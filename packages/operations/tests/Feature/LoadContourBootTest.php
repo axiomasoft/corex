@@ -33,7 +33,7 @@ use SplFileInfo;
 
 final class LoadContourBootTest extends TestCase
 {
-    public function test_public_surface_keeps_transfer_optional_on_laravel_12_or_13(): void
+    public function test_public_surface_keeps_transfer_optional_on_laravel_13(): void
     {
         $composer = json_decode((string) file_get_contents(dirname(__DIR__, 2).'/composer.json'), true);
         $require = $composer['require'];
@@ -43,12 +43,12 @@ final class LoadContourBootTest extends TestCase
         self::assertArrayHasKey(ApiServiceProvider::class, $surface['symbols']);
         self::assertSame('spi-call', $surface['symbols'][ApiServiceProvider::class]['layer']);
         self::assertSame(['ext-filter', 'ext-mbstring', 'php', 'axiomasoft/corex', 'illuminate/auth', 'illuminate/console', 'illuminate/contracts', 'illuminate/database', 'illuminate/http', 'illuminate/support', 'illuminate/validation', 'psr/clock', 'symfony/http-kernel'], array_keys($require));
-        self::assertSame('^12.0|^13.0', $require['illuminate/http']);
-        self::assertSame('^12.0|^13.0', $require['illuminate/support']);
-        self::assertSame('^12.0|^13.0', $require['illuminate/validation']);
+        self::assertSame('^13.0', $require['illuminate/http']);
+        self::assertSame('^13.0', $require['illuminate/support']);
+        self::assertSame('^13.0', $require['illuminate/validation']);
         self::assertArrayNotHasKey('axiomasoft/corex-transfer', $require);
         self::assertArrayHasKey('axiomasoft/corex-transfer', $composer['suggest']);
-        self::assertMatchesRegularExpression('/\A(12|13)\./', Application::VERSION);
+        self::assertMatchesRegularExpression('/\A13\./', Application::VERSION);
         self::assertSame([], $this->foreignInternalImports());
 
         $gate = json_decode((string) file_get_contents(dirname(__DIR__, 4).'/scripts/package-graph-gate.json'), true);

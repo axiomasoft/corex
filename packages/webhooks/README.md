@@ -6,7 +6,7 @@ Webhook subscriptions, signing, delivery and replay for CoreX operations.
 composer require axiomasoft/corex-webhooks
 ```
 
-Requires PHP 8.4 and Laravel 12 or 13. Uses CoreX Operations through its public contracts.
+Requires PHP 8.4 and Laravel 13. Uses CoreX Operations through its public contracts.
 
 ## Configuration
 

@@ -37,7 +37,7 @@ app(LogActivity::class)->handle($contact, ActivityType::Call, 'Intro call');
 
 ## Зависимости
 
-`axiomasoft/corex`, `axiomasoft/corex` и `illuminate/*`. Без AzGuard; Laravel 12/13.
+`axiomasoft/corex`, `axiomasoft/corex` и `illuminate/*`. Без AzGuard; Laravel 13.
 Авторизация — забота потребителя / `axiomasoft/corex-access`.
 
 ## Установка и lifecycle

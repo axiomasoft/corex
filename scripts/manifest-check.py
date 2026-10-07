@@ -16,7 +16,7 @@ ROOT = Path.cwd()
 ALIAS = '1.0.x-dev'
 MONO_CONSTRAINT = '^1.0@dev'
 PHP = '^8.4'
-ILLUMINATE = '^12.0|^13.0'
+ILLUMINATE = '^13.0'
 # Temporary pinned upstream exceptions for packages without stable releases.
 ALLOWED_PRERELEASE = {}
 # The AzGuard bridge stays outside the release set until its upstream is published.
@@ -24,7 +24,9 @@ UNRELEASED = {'axiomasoft/corex-access-azguard'}
 VALID_STABILITY = {'stable', 'experimental', 'internal', 'deprecated', 'unreleased'}
 STACK = {
     'pestphp/pest': '^5.2',
-    'orchestra/testbench': '^10.12|^11.3',
+    'orchestra/testbench': '^11.3',
+    'orchestra/testbench-core': '^11.5',
+    'laravel/framework': '^13.0',
 }
 
 

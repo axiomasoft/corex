@@ -1,0 +1,41 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D132",
+  "title": "CoreX: Laravel13-only; отмена Laravel12 по решению владельца",
+  "date": "2026-10-07",
+  "status": "accepted",
+  "question": "Отказаться от Laravel12 и оставить современный единый тестовый стек?",
+  "context": "Owner explicitly chose Laravel13-only instead of the D131 split-stack proposal.",
+  "decision": "CoreX прекращает поддержку Laravel12 по явному решению владельца. Текущая поддерживаемая платформа: PHP8.4–8.5 × Laravel13; Composer php ^8.4 сохраняется, first-party laravel/framework и illuminate/* — ^13.0, Testbench — ^11.3 (core — ^11.5 при его прямом объявлении). Pest5.2.1/PHPUnit13.3.4/Infection0.35.6 и их существующие root lock versions не понижаются. Compatibility preflight P09.9: две PHP version cells × SQLite/PostgreSQL = четыре реальные строки. MSI95/90/75, raw Pest/coverage XML/JUnit, uncovered/timeout/error controls и D125 repository-only scope неизменны. Это явное одобрение сужения platform contract и необходимых Composer/CI/docs/CHANGELOG изменений в P09.9; версии/каналы/release metadata не меняются. Два семейства тестовых стеков из D131 не нужны. Данное решение имеет приоритет только над Laravel12 matrix/minimum-platform положениями D03/D120 и прежнего досье; PHP, остальные quality/BC/API/SPI/schema положения сохраняются. Никакие другие items, в частности P09.5, и release-работы не запускаются.",
+  "rationale": "Явное решение владельца: проще отказаться от laravel 12, мы стараемся поддерживать современный стек",
+  "consequences": [
+    "P09.9 owns bounded repository platform reconciliation and fresh four-row compatibility acceptance; other item statuses/contracts stay unchanged.",
+    "D131 split-stack proposal is rejected; its pending patch must never be applied.",
+    "Previous eight-row/incompatible receipts and primary-source/solve evidence remain historical; do not relabel them compatible."
+  ],
+  "applies_to": [
+    "P09.9"
+  ],
+  "evidence": [
+    {
+      "kind": "owner",
+      "ref": "Owner reply 2026-10-07 after P09.9 stack proposal",
+      "note": "проще отказаться от laravel 12, мы стараемся поддерживать современный стек"
+    },
+    {
+      "kind": "repo",
+      "ref": "artifacts/P09.9-execution/completion.md",
+      "note": "Four Laravel13 runtime rows passed historically; prior full-matrix outcome remains incompatible."
+    },
+    {
+      "kind": "repo",
+      "ref": "artifacts/P09.9-stack-proposal/receipt.json",
+      "note": "Laravel13 full-root solves/platform/audit on PHP8.4/8.5 with existing engine pins verified."
+    }
+  ],
+  "actor": {
+    "provider": "codex",
+    "model": "gpt-6"
+  },
+  "answered_by": "owner"
+}

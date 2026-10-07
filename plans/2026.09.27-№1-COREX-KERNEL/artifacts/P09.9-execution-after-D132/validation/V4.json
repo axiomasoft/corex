@@ -1,0 +1,32 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:check-evidence:v1",
+  "evidence_id": "P09.9-D132-V4",
+  "check_id": "V4",
+  "subject": "PLAN3.P09.9",
+  "procedure": {
+    "cmd": "scripts/php84 composer audit --locked",
+    "cwd": "/home/vostrikov/projects/packages/corex"
+  },
+  "candidate": {
+    "head": "a83248a0adb02c82aca4c6dbdab71fb4c543cdac"
+  },
+  "exit": 0,
+  "environment": {
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3"
+  },
+  "log": {
+    "path": "@plan/artifacts/P09.9-execution-after-D132/validation/V4.log",
+    "sha256": "dac04dda7966b04d2eb83ba22b729e4025f820bba102192effa983b1fa377af8"
+  },
+  "started_at": "2026-10-07T11:17:16Z",
+  "finished_at": "2026-10-07T11:17:18.815857Z",
+  "producer": {
+    "kind": "executor",
+    "actor": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    }
+  }
+}

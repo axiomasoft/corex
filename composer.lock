@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "49e790c895a7c81883d5a1fa4258c8d6",
+    "content-hash": "9b7d089c94b9b68820473634f8c48314",
     "packages": [
         {
             "name": "axiomasoft/corex",
@@ -12,19 +12,19 @@
             "dist": {
                 "type": "path",
                 "url": "packages/core",
-                "reference": "bba0647a386f96d87478d6b501701ffd77562af1"
+                "reference": "7b72184a5410dbcf1433fa063bf2701820a62993"
             },
             "require": {
                 "ext-ctype": "*",
                 "ext-mbstring": "*",
-                "illuminate/auth": "^12.0|^13.0",
-                "illuminate/console": "^12.0|^13.0",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/events": "^12.0|^13.0",
-                "illuminate/queue": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
-                "laravel/framework": "^12.0|^13.0",
+                "illuminate/auth": "^13.0",
+                "illuminate/console": "^13.0",
+                "illuminate/contracts": "^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/events": "^13.0",
+                "illuminate/queue": "^13.0",
+                "illuminate/support": "^13.0",
+                "laravel/framework": "^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0"
             },
@@ -38,8 +38,8 @@
                 "nikic/php-parser": "^5.4",
                 "open-telemetry/api": "^1.4",
                 "open-telemetry/sdk": "^1.4",
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5",
                 "phpstan/phpdoc-parser": "^2.3",
                 "phpstan/phpstan": "^2.2.16",
                 "phpunit/phpunit": "^12.0",
@@ -135,22 +135,22 @@
             "dist": {
                 "type": "path",
                 "url": "packages/custom-fields",
-                "reference": "8448c947d9d123f297c6a4a823dd5f34c32f5f6a"
+                "reference": "abf9219b4c5457a0bfd1d638c43904e369111750"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "ext-filter": "*",
                 "ext-mbstring": "*",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
+                "illuminate/contracts": "^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/support": "^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0"
             },
             "require-dev": {
                 "mockery/mockery": "^1.6",
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5",
                 "symfony/process": "^7.2|^8.0"
             },
             "suggest": {
@@ -219,7 +219,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/intl",
-                "reference": "82f4d75ecc179618de46a792b18824add62b0447"
+                "reference": "28f3bc5601929b6a88adebb0f40c6ccc363f5536"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -227,17 +227,17 @@
                 "brick/money": "^0.9 || ^0.10",
                 "ext-intl": "*",
                 "ext-mbstring": "*",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
+                "illuminate/contracts": "^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/support": "^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0"
             },
             "require-dev": {
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2"
             },
             "type": "corex-module",
@@ -298,11 +298,11 @@
             "dist": {
                 "type": "path",
                 "url": "packages/media",
-                "reference": "4e0b230f39a242973c163eef09fbedaca30fc537"
+                "reference": "3c6a2e0f21f202fca0392ad0f45ab82ccc69a242"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
-                "laravel/framework": "^12.0|^13.0",
+                "laravel/framework": "^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0"
             },
@@ -311,8 +311,8 @@
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
                 "mockery/mockery": "^1.6",
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2"
             },
             "suggest": {
@@ -376,11 +376,11 @@
             "dist": {
                 "type": "path",
                 "url": "packages/notifications",
-                "reference": "4efb4de35fc2b067313578b5b30ea7a0eb54ade0"
+                "reference": "1c91c5b3d610e28eba6508cfcaeb079f80a56ef7"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
-                "laravel/framework": "^12.0|^13.0",
+                "laravel/framework": "^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0"
             },
@@ -389,8 +389,8 @@
                 "ext-pdo": "*",
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2"
             },
             "type": "corex-module",
@@ -451,19 +451,19 @@
             "dist": {
                 "type": "path",
                 "url": "packages/operations",
-                "reference": "451a7f47dea028f1c40b671ca343239a045c9aa5"
+                "reference": "7214eb2e8084cac14ed5defd1830d9c107dec9ff"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "ext-filter": "*",
                 "ext-mbstring": "*",
-                "illuminate/auth": "^12.0|^13.0",
-                "illuminate/console": "^12.0|^13.0",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/http": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
-                "illuminate/validation": "^12.0|^13.0",
+                "illuminate/auth": "^13.0",
+                "illuminate/console": "^13.0",
+                "illuminate/contracts": "^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/http": "^13.0",
+                "illuminate/support": "^13.0",
+                "illuminate/validation": "^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0",
                 "symfony/http-kernel": "^7.2|^8.0"
@@ -478,8 +478,8 @@
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
                 "opis/json-schema": "^2.4.1",
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2",
                 "phpunit/phpunit": "^12.0|^13.0"
             },
@@ -540,12 +540,12 @@
             "dist": {
                 "type": "path",
                 "url": "packages/panels",
-                "reference": "9354fd365fb8f845b08f563cd543987122d48b62"
+                "reference": "29e00888b5ca9052c23d870299e42c87336d675f"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
+                "illuminate/contracts": "^13.0",
+                "illuminate/support": "^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0"
             },
@@ -553,8 +553,8 @@
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
                 "mockery/mockery": "^1.6",
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2"
             },
             "type": "corex-module",
@@ -612,11 +612,11 @@
             "dist": {
                 "type": "path",
                 "url": "packages/recurrence",
-                "reference": "0ad168321118bca4bf2d3625692e5c5fc2c32503"
+                "reference": "1ae745f01e8bfdeb09d0257ed5e843c5e1da1ab3"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
-                "laravel/framework": "^12.0|^13.0",
+                "laravel/framework": "^13.0",
                 "php": "^8.4",
                 "rlanvin/php-rrule": "^3.0"
             },
@@ -671,20 +671,20 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search",
-                "reference": "3795f9bac79102e8f86ea60bd0e91d4a6300a9cc"
+                "reference": "13807e7c11ac4639901641bc526f25ab5655326e"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "ext-openssl": "*",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
+                "illuminate/contracts": "^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/support": "^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0"
             },
             "require-dev": {
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3"
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5"
             },
             "type": "corex-module",
             "extra": {
@@ -743,20 +743,20 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-intl",
-                "reference": "fcb5fbea4a61b3ee081732ee0dc0a70f5c7fe3e5"
+                "reference": "75b8f85b4155a7c077625122539641e7bfb6fe0a"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/corex-intl": "^1.0@dev",
                 "axiomasoft/corex-search": "^1.0@dev",
-                "illuminate/support": "^12.0|^13.0",
+                "illuminate/support": "^13.0",
                 "php": "^8.4"
             },
             "require-dev": {
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2"
             },
             "type": "corex-module",
@@ -810,20 +810,20 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-meilisearch",
-                "reference": "54fff5e36636a966ec3d67563d40b11e5050a435"
+                "reference": "53a85a2d7293bbf7724f7a74c05ab85456eb3bb3"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/corex-search": "^1.0@dev",
                 "ext-filter": "*",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
+                "illuminate/contracts": "^13.0",
+                "illuminate/support": "^13.0",
                 "meilisearch/meilisearch-php": ">=1.16.1-stable <=1.16.1-stable",
                 "php": "^8.4"
             },
             "require-dev": {
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3"
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5"
             },
             "type": "corex-module",
             "extra": {
@@ -882,12 +882,12 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tasks",
-                "reference": "d20a8f98d88b579a5c4d90da43f9d8c930465543"
+                "reference": "b567f77c5180255642ee3f4a49f945153c33a211"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "ext-mbstring": "*",
-                "laravel/framework": "^12.0|^13.0",
+                "laravel/framework": "^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0"
             },
@@ -895,8 +895,8 @@
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
                 "mockery/mockery": "^1.6",
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2"
             },
             "type": "corex-module",
@@ -973,7 +973,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tasks-workflow",
-                "reference": "7dfd487f32150b71b97d6e9ad2e8a178d8cf1389"
+                "reference": "f09ea8088b8dac5367cb60cb609f99c03eecfa8c"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -981,9 +981,9 @@
                 "axiomasoft/corex-tasks": "^1.0@dev",
                 "axiomasoft/corex-workflow": "^1.0@dev",
                 "ext-bcmath": "*",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
+                "illuminate/contracts": "^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/support": "^13.0",
                 "php": "^8.4"
             },
             "require-dev": {
@@ -991,8 +991,8 @@
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
                 "mockery/mockery": "^1.6",
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2"
             },
             "type": "corex-module",
@@ -1050,7 +1050,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tenancy",
-                "reference": "b3a8860892c311f20d914c1b2cb5dae252a13b56"
+                "reference": "2e0e669428b75a0f630b601b601f94a74b3c435e"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -1061,7 +1061,7 @@
                 "ext-session": "*",
                 "ext-sodium": "*",
                 "firebase/php-jwt": "^7.1",
-                "laravel/framework": "^12.0|^13.0",
+                "laravel/framework": "^13.0",
                 "nesbot/carbon": "^3.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0",
@@ -1078,8 +1078,8 @@
                 "league/flysystem-aws-s3-v3": "3.35.3",
                 "mockery/mockery": "^1.6",
                 "nikic/php-parser": "^5.4",
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2",
                 "phpstan/phpstan": "^2.2.16",
                 "symfony/console": "^7.2|^8.0",
@@ -1161,19 +1161,19 @@
             "dist": {
                 "type": "path",
                 "url": "packages/transfer",
-                "reference": "7607e76c80bd3b498d1538f1b2ee41aa23405de3"
+                "reference": "c05858e46c25d80fed9e80596c1b1fc4bd1c362f"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/support": "^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0"
             },
             "require-dev": {
-                "illuminate/contracts": "^12.0|^13.0",
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3"
+                "illuminate/contracts": "^13.0",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5"
             },
             "type": "corex-module",
             "extra": {
@@ -1232,21 +1232,21 @@
             "dist": {
                 "type": "path",
                 "url": "packages/wakeup",
-                "reference": "593ac91f43799f248fd337feca56abe3e7491ba6"
+                "reference": "6d3b46f846bf963573198293015d38d76ee89c75"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
-                "illuminate/console": "^12.0|^13.0",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
+                "illuminate/console": "^13.0",
+                "illuminate/contracts": "^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/support": "^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0"
             },
             "require-dev": {
                 "ext-pdo": "*",
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3"
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5"
             },
             "type": "corex-module",
             "extra": {
@@ -1306,19 +1306,19 @@
             "dist": {
                 "type": "path",
                 "url": "packages/workflow",
-                "reference": "1615b723a0d33925c756c76682e0d01042d92ac1"
+                "reference": "472b9037d2d25bf641b1adb0c078934a8a541665"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
+                "illuminate/contracts": "^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/support": "^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0"
             },
             "require-dev": {
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3"
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5"
             },
             "type": "corex-module",
             "extra": {
@@ -2011,7 +2011,7 @@
             "dist": {
                 "type": "path",
                 "url": "products/flex-crm",
-                "reference": "f4e7f809ef5b5275d6bf344fb5084af556d6b35f"
+                "reference": "f4bee8bfcc6f8fb1b2b8a06aaafd235ae8700cf2"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -2021,15 +2021,15 @@
                 "ext-filter": "*",
                 "ext-mbstring": "*",
                 "giggsey/libphonenumber-for-php-lite": "^9.0",
-                "laravel/framework": "^12.0|^13.0",
+                "laravel/framework": "^13.0",
                 "php": "^8.4"
             },
             "require-dev": {
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
                 "mockery/mockery": "^1.6",
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2"
             },
             "type": "corex-module",
@@ -7832,15 +7832,15 @@
             "dist": {
                 "type": "path",
                 "url": "packages/access",
-                "reference": "88cd71b71db1224162b975657ce9ef45f407b088"
+                "reference": "23fd598ac71da7b5dccdaf33f471852579ed9198"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "ext-mbstring": "*",
-                "illuminate/auth": "^12.0|^13.0",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
+                "illuminate/auth": "^13.0",
+                "illuminate/contracts": "^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/support": "^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0"
             },
@@ -7848,8 +7848,8 @@
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
                 "mockery/mockery": "^1.6",
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2",
                 "symfony/process": "^7.2|^8.0"
             },
@@ -7926,15 +7926,15 @@
             "dist": {
                 "type": "path",
                 "url": "packages/access-azguard",
-                "reference": "cf80fde07105dc0e2a17150326f17abcd3a5d2f9"
+                "reference": "e3d71bfc862af38029e8daed993ea2becce21951"
             },
             "require": {
                 "axioma-studio/azguard-core": "^0.3",
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/corex-access": "^1.0@dev",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
+                "illuminate/contracts": "^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/support": "^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0"
             },
@@ -7942,8 +7942,8 @@
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
                 "mockery/mockery": "^1.6",
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2",
                 "symfony/process": "^7.2|^8.0"
             },
@@ -8038,18 +8038,18 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tools",
-                "reference": "88a22201be138fc960598e8f940edbf89c3a723f"
+                "reference": "5a72d9d50fc2540424275ef62bd8ec88a18e4247"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/corex-operations": "^1.0@dev",
-                "illuminate/auth": "^12.0|^13.0",
-                "illuminate/console": "^12.0|^13.0",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/http": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
-                "illuminate/validation": "^12.0|^13.0",
+                "illuminate/auth": "^13.0",
+                "illuminate/console": "^13.0",
+                "illuminate/contracts": "^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/http": "^13.0",
+                "illuminate/support": "^13.0",
+                "illuminate/validation": "^13.0",
                 "php": "^8.4",
                 "symfony/http-kernel": "^7.2|^8.0"
             },
@@ -8062,8 +8062,8 @@
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
                 "opis/json-schema": "^2.4.1",
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2",
                 "phpunit/phpunit": "^12.0|^13.0",
                 "symfony/process": "^7.2|^8.0"
@@ -8127,19 +8127,19 @@
             "dist": {
                 "type": "path",
                 "url": "packages/webhooks",
-                "reference": "7e8b6e994b53980b645e936138d74f437a6a5941"
+                "reference": "532b1d319920f8f94bb03190a5af6cb17749be76"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/corex-operations": "^1.0@dev",
                 "ext-filter": "*",
-                "illuminate/auth": "^12.0|^13.0",
-                "illuminate/console": "^12.0|^13.0",
-                "illuminate/contracts": "^12.0|^13.0",
-                "illuminate/database": "^12.0|^13.0",
-                "illuminate/http": "^12.0|^13.0",
-                "illuminate/support": "^12.0|^13.0",
-                "illuminate/validation": "^12.0|^13.0",
+                "illuminate/auth": "^13.0",
+                "illuminate/console": "^13.0",
+                "illuminate/contracts": "^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/http": "^13.0",
+                "illuminate/support": "^13.0",
+                "illuminate/validation": "^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0"
             },
@@ -8152,8 +8152,8 @@
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
                 "opis/json-schema": "^2.4.1",
-                "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2",
                 "phpunit/phpunit": "^12.0|^13.0"
             },

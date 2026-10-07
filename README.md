@@ -49,7 +49,7 @@ php artisan corex:schema:status --scope=tenant
 
 ## Стек
 
-- PHP 8.4–8.5, Laravel 12–13 (см. [[ADR-001 Stack]]).
+- PHP 8.4–8.5, Laravel 13 (см. [[ADR-001 Stack]]).
 - ULID-идентификаторы ([[ADR-003 ULID]]); морфы — через `EntityRegistry`.
 - Деньги — `brick/money`, minor units ([[ADR-005 Money]]).
 - Мульти-тенантность — опциональная, row-level, включается биндингом `TenantService` ([[ADR-004 Multi-Tenancy]]).

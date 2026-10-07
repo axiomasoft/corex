@@ -1,0 +1,27 @@
+Loading composer repositories with package information
+Updating dependencies
+Lock file operations: 0 installs, 22 updates, 0 removals
+  - Upgrading axiomasoft/corex (dev-main 7b72184 => dev-main 798b737)
+  - Upgrading axiomasoft/corex-access (dev-main 23fd598 => dev-main d72848d)
+  - Upgrading axiomasoft/corex-access-azguard (dev-main e3d71bf => dev-main 0f9b5f4)
+  - Upgrading axiomasoft/corex-custom-fields (dev-main abf9219 => dev-main b83417a)
+  - Upgrading axiomasoft/corex-intl (dev-main 28f3bc5 => dev-main a3ed493)
+  - Upgrading axiomasoft/corex-media (dev-main 3c6a2e0 => dev-main da09e4c)
+  - Upgrading axiomasoft/corex-notifications (dev-main 1c91c5b => dev-main bae17fb)
+  - Upgrading axiomasoft/corex-operations (dev-main 7214eb2 => dev-main 4c4790e)
+  - Upgrading axiomasoft/corex-panels (dev-main 29e0088 => dev-main 7a9d290)
+  - Upgrading axiomasoft/corex-recurrence (dev-main 1ae745f => dev-main 335fd51)
+  - Upgrading axiomasoft/corex-search (dev-main 13807e7 => dev-main 3c0742a)
+  - Upgrading axiomasoft/corex-search-intl (dev-main 75b8f85 => dev-main 50c8e44)
+  - Upgrading axiomasoft/corex-search-meilisearch (dev-main 53a85a2 => dev-main ca56186)
+  - Upgrading axiomasoft/corex-tasks (dev-main b567f77 => dev-main c029fb8)
+  - Upgrading axiomasoft/corex-tasks-workflow (dev-main f09ea80 => dev-main f546834)
+  - Upgrading axiomasoft/corex-tenancy (dev-main 2e0e669 => dev-main 6fb95b8)
+  - Upgrading axiomasoft/corex-tools (dev-main 5a72d9d => dev-main e4ec02f)
+  - Upgrading axiomasoft/corex-transfer (dev-main c05858e => dev-main 0f338b1)
+  - Upgrading axiomasoft/corex-wakeup (dev-main 6d3b46f => dev-main 5dadbb4)
+  - Upgrading axiomasoft/corex-webhooks (dev-main 532b1d3 => dev-main 0afaa94)
+  - Upgrading axiomasoft/corex-workflow (dev-main 472b903 => dev-main be9a15f)
+  - Upgrading flex/crm (dev-main f4bee8b => dev-main 9d0cd81)
+Writing lock file
+No security vulnerability advisories found.

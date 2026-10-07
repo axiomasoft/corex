@@ -1,5 +1,5 @@
 {
-    "schema": "corex-infection-compatibility-policy/v1",
+    "schema": "corex-infection-compatibility-policy/v2",
     "package": "tenancy",
     "versions": {
         "infection/infection": "0.35.6",
@@ -10,7 +10,7 @@
         "axiomasoft/corex-infection-pest-adapter": "0.1.0"
     },
     "php": ["8.4", "8.5"],
-    "laravel": ["12", "13"],
+    "laravel": ["13"],
     "drivers": ["sqlite", "pgsql"],
     "adapter": "pest-spike",
     "source": "packages/tenancy/src/Provisioning/Internal/DatabaseValue.php",

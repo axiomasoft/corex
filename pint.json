@@ -29,6 +29,7 @@
         "/^packages\\/[^\\/]+\\/database\\/migrations\\//",
         "/^products\\/[^\\/]+\\/database\\/migrations\\//",
         "/^plans\\/.*\\/preimage\\//",
+        "/^plans\\/2026\\.09\\.27-№1-COREX-KERNEL\\/artifacts\\/P09\\.9-execution(?:-after-D132)?\\/matrix\\//",
         "/^plans\\/2026\\.09\\.27-№1-COREX-KERNEL\\/artifacts\\/P04-design\\/scripts\\/inventory\\.php$/"
     ]
 }

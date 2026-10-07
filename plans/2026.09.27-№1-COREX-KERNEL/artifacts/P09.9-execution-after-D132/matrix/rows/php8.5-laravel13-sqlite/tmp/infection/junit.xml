@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/rows/php8.5-laravel13-sqlite/pest-spike.xml" tests="13" assertions="25" errors="0" failures="0" skipped="0" time="0.038112">
+    <testsuite name="spike" tests="13" assertions="25" errors="0" failures="0" skipped="0" time="0.038112">
+      <testsuite name="Tests\ControlsTest" file="tests/ControlsTest.php" tests="3" assertions="3" errors="0" failures="0" skipped="0" time="0.012474">
+        <testcase name="it executes the escaped control without asserting its boolean" file="tests/ControlsTest.php::it executes the escaped control without asserting its boolean" class="Tests\ControlsTest" classname="Tests.ControlsTest" assertions="1" time="0.008437"/>
+        <testcase name="it executes the timeout control" file="tests/ControlsTest.php::it executes the timeout control" class="Tests\ControlsTest" classname="Tests.ControlsTest" assertions="1" time="0.002058"/>
+        <testcase name="it executes the process error control" file="tests/ControlsTest.php::it executes the process error control" class="Tests\ControlsTest" classname="Tests.ControlsTest" assertions="1" time="0.001979"/>
+      </testsuite>
+      <testsuite name="Tests\DatabaseProbeTest" file="tests/DatabaseProbeTest.php" tests="1" assertions="4" errors="0" failures="0" skipped="0" time="0.008382">
+        <testcase name="it decodes real PDO rows on sqlite" file="tests/DatabaseProbeTest.php::it decodes real PDO rows on sqlite" class="Tests\DatabaseProbeTest" classname="Tests.DatabaseProbeTest" assertions="4" time="0.008382"/>
+      </testsuite>
+      <testsuite name="Tests\DatabaseValueTest" file="tests/DatabaseValueTest.php" tests="9" assertions="18" errors="0" failures="0" skipped="0" time="0.017257">
+        <testcase name="it keeps native-range PDO integers and unsigned64 counters exact" file="tests/DatabaseValueTest.php::it keeps native-range PDO integers and unsigned64 counters exact" class="Tests\DatabaseValueTest" classname="Tests.DatabaseValueTest" assertions="5" time="0.002023"/>
+        <testsuite name="it refuses lossy integer conversion at the database boundary" tests="7" assertions="7" errors="0" failures="0" skipped="0" time="0.013341">
+          <testcase name="it refuses lossy integer conversion at the database boundary with data set &quot;dataset &quot;native overflow&quot;&quot;" file="tests/DatabaseValueTest.php::it refuses lossy integer conversion at the database boundary with data set &quot;dataset &quot;native overflow&quot;&quot;" class="Tests\DatabaseValueTest" classname="Tests.DatabaseValueTest" assertions="1" time="0.002051"/>
+          <testcase name="it refuses lossy integer conversion at the database boundary with data set &quot;dataset &quot;native underflow&quot;&quot;" file="tests/DatabaseValueTest.php::it refuses lossy integer conversion at the database boundary with data set &quot;dataset &quot;native underflow&quot;&quot;" class="Tests\DatabaseValueTest" classname="Tests.DatabaseValueTest" assertions="1" time="0.001917"/>
+          <testcase name="it refuses lossy integer conversion at the database boundary with data set &quot;dataset &quot;decimal fraction&quot;&quot;" file="tests/DatabaseValueTest.php::it refuses lossy integer conversion at the database boundary with data set &quot;dataset &quot;decimal fraction&quot;&quot;" class="Tests\DatabaseValueTest" classname="Tests.DatabaseValueTest" assertions="1" time="0.001865"/>
+          <testcase name="it refuses lossy integer conversion at the database boundary with data set &quot;dataset &quot;boolean authority value&quot;&quot;" file="tests/DatabaseValueTest.php::it refuses lossy integer conversion at the database boundary with data set &quot;dataset &quot;boolean authority value&quot;&quot;" class="Tests\DatabaseValueTest" classname="Tests.DatabaseValueTest" assertions="1" time="0.001888"/>
+          <testcase name="it refuses lossy integer conversion at the database boundary with data set &quot;dataset &quot;floating point value&quot;&quot;" file="tests/DatabaseValueTest.php::it refuses lossy integer conversion at the database boundary with data set &quot;dataset &quot;floating point value&quot;&quot;" class="Tests\DatabaseValueTest" classname="Tests.DatabaseValueTest" assertions="1" time="0.001905"/>
+          <testcase name="it refuses lossy integer conversion at the database boundary with data set &quot;dataset &quot;array&quot;&quot;" file="tests/DatabaseValueTest.php::it refuses lossy integer conversion at the database boundary with data set &quot;dataset &quot;array&quot;&quot;" class="Tests\DatabaseValueTest" classname="Tests.DatabaseValueTest" assertions="1" time="0.001866"/>
+          <testcase name="it refuses lossy integer conversion at the database boundary with data set &quot;dataset &quot;null&quot;&quot;" file="tests/DatabaseValueTest.php::it refuses lossy integer conversion at the database boundary with data set &quot;dataset &quot;null&quot;&quot;" class="Tests\DatabaseValueTest" classname="Tests.DatabaseValueTest" assertions="1" time="0.001849"/>
+        </testsuite>
+        <testcase name="it refuses coercion of routing text and missing result rows" file="tests/DatabaseValueTest.php::it refuses coercion of routing text and missing result rows" class="Tests\DatabaseValueTest" classname="Tests.DatabaseValueTest" assertions="6" time="0.001893"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

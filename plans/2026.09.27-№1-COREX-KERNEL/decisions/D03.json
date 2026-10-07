@@ -4,7 +4,7 @@
   "title": "platform (accepted)",
   "date": "2026-09-27",
   "status": "accepted",
-  "decision": "PHP `^8.4` во всех пакетах; Laravel `^12.0|^13.0` во всех пакетах (включая access); тест-стек и анализаторы — актуальные стабильные мажоры на дату P01 (Pest/PHPUnit/Testbench/Larastan/PHPStan/Rector/Pint — VERIFY-AT-EXEC по Packagist). CI-матрица: PHP 8.4/8.5 × Laravel 12/13; PostgreSQL — актуальные поддерживаемые мажоры (выбор P01 с ресерчем).",
+  "decision": "PHP `^8.4` во всех пакетах; Laravel `^13.0` во всех пакетах (включая access); тест-стек и анализаторы — актуальные стабильные мажоры на дату P01 (Pest/PHPUnit/Testbench/Larastan/PHPStan/Rector/Pint — VERIFY-AT-EXEC по Packagist). CI-матрица: PHP 8.4/8.5 × Laravel 13; PostgreSQL — актуальные поддерживаемые мажоры (выбор P01 с ресерчем).\n\nD132 (owner, 2026-10-07): Laravel12 support removed; this current policy supersedes only the former Laravel12 platform clause. P09.9 owns repository reconciliation; other historical item outcomes are not replayed.",
   "rationale": "Roave BC 8.22 требует PHP `~8.4|~8.5` (`pplx-09`); PHP 8.4 active support до 2026-12-31, 8.5 — до 2027-12-31; Laravel 13 вышел 2026-03-17 (`pplx-03`); tenancy уже `^8.4`; chatom PLAN2.D18 — PHP ^8.4. Нет потребителей → нет причины держать 8.3.",
   "applies_to": [
     "P01"
@@ -28,7 +28,7 @@
     {
       "id": "Solution",
       "title": "Solution",
-      "text": "PHP `^8.4` во всех пакетах; Laravel `^12.0|^13.0` во всех пакетах (включая access); тест-стек и анализаторы — актуальные стабильные мажоры на дату P01 (Pest/PHPUnit/Testbench/Larastan/PHPStan/Rector/Pint — VERIFY-AT-EXEC по Packagist). CI-матрица: PHP 8.4/8.5 × Laravel 12/13; PostgreSQL — актуальные поддерживаемые мажоры (выбор P01 с ресерчем)."
+      "text": "PHP `^8.4` во всех пакетах; Laravel `^13.0` во всех пакетах (включая access); тест-стек и анализаторы — актуальные стабильные мажоры на дату P01 (Pest/PHPUnit/Testbench/Larastan/PHPStan/Rector/Pint — VERIFY-AT-EXEC по Packagist). CI-матрица: PHP 8.4/8.5 × Laravel 13; PostgreSQL — актуальные поддерживаемые мажоры (выбор P01 с ресерчем).\n\nD132 (owner, 2026-10-07): Laravel12 support removed; this current policy supersedes only the former Laravel12 platform clause. P09.9 owns repository reconciliation; other historical item outcomes are not replayed."
     },
     {
       "id": "Why",

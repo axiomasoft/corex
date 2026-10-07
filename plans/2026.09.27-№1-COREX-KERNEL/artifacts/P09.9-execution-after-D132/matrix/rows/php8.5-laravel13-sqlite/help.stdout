@@ -1,0 +1,57 @@
+Description:
+  Runs the mutation testing.
+
+Usage:
+  run [options] [--] [<paths>...]
+
+Arguments:
+  paths                                                              Limit mutation testing to the given source and/or test paths. Path kind is inferred from the configured source directories and test-like paths. Pass as many paths as needed: `infection run src/A.php src/B.php tests/ATest.php`.
+
+Options:
+      --test-framework=TEST-FRAMEWORK                                Name of the Test framework to use ("phpunit", "phpspec", "codeception", "testo", "debug", "pest-spike")
+      --static-analysis-tool=STATIC-ANALYSIS-TOOL                    Name of the Static Analysis tool to use ("phpstan", "mago", "debug")
+      --test-framework-extra-args=TEST-FRAMEWORK-EXTRA-ARGS          Raw PHPUnit arguments to pass before Infection-generated arguments
+      --test-framework-options=TEST-FRAMEWORK-OPTIONS                Deprecated. Use --test-framework-extra-args instead.
+      --static-analysis-tool-options=STATIC-ANALYSIS-TOOL-OPTIONS    Options to be passed to the static analysis tool
+  -j, --threads=THREADS                                              Number of threads to use by the runner when executing the mutations. Use "max" to auto calculate it.
+      --dots-per-row=DOTS-PER-ROW                                    Number of dots per row in the dot progress formatter. Use "max" to fit the terminal width.
+      --with-uncovered                                               Allow mutation of code not covered by tests.
+  -s, --show-mutations[=SHOW-MUTATIONS]                              Number of maximum escaped (and non-covered in verbose mode) mutations shown to the console. Use "max" to show all. [default: 20]
+      --no-progress                                                  Do not output progress bars and mutation count during progress. Automatically enabled if a CI is detected
+      --force-progress                                               Output progress bars and mutation count during progress even if a CI is detected
+  -c, --configuration=CONFIGURATION                                  Path to the configuration file to use
+      --coverage=COVERAGE                                            Path to existing coverage directory
+      --mutators=MUTATORS                                            Specify particular mutators, e.g. "--mutators=Plus,PublicVisibility" [default: ""]
+      --filter=FILTER                                                Filter which files to mutate. For example "src/Service/Mailer.php,src/Entity/Foobar.php".
+      --git-diff-filter=GIT-DIFF-FILTER                              Filter files to mutate by git "--diff-filter" option. A - only for added files, AM - for added and modified.
+      --git-diff-lines                                               Mutates only added and modified lines in files (applies the git diff filter "AM").
+      --git-diff-base=GIT-DIFF-BASE                                  Base for "--git-diff-filter" option. Can be the git branch short name, full name or a commit hash. Must be used only together with "--git-diff-filter".
+      --formatter=FORMATTER                                          Name of the formatter to use ("dot", "progress", "teamcity") [default: "dot"]
+      --logger-github[=LOGGER-GITHUB]                                Log escaped Mutants as GitHub Annotations (automatically detected on Github Actions itself, use true to force-enable or false to force-disable it). [default: false]
+      --id=ID                                                        Run only one Mutant by its ID. Can be used multiple times. If source code is changed, can be invalidated. Pass all previous options with this one.
+      --map-source-class-to-test[=MAP-SOURCE-CLASS-TO-TEST]          Enables test files filtering during "Initial Tests Run" stage when `--filter`/`--git-diff-filter`/`--git-diff-lines` are used. With this option, only those test files are executed to provide coverage, that cover changed/added source files. [default: false]
+      --logger-gitlab[=LOGGER-GITLAB]                                Path to log escaped Mutants in the GitLab (Code Climate) JSON format.
+      --logger-project-root-directory=LOGGER-PROJECT-ROOT-DIRECTORY  Custom path to project root directory used on the log report generation (auto-detected if not set).
+      --logger-html=LOGGER-HTML                                      Path to HTML report file, similar to PHPUnit HTML report.
+      --logger-text=LOGGER-TEXT                                      Path to text report file.
+      --logger-summary-json=LOGGER-SUMMARY-JSON                      Path to summary JSON report file (statistics only, no mutation details).
+      --noop                                                         Use noop mutators that do not change AST. For debugging purposes.
+      --only-covering-test-cases                                     Execute only those test cases that cover mutated line, not the whole file with covering test cases. Can dramatically speed up Mutation Testing for slow test suites. For PHPUnit, it uses "--filter" option
+      --min-msi=MIN-MSI                                              Minimum Mutation Score Indicator (MSI) percentage value
+      --min-covered-msi=MIN-COVERED-MSI                              Minimum Covered Code Mutation Score Indicator (MSI) percentage value
+      --with-timeouts                                                Treat timed out mutants as escaped (affects MSI calculation)
+      --max-timeouts=MAX-TIMEOUTS                                    Maximum allowed timeouts. Build fails if exceeded
+      --log-verbosity=LOG-VERBOSITY                                  "all" - full logs format, "default" - short logs format, "none" - no logs [default: "default"]
+      --initial-tests-php-options=INITIAL-TESTS-PHP-OPTIONS          PHP options passed to the PHP executable when executing the initial tests. Will be ignored if "--coverage" option presented
+      --skip-initial-tests                                           Skips the initial test runs. Requires the coverage to be provided via the "--coverage" option
+      --ignore-msi-with-no-mutations[=IGNORE-MSI-WITH-NO-MUTATIONS]  Ignore MSI violations with zero mutations [default: false]
+      --debug|--no-debug                                             Will not clean up utility files from Infection temporary folder. Adds command lines to the logs and prints Initial Tests output to stdout.
+      --dry-run                                                      Runs mutation testing and does not run killer processes.
+      --teamcity                                                     Changes the progress output to Teamcity.
+  -h, --help                                                         Display help for the given command. When no command is given display help for the run command
+      --silent                                                       Do not output any message
+  -q, --quiet                                                        Only errors are displayed. All other output is suppressed
+  -V, --version                                                      Display this application version
+      --ansi|--no-ansi                                               Force (or disable --no-ansi) ANSI output
+  -n, --no-interaction                                               Do not ask any interactive question
+  -v|vv|vvv, --verbose                                               Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug

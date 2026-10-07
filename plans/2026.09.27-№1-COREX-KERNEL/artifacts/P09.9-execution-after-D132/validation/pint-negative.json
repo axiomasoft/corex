@@ -1,0 +1,5 @@
+{
+  "live_source_violation_exit": 1,
+  "immutable_generated_only_exit": 0,
+  "assertion": "Live PHP style failures still reject; immutable generated raw evidence excluded only."
+}

@@ -3,6 +3,7 @@ import copy
 import importlib.util
 import itertools
 import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -73,7 +74,7 @@ class InfectionSpikeTest(unittest.TestCase):
             with self.assertRaisesRegex(spike.ProofError, message):
                 spike.check_receipt(self.receipt, self.output)
         else:
-            self.assertEqual(spike.check_receipt(self.receipt, self.output), 8)
+            self.assertEqual(spike.check_receipt(self.receipt, self.output), 4)
 
     def test_complete_protocol_fixture(self):
         self.check()
@@ -180,6 +181,112 @@ class InfectionSpikeTest(unittest.TestCase):
     def test_artifact_path_escape(self):
         self.receipt['rows'][0]['lock']['path'] = '../outside/composer.lock'
         self.check('Missing or unsafe artifact')
+
+    def test_retired_laravel12_and_unsupported_php(self):
+        row = self.receipt['rows'][0]
+        row['laravel'] = '12'
+        self.check('Invalid/duplicate matrix row')
+        row['laravel'] = '13'
+        row['php'] = '8.3'
+        self.check('Invalid/duplicate matrix row')
+
+    def test_duplicate_database_driver(self):
+        self.receipt['rows'][1]['driver'] = 'sqlite'
+        self.check('Invalid/duplicate matrix row')
+
+    def test_wrong_runtime_framework_even_with_rehashed_artifacts(self):
+        row = self.receipt['rows'][0]
+        versions = json.loads(spike.read_artifact(row['versions'], self.output).read_text())
+        lock = json.loads(spike.read_artifact(row['lock'], self.output).read_text())
+        versions['laravel/framework'] = '12.69.3'
+        next(p for p in lock['packages'] if p['name'] == 'laravel/framework')['version'] = '12.69.3'
+        row['versions'] = self.put(row['versions']['path'], versions)
+        row['lock'] = self.put(row['lock']['path'], lock)
+        self.check('Runtime matrix/version mismatch')
+
+    def test_old_eight_row_schema_cannot_be_relabelled(self):
+        self.receipt['schema'] = 'corex-infection-spike/v1'
+        self.check('Incomplete/fake receipt')
+        self.receipt['schema'] = spike.SCHEMA
+        self.receipt['rows'] += copy.deepcopy(self.receipt['rows'])
+        self.check('Missing or duplicated matrix row')
+
+    def test_stale_policy_and_manifest_inputs(self):
+        for path in ('scripts/quality/infection-compatibility.json', 'packages/core/composer.json'):
+            with self.subTest(path=path):
+                original = self.receipt['inputs'][path]
+                self.receipt['inputs'][path] = 'old-policy-hash'
+                self.check('Stale product/tool/lock inputs')
+                self.receipt['inputs'][path] = original
+
+    def test_policy_cannot_restore_laravel12(self):
+        policy = copy.deepcopy(self.policy)
+        policy['laravel'] = ['12', '13']
+        with self.assertRaisesRegex(spike.ProofError, 'Unsupported platform policy'):
+            spike.check_policy(policy)
+
+
+class PlatformGateTest(unittest.TestCase):
+    def setUp(self):
+        temp = tempfile.TemporaryDirectory()
+        self.addCleanup(temp.cleanup)
+        self.root = Path(temp.name)
+        paths = spike.platform_manifests(spike.ROOT) + [spike.ROOT / '.github/workflows/ci.yml',
+                                                      spike.ROOT / 'composer.lock', spike.ROOT / 'scripts/manifest-check.py']
+        for path in paths:
+            target = self.root / path.relative_to(spike.ROOT)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(path.read_bytes())
+        os.symlink(spike.ROOT / '.git', self.root / '.git')
+        os.symlink(spike.ROOT / 'vendor', self.root / 'vendor')
+
+    def change_manifest(self, dependency, value):
+        path = self.root / 'packages/core/composer.json'
+        data = json.loads(path.read_text())
+        section = next(section for section in ('require', 'require-dev') if dependency in data.get(section, {}))
+        data[section][dependency] = value
+        path.write_text(json.dumps(data))
+
+    def test_manifest_gate_rejects_old_framework_and_testbench(self):
+        for dependency, value, diagnostic in [('illuminate/contracts', '^12.0', 'illuminate'),
+                                               ('orchestra/testbench', '^10.12', 'stack'),
+                                               ('orchestra/testbench-core', '^10.12', 'stack')]:
+            with self.subTest(dependency=dependency):
+                self.change_manifest(dependency, value)
+                result = spike.subprocess.run(['python3', 'scripts/manifest-check.py'], cwd=self.root,
+                                              capture_output=True, text=True)
+                self.assertEqual(result.returncode, 1)
+                self.assertIn(diagnostic + ': ' + dependency, result.stdout)
+                with self.assertRaisesRegex(spike.ProofError, 'Unexpected platform manifest delta'):
+                    spike.check_platform_contract(self.root)
+                source = spike.ROOT / 'packages/core/composer.json'
+                (self.root / 'packages/core/composer.json').write_bytes(source.read_bytes())
+
+    def test_contract_rejects_unrelated_manifest_change(self):
+        path = self.root / 'composer.json'
+        data = json.loads(path.read_text())
+        data['prefer-stable'] = False
+        path.write_text(json.dumps(data))
+        with self.assertRaisesRegex(spike.ProofError, 'Unexpected platform manifest delta'):
+            spike.check_platform_contract(self.root)
+
+    def test_contract_rejects_upstream_lock_change(self):
+        path = self.root / 'composer.lock'
+        lock = json.loads(path.read_text())
+        next(p for p in lock['packages'] if p['name'] == 'laravel/framework')['version'] = 'v13.0.0'
+        path.write_text(json.dumps(lock))
+        with self.assertRaisesRegex(spike.ProofError, 'Unexpected root lock delta'):
+            spike.check_platform_contract(self.root)
+
+    def test_ci_rejects_retired_stack_and_missing_php_lane(self):
+        path = self.root / '.github/workflows/ci.yml'
+        original = path.read_text()
+        for text in (original.replace("laravel: ['13.*']", "laravel: ['12.*', '13.*']", 1),
+                     original.replace("php: ['8.4', '8.5']", "php: ['8.4']", 1),
+                     original.replace('  COMPOSER_ROOT_VERSION: dev-main\n', '')):
+            path.write_text(text)
+            with self.assertRaisesRegex(spike.ProofError, 'Ordinary CI platform/installer drift'):
+                spike.check_ci_platform(self.root)
 
 
 if __name__ == '__main__':

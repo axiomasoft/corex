@@ -1,0 +1,547 @@
+{
+  "adapter": "pest-spike",
+  "duration_seconds": 13.901,
+  "failed_cells": [],
+  "inputs": {
+    ".github/workflows/ci.yml": "0f621db4b8cf36d744dbe12d2aad8b320b0d12b44971b8aaee0684823bd58623",
+    "composer.json": "58b120e46705fa87a3bb335aefd965c784468a1c49999fee10148d40faa88028",
+    "composer.lock": "4792a7b3af347214baa011b824ad1218bc2d5688c31d411624687d270d9cf1c2",
+    "packages/access-azguard/composer.json": "7745988ee7e2bca03068102679b0c682bf035ab7b50ed3077d1e777f2aebcf22",
+    "packages/access/composer.json": "44a8b389d4c66de908d59a8f3ce5ea664285a91aacc284c6dd4004e41fddd870",
+    "packages/core/composer.json": "48c0e66cb2482afb5fa0cc5fe5f8ade9c41d37efcc4f5dabf9c0664dddbf5429",
+    "packages/custom-fields/composer.json": "672c49c4ba8226448e87c35cc2277276a830aa9b7448b15420b4c19b714774eb",
+    "packages/intl/composer.json": "786a10784cb2655859f171d8684bd92391c5d3f7ac7d9ab2884c46d2e82469f4",
+    "packages/media/composer.json": "454b9d7f171abdcd492f57baebac57d0971882d27158dc90a16252a08f0a1e10",
+    "packages/notifications/composer.json": "37ae5feae573566c79420c887e01f2c3de6f467c6a82499fb6cf800080a528e9",
+    "packages/operations/composer.json": "a662308bb1ca48f80a9bf7d9c7ac8fcdadb35a6105d9f37386e5205d05ef45b1",
+    "packages/panels/composer.json": "5fde68209cfb3b1c760f5ed87b718a749ea1903049d2e6864fda7435f06426a3",
+    "packages/recurrence/composer.json": "f7b3407d6137ae7198b843dca15a98f854f39fe777c852a60a8545f46651e63e",
+    "packages/search-intl/composer.json": "9602756006a807536d7fd233770e6a85a18b8237b90e6b1a471252c7b27e8c6b",
+    "packages/search-meilisearch/composer.json": "f3933c72d2bb49cfa1725ca1f7191f0affe7edbb3b3d6bfe74a345c1c7276e6d",
+    "packages/search/composer.json": "cbf90d2a81f1d7b3b4b37b0d545636628d6407dc17974248d528205460a0ad83",
+    "packages/tasks-workflow/composer.json": "8e4771e65237fcb8315158c58813c7e2057ca5ebd57b3b5c7eca80321d5305e2",
+    "packages/tasks/composer.json": "adfa0ea885b3f38ad7edf9c6b88e940950c40e07eb639a27d79c1840eb221c6d",
+    "packages/tenancy/composer.json": "eb66cc9c77e284059d901aa263bad62957767e2e312e7344aa47679649b3f1aa",
+    "packages/tenancy/src/Provisioning/Internal/DatabaseValue.php": "199f86c635d1eb4ab07261effeea158d1515d1e591074306a5a96be7dc4f997e",
+    "packages/tenancy/tests/Unit/DatabaseValueTest.php": "da89c294525d64cc7552e472f0255c22970b3b392446ef4c96dbfbfbfe9c89d7",
+    "packages/tools/composer.json": "082dc851fbba1bc72d123569f90408461b07ae709867d1c6678af3b795e0be87",
+    "packages/transfer/composer.json": "7f01457b5072a3fee457c73d7f849a910fb3cbbcd456d5b725c14edc1fb7bcc0",
+    "packages/wakeup/composer.json": "f0e1f13902d3e8bd95d52d0227a36e7108111b3674e0e1cbacaea93e9f931c1b",
+    "packages/webhooks/composer.json": "93f3898a1eb02282637d22b7d820bfe90e2ea3dc8b35623f2614dfa879e4da46",
+    "packages/workflow/composer.json": "13f40a6accffc40b0a997c1307abdc15a1da3def4c0107d2803fe3ff3b5b6a01",
+    "products/flex-crm/composer.json": "e2c4c7f0d8d21022d29d971c8387dc0cfd5aa8500d7b9d116b725532bcb2a56b",
+    "scripts/manifest-check.py": "1bb617098977e3743e4dedceebd04800a25182e67c66640619e93d901f8eb16d",
+    "scripts/quality/infection-compatibility.json": "4948a3fe4d432eaa9fc0eafa9950a59b79c0f46816d56d58fb4bc4d8a2ba8321",
+    "scripts/quality/infection-pest-adapter/README.md": "c868b1cba4fa95221fedce11ff7bd1218e340eb5c343ac84df4cfffe87c4129b",
+    "scripts/quality/infection-pest-adapter/bin/corex-pest": "ece96f745f4b5823faba90abebc3d9553a65d18534d9ad29e9508cff8baa16b8",
+    "scripts/quality/infection-pest-adapter/composer.json": "89dd5e7b05df9477de13c108ed861505a3b5633e209cc342bbdd22a012996588",
+    "scripts/quality/infection-pest-adapter/src/PestAdapter.php": "dcbd03260449e63e92748273905b900505c007258c4c9ef65d83adf97723c91f",
+    "scripts/quality/infection-spike.py": "ce4c74a01b6d75b4158aa2cf91a0c7ef0e9897b28cb6a868d573a178506f9c38",
+    "scripts/quality/tests/test_infection_spike.py": "9ea8bdaf2c47dfe102c272ad49a192a0a4aa85a2f2c7f7c6f40e0bae451b67dc"
+  },
+  "result": "compatible",
+  "rows": [
+    {
+      "coverage": [
+        {
+          "path": "rows/php8.4-laravel13-sqlite/tmp/infection/coverage-xml/controls/Controls.php.xml",
+          "sha256": "3454c599ddc8017289559a3d786ffa6e66b2267b983ffc89a9c363648d7b89d2"
+        },
+        {
+          "path": "rows/php8.4-laravel13-sqlite/tmp/infection/coverage-xml/index.xml",
+          "sha256": "a66b81daa2827c3b44c982eff9e83b2f6f24407c2ca8960d0b4abffea0bbb64d"
+        },
+        {
+          "path": "rows/php8.4-laravel13-sqlite/tmp/infection/coverage-xml/packages/tenancy/src/Provisioning/Internal/DatabaseValue.php.xml",
+          "sha256": "4a398df1375d42c5b60372cff185043774a5424798b926345cb11e1b3e908d7f"
+        }
+      ],
+      "database": {
+        "path": "rows/php8.4-laravel13-sqlite/database.json",
+        "sha256": "dc95463ab5a93e9e68f393d58968037924ff069bda15354311d52be96cc3c449"
+      },
+      "driver": "sqlite",
+      "harness": [
+        {
+          "path": "rows/php8.4-laravel13-sqlite/pest-spike.xml",
+          "sha256": "5a260b35538b7376d85e00e4b42abe5047a1e345e7bc491e933c9560c8035934"
+        },
+        {
+          "path": "rows/php8.4-laravel13-sqlite/infection.json",
+          "sha256": "c48c903cb326ffcf9656afa5fe40253ce953b135f4d29f79f34478a5fe62f204"
+        }
+      ],
+      "help": {
+        "path": "rows/php8.4-laravel13-sqlite/help.stdout",
+        "sha256": "e70666366f74b68dc33fa2b546f9d64b2eb6f138c9d5afa21e5423e63bc8a117"
+      },
+      "infection": {
+        "argv": [
+          "/usr/bin/php8.4",
+          "-d",
+          "pcov.directory=/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.4-laravel13",
+          "/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.4-laravel13/vendor/bin/infection",
+          "--configuration=/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/rows/php8.4-laravel13-sqlite/infection.json",
+          "--no-progress",
+          "--with-uncovered",
+          "--with-timeouts",
+          "--threads=1",
+          "--log-verbosity=all",
+          "--debug"
+        ],
+        "cwd": "/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.4-laravel13",
+        "duration_seconds": 2.971,
+        "exit": 0,
+        "stderr": {
+          "path": "rows/php8.4-laravel13-sqlite/infection.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "path": "rows/php8.4-laravel13-sqlite/infection.stdout",
+          "sha256": "3887296f381578ebb4e9680e13b275043624e1f87e727504240d0954d8e81657"
+        }
+      },
+      "junit": {
+        "path": "rows/php8.4-laravel13-sqlite/tmp/infection/junit.xml",
+        "sha256": "30fedeceb2842d839b6f15802558444dc793ec1485a12f490f512d76cb7eabb7"
+      },
+      "laravel": "13",
+      "lock": {
+        "path": "rows/php8.4-laravel13-sqlite/composer.lock",
+        "sha256": "719eeeba0dbb2c53926a0ac91ec89b99b27a081085815376b2efe05bf49c4aee"
+      },
+      "mutant_stats": {
+        "coveredCodeMsi": 71.43,
+        "errorCount": 1,
+        "escapedCount": 1,
+        "ignoredCount": 0,
+        "killedByStaticAnalysisCount": 0,
+        "killedCount": 4,
+        "msi": 62.5,
+        "mutationCodeCoverage": 87.5,
+        "notCoveredCount": 1,
+        "skippedCount": 0,
+        "syntaxErrorCount": 0,
+        "timeOutCount": 1,
+        "totalMutantsCount": 8
+      },
+      "mutants": {
+        "path": "rows/php8.4-laravel13-sqlite/mutants.json",
+        "sha256": "709aac310e6ff41ce63d3bb1952f946b2afd8c241ea57674b45226343870d04d"
+      },
+      "pest": {
+        "argv": [
+          "/usr/bin/php8.4",
+          "-d",
+          "pcov.directory=/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.4-laravel13",
+          "/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.4-laravel13/vendor/bin/corex-pest",
+          "--configuration=/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.4-laravel13/pest-spike.xml",
+          "--compact",
+          "--colors=never"
+        ],
+        "cwd": "/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.4-laravel13",
+        "duration_seconds": 0.164,
+        "exit": 0,
+        "stderr": {
+          "path": "rows/php8.4-laravel13-sqlite/pest.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "path": "rows/php8.4-laravel13-sqlite/pest.stdout",
+          "sha256": "ed8044d891f5f86d297d43a37cebae30822b3163a690f16dd8cbea08121e5633"
+        }
+      },
+      "php": "8.4",
+      "php_binary": {
+        "path": "/usr/bin/php8.4",
+        "sha256": "7a2cd713d672ca4a581fa83bb453e697e5399d863bfde40d804f540dfb177f02"
+      },
+      "result": "passed",
+      "trace": {
+        "path": "rows/php8.4-laravel13-sqlite/pest-trace.jsonl",
+        "sha256": "36a5c96045d4d318acb42336d15c4764f3a7a3bdaf32ba51f689b1e89eabfeed"
+      },
+      "versions": {
+        "path": "rows/php8.4-laravel13-sqlite/versions.json",
+        "sha256": "5d55a2e64906fcfac87aa12cef67bcaf18230e92edae50779cda3780cf7df5e1"
+      }
+    },
+    {
+      "coverage": [
+        {
+          "path": "rows/php8.4-laravel13-pgsql/tmp/infection/coverage-xml/controls/Controls.php.xml",
+          "sha256": "3454c599ddc8017289559a3d786ffa6e66b2267b983ffc89a9c363648d7b89d2"
+        },
+        {
+          "path": "rows/php8.4-laravel13-pgsql/tmp/infection/coverage-xml/index.xml",
+          "sha256": "a3a14dc8a2de1093479d1792dba1ab4fe8fd7c8c5c8a01db1c8ee90f0819aa5a"
+        },
+        {
+          "path": "rows/php8.4-laravel13-pgsql/tmp/infection/coverage-xml/packages/tenancy/src/Provisioning/Internal/DatabaseValue.php.xml",
+          "sha256": "592ec58512ea7e8fd32a2b12e3e639d835d3f5a5300df0221419b5e33e94e144"
+        }
+      ],
+      "database": {
+        "path": "rows/php8.4-laravel13-pgsql/database.json",
+        "sha256": "036672fd35bd886e1ee602c00087ea182096e275532874a37848dc795d058cb5"
+      },
+      "driver": "pgsql",
+      "harness": [
+        {
+          "path": "rows/php8.4-laravel13-pgsql/pest-spike.xml",
+          "sha256": "5a260b35538b7376d85e00e4b42abe5047a1e345e7bc491e933c9560c8035934"
+        },
+        {
+          "path": "rows/php8.4-laravel13-pgsql/infection.json",
+          "sha256": "f8a5e34e75d831fd33e4d241607d92f2c212b300e9a56af56f4d7f1f0a39f00c"
+        }
+      ],
+      "help": {
+        "path": "rows/php8.4-laravel13-pgsql/help.stdout",
+        "sha256": "e70666366f74b68dc33fa2b546f9d64b2eb6f138c9d5afa21e5423e63bc8a117"
+      },
+      "infection": {
+        "argv": [
+          "/usr/bin/php8.4",
+          "-d",
+          "pcov.directory=/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.4-laravel13",
+          "/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.4-laravel13/vendor/bin/infection",
+          "--configuration=/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/rows/php8.4-laravel13-pgsql/infection.json",
+          "--no-progress",
+          "--with-uncovered",
+          "--with-timeouts",
+          "--threads=1",
+          "--log-verbosity=all",
+          "--debug"
+        ],
+        "cwd": "/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.4-laravel13",
+        "duration_seconds": 3.07,
+        "exit": 0,
+        "stderr": {
+          "path": "rows/php8.4-laravel13-pgsql/infection.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "path": "rows/php8.4-laravel13-pgsql/infection.stdout",
+          "sha256": "64ab88c4bfaf633a3ca810c104b9e006a9be95f1bdb17d6ffbf433dfa5e04d12"
+        }
+      },
+      "junit": {
+        "path": "rows/php8.4-laravel13-pgsql/tmp/infection/junit.xml",
+        "sha256": "a7f86e82d55ea3e4b6cb216f4c60ffc1b5eb52c44cea2e6a113c7055b677868d"
+      },
+      "laravel": "13",
+      "lock": {
+        "path": "rows/php8.4-laravel13-pgsql/composer.lock",
+        "sha256": "719eeeba0dbb2c53926a0ac91ec89b99b27a081085815376b2efe05bf49c4aee"
+      },
+      "mutant_stats": {
+        "coveredCodeMsi": 71.43,
+        "errorCount": 1,
+        "escapedCount": 1,
+        "ignoredCount": 0,
+        "killedByStaticAnalysisCount": 0,
+        "killedCount": 4,
+        "msi": 62.5,
+        "mutationCodeCoverage": 87.5,
+        "notCoveredCount": 1,
+        "skippedCount": 0,
+        "syntaxErrorCount": 0,
+        "timeOutCount": 1,
+        "totalMutantsCount": 8
+      },
+      "mutants": {
+        "path": "rows/php8.4-laravel13-pgsql/mutants.json",
+        "sha256": "907bb3ba08ea5a18ca273ce292e3ce1286eac7165e05ac578efa03b1b21378f2"
+      },
+      "pest": {
+        "argv": [
+          "/usr/bin/php8.4",
+          "-d",
+          "pcov.directory=/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.4-laravel13",
+          "/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.4-laravel13/vendor/bin/corex-pest",
+          "--configuration=/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.4-laravel13/pest-spike.xml",
+          "--compact",
+          "--colors=never"
+        ],
+        "cwd": "/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.4-laravel13",
+        "duration_seconds": 0.164,
+        "exit": 0,
+        "stderr": {
+          "path": "rows/php8.4-laravel13-pgsql/pest.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "path": "rows/php8.4-laravel13-pgsql/pest.stdout",
+          "sha256": "783f22a3f97da90120b278e8d6d712b6b1254b01b09029d267c3e6fe0a119d28"
+        }
+      },
+      "php": "8.4",
+      "php_binary": {
+        "path": "/usr/bin/php8.4",
+        "sha256": "7a2cd713d672ca4a581fa83bb453e697e5399d863bfde40d804f540dfb177f02"
+      },
+      "result": "passed",
+      "trace": {
+        "path": "rows/php8.4-laravel13-pgsql/pest-trace.jsonl",
+        "sha256": "0811bc2428a69827422fc057b1adf752c362cc19f4011215f13fe741d970c346"
+      },
+      "versions": {
+        "path": "rows/php8.4-laravel13-pgsql/versions.json",
+        "sha256": "5d55a2e64906fcfac87aa12cef67bcaf18230e92edae50779cda3780cf7df5e1"
+      }
+    },
+    {
+      "coverage": [
+        {
+          "path": "rows/php8.5-laravel13-sqlite/tmp/infection/coverage-xml/controls/Controls.php.xml",
+          "sha256": "3454c599ddc8017289559a3d786ffa6e66b2267b983ffc89a9c363648d7b89d2"
+        },
+        {
+          "path": "rows/php8.5-laravel13-sqlite/tmp/infection/coverage-xml/index.xml",
+          "sha256": "ef46daa7a1802409979de2bff222436dcf2d5ce6d77feafc9c50723e5034a493"
+        },
+        {
+          "path": "rows/php8.5-laravel13-sqlite/tmp/infection/coverage-xml/packages/tenancy/src/Provisioning/Internal/DatabaseValue.php.xml",
+          "sha256": "4a398df1375d42c5b60372cff185043774a5424798b926345cb11e1b3e908d7f"
+        }
+      ],
+      "database": {
+        "path": "rows/php8.5-laravel13-sqlite/database.json",
+        "sha256": "dc95463ab5a93e9e68f393d58968037924ff069bda15354311d52be96cc3c449"
+      },
+      "driver": "sqlite",
+      "harness": [
+        {
+          "path": "rows/php8.5-laravel13-sqlite/pest-spike.xml",
+          "sha256": "c4228b3c7fb7d4ee4c31749eeb16d0fe06dbc752a92b60a21e14a1904d90f8dc"
+        },
+        {
+          "path": "rows/php8.5-laravel13-sqlite/infection.json",
+          "sha256": "a1a076213c43041b680131fa39c310731ab287d00c335b4687a212a978ffe8d3"
+        }
+      ],
+      "help": {
+        "path": "rows/php8.5-laravel13-sqlite/help.stdout",
+        "sha256": "e70666366f74b68dc33fa2b546f9d64b2eb6f138c9d5afa21e5423e63bc8a117"
+      },
+      "infection": {
+        "argv": [
+          "/usr/bin/php8.5",
+          "-d",
+          "pcov.directory=/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.5-laravel13",
+          "/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.5-laravel13/vendor/bin/infection",
+          "--configuration=/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/rows/php8.5-laravel13-sqlite/infection.json",
+          "--no-progress",
+          "--with-uncovered",
+          "--with-timeouts",
+          "--threads=1",
+          "--log-verbosity=all",
+          "--debug"
+        ],
+        "cwd": "/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.5-laravel13",
+        "duration_seconds": 2.969,
+        "exit": 0,
+        "stderr": {
+          "path": "rows/php8.5-laravel13-sqlite/infection.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "path": "rows/php8.5-laravel13-sqlite/infection.stdout",
+          "sha256": "4fba9cb148b42337892476d27c0ffc47f7ac8207a730a2877ec5ce34207cf974"
+        }
+      },
+      "junit": {
+        "path": "rows/php8.5-laravel13-sqlite/tmp/infection/junit.xml",
+        "sha256": "dcb199eb908cc6481c63f9e996c3f5e8f5d13bf6d7175edaf95c43e233838cc8"
+      },
+      "laravel": "13",
+      "lock": {
+        "path": "rows/php8.5-laravel13-sqlite/composer.lock",
+        "sha256": "719eeeba0dbb2c53926a0ac91ec89b99b27a081085815376b2efe05bf49c4aee"
+      },
+      "mutant_stats": {
+        "coveredCodeMsi": 71.43,
+        "errorCount": 1,
+        "escapedCount": 1,
+        "ignoredCount": 0,
+        "killedByStaticAnalysisCount": 0,
+        "killedCount": 4,
+        "msi": 62.5,
+        "mutationCodeCoverage": 87.5,
+        "notCoveredCount": 1,
+        "skippedCount": 0,
+        "syntaxErrorCount": 0,
+        "timeOutCount": 1,
+        "totalMutantsCount": 8
+      },
+      "mutants": {
+        "path": "rows/php8.5-laravel13-sqlite/mutants.json",
+        "sha256": "bd21fec306dbfa5e9a194944e61603a1f64bc6104e76c9c2b2489010a445b8ad"
+      },
+      "pest": {
+        "argv": [
+          "/usr/bin/php8.5",
+          "-d",
+          "pcov.directory=/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.5-laravel13",
+          "/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.5-laravel13/vendor/bin/corex-pest",
+          "--configuration=/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.5-laravel13/pest-spike.xml",
+          "--compact",
+          "--colors=never"
+        ],
+        "cwd": "/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.5-laravel13",
+        "duration_seconds": 0.114,
+        "exit": 0,
+        "stderr": {
+          "path": "rows/php8.5-laravel13-sqlite/pest.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "path": "rows/php8.5-laravel13-sqlite/pest.stdout",
+          "sha256": "ed8044d891f5f86d297d43a37cebae30822b3163a690f16dd8cbea08121e5633"
+        }
+      },
+      "php": "8.5",
+      "php_binary": {
+        "path": "/usr/bin/php8.5",
+        "sha256": "2d059aa6d433b73285c68cef6fa37b66bf7f4834240b34b944ad68caade7aad6"
+      },
+      "result": "passed",
+      "trace": {
+        "path": "rows/php8.5-laravel13-sqlite/pest-trace.jsonl",
+        "sha256": "11aa9b16283b18de8efce7f52494881b4f581086a5ee97483f0db83491e296ee"
+      },
+      "versions": {
+        "path": "rows/php8.5-laravel13-sqlite/versions.json",
+        "sha256": "6259dde1b31d0ad6a0154ea782675ca0c9b2815411241fe934c854fa09b8c95f"
+      }
+    },
+    {
+      "coverage": [
+        {
+          "path": "rows/php8.5-laravel13-pgsql/tmp/infection/coverage-xml/controls/Controls.php.xml",
+          "sha256": "3454c599ddc8017289559a3d786ffa6e66b2267b983ffc89a9c363648d7b89d2"
+        },
+        {
+          "path": "rows/php8.5-laravel13-pgsql/tmp/infection/coverage-xml/index.xml",
+          "sha256": "7936ef0e6d96a25a020ce37a69122ab42c65ba4aedd05d9ca22bd39aee3f0be5"
+        },
+        {
+          "path": "rows/php8.5-laravel13-pgsql/tmp/infection/coverage-xml/packages/tenancy/src/Provisioning/Internal/DatabaseValue.php.xml",
+          "sha256": "592ec58512ea7e8fd32a2b12e3e639d835d3f5a5300df0221419b5e33e94e144"
+        }
+      ],
+      "database": {
+        "path": "rows/php8.5-laravel13-pgsql/database.json",
+        "sha256": "036672fd35bd886e1ee602c00087ea182096e275532874a37848dc795d058cb5"
+      },
+      "driver": "pgsql",
+      "harness": [
+        {
+          "path": "rows/php8.5-laravel13-pgsql/pest-spike.xml",
+          "sha256": "c4228b3c7fb7d4ee4c31749eeb16d0fe06dbc752a92b60a21e14a1904d90f8dc"
+        },
+        {
+          "path": "rows/php8.5-laravel13-pgsql/infection.json",
+          "sha256": "3a9e26583305776080ebeee9a0eed80a0b00a99a5945fbe404f9ddcd07d8fedb"
+        }
+      ],
+      "help": {
+        "path": "rows/php8.5-laravel13-pgsql/help.stdout",
+        "sha256": "e70666366f74b68dc33fa2b546f9d64b2eb6f138c9d5afa21e5423e63bc8a117"
+      },
+      "infection": {
+        "argv": [
+          "/usr/bin/php8.5",
+          "-d",
+          "pcov.directory=/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.5-laravel13",
+          "/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.5-laravel13/vendor/bin/infection",
+          "--configuration=/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/rows/php8.5-laravel13-pgsql/infection.json",
+          "--no-progress",
+          "--with-uncovered",
+          "--with-timeouts",
+          "--threads=1",
+          "--log-verbosity=all",
+          "--debug"
+        ],
+        "cwd": "/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.5-laravel13",
+        "duration_seconds": 3.021,
+        "exit": 0,
+        "stderr": {
+          "path": "rows/php8.5-laravel13-pgsql/infection.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "path": "rows/php8.5-laravel13-pgsql/infection.stdout",
+          "sha256": "91f39c3e0ebfc7fa9e9b7300e6b85479dd7111799ff1e88a0e21d4c3ea2ab1e1"
+        }
+      },
+      "junit": {
+        "path": "rows/php8.5-laravel13-pgsql/tmp/infection/junit.xml",
+        "sha256": "558e68029a234be80d363eac2c184c0c65f99ad3fa0a6a532794efef7c486cc8"
+      },
+      "laravel": "13",
+      "lock": {
+        "path": "rows/php8.5-laravel13-pgsql/composer.lock",
+        "sha256": "719eeeba0dbb2c53926a0ac91ec89b99b27a081085815376b2efe05bf49c4aee"
+      },
+      "mutant_stats": {
+        "coveredCodeMsi": 71.43,
+        "errorCount": 1,
+        "escapedCount": 1,
+        "ignoredCount": 0,
+        "killedByStaticAnalysisCount": 0,
+        "killedCount": 4,
+        "msi": 62.5,
+        "mutationCodeCoverage": 87.5,
+        "notCoveredCount": 1,
+        "skippedCount": 0,
+        "syntaxErrorCount": 0,
+        "timeOutCount": 1,
+        "totalMutantsCount": 8
+      },
+      "mutants": {
+        "path": "rows/php8.5-laravel13-pgsql/mutants.json",
+        "sha256": "82eccd1933f497079eb6a00750da955bbfada76a35e1adaa55d738d9232b0d61"
+      },
+      "pest": {
+        "argv": [
+          "/usr/bin/php8.5",
+          "-d",
+          "pcov.directory=/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.5-laravel13",
+          "/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.5-laravel13/vendor/bin/corex-pest",
+          "--configuration=/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.5-laravel13/pest-spike.xml",
+          "--compact",
+          "--colors=never"
+        ],
+        "cwd": "/home/vostrikov/projects/packages/corex/build/quality/infection-spike-laravel13/work/php8.5-laravel13",
+        "duration_seconds": 0.164,
+        "exit": 0,
+        "stderr": {
+          "path": "rows/php8.5-laravel13-pgsql/pest.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "path": "rows/php8.5-laravel13-pgsql/pest.stdout",
+          "sha256": "156207234ea622e1b2ff4a06e957e53b21864db37a8c0dc89ade5dfd2851fa51"
+        }
+      },
+      "php": "8.5",
+      "php_binary": {
+        "path": "/usr/bin/php8.5",
+        "sha256": "2d059aa6d433b73285c68cef6fa37b66bf7f4834240b34b944ad68caade7aad6"
+      },
+      "result": "passed",
+      "trace": {
+        "path": "rows/php8.5-laravel13-pgsql/pest-trace.jsonl",
+        "sha256": "dd0fe2a0b163a6ef9c89ce75fb14f35c9d3e38989f50699b18f0f2c9049d1f6e"
+      },
+      "versions": {
+        "path": "rows/php8.5-laravel13-pgsql/versions.json",
+        "sha256": "6259dde1b31d0ad6a0154ea782675ca0c9b2815411241fe934c854fa09b8c95f"
+      }
+    }
+  ],
+  "schema": "corex-infection-spike/v2",
+  "verified_partial_rows": 4
+}

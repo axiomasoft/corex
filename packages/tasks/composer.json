@@ -20,15 +20,15 @@
         "ext-mbstring": "*",
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
-        "laravel/framework": "^12.0|^13.0",
+        "laravel/framework": "^13.0",
         "psr/clock": "^1.0"
     },
     "require-dev": {
         "larastan/larastan": "^3.12",
         "laravel/pint": "^1.32",
         "mockery/mockery": "^1.6",
-        "orchestra/testbench": "^10.12|^11.3",
-        "orchestra/testbench-core": "^10.12|^11.3",
+        "orchestra/testbench": "^11.3",
+        "orchestra/testbench-core": "^11.5",
         "pestphp/pest": "^5.2"
     },
     "autoload": {

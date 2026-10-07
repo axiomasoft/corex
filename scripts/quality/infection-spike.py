@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run a pinned Pest/Infection fragment, retaining raw reports for all eight matrix rows.
+"""Run a pinned Pest/Infection fragment, retaining raw reports for the declared matrix.
 
 The adapter runs the complete fragment. JUnit and coverage stay byte-for-byte raw;
 Pest's pretty JUnit names are never substituted into its generated coverage names.
@@ -21,7 +21,8 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parents[2]
 POLICY = ROOT / 'scripts/quality/infection-compatibility.json'
 ADAPTER = 'scripts/quality/infection-pest-adapter'
-SCHEMA = 'corex-infection-spike/v1'
+SCHEMA = 'corex-infection-spike/v2'
+PLATFORM_BASE = 'a83248a0adb02c82aca4c6dbdab71fb4c543cdac'
 STATUSES = {'killed': 'killedCount', 'escaped': 'escapedCount',
             'timeouted': 'timeOutCount', 'errored': 'errorCount',
             'uncovered': 'notCoveredCount', 'syntaxErrors': 'syntaxErrorCount',
@@ -124,7 +125,11 @@ def save(path, value):
 
 def inputs(root, policy):
     paths = ['composer.json', 'composer.lock', str(POLICY.relative_to(ROOT)),
-             'scripts/quality/infection-spike.py', policy['source'], policy['test']]
+             'scripts/quality/infection-spike.py', 'scripts/manifest-check.py',
+             'scripts/quality/tests/test_infection_spike.py', '.github/workflows/ci.yml',
+             policy['source'], policy['test']]
+    paths += [str(p.relative_to(root)) for pattern in ('packages/*/composer.json', 'products/*/composer.json')
+              for p in root.glob(pattern)]
     paths += [str(p.relative_to(root)) for p in (root / ADAPTER).rglob('*') if p.is_file()]
     return {p: sha(root / p) for p in sorted(paths)}
 
@@ -190,6 +195,7 @@ def check_receipt(receipt, output, root=ROOT):
 def check_rows(receipt, output, root=ROOT, complete=False):
     """Verify partial diagnostics without granting full-matrix compatibility."""
     policy = json.loads((root / POLICY.relative_to(ROOT)).read_text())
+    check_policy(policy)
     require(receipt.get('schema') == SCHEMA, 'Unknown receipt schema')
     require(receipt.get('adapter') == policy['adapter'], 'Unverified adapter')
     require(receipt.get('inputs') == inputs(root, policy), 'Stale product/tool/lock inputs')
@@ -247,6 +253,130 @@ def check_rows(receipt, output, root=ROOT, complete=False):
     return len(rows)
 
 
+def check_policy(policy):
+    require(policy.get('schema') == 'corex-infection-compatibility-policy/v2' and
+            policy.get('php') == ['8.4', '8.5'] and policy.get('laravel') == ['13'] and
+            policy.get('drivers') == ['sqlite', 'pgsql'], 'Unsupported platform policy')
+
+
+def platform_manifests(root):
+    return [root / 'composer.json', *sorted(root.glob('packages/*/composer.json')),
+            *sorted(root.glob('products/*/composer.json'))]
+
+
+def platform_declarations(data):
+    for section in ('require', 'require-dev'):
+        for name in data.get(section, {}):
+            if name == 'laravel/framework' or name.startswith('illuminate/'):
+                data[section][name] = '^13.0'
+            elif name == 'orchestra/testbench':
+                data[section][name] = '^11.3'
+            elif name == 'orchestra/testbench-core':
+                data[section][name] = '^11.5'
+    return data
+
+
+def base_json(path, root):
+    return json.loads(subprocess.check_output(['git', 'show', PLATFORM_BASE + ':' + str(path.relative_to(root))],
+                                            cwd=root, text=True))
+
+
+def check_platform_contract(root=ROOT):
+    """Prove the finite D132 delta against its committed pre-amendment baseline."""
+    manifests = platform_manifests(root)
+    for path in manifests:
+        require(json.loads(path.read_text()) == platform_declarations(base_json(path, root)),
+                'Unexpected platform manifest delta: ' + str(path.relative_to(root)))
+    baseline = base_json(root / 'composer.lock', root)
+    current = json.loads((root / 'composer.lock').read_text())
+    expected = json.loads(json.dumps(baseline))
+    refreshed = []
+    for package in expected['packages'] + expected['packages-dev']:
+        dist = package.get('dist', {})
+        if dist.get('type') != 'path' or not dist.get('url', '').startswith(('packages/', 'products/')):
+            continue
+        manifest = root / dist['url'] / 'composer.json'
+        data = json.loads(manifest.read_text())
+        for section in ('require', 'require-dev'):
+            if section in data:
+                package[section] = data[section]
+        dist['reference'] = hashlib.sha1(manifest.read_bytes() + b'a:0:{}').hexdigest()
+        refreshed.append(package['name'])
+    # Composer itself owns the root content hash; do not approximate its JSON serialization.
+    php = shutil.which('php8.4')
+    require(php is not None, 'PHP 8.4 is unavailable')
+    expression = "require 'vendor/autoload.php'; echo Composer\\Package\\Locker::getContentHash(file_get_contents('composer.json'));"
+    expected['content-hash'] = subprocess.check_output([php, '-r', expression], cwd=root, text=True)
+    require(current == expected, 'Unexpected root lock delta: upstream records/pins must stay unchanged')
+    return {'baseline_commit': PLATFORM_BASE, 'manifests': len(manifests),
+            'refreshed_first_party': refreshed, 'content_hash': current['content-hash'],
+            'upstream_records_unchanged': True}
+
+
+def check_ci_platform(root=ROOT):
+    """Prove that ordinary CI changed only the exact retired Laravel 12 cells/steps."""
+    path = root / '.github/workflows/ci.yml'
+    baseline_text = subprocess.check_output(['git', 'show', PLATFORM_BASE + ':.github/workflows/ci.yml'],
+                                            cwd=root, text=True)
+    expected = baseline_text.replace("laravel: ['12.*', '13.*']", "laravel: ['13.*']")
+    expected = expected.replace('permissions: {}\n\njobs:',
+                                'permissions: {}\n\nenv:\n  COMPOSER_ROOT_VERSION: dev-main\n\njobs:')
+    expected = re.sub(r"      - name: (?:Root )?Laravel 12 test stack\n"
+                      r"        if: matrix.laravel == '12\.\*'\n        run: [^\n]+\n\n", '', expected)
+    current = path.read_text()
+    require(current == expected, 'Ordinary CI platform/installer drift beyond D132')
+    cells = [m.group(1) for m in re.finditer(r'^  ([\w-]+):\n(.*?)(?=^  [\w-]+:|\Z)', current, re.M | re.S)
+             if "laravel: ['13.*']" in m.group(2)]
+    require("php: ['8.4', '8.5']" in current, 'Missing PHP CI lane')
+    require(cells and 'tests-pg' in cells and 'tenancy-tests' in cells, 'Missing database CI lane')
+    return cells
+
+
+def check_platform_matrix(output, root=ROOT):
+    contract = check_platform_contract(root)
+    ci_jobs = check_ci_platform(root)
+    output.mkdir(parents=True, exist_ok=True)
+    policy = json.loads(POLICY.read_text())
+    check_policy(policy)
+    receipt = {'schema': 'corex-platform-matrix/v2', 'result': 'running', 'inputs': inputs(root, policy),
+               'contract': contract, 'ci_jobs': ci_jobs, 'cells': []}
+    lock = json.loads((root / 'composer.lock').read_text())
+    pinned = {p['name']: p['version'] for p in lock['packages'] + lock['packages-dev']
+              if p.get('dist', {}).get('type') != 'path'}
+    for php in policy['php']:
+        work = output / ('php' + php + '-laravel13')
+        work.mkdir(parents=True, exist_ok=True)
+        for path in platform_manifests(root) + [root / 'composer.lock']:
+            dest = work / path.relative_to(root)
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(path, dest)
+        shutil.copytree(root / ADAPTER, work / ADAPTER, dirs_exist_ok=True)
+        binary = shutil.which('php' + php)
+        require(binary is not None, 'PHP ' + php + ' is unavailable')
+        binary = Path(binary).resolve()
+        env = php_environment(binary, work)
+        env['COMPOSER_ROOT_VERSION'] = 'dev-main'
+        args = [binary, shutil.which('composer'), 'update', '--no-install', '--no-scripts', '--no-plugins', '--no-progress']
+        for name, version in pinned.items():
+            args += ['--with', name + ':' + version]
+        solve = run(args, work, env, work / 'solve', output, timeout=1200)
+        platform = run([binary, shutil.which('composer'), 'check-platform-reqs', '--lock', '--no-plugins'],
+                       work, env, work / 'platform', output)
+        audit = run([binary, shutil.which('composer'), 'audit', '--locked', '--no-plugins', '--format=json'],
+                    work, env, work / 'audit', output)
+        resolved = json.loads((work / 'composer.lock').read_text())
+        versions = {p['name']: p['version'].lstrip('v') for p in resolved['packages'] + resolved['packages-dev']}
+        require(all(versions.get(k) == v for k, v in policy['versions'].items()), 'Platform solve changed engine pins')
+        require(versions.get('laravel/framework', '').startswith('13.'), 'Unsupported framework solve')
+        receipt['cells'].append({'php': php, 'laravel': '13', 'binary': {'path': str(binary), 'sha256': sha(binary)},
+                                 'solve': solve, 'platform': platform, 'audit': audit,
+                                 'lock': artifact(work / 'composer.lock', output), 'versions': versions})
+        save(output / 'receipt.json', receipt)
+    receipt['result'] = 'compatible'
+    save(output / 'receipt.json', receipt)
+    return receipt
+
+
 def run(argv, cwd, env, log, output, timeout=600, accept=(0,)):
     log.parent.mkdir(parents=True, exist_ok=True)
     start = time.monotonic()
@@ -267,8 +397,11 @@ def php_environment(binary, work):
     if link.is_symlink():
         link.unlink()
     link.symlink_to(binary)
-    return {**os.environ, 'PATH': str(shim) + os.pathsep + os.environ['PATH'],
-            'XDEBUG_MODE': 'coverage', 'PAO_DISABLE': '1', 'COMPOSER_NO_INTERACTION': '1'}
+    env = {**os.environ, 'PATH': str(shim) + os.pathsep + os.environ['PATH'],
+           'XDEBUG_MODE': 'coverage', 'PAO_DISABLE': '1', 'COMPOSER_NO_INTERACTION': '1'}
+    if binary.name == 'php8.5' and os.environ.get('COREX_PHP85_INI_SCAN_DIR'):
+        env['PHP_INI_SCAN_DIR'] = os.environ['COREX_PHP85_INI_SCAN_DIR']
+    return env
 
 
 def prepare_cell(php, laravel, output, policy):
@@ -373,8 +506,18 @@ def main():
     parser.add_argument('--matrix', choices=['all'], default='all')
     parser.add_argument('--output', type=Path, default=ROOT / 'build/quality/infection-spike')
     parser.add_argument('--check', type=Path)
+    parser.add_argument('--check-platform-contract', action='store_true')
+    parser.add_argument('--check-platform-matrix', action='store_true')
     args = parser.parse_args()
     try:
+        if args.check_platform_contract:
+            proof = check_platform_contract()
+            print('Platform contract OK: ' + str(proof['manifests']) + ' manifests; upstream lock unchanged')
+            return 0
+        if args.check_platform_matrix:
+            check_platform_matrix(ROOT / 'build/quality/infection-platform-laravel13')
+            print('Platform matrix OK: PHP 8.4/8.5 × Laravel 13; ordinary CI preserved')
+            return 0
         if args.check:
             n = check_receipt(json.loads(args.check.read_text()), args.check.resolve().parent)
             print('Infection compatibility OK: ' + str(n) + ' actual matrix rows')
@@ -383,6 +526,7 @@ def main():
         require(output.is_relative_to(ROOT / 'build'), 'Spike output must be inside the repository build directory')
         output.mkdir(parents=True, exist_ok=True)
         policy = json.loads(POLICY.read_text())
+        check_policy(policy)
         start = time.monotonic()
         receipt = {'schema': SCHEMA, 'result': 'running', 'adapter': policy['adapter'],
                    'inputs': inputs(ROOT, policy), 'rows': [], 'failed_cells': []}
@@ -418,7 +562,7 @@ def main():
         receipt['result'] = 'compatible'
         check_receipt(receipt, output)
         save(output / 'receipt.json', receipt)
-        print('Infection compatibility OK: 8 actual matrix rows')
+        print('Infection compatibility OK: ' + str(len(receipt['rows'])) + ' actual matrix rows')
         return 0
     except (ProofError, OSError, ValueError, KeyError, TypeError, ET.ParseError, subprocess.SubprocessError) as exc:
         print('Infection compatibility RED: ' + str(exc), file=sys.stderr)
