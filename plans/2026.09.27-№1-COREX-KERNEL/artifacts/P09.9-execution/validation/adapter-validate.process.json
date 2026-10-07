@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "scripts/php84",
+    "composer",
+    "--working-dir=scripts/quality/infection-pest-adapter",
+    "validate",
+    "--strict"
+  ],
+  "exit": 0
+}

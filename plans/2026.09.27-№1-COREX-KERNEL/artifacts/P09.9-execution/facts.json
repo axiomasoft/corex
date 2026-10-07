@@ -1,0 +1,468 @@
+{
+  "anchors": {
+    ".github/workflows/ci.yml": "220ae361fc477cb7a5e5900a74570695770ca8e8a28a523504ceb11a1be90c49",
+    "composer.json": "9dabc7d0fe3f302e5771062df60808b8a89dc1f1ea0a5a89cd712d59e0df55a5",
+    "composer.lock": "573bbf1e9c9edc9a03ba4dc4ad2514b0eae4bd480834a6f1303ce8667870d167",
+    "phpstan-baseline.neon": "4b3227fab5b697264e8532b59f5cdd96c86a0ff1fa484cc1a869af36ae91530a",
+    "phpstan-extensions.neon": "9894d193a253316e7837f819b7fc3eb7cb290182a243d148a8409b4dc08af013",
+    "phpstan.neon": "632ac3eb90196e2bd14d005923f787e4d55bcf564b6541331d5674a95656ef32",
+    "pint.json": "8b3199f3aa4d4543f0396c28f7787f0ab71f0d2b3ba4fd87c3586219896269f8",
+    "rector.php": "4446b990229cd06c4511c80b68857050d994250b1953df7ce6030534b40721b3",
+    "scripts/bc-check.sh": "1057c8b825dcbbb43fbfb40a4746d056edf73b106a03c480fff978f3552ed719",
+    "scripts/bc/accepted-base.json": "e4312a96dbb104fa75b030f5738b89854d4b73ffb2b4f22f0498314e199f00c4",
+    "scripts/distribution/export-policy.json": "2f1463a870e65e059a8672af6f339a0a6a96aabc558ad0036df48b86a7b737c6",
+    "scripts/distribution/install-profiles.json": "fe62e1859102bf41916c16e1b40870c06cb83ee7b2755205b97c62478f9f4dff",
+    "scripts/distribution/profile-proof.py": "f6edf6ed6ee3e67ba6212c164af88a11fb7db36e53186c88c367ce18430c6c04",
+    "scripts/distribution/release-1.0-policy.json": "b4831f4a21339810a5952e63e470ddfee7716a13999b4dab2877870a3be9d437",
+    "scripts/distribution/release_candidate.py": "d43ae62ff2767323e04d5655d509283176b7c183630edc5dd5a643024135bca0",
+    "scripts/dod-1.0.json": "21f466bfdcd1117fedd35d136ab6e1b1ca0e9c5324b100bb10f3577fa63647bf",
+    "scripts/phpstan-packages.sh": "64177bc66158a56bcea2368b1f03647ed5ffd0af778f4c09e3618a280729968e",
+    "scripts/quality-ceiling-guard.php": "e89db7e690d43596b0043ba0f4a1c866f5007611b2da65029d34642f983291aa",
+    "scripts/quality-ceilings.json": "760d3f58ce1f3d20e24163609ee379adc6c98cbf666857f1744bec728428edaa",
+    "scripts/schema-gate.php": "14e92f3e28437cfeef2b13a41909128dc6de467d6bf35b64c6f0b10fec2f05b3",
+    "scripts/schema-sets.json": "0bac5b2db1b011e22f1a572032706a2bae7f6aeb71441e24b9302453aad5eb5b"
+  },
+  "baseline_total": 0,
+  "packages": [
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": null,
+      "name": "axiomasoft/corex-access",
+      "path": "packages/access",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "ext-mbstring": "*",
+        "illuminate/auth": "^12.0|^13.0",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "php": "^8.4",
+        "psr/clock": "^1.0"
+      },
+      "stability": "stable",
+      "type": "library"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": null,
+      "name": "axiomasoft/corex-access-azguard",
+      "path": "packages/access-azguard",
+      "phpstan_max": true,
+      "require": {
+        "axioma-studio/azguard-core": "^0.3",
+        "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/corex-access": "^1.0@dev",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "php": "^8.4",
+        "psr/clock": "^1.0"
+      },
+      "stability": "unreleased",
+      "type": "library"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage,ModulesPackage --exclude-group=pg --coverage --min=80",
+      "name": "axiomasoft/corex",
+      "path": "packages/core",
+      "phpstan_max": true,
+      "require": {
+        "ext-ctype": "*",
+        "ext-mbstring": "*",
+        "illuminate/auth": "^12.0|^13.0",
+        "illuminate/console": "^12.0|^13.0",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/events": "^12.0|^13.0",
+        "illuminate/queue": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "laravel/framework": "^12.0|^13.0",
+        "php": "^8.4",
+        "psr/clock": "^1.0"
+      },
+      "stability": "stable",
+      "type": "library"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80",
+      "name": "axiomasoft/corex-custom-fields",
+      "path": "packages/custom-fields",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "ext-filter": "*",
+        "ext-mbstring": "*",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "php": "^8.4",
+        "psr/clock": "^1.0"
+      },
+      "stability": "stable",
+      "type": "corex-module"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80",
+      "name": "axiomasoft/corex-intl",
+      "path": "packages/intl",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "brick/math": "^0.14|^0.15",
+        "brick/money": "^0.9 || ^0.10",
+        "ext-intl": "*",
+        "ext-mbstring": "*",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "php": "^8.4",
+        "psr/clock": "^1.0"
+      },
+      "stability": "stable",
+      "type": "corex-module"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": "pest --exclude-group=pg --coverage --min=80",
+      "name": "axiomasoft/corex-media",
+      "path": "packages/media",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "laravel/framework": "^12.0|^13.0",
+        "php": "^8.4",
+        "psr/clock": "^1.0"
+      },
+      "stability": "stable",
+      "type": "corex-module"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg --coverage --min=80",
+      "name": "axiomasoft/corex-notifications",
+      "path": "packages/notifications",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "laravel/framework": "^12.0|^13.0",
+        "php": "^8.4",
+        "psr/clock": "^1.0"
+      },
+      "stability": "stable",
+      "type": "corex-module"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": "pest --coverage --min=80",
+      "name": "axiomasoft/corex-operations",
+      "path": "packages/operations",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "ext-filter": "*",
+        "ext-mbstring": "*",
+        "illuminate/auth": "^12.0|^13.0",
+        "illuminate/console": "^12.0|^13.0",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/http": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "illuminate/validation": "^12.0|^13.0",
+        "php": "^8.4",
+        "psr/clock": "^1.0",
+        "symfony/http-kernel": "^7.2|^8.0"
+      },
+      "stability": "stable",
+      "type": "library"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": "pest --coverage --min=80",
+      "name": "axiomasoft/corex-panels",
+      "path": "packages/panels",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "php": "^8.4",
+        "psr/clock": "^1.0"
+      },
+      "stability": "stable",
+      "type": "corex-module"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": null,
+      "name": "axiomasoft/corex-recurrence",
+      "path": "packages/recurrence",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "laravel/framework": "^12.0|^13.0",
+        "php": "^8.4",
+        "rlanvin/php-rrule": "^3.0"
+      },
+      "stability": "stable",
+      "type": "library"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80",
+      "name": "axiomasoft/corex-search",
+      "path": "packages/search",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "ext-openssl": "*",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "php": "^8.4",
+        "psr/clock": "^1.0"
+      },
+      "stability": "stable",
+      "type": "corex-module"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": null,
+      "name": "axiomasoft/corex-search-intl",
+      "path": "packages/search-intl",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/corex-intl": "^1.0@dev",
+        "axiomasoft/corex-search": "^1.0@dev",
+        "illuminate/support": "^12.0|^13.0",
+        "php": "^8.4"
+      },
+      "stability": "stable",
+      "type": "corex-module"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80",
+      "name": "axiomasoft/corex-search-meilisearch",
+      "path": "packages/search-meilisearch",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/corex-search": "^1.0@dev",
+        "ext-filter": "*",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "meilisearch/meilisearch-php": ">=1.16.1-stable <=1.16.1-stable",
+        "php": "^8.4"
+      },
+      "stability": "stable",
+      "type": "corex-module"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": "pest --coverage --min=92",
+      "name": "axiomasoft/corex-tasks",
+      "path": "packages/tasks",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "ext-mbstring": "*",
+        "laravel/framework": "^12.0|^13.0",
+        "php": "^8.4",
+        "psr/clock": "^1.0"
+      },
+      "stability": "stable",
+      "type": "corex-module"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": "XDEBUG_MODE=coverage pest --coverage --min=80",
+      "name": "axiomasoft/corex-tasks-workflow",
+      "path": "packages/tasks-workflow",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/corex-recurrence": "^1.0@dev",
+        "axiomasoft/corex-tasks": "^1.0@dev",
+        "axiomasoft/corex-workflow": "^1.0@dev",
+        "ext-bcmath": "*",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "php": "^8.4"
+      },
+      "stability": "stable",
+      "type": "corex-module"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": null,
+      "name": "axiomasoft/corex-tenancy",
+      "path": "packages/tenancy",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "ext-ctype": "*",
+        "ext-filter": "*",
+        "ext-mbstring": "*",
+        "ext-openssl": "*",
+        "ext-session": "*",
+        "ext-sodium": "*",
+        "firebase/php-jwt": "^7.1",
+        "laravel/framework": "^12.0|^13.0",
+        "nesbot/carbon": "^3.0",
+        "php": "^8.4",
+        "psr/clock": "^1.0",
+        "psr/log": "^3.0",
+        "symfony/http-foundation": "^7.2|^8.0"
+      },
+      "stability": "stable",
+      "type": "library"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": "pest --coverage --min=80",
+      "name": "axiomasoft/corex-tools",
+      "path": "packages/tools",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/corex-operations": "^1.0@dev",
+        "illuminate/auth": "^12.0|^13.0",
+        "illuminate/console": "^12.0|^13.0",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/http": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "illuminate/validation": "^12.0|^13.0",
+        "php": "^8.4",
+        "symfony/http-kernel": "^7.2|^8.0"
+      },
+      "stability": "stable",
+      "type": "library"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80",
+      "name": "axiomasoft/corex-transfer",
+      "path": "packages/transfer",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "php": "^8.4",
+        "psr/clock": "^1.0"
+      },
+      "stability": "stable",
+      "type": "corex-module"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg --coverage --min=80",
+      "name": "axiomasoft/corex-wakeup",
+      "path": "packages/wakeup",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "illuminate/console": "^12.0|^13.0",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "php": "^8.4",
+        "psr/clock": "^1.0"
+      },
+      "stability": "stable",
+      "type": "corex-module"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": "pest --exclude-group=pg --coverage --min=80",
+      "name": "axiomasoft/corex-webhooks",
+      "path": "packages/webhooks",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/corex-operations": "^1.0@dev",
+        "ext-filter": "*",
+        "illuminate/auth": "^12.0|^13.0",
+        "illuminate/console": "^12.0|^13.0",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/http": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "illuminate/validation": "^12.0|^13.0",
+        "php": "^8.4",
+        "psr/clock": "^1.0"
+      },
+      "stability": "stable",
+      "type": "library"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80",
+      "name": "axiomasoft/corex-workflow",
+      "path": "packages/workflow",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "php": "^8.4",
+        "psr/clock": "^1.0"
+      },
+      "stability": "stable",
+      "type": "corex-module"
+    },
+    {
+      "baseline_count": 0,
+      "baseline_entries": 0,
+      "coverage_command": "pest --coverage --min=95",
+      "name": "flex/crm",
+      "path": "products/flex-crm",
+      "phpstan_max": true,
+      "require": {
+        "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/corex-intl": "^1.0@dev",
+        "axiomasoft/corex-operations": "^1.0@dev",
+        "brick/money": "^0.9 || ^0.10",
+        "ext-filter": "*",
+        "ext-mbstring": "*",
+        "giggsey/libphonenumber-for-php-lite": "^9.0",
+        "laravel/framework": "^12.0|^13.0",
+        "php": "^8.4"
+      },
+      "stability": "experimental",
+      "type": "corex-module"
+    }
+  ],
+  "root_baseline_count": 0,
+  "source_commit": "f8b98250a0de8d47100fa2e81616b1a87055116f",
+  "tests_run": false
+}

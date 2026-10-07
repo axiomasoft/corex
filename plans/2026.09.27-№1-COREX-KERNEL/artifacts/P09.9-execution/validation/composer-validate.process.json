@@ -1,0 +1,9 @@
+{
+  "argv": [
+    "scripts/php84",
+    "composer",
+    "validate",
+    "--strict"
+  ],
+  "exit": 0
+}

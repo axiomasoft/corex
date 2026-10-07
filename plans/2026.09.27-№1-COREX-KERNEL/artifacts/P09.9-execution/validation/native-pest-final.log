@@ -1,0 +1,72 @@
+
+    ____      ____          __  _
+   /  _/___  / __/__  _____/ /_(_)___  ____
+   / // __ \/ /_/ _ \/ ___/ __/ / __ \/ __ \
+ _/ // / / / __/  __/ /__/ /_/ / /_/ / / / /
+/___/_/ /_/_/  \___/\___/\__/_/\____/_/ /_/
+
+#StandWithUkraine
+
+Infection - PHP Mutation Testing Framework version 0.35.6
+
+[notice] You are running Infection with PCOV enabled.
+[notice] Running Infection with 1 thread.
+
+Running initial tests with PHPUnit version 5.2.1
+ [ERROR] Project tests must be in a passing state before running Infection.     
+         Check the executed command to identify the problem: '/usr/bin/php8.4'  
+         '-d'                                                                   
+         'pcov.directory=/home/vostrikov/projects/packages/corex/build/quality/i
+         nfection-spike/work/php8.4-laravel13/packages/tenancy/src'             
+         '/home/vostrikov/projects/packages/corex/build/quality/infection-spike/
+         work/php8.4-laravel13/vendor/bin/pest' '--configuration'               
+         '/home/vostrikov/projects/packages/corex/build/quality/infection-native
+         -proof/tmp/infection/phpunitConfiguration.initial.infection.xml'       
+         '--coverage-xml=/home/vostrikov/projects/packages/corex/build/quality/i
+         nfection-native-proof/tmp/infection/coverage-xml'                      
+         '--log-junit=/home/vostrikov/projects/packages/corex/build/quality/infe
+         ction-native-proof/tmp/infection/junit.xml'                            
+         PHPUnit reported an exit code of 1.                                    
+         Refer to the PHPUnit's output below:                                   
+         STDOUT:                                                                
+                                                                                
+           [30;43;1m WARN [39;49;22m The "cacheResult" attribute is deprecated                     
+         and will be removed in PHPUnit 14. Use "recordTestRunHistory" instead. 
+                                                                                
+           [30;43;1m WARN [39;49;22m Test results may not be as expected                           
+         because the XML configuration file did not pass validation:            
+                                                                                
+           Line 14:                                                             
+           - Element 'filter': This element is not expected.                    
+                                                                                
+                                                                                
+            PASS  Tests\ControlsTest                                            
+           ✓ it executes the escaped control without asserting its boolean      
+           ✓ it executes the timeout control                                    
+           ✓ it executes the process error control                              
+                                                                                
+            PASS  Tests\DatabaseProbeTest                                       
+           ✓ it decodes real PDO rows on sqlite                                 
+          0.01s                                                                 
+                                                                                
+            PASS  Tests\DatabaseValueTest                                       
+           ✓ it keeps native-range PDO integers and unsigned64 counters exact   
+           ✓ it refuses lossy integer conversion at the database boundary with  
+         dataset "native overflow"                                              
+           ✓ it refuses lossy integer conversion at the database boundary with  
+         dataset "native underflow"                                             
+           ✓ it refuses lossy integer conversion at the database boundary with  
+         dataset "decimal fraction"                                             
+           ✓ it refuses lossy integer conversion at the database boundary with  
+         dataset "boolean authority value"                                      
+           ✓ it refuses lossy integer conversion at the database boundary with  
+         dataset "floating point value"                                         
+           ✓ it refuses lossy integer conversion at the database boundary with  
+         dataset "array"                                                        
+           ✓ it refuses lossy integer conversion at the database boundary with  
+         dataset "null"                                                         
+           ✓ it refuses coercion of routing text and missing result rows        
+                                                                                
+           Tests:    13 passed (25 assertions)                                  
+           Duration: 0.08s                                                      
+

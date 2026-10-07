@@ -1,0 +1,18 @@
+{
+  "logs": {
+    "json": "/home/vostrikov/projects/packages/corex/build/quality/infection-spike/rows/php8.4-laravel13-pgsql/mutants.json"
+  },
+  "mutators": {
+    "FalseValue": true,
+    "LogicalNot": true
+  },
+  "source": {
+    "directories": [
+      "/home/vostrikov/projects/packages/corex/build/quality/infection-spike/work/php8.4-laravel13/packages/tenancy/src",
+      "/home/vostrikov/projects/packages/corex/build/quality/infection-spike/work/php8.4-laravel13/controls"
+    ]
+  },
+  "testFramework": "pest-spike",
+  "timeout": 2,
+  "tmpDir": "/home/vostrikov/projects/packages/corex/build/quality/infection-spike/rows/php8.4-laravel13-pgsql/tmp"
+}

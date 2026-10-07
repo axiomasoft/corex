@@ -1,0 +1,31 @@
+
+    ____      ____          __  _
+   /  _/___  / __/__  _____/ /_(_)___  ____
+   / // __ \/ /_/ _ \/ ___/ __/ / __ \/ __ \
+ _/ // / / / __/  __/ /__/ /_/ / /_/ / / / /
+/___/_/ /_/_/  \___/\___/\__/_/\____/_/ /_/
+
+#StandWithUkraine
+
+Infection - PHP Mutation Testing Framework version 0.35.6
+
+[notice] You are running Infection with PCOV enabled.
+[notice] Running Infection with 1 thread.
+
+Running initial tests with PHPUnit version 5.2.1
+ [ERROR] Project tests must be in a passing state before running Infection.     
+         Check the executed command to identify the problem: '/usr/bin/php8.4'  
+         '-d'                                                                   
+         'pcov.directory=/tmp/corex-p099-solve/spike/packages/tenancy/src/Provis
+         ioning/Internal' '/tmp/corex-p099-solve/vendor/bin/pest'               
+         '--configuration'                                                      
+         '/tmp/corex-p099-solve/spike/tmp/infection/phpunitConfiguration.initial
+         .infection.xml'                                                        
+         '--coverage-xml=/tmp/corex-p099-solve/spike/tmp/infection/coverage-xml'
+         '--log-junit=/tmp/corex-p099-solve/spike/tmp/infection/junit.xml'      
+         PHPUnit reported an exit code of 1.                                    
+         Refer to the PHPUnit's output below:                                   
+         STDOUT:                                                                
+         {"tool":"pest","result":"passed","tests":9,"passed":9,"assertions":18,"
+         duration_ms":18}                                                       
+

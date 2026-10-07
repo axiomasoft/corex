@@ -1,0 +1,26 @@
+{
+  "argv": [
+    "/usr/bin/php8.5",
+    "-d",
+    "pcov.directory=/home/vostrikov/projects/packages/corex/build/quality/infection-spike/work/php8.5-laravel13",
+    "/home/vostrikov/projects/packages/corex/build/quality/infection-spike/work/php8.5-laravel13/vendor/bin/infection",
+    "--configuration=/home/vostrikov/projects/packages/corex/build/quality/infection-spike/rows/php8.5-laravel13-sqlite/infection.json",
+    "--no-progress",
+    "--with-uncovered",
+    "--with-timeouts",
+    "--threads=1",
+    "--log-verbosity=all",
+    "--debug"
+  ],
+  "cwd": "/home/vostrikov/projects/packages/corex/build/quality/infection-spike/work/php8.5-laravel13",
+  "duration_seconds": 2.97,
+  "exit": 0,
+  "stderr": {
+    "path": "rows/php8.5-laravel13-sqlite/infection.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stdout": {
+    "path": "rows/php8.5-laravel13-sqlite/infection.stdout",
+    "sha256": "9d8ffb2f01c030cf52769f2573fc30a8dc0cf0a7d682a6e47305aa516f6bba55"
+  }
+}

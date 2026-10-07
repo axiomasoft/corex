@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "scripts/php84",
+    "python3",
+    "scripts/quality/infection-spike.py",
+    "--package",
+    "tenancy",
+    "--matrix",
+    "all",
+    "--output",
+    "build/quality/infection-spike"
+  ],
+  "exit": 1,
+  "duration_seconds": 25.778
+}

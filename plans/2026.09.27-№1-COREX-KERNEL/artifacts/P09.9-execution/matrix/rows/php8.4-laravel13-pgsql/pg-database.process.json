@@ -1,0 +1,26 @@
+{
+  "argv": [
+    "psql",
+    "-h",
+    "127.0.0.1",
+    "-p",
+    "5434",
+    "-U",
+    "corex",
+    "-d",
+    "corex_test",
+    "-Atqc",
+    "SELECT current_database(), current_setting('server_version');"
+  ],
+  "cwd": "/home/vostrikov/projects/packages/corex/build/quality/infection-spike/work/php8.4-laravel13",
+  "duration_seconds": 0.032,
+  "exit": 0,
+  "stderr": {
+    "path": "rows/php8.4-laravel13-pgsql/pg-database.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stdout": {
+    "path": "rows/php8.4-laravel13-pgsql/pg-database.stdout",
+    "sha256": "d5d18d05e0f5e38defb42fe0ceebe7118461a2227a4d13ad9df2b4f13b5cd4b5"
+  }
+}

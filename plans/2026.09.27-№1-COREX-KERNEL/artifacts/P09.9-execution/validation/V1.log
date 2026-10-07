@@ -1,0 +1,11 @@
+Preparing PHP 8.4 / Laravel 12
+Dependency solve RED: 8.4/12
+Preparing PHP 8.4 / Laravel 13
+Executing 8.4/13/sqlite
+Executing 8.4/13/pgsql
+Preparing PHP 8.5 / Laravel 12
+Dependency solve RED: 8.5/12
+Preparing PHP 8.5 / Laravel 13
+Executing 8.5/13/sqlite
+Executing 8.5/13/pgsql
+Infection compatibility RED: Unresolved dependency conflicts; partial rows cannot satisfy the matrix

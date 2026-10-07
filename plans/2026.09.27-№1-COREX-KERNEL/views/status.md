@@ -411,7 +411,7 @@ Closed 2026-10-06T19:12:32Z (🟠 Done with deviations): 10 item(s): 8 done, 2 d
 | P09.11 | Строгие operations/tools/webhooks без baseline (347) | 🟠 Done with deviations | implementation/xhigh | 2026-10-07T06:15:41Z |
 | P09.3 | Нулевой baseline оставшихся пакетов и consumer | 🟢 Done | implementation/high | 2026-10-07T07:18:06Z |
 | P09.4 | Rector PHP8.4/Laravel12, final/readonly/named и unused-public | 🟢 Done | implementation/xhigh | 2026-10-07T09:14:40Z |
-| P09.9 | Preflight Infection 0.35.6 × Pest 5.2.1 / PHPUnit 13.3.4 + bounded fallback | ⬜ Not started | implementation/xhigh | 2026-10-06T19:25:11Z |
+| P09.9 | Preflight Infection 0.35.6 × Pest 5.2.1 / PHPUnit 13.3.4 + bounded fallback | 🔴 Blocked | implementation/xhigh | 2026-10-07T09:53:50Z |
 | P09.5 | MSI runner, exhaustive fragments, strict parser and CI shards | ⬜ Not started | implementation/xhigh | 2026-10-06T19:25:11Z |
 | P09.12 | MSI security: тесты каждого package-fragment ≥95% | ⬜ Not started | implementation/xhigh | 2026-10-06T19:25:11Z |
 | P09.13 | MSI messaging: тесты каждого package-fragment ≥90% | ⬜ Not started | implementation/xhigh | 2026-10-06T19:25:11Z |

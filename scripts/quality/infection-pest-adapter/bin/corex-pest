@@ -1,0 +1,28 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+// exec preserves the actual Pest exit code and lets Infection terminate that same process.
+$project = getcwd();
+$pest = $project.'/vendor/pestphp/pest/bin/pest';
+if (! is_file($pest)) {
+    fwrite(STDERR, "Pinned Pest executable is missing.\n");
+    exit(127);
+}
+
+$command = [$pest, ...array_slice($argv, 1)];
+$trace = getenv('COREX_INFECTION_TRACE');
+if ($trace !== false) {
+    file_put_contents($trace, json_encode([
+        'php' => PHP_BINARY,
+        'php_version' => PHP_VERSION,
+        'executable' => $pest,
+        'argv' => $command,
+        'pid' => getmypid(),
+    ], JSON_THROW_ON_ERROR)."\n", FILE_APPEND | LOCK_EX);
+}
+
+pcntl_exec(PHP_BINARY, $command);
+fwrite(STDERR, "Could not execute the pinned Pest CLI.\n");
+exit(127);

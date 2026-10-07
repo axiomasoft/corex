@@ -1,0 +1,11 @@
+{
+  "axiomasoft/corex-infection-pest-adapter": "0.1.0",
+  "coverage_driver": "xdebug",
+  "infection/abstract-testframework-adapter": "0.5.1",
+  "infection/include-interceptor": "1.0.0",
+  "infection/infection": "0.35.6",
+  "laravel/framework": "13.35.0",
+  "pestphp/pest": "5.2.1",
+  "php": "8.5.11",
+  "phpunit/phpunit": "13.3.4"
+}

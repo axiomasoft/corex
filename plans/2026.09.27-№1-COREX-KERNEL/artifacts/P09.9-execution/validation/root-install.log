@@ -1,0 +1,39 @@
+Loading composer repositories with package information
+Updating dependencies
+Lock file operations: 13 installs, 0 updates, 0 removals
+  - Locking axiomasoft/corex-infection-pest-adapter (0.1.0)
+  - Locking colinodell/json5 (v3.0.0)
+  - Locking infection/abstract-testframework-adapter (0.5.1)
+  - Locking infection/extension-installer (0.1.2)
+  - Locking infection/include-interceptor (1.0.0)
+  - Locking infection/infection (0.35.6)
+  - Locking infection/mutator (0.4.1)
+  - Locking ondram/ci-detector (4.2.0)
+  - Locking sanmai/di-container (0.2)
+  - Locking sanmai/duoclock (0.1.3)
+  - Locking sanmai/later (0.1.8)
+  - Locking sanmai/pipeline (7.12)
+  - Locking thecodingmachine/safe (v3.4.0)
+Writing lock file
+Installing dependencies from lock file (including require-dev)
+Package operations: 13 installs, 0 updates, 0 removals
+  - Installing infection/extension-installer (0.1.2): Extracting archive
+  - Installing infection/include-interceptor (1.0.0): Extracting archive
+  - Installing infection/abstract-testframework-adapter (0.5.1): Extracting archive
+  - Installing axiomasoft/corex-infection-pest-adapter (0.1.0): Symlinking from scripts/quality/infection-pest-adapter
+  - Installing thecodingmachine/safe (v3.4.0): Extracting archive
+  - Installing sanmai/pipeline (7.12): Extracting archive
+  - Installing sanmai/later (0.1.8): Extracting archive
+  - Installing sanmai/duoclock (0.1.3): Extracting archive
+  - Installing sanmai/di-container (0.2): Extracting archive
+  - Installing ondram/ci-detector (4.2.0): Extracting archive
+  - Installing infection/mutator (0.4.1): Extracting archive
+  - Installing colinodell/json5 (v3.0.0): Extracting archive
+  - Installing infection/infection (0.35.6): Extracting archive
+Generating autoload files
+119 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+phpstan/extension-installer: Extensions installed
+infection/extension-installer: Extensions installed
+> axiomasoft/corex-infection-pest-adapter: installed
+No security vulnerability advisories found.

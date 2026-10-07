@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "/usr/bin/php8.4",
+    "/home/vostrikov/.config/herd-lite/bin/composer",
+    "install",
+    "--no-scripts",
+    "--no-progress"
+  ],
+  "cwd": "/home/vostrikov/projects/packages/corex/build/quality/infection-spike/work/php8.4-laravel13",
+  "duration_seconds": 0.465,
+  "exit": 0,
+  "stderr": {
+    "path": "work/php8.4-laravel13/solve.stderr",
+    "sha256": "7bcdb848b1ae1b7de8d1624f999111a87d7decbc37e4ae9721061ff865864430"
+  },
+  "stdout": {
+    "path": "work/php8.4-laravel13/solve.stdout",
+    "sha256": "704a315f1987af4906041cbacabcde26cb801c7cc2f7b1729006890fde1d688e"
+  }
+}

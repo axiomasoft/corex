@@ -50,7 +50,9 @@
         "shipmonk/composer-dependency-analyser": "^1.8.4",
         "axiomasoft/corex-tools": "^1.0@dev",
         "axiomasoft/corex-webhooks": "^1.0@dev",
-        "webmozart/assert": "^2.4.1"
+        "webmozart/assert": "^2.4.1",
+        "infection/infection": "0.35.6",
+        "axiomasoft/corex-infection-pest-adapter": "0.1.0"
     },
     "autoload-dev": {
         "psr-4": {
@@ -101,6 +103,15 @@
         ]
     },
     "repositories": [
+        {
+            "type": "path",
+            "url": "scripts/quality/infection-pest-adapter",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex-infection-pest-adapter": "0.1.0"
+                }
+            }
+        },
         {
             "type": "path",
             "url": "packages/*"
@@ -167,7 +178,8 @@
         "process-timeout": 1200,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "phpstan/extension-installer": true
+            "phpstan/extension-installer": true,
+            "infection/extension-installer": true
         }
     },
     "scripts": {
