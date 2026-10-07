@@ -20,6 +20,7 @@ use CoreX\Transfer\Data\TransferLimits;
 use CoreX\Transfer\Internal\Transfer\ExecutionGuard;
 use CoreX\Transfer\Internal\Transfer\NeverCancelled;
 use CoreX\Transfer\Internal\Transfer\TransferLimitReached;
+use CoreX\Transfer\Internal\Value;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Str;
 use JsonException;
@@ -148,7 +149,7 @@ final readonly class DatabaseExportRunner implements ExportRunner
             ->where('part_no', $cursor->partNumber)
             ->first();
 
-        if ($stored === null || $stored->state !== 'sealed' || ! hash_equals((string) $stored->parts_hash, $manifest->partsHash)) {
+        if ($stored === null || $stored->state !== 'sealed' || ! hash_equals(Value::text($stored->parts_hash), $manifest->partsHash)) {
             throw new ExportUnavailable('Export cursor does not address a sealed immutable part.');
         }
 
@@ -156,9 +157,9 @@ final readonly class DatabaseExportRunner implements ExportRunner
             throw new ExportUnavailable('Export cursor does not address a sealed immutable part.');
         }
 
-        $bytes = $this->storage->disk()->get($part->immutable_ref);
+        $bytes = $this->storage->disk()->get(Value::text($part->immutable_ref));
 
-        if (! is_string($bytes) || strlen($bytes) !== (int) $part->byte_length || ! hash_equals($part->hash, hash('sha256', $bytes))) {
+        if (! is_string($bytes) || strlen($bytes) !== Value::integer($part->byte_length) || ! hash_equals(Value::text($part->hash), hash('sha256', $bytes))) {
             throw new ExportUnavailable('Immutable export part verification failed.');
         }
 
@@ -273,12 +274,12 @@ final readonly class DatabaseExportRunner implements ExportRunner
     private function storedManifest(object $stored): ExportManifest
     {
         return new ExportManifest(
-            id: $stored->id,
-            snapshotMode: $stored->snapshot_mode,
-            schemaHash: $stored->schema_hash,
-            restoreEpoch: $stored->restore_epoch,
-            roster: JsonDocuments::capture(json_decode($stored->roster, true, flags: JSON_THROW_ON_ERROR)),
-            partsHash: $stored->parts_hash,
+            id: Value::text(Value::field($stored, 'id')),
+            snapshotMode: Value::text(Value::field($stored, 'snapshot_mode')),
+            schemaHash: Value::text(Value::field($stored, 'schema_hash')),
+            restoreEpoch: Value::text(Value::field($stored, 'restore_epoch')),
+            roster: JsonDocuments::capture(json_decode(Value::text(Value::field($stored, 'roster')), true, flags: JSON_THROW_ON_ERROR)),
+            partsHash: Value::text(Value::field($stored, 'parts_hash')),
         );
     }
 }

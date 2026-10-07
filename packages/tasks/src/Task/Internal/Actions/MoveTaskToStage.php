@@ -56,7 +56,7 @@ final class MoveTaskToStage implements MoveTaskToStageCommand
         $connectionName = $connection->getName();
 
         /** @var Task|null $task */
-        $task = Task::on($connectionName)->lockForUpdate()->find($data->taskId);
+        $task = Task::on($connectionName)->tap(static fn ($query) => $query->getQuery()->lockForUpdate())->find($data->taskId);
         /** @var Stage|null $stage */
         $stage = Stage::on($connectionName)->find($data->stageId);
 
@@ -79,11 +79,11 @@ final class MoveTaskToStage implements MoveTaskToStageCommand
             $this->invalid('stage_id', 'Проект стадии не принадлежит рабочему пространству задачи.');
         }
 
-        if ($task->stage_id === $stage->getKey()) {
+        if ($task->stage_id === $stage->id) {
             return TaskReferenceFactory::fromTask($task);
         }
 
-        $task->stage_id = $stage->getKey();
+        $task->stage_id = $stage->id;
         $completed = false;
 
         if ($stage->auto_status === TaskStatus::InProgress) {
@@ -92,7 +92,7 @@ final class MoveTaskToStage implements MoveTaskToStageCommand
         }
 
         if ($stage->auto_status === TaskStatus::Done) {
-            $completed = $this->completion->apply($task, new CompleteTaskData(taskId: $task->getKey(), actor: $data->actor), $context);
+            $completed = $this->completion->apply($task, new CompleteTaskData(taskId: $task->id, actor: $data->actor), $context);
         }
 
         $task->save();

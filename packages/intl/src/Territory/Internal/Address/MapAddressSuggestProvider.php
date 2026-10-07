@@ -25,13 +25,13 @@ final class MapAddressSuggestProvider implements AddressSuggestProvider
     #[Override]
     public function suggest(AddressQuery $query, SuggestionLimits $limits): SuggestionResult
     {
-        if ($invalid = $this->guard->validateQuery($query)) {
+        if (($invalid = $this->guard->validateQuery($query)) !== null) {
             return $invalid;
         }
 
         $limits = $this->guard->normalizeLimits($limits);
 
-        if ($invalid = $this->guard->validateLimits($limits)) {
+        if (($invalid = $this->guard->validateLimits($limits)) !== null) {
             return $invalid;
         }
 

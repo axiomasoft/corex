@@ -61,7 +61,7 @@ final class ConversionCoordinator
                 'created_at' => $this->clock->now(),
                 'updated_at' => $this->clock->now(),
             ]);
-            $this->operations->enqueueConversion(fileId: $fileId, profileKey: $profile->key, profileDigest: $digest, sourceVersion: (int) $file->version);
+            $this->operations->enqueueConversion(fileId: $fileId, profileKey: $profile->key, profileDigest: $digest, sourceVersion: Value::integer($file->version));
 
             return null;
         });
@@ -128,7 +128,7 @@ final class ConversionCoordinator
 
     private function reference(object $conversion): MediaConversionRef
     {
-        return new MediaConversionRef((int) $conversion->id, $conversion->file_id, $conversion->profile_key, $conversion->mime_type, (int) $conversion->size_bytes, (int) $conversion->width, (int) $conversion->height);
+        return new MediaConversionRef(Value::integer(Value::field($conversion, 'id')), Value::text(Value::field($conversion, 'file_id')), Value::text(Value::field($conversion, 'profile_key')), Value::text(Value::field($conversion, 'mime_type')), Value::integer(Value::field($conversion, 'size_bytes')), Value::integer(Value::field($conversion, 'width')), Value::integer(Value::field($conversion, 'height')));
     }
 
     private function assertOutputIsBounded(ConversionOutput $output, ConversionProfile $profile): void
@@ -143,7 +143,7 @@ final class ConversionCoordinator
 
         $facts = getimagesizefromstring($output->bytes);
 
-        if ($facts === false || $facts['mime'] !== $output->mimeType || (int) $facts[0] !== $output->width || (int) $facts[1] !== $output->height) {
+        if ($facts === false || $facts['mime'] !== $output->mimeType || $facts[0] !== $output->width || $facts[1] !== $output->height) {
             throw new MediaOperationConflict('The conversion output facts are invalid.');
         }
     }

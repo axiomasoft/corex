@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Wakeup\Internal\Commands;
 
+use CoreX\Wakeup\Internal\Value;
 use CoreX\Wakeup\Internal\WakeupHandlerRegistry;
 use Illuminate\Console\Command;
 use Illuminate\Database\Connection;
@@ -38,8 +39,8 @@ final class ValidateWakeupStamps extends Command
 
         foreach ($rows as $row) {
             try {
-                $payload = json_decode((string) $row->payload, true, flags: JSON_THROW_ON_ERROR);
-                $inspection = $handlers->inspectPayload(kind: (string) $row->kind, payload: $payload);
+                $payload = json_decode(Value::text($row->payload), true, flags: JSON_THROW_ON_ERROR);
+                $inspection = $handlers->inspectPayload(kind: Value::text($row->kind), payload: $payload);
                 $issue = $inspection['status'];
             } catch (JsonException) {
                 $issue = 'handler-stamp-missing';
@@ -49,7 +50,7 @@ final class ValidateWakeupStamps extends Command
                 continue;
             }
 
-            $issues[] = [(string) $row->kind, (string) $row->request_key, (string) $row->status, $issue];
+            $issues[] = [Value::text($row->kind), Value::text($row->request_key), Value::text($row->status), $issue];
         }
 
         if ($issues === [] && ! $truncated) {

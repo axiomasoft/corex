@@ -6,6 +6,7 @@ namespace Flex\Crm\Deal\Casts;
 
 use Brick\Money\Money;
 use CoreX\Intl\Money\Laravel\MoneyCast;
+use Flex\Crm\Internal\Value;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,7 +27,7 @@ final class DealAmount implements CastsAttributes
     {
         // Unlike the generic nullable pair, CRM currency remains mandatory.
         return $value === null
-            ? ['amount' => null, 'currency' => $attributes['currency'] ?? 'RUB']
+            ? ['amount' => null, 'currency' => Value::text($attributes['currency'] ?? 'RUB')]
             : (new MoneyCast('amount', 'currency'))->set($model, $key, $value, $attributes);
     }
 }

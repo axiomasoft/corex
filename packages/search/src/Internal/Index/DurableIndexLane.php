@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Search\Internal\Index;
 
 use CoreX\Search\Data\IndexClaim;
+use CoreX\Search\Internal\Value;
 use Illuminate\Database\ConnectionInterface;
 use InvalidArgumentException;
 use Psr\Clock\ClockInterface;
@@ -30,7 +31,7 @@ final readonly class DurableIndexLane
                 ->lockForUpdate()
                 ->value('revision');
 
-            if ($latest !== null && (int) $latest >= $revision) {
+            if ($latest !== null && Value::integer($latest) >= $revision) {
                 return;
             }
 
@@ -67,14 +68,14 @@ final readonly class DurableIndexLane
                 return null;
             }
 
-            $latestRows = $rows->groupBy('record_id')->map(static fn ($records): object => $records->sortByDesc('revision')->first());
-            $superseded = $rows->filter(static fn (object $row): bool => $latestRows->get($row->record_id)->sequence !== $row->sequence);
+            $latestRows = $rows->groupBy('record_id')->map(static fn ($records): object => $records->sortByDesc('revision')->firstOrFail());
+            $superseded = $rows->filter(static fn (object $row): bool => $latestRows->get(Value::text($row->record_id))?->sequence !== $row->sequence);
 
             if ($superseded->isNotEmpty()) {
                 $this->connection->table('corex_search_dirty')->whereIn('sequence', $superseded->pluck('sequence')->all())->update(['completed_at' => $this->clock->now()]);
             }
 
-            $claimEpoch = ((int) $lane->claim_epoch) + 1;
+            $claimEpoch = (Value::integer($lane->claim_epoch)) + 1;
             $this->connection->table('corex_search_lanes')->where('lane_key', $laneKey)->update([
                 'state' => 'claimed',
                 'claim_epoch' => $claimEpoch,
@@ -86,7 +87,7 @@ final readonly class DurableIndexLane
                 generation: $generation,
                 restoreEpoch: $restoreEpoch,
                 claimEpoch: $claimEpoch,
-                records: $latestRows->values()->map(static fn (object $row): array => (array) $row)->all(),
+                records: array_values($latestRows->map(static fn (object $row): array => self::record($row))->all()),
             );
         });
     }
@@ -100,7 +101,7 @@ final readonly class DurableIndexLane
         $this->connection->transaction(function () use ($claim, $taskId, $requestHash): void {
             $lane = $this->lockedLane($claim);
 
-            if ($lane === null || $lane->state !== 'claimed') {
+            if ($lane === null || Value::field($lane, 'state') !== 'claimed') {
                 throw new InvalidArgumentException('Index claim is no longer current.');
             }
 
@@ -121,7 +122,7 @@ final readonly class DurableIndexLane
         $this->connection->transaction(function () use ($claim, $outcome): void {
             $lane = $this->lockedLane($claim);
 
-            if ($lane === null || $lane->state !== 'submitted') {
+            if ($lane === null || Value::field($lane, 'state') !== 'submitted') {
                 throw new InvalidArgumentException('Index submission is no longer current.');
             }
 
@@ -136,11 +137,16 @@ final readonly class DurableIndexLane
             $sequences = array_column($claim->records, 'sequence');
 
             if ($outcome === 'succeeded') {
-                $maxRevision = max(array_map(static fn (array $record): int => (int) $record['revision'], $claim->records));
+                $revisions = array_map(static fn (array $record): int => Value::integer($record['revision']), $claim->records);
+
+                if ($revisions === []) {
+                    throw new InvalidArgumentException('Index claim has no records.');
+                }
+                $maxRevision = max($revisions);
                 $this->connection->table('corex_search_dirty')->whereIn('sequence', $sequences)->update(['completed_at' => $this->clock->now()]);
                 $this->connection->table('corex_search_lanes')->where('lane_key', $claim->laneKey)->update([
                     'state' => 'ready', 'active_task' => null, 'request_hash' => null,
-                    'committed_revision' => max((int) $lane->committed_revision, $maxRevision), 'updated_at' => $this->clock->now(),
+                    'committed_revision' => max(Value::integer(Value::field($lane, 'committed_revision')), $maxRevision), 'updated_at' => $this->clock->now(),
                 ]);
 
                 return;
@@ -153,11 +159,25 @@ final readonly class DurableIndexLane
         });
     }
 
+    /** @return array<string, scalar|null> */
+    private static function record(object $row): array
+    {
+        $record = [];
+        foreach (Value::map(get_object_vars($row)) as $key => $value) {
+            if ($value !== null && ! is_scalar($value)) {
+                throw new InvalidArgumentException('Index database record must contain scalar values.');
+            }
+            $record[$key] = $value;
+        }
+
+        return $record;
+    }
+
     private function lockedLane(IndexClaim $claim): ?object
     {
         $lane = $this->connection->table('corex_search_lanes')->where('lane_key', $claim->laneKey)->lockForUpdate()->first();
 
-        if ($lane === null || $lane->generation !== $claim->generation || $lane->restore_epoch !== $claim->restoreEpoch || (int) $lane->claim_epoch !== $claim->claimEpoch) {
+        if ($lane === null || $lane->generation !== $claim->generation || $lane->restore_epoch !== $claim->restoreEpoch || Value::integer($lane->claim_epoch) !== $claim->claimEpoch) {
             return null;
         }
 

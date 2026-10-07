@@ -13,6 +13,7 @@ use CoreX\Intl\Territory\Data\DatasetReceipt;
 use CoreX\Intl\Territory\Exceptions\AccessDeniedException;
 use CoreX\Intl\Territory\Exceptions\OperationConflictException;
 use CoreX\Intl\Territory\Exceptions\SchemaMismatchException;
+use CoreX\Intl\Territory\Internal\Value;
 use DateTimeZone;
 use Illuminate\Database\Connection;
 use Override;
@@ -57,7 +58,7 @@ final class SqlDatasetImporter implements DatasetImporter
                 ->lockForUpdate()
                 ->first();
 
-            $currentGeneration = $current !== null ? (int) $current->generation : 0;
+            $currentGeneration = $current !== null ? Value::integer($current->generation) : 0;
 
             if ($expected->expectedSnapshot !== null && $current !== null && $current->snapshot_id !== $expected->expectedSnapshot) {
                 throw new OperationConflictException('Reference dataset expected snapshot does not match the current pointer.');
@@ -77,7 +78,7 @@ final class SqlDatasetImporter implements DatasetImporter
                 ->first();
 
             if ($existing !== null) {
-                if (! hash_equals((string) $existing->normalized_hash, $candidate->manifest->normalizedHash)) {
+                if (! hash_equals(Value::text($existing->normalized_hash), $candidate->manifest->normalizedHash)) {
                     throw new OperationConflictException('Reference snapshot identity already exists with different content.');
                 }
 
@@ -126,13 +127,13 @@ final class SqlDatasetImporter implements DatasetImporter
                     'parent_source_id' => $record['parent_source_id'],
                     'names' => json_encode($record['names'], JSON_THROW_ON_ERROR),
                     'normalized_name' => $record['normalized_name'],
-                    'country_key' => $record['country_key'] ? json_encode($record['country_key'], JSON_THROW_ON_ERROR) : null,
-                    'coordinates' => $record['coordinates'] ? json_encode($record['coordinates'], JSON_THROW_ON_ERROR) : null,
+                    'country_key' => ($record['country_key'] !== null && $record['country_key'] !== []) ? json_encode($record['country_key'], JSON_THROW_ON_ERROR) : null,
+                    'coordinates' => ($record['coordinates'] !== null && $record['coordinates'] !== []) ? json_encode($record['coordinates'], JSON_THROW_ON_ERROR) : null,
                     'timezones' => json_encode($record['timezones'], JSON_THROW_ON_ERROR),
                     'provenance' => json_encode($record['provenance'], JSON_THROW_ON_ERROR),
                 ]);
 
-                foreach ($record['aliases'] as $alias) {
+                foreach (Value::array($record['aliases']) as $alias) {
                     if (! is_array($alias)) {
                         continue;
                     }
@@ -141,9 +142,9 @@ final class SqlDatasetImporter implements DatasetImporter
                         'snapshot_id' => $snapshotId,
                         'namespace' => $record['namespace'],
                         'source_id' => $record['sourceId'],
-                        'locale' => (string) ($alias['locale'] ?? 'en'),
-                        'alias' => (string) ($alias['alias'] ?? ''),
-                        'normalized_alias' => $this->normalizer->normalizeName(name: (string) ($alias['alias'] ?? '')),
+                        'locale' => Value::text($alias['locale'] ?? 'en'),
+                        'alias' => Value::text($alias['alias'] ?? ''),
+                        'normalized_alias' => $this->normalizer->normalizeName(name: Value::text($alias['alias'] ?? '')),
                     ]);
                 }
             }
@@ -187,7 +188,7 @@ final class SqlDatasetImporter implements DatasetImporter
         $seen = [];
 
         foreach ($records as $record) {
-            $key = $record['namespace'].'|'.$record['sourceId'];
+            $key = Value::text($record['namespace']).'|'.Value::text($record['sourceId']);
 
             if (isset($seen[$key])) {
                 throw new SchemaMismatchException('Duplicate reference identity in dataset candidate.');

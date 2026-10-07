@@ -49,7 +49,7 @@ final readonly class RecurrenceSet
             throw new InvalidArgumentException('The recurrence exception list exceeds the bounded profile.');
         }
 
-        if (! preg_match('/^[a-f0-9]{64}$/', $definitionHash)) {
+        if (preg_match('/^[a-f0-9]{64}$/', $definitionHash) !== 1) {
             throw new InvalidArgumentException('The recurrence definition hash is invalid.');
         }
     }

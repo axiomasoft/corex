@@ -25,6 +25,7 @@ use CoreX\TasksWorkflow\Internal\TasksWorkflowSchemaSets;
 use CoreX\TasksWorkflow\Laravel\CompletionBindings;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
@@ -49,7 +50,7 @@ final class TasksWorkflowServiceProvider extends ServiceProvider
 
         $this->app->scoped(TaskRecurrenceCommand::class, function (Application $app): SqlTaskRecurrenceMaterializer {
             return new SqlTaskRecurrenceMaterializer(
-                connection: $app['db']->connection(),
+                connection: $app->make(DatabaseManager::class)->connection(),
                 expander: $app->make(RecurrenceExpander::class),
                 createTask: $app->make(CreateTaskCommand::class),
                 taskAccess: $app->make(TaskAccess::class),

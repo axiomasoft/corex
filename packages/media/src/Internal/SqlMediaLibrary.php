@@ -188,10 +188,10 @@ final class SqlMediaLibrary implements MediaLibrary
         }
 
         return new MediaReadRef(
-            $file->id,
-            $file->mime_type,
-            (int) $file->size_bytes,
-            $file->sha256,
+            Value::text($file->id),
+            Value::text($file->mime_type),
+            Value::integer($file->size_bytes),
+            Value::text($file->sha256),
             function () use ($context, $file): mixed {
                 $current = $this->connection->table('med_files')->where('id', $file->id)->where('state', 'ready')->first();
 
@@ -199,7 +199,13 @@ final class SqlMediaLibrary implements MediaLibrary
                     throw new MediaAccessDenied('Media read is denied.');
                 }
 
-                return $this->storage->disk()->readStream($current->object_key);
+                $stream = $this->storage->disk()->readStream(Value::text($current->object_key));
+
+                if (! is_resource($stream)) {
+                    throw new MediaOperationConflict('Media stream is unavailable.');
+                }
+
+                return $stream;
             },
         );
     }
@@ -251,6 +257,6 @@ final class SqlMediaLibrary implements MediaLibrary
 
     private function reference(object $file): MediaFileRef
     {
-        return new MediaFileRef($file->id, $file->kind, $file->mime_type, (int) $file->size_bytes, $file->sha256, $file->state);
+        return new MediaFileRef(Value::text(Value::field($file, 'id')), Value::text(Value::field($file, 'kind')), Value::text(Value::field($file, 'mime_type')), Value::integer(Value::field($file, 'size_bytes')), Value::text(Value::field($file, 'sha256')), Value::text(Value::field($file, 'state')));
     }
 }

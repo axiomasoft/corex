@@ -12,6 +12,7 @@ use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\Query\Builder;
 use JsonException;
 use Psr\Clock\ClockInterface;
 
@@ -29,13 +30,13 @@ final class DeliveryStore
     {
         $now = $this->clock->now();
 
-        return $this->connection->table('ntf_deliveries')
+        return array_values($this->connection->table('ntf_deliveries')
             ->whereIn('state', ['pending', 'failed'])
-            ->where(static fn ($query) => $query->whereNull('next_attempt')->orWhere('next_attempt', '<=', $now))
+            ->where(static fn (Builder $query) => $query->whereNull('next_attempt')->orWhere('next_attempt', '<=', $now))
             ->orderBy('id')
             ->limit($limit)
-            ->pluck('id')
-            ->all();
+            ->pluck('id')->map(Value::text(...))
+            ->all());
     }
 
     public function recoverExpired(): int
@@ -57,13 +58,13 @@ final class DeliveryStore
 
             if ($delivery === null
                 || ! in_array($delivery->state, ['pending', 'failed'], true)
-                || (int) $delivery->attempts >= $this->maxAttempts
+                || Value::integer($delivery->attempts) >= $this->maxAttempts
                 || $this->notYetDue($delivery->next_attempt)) {
                 return null;
             }
 
-            $epoch = (int) $delivery->claim_epoch + 1;
-            $attempts = (int) $delivery->attempts + 1;
+            $epoch = Value::integer($delivery->claim_epoch) + 1;
+            $attempts = Value::integer($delivery->attempts) + 1;
             $this->connection->table('ntf_deliveries')->where('id', $deliveryId)->update([
                 'state' => 'claimed',
                 'claim_epoch' => (string) $epoch,
@@ -72,18 +73,18 @@ final class DeliveryStore
             ]);
 
             return new DeliveryClaim(
-                id: $delivery->id,
-                notificationId: $delivery->notification_id,
-                digestRunId: $delivery->digest_run_id,
-                channel: $delivery->channel,
-                deliveryKey: $delivery->delivery_key,
+                id: Value::text($delivery->id),
+                notificationId: Value::nullableText($delivery->notification_id),
+                digestRunId: Value::nullableText($delivery->digest_run_id),
+                channel: Value::text($delivery->channel),
+                deliveryKey: Value::text($delivery->delivery_key),
                 epoch: $epoch,
                 attempts: $attempts,
-                message: JsonDocuments::capture($this->message($delivery->message)),
-                messageHash: $delivery->message_hash,
-                templateVersion: $delivery->template_version,
-                policyVersion: $delivery->policy_version,
-                driverVersion: $delivery->driver_version,
+                message: JsonDocuments::capture($this->message(Value::nullableText($delivery->message))),
+                messageHash: Value::text($delivery->message_hash),
+                templateVersion: Value::text($delivery->template_version),
+                policyVersion: Value::text($delivery->policy_version),
+                driverVersion: Value::text($delivery->driver_version),
             );
         });
     }
@@ -93,13 +94,13 @@ final class DeliveryStore
         $this->connection->transaction(function () use ($claim, $outcome): void {
             $delivery = $this->connection->table('ntf_deliveries')->where('id', $claim->id)->lockForUpdate()->first();
 
-            if ($delivery === null || $delivery->state !== 'claimed' || (int) $delivery->claim_epoch !== $claim->epoch) {
+            if ($delivery === null || $delivery->state !== 'claimed' || Value::integer($delivery->claim_epoch) !== $claim->epoch) {
                 return;
             }
 
             $state = match ($outcome->kind) {
                 'accepted' => 'sent',
-                'retryable' => (int) $delivery->attempts >= $this->maxAttempts ? 'failed' : 'failed',
+                'retryable' => Value::integer($delivery->attempts) >= $this->maxAttempts ? 'failed' : 'failed',
                 'permanent' => 'failed',
                 'unknown' => 'unknown',
                 default => throw new NotificationOperationConflict('Notification driver returned an unsupported outcome.'),
@@ -182,7 +183,7 @@ final class DeliveryStore
             throw new NotificationOperationConflict('Notification delivery message must be an object.');
         }
 
-        return $decoded;
+        return Value::map($decoded);
     }
 
     /** A stored attempt time is a database string; comparing it with a DateTimeImmutable directly never orders. */

@@ -21,7 +21,7 @@ final readonly class ExpansionCursor
         public array $resumePosition,
     ) {
         foreach ([$setHash, $windowHash] as $hash) {
-            if (! preg_match('/^[a-f0-9]{64}$/', $hash)) {
+            if (preg_match('/^[a-f0-9]{64}$/', $hash) !== 1) {
                 throw new InvalidArgumentException('The recurrence cursor hash is invalid.');
             }
         }

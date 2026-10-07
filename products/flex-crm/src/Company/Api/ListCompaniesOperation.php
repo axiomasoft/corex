@@ -8,6 +8,7 @@ use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use Flex\Crm\Company\Models\Company;
 use Flex\Crm\Context\ContextGuard;
+use Flex\Crm\Internal\Value;
 
 final readonly class ListCompaniesOperation implements OperationHandler
 {
@@ -19,7 +20,7 @@ final readonly class ListCompaniesOperation implements OperationHandler
         $ctx = $this->guard->current();
         $limit = $input['limit'] ?? 50;
 
-        return ['items' => Company::on($ctx->connectionName)->orderBy('name')->limit($limit)->get()
+        return ['items' => Company::on($ctx->connectionName)->tap(static fn ($query) => $query->getQuery()->orderBy('name')->limit(Value::integer($limit)))->get()
             ->map(static fn (Company $company): array => CompanyPayload::from($company))->all()];
     }
 }

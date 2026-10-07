@@ -24,9 +24,9 @@ final readonly class MeilisearchIndexAdapter implements IndexDriver
     public function submit(IndexBatch $batch): IndexSubmission
     {
         $this->assertGeneration($batch->generation);
-        $task = $this->client->index($this->indexUid($batch->generation))->addDocuments($batch->documents, 'id');
+        $task = Value::map($this->client->index($this->indexUid($batch->generation))->addDocuments($batch->documents, 'id'));
 
-        return new IndexSubmission(taskId: (string) $task['taskUid'], generation: $batch->generation);
+        return new IndexSubmission(taskId: Value::text($task['taskUid']), generation: $batch->generation);
     }
 
     public function status(IndexSubmission $submission): IndexOutcome
@@ -38,7 +38,9 @@ final readonly class MeilisearchIndexAdapter implements IndexDriver
             return new IndexOutcome(status: 'unknown', errorCode: 'task-status-unknown');
         }
 
-        return new IndexOutcome(status: $status, errorCode: isset($task['error']['code']) && is_string($task['error']['code']) ? $task['error']['code'] : null);
+        $error = $task['error'] ?? null;
+
+        return new IndexOutcome(status: $status, errorCode: is_array($error) && is_string($error['code'] ?? null) ? $error['code'] : null);
     }
 
     public function swap(IndexSwap $swap): IndexSubmission
@@ -47,7 +49,7 @@ final readonly class MeilisearchIndexAdapter implements IndexDriver
         $this->assertGeneration($swap->toGeneration);
         $task = $this->client->swapIndexes([[$this->indexUid($swap->fromGeneration), $this->indexUid($swap->toGeneration)]]);
 
-        return new IndexSubmission(taskId: (string) $task['taskUid'], generation: $swap->toGeneration);
+        return new IndexSubmission(taskId: Value::text($task['taskUid']), generation: $swap->toGeneration);
     }
 
     private function assertGeneration(string $generation): void

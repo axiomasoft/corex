@@ -1,0 +1,239 @@
+{
+  "item": "P09.3",
+  "initial_phpstan_errors": 742,
+  "final_phpstan_and_dependency_ceilings": {
+    "schema": "corex-quality-ceilings/1",
+    "phpstan": {
+      "access": 0,
+      "access-azguard": 0,
+      "core": 0,
+      "custom-fields": 0,
+      "flex-crm": 0,
+      "intl": 0,
+      "media": 0,
+      "notifications": 0,
+      "operations": 0,
+      "panels": 0,
+      "recurrence": 0,
+      "root": 0,
+      "search": 0,
+      "search-intl": 0,
+      "search-meilisearch": 0,
+      "tasks": 0,
+      "tasks-workflow": 0,
+      "tenancy": 0,
+      "tools": 0,
+      "transfer": 0,
+      "wakeup": 0,
+      "webhooks": 0,
+      "workflow": 0
+    },
+    "dependencies": {
+      "access": 0,
+      "access-azguard": 0,
+      "core": 0,
+      "custom-fields": 0,
+      "flex-crm": 0,
+      "intl": 0,
+      "media": 0,
+      "notifications": 0,
+      "operations": 0,
+      "panels": 0,
+      "recurrence": 0,
+      "search": 0,
+      "search-intl": 0,
+      "search-meilisearch": 0,
+      "tasks": 0,
+      "tasks-workflow": 0,
+      "tenancy": 0,
+      "tools": 0,
+      "transfer": 0,
+      "wakeup": 0,
+      "webhooks": 0,
+      "workflow": 0
+    }
+  },
+  "checks": [
+    {
+      "id": "V1",
+      "command": [
+        "scripts/php84",
+        "composer",
+        "analyse"
+      ],
+      "exit": 0,
+      "duration_seconds": 39.082,
+      "log_sha256": "19de74e64e97264121467c1be9db466fd3f31136ec36ddbc2cccd3817508f6df"
+    },
+    {
+      "id": "V2",
+      "command": [
+        "scripts/php84",
+        "composer",
+        "analyse:tests-lint"
+      ],
+      "exit": 0,
+      "duration_seconds": 10.731,
+      "log_sha256": "41f298ff48d5359c06909f3d4db62f1e70d37278c192c08b2ad081e0f93a0dd6"
+    },
+    {
+      "id": "V3",
+      "command": [
+        "scripts/php84",
+        "php",
+        "scripts/quality/release-quality.php",
+        "--stage=all"
+      ],
+      "exit": 0,
+      "duration_seconds": 0.427,
+      "log_sha256": "f12e7a6e043687a8abc40dbe1788bd8c585e807d06c2306a0337ba29ee1b83da"
+    },
+    {
+      "id": "V4",
+      "command": [
+        "scripts/php84",
+        "composer",
+        "deps:analyse"
+      ],
+      "exit": 0,
+      "duration_seconds": 73.987,
+      "log_sha256": "92973cd85af2e6b7306d49d8aa43a1f280ce2d57bf1f0b87f36d8e02035072e8"
+    },
+    {
+      "id": "V5",
+      "command": [
+        "scripts/php84",
+        "composer",
+        "test:packages"
+      ],
+      "exit": 0,
+      "duration_seconds": 71.356,
+      "log_sha256": "78f30f703d77ac8fcd32164af61dde586156027669a8bcedc97c689a3955a6ab"
+    },
+    {
+      "id": "V6",
+      "command": [
+        "scripts/php84",
+        "composer",
+        "test:pg"
+      ],
+      "exit": 0,
+      "duration_seconds": 72.438,
+      "log_sha256": "5e08b88f97faf1149561ea083ac34770048e457bac46cca8921ab4287959abfd"
+    },
+    {
+      "id": "V7",
+      "command": [
+        "scripts/php84",
+        "composer",
+        "lint:check"
+      ],
+      "exit": 0,
+      "duration_seconds": 10.397,
+      "log_sha256": "18b94ca6b64dc05fa6c861c92fa49242e090852a0c2b13c09a30ea6463c7de8c"
+    },
+    {
+      "id": "V8",
+      "command": [
+        "scripts/php84",
+        "composer",
+        "bc-check"
+      ],
+      "exit": 0,
+      "duration_seconds": 281.548,
+      "log_sha256": "780a3580f24109b0fdd7ba4cb52e40fc9c8b65105b01e491d5785cb7540eb074"
+    },
+    {
+      "id": "V9",
+      "command": [
+        "scripts/php84",
+        "composer",
+        "php-api"
+      ],
+      "exit": 0,
+      "duration_seconds": 9.854,
+      "log_sha256": "ffd4fdc87924598346f48828f05c8d1c337ab85880ba13b5fde31c8ce56c5100"
+    },
+    {
+      "id": "V10",
+      "command": [
+        "scripts/php84",
+        "composer",
+        "schema-gate"
+      ],
+      "exit": 0,
+      "duration_seconds": 0.68,
+      "log_sha256": "5008a66e9922d243d99c31686cfbb795d49dbaf5c1ef57f6e655e2faa259869d"
+    },
+    {
+      "id": "V11",
+      "command": [
+        "scripts/php84",
+        "composer",
+        "golden"
+      ],
+      "exit": 0,
+      "duration_seconds": 13.729,
+      "log_sha256": "c88bf39eb756cdf01300d59da87d6d944aa8872e9b6bb65d7ba6197d17b84a2f"
+    },
+    {
+      "id": "V12",
+      "command": [
+        "scripts/php84",
+        "bash",
+        "scripts/mutation-check.sh",
+        "--all"
+      ],
+      "exit": 0,
+      "duration_seconds": 15.129,
+      "log_sha256": "ef218f975c8eb51a93e15dcce5e442395a781a00537a33c0811f63eecf093210"
+    }
+  ],
+  "supplemental_evidence": {
+    "module-layout-terminal.log": "b73f3491dd84b5116977377227c30a731cdb692e7dc919c864c2df5944c60cc3",
+    "package-graph-terminal.log": "3cd22aa476432378031ce853e42ae8bb0f368a58a6da1753a1d09bedb07836be",
+    "package-graph-terminal.json": "baf1e178948fb0539917e96b0d2609ac9e0f2adf29b77d500c295c400bc9d812",
+    "negative-controls.json": "5cf0ac1bf2b6f037c66ebbfbf77408473183f974938d96b1fd4e281ca89c442e",
+    "module-tests-final.log": "53c518b5fbab797a77bdfaed0acf261a7c5a1779dfbc99cec9ee41feb29bb9c9",
+    "saved-view-tests-final.log": "229cbdd82d484287b509558a66269bf46ee9d6454a27461c77022e9083f60f6e",
+    "transfer-final-tests.log": "45db69c53b413df450f87dced603b0d4572a03de033ea90f0520be5988e860f3",
+    "intl-terminal-tests.log": "de91a003c0afd42de4ca06dc37352f764b98a035a3ea59d136e858c0de387c41",
+    "access-pg-final.log": "da94071a89449a42a22375f894b4cc8eee3d1d0da24195b306b2d716766d3c98",
+    "access-cache-package.log": "fd640ca9047263337b730287f5c617634979a86d46b1480efee24aaca9272ff3",
+    "panels-lint-terminal.log": "cd1a94fc2cf6a965b86e1a4809d6c7fb9148b1ee374e1010ed2ac96ff4876ec2",
+    "pg-preflight.log": "39a520b5437ffabdb916dedd39086251d9abbd233d518f32a04f7867b41ca464",
+    "composer-cache-repair.json": "ca400e9799b496d9ae6df3d8e5d57ed2948e6847b9741c53bce6f5a16129573e",
+    "golden-delta-terminal.json": "f7580e1fab7134cc1b04358d8084345cd0987b0d69c8ad1ecec94aab3c519868",
+    "self-check.json": "8c463e5487337234160185304cb72ee702c2de214eb194a752a32aba810fd6c1"
+  },
+  "mutation": {
+    "passed": 35,
+    "total": 35,
+    "source_files": 3335,
+    "source_and_git_index_restored": true
+  },
+  "changes": [
+    "Removed strict-analysis debt across the fifteen remaining package/consumer configs; empty baselines, zero ceilings and all-stage CI gate.",
+    "Added guarded mixed-value conversion in module-local Internal helpers, precise collection/row types and query expressions; no new PHPStan suppression.",
+    "Preserved numeric NDJSON object keys and sort metadata; regressions cover malformed saved-view structures, blank CSV records, unavailable storage streams and PostgreSQL search expressions.",
+    "Declared tools existing symfony/process test dependency, moved a core lifecycle fixture into PSR autoload and removed access parser dependency on optional extensions.",
+    "Golden PHP surface: twenty new Internal classes and one concrete container type correction in an Internal handler; exported interfaces and migration files unchanged."
+  ],
+  "deviations": [
+    "Observed initial debt742, rather than historical1975; diagnosed with existing baseline includes removed temporarily.",
+    "Included missing panels migration analysis path and bounded upstream dependency/fixture repairs through amended task scope.",
+    "BC check required quarantining one empty local Composer Git-cache main ref; pinned source commit, BC bases and approvals unchanged.",
+    "Task CLI excludes tracked generated views even with --path; use its dry-run source selection plus an explicit list of task-generated views for one consistent scoped Git commit."
+  ],
+  "environment": {
+    "php": "8.4.26 via scripts/php84",
+    "postgres": "corex_test at127.0.0.1:5434, serial",
+    "composer_deps_and_bc": "COMPOSER_DISABLE_NETWORK=1; BC_CHECK_JOBS=4 on final aggregate BC run"
+  },
+  "limits": [
+    "Offline Composer cache checks do not establish a fresh vulnerability audit.",
+    "Hosted GitHub Actions and independent security/concurrency review remain in P09.8 under D125.",
+    "No push, tag, package publication, BC approval/base update or schema baseline update."
+  ],
+  "review_recommendation": "task:review of P09.3 source diff for guarded hydration, PostgreSQL DDL/search and scoped worker reset; independent review is scheduled in P09.8."
+}

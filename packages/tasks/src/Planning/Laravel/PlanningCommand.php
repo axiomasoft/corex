@@ -19,6 +19,7 @@ use CoreX\Tasks\Planning\Data\PlanningToken;
 use CoreX\Tasks\Planning\Exceptions\InvalidPlanningDraft;
 use CoreX\Tasks\Planning\Internal\OperationStore;
 use CoreX\Tasks\Planning\Internal\PlanningHasher;
+use CoreX\Tasks\Planning\Internal\Value;
 use CoreX\Tasks\Project\Data\ProjectDraft;
 use CoreX\Tasks\Project\Data\ProjectReference;
 use CoreX\Tasks\Project\Enums\ProjectStatus;
@@ -133,7 +134,7 @@ final class PlanningCommand implements TaskPlanningCommand
 
         $subject = new PlanningSubject(
             workspaceId: (string) $project->workspace_id,
-            projectId: (string) $project->getKey(),
+            projectId: Value::text($project->getKey()),
             taskId: null,
             userId: $draft->actor->id,
         );
@@ -231,14 +232,14 @@ final class PlanningCommand implements TaskPlanningCommand
                 if ($task->project_id !== null) {
                     Project::on($connection->getName())
                         ->whereKey($task->project_id)
-                        ->lockForUpdate()
+                        ->tap(static fn ($query) => $query->getQuery()->lockForUpdate())
                         ->first();
                 }
 
                 if ($task->sprint_id !== null) {
                     Sprint::on($connection->getName())
                         ->whereKey($task->sprint_id)
-                        ->lockForUpdate()
+                        ->tap(static fn ($query) => $query->getQuery()->lockForUpdate())
                         ->first();
                 }
 
@@ -288,7 +289,7 @@ final class PlanningCommand implements TaskPlanningCommand
             throw InvalidPlanningDraft::forField('request_key', 'Ключ запроса должен содержать от 1 до 190 байт.');
         }
 
-        if (! preg_match('/^[a-f0-9]{64}$/', $token->payloadHash)) {
+        if (preg_match('/^[a-f0-9]{64}$/', $token->payloadHash) !== 1) {
             throw InvalidPlanningDraft::forField('payload_hash', 'Хеш запроса должен быть SHA-256 в нижнем регистре.');
         }
 
@@ -371,7 +372,7 @@ final class PlanningCommand implements TaskPlanningCommand
         /** @var Task|null $task */
         $task = Task::on($connection->getName())
             ->whereKey($taskId)
-            ->lockForUpdate()
+            ->tap(static fn ($query) => $query->getQuery()->lockForUpdate())
             ->first();
 
         if ($task === null) {
@@ -384,9 +385,9 @@ final class PlanningCommand implements TaskPlanningCommand
     private function timeLogSubject(Task $task, string $userId): PlanningSubject
     {
         return new PlanningSubject(
-            workspaceId: (string) ($task->workspace_id ?? ''),
+            workspaceId: ($task->workspace_id ?? ''),
             projectId: $task->project_id,
-            taskId: (string) $task->getKey(),
+            taskId: Value::text($task->getKey()),
             userId: $userId,
         );
     }

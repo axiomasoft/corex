@@ -33,7 +33,7 @@ final class SettingsPreferenceRepository implements PreferenceRepository
             ->first();
         $value = JsonDocuments::decode($this->settings->get(self::NAMESPACE, $eventType, $this->scope($recipient['id']), JsonDocuments::capture($this->defaultPreference())));
 
-        return $this->preference($value, $state === null ? '1' : (string) $state->preference_revision);
+        return $this->preference($value, Value::text($state === null ? '1' : Value::text($state->preference_revision)));
     }
 
     public function set(NotificationContext $context, PreferenceInput $input): NotificationPreference
@@ -51,13 +51,13 @@ final class SettingsPreferenceRepository implements PreferenceRepository
                 ->where('id', $recipient['id'])
                 ->lockForUpdate()
                 ->firstOrFail();
-            $version = (string) $state->preference_revision;
+            $version = Value::text($state->preference_revision);
 
-            if (! hash_equals($version, $input->expectedVersion)) {
+            if (! hash_equals(Value::text($version), $input->expectedVersion)) {
                 throw new NotificationOperationConflict('Notification preference version conflicts with the current value.');
             }
 
-            $next = (string) ((int) $version + 1);
+            $next = (string) (Value::integer($version) + 1);
             $value = ['channels' => $input->channels, 'digest' => $input->digest];
             $this->settings->set(self::NAMESPACE, $input->eventType, JsonDocuments::capture($value), $this->scope($recipient['id']));
             $this->connection->table('ntf_recipient_state')

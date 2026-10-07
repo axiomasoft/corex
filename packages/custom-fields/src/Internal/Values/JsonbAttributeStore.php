@@ -21,6 +21,7 @@ use CoreX\CustomFields\Internal\KeyConflict;
 use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
 use CoreX\CustomFields\Internal\Support\Validation;
+use CoreX\CustomFields\Internal\Value;
 use CoreX\CustomFields\Internal\VersionConflict;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
@@ -55,7 +56,7 @@ final readonly class JsonbAttributeStore implements AttributeStore
         $this->validator()->validateSelection(scope: $scope, record: $record, selection: $fields);
         $definitions = $this->definitions($scope, $record->entity, $fields->fields);
         $row = $this->documents()->where('entity', $record->entity)->where('record_id', $record->id)->first();
-        $values = $row === null ? [] : $this->decode($row->values);
+        $values = $row === null ? [] : $this->decode(Value::text($row->values));
 
         $values = $this->projectValues($definitions, $values);
         $values = Validation::validatedMap($values, 'attribute values');
@@ -78,7 +79,7 @@ final readonly class JsonbAttributeStore implements AttributeStore
                     throw new KeyConflict('An operation key is already bound to different data.');
                 }
 
-                return new AttributeWriteResult(status: 'replayed', recordVersion: $existing->record_version, payloadHash: $existing->payload_hash);
+                return new AttributeWriteResult(status: 'replayed', recordVersion: Value::text($existing->record_version), payloadHash: $existing->payload_hash);
             }
 
             $current = $this->documents()->where('entity', $record->entity)->where('record_id', $record->id)->lockForUpdate()->first();
@@ -88,7 +89,7 @@ final readonly class JsonbAttributeStore implements AttributeStore
                 throw new VersionConflict('The attribute record version is stale.');
             }
 
-            $values = $current === null ? [] : $this->decode($current->values);
+            $values = $current === null ? [] : $this->decode(Value::text($current->values));
             $this->assertNoDrift($definitions, $values);
             foreach ($this->expandPatch($definitions, $patch->values) as $field => $value) {
                 $values[$field] = $value;
@@ -144,9 +145,9 @@ final readonly class JsonbAttributeStore implements AttributeStore
             $definitionsByEntity[$entity] = $this->definitions($scope, $entity, $fields->fields);
         }
 
-        $rows = $this->documents()->where(function ($query) use ($records): void {
+        $rows = $this->documents()->where(function (Builder $query) use ($records): void {
             foreach ($this->recordsByEntity($records) as $entity => $ids) {
-                $query->orWhere(function ($entityQuery) use ($entity, $ids): void {
+                $query->orWhere(function (Builder $entityQuery) use ($entity, $ids): void {
                     $entityQuery->where('entity', $entity)->whereIn('record_id', $ids);
                 });
             }
@@ -154,7 +155,7 @@ final readonly class JsonbAttributeStore implements AttributeStore
 
         $valuesByRecord = [];
         foreach ($rows as $row) {
-            $valuesByRecord[$row->entity."\n".$row->record_id] = $this->decode($row->values);
+            $valuesByRecord[Value::text($row->entity)."\n".Value::text($row->record_id)] = $this->decode(Value::text($row->values));
         }
 
         return new ValueBatch(records: array_map(
@@ -209,7 +210,7 @@ final readonly class JsonbAttributeStore implements AttributeStore
             throw new RuntimeException('Stored attribute document must be a JSON object.');
         }
 
-        return $values;
+        return Value::map($values);
     }
 
     /** @param array<string, mixed> $values */
@@ -342,7 +343,7 @@ final readonly class JsonbAttributeStore implements AttributeStore
     {
         $keys = $definition['read_keys'] ?? [];
 
-        return is_array($keys) && $keys !== [] ? array_values($keys) : [$logicalKey];
+        return is_array($keys) && $keys !== [] ? Value::strings(array_values($keys)) : [$logicalKey];
     }
 
     /** @param array<string, mixed> $definition
@@ -352,7 +353,7 @@ final readonly class JsonbAttributeStore implements AttributeStore
     {
         $keys = $definition['write_keys'] ?? [];
 
-        return is_array($keys) && $keys !== [] ? array_values($keys) : [$logicalKey];
+        return is_array($keys) && $keys !== [] ? Value::strings(array_values($keys)) : [$logicalKey];
     }
 
     /** @param array<string, mixed> $definition */
@@ -361,7 +362,7 @@ final readonly class JsonbAttributeStore implements AttributeStore
         $meta = is_array($definition['meta'] ?? null) ? $definition['meta'] : [];
 
         return ($meta['evolution_source_key'] ?? null) === $physicalKey
-            ? $this->transformerRegistry()->toTarget($meta, $value)
+            ? $this->transformerRegistry()->toTarget(Value::map($meta), $value)
             : $value;
     }
 
@@ -371,7 +372,7 @@ final readonly class JsonbAttributeStore implements AttributeStore
         $meta = is_array($definition['meta'] ?? null) ? $definition['meta'] : [];
 
         return ($meta['evolution_source_key'] ?? null) === $physicalKey
-            ? $this->transformerRegistry()->toSource($meta, $value)
+            ? $this->transformerRegistry()->toSource(Value::map($meta), $value)
             : $value;
     }
 

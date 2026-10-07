@@ -95,7 +95,8 @@ final class WorkflowDefinitionStamp
      */
     public static function schemaOf(?array $stored, string $definitionRef, string $versionRef): string
     {
-        $schema = is_array($stored) ? ($stored['identity']['schema'] ?? null) : null;
+        $identity = $stored['identity'] ?? null;
+        $schema = is_array($identity) ? ($identity['schema'] ?? null) : null;
 
         if ($schema === self::SCHEMA) {
             return 'versioned';

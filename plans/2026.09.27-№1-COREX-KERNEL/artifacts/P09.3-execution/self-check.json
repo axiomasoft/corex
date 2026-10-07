@@ -1,0 +1,166 @@
+{
+  "initial_errors": {
+    "search-meilisearch": 5,
+    "notifications": 63,
+    "search": 23,
+    "intl": 116,
+    "flex-crm": 69,
+    "media": 93,
+    "search-intl": 1,
+    "tasks-workflow": 72,
+    "recurrence": 9,
+    "transfer": 64,
+    "panels": 31,
+    "tasks": 16,
+    "custom-fields": 132,
+    "workflow": 13,
+    "wakeup": 35
+  },
+  "initial_total": 742,
+  "baseline_ceilings": {
+    "schema": "corex-quality-ceilings/1",
+    "phpstan": {
+      "access": 0,
+      "access-azguard": 0,
+      "core": 0,
+      "custom-fields": 0,
+      "flex-crm": 0,
+      "intl": 0,
+      "media": 0,
+      "notifications": 0,
+      "operations": 0,
+      "panels": 0,
+      "recurrence": 0,
+      "root": 0,
+      "search": 0,
+      "search-intl": 0,
+      "search-meilisearch": 0,
+      "tasks": 0,
+      "tasks-workflow": 0,
+      "tenancy": 0,
+      "tools": 0,
+      "transfer": 0,
+      "wakeup": 0,
+      "webhooks": 0,
+      "workflow": 0
+    },
+    "dependencies": {
+      "access": 0,
+      "access-azguard": 0,
+      "core": 0,
+      "custom-fields": 0,
+      "flex-crm": 0,
+      "intl": 0,
+      "media": 0,
+      "notifications": 0,
+      "operations": 0,
+      "panels": 0,
+      "recurrence": 0,
+      "search": 0,
+      "search-intl": 0,
+      "search-meilisearch": 0,
+      "tasks": 0,
+      "tasks-workflow": 0,
+      "tenancy": 0,
+      "tools": 0,
+      "transfer": 0,
+      "wakeup": 0,
+      "webhooks": 0,
+      "workflow": 0
+    }
+  },
+  "manifests": {
+    "packages/access-azguard/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "packages/media/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "packages/workflow/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "packages/search-meilisearch/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "packages/tasks/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "packages/tasks-workflow/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "packages/custom-fields/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "packages/transfer/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "packages/panels/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "packages/search-intl/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "packages/wakeup/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "packages/search/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "packages/operations/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "packages/core/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "packages/tenancy/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "packages/webhooks/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "packages/intl/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "packages/notifications/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "packages/recurrence/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "packages/tools/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": true
+    },
+    "packages/access/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    },
+    "products/flex-crm/composer.json": {
+      "runtime_unchanged": true,
+      "dev_changed": false
+    }
+  },
+  "migration_delta": [],
+  "contract_delta": [],
+  "bc_base_sha256": "e4312a96dbb104fa75b030f5738b89854d4b73ffb2b4f22f0498314e199f00c4",
+  "bc_approvals_sha256": "aba789c6e37d37e0f4df9577d589a3145fbb61775d38a2ed905a281d55f09ada"
+}

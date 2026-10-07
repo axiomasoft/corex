@@ -1,7 +1,2 @@
 parameters:
-	ignoreErrors:
-		-
-			rawMessage: Instanceof between CoreX\SearchIntl\Data\LocalizedFieldBinding and CoreX\SearchIntl\Data\LocalizedFieldBinding will always evaluate to true.
-			identifier: instanceof.alwaysTrue
-			count: 1
-			path: src/Internal/LocalizedSearchSchema.php
+    ignoreErrors: []

@@ -14,7 +14,7 @@ use CoreX\Scheduling\Contracts\DueWakeupHandler;
 use CoreX\Scheduling\Data\WakeupDelivery;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
 use CoreX\TasksWorkflow\Exceptions\StaleMaterialization;
-use Illuminate\Contracts\Container\Container;
+use Illuminate\Container\Container;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 

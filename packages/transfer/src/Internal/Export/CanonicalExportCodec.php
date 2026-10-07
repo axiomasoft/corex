@@ -72,7 +72,7 @@ final class CanonicalExportCodec
 
     private function csv(string $value): string
     {
-        if (preg_match('/^[=+\-@\t\r]/', $value)) {
+        if (preg_match('/^[=+\-@\t\r]/', $value) === 1) {
             $value = "'{$value}";
         }
 

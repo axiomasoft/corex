@@ -50,13 +50,13 @@ final class SqlRateImporter implements RateImporter
             ->first();
 
         if ($existing !== null) {
-            if (! hash_equals((string) $existing->payload_hash, $token->payloadHash)) {
+            if (! hash_equals(Value::text($existing->payload_hash), $token->payloadHash)) {
                 throw new OperationConflictException('Rate import operation key was reused with a different payload.');
             }
 
             return new RateImportReceipt(
                 status: 'noop',
-                generation: (int) $existing->generation,
+                generation: Value::integer($existing->generation),
                 imported: 0,
                 noop: count($batch->snapshots),
                 conflicts: 0,
@@ -82,7 +82,7 @@ final class SqlRateImporter implements RateImporter
                     ->first();
 
                 if ($existingRow !== null) {
-                    if (! hash_equals((string) $existingRow->payload_hash, $payloadHash)) {
+                    if (! hash_equals(Value::text($existingRow->payload_hash), $payloadHash)) {
                         $conflicts++;
 
                         continue;
@@ -149,7 +149,7 @@ final class SqlRateImporter implements RateImporter
             throw new InvalidRateException('Rate snapshot schema is not supported.');
         }
 
-        if (! preg_match('/\A[0-9]+(?:\.[0-9]{1,18})?\z/', $snapshot->rateDecimal)) {
+        if (preg_match('/\A[0-9]+(?:\.[0-9]{1,18})?\z/', $snapshot->rateDecimal) !== 1) {
             throw new InvalidRateException('Rate decimal must be a positive canonical decimal string.');
         }
 
@@ -157,7 +157,7 @@ final class SqlRateImporter implements RateImporter
             throw new InvalidRateException('Rate decimal must be positive.');
         }
 
-        if (! preg_match('/\A\d{4}-\d{2}-\d{2}\z/', $snapshot->validOn)) {
+        if (preg_match('/\A\d{4}-\d{2}-\d{2}\z/', $snapshot->validOn) !== 1) {
             throw new InvalidRateException('Rate valid_on must be a DATE string.');
         }
     }

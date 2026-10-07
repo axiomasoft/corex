@@ -1,0 +1,11 @@
+{
+  "id": "V10",
+  "command": [
+    "scripts/php84",
+    "composer",
+    "schema-gate"
+  ],
+  "exit": 0,
+  "duration_seconds": 0.68,
+  "log_sha256": "5008a66e9922d243d99c31686cfbb795d49dbaf5c1ef57f6e655e2faa259869d"
+}

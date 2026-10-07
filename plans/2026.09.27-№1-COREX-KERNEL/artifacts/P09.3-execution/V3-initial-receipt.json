@@ -1,0 +1,12 @@
+{
+  "id": "V3",
+  "command": [
+    "scripts/php84",
+    "php",
+    "scripts/quality/release-quality.php",
+    "--stage=all"
+  ],
+  "exit": 1,
+  "duration_seconds": 0.386,
+  "log_sha256": "043e47458c3b3dfd694d5315366a9f4605d2ac12bfd2e602cf55ef29d0c3f4e5"
+}

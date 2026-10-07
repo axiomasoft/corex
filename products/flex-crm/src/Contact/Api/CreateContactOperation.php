@@ -9,6 +9,7 @@ use CoreX\Operations\Invocation\Contracts\RequestContext;
 use Flex\Crm\ApiShared\CrmIdentifier;
 use Flex\Crm\Contact\Actions\CreateContact;
 use Flex\Crm\Contact\Data\ContactData;
+use Flex\Crm\Internal\Value;
 
 final readonly class CreateContactOperation implements OperationHandler
 {
@@ -18,16 +19,16 @@ final readonly class CreateContactOperation implements OperationHandler
     public function handle(RequestContext $context, array $input, array $parameters): array
     {
         return ContactPayload::from($this->createContact->handle(new ContactData(
-            nameFirst: $input['name_first'] ?? null,
-            nameLast: $input['name_last'] ?? null,
-            nameMiddle: $input['name_middle'] ?? null,
-            jobTitle: $input['job_title'] ?? null,
-            birthday: $input['birthday'] ?? null,
-            phones: $input['phones'] ?? [],
-            emails: $input['emails'] ?? [],
+            nameFirst: Value::nullableText($input['name_first'] ?? null),
+            nameLast: Value::nullableText($input['name_last'] ?? null),
+            nameMiddle: Value::nullableText($input['name_middle'] ?? null),
+            jobTitle: Value::nullableText($input['job_title'] ?? null),
+            birthday: Value::nullableText($input['birthday'] ?? null),
+            phones: Value::maps($input['phones'] ?? []),
+            emails: Value::maps($input['emails'] ?? []),
             sourceId: array_key_exists('source_id', $input) && $input['source_id'] !== null ? CrmIdentifier::fromInput($input['source_id']) : null,
             ownerId: array_key_exists('owner_id', $input) && $input['owner_id'] !== null ? CrmIdentifier::fromInput($input['owner_id']) : null,
-            accountLevel: $input['account_level'] ?? false,
+            accountLevel: Value::boolean($input['account_level'] ?? false),
         )));
     }
 }

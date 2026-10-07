@@ -8,6 +8,7 @@ use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Transfer\Contracts\TransferResultReader;
 use CoreX\Transfer\Data\TransferRef;
+use CoreX\Transfer\Internal\Value;
 use Illuminate\Database\ConnectionInterface;
 use Override;
 
@@ -41,10 +42,10 @@ final readonly class SqlTransferResultReader implements TransferResultReader
         $records = [];
 
         foreach ($page as $row) {
-            $error = json_decode((string) $row->error, true);
+            $error = json_decode(Value::text($row->error), true);
 
             $records[] = [
-                'ordinal' => (string) $row->ordinal,
+                'ordinal' => Value::text($row->ordinal),
                 'code' => is_array($error) && is_string($error['code'] ?? null) ? $error['code'] : 'rowFailed',
                 'path' => is_array($error) && is_string($error['path'] ?? null) ? $error['path'] : null,
             ];
@@ -62,18 +63,18 @@ final readonly class SqlTransferResultReader implements TransferResultReader
     public function result(DataScope $scope, TransferRef $ref): array
     {
         $job = $this->authorize(scope: $scope, ref: $ref);
-        $cursor = json_decode((string) $job->cursor, true);
-        $stats = json_decode((string) $job->stats, true);
+        $cursor = json_decode(Value::text(Value::field($job, 'cursor')), true);
+        $stats = json_decode(Value::text(Value::field($job, 'stats')), true);
 
         return [
-            'id' => (string) $job->id,
-            'state' => (string) $job->state,
-            'mode' => (string) $job->mode,
-            'checkpointSequence' => (string) $job->checkpoint_seq,
+            'id' => Value::text(Value::field($job, 'id')),
+            'state' => Value::text(Value::field($job, 'state')),
+            'mode' => Value::text(Value::field($job, 'mode')),
+            'checkpointSequence' => Value::text(Value::field($job, 'checkpoint_seq')),
             'cursor' => is_array($cursor) ? [
-                'ordinal' => isset($cursor['ordinal']) ? (string) $cursor['ordinal'] : '0',
+                'ordinal' => isset($cursor['ordinal']) ? Value::text($cursor['ordinal']) : '0',
                 'boundaryByteOffset' => array_key_exists('boundaryByteOffset', $cursor) && $cursor['boundaryByteOffset'] !== null
-                    ? (string) $cursor['boundaryByteOffset']
+                    ? Value::text($cursor['boundaryByteOffset'])
                     : null,
             ] : ['ordinal' => '0', 'boundaryByteOffset' => null],
             'stats' => is_array($stats) ? $stats : [],
@@ -85,7 +86,7 @@ final readonly class SqlTransferResultReader implements TransferResultReader
         $job = $this->connection->table('corex_transfer_jobs')->where('id', $ref->id)->first();
 
         if ($job === null
-            || ! hash_equals((string) $job->restore_epoch, $scope->restoreEpoch)
+            || ! hash_equals(Value::text($job->restore_epoch), $scope->restoreEpoch)
             || ! $this->authorizer->authorize(scope: $scope, entity: '*', subjectId: $ref->id, fields: [], action: 'transfer.read')->allowed) {
             throw new TransferUnavailable('Transfer result is not available under the current authority.');
         }

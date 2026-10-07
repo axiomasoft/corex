@@ -13,17 +13,17 @@ final class RateSnapshotMapper
     public static function fromRow(stdClass $row): RateSnapshot
     {
         return new RateSnapshot(
-            schema: (string) $row->schema_version,
-            base: (string) $row->base,
-            quote: (string) $row->quote,
-            rateDecimal: (string) $row->rate_decimal,
-            validOn: (string) $row->valid_on,
-            observedAt: new DateTimeImmutable((string) $row->observed_at),
-            source: (string) $row->source,
-            publicationId: (string) $row->publication_id,
-            publicationRevision: (string) $row->publication_revision,
-            payloadSha256: (string) $row->payload_hash,
-            id: (string) $row->id,
+            schema: Value::text($row->schema_version),
+            base: Value::text($row->base),
+            quote: Value::text($row->quote),
+            rateDecimal: Value::text($row->rate_decimal),
+            validOn: Value::text($row->valid_on),
+            observedAt: new DateTimeImmutable(Value::text($row->observed_at)),
+            source: Value::text($row->source),
+            publicationId: Value::text($row->publication_id),
+            publicationRevision: Value::text($row->publication_revision),
+            payloadSha256: Value::text($row->payload_hash),
+            id: Value::text($row->id),
         );
     }
 

@@ -1,0 +1,11 @@
+{
+  "id": "V8",
+  "command": [
+    "scripts/php84",
+    "composer",
+    "bc-check"
+  ],
+  "exit": 1,
+  "duration_seconds": 382.903,
+  "log_sha256": "5218eaa1715f2490d4a26961f27a47aa47d06bdf24d60e715b8f9a6034d093e7"
+}

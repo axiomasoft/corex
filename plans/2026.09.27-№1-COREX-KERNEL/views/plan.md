@@ -162,7 +162,7 @@ operations, независимые модули, детерминированн�
 | P06 | Operations, tools, webhooks и wire | detailed | 5/5 | 🟠 Done with deviations |
 | P07 | Tenancy, access, независимость модулей | detailed | 6/6 | 🟠 Done with deviations |
 | P08 | Схема: baseline v1 | detailed | 10/10 | 🟠 Done with deviations |
-| P09 | Планка качества: типизация, tooling и тесты до выпуска | detailed | 8/17 | 🟡 In progress |
+| P09 | Планка качества: типизация, tooling и тесты до выпуска | detailed | 9/17 | 🟡 In progress |
 | P10 | Зелёный hosted CI на базе P04 | detailed | 4/4 | 🟢 Done |
 
 ## Decisions

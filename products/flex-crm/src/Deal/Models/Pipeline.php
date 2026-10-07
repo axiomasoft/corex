@@ -25,7 +25,10 @@ final class Pipeline extends BaseModel
     /** @return HasMany<Stage, $this> */
     public function stages(): HasMany
     {
-        return $this->hasMany(Stage::class)->orderBy('position');
+        $relation = $this->hasMany(Stage::class);
+        $relation->getQuery()->getQuery()->orderBy('position');
+
+        return $relation;
     }
 
     /** @return HasMany<Deal, $this> */

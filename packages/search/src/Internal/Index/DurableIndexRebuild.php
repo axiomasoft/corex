@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Search\Internal\Index;
 
+use CoreX\Search\Internal\Value;
 use Illuminate\Database\ConnectionInterface;
 use InvalidArgumentException;
 use Psr\Clock\ClockInterface;
@@ -39,7 +40,7 @@ final readonly class DurableIndexRebuild
                 'to_generation' => $toGeneration,
                 'restore_epoch' => $restoreEpoch,
                 'schema_hash' => $schemaHash,
-                'fence_revision' => (int) $lane->committed_revision,
+                'fence_revision' => Value::integer($lane->committed_revision),
                 'state' => 'capturing',
                 'created_at' => $this->clock->now(),
                 'updated_at' => $this->clock->now(),
@@ -61,7 +62,7 @@ final readonly class DurableIndexRebuild
             }
 
             $this->connection->table('corex_search_rebuilds')->where('rebuild_id', $rebuildId)->update([
-                'fence_revision' => max((int) $rebuild->fence_revision, $watermark),
+                'fence_revision' => max(Value::integer($rebuild->fence_revision), $watermark),
                 'state' => 'fenced',
                 'updated_at' => $this->clock->now(),
             ]);

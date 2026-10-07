@@ -122,3 +122,27 @@ it('keeps physically separate account databases and their cursors isolated', fun
     expect($providerB->query(scope: $scopeB, query: new SearchQuery(entity: 'equipment', schemaHash: str_repeat('a', 64), text: 'pump'))->candidates[0]->record->id)->toBe('account-b-1')
         ->and(fn (): mixed => $providerB->query(scope: $scopeB, query: new SearchQuery(entity: 'equipment', schemaHash: str_repeat('a', 64), text: 'pump', afterId: $firstA->nextAfterId)))->toThrow(InvalidArgumentException::class);
 })->group('pg');
+
+it('preserves phrase search across nullable schema columns without interpreting text as SQL', function (): void {
+    DB::statement('ALTER TABLE corex_search_provider_test ADD COLUMN subtitle text');
+    DB::table('corex_search_provider_test')->where('id', 'equipment-1')->update(['title' => 'Centrifugal water', 'subtitle' => 'pump']);
+    $schema = new class implements SearchSchema
+    {
+        public function describe(DataScope $scope, string $entity): SearchSnapshot
+        {
+            return new SearchSnapshot(entity: $entity, schemaHash: str_repeat('a', 64), table: 'corex_search_provider_test', idColumn: 'id', searchableColumns: ['title', 'subtitle']);
+        }
+    };
+    $provider = new PostgresSearchProvider(connection: DB::connection(), schemas: $schema, cursors: new SearchCursorCodec(secret: str_repeat('c', 32)));
+    $scope = DataScope::fromTenantContext(
+        context: new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false),
+        connectionIdentity: 'pgsql:account-a', actorId: 'operator-a', restoreEpoch: str_repeat('b', 64),
+    );
+    $phrase = $provider->query(scope: $scope, query: new SearchQuery(entity: 'equipment', schemaHash: str_repeat('a', 64), text: '"water pump"'));
+    $nullable = $provider->query(scope: $scope, query: new SearchQuery(entity: 'equipment', schemaHash: str_repeat('a', 64), text: 'archived'));
+    $injection = $provider->query(scope: $scope, query: new SearchQuery(entity: 'equipment', schemaHash: str_repeat('a', 64), text: "unmatchable' OR 1=1 --"));
+
+    expect(array_map(static fn ($candidate): string => $candidate->record->id, $phrase->candidates))->toBe(['equipment-1'])
+        ->and(array_map(static fn ($candidate): string => $candidate->record->id, $nullable->candidates))->toBe(['equipment-2'])
+        ->and($injection->candidates)->toBe([]);
+});

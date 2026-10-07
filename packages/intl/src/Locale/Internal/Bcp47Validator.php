@@ -26,7 +26,7 @@ final class Bcp47Validator implements LocaleValidation
             throw new InvalidLocaleException('Locale tag is empty or exceeds the maximum length.');
         }
 
-        if (! preg_match('/\A[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*\z/', $trimmed)) {
+        if (preg_match('/\A[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*\z/', $trimmed) !== 1) {
             throw new InvalidLocaleException('Locale tag contains invalid BCP47 characters.');
         }
 
@@ -41,7 +41,7 @@ final class Bcp47Validator implements LocaleValidation
             throw new InvalidLocaleException('Locale tag is empty or exceeds the maximum length.');
         }
 
-        if (! preg_match('/\A[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*\z/', $trimmed)) {
+        if (preg_match('/\A[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*\z/', $trimmed) !== 1) {
             throw new InvalidLocaleException('Locale tag contains invalid BCP47 characters.');
         }
 
@@ -59,7 +59,7 @@ final class Bcp47Validator implements LocaleValidation
         if (class_exists(Locale::class)) {
             $canonical = Locale::canonicalize($tag);
 
-            if (is_string($canonical) && $canonical !== '') {
+            if (is_string($canonical)) {
                 return str_replace('_', '-', $canonical);
             }
         }

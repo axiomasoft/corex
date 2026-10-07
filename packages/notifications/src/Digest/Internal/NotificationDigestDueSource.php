@@ -41,8 +41,8 @@ final class NotificationDigestDueSource implements DueWakeupSource
         $completed = 0;
 
         foreach ($runs as $run) {
-            $window = new DigestWindow(start: $this->date($run->period_start), end: $this->date($run->period_end), period: $run->period);
-            $digest = $this->digests->build(new NotificationContext(tenant: $context, actorKind: $run->recipient_kind, actorId: $run->recipient_id), $window);
+            $window = new DigestWindow(start: $this->date($run->period_start), end: $this->date($run->period_end), period: Value::text($run->period));
+            $digest = $this->digests->build(new NotificationContext(tenant: $context, actorKind: Value::text($run->recipient_kind), actorId: Value::nullableText($run->recipient_id)), $window);
 
             if ($digest === null) {
                 continue;
@@ -57,6 +57,6 @@ final class NotificationDigestDueSource implements DueWakeupSource
 
     private function date(mixed $value): DateTimeImmutable
     {
-        return $value instanceof DateTimeInterface ? DateTimeImmutable::createFromInterface($value) : new DateTimeImmutable((string) $value);
+        return $value instanceof DateTimeInterface ? DateTimeImmutable::createFromInterface($value) : new DateTimeImmutable(Value::text($value));
     }
 }

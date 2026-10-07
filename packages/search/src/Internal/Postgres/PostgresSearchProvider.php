@@ -15,7 +15,9 @@ use CoreX\Search\Data\SearchFilter;
 use CoreX\Search\Data\SearchQuery;
 use CoreX\Search\Data\SearchSnapshot;
 use CoreX\Search\Internal\Query\SearchCursorCodec;
+use CoreX\Search\Internal\Value;
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\Query\Builder;
 use InvalidArgumentException;
 
 final class PostgresSearchProvider implements SearchProvider
@@ -62,21 +64,20 @@ final class PostgresSearchProvider implements SearchProvider
             $this->applyFilter(builder: $builder, schema: $schema, filter: $filter);
         }
 
-        $columns = implode(', ', array_map(static fn (string $column): string => 'COALESCE('.$column.", '')", $schema->searchableColumns));
-        $builder->whereRaw("to_tsvector('{$this->configuration}', concat_ws(' ', {$columns})) @@ websearch_to_tsquery(?, ?)", [$this->configuration, $query->text]);
+        $builder->whereRaw(new SearchTextExpression($schema, $this->configuration), [$this->configuration, $query->text]);
 
         $rows = $builder->get();
         $truncated = $rows->count() > $query->limit;
         $visible = $rows->take($query->limit);
-        $candidates = $visible->map(static fn (object $row): Candidate => new Candidate(new RecordRef(entity: $query->entity, id: (string) $row->{$schema->idColumn})))->all();
+        $candidates = $visible->map(static fn (object $row): Candidate => new Candidate(new RecordRef(entity: $query->entity, id: Value::text($row->{$schema->idColumn}))))->all();
         $next = $truncated ? $this->cursors->encode(
             scope: $scope,
             query: $query,
             schema: $schema,
-            id: (string) $visible->last()->{$schema->idColumn},
+            id: Value::text(($visible->last() ?? throw new InvalidArgumentException('Search page has no cursor record.'))->{$schema->idColumn}),
         ) : null;
 
-        return new CandidatePage(candidates: $candidates, nextAfterId: $next, truncated: $truncated);
+        return new CandidatePage(candidates: array_values($candidates), nextAfterId: $next, truncated: $truncated);
     }
 
     private function assertSchema(SearchQuery $query, SearchSnapshot $schema): void
@@ -86,7 +87,7 @@ final class PostgresSearchProvider implements SearchProvider
         }
     }
 
-    private function applyFilter(object $builder, SearchSnapshot $schema, SearchFilter $filter): void
+    private function applyFilter(Builder $builder, SearchSnapshot $schema, SearchFilter $filter): void
     {
         $column = $schema->filterColumns[$filter->field] ?? null;
 

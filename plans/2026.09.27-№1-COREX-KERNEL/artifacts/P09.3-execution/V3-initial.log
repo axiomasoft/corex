@@ -1,0 +1,2 @@
+quality FAIL: panels: missing analysis path database/migrations
+panels: uncovered SchemaSet database/migrations/tenant

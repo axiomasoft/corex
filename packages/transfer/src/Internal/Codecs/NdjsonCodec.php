@@ -8,7 +8,7 @@ use InvalidArgumentException;
 
 final class NdjsonCodec
 {
-    /** @return list<array<string, mixed>> */
+    /** @return list<array<array-key, mixed>> */
     public function decode(string $bytes, int $maxRecordBytes = 1_048_576): array
     {
         if ($maxRecordBytes < 1) {

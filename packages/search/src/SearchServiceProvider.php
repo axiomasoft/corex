@@ -20,6 +20,7 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use RuntimeException;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class SearchServiceProvider extends ServiceProvider
@@ -43,7 +44,15 @@ final class SearchServiceProvider extends ServiceProvider
 
         SearchPortBindings::register($this->app);
 
-        $this->app->scoped(SearchProvider::class, static fn (Application $app): SearchProvider => $app->make(SearchManager::class)->driver());
+        $this->app->scoped(SearchProvider::class, static function (Application $app): SearchProvider {
+            $provider = $app->make(SearchManager::class)->driver();
+
+            if (! $provider instanceof SearchProvider) {
+                throw new RuntimeException('Search driver must implement SearchProvider.');
+            }
+
+            return $provider;
+        });
     }
 
     public function boot(): void

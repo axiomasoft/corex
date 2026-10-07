@@ -12,8 +12,10 @@ use CoreX\Intl\Territory\Data\DatasetManifest;
 use CoreX\Intl\Territory\Data\GeographyQuery;
 use CoreX\Intl\Territory\Data\ReferenceCursor;
 use CoreX\Intl\Territory\Data\ReferencePage;
+use CoreX\Intl\Territory\Internal\Value;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
+use Illuminate\Database\Query\Builder;
 use InvalidArgumentException;
 use Override;
 use stdClass;
@@ -80,7 +82,7 @@ final class SqlGeographyProvider implements GeographyProvider
         $queryHash = $this->queryHash(query: $query);
 
         if ($after !== null) {
-            $this->cursors->decode(cursor: $after, query: $query, snapshotId: $snapshotId, queryHash: $queryHash);
+            $this->cursors->decode(cursor: $after, query: $query, snapshotId: Value::text($snapshotId), queryHash: $queryHash);
         }
 
         $builder = $this->connection->table('corex_reference_records')
@@ -113,13 +115,13 @@ final class SqlGeographyProvider implements GeographyProvider
         }
 
         if ($after !== null) {
-            $builder->where(function ($nested) use ($after): void {
+            $builder->where(function (Builder $nested) use ($after): void {
                 $nested->where('normalized_name', '>', $after->lastNormalizedName)
-                    ->orWhere(function ($inner) use ($after): void {
+                    ->orWhere(function (Builder $inner) use ($after): void {
                         $inner->where('normalized_name', $after->lastNormalizedName)
-                            ->where(function ($tie) use ($after): void {
+                            ->where(function (Builder $tie) use ($after): void {
                                 $tie->where('namespace', '>', $after->lastNamespace)
-                                    ->orWhere(function ($last) use ($after): void {
+                                    ->orWhere(function (Builder $last) use ($after): void {
                                         $last->where('namespace', $after->lastNamespace)
                                             ->where('source_id', '>', $after->lastSourceId);
                                     });
@@ -146,12 +148,12 @@ final class SqlGeographyProvider implements GeographyProvider
             $last = $pageRows->last();
             $next = $this->cursors->encode(
                 query: $query,
-                snapshotId: $snapshotId,
+                snapshotId: Value::text($snapshotId),
                 queryHash: $queryHash,
                 position: [
-                    'normalizedName' => (string) $last->normalized_name,
-                    'namespace' => (string) $last->namespace,
-                    'sourceId' => (string) $last->source_id,
+                    'normalizedName' => Value::text($last->normalized_name),
+                    'namespace' => Value::text($last->namespace),
+                    'sourceId' => Value::text($last->source_id),
                 ],
             );
         }
@@ -160,7 +162,7 @@ final class SqlGeographyProvider implements GeographyProvider
             status: $records === [] ? 'notFound' : 'available',
             records: JsonDocuments::capture($records),
             next: $next,
-            snapshotId: $snapshotId,
+            snapshotId: Value::nullableText($snapshotId),
             provenance: JsonDocuments::capture(['datasetKey' => $datasetKey, 'snapshotId' => $snapshotId]),
         );
     }
@@ -168,7 +170,7 @@ final class SqlGeographyProvider implements GeographyProvider
     private function manifestFromRow(stdClass $row): DatasetManifest
     {
         /** @var array<string, mixed> $manifest */
-        $manifest = json_decode((string) $row->manifest, true, 16, JSON_THROW_ON_ERROR);
+        $manifest = json_decode(Value::text($row->manifest), true, 16, JSON_THROW_ON_ERROR);
 
         $types = (array) ($manifest['types'] ?? []);
         foreach ($types as $type) {
@@ -185,23 +187,23 @@ final class SqlGeographyProvider implements GeographyProvider
 
         /** @var array<string, int> $counts */
         return new DatasetManifest(
-            schema: (string) ($manifest['schema'] ?? 'reference-data/1'),
-            snapshotId: (string) $row->snapshot_id,
-            provider: (string) ($manifest['provider'] ?? 'sql'),
-            sourceUri: (string) ($manifest['sourceUri'] ?? ''),
-            retrievedAt: new DateTimeImmutable((string) ($manifest['retrievedAt'] ?? $row->created_at)),
-            rawHash: (string) $row->raw_hash,
-            normalizedHash: (string) $row->normalized_hash,
-            sourceVersion: (string) ($manifest['sourceVersion'] ?? '1'),
-            importerVersion: (string) ($manifest['importerVersion'] ?? 'intl/1'),
-            licenseUri: (string) ($manifest['licenseUri'] ?? ''),
-            attribution: (string) ($manifest['attribution'] ?? ''),
-            coveredCountries: (array) ($manifest['coveredCountries'] ?? []),
+            schema: Value::text($manifest['schema'] ?? 'reference-data/1'),
+            snapshotId: Value::text($row->snapshot_id),
+            provider: Value::text($manifest['provider'] ?? 'sql'),
+            sourceUri: Value::text($manifest['sourceUri'] ?? ''),
+            retrievedAt: new DateTimeImmutable(Value::text($manifest['retrievedAt'] ?? $row->created_at)),
+            rawHash: Value::text($row->raw_hash),
+            normalizedHash: Value::text($row->normalized_hash),
+            sourceVersion: Value::text($manifest['sourceVersion'] ?? '1'),
+            importerVersion: Value::text($manifest['importerVersion'] ?? 'intl/1'),
+            licenseUri: Value::text($manifest['licenseUri'] ?? ''),
+            attribution: Value::text($manifest['attribution'] ?? ''),
+            coveredCountries: Value::strings($manifest['coveredCountries'] ?? []),
             types: array_values($types),
             counts: $counts,
-            coverageNotes: (string) ($manifest['coverageNotes'] ?? ''),
-            tzdbVersion: (string) ($manifest['tzdbVersion'] ?? ''),
-            status: (string) $row->state,
+            coverageNotes: Value::text($manifest['coverageNotes'] ?? ''),
+            tzdbVersion: Value::text($manifest['tzdbVersion'] ?? ''),
+            status: Value::text($row->state),
         );
     }
 
@@ -214,11 +216,11 @@ final class SqlGeographyProvider implements GeographyProvider
             'namespace' => $row->namespace,
             'sourceId' => $row->source_id,
             'kind' => $row->kind,
-            'names' => json_decode((string) $row->names, true),
-            'countryKey' => $row->country_key ? json_decode((string) $row->country_key, true) : null,
-            'coordinates' => $row->coordinates ? json_decode((string) $row->coordinates, true) : null,
-            'timezones' => json_decode((string) $row->timezones, true),
-            'provenance' => json_decode((string) $row->provenance, true),
+            'names' => json_decode(Value::text($row->names), true),
+            'countryKey' => $row->country_key ? json_decode(Value::text($row->country_key), true) : null,
+            'coordinates' => $row->coordinates ? json_decode(Value::text($row->coordinates), true) : null,
+            'timezones' => json_decode(Value::text($row->timezones), true),
+            'provenance' => json_decode(Value::text($row->provenance), true),
         ];
     }
 

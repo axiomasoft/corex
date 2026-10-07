@@ -9,6 +9,7 @@ use CoreX\CustomFields\Data\FieldSelection;
 use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\InvalidAttributeValue;
+use CoreX\CustomFields\Internal\Value;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
 use DateTimeImmutable;
@@ -52,8 +53,10 @@ final readonly class FieldValueValidator
                 continue;
             }
 
-            if (! $this->matches($field['type'], $value)) {
-                throw new InvalidAttributeValue("Attribute field [{$code}] does not contain a valid {$field['type']} value.");
+            if (! $this->matches(Value::text($field['type']), $value)) {
+                $type = Value::text($field['type']);
+
+                throw new InvalidAttributeValue("Attribute field [{$code}] does not contain a valid {$type} value.");
             }
         }
     }
@@ -70,7 +73,7 @@ final readonly class FieldValueValidator
             }
 
             if ($value === null) {
-                if ($field['required']) {
+                if (($field['required'] ?? false) === true) {
                     throw new InvalidAttributeValue("Required attribute field [{$code}] cannot be null.");
                 }
 
@@ -105,7 +108,7 @@ final readonly class FieldValueValidator
     /** @param array<string, mixed> $field */
     private function assertConstraints(string $code, array $field, mixed $value): void
     {
-        $constraints = $field['constraints'];
+        $constraints = Value::array($field['constraints']);
 
         foreach ($constraints as $constraint => $expected) {
             $valid = match ($constraint) {

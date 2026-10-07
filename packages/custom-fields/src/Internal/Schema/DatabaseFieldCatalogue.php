@@ -13,6 +13,7 @@ use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Data\IndexPolicy;
 use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
 use CoreX\CustomFields\Internal\Support\Validation;
+use CoreX\CustomFields\Internal\Value;
 use CoreX\Data\Data\DataScope;
 use Illuminate\Database\ConnectionInterface;
 use InvalidArgumentException;
@@ -132,12 +133,12 @@ final readonly class DatabaseFieldCatalogue implements FieldCatalogue
             }
 
             $definition = new AttributeDefinition(
-                id: new AttributeId((string) ($row->attribute_id ?? '')),
-                entity: (string) ($row->entity ?? ''),
-                key: (string) ($row->key ?? ''),
-                revision: (int) ($row->revision ?? 0),
-                type: (string) ($row->type ?? ''),
-                lifecycle: AttributeLifecycle::from((string) ($row->lifecycle ?? '')),
+                id: new AttributeId(Value::text($row->attribute_id ?? '')),
+                entity: Value::text($row->entity ?? ''),
+                key: Value::text($row->key ?? ''),
+                revision: Value::integer($row->revision ?? 0),
+                type: Value::text($row->type ?? ''),
+                lifecycle: AttributeLifecycle::from(Value::text($row->lifecycle ?? '')),
                 required: (bool) ($row->required ?? false),
                 searchable: (bool) ($row->searchable ?? false),
                 constraints: $this->map($row->constraints ?? null, 'constraints'),
@@ -152,7 +153,7 @@ final readonly class DatabaseFieldCatalogue implements FieldCatalogue
 
         $expected = hash('sha256', json_encode($definition->canonical(), JSON_THROW_ON_ERROR));
 
-        if (! hash_equals($expected, (string) ($row->definition_hash ?? ''))) {
+        if (! hash_equals($expected, Value::text($row->definition_hash ?? ''))) {
             throw new RuntimeException('Stored attribute definition hash does not match its canonical content.');
         }
 

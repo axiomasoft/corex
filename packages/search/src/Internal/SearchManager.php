@@ -51,7 +51,7 @@ final class SearchManager extends Manager
             connection: $this->container->make('db')->connection(),
             schemas: $this->container->make(SearchSchema::class),
             cursors: new SearchCursorCodec(secret: $secret),
-            configuration: (string) $this->config->get('corex-search.postgres.text_search_config', 'simple'),
+            configuration: Value::text($this->config->get('corex-search.postgres.text_search_config', 'simple')),
         );
     }
 }

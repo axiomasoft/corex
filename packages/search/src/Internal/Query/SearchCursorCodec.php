@@ -107,7 +107,9 @@ final readonly class SearchCursorCodec
             return null;
         }
 
-        return base64_decode(strtr($value, '-_', '+/').str_repeat('=', (4 - strlen($value) % 4) % 4), true) ?: null;
+        $decoded = base64_decode(strtr($value, '-_', '+/').str_repeat('=', (4 - strlen($value) % 4) % 4), true);
+
+        return $decoded === false || $decoded === '' ? null : $decoded;
     }
 
     private static function base64UrlEncode(string $value): string

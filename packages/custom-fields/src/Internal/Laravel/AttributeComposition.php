@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\CustomFields\Internal\Laravel;
 
 use CoreX\Config\Laravel\ConfigurationValidator;
+use CoreX\CustomFields\Internal\Value;
 
 /** @internal Package composition type. */
 final readonly class AttributeComposition
@@ -174,7 +175,7 @@ final readonly class AttributeComposition
                     continue;
                 }
 
-                $rows[] = $field;
+                $rows[] = Value::map($field);
             }
 
             $definitions[$entity] = $rows;

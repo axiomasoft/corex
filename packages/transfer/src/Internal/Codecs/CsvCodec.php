@@ -64,6 +64,6 @@ final class CsvCodec
             throw new InvalidArgumentException('CSV field limit or syntax violation.');
         }
 
-        return $fields;
+        return array_map(static fn (?string $field): string => $field ?? '', $fields);
     }
 }

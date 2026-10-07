@@ -7,6 +7,7 @@ namespace CoreX\CustomFields\Internal\Schema;
 use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Internal\Support\Validation;
+use CoreX\CustomFields\Internal\Value;
 use CoreX\Data\Data\DataScope;
 use RuntimeException;
 
@@ -34,7 +35,7 @@ final readonly class StaticFieldCatalogue implements FieldCatalogue
     public function snapshot(DataScope $scope, string $entity): FieldSnapshot
     {
         $fields = $this->definitions[$entity] ?? [];
-        usort($fields, static fn (array $left, array $right): int => (string) $left['code'] <=> (string) $right['code']);
+        usort($fields, static fn (array $left, array $right): int => Value::text($left['code']) <=> Value::text($right['code']));
 
         if ($this->appended instanceof FieldCatalogue) {
             try {

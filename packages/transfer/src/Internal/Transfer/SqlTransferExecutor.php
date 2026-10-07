@@ -23,7 +23,9 @@ use CoreX\Transfer\Data\TargetResult;
 use CoreX\Transfer\Data\TransferLimits;
 use CoreX\Transfer\Data\TransferReceipt;
 use CoreX\Transfer\Data\TransferRef;
+use CoreX\Transfer\Internal\Value;
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Support\Str;
 use Override;
 use Psr\Clock\ClockInterface;
 use Throwable;
@@ -99,13 +101,15 @@ final readonly class SqlTransferExecutor implements TransferRunner
                         continue;
                     }
 
+                    $record = $mapped->record;
+
                     try {
-                        $result = $this->connection->transaction(function () use ($scope, $transfer, $token, $row, $mapped): TargetResult {
-                            $writeToken = $this->writeToken(record: $mapped->record);
-                            $existing = $this->lockReference(jobId: $transfer->id, record: $mapped->record);
-                            $result = $existing ? $this->target->lookup(scope: $scope, token: $writeToken) : $this->target->apply(scope: $scope, record: $mapped->record, rule: $this->conflictRule, token: $writeToken);
-                            $this->storeReference(record: $mapped->record, result: $result);
-                            $this->recordResult(jobId: $transfer->id, ordinal: $row->ordinal, result: $result, payloadHash: $mapped->record->payloadHash, epoch: $token->epoch);
+                        $result = $this->connection->transaction(function () use ($scope, $transfer, $token, $row, $record): TargetResult {
+                            $writeToken = $this->writeToken(record: $record);
+                            $existing = $this->lockReference(jobId: $transfer->id, record: $record);
+                            $result = $existing ? $this->target->lookup(scope: $scope, token: $writeToken) : $this->target->apply(scope: $scope, record: $record, rule: $this->conflictRule, token: $writeToken);
+                            $this->storeReference(record: $record, result: $result);
+                            $this->recordResult(jobId: $transfer->id, ordinal: $row->ordinal, result: $result, payloadHash: $record->payloadHash, epoch: $token->epoch);
 
                             return $result;
                         });
@@ -114,7 +118,7 @@ final readonly class SqlTransferExecutor implements TransferRunner
                     } catch (Throwable) {
                         $stats['invalid'] = ($stats['invalid'] ?? 0) + 1;
                         $stats['errors'] = ($stats['errors'] ?? 0) + 1;
-                        $this->saveRow(jobId: $transfer->id, ordinal: $row->ordinal, result: 'invalid', payloadHash: $mapped->record->payloadHash, epoch: $token->epoch, errorCode: 'rowFailed');
+                        $this->saveRow(jobId: $transfer->id, ordinal: $row->ordinal, result: 'invalid', payloadHash: $record->payloadHash, epoch: $token->epoch, errorCode: 'rowFailed');
 
                         continue;
                     }
@@ -201,36 +205,36 @@ final readonly class SqlTransferExecutor implements TransferRunner
 
     private function assertFence(object $job, DataScope $scope, StepToken $token): void
     {
-        if ($job->checkpoint_seq !== $token->checkpointSequence || $job->claim_epoch !== $token->epoch || $job->source_hash !== $token->sourceHash || $job->mapping_hash !== $token->mappingHash || $job->schema_hash !== $token->schemaHash || $job->restore_epoch !== $token->restoreEpoch) {
+        if (Value::field($job, 'checkpoint_seq') !== $token->checkpointSequence || Value::field($job, 'claim_epoch') !== $token->epoch || Value::field($job, 'source_hash') !== $token->sourceHash || Value::field($job, 'mapping_hash') !== $token->mappingHash || Value::field($job, 'schema_hash') !== $token->schemaHash || Value::field($job, 'restore_epoch') !== $token->restoreEpoch) {
             throw new TransferUnavailable('Transfer checkpoint token does not match the current job.');
         }
 
-        if (! $this->authorizer->authorize(scope: $scope, entity: '*', subjectId: $job->id, fields: [], action: 'transfer.run')->allowed) {
+        if (! $this->authorizer->authorize(scope: $scope, entity: '*', subjectId: Value::text(Value::field($job, 'id')), fields: [], action: 'transfer.run')->allowed) {
             throw new TransferUnavailable('Transfer access is denied by the current policy.');
         }
     }
 
     private function cursor(object $job): SourceCursor
     {
-        $value = json_decode($job->cursor, true, 16, JSON_THROW_ON_ERROR);
+        $value = json_decode(Value::text(Value::field($job, 'cursor')), true, 16, JSON_THROW_ON_ERROR);
 
         if (! is_array($value) || ! isset($value['ordinal']) || ! array_key_exists('boundaryByteOffset', $value)) {
             throw new TransferUnavailable('Transfer checkpoint cursor is invalid.');
         }
 
-        return new SourceCursor(ordinal: $value['ordinal'], boundaryByteOffset: $value['boundaryByteOffset'], sourceHash: $job->source_hash);
+        return new SourceCursor(ordinal: Value::text($value['ordinal']), boundaryByteOffset: Value::nullableText($value['boundaryByteOffset']), sourceHash: Value::text(Value::field($job, 'source_hash')));
     }
 
     /** @return array<string, int> */
     private function stats(object $job): array
     {
-        $value = json_decode($job->stats, true, 16, JSON_THROW_ON_ERROR);
+        $value = json_decode(Value::text(Value::field($job, 'stats')), true, 16, JSON_THROW_ON_ERROR);
 
         if (! is_array($value) || ($value !== [] && array_is_list($value))) {
             throw new TransferUnavailable('Transfer statistics are invalid.');
         }
 
-        return array_map(static fn (mixed $count): int => is_int($count) && $count >= 0 ? $count : 0, $value);
+        return array_map(static fn (mixed $count): int => is_int($count) && $count >= 0 ? $count : 0, Value::map($value));
     }
 
     private function recordResult(string $jobId, string $ordinal, TargetResult $result, string $payloadHash, string $epoch): void
@@ -250,7 +254,7 @@ final readonly class SqlTransferExecutor implements TransferRunner
     private function lockReference(string $jobId, CanonicalRecord $record): bool
     {
         $inserted = $this->connection->table('corex_transfer_refs')->insertOrIgnore([
-            'id' => (string) str()->uuid(), 'job_id' => $jobId, 'entity' => $record->entity,
+            'id' => Value::text(Str::uuid()), 'job_id' => $jobId, 'entity' => $record->entity,
             'external_system' => $record->externalSystem, 'external_id' => $record->externalId,
             'source_revision' => $record->sourceRevision, 'source_updated_at' => $record->sourceUpdatedAt,
             'payload_hash' => $record->payloadHash, 'state' => 'running', 'created_at' => $this->clock->now(), 'updated_at' => $this->clock->now(),
@@ -286,7 +290,7 @@ final readonly class SqlTransferExecutor implements TransferRunner
         $this->connection->table('corex_transfer_rows')->updateOrInsert(
             attributes: ['job_id' => $jobId, 'ordinal' => $ordinal],
             values: [
-                'id' => (string) str()->uuid(),
+                'id' => Value::text(Str::uuid()),
                 'external_identity_hash' => hash('sha256', $jobId.'|'.$ordinal),
                 'operation_key' => hash('sha256', $jobId.'|'.$ordinal),
                 'payload_hash' => $payloadHash,

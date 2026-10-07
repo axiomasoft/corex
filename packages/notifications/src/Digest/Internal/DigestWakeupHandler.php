@@ -41,7 +41,7 @@ final class DigestWakeupHandler
                 return;
             }
 
-            $recipient = new RecipientReference(kind: $run->recipient_kind, id: $run->recipient_id);
+            $recipient = new RecipientReference(kind: Value::text($run->recipient_kind), id: Value::text($run->recipient_id));
             $context = new NotificationContext(tenant: $tick->tenant, actorKind: $recipient->kind, actorId: $recipient->id);
             $items = $this->connection->table('ntf_digest_items')
                 ->join('ntf_notifications', 'ntf_notifications.id', '=', 'ntf_digest_items.notification_id')
@@ -55,7 +55,7 @@ final class DigestWakeupHandler
 
             $notificationIds = [];
             foreach ($items as $item) {
-                if ($this->preferences->get($context, $item->event_type)->digest === $run->period) {
+                if ($this->preferences->get($context, Value::text($item->event_type))->digest === $run->period) {
                     $notificationIds[] = $item->id;
                 }
             }

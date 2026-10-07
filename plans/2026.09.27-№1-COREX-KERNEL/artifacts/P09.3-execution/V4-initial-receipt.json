@@ -1,0 +1,11 @@
+{
+  "id": "V4",
+  "command": [
+    "scripts/php84",
+    "composer",
+    "deps:analyse"
+  ],
+  "exit": 1,
+  "duration_seconds": 251.816,
+  "log_sha256": "9e541c9e186cdc28d8f62d3a681d651934ca360ef02af840ba15456e7f1b187e"
+}

@@ -7,6 +7,7 @@ namespace CoreX\CustomFields\Internal\Schema;
 use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Internal\Support\Validation;
+use CoreX\CustomFields\Internal\Value;
 use CoreX\Data\Data\DataScope;
 use InvalidArgumentException;
 use RuntimeException;
@@ -42,12 +43,12 @@ final readonly class CompositeFieldCatalogue implements FieldCatalogue
             foreach ($snapshot->activeFields as $field) {
 
                 $field = $this->normalize($field);
-                $id = (string) ($field['id'] ?? 'legacy:'.$sourceName.':'.$field['key']);
-                $key = (string) $field['key'];
+                $id = Value::text($field['id'] ?? 'legacy:'.$sourceName.':'.Value::text($field['key']));
+                $key = Value::text($field['key']);
                 $existingId = $byKey[$key] ?? null;
 
                 if ($existingId !== null && $existingId !== $id) {
-                    $this->conflict('same_key_different_id', $sourceName, $key);
+                    $this->conflict('same_key_different_id', $sourceName, Value::text($key));
                 }
 
                 if (! isset($byId[$id])) {
@@ -72,7 +73,7 @@ final readonly class CompositeFieldCatalogue implements FieldCatalogue
                 );
 
                 if ($shadow !== null) {
-                    unset($byKey[(string) $current['key']]);
+                    unset($byKey[Value::text($current['key'])]);
                     $byId[$id] = $shadow;
                     $byKey[$key] = $id;
 
@@ -80,29 +81,29 @@ final readonly class CompositeFieldCatalogue implements FieldCatalogue
                 }
 
                 if ($current['key'] !== $field['key']) {
-                    $newer = (int) $field['revision'] > (int) $current['revision'] ? $field : $current;
+                    $newer = Value::integer($field['revision']) > Value::integer($current['revision']) ? $field : $current;
                     $older = $newer === $field ? $current : $field;
-                    $aliases = [...$newer['read_keys'], ...$newer['write_keys']];
+                    $aliases = [...Value::strings($newer['read_keys']), ...Value::strings($newer['write_keys'])];
 
                     if ($newer['lifecycle'] !== 'migrating' || ! in_array($older['key'], $aliases, true)) {
-                        $this->conflict('same_id_different_key_without_migrating_alias', $sourceName, $key);
+                        $this->conflict('same_id_different_key_without_migrating_alias', $sourceName, Value::text($key));
                     }
                 }
 
-                if ((int) $current['revision'] === (int) $field['revision']) {
+                if (Value::integer($current['revision']) === Value::integer($field['revision'])) {
                     if ($current['type'] !== $field['type']) {
-                        $this->conflict('same_id_revision_different_type', $sourceName, $key);
+                        $this->conflict('same_id_revision_different_type', $sourceName, Value::text($key));
                     }
 
-                    $this->conflict('same_id_revision_flags_constraints_index_differ', $sourceName, $key);
+                    $this->conflict('same_id_revision_flags_constraints_index_differ', $sourceName, Value::text($key));
                 }
 
-                $winner = (int) $field['revision'] > (int) $current['revision']
+                $winner = Value::integer($field['revision']) > Value::integer($current['revision'])
                     ? ['source' => $sourceName, 'field' => $field]
                     : $existing;
-                unset($byKey[(string) $current['key']], $byKey[(string) $field['key']]);
+                unset($byKey[Value::text($current['key'])], $byKey[Value::text($field['key'])]);
                 $byId[$id] = $winner;
-                $byKey[(string) $winner['field']['key']] = $id;
+                $byKey[Value::text($winner['field']['key'])] = $id;
             }
         }
 
@@ -129,8 +130,8 @@ final readonly class CompositeFieldCatalogue implements FieldCatalogue
     private function shadow(array $existing, string $incomingSource, array $incoming, string $difference): ?array
     {
         $lifecycles = [
-            (string) ($existing['field']['lifecycle'] ?? ''),
-            (string) ($incoming['lifecycle'] ?? ''),
+            Value::text($existing['field']['lifecycle'] ?? ''),
+            Value::text($incoming['lifecycle'] ?? ''),
         ];
 
         if (count(array_unique($lifecycles)) !== 2
@@ -145,9 +146,9 @@ final readonly class CompositeFieldCatalogue implements FieldCatalogue
         if ($this->canonical($existingComparable) !== $this->canonical($incomingComparable)) {
             return null;
         }
-        $attributeId = (string) ($incoming['id'] ?? '');
+        $attributeId = Value::text($incoming['id'] ?? '');
 
-        if (! $this->policy->allowsShadow($incomingSource, $existing['source'], $attributeId, $difference)) {
+        if (! $this->policy->allowsShadow($incomingSource, $existing['source'], Value::text($attributeId), $difference)) {
             return null;
         }
 
@@ -168,8 +169,8 @@ final readonly class CompositeFieldCatalogue implements FieldCatalogue
 
         $field['code'] = $key;
         $field['key'] = $key;
-        $field['revision'] = (int) ($field['revision'] ?? 1);
-        $field['lifecycle'] = (string) ($field['lifecycle'] ?? 'active');
+        $field['revision'] = Value::integer($field['revision'] ?? 1);
+        $field['lifecycle'] = Value::text($field['lifecycle'] ?? 'active');
         $field['read_keys'] = is_array($field['read_keys'] ?? null) ? array_values($field['read_keys']) : [];
         $field['write_keys'] = is_array($field['write_keys'] ?? null) ? array_values($field['write_keys']) : [];
 

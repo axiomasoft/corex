@@ -38,10 +38,10 @@ final readonly class ScopeMapVersion implements ScopeMapVersions
             return $value;
         }
 
-        if (is_string($value) && ctype_digit($value)) {
-            $version = filter_var($value, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0]]);
+        if (is_string($value) && preg_match('/^[0-9]+$/D', $value) === 1) {
+            $version = (int) $value;
 
-            if (is_int($version)) {
+            if ((string) $version === $value) {
                 return $version;
             }
         }

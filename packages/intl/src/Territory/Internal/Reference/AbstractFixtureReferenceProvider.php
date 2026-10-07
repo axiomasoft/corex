@@ -13,6 +13,7 @@ use CoreX\Intl\Territory\Data\GeographyQuery;
 use CoreX\Intl\Territory\Data\ReferenceCursor;
 use CoreX\Intl\Territory\Data\ReferenceIdentity;
 use CoreX\Intl\Territory\Data\ReferencePage;
+use CoreX\Intl\Territory\Internal\Value;
 
 abstract class AbstractFixtureReferenceProvider implements GeographyProvider
 {
@@ -77,9 +78,9 @@ abstract class AbstractFixtureReferenceProvider implements GeographyProvider
                 snapshotId: $snapshotId,
                 queryHash: $queryHash,
                 position: [
-                    'normalizedName' => (string) $last['normalized_name'],
-                    'namespace' => (string) $last['namespace'],
-                    'sourceId' => (string) $last['sourceId'],
+                    'normalizedName' => Value::text($last['normalized_name']),
+                    'namespace' => Value::text($last['namespace']),
+                    'sourceId' => Value::text($last['sourceId']),
                 ],
             );
         }
@@ -136,8 +137,8 @@ abstract class AbstractFixtureReferenceProvider implements GeographyProvider
 
             return match ($query->mode) {
                 'exact' => $record['normalized_name'] === $needle,
-                'prefix' => str_starts_with((string) $record['normalized_name'], $needle),
-                default => str_contains((string) $record['normalized_name'], $needle),
+                'prefix' => str_starts_with(Value::text($record['normalized_name']), $needle),
+                default => str_contains(Value::text($record['normalized_name']), $needle),
             };
         }
 

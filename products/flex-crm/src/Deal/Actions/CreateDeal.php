@@ -32,12 +32,12 @@ final class CreateDeal
 
         return $this->guard->connection($ctx)->transaction(function () use ($pipeline, $title, $amount, $ownerId, $ctx): Deal {
             $this->guard->current(lock: true);
-            $pipeline = Pipeline::on($ctx->connectionName)->whereKey($pipeline->getKey())->sharedLock()->firstOrFail();
+            $pipeline = Pipeline::on($ctx->connectionName)->whereKey($pipeline->getKey())->tap(static fn ($query) => $query->getQuery()->sharedLock())->firstOrFail();
 
             if ($pipeline->entity_type !== 'crm.deal' || ($pipeline->workspace_id !== null && $pipeline->workspace_id !== $ctx->tenant->workspace?->id)) {
                 throw new AuthorizationException('Pipeline is not available for deals in this workspace.');
             }
-            $stage = $pipeline->stages()->first();
+            $stage = $pipeline->stages()->getQuery()->first();
 
             if ($stage === null) {
                 throw new RuntimeException('Воронка без стадий: добавьте стадию перед созданием сделки.');

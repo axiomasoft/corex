@@ -28,7 +28,7 @@ final class GdThumbnailDriver implements ConversionDriver
         if ($facts === false || ! in_array($facts['mime'], ['image/jpeg', 'image/png'], true)) {
             throw new MediaOperationConflict('The conversion source is not a supported image.');
         }
-        [$sourceWidth, $sourceHeight] = [(int) $facts[0], (int) $facts[1]];
+        [$sourceWidth, $sourceHeight] = [$facts[0], $facts[1]];
 
         if ($sourceWidth * $sourceHeight > $this->profile->maxPixels) {
             throw new MediaOperationConflict('The conversion source exceeds pixel limits.');
@@ -52,7 +52,12 @@ final class GdThumbnailDriver implements ConversionDriver
             if ($facts['mime'] === 'image/png') {
                 imagealphablending($target, false);
                 imagesavealpha($target, true);
-                imagefill($target, 0, 0, imagecolorallocatealpha($target, 0, 0, 0, 127));
+                $color = imagecolorallocatealpha($target, 0, 0, 0, 127);
+
+                if ($color === false) {
+                    throw new MediaOperationConflict('The conversion transparency could not be allocated.');
+                }
+                imagefill($target, 0, 0, $color);
             }
 
             if (! imagecopyresampled($target, $source, 0, 0, 0, 0, $width, $height, $sourceWidth, $sourceHeight)) {
@@ -74,7 +79,7 @@ final class GdThumbnailDriver implements ConversionDriver
         }
     }
 
-    /** @return array{int, int} */
+    /** @return array{positive-int, positive-int} */
     private function dimensions(int $sourceWidth, int $sourceHeight): array
     {
         $scale = min(1, $this->profile->maxWidth / $sourceWidth, $this->profile->maxHeight / $sourceHeight);

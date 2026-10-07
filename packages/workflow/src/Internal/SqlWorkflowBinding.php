@@ -147,20 +147,21 @@ final class SqlWorkflowBinding implements WorkflowBinding
      */
     private function admitExisting(object $existing, string $kind, string $requestKey, array $business, ExtensionStamp $stamp, string $versionedHash): string
     {
-        $stored = json_decode((string) $existing->payload, true);
+        $decoded = json_decode(Value::text(Value::field($existing, 'payload')), true);
+        $stored = is_array($decoded) ? Value::map($decoded) : null;
         $schema = WorkflowDefinitionStamp::schemaOf(
             stored: is_array($stored) ? $stored : null,
-            definitionRef: (string) $existing->definition_ref,
-            versionRef: (string) $existing->version_ref,
+            definitionRef: Value::text(Value::field($existing, 'definition_ref')),
+            versionRef: Value::text(Value::field($existing, 'version_ref')),
         );
 
         if ($schema === 'versioned') {
-            $identity = is_array($stored['identity'] ?? null) ? $stored['identity'] : [];
+            $identity = is_array($stored) && is_array($stored['identity'] ?? null) ? $stored['identity'] : [];
             $sameIdentity = ($identity['id'] ?? null) === $stamp->id
                 && ($identity['version'] ?? null) === $stamp->version
                 && ($identity['point'] ?? null) === $stamp->point;
 
-            return $sameIdentity && hash_equals((string) $existing->payload_hash, $versionedHash)
+            return $sameIdentity && hash_equals(Value::text(Value::field($existing, 'payload_hash')), $versionedHash)
                 ? 'existing'
                 : 'conflict';
         }
@@ -172,7 +173,7 @@ final class SqlWorkflowBinding implements WorkflowBinding
                 businessPayload: $business,
             );
 
-            return hash_equals((string) $existing->payload_hash, $legacyHash) ? 'existing' : 'conflict';
+            return hash_equals(Value::text(Value::field($existing, 'payload_hash')), $legacyHash) ? 'existing' : 'conflict';
         }
 
         return 'conflict';

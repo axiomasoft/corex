@@ -11,6 +11,7 @@ use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\Query\Builder;
 use Psr\Clock\ClockInterface;
 
 final class MediaOperationStore
@@ -55,11 +56,11 @@ final class MediaOperationStore
                 return null;
             }
 
-            $epoch = ((int) $operation->claim_epoch) + 1;
+            $epoch = (Value::integer($operation->claim_epoch)) + 1;
             $this->connection->table('med_operations')->where('id', $operation->id)->update([
                 'state' => 'claimed',
                 'claim_epoch' => $epoch,
-                'attempts' => ((int) $operation->attempts) + 1,
+                'attempts' => (Value::integer($operation->attempts)) + 1,
                 'lease_until' => $this->clock->now()->add(new DateInterval('PT5M')),
                 'updated_at' => $this->clock->now(),
             ]);
@@ -67,7 +68,7 @@ final class MediaOperationStore
             $conversionKeys = $this->connection->table('med_conversions')->where('file_id', $fileId)->whereNotNull('object_key')->pluck('object_key')->all();
             $attemptKeys = $this->connection->table('med_operations')->where('file_id', $fileId)->whereNotNull('attempt_object_key')->pluck('attempt_object_key')->all();
 
-            return new PurgeClaim((int) $operation->id, $file->id, $epoch, (int) $file->version, array_values(array_unique([$file->object_key, ...$conversionKeys, ...$attemptKeys])));
+            return new PurgeClaim(Value::integer($operation->id), Value::text($file->id), $epoch, Value::integer($file->version), Value::strings(array_values(array_unique(Value::strings([$file->object_key, ...$conversionKeys, ...$attemptKeys])))));
         });
     }
 
@@ -77,7 +78,7 @@ final class MediaOperationStore
             $file = $this->connection->table('med_files')->where('id', $claim->fileId)->lockForUpdate()->first();
             $operation = $this->connection->table('med_operations')->where('id', $claim->operationId)->lockForUpdate()->first();
 
-            if ($file === null || $operation === null || $file->state !== 'deleting' || (int) $file->version !== $claim->fileVersion || $operation->state !== 'claimed' || (int) $operation->claim_epoch !== $claim->epoch) {
+            if ($file === null || $operation === null || $file->state !== 'deleting' || Value::integer($file->version) !== $claim->fileVersion || $operation->state !== 'claimed' || Value::integer($operation->claim_epoch) !== $claim->epoch) {
                 return;
             }
 
@@ -159,18 +160,18 @@ final class MediaOperationStore
                 return null;
             }
 
-            $epoch = ((int) $operation->claim_epoch) + 1;
-            $attemptKey = "media/conversions/{$fileId}/{$conversion->profile_digest}/{$file->version}/{$epoch}";
+            $epoch = (Value::integer($operation->claim_epoch)) + 1;
+            $attemptKey = 'media/conversions/'.$fileId.'/'.Value::text($conversion->profile_digest).'/'.Value::integer($file->version).'/'.$epoch;
             $this->connection->table('med_operations')->where('id', $operation->id)->update([
                 'state' => 'claimed',
                 'claim_epoch' => $epoch,
-                'attempts' => ((int) $operation->attempts) + 1,
+                'attempts' => (Value::integer($operation->attempts)) + 1,
                 'lease_until' => $this->clock->now()->add(new DateInterval('PT5M')),
                 'attempt_object_key' => $attemptKey,
                 'updated_at' => $this->clock->now(),
             ]);
 
-            return new ConversionClaim((int) $operation->id, (int) $conversion->id, $file->id, $epoch, (int) $file->version, $file->object_key, $file->mime_type, $profileKey, $conversion->profile_digest, $attemptKey);
+            return new ConversionClaim(Value::integer($operation->id), Value::integer($conversion->id), Value::text($file->id), $epoch, Value::integer($file->version), Value::text($file->object_key), Value::text($file->mime_type), $profileKey, Value::text($conversion->profile_digest), $attemptKey);
         });
     }
 
@@ -181,7 +182,7 @@ final class MediaOperationStore
             $conversion = $this->connection->table('med_conversions')->where('id', $claim->conversionId)->lockForUpdate()->first();
             $operation = $this->connection->table('med_operations')->where('id', $claim->operationId)->lockForUpdate()->first();
 
-            if ($file === null || $conversion === null || $operation === null || $file->state !== 'ready' || (int) $file->version !== $claim->fileVersion || $conversion->state !== 'pending' || $operation->state !== 'claimed' || (int) $operation->claim_epoch !== $claim->epoch) {
+            if ($file === null || $conversion === null || $operation === null || $file->state !== 'ready' || Value::integer($file->version) !== $claim->fileVersion || $conversion->state !== 'pending' || $operation->state !== 'claimed' || Value::integer($operation->claim_epoch) !== $claim->epoch) {
                 return false;
             }
 
@@ -223,14 +224,14 @@ final class MediaOperationStore
     {
         $now = $this->clock->now();
 
-        return $this->connection->table('med_operations')
+        return array_values($this->connection->table('med_operations')
             ->where('kind', 'purge')
             ->whereIn('state', ['pending', 'unknown'])
-            ->where(static fn ($query) => $query->whereNull('next_attempt_at')->orWhere('next_attempt_at', '<=', $now))
+            ->where(static fn (Builder $query) => $query->whereNull('next_attempt_at')->orWhere('next_attempt_at', '<=', $now))
             ->orderBy('id')
             ->limit($limit)
-            ->pluck('file_id')
-            ->all();
+            ->pluck('file_id')->map(Value::text(...))
+            ->all());
     }
 
     /** @return list<ConversionOperationRequest> */
@@ -238,15 +239,15 @@ final class MediaOperationStore
     {
         $now = $this->clock->now();
 
-        return $this->connection->table('med_operations')
+        return array_values($this->connection->table('med_operations')
             ->where('kind', 'conversion')
             ->whereIn('state', ['pending', 'unknown'])
-            ->where(static fn ($query) => $query->whereNull('next_attempt_at')->orWhere('next_attempt_at', '<=', $now))
+            ->where(static fn (Builder $query) => $query->whereNull('next_attempt_at')->orWhere('next_attempt_at', '<=', $now))
             ->orderBy('id')
             ->limit($limit)
             ->get()
-            ->map(static fn (object $operation): ConversionOperationRequest => new ConversionOperationRequest($operation->file_id, (string) $operation->profile_key))
-            ->all();
+            ->map(static fn (object $operation): ConversionOperationRequest => new ConversionOperationRequest(Value::text($operation->file_id), Value::text($operation->profile_key)))
+            ->all());
     }
 
     /** A stored attempt time is a database string; comparing it with a DateTimeImmutable directly never orders. */

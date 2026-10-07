@@ -46,7 +46,7 @@ final class CompleteTask implements CompleteTaskCommand
     private function complete(CompleteTaskData $data, TenantContext $context, Connection $connection): TaskReference
     {
         /** @var Task|null $task */
-        $task = Task::on($connection->getName())->lockForUpdate()->find($data->taskId);
+        $task = Task::on($connection->getName())->tap(static fn ($query) => $query->getQuery()->lockForUpdate())->find($data->taskId);
 
         if ($task === null) {
             $this->invalid('task_id', 'Задача не найдена в текущем аккаунте.');

@@ -89,7 +89,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
             ->where('immutable_revision', $series->immutableRevision)
             ->first();
 
-        if ($seriesRow === null || ! hash_equals((string) $seriesRow->definition_hash, $series->definitionHash)) {
+        if ($seriesRow === null || ! hash_equals(Value::text($seriesRow->definition_hash), $series->definitionHash)) {
             throw StaleMaterialization::definition($series->id);
         }
 
@@ -104,11 +104,11 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
                 return $this->emptyReceipt(retired: true);
             }
 
-            if ((string) $state->active_revision !== $series->immutableRevision) {
-                throw StaleMaterialization::revision($series->id, $series->immutableRevision, (string) $state->active_revision);
+            if (Value::text($state->active_revision) !== $series->immutableRevision) {
+                throw StaleMaterialization::revision($series->id, $series->immutableRevision, Value::text($state->active_revision));
             }
 
-            if (! hash_equals((string) $state->restore_epoch, $scope->restoreEpoch)) {
+            if (! hash_equals(Value::text($state->restore_epoch), $scope->restoreEpoch)) {
                 throw StaleMaterialization::restoreEpoch($series->id);
             }
 
@@ -148,7 +148,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
             $noop = 0;
             $conflict = 0;
             $unknown = false;
-            $committedPrefix = $state->complete_through !== null ? (string) $state->complete_through : null;
+            $committedPrefix = $state->complete_through !== null ? Value::text($state->complete_through) : null;
             $lastCommittedKey = $committedPrefix;
 
             foreach ($page->occurrences as $occurrence) {
@@ -199,7 +199,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
             if ($unknown) {
                 $receipt = $this->buildReceipt(
                     taskRefs: $taskRefs,
-                    committedPrefix: $state->complete_through !== null ? (string) $state->complete_through : null,
+                    committedPrefix: $state->complete_through !== null ? Value::text($state->complete_through) : null,
                     cursor: null,
                     created: $created,
                     noop: $noop,
@@ -214,13 +214,13 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
 
             $nextCursor = $page->nextCursor;
             $nextCompleteThrough = $conflict > 0
-                ? ($state->complete_through !== null ? (string) $state->complete_through : null)
-                : ($lastCommittedKey !== null ? $committedPrefix : ($state->complete_through !== null ? (string) $state->complete_through : null));
+                ? ($state->complete_through !== null ? Value::text($state->complete_through) : null)
+                : ($lastCommittedKey !== null ? $committedPrefix : ($state->complete_through !== null ? Value::text($state->complete_through) : null));
 
             if ($created > 0 || $noop > 0) {
                 $store->advanceState(
                     seriesKey: $series->id,
-                    generation: (string) $state->generation,
+                    generation: Value::text($state->generation),
                     completeThrough: $nextCompleteThrough,
                     cursor: $nextCursor === null ? null : [
                         'setHash' => $nextCursor->setHash,
@@ -272,7 +272,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
 
             if ($existing->state === 'committed' && $existing->task_ref !== null) {
                 /** @var array<string, mixed> $stored */
-                $stored = json_decode((string) $existing->task_ref, true, flags: JSON_THROW_ON_ERROR);
+                $stored = json_decode(Value::text($existing->task_ref), true, flags: JSON_THROW_ON_ERROR);
 
                 return [
                     'reference' => SeriesDefinitionCodec::taskReferenceFromStored($stored),
@@ -283,7 +283,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
             }
 
             if ($existing->state === 'pending' && $existing->task_ref === null) {
-                $store->markOccurrenceUnknown((string) $existing->id);
+                $store->markOccurrenceUnknown(Value::text($existing->id));
 
                 return ['reference' => null, 'created' => false, 'conflict' => false, 'unknown' => true];
             }

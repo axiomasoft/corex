@@ -9,6 +9,7 @@ use CoreX\Intl\Territory\Contracts\AddressSuggestProvider;
 use CoreX\Intl\Territory\Data\AddressQuery;
 use CoreX\Intl\Territory\Data\SuggestionLimits;
 use CoreX\Intl\Territory\Data\SuggestionResult;
+use CoreX\Intl\Territory\Internal\Value;
 use InvalidArgumentException;
 use Override;
 
@@ -31,19 +32,19 @@ final class FixtureAddressSuggestProvider implements AddressSuggestProvider
             throw new InvalidArgumentException('Address fixture is malformed.');
         }
 
-        $this->entries = $decoded['entries'];
+        $this->entries = Value::maps($decoded['entries']);
     }
 
     #[Override]
     public function suggest(AddressQuery $query, SuggestionLimits $limits): SuggestionResult
     {
-        if ($invalid = $this->guard->validateQuery($query)) {
+        if (($invalid = $this->guard->validateQuery($query)) !== null) {
             return $invalid;
         }
 
         $limits = $this->guard->normalizeLimits($limits);
 
-        if ($invalid = $this->guard->validateLimits($limits)) {
+        if (($invalid = $this->guard->validateLimits($limits)) !== null) {
             return $invalid;
         }
 
@@ -51,13 +52,10 @@ final class FixtureAddressSuggestProvider implements AddressSuggestProvider
         $matches = [];
 
         foreach ($this->entries as $entry) {
-            if (! is_array($entry)) {
-                continue;
-            }
 
-            $entryText = mb_strtolower((string) ($entry['text'] ?? ''));
-            $entryLocale = (string) ($entry['locale'] ?? '');
-            $entryCountry = isset($entry['country']) ? (string) $entry['country'] : null;
+            $entryText = mb_strtolower(Value::text($entry['text'] ?? ''));
+            $entryLocale = Value::text($entry['locale'] ?? '');
+            $entryCountry = isset($entry['country']) ? Value::text($entry['country']) : null;
 
             if ($entryText !== $needle || $entryLocale !== $query->locale) {
                 continue;
@@ -67,14 +65,14 @@ final class FixtureAddressSuggestProvider implements AddressSuggestProvider
                 continue;
             }
 
-            foreach ($entry['suggestions'] ?? [] as $suggestion) {
+            foreach (Value::array($entry['suggestions'] ?? []) as $suggestion) {
                 if (! is_array($suggestion)) {
                     continue;
                 }
 
                 $matches[] = [
-                    'label' => (string) ($suggestion['label'] ?? ''),
-                    'value' => (string) ($suggestion['value'] ?? ''),
+                    'label' => Value::text($suggestion['label'] ?? ''),
+                    'value' => Value::text($suggestion['value'] ?? ''),
                 ];
 
                 if (count($matches) >= $limits->results) {

@@ -22,9 +22,14 @@ final readonly class LocalizedSearchSchema implements SearchSchema
         private string $localeTag,
     ) {
         foreach ($bindings as $binding) {
-            if (! $binding instanceof LocalizedFieldBinding) {
-                throw new InvalidArgumentException('Localized search bindings must be typed field bindings.');
-            }
+            self::validateBinding($binding);
+        }
+    }
+
+    private static function validateBinding(mixed $binding): void
+    {
+        if (! $binding instanceof LocalizedFieldBinding) {
+            throw new InvalidArgumentException('Localized search bindings must be typed field bindings.');
         }
     }
 

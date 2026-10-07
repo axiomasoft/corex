@@ -44,7 +44,7 @@ final class DefaultLocaleResolver implements LocaleResolver
             policy: $policy,
         );
 
-        if ($requested === null && $origin === 'app' && $used !== $policy->appTag) {
+        if ($requested === null && $used !== $policy->appTag) {
             $wasFallback = true;
         }
 

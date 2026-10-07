@@ -21,6 +21,7 @@ use CoreX\Notifications\Inbox\Exceptions\NotificationOperationConflict;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
 use JsonException;
@@ -56,7 +57,7 @@ final class SqlNotificationCenter implements NotificationCenter
                     ->first();
 
                 if ($existing !== null) {
-                    if (! hash_equals($existing->request_digest, $digest)) {
+                    if (! hash_equals(Value::text($existing->request_digest), $digest)) {
                         throw new NotificationOperationConflict('Notification request key conflicts with different content.');
                     }
 
@@ -135,7 +136,7 @@ final class SqlNotificationCenter implements NotificationCenter
                 throw $exception;
             }
 
-            if (! hash_equals($existing->request_digest, $digest)) {
+            if (! hash_equals(Value::text($existing->request_digest), $digest)) {
                 throw new NotificationOperationConflict('Notification request key conflicts with different content.');
             }
 
@@ -165,7 +166,7 @@ final class SqlNotificationCenter implements NotificationCenter
             $now = $this->clock->now();
             $this->connection->table('ntf_notifications')->where('id', $notificationId)->update([
                 'cancelled_at' => $now,
-                'revision' => (string) ((int) $notification->revision + 1),
+                'revision' => (string) (Value::integer($notification->revision) + 1),
                 'updated_at' => $now,
             ]);
             $this->connection->table('ntf_deliveries')
@@ -193,7 +194,7 @@ final class SqlNotificationCenter implements NotificationCenter
             if ($notification->read_at === null) {
                 $this->connection->table('ntf_notifications')->where('id', $notificationId)->update([
                     'read_at' => $this->clock->now(),
-                    'revision' => (string) ((int) $notification->revision + 1),
+                    'revision' => (string) (Value::integer($notification->revision) + 1),
                     'updated_at' => $this->clock->now(),
                 ]);
             }
@@ -207,7 +208,7 @@ final class SqlNotificationCenter implements NotificationCenter
         $rows = $this->connection->table('ntf_notifications')
             ->where('recipient_kind', $recipient->kind)
             ->where('recipient_id', $recipient->id)
-            ->when($query->before !== null, static fn ($builder) => $builder->where('id', '<', $query->before))
+            ->when($query->before !== null, static fn (Builder $builder) => $builder->where('id', '<', $query->before))
             ->orderByDesc('id')
             ->limit($query->limit)
             ->get();
@@ -246,22 +247,22 @@ final class SqlNotificationCenter implements NotificationCenter
     private function subject(object $notification): NotificationSubject
     {
         return new NotificationSubject(
-            notificationId: $notification->id,
-            recipient: new RecipientReference(kind: $notification->recipient_kind, id: $notification->recipient_id),
-            related: $this->related($notification->related),
+            notificationId: Value::nullableText(Value::field($notification, 'id')),
+            recipient: new RecipientReference(kind: Value::text(Value::field($notification, 'recipient_kind')), id: Value::text(Value::field($notification, 'recipient_id'))),
+            related: $this->related(Value::field($notification, 'related')),
         );
     }
 
     private function reference(object $notification): NotificationRef
     {
         return new NotificationRef(
-            id: $notification->id,
-            recipient: new RecipientReference(kind: $notification->recipient_kind, id: $notification->recipient_id),
-            eventType: $notification->event_type,
-            revision: (string) $notification->revision,
-            readAt: $this->date($notification->read_at),
-            cancelledAt: $this->date($notification->cancelled_at),
-            related: $this->related($notification->related),
+            id: Value::text(Value::field($notification, 'id')),
+            recipient: new RecipientReference(kind: Value::text(Value::field($notification, 'recipient_kind')), id: Value::text(Value::field($notification, 'recipient_id'))),
+            eventType: Value::text(Value::field($notification, 'event_type')),
+            revision: Value::text(Value::field($notification, 'revision')),
+            readAt: $this->date(Value::field($notification, 'read_at')),
+            cancelledAt: $this->date(Value::field($notification, 'cancelled_at')),
+            related: $this->related(Value::field($notification, 'related')),
         );
     }
 
@@ -294,18 +295,18 @@ final class SqlNotificationCenter implements NotificationCenter
             return DateTimeImmutable::createFromInterface($value);
         }
 
-        return new DateTimeImmutable((string) $value);
+        return new DateTimeImmutable(Value::text($value));
     }
 
     /** @return list<string> */
     private function dispatchedChannels(string $notificationId): array
     {
-        return $this->connection->table('ntf_deliveries')
+        return array_values($this->connection->table('ntf_deliveries')
             ->where('notification_id', $notificationId)
             ->whereIn('state', ['sent', 'unknown', 'claimed'])
             ->orderBy('channel')
-            ->pluck('channel')
-            ->all();
+            ->pluck('channel')->map(Value::text(...))
+            ->all());
     }
 
     /**
@@ -331,7 +332,8 @@ final class SqlNotificationCenter implements NotificationCenter
         return $canonical;
     }
 
-    private function canonicalValue(mixed $value): mixed
+    /** @return array<array-key, mixed>|bool|int|string|null */
+    private function canonicalValue(mixed $value): array|bool|int|string|null
     {
         if (is_null($value) || is_bool($value) || is_int($value) || is_string($value)) {
             return $value;

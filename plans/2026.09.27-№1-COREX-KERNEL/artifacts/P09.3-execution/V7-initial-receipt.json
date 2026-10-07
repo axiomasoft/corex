@@ -1,0 +1,11 @@
+{
+  "id": "V7",
+  "command": [
+    "scripts/php84",
+    "composer",
+    "lint:check"
+  ],
+  "exit": 1,
+  "duration_seconds": 252.177,
+  "log_sha256": "891c2e845e7426649e33f2e3904eabd2bf2b65395e3fe7d9517f0c3f9e2af4e0"
+}

@@ -336,8 +336,10 @@ final class RRuleRecurrenceExpander implements RecurrenceExpander
     private function windowBounds(RecurrenceSet $set, RecurrenceWindow $window, ExpansionLimits $limits): array
     {
         if ($set->start->valueType === 'DATE') {
-            $begin = DateTime::createFromFormat('Y-m-d', $window->start) ?: new DateTime($window->start);
-            $end = DateTime::createFromFormat('Y-m-d', $window->end) ?: new DateTime($window->end);
+            $begin = DateTime::createFromFormat('Y-m-d', $window->start);
+            $begin = $begin === false ? new DateTime($window->start) : $begin;
+            $end = DateTime::createFromFormat('Y-m-d', $window->end);
+            $end = $end === false ? new DateTime($window->end) : $end;
             $end->modify('-1 day');
 
             return ['begin' => $begin, 'end' => $end];

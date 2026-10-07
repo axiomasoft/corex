@@ -40,7 +40,7 @@ final class ViewConfigValidator
             throw new InvalidArgumentException('Invalid view projection.');
         }
         foreach ($columns as $key) {
-            $field = $fields[$key] ?? null;
+            $field = is_string($key) ? ($fields[$key] ?? null) : null;
 
             if (! is_string($key) || $field === null || ! $field->visible || ! $field->projectable) {
                 throw new InvalidArgumentException('View projection is not permitted.');
@@ -52,12 +52,10 @@ final class ViewConfigValidator
         if (! is_array($sorts) || count($sorts) > 5 || array_is_list($sorts) === false) {
             throw new InvalidArgumentException('Invalid view sort.');
         }
+        $validatedSorts = [];
         foreach ($sorts as $sort) {
-            $field = is_array($sort) ? ($fields[$sort['field'] ?? ''] ?? null) : null;
-
-            if ($field === null || ! $field->sortable || ! in_array($sort['direction'] ?? null, ['asc', 'desc'], true)) {
-                throw new InvalidArgumentException('View sort is not permitted.');
-            }
+            $this->validateSort($sort, $fields);
+            $validatedSorts[] = $sort;
         }
 
         $groupBy = $config['groupBy'] ?? null;
@@ -66,11 +64,30 @@ final class ViewConfigValidator
             throw new InvalidArgumentException('View group is not permitted.');
         }
 
-        return ['filters' => $filters, 'sorts' => $sorts, 'columns' => $columns, 'groupBy' => $groupBy];
+        return ['filters' => $filters, 'sorts' => $validatedSorts, 'columns' => $columns, 'groupBy' => $groupBy];
     }
 
     /**
-     * @param  array<string, mixed>  $node
+     * @param  array<string, ViewField>  $fields
+     *
+     * @phpstan-assert array{field: string, direction: 'asc'|'desc'} $sort
+     */
+    private function validateSort(mixed $sort, array $fields): void
+    {
+        $fieldKey = is_array($sort) ? ($sort['field'] ?? null) : null;
+        $direction = is_array($sort) ? ($sort['direction'] ?? null) : null;
+        $field = is_string($fieldKey) ? ($fields[$fieldKey] ?? null) : null;
+
+        if (! is_array($sort) || ! is_string($fieldKey) || $field === null || ! $field->sortable || ! in_array($direction, ['asc', 'desc'], true)) {
+            throw new InvalidArgumentException('View sort is not permitted.');
+        }
+    }
+
+    /**
+     * @param  array<array-key, mixed>  $node
+     *
+     * @phpstan-assert array<string, mixed> $node
+     *
      * @param  array<string, ViewField>  $fields
      */
     private function filter(array $node, array $fields, int $depth, int &$nodes): void
@@ -93,7 +110,8 @@ final class ViewConfigValidator
             return;
         }
 
-        $field = $fields[$node['field'] ?? ''] ?? null;
+        $fieldKey = $node['field'] ?? null;
+        $field = is_string($fieldKey) ? ($fields[$fieldKey] ?? null) : null;
 
         if ($field === null || ! $field->visible || ! $field->filterable || array_diff(array_keys($node), ['field', 'op', 'value']) !== [] || ! in_array($node['op'] ?? null, $field->operators, true)) {
             throw new InvalidArgumentException('View filter is not permitted.');

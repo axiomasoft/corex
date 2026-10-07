@@ -21,6 +21,7 @@ use CoreX\CustomFields\Internal\KeyConflict;
 use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
 use CoreX\CustomFields\Internal\Support\Validation;
+use CoreX\CustomFields\Internal\Value;
 use CoreX\CustomFields\Internal\VersionConflict;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
@@ -28,6 +29,7 @@ use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
 use CoreX\Messaging\Contracts\Outbox;
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
 use JsonException;
 use LogicException;
@@ -57,10 +59,10 @@ final readonly class EavAttributeStore implements AttributeStore
         $rows = $this->connection->table($this->tables->eavValues)->where('entity', $record->entity)->where('record_id', $record->id)->whereIn('field', $physicalFields)->get();
         $values = [];
         foreach ($rows as $row) {
-            $values[$row->field] = $this->decode($row->value);
+            $values[Value::text($row->field)] = $this->decode(Value::text($row->value));
         }
 
-        $values = $this->projectValues($definitions, $values);
+        $values = $this->projectValues($definitions, Value::map($values));
         $values = Validation::validatedMap($values, 'attribute values');
 
         return new ValueBag(values: $values);
@@ -82,7 +84,7 @@ final readonly class EavAttributeStore implements AttributeStore
                     throw new KeyConflict('An operation key is already bound to different data.');
                 }
 
-                return new AttributeWriteResult(status: 'replayed', recordVersion: $existing->record_version, payloadHash: $existing->payload_hash);
+                return new AttributeWriteResult(status: 'replayed', recordVersion: Value::text($existing->record_version), payloadHash: $existing->payload_hash);
             }
 
             $records = $this->connection->table($this->tables->eavRecords);
@@ -98,9 +100,9 @@ final readonly class EavAttributeStore implements AttributeStore
                 ->where('record_id', $record->id)
                 ->whereIn('field', $this->physicalReadKeys($definitions))
                 ->pluck('value', 'field')
-                ->map(fn (string $value): mixed => $this->decode($value))
+                ->map(fn (mixed $value): mixed => $this->decode(Value::text($value)))
                 ->all();
-            $this->assertNoDrift($definitions, $existingValues);
+            $this->assertNoDrift($definitions, Value::map($existingValues));
 
             $version = hash('sha256', $token->operationKey."\n".$token->payloadHash."\n".$currentVersion);
             foreach ($this->expandPatch($definitions, $patch->values) as $field => $value) {
@@ -142,9 +144,9 @@ final readonly class EavAttributeStore implements AttributeStore
 
         $rows = $this->connection->table($this->tables->eavValues)
             ->whereIn('field', array_values(array_unique($physicalFields)))
-            ->where(function ($query) use ($records): void {
+            ->where(function (Builder $query) use ($records): void {
                 foreach ($this->recordsByEntity($records) as $entity => $ids) {
-                    $query->orWhere(function ($entityQuery) use ($entity, $ids): void {
+                    $query->orWhere(function (Builder $entityQuery) use ($entity, $ids): void {
                         $entityQuery->where('entity', $entity)->whereIn('record_id', $ids);
                     });
                 }
@@ -153,13 +155,13 @@ final readonly class EavAttributeStore implements AttributeStore
 
         $valuesByRecord = [];
         foreach ($rows as $row) {
-            $valuesByRecord[$row->entity."\n".$row->record_id][$row->field] = $this->decode($row->value);
+            $valuesByRecord[Value::text($row->entity)."\n".Value::text($row->record_id)][Value::text($row->field)] = $this->decode(Value::text($row->value));
         }
 
         return new ValueBatch(records: array_map(
             fn (RecordRef $record): ValueBag => new ValueBag(values: Validation::validatedMap($this->projectValues(
                 $definitionsByEntity[$record->entity],
-                $valuesByRecord[$record->entity."\n".$record->id] ?? [],
+                Value::map($valuesByRecord[$record->entity."\n".$record->id] ?? []),
             ), 'attribute values')),
             $records->records,
         ));
@@ -337,7 +339,7 @@ final readonly class EavAttributeStore implements AttributeStore
     {
         $keys = $definition['read_keys'] ?? [];
 
-        return is_array($keys) && $keys !== [] ? array_values($keys) : [$logicalKey];
+        return is_array($keys) && $keys !== [] ? Value::strings(array_values($keys)) : [$logicalKey];
     }
 
     /** @param array<string, mixed> $definition
@@ -347,7 +349,7 @@ final readonly class EavAttributeStore implements AttributeStore
     {
         $keys = $definition['write_keys'] ?? [];
 
-        return is_array($keys) && $keys !== [] ? array_values($keys) : [$logicalKey];
+        return is_array($keys) && $keys !== [] ? Value::strings(array_values($keys)) : [$logicalKey];
     }
 
     /** @param array<string, mixed> $definition */
@@ -356,7 +358,7 @@ final readonly class EavAttributeStore implements AttributeStore
         $meta = is_array($definition['meta'] ?? null) ? $definition['meta'] : [];
 
         return ($meta['evolution_source_key'] ?? null) === $physicalKey
-            ? $this->transformerRegistry()->toTarget($meta, $value)
+            ? $this->transformerRegistry()->toTarget(Value::map($meta), $value)
             : $value;
     }
 
@@ -366,7 +368,7 @@ final readonly class EavAttributeStore implements AttributeStore
         $meta = is_array($definition['meta'] ?? null) ? $definition['meta'] : [];
 
         return ($meta['evolution_source_key'] ?? null) === $physicalKey
-            ? $this->transformerRegistry()->toSource($meta, $value)
+            ? $this->transformerRegistry()->toSource(Value::map($meta), $value)
             : $value;
     }
 

@@ -16,6 +16,7 @@ use CoreX\Scheduling\Contracts\WakeupScheduler;
 use CoreX\Scheduling\Data\WakeupRequest;
 use CoreX\Scheduling\Data\WakeupWindow;
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
 use Psr\Clock\ClockInterface;
 
@@ -49,7 +50,7 @@ final class SqlDigestBuilder implements DigestBuilder
                 ->whereNull('cancelled_at')
                 ->where('created_at', '>=', $window->start)
                 ->where('created_at', '<', $window->end)
-                ->whereNotExists(function ($query): void {
+                ->whereNotExists(function (Builder $query): void {
                     $query->selectRaw('1')
                         ->from('ntf_digest_items')
                         ->whereColumn('ntf_digest_items.notification_id', 'ntf_notifications.id')
@@ -67,11 +68,11 @@ final class SqlDigestBuilder implements DigestBuilder
 
                 $run = $runs->first();
 
-                return new DigestRef(id: $run->id, recipient: $recipient, window: $window, batchSequence: (int) $run->batch_seq);
+                return new DigestRef(id: Value::text($run->id), recipient: $recipient, window: $window, batchSequence: Value::integer($run->batch_seq));
             }
-            $ids = $items->pluck('id')->all();
+            $ids = Value::strings($items->pluck('id')->all());
             $runId = (string) Str::uuid7();
-            $batchSequence = $runs->isEmpty() ? 0 : (int) $runs->first()->batch_seq + 1;
+            $batchSequence = $runs->isEmpty() ? 0 : Value::integer($runs->first()->batch_seq) + 1;
             $this->connection->table('ntf_digest_runs')->insert(['id' => $runId, 'recipient_kind' => $recipient->kind, 'recipient_id' => $recipient->id, 'period' => $window->period, 'period_start' => $window->start, 'period_end' => $window->end, 'batch_seq' => $batchSequence, 'membership_hash' => hash('sha256', implode("\0", $ids)), 'state' => 'frozen', 'created_at' => $this->clock->now()]);
             foreach ($ids as $id) {
                 $this->connection->table('ntf_digest_items')->insert(['id' => (string) Str::uuid7(), 'run_id' => $runId, 'notification_id' => $id, 'channel' => 'in_app']);

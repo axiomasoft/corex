@@ -17,6 +17,7 @@ use CoreX\CustomFields\Internal\SchemaOperationConflict;
 use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
 use CoreX\CustomFields\Internal\Support\Validation;
+use CoreX\CustomFields\Internal\Value;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
 use Illuminate\Database\ConnectionInterface;
@@ -52,7 +53,7 @@ final readonly class QueuedSchemaOperations implements SchemaOperations
                     throw new KeyConflict('A schema operation key is already bound to different data.');
                 }
 
-                return new SchemaReceipt(new OperationRef($existing->id), $existing->status, $existing->schema_hash, $existing->error_code);
+                return new SchemaReceipt(new OperationRef(Value::text($existing->id)), Value::text($existing->status), Value::text($existing->schema_hash), Value::nullableText($existing->error_code));
             }
 
             $id = hash('sha256', $key->key."\n".$key->payloadHash);
@@ -73,11 +74,11 @@ final readonly class QueuedSchemaOperations implements SchemaOperations
         (new ScopeConnectionGuard($this->connection))->assertMatches($scope);
         $row = $this->connection->table($this->tables->schemaOperations)->where('id', $operation->id)->first();
 
-        if ($row === null || $row->restore_epoch !== $scope->restoreEpoch || ! $this->authorizer->authorize(scope: $scope, entity: $row->entity, subjectId: '', fields: [], action: 'schema')->allowed) {
+        if ($row === null || $row->restore_epoch !== $scope->restoreEpoch || ! $this->authorizer->authorize(scope: $scope, entity: Value::text($row->entity), subjectId: '', fields: [], action: 'schema')->allowed) {
             throw new ScopeDenied('The current scope cannot inspect this schema operation.');
         }
 
-        return new SchemaReceipt($operation, $row->status, $row->schema_hash, $row->error_code);
+        return new SchemaReceipt($operation, Value::text($row->status), Value::text($row->schema_hash), Value::nullableText($row->error_code));
     }
 
     public function verify(DataScope $scope, string $entity): DriftReport
@@ -92,8 +93,10 @@ final readonly class QueuedSchemaOperations implements SchemaOperations
         $drift = [];
         $managed = [];
         foreach ($rows as $row) {
-            $definition = json_decode($row->definition, true, 16, JSON_THROW_ON_ERROR);
-            $field = $definition['definition']['field'] ?? null;
+            $definition = json_decode(Value::text($row->definition), true, 16, JSON_THROW_ON_ERROR);
+            $definition = is_array($definition) ? $definition : [];
+            $payload = $definition['definition'] ?? null;
+            $field = is_array($payload) ? ($payload['field'] ?? null) : null;
 
             if (! is_string($field)) {
                 $drift[] = ['operation' => $row->id, 'reason' => 'invalid_definition'];

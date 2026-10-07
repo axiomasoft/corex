@@ -21,3 +21,26 @@ it('rejects an unsafe saved-view filter before a consumer can map it to SQL', fu
         'presentation' => [],
     ], $schema))->toThrow(InvalidArgumentException::class);
 });
+
+it('rejects malformed field keys with the configuration error before indexing the schema', function (array $config): void {
+    $schema = new ViewSchema('neutral/1', 'lab.sample', [
+        new ViewField('name', 'string', ['eq'], true, true, true, true, 'name'),
+    ]);
+    expect(fn (): array => (new ViewConfigValidator)->validate(['version' => 'saved-view/1', ...$config], $schema))
+        ->toThrow(InvalidArgumentException::class);
+})->with([
+    'projection' => [['columns' => [['name']]]],
+    'sort' => [['sorts' => [['field' => ['name'], 'direction' => 'asc']]]],
+    'filter' => [['filters' => ['field' => ['name'], 'op' => 'eq', 'value' => 'Ada']]],
+    'numeric filter property' => [['filters' => ['field' => 'name', 'op' => 'eq', 'value' => 'Ada', 10 => 'extra']]],
+    'numeric child property' => [['filters' => ['op' => 'and', 'args' => [['field' => 'name', 'op' => 'eq', 'value' => 'Ada', 10 => 'extra']]]]],
+]);
+
+it('preserves supported sort data while validating the field and direction', function (): void {
+    $schema = new ViewSchema('neutral/1', 'lab.sample', [
+        new ViewField('name', 'string', ['eq'], true, true, true, true, 'name'),
+    ]);
+    $sort = ['field' => 'name', 'direction' => 'asc', 'label' => 'Display name'];
+    $validated = (new ViewConfigValidator)->validate(['version' => 'saved-view/1', 'sorts' => [$sort]], $schema);
+    expect($validated['sorts'])->toBe([$sort]);
+});

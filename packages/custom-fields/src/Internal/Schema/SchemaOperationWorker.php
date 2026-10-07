@@ -9,6 +9,7 @@ use CoreX\CustomFields\Data\OperationRef;
 use CoreX\CustomFields\Internal\SchemaOperationConflict;
 use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
+use CoreX\CustomFields\Internal\Value;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
 use DateInterval;
@@ -34,8 +35,8 @@ final readonly class SchemaOperationWorker
         $row = $this->claim(scope: $scope, operation: $operation);
 
         try {
-            $definition = json_decode($row->definition, true, 16, JSON_THROW_ON_ERROR);
-            $this->apply(entity: $row->entity, definition: $definition);
+            $definition = json_decode(Value::text(Value::field($row, 'definition')), true, 16, JSON_THROW_ON_ERROR);
+            $this->apply(entity: Value::text(Value::field($row, 'entity')), definition: Value::map($definition));
 
             $this->connection->table($this->tables->schemaOperations)->where('id', $operation->id)->update([
                 'status' => 'verified',
@@ -60,12 +61,12 @@ final readonly class SchemaOperationWorker
             $row = $operations->where('id', $operation->id)->lockForUpdate()->first();
 
             if ($row === null || $row->restore_epoch !== $scope->restoreEpoch
-                || ! $this->authorizer->authorize(scope: $scope, entity: $row->entity, subjectId: '', fields: [], action: 'schema')->allowed
-                || ! $this->authorizer->authorize(scope: $scope, entity: $row->entity, subjectId: '', fields: [$row->approval_digest], action: 'schema-approve')->allowed) {
+                || ! $this->authorizer->authorize(scope: $scope, entity: Value::text($row->entity), subjectId: '', fields: [], action: 'schema')->allowed
+                || ! $this->authorizer->authorize(scope: $scope, entity: Value::text($row->entity), subjectId: '', fields: Value::strings([$row->approval_digest]), action: 'schema-approve')->allowed) {
                 throw new ScopeDenied('The schema operation cannot run in the current scope.');
             }
 
-            if ($row->status === 'running' && $row->started_at !== null && new DateTimeImmutable($row->started_at) <= new DateTimeImmutable('-10 minutes')) {
+            if ($row->status === 'running' && $row->started_at !== null && new DateTimeImmutable(Value::text($row->started_at)) <= new DateTimeImmutable(Value::text('-10 minutes'))) {
                 $operations->where('id', $operation->id)->update(['status' => 'pending', 'error_code' => 'stale_worker_reclaimed']);
                 $row->status = 'pending';
             }
@@ -80,7 +81,7 @@ final readonly class SchemaOperationWorker
 
             $operations->where('id', $operation->id)->update([
                 'status' => 'running',
-                'attempts' => $row->attempts + 1,
+                'attempts' => Value::integer($row->attempts) + 1,
                 'started_at' => $this->clock->now(),
                 'error_code' => null,
             ]);
@@ -89,7 +90,7 @@ final readonly class SchemaOperationWorker
         });
     }
 
-    /** @param array{kind?: mixed, definition?: mixed} $definition */
+    /** @param array<string, mixed> $definition */
     private function apply(string $entity, array $definition): void
     {
         $kind = $definition['kind'] ?? null;
@@ -113,7 +114,7 @@ final readonly class SchemaOperationWorker
         }
 
         if ($kind === 'drop') {
-            $this->dropRetiredIndex(index: $index, definition: $payload);
+            $this->dropRetiredIndex(index: $index, definition: Value::map($payload));
 
             return;
         }
@@ -127,7 +128,7 @@ final readonly class SchemaOperationWorker
             $fieldLiteral = $this->literal($field);
             $entityLiteral = $this->literal($entity);
             // PostgreSQL forbids CREATE INDEX CONCURRENTLY in a transaction. Claiming is complete above.
-            $this->connection->unprepared("CREATE INDEX CONCURRENTLY {$index} ON {$this->tables->documents} ((values->>{$fieldLiteral})) WHERE entity = {$entityLiteral}");
+            $this->connection->statement("CREATE INDEX CONCURRENTLY {$index} ON {$this->tables->documents} ((values->>{$fieldLiteral})) WHERE entity = {$entityLiteral}");
         }
 
         if (! $this->indexExists($index)) {
@@ -156,7 +157,7 @@ final readonly class SchemaOperationWorker
         }
 
         if ($this->indexExists($index)) {
-            $this->connection->unprepared("DROP INDEX CONCURRENTLY {$index}");
+            $this->connection->statement("DROP INDEX CONCURRENTLY {$index}");
         }
     }
 

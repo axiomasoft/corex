@@ -39,9 +39,9 @@ final class SqlSavedViewRepository implements SavedViewRepository
     {
         $this->authorize($context, ViewAction::Read, $scope, null);
 
-        return $this->db()->table($this->viewsTable())->where('entity_code', $scope->entityHandle)
+        return array_values($this->db()->table($this->viewsTable())->where('entity_code', $scope->entityHandle)
             ->where('scope_key', $this->scopeKey($scope))->orderBy('position')->get()
-            ->map(fn (object $row): SavedViewRef => $this->reference($row))->all();
+            ->map(fn (object $row): SavedViewRef => $this->reference($row))->all());
     }
 
     public function save(ViewContext $context, SaveViewInput $input): SavedViewRef
@@ -68,10 +68,10 @@ final class SqlSavedViewRepository implements SavedViewRepository
             }
             $row = $this->db()->table($table)->where('id', $input->id)->lockForUpdate()->first();
 
-            if ($row === null || $row->scope_key !== $scopeKey || (string) $row->revision !== $input->expectedRevision) {
+            if ($row === null || $row->scope_key !== $scopeKey || Value::text($row->revision) !== $input->expectedRevision) {
                 throw new RuntimeException('Saved view revision conflict.');
             }
-            $revision = (string) ((int) $row->revision + 1);
+            $revision = (string) (Value::integer($row->revision) + 1);
             $payload = $this->payload($context, $input, $schema->version, $scopeKey, $input->id, $revision, (bool) $row->is_default, $normalized);
             unset($payload['created_at'], $payload['created_by']);
             $this->db()->table($table)->where('id', $input->id)->update($payload);
@@ -90,7 +90,7 @@ final class SqlSavedViewRepository implements SavedViewRepository
             }
             $scope = $this->scopeFrom($row);
             $this->authorize($context, ViewAction::Delete, $scope, $viewId);
-            $this->lockScope($scope, $row->scope_key);
+            $this->lockScope($scope, Value::text($row->scope_key));
             $this->db()->table($this->viewsTable())->where('id', $viewId)->delete();
 
             if ((bool) $row->is_default) {
@@ -113,11 +113,11 @@ final class SqlSavedViewRepository implements SavedViewRepository
             }
             $scope = $this->scopeFrom($row);
             $this->authorize($context, ViewAction::SetDefault, $scope, $viewId);
-            $this->lockScope($scope, $row->scope_key);
+            $this->lockScope($scope, Value::text($row->scope_key));
             $this->db()->table($this->viewsTable())->where('entity_code', $row->entity_code)->where('scope_key', $row->scope_key)->update(['is_default' => false, 'default_scope_key' => null]);
             $this->db()->table($this->viewsTable())->where('id', $viewId)->update(['is_default' => true, 'default_scope_key' => $row->scope_key]);
 
-            return new SavedViewRef($row->id, $scope, $row->kind, (string) $row->revision, true);
+            return new SavedViewRef(Value::text($row->id), $scope, Value::text($row->kind), Value::text($row->revision), true);
         });
     }
 
@@ -135,8 +135,8 @@ final class SqlSavedViewRepository implements SavedViewRepository
         if ($schema->version !== $row->schema_version) {
             throw new RuntimeException('Unsupported saved view schema.');
         }
-        $config = json_decode($row->config, true, flags: JSON_THROW_ON_ERROR);
-        $validated = $this->validator->validate($config, $schema);
+        $config = json_decode(Value::text($row->config), true, flags: JSON_THROW_ON_ERROR);
+        $validated = $this->validator->validate(Value::map($config), $schema);
 
         return new SavedQuery($schema->version, JsonDocuments::capture($validated['filters']), $validated['sorts'], $validated['columns'], $validated['groupBy']);
     }
@@ -172,12 +172,12 @@ final class SqlSavedViewRepository implements SavedViewRepository
 
     private function scopeFrom(object $row): ViewScope
     {
-        return new ViewScope($row->entity_code, $row->workspace_id, $row->owner_kind, $row->owner_id);
+        return new ViewScope(Value::text(Value::field($row, 'entity_code')), Value::nullableText(Value::field($row, 'workspace_id')), Value::nullableText(Value::field($row, 'owner_kind')), Value::nullableText(Value::field($row, 'owner_id')));
     }
 
     private function reference(object $row): SavedViewRef
     {
-        return new SavedViewRef($row->id, $this->scopeFrom($row), $row->kind, (string) $row->revision, (bool) $row->is_default);
+        return new SavedViewRef(Value::text(Value::field($row, 'id')), $this->scopeFrom($row), Value::text(Value::field($row, 'kind')), Value::text(Value::field($row, 'revision')), (bool) Value::field($row, 'is_default'));
     }
 
     private function db(): ConnectionInterface

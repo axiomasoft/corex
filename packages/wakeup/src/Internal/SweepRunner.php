@@ -17,6 +17,7 @@ use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\Connection;
+use Illuminate\Database\Query\Builder;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 use Throwable;
@@ -67,7 +68,7 @@ final class SweepRunner implements DueWakeupSweeper
             throw new RuntimeException('Wakeup context does not match the current tenant context.');
         }
         $value = $this->connection->table('sys_wakeup_requests')->whereIn('status', ['pending', 'failed'])->where('attempt', '<', $this->maxAttempts)->min('fire_at');
-        $due = $value === null ? null : new DateTimeImmutable((string) $value);
+        $due = $value === null ? null : new DateTimeImmutable(Value::text($value));
 
         foreach ($this->dueSources as $source) {
             $candidate = $source->nextDue($context);
@@ -100,7 +101,7 @@ final class SweepRunner implements DueWakeupSweeper
                 ->whereIn('status', ['pending', 'failed'])
                 ->where('attempt', '<', $this->maxAttempts)
                 ->where('fire_at', '<=', $now)
-                ->where(static fn ($query) => $query->whereNull('retry_at')->orWhere('retry_at', '<=', $now))
+                ->where(static fn (Builder $query) => $query->whereNull('retry_at')->orWhere('retry_at', '<=', $now))
                 ->orderBy('fire_at')
                 ->orderBy('id')
                 ->limit($limit);
@@ -115,15 +116,15 @@ final class SweepRunner implements DueWakeupSweeper
             $claims = [];
 
             foreach ($rows as $row) {
-                $generation = (int) $row->generation + 1;
+                $generation = Value::integer($row->generation) + 1;
                 $this->connection->table('sys_wakeup_requests')->where('id', $row->id)->update([
                     'status' => 'running',
                     'generation' => $generation,
-                    'attempt' => (int) $row->attempt + 1,
+                    'attempt' => Value::integer($row->attempt) + 1,
                     'lease_until' => $now->add(new DateInterval("PT{$this->leaseSeconds}S")),
                     'updated_at' => $now,
                 ]);
-                $claims[] = ['id' => $row->id, 'generation' => $generation];
+                $claims[] = ['id' => Value::text($row->id), 'generation' => $generation];
             }
 
             return $claims;
@@ -139,12 +140,12 @@ final class SweepRunner implements DueWakeupSweeper
 
                 if ($row === null
                     || $row->status !== 'running'
-                    || (int) $row->generation !== $generation
+                    || Value::integer($row->generation) !== $generation
                     || $row->lease_until === null
                     || $this->date($row->lease_until) <= $now) {
                     return 'skipped';
                 }
-                $handler = $this->handlers->handler((string) $row->kind);
+                $handler = $this->handlers->handler(Value::text($row->kind));
 
                 if ($handler === null) {
                     $this->terminalFailure(id: $id, code: 'handler-unavailable', now: $now);
@@ -160,9 +161,9 @@ final class SweepRunner implements DueWakeupSweeper
                 }
 
                 $handler->handle(new WakeupDelivery(
-                    request: $this->request(context: $context, row: $row, payload: $payload['data']),
+                    request: $this->request(context: $context, row: $row, payload: Value::map($payload['data'] ?? null)),
                     generation: $generation,
-                    attempt: (int) $row->attempt,
+                    attempt: Value::integer($row->attempt),
                 ));
                 $this->connection->table('sys_wakeup_requests')->where('id', $id)->where('status', 'running')->where('generation', $generation)->update(['status' => 'completed', 'completed_at' => $now, 'lease_until' => null, 'updated_at' => $now]);
 
@@ -175,7 +176,7 @@ final class SweepRunner implements DueWakeupSweeper
                 return 'skipped';
             }
             $now = $this->clock->now();
-            $attempt = (int) $row->attempt;
+            $attempt = Value::integer($row->attempt);
             $backoffSeconds = min(300, 2 ** $attempt);
             $retry = $attempt >= $this->maxAttempts ? null : $now->add(new DateInterval("PT{$backoffSeconds}S"));
             $this->connection->table('sys_wakeup_requests')
@@ -199,20 +200,20 @@ final class SweepRunner implements DueWakeupSweeper
     private function payload(object $row): array
     {
         try {
-            $payload = json_decode((string) $row->payload, true, flags: JSON_THROW_ON_ERROR);
+            $payload = json_decode(Value::text(Value::field($row, 'payload')), true, flags: JSON_THROW_ON_ERROR);
         } catch (Throwable) {
             return ['status' => 'handler-stamp-missing'];
         }
 
-        return $this->handlers->inspectPayload(kind: (string) $row->kind, payload: $payload);
+        return $this->handlers->inspectPayload(kind: Value::text(Value::field($row, 'kind')), payload: $payload);
     }
 
     /** @param array<string, mixed> $payload */
     private function request(TenantContext $context, object $row, array $payload): WakeupRequest
     {
-        $window = $row->window_start === null ? null : new WakeupWindow(start: $this->date($row->window_start), end: $this->date($row->window_end), period: $row->period);
+        $window = Value::field($row, 'window_start') === null ? null : new WakeupWindow(start: $this->date(Value::field($row, 'window_start')), end: $this->date(Value::field($row, 'window_end')), period: Value::text(Value::field($row, 'period')));
 
-        return new WakeupRequest(context: $context, kind: $row->kind, requestKey: $row->request_key, fireAt: $this->date($row->fire_at), window: $window, payload: JsonDocuments::capture($payload));
+        return new WakeupRequest(context: $context, kind: Value::text(Value::field($row, 'kind')), requestKey: Value::text(Value::field($row, 'request_key')), fireAt: $this->date(Value::field($row, 'fire_at')), window: $window, payload: JsonDocuments::capture($payload));
     }
 
     private function terminalFailure(string $id, string $code, DateTimeImmutable $now): void
@@ -229,6 +230,6 @@ final class SweepRunner implements DueWakeupSweeper
 
     private function date(mixed $value): DateTimeImmutable
     {
-        return $value instanceof DateTimeInterface ? DateTimeImmutable::createFromInterface($value) : new DateTimeImmutable((string) $value);
+        return $value instanceof DateTimeInterface ? DateTimeImmutable::createFromInterface($value) : new DateTimeImmutable(Value::text($value));
     }
 }

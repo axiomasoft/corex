@@ -9,6 +9,7 @@ use CoreX\CustomFields\Data\AttributeLifecycle;
 use CoreX\CustomFields\Data\AttributeTables;
 use CoreX\CustomFields\Internal\KeyConflict;
 use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
+use CoreX\CustomFields\Internal\Value;
 use CoreX\CustomFields\Internal\VersionConflict;
 use CoreX\Data\Data\DataScope;
 use Illuminate\Database\ConnectionInterface;
@@ -68,7 +69,7 @@ final readonly class AttributeBackfill
 
             if ($existing !== null) {
                 foreach ($payload as $column => $value) {
-                    if ((string) $existing->{$column} !== (string) $value) {
+                    if (Value::text($existing->{$column}) !== Value::text($value)) {
                         throw new KeyConflict('A backfill operation id is already bound to different revisions.');
                     }
                 }
@@ -129,20 +130,20 @@ final readonly class AttributeBackfill
                 $changed += $this->backfillRecord($operation, $selected, $meta) ? 1 : 0;
             }
 
-            $cursor = (string) end($records)->record_id;
+            $cursor = Value::text(end($records)->record_id);
             $this->backfills()->where('id', $operationId)->update([
                 'status' => 'backfilling',
                 'cursor_record_id' => $cursor,
-                'attempted' => $operation->attempted + $attempted,
-                'changed' => $operation->changed + $changed,
+                'attempted' => Value::integer($operation->attempted) + $attempted,
+                'changed' => Value::integer($operation->changed) + $changed,
                 'error' => null,
                 'updated_at' => $this->connection->raw('CURRENT_TIMESTAMP'),
             ]);
 
             return [
                 'status' => 'backfilling',
-                'attempted' => (int) $operation->attempted + $attempted,
-                'changed' => (int) $operation->changed + $changed,
+                'attempted' => Value::integer($operation->attempted) + $attempted,
+                'changed' => Value::integer($operation->changed) + $changed,
                 'cursor' => $cursor,
             ];
         });
@@ -246,23 +247,23 @@ final readonly class AttributeBackfill
             ->lockForUpdate()
             ->first();
         $this->assertRecordVersion($selected, $record);
-        $values = $this->decodeMap($record->values);
+        $values = $this->decodeMap(Value::text($record->values));
 
-        if (! array_key_exists($operation->source_key, $values)) {
+        if (! array_key_exists(Value::text($operation->source_key), $values)) {
             return false;
         }
 
-        $expected = $this->transformers->toTarget($meta, $values[$operation->source_key]);
+        $expected = $this->transformers->toTarget($meta, $values[Value::text($operation->source_key)]);
 
-        if (array_key_exists($operation->target_key, $values)) {
-            if (! $this->sameValue($expected, $values[$operation->target_key])) {
+        if (array_key_exists(Value::text($operation->target_key), $values)) {
+            if (! $this->sameValue($expected, $values[Value::text($operation->target_key)])) {
                 throw new RuntimeException('Concurrent attribute values diverged during backfill.');
             }
 
             return false;
         }
 
-        $values[$operation->target_key] = $expected;
+        $values[Value::text($operation->target_key)] = $expected;
         $this->connection->table($this->tables->documents)
             ->where('entity', $operation->entity)
             ->where('record_id', $selected->record_id)
@@ -286,18 +287,18 @@ final readonly class AttributeBackfill
         $values = $this->connection->table($this->tables->eavValues)
             ->where('entity', $operation->entity)
             ->where('record_id', $selected->record_id)
-            ->whereIn('field', [$operation->source_key, $operation->target_key])
+            ->whereIn('field', [Value::text($operation->source_key), Value::text($operation->target_key)])
             ->pluck('value', 'field')
             ->all();
 
-        if (! array_key_exists($operation->source_key, $values)) {
+        if (! array_key_exists(Value::text($operation->source_key), $values)) {
             return false;
         }
 
-        $expected = $this->transformers->toTarget($meta, $this->decode($values[$operation->source_key]));
+        $expected = $this->transformers->toTarget($meta, $this->decode(Value::text($values[Value::text($operation->source_key)])));
 
-        if (array_key_exists($operation->target_key, $values)) {
-            if (! $this->sameValue($expected, $this->decode($values[$operation->target_key]))) {
+        if (array_key_exists(Value::text($operation->target_key), $values)) {
+            if (! $this->sameValue($expected, $this->decode(Value::text($values[Value::text($operation->target_key)])))) {
                 throw new RuntimeException('Concurrent attribute values diverged during backfill.');
             }
 
@@ -307,7 +308,7 @@ final readonly class AttributeBackfill
         $this->connection->table($this->tables->eavValues)->insert([
             'entity' => $operation->entity,
             'record_id' => $selected->record_id,
-            'field' => $operation->target_key,
+            'field' => Value::text($operation->target_key),
             'value' => $this->encode($expected),
         ]);
         $this->connection->table($this->tables->eavRecords)
@@ -327,20 +328,20 @@ final readonly class AttributeBackfill
         $actual = [];
         $failed = 0;
         foreach ($this->allRecordValues($operation) as $recordId => $values) {
-            if (! array_key_exists($operation->source_key, $values)) {
+            if (! array_key_exists(Value::text($operation->source_key), $values)) {
                 continue;
             }
 
-            $target = $this->transformers->toTarget($meta, $values[$operation->source_key]);
+            $target = $this->transformers->toTarget($meta, $values[Value::text($operation->source_key)]);
             $expected[$recordId] = $target;
 
-            if (! array_key_exists($operation->target_key, $values)) {
+            if (! array_key_exists(Value::text($operation->target_key), $values)) {
                 $failed++;
 
                 continue;
             }
 
-            $actual[$recordId] = $values[$operation->target_key];
+            $actual[$recordId] = $values[Value::text($operation->target_key)];
 
             if (! $this->sameValue($target, $actual[$recordId])) {
                 $failed++;
@@ -357,7 +358,7 @@ final readonly class AttributeBackfill
 
         if ($this->engine === 'jsonb') {
             foreach ($this->connection->table($this->tables->documents)->where('entity', $operation->entity)->orderBy('record_id')->get() as $row) {
-                $values[$row->record_id] = $this->decodeMap($row->values);
+                $values[Value::text($row->record_id)] = $this->decodeMap(Value::text($row->values));
             }
 
             return $values;
@@ -365,11 +366,11 @@ final readonly class AttributeBackfill
 
         foreach ($this->connection->table($this->tables->eavValues)
             ->where('entity', $operation->entity)
-            ->whereIn('field', [$operation->source_key, $operation->target_key])
+            ->whereIn('field', [Value::text($operation->source_key), Value::text($operation->target_key)])
             ->orderBy('record_id')
             ->orderBy('field')
             ->get() as $row) {
-            $values[$row->record_id][$row->field] = $this->decode($row->value);
+            $values[Value::text($row->record_id)][Value::text($row->field)] = $this->decode(Value::text($row->value));
         }
 
         return $values;
@@ -387,7 +388,7 @@ final readonly class AttributeBackfill
             throw new RuntimeException('Attribute backfill target definition is missing.');
         }
 
-        return $this->decodeMap($definition->meta);
+        return $this->decodeMap(Value::text($definition->meta));
     }
 
     private function operationForUpdate(string $operationId): stdClass
@@ -401,6 +402,7 @@ final readonly class AttributeBackfill
         return $operation;
     }
 
+    /** @phpstan-assert stdClass $current */
     private function assertRecordVersion(stdClass $selected, ?stdClass $current): void
     {
         if ($current === null || $current->record_version !== $selected->record_version) {
@@ -410,17 +412,17 @@ final readonly class AttributeBackfill
 
     private function backfillVersion(stdClass $operation, stdClass $selected): string
     {
-        return hash('sha256', $operation->id."\n".$operation->target_key."\n".$selected->record_version);
+        return hash('sha256', Value::text($operation->id)."\n".Value::text($operation->target_key)."\n".Value::text($selected->record_version));
     }
 
     /** @return array{status: string, attempted: int, changed: int, cursor: ?string} */
     private function batchReceipt(stdClass $operation): array
     {
         return [
-            'status' => (string) $operation->status,
-            'attempted' => (int) $operation->attempted,
-            'changed' => (int) $operation->changed,
-            'cursor' => $operation->cursor_record_id,
+            'status' => Value::text($operation->status),
+            'attempted' => Value::integer($operation->attempted),
+            'changed' => Value::integer($operation->changed),
+            'cursor' => Value::nullableText($operation->cursor_record_id),
         ];
     }
 
@@ -438,7 +440,7 @@ final readonly class AttributeBackfill
             throw new RuntimeException('Stored attribute backfill data must be a JSON object.');
         }
 
-        return $decoded;
+        return Value::map($decoded);
     }
 
     private function decode(string $json): mixed

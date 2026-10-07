@@ -1,0 +1,22 @@
+> python3 scripts/module-layout-gate.py
+new R5 packages/intl/src/Currency/Internal/RateSnapshotMapper.php CoreX\Intl\Internal\Value
+new R5 packages/intl/src/Currency/Internal/SqlRateImporter.php CoreX\Intl\Internal\Value
+new R5 packages/intl/src/Locale/Internal/LocalePolicyBuilder.php CoreX\Intl\Internal\Value
+new R5 packages/intl/src/Territory/Internal/Address/FixtureAddressSuggestProvider.php CoreX\Intl\Internal\Value
+new R5 packages/intl/src/Territory/Internal/Reference/AbstractFixtureReferenceProvider.php CoreX\Intl\Internal\Value
+new R5 packages/intl/src/Territory/Internal/Reference/FixtureReferenceNormalizer.php CoreX\Intl\Internal\Value
+new R5 packages/intl/src/Territory/Internal/Reference/ReferenceCursorCodec.php CoreX\Intl\Internal\Value
+new R5 packages/intl/src/Territory/Internal/Reference/SqlDatasetImporter.php CoreX\Intl\Internal\Value
+new R5 packages/intl/src/Territory/Internal/Reference/SqlGeographyProvider.php CoreX\Intl\Internal\Value
+new R5 packages/notifications/src/Delivery/Internal/DeliveryStore.php CoreX\Notifications\Internal\Value
+new R5 packages/notifications/src/Digest/Internal/DigestWakeupHandler.php CoreX\Notifications\Internal\Value
+new R5 packages/notifications/src/Digest/Internal/NotificationDigestDueSource.php CoreX\Notifications\Internal\Value
+new R5 packages/notifications/src/Digest/Internal/SqlDigestBuilder.php CoreX\Notifications\Internal\Value
+new R5 packages/notifications/src/Inbox/Internal/SqlNotificationCenter.php CoreX\Notifications\Internal\Value
+new R5 packages/notifications/src/Preferences/Internal/SettingsPreferenceRepository.php CoreX\Notifications\Internal\Value
+new R5 packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php CoreX\Panels\Internal\Value
+new R5 packages/panels/src/SavedViews/Internal/ViewConfigValidator.php CoreX\Panels\Internal\Value
+new R5 packages/tasks/src/Planning/Internal/DatabaseTaskOperationReceipts.php CoreX\Tasks\Internal\Value
+new R5 packages/tasks/src/Task/Internal/Actions/MoveTaskToStage.php CoreX\Tasks\Internal\Value
+module-layout FAIL: 1414 files, 19 violations, 0 baselined, 19 new, 0 stale; R0 0, R1 0, R2 0, R3 0, R4 0, R5 19, R6 0
+Script python3 scripts/module-layout-gate.py handling the module-layout-gate event returned with error code 1

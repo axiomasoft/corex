@@ -16,6 +16,7 @@ use CoreX\Modules\Internal\Gate\ModuleActivationDecision;
 use CoreX\Modules\Internal\Lifecycle\DatabaseModuleLifecycle;
 use CoreX\Modules\Internal\Lifecycle\DatabaseRecordsRegistrar;
 use CoreX\Modules\ModulesServiceProvider;
+use CoreX\Testing\LifecycleStringMigrationListener;
 use CoreX\Testing\Stubs\Lifecycle\StubBaseModule;
 use CoreX\Testing\Stubs\Lifecycle\StubFailingModule;
 use CoreX\Testing\Stubs\Lifecycle\StubFeatureFlagModule;
@@ -31,16 +32,6 @@ use Illuminate\Support\Facades\Schema;
 use Psr\Clock\ClockInterface;
 
 uses()->group('pg');
-
-final class LifecycleStringMigrationListener
-{
-    public static int $calls = 0;
-
-    public function onStarted(MigrationStarted $event): void
-    {
-        self::$calls++;
-    }
-}
 
 beforeEach(function (): void {
     config(['database.default' => 'pgsql', 'corex.modules.connection' => 'pgsql']);

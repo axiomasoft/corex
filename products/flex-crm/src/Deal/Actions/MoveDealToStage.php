@@ -30,8 +30,8 @@ final class MoveDealToStage
 
         return $deal->getConnection()->transaction(function () use ($deal, $stage): Deal {
             $this->guard->current(lock: true);
-            $fresh = $deal->newQuery()->whereKey($deal->getKey())->lockForUpdate()->firstOrFail();
-            $stage = Stage::on($deal->getConnectionName())->whereKey($stage->getKey())->lockForUpdate()->firstOrFail();
+            $fresh = $deal->newQuery()->whereKey($deal->getKey())->tap(static fn ($query) => $query->getQuery()->lockForUpdate())->firstOrFail();
+            $stage = Stage::on($deal->getConnectionName())->whereKey($stage->getKey())->tap(static fn ($query) => $query->getQuery()->lockForUpdate())->firstOrFail();
 
             if ($fresh->pipeline_id !== $stage->pipeline_id) {
                 throw ValidationException::withMessages(['stage_id' => 'Stage must belong to the deal pipeline.']);

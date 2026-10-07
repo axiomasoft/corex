@@ -41,7 +41,7 @@ final class LogActivity
 
         return $this->guard->connection($ctx)->transaction(function () use ($subject, $type, $summary, $body, $ownerId, $ctx): Activity {
             $this->guard->current(lock: true);
-            $subject = $subject->newQuery()->whereKey($subject->getKey())->sharedLock()->firstOrFail();
+            $subject = $subject->newQuery()->whereKey($subject->getKey())->tap(static fn ($query) => $query->getQuery()->sharedLock())->firstOrFail();
             $activity = new Activity([
                 'workspace_id' => $subject->getAttribute('workspace_id'),
                 'kind' => $type,

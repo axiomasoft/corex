@@ -44,8 +44,8 @@ final class ConvertLead
             throw new AuthorizationException('Lead conversion requires the current trusted account connection.');
         }
 
-        return DB::usingConnection($lead->getConnectionName(), fn (): Contact => $lead->getConnection()->transaction(function () use ($lead, $pipeline, $withCompany): Contact {
-            $fresh = $lead->newQuery()->whereKey($lead->getKey())->lockForUpdate()->firstOrFail();
+        return DB::usingConnection($ctx->connectionName, fn (): Contact => $lead->getConnection()->transaction(function () use ($lead, $pipeline, $withCompany): Contact {
+            $fresh = $lead->newQuery()->whereKey($lead->getKey())->tap(static fn ($query) => $query->getQuery()->lockForUpdate())->firstOrFail();
             $this->guard->current(lock: true);
             $lead->setRawAttributes($fresh->getAttributes(), true);
 

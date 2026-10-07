@@ -986,6 +986,9 @@ jobs:
       - name: PHPStan
         run: composer analyse
 
+      - name: Zero PHPStan debt across all packages and consumers
+        run: php scripts/quality/release-quality.php --stage=all
+
       # Второй, самостоятельный прогон (P1.28/D48): 9 правил corex/modules-lint
       # на tests/ через phpstan-tests-lint.neon (без larastan — иначе Pest-идиома
       # даёт 60 несвязанных property.notFound). Строго ПОСЛЕ основного analyse.

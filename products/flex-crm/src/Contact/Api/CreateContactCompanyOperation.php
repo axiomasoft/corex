@@ -8,6 +8,7 @@ use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use Flex\Crm\ApiShared\CrmIdentifier;
 use Flex\Crm\Contact\Actions\AssociateContactCompany;
+use Flex\Crm\Internal\Value;
 
 final readonly class CreateContactCompanyOperation implements OperationHandler
 {
@@ -19,14 +20,14 @@ final readonly class CreateContactCompanyOperation implements OperationHandler
         $link = $this->associateContactCompany->handle(
             contactId: CrmIdentifier::fromPath($parameters['contactId']),
             companyId: CrmIdentifier::fromInput($input['company_id']),
-            label: $input['label'] ?? null,
-            isPrimary: $input['is_primary'] ?? false,
+            label: Value::nullableText($input['label'] ?? null),
+            isPrimary: Value::boolean($input['is_primary'] ?? false),
         );
 
         return [
-            'id' => (string) $link->getKey(),
-            'contact_id' => (string) $link->contact_id,
-            'company_id' => (string) $link->company_id,
+            'id' => Value::text($link->getKey()),
+            'contact_id' => $link->contact_id,
+            'company_id' => $link->company_id,
             'label' => $link->label,
             'is_primary' => $link->is_primary,
         ];

@@ -8,5 +8,6 @@ parameters:
     tmpDir: ../../build/phpstan/panels
     paths:
         - src
+        - database/migrations
     checkModelProperties: true
     checkPhpDocMissingReturn: true

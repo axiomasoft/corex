@@ -11,6 +11,7 @@ use CoreX\CustomFields\Data\IndexPolicy;
 use CoreX\CustomFields\Data\SchemaChange;
 use CoreX\CustomFields\Data\SchemaOperationId;
 use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
+use CoreX\CustomFields\Internal\Value;
 use CoreX\Data\Data\DataScope;
 use Illuminate\Database\ConnectionInterface;
 use InvalidArgumentException;
@@ -94,7 +95,7 @@ final readonly class AttributeIndexPlanner
         $predicate = 'entity = '.$this->literal($definition->entity);
 
         if (! $this->indexExists($name)) {
-            $this->connection->unprepared(
+            $this->connection->statement(
                 "CREATE INDEX CONCURRENTLY {$name} ON {$this->tables->documents} ({$expression}, record_id) WHERE {$predicate}",
             );
         }
@@ -131,13 +132,13 @@ final readonly class AttributeIndexPlanner
     {
         $cast = $definition->type === 'int' ? 'bigint' : 'numeric';
 
-        return $this->connection->table($this->tables->documents)
+        return array_values($this->connection->table($this->tables->documents)
             ->where('entity', $definition->entity)
             ->whereRaw('values ?? ?', [$definition->key])
             ->whereRaw('not pg_input_is_valid(values->>?, ?)', [$definition->key, $cast])
             ->pluck('record_id')
-            ->map(static fn (mixed $id): string => (string) $id)
-            ->all();
+            ->map(static fn (mixed $id): string => Value::text($id))
+            ->all());
     }
 
     /** @return array<array-key, mixed> */
@@ -145,15 +146,21 @@ final readonly class AttributeIndexPlanner
     {
         $sql = 'EXPLAIN (FORMAT JSON) SELECT record_id FROM '.$this->tables->documents
             .' WHERE entity = '.$this->literal($entity)." AND {$expression} IS NOT NULL ORDER BY {$expression}, record_id";
-        $row = $this->connection->transaction(function () use ($sql): mixed {
+        $row = $this->connection->transaction(function () use ($sql): ?object {
             $this->connection->unprepared('SET LOCAL enable_seqscan = off');
 
-            return $this->connection->selectOne($sql);
+            $row = $this->connection->selectOne($sql);
+
+            if ($row !== null && ! is_object($row)) {
+                throw new RuntimeException('Query plan did not return a row.');
+            }
+
+            return $row;
         });
 
-        $plan = $row->{'QUERY PLAN'} ?? null;
+        $plan = $row === null ? null : Value::field($row, 'QUERY PLAN');
 
-        return json_decode(is_string($plan) ? $plan : json_encode($plan, JSON_THROW_ON_ERROR), true, 32, JSON_THROW_ON_ERROR);
+        return Value::array(json_decode(is_string($plan) ? $plan : json_encode($plan, JSON_THROW_ON_ERROR), true, 32, JSON_THROW_ON_ERROR));
     }
 
     private function indexExists(string $index): bool

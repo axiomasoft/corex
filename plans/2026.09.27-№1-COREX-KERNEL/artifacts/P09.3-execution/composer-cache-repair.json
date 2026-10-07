@@ -1,0 +1,8 @@
+{
+  "cache": "/home/vostrikov/.cache/composer/vcs/https---github.com-axiomasoft-azguard-private.git",
+  "quarantined": "refs/heads/main: empty file",
+  "clone_exit": 0,
+  "checkout_exit": 0,
+  "clone_diagnostic": "Cloning into '/tmp/corex-p093-cache-xgxhc0n3/clone'...\ndone.\n",
+  "source_reference": "253cbf4cce0226545cd96ca8c6bcbefe329b1403"
+}

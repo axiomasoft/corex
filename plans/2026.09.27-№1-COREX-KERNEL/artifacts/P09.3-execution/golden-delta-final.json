@@ -1,0 +1,27 @@
+{
+  "added": [
+    "CoreX\\CustomFields\\Internal\\Value",
+    "CoreX\\Intl\\Currency\\Internal\\Value",
+    "CoreX\\Intl\\Locale\\Internal\\Value",
+    "CoreX\\Intl\\Territory\\Internal\\Value",
+    "CoreX\\Media\\Internal\\Value",
+    "CoreX\\Notifications\\Delivery\\Internal\\Value",
+    "CoreX\\Notifications\\Digest\\Internal\\Value",
+    "CoreX\\Notifications\\Inbox\\Internal\\Value",
+    "CoreX\\Notifications\\Preferences\\Internal\\Value",
+    "CoreX\\Panels\\SavedViews\\Internal\\Value",
+    "CoreX\\SearchMeilisearch\\Internal\\Value",
+    "CoreX\\Search\\Internal\\Postgres\\SearchTextExpression",
+    "CoreX\\Search\\Internal\\Value",
+    "CoreX\\TasksWorkflow\\Internal\\Value",
+    "CoreX\\Tasks\\Planning\\Internal\\Value",
+    "CoreX\\Transfer\\Internal\\Value",
+    "CoreX\\Wakeup\\Internal\\Value",
+    "CoreX\\Workflow\\Internal\\Value",
+    "Flex\\Crm\\Internal\\Value"
+  ],
+  "removed": [],
+  "changed": [
+    "CoreX\\TasksWorkflow\\Internal\\MaterializationWakeupHandler"
+  ]
+}

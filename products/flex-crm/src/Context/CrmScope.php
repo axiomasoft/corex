@@ -30,10 +30,10 @@ final class CrmScope implements Scope
                 $query->where($column, $ctx->tenant->workspace->id);
 
                 if ($ctx->allowAccountLevel) {
-                    $query->orWhereNull($column);
+                    $query->getQuery()->orWhereNull($column);
                 }
             } else {
-                $query->whereNull($column);
+                $query->getQuery()->whereNull($column);
             }
         });
     }

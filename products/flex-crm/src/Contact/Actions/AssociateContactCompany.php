@@ -28,15 +28,15 @@ final readonly class AssociateContactCompany
 
         return $this->guard->connection($ctx)->transaction(function () use ($ctx, $contactId, $companyId, $label, $isPrimary): ContactCompany {
             $this->guard->current(lock: true);
-            $contact = Contact::on($ctx->connectionName)->whereKey($contactId)->lockForUpdate()->firstOrFail();
-            $company = Company::on($ctx->connectionName)->whereKey($companyId)->sharedLock()->firstOrFail();
+            $contact = Contact::on($ctx->connectionName)->whereKey($contactId)->tap(static fn ($query) => $query->getQuery()->lockForUpdate())->firstOrFail();
+            $company = Company::on($ctx->connectionName)->whereKey($companyId)->tap(static fn ($query) => $query->getQuery()->sharedLock())->firstOrFail();
 
             if ($contact->workspace_id !== $company->workspace_id) {
                 throw new AuthorizationException('CRM association requires identical workspace scopes.');
             }
             $links = ContactCompany::on($ctx->connectionName)->where('contact_id', $contactId);
 
-            if ((clone $links)->where('company_id', $companyId)->exists() || ($isPrimary && (clone $links)->where('is_primary', true)->exists())) {
+            if ((clone $links)->where('company_id', $companyId)->toBase()->exists() || ($isPrimary && (clone $links)->where('is_primary', true)->toBase()->exists())) {
                 throw ValidationException::withMessages(['association' => 'The contact/company pair or primary association already exists.']);
             }
             $link = new ContactCompany(['contact_id' => $contactId, 'company_id' => $companyId, 'label' => $label === null ? null : trim($label), 'is_primary' => $isPrimary]);

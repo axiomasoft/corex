@@ -7,6 +7,7 @@ namespace CoreX\Intl\Money\Laravel;
 use Brick\Money\Money;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Intl\Money\Internal\Value;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
@@ -38,7 +39,7 @@ final class MoneyCast implements CastsAttributes
             return null;
         }
 
-        return Money::ofMinor((int) $minor, (string) $currency);
+        return Money::ofMinor(Value::integer($minor), Value::text($currency));
     }
 
     /**

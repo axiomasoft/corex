@@ -11468,6 +11468,109 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\CustomFields\\Internal\\Value": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "array": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "field": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "row",
+                        "type": "object",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
+                "static": true
+            },
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "map": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "nullableText": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "?string",
+                "static": true
+            },
+            "strings": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\CustomFields\\Internal\\Values\\AttributeBackfill": {
         "abstract": false,
         "constants": [],
@@ -17750,6 +17853,43 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Intl\\Currency\\Internal\\Value": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Intl\\Currency\\Laravel\\ConversionPolicy": {
         "abstract": false,
         "constants": [],
@@ -19276,6 +19416,55 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Intl\\Locale\\Internal\\Value": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "array": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Intl\\Locale\\Laravel\\LocalePortBindings": {
         "abstract": false,
         "constants": [],
@@ -19294,6 +19483,43 @@
                     }
                 ],
                 "return": "void",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Intl\\Money\\Internal\\Value": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
                 "static": true
             }
         },
@@ -21234,6 +21460,103 @@
                 ],
                 "return": "CoreX\\Intl\\Territory\\Data\\ReferencePage",
                 "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Intl\\Territory\\Internal\\Value": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "array": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "map": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "maps": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "nullableText": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "?string",
+                "static": true
+            },
+            "strings": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
             }
         },
         "parent": null,
@@ -24971,6 +25294,85 @@
             }
         },
         "readonly": true
+    },
+    "CoreX\\Media\\Internal\\Value": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "field": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "row",
+                        "type": "object",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
+                "static": true
+            },
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "map": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "strings": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\Media\\Laravel\\GdThumbnailDriverFactory": {
         "abstract": false,
@@ -37867,6 +38269,67 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Notifications\\Delivery\\Internal\\Value": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "map": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "nullableText": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "?string",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Notifications\\Delivery\\Laravel\\DeliveryPortBindings": {
         "abstract": false,
         "constants": [],
@@ -38862,6 +39325,67 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Notifications\\Digest\\Internal\\Value": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "nullableText": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "?string",
+                "static": true
+            },
+            "strings": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Notifications\\Errors\\Enums\\NotificationsErrorCode": {
         "abstract": false,
         "constants": {
@@ -39835,6 +40359,73 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Notifications\\Inbox\\Internal\\Value": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "field": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "row",
+                        "type": "object",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
+                "static": true
+            },
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "nullableText": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "?string",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Notifications\\Internal\\DangerousModesCheck": {
         "abstract": false,
         "constants": [],
@@ -40385,6 +40976,43 @@
                 ],
                 "return": "CoreX\\Notifications\\Preferences\\Data\\NotificationPreference",
                 "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Notifications\\Preferences\\Internal\\Value": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
             }
         },
         "parent": null,
@@ -54331,6 +54959,85 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Panels\\SavedViews\\Internal\\Value": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "field": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "row",
+                        "type": "object",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
+                "static": true
+            },
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "map": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "nullableText": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "?string",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Panels\\SavedViews\\Internal\\ViewConfigValidator": {
         "abstract": false,
         "constants": [],
@@ -57131,6 +57838,43 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\SearchMeilisearch\\Internal\\Value": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "map": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\SearchMeilisearch\\Laravel\\MeilisearchProviderFactory": {
         "abstract": false,
         "constants": [],
@@ -58795,6 +59539,51 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Search\\Internal\\Postgres\\SearchTextExpression": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "Illuminate\\Contracts\\Database\\Query\\Expression"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "schema",
+                        "type": "CoreX\\Search\\Data\\SearchSnapshot",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "configuration",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "getValue": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "grammar",
+                        "type": "Illuminate\\Database\\Grammar",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\Search\\Internal\\Query\\PolicySearchHydrator": {
         "abstract": false,
         "constants": [],
@@ -59132,6 +59921,73 @@
                 ],
                 "return": "CoreX\\Search\\Data\\CandidatePage",
                 "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Search\\Internal\\Value": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "field": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "row",
+                        "type": "object",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
+                "static": true
+            },
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "map": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
             }
         },
         "parent": null,
@@ -61950,7 +62806,7 @@
                     {
                         "byRef": false,
                         "name": "container",
-                        "type": "Illuminate\\Contracts\\Container\\Container",
+                        "type": "Illuminate\\Container\\Container",
                         "variadic": false
                     },
                     {
@@ -62389,6 +63245,103 @@
         "parent": null,
         "properties": [],
         "readonly": true
+    },
+    "CoreX\\TasksWorkflow\\Internal\\Value": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "array": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "decimal": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            },
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "map": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "maps": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "strings": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\TasksWorkflow\\Laravel\\CompletionBindings": {
         "abstract": false,
@@ -63829,6 +64782,31 @@
             }
         },
         "parent": "Illuminate\\Support\\ServiceProvider",
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Tasks\\Planning\\Internal\\Value": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
         "properties": [],
         "readonly": false
     },
@@ -87246,6 +88224,85 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Transfer\\Internal\\Value": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "field": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "row",
+                        "type": "object",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
+                "static": true
+            },
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "map": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "nullableText": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "?string",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Transfer\\TransferServiceProvider": {
         "abstract": false,
         "constants": [],
@@ -87622,6 +88679,73 @@
                 ],
                 "return": "CoreX\\Scheduling\\Data\\SweepResult",
                 "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Wakeup\\Internal\\Value": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "field": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "row",
+                        "type": "object",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
+                "static": true
+            },
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "map": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
             }
         },
         "parent": null,
@@ -92433,6 +93557,61 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Workflow\\Internal\\Value": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "field": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "row",
+                        "type": "object",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
+                "static": true
+            },
+            "map": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Workflow\\Internal\\WorkflowDefinitionStamp": {
         "abstract": false,
         "constants": {
@@ -95645,6 +96824,121 @@
         "parent": null,
         "properties": [],
         "readonly": true
+    },
+    "Flex\\Crm\\Internal\\Value": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "boolean": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": true
+            },
+            "field": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "row",
+                        "type": "object",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
+                "static": true
+            },
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "map": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "maps": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
+            "nullableMap": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "?array",
+                "static": true
+            },
+            "nullableText": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "?string",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "Flex\\Crm\\Lead\\Actions\\ConvertLead": {
         "abstract": false,

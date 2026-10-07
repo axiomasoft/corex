@@ -6,6 +6,7 @@ namespace CoreX\Intl\Territory\Internal\Reference;
 
 use CoreX\Intl\Territory\Data\DatasetManifest;
 use CoreX\Intl\Territory\Exceptions\SchemaMismatchException;
+use CoreX\Intl\Territory\Internal\Value;
 use DateTimeImmutable;
 use JsonException;
 
@@ -50,31 +51,31 @@ final class FixtureReferenceNormalizer
                 throw new SchemaMismatchException('Reference fixture record must be an object.');
             }
 
-            $records[] = $this->normalizeRecord(record: $record, provider: $provider);
+            $records[] = $this->normalizeRecord(record: Value::map($record), provider: $provider);
         }
 
         $normalizedHash = hash('sha256', json_encode($records, JSON_THROW_ON_ERROR));
 
         $manifest = new DatasetManifest(
             schema: 'reference-data/1',
-            snapshotId: (string) ($decoded['snapshotId'] ?? $provider.'-fixture-v1'),
+            snapshotId: Value::text($decoded['snapshotId'] ?? $provider.'-fixture-v1'),
             provider: $provider,
-            sourceUri: (string) ($decoded['sourceUri'] ?? 'fixture://'.$provider),
-            retrievedAt: new DateTimeImmutable((string) ($decoded['retrievedAt'] ?? '2026-09-15T00:00:00+00:00')),
+            sourceUri: Value::text($decoded['sourceUri'] ?? 'fixture://'.$provider),
+            retrievedAt: new DateTimeImmutable(Value::text($decoded['retrievedAt'] ?? '2026-09-15T00:00:00+00:00')),
             rawHash: $rawHash,
             normalizedHash: $normalizedHash,
-            sourceVersion: (string) ($decoded['sourceVersion'] ?? '1.0.0'),
-            importerVersion: (string) ($decoded['importerVersion'] ?? 'intl/1'),
-            licenseUri: (string) ($decoded['licenseUri'] ?? 'https://corex.test/licenses/fixture'),
-            attribution: (string) ($decoded['attribution'] ?? 'CoreX test fixture'),
+            sourceVersion: Value::text($decoded['sourceVersion'] ?? '1.0.0'),
+            importerVersion: Value::text($decoded['importerVersion'] ?? 'intl/1'),
+            licenseUri: Value::text($decoded['licenseUri'] ?? 'https://corex.test/licenses/fixture'),
+            attribution: Value::text($decoded['attribution'] ?? 'CoreX test fixture'),
             coveredCountries: array_values(array_unique(array_map(
-                static fn (array $row): string => (string) ($row['countryKey']['sourceId'] ?? $row['sourceId'] ?? ''),
+                static fn (array $row): string => Value::text((is_array($row['countryKey'] ?? null) ? ($row['countryKey']['sourceId'] ?? null) : null) ?? $row['sourceId'] ?? ''),
                 array_filter($records, static fn (array $row): bool => ($row['kind'] ?? '') === 'country'),
             ))),
-            types: array_values(array_unique(array_map(static fn (array $row): string => (string) $row['kind'], $records))),
-            counts: array_count_values(array_map(static fn (array $row): string => (string) $row['kind'], $records)),
-            coverageNotes: (string) ($decoded['coverageNotes'] ?? 'Licensed minimal fixture for conformance tests.'),
-            tzdbVersion: (string) ($decoded['tzdbVersion'] ?? '2025a'),
+            types: array_values(array_unique(array_map(static fn (array $row): string => Value::text($row['kind']), $records))),
+            counts: array_count_values(array_map(static fn (array $row): string => Value::text($row['kind']), $records)),
+            coverageNotes: Value::text($decoded['coverageNotes'] ?? 'Licensed minimal fixture for conformance tests.'),
+            tzdbVersion: Value::text($decoded['tzdbVersion'] ?? '2025a'),
             status: 'published',
         );
 
@@ -92,23 +93,23 @@ final class FixtureReferenceNormalizer
      */
     private function normalizeRecord(array $record, string $provider): array
     {
-        $namespace = (string) ($record['namespace'] ?? '');
-        $sourceId = (string) ($record['sourceId'] ?? '');
-        $kind = (string) ($record['kind'] ?? '');
+        $namespace = Value::text($record['namespace'] ?? '');
+        $sourceId = Value::text($record['sourceId'] ?? '');
+        $kind = Value::text($record['kind'] ?? '');
 
         if ($namespace === '' || $sourceId === '' || $kind === '') {
             throw new SchemaMismatchException('Reference record requires namespace, sourceId, and kind.');
         }
 
         $names = is_array($record['names'] ?? null) ? $record['names'] : [];
-        $primaryName = is_string($names['en'] ?? null) ? $names['en'] : (string) reset($names);
+        $primaryName = is_string($names['en'] ?? null) ? $names['en'] : Value::text(reset($names));
 
         return [
             'namespace' => $namespace,
             'sourceId' => $sourceId,
             'kind' => $kind,
-            'parent_namespace' => is_array($record['parent'] ?? null) ? (string) ($record['parent']['namespace'] ?? '') : null,
-            'parent_source_id' => is_array($record['parent'] ?? null) ? (string) ($record['parent']['sourceId'] ?? '') : null,
+            'parent_namespace' => is_array($record['parent'] ?? null) ? Value::text($record['parent']['namespace'] ?? '') : null,
+            'parent_source_id' => is_array($record['parent'] ?? null) ? Value::text($record['parent']['sourceId'] ?? '') : null,
             'names' => $names,
             'normalized_name' => $this->normalizeName(name: $primaryName),
             'country_key' => $record['countryKey'] ?? null,

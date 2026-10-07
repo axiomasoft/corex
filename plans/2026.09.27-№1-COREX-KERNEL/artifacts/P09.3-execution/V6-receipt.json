@@ -1,0 +1,11 @@
+{
+  "id": "V6",
+  "command": [
+    "scripts/php84",
+    "composer",
+    "test:pg"
+  ],
+  "exit": 0,
+  "duration_seconds": 72.438,
+  "log_sha256": "5e08b88f97faf1149561ea083ac34770048e457bac46cca8921ab4287959abfd"
+}

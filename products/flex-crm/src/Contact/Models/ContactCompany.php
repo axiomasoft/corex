@@ -6,6 +6,7 @@ namespace Flex\Crm\Contact\Models;
 
 use Flex\Crm\Company\Models\Company;
 use Flex\Crm\Context\ContextGuard;
+use Flex\Crm\Internal\Value;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -68,7 +69,7 @@ final class ContactCompany extends Pivot
     {
         $this->assertContext();
 
-        return parent::getAttributesForInsert();
+        return Value::map(parent::getAttributesForInsert());
     }
 
     /** @return array<string, mixed> */

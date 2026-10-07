@@ -42,7 +42,7 @@ final class MeilisearchSearchProvider implements SearchProvider
         $truncated = count($hits) > $query->limit;
         $visibleHits = array_slice($hits, 0, $query->limit);
         $candidates = array_map(
-            static fn (array $hit): Candidate => new Candidate(new RecordRef(entity: $query->entity, id: self::candidateId($hit))),
+            static fn (array $hit): Candidate => new Candidate(new RecordRef(entity: $query->entity, id: self::candidateId(Value::map($hit)))),
             $visibleHits,
         );
 

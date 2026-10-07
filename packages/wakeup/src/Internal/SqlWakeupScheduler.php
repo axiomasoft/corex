@@ -78,7 +78,7 @@ final class SqlWakeupScheduler implements WakeupScheduler
                 ? $digest
                 : $legacyDigest;
 
-            return new ScheduleResult(status: hash_equals($existing->request_digest, $candidateDigest) ? 'existing' : 'conflict', requestKey: $request->requestKey);
+            return new ScheduleResult(status: hash_equals(Value::text($existing->request_digest), $candidateDigest) ? 'existing' : 'conflict', requestKey: $request->requestKey);
         }
 
         $this->notifyHints(context: $request->context, fireAt: $request->fireAt);

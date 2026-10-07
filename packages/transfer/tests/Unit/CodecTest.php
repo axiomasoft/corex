@@ -34,3 +34,11 @@ it('keeps raw NDJSON separate from the labelled display-safe CSV projection', fu
         ->and($codec->displaySafeCsv([$record], 1024)['csv'])->toContain("'=SUM(A1:A2)")
         ->and($codec->displaySafeCsv([$record], 1024)['profile'])->toBe('displaySafe/spreadsheet-formula-prefix/1');
 });
+
+it('represents a blank CSV logical record as an empty string field', function (): void {
+    expect((new CsvCodec)->decode("\nname,value\nAda,\n"))->toBe([[''], ['name', 'value'], ['Ada', '']]);
+});
+
+it('preserves numeric JSON object names in NDJSON records', function (): void {
+    expect((new NdjsonCodec)->decode('{"10":"revision","name":"Ada"}'))->toBe([[10 => 'revision', 'name' => 'Ada']]);
+});

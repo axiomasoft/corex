@@ -28,15 +28,15 @@ final class DatabaseTaskOperationReceipts implements TaskOperationReceipts
             return null;
         }
 
-        $result = json_decode((string) $row->result_ref, true, flags: JSON_THROW_ON_ERROR);
+        $result = json_decode(Value::text($row->result_ref), true, flags: JSON_THROW_ON_ERROR);
 
         if (! is_array($result)) {
             throw new UnexpectedValueException('Task operation result_ref must decode to an array.');
         }
 
         return new TaskOperationReceipt(
-            requestKey: (string) $row->request_key,
-            payloadHash: (string) $row->payload_hash,
+            requestKey: Value::text($row->request_key),
+            payloadHash: Value::text($row->payload_hash),
             resultRef: JsonDocuments::capture($result),
         );
     }

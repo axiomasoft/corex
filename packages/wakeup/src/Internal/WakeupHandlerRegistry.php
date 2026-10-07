@@ -88,7 +88,7 @@ final readonly class WakeupHandlerRegistry
                 'schema' => self::Schema,
                 'extension' => $this->stamp($definition)->toArray(),
             ],
-            'data' => $data,
+            'data' => Value::map($data),
         ];
     }
 
@@ -100,7 +100,7 @@ final readonly class WakeupHandlerRegistry
     {
         $identity = $envelope;
 
-        if (is_array($identity['_corex']['extension'] ?? null)) {
+        if (is_array($identity['_corex'] ?? null) && is_array($identity['_corex']['extension'] ?? null)) {
             unset($identity['_corex']['extension']['registryFingerprint']);
         }
 
@@ -129,12 +129,12 @@ final readonly class WakeupHandlerRegistry
                 return ['status' => 'handler-stamp-missing'];
             }
 
-            return ['status' => 'legacy-admitted', 'data' => $payload];
+            return ['status' => 'legacy-admitted', 'data' => Value::map($payload)];
         }
 
         $data = $payload['data'] ?? null;
 
-        if (($metadata['schema'] ?? null) !== self::Schema
+        if ($metadata['schema'] !== self::Schema
             || ! is_array($metadata['extension'] ?? null)
             || ! is_array($data)) {
             return ['status' => 'handler-stamp-missing'];
@@ -159,7 +159,7 @@ final readonly class WakeupHandlerRegistry
             return ['status' => 'handler-version-mismatch'];
         }
 
-        return ['status' => 'ready', 'data' => $data];
+        return ['status' => 'ready', 'data' => Value::map($data)];
     }
 
     private function stamp(WakeupHandlerDefinition $definition): ExtensionStamp

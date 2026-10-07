@@ -17,6 +17,7 @@ use CoreX\Tasks\Task\Internal\Models\Task;
 use CoreX\Tasks\Task\Internal\TaskReferenceFactory;
 use CoreX\Tasks\Task\Internal\TaskSnapshot;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
@@ -51,7 +52,7 @@ final class UpdateTask implements UpdateTaskCommand
         $connectionName = $connection->getName();
 
         /** @var Task|null $task */
-        $task = Task::on($connectionName)->lockForUpdate()->find($data->taskId);
+        $task = Task::on($connectionName)->tap(static fn ($query) => $query->getQuery()->lockForUpdate())->find($data->taskId);
 
         if ($task === null) {
             $this->invalid('task_id', 'Задача не найдена в текущем аккаунте.');
@@ -175,7 +176,7 @@ final class UpdateTask implements UpdateTaskCommand
         return $project;
     }
 
-    private function immutable(mixed $value): ?DateTimeImmutable
+    private function immutable(?DateTimeInterface $value): ?DateTimeImmutable
     {
         if ($value === null) {
             return null;

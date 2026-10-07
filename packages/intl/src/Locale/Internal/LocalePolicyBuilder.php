@@ -18,7 +18,7 @@ final class LocalePolicyBuilder
     {
         $supportedTags = array_values(array_unique(array_map(
             static fn (mixed $tag): string => is_string($tag) ? $tag : '',
-            $config['supported_tags'] ?? [],
+            Value::array($config['supported_tags'] ?? []),
         )));
 
         $supportedTags = array_values(array_filter($supportedTags, static fn (string $tag): bool => $tag !== ''));
@@ -27,13 +27,13 @@ final class LocalePolicyBuilder
             throw new InvalidArgumentException('Locale supported tags allowlist must be non-empty.');
         }
 
-        if (count($supportedTags) > (int) ($config['max_supported_tags'] ?? 100)) {
+        if (count($supportedTags) > Value::integer($config['max_supported_tags'] ?? 100)) {
             throw new InvalidArgumentException('Locale supported tags exceed the configured maximum.');
         }
 
         $validator = new Bcp47Validator(
             supportedTags: $supportedTags,
-            maxTagLength: (int) ($config['max_tag_length'] ?? 128),
+            maxTagLength: Value::integer($config['max_tag_length'] ?? 128),
         );
 
         $canonicalSupported = array_map(
@@ -41,11 +41,11 @@ final class LocalePolicyBuilder
             $supportedTags,
         );
 
-        $appTag = $validator->validate(tag: (string) ($config['app_tag'] ?? 'en'));
+        $appTag = $validator->validate(tag: Value::text($config['app_tag'] ?? 'en'));
 
         $fallbackTags = array_values(array_unique(array_map(
             static fn (mixed $tag): string => is_string($tag) ? $tag : '',
-            $config['explicit_fallback_tags'] ?? [],
+            Value::array($config['explicit_fallback_tags'] ?? []),
         )));
 
         $canonicalFallback = array_map(

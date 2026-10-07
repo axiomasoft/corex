@@ -175,3 +175,18 @@ it('publishes media as a standalone CoreX module', function (): void {
     expect($manifest->composerName)->toBe('axiomasoft/corex-media')
         ->and($manifest->tablePrefix)->toBe('med');
 });
+
+it('reports an unavailable storage stream instead of returning a non-resource from a ready media reference', function (): void {
+    allowMediaEdges();
+    $library = app(MediaLibrary::class);
+    $file = $library->store(mediaEdgeContext(), edgeUpload('unavailable-stream', 'ready bytes'));
+    $disk = Mockery::mock(Filesystem::class);
+    $disk->shouldReceive('readStream')->once()->andReturnNull();
+    $storage = Mockery::mock(TenantStorage::class);
+    $storage->shouldReceive('disk')->andReturn($disk);
+    app()->instance(TenantStorage::class, $storage);
+    app()->forgetScopedInstances();
+    $read = app(MediaLibrary::class)->read(mediaEdgeContext(), $file->id);
+
+    expect(fn (): mixed => ($read->openStream)())->toThrow(MediaOperationConflict::class, 'Media stream is unavailable.');
+});

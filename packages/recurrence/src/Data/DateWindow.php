@@ -14,7 +14,7 @@ final readonly class DateWindow
         public string $start,
         public string $end,
     ) {
-        if (! preg_match('/^\d{4}-\d{2}-\d{2}$/', $start) || ! preg_match('/^\d{4}-\d{2}-\d{2}$/', $end)) {
+        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $start) !== 1 || preg_match('/^\d{4}-\d{2}-\d{2}$/', $end) !== 1) {
             throw new InvalidArgumentException('A date window must use calendar dates.');
         }
 

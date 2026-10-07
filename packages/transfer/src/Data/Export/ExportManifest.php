@@ -31,7 +31,7 @@ final readonly class ExportManifest
         }
 
         foreach ([$schemaHash, $restoreEpoch, $partsHash] as $hash) {
-            if (! preg_match('/^[a-f0-9]{64}$/', $hash)) {
+            if (preg_match('/^[a-f0-9]{64}$/', $hash) !== 1) {
                 throw new InvalidArgumentException('Export manifest hashes must be lowercase SHA-256 values.');
             }
         }

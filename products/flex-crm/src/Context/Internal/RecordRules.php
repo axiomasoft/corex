@@ -10,6 +10,7 @@ use Flex\Crm\Contact\Models\Contact;
 use Flex\Crm\Context\Channels;
 use Flex\Crm\Context\ContextGuard;
 use Flex\Crm\Deal\Models\Deal;
+use Flex\Crm\Internal\Value;
 use Flex\Crm\Lead\Models\Lead;
 use Flex\Crm\Support\CrmOptions;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -45,12 +46,12 @@ final class RecordRules
         $owner = $record->getAttribute('owner_id');
 
         if ($owner !== null) {
-            $guard->user(ctx: $ctx, id: $owner, lock: $record->getConnection()->transactionLevel() > 0);
+            $guard->user(ctx: $ctx, id: Value::text($owner), lock: $record->getConnection()->transactionLevel() > 0);
         }
         $source = $record->getAttribute('source_id');
 
         if ($source !== null) {
-            $guard->id($source);
+            $guard->id(Value::text($source));
             $query = $record->getConnection()->table('crm_sources')->where('id', $source)->where('is_active', true);
 
             if ($record->getConnection()->transactionLevel() > 0) {
@@ -103,11 +104,15 @@ final class RecordRules
             $record instanceof Company ? $record->legal_name : $record->job_title,
             $record instanceof Company ? $record->inn : null,
             ...array_column($record->phones, 'norm'), ...array_column($record->emails, 'norm'),
-        ]));
+        ], static fn (?string $value): bool => $value !== null && $value !== '' && $value !== '0'));
 
         if ($record->getConnection()->getDriverName() === 'pgsql') {
             $row = $record->getConnection()->selectOne('SELECT to_tsvector(?::regconfig, ?)::text AS value', [$this->options->searchLanguage, $search]);
-            $record->setAttribute('search', $row->value);
+
+            if (! is_object($row)) {
+                throw new AuthorizationException('CRM search normalization returned no row.');
+            }
+            $record->setAttribute('search', Value::field($row, 'value'));
         } else {
             $record->setAttribute('search', $search);
         }

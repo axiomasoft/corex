@@ -9,6 +9,7 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use Flex\Crm\Context\Contracts\CrmExecutionContext;
 use Flex\Crm\Context\Data\ExecutionContext;
+use Flex\Crm\Internal\Value;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
@@ -35,12 +36,12 @@ final readonly class ContextGuard
         $db = $this->connection($ctx);
         $expected = $this->connections->resolve($tenant->account);
         foreach (['driver', 'host', 'port', 'database', 'username'] as $key) {
-            if ((string) $db->getConfig($key) !== (string) $expected->{$key}) {
+            if (Value::text($db->getConfig($key)) !== Value::text($expected->{$key})) {
                 throw new AuthorizationException('CRM connection does not belong to the current account.');
             }
         }
 
-        if ($db->getDriverName() === 'pgsql' && $db->selectOne('SELECT current_database() AS name')->name !== $expected->database) {
+        if ($db->getDriverName() === 'pgsql' && (($active = $db->selectOne('SELECT current_database() AS name')) === null || ! is_object($active) || Value::field($active, 'name') !== $expected->database)) {
             throw new AuthorizationException('CRM active PDO database differs from the account connection.');
         }
 

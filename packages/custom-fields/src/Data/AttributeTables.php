@@ -6,6 +6,7 @@ namespace CoreX\CustomFields\Data;
 
 use CoreX\Attributes\Api;
 use CoreX\CustomFields\Exceptions\InvalidAttributeTables;
+use CoreX\CustomFields\Internal\Value;
 
 #[Api(since: '1.0')]
 final readonly class AttributeTables
@@ -23,8 +24,8 @@ final readonly class AttributeTables
         public string $backfills = 'sys_attribute_backfills',
     ) {
         foreach (get_object_vars($this) as $property => $table) {
-            if (preg_match(self::IDENTIFIER, $table) !== 1) {
-                throw InvalidAttributeTables::invalidIdentifier(property: $property, table: $table);
+            if (preg_match(self::IDENTIFIER, Value::text($table)) !== 1) {
+                throw InvalidAttributeTables::invalidIdentifier(property: $property, table: Value::text($table));
             }
         }
 

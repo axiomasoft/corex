@@ -9,6 +9,7 @@ use CoreX\Intl\Currency\Data\RateLookup;
 use CoreX\Intl\Currency\Data\RateQuery;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
+use Illuminate\Database\Query\Builder;
 use Override;
 
 final class SqlRateProvider implements RateProvider
@@ -33,7 +34,7 @@ final class SqlRateProvider implements RateProvider
             ->where('valid_on', '<=', $query->onDate)
             ->when(
                 $query->publicationCutoff !== null,
-                fn ($builder) => $builder->where('observed_at', '<=', $query->publicationCutoff->format('Y-m-d H:i:s')),
+                fn (Builder $builder) => $builder->where('observed_at', '<=', $query->publicationCutoff?->format('Y-m-d H:i:s')),
             )
             ->orderByDesc('valid_on')
             ->orderByDesc('observed_at')

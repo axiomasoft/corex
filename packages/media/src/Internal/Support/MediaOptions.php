@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Media\Internal\Support;
 
 use CoreX\Config\Laravel\ConfigurationValidator;
+use CoreX\Media\Internal\Value;
 
 /** @internal Package composition type. */
 final readonly class MediaOptions
@@ -51,7 +52,7 @@ final readonly class MediaOptions
             purposes: $purposes,
             allowedMimeTypes: $allowedMimeTypes,
             conversionDriverTag: $conversionDriverTag,
-            conversion: $conversion,
+            conversion: Value::map($conversion),
         );
     }
 

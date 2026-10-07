@@ -6,6 +6,7 @@ namespace CoreX\Intl\Territory\Internal\Reference;
 
 use CoreX\Intl\Territory\Data\GeographyQuery;
 use CoreX\Intl\Territory\Data\ReferenceCursor;
+use CoreX\Intl\Territory\Internal\Value;
 use InvalidArgumentException;
 use JsonException;
 use RuntimeException;
@@ -19,6 +20,7 @@ final readonly class ReferenceCursorCodec
         }
     }
 
+    /** @param array<string, string> $position */
     public function encode(GeographyQuery $query, string $snapshotId, string $queryHash, array $position): ReferenceCursor
     {
         $proof = $this->proof(
@@ -31,9 +33,9 @@ final readonly class ReferenceCursorCodec
             schema: 'reference-cursor/1',
             snapshotId: $snapshotId,
             queryHash: $queryHash,
-            lastNormalizedName: (string) ($position['normalizedName'] ?? ''),
-            lastNamespace: (string) ($position['namespace'] ?? ''),
-            lastSourceId: (string) ($position['sourceId'] ?? ''),
+            lastNormalizedName: Value::text($position['normalizedName'] ?? ''),
+            lastNamespace: Value::text($position['namespace'] ?? ''),
+            lastSourceId: Value::text($position['sourceId'] ?? ''),
             proof: $proof,
         );
     }

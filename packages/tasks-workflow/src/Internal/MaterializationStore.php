@@ -151,7 +151,7 @@ final class MaterializationStore
                 'complete_through' => $completeThrough,
                 'cursor' => $cursor === null ? null : json_encode($cursor, JSON_THROW_ON_ERROR),
                 'restore_epoch' => $restoreEpoch,
-                'generation' => \bcadd($generation, '1', 0),
+                'generation' => \bcadd(Value::decimal($generation), '1', 0),
             ]);
 
         if ($updated !== 1) {
@@ -164,7 +164,7 @@ final class MaterializationStore
     {
         $taskRefs = array_map(
             SeriesDefinitionCodec::taskReferenceFromStored(...),
-            $stored['taskRefs'] ?? [],
+            Value::maps($stored['taskRefs'] ?? []),
         );
 
         $cursor = null;
@@ -182,23 +182,23 @@ final class MaterializationStore
             }
             /** @var array{scanned?: int, emitted?: int} $resume */
             $cursor = new ExpansionCursor(
-                setHash: (string) $stored['cursor']['setHash'],
-                windowHash: (string) $stored['cursor']['windowHash'],
-                tzdbVersion: (string) $stored['cursor']['tzdbVersion'],
-                libraryVersion: (string) $stored['cursor']['libraryVersion'],
+                setHash: Value::text($stored['cursor']['setHash']),
+                windowHash: Value::text($stored['cursor']['windowHash']),
+                tzdbVersion: Value::text($stored['cursor']['tzdbVersion']),
+                libraryVersion: Value::text($stored['cursor']['libraryVersion']),
                 resumePosition: $resume,
             );
         }
 
         return new MaterializationReceipt(
-            version: (string) $stored['version'],
+            version: Value::text($stored['version']),
             taskRefs: $taskRefs,
-            pageDigest: (string) $stored['pageDigest'],
-            committedPrefix: isset($stored['committedPrefix']) ? (string) $stored['committedPrefix'] : null,
+            pageDigest: Value::text($stored['pageDigest']),
+            committedPrefix: isset($stored['committedPrefix']) ? Value::text($stored['committedPrefix']) : null,
             cursor: $cursor,
-            created: (int) $stored['created'],
-            noop: (int) $stored['noop'],
-            conflict: (int) $stored['conflict'],
+            created: Value::integer($stored['created']),
+            noop: Value::integer($stored['noop']),
+            conflict: Value::integer($stored['conflict']),
             retired: (bool) $stored['retired'],
             unknown: (bool) $stored['unknown'],
         );

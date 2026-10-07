@@ -20,7 +20,7 @@ final readonly class RecurrenceWindow
         }
 
         if ($valueType === 'DATE') {
-            if (! preg_match('/^\d{4}-\d{2}-\d{2}$/', $start) || ! preg_match('/^\d{4}-\d{2}-\d{2}$/', $end)) {
+            if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $start) !== 1 || preg_match('/^\d{4}-\d{2}-\d{2}$/', $end) !== 1) {
                 throw new InvalidArgumentException('DATE windows require calendar dates.');
             }
         } else {

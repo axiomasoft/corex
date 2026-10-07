@@ -22,57 +22,57 @@ final class SeriesDefinitionCodec
     public static function decode(string $definitionJson, string $templateJson, string $actorJson): array
     {
         /** @var array<string, mixed> $definition */
-        $definition = json_decode($definitionJson, true, flags: JSON_THROW_ON_ERROR);
+        $definition = Value::map(json_decode($definitionJson, true, flags: JSON_THROW_ON_ERROR));
         /** @var array<string, mixed> $template */
-        $template = json_decode($templateJson, true, flags: JSON_THROW_ON_ERROR);
+        $template = Value::map(json_decode($templateJson, true, flags: JSON_THROW_ON_ERROR));
         /** @var array<string, mixed> $actor */
-        $actor = json_decode($actorJson, true, flags: JSON_THROW_ON_ERROR);
+        $actor = Value::map(json_decode($actorJson, true, flags: JSON_THROW_ON_ERROR));
 
-        $start = $definition['start'];
+        $start = Value::map($definition['start']);
         $set = new RecurrenceSet(
-            schemaVersion: (string) $definition['schemaVersion'],
-            seriesId: (string) $definition['seriesId'],
-            immutableRevision: (string) $definition['immutableRevision'],
+            schemaVersion: Value::text($definition['schemaVersion']),
+            seriesId: Value::text($definition['seriesId']),
+            immutableRevision: Value::text($definition['immutableRevision']),
             start: new DateStart(
-                valueType: (string) $start['valueType'],
-                nominalStart: (string) $start['nominalStart'],
-                tzid: isset($start['tzid']) ? (string) $start['tzid'] : null,
+                valueType: Value::text($start['valueType']),
+                nominalStart: Value::text($start['nominalStart']),
+                tzid: isset($start['tzid']) ? Value::text($start['tzid']) : null,
             ),
-            rrule: isset($definition['rrule']) ? (string) $definition['rrule'] : null,
-            rdates: array_map(strval(...), $definition['rdates'] ?? []),
-            exdates: array_map(strval(...), $definition['exdates'] ?? []),
+            rrule: isset($definition['rrule']) ? Value::text($definition['rrule']) : null,
+            rdates: Value::strings($definition['rdates'] ?? []),
+            exdates: Value::strings($definition['exdates'] ?? []),
             overrides: array_map(
                 static fn (array $override): RecurrenceOverride => new RecurrenceOverride(
-                    originalRecurrenceId: (string) $override['originalRecurrenceId'],
-                    effectiveStart: isset($override['effectiveStart']) ? (string) $override['effectiveStart'] : null,
+                    originalRecurrenceId: Value::text($override['originalRecurrenceId']),
+                    effectiveStart: isset($override['effectiveStart']) ? Value::text($override['effectiveStart']) : null,
                     cancelled: (bool) ($override['cancelled'] ?? false),
                 ),
-                $definition['overrides'] ?? [],
+                Value::maps($definition['overrides'] ?? []),
             ),
-            tzdbVersion: (string) $definition['tzdbVersion'],
-            definitionHash: (string) $definition['definitionHash'],
+            tzdbVersion: Value::text($definition['tzdbVersion']),
+            definitionHash: Value::text($definition['definitionHash']),
         );
 
         $actorData = new ActorData(
-            type: ActorType::from((string) $actor['type']),
-            id: isset($actor['id']) ? (string) $actor['id'] : null,
+            type: ActorType::from(Value::text($actor['type'])),
+            id: isset($actor['id']) ? Value::text($actor['id']) : null,
             context: JsonDocuments::capture(is_array($actor['context'] ?? null) ? $actor['context'] : []),
         );
         $draft = new TaskDraft(
-            workspaceId: (string) $template['workspaceId'],
-            title: (string) $template['title'],
+            workspaceId: Value::text($template['workspaceId']),
+            title: Value::text($template['title']),
             actor: $actorData,
-            description: isset($template['description']) ? (string) $template['description'] : null,
-            priority: isset($template['priority']) ? TaskPriority::from((string) $template['priority']) : TaskPriority::Normal,
-            projectId: isset($template['projectId']) ? (string) $template['projectId'] : null,
-            sprintId: isset($template['sprintId']) ? (string) $template['sprintId'] : null,
-            stageId: isset($template['stageId']) ? (string) $template['stageId'] : null,
-            parentId: isset($template['parentId']) ? (string) $template['parentId'] : null,
-            authorId: isset($template['authorId']) ? (string) $template['authorId'] : null,
-            assigneeId: isset($template['assigneeId']) ? (string) $template['assigneeId'] : null,
-            startsAt: isset($template['startsAt']) ? new DateTimeImmutable((string) $template['startsAt']) : null,
-            dueAt: isset($template['dueAt']) ? new DateTimeImmutable((string) $template['dueAt']) : null,
-            estimateMinutes: isset($template['estimateMinutes']) ? (int) $template['estimateMinutes'] : null,
+            description: isset($template['description']) ? Value::text($template['description']) : null,
+            priority: isset($template['priority']) ? TaskPriority::from(Value::text($template['priority'])) : TaskPriority::Normal,
+            projectId: isset($template['projectId']) ? Value::text($template['projectId']) : null,
+            sprintId: isset($template['sprintId']) ? Value::text($template['sprintId']) : null,
+            stageId: isset($template['stageId']) ? Value::text($template['stageId']) : null,
+            parentId: isset($template['parentId']) ? Value::text($template['parentId']) : null,
+            authorId: isset($template['authorId']) ? Value::text($template['authorId']) : null,
+            assigneeId: isset($template['assigneeId']) ? Value::text($template['assigneeId']) : null,
+            startsAt: isset($template['startsAt']) ? new DateTimeImmutable(Value::text($template['startsAt'])) : null,
+            dueAt: isset($template['dueAt']) ? new DateTimeImmutable(Value::text($template['dueAt'])) : null,
+            estimateMinutes: isset($template['estimateMinutes']) ? Value::integer($template['estimateMinutes']) : null,
             targets: [],
         );
 
@@ -133,9 +133,9 @@ final class SeriesDefinitionCodec
         }
 
         return new TaskReference(
-            id: (string) $stored['id'],
-            type: (string) $stored['type'],
-            display: (string) $stored['display'],
+            id: Value::text($stored['id']),
+            type: Value::text($stored['type']),
+            display: Value::text($stored['display']),
         );
     }
 }
