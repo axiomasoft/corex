@@ -1,0 +1,52 @@
+{
+  "item": "P09.13",
+  "at": "2026-10-07T16:35:58.629470+00:00",
+  "executor": "codex/gpt-6.1-sol/xhigh",
+  "scope": "ordinary Transfer regression tests only; owner scoped/no long runs; D133 no mutation work",
+  "source_sha_before": "1eb2a3d774a18460ff75a1c76eb1ed52cb8afb26",
+  "changed_test_hashes": {
+    "packages/transfer/tests/Pg/ReleaseResumeTest.php": "ab0d303c7f1c0a214eaa2865a3c3976c31c25e1a8dbcd128a8ab9bd3f8d93422",
+    "packages/transfer/tests/Pg/SqlTransferExecutorTest.php": "f6c21172cc587b69495b872681048aa813a2bcd412c938a8dfbbeb0bd734de65"
+  },
+  "production_source_changed": false,
+  "test_database": "corex_p0913_transfer_test",
+  "checks": {
+    "V2": {
+      "command": "scripts/php84 vendor/bin/pint --test packages/transfer/tests/Pg/ReleaseResumeTest.php packages/transfer/tests/Pg/SqlTransferExecutorTest.php",
+      "exit": 0
+    },
+    "V3": {
+      "command": "scripts/php84 vendor/bin/phpstan analyse -c 'plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.13-execution/phpstan-scoped.neon' --memory-limit=1G",
+      "exit": 0
+    },
+    "V6": {
+      "command": "PGSQL_DATABASE=corex_p0913_transfer_test PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/transfer/tests --configuration=packages/transfer/phpunit.xml --bootstrap=vendor/autoload.php packages/transfer/tests/Pg/ReleaseResumeTest.php --group=pg --filter='resumes the persisted checkpoint in a new executor without replaying committed rows' --log-junit=build/quality/P09.13/transfer-resume.xml",
+      "exit": 0,
+      "junit": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.13-execution/transfer-resume.xml",
+      "test": "it resumes the persisted checkpoint in a new executor without replaying committed rows",
+      "assertions": 35,
+      "duration_seconds": 0.19341
+    },
+    "V7": {
+      "command": "PGSQL_DATABASE=corex_p0913_transfer_test PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/transfer/tests --configuration=packages/transfer/phpunit.xml --bootstrap=vendor/autoload.php packages/transfer/tests/Pg/SqlTransferExecutorTest.php --group=pg --filter='deduplicates an identical external record across independent jobs before target apply' --log-junit=build/quality/P09.13/transfer-idempotency.xml",
+      "exit": 0,
+      "junit": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.13-execution/transfer-idempotency.xml",
+      "test": "it deduplicates an identical external record across independent jobs before target apply",
+      "assertions": 2,
+      "duration_seconds": 0.224803
+    },
+    "V8": {
+      "command": "PGSQL_DATABASE=corex_p0913_transfer_test PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/transfer/tests --configuration=packages/transfer/phpunit.xml --bootstrap=vendor/autoload.php packages/transfer/tests/Pg/SqlTransferExecutorTest.php --group=pg --filter='rolls back only the failed row savepoint and continues the batch' --log-junit=build/quality/P09.13/transfer-partial-failure.xml",
+      "exit": 0,
+      "junit": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.13-execution/transfer-partial-failure.xml",
+      "test": "it rolls back only the failed row savepoint and continues the batch",
+      "assertions": 4,
+      "duration_seconds": 0.164381
+    },
+    "V9": {
+      "command": "python3 -c 'import xml.etree.ElementTree as E; rows=[(\"build/quality/P09.13/transfer-resume.xml\",\"resumes the persisted checkpoint in a new executor without replaying committed rows\"),(\"build/quality/P09.13/transfer-idempotency.xml\",\"deduplicates an identical external record across independent jobs before target apply\"),(\"build/quality/P09.13/transfer-partial-failure.xml\",\"rolls back only the failed row savepoint and continues the batch\")]; docs=[(E.parse(p).getroot(),n)for p,n in rows]; assert all(len(r.findall(\".//testcase\"))==1 and n in r.find(\".//testcase\").get(\"name\",\"\") and int(r.find(\".//testcase\").get(\"assertions\",\"0\"))>0 and not any(r.findall(\".//\"+tag)for tag in [\"skipped\",\"failure\",\"error\"]) for r,n in docs), \"missing/skipped/wrong Transfer DoD case\"; print(\"Transfer DoD cases OK\")'",
+      "exit": 0
+    }
+  },
+  "limitations": "No broad suite, production-level full PHPStan or mutation measurement; V3 is adopted scoped test-lint rules. Prior max analysis attempt on Pest test idioms retained only as diagnostic."
+}

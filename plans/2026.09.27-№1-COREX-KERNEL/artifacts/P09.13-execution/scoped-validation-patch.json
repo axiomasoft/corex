@@ -1,0 +1,41 @@
+{
+  "validation": [
+    {
+      "id": "V2",
+      "cmd": "scripts/php84 vendor/bin/pint --test packages/transfer/tests/Pg/ReleaseResumeTest.php packages/transfer/tests/Pg/SqlTransferExecutorTest.php",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "scripts/php84 vendor/bin/phpstan analyse -c 'plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.13-execution/phpstan-scoped.neon' --memory-limit=1G",
+      "expect": "exit0 adopted test-lint AST rules on the single new test, without unrelated root-suite ignore exceptions; production types unchanged",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "PGSQL_DATABASE=corex_p0913_transfer_test PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/transfer/tests --configuration=packages/transfer/phpunit.xml --bootstrap=vendor/autoload.php packages/transfer/tests/Pg/ReleaseResumeTest.php --group=pg --filter='resumes the persisted checkpoint in a new executor without replaying committed rows' --log-junit=build/quality/P09.13/transfer-resume.xml",
+      "expect": "exit0 exactly named non-skipped behavioral case against preflighted isolated *_test DB; raw JUnit retained",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "cmd": "PGSQL_DATABASE=corex_p0913_transfer_test PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/transfer/tests --configuration=packages/transfer/phpunit.xml --bootstrap=vendor/autoload.php packages/transfer/tests/Pg/SqlTransferExecutorTest.php --group=pg --filter='deduplicates an identical external record across independent jobs before target apply' --log-junit=build/quality/P09.13/transfer-idempotency.xml",
+      "expect": "exit0 exactly named non-skipped behavioral case against preflighted isolated *_test DB; raw JUnit retained",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "cmd": "PGSQL_DATABASE=corex_p0913_transfer_test PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/transfer/tests --configuration=packages/transfer/phpunit.xml --bootstrap=vendor/autoload.php packages/transfer/tests/Pg/SqlTransferExecutorTest.php --group=pg --filter='rolls back only the failed row savepoint and continues the batch' --log-junit=build/quality/P09.13/transfer-partial-failure.xml",
+      "expect": "exit0 exactly named non-skipped behavioral case against preflighted isolated *_test DB; raw JUnit retained",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "cmd": "python3 -c 'import xml.etree.ElementTree as E; rows=[(\"build/quality/P09.13/transfer-resume.xml\",\"resumes the persisted checkpoint in a new executor without replaying committed rows\"),(\"build/quality/P09.13/transfer-idempotency.xml\",\"deduplicates an identical external record across independent jobs before target apply\"),(\"build/quality/P09.13/transfer-partial-failure.xml\",\"rolls back only the failed row savepoint and continues the batch\")]; docs=[(E.parse(p).getroot(),n)for p,n in rows]; assert all(len(r.findall(\".//testcase\"))==1 and n in r.find(\".//testcase\").get(\"name\",\"\") and int(r.find(\".//testcase\").get(\"assertions\",\"0\"))>0 and not any(r.findall(\".//\"+tag)for tag in [\"skipped\",\"failure\",\"error\"]) for r,n in docs), \"missing/skipped/wrong Transfer DoD case\"; print(\"Transfer DoD cases OK\")'",
+      "expect": "exit0 all3 exact JUnit testcases/assertions; missing/empty/wrong/skipped case RED",
+      "kind": "acceptance"
+    }
+  ],
+  "guidance": "Сначала применить scope D125 и knowledge/research-P09-design#repository-only. Execute only after admission, from required section. Produce real fresh raw outputs; new commands below are owned deliverables, not present-at-design assumptions. D133 has priority over all old mutation-related text and the previous cheaper-model prompt: no further mutation work during PLAN3; only independent ordinary scope remains. Owner steering in this execution: «никаких длинных прогонов, никаких мутаторов, ты делай только то, что по задаче качественно». Run only the three named short Transfer cases and scoped file Pint/PHPStan; no broad suites. Use dedicated corex_p0913_transfer_test."
+}

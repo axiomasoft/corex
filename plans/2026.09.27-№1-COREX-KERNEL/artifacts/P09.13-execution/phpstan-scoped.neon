@@ -1,0 +1,10 @@
+includes:
+    - /home/vostrikov/projects/packages/corex/packages/core/extension.neon
+    - /home/vostrikov/projects/packages/corex/vendor/pestphp/pest/extension.neon
+
+parameters:
+    level: 0
+    tmpDir: /home/vostrikov/projects/packages/corex/build/phpstan-p0913-tests
+    paths:
+        - /home/vostrikov/projects/packages/corex/packages/transfer/tests/Pg/ReleaseResumeTest.php
+        - /home/vostrikov/projects/packages/corex/packages/transfer/tests/Pg/SqlTransferExecutorTest.php

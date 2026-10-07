@@ -2,7 +2,7 @@
   "$schema": "urn:swissknifeman:task:plan:item:v1",
   "id": "P09.13",
   "title": "Регрессии Transfer: resume/idempotency/partial-failure; MSI отложен по D133",
-  "status": "todo",
+  "status": "done",
   "summary": "Обычные поведенческие PG-регрессии Transfer без мутационных прогонов.",
   "why": "Bounded owner of verified P09 review defect; explicit acceptance and dependencies prevent hidden work.",
   "scope": {
@@ -82,35 +82,35 @@
     "G5 behavioral proof is three explicit cases. Reuse existing dedup (assert target applied exactly1, refs1) and failed-row-savepoint (one invalid + one applied row, successful ref1); they already prove idempotency/partial failure despite lacking those exact words in titles. Add only missing named multi-step restart/resume regression. No duplicated cosmetic idempotency/partial-failure tests needed.",
     "D125: выполнять только repository scope; требования к rc/candidate/SBOM/27-row release DoD и публикации пропущены, не переносить их в этот item."
   ],
-  "guidance": "Сначала применить scope D125 и knowledge/research-P09-design#repository-only. Execute only after admission, from required section. Produce real fresh raw outputs; new commands below are owned deliverables, not present-at-design assumptions. D133 has priority over all old mutation-related text and the previous cheaper-model prompt: no further mutation work during PLAN3; only independent ordinary scope remains.",
+  "guidance": "Сначала применить scope D125 и knowledge/research-P09-design#repository-only. Execute only after admission, from required section. Produce real fresh raw outputs; new commands below are owned deliverables, not present-at-design assumptions. D133 has priority over all old mutation-related text and the previous cheaper-model prompt: no further mutation work during PLAN3; only independent ordinary scope remains. Owner steering in this execution: «никаких длинных прогонов, никаких мутаторов, ты делай только то, что по задаче качественно». Run only the three named short Transfer cases and scoped file Pint/PHPStan; no broad suites. Use dedicated corex_p0913_transfer_test.",
   "validation": [
     {
       "id": "V2",
-      "cmd": "scripts/php84 composer lint:check",
+      "cmd": "scripts/php84 vendor/bin/pint --test packages/transfer/tests/Pg/ReleaseResumeTest.php packages/transfer/tests/Pg/SqlTransferExecutorTest.php",
       "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V3",
-      "cmd": "scripts/php84 composer analyse",
-      "expect": "exit 0",
+      "cmd": "scripts/php84 vendor/bin/phpstan analyse -c 'plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.13-execution/phpstan-scoped.neon' --memory-limit=1G",
+      "expect": "exit0 adopted test-lint AST rules on the single new test, without unrelated root-suite ignore exceptions; production types unchanged",
       "kind": "acceptance"
     },
     {
       "id": "V6",
-      "cmd": "PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/transfer/tests --configuration=packages/transfer/phpunit.xml --bootstrap=vendor/autoload.php packages/transfer/tests/Pg/ReleaseResumeTest.php --group=pg --filter='resumes the persisted checkpoint in a new executor without replaying committed rows' --log-junit=build/quality/P09.13/transfer-resume.xml",
+      "cmd": "PGSQL_DATABASE=corex_p0913_transfer_test PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/transfer/tests --configuration=packages/transfer/phpunit.xml --bootstrap=vendor/autoload.php packages/transfer/tests/Pg/ReleaseResumeTest.php --group=pg --filter='resumes the persisted checkpoint in a new executor without replaying committed rows' --log-junit=build/quality/P09.13/transfer-resume.xml",
       "expect": "exit0 exactly named non-skipped behavioral case against preflighted isolated *_test DB; raw JUnit retained",
       "kind": "acceptance"
     },
     {
       "id": "V7",
-      "cmd": "PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/transfer/tests --configuration=packages/transfer/phpunit.xml --bootstrap=vendor/autoload.php packages/transfer/tests/Pg/SqlTransferExecutorTest.php --group=pg --filter='deduplicates an identical external record across independent jobs before target apply' --log-junit=build/quality/P09.13/transfer-idempotency.xml",
+      "cmd": "PGSQL_DATABASE=corex_p0913_transfer_test PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/transfer/tests --configuration=packages/transfer/phpunit.xml --bootstrap=vendor/autoload.php packages/transfer/tests/Pg/SqlTransferExecutorTest.php --group=pg --filter='deduplicates an identical external record across independent jobs before target apply' --log-junit=build/quality/P09.13/transfer-idempotency.xml",
       "expect": "exit0 exactly named non-skipped behavioral case against preflighted isolated *_test DB; raw JUnit retained",
       "kind": "acceptance"
     },
     {
       "id": "V8",
-      "cmd": "PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/transfer/tests --configuration=packages/transfer/phpunit.xml --bootstrap=vendor/autoload.php packages/transfer/tests/Pg/SqlTransferExecutorTest.php --group=pg --filter='rolls back only the failed row savepoint and continues the batch' --log-junit=build/quality/P09.13/transfer-partial-failure.xml",
+      "cmd": "PGSQL_DATABASE=corex_p0913_transfer_test PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/transfer/tests --configuration=packages/transfer/phpunit.xml --bootstrap=vendor/autoload.php packages/transfer/tests/Pg/SqlTransferExecutorTest.php --group=pg --filter='rolls back only the failed row savepoint and continues the batch' --log-junit=build/quality/P09.13/transfer-partial-failure.xml",
       "expect": "exit0 exactly named non-skipped behavioral case against preflighted isolated *_test DB; raw JUnit retained",
       "kind": "acceptance"
     },
@@ -140,6 +140,48 @@
     "notes": "RAG:— current source facts",
     "captures": []
   },
-  "result": null,
-  "updated_at": "2026-10-07T16:04:59Z"
+  "result": {
+    "started_at": "2026-10-07T16:25:05Z",
+    "finished_at": "2026-10-07T16:35:58Z",
+    "executor": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "session": "01a1166d-625e-7e72-8dac-6b75526f9292"
+    },
+    "notes": "Added real PostgreSQL two-step restart/resume regression: a new executor/source/sink reads the persisted ordinal/offset, completes checkpoint2 with both distinct row/ref/target writes, preserves accumulated stats, and refuses stale token or source drift before writes. Existing dedup and savepoint tests retained; removed only duplicate inherited PgTestCase binding rejected by Pest5. Three exact cases: 35+2+4 assertions, each <0.3s. Scoped Pint and adopted test-lint PHPStan rules GREEN. Owner requested no broad/long runs; none performed. D133 mutation cancellation honored. Evidence artifacts/P09.13-execution/checks.json and copied raw JUnit. Production/API/schema unchanged.",
+    "checks": [
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-10-07T16:35:58Z"
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-10-07T16:35:58Z"
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-10-07T16:35:58Z"
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-10-07T16:35:58Z"
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-10-07T16:35:58Z"
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-10-07T16:35:58Z"
+      }
+    ]
+  },
+  "updated_at": "2026-10-07T16:35:58Z"
 }

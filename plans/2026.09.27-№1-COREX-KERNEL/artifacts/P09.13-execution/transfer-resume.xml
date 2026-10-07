@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="Packages\transfer\tests\Pg\ReleaseResumeTest" file="packages/transfer/tests/Pg/ReleaseResumeTest.php" tests="1" assertions="35" errors="0" failures="0" skipped="0" time="0.193410">
+    <testcase name="it resumes the persisted checkpoint in a new executor without replaying committed rows" file="packages/transfer/tests/Pg/ReleaseResumeTest.php::it resumes the persisted checkpoint in a new executor without replaying committed rows" class="Packages\transfer\tests\Pg\ReleaseResumeTest" classname="Packages.transfer.tests.Pg.ReleaseResumeTest" assertions="35" time="0.193410"/>
+  </testsuite>
+</testsuites>

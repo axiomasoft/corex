@@ -27,10 +27,7 @@ use CoreX\Transfer\Data\TransferLimits;
 use CoreX\Transfer\Data\TransferRef;
 use CoreX\Transfer\Internal\Transfer\SqlTransferExecutor;
 use CoreX\Transfer\Internal\Transfer\TransferUnavailable;
-use CoreX\Transfer\Tests\PgTestCase;
 use Illuminate\Support\Facades\DB;
-
-uses(PgTestCase::class)->group('pg');
 
 it('commits local result and fenced checkpoint in one PostgreSQL transaction', function (): void {
     $hash = str_repeat('a', 64);
