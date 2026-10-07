@@ -5,15 +5,20 @@ declare(strict_types=1);
 use AzGuard\Contracts\PermissionLayer;
 use AzGuard\Contracts\PermissionResolverInterface;
 use AzGuard\Models\RolePermission;
+use AzGuard\Registry\Contracts\PermissionDefinition;
 use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\RoleMatrixCompiler;
 use CoreX\Access\Enums\PrincipalType;
+use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Matrix\Contracts\EntityActivity;
 use CoreX\Access\Matrix\Contracts\ScopeMapVersions;
 use CoreX\Access\Matrix\Events\RoleMatrixCompiled;
 use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
 use CoreX\AccessAzguard\Internal\AutMatrixGrantSource;
 use CoreX\AccessAzguard\Internal\AzGuardRoleModel;
+use CoreX\AccessAzguard\Internal\MatrixPermissionCatalogBuilder;
+use CoreX\AccessAzguard\Internal\RoleLinkStore;
+use CoreX\AccessAzguard\Internal\SyncAzGuardRolePermissions;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
@@ -22,13 +27,18 @@ use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Context\Internal\NullTenancyManager;
 use CoreX\Context\Internal\SingleAccountResolver;
 use CoreX\Database\Contracts\SchemaMigrator;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Psr\Clock\ClockInterface;
 
 beforeEach(function (): void {
     Schema::create('aut_roles', static function (Blueprint $table): void {
@@ -331,3 +341,89 @@ it('excludes ineligible assignments and roles from the compiled grant chain', fu
 
     expect($source->permissionsFor($principal, 'app')->keys())->toBe([]);
 })->with(['expired', 'foreign workspace', 'different principal', 'deleted role', 'missing link']);
+
+it('builds only active and scoped catalog definitions for the configured panel', function (): void {
+    bridgeRole();
+    $builder = resolve(MatrixPermissionCatalogBuilder::class);
+
+    expect($builder->supports('app'))->toBeTrue()
+        ->and($builder->supports('admin'))->toBeFalse()
+        ->and($builder->build('admin'))->toBe([]);
+    $definitions = $builder->build('app');
+    expect(array_map(static fn (PermissionDefinition $definition): string => $definition->key(), $definitions))
+        ->toBe(['app.crm.deal.read'])
+        ->and($definitions[0]->panelId())->toBe('app');
+});
+
+it('accepts ordinary string and integer auth identifiers without weakening the grant priority', function (string|int $identifier): void {
+    $roleId = bridgeRole();
+    DB::table('aut_role_assignments')->insert([
+        'id' => (string) Str::uuid(), 'role_id' => $roleId,
+        'principal_type' => 'user', 'principal_id' => (string) $identifier,
+    ]);
+    resolve(RoleMatrixCompiler::class)->compile($roleId);
+    $user = Mockery::mock(Authenticatable::class);
+    $user->shouldReceive('getAuthIdentifier')->andReturn($identifier);
+    $source = resolve(AutMatrixGrantSource::class);
+
+    expect($source->permissionsFor($user, 'app')->keys())->toBe(['app.crm.deal.read'])
+        ->and($source->priority())->toBe(85);
+})->with(['string' => 'ordinary-user', 'integer' => 42]);
+
+it('rejects malformed ordinary auth identifiers before issuing a grant query', function (mixed $identifier): void {
+    $user = Mockery::mock(Authenticatable::class);
+    $user->shouldReceive('getAuthIdentifier')->andReturn($identifier);
+
+    expect(fn () => resolve(AutMatrixGrantSource::class)->permissionsFor($user, 'app'))
+        ->toThrow(InvalidArgumentException::class, 'must be a string or integer');
+})->with(['null' => null, 'boolean' => false, 'array' => [[]]]);
+
+it('grants wildcard only for an active assignment of the system owner role', function (): void {
+    $roleId = bridgeRole();
+    $principal = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid());
+    DB::table('aut_roles')->where('id', $roleId)->update(['slug' => 'owner', 'is_system' => false]);
+    $assignment = (string) Str::uuid();
+    DB::table('aut_role_assignments')->insert([
+        'id' => $assignment, 'role_id' => $roleId,
+        'principal_type' => 'user', 'principal_id' => $principal->principalId(),
+    ]);
+    $source = resolve(AutMatrixGrantSource::class);
+    expect($source->permissionsFor($principal, 'app')->keys())->toBe([]);
+
+    DB::table('aut_roles')->where('id', $roleId)->update(['is_system' => true]);
+    expect($source->permissionsFor($principal, 'app')->keys())->toBe(['*']);
+
+    DB::table('aut_role_assignments')->where('id', $assignment)->update(['expires_at' => '2000-01-01 00:00:00']);
+    expect($source->permissionsFor($principal, 'app')->keys())->toBe([]);
+});
+
+it('rejects a malformed permission value at the native grant boundary', function (): void {
+    $query = Mockery::mock(Builder::class);
+    $query->shouldReceive('where', 'whereNull', 'join')->andReturnSelf();
+    $query->shouldReceive('exists')->andReturnFalse();
+    $query->shouldReceive('pluck')->with('azgrp.permission_key')->andReturn(collect([42]));
+    $connection = Mockery::mock(ConnectionInterface::class);
+    $connection->shouldReceive('table')->with('aut_role_assignments')->andReturn($query);
+    $connections = Mockery::mock(ConnectionResolverInterface::class);
+    $connections->shouldReceive('connection')->andReturn($connection);
+    $source = new AutMatrixGrantSource(
+        tenancyManager: resolve(TenancyManager::class), connections: $connections, clock: resolve(ClockInterface::class),
+    );
+    $principal = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid());
+
+    expect(fn () => $source->permissionsFor($principal, 'app'))->toThrow(UnexpectedValueException::class, 'must be a string');
+});
+
+it('refuses a non-Laravel connection before starting bridge writes', function (): void {
+    $roleId = bridgeRole();
+    $connections = Mockery::mock(ConnectionResolverInterface::class);
+    $connections->shouldReceive('connection')->once()->andReturn(Mockery::mock(ConnectionInterface::class));
+    $sync = new SyncAzGuardRolePermissions(
+        options: resolve(AuthOptions::class), activeEntities: resolve(EntityActivity::class),
+        links: resolve(RoleLinkStore::class), connections: $connections,
+    );
+
+    expect(fn () => $sync->handle(new RoleMatrixCompiled(roleId: $roleId)))
+        ->toThrow(LogicException::class, 'requires a Laravel database connection');
+    expect(DB::table('aut_azguard_role_links')->count())->toBe(0);
+});

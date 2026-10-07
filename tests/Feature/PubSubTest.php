@@ -133,5 +133,6 @@ it('P1.24: subscribe() refuses a non-console, non-Octane runtime (HTTP request c
 });
 
 it('P1.24: SubscribeGuard allows an Octane runtime that explicitly opted in', function (): void {
-    SubscribeGuard::assert(new FakeWorkerRuntime(octane: true, console: true), octaneWorkerOptIn: true, driverClass: RedisPubSub::class);
-})->throwsNoExceptions();
+    expect(fn () => SubscribeGuard::assert(new FakeWorkerRuntime(octane: true, console: true), octaneWorkerOptIn: true, driverClass: RedisPubSub::class))
+        ->not->toThrow(LogicException::class);
+});

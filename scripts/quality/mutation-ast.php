@@ -11,6 +11,21 @@ use PhpParser\PrettyPrinter\Standard;
 
 require dirname(__DIR__, 2).'/vendor/autoload.php';
 
+// Literal null/string/empty-array defaults only store data. Boolean/numeric defaults
+// remain subject to the default value mutators; object construction is executable.
+function immutableLiteral(?Expr $value): bool
+{
+    return $value === null || $value instanceof Node\Scalar\String_
+        || ($value instanceof Expr\ConstFetch && $value->name->toLowerString() === 'null')
+        || ($value instanceof Expr\Array_ && $value->items === []);
+}
+
+function declarationDefault(?Expr $value): bool
+{
+    return immutableLiteral($value) || $value instanceof Node\Scalar\Int_ || $value instanceof Node\Scalar\Float_
+        || ($value instanceof Expr\ConstFetch && in_array($value->name->toLowerString(), ['true', 'false'], true));
+}
+
 // Conservative: an empty abstract base with executable methods is still behavior.
 /** @param array<Node> $nodes */
 function declarationOnly(array $nodes): bool
@@ -45,7 +60,7 @@ function declarationOnly(array $nodes): bool
                     return false;
                 }
                 foreach ($member->params as $parameter) {
-                    if ($parameter->default !== null) {
+                    if (! declarationDefault($parameter->default)) {
                         return false;
                     }
                 }
@@ -64,17 +79,23 @@ function declarationOnly(array $nodes): bool
             continue;
         }
 
-        if (! $node instanceof Stmt\Class_ || $node->extends !== null) {
+        if (! $node instanceof Stmt\Class_) {
             return false;
         }
 
         if ($node->isAbstract()) {
             foreach ($node->stmts as $member) {
+                // Trait composition in an otherwise empty abstract extension declares
+                // inherited behavior; the executable trait bodies belong to their source files.
+                if ($member instanceof Stmt\TraitUse && $member->adaptations === []) {
+                    continue;
+                }
+
                 if (! $member instanceof Stmt\ClassMethod || ! $member->isAbstract() || $member->stmts !== null) {
                     return false;
                 }
                 foreach ($member->params as $parameter) {
-                    if ($parameter->default !== null) {
+                    if (! declarationDefault($parameter->default)) {
                         return false;
                     }
                 }
@@ -83,10 +104,20 @@ function declarationOnly(array $nodes): bool
             continue;
         }
 
-        if (! $node->isReadonly() || $node->implements !== []) {
+        if ($node->extends !== null || ! $node->isReadonly() || $node->implements !== []) {
             return false;
         }
         foreach ($node->stmts as $member) {
+            if ($member instanceof Stmt\ClassConst) {
+                foreach ($member->consts as $constant) {
+                    if (! $constant->value instanceof Node\Scalar\String_) {
+                        return false;
+                    }
+                }
+
+                continue;
+            }
+
             if ($member instanceof Stmt\Property) {
                 if ($member->isStatic()) {
                     return false;
@@ -104,7 +135,7 @@ function declarationOnly(array $nodes): bool
                 return false;
             }
             foreach ($member->params as $parameter) {
-                if ($parameter->default !== null) {
+                if (! immutableLiteral($parameter->default)) {
                     return false;
                 }
             }

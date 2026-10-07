@@ -1,0 +1,16 @@
+[
+  {
+    "mode": "late-phpunit-bootstrap",
+    "exit": 0,
+    "duration_seconds": 0.3065189900007681,
+    "stdout": "\n  .\n\n  Tests:    1 passed (5 assertions)\n  Duration: 0.27s\n\n",
+    "stderr": ""
+  },
+  {
+    "mode": "early-php-auto-prepend",
+    "exit": 2,
+    "duration_seconds": 0.3083995370034245,
+    "stdout": "",
+    "stderr": ""
+  }
+]

@@ -52,7 +52,8 @@
         "axiomasoft/corex-webhooks": "^1.0@dev",
         "webmozart/assert": "^2.4.1",
         "infection/infection": "0.35.6",
-        "axiomasoft/corex-infection-pest-adapter": "0.1.0"
+        "axiomasoft/corex-infection-pest-adapter": "0.1.0",
+        "league/flysystem-aws-s3-v3": "3.35.3"
     },
     "autoload-dev": {
         "psr-4": {

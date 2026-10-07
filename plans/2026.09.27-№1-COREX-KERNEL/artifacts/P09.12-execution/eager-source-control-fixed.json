@@ -1,0 +1,23 @@
+{
+  "argv": [
+    "/usr/bin/php8.4",
+    "-d",
+    "auto_prepend_file=/home/vostrikov/projects/packages/corex/build/quality/mutation/core-security/711accd9ded5436eb9ef572027367bbe/early-interceptor-only.php",
+    "/home/vostrikov/projects/packages/corex/build/quality/mutation/core-security/711accd9ded5436eb9ef572027367bbe/sandbox/vendor/bin/../pestphp/pest/bin/pest",
+    "--test-directory=tests",
+    "--configuration=/home/vostrikov/projects/packages/corex/build/quality/mutation/core-security/711accd9ded5436eb9ef572027367bbe/pgsql/tmp/infection/pest.b47bef34484b1874f90b76fe5d4faa0f.xml",
+    "--compact",
+    "--colors=never",
+    "--filter",
+    "SchemaStatusContractTest::test_testbench_helper_defaults_and_explicit_selection_reach_the_same_schema_migrator",
+    "--cache-directory=/home/vostrikov/projects/packages/corex/build/quality/mutation/core-security/711accd9ded5436eb9ef572027367bbe/pgsql/tmp/infection/test-history-b47bef34484b1874f90b76fe5d4faa0f",
+    "--order-by=duration-ascending",
+    "--record-test-run-history",
+    "--stop-on-failure",
+    "--stop-on-error",
+    "--log-junit=/tmp/corex-p0912-early-only.xml"
+  ],
+  "exit": 2,
+  "stdout": "\n  ⨯\n  ────────────────────────────────────────────────────────────────────────────  \n   FAILED  CoreX\\Tests\\Unit\\SchemaStatusCont…  NoMatchingExpectationException   \n  No matching handler found for Mockery_0_CoreX_Database_Contracts_SchemaMigrator::migrate(object(CoreX\\Database\\Enums\\SchemaScope), NULL, false). Either the method was unexpected or its arguments matched no expected argument list for this method\n\nObjects: ( array (\n  'CoreX\\\\Database\\\\Enums\\\\SchemaScope' => \n  array (\n    'class' => 'CoreX\\\\Database\\\\Enums\\\\SchemaScope',\n    'identity' => '#354e400987eed5465d41ba423094a950',\n    'properties' => \n    array (\n      'name' => 'Tenant',\n      'value' => 'tenant',\n    ),\n  ),\n))\n\n  at packages/core/src/Database/Testing/MigratesSchemaSets.php:28\n     24▕     }\n     25▕ \n     26▕     protected function migrateSchemaScope(SchemaScope $scope = SchemaScope::Tenant, ?string $connection = null, bool $includeModules = true): void\n     27▕     {\n  ➜  28▕         ($this->app ?? throw new LogicException('Boot the test application before migrating schema sets.'))->make(SchemaMigrator::class)->migrate($scope, $connection, $includeModules);\n     29▕     }\n     30▕ }\n     31▕\n\n  1   packages/core/tests/Unit/SchemaStatusContractTest.php:108\n  2   packages/core/tests/Unit/SchemaStatusContractTest.php:117\n\n\n  Tests:    1 failed (0 assertions)\n  Duration: 0.28s\n\n",
+  "stderr": ""
+}

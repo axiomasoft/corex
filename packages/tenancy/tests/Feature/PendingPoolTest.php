@@ -26,7 +26,7 @@ beforeEach(function (): void {
     $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
     // Golden-template fixture, same one ProvisioningTest (P2.3) uses.
-    DB::statement('DROP DATABASE IF EXISTS '.PENDING_TEMPLATE_DB);
+    dropPendingTemplateFixture();
     DB::statement('CREATE DATABASE '.PENDING_TEMPLATE_DB);
 
     $probe = pendingConnectTo(PENDING_TEMPLATE_DB);
@@ -48,8 +48,27 @@ afterEach(function (): void {
         DB::statement('DROP DATABASE IF EXISTS "'.$db.'"');
     }
 
+    dropPendingTemplateFixture();
+});
+
+/** Recover the exact test fixture even when a terminated trial missed afterEach. */
+function dropPendingTemplateFixture(): void
+{
+    if (DB::selectOne('SELECT datname FROM pg_database WHERE datname = ?', [PENDING_TEMPLATE_DB]) === null) {
+        return;
+    }
+
     DB::statement('ALTER DATABASE '.PENDING_TEMPLATE_DB.' WITH IS_TEMPLATE false');
     DB::statement('DROP DATABASE IF EXISTS '.PENDING_TEMPLATE_DB);
+}
+
+it('recovers a template fixture left behind by an interrupted trial', function (): void {
+    expect(DB::table('pg_database')->where('datname', PENDING_TEMPLATE_DB)->value('datistemplate'))->toBeTrue();
+
+    dropPendingTemplateFixture();
+    dropPendingTemplateFixture();
+
+    expect(DB::table('pg_database')->where('datname', PENDING_TEMPLATE_DB)->exists())->toBeFalse();
 });
 
 /** Fresh Laravel connection bound to an arbitrary already-created database on the same PG server. */

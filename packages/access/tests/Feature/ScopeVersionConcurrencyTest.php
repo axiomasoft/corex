@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Composer\Autoload\ClassLoader;
 use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Matrix\Internal\ScopeMapVersion;
 use CoreX\Context\Contracts\TenantContextResolver;
@@ -31,8 +32,11 @@ it('retains every concurrent invalidation even on the non-atomic file cache', fu
     $path = database_path('version-cache');
     config(['cache.stores.remediation' => ['driver' => 'file', 'path' => $path], 'corex-access.cache.store' => 'remediation']);
     $processes = [];
+    $loader = (new ReflectionClass(ClassLoader::class))->getFileName();
+    assert(is_string($loader));
+    $autoload = dirname($loader, 2).'/autoload.php';
     for ($worker = 0; $worker < 4; $worker++) {
-        $process = new Process([PHP_BINARY, __DIR__.'/../Fixtures/BumpScopeVersion.php', $path]);
+        $process = new Process([PHP_BINARY, __DIR__.'/../Fixtures/BumpScopeVersion.php', $path, $autoload]);
         $process->start();
         $processes[] = $process;
     }

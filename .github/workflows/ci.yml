@@ -977,6 +977,8 @@ jobs:
         run: composer refactor:check
 
   mutation-inventory:
+    # PLAN3.D133: owner deferred mutation work until kernel stability; re-enable explicitly.
+    if: ${{ false }}
     name: Mutation inventory and parser controls
     permissions:
       contents: read
@@ -1003,6 +1005,8 @@ jobs:
         run: echo "matrix=$(python3 scripts/quality/mutation.py --matrix)" >> "$GITHUB_OUTPUT"
 
   mutation-fragments:
+    # PLAN3.D133: mutation scores are not acceptance gates during the rest of PLAN3.
+    if: ${{ false }}
     name: MSI · ${{ matrix.package }} · ${{ matrix.zone }}
     needs: mutation-inventory
     permissions:
@@ -1061,6 +1065,8 @@ jobs:
           retention-days: 7
 
   mutation-check:
+    # PLAN3.D133 also defers the fixed sabotage registry.
+    if: ${{ false }}
     permissions:
       contents: read
     runs-on: ubuntu-latest

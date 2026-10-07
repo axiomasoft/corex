@@ -1,0 +1,76 @@
+{
+  "task_files": [
+    {
+      "path": "packages/*/tests/**",
+      "change": "modify"
+    },
+    {
+      "path": "tests/**",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/mutation-equivalents.json",
+      "change": "any",
+      "note": "Created by predecessor item; then amended here."
+    },
+    {
+      "path": "scripts/quality/mutation-zero-ledger.json",
+      "change": "any",
+      "note": "Created by predecessor item; then amended here."
+    },
+    {
+      "path": "scripts/quality/tests/fixtures/**",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/mutation.py",
+      "change": "modify",
+      "note": "Repair observed package Pest bootstrap and Testbench sandbox directory loss; preserve full source/mutator/threshold policy."
+    },
+    {
+      "path": "scripts/quality/tests/test_mutation.py",
+      "change": "modify",
+      "note": "Regression controls for the observed sandbox/harness defects."
+    },
+    {
+      "path": "scripts/quality/infection-pest-adapter/src/PestAdapter.php",
+      "change": "modify",
+      "note": "Use every coverage-reported test class for each mutant; retain all methods/datasets, full initial suites, unknown mapping refusal and raw exit evidence."
+    },
+    {
+      "path": "scripts/quality/infection-pest-adapter/src/NullReturn.php",
+      "change": "create",
+      "note": "Additional return-null perturbation; preserves all default mutators and strict scoring without classifying behavior as declarations."
+    },
+    {
+      "path": "composer.json",
+      "change": "modify",
+      "note": "Root test-only installation of Tenancy existing exact native S3 adapter development pin, to run the full fragment without skips."
+    },
+    {
+      "path": "composer.lock",
+      "change": "modify",
+      "note": "Lock that test-only SDK closure; preserve existing engine/platform pins."
+    },
+    {
+      "path": "pint.json",
+      "change": "modify",
+      "note": "Exclude only four immutable historical generated P09.5 probe bootstrap artifacts; retain maintained source/test rules."
+    },
+    {
+      "path": "scripts/quality/infection-pest-adapter/src/NonNullReturn.php",
+      "change": "create",
+      "note": "Additional null perturbation of non-null typed forwarded values, covering default-profile omissions; retain all standard mutators."
+    },
+    {
+      "path": "scripts/quality/mutation-ast.php",
+      "change": "modify",
+      "note": "Classify only observed zero-file declarations with null/empty literal storage defaults or empty abstract trait composition; preserve executable expression/branch refusal and full raw source profile."
+    },
+    {
+      "path": "scripts/quality/infection-pest-adapter/src/DefaultObjectArgument.php",
+      "change": "create",
+      "note": "Additional typed object-constructor default perturbation; default ToolResult metadata evaluates JsonDocument and remains behavior, not a declaration exception."
+    }
+  ]
+}

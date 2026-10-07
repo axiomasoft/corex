@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b7d089c94b9b68820473634f8c48314",
+    "content-hash": "c4e04746592a218309ca14a5f5db5b2f",
     "packages": [
         {
             "name": "axiomasoft/corex",
@@ -12,7 +12,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/core",
-                "reference": "7b72184a5410dbcf1433fa063bf2701820a62993"
+                "reference": "798b7376afd2a7da52fdb27a457c6b5b212eee20"
             },
             "require": {
                 "ext-ctype": "*",
@@ -135,7 +135,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/custom-fields",
-                "reference": "abf9219b4c5457a0bfd1d638c43904e369111750"
+                "reference": "b83417a4d3e5b001d27d82de0f1854f508423465"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -219,7 +219,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/intl",
-                "reference": "28f3bc5601929b6a88adebb0f40c6ccc363f5536"
+                "reference": "a3ed4931d24a2cfd9ea80ab404d934eae8fe0a80"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -298,7 +298,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/media",
-                "reference": "3c6a2e0f21f202fca0392ad0f45ab82ccc69a242"
+                "reference": "da09e4cd99d3349bc393a438acb4eb6b0017960b"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -376,7 +376,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/notifications",
-                "reference": "1c91c5b3d610e28eba6508cfcaeb079f80a56ef7"
+                "reference": "bae17fbcad0d331a8abc3446a7b121760824feac"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -451,7 +451,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/operations",
-                "reference": "7214eb2e8084cac14ed5defd1830d9c107dec9ff"
+                "reference": "4c4790e9e19aca789eec7a9cc4dd26a8dc2d1b2b"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -540,7 +540,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/panels",
-                "reference": "29e00888b5ca9052c23d870299e42c87336d675f"
+                "reference": "7a9d290994a96bfec08a77a0969a8bcdceeb2857"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -612,7 +612,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/recurrence",
-                "reference": "1ae745f01e8bfdeb09d0257ed5e843c5e1da1ab3"
+                "reference": "335fd516e78107f68dd13e21738263bd31c655a6"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -671,7 +671,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search",
-                "reference": "13807e7c11ac4639901641bc526f25ab5655326e"
+                "reference": "3c0742a99efa64af2eb9a526f90cffc1e53eabb0"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -743,7 +743,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-intl",
-                "reference": "75b8f85b4155a7c077625122539641e7bfb6fe0a"
+                "reference": "50c8e44cba98c19f852243367fcf20adc428182e"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -810,7 +810,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-meilisearch",
-                "reference": "53a85a2d7293bbf7724f7a74c05ab85456eb3bb3"
+                "reference": "ca56186394a93d7798529bb809acfc98a7e06236"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -882,7 +882,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tasks",
-                "reference": "b567f77c5180255642ee3f4a49f945153c33a211"
+                "reference": "c029fb8f979031fbd2635b42d3b8f69c57f94d8a"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -973,7 +973,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tasks-workflow",
-                "reference": "f09ea8088b8dac5367cb60cb609f99c03eecfa8c"
+                "reference": "f5468341344eca86b073c097cfdc2d06c2b7a419"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -1050,7 +1050,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tenancy",
-                "reference": "2e0e669428b75a0f630b601b601f94a74b3c435e"
+                "reference": "6fb95b89561bdc3aa992d4907e366e8eaa15f74c"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -1161,7 +1161,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/transfer",
-                "reference": "c05858e46c25d80fed9e80596c1b1fc4bd1c362f"
+                "reference": "0f338b192ba3047e57063ae150392c60419cae94"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -1232,7 +1232,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/wakeup",
-                "reference": "6d3b46f846bf963573198293015d38d76ee89c75"
+                "reference": "5dadbb4c107c8661c1e72890e6896f02d1580858"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -1306,7 +1306,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/workflow",
-                "reference": "472b9037d2d25bf641b1adb0c078934a8a541665"
+                "reference": "be9a15f613e5ae72006227d1f0b80c89b9bf5913"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -2011,7 +2011,7 @@
             "dist": {
                 "type": "path",
                 "url": "products/flex-crm",
-                "reference": "f4bee8bfcc6f8fb1b2b8a06aaafd235ae8700cf2"
+                "reference": "9d0cd817d932fb1164efebc4e925a9e87c9655bc"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -7794,6 +7794,157 @@
     ],
     "packages-dev": [
         {
+            "name": "aws/aws-crt-php",
+            "version": "v1.2.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/awslabs/aws-crt-php.git",
+                "reference": "d71d9906c7bb63a28295447ba12e74723bd3730e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/awslabs/aws-crt-php/zipball/d71d9906c7bb63a28295447ba12e74723bd3730e",
+                "reference": "d71d9906c7bb63a28295447ba12e74723bd3730e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35||^5.6.3||^9.5",
+                "yoast/phpunit-polyfills": "^1.0"
+            },
+            "suggest": {
+                "ext-awscrt": "Make sure you install awscrt native extension to use any of the functionality."
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "AWS SDK Common Runtime Team",
+                    "email": "aws-sdk-common-runtime@amazon.com"
+                }
+            ],
+            "description": "AWS Common Runtime for PHP",
+            "homepage": "https://github.com/awslabs/aws-crt-php",
+            "keywords": [
+                "amazon",
+                "aws",
+                "crt",
+                "sdk"
+            ],
+            "support": {
+                "issues": "https://github.com/awslabs/aws-crt-php/issues",
+                "source": "https://github.com/awslabs/aws-crt-php/tree/v1.2.7"
+            },
+            "time": "2024-10-18T22:15:13+00:00"
+        },
+        {
+            "name": "aws/aws-sdk-php",
+            "version": "3.399.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aws/aws-sdk-php.git",
+                "reference": "a69c0b97b8464b059c8d2e147eab6daed5d5cd25"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/a69c0b97b8464b059c8d2e147eab6daed5d5cd25",
+                "reference": "a69c0b97b8464b059c8d2e147eab6daed5d5cd25",
+                "shasum": ""
+            },
+            "require": {
+                "aws/aws-crt-php": "^1.2.3",
+                "ext-json": "*",
+                "ext-pcre": "*",
+                "ext-simplexml": "*",
+                "guzzlehttp/guzzle": "^7.8.2 || ^8.0",
+                "guzzlehttp/promises": "^2.0.3 || ^3.0",
+                "guzzlehttp/psr7": "^2.6.3 || ^3.0",
+                "mtdowling/jmespath.php": "^2.9.1",
+                "php": ">=8.1",
+                "psr/http-message": "^1.0 || ^2.0",
+                "symfony/filesystem": "^v5.4.45 || ^v6.4.3 || ^v7.1.0 || ^v8.0.0"
+            },
+            "require-dev": {
+                "andrewsville/php-token-reflection": "^1.4",
+                "aws/aws-php-sns-message-validator": "~1.0",
+                "behat/behat": "~3.0",
+                "composer/composer": "^2.7.8",
+                "dms/phpunit-arraysubset-asserts": "^v0.5.0",
+                "doctrine/cache": "~1.4",
+                "ext-dom": "*",
+                "ext-openssl": "*",
+                "ext-sockets": "*",
+                "phpunit/phpunit": "^10.0",
+                "psr/cache": "^2.0 || ^3.0",
+                "psr/simple-cache": "^2.0 || ^3.0",
+                "sebastian/comparator": "^1.2.3 || ^4.0 || ^5.0",
+                "yoast/phpunit-polyfills": "^2.0"
+            },
+            "suggest": {
+                "aws/aws-php-sns-message-validator": "To validate incoming SNS notifications",
+                "doctrine/cache": "To use the DoctrineCacheAdapter",
+                "ext-curl": "To send requests using cURL",
+                "ext-openssl": "Allows working with CloudFront private distributions and verifying received SNS messages",
+                "ext-pcntl": "To use client-side monitoring",
+                "ext-sockets": "To use client-side monitoring"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "Aws\\": "src/"
+                },
+                "exclude-from-classmap": [
+                    "src/data/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Amazon Web Services",
+                    "homepage": "https://aws.amazon.com"
+                }
+            ],
+            "description": "AWS SDK for PHP - Use Amazon Web Services in your PHP project",
+            "homepage": "https://aws.amazon.com/sdk-for-php",
+            "keywords": [
+                "amazon",
+                "aws",
+                "cloud",
+                "dynamodb",
+                "ec2",
+                "glacier",
+                "s3",
+                "sdk"
+            ],
+            "support": {
+                "forum": "https://github.com/aws/aws-sdk-php/discussions",
+                "issues": "https://github.com/aws/aws-sdk-php/issues",
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.399.2"
+            },
+            "time": "2026-10-06T22:19:35+00:00"
+        },
+        {
             "name": "axioma-studio/azguard-core",
             "version": "0.3.0",
             "source": {
@@ -7832,7 +7983,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/access",
-                "reference": "23fd598ac71da7b5dccdaf33f471852579ed9198"
+                "reference": "d72848d6778d3668db25c68fde1f0645683e3d4e"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -7926,7 +8077,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/access-azguard",
-                "reference": "e3d71bfc862af38029e8daed993ea2becce21951"
+                "reference": "0f9b5f4d2745c1b69f1ad0a3f87116baa445dafd"
             },
             "require": {
                 "axioma-studio/azguard-core": "^0.3",
@@ -8038,7 +8189,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tools",
-                "reference": "5a72d9d50fc2540424275ef62bd8ec88a18e4247"
+                "reference": "e4ec02fb71ea30c22cf2f3c71b404878be67147f"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -8127,7 +8278,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/webhooks",
-                "reference": "532b1d319920f8f94bb03190a5af6cb17749be76"
+                "reference": "0afaa94df91d55dd188b2a9e5866ce1c660cd5bd"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -10411,6 +10562,61 @@
             "time": "2026-03-17T14:54:13+00:00"
         },
         {
+            "name": "league/flysystem-aws-s3-v3",
+            "version": "3.35.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/flysystem-aws-s3-v3.git",
+                "reference": "b03780cb97585ee7e48977f40ed599b33b751634"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/b03780cb97585ee7e48977f40ed599b33b751634",
+                "reference": "b03780cb97585ee7e48977f40ed599b33b751634",
+                "shasum": ""
+            },
+            "require": {
+                "aws/aws-sdk-php": "^3.371.5",
+                "league/flysystem": "^3.10.0",
+                "league/mime-type-detection": "^1.0.0",
+                "php": "^8.0.2"
+            },
+            "conflict": {
+                "guzzlehttp/guzzle": "<7.0",
+                "guzzlehttp/ringphp": "<1.1.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "League\\Flysystem\\AwsS3V3\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Frank de Jonge",
+                    "email": "info@frankdejonge.nl"
+                }
+            ],
+            "description": "AWS S3 filesystem adapter for Flysystem.",
+            "keywords": [
+                "Flysystem",
+                "aws",
+                "file",
+                "files",
+                "filesystem",
+                "s3",
+                "storage"
+            ],
+            "support": {
+                "source": "https://github.com/thephpleague/flysystem-aws-s3-v3/tree/3.35.3"
+            },
+            "time": "2026-08-08T16:19:23+00:00"
+        },
+        {
             "name": "marc-mabe/php-enum",
             "version": "v4.7.2",
             "source": {
@@ -10564,6 +10770,72 @@
                 "source": "https://github.com/mockery/mockery"
             },
             "time": "2026-08-19T19:37:52+00:00"
+        },
+        {
+            "name": "mtdowling/jmespath.php",
+            "version": "2.9.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jmespath/jmespath.php.git",
+                "reference": "2157c5e50e813ec6a96c1eed3be7f64a20fb32a8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jmespath/jmespath.php/zipball/2157c5e50e813ec6a96c1eed3be7f64a20fb32a8",
+                "reference": "2157c5e50e813ec6a96c1eed3be7f64a20fb32a8",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2.5 || ^8.0",
+                "symfony/polyfill-mbstring": "^1.17"
+            },
+            "require-dev": {
+                "composer/xdebug-handler": "^3.0.3",
+                "phpunit/phpunit": "^8.5.52"
+            },
+            "bin": [
+                "bin/jp.php"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.9-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/JmesPath.php"
+                ],
+                "psr-4": {
+                    "JmesPath\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Graham Campbell",
+                    "email": "hello@gjcampbell.co.uk",
+                    "homepage": "https://github.com/GrahamCampbell"
+                },
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Declaratively specify how to extract elements from a JSON document",
+            "keywords": [
+                "json",
+                "jsonpath"
+            ],
+            "support": {
+                "issues": "https://github.com/jmespath/jmespath.php/issues",
+                "source": "https://github.com/jmespath/jmespath.php/tree/2.9.2"
+            },
+            "time": "2026-07-06T18:56:19+00:00"
         },
         {
             "name": "myclabs/deep-copy",

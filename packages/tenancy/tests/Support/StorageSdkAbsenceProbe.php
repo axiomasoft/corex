@@ -12,7 +12,7 @@ use Illuminate\Container\Container;
 use Illuminate\Filesystem\FilesystemManager;
 use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
 
-$original = require dirname(__DIR__, 2).'/vendor/autoload.php';
+$original = require $argv[1];
 // A child process models Composer installation without the optional SDK.
 // Clone the installed maps; do not mutate vendor files or the parent's loader.
 $withoutSdk = static fn (string $name): bool => ! str_starts_with($name, 'Aws\\')

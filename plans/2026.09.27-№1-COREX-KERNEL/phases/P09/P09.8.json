@@ -27,7 +27,8 @@
     "D103",
     "D113",
     "D121",
-    "D125"
+    "D125",
+    "D133"
   ],
   "reads": [
     {
@@ -61,12 +62,12 @@
     "Соблюдать D125, D118/D120 и технические правила D121, D17/D73/D103/D113. Release-положения прежнего дизайна исключены D125; внешние записи не разрешены.",
     "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
     "Поведение/API/SPI/schema не менять молча ради зелёного tooling; precise decision+CHANGELOG+API/Golden для public delta.",
-    "Каждый новый gate негатив-проверен на temp fixtures; coverage/MSI/quality scopes и пороги не снижать. Если packages/*/src меняется, surviving fixed mutations --all до завершения.",
+    "D133: до конца PLAN3 mutation/Infection/MSI/probes/registry/ledger replay не выполняются. Обычные behavior, coverage, analysis, BC/API/schema проверки сохраняются.",
     "Self-check + scoped checks; repair owning item. Независимое full-review фазы отдельное P09.8 по действующим требованиям плана.",
     "Изменение scope не запускает исполнение. При запуске проверить актуальное завершение P08 и independent corrected-design review. Release owner questions/grants не являются допуском для code-items.",
     "D125: выполнять только repository scope; требования к rc/candidate/SBOM/27-row release DoD и публикации пропущены, не переносить их в этот item."
   ],
-  "guidance": "Сначала применить scope D125 и knowledge/research-P09-design#repository-only. Read-only product. Consume existing green outputs and reproduce only suspicious evidence. Publish verdict through plan.py. Do not repair product or run a publisher. Hosted remote read is allowed; missing final CI is a concrete acceptance wait, not GREEN.",
+  "guidance": "Сначала применить scope D125 и knowledge/research-P09-design#repository-only. Read-only product. Consume existing green outputs and reproduce only suspicious evidence. Publish verdict through plan.py. Do not repair product or run a publisher. Hosted remote read is allowed; missing final CI is a concrete acceptance wait, not GREEN. D133 has priority over all old mutation-related text and the previous cheaper-model prompt: no further mutation work during PLAN3; only independent ordinary scope remains.",
   "validation": [
     {
       "id": "V0",
@@ -94,14 +95,14 @@
     },
     {
       "id": "V5",
-      "procedure": "Read-only gh api/gh run view: обычный workflow CI на финальном commit фазы; exact SHA, completed/success, все обязательные jobs success по D73. При разном source/bookkeeping commit доказать lineage и identical product hashes. RC candidate/archive digests и release qualification matrix не требуются по D125.",
+      "procedure": "Read-only gh api/gh run view: обычный workflow CI на финальном commit фазы; exact SHA, completed/success, все обязательные jobs success по D73. При разном source/bookkeeping commit доказать lineage и identical product hashes. RC candidate/archive digests и release qualification matrix не требуются по D125. D133: mutation-inventory/mutation-fragments/mutation-check are intentionally disabled and skipped, not required-success jobs.",
       "expect": "Hosted ordinary final-commit CI GREEN; missing proof keeps closure pending",
       "kind": "acceptance"
     },
     {
       "id": "V6",
-      "procedure": "Independently replay equivalent/parse/compile and declaration-only exceptions; verify fragment denominator, ≤5% cap, fresh Infection error controls, coverage and source lifecycle/transfer/search behavior receipts.",
-      "expect": "No unreviewed ledger/stale hash/vacuous MSI score; per-fragment95/90/75 and source behavior checks current; no release DoD27 required",
+      "procedure": "Independently verify ordinary source lifecycle/transfer/search behavior receipts and retained code changes. D133 cancels mutation scores, equivalent/declaration replay and mutation CI gates for the rest of PLAN3.",
+      "expect": "Ordinary source behavior checks current; no claimed MSI95/90/75 or mutation qualification; no release DoD27 required",
       "kind": "acceptance"
     }
   ],
@@ -133,5 +134,5 @@
     ]
   },
   "result": null,
-  "updated_at": "2026-10-06T19:25:11Z"
+  "updated_at": "2026-10-07T16:04:59Z"
 }

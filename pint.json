@@ -30,6 +30,7 @@
         "/^products\\/[^\\/]+\\/database\\/migrations\\//",
         "/^plans\\/.*\\/preimage\\//",
         "/^plans\\/2026\\.09\\.27-№1-COREX-KERNEL\\/artifacts\\/P09\\.9-execution(?:-after-D132)?\\/matrix\\//",
-        "/^plans\\/2026\\.09\\.27-№1-COREX-KERNEL\\/artifacts\\/P04-design\\/scripts\\/inventory\\.php$/"
+        "/^plans\\/2026\\.09\\.27-№1-COREX-KERNEL\\/artifacts\\/P04-design\\/scripts\\/inventory\\.php$/",
+        "/^plans\\/2026\\.09\\.27-№1-COREX-KERNEL\\/artifacts\\/P09\\.5-execution\\/probe\\/pgsql\\/tmp\\/infection\\/bootstrap\\.(?:ce1c7b8623b783a056d8aad85c1a9b94|1a8d45671ced8563e34fe9c60c4af4a6|779762e14837e791dc1495045c09f0d9|5b3763fe8287333766ba4c9c4170eb23)\\.php$/"
     ]
 }

@@ -1,8 +1,17 @@
 # Mutation quality gates
 
+PLAN3.D133 (owner, 2026-10-07): mutation work is deferred until kernel stability.
+Do not run Infection, mutation scores, probes, parser self-tests or the fixed
+`scripts/mutation-check.sh` registry during the rest of PLAN3. Their CI jobs are
+disabled. The commands and policy below are retained for a future explicitly
+authorized resumption; historical reports do not establish current acceptance.
+
 Run commands through `scripts/php84` in the development checkout. The locked
-stack is Infection 0.35.6, Pest 5.2.1 and PHPUnit 13.3.4, with the existing
-whole-suite Pest adapter. Mutation files, coverage XML and JUnit remain raw.
+stack is Infection 0.35.6, Pest 5.2.1 and PHPUnit 13.3.4. Initial runs cover the
+whole bounded suite; each mutant runs every coverage-reported test class and all
+its methods and datasets, verified against fresh JUnit. Class filters avoid
+oversized method patterns for broadly covered registrars. Mutation files, coverage XML and JUnit
+remain raw. Unknown mappings or empty test runs fail the measurement.
 
 ```bash
 scripts/php84 python3 scripts/quality/mutation.py --inventory --check
@@ -39,6 +48,11 @@ failures and OOM/exit137 block the run. Syntax exclusion requires a failing
 original independently loads and the mutant fails with a declaration error.
 Test assertions, TypeError and domain exceptions remain behavioral results.
 Every executed mutant retains its process exit, stdout/stderr and duration.
+The sandbox supervisor prepends only the mutant stream interceptor before Pest
+loads its test-directory bootstrap; Composer retains its normal startup order.
+Each mutant receives its own copy of initial test history for duration ordering.
+The default mutator profile remains enabled, with three additional operators:
+null returns, non-null typed forwarded returns, and object-default string arguments.
 
 Equivalents need an exact mutant identity, source hash, rationale, hashed replay
 and independent P09.8 confirmation. They may not exceed 5% in any fragment or
@@ -53,3 +67,10 @@ combined initial suite includes PG tests and supplies the mutation coverage.
 The runner is serial (`threads=1`), initial tests have a 600s limit, mutants 10s,
 and CI workers a 60 minute job budget with at most four concurrent workers.
 Existing fixed sabotage cases remain a separate `scripts/mutation-check.sh` gate.
+
+Tenancy's native Redis and S3 conformance tests require `P3_REDIS_PORT` and
+`COREX_P3_STORAGE_CONFIG`. The latter must name a JSON configuration file inside
+the repository; its content is hashed into every receipt. The root development
+dependencies include Tenancy's exact S3 adapter pin so these tests run without
+optional-SDK skips. Use the same native environment for all fragments: any
+source, test, tooling, lock or native-configuration change invalidates all receipts.

@@ -125,6 +125,15 @@ API, политиками или задачами между проектами.
 
 ## 6. Гейты качества — и их честное состояние
 
+- **Действующее исключение владельца PLAN3.D133 (2026-10-07):** до конца PLAN3
+  мутационные прогоны отложены до стабилизации ядра. Infection/MSI, probes,
+  mutation runner self-tests, replay ledger и `scripts/mutation-check.sh --all`
+  не запускаются и не блокируют закрытие items; три mutation CI jobs отключены.
+  Это отмена текущего требования, а не доказательство MSI95/90/75. Ниже D98 и
+  исторические результаты mutation-check сохраняются как история; их обязанность
+  запускать fixed mutations для изменений source временно отменена D133.
+  Обычные behavioral tests, PHPStan, coverage, API/BC/schema gates сохраняются.
+  Возобновление mutation work требует отдельного запроса владельца.
 - **Закрытие code-item'а (D34) — ОБА лейна:** `composer lint:check && composer analyse && composer test && composer test:pg`; один sqlite-лейн = ложно-зелёное.
 - **Слой-гейт (D84 + P2.17):** source-scan `tests/Arch/LayerTest.php` + `tests/Support/SourceScanner.php`, **4 правила**, `composer test:arch`,
   CI-джоб `layer-gate`; `pest-plugin-arch` отвергнут — пакеты как path-репо под `vendor/` дают ВАКУУМНОЕ прохождение правила.

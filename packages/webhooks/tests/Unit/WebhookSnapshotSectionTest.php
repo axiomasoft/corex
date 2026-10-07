@@ -32,5 +32,31 @@ final class WebhookSnapshotSectionTest extends TestCase
         self::assertFalse($document['pii']['secret_subscribable']);
         self::assertSame(20 * 1024, $document['payload_limit_bytes']);
         self::assertSame([], $section->document('v3')['topics']);
+        self::assertSame([
+            'bulk' => [
+                'failure_page_max' => 100,
+                'result_ttl_seconds' => 86400,
+                'states' => ['cancelled', 'cancelling', 'completed', 'expired', 'failed', 'pending', 'running'],
+                'tombstone_ttl_seconds' => 2592000,
+            ],
+            'delivery' => ['guarantee' => 'at-least-once', 'ordering' => 'none'],
+            'payload_limit_bytes' => 20480,
+            'pii' => ['classes' => ['none', 'pseudonymous', 'personal', 'restricted', 'secret'], 'secret_subscribable' => false],
+            'replay' => ['body_retention_seconds' => 604800, 'horizon_seconds' => 604800, 'max_count' => 3, 'range_max' => 100, 'range_window_seconds' => 86400],
+            'retry' => ['attempts' => 12, 'horizon_seconds' => 259200, 'lease_seconds' => 30, 'maximum_delay_seconds' => 3600, 'minimum_delay_seconds' => 1],
+            'rotation' => [
+                'algorithm' => 'hmac-sha256', 'content' => 'delivery-id.timestamp.raw-body',
+                'headers' => ['webhook-id', 'webhook-timestamp', 'webhook-signature'],
+                'id_semantics' => 'delivery-id', 'max_active_keys' => 2, 'prefix' => 'whsec_',
+                'secret_bytes' => 32, 'signature' => 'v1', 'timestamp_window_seconds' => 300,
+            ],
+            'schema' => 'corex-webhook-contract/1',
+            'topics' => [],
+        ], (new WebhookSnapshotSection)->document('v1'));
+        self::assertSame([
+            'major' => 'v1', 'name' => 'a.created',
+            'payload' => ['properties' => ['z' => ['type' => 'string'], 'a' => ['type' => 'integer']], 'required' => ['a', 'z'], 'type' => 'object'],
+            'pii_class' => 'none', 'version' => 1,
+        ], $document['topics'][0]);
     }
 }

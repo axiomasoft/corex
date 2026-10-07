@@ -40,7 +40,7 @@ INFRA = re.compile(r'connection refused|could not find driver|SQLSTATE\[(?:080\w
 COMPILE = re.compile(r'Cannot redeclare|Declaration of .*must be compatible|Cannot (?:extend|override|inherit)|'
                      r'contains .*abstract method|Type of .*must be|Cannot use .* as .*because|'
                      r'Access level to .*must be|Cannot make .*method.*(?:static|non.static)', re.I)
-FLAGS = ['--with-uncovered', '--with-timeouts', '--threads=1', '--log-verbosity=all', '--debug', '--no-progress']
+FLAGS = ['--with-uncovered', '--with-timeouts', '--threads=1', '--log-verbosity=all', '--debug', '--no-progress', '--quiet']
 
 
 class MutationError(ValueError):
@@ -310,7 +310,13 @@ def input_hashes(root):
                     '.cache' not in p.name and not any(part.startswith('.phpunit') for part in p.parts):
                 paths.add(str(p.relative_to(root)))
     paths.update(('composer.json', 'composer.lock', 'phpunit.xml', '.github/workflows/ci.yml', 'scripts/php84'))
-    for package in ('infection/infection', 'pestphp/pest', 'phpunit/phpunit', 'phpunit/php-code-coverage', 'nikic/php-parser'):
+    native_config = os.environ.get('COREX_P3_STORAGE_CONFIG')
+    if native_config:
+        native_path = Path(native_config).resolve()
+        require(native_path.is_relative_to(root.resolve()) and native_path.is_file(), 'Native test config must be inside the repository')
+        paths.add(str(native_path.relative_to(root.resolve())))
+    for package in ('infection/infection', 'pestphp/pest', 'phpunit/phpunit', 'phpunit/php-code-coverage', 'nikic/php-parser',
+                    'aws/aws-sdk-php', 'league/flysystem-aws-s3-v3', 'mtdowling/jmespath.php', 'aws/aws-crt-php'):
         directory = root / 'vendor' / package
         require(directory.is_dir(), 'Missing locked tool: ' + package)
         paths.update(str(p.relative_to(root)) for p in directory.rglob('*') if p.is_file())
@@ -440,7 +446,7 @@ def pg_preflight(binary, sandbox, env, base):
     return value
 
 
-def snapshot(sandbox, root):
+def snapshot(sandbox, root, test_directory='tests'):
     sandbox.mkdir()
     for name in ('packages', 'products', 'tests', 'scripts', 'vendor', 'api', 'docs'):
         shutil.copytree(root / name, sandbox / name, symlinks=True,
@@ -455,6 +461,13 @@ def snapshot(sandbox, root):
             require(target.is_relative_to(root), 'External absolute vendor link: ' + str(p))
             p.unlink()
             p.symlink_to(sandbox / target.relative_to(root))
+    # Testbench resolves its compiled-view path with realpath before booting.
+    testbench_storage = sandbox / 'vendor/orchestra/testbench-core/laravel/storage'
+    for directory in ('framework/views', 'framework/cache/data', 'framework/sessions', 'logs'):
+        (testbench_storage / directory).mkdir(parents=True, exist_ok=True)
+    # This shipped template is framework source, needed by the stream interceptor too.
+    testbench_env = Path('vendor/orchestra/testbench-core/src/Bootstrap/stubs/.env.testbench')
+    shutil.copy2(root / testbench_env, sandbox / testbench_env)
     # Instrument the sandbox executable only. The pinned adapter still launches real Pest.
     executable = sandbox / 'vendor/bin/corex-pest'
     if executable.is_symlink():
@@ -463,7 +476,7 @@ def snapshot(sandbox, root):
 <?php
 declare(strict_types=1);
 pcntl_exec('/usr/bin/python3', [__DIR__.'/../../scripts/quality/mutation.py', '--supervise', '--', PHP_BINARY,
-    __DIR__.'/../pestphp/pest/bin/pest', ...array_slice($argv, 1)]);
+    __DIR__.'/../pestphp/pest/bin/pest', ''' + json.dumps('--test-directory=' + test_directory) + ''', ...array_slice($argv, 1)]);
 exit(127);
 ''')
     executable.chmod(0o755)
@@ -526,6 +539,17 @@ def harness(fragment, sandbox, lane, files, probe=False):
     xml.set('failOnWarning', 'true')
     xml.set('failOnRisky', 'true')
     tree.write(sandbox / 'phpunit.xml', encoding='utf-8', xml_declaration=True)
+
+
+def infection_source(sandbox, files, inputs):
+    source_root = Path(*Path(files[0]).parts[:3])
+    source = {'directories': [str(sandbox / source_root)]}
+    excludes = ['/^' + re.escape(str(Path(p).relative_to(source_root))).replace('/', r'\/') + '$/'
+                for p in inputs if p.endswith('.php') and Path(p).is_relative_to(source_root) and p not in files]
+    # Infection's schema forbids an empty excludes list; omitting it includes the whole root.
+    if excludes:
+        source['excludes'] = excludes
+    return source
 
 
 def invalid_prover(binary, sandbox, base, env):
@@ -621,30 +645,76 @@ def supervise(argv):
     """Capture Pest without translating names or masking exit codes; kill its process group on timeout."""
     config = next((a.split('=', 1)[1] for a in argv if a.startswith('--configuration=')), '')
     match = re.search(r'pest\.([a-f0-9]+)\.xml$', config)
+    if match is not None and len(argv) > 1 and Path(argv[1]).name == 'pest':
+        # Pest loads its test-directory bootstrap before PHPUnit's XML bootstrap.
+        # Intercept first, while letting Pest load Composer itself in its normal order.
+        early = Path(config).parent / ('interceptor.' + match.group(1) + '.php')
+        require(early.is_file(), 'Missing early mutant interception bootstrap')
+        argv = [argv[0], '-d', 'auto_prepend_file=' + str(early), *argv[1:]]
     key = match.group(1) if match else 'initial-' + uuid.uuid4().hex
     logs = Path(os.environ['COREX_MUTATION_LOGS'])
     logs.mkdir(parents=True, exist_ok=True)
+    controller = os.getpid()
+    guardian = os.fork()
+    if guardian:
+        def forward(signum, frame):
+            try:
+                os.kill(guardian, signum)
+            except ProcessLookupError:
+                pass
+        signal.signal(signal.SIGTERM, forward)
+        signal.signal(signal.SIGINT, forward)
+        _, status = os.waitpid(guardian, 0)
+        code = os.waitstatus_to_exitcode(status)
+        return code if code >= 0 else 128 - code
+    # Symfony's timeout calls stop(0), killing the controller before it can journal.
+    # A separate session retains the actual child exit and reaps it after controller death.
+    os.setsid()
+    try:
+        code = supervised_child(argv, logs, key, controller, match is not None)
+        sys.stdout.flush()
+        sys.stderr.flush()
+    except BaseException:
+        import traceback
+        traceback.print_exc()
+        sys.stderr.flush()
+        code = 1
+    os._exit(code)
+
+
+def supervised_child(argv, logs, key, controller, mutant):
     base = logs.parent
     terminated = False
+    stopping_at = None
     start = time.monotonic()
     with (logs / (key + '.stdout')).open('wb') as out, (logs / (key + '.stderr')).open('wb') as err:
         process = subprocess.Popen(argv, stdout=out, stderr=err, start_new_session=True)
         def stop(signum, frame):
-            nonlocal terminated
+            nonlocal terminated, stopping_at
             terminated = True
+            if stopping_at is None:
+                stopping_at = time.monotonic()
             try:
                 os.killpg(process.pid, signal.SIGTERM)
             except ProcessLookupError:
                 pass
         signal.signal(signal.SIGTERM, stop)
         signal.signal(signal.SIGINT, stop)
-        try:
-            process.wait(timeout=600 if match is None else 15)
-        except subprocess.TimeoutExpired:
-            terminated = True
-            os.killpg(process.pid, signal.SIGKILL)
-            process.wait()
+        deadline = start + (15 if mutant else 600)
+        while process.poll() is None:
+            if not terminated and (os.getppid() != controller or time.monotonic() >= deadline):
+                stop(signal.SIGTERM, None)
+            if stopping_at is not None and time.monotonic() - stopping_at >= 1:
+                try:
+                    os.killpg(process.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+            try:
+                process.wait(timeout=.05)
+            except subprocess.TimeoutExpired:
+                pass
     record = {'argv': argv, 'exit': process.returncode, 'terminated': terminated,
+              'controller_pid': controller, 'guardian_pid': os.getpid(),
               'duration_seconds': round(time.monotonic() - start, 3),
               'stdout': artifact(logs / (key + '.stdout'), base), 'stderr': artifact(logs / (key + '.stderr'), base)}
     save(logs / (key + '.json'), record)
@@ -676,7 +746,8 @@ def run_fragment(fragment, root, output, ast, inputs, probe=False):
         print(fragment['package'] + '/' + fragment['zone'] + ': N/A-declaration (independently confirmed)', flush=True)
         return receipt
     sandbox = base / 'sandbox'
-    snapshot(sandbox, root)
+    test_directory = 'tests' if fragment['package'] == 'core' else str(Path(*Path(fragment['files'][0]).parts[:2]) / 'tests')
+    snapshot(sandbox, root, test_directory)
     binary, version, env = php_environment(sandbox, fragment)
     db = pg_preflight(binary, sandbox, env, base)
     files = ['packages/tenancy/src/Provisioning/Internal/DatabaseValue.php'] if probe else fragment['files']
@@ -696,12 +767,12 @@ def run_fragment(fragment, root, output, ast, inputs, probe=False):
         lane_dir.mkdir()
         harness(selected, sandbox, lane, files, probe)
         shutil.copy2(sandbox / 'phpunit.xml', lane_dir / 'pest-spike.xml')
-        source_root = Path(*Path(files[0]).parts[:3])
-        config = {'source': {'directories': [str(sandbox / source_root)],
-                             'excludes': ['/^' + re.escape(str(Path(p).relative_to(source_root))).replace('/', r'\/') + '$/'
-                                          for p in inputs if p.endswith('.php') and Path(p).is_relative_to(source_root) and p not in files]},
+        config = {'source': infection_source(sandbox, files, inputs),
                   'testFramework': 'pest-spike', 'timeout': 10, 'tmpDir': str(lane_dir / 'tmp'),
-                  'logs': {'json': str(lane_dir / 'mutants.json')}, 'mutators': {'@default': True}}
+                  'logs': {'json': str(lane_dir / 'mutants.json')},
+                  'mutators': {'@default': True, 'CoreX\\Tooling\\Infection\\NullReturn': True,
+                               'CoreX\\Tooling\\Infection\\NonNullReturn': True,
+                               'CoreX\\Tooling\\Infection\\DefaultObjectArgument': True}}
         if probe:
             config['mutators'] = {'LogicalNot': True, 'FalseValue': True}
         save(lane_dir / 'infection.json', config)
@@ -731,6 +802,7 @@ def run_fragment(fragment, root, output, ast, inputs, probe=False):
         lanes.append({'lane': lane, 'initial': initial, 'infection': infection, 'score': score, 'cases': cases,
                       'report': artifact(lane_dir / 'mutants.json', base),
                       'junit': artifact(raw / 'junit.xml', base),
+                      'test_history': [artifact(p, base) for p in sorted((raw / 'test-history').rglob('*')) if p.is_file()],
                       'coverage': [artifact(p, base) for p in sorted((raw / 'coverage-xml').rglob('*.xml'))]})
     require(input_hashes(root) == inputs, 'Source/test/tool/lock changed during measurement')
     receipt = {'schema': 'corex-mutation-fragment/1', 'kind': 'probe' if probe else 'measurement',
@@ -739,6 +811,7 @@ def run_fragment(fragment, root, output, ast, inputs, probe=False):
                'versions': versions, 'database': db, 'lanes': lanes,
                'environment': php_witness(binary),
                'connection': {k: env[k] for k in ('PGSQL_HOST', 'PGSQL_PORT', 'PGSQL_USERNAME')},
+               'native_test_environment': {k: env[k] for k in ('P3_REDIS_PORT', 'COREX_P3_STORAGE_CONFIG') if k in env},
                'process_evidence': [artifact(p, base) for directory in ('processes', 'invalid')
                                     for p in sorted((base / directory).rglob('*')) if p.is_file()],
                'duration_seconds': round(time.monotonic() - start, 3),
@@ -793,6 +866,10 @@ def aggregate(mapping, output, root, inputs):
             verify_artifact(initial['stdout'], path.parent)
             verify_artifact(initial['stderr'], path.parent)
             check_junit(verify_artifact(lane['junit'], path.parent))
+            if lane['lane'] == 'pgsql':
+                require(lane.get('test_history'), 'Missing fresh initial test history')
+                for ref in lane['test_history']:
+                    verify_artifact(ref, path.parent)
             ast = ast_inventory(root, receipt['files'])
             directory = path.parent / lane['lane'] / ('coverage-xml' if lane['lane'] == 'sqlite' else 'tmp/infection/coverage-xml')
             coverage_evidence(lane.get('coverage'), directory, path.parent,

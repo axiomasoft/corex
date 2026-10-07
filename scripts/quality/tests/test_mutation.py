@@ -298,14 +298,20 @@ class InventoryTests(unittest.TestCase):
         sources = {'interface': '<?php interface I { public function a(): void; }',
                    'enum': '<?php enum E: string { case A = "a"; }',
                    'dto': '<?php final readonly class D { public function __construct(public string $id) {} }',
+                   'dto-literals': '<?php final readonly class D { public const string PROFILE="p/1"; public function __construct(public ?string $id=null,public array $options=[],public string $locale="ru") {} }',
+                   'interface-null': '<?php interface I { public function a(?string $id=null): void; }',
+                   'abstract-trait-declaration': '<?php abstract class B extends Model { use T; }',
+                   'dto-object-expression': '<?php final readonly class D {public function __construct(public O $value=new O("[]")) {}}',
                    'abstract-behavior': '<?php abstract class B { public function a(): bool { return true; } }',
                    'dto-branch': '<?php final readonly class D { public function __construct(public string $id) { if (!$id) {throw new Exception;} } }',
                    'enum-behavior': '<?php enum E {case A; public function a(): bool {return true;} }',
                    'default-expression': '<?php final readonly class D { public function __construct(public bool $a = false) {} }',
-                   'interface-expression': '<?php interface I {public function a(bool $v = false): void;}',
+                   'interface-literal': '<?php interface I {public function a(bool $v = false): void;}',
+                   'interface-expression': '<?php interface I {public function a(O $v = new O("[]")): void;}',
                    'declare-behavior': '<?php declare(ticks=1) {echo "side effect";}'}
         ast = m.ast_sources(m.ROOT, sources)
-        self.assertEqual({p for p, a in ast.items() if a['declaration_only']}, {'interface', 'enum', 'dto'})
+        self.assertEqual({p for p, a in ast.items() if a['declaration_only']},
+                         {'interface', 'enum', 'dto', 'dto-literals', 'interface-null', 'interface-literal', 'abstract-trait-declaration'})
 
     def test_aggregate_missing_fragments_is_red(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -314,6 +320,177 @@ class InventoryTests(unittest.TestCase):
 
 
 class ProcessTests(unittest.TestCase):
+    def test_executable_object_default_is_mutated_and_not_a_declaration_exception(self):
+        expression = ('require "vendor/autoload.php"; '
+                      '$p=(new \\PhpParser\\ParserFactory())->createForNewestSupportedVersion(); '
+                      '$tree=$p->parse("<?php function a(JsonDocument \\$metadata = new JsonDocument(\\\"[]\\\")) {} '
+                      'function b(?string \\$value = null) {}"); '
+                      '$m=new \\CoreX\\Tooling\\Infection\\DefaultObjectArgument; '
+                      'echo json_encode([array_map(fn($f)=>$m->canMutate($f->params[0]),$tree),'
+                      '(new \\PhpParser\\PrettyPrinter\\Standard)->prettyPrintFile(iterator_to_array($m->mutate($tree[0]->params[0])))]);')
+        result = subprocess.run([shutil.which('php'), '-r', expression], cwd=m.ROOT,
+                                capture_output=True, text=True, timeout=30)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        matches, mutant = json.loads(result.stdout)
+        self.assertEqual(matches, [True, False])
+        self.assertIn("new JsonDocument('{}')", mutant)
+
+    def test_nonnull_return_operator_adds_the_forwarding_case_skipped_by_the_default_profile(self):
+        expression = ('require "vendor/autoload.php"; '
+                      '$p=(new \\PhpParser\\ParserFactory())->createForNewestSupportedVersion(); '
+                      '$tree=$p->parse("<?php function typed(): string { return Config::value(); } '
+                      'function nullable(): ?string { return Config::value(); } '
+                      'function literal(): string { return \\\"fixed\\\"; }"); '
+                      '$traverser=new \\PhpParser\\NodeTraverser(new \\PhpParser\\NodeVisitor\\ParentConnectingVisitor()); '
+                      '$tree=$traverser->traverse($tree); $m=new \\CoreX\\Tooling\\Infection\\NonNullReturn; '
+                      'echo json_encode(array_map(fn($f)=>$m->canMutate($f->stmts[0]),$tree));')
+        result = subprocess.run([shutil.which('php'), '-r', expression], cwd=m.ROOT,
+                                capture_output=True, text=True, timeout=30)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(json.loads(result.stdout), [True, False, False])
+
+    def test_null_return_operator_changes_only_return_null_statements(self):
+        expression = ('require "vendor/autoload.php"; '
+                      '$p=(new \\PhpParser\\ParserFactory())->createForNewestSupportedVersion(); '
+                      '$m=new \\CoreX\\Tooling\\Infection\\NullReturn; '
+                      '$nodes=$p->parse("<?php return null; return false; \\$value=null;"); '
+                      '$matches=array_map($m->canMutate(...),$nodes); '
+                      'echo json_encode([$matches,(new \\PhpParser\\PrettyPrinter\\Standard)->prettyPrintFile('
+                      'iterator_to_array($m->mutate($nodes[0])))]);')
+        result = subprocess.run([shutil.which('php'), '-r', expression], cwd=m.ROOT,
+                                capture_output=True, text=True, timeout=30)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        matches, mutant = json.loads(result.stdout)
+        self.assertEqual(matches, [True, False, False])
+        self.assertIn('return false;', mutant)
+
+    def test_adapter_runs_whole_covering_classes_and_datasets_and_kills_an_eager_mutant(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            sandbox = base / 'sandbox'
+            m.snapshot(sandbox, m.ROOT, 'packages/access/tests')
+            tests = sandbox / 'packages/access/tests'
+            (tests / 'Pest.php').write_text("<?php dataset('adapter-values', [[7], [7]]); "
+                                          "require_once dirname(__DIR__, 3).'/MutationProbe.php';")
+            original = sandbox / 'MutationProbe.php'
+            original.write_text('<?php final class MutationProbe { public static function value(): int { return 7; }}')
+            mutant = base / 'mutant.php'
+            mutant.write_text(original.read_text().replace('return 7', 'return 6'))
+            pest = tests / 'MutationCoverageTest.php'
+            pest.write_text("<?php it('checks the probe = expected', function (int $value) { require_once 'MutationProbe.php';"
+                            "expect(MutationProbe::value())->toBe($value); })->with('adapter-values');"
+                            "it('retains another method of its covering class', function () { expect(true)->toBeTrue(); });")
+            classic = tests / 'MutationClassicTest.php'
+            classic.write_text('<?php final class MutationClassicTest extends \\PHPUnit\\Framework\\TestCase {'
+                               '#[\\PHPUnit\\Framework\\Attributes\\DataProvider("values")] '
+                               'public function testDataset(int $value): void { $this->assertSame(7, $value); } '
+                               'public static function values(): array { return [[7], [7]]; }}')
+            unrelated = tests / 'MutationUnrelatedTest.php'
+            unrelated.write_text('<?php final class MutationUnrelatedTest extends \\PHPUnit\\Framework\\TestCase {'
+                                 'public function testUnrelated(): void { file_put_contents("unrelated.marker", "ran"); '
+                                 '$this->assertTrue(true); }}')
+            config = sandbox / 'phpunit.xml'
+            config.write_text('<phpunit bootstrap="' + str(sandbox / 'vendor/autoload.php') +
+                              '" failOnEmptyTestSuite="true"><testsuites><testsuite name="coverage">' +
+                              ''.join('<file>' + str(p) + '</file>' for p in (pest, classic, unrelated)) +
+                              '</testsuite></testsuites></phpunit>')
+            env = {**os.environ, 'COREX_MUTATION_LOGS': str(base / 'processes'), 'PAO_DISABLE': '1'}
+            executable = sandbox / 'vendor/bin/corex-pest'
+            adapter_tmp = base / 'adapter'
+            adapter_tmp.mkdir()
+            initial = subprocess.run([shutil.which('php'), executable, '--configuration=' + str(config), '--compact',
+                                      '--colors=never', '--log-junit=' + str(adapter_tmp / 'junit.xml'),
+                                      '--record-test-run-history', '--cache-directory=' + str(adapter_tmp / 'test-history')],
+                                     cwd=sandbox, env=env, capture_output=True, text=True, timeout=30)
+            self.assertEqual(initial.returncode, 0, initial.stdout + initial.stderr)
+            self.assertIn('6 passed', initial.stdout)
+            history = {str(p): m.sha(p) for p in (adapter_tmp / 'test-history').rglob('*') if p.is_file()}
+            self.assertTrue(history)
+            (adapter_tmp / 'test-history/code-coverage').mkdir()
+            (adapter_tmp / 'test-history/code-coverage/probe').write_text('coverage cache is not timing history')
+            history = {str(p): m.sha(p) for p in (adapter_tmp / 'test-history').rglob('*') if p.is_file()}
+            (sandbox / 'unrelated.marker').unlink()
+            script = ('require "vendor/autoload.php"; '
+                      '$a = \\CoreX\\Tooling\\Infection\\PestAdapter::create($argv[1],$argv[2],$argv[3],null,'
+                      '$argv[2]."/junit.xml",getcwd(),[],false); '
+                      '$t = array_map(\\Infection\\AbstractTestFramework\\Coverage\\TestLocation::forTestMethod(...), '
+                      '["P\\\\\\\\Packages\\\\\\\\access\\\\\\\\tests\\\\\\\\MutationCoverageTest::__pest_evaluable_it_checks_the_probe___expected", '
+                      '"MutationClassicTest::testDataset"]); '
+                      'echo json_encode($a->getMutantCommandLine($t,$argv[4],"' + 'a' * 32 + '",$argv[5],""));')
+            args = [shutil.which('php'), '-r', script, executable, adapter_tmp, config, original, original]
+            command = subprocess.run(args, cwd=sandbox, env=env, capture_output=True, text=True, timeout=30)
+            self.assertEqual(command.returncode, 0, command.stdout + command.stderr)
+            selected = subprocess.run(json.loads(command.stdout), cwd=sandbox, env=env, capture_output=True,
+                                      text=True, timeout=30)
+            self.assertEqual(selected.returncode, 0, selected.stdout + selected.stderr)
+            self.assertIn('5 passed', selected.stdout)
+            self.assertFalse((sandbox / 'unrelated.marker').exists())
+            args[-2] = mutant
+            command = subprocess.run(args, cwd=sandbox, env=env, capture_output=True, text=True, timeout=30)
+            self.assertEqual(command.returncode, 0, command.stdout + command.stderr)
+            killed = subprocess.run(json.loads(command.stdout), cwd=sandbox, env=env, capture_output=True,
+                                    text=True, timeout=30)
+            self.assertNotEqual(killed.returncode, 0)
+            self.assertIn('1 failed', killed.stdout)
+            self.assertFalse((sandbox / 'unrelated.marker').exists())
+            self.assertEqual(history, {str(p): m.sha(p) for p in (adapter_tmp / 'test-history').rglob('*') if p.is_file()})
+            for identity in ('P\\\\Packages\\\\access\\\\tests\\\\MutationCoverageTest::__pest_evaluable_unknown_method', 'missing'):
+                refusal = script.replace('__pest_evaluable_it_checks_the_probe___expected', '__pest_evaluable_unknown_method')
+                if identity == 'missing':
+                    refusal = script.replace('"MutationClassicTest::testDataset"', '"MissingTest::testDataset"')
+                bad = subprocess.run([shutil.which('php'), '-r', refusal, *args[3:]], cwd=sandbox, env=env,
+                                     capture_output=True, text=True, timeout=30)
+                self.assertNotEqual(bad.returncode, 0)
+                self.assertIn('Unknown covering', bad.stderr)
+
+    def test_sandbox_loads_package_pest_bootstrap_and_restores_testbench_storage(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            sandbox = base / 'sandbox'
+            m.snapshot(sandbox, m.ROOT, 'packages/access/tests')
+            tests = sandbox / 'packages/access/tests'
+            (tests / 'Pest.php').write_text("<?php dataset('package-bootstrap', [[7]]);")
+            fixture = tests / 'MutationBootstrapTest.php'
+            fixture.write_text("<?php it('loads its package bootstrap', function (int $value) {"
+                               "expect($value)->toBe(7); })->with('package-bootstrap');")
+            config = sandbox / 'phpunit.xml'
+            config.write_text('<phpunit bootstrap="' + str(sandbox / 'vendor/autoload.php') + '">'
+                              '<testsuites><testsuite name="bootstrap"><file>' + str(fixture) +
+                              '</file></testsuite></testsuites></phpunit>')
+            env = {**os.environ, 'COREX_MUTATION_LOGS': str(base / 'processes'), 'PAO_DISABLE': '1'}
+            executable = sandbox / 'vendor/bin/corex-pest'
+            command = [shutil.which('php'), executable, '--configuration=' + str(config), '--compact', '--colors=never']
+            result = subprocess.run(command, cwd=sandbox, env=env, capture_output=True, text=True, timeout=30)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn('1 passed', result.stdout)
+            self.assertTrue((sandbox / 'vendor/orchestra/testbench-core/laravel/storage/framework/views').is_dir())
+            testbench_env = Path('vendor/orchestra/testbench-core/src/Bootstrap/stubs/.env.testbench')
+            self.assertEqual((sandbox / testbench_env).read_bytes(), (m.ROOT / testbench_env).read_bytes())
+            executable.write_text(executable.read_text().replace('--test-directory=packages/access/tests', '--test-directory=tests'))
+            negative = subprocess.run(command, cwd=sandbox, env=env, capture_output=True, text=True, timeout=30)
+            self.assertNotEqual(negative.returncode, 0, negative.stdout + negative.stderr)
+            self.assertIn('package-bootstrap', negative.stdout + negative.stderr)
+
+    def test_full_package_source_is_valid_without_empty_exclusions(self):
+        files = ['packages/tools/src/Example.php']
+        source = m.infection_source(m.ROOT, files, {p: 'hash' for p in files})
+        self.assertEqual(source['directories'], [str(m.ROOT / 'packages/tools/src')])
+        self.assertNotIn('excludes', source)
+        expression = ('require "vendor/autoload.php"; '
+                      '$schema = new \\Infection\\Configuration\\Schema\\SchemaValidator(); '
+                      '$schema->validate(new \\Infection\\Configuration\\Schema\\SchemaConfigurationFile($argv[1]));')
+        with tempfile.TemporaryDirectory() as tmp:
+            config = Path(tmp) / 'infection.json'
+            m.save(config, {'source': source})
+            valid = subprocess.run([shutil.which('php'), '-r', expression, config], cwd=m.ROOT,
+                                   capture_output=True, text=True, timeout=30)
+            self.assertEqual(valid.returncode, 0, valid.stdout + valid.stderr)
+            m.save(config, {'source': {**source, 'excludes': []}})
+            invalid = subprocess.run([shutil.which('php'), '-r', expression, config], cwd=m.ROOT,
+                                     capture_output=True, text=True, timeout=30)
+            self.assertNotEqual(invalid.returncode, 0)
+            self.assertIn('source.excludes', invalid.stderr)
+
     def test_missing_or_incomplete_pg_coverage_evidence_is_red(self):
         with tempfile.TemporaryDirectory() as tmp:
             base = Path(tmp)
@@ -404,6 +581,36 @@ class ProcessTests(unittest.TestCase):
                 if process.poll() is None:
                     process.kill()
                     process.wait()
+
+    def test_symfony_immediate_timeout_keeps_evidence_and_reaps_the_child(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            marker = base / 'child.pid'
+            env = {**os.environ, 'COREX_MUTATION_LOGS': str(base / 'processes')}
+            script = ('require "vendor/autoload.php"; '
+                      '$p=new \\Symfony\\Component\\Process\\Process(array_slice($argv,1)); '
+                      '$p->setTimeout(1); $p->start(); '
+                      'try {$p->wait(); exit(1);} catch(\\Symfony\\Component\\Process\\Exception\\ProcessTimedOutException $e) '
+                      '{echo "actual Symfony timeout";}')
+            result = subprocess.run([shutil.which('php'), '-r', script, shutil.which('python3'), SCRIPT,
+                                     '--supervise', '--', shutil.which('php'), '-r',
+                                     'file_put_contents($argv[1],getmypid()); echo "child marker"; sleep(30);', marker,
+                                     '--configuration=' + str(base / ('pest.' + 'b' * 32 + '.xml'))],
+                                    cwd=m.ROOT, env=env, capture_output=True, text=True, timeout=10)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn('actual Symfony timeout', result.stdout)
+            self.assertTrue(marker.exists())
+            path = base / 'processes' / ('b' * 32 + '.json')
+            deadline = time.monotonic() + 5
+            while not path.exists() and time.monotonic() < deadline:
+                time.sleep(.02)
+            self.assertTrue(path.exists(), 'Hard-killed controller lost its child evidence')
+            record = m.load(path)
+            self.assertTrue(record['terminated'])
+            self.assertLess(record['exit'], 0)
+            self.assertEqual(m.verify_artifact(record['stdout'], base).read_text(), 'child marker')
+            with self.assertRaises(ProcessLookupError):
+                os.kill(int(marker.read_text()), 0)
 
 
 if __name__ == '__main__':

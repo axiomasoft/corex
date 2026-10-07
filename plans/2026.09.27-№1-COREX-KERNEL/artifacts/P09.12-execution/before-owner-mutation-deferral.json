@@ -1,0 +1,842 @@
+{
+  "P09.12": {
+    "$schema": "urn:swissknifeman:task:plan:item:v1",
+    "id": "P09.12",
+    "title": "MSI security: тесты каждого package-fragment ≥95%",
+    "status": "in_progress",
+    "summary": "MSI security: тесты каждого package-fragment ≥95%",
+    "why": "Bounded owner of verified P09 review defect; explicit acceptance and dependencies prevent hidden work.",
+    "scope": {
+      "include": [
+        "MSI security: тесты каждого package-fragment ≥95%"
+      ],
+      "exclude": [
+        "Remote writes/publication unless exact separate external gate supplied; no unrelated P08/product behavior change."
+      ]
+    },
+    "depends_on": [
+      "P09.5"
+    ],
+    "decisions": [
+      "D118",
+      "D120",
+      "D17",
+      "D18",
+      "D19",
+      "D73",
+      "D103",
+      "D113",
+      "D121",
+      "D125"
+    ],
+    "reads": [
+      {
+        "ref": "knowledge/research-P09-design#repository-only",
+        "why": "Действующий scope владельца и граница отменённых release работ",
+        "required": true
+      },
+      {
+        "ref": "knowledge/research-P09-design#basis",
+        "why": "Canonical verified runbook",
+        "required": true
+      },
+      {
+        "ref": "knowledge/research-P09-design#mutation",
+        "why": "Canonical verified runbook",
+        "required": true
+      },
+      {
+        "ref": "knowledge/research-P09-design#checks",
+        "why": "Canonical verified runbook",
+        "required": true
+      },
+      {
+        "ref": "knowledge/research-P09-design#grok-repair",
+        "why": "Verified G1–G6 corrections and executable runtime boundary",
+        "required": true
+      }
+    ],
+    "task_files": [
+      {
+        "path": "packages/*/tests/**",
+        "change": "modify"
+      },
+      {
+        "path": "tests/**",
+        "change": "modify"
+      },
+      {
+        "path": "scripts/quality/mutation-equivalents.json",
+        "change": "any",
+        "note": "Created by predecessor item; then amended here."
+      },
+      {
+        "path": "scripts/quality/mutation-zero-ledger.json",
+        "change": "any",
+        "note": "Created by predecessor item; then amended here."
+      },
+      {
+        "path": "scripts/quality/tests/fixtures/**",
+        "change": "modify"
+      },
+      {
+        "path": "scripts/quality/mutation.py",
+        "change": "modify",
+        "note": "Repair observed package Pest bootstrap and Testbench sandbox directory loss; preserve full source/mutator/threshold policy."
+      },
+      {
+        "path": "scripts/quality/tests/test_mutation.py",
+        "change": "modify",
+        "note": "Regression controls for the observed sandbox/harness defects."
+      },
+      {
+        "path": "scripts/quality/infection-pest-adapter/src/PestAdapter.php",
+        "change": "modify",
+        "note": "Use every coverage-reported test class for each mutant; retain all methods/datasets, full initial suites, unknown mapping refusal and raw exit evidence."
+      },
+      {
+        "path": "scripts/quality/infection-pest-adapter/src/NullReturn.php",
+        "change": "create",
+        "note": "Additional return-null perturbation; preserves all default mutators and strict scoring without classifying behavior as declarations."
+      },
+      {
+        "path": "composer.json",
+        "change": "modify",
+        "note": "Root test-only installation of Tenancy existing exact native S3 adapter development pin, to run the full fragment without skips."
+      },
+      {
+        "path": "composer.lock",
+        "change": "modify",
+        "note": "Lock that test-only SDK closure; preserve existing engine/platform pins."
+      },
+      {
+        "path": "pint.json",
+        "change": "modify",
+        "note": "Exclude only four immutable historical generated P09.5 probe bootstrap artifacts; retain maintained source/test rules."
+      },
+      {
+        "path": "scripts/quality/infection-pest-adapter/src/NonNullReturn.php",
+        "change": "create",
+        "note": "Additional null perturbation of non-null typed forwarded values, covering default-profile omissions; retain all standard mutators."
+      },
+      {
+        "path": "scripts/quality/mutation-ast.php",
+        "change": "modify",
+        "note": "Classify only observed zero-file declarations with null/empty literal storage defaults or empty abstract trait composition; preserve executable expression/branch refusal and full raw source profile."
+      },
+      {
+        "path": "scripts/quality/infection-pest-adapter/src/DefaultObjectArgument.php",
+        "change": "create",
+        "note": "Additional typed object-constructor default perturbation; default ToolResult metadata evaluates JsonDocument and remains behavior, not a declaration exception."
+      },
+      {
+        "path": "scripts/quality/README.md",
+        "change": "modify",
+        "note": "Document the verified covering-method adapter, early interception and native service inputs."
+      }
+    ],
+    "rules": [
+      "Соблюдать D125, D118/D120 и технические правила D121, D17/D73/D103/D113. Release-положения прежнего дизайна исключены D125; внешние записи не разрешены.",
+      "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
+      "Поведение/API/SPI/schema не менять молча ради зелёного tooling; precise decision+CHANGELOG+API/Golden для public delta.",
+      "Каждый новый gate негатив-проверен на temp fixtures; coverage/MSI/quality scopes и пороги не снижать. Если packages/*/src меняется, surviving fixed mutations --all до завершения.",
+      "Self-check + scoped checks; repair owning item. Независимое full-review фазы отдельное P09.8 по действующим требованиям плана.",
+      "Изменение scope не запускает исполнение. При запуске проверить актуальное завершение P08 и independent corrected-design review. Release owner questions/grants не являются допуском для code-items.",
+      "D125: выполнять только repository scope; требования к rc/candidate/SBOM/27-row release DoD и публикации пропущены, не переносить их в этот item."
+    ],
+    "guidance": "Сначала применить scope D125 и knowledge/research-P09-design#repository-only. Execute only after admission, from required section. Produce real fresh raw outputs; new commands below are owned deliverables, not present-at-design assumptions. Owner steering 2026-10-07: «я думаю ты должен сделать макимум по коду и дать промт для новой сессии, чтобы дешевая модель гоняла долгие прогоны и делала фиксы». Finish code checkpoint and hand off long measurements/survivor test fixes. Remaining execution may use economy/medium; acceptance remains security95 for every package and all source/mutator scopes unchanged. Do not silently alter production behavior or counting rules; return demonstrated tooling/semantic blockers with exact repro. Handoff is not item completion and does not reset the two4h total execution budget.",
+    "validation": [
+      {
+        "id": "V1",
+        "cmd": "PGSQL_PORT=5434 scripts/php84 python3 scripts/quality/mutation.py --zone security",
+        "expect": "exit0 every security behavioral package-fragment ≥95%, positive valid mutants, fresh SQLite/required PG hashes; AST declaration ledger reviewed separately",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V2",
+        "cmd": "scripts/php84 composer lint:check",
+        "expect": "exit 0",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V3",
+        "cmd": "scripts/php84 composer analyse",
+        "expect": "exit 0",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V4",
+        "cmd": "bash scripts/mutation-check.sh --all",
+        "expect": "exit 0",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V5",
+        "cmd": "scripts/php84 python3 scripts/quality/mutation.py --inventory --check",
+        "expect": "exit0 exhaustive inventory, current AST zero-ledger hashes and exact equivalent source/confirmation checks; per-fragment/global 5% caps remain enforced by measured V1 receipts, no new equivalents",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V6",
+        "procedure": "Inspect raw core×security fragment source manifest for all current Data authz/Modules/Internal/Gate paths, confirm actual fragment MSI ≥95%; missing file/downgraded mapping refuses receipt.",
+        "expect": "Security receipt covers named real authz code, not empty Modules/Gate or aggregate masking",
+        "kind": "acceptance"
+      }
+    ],
+    "deliverables": [
+      "security fresh fragment receipts/survivor regressions; two4h rounds limit then honest BLOCKED; no source/mutator/threshold narrowing"
+    ],
+    "route": {
+      "class": "economy",
+      "effort": "medium"
+    },
+    "review": {
+      "mode": "none"
+    },
+    "authority": {
+      "kind": "routine"
+    },
+    "rag": {
+      "need": "none",
+      "status": "not_needed",
+      "notes": "RAG:— current source facts",
+      "captures": []
+    },
+    "result": {
+      "started_at": "2026-10-07T12:55:27Z",
+      "executor": {
+        "provider": "codex",
+        "model": "gpt-6.1-sol",
+        "effort": "xhigh",
+        "session": "01a1166d-625e-7e72-8dac-6b75526f9292"
+      }
+    },
+    "updated_at": "2026-10-07T15:37:44Z"
+  },
+  "P09.13": {
+    "$schema": "urn:swissknifeman:task:plan:item:v1",
+    "id": "P09.13",
+    "title": "MSI messaging: тесты каждого package-fragment ≥90%",
+    "status": "todo",
+    "summary": "MSI messaging: тесты каждого package-fragment ≥90%",
+    "why": "Bounded owner of verified P09 review defect; explicit acceptance and dependencies prevent hidden work.",
+    "scope": {
+      "include": [
+        "MSI messaging: тесты каждого package-fragment ≥90%"
+      ],
+      "exclude": [
+        "Remote writes/publication unless exact separate external gate supplied; no unrelated P08/product behavior change."
+      ]
+    },
+    "depends_on": [
+      "P09.12"
+    ],
+    "decisions": [
+      "D118",
+      "D120",
+      "D17",
+      "D18",
+      "D19",
+      "D73",
+      "D103",
+      "D113",
+      "D121",
+      "D125"
+    ],
+    "reads": [
+      {
+        "ref": "knowledge/research-P09-design#repository-only",
+        "why": "Действующий scope владельца и граница отменённых release работ",
+        "required": true
+      },
+      {
+        "ref": "knowledge/research-P09-design#basis",
+        "why": "Canonical verified runbook",
+        "required": true
+      },
+      {
+        "ref": "knowledge/research-P09-design#mutation",
+        "why": "Canonical verified runbook",
+        "required": true
+      },
+      {
+        "ref": "knowledge/research-P09-design#checks",
+        "why": "Canonical verified runbook",
+        "required": true
+      },
+      {
+        "ref": "knowledge/research-P09-design#grok-repair",
+        "why": "Verified G1–G6 corrections and executable runtime boundary",
+        "required": true
+      }
+    ],
+    "task_files": [
+      {
+        "path": "packages/*/tests/**",
+        "change": "modify"
+      },
+      {
+        "path": "tests/**",
+        "change": "modify"
+      },
+      {
+        "path": "scripts/quality/mutation-equivalents.json",
+        "change": "any",
+        "note": "Created by predecessor item; then amended here."
+      },
+      {
+        "path": "scripts/quality/mutation-zero-ledger.json",
+        "change": "any",
+        "note": "Created by predecessor item; then amended here."
+      },
+      {
+        "path": "scripts/quality/tests/fixtures/**",
+        "change": "modify"
+      },
+      {
+        "path": "packages/transfer/tests/Pg/ReleaseResumeTest.php",
+        "change": "create"
+      }
+    ],
+    "rules": [
+      "Соблюдать D125, D118/D120 и технические правила D121, D17/D73/D103/D113. Release-положения прежнего дизайна исключены D125; внешние записи не разрешены.",
+      "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
+      "Поведение/API/SPI/schema не менять молча ради зелёного tooling; precise decision+CHANGELOG+API/Golden для public delta.",
+      "Каждый новый gate негатив-проверен на temp fixtures; coverage/MSI/quality scopes и пороги не снижать. Если packages/*/src меняется, surviving fixed mutations --all до завершения.",
+      "Self-check + scoped checks; repair owning item. Независимое full-review фазы отдельное P09.8 по действующим требованиям плана.",
+      "Изменение scope не запускает исполнение. При запуске проверить актуальное завершение P08 и independent corrected-design review. Release owner questions/grants не являются допуском для code-items.",
+      "Регрессионная защита transfer требует resume/idempotency/partial failure behavioral PG tests, not codec-only evidence.",
+      "G5 behavioral proof is three explicit cases. Reuse existing dedup (assert target applied exactly1, refs1) and failed-row-savepoint (one invalid + one applied row, successful ref1); they already prove idempotency/partial failure despite lacking those exact words in titles. Add only missing named multi-step restart/resume regression. No duplicated cosmetic idempotency/partial-failure tests needed.",
+      "D125: выполнять только repository scope; требования к rc/candidate/SBOM/27-row release DoD и публикации пропущены, не переносить их в этот item."
+    ],
+    "guidance": "Сначала применить scope D125 и knowledge/research-P09-design#repository-only. Execute only after admission, from required section. Produce real fresh raw outputs; new commands below are owned deliverables, not present-at-design assumptions.",
+    "validation": [
+      {
+        "id": "V1",
+        "cmd": "PGSQL_PORT=5434 scripts/php84 python3 scripts/quality/mutation.py --zone messaging",
+        "expect": "exit0 every messaging behavioral package-fragment ≥90%, positive valid mutants, fresh SQLite/required PG hashes; AST declaration ledger reviewed separately",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V2",
+        "cmd": "scripts/php84 composer lint:check",
+        "expect": "exit 0",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V3",
+        "cmd": "scripts/php84 composer analyse",
+        "expect": "exit 0",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V4",
+        "cmd": "bash scripts/mutation-check.sh --all",
+        "expect": "exit 0",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V5",
+        "cmd": "python3 scripts/quality/mutation.py --check-ledgers",
+        "expect": "exit0 per-fragment/global equivalents≤5%, exact reproduced exclusions, unchanged hashes",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V6",
+        "cmd": "PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/transfer/tests --configuration=packages/transfer/phpunit.xml --bootstrap=vendor/autoload.php packages/transfer/tests/Pg/ReleaseResumeTest.php --group=pg --filter='resumes the persisted checkpoint in a new executor without replaying committed rows' --log-junit=build/quality/P09.13/transfer-resume.xml",
+        "expect": "exit0 exactly named non-skipped behavioral case against preflighted isolated *_test DB; raw JUnit retained",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V7",
+        "cmd": "PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/transfer/tests --configuration=packages/transfer/phpunit.xml --bootstrap=vendor/autoload.php packages/transfer/tests/Pg/SqlTransferExecutorTest.php --group=pg --filter='deduplicates an identical external record across independent jobs before target apply' --log-junit=build/quality/P09.13/transfer-idempotency.xml",
+        "expect": "exit0 exactly named non-skipped behavioral case against preflighted isolated *_test DB; raw JUnit retained",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V8",
+        "cmd": "PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/transfer/tests --configuration=packages/transfer/phpunit.xml --bootstrap=vendor/autoload.php packages/transfer/tests/Pg/SqlTransferExecutorTest.php --group=pg --filter='rolls back only the failed row savepoint and continues the batch' --log-junit=build/quality/P09.13/transfer-partial-failure.xml",
+        "expect": "exit0 exactly named non-skipped behavioral case against preflighted isolated *_test DB; raw JUnit retained",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V9",
+        "cmd": "python3 -c 'import xml.etree.ElementTree as E; rows=[(\"build/quality/P09.13/transfer-resume.xml\",\"resumes the persisted checkpoint in a new executor without replaying committed rows\"),(\"build/quality/P09.13/transfer-idempotency.xml\",\"deduplicates an identical external record across independent jobs before target apply\"),(\"build/quality/P09.13/transfer-partial-failure.xml\",\"rolls back only the failed row savepoint and continues the batch\")]; docs=[(E.parse(p).getroot(),n)for p,n in rows]; assert all(len(r.findall(\".//testcase\"))==1 and n in r.find(\".//testcase\").get(\"name\",\"\") and int(r.find(\".//testcase\").get(\"assertions\",\"0\"))>0 and not any(r.findall(\".//\"+tag)for tag in [\"skipped\",\"failure\",\"error\"]) for r,n in docs), \"missing/skipped/wrong Transfer DoD case\"; print(\"Transfer DoD cases OK\")'",
+        "expect": "exit0 all3 exact JUnit testcases/assertions; missing/empty/wrong/skipped case RED",
+        "kind": "acceptance"
+      }
+    ],
+    "deliverables": [
+      "messaging fresh fragment receipts/survivor regressions; two4h rounds limit then honest BLOCKED; no source/mutator/threshold narrowing",
+      "Named source regression resume/idempotency/partial-failure JUnit evidence; resume new executor case and existing semantic tests preserved"
+    ],
+    "route": {
+      "class": "implementation",
+      "effort": "xhigh"
+    },
+    "review": {
+      "mode": "none"
+    },
+    "authority": {
+      "kind": "routine"
+    },
+    "rag": {
+      "need": "none",
+      "status": "not_needed",
+      "notes": "RAG:— current source facts",
+      "captures": []
+    },
+    "result": null,
+    "updated_at": "2026-10-06T19:25:11Z"
+  },
+  "P09.14": {
+    "$schema": "urn:swissknifeman:task:plan:item:v1",
+    "id": "P09.14",
+    "title": "MSI other: тесты каждого package-fragment ≥75%",
+    "status": "todo",
+    "summary": "MSI other: тесты каждого package-fragment ≥75%",
+    "why": "Bounded owner of verified P09 review defect; explicit acceptance and dependencies prevent hidden work.",
+    "scope": {
+      "include": [
+        "MSI other: тесты каждого package-fragment ≥75%"
+      ],
+      "exclude": [
+        "Remote writes/publication unless exact separate external gate supplied; no unrelated P08/product behavior change."
+      ]
+    },
+    "depends_on": [
+      "P09.13"
+    ],
+    "decisions": [
+      "D118",
+      "D120",
+      "D17",
+      "D18",
+      "D19",
+      "D73",
+      "D103",
+      "D113",
+      "D121",
+      "D125"
+    ],
+    "reads": [
+      {
+        "ref": "knowledge/research-P09-design#repository-only",
+        "why": "Действующий scope владельца и граница отменённых release работ",
+        "required": true
+      },
+      {
+        "ref": "knowledge/research-P09-design#basis",
+        "why": "Canonical verified runbook",
+        "required": true
+      },
+      {
+        "ref": "knowledge/research-P09-design#mutation",
+        "why": "Canonical verified runbook",
+        "required": true
+      },
+      {
+        "ref": "knowledge/research-P09-design#checks",
+        "why": "Canonical verified runbook",
+        "required": true
+      }
+    ],
+    "task_files": [
+      {
+        "path": "packages/*/tests/**",
+        "change": "modify"
+      },
+      {
+        "path": "tests/**",
+        "change": "modify"
+      },
+      {
+        "path": "scripts/quality/mutation-equivalents.json",
+        "change": "any",
+        "note": "Created by predecessor item; then amended here."
+      },
+      {
+        "path": "scripts/quality/mutation-zero-ledger.json",
+        "change": "any",
+        "note": "Created by predecessor item; then amended here."
+      },
+      {
+        "path": "scripts/quality/tests/fixtures/**",
+        "change": "modify"
+      },
+      {
+        "path": "docker-compose.yml",
+        "change": "modify"
+      },
+      {
+        "path": ".github/workflows/ci.yml",
+        "change": "modify"
+      }
+    ],
+    "rules": [
+      "Соблюдать D125, D118/D120 и технические правила D121, D17/D73/D103/D113. Release-положения прежнего дизайна исключены D125; внешние записи не разрешены.",
+      "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
+      "Поведение/API/SPI/schema не менять молча ради зелёного tooling; precise decision+CHANGELOG+API/Golden для public delta.",
+      "Каждый новый gate негатив-проверен на temp fixtures; coverage/MSI/quality scopes и пороги не снижать. Если packages/*/src меняется, surviving fixed mutations --all до завершения.",
+      "Self-check + scoped checks; repair owning item. Независимое full-review фазы отдельное P09.8 по действующим требованиям плана.",
+      "Изменение scope не запускает исполнение. При запуске проверить актуальное завершение P08 и independent corrected-design review. Release owner questions/grants не являются допуском для code-items.",
+      "Регрессионная защита search SQL+Meilisearch actual provider behavior must run. Owner of isolated backend service preflight is this item; no blanket backend exclude.",
+      "D125: выполнять только repository scope; требования к rc/candidate/SBOM/27-row release DoD и публикации пропущены, не переносить их в этот item."
+    ],
+    "guidance": "Сначала применить scope D125 и knowledge/research-P09-design#repository-only. Execute only after admission, from required section. Produce real fresh raw outputs; new commands below are owned deliverables, not present-at-design assumptions.",
+    "validation": [
+      {
+        "id": "V1",
+        "cmd": "PGSQL_PORT=5434 scripts/php84 python3 scripts/quality/mutation.py --zone other",
+        "expect": "exit0 every other behavioral package-fragment ≥75%, positive valid mutants, fresh SQLite/required PG hashes; AST declaration ledger reviewed separately",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V2",
+        "cmd": "scripts/php84 composer lint:check",
+        "expect": "exit 0",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V3",
+        "cmd": "scripts/php84 composer analyse",
+        "expect": "exit 0",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V4",
+        "cmd": "bash scripts/mutation-check.sh --all",
+        "expect": "exit 0",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V5",
+        "cmd": "python3 scripts/quality/mutation.py --check-ledgers",
+        "expect": "exit0 per-fragment/global equivalents≤5%, exact reproduced exclusions, unchanged hashes",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V6",
+        "cmd": "scripts/php84 vendor/bin/pest --test-directory=packages/search-meilisearch/tests --configuration=packages/search-meilisearch/phpunit.xml --bootstrap=vendor/autoload.php packages/search-meilisearch/tests/Feature --group=meilisearch",
+        "expect": "exit0 actual isolated Meilisearch service, no excluded group or mocked only result",
+        "kind": "acceptance"
+      }
+    ],
+    "deliverables": [
+      "other fresh fragment receipts/survivor regressions; two4h rounds limit then honest BLOCKED; no source/mutator/threshold narrowing"
+    ],
+    "route": {
+      "class": "implementation",
+      "effort": "xhigh"
+    },
+    "review": {
+      "mode": "none"
+    },
+    "authority": {
+      "kind": "routine"
+    },
+    "rag": {
+      "need": "none",
+      "status": "not_needed",
+      "notes": "RAG:— current source facts",
+      "captures": []
+    },
+    "result": null,
+    "updated_at": "2026-10-06T19:25:11Z"
+  },
+  "P09.15": {
+    "$schema": "urn:swissknifeman:task:plan:item:v1",
+    "id": "P09.15",
+    "title": "Проверки request/queue/Octane lifecycle по текущему коду",
+    "status": "todo",
+    "summary": "Проверить изоляцию resident/request/queue lifecycle и добавить реальный Octane Worker harness с воспроизводимыми source receipts без release DoD.",
+    "why": "Tenant context/reset и очистка после ошибок требуют поведенческой регрессионной защиты независимо от выпуска версии.",
+    "scope": {
+      "include": [
+        "Source lifecycle tests: resident/request/scoped reset, queue two-tenant/failure cleanup; actual Octane Worker harness на поддерживаемой матрице; тесты достоверности source receipts."
+      ],
+      "exclude": [
+        "Release DoD/27-row collector, first-release scorecard, supported-release registry, candidate fingerprints, exporter/SBOM/qualification/publication и версия 1.0.0-rc.1.",
+        "Изменение API/schema/версий/каналов без отдельного решения."
+      ]
+    },
+    "depends_on": [
+      "P09.14"
+    ],
+    "decisions": [
+      "D118",
+      "D120",
+      "D17",
+      "D18",
+      "D19",
+      "D73",
+      "D103",
+      "D113",
+      "D121",
+      "D125"
+    ],
+    "reads": [
+      {
+        "ref": "knowledge/research-P09-design#repository-only",
+        "why": "Действующий scope владельца и граница отменённых release работ",
+        "required": true
+      },
+      {
+        "ref": "knowledge/research-P09-design#basis",
+        "why": "Canonical verified runbook",
+        "required": true
+      },
+      {
+        "ref": "knowledge/research-P09-design#checks",
+        "why": "Canonical verified runbook",
+        "required": true
+      },
+      {
+        "ref": "knowledge/research-P09-design#grok-repair",
+        "why": "Verified G1–G6 corrections and executable runtime boundary",
+        "required": true
+      },
+      {
+        "ref": "knowledge/research-P09-design#dod-map",
+        "why": "Только source lifecycle subsection DOD-08/G6 по D125; release DoD/collector исключены",
+        "required": true
+      }
+    ],
+    "task_files": [
+      {
+        "path": "packages/core/tests/Feature/ReleaseContextLifecycleTest.php",
+        "change": "create"
+      },
+      {
+        "path": "scripts/quality/octane-proof.py",
+        "change": "create"
+      },
+      {
+        "path": "scripts/quality/tests/test_octane_proof.py",
+        "change": "create"
+      },
+      {
+        "path": "packages/core/tests/Release/OctaneLifecycleTest.php",
+        "change": "create"
+      },
+      {
+        "path": "packages/core/tests/Release/octane-consumer/**",
+        "change": "create"
+      }
+    ],
+    "rules": [
+      "Соблюдать D125, D118/D120 и технические правила D121, D17/D73/D103/D113. Release-положения прежнего дизайна исключены D125; внешние записи не разрешены.",
+      "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
+      "Поведение/API/SPI/schema не менять молча ради зелёного tooling; precise decision+CHANGELOG+API/Golden для public delta.",
+      "Каждый новый gate негатив-проверен на temp fixtures; coverage/MSI/quality scopes и пороги не снижать. Если packages/*/src меняется, surviving fixed mutations --all до завершения.",
+      "Self-check + scoped checks; repair owning item. Независимое full-review фазы отдельное P09.8 по действующим требованиям плана.",
+      "Изменение scope не запускает исполнение. При запуске проверить актуальное завершение P08 и independent corrected-design review. Release owner questions/grants не являются допуском для code-items.",
+      "D125: выполнять только repository scope; требования к rc/candidate/SBOM/27-row release DoD и публикации пропущены, не переносить их в этот item.",
+      "Actual Octane Worker execution обязательна: request/queue isolation, handler lifecycle и cleanup failure; modeled reset proof не заменяет реальные source checks."
+    ],
+    "guidance": "D125: исполнить только lifecycle часть старой dod-map (DOD-08/G6). Сохранить request и queue scenarios; добавить ReleaseContextLifecycleTest.php и реальный Octane Worker harness из существующего примера, scripts/quality/octane-proof.py и его tests. Здесь Release в пути — прежнее имя тестовой фикстуры, не выпуск версии. V3/V6/V7 являются source checks и не требуют rc/candidate/SBOM. Не создавать scripts/dod-1.0.py/json, dod-evidence.py, supported-releases.json или first-release scorecard. Перед PG проверить *_test; реальные Octane handlers на всех 4 поддерживаемых cells, модельный forgetScopedInstances не заменяет исполнение.",
+    "validation": [
+      {
+        "id": "V3",
+        "cmd": "scripts/php84 vendor/bin/pest tests/Feature/ResidentLifecycleTest.php packages/core/tests/Unit/TenantContextRestorerTest.php packages/core/tests/Feature/ReleaseContextLifecycleTest.php",
+        "expect": "exit0 request/scoped reset/queue two-tenant/failure cleanup assertions; negative singleton/reset controls demonstrated",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V6",
+        "cmd": "scripts/php84 python3 scripts/quality/octane-proof.py --source-root . --matrix all --evidence-dir build/quality/P09.15/octane",
+        "expect": "exit0 real Octane Worker boot/handle/request termination in persistent PHP process on all4 supported cells; source proof only, all handler cases counted",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V7",
+        "cmd": "python3 -m unittest discover -s scripts/quality/tests -p test_octane_proof.py",
+        "expect": "exit0 missing/unexecuted/wrong handler/model-only/skip/lock/hash/cleanup failure receipts RED",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V9",
+        "cmd": "scripts/php84 composer lint:check",
+        "expect": "exit 0",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V10",
+        "cmd": "scripts/php84 composer analyse",
+        "expect": "exit 0",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V11",
+        "cmd": "scripts/php84 composer test",
+        "expect": "exit 0",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V12",
+        "cmd": "PGSQL_PORT=5434 scripts/php84 composer test:pg",
+        "expect": "exit 0 after isolated *_test preflight",
+        "kind": "acceptance"
+      }
+    ],
+    "deliverables": [
+      "Request/queue regression tests and actual Octane Worker boot/handle/request termination harness; fresh source/lock/hash receipts for all supported cells, independently checked failure/cleanup/tenant separation.",
+      "Receipt checker negative controls: missing/unexecuted/wrong handler/model-only/skipped handler/lock/hash/cleanup failure are RED; no release readiness claim."
+    ],
+    "route": {
+      "class": "implementation",
+      "effort": "xhigh"
+    },
+    "review": {
+      "mode": "none"
+    },
+    "authority": {
+      "kind": "routine"
+    },
+    "rag": {
+      "need": "none",
+      "status": "not_needed",
+      "notes": "RAG:— current source facts",
+      "captures": []
+    },
+    "result": null,
+    "updated_at": "2026-10-06T19:25:11Z"
+  },
+  "P09.8": {
+    "$schema": "urn:swissknifeman:task:plan:item:v1",
+    "id": "P09.8",
+    "title": "Review P09: качество кода и обычное CI-закрытие",
+    "status": "todo",
+    "summary": "Независимый read-only review типизации, tooling, MSI и lifecycle tests; закрытие по обычному hosted CI D73 без квалификации релиза.",
+    "why": "Изменения качества должны сохранять поведение/API/SPI/schema и иметь честные измерения; итоговый review другой моделью остаётся требованием плана.",
+    "scope": {
+      "include": [
+        "Specs/diff/check outputs retained code-items; independent verdict source/log integrity; обычный hosted final-commit CI D73."
+      ],
+      "exclude": [
+        "RC/candidate/SBOM/DoD27, operator packet, release qualification matrix и publication.",
+        "Незаявленные product/API/schema изменения."
+      ]
+    },
+    "depends_on": [
+      "P09.15"
+    ],
+    "decisions": [
+      "D118",
+      "D120",
+      "D17",
+      "D18",
+      "D19",
+      "D73",
+      "D103",
+      "D113",
+      "D121",
+      "D125"
+    ],
+    "reads": [
+      {
+        "ref": "knowledge/research-P09-design#repository-only",
+        "why": "Действующий scope владельца и граница отменённых release работ",
+        "required": true
+      },
+      {
+        "ref": "knowledge/research-P09-design#basis",
+        "why": "База/cohort",
+        "required": true
+      },
+      {
+        "ref": "knowledge/research-P09-design#checks",
+        "why": "Алгоритм и runbook",
+        "required": true
+      },
+      {
+        "ref": "knowledge/research-P09-design#checks",
+        "why": "Acceptance/failure/review",
+        "required": true
+      },
+      {
+        "ref": "knowledge/research-P09-design-rag#sources",
+        "why": "Version-bound tooling",
+        "required": true
+      }
+    ],
+    "task_files": [],
+    "rules": [
+      "Соблюдать D125, D118/D120 и технические правила D121, D17/D73/D103/D113. Release-положения прежнего дизайна исключены D125; внешние записи не разрешены.",
+      "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
+      "Поведение/API/SPI/schema не менять молча ради зелёного tooling; precise decision+CHANGELOG+API/Golden для public delta.",
+      "Каждый новый gate негатив-проверен на temp fixtures; coverage/MSI/quality scopes и пороги не снижать. Если packages/*/src меняется, surviving fixed mutations --all до завершения.",
+      "Self-check + scoped checks; repair owning item. Независимое full-review фазы отдельное P09.8 по действующим требованиям плана.",
+      "Изменение scope не запускает исполнение. При запуске проверить актуальное завершение P08 и independent corrected-design review. Release owner questions/grants не являются допуском для code-items.",
+      "D125: выполнять только repository scope; требования к rc/candidate/SBOM/27-row release DoD и публикации пропущены, не переносить их в этот item."
+    ],
+    "guidance": "Сначала применить scope D125 и knowledge/research-P09-design#repository-only. Read-only product. Consume existing green outputs and reproduce only suspicious evidence. Publish verdict through plan.py. Do not repair product or run a publisher. Hosted remote read is allowed; missing final CI is a concrete acceptance wait, not GREEN.",
+    "validation": [
+      {
+        "id": "V0",
+        "cmd": "test ! -e scripts/.plan-close-deferred",
+        "expect": "exit 0",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V1",
+        "cmd": "git status --porcelain -- packages products scripts tests docs docs-public .github composer.json composer.lock",
+        "expect": "empty product worktree before and after review",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V2",
+        "procedure": "Снять SHA256 всех product files до/после read-only review и сравнить. Reviewer model differs from P09 executors, prompt/context only specs+diff+checks.",
+        "expect": "Product hashes identical; model identity recorded",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V4",
+        "procedure": "Сохранить независимый вердикт knowledge/artifacts-P09.8-review-verdict.json через plan.py add-document; exact review:<provider>/<model> GREEN|FINDINGS:N, source fingerprints и checks оставшихся code-items. Findings repair in owning item, затем bounded read-only recheck.",
+        "expect": "GREEN; no unresolved code/API/schema/security/check-integrity findings; release readiness not asserted",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V5",
+        "procedure": "Read-only gh api/gh run view: обычный workflow CI на финальном commit фазы; exact SHA, completed/success, все обязательные jobs success по D73. При разном source/bookkeeping commit доказать lineage и identical product hashes. RC candidate/archive digests и release qualification matrix не требуются по D125.",
+        "expect": "Hosted ordinary final-commit CI GREEN; missing proof keeps closure pending",
+        "kind": "acceptance"
+      },
+      {
+        "id": "V6",
+        "procedure": "Independently replay equivalent/parse/compile and declaration-only exceptions; verify fragment denominator, ≤5% cap, fresh Infection error controls, coverage and source lifecycle/transfer/search behavior receipts.",
+        "expect": "No unreviewed ledger/stale hash/vacuous MSI score; per-fragment95/90/75 and source behavior checks current; no release DoD27 required",
+        "kind": "acceptance"
+      }
+    ],
+    "deliverables": [
+      "Independent code-quality verdict; обычный hosted closing CI receipt runid/sha/jobs по D73.",
+      "Улучшения репозитория проверены; релизная готовность и выпуск версии не заявлены."
+    ],
+    "route": {
+      "class": "frontier",
+      "effort": "high"
+    },
+    "review": {
+      "mode": "requested",
+      "reviewer": {
+        "class": "frontier",
+        "note": "Different model than P09 executors; standing plan full-review mandate, not newly imposed opt-in.",
+        "effort": "high"
+      }
+    },
+    "authority": {
+      "kind": "routine"
+    },
+    "rag": {
+      "need": "required",
+      "status": "complete",
+      "notes": "Primary captures+research-P09-design-rag; dependency solve VERIFY-AT-EXEC",
+      "captures": [
+        "@plan/artifacts/P09-design-rag/README.md"
+      ]
+    },
+    "result": null,
+    "updated_at": "2026-10-06T19:25:11Z"
+  }
+}

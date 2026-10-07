@@ -10,7 +10,7 @@ use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 use Illuminate\Filesystem\Filesystem;
 
-require dirname(__DIR__, 2).'/vendor/autoload.php';
+require $argv[2];
 
 $container = new Container;
 Container::setInstance($container);

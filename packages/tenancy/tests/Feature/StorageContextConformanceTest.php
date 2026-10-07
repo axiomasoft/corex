@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Aws\S3\S3Client;
+use Composer\Autoload\ClassLoader;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
@@ -229,7 +230,9 @@ it('validates batch and destination paths before any part of the operation mutat
 
 it('refuses the optional object branch explicitly when its native SDK is absent', function (): void {
     if (class_exists(AwsS3V3Adapter::class)) {
-        $process = new Process([PHP_BINARY, __DIR__.'/../Support/StorageSdkAbsenceProbe.php']);
+        $loader = (new ReflectionClass(ClassLoader::class))->getFileName();
+        assert(is_string($loader));
+        $process = new Process([PHP_BINARY, __DIR__.'/../Support/StorageSdkAbsenceProbe.php', dirname($loader, 2).'/autoload.php']);
         $process->mustRun();
         expect(trim($process->getOutput()))->toBe('sdk-absent: denied before context or storage access');
 

@@ -27,7 +27,8 @@
     "D103",
     "D113",
     "D121",
-    "D125"
+    "D125",
+    "D133"
   ],
   "reads": [
     {
@@ -82,13 +83,13 @@
     "Соблюдать D125, D118/D120 и технические правила D121, D17/D73/D103/D113. Release-положения прежнего дизайна исключены D125; внешние записи не разрешены.",
     "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
     "Поведение/API/SPI/schema не менять молча ради зелёного tooling; precise decision+CHANGELOG+API/Golden для public delta.",
-    "Каждый новый gate негатив-проверен на temp fixtures; coverage/MSI/quality scopes и пороги не снижать. Если packages/*/src меняется, surviving fixed mutations --all до завершения.",
+    "D133: до конца PLAN3 mutation/Infection/MSI/probes/registry/ledger replay не выполняются. Обычные behavior, coverage, analysis, BC/API/schema проверки сохраняются.",
     "Self-check + scoped checks; repair owning item. Независимое full-review фазы отдельное P09.8 по действующим требованиям плана.",
     "Изменение scope не запускает исполнение. При запуске проверить актуальное завершение P08 и independent corrected-design review. Release owner questions/grants не являются допуском для code-items.",
     "D125: выполнять только repository scope; требования к rc/candidate/SBOM/27-row release DoD и публикации пропущены, не переносить их в этот item.",
     "Actual Octane Worker execution обязательна: request/queue isolation, handler lifecycle и cleanup failure; modeled reset proof не заменяет реальные source checks."
   ],
-  "guidance": "D125: исполнить только lifecycle часть старой dod-map (DOD-08/G6). Сохранить request и queue scenarios; добавить ReleaseContextLifecycleTest.php и реальный Octane Worker harness из существующего примера, scripts/quality/octane-proof.py и его tests. Здесь Release в пути — прежнее имя тестовой фикстуры, не выпуск версии. V3/V6/V7 являются source checks и не требуют rc/candidate/SBOM. Не создавать scripts/dod-1.0.py/json, dod-evidence.py, supported-releases.json или first-release scorecard. Перед PG проверить *_test; реальные Octane handlers на всех 4 поддерживаемых cells, модельный forgetScopedInstances не заменяет исполнение.",
+  "guidance": "D125: исполнить только lifecycle часть старой dod-map (DOD-08/G6). Сохранить request и queue scenarios; добавить ReleaseContextLifecycleTest.php и реальный Octane Worker harness из существующего примера, scripts/quality/octane-proof.py и его tests. Здесь Release в пути — прежнее имя тестовой фикстуры, не выпуск версии. V3/V6/V7 являются source checks и не требуют rc/candidate/SBOM. Не создавать scripts/dod-1.0.py/json, dod-evidence.py, supported-releases.json или first-release scorecard. Перед PG проверить *_test; реальные Octane handlers на всех 4 поддерживаемых cells, модельный forgetScopedInstances не заменяет исполнение. D133 has priority over all old mutation-related text and the previous cheaper-model prompt: no further mutation work during PLAN3; only independent ordinary scope remains.",
   "validation": [
     {
       "id": "V3",
@@ -154,5 +155,5 @@
     "captures": []
   },
   "result": null,
-  "updated_at": "2026-10-06T19:25:11Z"
+  "updated_at": "2026-10-07T16:04:59Z"
 }

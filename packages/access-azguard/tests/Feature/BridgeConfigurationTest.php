@@ -2,18 +2,23 @@
 
 declare(strict_types=1);
 
+use AzGuard\Contracts\AzGuardManagerInterface;
 use AzGuard\Contracts\ContextGuard;
 use AzGuard\Contracts\PermissionLayer;
 use AzGuard\Models\Role;
 use CoreX\AccessAzguard\AccessAzguardRegistrar;
 use CoreX\AccessAzguard\AccessAzguardServiceProvider;
 use CoreX\AccessAzguard\Internal\AccessAzguardOptions;
+use CoreX\AccessAzguard\Internal\AccessAzguardSchemaSets;
+use CoreX\AccessAzguard\Internal\AutMatrixGrantSource;
 use CoreX\AccessAzguard\Internal\AzGuardRoleModel;
+use CoreX\AccessAzguard\Internal\MatrixPermissionCatalogBuilder;
 use CoreX\AccessAzguard\Internal\TenantContextGuard;
 use CoreX\AccessAzguard\Internal\WorkspacePermissionLayer;
 use CoreX\Config\Exceptions\InvalidConfiguration;
 use Illuminate\Config\Repository;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\ServiceProvider;
 
 it('resolves bridge options as a shared immutable snapshot', function (): void {
     $options = resolve(AccessAzguardOptions::class);
@@ -32,6 +37,7 @@ it('keeps the shared bridge options unresolved during registration', function ()
     new AccessAzguardServiceProvider($application)->register();
 
     expect($application->resolved(AccessAzguardOptions::class))->toBeFalse();
+    expect($application->make('config')->get('corex-access-azguard.azguard_pins.table_names.roles'))->toBe('az_guard_roles');
     $application->make('config')->set('corex-access-azguard.bind_permission_layer', false);
     $options = $application->make(AccessAzguardOptions::class);
     expect($options->bindPermissionLayer)->toBeFalse()
@@ -102,6 +108,7 @@ it('rejects invalid bridge configuration with the offending path', function (arr
     'pin group' => [['azguard_pins' => 'invalid'], 'azguard_pins'],
     'tables group' => [['azguard_pins' => ['table_names' => false]], 'azguard_pins.table_names'],
     'roles table' => [['azguard_pins' => ['table_names' => ['roles' => '']]], 'azguard_pins.table_names.roles'],
+    'whitespace roles table' => [['azguard_pins' => ['table_names' => ['roles' => '  ']]], 'azguard_pins.table_names.roles'],
     'morph type' => [['azguard_pins' => ['column_names' => ['morph_type' => 'bad']]], 'azguard_pins.column_names.morph_type'],
     'role model' => [['azguard_pins' => ['models' => ['role' => stdClass::class]]], 'azguard_pins.models.role'],
 ]);
@@ -114,4 +121,25 @@ it('validates the lazy bridge options before booting runtime integrations', func
     $application->make('config')->set('corex-access-azguard.bind_permission_layer', 'invalid');
 
     expect(fn () => $provider->boot())->toThrow(InvalidConfiguration::class);
+});
+
+it('registers the native grant source and catalog builder with AzGuard', function (): void {
+    $manager = Mockery::mock(AzGuardManagerInterface::class);
+    $manager->shouldReceive('registerGrantSource')->once()->with(AutMatrixGrantSource::class);
+    $manager->shouldReceive('registerCatalogBuilder')->once()->with(MatrixPermissionCatalogBuilder::class);
+    app()->instance(AzGuardManagerInterface::class, $manager);
+
+    (new AccessAzguardRegistrar)->boot($this->app);
+    expect(resolve(AzGuardManagerInterface::class))->toBe($manager);
+});
+
+it('publishes the exact bridge configuration and declares its current tenant schema version', function (): void {
+    expect(ServiceProvider::pathsToPublish(AccessAzguardServiceProvider::class, 'corex-access-azguard-config'))
+        ->toBe([dirname(__DIR__, 2).'/src/../config/corex-access-azguard.php' => config_path('corex-access-azguard.php')]);
+    $sets = (new AccessAzguardSchemaSets)->sets();
+    expect($sets)->toHaveCount(1)
+        ->and($sets[0]->package)->toBe('axiomasoft/corex-access-azguard')
+        ->and($sets[0]->name)->toBe('tenant')
+        ->and($sets[0]->version)->toBe(1)
+        ->and($sets[0]->drivers)->toBe(['pgsql', 'sqlite']);
 });

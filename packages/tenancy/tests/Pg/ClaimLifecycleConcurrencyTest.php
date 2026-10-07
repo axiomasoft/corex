@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Composer\Autoload\ClassLoader;
 use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\Data\ClaimRequest;
 use CoreX\Tenancy\Provisioning\Data\QualifiedTemplate;
@@ -109,7 +110,9 @@ beforeEach(function (): void {
     }
     $this->p32Workers = [];
     $this->p32WorkerScript = tempnam(sys_get_temp_dir(), 'corex-p32-claim-');
-    $autoload = var_export(realpath(__DIR__.'/../../vendor/autoload.php'), true);
+    $loader = (new ReflectionClass(ClassLoader::class))->getFileName();
+    assert(is_string($loader));
+    $autoload = var_export(dirname($loader, 2).'/autoload.php', true);
     $source = <<<'PHP'
 <?php
 declare(strict_types=1);

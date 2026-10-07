@@ -1,0 +1,46 @@
+{
+  "task_files": [
+    {
+      "path": "packages/*/tests/**",
+      "change": "modify"
+    },
+    {
+      "path": "tests/**",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/mutation-equivalents.json",
+      "change": "any",
+      "note": "Created by predecessor item; then amended here."
+    },
+    {
+      "path": "scripts/quality/mutation-zero-ledger.json",
+      "change": "any",
+      "note": "Created by predecessor item; then amended here."
+    },
+    {
+      "path": "scripts/quality/tests/fixtures/**",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/mutation.py",
+      "change": "modify",
+      "note": "Repair observed package Pest bootstrap and Testbench sandbox directory loss; preserve full source/mutator/threshold policy."
+    },
+    {
+      "path": "scripts/quality/tests/test_mutation.py",
+      "change": "modify",
+      "note": "Regression controls for the observed sandbox/harness defects."
+    },
+    {
+      "path": "scripts/quality/infection-pest-adapter/src/PestAdapter.php",
+      "change": "modify",
+      "note": "Use every coverage-reported test class for each mutant; retain all methods/datasets, full initial suites, unknown mapping refusal and raw exit evidence."
+    },
+    {
+      "path": "scripts/quality/infection-pest-adapter/src/NullReturn.php",
+      "change": "create",
+      "note": "Additional return-null perturbation; preserves all default mutators and strict scoring without classifying behavior as declarations."
+    }
+  ]
+}

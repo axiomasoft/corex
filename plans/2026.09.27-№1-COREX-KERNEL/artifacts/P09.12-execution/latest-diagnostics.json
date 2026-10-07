@@ -1,0 +1,127 @@
+{
+  "core": {
+    "path": "build/quality/mutation/core-security/f13d7c3749444c8d999ec20a5c97771b",
+    "acceptance": false,
+    "reason": "superseded inputs and/or infrastructure failure; diagnostic only",
+    "upstream_stats": {
+      "totalMutantsCount": 497,
+      "killedCount": 431,
+      "killedByStaticAnalysisCount": 0,
+      "notCoveredCount": 1,
+      "escapedCount": 14,
+      "errorCount": 0,
+      "syntaxErrorCount": 0,
+      "skippedCount": 0,
+      "ignoredCount": 0,
+      "timeOutCount": 51,
+      "msi": 86.72,
+      "mutationCodeCoverage": 99.8,
+      "coveredCodeMsi": 86.9
+    },
+    "nonkills_by_file": {
+      "escaped": {
+        "GuardedTenantContextRestorer.php": 1,
+        "DataScope.php": 1,
+        "DataScopeAccessDecision.php": 2,
+        "RecordRef.php": 1,
+        "WriteToken.php": 1,
+        "SchemaMigrateCommand.php": 2,
+        "SchemaStatusCommand.php": 4,
+        "LaravelSchemaMigrator.php": 2
+      },
+      "uncovered": {
+        "JsonDocuments.php": 1
+      },
+      "timeouted": {
+        "TenantContext.php": 1,
+        "JsonDocument.php": 3,
+        "JsonDocuments.php": 2,
+        "SchemaSet.php": 14,
+        "CoreSchemaSets.php": 1,
+        "LaravelSchemaMigrator.php": 15,
+        "TaggedSchemaSets.php": 14,
+        "MigratesSchemaSets.php": 1
+      }
+    }
+  },
+  "access": {
+    "path": "build/quality/mutation/access-security/d4dc369d41ba40a7a67c55fafbf7f290",
+    "acceptance": false,
+    "reason": "superseded inputs and/or infrastructure failure; diagnostic only",
+    "upstream_stats": {
+      "totalMutantsCount": 652,
+      "killedCount": 509,
+      "killedByStaticAnalysisCount": 0,
+      "notCoveredCount": 48,
+      "escapedCount": 26,
+      "errorCount": 0,
+      "syntaxErrorCount": 0,
+      "skippedCount": 0,
+      "ignoredCount": 0,
+      "timeOutCount": 69,
+      "msi": 78.07,
+      "mutationCodeCoverage": 92.64,
+      "coveredCodeMsi": 84.27
+    },
+    "nonkills_by_file": {
+      "escaped": {
+        "DefaultAccessChecker.php": 1,
+        "PermissionSurface.php": 1,
+        "ScopeAvailability.php": 1,
+        "ScopePredicate.php": 3,
+        "PermissionsMerger.php": 1,
+        "PrincipalUserProvider.php": 2,
+        "AuthOptions.php": 2,
+        "MatrixValidator.php": 4,
+        "ScopeMapVersion.php": 3,
+        "RoleCloner.php": 5,
+        "SystemRoleMutationScope.php": 1,
+        "RoleMatrixData.php": 1,
+        "SystemRoleImmutable.php": 1
+      },
+      "uncovered": {
+        "DefaultAccessChecker.php": 2,
+        "ScopePredicate.php": 15,
+        "PrincipalIdentity.php": 4,
+        "AccessIntegrationRegistrar.php": 10,
+        "DatabaseRoleMatrixCompiler.php": 1,
+        "MatrixValidator.php": 5,
+        "ScopeMapVersion.php": 3,
+        "Role.php": 4,
+        "RoleAssignment.php": 2,
+        "RoleMatrixRow.php": 2
+      },
+      "timeouted": {
+        "DefaultAccessChecker.php": 11,
+        "DefaultScopeResolver.php": 1,
+        "ScopePredicate.php": 4,
+        "CoreAuthServiceProvider.php": 10,
+        "Scope.php": 10,
+        "PackageProblemDefinitions.php": 1,
+        "AccessSchemaSets.php": 4,
+        "AccessBindingsRegistrar.php": 2,
+        "AccessIntegrationRegistrar.php": 1,
+        "AuthOptions.php": 1,
+        "DatabaseRoleMatrixCompiler.php": 2,
+        "ScopeMapVersion.php": 14,
+        "Role.php": 2,
+        "RoleAssignment.php": 1,
+        "RoleMatrixRow.php": 2,
+        "RoleMatrixData.php": 2,
+        "SystemRoleImmutable.php": 1
+      }
+    }
+  },
+  "tools": {
+    "path": "build/quality/mutation/tools-security/9181ed5795ba4f448fa5731302879cd9",
+    "acceptance": false,
+    "reason": "superseded inputs and/or infrastructure failure; diagnostic only",
+    "recorded_trials": 493
+  },
+  "tenancy": {
+    "path": "build/quality/mutation/tenancy-security/850db870f1404002be5246a931e7fbf1",
+    "acceptance": false,
+    "reason": "superseded inputs and/or infrastructure failure; diagnostic only",
+    "recorded_trials": 2
+  }
+}
