@@ -2,6 +2,4 @@
 
 declare(strict_types=1);
 
-use CoreX\Search\Tests\PgTestCase;
-
-uses(PgTestCase::class)->group('pg')->in(__DIR__.'/Pg');
+// Each backend test file declares its TestCase and group for all entrypoints.

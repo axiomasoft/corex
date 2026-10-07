@@ -5,6 +5,9 @@ declare(strict_types=1);
 use CoreX\Search\Data\IndexBatch;
 use CoreX\Search\Data\IndexSwap;
 use CoreX\SearchMeilisearch\Internal\MeilisearchIndexAdapter;
+use CoreX\SearchMeilisearch\Tests\MeilisearchTestCase;
+
+uses(MeilisearchTestCase::class)->group('meilisearch');
 
 it('returns an asynchronous task receipt for index submission', function (): void {
     $index = $this->index('g1');

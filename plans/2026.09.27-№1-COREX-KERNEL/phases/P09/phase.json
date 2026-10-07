@@ -212,7 +212,11 @@
       "mode": "recommended"
     }
   ],
-  "closed": null,
+  "closed": {
+    "at": "2026-10-07T18:38:43Z",
+    "result": "blocked",
+    "summary": "17 item(s): 8 done, 4 done_with_deviations, 1 blocked, 4 skipped"
+  },
   "orchestration": {
     "strategy": "sequential"
   },

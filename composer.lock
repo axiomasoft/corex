@@ -810,7 +810,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-meilisearch",
-                "reference": "ca56186394a93d7798529bb809acfc98a7e06236"
+                "reference": "c6945fe6246a58e7c19b5f7d55dbb06376b71c18"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -823,7 +823,8 @@
             },
             "require-dev": {
                 "orchestra/testbench": "^11.3",
-                "orchestra/testbench-core": "^11.5"
+                "orchestra/testbench-core": "^11.5",
+                "phpunit/phpunit": "^13.3"
             },
             "type": "corex-module",
             "extra": {

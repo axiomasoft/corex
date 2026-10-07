@@ -1,0 +1,11 @@
+Loading composer repositories with package information
+Updating dependencies
+Lock file operations: 0 installs, 1 update, 0 removals
+  - Upgrading axiomasoft/corex-search-meilisearch (dev-main ca56186 => dev-main c6945fe)
+Writing lock file
+119 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+infection/extension-installer: Extensions installed
+> axiomasoft/corex-infection-pest-adapter: installed
+phpstan/extension-installer: Extensions installed
+No security vulnerability advisories found.

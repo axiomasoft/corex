@@ -7,7 +7,8 @@
   "why": "Bounded owner of verified P09 review defect; explicit acceptance and dependencies prevent hidden work.",
   "scope": {
     "include": [
-      "Ordinary SQL/search and actual isolated Meilisearch provider behavior; isolated backend preflight."
+      "Ordinary SQL/search and actual isolated Meilisearch provider behavior; isolated backend preflight.",
+      "Explicit owner amendment: bounded confirmed CI repair and authorized scoped product commits/push to axiomik/corex-mirror, no force/tags; acceptance limited to changed inputs with retained unaffected receipts and final ordinary hosted CI."
     ],
     "exclude": [
       "Remote writes/publication unless exact separate external gate supplied; no unrelated P08/product behavior change.",
@@ -54,20 +55,28 @@
   ],
   "task_files": [
     {
-      "path": "packages/*/tests/**",
+      "path": "packages/search/tests/Pg/PostgresSearchProviderTest.php",
       "change": "modify"
     },
     {
-      "path": "tests/**",
+      "path": "packages/search/tests/Pest.php",
       "change": "modify"
     },
     {
-      "path": "docker-compose.yml",
+      "path": "packages/search-meilisearch/tests/**",
       "change": "modify"
     },
     {
-      "path": ".github/workflows/ci.yml",
+      "path": "packages/search-meilisearch/composer.json",
       "change": "modify"
+    },
+    {
+      "path": "composer.lock",
+      "change": "modify"
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09-repair/P09.14-*",
+      "change": "any"
     }
   ],
   "rules": [
@@ -83,33 +92,57 @@
   "guidance": "Сначала применить scope D125 и knowledge/research-P09-design#repository-only. Execute only after admission, from required section. Produce real fresh raw outputs; new commands below are owned deliverables, not present-at-design assumptions. D133 has priority over all old mutation-related text and the previous cheaper-model prompt: no further mutation work during PLAN3; only independent ordinary scope remains. Owner steering: «никаких длинных прогонов, никаких мутаторов, ты делай только то, что по задаче качественно». Only seven short SQL/actual Meilisearch cases and affected-file Pint/test-lint. No full CI, coverage or mutation runs.",
   "validation": [
     {
+      "id": "V1",
+      "cmd": "PGSQL_DATABASE=corex_p09_repair_search_test PGSQL_SEARCH_A_DATABASE=corex_p09_repair_search_a_test PGSQL_SEARCH_B_DATABASE=corex_p09_repair_search_b_test PGSQL_PORT=5434 scripts/php84 composer test:pg -- --testsuite=SearchPackage",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
       "id": "V2",
-      "cmd": "scripts/php84 vendor/bin/pint --test packages/search/tests/Pg/PostgresSearchProviderTest.php packages/search-meilisearch/tests/MeilisearchTestCase.php packages/search-meilisearch/tests/Pest.php packages/search-meilisearch/tests/Feature/MeilisearchSearchProviderTest.php packages/search-meilisearch/tests/Feature/IndexLifecycleTest.php",
-      "expect": "exit0 style on the five affected test files",
+      "cmd": "same isolated PGSQL_* environment scripts/php84 composer --working-dir=packages/search test:pg",
+      "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V3",
-      "cmd": "scripts/php84 vendor/bin/phpstan analyse -c 'plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.14-execution/phpstan-scoped.neon' --memory-limit=1G",
-      "expect": "exit0 adopted test-lint AST rules on affected tests; no ignore rules or baseline added",
+      "cmd": "MEILISEARCH_HOST=http://127.0.0.1:32772 scripts/php84 composer --working-dir=packages/search-meilisearch test:meilisearch",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "MEILISEARCH_HOST=http://127.0.0.1:32772 scripts/php84 vendor/bin/pest --group=meilisearch --testsuite=SearchMeilisearchPackage",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "scripts/php84 bash scripts/dependency-analyser.sh packages/search-meilisearch",
+      "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V6",
-      "cmd": "MEILISEARCH_HOST=http://127.0.0.1:32771 scripts/php84 vendor/bin/pest --test-directory=packages/search-meilisearch/tests --configuration=packages/search-meilisearch/phpunit.xml --bootstrap=vendor/autoload.php packages/search-meilisearch/tests/Feature --group=meilisearch --log-junit=build/quality/P09.14/meilisearch.xml",
-      "expect": "exit0 all three non-skipped actual isolated Meilisearch cases: query/limit/subset, persisted documents, actual swap content",
+      "cmd": "scripts/php84 vendor/bin/pint --test packages/search/tests packages/search-meilisearch/tests",
+      "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V7",
-      "cmd": "PGSQL_DATABASE=corex_p0914_search_test PGSQL_SEARCH_A_DATABASE=corex_p0914_search_a_test PGSQL_SEARCH_B_DATABASE=corex_p0914_search_b_test PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/search/tests --configuration=packages/search/phpunit.xml --bootstrap=vendor/autoload.php packages/search/tests/Pg/PostgresSearchProviderTest.php --group=pg --log-junit=build/quality/P09.14/postgres-search.xml",
-      "expect": "exit0 all four non-skipped SQL provider cases against preflighted isolated *_test databases",
+      "cmd": "scripts/php84 vendor/bin/phpstan analyse -c 'plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.14-execution/phpstan-scoped.neon' --memory-limit=1G --no-progress",
+      "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V8",
-      "cmd": "python3 'plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.14-execution/verify-results.py'",
-      "expect": "exit0 exact seven JUnit cases with assertions, no skipped/failed/error cases; no fixture indexes remain in the owned Meilisearch service",
+      "cmd": "PGSQL_PORT=1 scripts/php84 composer --working-dir=packages/search test; MEILISEARCH_HOST=http://127.0.0.1:1 scripts/php84 composer --working-dir=packages/search-meilisearch test; scripts/php84 composer test:hermetic -- --testsuite=TransferPackage,SearchPackage",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "cmd": "scripts/php84 composer validate --strict; scripts/php84 composer --working-dir=packages/search-meilisearch validate --strict",
+      "expect": "exit 0",
       "kind": "acceptance"
     }
   ],
@@ -118,7 +151,7 @@
   ],
   "route": {
     "class": "implementation",
-    "effort": "xhigh"
+    "effort": "high"
   },
   "review": {
     "mode": "none"
@@ -133,42 +166,62 @@
     "captures": []
   },
   "result": {
-    "started_at": "2026-10-07T16:40:38Z",
-    "finished_at": "2026-10-07T16:49:24Z",
+    "started_at": "2026-10-07T18:35:21Z",
+    "finished_at": "2026-10-07T18:38:43Z",
     "executor": {
       "provider": "codex",
       "model": "gpt-6.1-sol",
-      "effort": "xhigh",
-      "session": "01a1166d-625e-7e72-8dac-6b75526f9292"
+      "effort": "high",
+      "session": "01a11796-aa4e-7081-a4c1-16e2352fc5bf"
     },
-    "notes": "Усилены ordinary SQL filter/query-bound cursor и реальные Meilisearch IDs/limit/subset/index document/swap assertions; исправлена повторная Pest5 TestCase binding. 7 tests / 31 assertions: PG ~0.18s, real Meilisearch ~1.48s; affected-file Pint/test-lint GREEN. Изолированные три *_test DB и отдельный loopback/tmpfs Meilisearch1.16.0 preflighted; уникальные индексы удалены, свой контейнер остановлен. Fresh raw JUnit, source hashes, commands, durations: artifacts/P09.14-execution/checks.json. Production/API/schema unchanged; без длинных/full/mutation runs, D133 действует.",
+    "notes": "Bounded owner repair: root/default package PG7tests28assertions each, actual root/default package Meilisearch3tests18assertions each; hermetic Search14/35,Meilisearch7/16,root selected27/66+17/79 pass with closed ports. Every JUnit case has assertions/no skips/errors; backend indexes cleaned. Direct dev phpunit^13.3; standalone dependency analyzer GREEN17files; scoped root lock refresh changes only Meilisearch metadata. Pint/PHPStan/strict manifests GREEN. PG/coverage hosted lanes already prepare Search physical DBs and real backend. Raw P09-repair/P09.14 evidence; no mutation/MSI/release claims.",
     "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-10-07T18:38:43Z"
+      },
       {
         "id": "V2",
         "exit": 0,
-        "at": "2026-10-07T16:49:24Z"
+        "at": "2026-10-07T18:38:43Z"
       },
       {
         "id": "V3",
         "exit": 0,
-        "at": "2026-10-07T16:49:24Z"
+        "at": "2026-10-07T18:38:43Z"
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-10-07T18:38:43Z"
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-10-07T18:38:43Z"
       },
       {
         "id": "V6",
         "exit": 0,
-        "at": "2026-10-07T16:49:24Z"
+        "at": "2026-10-07T18:38:43Z"
       },
       {
         "id": "V7",
         "exit": 0,
-        "at": "2026-10-07T16:49:24Z"
+        "at": "2026-10-07T18:38:43Z"
       },
       {
         "id": "V8",
         "exit": 0,
-        "at": "2026-10-07T16:49:24Z"
+        "at": "2026-10-07T18:38:43Z"
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-10-07T18:38:43Z"
       }
     ]
   },
-  "updated_at": "2026-10-07T16:49:24Z"
+  "updated_at": "2026-10-07T18:38:43Z"
 }

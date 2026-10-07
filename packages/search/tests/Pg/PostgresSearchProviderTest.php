@@ -11,7 +11,10 @@ use CoreX\Search\Data\SearchQuery;
 use CoreX\Search\Data\SearchSnapshot;
 use CoreX\Search\Internal\Postgres\PostgresSearchProvider;
 use CoreX\Search\Internal\Query\SearchCursorCodec;
+use CoreX\Search\Tests\PgTestCase;
 use Illuminate\Support\Facades\DB;
+
+uses(PgTestCase::class)->group('pg');
 
 beforeEach(function (): void {
     DB::statement('DROP TABLE IF EXISTS corex_search_provider_test');

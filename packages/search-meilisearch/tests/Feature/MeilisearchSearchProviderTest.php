@@ -8,6 +8,9 @@ use CoreX\Data\Data\DataScope;
 use CoreX\Search\Data\SearchFilter;
 use CoreX\Search\Data\SearchQuery;
 use CoreX\SearchMeilisearch\Internal\MeilisearchSearchProvider;
+use CoreX\SearchMeilisearch\Tests\MeilisearchTestCase;
+
+uses(MeilisearchTestCase::class)->group('meilisearch');
 
 it('returns candidate identifiers only from an isolated local Meilisearch service', function (): void {
     $index = $this->index('query');
