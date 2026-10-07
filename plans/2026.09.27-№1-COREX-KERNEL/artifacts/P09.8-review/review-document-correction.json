@@ -1,0 +1,27 @@
+{
+  "title": "P09.8 independent review verdict",
+  "sections": [
+    {
+      "id": "verdict",
+      "title": "Independent code verdict",
+      "text": "review:codex/gpt-6-astra FINDINGS:2. Actual reviewer codex/gpt-6-astra/high; native session01a1175f-c10c-78c1-baff-26e5fb2fa45f. Supersedes historical GREEN issued before exact-HEAD hosted CI completed. F1 P2: missing root/standalone PgTestCase/pg-group integration for Transfer and Search causes three PG18 failures and eight failures in each PHP8.4/8.5 hermetic root job (six Transfer SQL,one Transfer resume,one Search phrase); owning repairs P09.13+P09.14. F2 P2: CRM coverage94.3%<unchanged95% after71passing tests/340assertions, with new Value boundary paths uncovered; owning repair P09.3. P09.8 remains unaccepted."
+    },
+    {
+      "id": "source",
+      "title": "Source and preservation",
+      "text": "Base f0faead86201935c71cd0c2d8731e2e41bcc26e5 \u2192 HEAD 1bfcb0324197c9e3ae8a050dea2b8f1d84b7f6dc; non-plan diff SHA256 25eead518d70bc5afdb9e1de625f2ee2bd79a5bcc34a0f1f8dbdc234b313f970. All 3119 manifest paths unchanged; before/after manifest SHA256 ee40bdeca142536a2e497e2a33f84ec7f4632b340a59c2df3599dfdafb5bfde0. Source fingerprints and native identity retained under artifacts/P09.8-review/."
+    },
+    {
+      "id": "evidence",
+      "title": "Review evidence and limits",
+      "text": "Consumed specs + retained diff + completed checks only, under D125/D132/D133. Verified 97 log hashes, 23 current source bindings, nine clean JUnit files, and 514 Octane source/lock/raw bindings. No test, mutation, probe, self-test, replay, release/candidate/SBOM/DoD27 or publishing executions. Raw detailed review: artifacts/P09.8-review/review-report.md. Context-budget defect recorded independently. Hosted CI remains integrator-owned; the native reviewer did not finish or commit the item. Bounded live-CI follow-up consumed hosted job112898736741 and112898736744 logs; current FINDINGS:2 supersedes the earlier pending-CI GREEN, preserved in artifacts/P09.8-review/review-report-pending-ci-historical.md. Concrete paths/triggers/impact/repair ownership and raw hashes: findings.json and review-report.md. No product fixes or local suites executed."
+    }
+  ],
+  "applies_to": [
+    "P09.8"
+  ],
+  "provenance": {
+    "path": "artifacts/P09.8-review/review-report.md",
+    "sha256": "6e85cf4dc931924defadf40ce44d3204aaa238e158b9f297e92fb061c94d372a"
+  }
+}

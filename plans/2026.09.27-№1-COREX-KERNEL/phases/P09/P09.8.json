@@ -2,7 +2,7 @@
   "$schema": "urn:swissknifeman:task:plan:item:v1",
   "id": "P09.8",
   "title": "Review P09: качество кода и обычное CI-закрытие",
-  "status": "todo",
+  "status": "blocked",
   "summary": "Независимый read-only review типизации, tooling, MSI и lifecycle tests; закрытие по обычному hosted CI D73 без квалификации релиза.",
   "why": "Изменения качества должны сохранять поведение/API/SPI/schema и иметь честные измерения; итоговый review другой моделью остаётся требованием плана.",
   "scope": {
@@ -133,6 +133,54 @@
       "@plan/artifacts/P09-design-rag/README.md"
     ]
   },
-  "result": null,
-  "updated_at": "2026-10-07T16:04:59Z"
+  "result": {
+    "started_at": "2026-10-07T17:19:14Z",
+    "finished_at": "2026-10-07T17:51:56Z",
+    "executor": {
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "session": "01a1175f-c10c-78c1-baff-26e5fb2fa45f"
+    },
+    "registered_by": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    },
+    "notes": "Read-only P09.8 completed independent reviewer codex/gpt-6-astra/high FINDINGS:2 and exact-source hosted CI run37652373568 on axiomik/corex-mirror:20success10failure3D133-planned skips. Five owning cause families recorded: Transfer/Search/Meilisearch Pest harness integration; CRM94.3<95coverage; missing Meilisearch PHPUnit dev declaration; three disabled-job Zizmor obfuscation diagnostics; hosted COMPOSER_NO_AUDIT blocks source audit after all PHPStan scopes pass. Current source1bfcb032 unchanged (root2879/reviewer3119files). No local suites or mutation/release work; no product repairs. Independent report and raw source-bound hosted receipts retained. Root current model explicitly authorized by owner.",
+    "escalation": "Owner approval is required only to expand the explicit read-only P09.8 contract («Do not repair product») into owning repairs P09.3/P09.4/P09.12/P09.13/P09.14 with affected checks, bounded independent recheck and final ordinary CI on axiomik. Approval request is pending; do not reopen or repair product without that response. P09.8 and phase cannot close GREEN on current findings/failed CI.",
+    "checks": [
+      {
+        "id": "V0",
+        "exit": 0,
+        "at": "2026-10-07T17:51:56Z"
+      },
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-10-07T17:51:56Z"
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-10-07T17:51:56Z"
+      },
+      {
+        "id": "V4",
+        "exit": 1,
+        "at": "2026-10-07T17:51:56Z"
+      },
+      {
+        "id": "V5",
+        "exit": 1,
+        "at": "2026-10-07T17:51:56Z"
+      },
+      {
+        "id": "V6",
+        "exit": 1,
+        "at": "2026-10-07T17:51:56Z"
+      }
+    ]
+  },
+  "updated_at": "2026-10-07T17:51:56Z"
 }

@@ -1,0 +1,1471 @@
+﻿2026-10-07T16:29:01.5002932Z Current runner version: '2.337.0'
+2026-10-07T16:29:01.5028702Z ##[group]Runner Image Provisioner
+2026-10-07T16:29:01.5029431Z Hosted Compute Agent
+2026-10-07T16:29:01.5030030Z Version: 20260901.588
+2026-10-07T16:29:01.5030572Z Commit: f88ec8081b781fac6c440065ac7ff9e710ce3d0b
+2026-10-07T16:29:01.5031157Z Build Date: 2026-09-01T19:56:44Z
+2026-10-07T16:29:01.5031847Z Worker ID: {3da2dce1-1bf8-47af-b4df-53d0b72034b8}
+2026-10-07T16:29:01.5032469Z Azure Region: southcentralus
+2026-10-07T16:29:01.5033100Z ##[endgroup]
+2026-10-07T16:29:01.5034757Z ##[group]Operating System
+2026-10-07T16:29:01.5035270Z Ubuntu
+2026-10-07T16:29:01.5035903Z 24.04.5
+2026-10-07T16:29:01.5036485Z LTS
+2026-10-07T16:29:01.5036971Z ##[endgroup]
+2026-10-07T16:29:01.5037446Z ##[group]Runner Image
+2026-10-07T16:29:01.5037949Z Image: ubuntu-24.04
+2026-10-07T16:29:01.5038525Z Version: 20260927.320.1
+2026-10-07T16:29:01.5039645Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260927.320/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-07T16:29:01.5041069Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260927.320
+2026-10-07T16:29:01.5041908Z ##[endgroup]
+2026-10-07T16:29:01.5042958Z ##[group]GITHUB_TOKEN Permissions
+2026-10-07T16:29:01.5044862Z Contents: read
+2026-10-07T16:29:01.5045439Z Metadata: read
+2026-10-07T16:29:01.5045980Z ##[endgroup]
+2026-10-07T16:29:01.5048217Z Secret source: Actions
+2026-10-07T16:29:01.5049001Z Cache mode: write
+2026-10-07T16:29:01.5049587Z Prepare workflow directory
+2026-10-07T16:29:01.6851244Z Prepare all required actions
+2026-10-07T16:29:01.6936823Z Getting action download info
+2026-10-07T16:29:01.9669317Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-07T16:29:02.9270707Z Download action repository 'shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240' (SHA:f3e473d116dcccaddc5834248c87452386958240)
+2026-10-07T16:29:03.6685406Z Complete job name: PG lane (postgres:18) · Laravel 13.*
+2026-10-07T16:29:03.7014321Z ##[group]Checking docker version
+2026-10-07T16:29:03.7023466Z ##[command]/usr/bin/docker version --format '{{.Server.APIVersion}}'
+2026-10-07T16:29:03.7671520Z '1.48'
+2026-10-07T16:29:03.7688359Z Docker daemon API version: '1.48'
+2026-10-07T16:29:03.7689446Z ##[command]/usr/bin/docker version --format '{{.Client.APIVersion}}'
+2026-10-07T16:29:03.7828456Z '1.48'
+2026-10-07T16:29:03.7841822Z Docker client API version: '1.48'
+2026-10-07T16:29:03.7847393Z ##[endgroup]
+2026-10-07T16:29:03.7849432Z ##[group]Clean up resources from previous jobs
+2026-10-07T16:29:03.7853861Z ##[command]/usr/bin/docker ps --all --quiet --no-trunc --filter "label=69ec33"
+2026-10-07T16:29:03.7977173Z ##[command]/usr/bin/docker network prune --force --filter "label=69ec33"
+2026-10-07T16:29:03.8086164Z ##[endgroup]
+2026-10-07T16:29:03.8087000Z ##[group]Create local container network
+2026-10-07T16:29:03.8094828Z ##[command]/usr/bin/docker network create --label 69ec33 github_network_c50ca3de17c2419c8915550aed41a985
+2026-10-07T16:29:03.8873382Z 58a4f0f7106d4b82773dcf88ed574bff567dbb3e00a3e8b9d57902f2f59fc7e5
+2026-10-07T16:29:03.8887272Z ##[endgroup]
+2026-10-07T16:29:03.8907158Z ##[group]Starting postgres service container
+2026-10-07T16:29:03.8923512Z ##[command]/usr/bin/docker pull postgres:18
+2026-10-07T16:29:04.5023606Z 18: Pulling from library/postgres
+2026-10-07T16:29:04.7230023Z ecc510c1e359: Pulling fs layer
+2026-10-07T16:29:04.7234616Z 4a3cafbebf6d: Pulling fs layer
+2026-10-07T16:29:04.7235295Z 28ced28a309b: Pulling fs layer
+2026-10-07T16:29:04.7235863Z ab69e2551985: Pulling fs layer
+2026-10-07T16:29:04.7236517Z 1f04dfa92b9f: Pulling fs layer
+2026-10-07T16:29:04.7237027Z 5a487c9461a5: Pulling fs layer
+2026-10-07T16:29:04.7237559Z e0d4a6e58470: Pulling fs layer
+2026-10-07T16:29:04.7238165Z 496ce2ef5b2f: Pulling fs layer
+2026-10-07T16:29:04.7238726Z c8145e79cc2b: Pulling fs layer
+2026-10-07T16:29:04.7239247Z 06ea90d3bcc9: Pulling fs layer
+2026-10-07T16:29:04.7239736Z dc25540d793f: Pulling fs layer
+2026-10-07T16:29:04.7240521Z 7967f593457f: Pulling fs layer
+2026-10-07T16:29:04.7241044Z d23c975c4693: Pulling fs layer
+2026-10-07T16:29:04.7241578Z 496ce2ef5b2f: Waiting
+2026-10-07T16:29:04.7242114Z c8145e79cc2b: Waiting
+2026-10-07T16:29:04.7242663Z 06ea90d3bcc9: Waiting
+2026-10-07T16:29:04.7243198Z dc25540d793f: Waiting
+2026-10-07T16:29:04.7243716Z 7967f593457f: Waiting
+2026-10-07T16:29:04.7244241Z d23c975c4693: Waiting
+2026-10-07T16:29:04.7244799Z ab69e2551985: Waiting
+2026-10-07T16:29:04.7245292Z 1f04dfa92b9f: Waiting
+2026-10-07T16:29:04.7245820Z 5a487c9461a5: Waiting
+2026-10-07T16:29:04.7246472Z e0d4a6e58470: Waiting
+2026-10-07T16:29:04.8413040Z 4a3cafbebf6d: Verifying Checksum
+2026-10-07T16:29:04.8413887Z 4a3cafbebf6d: Download complete
+2026-10-07T16:29:04.9673049Z 28ced28a309b: Verifying Checksum
+2026-10-07T16:29:04.9673671Z 28ced28a309b: Download complete
+2026-10-07T16:29:05.0605970Z ecc510c1e359: Download complete
+2026-10-07T16:29:05.0835676Z ab69e2551985: Verifying Checksum
+2026-10-07T16:29:05.0836211Z ab69e2551985: Download complete
+2026-10-07T16:29:05.2640243Z e0d4a6e58470: Verifying Checksum
+2026-10-07T16:29:05.2641927Z e0d4a6e58470: Download complete
+2026-10-07T16:29:05.2642660Z 1f04dfa92b9f: Verifying Checksum
+2026-10-07T16:29:05.2643496Z 1f04dfa92b9f: Download complete
+2026-10-07T16:29:05.2644373Z 5a487c9461a5: Verifying Checksum
+2026-10-07T16:29:05.2645162Z 5a487c9461a5: Download complete
+2026-10-07T16:29:05.3792245Z 496ce2ef5b2f: Download complete
+2026-10-07T16:29:05.4326088Z 06ea90d3bcc9: Verifying Checksum
+2026-10-07T16:29:05.4326594Z 06ea90d3bcc9: Download complete
+2026-10-07T16:29:05.5366863Z dc25540d793f: Verifying Checksum
+2026-10-07T16:29:05.5367802Z dc25540d793f: Download complete
+2026-10-07T16:29:05.5787997Z 7967f593457f: Verifying Checksum
+2026-10-07T16:29:05.5790178Z 7967f593457f: Download complete
+2026-10-07T16:29:05.8011857Z d23c975c4693: Verifying Checksum
+2026-10-07T16:29:05.8012496Z d23c975c4693: Download complete
+2026-10-07T16:29:05.9840088Z c8145e79cc2b: Verifying Checksum
+2026-10-07T16:29:05.9849522Z c8145e79cc2b: Download complete
+2026-10-07T16:29:06.6827372Z ecc510c1e359: Pull complete
+2026-10-07T16:29:07.3840321Z 4a3cafbebf6d: Pull complete
+2026-10-07T16:29:14.6336714Z 28ced28a309b: Pull complete
+2026-10-07T16:29:14.7150723Z ab69e2551985: Pull complete
+2026-10-07T16:29:15.2353628Z 1f04dfa92b9f: Pull complete
+2026-10-07T16:29:15.3525111Z 5a487c9461a5: Pull complete
+2026-10-07T16:29:15.3627571Z e0d4a6e58470: Pull complete
+2026-10-07T16:29:15.3741977Z 496ce2ef5b2f: Pull complete
+2026-10-07T16:29:20.9050778Z c8145e79cc2b: Pull complete
+2026-10-07T16:29:20.9178766Z 06ea90d3bcc9: Pull complete
+2026-10-07T16:29:20.9408962Z dc25540d793f: Pull complete
+2026-10-07T16:29:20.9503931Z 7967f593457f: Pull complete
+2026-10-07T16:29:20.9567160Z d23c975c4693: Pull complete
+2026-10-07T16:29:20.9607259Z Digest: sha256:74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336
+2026-10-07T16:29:20.9619524Z Status: Downloaded newer image for postgres:18
+2026-10-07T16:29:20.9627122Z docker.io/library/postgres:18
+2026-10-07T16:29:20.9677733Z ##[command]/usr/bin/docker create --name 1687a4bca763474e9296f407fe8a1b63_postgres18_0b714a --label 69ec33 --network github_network_c50ca3de17c2419c8915550aed41a985 --network-alias postgres -p 5432:5432 --health-cmd "pg_isready -U corex -d corex_test" --health-interval 5s --health-timeout 5s --health-retries 10 -e "POSTGRES_DB=corex_test" -e "POSTGRES_USER=corex" -e "POSTGRES_PASSWORD=corex" -e GITHUB_ACTIONS=true -e CI=true postgres:18
+2026-10-07T16:29:20.9888501Z 02f36201e85786ea2c70f863f7837b94c0a7b00129c719b8af81a4013e469904
+2026-10-07T16:29:20.9909831Z ##[command]/usr/bin/docker start 02f36201e85786ea2c70f863f7837b94c0a7b00129c719b8af81a4013e469904
+2026-10-07T16:29:21.1755771Z 02f36201e85786ea2c70f863f7837b94c0a7b00129c719b8af81a4013e469904
+2026-10-07T16:29:21.1782713Z ##[command]/usr/bin/docker ps --all --filter id=02f36201e85786ea2c70f863f7837b94c0a7b00129c719b8af81a4013e469904 --filter status=running --no-trunc --format "{{.ID}} {{.Status}}"
+2026-10-07T16:29:21.1909406Z 02f36201e85786ea2c70f863f7837b94c0a7b00129c719b8af81a4013e469904 Up Less than a second (health: starting)
+2026-10-07T16:29:21.1953472Z ##[command]/usr/bin/docker port 02f36201e85786ea2c70f863f7837b94c0a7b00129c719b8af81a4013e469904
+2026-10-07T16:29:21.2096892Z 5432/tcp -> 0.0.0.0:5432
+2026-10-07T16:29:21.2097296Z 5432/tcp -> [::]:5432
+2026-10-07T16:29:21.2134427Z ##[endgroup]
+2026-10-07T16:29:21.2148080Z ##[group]Waiting for all services to be ready
+2026-10-07T16:29:21.2162201Z ##[command]/usr/bin/docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" 02f36201e85786ea2c70f863f7837b94c0a7b00129c719b8af81a4013e469904
+2026-10-07T16:29:21.2324025Z starting
+2026-10-07T16:29:21.2334844Z postgres service is starting, waiting 2 seconds before checking again.
+2026-10-07T16:29:23.2322722Z ##[command]/usr/bin/docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" 02f36201e85786ea2c70f863f7837b94c0a7b00129c719b8af81a4013e469904
+2026-10-07T16:29:23.2426574Z starting
+2026-10-07T16:29:23.2437593Z postgres service is starting, waiting 3 seconds before checking again.
+2026-10-07T16:29:27.1817766Z ##[command]/usr/bin/docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" 02f36201e85786ea2c70f863f7837b94c0a7b00129c719b8af81a4013e469904
+2026-10-07T16:29:27.1920906Z healthy
+2026-10-07T16:29:27.1941741Z postgres service is healthy.
+2026-10-07T16:29:27.1942054Z ##[endgroup]
+2026-10-07T16:29:27.2179386Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-07T16:29:27.2179693Z with:
+2026-10-07T16:29:27.2179819Z   persist-credentials: false
+2026-10-07T16:29:27.2179970Z   repository: axiomik/corex-mirror
+2026-10-07T16:29:27.2181421Z   token: ***
+2026-10-07T16:29:27.2181537Z   ssh-strict: true
+2026-10-07T16:29:27.2181651Z   ssh-user: git
+2026-10-07T16:29:27.2181763Z   clean: true
+2026-10-07T16:29:27.2181886Z   sparse-checkout-cone-mode: true
+2026-10-07T16:29:27.2182030Z   fetch-depth: 1
+2026-10-07T16:29:27.2182156Z   fetch-tags: false
+2026-10-07T16:29:27.2182273Z   show-progress: true
+2026-10-07T16:29:27.2182392Z   lfs: false
+2026-10-07T16:29:27.2182499Z   submodules: false
+2026-10-07T16:29:27.2182621Z   set-safe-directory: true
+2026-10-07T16:29:27.2182757Z   allow-unsafe-pr-checkout: false
+2026-10-07T16:29:27.2182962Z env:
+2026-10-07T16:29:27.2183072Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T16:29:27.2183209Z   LARAVEL_VERSION: 13.*
+2026-10-07T16:29:27.2183374Z ##[endgroup]
+2026-10-07T16:29:27.2997460Z Syncing repository: axiomik/corex-mirror
+2026-10-07T16:29:27.2998731Z ##[group]Getting Git version info
+2026-10-07T16:29:27.2999077Z Working directory is '/home/runner/work/corex-mirror/corex-mirror'
+2026-10-07T16:29:27.2999556Z [command]/usr/bin/git version
+2026-10-07T16:29:27.3099633Z git version 2.55.0
+2026-10-07T16:29:27.3141903Z ##[endgroup]
+2026-10-07T16:29:27.3149256Z Temporarily overriding HOME='/home/runner/work/_temp/42623949-4b33-4a94-a0ad-de7cc0660f90' before making global git config changes
+2026-10-07T16:29:27.3174284Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-07T16:29:27.3197370Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/corex-mirror/corex-mirror
+2026-10-07T16:29:27.3207052Z Deleting the contents of '/home/runner/work/corex-mirror/corex-mirror'
+2026-10-07T16:29:27.3207930Z ##[group]Determining repository object format
+2026-10-07T16:29:27.3208440Z ##[endgroup]
+2026-10-07T16:29:27.3208888Z ##[group]Initializing the repository
+2026-10-07T16:29:27.3209319Z [command]/usr/bin/git init /home/runner/work/corex-mirror/corex-mirror
+2026-10-07T16:29:27.3298444Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-07T16:29:27.3309316Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-07T16:29:27.3313717Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-07T16:29:27.3314167Z hint: call:
+2026-10-07T16:29:27.3314654Z hint:
+2026-10-07T16:29:27.3315110Z hint: 	git config --global init.defaultBranch <name>
+2026-10-07T16:29:27.3315490Z hint:
+2026-10-07T16:29:27.3315859Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-07T16:29:27.3316635Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-07T16:29:27.3338743Z hint:
+2026-10-07T16:29:27.3339169Z hint: 	git branch -m <name>
+2026-10-07T16:29:27.3351190Z hint:
+2026-10-07T16:29:27.3351682Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-07T16:29:27.3352363Z Initialized empty Git repository in /home/runner/work/corex-mirror/corex-mirror/.git/
+2026-10-07T16:29:27.3354134Z [command]/usr/bin/git remote add origin https://github.com/axiomik/corex-mirror
+2026-10-07T16:29:27.3404420Z ##[endgroup]
+2026-10-07T16:29:27.3405026Z ##[group]Disabling automatic garbage collection
+2026-10-07T16:29:27.3405570Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-07T16:29:27.3460478Z ##[endgroup]
+2026-10-07T16:29:27.3460963Z ##[group]Setting up auth
+2026-10-07T16:29:27.3461385Z Removing SSH command configuration
+2026-10-07T16:29:27.3461870Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-07T16:29:27.3511913Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-07T16:29:27.3855085Z Removing HTTP extra header
+2026-10-07T16:29:27.3860529Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-07T16:29:27.3901000Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-07T16:29:27.4090711Z Removing includeIf entries pointing to credentials config files
+2026-10-07T16:29:27.4095518Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-07T16:29:27.4139256Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-07T16:29:27.4337435Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-4a379f1e-d178-436f-807a-4f49344b928a.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-07T16:29:27.4376070Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git.path /home/runner/work/_temp/git-credentials-4a379f1e-d178-436f-807a-4f49344b928a.config
+2026-10-07T16:29:27.4408430Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-4a379f1e-d178-436f-807a-4f49344b928a.config
+2026-10-07T16:29:27.4443277Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-4a379f1e-d178-436f-807a-4f49344b928a.config
+2026-10-07T16:29:27.4475861Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-4a379f1e-d178-436f-807a-4f49344b928a.config
+2026-10-07T16:29:27.4504726Z ##[endgroup]
+2026-10-07T16:29:27.4505219Z ##[group]Fetching the repository
+2026-10-07T16:29:27.4511440Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +1bfcb0324197c9e3ae8a050dea2b8f1d84b7f6dc:refs/remotes/origin/main
+2026-10-07T16:29:33.1579542Z From https://github.com/axiomik/corex-mirror
+2026-10-07T16:29:33.1580564Z  * [new ref]         1bfcb0324197c9e3ae8a050dea2b8f1d84b7f6dc -> origin/main
+2026-10-07T16:29:33.1587457Z [command]/usr/bin/git branch --list --remote origin/main
+2026-10-07T16:29:33.1613976Z   origin/main
+2026-10-07T16:29:33.1628091Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+2026-10-07T16:29:33.1643376Z 1bfcb0324197c9e3ae8a050dea2b8f1d84b7f6dc
+2026-10-07T16:29:33.1647615Z ##[endgroup]
+2026-10-07T16:29:33.1648042Z ##[group]Determining the checkout info
+2026-10-07T16:29:33.1648508Z ##[endgroup]
+2026-10-07T16:29:33.1658052Z [command]/usr/bin/git sparse-checkout disable
+2026-10-07T16:29:33.1701779Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-07T16:29:33.1733884Z ##[group]Checking out the ref
+2026-10-07T16:29:33.1734410Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-07T16:29:34.2085515Z Updating files:  77% (11672/15112)
+2026-10-07T16:29:34.2220661Z Updating files:  78% (11788/15112)
+2026-10-07T16:29:34.2710892Z Updating files:  79% (11939/15112)
+2026-10-07T16:29:34.3286672Z Updating files:  80% (12090/15112)
+2026-10-07T16:29:34.3357011Z Updating files:  81% (12241/15112)
+2026-10-07T16:29:34.3437648Z Updating files:  82% (12392/15112)
+2026-10-07T16:29:34.3534047Z Updating files:  83% (12543/15112)
+2026-10-07T16:29:34.3603696Z Updating files:  84% (12695/15112)
+2026-10-07T16:29:34.3896048Z Updating files:  85% (12846/15112)
+2026-10-07T16:29:34.3963559Z Updating files:  86% (12997/15112)
+2026-10-07T16:29:34.4007411Z Updating files:  87% (13148/15112)
+2026-10-07T16:29:34.4064036Z Updating files:  88% (13299/15112)
+2026-10-07T16:29:34.4124164Z Updating files:  89% (13450/15112)
+2026-10-07T16:29:34.5605008Z Updating files:  90% (13601/15112)
+2026-10-07T16:29:34.5658352Z Updating files:  91% (13752/15112)
+2026-10-07T16:29:34.5719554Z Updating files:  92% (13904/15112)
+2026-10-07T16:29:34.5791218Z Updating files:  93% (14055/15112)
+2026-10-07T16:29:34.5856094Z Updating files:  94% (14206/15112)
+2026-10-07T16:29:34.5946160Z Updating files:  95% (14357/15112)
+2026-10-07T16:29:34.6047041Z Updating files:  96% (14508/15112)
+2026-10-07T16:29:34.6104753Z Updating files:  97% (14659/15112)
+2026-10-07T16:29:34.6223872Z Updating files:  98% (14810/15112)
+2026-10-07T16:29:34.6287475Z Updating files:  99% (14961/15112)
+2026-10-07T16:29:34.6287937Z Updating files: 100% (15112/15112)
+2026-10-07T16:29:34.6288565Z Updating files: 100% (15112/15112), done.
+2026-10-07T16:29:34.6481542Z Switched to a new branch 'main'
+2026-10-07T16:29:34.6481989Z branch 'main' set up to track 'origin/main'.
+2026-10-07T16:29:34.6567306Z ##[endgroup]
+2026-10-07T16:29:34.6611162Z [command]/usr/bin/git log -1 --format=%H
+2026-10-07T16:29:34.6642098Z 1bfcb0324197c9e3ae8a050dea2b8f1d84b7f6dc
+2026-10-07T16:29:34.6657154Z ##[group]Removing auth
+2026-10-07T16:29:34.6697221Z Removing SSH command configuration
+2026-10-07T16:29:34.6702656Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-07T16:29:34.6708531Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-07T16:29:34.6930676Z Removing HTTP extra header
+2026-10-07T16:29:34.6933519Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-07T16:29:34.6968193Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-07T16:29:34.7199448Z Removing includeIf entries pointing to credentials config files
+2026-10-07T16:29:34.7217226Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-07T16:29:34.7247533Z includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git.path
+2026-10-07T16:29:34.7248066Z includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git/worktrees/*.path
+2026-10-07T16:29:34.7248588Z includeif.gitdir:/github/workspace/.git.path
+2026-10-07T16:29:34.7249019Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-07T16:29:34.7251401Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git.path
+2026-10-07T16:29:34.7295736Z /home/runner/work/_temp/git-credentials-4a379f1e-d178-436f-807a-4f49344b928a.config
+2026-10-07T16:29:34.7307414Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-4a379f1e\-d178\-436f\-807a\-4f49344b928a\.config
+2026-10-07T16:29:34.7475677Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git/worktrees/*.path
+2026-10-07T16:29:34.7518662Z /home/runner/work/_temp/git-credentials-4a379f1e-d178-436f-807a-4f49344b928a.config
+2026-10-07T16:29:34.7537910Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-4a379f1e\-d178\-436f\-807a\-4f49344b928a\.config
+2026-10-07T16:29:34.7670903Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-07T16:29:34.7701679Z /github/runner_temp/git-credentials-4a379f1e-d178-436f-807a-4f49344b928a.config
+2026-10-07T16:29:34.7708013Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-4a379f1e\-d178\-436f\-807a\-4f49344b928a\.config
+2026-10-07T16:29:34.7771339Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-07T16:29:34.7804514Z /github/runner_temp/git-credentials-4a379f1e-d178-436f-807a-4f49344b928a.config
+2026-10-07T16:29:34.7810608Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-4a379f1e\-d178\-436f\-807a\-4f49344b928a\.config
+2026-10-07T16:29:34.8064710Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-07T16:29:34.8291108Z Removing credentials config '/home/runner/work/_temp/git-credentials-4a379f1e-d178-436f-807a-4f49344b928a.config'
+2026-10-07T16:29:34.8298996Z ##[endgroup]
+2026-10-07T16:29:34.8556084Z ##[group]Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240
+2026-10-07T16:29:34.8556561Z with:
+2026-10-07T16:29:34.8556728Z   php-version: 8.4
+2026-10-07T16:29:34.8557031Z   extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
+2026-10-07T16:29:34.8557381Z   coverage: none
+2026-10-07T16:29:34.8557547Z   ini-file: production
+2026-10-07T16:29:34.8559510Z   github-token: ***
+2026-10-07T16:29:34.8559682Z env:
+2026-10-07T16:29:34.8559856Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T16:29:34.8560082Z   LARAVEL_VERSION: 13.*
+2026-10-07T16:29:34.8560268Z ##[endgroup]
+2026-10-07T16:29:34.8849146Z [command]/usr/bin/bash /home/runner/work/_actions/shivammathur/setup-php/f3e473d116dcccaddc5834248c87452386958240/src/scripts/run.sh
+2026-10-07T16:29:34.9217534Z 
+2026-10-07T16:29:34.9218436Z [90;1m==> [0m[37;1mSetup PHP[0m
+2026-10-07T16:29:39.5260454Z [32;1m✓ [0m[34;1mPHP [0m[90;1mInstalled PHP 8.4.26[0m
+2026-10-07T16:29:39.5261669Z 
+2026-10-07T16:29:39.5262147Z [90;1m==> [0m[37;1mSetup Extensions[0m
+2026-10-07T16:29:39.5714177Z [32;1m✓ [0m[34;1mmbstring [0m[90;1mEnabled[0m
+2026-10-07T16:29:39.5743894Z [32;1m✓ [0m[34;1mpdo [0m[90;1mEnabled[0m
+2026-10-07T16:29:39.5771380Z [32;1m✓ [0m[34;1msqlite3 [0m[90;1mEnabled[0m
+2026-10-07T16:29:39.5786111Z [32;1m✓ [0m[34;1mpdo_sqlite [0m[90;1mEnabled[0m
+2026-10-07T16:29:39.5804819Z [32;1m✓ [0m[34;1mpdo_pgsql [0m[90;1mEnabled[0m
+2026-10-07T16:29:39.5832409Z [32;1m✓ [0m[34;1mbcmath [0m[90;1mEnabled[0m
+2026-10-07T16:29:39.5855013Z [32;1m✓ [0m[34;1mcurl [0m[90;1mEnabled[0m
+2026-10-07T16:29:39.5882269Z [32;1m✓ [0m[34;1mintl [0m[90;1mEnabled[0m
+2026-10-07T16:29:39.5908046Z [32;1m✓ [0m[34;1mzip [0m[90;1mEnabled[0m
+2026-10-07T16:29:39.5934298Z [32;1m✓ [0m[34;1mgd [0m[90;1mEnabled[0m
+2026-10-07T16:29:39.5937716Z 
+2026-10-07T16:29:39.5938190Z [90;1m==> [0m[37;1mSetup Tools[0m
+2026-10-07T16:29:40.3225899Z [32;1m✓ [0m[34;1mcomposer [0m[90;1mAdded composer 2.10.3[0m
+2026-10-07T16:29:40.3229333Z 
+2026-10-07T16:29:40.3229734Z [90;1m==> [0m[37;1mSetup Coverage[0m
+2026-10-07T16:29:40.6124007Z [32;1m✓ [0m[34;1mnone [0m[90;1mDisabled Xdebug and PCOV[0m
+2026-10-07T16:29:40.6124491Z 
+2026-10-07T16:29:40.6124763Z [90;1m==> [0m[37;1mSponsor setup-php[0m
+2026-10-07T16:29:40.6125387Z [32;1m✓ [0m[34;1msetup-php [0m[90;1mhttps://setup-php.com/sponsor[0m
+2026-10-07T16:29:40.6342491Z ##[group]Run echo "Temporary constraint illuminate/contracts:$LARAVEL_VERSION applies during dependency installation"
+2026-10-07T16:29:40.6343187Z [36;1mecho "Temporary constraint illuminate/contracts:$LARAVEL_VERSION applies during dependency installation"[0m
+2026-10-07T16:29:40.6927675Z shell: /usr/bin/bash -e {0}
+2026-10-07T16:29:40.6927871Z env:
+2026-10-07T16:29:40.6928007Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T16:29:40.6928155Z   LARAVEL_VERSION: 13.*
+2026-10-07T16:29:40.6928291Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-07T16:29:40.6928473Z   COMPOSER_NO_INTERACTION: 1
+2026-10-07T16:29:40.6928609Z   COMPOSER_NO_AUDIT: 1
+2026-10-07T16:29:40.6928758Z ##[endgroup]
+2026-10-07T16:29:40.8369679Z Temporary constraint illuminate/contracts:13.* applies during dependency installation
+2026-10-07T16:29:41.0440355Z ##[group]Run php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
+2026-10-07T16:29:41.0440749Z [36;1mphp scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"[0m
+2026-10-07T16:29:41.0492408Z shell: /usr/bin/bash -e {0}
+2026-10-07T16:29:41.0492552Z env:
+2026-10-07T16:29:41.0492666Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T16:29:41.0492804Z   LARAVEL_VERSION: 13.*
+2026-10-07T16:29:41.0492928Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-07T16:29:41.0493064Z   COMPOSER_NO_INTERACTION: 1
+2026-10-07T16:29:41.0493193Z   COMPOSER_NO_AUDIT: 1
+2026-10-07T16:29:41.0493312Z ##[endgroup]
+2026-10-07T16:29:41.0888258Z CI locked toolchain: phpstan/phpstan 2.2.16
+2026-10-07T16:29:41.0888936Z CI locked toolchain: phpstan/phpstan-strict-rules 2.0.12
+2026-10-07T16:29:41.0889427Z CI locked toolchain: larastan/larastan v3.12.2
+2026-10-07T16:29:41.1846547Z Loading composer repositories with package information
+2026-10-07T16:29:49.6586952Z Updating dependencies
+2026-10-07T16:29:49.7189933Z Lock file operations: 0 installs, 40 updates, 0 removals
+2026-10-07T16:29:49.7191031Z   - Upgrading composer/semver (3.5.0 => 3.5.1)
+2026-10-07T16:29:49.7222709Z   - Upgrading doctrine/lexer (3.0.2 => 3.0.3)
+2026-10-07T16:29:49.7223344Z   - Upgrading fidry/cpu-core-counter (1.4.0 => 1.4.1)
+2026-10-07T16:29:49.7224098Z   - Upgrading filp/whoops (2.18.5 => 2.18.6)
+2026-10-07T16:29:49.7224556Z   - Upgrading firebase/php-jwt (v7.2.0 => v7.2.1)
+2026-10-07T16:29:49.7225248Z   - Upgrading justinrainbow/json-schema (6.13.0 => 6.13.1)
+2026-10-07T16:29:49.7225777Z   - Upgrading laravel/agent-detector (v2.0.2 => v2.0.4)
+2026-10-07T16:29:49.7226766Z   - Upgrading laravel/framework (v13.33.0 => v13.35.0)
+2026-10-07T16:29:49.7227313Z   - Upgrading laravel/prompts (v0.3.24 => v0.3.25)
+2026-10-07T16:29:49.7227959Z   - Upgrading monolog/monolog (3.12.0 => 3.12.1)
+2026-10-07T16:29:49.7228420Z   - Upgrading nesbot/carbon (3.14.1 => 3.14.2)
+2026-10-07T16:29:49.7229076Z   - Upgrading orchestra/sidekick (v1.2.22 => v1.2.23)
+2026-10-07T16:29:49.7229569Z   - Upgrading pestphp/pest (v5.2.1 => v5.3.0)
+2026-10-07T16:29:49.7230237Z   - Upgrading phpdocumentor/type-resolver (2.0.0 => 2.1.0)
+2026-10-07T16:29:49.7230767Z   - Upgrading phpunit/php-code-coverage (14.3.5 => 14.4.1)
+2026-10-07T16:29:49.7231461Z   - Upgrading phpunit/php-text-template (6.0.0 => 6.0.1)
+2026-10-07T16:29:49.7231976Z   - Upgrading phpunit/phpunit (13.3.4 => 13.3.6)
+2026-10-07T16:29:49.7232709Z   - Upgrading roave/backward-compatibility-check (8.22.0 => 8.23.0)
+2026-10-07T16:29:49.7233295Z   - Upgrading sebastian/environment (9.3.2 => 9.3.3)
+2026-10-07T16:29:49.7233935Z   - Upgrading sebastian/version (7.0.0 => 7.0.1)
+2026-10-07T16:29:49.7234339Z   - Upgrading seld/phar-utils (1.2.2 => 1.2.3)
+2026-10-07T16:29:49.7235503Z   - Upgrading symfony/console (v7.4.19 => v7.4.20)
+2026-10-07T16:29:49.7235967Z   - Upgrading symfony/error-handler (v8.1.5 => v8.1.8)
+2026-10-07T16:29:49.7236726Z   - Upgrading symfony/finder (v8.1.7 => v8.1.8)
+2026-10-07T16:29:49.7237230Z   - Upgrading symfony/http-foundation (v8.1.7 => v8.1.8)
+2026-10-07T16:29:49.7237842Z   - Upgrading symfony/http-kernel (v8.1.7 => v8.1.8)
+2026-10-07T16:29:49.7238316Z   - Upgrading symfony/polyfill-intl-grapheme (v1.41.0 => v1.43.0)
+2026-10-07T16:29:49.7239039Z   - Upgrading symfony/polyfill-intl-idn (v1.42.0 => v1.43.0)
+2026-10-07T16:29:49.7239585Z   - Upgrading symfony/polyfill-intl-normalizer (v1.42.0 => v1.43.0)
+2026-10-07T16:29:49.7240286Z   - Upgrading symfony/polyfill-mbstring (v1.38.2 => v1.43.0)
+2026-10-07T16:29:49.7240774Z   - Upgrading symfony/polyfill-php80 (v1.37.0 => v1.43.0)
+2026-10-07T16:29:49.7241432Z   - Upgrading symfony/polyfill-php82 (v1.38.1 => v1.43.0)
+2026-10-07T16:29:49.7241936Z   - Upgrading symfony/polyfill-php83 (v1.41.0 => v1.43.0)
+2026-10-07T16:29:49.7242592Z   - Upgrading symfony/polyfill-php84 (v1.38.1 => v1.43.0)
+2026-10-07T16:29:49.7243059Z   - Upgrading symfony/polyfill-php85 (v1.41.0 => v1.43.0)
+2026-10-07T16:29:49.7244169Z   - Upgrading symfony/polyfill-php86 (v1.41.0 => v1.43.0)
+2026-10-07T16:29:49.7244677Z   - Upgrading symfony/polyfill-uuid (v1.37.0 => v1.43.0)
+2026-10-07T16:29:49.7245307Z   - Upgrading symfony/routing (v8.1.6 => v8.1.8)
+2026-10-07T16:29:49.7245731Z   - Upgrading symfony/uid (v8.1.5 => v8.1.8)
+2026-10-07T16:29:49.7246526Z   - Upgrading symfony/yaml (v8.1.6 => v8.1.8)
+2026-10-07T16:29:49.7277089Z Writing lock file
+2026-10-07T16:29:49.7277788Z Installing dependencies from lock file (including require-dev)
+2026-10-07T16:29:49.7357942Z Package operations: 247 installs, 0 updates, 0 removals
+2026-10-07T16:29:49.7365478Z   - Downloading pestphp/pest-plugin (v5.0.0)
+2026-10-07T16:29:49.7369676Z   - Downloading php-http/discovery (1.20.0)
+2026-10-07T16:29:49.7372112Z   - Downloading infection/extension-installer (0.1.2)
+2026-10-07T16:29:49.7374380Z   - Downloading phpstan/phpstan (2.2.16)
+2026-10-07T16:29:49.7376490Z   - Downloading composer/semver (3.5.1)
+2026-10-07T16:29:49.7378678Z   - Downloading tbachert/spi (v1.0.5)
+2026-10-07T16:29:49.7380587Z   - Downloading phpstan/extension-installer (1.4.3)
+2026-10-07T16:29:49.7382652Z   - Downloading aws/aws-crt-php (v1.2.7)
+2026-10-07T16:29:49.7384739Z   - Downloading psr/clock (1.0.0)
+2026-10-07T16:29:49.7386892Z   - Downloading voku/portable-ascii (2.1.1)
+2026-10-07T16:29:49.7389139Z   - Downloading symfony/polyfill-php80 (v1.43.0)
+2026-10-07T16:29:49.7390927Z   - Downloading symfony/polyfill-mbstring (v1.43.0)
+2026-10-07T16:29:49.7392700Z   - Downloading symfony/polyfill-ctype (v1.37.0)
+2026-10-07T16:29:49.7394291Z   - Downloading phpoption/phpoption (1.10.0)
+2026-10-07T16:29:49.7397010Z   - Downloading graham-campbell/result-type (v1.2.0)
+2026-10-07T16:29:49.7397485Z   - Downloading vlucas/phpdotenv (v5.7.0)
+2026-10-07T16:29:49.7398152Z   - Downloading symfony/css-selector (v8.1.6)
+2026-10-07T16:29:49.7417151Z   - Downloading tijsverkoyen/css-to-inline-styles (v2.4.0)
+2026-10-07T16:29:49.7417740Z   - Downloading symfony/var-dumper (v8.1.7)
+2026-10-07T16:29:49.7418413Z   - Downloading symfony/polyfill-uuid (v1.43.0)
+2026-10-07T16:29:49.7418874Z   - Downloading symfony/uid (v8.1.8)
+2026-10-07T16:29:49.7419578Z   - Downloading symfony/deprecation-contracts (v3.7.1)
+2026-10-07T16:29:49.7420049Z   - Downloading symfony/routing (v8.1.8)
+2026-10-07T16:29:49.7420676Z   - Downloading symfony/process (v8.1.7)
+2026-10-07T16:29:49.7422492Z   - Downloading symfony/polyfill-php86 (v1.43.0)
+2026-10-07T16:29:49.7422788Z   - Downloading symfony/polyfill-php85 (v1.43.0)
+2026-10-07T16:29:49.7423076Z   - Downloading symfony/polyfill-php84 (v1.43.0)
+2026-10-07T16:29:49.7423397Z   - Downloading symfony/polyfill-intl-normalizer (v1.43.0)
+2026-10-07T16:29:49.7423724Z   - Downloading symfony/polyfill-intl-idn (v1.43.0)
+2026-10-07T16:29:49.7423998Z   - Downloading symfony/mime (v8.1.7)
+2026-10-07T16:29:49.7424591Z   - Downloading psr/container (2.0.2)
+2026-10-07T16:29:49.7424854Z   - Downloading symfony/service-contracts (v3.7.3)
+2026-10-07T16:29:49.7425146Z   - Downloading psr/event-dispatcher (1.0.0)
+2026-10-07T16:29:49.7425465Z   - Downloading symfony/event-dispatcher-contracts (v3.7.1)
+2026-10-07T16:29:49.7425787Z   - Downloading symfony/event-dispatcher (v8.1.5)
+2026-10-07T16:29:49.7426062Z   - Downloading psr/log (3.0.2)
+2026-10-07T16:29:49.7426469Z   - Downloading doctrine/lexer (3.0.3)
+2026-10-07T16:29:49.7426731Z   - Downloading egulias/email-validator (4.0.4)
+2026-10-07T16:29:49.7426997Z   - Downloading symfony/mailer (v8.1.7)
+2026-10-07T16:29:49.7427253Z   - Downloading symfony/http-foundation (v8.1.8)
+2026-10-07T16:29:49.7427535Z   - Downloading symfony/error-handler (v8.1.8)
+2026-10-07T16:29:49.7427808Z   - Downloading symfony/http-kernel (v8.1.8)
+2026-10-07T16:29:49.7428069Z   - Downloading symfony/finder (v8.1.8)
+2026-10-07T16:29:49.7428350Z   - Downloading symfony/polyfill-intl-grapheme (v1.43.0)
+2026-10-07T16:29:49.7428646Z   - Downloading symfony/string (v8.1.7)
+2026-10-07T16:29:49.7428892Z   - Downloading symfony/console (v7.4.20)
+2026-10-07T16:29:49.7429143Z   - Downloading ramsey/collection (2.1.1)
+2026-10-07T16:29:49.7447416Z   - Downloading brick/math (0.14.8)
+2026-10-07T16:29:49.7447740Z   - Downloading ramsey/uuid (4.9.4)
+2026-10-07T16:29:49.7448142Z   - Downloading psr/simple-cache (3.0.0)
+2026-10-07T16:29:49.7448555Z   - Downloading psr/http-message (2.0)
+2026-10-07T16:29:49.7448967Z   - Downloading nunomaduro/termwind (v2.4.0)
+2026-10-07T16:29:49.7449411Z   - Downloading symfony/translation-contracts (v3.7.1)
+2026-10-07T16:29:49.7449849Z   - Downloading symfony/translation (v8.1.5)
+2026-10-07T16:29:49.7450409Z   - Downloading symfony/clock (v8.1.0)
+2026-10-07T16:29:49.7451140Z   - Downloading carbonphp/carbon-doctrine-types (3.2.1)
+2026-10-07T16:29:49.7452910Z   - Downloading nesbot/carbon (3.14.2)
+2026-10-07T16:29:49.7453155Z   - Downloading monolog/monolog (3.12.1)
+2026-10-07T16:29:49.7453411Z   - Downloading psr/http-factory (1.1.0)
+2026-10-07T16:29:49.7453664Z   - Downloading league/uri-interfaces (7.8.1)
+2026-10-07T16:29:49.7453929Z   - Downloading league/uri (7.8.1)
+2026-10-07T16:29:49.7454187Z   - Downloading league/mime-type-detection (1.17.0)
+2026-10-07T16:29:49.7454488Z   - Downloading league/flysystem-local (3.35.3)
+2026-10-07T16:29:49.7454759Z   - Downloading league/flysystem (3.36.0)
+2026-10-07T16:29:49.7455000Z   - Downloading nette/utils (v4.1.5)
+2026-10-07T16:29:49.7455249Z   - Downloading nette/schema (v1.3.6)
+2026-10-07T16:29:49.7455525Z   - Downloading dflydev/dot-access-data (v3.0.3)
+2026-10-07T16:29:49.7455796Z   - Downloading league/config (v1.2.0)
+2026-10-07T16:29:49.7456047Z   - Downloading league/commonmark (2.10.3)
+2026-10-07T16:29:49.7456561Z   - Downloading laravel/serializable-closure (v2.1.0)
+2026-10-07T16:29:49.7456844Z   - Downloading laravel/prompts (v0.3.25)
+2026-10-07T16:29:49.7457096Z   - Downloading guzzlehttp/uri-template (v2.0.1)
+2026-10-07T16:29:49.7457373Z   - Downloading symfony/polyfill-php82 (v1.43.0)
+2026-10-07T16:29:49.7457632Z   - Downloading guzzlehttp/psr7 (3.1.0)
+2026-10-07T16:29:49.7457875Z   - Downloading guzzlehttp/promises (3.0.2)
+2026-10-07T16:29:49.7458131Z   - Downloading psr/http-client (1.0.3)
+2026-10-07T16:29:49.7458381Z   - Downloading guzzlehttp/guzzle (8.2.0)
+2026-10-07T16:29:49.7459141Z   - Downloading fruitcake/php-cors (v1.4.0)
+2026-10-07T16:29:49.7459697Z   - Downloading dragonmantank/cron-expression (v3.6.0)
+2026-10-07T16:29:49.7460388Z   - Downloading doctrine/inflector (2.1.0)
+2026-10-07T16:29:49.7462016Z   - Downloading laravel/framework (v13.35.0)
+2026-10-07T16:29:49.7462301Z   - Syncing axioma-studio/azguard-core (0.3.0) into cache
+2026-10-07T16:29:51.2562250Z   - Downloading staabm/side-effects-detector (1.0.5)
+2026-10-07T16:29:51.2562939Z   - Downloading sebastian/version (7.0.1)
+2026-10-07T16:29:51.2563403Z   - Downloading sebastian/type (7.0.2)
+2026-10-07T16:29:51.2564361Z   - Downloading sebastian/recursion-context (8.0.1)
+2026-10-07T16:29:51.2576738Z   - Downloading sebastian/object-enumerator (8.1.0)
+2026-10-07T16:29:51.2597026Z   - Downloading sebastian/object-reflector (6.1.0)
+2026-10-07T16:29:51.2597477Z   - Downloading sebastian/global-state (9.0.1)
+2026-10-07T16:29:51.2598009Z   - Downloading sebastian/git-state (1.0.0)
+2026-10-07T16:29:51.2598451Z   - Downloading sebastian/file-filter (1.0.0)
+2026-10-07T16:29:51.2598850Z   - Downloading sebastian/exporter (8.2.1)
+2026-10-07T16:29:51.2599253Z   - Downloading sebastian/environment (9.3.3)
+2026-10-07T16:29:51.2599644Z   - Downloading sebastian/diff (9.0.1)
+2026-10-07T16:29:51.2600039Z   - Downloading sebastian/comparator (8.4.0)
+2026-10-07T16:29:51.2600441Z   - Downloading sebastian/cli-parser (5.0.1)
+2026-10-07T16:29:51.2600833Z   - Downloading phpunit/php-timer (9.0.0)
+2026-10-07T16:29:51.2601241Z   - Downloading phpunit/php-text-template (6.0.1)
+2026-10-07T16:29:51.2601650Z   - Downloading phpunit/php-invoker (7.0.0)
+2026-10-07T16:29:51.2602068Z   - Downloading phpunit/php-file-iterator (7.0.2)
+2026-10-07T16:29:51.2602502Z   - Downloading theseer/tokenizer (2.0.1)
+2026-10-07T16:29:51.2602890Z   - Downloading nikic/php-parser (v5.9.0)
+2026-10-07T16:29:51.2603455Z   - Downloading sebastian/lines-of-code (5.0.2)
+2026-10-07T16:29:51.2603870Z   - Downloading sebastian/complexity (6.0.0)
+2026-10-07T16:29:51.2604287Z   - Downloading phpunit/php-code-coverage (14.4.1)
+2026-10-07T16:29:51.2604694Z   - Downloading phar-io/version (3.2.1)
+2026-10-07T16:29:51.2605069Z   - Downloading phar-io/manifest (2.0.4)
+2026-10-07T16:29:51.2605467Z   - Downloading myclabs/deep-copy (1.14.0)
+2026-10-07T16:29:51.2605854Z   - Downloading phpunit/phpunit (13.3.6)
+2026-10-07T16:29:51.2606269Z   - Downloading pestphp/pest-plugin-profanity (v5.0.0)
+2026-10-07T16:29:51.2606884Z   - Downloading pestphp/pest-plugin-mutate (v5.0.2)
+2026-10-07T16:29:51.2607296Z   - Downloading webmozart/assert (2.5.0)
+2026-10-07T16:29:51.2607694Z   - Downloading phpstan/phpdoc-parser (2.3.6)
+2026-10-07T16:29:51.2608128Z   - Downloading phpdocumentor/reflection-common (2.2.1)
+2026-10-07T16:29:51.2608554Z   - Downloading doctrine/deprecations (1.1.6)
+2026-10-07T16:29:51.2608974Z   - Downloading phpdocumentor/type-resolver (2.1.0)
+2026-10-07T16:29:51.2609441Z   - Downloading phpdocumentor/reflection-docblock (6.0.3)
+2026-10-07T16:29:51.2609917Z   - Downloading ta-tikoma/phpunit-architecture-test (0.8.7)
+2026-10-07T16:29:51.2610376Z   - Downloading pestphp/pest-plugin-arch (v5.0.0)
+2026-10-07T16:29:51.2610779Z   - Downloading filp/whoops (2.18.6)
+2026-10-07T16:29:51.2611160Z   - Downloading nunomaduro/collision (v8.9.5)
+2026-10-07T16:29:51.2611587Z   - Downloading jean85/pretty-package-versions (2.1.1)
+2026-10-07T16:29:51.2612023Z   - Downloading fidry/cpu-core-counter (1.4.1)
+2026-10-07T16:29:51.2612437Z   - Downloading brianium/paratest (v7.25.0)
+2026-10-07T16:29:51.2612837Z   - Downloading pestphp/pest (v5.3.0)
+2026-10-07T16:29:51.2613254Z   - Downloading infection/include-interceptor (1.0.0)
+2026-10-07T16:29:51.2613751Z   - Downloading infection/abstract-testframework-adapter (0.5.1)
+2026-10-07T16:29:51.2614225Z   - Downloading brick/money (0.10.3)
+2026-10-07T16:29:51.2614634Z   - Downloading symfony/polyfill-php81 (v1.38.1)
+2026-10-07T16:29:51.2615082Z   - Downloading meilisearch/meilisearch-php (v1.16.1)
+2026-10-07T16:29:51.2615506Z   - Downloading rlanvin/php-rrule (v3.0.0)
+2026-10-07T16:29:51.2615899Z   - Downloading firebase/php-jwt (v7.2.1)
+2026-10-07T16:29:51.2616422Z   - Downloading beberlei/assert (v3.3.4)
+2026-10-07T16:29:51.2616813Z   - Downloading composer/ca-bundle (1.5.14)
+2026-10-07T16:29:51.2617211Z   - Downloading composer/pcre (3.4.0)
+2026-10-07T16:29:51.2617634Z   - Downloading composer/class-map-generator (1.8.0)
+2026-10-07T16:29:51.2618077Z   - Downloading composer/metadata-minifier (1.0.1)
+2026-10-07T16:29:51.2618499Z   - Downloading composer/spdx-licenses (1.6.0)
+2026-10-07T16:29:51.2618970Z   - Downloading giggsey/libphonenumber-for-php-lite (9.0.40)
+2026-10-07T16:29:51.2619830Z   - Downloading hamcrest/hamcrest-php (v3.0.0)
+2026-10-07T16:29:51.2621064Z   - Downloading thecodingmachine/safe (v3.4.0)
+2026-10-07T16:29:51.2621991Z   - Downloading symfony/filesystem (v8.1.6)
+2026-10-07T16:29:51.2623209Z   - Downloading sanmai/pipeline (7.12)
+2026-10-07T16:29:51.2624094Z   - Downloading sanmai/later (0.1.8)
+2026-10-07T16:29:51.2624997Z   - Downloading sanmai/duoclock (0.1.3)
+2026-10-07T16:29:51.2625876Z   - Downloading sanmai/di-container (0.2)
+2026-10-07T16:29:51.2627314Z   - Downloading ondram/ci-detector (4.2.0)
+2026-10-07T16:29:51.2628570Z   - Downloading marc-mabe/php-enum (v4.7.2)
+2026-10-07T16:29:51.2629813Z   - Downloading justinrainbow/json-schema (6.13.1)
+2026-10-07T16:29:51.2630730Z   - Downloading infection/mutator (0.4.1)
+2026-10-07T16:29:51.2631654Z   - Downloading composer/xdebug-handler (3.0.5)
+2026-10-07T16:29:51.2632880Z   - Downloading colinodell/json5 (v3.0.0)
+2026-10-07T16:29:51.2633757Z   - Downloading infection/infection (0.35.6)
+2026-10-07T16:29:51.2635007Z   - Downloading iamcal/sql-parser (v0.7)
+2026-10-07T16:29:51.2636255Z   - Downloading larastan/larastan (v3.12.2)
+2026-10-07T16:29:51.2637383Z   - Downloading laravel/agent-detector (v2.0.4)
+2026-10-07T16:29:51.2638438Z   - Downloading laravel/pao (v1.1.5)
+2026-10-07T16:29:51.2639322Z   - Downloading laravel/pint (v1.32.1)
+2026-10-07T16:29:51.2640607Z   - Downloading mtdowling/jmespath.php (2.9.2)
+2026-10-07T16:29:51.2641535Z   - Downloading aws/aws-sdk-php (3.399.2)
+2026-10-07T16:29:51.2642514Z   - Downloading league/flysystem-aws-s3-v3 (3.35.3)
+2026-10-07T16:29:51.2643799Z   - Downloading open-telemetry/sem-conv (1.44.0)
+2026-10-07T16:29:51.2644704Z   - Downloading open-telemetry/context (1.5.0)
+2026-10-07T16:29:51.2645605Z   - Downloading open-telemetry/api (1.10.0)
+2026-10-07T16:29:51.2646999Z   - Downloading nyholm/psr7-server (1.1.0)
+2026-10-07T16:29:51.2647948Z   - Downloading open-telemetry/sdk (1.15.0)
+2026-10-07T16:29:51.2649156Z   - Downloading opis/string (2.1.0)
+2026-10-07T16:29:51.2650075Z   - Downloading opis/uri (1.1.0)
+2026-10-07T16:29:51.2650965Z   - Downloading opis/json-schema (2.6.0)
+2026-10-07T16:29:51.2651911Z   - Downloading symfony/polyfill-php83 (v1.43.0)
+2026-10-07T16:29:51.2653133Z   - Downloading orchestra/sidekick (v1.2.23)
+2026-10-07T16:29:51.2654035Z   - Downloading orchestra/canvas-core (v11.0.0)
+2026-10-07T16:29:51.2654907Z   - Downloading symfony/yaml (v8.1.8)
+2026-10-07T16:29:51.2655856Z   - Downloading orchestra/testbench-core (v11.5.0)
+2026-10-07T16:29:51.2656862Z   - Downloading orchestra/canvas (v11.1.0)
+2026-10-07T16:29:51.2658155Z   - Downloading psy/psysh (v0.12.24)
+2026-10-07T16:29:51.2659074Z   - Downloading laravel/tinker (v3.0.2)
+2026-10-07T16:29:51.2659973Z   - Downloading laravel/pail (v1.2.7)
+2026-10-07T16:29:51.2661250Z   - Downloading fakerphp/faker (v1.24.1)
+2026-10-07T16:29:51.2662142Z   - Downloading orchestra/workbench (v11.3.0)
+2026-10-07T16:29:51.2663358Z   - Downloading mockery/mockery (1.6.15)
+2026-10-07T16:29:51.2664261Z   - Downloading orchestra/testbench (v11.3.0)
+2026-10-07T16:29:51.2665539Z   - Downloading revolt/event-loop (v1.0.9)
+2026-10-07T16:29:51.2666928Z   - Downloading php-standard-library/foundation (6.3.0)
+2026-10-07T16:29:51.2667904Z   - Downloading php-standard-library/promise (6.3.0)
+2026-10-07T16:29:51.2668868Z   - Downloading php-standard-library/default (6.3.0)
+2026-10-07T16:29:51.2669779Z   - Downloading php-standard-library/locale (6.3.0)
+2026-10-07T16:29:51.2670730Z   - Downloading php-standard-library/interoperability (6.3.0)
+2026-10-07T16:29:51.2671649Z   - Downloading php-standard-library/comparison (6.3.0)
+2026-10-07T16:29:51.2672602Z   - Downloading php-standard-library/date-time (6.3.0)
+2026-10-07T16:29:51.2673534Z   - Downloading php-standard-library/async (6.3.0)
+2026-10-07T16:29:51.2674454Z   - Downloading php-standard-library/channel (6.3.0)
+2026-10-07T16:29:51.2675380Z   - Downloading php-standard-library/collection (6.3.0)
+2026-10-07T16:29:51.2676373Z   - Downloading php-standard-library/option (6.3.0)
+2026-10-07T16:29:51.2677378Z   - Downloading php-standard-library/either-or-both (6.3.0)
+2026-10-07T16:29:51.2678295Z   - Downloading php-standard-library/result (6.3.0)
+2026-10-07T16:29:51.2679238Z   - Downloading php-standard-library/io (6.3.0)
+2026-10-07T16:29:51.2680163Z   - Downloading php-standard-library/process (6.3.0)
+2026-10-07T16:29:51.2681047Z   - Downloading php-standard-library/iter (6.3.0)
+2026-10-07T16:29:51.2681968Z   - Downloading php-standard-library/range (6.3.0)
+2026-10-07T16:29:51.2682988Z   - Downloading phpstan/phpstan-strict-rules (2.0.12)
+2026-10-07T16:29:51.2684185Z   - Downloading react/promise (v3.3.0)
+2026-10-07T16:29:51.2685473Z   - Downloading rector/rector (2.6.7)
+2026-10-07T16:29:51.2686880Z   - Downloading jetbrains/phpstorm-stubs (v2026.2)
+2026-10-07T16:29:51.2688115Z   - Downloading roave/better-reflection (6.73.0)
+2026-10-07T16:29:51.2689046Z   - Downloading php-standard-library/vec (6.3.0)
+2026-10-07T16:29:51.2689983Z   - Downloading php-standard-library/type (6.3.0)
+2026-10-07T16:29:51.2690895Z   - Downloading php-standard-library/str (6.3.0)
+2026-10-07T16:29:51.2691785Z   - Downloading php-standard-library/shell (6.3.0)
+2026-10-07T16:29:51.2692702Z   - Downloading php-standard-library/regex (6.3.0)
+2026-10-07T16:29:51.2693714Z   - Downloading php-standard-library/json (6.3.0)
+2026-10-07T16:29:51.2694517Z   - Downloading php-standard-library/filesystem (6.3.0)
+2026-10-07T16:29:51.2695469Z   - Downloading php-standard-library/file (6.3.0)
+2026-10-07T16:29:51.2696547Z   - Downloading php-standard-library/env (6.3.0)
+2026-10-07T16:29:51.2697494Z   - Downloading php-standard-library/dict (6.3.0)
+2026-10-07T16:29:51.2698700Z   - Downloading ocramius/package-versions (2.12.0)
+2026-10-07T16:29:51.2699964Z   - Downloading nikolaposa/version (4.2.1)
+2026-10-07T16:29:51.2700899Z   - Downloading symfony/polyfill-php73 (v1.37.0)
+2026-10-07T16:29:51.2702119Z   - Downloading seld/signal-handler (2.0.2)
+2026-10-07T16:29:51.2703004Z   - Downloading seld/phar-utils (1.2.3)
+2026-10-07T16:29:51.2703860Z   - Downloading seld/jsonlint (1.12.1)
+2026-10-07T16:29:51.2704750Z   - Downloading composer/composer (2.10.3)
+2026-10-07T16:29:51.2705707Z   - Downloading roave/backward-compatibility-check (8.23.0)
+2026-10-07T16:29:51.2707091Z   - Downloading shipmonk/composer-dependency-analyser (1.8.4)
+2026-10-07T16:29:56.7156664Z   - Installing pestphp/pest-plugin (v5.0.0): Extracting archive
+2026-10-07T16:29:56.7280079Z   - Installing php-http/discovery (1.20.0): Extracting archive
+2026-10-07T16:29:56.7345617Z   - Installing infection/extension-installer (0.1.2): Extracting archive
+2026-10-07T16:29:56.7435061Z   - Installing phpstan/phpstan (2.2.16): Extracting archive
+2026-10-07T16:29:56.7439091Z   - Installing composer/semver (3.5.1): Extracting archive
+2026-10-07T16:29:57.0173470Z   - Installing tbachert/spi (v1.0.5): Extracting archive
+2026-10-07T16:29:57.0244189Z   - Installing phpstan/extension-installer (1.4.3): Extracting archive
+2026-10-07T16:29:57.0312052Z   - Installing aws/aws-crt-php (v1.2.7): Extracting archive
+2026-10-07T16:29:57.0315920Z   - Installing psr/clock (1.0.0): Extracting archive
+2026-10-07T16:29:57.0336990Z   - Installing voku/portable-ascii (2.1.1): Extracting archive
+2026-10-07T16:29:57.0339501Z   - Installing symfony/polyfill-php80 (v1.43.0): Extracting archive
+2026-10-07T16:29:57.0377013Z   - Installing symfony/polyfill-mbstring (v1.43.0): Extracting archive
+2026-10-07T16:29:57.0399951Z   - Installing symfony/polyfill-ctype (v1.37.0): Extracting archive
+2026-10-07T16:29:57.0441123Z   - Installing phpoption/phpoption (1.10.0): Extracting archive
+2026-10-07T16:29:57.0466861Z   - Installing graham-campbell/result-type (v1.2.0): Extracting archive
+2026-10-07T16:29:57.0471570Z   - Installing vlucas/phpdotenv (v5.7.0): Extracting archive
+2026-10-07T16:29:57.0490657Z   - Installing symfony/css-selector (v8.1.6): Extracting archive
+2026-10-07T16:29:57.0526835Z   - Installing tijsverkoyen/css-to-inline-styles (v2.4.0): Extracting archive
+2026-10-07T16:29:57.0566682Z   - Installing symfony/var-dumper (v8.1.7): Extracting archive
+2026-10-07T16:29:57.0586631Z   - Installing symfony/polyfill-uuid (v1.43.0): Extracting archive
+2026-10-07T16:29:57.0606797Z   - Installing symfony/uid (v8.1.8): Extracting archive
+2026-10-07T16:29:57.0607261Z   - Installing symfony/deprecation-contracts (v3.7.1): Extracting archive
+2026-10-07T16:29:57.0607636Z   - Installing symfony/routing (v8.1.8): Extracting archive
+2026-10-07T16:29:57.0607989Z   - Installing symfony/process (v8.1.7): Extracting archive
+2026-10-07T16:29:57.0608360Z   - Installing symfony/polyfill-php86 (v1.43.0): Extracting archive
+2026-10-07T16:29:57.0608732Z   - Installing symfony/polyfill-php85 (v1.43.0): Extracting archive
+2026-10-07T16:29:57.0609096Z   - Installing symfony/polyfill-php84 (v1.43.0): Extracting archive
+2026-10-07T16:29:57.0609506Z   - Installing symfony/polyfill-intl-normalizer (v1.43.0): Extracting archive
+2026-10-07T16:29:57.0609904Z   - Installing symfony/polyfill-intl-idn (v1.43.0): Extracting archive
+2026-10-07T16:29:57.0610253Z   - Installing symfony/mime (v8.1.7): Extracting archive
+2026-10-07T16:29:57.0610603Z   - Installing psr/container (2.0.2): Extracting archive
+2026-10-07T16:29:57.0610970Z   - Installing symfony/service-contracts (v3.7.3): Extracting archive
+2026-10-07T16:29:57.0611530Z   - Installing psr/event-dispatcher (1.0.0): Extracting archive
+2026-10-07T16:29:57.0611892Z   - Installing symfony/event-dispatcher-contracts (v3.7.1): Extracting archive
+2026-10-07T16:29:57.0612273Z   - Installing symfony/event-dispatcher (v8.1.5): Extracting archive
+2026-10-07T16:29:57.0612604Z   - Installing psr/log (3.0.2): Extracting archive
+2026-10-07T16:29:57.0612931Z   - Installing doctrine/lexer (3.0.3): Extracting archive
+2026-10-07T16:29:57.0613285Z   - Installing egulias/email-validator (4.0.4): Extracting archive
+2026-10-07T16:29:57.0613628Z   - Installing symfony/mailer (v8.1.7): Extracting archive
+2026-10-07T16:29:57.0613987Z   - Installing symfony/http-foundation (v8.1.8): Extracting archive
+2026-10-07T16:29:57.0616653Z   - Installing symfony/error-handler (v8.1.8): Extracting archive
+2026-10-07T16:29:57.0617388Z   - Installing symfony/http-kernel (v8.1.8): Extracting archive
+2026-10-07T16:29:57.0618042Z   - Installing symfony/finder (v8.1.8): Extracting archive
+2026-10-07T16:29:57.0618562Z   - Installing symfony/polyfill-intl-grapheme (v1.43.0): Extracting archive
+2026-10-07T16:29:57.0619085Z   - Installing symfony/string (v8.1.7): Extracting archive
+2026-10-07T16:29:57.0619556Z   - Installing symfony/console (v7.4.20): Extracting archive
+2026-10-07T16:29:57.0620018Z   - Installing ramsey/collection (2.1.1): Extracting archive
+2026-10-07T16:29:57.0620469Z   - Installing brick/math (0.14.8): Extracting archive
+2026-10-07T16:29:57.0620909Z   - Installing ramsey/uuid (4.9.4): Extracting archive
+2026-10-07T16:29:57.0621353Z   - Installing psr/simple-cache (3.0.0): Extracting archive
+2026-10-07T16:29:57.0621812Z   - Installing psr/http-message (2.0): Extracting archive
+2026-10-07T16:29:57.0622293Z   - Installing nunomaduro/termwind (v2.4.0): Extracting archive
+2026-10-07T16:29:57.0622819Z   - Installing symfony/translation-contracts (v3.7.1): Extracting archive
+2026-10-07T16:29:57.0623340Z   - Installing symfony/translation (v8.1.5): Extracting archive
+2026-10-07T16:29:57.0623820Z   - Installing symfony/clock (v8.1.0): Extracting archive
+2026-10-07T16:29:57.0624312Z   - Installing carbonphp/carbon-doctrine-types (3.2.1): Extracting archive
+2026-10-07T16:29:57.0624820Z   - Installing nesbot/carbon (3.14.2): Extracting archive
+2026-10-07T16:29:57.0625295Z   - Installing monolog/monolog (3.12.1): Extracting archive
+2026-10-07T16:29:57.0625747Z   - Installing psr/http-factory (1.1.0): Extracting archive
+2026-10-07T16:29:57.0626235Z   - Installing league/uri-interfaces (7.8.1): Extracting archive
+2026-10-07T16:29:57.0626893Z   - Installing league/uri (7.8.1): Extracting archive
+2026-10-07T16:29:57.0627362Z   - Installing league/mime-type-detection (1.17.0): Extracting archive
+2026-10-07T16:29:57.0627878Z   - Installing league/flysystem-local (3.35.3): Extracting archive
+2026-10-07T16:29:57.0628535Z   - Installing league/flysystem (3.36.0): Extracting archive
+2026-10-07T16:29:57.0628995Z   - Installing nette/utils (v4.1.5): Extracting archive
+2026-10-07T16:29:57.0629457Z   - Installing nette/schema (v1.3.6): Extracting archive
+2026-10-07T16:29:57.0629947Z   - Installing dflydev/dot-access-data (v3.0.3): Extracting archive
+2026-10-07T16:29:57.0631332Z   - Installing league/config (v1.2.0): Extracting archive
+2026-10-07T16:29:57.0632787Z   - Installing league/commonmark (2.10.3): Extracting archive
+2026-10-07T16:29:57.0634291Z   - Installing laravel/serializable-closure (v2.1.0): Extracting archive
+2026-10-07T16:29:57.0635741Z   - Installing laravel/prompts (v0.3.25): Extracting archive
+2026-10-07T16:29:57.0637449Z   - Installing guzzlehttp/uri-template (v2.0.1): Extracting archive
+2026-10-07T16:29:57.0638894Z   - Installing symfony/polyfill-php82 (v1.43.0): Extracting archive
+2026-10-07T16:29:57.0640300Z   - Installing guzzlehttp/psr7 (3.1.0): Extracting archive
+2026-10-07T16:29:57.0641740Z   - Installing guzzlehttp/promises (3.0.2): Extracting archive
+2026-10-07T16:29:57.0643182Z   - Installing psr/http-client (1.0.3): Extracting archive
+2026-10-07T16:29:57.0644760Z   - Installing guzzlehttp/guzzle (8.2.0): Extracting archive
+2026-10-07T16:29:57.0646064Z   - Installing fruitcake/php-cors (v1.4.0): Extracting archive
+2026-10-07T16:29:57.0647781Z   - Installing dragonmantank/cron-expression (v3.6.0): Extracting archive
+2026-10-07T16:29:57.0649290Z   - Installing doctrine/inflector (2.1.0): Extracting archive
+2026-10-07T16:29:57.0650842Z   - Installing laravel/framework (v13.35.0): Extracting archive
+2026-10-07T16:29:57.0662652Z   - Installing axiomasoft/corex (dev-main 798b737): Symlinking from packages/core
+2026-10-07T16:29:57.0679031Z   - Installing axiomasoft/corex-access (dev-main d72848d): Symlinking from packages/access
+2026-10-07T16:29:57.0695270Z   - Installing axioma-studio/azguard-core (0.3.0): Cloning 253cbf4cce from cache
+2026-10-07T16:29:57.5582149Z   - Installing axiomasoft/corex-access-azguard (dev-main 0f9b5f4): Symlinking from packages/access-azguard
+2026-10-07T16:29:57.5667331Z   - Installing axiomasoft/corex-custom-fields (dev-main b83417a): Symlinking from packages/custom-fields
+2026-10-07T16:29:57.5721218Z   - Installing staabm/side-effects-detector (1.0.5): Extracting archive
+2026-10-07T16:29:57.5723156Z   - Installing sebastian/version (7.0.1): Extracting archive
+2026-10-07T16:29:57.5724877Z   - Installing sebastian/type (7.0.2): Extracting archive
+2026-10-07T16:29:57.5726718Z   - Installing sebastian/recursion-context (8.0.1): Extracting archive
+2026-10-07T16:29:57.5728248Z   - Installing sebastian/object-enumerator (8.1.0): Extracting archive
+2026-10-07T16:29:57.5729791Z   - Installing sebastian/object-reflector (6.1.0): Extracting archive
+2026-10-07T16:29:57.5731269Z   - Installing sebastian/global-state (9.0.1): Extracting archive
+2026-10-07T16:29:57.5732826Z   - Installing sebastian/git-state (1.0.0): Extracting archive
+2026-10-07T16:29:57.5734307Z   - Installing sebastian/file-filter (1.0.0): Extracting archive
+2026-10-07T16:29:57.5735811Z   - Installing sebastian/exporter (8.2.1): Extracting archive
+2026-10-07T16:29:57.5737509Z   - Installing sebastian/environment (9.3.3): Extracting archive
+2026-10-07T16:29:57.5738970Z   - Installing sebastian/diff (9.0.1): Extracting archive
+2026-10-07T16:29:57.5740477Z   - Installing sebastian/comparator (8.4.0): Extracting archive
+2026-10-07T16:29:57.5742019Z   - Installing sebastian/cli-parser (5.0.1): Extracting archive
+2026-10-07T16:29:57.5743487Z   - Installing phpunit/php-timer (9.0.0): Extracting archive
+2026-10-07T16:29:57.5745048Z   - Installing phpunit/php-text-template (6.0.1): Extracting archive
+2026-10-07T16:29:57.5746684Z   - Installing phpunit/php-invoker (7.0.0): Extracting archive
+2026-10-07T16:29:57.5748159Z   - Installing phpunit/php-file-iterator (7.0.2): Extracting archive
+2026-10-07T16:29:57.5749682Z   - Installing theseer/tokenizer (2.0.1): Extracting archive
+2026-10-07T16:29:57.5751252Z   - Installing nikic/php-parser (v5.9.0): Extracting archive
+2026-10-07T16:29:57.5752750Z   - Installing sebastian/lines-of-code (5.0.2): Extracting archive
+2026-10-07T16:29:57.5754202Z   - Installing sebastian/complexity (6.0.0): Extracting archive
+2026-10-07T16:29:57.5755711Z   - Installing phpunit/php-code-coverage (14.4.1): Extracting archive
+2026-10-07T16:29:57.5757326Z   - Installing phar-io/version (3.2.1): Extracting archive
+2026-10-07T16:29:57.5758885Z   - Installing phar-io/manifest (2.0.4): Extracting archive
+2026-10-07T16:29:57.5760382Z   - Installing myclabs/deep-copy (1.14.0): Extracting archive
+2026-10-07T16:29:57.5761899Z   - Installing phpunit/phpunit (13.3.6): Extracting archive
+2026-10-07T16:29:57.5763408Z   - Installing pestphp/pest-plugin-profanity (v5.0.0): Extracting archive
+2026-10-07T16:29:57.5764892Z   - Installing pestphp/pest-plugin-mutate (v5.0.2): Extracting archive
+2026-10-07T16:29:57.5766471Z   - Installing webmozart/assert (2.5.0): Extracting archive
+2026-10-07T16:29:57.5768008Z   - Installing phpstan/phpdoc-parser (2.3.6): Extracting archive
+2026-10-07T16:29:57.5769441Z   - Installing phpdocumentor/reflection-common (2.2.1): Extracting archive
+2026-10-07T16:29:57.5771114Z   - Installing doctrine/deprecations (1.1.6): Extracting archive
+2026-10-07T16:29:57.5772403Z   - Installing phpdocumentor/type-resolver (2.1.0): Extracting archive
+2026-10-07T16:29:57.5773893Z   - Installing phpdocumentor/reflection-docblock (6.0.3): Extracting archive
+2026-10-07T16:29:57.5775360Z   - Installing ta-tikoma/phpunit-architecture-test (0.8.7): Extracting archive
+2026-10-07T16:29:57.5776939Z   - Installing pestphp/pest-plugin-arch (v5.0.0): Extracting archive
+2026-10-07T16:29:57.5778385Z   - Installing filp/whoops (2.18.6): Extracting archive
+2026-10-07T16:29:57.5779935Z   - Installing nunomaduro/collision (v8.9.5): Extracting archive
+2026-10-07T16:29:57.5781431Z   - Installing jean85/pretty-package-versions (2.1.1): Extracting archive
+2026-10-07T16:29:57.5782882Z   - Installing fidry/cpu-core-counter (1.4.1): Extracting archive
+2026-10-07T16:29:57.5784361Z   - Installing brianium/paratest (v7.25.0): Extracting archive
+2026-10-07T16:29:57.5785840Z   - Installing pestphp/pest (v5.3.0): Extracting archive
+2026-10-07T16:29:57.5787468Z   - Installing infection/include-interceptor (1.0.0): Extracting archive
+2026-10-07T16:29:57.5789020Z   - Installing infection/abstract-testframework-adapter (0.5.1): Extracting archive
+2026-10-07T16:29:57.5791642Z   - Installing axiomasoft/corex-infection-pest-adapter (0.1.0): Symlinking from scripts/quality/infection-pest-adapter
+2026-10-07T16:29:57.5809154Z   - Installing axiomasoft/corex-media (dev-main da09e4c): Symlinking from packages/media
+2026-10-07T16:29:57.5824350Z   - Installing axiomasoft/corex-notifications (dev-main bae17fb): Symlinking from packages/notifications
+2026-10-07T16:29:57.5840093Z   - Installing axiomasoft/corex-panels (dev-main 7a9d290): Symlinking from packages/panels
+2026-10-07T16:29:57.5855349Z   - Installing axiomasoft/corex-search (dev-main 3c0742a): Symlinking from packages/search
+2026-10-07T16:29:57.5869891Z   - Installing brick/money (0.10.3): Extracting archive
+2026-10-07T16:29:57.5872636Z   - Installing axiomasoft/corex-intl (dev-main a3ed493): Symlinking from packages/intl
+2026-10-07T16:29:57.5895986Z   - Installing axiomasoft/corex-search-intl (dev-main 50c8e44): Symlinking from packages/search-intl
+2026-10-07T16:29:57.5906415Z   - Installing symfony/polyfill-php81 (v1.38.1): Extracting archive
+2026-10-07T16:29:57.5907975Z   - Installing meilisearch/meilisearch-php (v1.16.1): Extracting archive
+2026-10-07T16:29:57.5910637Z   - Installing axiomasoft/corex-search-meilisearch (dev-main ca56186): Symlinking from packages/search-meilisearch
+2026-10-07T16:29:57.5927001Z   - Installing axiomasoft/corex-workflow (dev-main be9a15f): Symlinking from packages/workflow
+2026-10-07T16:29:57.5942917Z   - Installing axiomasoft/corex-tasks (dev-main c029fb8): Symlinking from packages/tasks
+2026-10-07T16:29:57.5958629Z   - Installing rlanvin/php-rrule (v3.0.0): Extracting archive
+2026-10-07T16:29:57.5961086Z   - Installing axiomasoft/corex-recurrence (dev-main 335fd51): Symlinking from packages/recurrence
+2026-10-07T16:29:57.5977463Z   - Installing axiomasoft/corex-tasks-workflow (dev-main f546834): Symlinking from packages/tasks-workflow
+2026-10-07T16:29:57.5993913Z   - Installing firebase/php-jwt (v7.2.1): Extracting archive
+2026-10-07T16:29:57.5998716Z   - Installing axiomasoft/corex-tenancy (dev-main 6fb95b8): Symlinking from packages/tenancy
+2026-10-07T16:29:57.6015583Z   - Installing axiomasoft/corex-operations (dev-main 4c4790e): Symlinking from packages/operations
+2026-10-07T16:29:57.6032500Z   - Installing axiomasoft/corex-tools (dev-main e4ec02f): Symlinking from packages/tools
+2026-10-07T16:29:57.6050034Z   - Installing axiomasoft/corex-transfer (dev-main 0f338b1): Symlinking from packages/transfer
+2026-10-07T16:29:57.6067234Z   - Installing axiomasoft/corex-wakeup (dev-main 5dadbb4): Symlinking from packages/wakeup
+2026-10-07T16:29:57.6084499Z   - Installing axiomasoft/corex-webhooks (dev-main 0afaa94): Symlinking from packages/webhooks
+2026-10-07T16:29:57.6101399Z   - Installing beberlei/assert (v3.3.4): Extracting archive
+2026-10-07T16:29:57.6103083Z   - Installing composer/ca-bundle (1.5.14): Extracting archive
+2026-10-07T16:29:57.6104455Z   - Installing composer/pcre (3.4.0): Extracting archive
+2026-10-07T16:29:57.6105933Z   - Installing composer/class-map-generator (1.8.0): Extracting archive
+2026-10-07T16:29:57.6107516Z   - Installing composer/metadata-minifier (1.0.1): Extracting archive
+2026-10-07T16:29:57.6108968Z   - Installing composer/spdx-licenses (1.6.0): Extracting archive
+2026-10-07T16:29:57.6110492Z   - Installing giggsey/libphonenumber-for-php-lite (9.0.40): Extracting archive
+2026-10-07T16:29:57.6112932Z   - Installing flex/crm (dev-main 9d0cd81): Symlinking from products/flex-crm
+2026-10-07T16:29:57.6130637Z   - Installing hamcrest/hamcrest-php (v3.0.0): Extracting archive
+2026-10-07T16:29:57.6131995Z   - Installing thecodingmachine/safe (v3.4.0): Extracting archive
+2026-10-07T16:29:57.6133941Z   - Installing symfony/filesystem (v8.1.6): Extracting archive
+2026-10-07T16:29:57.6135447Z   - Installing sanmai/pipeline (7.12): Extracting archive
+2026-10-07T16:29:57.6137026Z   - Installing sanmai/later (0.1.8): Extracting archive
+2026-10-07T16:29:57.6138493Z   - Installing sanmai/duoclock (0.1.3): Extracting archive
+2026-10-07T16:29:57.6139974Z   - Installing sanmai/di-container (0.2): Extracting archive
+2026-10-07T16:29:57.6141460Z   - Installing ondram/ci-detector (4.2.0): Extracting archive
+2026-10-07T16:29:57.6142952Z   - Installing marc-mabe/php-enum (v4.7.2): Extracting archive
+2026-10-07T16:29:57.6144459Z   - Installing justinrainbow/json-schema (6.13.1): Extracting archive
+2026-10-07T16:29:57.6145964Z   - Installing infection/mutator (0.4.1): Extracting archive
+2026-10-07T16:29:57.6147617Z   - Installing composer/xdebug-handler (3.0.5): Extracting archive
+2026-10-07T16:29:57.6149023Z   - Installing colinodell/json5 (v3.0.0): Extracting archive
+2026-10-07T16:29:57.6150498Z   - Installing infection/infection (0.35.6): Extracting archive
+2026-10-07T16:29:57.6151953Z   - Installing iamcal/sql-parser (v0.7): Extracting archive
+2026-10-07T16:29:57.6153452Z   - Installing larastan/larastan (v3.12.2): Extracting archive
+2026-10-07T16:29:57.6154898Z   - Installing laravel/agent-detector (v2.0.4): Extracting archive
+2026-10-07T16:29:57.6156434Z   - Installing laravel/pao (v1.1.5): Extracting archive
+2026-10-07T16:29:57.6157855Z   - Installing laravel/pint (v1.32.1): Extracting archive
+2026-10-07T16:29:57.6159289Z   - Installing mtdowling/jmespath.php (2.9.2): Extracting archive
+2026-10-07T16:29:57.6160688Z   - Installing aws/aws-sdk-php (3.399.2): Extracting archive
+2026-10-07T16:29:57.6162120Z   - Installing league/flysystem-aws-s3-v3 (3.35.3): Extracting archive
+2026-10-07T16:29:57.6163554Z   - Installing open-telemetry/sem-conv (1.44.0): Extracting archive
+2026-10-07T16:29:57.6164998Z   - Installing open-telemetry/context (1.5.0): Extracting archive
+2026-10-07T16:29:57.6166506Z   - Installing open-telemetry/api (1.10.0): Extracting archive
+2026-10-07T16:29:57.6167974Z   - Installing nyholm/psr7-server (1.1.0): Extracting archive
+2026-10-07T16:29:57.6169411Z   - Installing open-telemetry/sdk (1.15.0): Extracting archive
+2026-10-07T16:29:57.6170786Z   - Installing opis/string (2.1.0): Extracting archive
+2026-10-07T16:29:57.6172206Z   - Installing opis/uri (1.1.0): Extracting archive
+2026-10-07T16:29:57.6173743Z   - Installing opis/json-schema (2.6.0): Extracting archive
+2026-10-07T16:29:57.6175262Z   - Installing symfony/polyfill-php83 (v1.43.0): Extracting archive
+2026-10-07T16:29:57.6176968Z   - Installing orchestra/sidekick (v1.2.23): Extracting archive
+2026-10-07T16:29:57.6178353Z   - Installing orchestra/canvas-core (v11.0.0): Extracting archive
+2026-10-07T16:29:57.6179677Z   - Installing symfony/yaml (v8.1.8): Extracting archive
+2026-10-07T16:29:57.6181127Z   - Installing orchestra/testbench-core (v11.5.0): Extracting archive
+2026-10-07T16:29:57.6182534Z   - Installing orchestra/canvas (v11.1.0): Extracting archive
+2026-10-07T16:29:57.6183963Z   - Installing psy/psysh (v0.12.24): Extracting archive
+2026-10-07T16:29:57.6185441Z   - Installing laravel/tinker (v3.0.2): Extracting archive
+2026-10-07T16:29:57.6187109Z   - Installing laravel/pail (v1.2.7): Extracting archive
+2026-10-07T16:29:57.6188407Z   - Installing fakerphp/faker (v1.24.1): Extracting archive
+2026-10-07T16:29:57.6189859Z   - Installing orchestra/workbench (v11.3.0): Extracting archive
+2026-10-07T16:29:57.6191259Z   - Installing mockery/mockery (1.6.15): Extracting archive
+2026-10-07T16:29:57.6192702Z   - Installing orchestra/testbench (v11.3.0): Extracting archive
+2026-10-07T16:29:57.6194481Z   - Installing revolt/event-loop (v1.0.9): Extracting archive
+2026-10-07T16:29:57.6195935Z   - Installing php-standard-library/foundation (6.3.0): Extracting archive
+2026-10-07T16:29:57.6197496Z   - Installing php-standard-library/promise (6.3.0): Extracting archive
+2026-10-07T16:29:57.6198889Z   - Installing php-standard-library/default (6.3.0): Extracting archive
+2026-10-07T16:29:57.6200259Z   - Installing php-standard-library/locale (6.3.0): Extracting archive
+2026-10-07T16:29:57.6201674Z   - Installing php-standard-library/interoperability (6.3.0): Extracting archive
+2026-10-07T16:29:57.6202978Z   - Installing php-standard-library/comparison (6.3.0): Extracting archive
+2026-10-07T16:29:57.6204479Z   - Installing php-standard-library/date-time (6.3.0): Extracting archive
+2026-10-07T16:29:57.6205813Z   - Installing php-standard-library/async (6.3.0): Extracting archive
+2026-10-07T16:29:57.6207296Z   - Installing php-standard-library/channel (6.3.0): Extracting archive
+2026-10-07T16:29:57.6208723Z   - Installing php-standard-library/collection (6.3.0): Extracting archive
+2026-10-07T16:29:57.6210054Z   - Installing php-standard-library/option (6.3.0): Extracting archive
+2026-10-07T16:29:57.6211488Z   - Installing php-standard-library/either-or-both (6.3.0): Extracting archive
+2026-10-07T16:29:57.6212804Z   - Installing php-standard-library/result (6.3.0): Extracting archive
+2026-10-07T16:29:57.6214121Z   - Installing php-standard-library/io (6.3.0): Extracting archive
+2026-10-07T16:29:57.6215540Z   - Installing php-standard-library/process (6.3.0): Extracting archive
+2026-10-07T16:29:57.6217044Z   - Installing php-standard-library/iter (6.3.0): Extracting archive
+2026-10-07T16:29:57.6218411Z   - Installing php-standard-library/range (6.3.0): Extracting archive
+2026-10-07T16:29:57.6219787Z   - Installing phpstan/phpstan-strict-rules (2.0.12): Extracting archive
+2026-10-07T16:29:57.6221136Z   - Installing react/promise (v3.3.0): Extracting archive
+2026-10-07T16:29:57.6222532Z   - Installing rector/rector (2.6.7): Extracting archive
+2026-10-07T16:29:57.6223944Z   - Installing jetbrains/phpstorm-stubs (v2026.2): Extracting archive
+2026-10-07T16:29:57.6225304Z   - Installing roave/better-reflection (6.73.0): Extracting archive
+2026-10-07T16:29:57.6226799Z   - Installing php-standard-library/vec (6.3.0): Extracting archive
+2026-10-07T16:29:57.6228212Z   - Installing php-standard-library/type (6.3.0): Extracting archive
+2026-10-07T16:29:57.6229604Z   - Installing php-standard-library/str (6.3.0): Extracting archive
+2026-10-07T16:29:57.6231023Z   - Installing php-standard-library/shell (6.3.0): Extracting archive
+2026-10-07T16:29:57.6232577Z   - Installing php-standard-library/regex (6.3.0): Extracting archive
+2026-10-07T16:29:57.6234009Z   - Installing php-standard-library/json (6.3.0): Extracting archive
+2026-10-07T16:29:57.6235397Z   - Installing php-standard-library/filesystem (6.3.0): Extracting archive
+2026-10-07T16:29:57.6237258Z   - Installing php-standard-library/file (6.3.0): Extracting archive
+2026-10-07T16:29:57.6238305Z   - Installing php-standard-library/env (6.3.0): Extracting archive
+2026-10-07T16:29:57.6239712Z   - Installing php-standard-library/dict (6.3.0): Extracting archive
+2026-10-07T16:29:57.6241116Z   - Installing ocramius/package-versions (2.12.0): Extracting archive
+2026-10-07T16:29:57.6242429Z   - Installing nikolaposa/version (4.2.1): Extracting archive
+2026-10-07T16:29:57.6243812Z   - Installing symfony/polyfill-php73 (v1.37.0): Extracting archive
+2026-10-07T16:29:57.6245316Z   - Installing seld/signal-handler (2.0.2): Extracting archive
+2026-10-07T16:29:57.6246690Z   - Installing seld/phar-utils (1.2.3): Extracting archive
+2026-10-07T16:29:57.6248070Z   - Installing seld/jsonlint (1.12.1): Extracting archive
+2026-10-07T16:29:57.6249422Z   - Installing composer/composer (2.10.3): Extracting archive
+2026-10-07T16:29:57.6250884Z   - Installing roave/backward-compatibility-check (8.23.0): Extracting archive
+2026-10-07T16:29:57.6252279Z   - Installing shipmonk/composer-dependency-analyser (1.8.4): Extracting archive
+2026-10-07T16:30:03.1209313Z Generating autoload files
+2026-10-07T16:30:03.3549338Z 119 packages you are using are looking for funding.
+2026-10-07T16:30:03.3549959Z Use the `composer fund` command to find out more!
+2026-10-07T16:30:03.3551812Z infection/extension-installer: Extensions installed
+2026-10-07T16:30:03.3552390Z > axiomasoft/corex-infection-pest-adapter: installed
+2026-10-07T16:30:03.3554867Z phpstan/extension-installer: Extensions installed
+2026-10-07T16:30:03.3555295Z > axiomasoft/corex: ignored
+2026-10-07T16:30:03.3555665Z > axiomasoft/corex: ignored
+2026-10-07T16:30:03.3556042Z > axiomasoft/corex-tenancy: ignored
+2026-10-07T16:30:03.3556582Z > axiomasoft/corex-tenancy: ignored
+2026-10-07T16:30:03.3557073Z > composer/composer: ignored
+2026-10-07T16:30:03.3557405Z > composer/pcre: ignored
+2026-10-07T16:30:03.3557723Z > larastan/larastan: ignored
+2026-10-07T16:30:03.3558042Z > nesbot/carbon: ignored
+2026-10-07T16:30:03.3558354Z > pestphp/pest: ignored
+2026-10-07T16:30:03.3558696Z > phpstan/phpstan-strict-rules: ignored
+2026-10-07T16:30:03.3920017Z ##[group]Run composer audit --locked
+2026-10-07T16:30:03.3920226Z [36;1mcomposer audit --locked[0m
+2026-10-07T16:30:03.3975618Z shell: /usr/bin/bash -e {0}
+2026-10-07T16:30:03.3975761Z env:
+2026-10-07T16:30:03.3975883Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T16:30:03.3976043Z   LARAVEL_VERSION: 13.*
+2026-10-07T16:30:03.3976172Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-07T16:30:03.3976472Z   COMPOSER_NO_INTERACTION: 1
+2026-10-07T16:30:03.3976622Z   COMPOSER_NO_AUDIT: 1
+2026-10-07T16:30:03.3976743Z ##[endgroup]
+2026-10-07T16:30:04.5588927Z No security vulnerability advisories found.
+2026-10-07T16:30:04.6275838Z ##[group]Run for database in corex_test corex_search_a_test corex_search_b_test; do
+2026-10-07T16:30:04.6276761Z [36;1mfor database in corex_test corex_search_a_test corex_search_b_test; do[0m
+2026-10-07T16:30:04.6277367Z [36;1m  PGPASSWORD=corex psql -h 127.0.0.1 -U corex -d postgres -tc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 \[0m
+2026-10-07T16:30:04.6278006Z [36;1m    || PGPASSWORD=corex psql -h 127.0.0.1 -U corex -d postgres -c "CREATE DATABASE ${database}"[0m
+2026-10-07T16:30:04.6278383Z [36;1mdone[0m
+2026-10-07T16:30:04.6336571Z shell: /usr/bin/bash -e {0}
+2026-10-07T16:30:04.6336904Z env:
+2026-10-07T16:30:04.6337027Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T16:30:04.6337179Z   LARAVEL_VERSION: 13.*
+2026-10-07T16:30:04.6337312Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-07T16:30:04.6337456Z   COMPOSER_NO_INTERACTION: 1
+2026-10-07T16:30:04.6337596Z   COMPOSER_NO_AUDIT: 1
+2026-10-07T16:30:04.6337721Z ##[endgroup]
+2026-10-07T16:30:05.0534498Z CREATE DATABASE
+2026-10-07T16:30:05.3053278Z CREATE DATABASE
+2026-10-07T16:30:05.3121729Z ##[group]Run composer test:pg
+2026-10-07T16:30:05.3121910Z [36;1mcomposer test:pg[0m
+2026-10-07T16:30:05.3175852Z shell: /usr/bin/bash -e {0}
+2026-10-07T16:30:05.3175990Z env:
+2026-10-07T16:30:05.3176113Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T16:30:05.3176261Z   LARAVEL_VERSION: 13.*
+2026-10-07T16:30:05.3176552Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-07T16:30:05.3176694Z   COMPOSER_NO_INTERACTION: 1
+2026-10-07T16:30:05.3176833Z   COMPOSER_NO_AUDIT: 1
+2026-10-07T16:30:05.3176957Z   PGSQL_HOST: 127.0.0.1
+2026-10-07T16:30:05.3177079Z   PGSQL_PORT: 5432
+2026-10-07T16:30:05.3177223Z   PGSQL_DATABASE: corex_test
+2026-10-07T16:30:05.3177353Z   PGSQL_USERNAME: corex
+2026-10-07T16:30:05.3177474Z   PGSQL_PASSWORD: corex
+2026-10-07T16:30:05.3177596Z ##[endgroup]
+2026-10-07T16:30:07.0063624Z 
+2026-10-07T16:30:07.0064606Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tests\Golden\SchemaGoldenTest[39m
+2026-10-07T16:30:07.0087622Z   [32;1m✓[39;22m[90m [39m[90mfresh postgres schemas with data set #0[39m[90m                             [39m [90m0.83s[39m  
+2026-10-07T16:30:07.0089926Z   [32;1m✓[39;22m[90m [39m[90mfresh postgres schemas with data set #1[39m[90m                             [39m [90m0.23s[39m  
+2026-10-07T16:30:07.0092299Z   [32;1m✓[39;22m[90m [39m[90mfresh postgres schemas with data set #2[39m[90m                             [39m [90m0.06s[39m  
+2026-10-07T16:30:07.0094644Z   [32;1m✓[39;22m[90m [39m[90mcatalogue distinguishes null uniqueness with identical name and col[39m[90m…[39m [90m0.03s[39m  
+2026-10-07T16:30:07.0096930Z   [32;1m✓[39;22m[90m [39m[90mcatalogue distinguishes null uniqueness with identical name and col[39m[90m…[39m [90m0.03s[39m  
+2026-10-07T16:30:07.0172879Z 
+2026-10-07T16:30:07.0173593Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tests\Golden\SnapshotSchemaTest[39m
+2026-10-07T16:30:07.0176200Z   [32;1m✓[39;22m[90m [39m[90mopt in schema export[39m[90m                                                [39m [90m0.01s[39m  
+2026-10-07T16:30:12.2217664Z 
+2026-10-07T16:30:12.2219096Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\AuditLogTest[39m
+2026-10-07T16:30:12.2223509Z   [32;1m✓[39;22m[90m [39m[90mit enqueues on the sync path instead of writing synchronously (AC-2[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:12.2226161Z   [32;1m✓[39;22m[90m [39m[90mit HasAuditLog trait records an append-only entry on create through[39m[90m…[39m [90m0.12s[39m  
+2026-10-07T16:30:12.2230003Z   [32;1m✓[39;22m[90m [39m[90mit HasAuditLog trait records the diff on update[39m[90m                     [39m [90m0.11s[39m  
+2026-10-07T16:30:12.2235068Z   [32;1m✓[39;22m[90m [39m[90mit auto-observer records byCapability(Auditable) with sensitive mas[39m[90m…[39m [90m2.27s[39m  
+2026-10-07T16:30:12.2236421Z   [32;1m✓[39;22m[90m [39m[90mit auto-observer skips models that already opt in via HasAuditLog ([39m[90m…[39m [90m0.29s[39m  
+2026-10-07T16:30:12.2237486Z   [32;1m✓[39;22m[90m [39m[90mit actor_type falls back to system when unauthenticated[39m[90m             [39m [90m0.55s[39m  
+2026-10-07T16:30:12.2238635Z   [32;1m✓[39;22m[90m [39m[90mit omits guarded/non-fillable attributes from the diff on create (A[39m[90m…[39m [90m0.42s[39m  
+2026-10-07T16:30:12.2241035Z   [32;1m✓[39;22m[90m [39m[90mit excludes password/remember_token even when $guarded = [] makes t[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:12.2243372Z   [32;1m✓[39;22m[90m [39m[90mit masks a fillable sensitive field in both old and new on update ([39m[90m…[39m [90m0.12s[39m  
+2026-10-07T16:30:12.2257812Z   [32;1m✓[39;22m[90m [39m[90mit killswitch silences the capability path, not only the trait (A60[39m[90m…[39m [90m0.12s[39m  
+2026-10-07T16:30:12.2264287Z   [32;1m✓[39;22m[90m [39m[90mit killswitch silences a direct AuditLogger::record() at the write[39m[90m… [39m [90m0.11s[39m  
+2026-10-07T16:30:12.2266095Z   [32;1m✓[39;22m[90m [39m[90mit killswitch aborts in the observer itself — an unconditional logg[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:12.2267196Z   [32;1m✓[39;22m[90m [39m[90mit snapshots occurred_at and workspace_id at enqueue, not in the wo[39m[90m…[39m [90m0.12s[39m  
+2026-10-07T16:30:12.2268047Z   [32;1m✓[39;22m[90m [39m[90mit records restored and forceDeleted, folding the redundant delete[39m[90m… [39m [90m0.14s[39m  
+2026-10-07T16:30:12.2268907Z   [32;1m✓[39;22m[90m [39m[90mit paginates the audit journal by the monotonic seq cursor in inser[39m[90m…[39m [90m0.14s[39m  
+2026-10-07T16:30:12.2269727Z   [32;1m✓[39;22m[90m [39m[90mit corex:audit:prune deletes rows older than the retention boundary[39m[90m…[39m [90m0.13s[39m  
+2026-10-07T16:30:12.2270559Z   [32;1m✓[39;22m[90m [39m[90mit corex:audit:prune with the default NullAuditRetention deletes no[39m[90m…[39m [90m0.12s[39m  
+2026-10-07T16:30:12.2271376Z   [32;1m✓[39;22m[90m [39m[90mit creates the BRIN index on occurred_at[39m[90m                            [39m [90m0.12s[39m  
+2026-10-07T16:30:14.6494201Z 
+2026-10-07T16:30:14.6495736Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\DepartmentTest[39m
+2026-10-07T16:30:14.6498495Z   [32;1m✓[39;22m[90m [39m[90mit AC-24a: reparents the whole subtree in EXACTLY ONE UPDATE (query[39m[90m…[39m [90m0.13s[39m  
+2026-10-07T16:30:14.6501183Z   [32;1m✓[39;22m[90m [39m[90mit AC-24b: move() waits on the workspace advisory lock — a holder b[39m[90m…[39m [90m0.63s[39m  
+2026-10-07T16:30:14.6503664Z   [32;1m✓[39;22m[90m [39m[90mit AC-24c: a committed move() dispatches DepartmentMoved with the o[39m[90m…[39m [90m0.12s[39m  
+2026-10-07T16:30:14.6505973Z   [32;1m✓[39;22m[90m [39m[90mit AC-24c (after-commit): a move rolled back by an outer transactio[39m[90m…[39m [90m0.29s[39m  
+2026-10-07T16:30:14.6508335Z   [32;1m✓[39;22m[90m [39m[90mit AC-24d: a second primary department for the same user is rejecte[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:14.6510526Z   [32;1m✓[39;22m[90m [39m[90mit AC-24e: subtree() and primaryOf() return the correct rows[39m[90m        [39m [90m0.12s[39m  
+2026-10-07T16:30:14.6512665Z   [32;1m✓[39;22m[90m [39m[90mit AC-24 (cycle): moving into its own subtree is rejected and leave[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:14.6514852Z   [32;1m✓[39;22m[90m [39m[90mit AC-24 (root move): move($id, null) reparents the subtree to the[39m[90m… [39m [90m0.12s[39m  
+2026-10-07T16:30:14.6517257Z   [32;1m✓[39;22m[90m [39m[90mit AC-24 (soft-delete): a removed department drops out of find/subt[39m[90m…[39m [90m0.12s[39m  
+2026-10-07T16:30:14.6519503Z   [32;1m✓[39;22m[90m [39m[90mit AC-24 (re-read guard): move() on a soft-deleted department throw[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:14.6521666Z   [32;1m✓[39;22m[90m [39m[90mit AC-24 (workspace scope): subtree() excludes a same-path row from[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:14.6523872Z   [32;1m✓[39;22m[90m [39m[90mit AC-24 (workspace scope): move() rewrites ONLY the moving workspa[39m[90m…[39m [90m0.12s[39m  
+2026-10-07T16:30:14.6526000Z   [32;1m✓[39;22m[90m [39m[90mit AC-24 (workspace scope): move() into a parent in ANOTHER workspa[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:14.6528387Z   [32;1m✓[39;22m[90m [39m[90mit AC-24 (DTO): the read-DTO carries sort_order[39m[90m                     [39m [90m0.11s[39m  
+2026-10-07T16:30:14.6530527Z   [32;1m✓[39;22m[90m [39m[90mit creates a GIST index and a unique constraint on sys_departments.[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:17.3453726Z 
+2026-10-07T16:30:17.3469607Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\FeatureFlagsTest[39m
+2026-10-07T16:30:17.3470760Z   [32;1m✓[39;22m[90m [39m[90mit stamps a DomainEvent with a UUIDv7 eventId, occurredAt and a sta[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:17.3472684Z   [32;1m✓[39;22m[90m [39m[90mit FeatureFlagToggled extends DomainEvent with its own stable name([39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:17.3474045Z   [32;1m✓[39;22m[90m [39m[90mit define() is idempotent and does not stomp an admin-toggled is_en[39m[90m…[39m [90m0.12s[39m  
+2026-10-07T16:30:17.3475085Z   [32;1m✓[39;22m[90m [39m[90mit AC-22: a narrower workspace override wins over the account-level[39m[90m…[39m [90m0.12s[39m  
+2026-10-07T16:30:17.3476514Z   [32;1m✓[39;22m[90m [39m[90mit a user-scoped override is independent of a workspace-scoped one[39m[90m  [39m [90m0.28s[39m  
+2026-10-07T16:30:17.3477645Z   [32;1m✓[39;22m[90m [39m[90mit cascades override delete when its flag is deleted (FK ON DELETE[39m[90m… [39m [90m0.12s[39m  
+2026-10-07T16:30:17.3478993Z   [32;1m✓[39;22m[90m [39m[90mit rejects an override scope_type outside workspace/user/department[39m[90m…[39m [90m0.23s[39m  
+2026-10-07T16:30:17.3480042Z   [32;1m✓[39;22m[90m [39m[90mit AC-22 (a): a user-override wins for a user-scoped read, and the[39m[90m… [39m [90m0.12s[39m  
+2026-10-07T16:30:17.3481434Z   [32;1m✓[39;22m[90m [39m[90mit AC-22 (b): a department-override is independently reachable, and[39m[90m…[39m [90m0.12s[39m  
+2026-10-07T16:30:17.3482532Z   [32;1m✓[39;22m[90m [39m[90mit AC-22 (c): falls back to the account-level default when no narro[39m[90m…[39m [90m0.13s[39m  
+2026-10-07T16:30:17.3484532Z   [32;1m✓[39;22m[90m [39m[90mit AC-22 (d): value() falls back to the flag payload when the overr[39m[90m…[39m [90m0.79s[39m  
+2026-10-07T16:30:17.3487302Z   [32;1m✓[39;22m[90m [39m[90mit define() is atomic under a racing second define() for the same k[39m[90m…[39m [90m0.44s[39m  
+2026-10-07T16:30:19.1688779Z 
+2026-10-07T16:30:19.1690254Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\ImpersonatedActorTest[39m
+2026-10-07T16:30:19.1692530Z   [32;1m✓[39;22m[90m [39m[90mit sys_audit_log_actor_ck accepts support in the baseline[39m[90m           [39m [90m1.63s[39m  
+2026-10-07T16:30:19.1694931Z   [32;1m✓[39;22m[90m [39m[90mit mod_lifecycle_log_actor_ck accepts support under impersonation[39m[90m   [39m [90m0.19s[39m  
+2026-10-07T16:30:23.9586168Z 
+2026-10-07T16:30:23.9587879Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\ModuleLifecycleTest[39m
+2026-10-07T16:30:23.9590391Z   [32;1m✓[39;22m[90m [39m[90mit enables a module from available: migrations run, mod_records + m[39m[90m…[39m [90m0.14s[39m  
+2026-10-07T16:30:23.9592969Z   [32;1m✓[39;22m[90m [39m[90mit rejects enable when a dependency is not enabled, without touchin[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:23.9595295Z   [32;1m✓[39;22m[90m [39m[90mit cascade auto-enables the requires chain[39m[90m                          [39m [90m0.14s[39m  
+2026-10-07T16:30:23.9597840Z   [32;1m✓[39;22m[90m [39m[90mit rolls the whole transition back and throws when migration K fail[39m[90m…[39m [90m0.14s[39m  
+2026-10-07T16:30:23.9600198Z   [32;1m✓[39;22m[90m [39m[90mit never touches DATA on disable and blocks when a dependent module[39m[90m…[39m [90m0.15s[39m  
+2026-10-07T16:30:23.9602612Z   [32;1m✓[39;22m[90m [39m[90mit rejects uninstall directly from enabled — two-step safety (B-10[39m[90m… [39m [90m0.14s[39m  
+2026-10-07T16:30:23.9604793Z   [32;1m✓[39;22m[90m [39m[90mit archives on uninstall(keepData: true) and re-enables cleanly (AC[39m[90m…[39m [90m0.36s[39m  
+2026-10-07T16:30:23.9607336Z   [32;1m✓[39;22m[90m [39m[90mit purges every owned object in reverse creation order — FK child b[39m[90m…[39m [90m0.17s[39m  
+2026-10-07T16:30:23.9609691Z   [32;1m✓[39;22m[90m [39m[90mit serializes a concurrent enable through pg_advisory_xact_lock — a[39m[90m…[39m [90m0.62s[39m  
+2026-10-07T16:30:23.9612030Z   [32;1m✓[39;22m[90m [39m[90mit records every transition in mod_lifecycle_log (AC-13)[39m[90m            [39m [90m0.14s[39m  
+2026-10-07T16:30:23.9614373Z   [32;1m✓[39;22m[90m [39m[90mit writes the lifecycle-log actor from CurrentActor, not a hardcode[39m[90m…[39m [90m0.14s[39m  
+2026-10-07T16:30:23.9616979Z   [32;1m✓[39;22m[90m [39m[90mit rejects enabling a purged module — purged is terminal (A11/A12,[39m[90m… [39m [90m0.16s[39m  
+2026-10-07T16:30:23.9619287Z   [32;1m✓[39;22m[90m [39m[90mit rejects upgrade unless the module is enabled (FSM gate, B-10 §5.[39m[90m…[39m [90m0.14s[39m  
+2026-10-07T16:30:23.9621640Z   [32;1m✓[39;22m[90m [39m[90mit rolls the upgrade back and rethrows when a catch-up migration fa[39m[90m…[39m [90m0.18s[39m  
+2026-10-07T16:30:23.9623943Z   [32;1m✓[39;22m[90m [39m[90mit corex:modules:repair returns a purged module to available, and a[39m[90m…[39m [90m0.17s[39m  
+2026-10-07T16:30:23.9626454Z   [32;1m✓[39;22m[90m [39m[90mit reconciles mod_records with the schema — drops a claim whose tab[39m[90m…[39m [90m0.14s[39m  
+2026-10-07T16:30:23.9628769Z   [32;1m✓[39;22m[90m [39m[90mit runs the corex:modules:repair artisan command against the module[39m[90m…[39m [90m0.15s[39m  
+2026-10-07T16:30:23.9631099Z   [32;1m✓[39;22m[90m [39m[90mit runs migrations resolved through the container, not a hand-built[39m[90m…[39m [90m0.14s[39m  
+2026-10-07T16:30:23.9633258Z   [32;1m✓[39;22m[90m [39m[90mit derives pendingUpgrade from codeVersion vs. the stored dbVersion[39m[90m…[39m [90m0.14s[39m  
+2026-10-07T16:30:23.9635555Z   [32;1m✓[39;22m[90m [39m[90mit makes an enabled module isActive immediately — epoch invalidatio[39m[90m…[39m [90m0.14s[39m  
+2026-10-07T16:30:23.9638070Z   [32;1m✓[39;22m[90m [39m[90mit makes a disabled module isActive=false immediately — the billing[39m[90m…[39m [90m0.17s[39m  
+2026-10-07T16:30:23.9640258Z   [32;1m✓[39;22m[90m [39m[90mit propagates a disable to another node without a forget() there —[39m[90m… [39m [90m0.31s[39m  
+2026-10-07T16:30:23.9642548Z   [32;1m✓[39;22m[90m [39m[90mit reads the module state from the injected connection, not the amb[39m[90m…[39m [90m0.13s[39m  
+2026-10-07T16:30:23.9644852Z   [32;1m✓[39;22m[90m [39m[90mit carries a UUIDv7 eventId, occurredAt, tenant and the canonical B[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:23.9647382Z   [32;1m✓[39;22m[90m [39m[90mit never dispatches ModuleEnabled when the enabling transaction rol[39m[90m…[39m [90m0.12s[39m  
+2026-10-07T16:30:23.9649590Z   [32;1m✓[39;22m[90m [39m[90mit defines a manifest-declared feature flag in sys_feature_flags wh[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:23.9651893Z   [32;1m✓[39;22m[90m [39m[90mit resolves ModuleStateReader from the registered ModulesOptions co[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:23.9654102Z   [32;1m✓[39;22m[90m [39m[90mit enables a module using its registered set without an installed m[39m[90m…[39m [90m0.13s[39m  
+2026-10-07T16:30:24.5247130Z 
+2026-10-07T16:30:24.5267982Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\PubSubDatabasePollTest[39m
+2026-10-07T16:30:24.5277853Z   [32;1m✓[39;22m[90m [39m[90mit AC-25(a)/(б) publish→subscribe delivers the payload via the poll[39m[90m…[39m [90m0.12s[39m  
+2026-10-07T16:30:24.5278791Z   [32;1m✓[39;22m[90m [39m[90mit persists rows in the configured table with a bigint cursor[39m[90m       [39m [90m0.11s[39m  
+2026-10-07T16:30:24.5279788Z   [32;1m✓[39;22m[90m [39m[90mit (г) D44: a new subscriber does NOT replay pre-existing history b[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:24.5280632Z   [32;1m✓[39;22m[90m [39m[90mit (г) D44: a rolling restart of the SAME subscriber resumes from i[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:24.5281481Z   [32;1m✓[39;22m[90m [39m[90mit (д) corex:messaging:prune-pubsub truncates rows older than the t[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:25.6042996Z 
+2026-10-07T16:30:25.6044136Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\SchemaSetsPgTest[39m
+2026-10-07T16:30:25.6045221Z   [32;1m✓[39;22m[90m [39m[90mit migrates the complete core tenant baseline from its single platf[39m[90m…[39m [90m0.14s[39m  
+2026-10-07T16:30:25.6046764Z   [32;1m✓[39;22m[90m [39m[90mit includes a real module schema only when module execution is requ[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:25.6047723Z   [32;1m✓[39;22m[90m [39m[90mit preserves explicit microsecond precision on every sys and module[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:25.6048614Z   [32;1m✓[39;22m[90m [39m[90mit preserves the monotonic audit sequence cursor (D42)[39m[90m              [39m [90m0.11s[39m  
+2026-10-07T16:30:25.6049524Z   [32;1m✓[39;22m[90m [39m[90mit reads the PostgreSQL journal and reports pending files on the se[39m[90m…[39m [90m0.27s[39m  
+2026-10-07T16:30:25.6050452Z   [32;1m✓[39;22m[90m [39m[90mit ignores central legacy journal entries when tenant sets share on[39m[90m…[39m [90m0.19s[39m  
+2026-10-07T16:30:25.6051361Z   [32;1m✓[39;22m[90m [39m[90mit enables a module using only its registered schema set path[39m[90m       [39m [90m0.15s[39m  
+2026-10-07T16:30:27.0061554Z 
+2026-10-07T16:30:27.0063072Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\SettingsTest[39m
+2026-10-07T16:30:27.0065548Z   [32;1m✓[39;22m[90m [39m[90mit cascades user over workspace over account over manifest default[39m[90m  [39m [90m0.12s[39m  
+2026-10-07T16:30:27.0068905Z   [32;1m✓[39;22m[90m [39m[90mit lets a narrower scope override a broader one without leaking acr[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:27.0071649Z   [32;1m✓[39;22m[90m [39m[90mit encrypts a sensitive value at rest and masks it in SettingChange[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:27.0074180Z   [32;1m✓[39;22m[90m [39m[90mit updates in place through the repository rather than duplicating[39m[90m… [39m [90m0.11s[39m  
+2026-10-07T16:30:27.0076800Z   [32;1m✓[39;22m[90m [39m[90mit rejects a duplicate account-level row at the DB constraint (UNIQ[39m[90m…[39m [90m0.12s[39m  
+2026-10-07T16:30:27.0079302Z   [32;1m✓[39;22m[90m [39m[90mit does not fire SettingChanged when set() re-writes the same value[39m[90m [39m [90m0.12s[39m  
+2026-10-07T16:30:27.0081715Z   [32;1m✓[39;22m[90m [39m[90mit fires SettingChanged once per actual value change[39m[90m                [39m [90m0.11s[39m  
+2026-10-07T16:30:27.0084158Z   [32;1m✓[39;22m[90m [39m[90mit all() merges the cascade with the narrower scope winning per key[39m[90m [39m [90m0.14s[39m  
+2026-10-07T16:30:27.0086909Z   [32;1m✓[39;22m[90m [39m[90mit forget() removes exactly its own scope level, leaving other leve[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:27.0089411Z   [32;1m✓[39;22m[90m [39m[90mit rejects a department scope on every method (sys_settings has no[39m[90m… [39m [90m0.10s[39m  
+2026-10-07T16:30:27.0091792Z   [32;1m✓[39;22m[90m [39m[90mit rejects a value over the 64KB quota[39m[90m                              [39m [90m0.11s[39m  
+2026-10-07T16:30:27.0094368Z   [32;1m✓[39;22m[90m [39m[90mit resolves a manifest-declared DefaultSettingDefinition through th[39m[90m…[39m [90m0.14s[39m  
+2026-10-07T16:30:27.0621190Z 
+2026-10-07T16:30:27.0622818Z   [30;42;1m PASS [39;49;22m[39m CoreX\Webhooks\Tests\Feature\WebhookApiRetentionTest[39m
+2026-10-07T16:30:27.0625034Z   [32;1m✓[39;22m[90m [39m[90mpostgresql retention uses isolated schemas[39m[90m                          [39m [90m0.06s[39m  
+2026-10-07T16:30:27.2357228Z 
+2026-10-07T16:30:27.2367974Z   [30;42;1m PASS [39;49;22m[39m CoreX\Webhooks\Tests\Feature\WebhookConcurrencyTest[39m
+2026-10-07T16:30:27.2368987Z   [32;1m✓[39;22m[90m [39m[90mtwo workers claim once and late ack cannot overwrite the new lease[39m[90m  [39m [90m0.17s[39m  
+2026-10-07T16:30:27.2856796Z 
+2026-10-07T16:30:27.2857993Z   [30;42;1m PASS [39;49;22m[39m CoreX\Webhooks\Tests\Feature\WebhookFanoutTest[39m
+2026-10-07T16:30:27.2858933Z   [32;1m✓[39;22m[90m [39m[90mpostgresql inbox and delivery roll back together[39m[90m                    [39m [90m0.05s[39m  
+2026-10-07T16:30:27.3377045Z 
+2026-10-07T16:30:27.3387484Z   [30;42;1m PASS [39;49;22m[39m CoreX\Webhooks\Tests\Feature\WebhookLoadContourIntegrationTest[39m
+2026-10-07T16:30:27.3407579Z   [32;1m✓[39;22m[90m [39m[90mpostgresql fanout delivers once to the local receiver[39m[90m               [39m [90m0.05s[39m  
+2026-10-07T16:30:27.3856986Z 
+2026-10-07T16:30:27.3858163Z   [30;42;1m PASS [39;49;22m[39m CoreX\Webhooks\Tests\Feature\WebhookReplayTest[39m
+2026-10-07T16:30:27.3859178Z   [32;1m✓[39;22m[90m [39m[90mpostgresql scope predicate and replay cas[39m[90m                           [39m [90m0.05s[39m  
+2026-10-07T16:30:27.4277116Z 
+2026-10-07T16:30:27.4278817Z   [30;42;1m PASS [39;49;22m[39m CoreX\Webhooks\Tests\Feature\WebhookSubscriptionTest[39m
+2026-10-07T16:30:27.4281036Z   [32;1m✓[39;22m[90m [39m[90mpostgresql subscription revision is optimistic[39m[90m                      [39m [90m0.04s[39m  
+2026-10-07T16:30:27.6615591Z 
+2026-10-07T16:30:27.6616968Z   [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\ApiRetentionTest[39m
+2026-10-07T16:30:27.6617963Z   [32;1m✓[39;22m[90m [39m[90mpostgresql retention uses isolated schemas[39m[90m                          [39m [90m0.23s[39m  
+2026-10-07T16:30:27.9422165Z 
+2026-10-07T16:30:27.9427895Z   [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\BulkStoreTest[39m
+2026-10-07T16:30:27.9428839Z   [32;1m✓[39;22m[90m [39m[90mpostgresql concurrent submission and cancel completion race[39m[90m         [39m [90m0.28s[39m  
+2026-10-07T16:30:28.3008456Z 
+2026-10-07T16:30:28.3010130Z   [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\IdempotencyStoreTest[39m
+2026-10-07T16:30:28.3012628Z   [32;1m✓[39;22m[90m [39m[90mtwo postgresql connections racing on one key yield one owner[39m[90m        [39m [90m0.36s[39m  
+2026-10-07T16:30:28.4009228Z 
+2026-10-07T16:30:28.4010858Z   [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\LoadSchemaTest[39m
+2026-10-07T16:30:28.4013367Z   [32;1m✓[39;22m[90m [39m[90mpostgresql schema and constraints[39m[90m                                   [39m [90m0.10s[39m  
+2026-10-07T16:30:28.5697406Z 
+2026-10-07T16:30:28.5698999Z   [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\OperationBudgetTest[39m
+2026-10-07T16:30:28.5707687Z   [32;1m✓[39;22m[90m [39m[90mpostgresql concurrent reserve admits only available global capacity[39m[90m [39m [90m0.17s[39m  
+2026-10-07T16:30:28.6077056Z 
+2026-10-07T16:30:28.6088213Z   [30;42;1m PASS [39;49;22m[39m Packages\panels\tests\SavedViews\SavedViewPgSchemaTest[39m
+2026-10-07T16:30:28.6089203Z   [32;1m✓[39;22m[90m [39m[90mit creates the saved-view scope lock before the composite view fore[39m[90m…[39m [90m0.03s[39m  
+2026-10-07T16:30:28.9856883Z 
+2026-10-07T16:30:28.9857796Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Feature\AuditImpersonationTest[39m
+2026-10-07T16:30:28.9869652Z   [32;1m✓[39;22m[90m [39m[90mit stamps observer and direct logger entries from authority and kee[39m[90m…[39m [90m0.09s[39m  
+2026-10-07T16:30:28.9870824Z   [32;1m✓[39;22m[90m [39m[90mit leaves user and system records byte-equivalent when no impersona[39m[90m…[39m [90m0.09s[39m  
+2026-10-07T16:30:28.9871951Z   [32;1m✓[39;22m[90m [39m[90mit writes the captured snapshot from a worker that has no session[39m[90m   [39m [90m0.10s[39m  
+2026-10-07T16:30:28.9872864Z   [32;1m✓[39;22m[90m [39m[90mit keeps snapshot and impersonation fields in either copy order[39m[90m     [39m [90m0.10s[39m  
+2026-10-07T16:30:29.3597870Z 
+2026-10-07T16:30:29.3599412Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Feature\DeliveryRemediationTest[39m
+2026-10-07T16:30:29.3602463Z   [32;1m✓[39;22m[90m [39m[90mit records committed audit only after the outer transaction succeed[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:29.3604936Z   [32;1m✓[39;22m[90m [39m[90mit serializes publishers so a cursor cannot overtake an uncommitted[39m[90m…[39m [90m0.17s[39m  
+2026-10-07T16:30:29.3607703Z   [32;1m✓[39;22m[90m [39m[90mit isolates duplicate feature definitions without aborting the call[39m[90m…[39m [90m0.10s[39m  
+2026-10-07T16:30:30.0503814Z 
+2026-10-07T16:30:30.0504957Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Pg\DeliveryGuaranteesTest[39m
+2026-10-07T16:30:30.0508306Z   [32;1m✓[39;22m[90m [39m[90mit proves at-least-once when the relay dies after durable publish b[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:30.0511174Z   [32;1m✓[39;22m[90m [39m[90mit does not repeat the business effect when the same messageId is c[39m[90m…[39m [90m0.10s[39m  
+2026-10-07T16:30:30.0513705Z   [32;1m✓[39;22m[90m [39m[90mit partitions concurrent relay leases without overlap or blocking[39m[90m   [39m [90m0.13s[39m  
+2026-10-07T16:30:30.0516173Z   [32;1m✓[39;22m[90m [39m[90mit rolls back outbox rows with the business transaction and commits[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:30.0518678Z   [32;1m✓[39;22m[90m [39m[90mit hands off durably to a restarted consumer and rejects lossy publ[39m[90m…[39m [90m0.12s[39m  
+2026-10-07T16:30:30.0521144Z   [32;1m✓[39;22m[90m [39m[90mit terminates expired publishing rows at maxAttempts without anothe[39m[90m…[39m [90m0.12s[39m  
+2026-10-07T16:30:30.9476893Z 
+2026-10-07T16:30:30.9477809Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Pg\DeliveryHealthTest[39m
+2026-10-07T16:30:30.9478685Z   [32;1m✓[39;22m[90m [39m[90mit returns null oldest age and zero counters on an empty table[39m[90m      [39m [90m0.10s[39m  
+2026-10-07T16:30:30.9497696Z   [32;1m✓[39;22m[90m [39m[90mit reports per-contract ages and the maximum as oldest pending[39m[90m      [39m [90m0.13s[39m  
+2026-10-07T16:30:30.9498652Z   [32;1m✓[39;22m[90m [39m[90mit excludes pending rows with future available_at from age[39m[90m          [39m [90m0.26s[39m  
+2026-10-07T16:30:30.9499479Z   [32;1m✓[39;22m[90m [39m[90mit counts published rows only in status totals not in pending age[39m[90m   [39m [90m0.09s[39m  
+2026-10-07T16:30:30.9500318Z   [32;1m✓[39;22m[90m [39m[90mit computes maxAttempts only from pending and publishing rows[39m[90m       [39m [90m0.10s[39m  
+2026-10-07T16:30:30.9501153Z   [32;1m✓[39;22m[90m [39m[90mit fails the health probe when oldest pending exceeds max-age[39m[90m       [39m [90m0.10s[39m  
+2026-10-07T16:30:30.9501953Z   [32;1m✓[39;22m[90m [39m[90mit returns success for max-age probe on an empty table[39m[90m              [39m [90m0.10s[39m  
+2026-10-07T16:30:31.0639424Z 
+2026-10-07T16:30:31.0646797Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Pg\InboxConcurrencyTest[39m
+2026-10-07T16:30:31.0657734Z   [32;1m✓[39;22m[90m [39m[90mit inserts exactly one inbox row when two connections race on the s[39m[90m…[39m [90m0.12s[39m  
+2026-10-07T16:30:31.5864714Z 
+2026-10-07T16:30:31.5865833Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Pg\MessagingSchemaTest[39m
+2026-10-07T16:30:31.5869054Z   [32;1m✓[39;22m[90m [39m[90mit creates messaging tables with expected columns[39m[90m                   [39m [90m0.11s[39m  
+2026-10-07T16:30:31.5872075Z   [32;1m✓[39;22m[90m [39m[90mit defines a composite primary key on sys_inbox_messages[39m[90m            [39m [90m0.10s[39m  
+2026-10-07T16:30:31.5874683Z   [32;1m✓[39;22m[90m [39m[90mit creates partial indexes on sys_outbox_messages hot paths[39m[90m         [39m [90m0.11s[39m  
+2026-10-07T16:30:31.5877090Z   [32;1m✓[39;22m[90m [39m[90mit indexes the shipped inbox table for retention[39m[90m                    [39m [90m0.10s[39m  
+2026-10-07T16:30:31.5879713Z   [32;1m✓[39;22m[90m [39m[90mit rejects duplicate inbox consumer and message_id pairs[39m[90m            [39m [90m0.10s[39m  
+2026-10-07T16:30:31.6894357Z 
+2026-10-07T16:30:31.6895622Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Pg\OutboxAppendPgTest[39m
+2026-10-07T16:30:31.6899367Z   [32;1m✓[39;22m[90m [39m[90mit rolls back an outbox row with the business transaction[39m[90m           [39m [90m0.10s[39m  
+2026-10-07T16:30:32.1294181Z 
+2026-10-07T16:30:32.1295794Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Pg\OutboxRelayCommandTest[39m
+2026-10-07T16:30:32.1298253Z   [32;1m✓[39;22m[90m [39m[90mit publishes two pending messages in one pass[39m[90m                       [39m [90m0.11s[39m  
+2026-10-07T16:30:32.1301096Z   [32;1m✓[39;22m[90m [39m[90mit defers the second message when the publisher throws[39m[90m              [39m [90m0.11s[39m  
+2026-10-07T16:30:32.1303684Z   [32;1m✓[39;22m[90m [39m[90mit warns on OutboxLeaseLost without deferring[39m[90m                       [39m [90m0.12s[39m  
+2026-10-07T16:30:32.1306167Z   [32;1m✓[39;22m[90m [39m[90mit runs relay once in the test environment[39m[90m                          [39m [90m0.10s[39m  
+2026-10-07T16:30:33.4585015Z 
+2026-10-07T16:30:33.4587077Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Pg\OutboxRelayTest[39m
+2026-10-07T16:30:33.4589110Z   [32;1m✓[39;22m[90m [39m[90mit leases a pending row into publishing with owner, lease window, a[39m[90m…[39m [90m0.27s[39m  
+2026-10-07T16:30:33.4591858Z   [32;1m✓[39;22m[90m [39m[90mit does not lease rows with a future available_at[39m[90m                   [39m [90m0.10s[39m  
+2026-10-07T16:30:33.4594470Z   [32;1m✓[39;22m[90m [39m[90mit reclaims expired publishing rows, marks exhausted leases dead, a[39m[90m…[39m [90m0.10s[39m  
+2026-10-07T16:30:33.4597238Z   [32;1m✓[39;22m[90m [39m[90mit fences corrupt envelope reconstruction through the same backoff[39m[90m… [39m [90m0.11s[39m  
+2026-10-07T16:30:33.4599719Z   [32;1m✓[39;22m[90m [39m[90mit refuses markPublished when the lease owner no longer matches[39m[90m     [39m [90m0.10s[39m  
+2026-10-07T16:30:33.4602254Z   [32;1m✓[39;22m[90m [39m[90mit applies deterministic exponential backoff on the first four publ[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:33.4604690Z   [32;1m✓[39;22m[90m [39m[90mit marks a row dead after the eighth failed attempt[39m[90m                 [39m [90m0.18s[39m  
+2026-10-07T16:30:33.4607258Z   [32;1m✓[39;22m[90m [39m[90mit truncates last_error to two thousand characters[39m[90m                  [39m [90m0.16s[39m  
+2026-10-07T16:30:33.4609715Z   [32;1m✓[39;22m[90m [39m[90mit skips locked pending rows with SKIP LOCKED and blocks without it[39m[90m [39m [90m0.21s[39m  
+2026-10-07T16:30:34.2506924Z 
+2026-10-07T16:30:34.2508668Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Modules\Feature\LifecycleRemediationTest[39m
+2026-10-07T16:30:34.2510138Z   [32;1m✓[39;22m[90m [39m[90mit honors a denying activation gate before migrations and hooks[39m[90m     [39m [90m0.11s[39m  
+2026-10-07T16:30:34.2511939Z   [32;1m✓[39;22m[90m [39m[90mit serializes different module transitions on the dependency graph[39m[90m… [39m [90m0.20s[39m  
+2026-10-07T16:30:34.2514345Z   [32;1m✓[39;22m[90m [39m[90mit preserves application migration listeners on success and failure[39m[90m [39m [90m0.15s[39m  
+2026-10-07T16:30:34.2516866Z   [32;1m✓[39;22m[90m [39m[90mit makes flags visible to ModuleEnabled and rolls back a failed def[39m[90m…[39m [90m0.12s[39m  
+2026-10-07T16:30:34.2519245Z   [32;1m✓[39;22m[90m [39m[90mit rolls back feature definitions and enable notifications with an[39m[90m… [39m [90m0.11s[39m  
+2026-10-07T16:30:34.2521591Z   [32;1m✓[39;22m[90m [39m[90mit uses the current physical default when lifecycle connection is u[39m[90m…[39m [90m0.11s[39m  
+2026-10-07T16:30:34.7571712Z 
+2026-10-07T16:30:34.7572911Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Pg\AttributeBackfillTest[39m
+2026-10-07T16:30:34.7574427Z   [32;1m✓[39;22m[90m [39m[90mit resumes ordered batches and verifies canonical digests on both e[39m[90m…[39m [90m0.08s[39m  
+2026-10-07T16:30:34.7577133Z   [32;1m✓[39;22m[90m [39m[90mit resumes ordered batches and verifies canonical digests on both e[39m[90m…[39m [90m0.08s[39m  
+2026-10-07T16:30:34.7578353Z   [32;1m✓[39;22m[90m [39m[90mit rolls back a failed batch and resumes it without advancing the c[39m[90m…[39m [90m0.06s[39m  
+2026-10-07T16:30:34.7579477Z   [32;1m✓[39;22m[90m [39m[90mit preserves a concurrent dual write and blocks switch after digest[39m[90m…[39m [90m0.22s[39m  
+2026-10-07T16:30:34.7582108Z   [32;1m✓[39;22m[90m [39m[90mit aborts an unfinished backfill and refuses to resume it[39m[90m           [39m [90m0.06s[39m  
+2026-10-07T16:30:35.0419892Z 
+2026-10-07T16:30:35.0421621Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Pg\AttributeEvolutionTest[39m
+2026-10-07T16:30:35.0424557Z   [32;1m✓[39;22m[90m [39m[90mit dual reads and writes rename and type evolution on both engines[39m[90m… [39m [90m0.09s[39m  
+2026-10-07T16:30:35.0428007Z   [32;1m✓[39;22m[90m [39m[90mit dual reads and writes rename and type evolution on both engines[39m[90m… [39m [90m0.07s[39m  
+2026-10-07T16:30:35.0437325Z   [32;1m✓[39;22m[90m [39m[90mit publishes expand switch and contract reservations atomically whi[39m[90m…[39m [90m0.06s[39m  
+2026-10-07T16:30:35.0438415Z   [32;1m✓[39;22m[90m [39m[90mit publishes both rollback projections without dropping immutable r[39m[90m…[39m [90m0.06s[39m  
+2026-10-07T16:30:35.2717092Z 
+2026-10-07T16:30:35.2718498Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Pg\AttributeIndexTest[39m
+2026-10-07T16:30:35.2719024Z   [32;1m✓[39;22m[90m [39m[90mit routes a mixed batch through both engines without reordering[39m[90m     [39m [90m0.06s[39m  
+2026-10-07T16:30:35.2719555Z   [32;1m✓[39;22m[90m [39m[90mit blocks expression index DDL when an existing value cannot cast[39m[90m   [39m [90m0.06s[39m  
+2026-10-07T16:30:35.2720026Z   [32;1m✓[39;22m[90m [39m[90mit verifies an expression B-tree and orders ties by record id[39m[90m       [39m [90m0.06s[39m  
+2026-10-07T16:30:35.2737730Z   [32;1m✓[39;22m[90m [39m[90mit declares promoted storage without foreign DDL[39m[90m                    [39m [90m0.05s[39m  
+2026-10-07T16:30:35.8320191Z 
+2026-10-07T16:30:35.8322911Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Pg\AttributeOutboxTest[39m
+2026-10-07T16:30:35.8328246Z   [32;1m✓[39;22m[90m [39m[90mit commits one metadata-only outbox row and appends nothing on repl[39m[90m…[39m [90m0.13s[39m  
+2026-10-07T16:30:35.8329308Z   [32;1m✓[39;22m[90m [39m[90mit commits one metadata-only outbox row and appends nothing on repl[39m[90m…[39m [90m0.14s[39m  
+2026-10-07T16:30:35.8330690Z   [32;1m✓[39;22m[90m [39m[90mit rolls back the mutation and token when outbox admission fails wi[39m[90m…[39m [90m0.16s[39m  
+2026-10-07T16:30:35.8347557Z   [32;1m✓[39;22m[90m [39m[90mit rolls back the mutation and token when outbox admission fails wi[39m[90m…[39m [90m0.14s[39m  
+2026-10-07T16:30:36.2742298Z 
+2026-10-07T16:30:36.2746175Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Pg\AttributeWriteAuthorizationTest[39m
+2026-10-07T16:30:36.2748781Z   [32;1m✓[39;22m[90m [39m[90mit denies each engine atomically before database mutation with ('js[39m[90m…[39m [90m0.07s[39m  
+2026-10-07T16:30:36.2750059Z   [32;1m✓[39;22m[90m [39m[90mit denies each engine atomically before database mutation with ('ea[39m[90m…[39m [90m0.05s[39m  
+2026-10-07T16:30:36.2752255Z   [32;1m✓[39;22m[90m [39m[90mit checks the tenant connection before catalogue or database mutati[39m[90m…[39m [90m0.05s[39m  
+2026-10-07T16:30:36.2755241Z   [32;1m✓[39;22m[90m [39m[90mit checks the tenant connection before catalogue or database mutati[39m[90m…[39m [90m0.05s[39m  
+2026-10-07T16:30:36.2758546Z   [32;1m✓[39;22m[90m [39m[90mit rejects stale schema and invalid batch constraints without parti[39m[90m…[39m [90m0.16s[39m  
+2026-10-07T16:30:36.2760527Z   [32;1m✓[39;22m[90m [39m[90mit rejects stale schema and invalid batch constraints without parti[39m[90m…[39m [90m0.05s[39m  
+2026-10-07T16:30:36.6382571Z 
+2026-10-07T16:30:36.6384206Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Pg\DatabaseFieldCatalogueTest[39m
+2026-10-07T16:30:36.6387166Z   [32;1m✓[39;22m[90m [39m[90mit migrates and rolls back the three owned catalogue tables on an e[39m[90m…[39m [90m0.08s[39m  
+2026-10-07T16:30:36.6389767Z   [32;1m✓[39;22m[90m [39m[90mit retains immutable revisions and projects only the latest revisio[39m[90m…[39m [90m0.07s[39m  
+2026-10-07T16:30:36.6392039Z   [32;1m✓[39;22m[90m [39m[90mit rolls back definition publication when another id owns the curre[39m[90m…[39m [90m0.06s[39m  
+2026-10-07T16:30:36.6394960Z   [32;1m✓[39;22m[90m [39m[90mit replaces the complete reservation set in the same transaction as[39m[90m…[39m [90m0.06s[39m  
+2026-10-07T16:30:36.6407618Z   [32;1m✓[39;22m[90m [39m[90mit rejects duplicate immutable revisions without changing reservati[39m[90m…[39m [90m0.05s[39m  
+2026-10-07T16:30:36.6408288Z   [32;1m✓[39;22m[90m [39m[90mit checks the tenant connection before reading definitions[39m[90m          [39m [90m0.05s[39m  
+2026-10-07T16:30:37.8166587Z 
+2026-10-07T16:30:37.8167973Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Pg\EavAttributeStoreTest[39m
+2026-10-07T16:30:37.8171156Z   [32;1m✓[39;22m[90m [39m[90mit stores independently indexed EAV values with the same version bo[39m[90m…[39m [90m0.06s[39m  
+2026-10-07T16:30:37.8173832Z   [32;1m✓[39;22m[90m [39m[90mit loads a 50 by 30 EAV selection with one values query[39m[90m             [39m [90m1.12s[39m  
+2026-10-07T16:30:38.1146504Z 
+2026-10-07T16:30:38.1148147Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Pg\JsonbAttributeStoreTest[39m
+2026-10-07T16:30:38.1151078Z   [32;1m✓[39;22m[90m [39m[90mit writes reads replays and versions an isolated JSONB attribute do[39m[90m…[39m [90m0.06s[39m  
+2026-10-07T16:30:38.1154018Z   [32;1m✓[39;22m[90m [39m[90mit rejects a scope whose physical database identity differs from th[39m[90m…[39m [90m0.05s[39m  
+2026-10-07T16:30:38.1156668Z   [32;1m✓[39;22m[90m [39m[90mit loads a bounded JSONB record selection with one documents query[39m[90m  [39m [90m0.13s[39m  
+2026-10-07T16:30:38.1159003Z   [32;1m✓[39;22m[90m [39m[90mit rejects writes for fields that are absent from the active schema[39m[90m…[39m [90m0.05s[39m  
+2026-10-07T16:30:38.6956992Z 
+2026-10-07T16:30:38.6958236Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Pg\QueuedSchemaOperationsTest[39m
+2026-10-07T16:30:38.6967356Z   [32;1m✓[39;22m[90m [39m[90mit persists schema work as pending instead of executing DDL in the[39m[90m… [39m [90m0.07s[39m  
+2026-10-07T16:30:38.6968815Z   [32;1m✓[39;22m[90m [39m[90mit replays an identical schema request without creating a second op[39m[90m…[39m [90m0.05s[39m  
+2026-10-07T16:30:38.6970017Z   [32;1m✓[39;22m[90m [39m[90mit reclaims a stale worker claim and completes the managed operatio[39m[90m…[39m [90m0.06s[39m  
+2026-10-07T16:30:38.6971016Z   [32;1m✓[39;22m[90m [39m[90mit reports catalog drift when an owned managed index disappears[39m[90m     [39m [90m0.06s[39m  
+2026-10-07T16:30:38.6972154Z   [32;1m✓[39;22m[90m [39m[90mit denies a stale restore epoch before a worker can execute DDL[39m[90m     [39m [90m0.06s[39m  
+2026-10-07T16:30:38.6973131Z   [32;1m✓[39;22m[90m [39m[90mit requires the trusted scope to approve the exact schema approval[39m[90m… [39m [90m0.05s[39m  
+2026-10-07T16:30:38.6974669Z   [32;1m✓[39;22m[90m [39m[90mit rejects a stale field snapshot as a schema conflict without writ[39m[90m…[39m [90m0.05s[39m  
+2026-10-07T16:30:38.6977256Z   [32;1m✓[39;22m[90m [39m[90mit keeps a not-ready schema operation distinct from access denial[39m[90m   [39m [90m0.06s[39m  
+2026-10-07T16:30:38.6979530Z   [32;1m✓[39;22m[90m [39m[90mit keeps exhausted schema retries distinct from access denial[39m[90m       [39m [90m0.06s[39m  
+2026-10-07T16:30:38.6981984Z   [32;1m✓[39;22m[90m [39m[90mit requires a 30-day grace period and export digest before removing[39m[90m…[39m [90m0.07s[39m  
+2026-10-07T16:30:39.1411029Z 
+2026-10-07T16:30:39.1412019Z   [30;42;1m PASS [39;49;22m[39m Packages\transfer\tests\Feature\ExportLimitsTest[39m
+2026-10-07T16:30:39.1415820Z   [32;1m✓[39;22m[90m [39m[90mit rejects a page that exceeds the row cap even when it is a single[39m[90m…[39m [90m0.06s[39m  
+2026-10-07T16:30:39.1418810Z   [32;1m✓[39;22m[90m [39m[90mit seals several parts when each page stays inside the row cap[39m[90m      [39m [90m0.05s[39m  
+2026-10-07T16:30:39.1421252Z   [32;1m✓[39;22m[90m [39m[90mit enforces the byte cap independently of the part count[39m[90m            [39m [90m0.05s[39m  
+2026-10-07T16:30:39.1423633Z   [32;1m✓[39;22m[90m [39m[90mit drops an interrupted capture so a new manifest can be sealed[39m[90m     [39m [90m0.22s[39m  
+2026-10-07T16:30:39.1425985Z   [32;1m✓[39;22m[90m [39m[90mit checks runtime and memory before each page and rolls the capture[39m[90m…[39m [90m0.05s[39m  
+2026-10-07T16:30:39.3262600Z 
+2026-10-07T16:30:39.3264272Z   [30;42;1m PASS [39;49;22m[39m Packages\transfer\tests\Feature\TransferCancellationTest[39m
+2026-10-07T16:30:39.3266776Z   [32;1m✓[39;22m[90m [39m[90mit returns cancelled at the read boundary without the next target c[39m[90m…[39m [90m0.13s[39m  
+2026-10-07T16:30:39.3269704Z   [32;1m✓[39;22m[90m [39m[90mit does not write checkpoint, source, or target state when a dry ru[39m[90m…[39m [90m0.05s[39m  
+2026-10-07T16:30:39.5317894Z 
+2026-10-07T16:30:39.5319198Z   [30;42;1m PASS [39;49;22m[39m Packages\transfer\tests\Feature\TransferLimitsTest[39m
+2026-10-07T16:30:39.5320288Z   [32;1m✓[39;22m[90m [39m[90mit rejects an oversized source batch before any target write[39m[90m        [39m [90m0.05s[39m  
+2026-10-07T16:30:39.5323767Z   [32;1m✓[39;22m[90m [39m[90mit rolls the batch back when a runtime limit is reached and does no[39m[90m…[39m [90m0.05s[39m  
+2026-10-07T16:30:39.5326925Z   [32;1m✓[39;22m[90m [39m[90mit does not let a limit raised inside the row write become a swallo[39m[90m…[39m [90m0.05s[39m  
+2026-10-07T16:30:39.5329696Z   [32;1m✓[39;22m[90m [39m[90mit writes nothing when a dry run reaches a memory limit[39m[90m             [39m [90m0.05s[39m  
+2026-10-07T16:30:39.6406169Z 
+2026-10-07T16:30:39.6418564Z   [30;42;1m PASS [39;49;22m[39m Packages\transfer\tests\Feature\TransferResultReaderTest[39m
+2026-10-07T16:30:39.6419506Z   [32;1m✓[39;22m[90m [39m[90mit returns a bounded failure page and a typed manifest from transfe[39m[90m…[39m [90m0.06s[39m  
+2026-10-07T16:30:39.6420461Z   [32;1m✓[39;22m[90m [39m[90mit refuses a result when the scope or policy does not match[39m[90m         [39m [90m0.05s[39m  
+2026-10-07T16:30:39.8539997Z 
+2026-10-07T16:30:39.8541554Z   [30;42;1m PASS [39;49;22m[39m Packages\transfer\tests\Pg\ExportPgTest[39m
+2026-10-07T16:30:39.8544254Z   [32;1m✓[39;22m[90m [39m[90mit seals verified immutable parts and emits them only under current[39m[90m…[39m [90m0.06s[39m  
+2026-10-07T16:30:39.8546802Z   [32;1m✓[39;22m[90m [39m[90mit refuses output after a current policy revocation or an incompati[39m[90m…[39m [90m0.05s[39m  
+2026-10-07T16:30:39.8551218Z   [32;1m✓[39;22m[90m [39m[90mit aborts an unsealed capture instead of resuming its mutable snaps[39m[90m…[39m [90m0.05s[39m  
+2026-10-07T16:30:39.8552558Z   [32;1m✓[39;22m[90m [39m[90mit captures source pages inside a repeatable-read transaction[39m[90m       [39m [90m0.05s[39m  
+2026-10-07T16:30:39.9277130Z 
+2026-10-07T16:30:39.9298498Z   [30;42;1m PASS [39;49;22m[39m Packages\search\tests\Pg\IndexLifecyclePgTest[39m
+2026-10-07T16:30:39.9299497Z   [32;1m✓[39;22m[90m [39m[90mit deduplicates a revision and fences generation and restore epoch[39m[90m… [39m [90m0.03s[39m  
+2026-10-07T16:30:39.9300722Z   [32;1m✓[39;22m[90m [39m[90mit keeps the dirty receipt transactional so a later sweep heals a m[39m[90m…[39m [90m0.02s[39m  
+2026-10-07T16:30:39.9301629Z   [32;1m✓[39;22m[90m [39m[90mit fences, drains, and quarantines an unknown swap without a blind[39m[90m… [39m [90m0.02s[39m  
+2026-10-07T16:30:39.9338304Z 
+2026-10-07T16:30:39.9339110Z   [39;41;1m FAIL [39;49;22m[39m Packages\search\tests\Pg\PostgresSearchProviderTest[39m
+2026-10-07T16:30:39.9339969Z   [31;1m⨯[39;22m[90m [39m[90mit uses allowlisted schema identifiers and bound text-query values[39m
+2026-10-07T16:30:39.9340679Z   [31;1m⨯[39;22m[90m [39m[90mit uses an opaque cursor bound to its scope and query[39m
+2026-10-07T16:30:39.9344528Z   [31;1m⨯[39;22m[90m [39m[90mit keeps physically separate account databases and their cursors isolated[39m
+2026-10-07T16:30:41.3785461Z 
+2026-10-07T16:30:41.3789995Z   [30;42;1m PASS [39;49;22m[39m Packages\tasksworkflow\tests\Pg\MaterializationPgTest[39m
+2026-10-07T16:30:41.3791493Z   [32;1m✓[39;22m[90m [39m[90mit MAT-01 serializes concurrent materialization to one task per occ[39m[90m…[39m [90m0.13s[39m  
+2026-10-07T16:30:41.3792796Z   [32;1m✓[39;22m[90m [39m[90mit MAT-02 replays durable receipts after a failed outer attempt[39m[90m     [39m [90m0.12s[39m  
+2026-10-07T16:30:41.3795102Z   [32;1m✓[39;22m[90m [39m[90mit MAT-06 schedules a stamped complete payload and materializes thr[39m[90m…[39m [90m0.15s[39m  
+2026-10-07T16:30:41.3797666Z   [32;1m✓[39;22m[90m [39m[90mit MAT-06b quarantines an exact handler version mismatch without in[39m[90m…[39m [90m0.13s[39m  
+2026-10-07T16:30:41.3800040Z   [32;1m✓[39;22m[90m [39m[90mit MAT-07 captures workflow completion inside the task transaction[39m[90m… [39m [90m0.13s[39m  
+2026-10-07T16:30:41.3802333Z   [32;1m✓[39;22m[90m [39m[90mit MAT-08 denies cross-account restore epoch reuse on postgres[39m[90m      [39m [90m0.78s[39m  
+2026-10-07T16:30:41.5460049Z 
+2026-10-07T16:30:41.5460947Z   [30;42;1m PASS [39;49;22m[39m Packages\tasksworkflow\tests\Pg\WorkUnitIsolationPgTest[39m
+2026-10-07T16:30:41.5467498Z   [32;1m✓[39;22m[90m [39m[90mit isolates sequential postgres materializations when the first uni[39m[90m…[39m [90m0.17s[39m  
+2026-10-07T16:30:41.6196919Z 
+2026-10-07T16:30:41.6198676Z   [30;42;1m PASS [39;49;22m[39m Packages\intl\tests\Pg\RateImportConcurrencyTest[39m
+2026-10-07T16:30:41.6201129Z   [32;1m✓[39;22m[90m [39m[90mit FX-04 imports concurrent rate batches into one immutable row set[39m[90m [39m [90m0.07s[39m  
+2026-10-07T16:30:41.7004587Z 
+2026-10-07T16:30:41.7005701Z   [30;42;1m PASS [39;49;22m[39m Packages\intl\tests\Pg\ReferencePublicationTest[39m
+2026-10-07T16:30:41.7010162Z   [32;1m✓[39;22m[90m [39m[90mit GEO-04 publishes reference dataset with CAS generation on Postgr[39m[90m…[39m [90m0.08s[39m  
+2026-10-07T16:30:41.7014965Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
+2026-10-07T16:30:41.7019188Z   [41;1m FAILED [49;22m [1mPackages\search\tests\Pg\PostgresSear[22m… [41;1m BindingResolutionException [49;22m  
+2026-10-07T16:30:41.7033472Z [39;1m  Target class [config] does not exist.[39;22m
+2026-10-07T16:30:41.7042800Z 
+2026-10-07T16:30:41.7043645Z   at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1147[39m
+2026-10-07T16:30:41.7150746Z     1143▕             }
+2026-10-07T16:30:41.7151721Z     1144▕         }
+2026-10-07T16:30:41.7153769Z     1145▕ 
+2026-10-07T16:30:41.7155417Z     1146▕         try {
+2026-10-07T16:30:41.7155883Z   ➜ 1147▕             $reflector = new ReflectionClass($concrete);
+2026-10-07T16:30:41.7159024Z     1148▕         } catch (ReflectionException $e) {
+2026-10-07T16:30:41.7159768Z     1149▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+2026-10-07T16:30:41.7162268Z     1150▕         }
+2026-10-07T16:30:41.7162607Z     1151▕
+2026-10-07T16:30:41.7162855Z 
+2026-10-07T16:30:41.7164296Z       [2m+10 vendor frames [22m
+2026-10-07T16:30:41.7166151Z   [33m11  [39m[39;1mpackages/search/tests/Pg/PostgresSearchProviderTest.php[39;22m:[39;1m17[39;22m
+2026-10-07T16:30:41.7166863Z 
+2026-10-07T16:30:41.7168213Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
+2026-10-07T16:30:41.7169953Z   [41;1m FAILED [49;22m [1mPackages\search\tests\Pg\PostgresSear[22m… [41;1m BindingResolutionException [49;22m  
+2026-10-07T16:30:41.7171961Z [39;1m  Target class [config] does not exist.[39;22m
+2026-10-07T16:30:41.7180058Z 
+2026-10-07T16:30:41.7182109Z   at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1147[39m
+2026-10-07T16:30:41.7247926Z     1143▕             }
+2026-10-07T16:30:41.7252527Z     1144▕         }
+2026-10-07T16:30:41.7253066Z     1145▕ 
+2026-10-07T16:30:41.7256425Z     1146▕         try {
+2026-10-07T16:30:41.7256956Z   ➜ 1147▕             $reflector = new ReflectionClass($concrete);
+2026-10-07T16:30:41.7260341Z     1148▕         } catch (ReflectionException $e) {
+2026-10-07T16:30:41.7262360Z     1149▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+2026-10-07T16:30:41.7264478Z     1150▕         }
+2026-10-07T16:30:41.7264805Z     1151▕
+2026-10-07T16:30:41.7265274Z 
+2026-10-07T16:30:41.7265605Z       [2m+10 vendor frames [22m
+2026-10-07T16:30:41.7267840Z   [33m11  [39m[39;1mpackages/search/tests/Pg/PostgresSearchProviderTest.php[39;22m:[39;1m17[39;22m
+2026-10-07T16:30:41.7268603Z 
+2026-10-07T16:30:41.7269795Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
+2026-10-07T16:30:41.7271980Z   [41;1m FAILED [49;22m [1mPackages\search\tests\Pg\PostgresSear[22m… [41;1m BindingResolutionException [49;22m  
+2026-10-07T16:30:41.7273883Z [39;1m  Target class [config] does not exist.[39;22m
+2026-10-07T16:30:41.7278043Z 
+2026-10-07T16:30:41.7278547Z   at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1147[39m
+2026-10-07T16:30:41.7324454Z     1143▕             }
+2026-10-07T16:30:41.7324823Z     1144▕         }
+2026-10-07T16:30:41.7326645Z     1145▕ 
+2026-10-07T16:30:41.7327046Z     1146▕         try {
+2026-10-07T16:30:41.7328926Z   ➜ 1147▕             $reflector = new ReflectionClass($concrete);
+2026-10-07T16:30:41.7330778Z     1148▕         } catch (ReflectionException $e) {
+2026-10-07T16:30:41.7332949Z     1149▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+2026-10-07T16:30:41.7336800Z     1150▕         }
+2026-10-07T16:30:41.7336984Z     1151▕
+2026-10-07T16:30:41.7337082Z 
+2026-10-07T16:30:41.7338938Z       [2m+10 vendor frames [22m
+2026-10-07T16:30:41.7339402Z   [33m11  [39m[39;1mpackages/search/tests/Pg/PostgresSearchProviderTest.php[39;22m:[39;1m17[39;22m
+2026-10-07T16:30:41.7339718Z 
+2026-10-07T16:30:41.7339722Z 
+2026-10-07T16:30:41.7340052Z   [90mTests:[39m    [31;1m3 failed[39;22m[90m,[39m[39m [39m[32;1m237 passed[39;22m[90m (4801 assertions)[39m
+2026-10-07T16:30:41.7341878Z   [90mDuration:[39m [39m36.22s[39m
+2026-10-07T16:30:41.7342026Z 
+2026-10-07T16:30:41.7625962Z Script vendor/bin/pest --group=pg handling the test:pg event returned with error code 2
+2026-10-07T16:30:41.7739757Z ##[error]Process completed with exit code 2.
+2026-10-07T16:30:41.7832618Z Post job cleanup.
+2026-10-07T16:30:41.8510434Z [command]/usr/bin/git version
+2026-10-07T16:30:41.8606536Z git version 2.55.0
+2026-10-07T16:30:41.8765972Z Temporarily overriding HOME='/home/runner/work/_temp/38d8c609-bff2-43d7-b10a-543948a364a4' before making global git config changes
+2026-10-07T16:30:41.8766917Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-07T16:30:41.8776987Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/corex-mirror/corex-mirror
+2026-10-07T16:30:41.8789220Z Removing SSH command configuration
+2026-10-07T16:30:41.8789683Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-07T16:30:41.8791136Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-07T16:30:41.9095374Z Removing HTTP extra header
+2026-10-07T16:30:41.9096064Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-07T16:30:41.9162350Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-07T16:30:41.9437142Z Removing includeIf entries pointing to credentials config files
+2026-10-07T16:30:41.9457143Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-07T16:30:41.9474647Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-07T16:30:41.9811531Z Print service container logs: 1687a4bca763474e9296f407fe8a1b63_postgres18_0b714a
+2026-10-07T16:30:41.9814297Z ##[command]/usr/bin/docker logs --details 02f36201e85786ea2c70f863f7837b94c0a7b00129c719b8af81a4013e469904
+2026-10-07T16:30:41.9934523Z  initdb: warning: enabling "trust" authentication for local connections
+2026-10-07T16:30:41.9935296Z  initdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.
+2026-10-07T16:30:41.9936080Z  2026-10-07 16:29:22.616 UTC [1] LOG:  starting PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-10-07T16:30:41.9936912Z  2026-10-07 16:29:22.617 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2026-10-07T16:30:41.9937976Z  The files belonging to this database system will be owned by user "postgres".
+2026-10-07T16:30:41.9947245Z  2026-10-07 16:29:22.617 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+2026-10-07T16:30:41.9947468Z  This user must also own the server process.
+2026-10-07T16:30:41.9947831Z  2026-10-07 16:29:22.617 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-10-07T16:30:41.9948263Z  2026-10-07 16:29:22.621 UTC [74] LOG:  database system was shut down at 2026-10-07 16:29:22 UTC
+2026-10-07T16:30:41.9948695Z  2026-10-07 16:29:22.624 UTC [1] LOG:  database system is ready to accept connections
+2026-10-07T16:30:41.9949100Z  2026-10-07 16:30:12.975 UTC [206] ERROR:  canceling statement due to lock timeout
+2026-10-07T16:30:41.9949573Z  2026-10-07 16:30:12.975 UTC [206] STATEMENT:  select pg_advisory_xact_lock(hashtext($1))
+2026-10-07T16:30:41.9950302Z  2026-10-07 16:30:12.975 UTC [206] ERROR:  current transaction is aborted, commands ignored until end of transaction block
+2026-10-07T16:30:41.9950706Z  2026-10-07 16:30:12.975 UTC [206] STATEMENT:  DEALLOCATE pdo_stmt_0000006c
+2026-10-07T16:30:41.9951198Z  2026-10-07 16:30:13.497 UTC [215] ERROR:  duplicate key value violates unique constraint "sys_department_user_primary_uq"
+2026-10-07T16:30:41.9951682Z  2026-10-07 16:30:13.497 UTC [215] DETAIL:  Key (user_id)=(01a11733-7ff8-715e-90eb-af303aaaa521) already exists.
+2026-10-07T16:30:41.9952224Z  2026-10-07 16:30:13.497 UTC [215] STATEMENT:  insert into "sys_department_user" ("department_id", "user_id", "is_primary") values ($1, $2, $3)
+2026-10-07T16:30:41.9952757Z  2026-10-07 16:30:14.984 UTC [241] ERROR:  duplicate key value violates unique constraint "sys_feature_flags_key_uq"
+2026-10-07T16:30:41.9953160Z  2026-10-07 16:30:14.984 UTC [241] DETAIL:  Key (key)=(crm.lead_mode) already exists.
+2026-10-07T16:30:41.9953752Z  2026-10-07 16:30:14.984 UTC [241] STATEMENT:  insert into "sys_feature_flags" ("key", "module", "is_enabled", "payload", "id", "updated_at", "created_at") values ($1, $2, $3, $4, $5, $6, $7)
+2026-10-07T16:30:41.9954410Z  2026-10-07 16:30:15.742 UTC [249] ERROR:  new row for relation "sys_feature_overrides" violates check constraint "sys_feature_overrides_scope_ck"
+2026-10-07T16:30:41.9955172Z  2026-10-07 16:30:15.742 UTC [249] DETAIL:  Failing row contains (01a11733-88be-71f7-8dce-e63ed58284b2, 01a11733-88bc-7206-a5d0-94351d32a3ba, account, 00000000-0000-0000-0000-000000000101, t, null, 2026-10-07 16:30:15+00, 2026-10-07 16:30:15+00).
+2026-10-07T16:30:41.9956028Z  2026-10-07 16:30:15.742 UTC [249] STATEMENT:  insert into "sys_feature_overrides" ("flag_id", "scope_type", "scope_id", "is_enabled", "id", "updated_at", "created_at") values ($1, $2, $3, $4, $5, $6, $7)
+2026-10-07T16:30:41.9956776Z  2026-10-07 16:30:17.335 UTC [267] ERROR:  duplicate key value violates unique constraint "sys_feature_flags_key_uq"
+2026-10-07T16:30:41.9957822Z  2026-10-07 16:30:17.335 UTC [267] DETAIL:  Key (key)=(crm.lead_mode) already exists.
+2026-10-07T16:30:41.9958117Z  
+2026-10-07T16:30:41.9959658Z  2026-10-07 16:30:17.335 UTC [267] STATEMENT:  insert into "sys_feature_flags" ("key", "module", "is_enabled", "payload", "id", "updated_at", "created_at") values ($1, $2, $3, $4, $5, $6, $7)
+2026-10-07T16:30:41.9960066Z  The database cluster will be initialized with locale "en_US.utf8".
+2026-10-07T16:30:41.9960418Z  2026-10-07 16:30:21.132 UTC [289] ERROR:  canceling statement due to lock timeout
+2026-10-07T16:30:41.9961000Z  2026-10-07 16:30:21.132 UTC [289] STATEMENT:  select pg_advisory_xact_lock(hashtext($1))
+2026-10-07T16:30:41.9961400Z  The default database encoding has accordingly been set to "UTF8".
+2026-10-07T16:30:41.9961678Z  The default text search configuration will be set to "english".
+2026-10-07T16:30:41.9961854Z  
+2026-10-07T16:30:41.9961961Z  Data page checksums are enabled.
+2026-10-07T16:30:41.9962096Z  
+2026-10-07T16:30:41.9962262Z  fixing permissions on existing directory /var/lib/postgresql/18/docker ... ok
+2026-10-07T16:30:41.9962479Z  creating subdirectories ... ok
+2026-10-07T16:30:41.9962652Z  selecting dynamic shared memory implementation ... posix
+2026-10-07T16:30:41.9962840Z  selecting default "max_connections" ... 100
+2026-10-07T16:30:41.9963008Z  selecting default "shared_buffers" ... 128MB
+2026-10-07T16:30:41.9963166Z  selecting default time zone ... Etc/UTC
+2026-10-07T16:30:41.9963318Z  creating configuration files ... ok
+2026-10-07T16:30:41.9963463Z  running bootstrap script ... ok
+2026-10-07T16:30:41.9963620Z  performing post-bootstrap initialization ... ok
+2026-10-07T16:30:41.9963783Z  syncing data to disk ... ok
+2026-10-07T16:30:41.9963907Z  
+2026-10-07T16:30:41.9963996Z  
+2026-10-07T16:30:41.9964120Z  Success. You can now start the database server using:
+2026-10-07T16:30:41.9964277Z  
+2026-10-07T16:30:41.9964416Z      pg_ctl -D /var/lib/postgresql/18/docker -l logfile start
+2026-10-07T16:30:41.9964695Z  
+2026-10-07T16:30:41.9965028Z  waiting for server to start....2026-10-07 16:29:22.200 UTC [52] LOG:  starting PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-10-07T16:30:41.9965484Z  2026-10-07 16:29:22.200 UTC [52] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-10-07T16:30:41.9965781Z  2026-10-07 16:29:22.203 UTC [58] LOG:  database system was shut down at 2026-10-07 16:29:21 UTC
+2026-10-07T16:30:41.9966052Z  2026-10-07 16:29:22.206 UTC [52] LOG:  database system is ready to accept connections
+2026-10-07T16:30:41.9966246Z   done
+2026-10-07T16:30:41.9966541Z  server started
+2026-10-07T16:30:41.9966652Z  CREATE DATABASE
+2026-10-07T16:30:41.9966755Z  
+2026-10-07T16:30:41.9966843Z  
+2026-10-07T16:30:41.9967013Z  /usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
+2026-10-07T16:30:41.9967217Z  
+2026-10-07T16:30:41.9967352Z  2026-10-07 16:29:22.396 UTC [52] LOG:  received fast shutdown request
+2026-10-07T16:30:41.9967879Z  2026-10-07 16:30:21.132 UTC [289] ERROR:  current transaction is aborted, commands ignored until end of transaction block
+2026-10-07T16:30:41.9968241Z  waiting for server to shut down....2026-10-07 16:29:22.396 UTC [52] LOG:  aborting any active transactions
+2026-10-07T16:30:41.9968623Z  2026-10-07 16:30:21.132 UTC [289] STATEMENT:  DEALLOCATE pdo_stmt_00000069
+2026-10-07T16:30:41.9969069Z  2026-10-07 16:30:26.169 UTC [372] ERROR:  duplicate key value violates unique constraint "sys_settings_uq"
+2026-10-07T16:30:41.9969591Z  2026-10-07 16:30:26.169 UTC [372] DETAIL:  Key (namespace, key, scope_type, scope_id)=(crm, dup-raw, account, null) already exists.
+2026-10-07T16:30:41.9970264Z  2026-10-07 16:30:26.169 UTC [372] STATEMENT:  insert into "sys_settings" ("id", "namespace", "key", "scope_type", "scope_id", "value", "is_sensitive", "created_at", "updated_at") values ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+2026-10-07T16:30:41.9970972Z  2026-10-07 16:30:28.374 UTC [428] ERROR:  new row for relation "sys_api_budget_buckets" violates check constraint "sys_api_budget_buckets_counts_ck"
+2026-10-07T16:30:41.9971720Z  2026-10-07 16:30:28.374 UTC [428] DETAIL:  Failing row contains (aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, -1, 0, 1, 2026-09-25 10:00:00.123456+00, 2026-09-25 10:00:00.123456+00).
+2026-10-07T16:30:41.9972693Z  2026-10-07 16:30:28.374 UTC [428] STATEMENT:  insert into "sys_api_budget_buckets" ("key", "capacity", "available", "refill_rate", "last_refill_at", "last_used_at") values ($1, $2, $3, $4, $5, $6)
+2026-10-07T16:30:41.9973580Z  2026-10-07 16:30:28.374 UTC [428] ERROR:  new row for relation "sys_api_budget_reservations" violates check constraint "sys_api_budget_reservations_keys_ck"
+2026-10-07T16:30:41.9974572Z  2026-10-07 16:30:28.374 UTC [428] DETAIL:  Failing row contains (bad-keys, ["one"], 1, 0, bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb, held, 2026-09-25 10:00:00.123456+00, 2026-09-25 10:00:00.123456+00).
+2026-10-07T16:30:41.9975688Z  2026-10-07 16:30:28.374 UTC [428] STATEMENT:  insert into "sys_api_budget_reservations" ("id", "keys", "estimate", "charged", "recipe_hash", "state", "created_at", "expires_at") values ($1, $2, $3, $4, $5, $6, $7, $8)
+2026-10-07T16:30:41.9976851Z  2026-10-07 16:30:28.375 UTC [429] ERROR:  new row for relation "sys_api_bulk_operations" violates check constraint "sys_api_bulk_operations_status_ck"
+2026-10-07T16:30:41.9978099Z  2026-10-07 16:30:28.375 UTC [429] DETAIL:  Failing row contains (invalid, v1, orders.import, submission-1, {}, actor-1, client-1, cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc, {}, {}, null, invented, null, 0, null, null, null, {}, {}, null, null, 0, 2026-09-25 10:00:00.123456+00, 2026-09-25 10:00:00.123456+00, null, null).
+2026-10-07T16:30:41.9979770Z  2026-10-07 16:30:28.375 UTC [429] STATEMENT:  insert into "sys_api_bulk_operations" ("id", "major", "operation_id", "submission_id", "scope", "actor_id", "client_id", "contract_hash", "extension_stamp", "input_ref", "status", "revision", "checkpoint", "progress", "attempt", "next_attempt_at", "created_at") values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
+2026-10-07T16:30:41.9980690Z  2026-10-07 16:30:28.376 UTC [429] ERROR:  new row for relation "sys_api_webhook_subscriptions" violates check constraint "sys_api_webhook_subscriptions_status_ck"
+2026-10-07T16:30:41.9981313Z  2026-10-07 16:30:28.376 UTC [429] DETAIL:  Failing row contains (invalid, 1, v1, orders.changed, 1, https://receiver.test/hook, invented, pii-pseudonymous, [], 2026-09-25 10:00:00.123456+00, 2026-09-25 10:00:00.123456+00).
+2026-10-07T16:30:41.9982067Z  2026-10-07 16:30:28.376 UTC [429] STATEMENT:  insert into "sys_api_webhook_subscriptions" ("id", "revision", "major", "topic", "topic_version", "endpoint_url", "status", "max_pii_class", "key_refs", "created_at", "updated_at") values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+2026-10-07T16:30:41.9982606Z  2026-10-07 16:30:29.252 UTC [443] ERROR:  canceling statement due to lock timeout
+2026-10-07T16:30:41.9982871Z  2026-10-07 16:30:29.252 UTC [443] STATEMENT:  SELECT pg_advisory_xact_lock(hashtext($1))
+2026-10-07T16:30:41.9983199Z  2026-10-07 16:30:29.253 UTC [443] ERROR:  current transaction is aborted, commands ignored until end of transaction block
+2026-10-07T16:30:41.9983509Z  2026-10-07 16:30:29.253 UTC [443] STATEMENT:  DEALLOCATE pdo_stmt_00000004
+2026-10-07T16:30:41.9983802Z  2026-10-07 16:30:29.354 UTC [444] ERROR:  duplicate key value violates unique constraint "sys_feature_flags_key_uq"
+2026-10-07T16:30:41.9984112Z  2026-10-07 16:30:29.354 UTC [444] DETAIL:  Key (key)=(example.toggle) already exists.
+2026-10-07T16:30:41.9984522Z  2026-10-07 16:30:29.354 UTC [444] STATEMENT:  insert into "sys_feature_flags" ("key", "module", "is_enabled", "payload", "id", "updated_at", "created_at") values ($1, $2, $3, $4, $5, $6, $7)
+2026-10-07T16:30:41.9984994Z  2026-10-07 16:30:29.355 UTC [444] ERROR:  current transaction is aborted, commands ignored until end of transaction block
+2026-10-07T16:30:41.9985300Z  2026-10-07 16:30:29.355 UTC [444] STATEMENT:  DEALLOCATE pdo_stmt_0000006b
+2026-10-07T16:30:41.9985587Z  2026-10-07 16:30:31.583 UTC [467] ERROR:  duplicate key value violates unique constraint "sys_inbox_messages_pk"
+2026-10-07T16:30:41.9986056Z  2026-10-07 16:30:31.583 UTC [467] DETAIL:  Key (consumer, message_id)=(test-consumer, 01932f5a-0000-7000-8000-000000000001) already exists.
+2026-10-07T16:30:41.9986670Z  2026-10-07 16:30:31.583 UTC [467] STATEMENT:  insert into "sys_inbox_messages" ("consumer", "message_id", "name", "processed_at") values ($1, $2, $3, $4)
+2026-10-07T16:30:41.9987038Z  2026-10-07 16:30:33.454 UTC [491] ERROR:  canceling statement due to lock timeout
+2026-10-07T16:30:41.9987323Z  2026-10-07 16:30:33.454 UTC [491] CONTEXT:  while locking tuple (0,1) in relation "sys_outbox_messages"
+2026-10-07T16:30:41.9987692Z  2026-10-07 16:30:33.454 UTC [491] STATEMENT:  SELECT id FROM sys_outbox_messages WHERE id = '01932f5a-0000-7000-8000-000000000007' FOR UPDATE
+2026-10-07T16:30:41.9988032Z  2026-10-07 16:30:33.726 UTC [494] ERROR:  canceling statement due to lock timeout
+2026-10-07T16:30:41.9988288Z  2026-10-07 16:30:33.726 UTC [494] STATEMENT:  select pg_advisory_xact_lock(hashtext($1))
+2026-10-07T16:30:41.9988614Z  2026-10-07 16:30:33.726 UTC [494] ERROR:  current transaction is aborted, commands ignored until end of transaction block
+2026-10-07T16:30:41.9988915Z  2026-10-07 16:30:33.726 UTC [494] STATEMENT:  DEALLOCATE pdo_stmt_00000004
+2026-10-07T16:30:41.9989206Z  2026-10-07 16:30:34.024 UTC [496] ERROR:  duplicate key value violates unique constraint "sys_feature_flags_key_uq"
+2026-10-07T16:30:41.9989509Z  2026-10-07 16:30:34.024 UTC [496] DETAIL:  Key (key)=(sff.beta_mode) already exists.
+2026-10-07T16:30:41.9989912Z  2026-10-07 16:30:34.024 UTC [496] STATEMENT:  insert into "sys_feature_flags" ("key", "module", "is_enabled", "payload", "id", "updated_at", "created_at") values ($1, $2, $3, $4, $5, $6, $7)
+2026-10-07T16:30:41.9990529Z  2026-10-07 16:30:34.024 UTC [496] ERROR:  current transaction is aborted, commands ignored until end of transaction block
+2026-10-07T16:30:41.9990831Z  2026-10-07 16:30:34.024 UTC [496] STATEMENT:  DEALLOCATE pdo_stmt_0000007f
+2026-10-07T16:30:41.9991140Z  2026-10-07 16:30:36.473 UTC [550] ERROR:  duplicate key value violates unique constraint "sys_attribute_key_reservations_pk"
+2026-10-07T16:30:41.9991483Z  2026-10-07 16:30:36.473 UTC [550] DETAIL:  Key (entity, key)=(contact, website) already exists.
+2026-10-07T16:30:41.9992001Z  2026-10-07 16:30:36.473 UTC [550] STATEMENT:  insert into "sys_attribute_key_reservations" ("entity", "key", "attribute_id", "current_revision", "role", "created_at", "updated_at") values ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+2026-10-07T16:30:41.9992555Z  2026-10-07 16:30:36.473 UTC [550] ERROR:  current transaction is aborted, commands ignored until end of transaction block
+2026-10-07T16:30:41.9992881Z  2026-10-07 16:30:36.473 UTC [550] STATEMENT:  DEALLOCATE pdo_stmt_00000032
+2026-10-07T16:30:41.9993180Z  2026-10-07 16:30:36.585 UTC [554] ERROR:  duplicate key value violates unique constraint "sys_attribute_definitions_pk"
+2026-10-07T16:30:41.9993563Z  2026-10-07 16:30:36.585 UTC [554] DETAIL:  Key (attribute_id, revision)=(018f0b5d-0000-7000-8000-000000000001, 1) already exists.
+2026-10-07T16:30:41.9994243Z  2026-10-07 16:30:36.585 UTC [554] STATEMENT:  insert into "sys_attribute_definitions" ("attribute_id", "revision", "entity", "key", "type", "lifecycle", "required", "searchable", "constraints", "read_keys", "write_keys", "index_policy", "meta", "definition_hash") values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+2026-10-07T16:30:41.9994911Z  2026-10-07 16:30:36.585 UTC [554] ERROR:  current transaction is aborted, commands ignored until end of transaction block
+2026-10-07T16:30:41.9995211Z  2026-10-07 16:30:36.585 UTC [554] STATEMENT:  DEALLOCATE pdo_stmt_00000030
+2026-10-07T16:30:41.9995561Z  2026-10-07 16:30:40.327 UTC [639] ERROR:  duplicate key value violates unique constraint "sys_wakeup_requests_workspace_scope_key_kind_request_key_uq"
+2026-10-07T16:30:41.9996082Z  2026-10-07 16:30:40.327 UTC [639] DETAIL:  Key (workspace_scope_key, kind, request_key)=(account, task-recurrence.materialize, materialize:series-pg-06) already exists.
+2026-10-07T16:30:41.9997141Z  2026-10-07 16:30:40.327 UTC [639] STATEMENT:  insert into "sys_wakeup_requests" ("id", "workspace_scope_key", "kind", "request_key", "request_digest", "fire_at", "window_start", "window_end", "period", "payload", "status", "generation", "attempt", "created_at", "updated_at") values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+2026-10-07T16:30:41.9997830Z  2026-10-07 16:30:40.327 UTC [639] ERROR:  current transaction is aborted, commands ignored until end of transaction block
+2026-10-07T16:30:41.9998138Z  2026-10-07 16:30:40.327 UTC [639] STATEMENT:  DEALLOCATE pdo_stmt_000000b6
+2026-10-07T16:30:41.9998437Z  2026-10-07 16:30:40.328 UTC [639] ERROR:  current transaction is aborted, commands ignored until end of transaction block
+2026-10-07T16:30:41.9998851Z  2026-10-07 16:30:40.328 UTC [639] STATEMENT:  select * from "sys_wakeup_requests" where "workspace_scope_key" = $1 and "request_key" = $2 limit 1
+2026-10-07T16:30:41.9999280Z  2026-10-07 16:29:22.399 UTC [52] LOG:  background worker "logical replication launcher" (PID 61) exited with exit code 1
+2026-10-07T16:30:41.9999563Z  2026-10-07 16:29:22.400 UTC [56] LOG:  shutting down
+2026-10-07T16:30:41.9999771Z  2026-10-07 16:29:22.400 UTC [56] LOG:  checkpoint starting: shutdown immediate
+2026-10-07T16:30:42.0000376Z  2026-10-07 16:29:22.534 UTC [56] LOG:  checkpoint complete: wrote 943 buffers (5.8%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.116 s, sync=0.018 s, total=0.135 s; sync files=303, longest=0.017 s, average=0.001 s; distance=4352 kB, estimate=4352 kB; lsn=0/1BA1BE0, redo lsn=0/1BA1BE0
+2026-10-07T16:30:42.0000957Z  2026-10-07 16:29:22.545 UTC [52] LOG:  database system is shut down
+2026-10-07T16:30:42.0001213Z   done
+2026-10-07T16:30:42.0001320Z  server stopped
+2026-10-07T16:30:42.0001430Z  
+2026-10-07T16:30:42.0001560Z  PostgreSQL init process complete; ready for start up.
+2026-10-07T16:30:42.0001723Z  
+2026-10-07T16:30:42.0006081Z Stop and remove container: 1687a4bca763474e9296f407fe8a1b63_postgres18_0b714a
+2026-10-07T16:30:42.0009921Z ##[command]/usr/bin/docker rm --force 02f36201e85786ea2c70f863f7837b94c0a7b00129c719b8af81a4013e469904
+2026-10-07T16:30:42.5049980Z 02f36201e85786ea2c70f863f7837b94c0a7b00129c719b8af81a4013e469904
+2026-10-07T16:30:42.5064847Z Remove container network: github_network_c50ca3de17c2419c8915550aed41a985
+2026-10-07T16:30:42.5068270Z ##[command]/usr/bin/docker network rm github_network_c50ca3de17c2419c8915550aed41a985
+2026-10-07T16:30:42.5697335Z github_network_c50ca3de17c2419c8915550aed41a985
+2026-10-07T16:30:42.5751387Z Cleaning up orphan processes

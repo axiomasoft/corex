@@ -1,0 +1,859 @@
+{
+  "structured_checks": [
+    {
+      "item": "P09.1",
+      "check": "V0",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V0.json",
+      "receipt_sha256": "eb30780db95d1daeaee934a431db4569e91f2e5ccb1fc1b7a67a26af58de64c6",
+      "log_matches": true,
+      "exit": null
+    },
+    {
+      "item": "P09.1",
+      "check": "V1",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V1.json",
+      "receipt_sha256": "47f55cc5c171a79b9c3d7247e9f911947be2f143c81fdc6f4e600b77a1fc35a6",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.1",
+      "check": "V2",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V2.json",
+      "receipt_sha256": "60fb8a3e04f4ee268a32097acbd59330ea393dc2c31d981eeda8e525f5a22848",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.1",
+      "check": "V3",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V3.json",
+      "receipt_sha256": "76114b343692714d19644f06655564fc81fae537f994636eee2ebb53016dd2da",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.1",
+      "check": "V4",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V4.json",
+      "receipt_sha256": "36427c604f194f82847ee3feacd549401b3cd48651c185a5f33b7ccf8cfe1a30",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.1",
+      "check": "V5",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V5.json",
+      "receipt_sha256": "a47dd83d2f4b3d9bc22581e633f3c697e5bec5ae3ea55549ec4c63f8ff03b8fa",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.1",
+      "check": "V6",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V6.json",
+      "receipt_sha256": "dea5f85809ac25be5283f69560d2f7a4e8c08f0d6a1568db84858f6faeb53acd",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.1",
+      "check": "V7",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V7.json",
+      "receipt_sha256": "b323afcfbd2c0c7a56c585ffb77ee5fdc56099a3e67654b18f38c2682498eec1",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.1",
+      "check": "V8",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V8.json",
+      "receipt_sha256": "3f0081b8d5a8152fe90dc9577556c31300898f915b3a9e67add5e2975189a04a",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.1",
+      "check": "V9",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V9.json",
+      "receipt_sha256": "817b074f4ba5688a0d256e0f1d8192cc2c3ecc9a1b4735357e76709e450b9702",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.1",
+      "check": "V10",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V10.json",
+      "receipt_sha256": "abad283ab9ee282d62f2b220537f0d74ac59fd552316a3c298de8e523749e617",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.1",
+      "check": "V11",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V11.json",
+      "receipt_sha256": "8a34b1500f10af69bc8703c33838df7c38fca98c447feb439e38d1ed02e2ed97",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.1",
+      "check": "V12",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V12.json",
+      "receipt_sha256": "8325ad4d26ee4ab1249c0517b4916f5b7f64c052c5d542213d1e51429b8b7f4c",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.1",
+      "check": "V13",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V13.json",
+      "receipt_sha256": "3040a8196e66ed95f3352e32db2d641d99f91a2eb3b395dbce3cc0900c48bdc6",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.1",
+      "check": "V14",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V14.json",
+      "receipt_sha256": "b7b47934e2d327398f386b993991aa2582e4a4868acc345d9dabfefdd86f2302",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.1",
+      "check": "V15",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V15.json",
+      "receipt_sha256": "1faed2620313786c80fbf8756873e6fd51786adfc6acd6897952c36d8930f5ff",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.1",
+      "check": "V16",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V16.json",
+      "receipt_sha256": "c0c19b6f3df32362f6b98b7acf95d2db1c5370fa4e7ab05e5bd50c8dbb602453",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.1",
+      "check": "V17",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V17.json",
+      "receipt_sha256": "d2ec33394d3b90e80da555b053d47d02421bee0f85b764a91582cb4b7b33f0ca",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.1",
+      "check": "V18",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V18.json",
+      "receipt_sha256": "a183014fc0ee20bb8a6f6fb22498069c97293aa879990b3568eca0f95d30b9e1",
+      "log_matches": true,
+      "exit": null
+    },
+    {
+      "item": "P09.1",
+      "check": "V19",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V19.json",
+      "receipt_sha256": "1c6fd7bf465f02bc6cf9f5b546384ce670902a7ac6dd502a05a2a81850300273",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.1",
+      "check": "V20",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/checks/V20.json",
+      "receipt_sha256": "30719f8be4378cb10f2165c1a9c67ddec6bad50205f3e927dd4f9bf78cee248d",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.2",
+      "check": "V1",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.2-execution/checks/V1.json",
+      "receipt_sha256": "046ac9afbfdb48954b9552bc68457936f70584fce654f2d4314b762c51683f41",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.2",
+      "check": "V7",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.2-execution/checks/V7.json",
+      "receipt_sha256": "6fcdcf5c4544233ccf8906cc7f744cd82a2f458273943bd43cbb3ac1c9baa34b",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.2",
+      "check": "V12",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.2-execution/checks/V12.json",
+      "receipt_sha256": "3157072066c25400a36259d3dd7020fde3e831bd74d55b961294fc726865232a",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.2",
+      "check": "V15",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.2-execution/checks/V15.json",
+      "receipt_sha256": "f6b4cd7caab093fa8608d4eb481feaed49f1564f45d2414d792fbaa64c7d94a2",
+      "log_matches": true,
+      "exit": null
+    },
+    {
+      "item": "P09.2",
+      "check": "V17",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.2-execution/checks/V17.json",
+      "receipt_sha256": "acf2387359759fb42d37753f8fe7d705de954fda82fb86c0568569d8c076ec2b",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.2",
+      "check": "V18",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.2-execution/checks/V18.json",
+      "receipt_sha256": "3e3b46890ca0cccab9ff067bda45e9ad289adbd2c049e5c00cec49db888a4899",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.2",
+      "check": "V19",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.2-execution/checks/V19.json",
+      "receipt_sha256": "11d3366e2a0110525b089e1ba32a79e7ed4995eb69ceebf48905138844f81225",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.2",
+      "check": "V20",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.2-execution/checks/V20.json",
+      "receipt_sha256": "f730fe53c38dbe807b0880aaad4489c90b15721beecad2248d10bd8d46e0823c",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.2",
+      "check": "V21",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.2-execution/checks/V21.json",
+      "receipt_sha256": "47b515ff5a6e8725cfd16f00a27d7ef331f043f0a51275627c024460d9e4b441",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.2",
+      "check": "V22",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.2-execution/checks/V22.json",
+      "receipt_sha256": "f9b5cc50973accd0dca11724da774ca3ae8357e1740cbeff6335e9fb1c21eafe",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.10",
+      "check": "V2",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V2.json",
+      "receipt_sha256": "2018a10b9110dc4f66f07f55b3d66915836f9679d57ef6df53c188c53cb5275c",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.10",
+      "check": "V8",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V8.json",
+      "receipt_sha256": "73ff45091c3fb1f0081ba8e8d03e331f000cf754d65a035ebe9c3ee1a3bf3cdb",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.10",
+      "check": "V13",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V13.json",
+      "receipt_sha256": "af4cd8dac3303059085bb52287f6bc5acba45580e52d5785174ad9be77f822b7",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.10",
+      "check": "V17",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V17.json",
+      "receipt_sha256": "f393db4fc5bc53ff94a740ed3be243a01246e6ba70d0de88ee939afb360e321f",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.10",
+      "check": "V18",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V18.json",
+      "receipt_sha256": "2d4dd6b11c66075d0009ab79445106475282804171c2f5e369a4f651c0463e36",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.10",
+      "check": "V19",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V19.json",
+      "receipt_sha256": "fcb7328f490c3d51207889787ba772a64d568a5db21e8a47d3bb09c1e565cad1",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.10",
+      "check": "V20",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V20.json",
+      "receipt_sha256": "b563f00bd37acd953c4bc64360fd8210cbabcf273b4969aa8e11b6088b0881c4",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.10",
+      "check": "V21",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V21.json",
+      "receipt_sha256": "5125f5d4459bf91475900322ce8258ff05afb4bf343c108220ec3439f204e20a",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.10",
+      "check": "V22",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V22.json",
+      "receipt_sha256": "298442b2b69eaab2412312fe9b8e76613a276a5feddcf91bee8111774f3e5eb7",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.10",
+      "check": "V30",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V30.json",
+      "receipt_sha256": "1bfc9974643a335824c1cc495b25d4e1311c3db2ee51fa5885a3f1d0f3662f04",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.4",
+      "check": "V1",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V1.json",
+      "receipt_sha256": "7fab6efee41b6fc57178905d8cdb1009b5c2779008d3ec643b2e10c56e4bf0af",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.4",
+      "check": "V2",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V2.json",
+      "receipt_sha256": "a50d129851161f450a94d5eb30c966102949288ca9a813bd3a2663b50344026d",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.4",
+      "check": "V3",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V3.json",
+      "receipt_sha256": "b6531875807a776e1017ba7faa2b4579a8c8ef4bfdada1d98c3ee6f5a59d432a",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.4",
+      "check": "V4",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V4.json",
+      "receipt_sha256": "9f517e30acf83167d745c84893b589716a23951b833ba51595e0ce7e07110b33",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.4",
+      "check": "V5",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V5.json",
+      "receipt_sha256": "3af292a67f712706150b0e9f4c6d5068589ba9d6f7f54604b1a17a1abdfc0c61",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.4",
+      "check": "V6",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V6.json",
+      "receipt_sha256": "0069ca768043e8a676d202c89e63e857a03f674afc66f63db394ccbb2298c5ec",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.4",
+      "check": "V7",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V7.json",
+      "receipt_sha256": "dfaa4f437957d6cb5ac426083f9fbaa474f7ad84c5f060711b0450a0107daf1a",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.4",
+      "check": "V8",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V8.json",
+      "receipt_sha256": "e7dae5f82ea7987fd6b5272d03ee00fd63345bcd75ca6de8d06b5f400450a2f5",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.4",
+      "check": "V9",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V9.json",
+      "receipt_sha256": "9f7ec82d41d44c8dc9389701d99aab03ebf1e90a65d9a97501ac15c26871f281",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.4",
+      "check": "V10",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V10.json",
+      "receipt_sha256": "ec9e26a4e44d503fd6d43e0eafb0eb7791fa3f9dfbeba1957d63cc7e7cc50dfe",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.4",
+      "check": "V11",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V11.json",
+      "receipt_sha256": "af17bf21ca8d925322364b1eda5d412d388dd3edc4d9dec7a4a213c00c09ecf6",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.4",
+      "check": "V12",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V12.json",
+      "receipt_sha256": "9e7fe3d011974af0212b2784c1d42c7b9aef1b94f1e8d9ce114f465f18b0ec0e",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.4",
+      "check": "V13",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V13.json",
+      "receipt_sha256": "b5d732b1e06015c98cdbe74a574ee330311cbcd99dd1486ec4db9dbca5096176",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.4",
+      "check": "V14",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V14.json",
+      "receipt_sha256": "de4938a8c5bc3f535d542e40b51f008352555c70122def403ae850c14e59d7f6",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.4",
+      "check": "V15",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V15.json",
+      "receipt_sha256": "1eacb0283bfa98460393888e50d982c1702df87705ffb85647fb5e8f80b11a6f",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.4",
+      "check": "V16",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V16.json",
+      "receipt_sha256": "06cbe2b1d5fca67766f30b3607cba89b2754e2318b32ba7b93e27878d63442d5",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.4",
+      "check": "V17",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V17.json",
+      "receipt_sha256": "5200785f1f52844889375490e035af7298e1c1a3041d5d78b7e56c4f9ea34c7b",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.4",
+      "check": "V18",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V18.json",
+      "receipt_sha256": "3f272cb445b1827aa54bee88fb5a9167ee2cf38525a65be6a581172b8a202230",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.4",
+      "check": "V19",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V19.json",
+      "receipt_sha256": "422f6e1c695af6dca05f7649572cd90c0f489458da067bfa0171dfa6f3f5a610",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.9",
+      "check": "V1",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.9-execution-after-D132/validation/V1.json",
+      "receipt_sha256": "a51f5981444bad8ecf81238acfcaaa405a716b799927628f0a61e74ddf40a4e8",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.9",
+      "check": "V2",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.9-execution-after-D132/validation/V2.json",
+      "receipt_sha256": "3e65af491754c58aa6d37008d8655e0ca748211a3814562be3046c50d6adf146",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.9",
+      "check": "V3",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.9-execution-after-D132/validation/V3.json",
+      "receipt_sha256": "06229e561c40bab3be69fe6324189e3891586e7668f87fdb8549b57378c01a59",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.9",
+      "check": "V4",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.9-execution-after-D132/validation/V4.json",
+      "receipt_sha256": "1b005832fac4945531115424d0f1a22924e15305bf4c291f845500fc30cd0cf8",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.9",
+      "check": "V5",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.9-execution-after-D132/validation/V5.json",
+      "receipt_sha256": "a37e03a212747b4842b0172e1471600b8f2fa806c7b890b33cfcce287889532b",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.9",
+      "check": "V6",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.9-execution-after-D132/validation/V6.json",
+      "receipt_sha256": "adac1997d3c6d6cf56751f2d2c67d4648826f93a740dc12a3e5b59973460617e",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.9",
+      "check": "V7",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.9-execution-after-D132/validation/V7.json",
+      "receipt_sha256": "33a3b82bbca1141ab1de5d1af7bd92072fcf5332e8b5318b19482079d5c27aec",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.9",
+      "check": "V8",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.9-execution-after-D132/validation/V8.json",
+      "receipt_sha256": "6bc84c9f70013fc9068d22186b9bf92ac8656ba8fabc8b9c21e681f467e91437",
+      "log_matches": true,
+      "exit": 0
+    },
+    {
+      "item": "P09.9",
+      "check": "V9",
+      "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.9-execution-after-D132/validation/V9.json",
+      "receipt_sha256": "3bed9e69785102bd45f56fe8b3cca93e43f18f13474f0e661b66fccc56bc83ab",
+      "log_matches": true,
+      "exit": 0
+    }
+  ],
+  "summary_log_checks": [
+    {
+      "item": "P09.11",
+      "check": "V3",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.11-execution/V3.log",
+      "matches": true
+    },
+    {
+      "item": "P09.11",
+      "check": "V4",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.11-execution/V4.log",
+      "matches": true
+    },
+    {
+      "item": "P09.11",
+      "check": "V5",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.11-execution/V5.log",
+      "matches": true
+    },
+    {
+      "item": "P09.11",
+      "check": "V9",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.11-execution/V9.log",
+      "matches": true
+    },
+    {
+      "item": "P09.11",
+      "check": "V10",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.11-execution/V10.log",
+      "matches": true
+    },
+    {
+      "item": "P09.11",
+      "check": "V11",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.11-execution/V11.log",
+      "matches": true
+    },
+    {
+      "item": "P09.11",
+      "check": "V14",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.11-execution/V14.log",
+      "matches": true
+    },
+    {
+      "item": "P09.11",
+      "check": "V16",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.11-execution/V16.log",
+      "matches": true
+    },
+    {
+      "item": "P09.11",
+      "check": "V6",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.11-execution/V6.log",
+      "matches": true
+    },
+    {
+      "item": "P09.11",
+      "check": "V17",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.11-execution/V17.log",
+      "matches": true
+    },
+    {
+      "item": "P09.11",
+      "check": "V18",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.11-execution/V18.log",
+      "matches": true
+    },
+    {
+      "item": "P09.11",
+      "check": "V19",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.11-execution/V19.log",
+      "matches": true
+    },
+    {
+      "item": "P09.11",
+      "check": "V20",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.11-execution/V20.log",
+      "matches": true
+    },
+    {
+      "item": "P09.11",
+      "check": "V21",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.11-execution/V21.log",
+      "matches": true
+    },
+    {
+      "item": "P09.11",
+      "check": "V22",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.11-execution/V22.log",
+      "matches": true
+    },
+    {
+      "item": "P09.11",
+      "check": "V30",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.11-execution/V30.log",
+      "matches": true
+    },
+    {
+      "item": "P09.3",
+      "check": "V1",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.3-execution/V1.log",
+      "matches": true
+    },
+    {
+      "item": "P09.3",
+      "check": "V2",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.3-execution/V2.log",
+      "matches": true
+    },
+    {
+      "item": "P09.3",
+      "check": "V3",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.3-execution/V3.log",
+      "matches": true
+    },
+    {
+      "item": "P09.3",
+      "check": "V4",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.3-execution/V4.log",
+      "matches": true
+    },
+    {
+      "item": "P09.3",
+      "check": "V5",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.3-execution/V5.log",
+      "matches": true
+    },
+    {
+      "item": "P09.3",
+      "check": "V6",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.3-execution/V6.log",
+      "matches": true
+    },
+    {
+      "item": "P09.3",
+      "check": "V7",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.3-execution/V7.log",
+      "matches": true
+    },
+    {
+      "item": "P09.3",
+      "check": "V8",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.3-execution/V8.log",
+      "matches": true
+    },
+    {
+      "item": "P09.3",
+      "check": "V9",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.3-execution/V9.log",
+      "matches": true
+    },
+    {
+      "item": "P09.3",
+      "check": "V10",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.3-execution/V10.log",
+      "matches": true
+    },
+    {
+      "item": "P09.3",
+      "check": "V11",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.3-execution/V11.log",
+      "matches": true
+    },
+    {
+      "item": "P09.3",
+      "check": "V12",
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.3-execution/V12.log",
+      "matches": true
+    }
+  ],
+  "current_inputs": {
+    "P09.13": {
+      "packages/transfer/tests/Pg/ReleaseResumeTest.php": true,
+      "packages/transfer/tests/Pg/SqlTransferExecutorTest.php": true
+    },
+    "P09.14": {
+      "packages/search/tests/Pg/PostgresSearchProviderTest.php": true,
+      "packages/search-meilisearch/tests/MeilisearchTestCase.php": true,
+      "packages/search-meilisearch/tests/Pest.php": true,
+      "packages/search-meilisearch/tests/Feature/MeilisearchSearchProviderTest.php": true,
+      "packages/search-meilisearch/tests/Feature/IndexLifecycleTest.php": true
+    },
+    "P09.15": {
+      ".github/workflows/ci.yml": true,
+      "packages/core/tests/Feature/ReleaseContextLifecycleTest.php": true,
+      "packages/core/tests/Release/OctaneLifecycleTest.php": true,
+      "packages/core/tests/Release/octane-consumer/.gitignore": true,
+      "packages/core/tests/Release/octane-consumer/LifecycleServiceProvider.php": true,
+      "packages/core/tests/Release/octane-consumer/README.md": true,
+      "packages/core/tests/Release/octane-consumer/bootstrap/app.php": true,
+      "packages/core/tests/Release/octane-consumer/composer.json": true,
+      "packages/core/tests/Release/octane-consumer/composer.lock": true,
+      "packages/core/tests/Release/octane-consumer/config/app.php": true,
+      "packages/core/tests/Release/octane-consumer/config/cache.php": true,
+      "packages/core/tests/Release/octane-consumer/config/database.php": true,
+      "packages/core/tests/Release/octane-consumer/config/logging.php": true,
+      "packages/core/tests/Release/octane-consumer/phpunit.xml": true,
+      "scripts/quality/octane-proof.py": true,
+      "scripts/quality/tests/test_octane_proof.py": true
+    }
+  },
+  "junit": [
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.13-execution/transfer-idempotency.xml",
+      "sha256": "a6061c22552e7000818972ea4bbd1ce64b8b21db150a5476d349a56254a02d96",
+      "cases": 1,
+      "assertions": 2,
+      "problems": {
+        "failure": 0,
+        "error": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.13-execution/transfer-partial-failure.xml",
+      "sha256": "3021142b1421b9d613f961ad9d86ef8daa2a43be7bcfff862aacd4533558c915",
+      "cases": 1,
+      "assertions": 4,
+      "problems": {
+        "failure": 0,
+        "error": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.13-execution/transfer-resume.xml",
+      "sha256": "3e597c8d580cfca02515096d33facb9f9d63eee367ad3b6dd2c0802c6c233f49",
+      "cases": 1,
+      "assertions": 35,
+      "problems": {
+        "failure": 0,
+        "error": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.14-execution/meilisearch.xml",
+      "sha256": "d786cd891866f26777cf2742a0b5bc6569684b59f33727566959c546a8fb5842",
+      "cases": 3,
+      "assertions": 18,
+      "problems": {
+        "failure": 0,
+        "error": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.14-execution/postgres-search.xml",
+      "sha256": "2e944a4f93c183d080c3e58c68a497028b778b4138c6c9cb24317c56b1a531d2",
+      "cases": 4,
+      "assertions": 13,
+      "problems": {
+        "failure": 0,
+        "error": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.15-execution/lifecycle.xml",
+      "sha256": "6030851726a71b59b83ba7315fb16f483f8e7a8138c3b40985c978f5acecc762",
+      "cases": 11,
+      "assertions": 49,
+      "problems": {
+        "failure": 0,
+        "error": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.15-execution/octane/run-u0vrb3n9/php8.4/junit.xml",
+      "sha256": "bd6299a557e264e6d5369e5f69f28754490e17e1d0283f41ea5140be09e9bbed",
+      "cases": 4,
+      "assertions": 109,
+      "problems": {
+        "failure": 0,
+        "error": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.15-execution/octane/run-u0vrb3n9/php8.5/junit.xml",
+      "sha256": "94ddb0ee8334dcbfe021551827fcb78eb43598282d973d92ca8c62926deb896c",
+      "cases": 4,
+      "assertions": 109,
+      "problems": {
+        "failure": 0,
+        "error": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.15-execution/queue-tenancy.xml",
+      "sha256": "3f751f910a2ea73ab02116d8b5dd82cfb76f8965f9664cb49979ee2dd117d788",
+      "cases": 3,
+      "assertions": 21,
+      "problems": {
+        "failure": 0,
+        "error": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "issues": []
+}

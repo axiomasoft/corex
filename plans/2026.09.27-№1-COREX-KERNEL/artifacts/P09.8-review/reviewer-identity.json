@@ -1,0 +1,27 @@
+{
+  "actor": "codex/gpt-6-astra/high",
+  "session": "01a1175f-c10c-78c1-baff-26e5fb2fa45f",
+  "native_session_path": "/home/vostrikov/.codex/sessions/2026/10/07/rollout-2026-10-07T20-18-33-01a1175f-c10c-78c1-baff-26e5fb2fa45f.jsonl",
+  "observations": [
+    {
+      "type": "session_meta",
+      "id": "01a1175f-c10c-78c1-baff-26e5fb2fa45f",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a1175c-635b-7f42-8027-020ab954e752",
+            "depth": 1,
+            "agent_path": "/root/p098_review",
+            "agent_nickname": "Kierkegaard",
+            "agent_role": null
+          }
+        }
+      }
+    },
+    {
+      "type": "turn_context",
+      "model": "gpt-6-astra",
+      "effort": "high"
+    }
+  ]
+}

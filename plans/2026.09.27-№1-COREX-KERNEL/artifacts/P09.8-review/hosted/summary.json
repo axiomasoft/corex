@@ -1,0 +1,212 @@
+{
+  "observed_at": "2026-10-07T17:49:48.017628+00:00",
+  "source_sha": "1bfcb0324197c9e3ae8a050dea2b8f1d84b7f6dc",
+  "result": "RED",
+  "reason": "Completed exact-source ordinary hosted CI failed; five concrete cause families recorded for owning repair",
+  "executed_remote_tests": true,
+  "mirrors": [
+    {
+      "repo": "ax1oma/corex-mirror",
+      "run_id": 37651181943,
+      "sha": "1bfcb0324197c9e3ae8a050dea2b8f1d84b7f6dc",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/ax1oma/corex-mirror/actions/runs/37651181943",
+      "jobs_observed": 33,
+      "success": 0,
+      "failed": 30,
+      "skipped": 3,
+      "job_steps_executed": 0,
+      "billing_annotation": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings"
+    },
+    {
+      "repo": "academici/corex-mirror",
+      "run_id": 37651557696,
+      "sha": "1bfcb0324197c9e3ae8a050dea2b8f1d84b7f6dc",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/academici/corex-mirror/actions/runs/37651557696",
+      "jobs_observed": 33,
+      "success": 0,
+      "failed": 30,
+      "skipped": 3,
+      "job_steps_executed": 0,
+      "billing_annotation": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings"
+    },
+    {
+      "repo": "axiomik/corex-mirror",
+      "run_id": 37652373568,
+      "sha": "1bfcb0324197c9e3ae8a050dea2b8f1d84b7f6dc",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/axiomik/corex-mirror/actions/runs/37652373568",
+      "jobs_observed": 33,
+      "success": 20,
+      "failed": 10,
+      "skipped": 3,
+      "failed_jobs": [
+        {
+          "id": 112898736347,
+          "name": "PHP 8.5 · Laravel 13.*",
+          "steps": [
+            "Tests"
+          ]
+        },
+        {
+          "id": 112898736704,
+          "name": "PHP 8.4 · Laravel 13.*",
+          "steps": [
+            "Tests"
+          ]
+        },
+        {
+          "id": 112898736741,
+          "name": "PG lane (postgres:18) · Laravel 13.*",
+          "steps": [
+            "PG tests"
+          ]
+        },
+        {
+          "id": 112898736744,
+          "name": "Crm package",
+          "steps": [
+            "Crm coverage (P1.27 compensating gate)"
+          ]
+        },
+        {
+          "id": 112898737029,
+          "name": "PG lane (postgres:16) · Laravel 13.*",
+          "steps": [
+            "PG tests"
+          ]
+        },
+        {
+          "id": 112898737133,
+          "name": "Standalone dependencies and lockfile audits",
+          "steps": [
+            "Analyse every standalone package"
+          ]
+        },
+        {
+          "id": 112898737229,
+          "name": "Coverage (floor from scripts/coverage-min-floor.txt)",
+          "steps": [
+            "Coverage"
+          ]
+        },
+        {
+          "id": 112898737254,
+          "name": "Workflow supply chain security",
+          "steps": [
+            "Run zizmorcore/zizmor-action@cc914d7f3750a2d13d75c7f184a1060aa0e9d482"
+          ]
+        },
+        {
+          "id": 112898737498,
+          "name": "Remaining cohort package aggregator",
+          "steps": [
+            "Per-package test aggregator"
+          ]
+        },
+        {
+          "id": 112898738010,
+          "name": "Static analysis & code style",
+          "steps": [
+            "Audit every maintained Composer source root"
+          ]
+        }
+      ]
+    }
+  ],
+  "owner_instruction": "CI тестируй на зеркале, на одном точно должны быть лимиты, которое свежее",
+  "mutation_obligation": "D133: disabled, not tested or claimed GREEN",
+  "product_before_sha256": "a262963bc68e7f7a3a9812fc73a0f594b310138309000e7260e2459b0d24db43",
+  "additional_owner_instruction": "https://github.com/axiomik/corex-mirror",
+  "diagnostics": [
+    {
+      "id": "C1",
+      "owners": [
+        "P09.13",
+        "P09.14"
+      ],
+      "cause": "Pest TestCase/group bindings missing in root and default Composer entrypoints for Transfer/Search/Meilisearch",
+      "evidence": [
+        "axiomik-pg18-job.log",
+        "axiomik-pg16-job.log",
+        "axiomik-job-112898736347.log",
+        "axiomik-job-112898736704.log",
+        "axiomik-aggregator-job.log",
+        "axiomik-coverage-job.log"
+      ],
+      "detail": "Each hermetic PHP lane:8failed1496passed; each PG lane:3failed237passed; aggregator Search:1failed14passed; root coverage:7failed1710passed (4Search,3Meilisearch). Existing standalone selected-test receipts remain true but do not prove standard entrypoint integration."
+    },
+    {
+      "id": "C2",
+      "owners": [
+        "P09.3"
+      ],
+      "cause": "CRM coverage94.3% below unchanged95% floor",
+      "evidence": [
+        "axiomik-crm-job.log"
+      ],
+      "detail": "71tests340assertions pass; new Internal/Value.php boundary has66.7% coverage; no threshold/denominator weakening."
+    },
+    {
+      "id": "C3",
+      "owners": [
+        "P09.14"
+      ],
+      "cause": "Missing direct phpunit/phpunit dev dependency for new MeilisearchTestCase",
+      "evidence": [
+        "axiomik-standalone-job.log"
+      ],
+      "detail": "Dependency analyzer reports PHPUnit\\Framework\\TestCase at packages/search-meilisearch/tests/MeilisearchTestCase.php:13."
+    },
+    {
+      "id": "C4",
+      "owners": [
+        "P09.12"
+      ],
+      "cause": "Zizmor rejects three static-expression obfuscation forms in disabled mutation jobs",
+      "evidence": [
+        "axiomik-workflow-job.log"
+      ],
+      "detail": "Three LOW obfuscation diagnostics ci.yml:1015,1043,1103 for if:${{ false }}; preserve D133 disabling, fix syntax rather than suppress gate."
+    },
+    {
+      "id": "C5",
+      "owners": [
+        "P09.4"
+      ],
+      "cause": "Hosted source audit gate rejects COMPOSER_NO_AUDIT environment",
+      "evidence": [
+        "axiomik-analysis-job.log"
+      ],
+      "detail": "All package/root PHPStan and quality/unused-public checks pass; audit-roots.py then fails closed before auditing any roots because COMPOSER_NO_AUDIT=1 is present."
+    }
+  ],
+  "product_after_sha256": "a262963bc68e7f7a3a9812fc73a0f594b310138309000e7260e2459b0d24db43",
+  "product_files_unchanged": 2879,
+  "artifact_sha256": {
+    "axiomik-crm-job.log": "5099970206238140bfdbbe35af5583db2b6d3cdce9e652b6d6548374289d3356",
+    "product-before.json": "a262963bc68e7f7a3a9812fc73a0f594b310138309000e7260e2459b0d24db43",
+    "academici-annotations.json": "313d26ee13093a976a43b6a322d924e01f3c15a558a38bab85c6da54ddd5dbd4",
+    "axiomik-jobs.json": "149ba5475ae2d44b3dae0ddd861edc245d9f059200834637a6f09ef6cd50dc22",
+    "axiomik-coverage-job.log": "dd7b2b31136bebfaf755ccf122355da248c353475fd4970df051b0646c82862a",
+    "axiomik-aggregator-job.log": "3a4707f74eff7e5ded058d03375f2f6f3b58828b4d0bf74964e747a582802d92",
+    "axiomik-pg18-job.log": "01760f816b62b95213ba447c534ca4d11709de61271ffaf2604dc27be33bb346",
+    "academici-run.json": "8c29764cf800227fa1a7126352ed9a0f3cfbd1b0f6b0b995ad1792b6d9df7e37",
+    "ax1oma-jobs.json": "82343b7edb8cd90155cbe2b56f0f244f4420d490c072dacfc66eeb1fdfb5a3bc",
+    "axiomik-analysis-job.log": "75cf65a812a2c8584b27b68a7fddd3533bb09ca3c8d0d2f6166fda3ae7ba07ea",
+    "axiomik-job-112898736704.log": "9aae6fce521b9eacf0a481acd1d50973feb9f35b96efdb24922ec9072ff7f0a3",
+    "axiomik-run.json": "a4b594b6c2ddda3ad844f7364b4d8e4887a52f68913163d1063866aae34fd7ac",
+    "product-after.json": "a262963bc68e7f7a3a9812fc73a0f594b310138309000e7260e2459b0d24db43",
+    "axiomik-pg16-job.log": "f6e023a1bc6fc47eddd3e044afa487b8a2de19ac4a2a1f064fbda6f5bc7594a1",
+    "axiomik-standalone-job.log": "bbee582cc30ef3b8861b191e96cb64ef85c3b19cb4dde975630d68a289f6dec7",
+    "ax1oma-run.json": "f28738312d4f22a6d25f353dffc82dc1b8bc9fc014ea6452c1da23dda8f93d3b",
+    "ax1oma-annotations.json": "db9de42e290b976d0e7ca2691ba3133582710477884f4bf85975da9653578241",
+    "academici-jobs.json": "450b7f015d2639c303eb74343a0a6aeb4a52f3b1af4e0faebd3a48c35c32e230",
+    "axiomik-workflow-job.log": "a4d553b531b85a64e28c158c4f198f094efa680bec53e33438fa31b3bdf96943",
+    "axiomik-job-112898736347.log": "ff4b5b3281a82bfae9fcfd07aaf769ebdcf662f5c8c14cc1d1ef0b5b991b1593"
+  }
+}
