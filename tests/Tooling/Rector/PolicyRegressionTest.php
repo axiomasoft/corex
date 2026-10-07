@@ -9,6 +9,7 @@ use CoreX\Tooling\Rector\Laravel\Rector\StaticCall\DispatchToHelperFunctionsRect
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use ReflectionClass;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -50,6 +51,14 @@ final class PolicyRegressionTest extends TestCase
         }
     }
 
+    public function test_optional_binding_identifier_stays_data_while_other_class_names_modernize(): void
+    {
+        $before = "<?php\n\nfunction inspectBinding(\$application): array\n{\n    return [\$application->bound('Laravel\\Octane\\Octane'), 'Illuminate\\Support\\Collection'];\n}\n";
+        $after = "<?php\n\nfunction inspectBinding(\$application): array\n{\n    return [\$application->bound('Laravel\\Octane\\Octane'), \\Illuminate\\Support\\Collection::class];\n}\n";
+
+        $this->compare(StringClassNameToClassConstantRector::class, $before, $after, 'class-identifiers');
+    }
+
     /** @param class-string<ConfigurableRectorInterface> $class */
     private function compare(string $class, string $before, string $after, string $mode): void
     {
@@ -71,7 +80,8 @@ final class PolicyRegressionTest extends TestCase
                 default => [],
             };
             $config = '<?php'.PHP_EOL.'return static function (\\Rector\\Config\\RectorConfig $config): void {'.PHP_EOL;
-            $config .= '$config->ruleWithConfiguration(\\'.$class.'::class, ["preserve_paths" => '.var_export($paths, true).']);'.PHP_EOL.'};'.PHP_EOL;
+            $configuration = $mode === 'class-identifiers' ? ['Laravel\\Octane\\Octane'] : ['preserve_paths' => $paths];
+            $config .= '$config->ruleWithConfiguration(\\'.$class.'::class, '.var_export($configuration, true).');'.PHP_EOL.'};'.PHP_EOL;
             $files->dumpFile($directory.'/config.php', $config);
             $runner = new PolicyFixtureRunner('fixture');
             $runner->runFixture($fixture, $directory.'/config.php');

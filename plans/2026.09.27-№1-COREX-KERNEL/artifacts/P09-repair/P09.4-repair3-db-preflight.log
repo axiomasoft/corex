@@ -1,0 +1,6 @@
+NAME               IMAGE                COMMAND                  SERVICE   CREATED        STATUS                 PORTS
+corex_pgsql_test   postgres:16-alpine   "docker-entrypoint.s…"   pgsql     2 months ago   Up 2 hours (healthy)   127.0.0.1:5434->5432/tcp
+127.0.0.1:5434 - accepting connections
+CREATE DATABASE
+corex_p09_repair_tenancy_test|corex|5432
+Host 127.0.0.1:5434; explicit PGSQL_DATABASE=corex_p09_repair_tenancy_test; PHPUnit APP_ENV testing; schema migrated by guarded beforeEach; filesystem randomized temp roots.

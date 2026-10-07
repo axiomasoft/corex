@@ -23,7 +23,7 @@ final class ContextStorageDefaultTest extends TestCase
         self::assertFalse($tenant->isBoxed());
         self::assertNull($tenant->workspace);
         foreach ([false, true] as $boxed) {
-            $switched = (new TenantContext(account: $account, boxed: $boxed))->forWorkspace(workspace: $workspace);
+            $switched = new TenantContext(account: $account, boxed: $boxed)->forWorkspace(workspace: $workspace);
             self::assertSame($account, $switched->account);
             self::assertSame($workspace, $switched->workspace);
             self::assertSame($boxed, $switched->isBoxed());

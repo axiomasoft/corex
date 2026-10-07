@@ -32,7 +32,7 @@ it('retains every concurrent invalidation even on the non-atomic file cache', fu
     $path = database_path('version-cache');
     config(['cache.stores.remediation' => ['driver' => 'file', 'path' => $path], 'corex-access.cache.store' => 'remediation']);
     $processes = [];
-    $loader = (new ReflectionClass(ClassLoader::class))->getFileName();
+    $loader = new ReflectionClass(ClassLoader::class)->getFileName();
     assert(is_string($loader));
     $autoload = dirname($loader, 2).'/autoload.php';
     for ($worker = 0; $worker < 4; $worker++) {

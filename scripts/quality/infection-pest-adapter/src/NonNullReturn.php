@@ -8,8 +8,22 @@ use Infection\Mutator\Definition;
 use Infection\Mutator\Mutator;
 use Infection\Mutator\MutatorCategory;
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Return_;
 
-/** @implements Mutator<Node\Stmt\Return_> */
+/** @implements Mutator<Return_> */
 final class NonNullReturn implements Mutator
 {
     public function getName(): string
@@ -29,32 +43,32 @@ final class NonNullReturn implements Mutator
 
     public function canMutate(Node $node): bool
     {
-        if (! $node instanceof Node\Stmt\Return_
-            || ! ($node->expr instanceof Node\Expr\MethodCall || $node->expr instanceof Node\Expr\StaticCall
-                || $node->expr instanceof Node\Expr\FuncCall || $node->expr instanceof Node\Expr\PropertyFetch
-                || $node->expr instanceof Node\Expr\ArrayDimFetch || $node->expr instanceof Node\Expr\Variable
-                || $node->expr instanceof Node\Expr\New_)) {
+        if (! $node instanceof Return_
+            || ! ($node->expr instanceof MethodCall || $node->expr instanceof StaticCall
+                || $node->expr instanceof FuncCall || $node->expr instanceof PropertyFetch
+                || $node->expr instanceof ArrayDimFetch || $node->expr instanceof Variable
+                || $node->expr instanceof New_)) {
             return false;
         }
         $scope = $node->getAttribute('parent');
-        while ($scope instanceof Node && ! ($scope instanceof Node\Stmt\ClassMethod
-            || $scope instanceof Node\Stmt\Function_ || $scope instanceof Node\Expr\Closure)) {
+        while ($scope instanceof Node && ! ($scope instanceof ClassMethod
+            || $scope instanceof Function_ || $scope instanceof Closure)) {
             $scope = $scope->getAttribute('parent');
         }
 
-        if (! ($scope instanceof Node\Stmt\ClassMethod || $scope instanceof Node\Stmt\Function_
-            || $scope instanceof Node\Expr\Closure)) {
+        if (! ($scope instanceof ClassMethod || $scope instanceof Function_
+            || $scope instanceof Closure)) {
             return false;
         }
         $type = $scope->returnType;
 
-        return $type instanceof Node\Name || ($type instanceof Node\Identifier
+        return $type instanceof Name || ($type instanceof Identifier
             && ! in_array($type->toLowerString(), ['void', 'never', 'mixed', 'null'], true));
     }
 
-    /** @return iterable<Node\Stmt\Return_> */
+    /** @return iterable<Return_> */
     public function mutate(Node $node): iterable
     {
-        yield new Node\Stmt\Return_(new Node\Expr\ConstFetch(new Node\Name('null')));
+        yield new Return_(new ConstFetch(new Name('null')));
     }
 }

@@ -110,7 +110,7 @@ beforeEach(function (): void {
     }
     $this->p32Workers = [];
     $this->p32WorkerScript = tempnam(sys_get_temp_dir(), 'corex-p32-claim-');
-    $loader = (new ReflectionClass(ClassLoader::class))->getFileName();
+    $loader = new ReflectionClass(ClassLoader::class)->getFileName();
     assert(is_string($loader));
     $autoload = var_export(dirname($loader, 2).'/autoload.php', true);
     $source = <<<'PHP'

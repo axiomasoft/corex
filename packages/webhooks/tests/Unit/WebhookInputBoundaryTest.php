@@ -106,8 +106,8 @@ final class WebhookInputBoundaryTest extends TestCase
     {
         $first = 'v1,'.str_repeat('A', 43).'=';
         $second = 'v1,'.str_repeat('B', 43).'=';
-        self::assertSame(['webhook-id' => 'delivery-1', 'webhook-timestamp' => '0', 'webhook-signature' => $first.' '.$second], (new WebhookSignedHeaders('delivery-1', 0, [$first, $second]))->toArray());
-        self::assertSame($first, (new WebhookSignedHeaders('delivery-1', 1, [$first]))->toArray()['webhook-signature']);
+        self::assertSame(['webhook-id' => 'delivery-1', 'webhook-timestamp' => '0', 'webhook-signature' => $first.' '.$second], new WebhookSignedHeaders('delivery-1', 0, [$first, $second])->toArray());
+        self::assertSame($first, new WebhookSignedHeaders('delivery-1', 1, [$first])->toArray()['webhook-signature']);
     }
 
     #[DataProvider('invalidSignatures')]

@@ -230,7 +230,7 @@ it('validates batch and destination paths before any part of the operation mutat
 
 it('refuses the optional object branch explicitly when its native SDK is absent', function (): void {
     if (class_exists(AwsS3V3Adapter::class)) {
-        $loader = (new ReflectionClass(ClassLoader::class))->getFileName();
+        $loader = new ReflectionClass(ClassLoader::class)->getFileName();
         assert(is_string($loader));
         $process = new Process([PHP_BINARY, __DIR__.'/../Support/StorageSdkAbsenceProbe.php', dirname($loader, 2).'/autoload.php']);
         $process->mustRun();

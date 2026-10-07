@@ -46,6 +46,8 @@ return RectorConfig::configure()
     ])
     // These names are inspection data. Importing them crosses package or Internal boundaries.
     ->withConfiguredRule(StringClassNameToClassConstantRector::class, [
+        // Optional container binding identifier; importing it creates a production/dev dependency edge.
+        'Laravel\\Octane\\Octane',
         'Symfony\\Component\\HttpFoundation\\Request',
         'Psr\\Container\\ContainerInterface',
         'Illuminate\\Contracts\\Container\\Container',

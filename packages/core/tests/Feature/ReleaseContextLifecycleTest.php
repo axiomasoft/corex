@@ -21,8 +21,8 @@ use PHPUnit\Framework\AssertionFailedError;
 
 beforeEach(function (): void {
     $this->lifecycleRoot = sys_get_temp_dir().'/corex-queue-test-'.bin2hex(random_bytes(12));
-    app('config')->set('corex.storage.durable_root', $this->lifecycleRoot.'/durable');
-    app('config')->set('corex.storage.ephemeral_root', $this->lifecycleRoot.'/ephemeral');
+    resolve('config')->set('corex.storage.durable_root', $this->lifecycleRoot.'/durable');
+    resolve('config')->set('corex.storage.ephemeral_root', $this->lifecycleRoot.'/ephemeral');
     app()->forgetInstance(CoreOptions::class);
 });
 
@@ -86,24 +86,24 @@ final class LifecycleQueueJob extends Job implements Illuminate\Contracts\Queue\
 }
 
 it('resets CoreX scoped services in a real queue daemon after success and failure', function (bool $failure): void {
-    $options = app(CoreOptions::class);
+    $options = resolve(CoreOptions::class);
     $a = new LifecycleQueueJob(app(), '0198a000-0000-7000-8000-00000000000a', $failure);
     $b = new LifecycleQueueJob(app(), '0198a000-0000-7000-8000-00000000000b', false);
     $jobs = [$a, $b];
     $attempts = [];
-    app(ExceptionHandler::class)->reportable(static function (Throwable $exception): void {
+    resolve(ExceptionHandler::class)->reportable(static function (Throwable $exception): void {
         if ($exception->getMessage() !== 'lifecycle job failed') {
             throw $exception;
         }
     });
-    app('config')->set('logging.default', 'null');
-    app('events')->listen(JobAttempted::class, function (JobAttempted $event) use (&$attempts): void {
+    resolve('config')->set('logging.default', 'null');
+    resolve('events')->listen(JobAttempted::class, function (JobAttempted $event) use (&$attempts): void {
         $attempts[] = $event->exception !== null;
     });
     Worker::popUsing('corex-lifecycle', static function () use (&$jobs): ?Job {
         return array_shift($jobs);
     });
-    $worker = app('queue.worker');
+    $worker = resolve('queue.worker');
     $worker->setName('corex-lifecycle');
     $signalHandlers = [];
     $asyncSignals = function_exists('pcntl_async_signals') ? pcntl_async_signals() : null;
@@ -138,8 +138,8 @@ it('resets CoreX scoped services in a real queue daemon after success and failur
         ->and($b->storage)->not->toBe($a->storage)
         ->and($a->root)->toContain($a->getJobId())->not->toContain($b->getJobId())
         ->and($b->root)->toContain($b->getJobId())->not->toContain($a->getJobId())
-        ->and(app(CoreOptions::class))->toBe($options)
-        ->and(app(TenantContextRestorer::class))->not->toBe($b->restorer);
+        ->and(resolve(CoreOptions::class))->toBe($options)
+        ->and(resolve(TenantContextRestorer::class))->not->toBe($b->restorer);
 })->with(['success' => false, 'failure' => true]);
 
 it('detects fixture lifecycle omissions and a singleton registered in place of a scoped binding', function (bool $singleton, bool $reset): void {
@@ -147,7 +147,7 @@ it('detects fixture lifecycle omissions and a singleton registered in place of a
 
     if ($singleton) {
         $container = new Container;
-        $container->singleton(TenantContextRestorer::class, static fn (): object => app(TenantContextRestorer::class));
+        $container->singleton(TenantContextRestorer::class, static fn (): object => resolve(TenantContextRestorer::class));
     }
 
     app()->instance(TenantContextResolver::class, new LifecycleContextResolver('0198a000-0000-7000-8000-00000000000a'));

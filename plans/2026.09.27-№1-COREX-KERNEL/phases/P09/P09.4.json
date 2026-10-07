@@ -66,16 +66,60 @@
   ],
   "task_files": [
     {
-      "path": "phpstan-tests-lint.neon",
+      "path": "packages/access/tests/Feature/ScopeVersionConcurrencyTest.php",
       "change": "modify"
     },
     {
-      "path": ".github/workflows/ci.yml",
+      "path": "packages/core/tests/Feature/ReleaseContextLifecycleTest.php",
+      "change": "modify"
+    },
+    {
+      "path": "packages/core/tests/Unit/ContextStorageDefaultTest.php",
+      "change": "modify"
+    },
+    {
+      "path": "packages/core/tests/Unit/SchemaStatusContractTest.php",
+      "change": "modify"
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/StorageContextConformanceTest.php",
+      "change": "modify"
+    },
+    {
+      "path": "packages/tenancy/tests/Pg/ClaimLifecycleConcurrencyTest.php",
+      "change": "modify"
+    },
+    {
+      "path": "packages/webhooks/tests/Unit/WebhookInputBoundaryTest.php",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/infection-pest-adapter/src/DefaultObjectArgument.php",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/infection-pest-adapter/src/NonNullReturn.php",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/infection-pest-adapter/src/NullReturn.php",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/mutation-ast.php",
+      "change": "modify"
+    },
+    {
+      "path": "rector.php",
       "change": "modify"
     },
     {
       "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09-repair/P09.4-*",
       "change": "any"
+    },
+    {
+      "path": "tests/Tooling/Rector/PolicyRegressionTest.php",
+      "change": "modify"
     }
   ],
   "rules": [
@@ -92,13 +136,31 @@
   "validation": [
     {
       "id": "V1",
-      "cmd": "scripts/php84 composer analyse:tests-lint",
+      "cmd": "scripts/php84 composer refactor:check",
       "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V2",
-      "cmd": "uv tool run --from zizmor==1.30.1 zizmor --offline --persona regular .github",
+      "cmd": "scripts/php84 vendor/bin/pest tests/Tooling/Rector/PolicyRegressionTest.php",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "Affected Core/Access/Webhooks and isolated Tenancy package Composer tests",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "scripts/php84 composer analyse:tests-lint; scripts/php84 vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=2G --no-progress",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "scripts/php84 vendor/bin/pint --test <13 changed PHP paths>",
       "expect": "exit 0",
       "kind": "acceptance"
     }
@@ -132,29 +194,44 @@
     "U5"
   ],
   "result": {
-    "started_at": "2026-10-07T20:03:37Z",
-    "finished_at": "2026-10-07T20:04:54Z",
+    "started_at": "2026-10-07T20:26:06Z",
+    "finished_at": "2026-10-07T20:35:29Z",
     "executor": {
       "provider": "codex",
       "model": "gpt-6.1-sol",
       "effort": "high",
       "session": "01a117f0-0c4f-7fb3-9855-cea7eb7f538f"
     },
-    "notes": "Second bounded repair: explicit symbol discovery of maintained SourceSnapshot in tests-lint config, no suppressions/level/path/ceiling changes. Standard Composer analyse:tests-lint GREEN; pinned Zizmor GREEN; remaining direct Octane consumer audit boundary unsets COMPOSER_NO_AUDIT. Previous source audit25roots/22controls and hosted source audit on84228516 were GREEN; new manifests will be reaudited by final ordinary CI.",
+    "notes": "F3 resolved: full standard Rector GREEN; finite D129 identifier with negative/positive native regression, meaningful affected checks and strict analysis. Source audit preceding GREEN retained unchanged; final hosted acceptance belongs P09.8.",
     "checks": [
       {
         "id": "V1",
         "exit": 0,
-        "at": "2026-10-07T20:04:54Z"
+        "at": "2026-10-07T20:35:29Z"
       },
       {
         "id": "V2",
         "exit": 0,
-        "at": "2026-10-07T20:04:54Z"
+        "at": "2026-10-07T20:35:29Z"
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-10-07T20:35:29Z"
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-10-07T20:35:29Z"
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-10-07T20:35:29Z"
       }
     ]
   },
-  "updated_at": "2026-10-07T20:04:54Z",
+  "updated_at": "2026-10-07T20:35:29Z",
   "orchestration": {
     "strategy": "dag"
   }

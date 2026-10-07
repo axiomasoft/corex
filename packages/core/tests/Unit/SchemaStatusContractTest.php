@@ -59,7 +59,7 @@ final class SchemaStatusContractTest extends TestCase
         $connection->shouldReceive('getDriverName')->twice()->andReturn('pgsql');
         $db = Mockery::mock(DatabaseManager::class);
         $db->shouldReceive('connection')->twice()->with('isolated')->andReturn($connection);
-        $statuses = (new LaravelSchemaMigrator(sets: $sets, migrator: $migrator, db: $db))->status(scope: SchemaScope::Tenant, connection: 'isolated');
+        $statuses = new LaravelSchemaMigrator(sets: $sets, migrator: $migrator, db: $db)->status(scope: SchemaScope::Tenant, connection: 'isolated');
         self::assertCount(2, $statuses);
         self::assertSame($a, $statuses[0]->set);
         self::assertSame([], $statuses[0]->applied);

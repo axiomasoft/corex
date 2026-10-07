@@ -1,0 +1,119 @@
+> pest 'tests/Unit/WebhookInputBoundaryTest.php'
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Webhooks\Tests\Unit\WebhookInputBoundaryTest[39m
+  [32;1m✓[39;22m[90m [39m[90mcanonical destination and payload limits keep the exact wire values[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "http://hooks.example.com/"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "https://other.example.com/"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "https://user@hooks.example.com/"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "https://user:password@hooks.example.com/"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "https://hooks.example.com/?query"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "https://hooks.example.com/#fragment"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "https://hooks.example.com:444/"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "invalid i p"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "body 20481"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "timeout 0"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "timeout 11"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "missing webhook-id"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "invalid webhook-id 0"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "invalid webhook-id 1"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "invalid webhook-id 2"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "invalid webhook-id 3"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "invalid webhook-id 4"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "missing webhook-timestamp"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "invalid webhook-timestamp 0"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "invalid webhook-timestamp 1"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "invalid webhook-timestamp 2"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "invalid webhook-timestamp 3"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "invalid webhook-timestamp 4"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "missing webhook-signature"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "invalid webhook-signature 0"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "invalid webhook-signature 1"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "invalid webhook-signature 2"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "invalid webhook-signature 3"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "invalid webhook-signature 4"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "four headers"[39m
+  [32;1m✓[39;22m[90m [39m[90mrequest rejects each independent admission failure with data set "oversized headers"[39m
+  [32;1m✓[39;22m[90m [39m[90mhttp result boundaries are admitted without altering the observed values with data set #0[39m
+  [32;1m✓[39;22m[90m [39m[90mhttp result boundaries are admitted without altering the observed values with data set #1[39m
+  [32;1m✓[39;22m[90m [39m[90mhttp result boundaries are admitted without altering the observed values with data set #2[39m
+  [32;1m✓[39;22m[90m [39m[90mhttp result invalid wire values are rejected with data set #0[39m
+  [32;1m✓[39;22m[90m [39m[90mhttp result invalid wire values are rejected with data set #1[39m
+  [32;1m✓[39;22m[90m [39m[90mhttp result invalid wire values are rejected with data set #2[39m
+  [32;1m✓[39;22m[90m [39m[90mhttp result invalid wire values are rejected with data set #3[39m
+  [32;1m✓[39;22m[90m [39m[90mhttp result invalid wire values are rejected with data set #4[39m
+  [32;1m✓[39;22m[90m [39m[90mhttp result invalid wire values are rejected with data set #5[39m
+  [32;1m✓[39;22m[90m [39m[90mhttp result invalid wire values are rejected with data set #6[39m
+  [32;1m✓[39;22m[90m [39m[90mhttp result invalid wire values are rejected with data set #7[39m
+  [32;1m✓[39;22m[90m [39m[90mhttp result invalid wire values are rejected with data set #8[39m
+  [32;1m✓[39;22m[90m [39m[90msignatures keep one or two ordered values and a zero timestamp[39m
+  [32;1m✓[39;22m[90m [39m[90munsigned or ambiguous signature frames are rejected with data set #0[39m
+  [32;1m✓[39;22m[90m [39m[90munsigned or ambiguous signature frames are rejected with data set #1[39m
+  [32;1m✓[39;22m[90m [39m[90munsigned or ambiguous signature frames are rejected with data set #2[39m
+  [32;1m✓[39;22m[90m [39m[90munsigned or ambiguous signature frames are rejected with data set #3[39m
+  [32;1m✓[39;22m[90m [39m[90munsigned or ambiguous signature frames are rejected with data set #4[39m
+  [32;1m✓[39;22m[90m [39m[90munsigned or ambiguous signature frames are rejected with data set #5[39m
+  [32;1m✓[39;22m[90m [39m[90munsigned or ambiguous signature frames are rejected with data set #6[39m
+  [32;1m✓[39;22m[90m [39m[90munsigned or ambiguous signature frames are rejected with data set #7[39m
+  [32;1m✓[39;22m[90m [39m[90munsigned or ambiguous signature frames are rejected with data set #8[39m
+  [32;1m✓[39;22m[90m [39m[90munsigned or ambiguous signature frames are rejected with data set #9[39m
+  [32;1m✓[39;22m[90m [39m[90munsigned or ambiguous signature frames are rejected with data set #10[39m
+  [32;1m✓[39;22m[90m [39m[90munsigned or ambiguous signature frames are rejected with data set #11[39m
+  [32;1m✓[39;22m[90m [39m[90munsigned or ambiguous signature frames are rejected with data set #12[39m
+  [32;1m✓[39;22m[90m [39m[90mtopic pii rank and subscription flags keep the closed vocabulary[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #0[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #1[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #2[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #3[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #4[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #5[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #6[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #7[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #8[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #9[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #10[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #11[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #12[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #13[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #14[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #15[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #16[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #17[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #18[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #19[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #20[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #21[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #22[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #23[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #24[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #25[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #26[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #27[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #28[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #29[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #30[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #31[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #32[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #33[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #34[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #35[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #36[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #37[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #38[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #39[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #40[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #41[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #42[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #43[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #44[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #45[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #46[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #47[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #48[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #49[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #50[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #51[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic address policy checks range endpoints and adjacent addresses with data set #52[39m
+
+  [90mTests:[39m    [32;1m112 passed[39;22m[90m (194 assertions)[39m
+  [90mDuration:[39m [39m0.12s[39m
+

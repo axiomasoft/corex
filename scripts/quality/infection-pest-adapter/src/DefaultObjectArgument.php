@@ -8,8 +8,12 @@ use Infection\Mutator\Definition;
 use Infection\Mutator\Mutator;
 use Infection\Mutator\MutatorCategory;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Param;
+use PhpParser\Node\Scalar\String_;
 
-/** @implements Mutator<Node\Param> */
+/** @implements Mutator<Param> */
 final class DefaultObjectArgument implements Mutator
 {
     public function getName(): string
@@ -29,24 +33,24 @@ final class DefaultObjectArgument implements Mutator
 
     public function canMutate(Node $node): bool
     {
-        return $node instanceof Node\Param && $node->default instanceof Node\Expr\New_
-            && array_any($node->default->args, static fn (Node $arg): bool => $arg instanceof Node\Arg && $arg->value instanceof Node\Scalar\String_);
+        return $node instanceof Param && $node->default instanceof New_
+            && array_any($node->default->args, static fn (Node $arg): bool => $arg instanceof Arg && $arg->value instanceof String_);
     }
 
-    /** @return iterable<Node\Param> */
+    /** @return iterable<Param> */
     public function mutate(Node $node): iterable
     {
-        if (! $node->default instanceof Node\Expr\New_) {
+        if (! $node->default instanceof New_) {
             return;
         }
         foreach ($node->default->args as $index => $arg) {
-            if (! $arg instanceof Node\Arg || ! $arg->value instanceof Node\Scalar\String_) {
+            if (! $arg instanceof Arg || ! $arg->value instanceof String_) {
                 continue;
             }
             $mutant = clone $node;
             $mutant->default = clone $node->default;
             $changed = clone $arg;
-            $changed->value = new Node\Scalar\String_(match ($arg->value->value) {
+            $changed->value = new String_(match ($arg->value->value) {
                 '[]' => '{}',
                 '{}' => '[]',
                 default => $arg->value->value.'_',

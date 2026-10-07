@@ -4,7 +4,29 @@ declare(strict_types=1);
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\Float_;
+use PhpParser\Node\Scalar\Int_;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Declare_;
+use PhpParser\Node\Stmt\Enum_;
+use PhpParser\Node\Stmt\EnumCase;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\GroupUse;
+use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Nop;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\TraitUse;
+use PhpParser\Node\Stmt\Use_;
 use PhpParser\ParserFactory;
 use PhpParser\PhpVersion;
 use PhpParser\PrettyPrinter\Standard;
@@ -15,15 +37,15 @@ require dirname(__DIR__, 2).'/vendor/autoload.php';
 // remain subject to the default value mutators; object construction is executable.
 function immutableLiteral(?Expr $value): bool
 {
-    return $value === null || $value instanceof Node\Scalar\String_
-        || ($value instanceof Expr\ConstFetch && $value->name->toLowerString() === 'null')
-        || ($value instanceof Expr\Array_ && $value->items === []);
+    return $value === null || $value instanceof String_
+        || ($value instanceof ConstFetch && $value->name->toLowerString() === 'null')
+        || ($value instanceof Array_ && $value->items === []);
 }
 
 function declarationDefault(?Expr $value): bool
 {
-    return immutableLiteral($value) || $value instanceof Node\Scalar\Int_ || $value instanceof Node\Scalar\Float_
-        || ($value instanceof Expr\ConstFetch && in_array($value->name->toLowerString(), ['true', 'false'], true));
+    return immutableLiteral($value) || $value instanceof Int_ || $value instanceof Float_
+        || ($value instanceof ConstFetch && in_array($value->name->toLowerString(), ['true', 'false'], true));
 }
 
 // Conservative: an empty abstract base with executable methods is still behavior.
@@ -34,7 +56,7 @@ function declarationOnly(array $nodes): bool
         return false;
     }
     foreach ($nodes as $node) {
-        if ($node instanceof Stmt\Namespace_) {
+        if ($node instanceof Namespace_) {
             if (! declarationOnly($node->stmts)) {
                 return false;
             }
@@ -42,7 +64,7 @@ function declarationOnly(array $nodes): bool
             continue;
         }
 
-        if ($node instanceof Stmt\Declare_) {
+        if ($node instanceof Declare_) {
             if ($node->stmts !== null) {
                 return false;
             }
@@ -50,13 +72,13 @@ function declarationOnly(array $nodes): bool
             continue;
         }
 
-        if ($node instanceof Stmt\Use_ || $node instanceof Stmt\GroupUse || $node instanceof Stmt\Nop) {
+        if ($node instanceof Use_ || $node instanceof GroupUse || $node instanceof Nop) {
             continue;
         }
 
-        if ($node instanceof Stmt\Interface_) {
+        if ($node instanceof Interface_) {
             foreach ($node->stmts as $member) {
-                if (! $member instanceof Stmt\ClassMethod || $member->stmts !== null) {
+                if (! $member instanceof ClassMethod || $member->stmts !== null) {
                     return false;
                 }
                 foreach ($member->params as $parameter) {
@@ -69,9 +91,9 @@ function declarationOnly(array $nodes): bool
             continue;
         }
 
-        if ($node instanceof Stmt\Enum_) {
+        if ($node instanceof Enum_) {
             foreach ($node->stmts as $member) {
-                if (! $member instanceof Stmt\EnumCase || ($member->expr !== null && ! $member->expr instanceof Node\Scalar\String_ && ! $member->expr instanceof Node\Scalar\Int_)) {
+                if (! $member instanceof EnumCase || ($member->expr !== null && ! $member->expr instanceof String_ && ! $member->expr instanceof Int_)) {
                     return false;
                 }
             }
@@ -79,7 +101,7 @@ function declarationOnly(array $nodes): bool
             continue;
         }
 
-        if (! $node instanceof Stmt\Class_) {
+        if (! $node instanceof Class_) {
             return false;
         }
 
@@ -87,11 +109,11 @@ function declarationOnly(array $nodes): bool
             foreach ($node->stmts as $member) {
                 // Trait composition in an otherwise empty abstract extension declares
                 // inherited behavior; the executable trait bodies belong to their source files.
-                if ($member instanceof Stmt\TraitUse && $member->adaptations === []) {
+                if ($member instanceof TraitUse && $member->adaptations === []) {
                     continue;
                 }
 
-                if (! $member instanceof Stmt\ClassMethod || ! $member->isAbstract() || $member->stmts !== null) {
+                if (! $member instanceof ClassMethod || ! $member->isAbstract() || $member->stmts !== null) {
                     return false;
                 }
                 foreach ($member->params as $parameter) {
@@ -108,9 +130,9 @@ function declarationOnly(array $nodes): bool
             return false;
         }
         foreach ($node->stmts as $member) {
-            if ($member instanceof Stmt\ClassConst) {
+            if ($member instanceof ClassConst) {
                 foreach ($member->consts as $constant) {
-                    if (! $constant->value instanceof Node\Scalar\String_) {
+                    if (! $constant->value instanceof String_) {
                         return false;
                     }
                 }
@@ -118,7 +140,7 @@ function declarationOnly(array $nodes): bool
                 continue;
             }
 
-            if ($member instanceof Stmt\Property) {
+            if ($member instanceof Property) {
                 if ($member->isStatic()) {
                     return false;
                 }
@@ -131,7 +153,7 @@ function declarationOnly(array $nodes): bool
                 continue;
             }
 
-            if (! $member instanceof Stmt\ClassMethod || $member->name->toLowerString() !== '__construct') {
+            if (! $member instanceof ClassMethod || $member->name->toLowerString() !== '__construct') {
                 return false;
             }
             foreach ($member->params as $parameter) {
@@ -141,12 +163,12 @@ function declarationOnly(array $nodes): bool
             }
             // Storage assignment is allowed only from the corresponding constructor value.
             foreach ($member->stmts ?? [] as $statement) {
-                $expression = $statement instanceof Stmt\Expression ? $statement->expr : null;
+                $expression = $statement instanceof Expression ? $statement->expr : null;
 
-                if (! $expression instanceof Expr\Assign || ! $expression->var instanceof Expr\PropertyFetch
-                    || ! $expression->var->var instanceof Expr\Variable || $expression->var->var->name !== 'this'
-                    || ! $expression->expr instanceof Expr\Variable || ! is_string($expression->expr->name)
-                    || ! $expression->var->name instanceof Node\Identifier || $expression->var->name->toString() !== $expression->expr->name) {
+                if (! $expression instanceof Assign || ! $expression->var instanceof PropertyFetch
+                    || ! $expression->var->var instanceof Variable || $expression->var->var->name !== 'this'
+                    || ! $expression->expr instanceof Variable || ! is_string($expression->expr->name)
+                    || ! $expression->var->name instanceof Identifier || $expression->var->name->toString() !== $expression->expr->name) {
                     return false;
                 }
             }

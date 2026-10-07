@@ -8,8 +8,11 @@ use Infection\Mutator\Definition;
 use Infection\Mutator\Mutator;
 use Infection\Mutator\MutatorCategory;
 use PhpParser\Node;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Return_;
 
-/** @implements Mutator<Node\Stmt\Return_> */
+/** @implements Mutator<Return_> */
 final class NullReturn implements Mutator
 {
     public function getName(): string
@@ -29,14 +32,14 @@ final class NullReturn implements Mutator
 
     public function canMutate(Node $node): bool
     {
-        return $node instanceof Node\Stmt\Return_
-            && $node->expr instanceof Node\Expr\ConstFetch
+        return $node instanceof Return_
+            && $node->expr instanceof ConstFetch
             && $node->expr->name->toLowerString() === 'null';
     }
 
-    /** @return iterable<Node\Stmt\Return_> */
+    /** @return iterable<Return_> */
     public function mutate(Node $node): iterable
     {
-        yield new Node\Stmt\Return_(new Node\Expr\ConstFetch(new Node\Name('false')));
+        yield new Return_(new ConstFetch(new Name('false')));
     }
 }
