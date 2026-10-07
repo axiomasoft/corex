@@ -10,7 +10,7 @@ use CoreX\CustomFields\Internal\Value;
 /** @internal Package composition type. */
 final readonly class AttributeComposition
 {
-    private const ALLOWED_SOURCES = ['static', 'module'];
+    private const array ALLOWED_SOURCES = ['static', 'module'];
 
     /**
      * @param  list<string>  $sources
@@ -30,11 +30,11 @@ final readonly class AttributeComposition
     public static function fromArray(array $config): self
     {
         $violations = new ConfigurationValidator;
-        $sources = self::sources($violations, $config['sources'] ?? ['static']);
-        $storageDriver = self::storageDriver($violations, $config['storage_driver'] ?? 'jsonb');
-        $definitions = self::definitions($violations, $config['definitions'] ?? []);
-        $drivers = self::drivers($violations, $config['drivers'] ?? []);
-        $storageByEntity = self::storageByEntity($violations, $config['storage_by_entity'] ?? []);
+        $sources = self::sources(violations: $violations, value: $config['sources'] ?? ['static']);
+        $storageDriver = self::storageDriver(violations: $violations, value: $config['storage_driver'] ?? 'jsonb');
+        $definitions = self::definitions(violations: $violations, value: $config['definitions'] ?? []);
+        $drivers = self::drivers(violations: $violations, value: $config['drivers'] ?? []);
+        $storageByEntity = self::storageByEntity(violations: $violations, value: $config['storage_by_entity'] ?? []);
         $violations->failIfAny();
 
         return new self(
@@ -71,7 +71,7 @@ final readonly class AttributeComposition
     private static function sources(ConfigurationValidator $violations, mixed $value): array
     {
         if (! is_array($value) || ! array_is_list($value) || $value === []) {
-            $violations->add('sources', 'must be a non-empty list');
+            $violations->add(path: 'sources', message: 'must be a non-empty list');
 
             return ['static'];
         }
@@ -79,13 +79,13 @@ final readonly class AttributeComposition
         $sources = [];
         foreach ($value as $index => $source) {
             if (! is_string($source) || ! in_array($source, self::ALLOWED_SOURCES, true)) {
-                $violations->add('sources.'.$index, 'must be static or module');
+                $violations->add(path: 'sources.'.$index, message: 'must be static or module');
 
                 continue;
             }
 
             if (in_array($source, $sources, true)) {
-                $violations->add('sources.'.$index, 'is duplicated');
+                $violations->add(path: 'sources.'.$index, message: 'is duplicated');
             }
 
             $sources[] = $source;
@@ -95,7 +95,7 @@ final readonly class AttributeComposition
         $module = array_search('module', $sources, true);
 
         if ($static !== false && $module !== false && $module < $static) {
-            $violations->add('sources', 'module must follow static');
+            $violations->add(path: 'sources', message: 'module must follow static');
         }
 
         return $sources === [] ? ['static'] : $sources;
@@ -107,7 +107,7 @@ final readonly class AttributeComposition
             return $value;
         }
 
-        $violations->add('storage_driver', 'must be jsonb or eav');
+        $violations->add(path: 'storage_driver', message: 'must be jsonb or eav');
 
         return 'jsonb';
     }
@@ -122,7 +122,7 @@ final readonly class AttributeComposition
         }
 
         if (! is_array($value) || array_is_list($value)) {
-            $violations->add('storage_by_entity', 'must be an entity map');
+            $violations->add(path: 'storage_by_entity', message: 'must be an entity map');
 
             return [];
         }
@@ -131,7 +131,7 @@ final readonly class AttributeComposition
         foreach ($value as $entity => $driver) {
             if (! is_string($entity) || preg_match('/\A[a-z][a-z0-9_]{0,63}\z/D', $entity) !== 1
                 || ! is_string($driver) || ! in_array($driver, ['jsonb', 'eav'], true)) {
-                $violations->add('storage_by_entity', 'must map each entity to jsonb or eav');
+                $violations->add(path: 'storage_by_entity', message: 'must map each entity to jsonb or eav');
 
                 return [];
             }
@@ -148,7 +148,7 @@ final readonly class AttributeComposition
     private static function definitions(ConfigurationValidator $violations, mixed $value): array
     {
         if (! is_array($value)) {
-            $violations->add('definitions', 'must be a map of entity definitions');
+            $violations->add(path: 'definitions', message: 'must be a map of entity definitions');
 
             return [];
         }
@@ -156,7 +156,7 @@ final readonly class AttributeComposition
         $definitions = [];
         foreach ($value as $entity => $fields) {
             if (! is_string($entity) || $entity === '' || ! is_array($fields) || ! array_is_list($fields)) {
-                $violations->add('definitions', 'must be a map of entity field lists');
+                $violations->add(path: 'definitions', message: 'must be a map of entity field lists');
 
                 continue;
             }
@@ -164,13 +164,13 @@ final readonly class AttributeComposition
             $rows = [];
             foreach ($fields as $index => $field) {
                 if (! is_array($field) || array_is_list($field) || ! is_string($field['code'] ?? null) || ! is_string($field['type'] ?? null)) {
-                    $violations->add('definitions.'.$entity.'.'.$index, 'must be a field map with code and type');
+                    $violations->add(path: 'definitions.'.$entity.'.'.$index, message: 'must be a field map with code and type');
 
                     continue;
                 }
 
                 if (array_key_exists('storage_driver', $field) || array_key_exists('storage_engine', $field)) {
-                    $violations->add('definitions.'.$entity.'.'.$index, 'per-field storage driver is not supported');
+                    $violations->add(path: 'definitions.'.$entity.'.'.$index, message: 'per-field storage driver is not supported');
 
                     continue;
                 }
@@ -190,7 +190,7 @@ final readonly class AttributeComposition
     private static function drivers(ConfigurationValidator $violations, mixed $value): array
     {
         if (! is_array($value)) {
-            $violations->add('drivers', 'must be a map');
+            $violations->add(path: 'drivers', message: 'must be a map');
 
             return [];
         }
@@ -198,7 +198,7 @@ final readonly class AttributeComposition
         $drivers = [];
         foreach ($value as $name => $enabled) {
             if (! is_string($name) || ! is_bool($enabled)) {
-                $violations->add('drivers', 'must be a map of booleans');
+                $violations->add(path: 'drivers', message: 'must be a map of booleans');
 
                 continue;
             }

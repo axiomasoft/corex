@@ -13,7 +13,7 @@ it('compiles a consumer money field using the intl cast registration', function 
     $manifest = ModuleManifest::make('example/money-consumer')->title('Money')->tablePrefix('mon')
         ->extends([Entity::make(RegistryMoneyModel::class)->handle('mon.money')->table('mon_money')]);
 
-    $registry = app(RegistryCompiler::class)->compile([$manifest], installedPackages: []);
+    $registry = resolve(RegistryCompiler::class)->compile([$manifest], installedPackages: []);
     $field = collect($registry->entities['mon.money']->fields)->firstWhere('handle', 'amount');
 
     expect($field->type)->toBe('money');

@@ -31,6 +31,6 @@ final class InvalidMessage extends InvalidArgumentException implements Describes
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::InvalidMessage, ErrorCategory::Validation, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::InvalidMessage, category: ErrorCategory::Validation, retryable: false);
     }
 }

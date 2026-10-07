@@ -40,7 +40,7 @@ function bindDigestClockSettings(): void
 it('resolves wakeup from the isolated notifications composition without CoreServiceProvider', function (): void {
     expect(app()->getLoadedProviders())->not->toHaveKey(CoreServiceProvider::class);
 
-    $clock = app(ClockInterface::class);
+    $clock = resolve(ClockInterface::class);
 
     expect($clock::class)->toBe(wakeup_bridge_system_clock())
         ->and($clock->now())->toBeInstanceOf(DateTimeImmutable::class)
@@ -48,9 +48,9 @@ it('resolves wakeup from the isolated notifications composition without CoreServ
 
     bindDigestClockSettings();
 
-    expect(app(WakeupScheduler::class))->toBeInstanceOf(WakeupScheduler::class)
-        ->and(app(wakeup_bridge_sweeper()))->toBeInstanceOf(wakeup_bridge_sweeper())
-        ->and(app(ClockInterface::class))->toBe($clock);
+    expect(resolve(WakeupScheduler::class))->toBeInstanceOf(WakeupScheduler::class)
+        ->and(resolve(wakeup_bridge_sweeper()))->toBeInstanceOf(wakeup_bridge_sweeper())
+        ->and(resolve(ClockInterface::class))->toBe($clock);
 });
 
 it('preserves a FrozenClock already bound beside the notifications wakeup composition', function (): void {
@@ -59,13 +59,13 @@ it('preserves a FrozenClock already bound beside the notifications wakeup compos
     app()->forgetScopedInstances();
     wakeup_bridge_register_bindings();
 
-    expect(app(ClockInterface::class))->toBe($clock);
+    expect(resolve(ClockInterface::class))->toBe($clock);
 
     bindDigestClockSettings();
 
-    app(WakeupScheduler::class);
-    app(wakeup_bridge_sweeper());
+    resolve(WakeupScheduler::class);
+    resolve(wakeup_bridge_sweeper());
 
-    expect(app(ClockInterface::class))->toBe($clock)
+    expect(resolve(ClockInterface::class))->toBe($clock)
         ->and($clock->now()->format(DateTimeImmutable::ATOM))->toBe('2026-03-04T05:06:07+00:00');
 });

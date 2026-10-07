@@ -50,8 +50,8 @@ final class ToolSchemaWorker
 
             if ($action === 'admit') {
                 $handle = $validator->admit(
-                    new JsonObject(self::text($request['schema'] ?? null)),
-                    self::text($request['profile'] ?? null),
+                    schema: new JsonObject(self::text($request['schema'] ?? null)),
+                    profile: self::text($request['profile'] ?? null),
                 );
                 self::respond([
                     'ok' => true,
@@ -84,8 +84,8 @@ final class ToolSchemaWorker
                     localResources: $resources,
                 );
                 $validation = $validator->validate(
-                    $handle,
-                    new JsonValue(self::text($request['value'] ?? null)),
+                    schema: $handle,
+                    value: new JsonValue(self::text($request['value'] ?? null)),
                 );
                 self::respond([
                     'ok' => true,

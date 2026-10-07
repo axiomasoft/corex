@@ -21,13 +21,13 @@ use Psr\Clock\ClockInterface;
  * `root_idp_sessions` are not created here (that is the AS's job); this
  * controller only ever revokes.
  */
-final class LogoutController
+final readonly class LogoutController
 {
     public function __construct(
-        private readonly AuthFactory $auth,
-        private readonly ConnectionResolverInterface $connections,
-        private readonly ClockInterface $clock,
-        private readonly TenancyOptions $options,
+        private AuthFactory $auth,
+        private ConnectionResolverInterface $connections,
+        private ClockInterface $clock,
+        private TenancyOptions $options,
     ) {}
 
     public function logout(Request $request): RedirectResponse

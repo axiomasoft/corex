@@ -16,7 +16,7 @@ use Psr\Clock\ClockInterface;
 uses(TestCase::class);
 
 it('tags the digest handler and due source when digest is enabled', function (): void {
-    $tags = (new ReflectionProperty(app(), 'tags'))->getValue(app());
+    $tags = new ReflectionProperty(app(), 'tags')->getValue(app());
 
     expect($tags[WakeupHandlerDefinition::TAG] ?? [])->toBe(['corex.notifications.digest-wakeup-handler'])
         ->and($tags[DueWakeupSource::TAG] ?? [])->toBe([NotificationDigestDueSource::class]);
@@ -24,10 +24,10 @@ it('tags the digest handler and due source when digest is enabled', function ():
 
 it('rejects an enabled digest builder that has no scheduler before it writes', function (): void {
     expect(fn () => new SqlDigestBuilder(
-        connection: app('db')->connection(),
+        connection: resolve('db')->connection(),
         wakeup: null,
         enabled: true,
-        clock: app(ClockInterface::class),
+        clock: resolve(ClockInterface::class),
     ))->toThrow(InvalidConfiguration::class, 'corex-notifications.digest.enabled requires a bound CoreX\\Scheduling\\Contracts\\WakeupScheduler');
 });
 

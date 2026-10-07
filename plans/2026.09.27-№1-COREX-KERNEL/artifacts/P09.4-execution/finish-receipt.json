@@ -1,0 +1,25 @@
+{
+  "item": "P09.4",
+  "status": "done",
+  "phase_closed": null,
+  "plan_done": false,
+  "next": {
+    "kind": "run-items",
+    "exact": "run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P09.9",
+    "phase": "P09",
+    "batch": "B09-7",
+    "items": [
+      "P09.9"
+    ],
+    "route": {
+      "class": "implementation",
+      "effort": "xhigh"
+    },
+    "launch": {
+      "claude": "/task:plan-run 2026.09.27-№1-COREX-KERNEL P09.9",
+      "codex": "$ task:plan-run 2026.09.27-№1-COREX-KERNEL P09.9"
+    },
+    "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P09.9",
+    "reason": ""
+  }
+}

@@ -25,32 +25,32 @@ final readonly class AccessAzguardOptions
         $bindPermissionLayer = $config['bind_permission_layer'] ?? true;
 
         if (! is_bool($bindPermissionLayer)) {
-            $violations->add('bind_permission_layer', 'must be a boolean');
+            $violations->add(path: 'bind_permission_layer', message: 'must be a boolean');
             $bindPermissionLayer = false;
         }
 
-        $pins = self::section($violations, 'azguard_pins', $config['azguard_pins'] ?? []);
-        $tables = self::section($violations, 'azguard_pins.table_names', $pins['table_names'] ?? []);
-        $columns = self::section($violations, 'azguard_pins.column_names', $pins['column_names'] ?? []);
-        $models = self::section($violations, 'azguard_pins.models', $pins['models'] ?? []);
+        $pins = self::section(violations: $violations, path: 'azguard_pins', value: $config['azguard_pins'] ?? []);
+        $tables = self::section(violations: $violations, path: 'azguard_pins.table_names', value: $pins['table_names'] ?? []);
+        $columns = self::section(violations: $violations, path: 'azguard_pins.column_names', value: $pins['column_names'] ?? []);
+        $models = self::section(violations: $violations, path: 'azguard_pins.models', value: $pins['models'] ?? []);
         $rolesTable = $tables['roles'] ?? 'az_guard_roles';
 
         if (! is_string($rolesTable) || trim($rolesTable) === '') {
-            $violations->add('azguard_pins.table_names.roles', 'must be a non-empty string');
+            $violations->add(path: 'azguard_pins.table_names.roles', message: 'must be a non-empty string');
             $rolesTable = 'az_guard_roles';
         }
 
         $morphType = $columns['morph_type'] ?? 'uuid';
 
         if (! in_array($morphType, ['int', 'ulid', 'uuid'], true)) {
-            $violations->add('azguard_pins.column_names.morph_type', 'must be int, ulid or uuid');
+            $violations->add(path: 'azguard_pins.column_names.morph_type', message: 'must be int, ulid or uuid');
             $morphType = 'uuid';
         }
 
         $roleModel = array_key_exists('role', $models) ? $models['role'] : AzGuardRoleModel::class;
 
         if ($roleModel !== null && (! is_string($roleModel) || ! is_a($roleModel, Role::class, true))) {
-            $violations->add('azguard_pins.models.role', 'must be an AzGuard role class or null');
+            $violations->add(path: 'azguard_pins.models.role', message: 'must be an AzGuard role class or null');
             $roleModel = AzGuardRoleModel::class;
         }
 
@@ -71,7 +71,7 @@ final readonly class AccessAzguardOptions
             return $value;
         }
 
-        $violations->add($path, 'must be an array');
+        $violations->add(path: $path, message: 'must be an array');
 
         return [];
     }

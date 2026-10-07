@@ -159,7 +159,7 @@ final class WebhookDeliveryTest extends TestCase
             topics: $this->topics(),
             clock: $this->clock,
             egress: new PermitPublicEgressPolicy,
-            scopeCodec: app(DataScopeCodec::class),
+            scopeCodec: resolve(DataScopeCodec::class),
         );
     }
 

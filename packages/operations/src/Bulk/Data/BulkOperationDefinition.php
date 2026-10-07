@@ -28,12 +28,12 @@ final readonly class BulkOperationDefinition
         public JsonDocument $extensionStamp,
         public JsonDocument $inputRef,
     ) {
-        self::assertString($id, 'id', 64);
-        self::assertString($submissionId, 'submission id', 64);
-        self::assertString($operationId, 'operation id', 191);
-        self::assertString($major, 'major', 32);
-        self::assertString($actorId, 'actor id', 191);
-        self::assertString($clientId, 'client id', 191);
+        self::assertString(value: $id, name: 'id', maximum: 64);
+        self::assertString(value: $submissionId, name: 'submission id', maximum: 64);
+        self::assertString(value: $operationId, name: 'operation id', maximum: 191);
+        self::assertString(value: $major, name: 'major', maximum: 32);
+        self::assertString(value: $actorId, name: 'actor id', maximum: 191);
+        self::assertString(value: $clientId, name: 'client id', maximum: 191);
 
         if (preg_match('/\A[a-f0-9]{64}\z/D', $contractHash) !== 1) {
             throw new InvalidArgumentException('Bulk contract hash must be a lowercase SHA-256 digest.');
@@ -43,8 +43,8 @@ final readonly class BulkOperationDefinition
             throw new InvalidArgumentException('Bulk encoded scope must be a non-empty JSON object.');
         }
 
-        self::assertJsonObject(JsonDocuments::map($extensionStamp), 'extension stamp');
-        self::assertJsonObject(JsonDocuments::map($inputRef), 'input reference');
+        self::assertJsonObject(value: JsonDocuments::map($extensionStamp), name: 'extension stamp');
+        self::assertJsonObject(value: JsonDocuments::map($inputRef), name: 'input reference');
         self::assertSafeInputReference(JsonDocuments::map($inputRef));
     }
 

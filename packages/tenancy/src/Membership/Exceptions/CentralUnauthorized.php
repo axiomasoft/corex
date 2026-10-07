@@ -16,6 +16,6 @@ final class CentralUnauthorized extends DomainException implements DescribesErro
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TenancyErrorCode::CentralUnauthorized, ErrorCategory::Authorization, retryable: false);
+        return new ErrorDescriptor(code: TenancyErrorCode::CentralUnauthorized, category: ErrorCategory::Authorization, retryable: false);
     }
 }

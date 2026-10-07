@@ -21,7 +21,7 @@ final readonly class WorkflowOptions
         $enforceDeclarations = $config['enforce_declarations'] ?? true;
 
         if (! is_bool($enforceDeclarations)) {
-            $violations->add('enforce_declarations', 'must be a boolean');
+            $violations->add(path: 'enforce_declarations', message: 'must be a boolean');
             $enforceDeclarations = true;
         }
 

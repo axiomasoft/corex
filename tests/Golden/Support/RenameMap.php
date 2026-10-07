@@ -12,7 +12,7 @@ use RuntimeException;
  */
 final readonly class RenameMap
 {
-    private const FQCN = '/\\\\?[A-Za-z_]\w*(?:\\\\[A-Za-z_]\w*)+/';
+    private const string FQCN = '/\\\\?[A-Za-z_]\w*(?:\\\\[A-Za-z_]\w*)+/';
 
     /**
      * @param  array<string, string>  $classes

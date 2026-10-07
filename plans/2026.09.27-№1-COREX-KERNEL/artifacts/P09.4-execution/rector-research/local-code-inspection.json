@@ -1,0 +1,1172 @@
+{
+  "captured_at": "2026-10-07T08:04:48.637175+00:00",
+  "method": "read-only source inspection",
+  "extension_version": "2.6.2",
+  "sources": [
+    {
+      "file": "vendor/driftingly/rector-laravel/src/AbstractRector.php",
+      "sha256": "84e278ea6fc8c267d6d900db2ec1d0537ff3d4eebacc4ab12eade180cf3b897d",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\Contract\\DocumentedRuleInterface;"
+      ],
+      "getRuleDefinition_count": 0
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/StaticCall/RequestStaticValidateToInjectRector.php",
+      "sha256": "7d56869b2f133c37d0d8262afa3d483eb68b2942693381e2dcb9099de0120e2c",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/StaticCall/CarbonToDateFacadeRector.php",
+      "sha256": "82d7fb8235abf99fec6c49ff75e844b9edd55f89524368ff09e568add5ac7d5d",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\Exception\\PoorDocumentationException;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/StaticCall/MinutesToSecondsInCacheRector.php",
+      "sha256": "0571cb400c4d79a321d4e7d9e413a4c60dd543e7fe3c37b3332a489b754a80f6",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/StaticCall/Redirect301ToPermanentRedirectRector.php",
+      "sha256": "d21555d9c224d8b8ca9b04d190a284284166eccbd28a8761d6b040badc4cc173",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/StaticCall/AssertWithClassStringToTypeHintedClosureRector.php",
+      "sha256": "1702caaea5c0564d43002205b505b4da753231897dce497b2b53a26d41b011b1",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/StaticCall/CarbonSetTestNowToTravelToRector.php",
+      "sha256": "7224129144adddd96804dd69945c0904d1bd2506ada43e2c02026ca809f4cb8b",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\Exception\\PoorDocumentationException;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/StaticCall/ReplaceAssertTimesSendWithAssertSentTimesRector.php",
+      "sha256": "e9a98bad605cf49e84ea23a8477c0ae4cf824c489f608abbbb1c34a8ca222a3f",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/StaticCall/RouteActionCallableRector.php",
+      "sha256": "d4eaaf9914642199ff6bb13b8a9acad4bcdb56fb12019576668cd14375cc2b25",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/StaticCall/EloquentMagicMethodToQueryBuilderRector.php",
+      "sha256": "0bf34a48db563f494469c26f2b8ee402bae322e42aa4c983bdd8dfe8ecd89bef",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/StaticCall/DispatchToHelperFunctionsRector.php",
+      "sha256": "469408edcc9a54f7cbce964794c700619ef5a34370490c7a2883feb7e16b3020",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\Exception\\PoorDocumentationException;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Coalesce/ApplyDefaultInsteadOfNullCoalesceRector.php",
+      "sha256": "80861887b696f3328963709055a74c2fdb9041d90cb41eb41824bf4d74ad4d4e",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Assign/CallOnAppArrayAccessToStandaloneAssignRector.php",
+      "sha256": "98f24f446a242d08b95b9aeac8b9c6efd55f6d0632b45c0585bcfa591d6b8f48",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/LumenRoutesStringMiddlewareToArrayRector.php",
+      "sha256": "0377f56ea52f7fcbb82c3ac3602c0a5e3ea38d524bab916ecd62389b4a781a44",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/WhereNullComparisonToWhereNullRector.php",
+      "sha256": "30b6de1e391d76b60362bb2e5394a8d1433fe424b398fe1f2c41f88e661c0104",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/DatabaseExpressionToStringToMethodCallRector.php",
+      "sha256": "eff38d1332d65e5dd4659f0d736ec9a6b8d28db177745ac969e96f2b457b5bd4",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/AvoidNegatedCollectionFilterOrRejectRector.php",
+      "sha256": "744c93701e1fb7675c74973e1124d2a63bb6e05ab1856e872f501eb8c9c407e9",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/ConvertEnumerableToArrayToAllRector.php",
+      "sha256": "6a3da0ecf418932f20f52639e888fe839eed53b61dc63d9426d29e5c28474a6b",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/LumenRoutesStringActionToUsesArrayRector.php",
+      "sha256": "25c177ff22c53dc4e723a18748ab20e06914e6abb14a4f807b4e59839f200730",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/WhereToWhereLikeRector.php",
+      "sha256": "305f00dd15dfad3374e8df6f050044ad0af4230dbf46b6f66c731b234571b247",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/ChangeQueryWhereDateValueWithCarbonRector.php",
+      "sha256": "3ab4733ec03d166842e4961f837c360024dfd140c7cae345795e60df76d20a2d",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/JsonCallToExplicitJsonCallRector.php",
+      "sha256": "4cd4dda22f0600d6ed6dfcccdb84b0f7be24da46c790114e177f229f3bd2dbb9",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/RedirectBackToBackHelperRector.php",
+      "sha256": "9dca9898a115c4a744701a4a367c4cd4b8b80c6832b0e5a8e571547b4a556948",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/ValidationRuleArrayStringValueToArrayRector.php",
+      "sha256": "1614187e703625c0ae47c6186d40468ba67af7954547dc74f3545a27855bf539",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/ResponseHelperCallToJsonResponseRector.php",
+      "sha256": "63bc4e2d8c9022e2490faba6406af73fbf5617793f711bb2d50a3a61999cea9c",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/UseComponentPropertyWithinCommandsRector.php",
+      "sha256": "c6b2936439562e1bb908d2b3625ed2a4de0ad5127ae4f58dcb099d4e9f649f14",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/RedirectRouteToToRouteHelperRector.php",
+      "sha256": "c6d76974affa89aa42d232a80200d33a1050ffe36871e50c4b6ede9dbcf2d0cf",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/UnaliasCollectionMethodsRector.php",
+      "sha256": "8d40f4537492ca3b107fbcae17d767bf15bf424c1b00fcf9aa1ee0b2d58a570d",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/ReplaceServiceContainerCallArgRector.php",
+      "sha256": "62cf9705b1950d48d77aad52c33d10332556b8ce9d7391f6b19631692c0612f5",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/DateWhereClauseToShorthandRector.php",
+      "sha256": "02cc030675a6803940460c76958aeb202848db611d0a1598efa6fe1c64a7612f",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/EloquentWhereTypeHintClosureParameterRector.php",
+      "sha256": "ccc6f026a16940ab1a9b0b8f347d9c7d36b697851c3e7804b394318f6a4425b6",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/ReplaceWithoutJobsEventsAndNotificationsWithFacadeFakeRector.php",
+      "sha256": "48515c76ac5a9c1fd1360a3761ae4a7a1c0a6458a908251c96d61a9b131ac74c",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/ContainerBindConcreteWithClosureOnlyRector.php",
+      "sha256": "34e318d2238899d3bde70e39d934bbcdb3e3291d044ab5ab8aeefbb2f53313f1",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/ReverseConditionableMethodCallRector.php",
+      "sha256": "052d06217a6b4f0db3d9e90ec2e714f4c913d193830f224496d3b54cf976ae61",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/FactoryApplyingStatesRector.php",
+      "sha256": "603f5db5bff080c823f7c206aa28f901b70ab5e6f590601a70ed6ab8c7a52f8a",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/EloquentWhereRelationTypeHintingParameterRector.php",
+      "sha256": "cc86a4adcfcd0b4ef9ce0bc9570f60e334eb2a2d17ab2ea783bdbca2c7b0bf70",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/RefactorBlueprintGeometryColumnsRector.php",
+      "sha256": "85306462e689b2fd4ba9bc5c3c97a2ce81f6f6ce5f452aedce54030a982a8f1d",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/AssertStatusToAssertMethodRector.php",
+      "sha256": "3e6760a6bdd6f3e7b378981bd9b90b85f9bfce382479c77f50bcd1c91ea19c16",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/EloquentOrderByToLatestOrOldestRector.php",
+      "sha256": "1cdc2082ab2744cce3811976671b77e2f3e4d26578ae771e2abfbded50e35cc6",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/MethodCall/AssertSeeToAssertSeeHtmlRector.php",
+      "sha256": "2ded5459523730573d80115833f7d3226a95ee226fe933fea6ecc8e9f8e233a7",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/PropertyFetch/OptionalToNullsafeOperatorRector.php",
+      "sha256": "8ee91d0ff576b11e54e109f6f0361a440c20239fb93c4015aef0a1de1523927c",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/PropertyFetch/ReplaceFakerInstanceWithHelperRector.php",
+      "sha256": "1fa44f6f0b6096aa31ae5906822595c887cc88375ef1ce1169f79cbb970bad7f",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/PropertyFetch/ReplaceFakerPropertyFetchWithMethodCallRector.php",
+      "sha256": "f46f9c77214670e3967747fa5de85e348ba5c391ada10499438b328b3dfda1a5",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/CashierStripeOptionsToStripeRector.php",
+      "sha256": "ef45c031c52a733192f8697b4215ded86866f0bfbc68940efd25a61d60fb236e",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/WithoutTimestampsPropertyToWithoutTimestampsAttributeRector.php",
+      "sha256": "f437a680d53068adbaa41f6be50754b2ea3dcdc28b118387655f3395e21abfc3",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/LivewireComponentQueryStringToUrlAttributeRector.php",
+      "sha256": "a8a29af1dd6fd22fed974ec933bcc52f793fbde620db296618ef52289d85740b",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/TablePropertyToTableAttributeRector.php",
+      "sha256": "bb36dd979cf393b7957549448710d5a809e525d6211ac71cd84bd0f4f53b13e5",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/DescriptionPropertyToDescriptionAttributeRector.php",
+      "sha256": "ff1c3df221dc49ae984127ae820f8b3e4f6f00289ee09a316010f9a0b1d8ac0f",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/AppendsPropertyToAppendsAttributeRector.php",
+      "sha256": "5dd231b93a2b07e6681198c89373a97351d1a6c9a41a644d3b96a975fc81395d",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/RouteKeyMethodToRouteKeyAttributeRector.php",
+      "sha256": "107ea4443988c3aa93611a5a43ac36a8ba2582b9fe697d0243c73948164ace16",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/ReplaceQueueTraitsWithQueueableRector.php",
+      "sha256": "2f4afaa89eaa66e507c35ccea77814c2607e1c411a6fb0ba52f49b8ed577898e",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/BackoffPropertyToBackoffAttributeRector.php",
+      "sha256": "e37a60807739810f7d181fc7eedb87e5c7b3f5805852c39b138fffd117d6655c",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/ErrorBagPropertyToErrorBagAttributeRector.php",
+      "sha256": "11ea26505c524ed676862269f355e5a7a8235b83532977dec26df1063928b477",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/AddHasFactoryToModelsRector.php",
+      "sha256": "027c48dc7d40a2466e3efc340b373c030de86763134a70fb85a01293880ef7ad",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/StopOnFirstFailurePropertyToStopOnFirstFailureAttributeRector.php",
+      "sha256": "5176070c432b9e5a8a3cd941e60e91dbc65760622ba322c4312ea02f3e9366aa",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/UniqueForPropertyToUniqueForAttributeRector.php",
+      "sha256": "48506e548985b49c33384ca5bc7d8a5e1ff3098aca0faa32c6f46aac488fbc1b",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/ReplaceExpectsMethodsInTestsRector.php",
+      "sha256": "ce64ecfd7957fd40c3e1284b0b9c0b329c323dce0600a006ea049f67cc850500",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/PreserveKeysPropertyToPreserveKeysAttributeRector.php",
+      "sha256": "83f3222cad938fac3f4e256636211e80f6ff3c871af72e6f98fbd63bcbfdabed",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/MaxExceptionsPropertyToMaxExceptionsAttributeRector.php",
+      "sha256": "5763c1f283eb28aebca6369dc985c13e5c931259872ca3c01a577a7c6efb844c",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/TimeoutPropertyToTimeoutAttributeRector.php",
+      "sha256": "f17e7bc41de576fa9a47793bb2ac9d8f5b2365c2ae0bd34295867bb7da910be6",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/EmptyGuardedPropertyToUnguardedAttributeRector.php",
+      "sha256": "a5074ab1b9c3b4a3a007b6e9b1104b0e533debbd148a2e5ca55e04087bec5895",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/AddMockConsoleOutputFalseToConsoleTestsRector.php",
+      "sha256": "e40ffb5e364ff707df37fe140275a69b9f34840f7157cdd07b56303a9e960cad",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/DelayPropertyToDelayAttributeRector.php",
+      "sha256": "e01998609e60983c725906942ed33a08a1aec0aa61150ec93a8c8c4f2215ff20",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/CommandHiddenPropertyToHiddenAttributeRector.php",
+      "sha256": "8378b95f115b1ab303d6a151adf4986344536620ba963330312467b3dc3a49fc",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/PropertyDeferToDeferrableProviderToRector.php",
+      "sha256": "1aa44c79b181de99e5f60db56cd0e122872bbc8c9d7e0931a39b1a9b5f723b14",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/TriesPropertyToTriesAttributeRector.php",
+      "sha256": "8258f5b06977c17bfa699634456fe29248a60b3a8e58fc6fd08d067fecaafc92",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/HelpPropertyToHelpAttributeRector.php",
+      "sha256": "802c2aa7480528ab7c84b411bd5a14d341ceeed4a999a6410d1103fb9f71332c",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/RemoveModelPropertyFromFactoriesRector.php",
+      "sha256": "147bc026b07c3f948a30e11d5574cac337313ee9bf21a3ce082ca0ce25d2b04c",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/UnifyModelDatesWithCastsRector.php",
+      "sha256": "966529d7d66d237cd97df5962c627be1596e967db6e471ac026f3d4ee4272ac1",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/TouchesPropertyToTouchesAttributeRector.php",
+      "sha256": "2c3b88f1869ff555beb3e7af7aff6e12e1d3422a355487f8082ffee690aefd75",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/DeleteWhenMissingModelsPropertyToDeleteWhenMissingModelsAttributeRector.php",
+      "sha256": "bc13af69fbf3f6008654859726061bf1db89f1091637b3323fb6a21792253ad3",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/CollectedByPropertyToCollectedByAttributeRector.php",
+      "sha256": "cf285a9a435318a734de6e322da739b8f3d557098880d244dd932f38d0a5c15f",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/AddExtendsAnnotationToModelFactoriesRector.php",
+      "sha256": "290035c9be39962ba5eaae17e8280ad5fc1c0059aad0e6e57b455f2b6cbda4ea",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/HiddenPropertyToHiddenAttributeRector.php",
+      "sha256": "5c6cdd223d8adb7fe364746533613a000ff4f297c3b5e1aee8b8832117a778e5",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/VisiblePropertyToVisibleAttributeRector.php",
+      "sha256": "9b5072374c07d06237681ada71702be3ff063d1b2c9949b0484259b416bd08b1",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/FillablePropertyToFillableAttributeRector.php",
+      "sha256": "ddd4d4686b19ba65092382deee5534af9341b1c30000e32c6cbc7fbfc9bf7caf",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/UseForwardsCallsTraitRector.php",
+      "sha256": "b128b80699b56837ad3197cb78d0a19a756ab8022dab1f989301d1bff7552564",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/ModelCastsPropertyToCastsMethodRector.php",
+      "sha256": "1462c44903b2bb891a2e244f76fd04014d57080a3978a5057acb38d9a5a8616b",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/DateFormatPropertyToDateFormatAttributeRector.php",
+      "sha256": "4970a8ddb533cbbf43aadf13e510255c6843ae86eeb0b65fc9c8c22164c94741",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/ConnectionPropertyToConnectionAttributeRector.php",
+      "sha256": "b04b33ca816bcc82c64bdd7806cfdc2b2e98fe4250ab7786bbc661e7c9fc2732",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/GuardedPropertyToGuardedAttributeRector.php",
+      "sha256": "b7f8fcf92cfb7479efb6974489451a06f93714d229a380d1494004639415b4c6",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/FailOnTimeoutPropertyToFailOnTimeoutAttributeRector.php",
+      "sha256": "a61e0805f3722e3cd94820a92326ebbe9beb0ef24b0e3729e21f928161701603",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/AnonymousMigrationsRector.php",
+      "sha256": "a0b6b67eec22f25492f29be7f657c8e9a9a21c0a3cdfecb7ba571700019a0adc",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/JobConnectionPropertyToJobConnectionAttributeRector.php",
+      "sha256": "28f3e00d3ac53b7e4b504f7cf4ed4b2430f440b6c58eb394776e1f80b8b3c3ea",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/AliasesPropertyToAliasesAttributeRector.php",
+      "sha256": "1d308775181a7cef232cccb519bdffab7c4ca8099758c385c41880c821d6139d",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/CollectsPropertyToCollectsAttributeRector.php",
+      "sha256": "97d96fcc7dc16e2620f35ef240f798944fecd2f6f61ea9dbe0885cf7d703e3b6",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/QueuePropertyToQueueAttributeRector.php",
+      "sha256": "f95eb512471c9b2bc40ed6aaeafd91c9580588e9395b1dfd65b6905744eca8a5",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/WithoutIncrementingPropertyToWithoutIncrementingAttributeRector.php",
+      "sha256": "1475253be354a62c7a33bfa4c8312d3e009ef48b99fc6ec0329f128f05468dee",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/LivewireComponentComputedMethodToComputedAttributeRector.php",
+      "sha256": "a86a6ea7e7066ad4590a7f621edaac1ec7bf7f33ab8a1baf3681ddea51800527",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Class_/SignaturePropertyToSignatureAttributeRector.php",
+      "sha256": "673e9d11b18a1cd049ebe410aa01cc2646843ea118432d320b4f09c4621672a7",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/ClassMethod/AddNewGenericReturnTypeToRelationsRector.php",
+      "sha256": "e4b96df37abf9f946c81f0ef034753d6f240ab8c7e57dd3cddf530e8eec33ea7",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/ClassMethod/MakeModelAttributesAndScopesProtectedRector.php",
+      "sha256": "2af6dce9caa46e4cdc0424acae71c936d4f56fe6a3b2fe1dfc6fcbef517e3b79",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/ClassMethod/AddParentBootToModelClassMethodRector.php",
+      "sha256": "ba3d9b1c860041b4d9f87238f6be857ddfaeff148e1e2bcd2dbff9bd7f9f202e",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/ClassMethod/AddGenericBuilderToScopesRector.php",
+      "sha256": "d2b1a5b359665cd291a17391df3e90da92693ca1efbad56f50a63c6afbdca249",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/ClassMethod/AddParentRegisterToEventServiceProviderRector.php",
+      "sha256": "f42cf1ac7bfb462c4505f531e05eac87de90f72af042bba4e650ffe1fea219a4",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/ClassMethod/AddGenericReturnTypeToRelationsRector.php",
+      "sha256": "4726e3f5b774865f9de3507ad1996db996cf9b17f284c4804d210fb46c836ba4",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/ClassMethod/MigrateToSimplifiedAttributeRector.php",
+      "sha256": "daf980a2130ca291e8cfa16c88a3cdb3b302dccdc0a6d78f0a4feab4874f3b7c",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/ClassMethod/AddArgumentDefaultValueRector.php",
+      "sha256": "3bfeef0c4a3a184f0240274108d6da09a0eefa2fd617f9397c82bc6ec47feeaf",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/ClassMethod/ScopeNamedClassMethodToScopeAttributedClassMethodRector.php",
+      "sha256": "aa86ce7de95311e2daf637e039d925095747eb1812c41557fcc10f8c3aa61bc2",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/ClassMethod/AddLegacyGenericReturnTypeToRelationsRector.php",
+      "sha256": "e0c415475c37e98d325eed361629045521f60a93556263a8f08db0e575bd052e",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/If_/ReportIfRector.php",
+      "sha256": "f386178fab4d29afe77ed73d8ccb98f9d0dcade97a51dfd257008d2b915d574f",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/If_/AbortIfRector.php",
+      "sha256": "7356e8e25de221d4089d91b6748121d424d1aeaaaad257b3a00d15e8c1353428",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/If_/ThrowIfRector.php",
+      "sha256": "1d26817b69f5efa48a37d700dd1721b7c5dfb790aab947ca97f2d6c8f30a921e",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/ArrayDimFetch/SessionVariableToSessionFacadeRector.php",
+      "sha256": "d31666c89de0d7b75432e59d9322cac44c4fc960acdf5acbf47ece2814671f46",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/ArrayDimFetch/RequestVariablesToRequestFacadeRector.php",
+      "sha256": "ebc5d6cbeb73c14d38261fc61fc1d6c6c034d9bf317e1412925a932590fd66be",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/ArrayDimFetch/ServerVariableToRequestFacadeRector.php",
+      "sha256": "472fe1842644d6a30a2c2384e6e8851ea12a820c29f06ea6f019c686b6e719f8",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/ArrayDimFetch/EnvVariableToEnvHelperRector.php",
+      "sha256": "bedbe94baceaa14ae9c6d692c473f4dadf852ebb1ab40bd6b62109ad85f2ca5a",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/ArrayDimFetch/ArrayToArrGetRector.php",
+      "sha256": "529832aeea79ae1f667c6eb6c026c05d3cc6dd57f7a8df1556217eca0b88e3f9",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Namespace_/FactoryDefinitionRector.php",
+      "sha256": "53456e76cf0c51bdd6fd7d2c2fac96a5fc25656d3103c5a4f80b68b7ba26f795",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Empty_/EmptyToBlankAndFilledFuncRector.php",
+      "sha256": "462361dfe2c86b15bff157b3072af585137f2058886f714ca7d6412854a46d20",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Cast/DatabaseExpressionCastsToMethodCallRector.php",
+      "sha256": "93c6b0aa7d903e5636e2edaf7f00c65d3b284ae067db9bba7afe429d917be13d",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Expr/AppEnvironmentComparisonToParameterRector.php",
+      "sha256": "172139eb4ca560030dff867b256539cf25b51ea35cbfcbafdc3a517744b8ebc1",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/BooleanNot/AvoidNegatedCollectionContainsOrDoesntContainRector.php",
+      "sha256": "53ec66b59de3751b1b94bc33df72a27bf20cfdc427151fc1ed09c13de5dadc4b",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/FuncCall/RemoveRedundantValueCallsRector.php",
+      "sha256": "43f0cff84e3be18af5438c7114503810b2459a4f78784475c155b1be2f0eefd5",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/FuncCall/HelperFuncCallToFacadeClassRector.php",
+      "sha256": "0608f24d29228d87fe46c2601a5f300530e7e17b93f2d5764634393676e3c80b",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/FuncCall/SleepFuncToSleepStaticCallRector.php",
+      "sha256": "e7676c9a34100d65e0b26bef007b6d63a4a93e85eb980d3a18d3c918c60187ac",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/FuncCall/TypeHintTappableCallRector.php",
+      "sha256": "77bd34e925391405e5bd6d11f990ab5b4727be06a37e935f50994ac4c77b6774",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/FuncCall/RemoveRedundantWithCallsRector.php",
+      "sha256": "b9caae03bd261241738b0063cc2e6c31dd583a3443e7ba1174f446caf386b456",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/FuncCall/DispatchNonShouldQueueToDispatchSyncRector.php",
+      "sha256": "3dd08b7bafb9aeab07daf7f37b3898d72181ba15569244d343e1207d0c8fb341",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/FuncCall/NotFilledBlankFuncCallToBlankFilledFuncCallRector.php",
+      "sha256": "0673c952038e69ce0792182620683fc755dbd5516d621e61986fb87804278f56",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/FuncCall/RemoveDumpDataDeadCodeRector.php",
+      "sha256": "93bdb0bbcfa06797fe7376572f0548b4f93450800d85cd6fcb9dbe56bcb7b1ed",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/FuncCall/AppToResolveRector.php",
+      "sha256": "fb86212943fea4fba8d596941d112d1646a9d44197c40665e3f5aa646f2412e6",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/FuncCall/ConfigToTypedConfigMethodCallRector.php",
+      "sha256": "b68a156d65ab7ccfd8988c524f2574dfd9bd4120a6a3232c429d254edbf4e726",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/FuncCall/ArgumentFuncCallToMethodCallRector.php",
+      "sha256": "7e1cbe469ca5ee77f5e358c2eff9641f0e64ae7c66c843d213d4cab33e1f3a70",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/FuncCall/ThrowIfAndThrowUnlessExceptionsToUseClassStringRector.php",
+      "sha256": "08466483764a5cb662c622a72cc414013aeda425c240a9c39581153599fb1c96",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/FuncCall/NowFuncWithStartOfDayMethodCallToTodayFuncRector.php",
+      "sha256": "61efea77c08991957c53a4f3beb20f965c3ceabf550198883c310af718269340",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/FuncCall/FactoryFuncCallToStaticCallRector.php",
+      "sha256": "12df8a99dd31f27e9f8efb912088169ca075112e39ca5879f5d70615a873b794",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/New_/AddGuardToLoginEventRector.php",
+      "sha256": "4b85ddc9bc4cfb68d6bed8da03916b82bc5007bcf78633ea23a2203796c7d31b",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    },
+    {
+      "file": "vendor/driftingly/rector-laravel/src/Rector/Expr/SubStrToStartsWithOrEndsWithStaticMethodCallRector/SubStrToStartsWithOrEndsWithStaticMethodCallRector.php",
+      "sha256": "76ebb0edef686a6a7fc229f8a1e5f8bcafd3d37d385f04876aff42a749438cb1",
+      "imports": [
+        "use Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample;",
+        "use Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition;"
+      ],
+      "getRuleDefinition_count": 1
+    }
+  ],
+  "contracts_php_file_count": 13,
+  "contracts_php_line_count": 341
+}

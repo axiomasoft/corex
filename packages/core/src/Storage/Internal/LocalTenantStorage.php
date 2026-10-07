@@ -16,9 +16,9 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 
-final class LocalTenantStorage implements TenantStorage
+final readonly class LocalTenantStorage implements TenantStorage
 {
-    public function __construct(private readonly TenantContextResolver $contexts, private readonly FilesystemManager $filesystems, private readonly string $durableRoot, private readonly string $ephemeralRoot) {}
+    public function __construct(private TenantContextResolver $contexts, private FilesystemManager $filesystems, private string $durableRoot, private string $ephemeralRoot) {}
 
     public function disk(): Filesystem
     {

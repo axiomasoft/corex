@@ -1,20 +1,21 @@
 <?php
 
 declare(strict_types=1);
+
 use CoreX\Tools\Internal\ToolSchemaWorker;
 
 $mode = $argv[1];
 file_put_contents($argv[2], (string) getmypid());
 
 if ($mode === 'slow-start') {
-    usleep(300_000);
+    time_nanosleep(0, 300_000_000);
     require __DIR__.'/../../src/Internal/ToolSchemaWorker.php';
     ToolSchemaWorker::runCli();
     exit;
 }
 
 if ($mode === 'no-ready') {
-    sleep(10);
+    time_nanosleep(10, 0);
     exit;
 }
 
@@ -37,7 +38,7 @@ if ($mode === 'coalesced') {
 if ($mode === 'partial-ready') {
     echo 'rea';
     fflush(STDOUT);
-    usleep(20_000);
+    time_nanosleep(0, 20_000_000);
     echo "dy\n";
 } else {
     echo "ready\n";
@@ -45,7 +46,7 @@ if ($mode === 'partial-ready') {
 fflush(STDOUT);
 
 if ($mode === 'blocked-input') {
-    sleep(10);
+    time_nanosleep(10, 0);
     exit;
 }
 stream_get_contents(STDIN);
@@ -55,7 +56,7 @@ if ($mode === 'timeout' || $mode === 'ignore-terminate') {
         pcntl_async_signals(true);
         pcntl_signal(SIGTERM, SIG_IGN);
     }
-    sleep(10);
+    time_nanosleep(10, 0);
     exit;
 }
 

@@ -38,7 +38,7 @@ beforeEach(function (): void {
     DB::table('wsp_workspaces')->insert(['id' => $this->workspaceId, 'name' => 'Main']);
     DB::table('users')->insert(['id' => $this->userId, 'name' => 'Owner']);
     $this->actor = new ActorData(type: ActorType::User, id: $this->userId);
-    $this->context = app(TenantContextResolver::class)->current();
+    $this->context = resolve(TenantContextResolver::class)->current();
     $this->task = Task::query()->create([
         'workspace_id' => $this->workspaceId,
         'title' => 'Concurrent',
@@ -74,7 +74,7 @@ it('serializes concurrent time-log totals and deduplicates repeated keys', funct
         requestKey: 'prim-05-b',
         payloadHash: PlanningHasher::timeLog($draftB, $this->context),
     );
-    $command = app(TaskPlanningCommand::class);
+    $command = resolve(TaskPlanningCommand::class);
 
     $command->recordTime($draftA, $tokenA);
     $command->recordTime($draftB, $tokenB);

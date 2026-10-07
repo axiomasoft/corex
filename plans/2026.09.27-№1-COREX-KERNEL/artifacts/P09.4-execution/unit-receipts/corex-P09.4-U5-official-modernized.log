@@ -1,0 +1,2 @@
+{"tool":"phpunit","result":"passed","tests":176,"passed":176,"assertions":241,"duration_ms":5947}
+Official fixture inventory: 173 unique fixtures, 36 rule test classes; stubs confined to child process.

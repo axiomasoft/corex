@@ -45,17 +45,15 @@ final class CostBindingsRegistrar implements PackageRegistrar
             return;
         }
 
-        $app->scoped(OperationBudget::class, static function (Application $app): SqlOperationBudget {
-            return new SqlOperationBudget(
-                connection: $app->make(ApiSchemaRegistrar::class)->budget(),
-                clock: $app->make(ClockInterface::class),
-                scopeHmacSecret: $app->make(CostOptions::class)->scopeHmacSecret,
-                capacity: $app->make(CostOptions::class)->capacity,
-                restoreRate: $app->make(CostOptions::class)->restoreRate,
-                enforcedLevels: $app->make(CostOptions::class)->enforcedLevels,
-                reservationTtlSeconds: $app->make(CostOptions::class)->reservationTtlSeconds,
-            );
-        });
+        $app->scoped(OperationBudget::class, static fn (Application $app): SqlOperationBudget => new SqlOperationBudget(
+            connection: $app->make(ApiSchemaRegistrar::class)->budget(),
+            clock: $app->make(ClockInterface::class),
+            scopeHmacSecret: $app->make(CostOptions::class)->scopeHmacSecret,
+            capacity: $app->make(CostOptions::class)->capacity,
+            restoreRate: $app->make(CostOptions::class)->restoreRate,
+            enforcedLevels: $app->make(CostOptions::class)->enforcedLevels,
+            reservationTtlSeconds: $app->make(CostOptions::class)->reservationTtlSeconds,
+        ));
         $app->bind(BudgetExecution::class, static fn (Application $app): BudgetExecution => $app->make(BudgetAdmission::class));
         $app->scoped(BudgetAdmission::class, static fn (Application $app): BudgetAdmission => new BudgetAdmission(
             budget: $app->make(OperationBudget::class),

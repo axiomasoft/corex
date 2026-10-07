@@ -12,6 +12,6 @@ trait AssertsRegisteredToolErrors
     private function assertToolError(ToolsErrorCode $expected, ?string $actual): void
     {
         self::assertSame($expected->value, $actual);
-        self::assertSame($expected, app(ProblemRegistry::class)->fromWire($actual)->code);
+        self::assertSame($expected, resolve(ProblemRegistry::class)->fromWire($actual)->code);
     }
 }

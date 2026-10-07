@@ -14,19 +14,17 @@ use CoreX\Tests\Stubs\Widget;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 beforeEach(function (): void {
-    $this->widgetDefinition = function (string $handle, array $capabilities = []): EntityDefinition {
-        return new EntityDefinition(
-            handle: $handle,
-            model: Widget::class,
-            table: 'widgets',
-            module: 'corex/core-tests',
-            labelSingular: 'Widget',
-            labelPlural: 'Widgets',
-            capabilities: $capabilities,
-            fields: [],
-            titleAttribute: 'name',
-        );
-    };
+    $this->widgetDefinition = (fn (string $handle, array $capabilities = []): EntityDefinition => new EntityDefinition(
+        handle: $handle,
+        model: Widget::class,
+        table: 'widgets',
+        module: 'corex/core-tests',
+        labelSingular: 'Widget',
+        labelPlural: 'Widgets',
+        capabilities: $capabilities,
+        fields: [],
+        titleAttribute: 'name',
+    ));
 });
 
 it('registers an entity and reads it back via get/has/forModel', function (): void {
@@ -55,19 +53,17 @@ it('returns the whole registry for all(null) and only active-module entities for
     // The predicate is the ModuleRegistry::isActive seam — per module AND per
     // ctx. all(null) must bypass it entirely (whole registry: morph map spans
     // disabled modules too); all($ctx) must apply it.
-    $entityFor = static function (string $handle, string $module): EntityDefinition {
-        return new EntityDefinition(
-            handle: $handle,
-            model: Widget::class,
-            table: 'widgets',
-            module: $module,
-            labelSingular: 'Widget',
-            labelPlural: 'Widgets',
-            capabilities: [],
-            fields: [],
-            titleAttribute: 'name',
-        );
-    };
+    $entityFor = (static fn (string $handle, string $module): EntityDefinition => new EntityDefinition(
+        handle: $handle,
+        model: Widget::class,
+        table: 'widgets',
+        module: $module,
+        labelSingular: 'Widget',
+        labelPlural: 'Widgets',
+        capabilities: [],
+        fields: [],
+        titleAttribute: 'name',
+    ));
 
     $registry = new ArrayEntityRegistry(
         moduleActive: static fn (string $module, TenantContext $ctx): bool => $module === 'corex/on',

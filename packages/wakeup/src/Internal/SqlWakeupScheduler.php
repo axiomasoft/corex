@@ -20,17 +20,17 @@ use JsonException;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
-final class SqlWakeupScheduler implements WakeupScheduler
+final readonly class SqlWakeupScheduler implements WakeupScheduler
 {
     /**
      * @param  list<WakeupScheduleHint>  $hints
      */
     public function __construct(
-        private readonly Connection $connection,
-        private readonly TenantContextResolver $contexts,
-        private readonly WakeupHandlerRegistry $handlers,
-        private readonly array $hints,
-        private readonly ClockInterface $clock,
+        private Connection $connection,
+        private TenantContextResolver $contexts,
+        private WakeupHandlerRegistry $handlers,
+        private array $hints,
+        private ClockInterface $clock,
     ) {}
 
     public function schedule(WakeupRequest $request): ScheduleResult

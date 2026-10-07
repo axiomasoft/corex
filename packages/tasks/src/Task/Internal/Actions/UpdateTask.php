@@ -23,13 +23,13 @@ use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
-final class UpdateTask implements UpdateTaskCommand
+final readonly class UpdateTask implements UpdateTaskCommand
 {
     public function __construct(
-        private readonly TaskModuleGuard $moduleGuard,
-        private readonly TaskMutationAccess $access,
-        private readonly ProjectRead $projects,
-        private readonly Dispatcher $events,
+        private TaskModuleGuard $moduleGuard,
+        private TaskMutationAccess $access,
+        private ProjectRead $projects,
+        private Dispatcher $events,
     ) {}
 
     public function handle(UpdateTaskData $data): TaskReference
@@ -55,11 +55,11 @@ final class UpdateTask implements UpdateTaskCommand
         $task = Task::on($connectionName)->tap(static fn ($query) => $query->getQuery()->lockForUpdate())->find($data->taskId);
 
         if ($task === null) {
-            $this->invalid('task_id', 'Задача не найдена в текущем аккаунте.');
+            $this->invalid(field: 'task_id', message: 'Задача не найдена в текущем аккаунте.');
         }
 
         if ($context->workspace !== null && $context->workspace->id !== $task->workspace_id) {
-            $this->invalid('task_id', 'Задача не принадлежит текущему рабочему пространству.');
+            $this->invalid(field: 'task_id', message: 'Задача не принадлежит текущему рабочему пространству.');
         }
 
         $this->access->authorizeUpdate(data: $data, context: $context, task: TaskSnapshot::fromTask($task));
@@ -68,7 +68,7 @@ final class UpdateTask implements UpdateTaskCommand
             $title = trim((string) $data->title);
 
             if ($title === '' || mb_strlen($title) > 255) {
-                $this->invalid('title', 'Название задачи должно содержать от 1 до 255 символов.');
+                $this->invalid(field: 'title', message: 'Название задачи должно содержать от 1 до 255 символов.');
             }
 
             $task->title = $title;
@@ -80,7 +80,7 @@ final class UpdateTask implements UpdateTaskCommand
 
         if ($data->has('priority')) {
             if ($data->priority === null) {
-                $this->invalid('priority', 'Приоритет задачи обязателен.');
+                $this->invalid(field: 'priority', message: 'Приоритет задачи обязателен.');
             }
 
             $task->priority = $data->priority;
@@ -88,7 +88,7 @@ final class UpdateTask implements UpdateTaskCommand
 
         if ($data->has('assignee_id')) {
             if ($data->assigneeId !== null && (! Str::isUuid($data->assigneeId) || ! $connection->table('users')->where('id', $data->assigneeId)->exists())) {
-                $this->invalid('assignee_id', 'Пользователь не найден в текущем аккаунте.');
+                $this->invalid(field: 'assignee_id', message: 'Пользователь не найден в текущем аккаунте.');
             }
 
             $task->assignee_id = $data->assigneeId;
@@ -112,7 +112,7 @@ final class UpdateTask implements UpdateTaskCommand
 
         if ($data->has('estimate_minutes')) {
             if ($data->estimateMinutes !== null && $data->estimateMinutes < 0) {
-                $this->invalid('estimate_minutes', 'Оценка времени не может быть отрицательной.');
+                $this->invalid(field: 'estimate_minutes', message: 'Оценка времени не может быть отрицательной.');
             }
 
             $task->estimate_minutes = $data->estimateMinutes;
@@ -126,7 +126,7 @@ final class UpdateTask implements UpdateTaskCommand
             : $this->immutable($task->due_at);
 
         if ($startsAt !== null && $dueAt !== null && $dueAt < $startsAt) {
-            $this->invalid('due_at', 'Срок задачи не может быть раньше даты начала.');
+            $this->invalid(field: 'due_at', message: 'Срок задачи не может быть раньше даты начала.');
         }
 
         if ($data->has('starts_at')) {
@@ -141,7 +141,7 @@ final class UpdateTask implements UpdateTaskCommand
 
         if ($changed !== []) {
             $task->save();
-            $this->events->dispatch(new TaskUpdated(TaskSnapshot::fromTask($task), $changed));
+            $this->events->dispatch(new TaskUpdated(task: TaskSnapshot::fromTask($task), changed: $changed));
         }
 
         return TaskReferenceFactory::fromTask($task);
@@ -150,13 +150,13 @@ final class UpdateTask implements UpdateTaskCommand
     private function validateProvidedFields(UpdateTaskData $data): void
     {
         if ($data->provided === []) {
-            $this->invalid('task', 'Передайте хотя бы одно изменяемое поле задачи.');
+            $this->invalid(field: 'task', message: 'Передайте хотя бы одно изменяемое поле задачи.');
         }
 
         $unknown = array_diff($data->provided, UpdateTaskData::fields());
 
         if ($unknown !== [] || count(array_unique($data->provided)) !== count($data->provided)) {
-            $this->invalid('task', 'Набор изменяемых полей задачи недопустим.');
+            $this->invalid(field: 'task', message: 'Набор изменяемых полей задачи недопустим.');
         }
     }
 
@@ -167,10 +167,10 @@ final class UpdateTask implements UpdateTaskCommand
         }
 
         /** @var ProjectView|null $project */
-        $project = $this->projects->find($id, $connectionName);
+        $project = $this->projects->find(id: $id, connectionName: $connectionName);
 
         if ($project === null || $project->workspaceId !== $workspaceId) {
-            $this->invalid('project_id', 'Проект не найден в рабочем пространстве задачи.');
+            $this->invalid(field: 'project_id', message: 'Проект не найден в рабочем пространстве задачи.');
         }
 
         return $project;
@@ -189,8 +189,7 @@ final class UpdateTask implements UpdateTaskCommand
         return DateTimeImmutable::createFromInterface($value);
     }
 
-    /** @return never */
-    private function invalid(string $field, string $message): void
+    private function invalid(string $field, string $message): never
     {
         throw ValidationException::withMessages([$field => [$message]]);
     }

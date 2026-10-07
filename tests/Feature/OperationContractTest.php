@@ -60,7 +60,7 @@ final class OperationContractTest extends TestCase
         parent::setUp();
         $this->app['config']->set('app.key', 'p13-contract-test-secret');
         Schema::dropIfExists('sys_api_idempotency');
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
 
         $input = self::schema(['title' => ['type' => 'string']]);
         $output = self::schema([
@@ -83,7 +83,7 @@ final class OperationContractTest extends TestCase
             ->asAsyncCommand()->idempotency('required')->effect('tenant_transactional');
         $tool = Api::exposeTool('notes.create', 'v1', 'notes.create', 'v1', 'write', 'domain-key', $input, $output, ['title' => 'title']);
         $asyncTool = Api::exposeTool('notes.export', 'v1', 'notes.export', 'v1', 'write', 'domain-key', $asyncInput, $asyncOutput, ['format' => 'format']);
-        $this->modules = new ModuleFixture(app(RegistryCompiler::class)->compile([
+        $this->modules = new ModuleFixture(resolve(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$query, $command, $async, $tool, $asyncTool]),
         ], installedPackages: []));
         $this->tenants = new ContextFixture;
@@ -217,15 +217,7 @@ final class OperationContractTest extends TestCase
 
     public function test_p14_consumer_compiles_against_frozen_public_surface(): void
     {
-        $operation = null;
-
-        foreach ($this->modules->registry->api as $candidate) {
-            if ($candidate->mode === 'operation' && $candidate->operationId === 'notes.create') {
-                $operation = $candidate;
-
-                break;
-            }
-        }
+        $operation = array_find($this->modules->registry->api, fn ($candidate) => $candidate->mode === 'operation' && $candidate->operationId === 'notes.create');
         self::assertInstanceOf(Api::class, $operation);
         self::assertSame('command', $operation->operationMode);
         self::assertSame('required', $operation->idempotencyRequirement);

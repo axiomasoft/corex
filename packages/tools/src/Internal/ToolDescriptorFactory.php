@@ -22,6 +22,6 @@ final class ToolDescriptorFactory
         $inputSchema = JsonObjectFactory::fromSchemaArray($api->requestSchema);
         $outputSchema = JsonObjectFactory::fromSchemaArray($api->responseSchema);
 
-        return new ToolDescriptor(module: $api->declaringModule, code: $api->toolCode, toolVersion: $api->toolVersion, wireName: ToolName::wireName($api->toolCode, $api->toolVersion), title: $api->title, description: $api->description, ability: $api->ability, sideEffect: $api->sideEffect, idempotency: $api->idempotency, inputSchema: $inputSchema, outputSchema: $outputSchema, schemaProfile: ToolDescriptor::SCHEMA_PROFILE, contractHash: ToolContractHasher::hash($api), operationRef: $api->operationRef, availability: JsonDocuments::capture($api->availability));
+        return new ToolDescriptor(module: $api->declaringModule, code: $api->toolCode, toolVersion: $api->toolVersion, wireName: ToolName::wireName(code: $api->toolCode, version: $api->toolVersion), title: $api->title, description: $api->description, ability: $api->ability, sideEffect: $api->sideEffect, idempotency: $api->idempotency, inputSchema: $inputSchema, outputSchema: $outputSchema, schemaProfile: ToolDescriptor::SCHEMA_PROFILE, contractHash: ToolContractHasher::hash($api), operationRef: $api->operationRef, availability: JsonDocuments::capture($api->availability));
     }
 }

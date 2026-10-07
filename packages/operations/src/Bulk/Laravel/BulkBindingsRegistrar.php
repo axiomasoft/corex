@@ -81,10 +81,10 @@ final class BulkBindingsRegistrar implements PackageRegistrar
         $app->scoped(BulkResultReader::class, static fn (Application $app): BulkResultReader => new BulkResultReader(
             // The host must replace this reader with its current field-policy check.
             fieldAccess: static fn (): bool => false,
-            manifest: static fn (DataScope $scope, BulkOperation $operation): array => self::manifest($app, $scope, $operation),
+            manifest: static fn (DataScope $scope, BulkOperation $operation): array => self::manifest(app: $app, scope: $scope, operation: $operation),
         ));
         $app->scoped(BulkFailureReader::class, static fn (Application $app): BulkFailureReader => new BulkFailureReader(
-            static fn (DataScope $scope, BulkOperation $operation, ?string $after, int $limit): array => self::failures($app, $scope, $operation, $after, $limit),
+            static fn (DataScope $scope, BulkOperation $operation, ?string $after, int $limit): array => self::failures(app: $app, scope: $scope, operation: $operation, after: $after, limit: $limit),
         ));
         $app->scoped(BulkOperations::class, static fn (Application $app): BulkOperations => new BulkOperations(
             store: $app->make(BulkOperationStore::class),
@@ -119,16 +119,16 @@ final class BulkBindingsRegistrar implements PackageRegistrar
     /** @return array<string, mixed> */
     private static function manifest(Application $app, DataScope $scope, BulkOperation $operation): array
     {
-        $session = self::session($app, $operation);
+        $session = self::session(app: $app, operation: $operation);
 
-        return $session->results->result($scope, $session->transfer);
+        return $session->results->result(scope: $scope, ref: $session->transfer);
     }
 
     /** @return array{records: list<array{ordinal: string, code: string, path: ?string}>, next: ?string} */
     private static function failures(Application $app, DataScope $scope, BulkOperation $operation, ?string $after, int $limit): array
     {
-        $session = self::session($app, $operation);
+        $session = self::session(app: $app, operation: $operation);
 
-        return $session->results->failures($scope, $session->transfer, $after, $limit);
+        return $session->results->failures(scope: $scope, ref: $session->transfer, afterOrdinal: $after, limit: $limit);
     }
 }

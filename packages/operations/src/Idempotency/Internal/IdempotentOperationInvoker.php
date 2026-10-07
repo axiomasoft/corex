@@ -31,19 +31,19 @@ use Override;
 use Throwable;
 
 /** @internal Adds tenant-transactional idempotency around the shared operation invoker. */
-final class IdempotentOperationInvoker implements OperationInvoker
+final readonly class IdempotentOperationInvoker implements OperationInvoker
 {
     public function __construct(
-        private readonly OperationInvoker $inner,
+        private OperationInvoker $inner,
         /** @var Closure(): IdempotencyStore */
-        private readonly Closure $store,
-        private readonly Connection $connection,
-        private readonly ModuleRegistry $modules,
-        private readonly OperationAuthorizer $authorizer,
-        private readonly ReplayAuthorizer $replayAuthorizer,
-        private readonly ErrorMapper $errors,
-        private readonly ProblemRegistry $problems,
-        private readonly ?BudgetAdmission $budget = null,
+        private Closure $store,
+        private Connection $connection,
+        private ModuleRegistry $modules,
+        private OperationAuthorizer $authorizer,
+        private ReplayAuthorizer $replayAuthorizer,
+        private ErrorMapper $errors,
+        private ProblemRegistry $problems,
+        private ?BudgetAdmission $budget = null,
     ) {}
 
     #[Override]
@@ -59,7 +59,7 @@ final class IdempotentOperationInvoker implements OperationInvoker
         if ($key === null) {
             $result = $this->inner->invoke($invocation);
             $fresh = StoredOperationOutcome::success(JsonDocuments::capture(JsonDocuments::array($result->data)));
-            $projected = $this->project($invocation, $fresh, $result->replayed);
+            $projected = $this->project(invocation: $invocation, outcome: $fresh, replayed: $result->replayed);
 
             return new OperationResult(
                 data: JsonDocuments::capture(JsonDocuments::array($projected->data)),
@@ -69,10 +69,10 @@ final class IdempotentOperationInvoker implements OperationInvoker
         }
 
         if (! in_array($invocation->operation->effectMode, ['tenant_transactional', 'same_transaction_outbox'], true)) {
-            throw new ApiError(OperationsErrorCode::IdempotencyNotSupported, 422, 'This operation does not support transactional idempotency.');
+            throw new ApiError(errorCode: OperationsErrorCode::IdempotencyNotSupported, status: 422, message: 'This operation does not support transactional idempotency.');
         }
 
-        $scope = OperationFingerprint::scope($invocation, $this->connection);
+        $scope = OperationFingerprint::scope(invocation: $invocation, connection: $this->connection);
         $fingerprint = OperationFingerprint::request($invocation);
         $handlerFailure = new HandlerFailure;
         $effectCompleted = false;
@@ -99,18 +99,16 @@ final class IdempotentOperationInvoker implements OperationInvoker
                 );
 
                 if ($attempt->disposition === IdempotencyAttempt::Replay) {
-                    return [StoredOperationOutcome::fromCanonicalJson((string) $attempt->outcomeJson, $this->problems), true];
+                    return [StoredOperationOutcome::fromCanonicalJson(json: (string) $attempt->outcomeJson, problems: $this->problems), true];
                 }
 
-                $this->throwUnlessOwner($attempt, $invocation->operation->contractHash);
+                $this->throwUnlessOwner(attempt: $attempt, contractHash: $invocation->operation->contractHash);
 
                 try {
                     $result = $this->inner->invoke($invocation);
                     $effectCompleted = true;
                     $freshMetadata = JsonDocuments::map($result->metadata);
-                } catch (BudgetStoreUnavailable $error) {
-                    throw $error;
-                } catch (BudgetRateLimited $error) {
+                } catch (BudgetStoreUnavailable|BudgetRateLimited $error) {
                     throw $error;
                 } catch (Throwable $error) {
                     $handlerFailure->error = $this->errors->map($error);
@@ -142,7 +140,7 @@ final class IdempotentOperationInvoker implements OperationInvoker
                     throw $outcome->error($this->problems);
                 }
 
-                return $this->project($invocation, $outcome, true);
+                return $this->project(invocation: $invocation, outcome: $outcome, replayed: true);
             }
 
             if ($effectCompleted && $terminalPersisted) {
@@ -160,10 +158,10 @@ final class IdempotentOperationInvoker implements OperationInvoker
             throw $this->errors->map($error);
         }
 
-        $projected = $this->project($invocation, $outcome, $replayed);
+        $projected = $this->project(invocation: $invocation, outcome: $outcome, replayed: $replayed);
 
         if ($replayed && $this->budget !== null) {
-            return $this->budget->replay($invocation, $projected);
+            return $this->budget->replay(invocation: $invocation, result: $projected);
         }
 
         return new OperationResult(
@@ -178,15 +176,15 @@ final class IdempotentOperationInvoker implements OperationInvoker
         $operation = $invocation->operation;
 
         if (! $operation->executionSupported) {
-            throw new ApiError(OperationsErrorCode::OperationUnsupported, 404, 'Operation is not executable.');
+            throw new ApiError(errorCode: OperationsErrorCode::OperationUnsupported, status: 404, message: 'Operation is not executable.');
         }
 
-        if (! $this->modules->isActive($operation->module, $invocation->context->tenant())) {
-            throw new ApiError(OperationsErrorCode::ModuleUnavailable, 404, 'Operation not found.');
+        if (! $this->modules->isActive(name: $operation->module, ctx: $invocation->context->tenant())) {
+            throw new ApiError(errorCode: OperationsErrorCode::ModuleUnavailable, status: 404, message: 'Operation not found.');
         }
 
-        if (! $this->authorizer->allows($operation, $invocation->context)) {
-            throw new ApiError(OperationsErrorCode::Forbidden, 403, 'Operation is not permitted.');
+        if (! $this->authorizer->allows(operation: $operation, context: $invocation->context)) {
+            throw new ApiError(errorCode: OperationsErrorCode::Forbidden, status: 403, message: 'Operation is not permitted.');
         }
     }
 
@@ -196,15 +194,15 @@ final class IdempotentOperationInvoker implements OperationInvoker
         $requirement = $invocation->operation->idempotency;
 
         if ($requirement === IdempotencyRequirement::Forbidden && $key !== null) {
-            throw new ApiError(OperationsErrorCode::IdempotencyKeyForbidden, 422, 'An idempotency key is not allowed for this operation.');
+            throw new ApiError(errorCode: OperationsErrorCode::IdempotencyKeyForbidden, status: 422, message: 'An idempotency key is not allowed for this operation.');
         }
 
         if ($requirement === IdempotencyRequirement::Required && $key === null) {
-            throw new ApiError(OperationsErrorCode::IdempotencyKeyRequired, 422, 'An idempotency key is required for this operation.');
+            throw new ApiError(errorCode: OperationsErrorCode::IdempotencyKeyRequired, status: 422, message: 'An idempotency key is required for this operation.');
         }
 
         if ($key !== null && (strlen($key) < 1 || strlen($key) > 255)) {
-            throw new ApiError(OperationsErrorCode::IdempotencyKeyInvalid, 422, 'The idempotency key must contain 1-255 bytes.');
+            throw new ApiError(errorCode: OperationsErrorCode::IdempotencyKeyInvalid, status: 422, message: 'The idempotency key must contain 1-255 bytes.');
         }
 
         return $key;
@@ -217,14 +215,14 @@ final class IdempotentOperationInvoker implements OperationInvoker
         }
 
         if (! hash_equals($attempt->contractHash, $contractHash)) {
-            throw new ApiError(OperationsErrorCode::IdempotencyContractMismatch, 409, 'The stored outcome belongs to a different operation contract.');
+            throw new ApiError(errorCode: OperationsErrorCode::IdempotencyContractMismatch, status: 409, message: 'The stored outcome belongs to a different operation contract.');
         }
 
         throw match ($attempt->disposition) {
-            IdempotencyAttempt::Conflict => new ApiError(OperationsErrorCode::IdempotencyConflict, 409, 'The idempotency key was used with different input.'),
-            IdempotencyAttempt::ContractMismatch => new ApiError(OperationsErrorCode::IdempotencyContractMismatch, 409, 'The stored outcome belongs to a different operation contract.'),
-            IdempotencyAttempt::InProgress => new ApiError(OperationsErrorCode::IdempotencyInProgress, 409, 'The operation is already in progress.', retryable: true),
-            default => new ApiError(CoreErrorCode::InternalError, 500, 'Operation could not be completed.'),
+            IdempotencyAttempt::Conflict => new ApiError(errorCode: OperationsErrorCode::IdempotencyConflict, status: 409, message: 'The idempotency key was used with different input.'),
+            IdempotencyAttempt::ContractMismatch => new ApiError(errorCode: OperationsErrorCode::IdempotencyContractMismatch, status: 409, message: 'The stored outcome belongs to a different operation contract.'),
+            IdempotencyAttempt::InProgress => new ApiError(errorCode: OperationsErrorCode::IdempotencyInProgress, status: 409, message: 'The operation is already in progress.', retryable: true),
+            default => new ApiError(errorCode: CoreErrorCode::InternalError, status: 500, message: 'Operation could not be completed.'),
         };
     }
 
@@ -255,10 +253,10 @@ final class IdempotentOperationInvoker implements OperationInvoker
                 );
 
                 if ($attempt->disposition === IdempotencyAttempt::Replay) {
-                    return StoredOperationOutcome::fromCanonicalJson((string) $attempt->outcomeJson, $this->problems);
+                    return StoredOperationOutcome::fromCanonicalJson(json: (string) $attempt->outcomeJson, problems: $this->problems);
                 }
 
-                $this->throwUnlessOwner($attempt, $invocation->operation->contractHash);
+                $this->throwUnlessOwner(attempt: $attempt, contractHash: $invocation->operation->contractHash);
                 $outcome = StoredOperationOutcome::failure($error);
                 $store->fail($attempt, $outcome->canonicalJson());
                 $terminalPersisted = true;
@@ -283,7 +281,7 @@ final class IdempotentOperationInvoker implements OperationInvoker
         StoredOperationOutcome $outcome,
         bool $replayed,
     ): OperationResult {
-        $authorized = $this->replayAuthorizer->authorize($invocation, $outcome, $replayed);
+        $authorized = $this->replayAuthorizer->authorize(invocation: $invocation, outcome: $outcome, replayed: $replayed);
 
         if ($authorized->kind === 'error') {
             throw $authorized->error($this->problems);

@@ -31,8 +31,8 @@ final readonly class ApiSchemaRegistrar
             throw new InvalidArgumentException('Explicit corex-operations.schema budget and tenant settings are required.');
         }
 
-        $budget = self::identity($schema, 'budget');
-        $tenant = self::identity($schema, 'tenant');
+        $budget = self::identity(schema: $schema, scope: 'budget');
+        $tenant = self::identity(schema: $schema, scope: 'tenant');
 
         return new self(
             budget: $database->connection($budget['connection']),
@@ -52,8 +52,8 @@ final readonly class ApiSchemaRegistrar
         private string $tenantDriver,
         private string $tenantDatabase,
     ) {
-        $this->assertIdentity($this->budget, $this->budgetDriver, $this->budgetDatabase, 'budget');
-        $this->assertIdentity($this->tenant, $this->tenantDriver, $this->tenantDatabase, 'tenant');
+        $this->assertIdentity(connection: $this->budget, driver: $this->budgetDriver, database: $this->budgetDatabase, scope: 'budget');
+        $this->assertIdentity(connection: $this->tenant, driver: $this->tenantDriver, database: $this->tenantDatabase, scope: 'tenant');
 
         if ($this->budget === $this->tenant || $this->budget->getName() === $this->tenant->getName()) {
             throw new InvalidArgumentException('Budget and tenant schemas must use distinct explicit connections.');

@@ -35,7 +35,7 @@ it('reports a digest scheduler violation when the binding is absent', function (
     app()['config']->set('corex-notifications.digest.enabled', true);
     app()->forgetInstance(NotificationsOptions::class);
 
-    expect(app(DigestSchedulerCheck::class)->violations(false))->toBe([
+    expect(resolve(DigestSchedulerCheck::class)->violations(false))->toBe([
         'corex-notifications.digest.enabled requires a bound CoreX\\Scheduling\\Contracts\\WakeupScheduler',
     ]);
 });

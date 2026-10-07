@@ -29,7 +29,7 @@ final class CoreAuthServiceProvider extends ServiceProvider
     {
         $this->app->tag([AccessSchemaSets::class], SchemaSetProvider::class);
 
-        ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
+        ProblemDefinitions::register(app: $this->app, composerManifest: __DIR__.'/../composer.json', provider: PackageProblemDefinitions::class);
 
         $this->app->tag([AccessConfigSection::class], ConfigReportSection::class);
 

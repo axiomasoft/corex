@@ -28,6 +28,6 @@ final class DepartmentCycleException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::DepartmentCycleException, ErrorCategory::Conflict, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::DepartmentCycleException, category: ErrorCategory::Conflict, retryable: false);
     }
 }

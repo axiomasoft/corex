@@ -95,14 +95,14 @@ it('persists idempotent requests and completes the local handler once', function
     app()['config']->set('corex-wakeup.handlers', ['test.reminder' => ['handler' => WakeupTestHandler::class, 'version' => 'test/1']]);
     app()->forgetInstance(WakeupOptions::class);
     app()->forgetScopedInstances();
-    $context = app(TenantContextResolver::class)->current();
-    $scheduler = app(WakeupScheduler::class);
+    $context = resolve(TenantContextResolver::class)->current();
+    $scheduler = resolve(WakeupScheduler::class);
     $request = new WakeupRequest($context, 'test.reminder', 'reminder-1', new DateTimeImmutable('-1 minute'), null, JsonDocuments::capture(['message' => 'wake']));
 
     expect($scheduler->schedule($request)->status)->toBe('created')
         ->and($scheduler->schedule($request)->status)->toBe('existing');
 
-    $result = app(DueWakeupSweeper::class)->sweep($context, 10);
+    $result = resolve(DueWakeupSweeper::class)->sweep($context, 10);
 
     expect($result->completed)->toBe(1)
         ->and(DB::table('wakeup_effects')->where('request_key', 'reminder-1')->count())->toBe(1);
@@ -121,7 +121,7 @@ it('stores a versioned envelope and exposes only business data to the handler', 
     app()->forgetInstance(WakeupOptions::class);
     app()->forgetInstance(WakeupHandlerRegistry::class);
     app()->forgetScopedInstances();
-    $context = app(TenantContextResolver::class)->current();
+    $context = resolve(TenantContextResolver::class)->current();
     $request = new WakeupRequest(
         context: $context,
         kind: 'test.reminder',
@@ -131,7 +131,7 @@ it('stores a versioned envelope and exposes only business data to the handler', 
         payload: JsonDocuments::capture(['message' => 'wake']),
     );
 
-    expect(app(WakeupScheduler::class)->schedule($request)->status)->toBe('created');
+    expect(resolve(WakeupScheduler::class)->schedule($request)->status)->toBe('created');
 
     $stored = json_decode(
         (string) DB::table('sys_wakeup_requests')->where('request_key', 'versioned-envelope')->value('payload'),
@@ -152,7 +152,7 @@ it('stores a versioned envelope and exposes only business data to the handler', 
         'data' => ['message' => 'wake'],
     ]);
 
-    expect(app(DueWakeupSweeper::class)->sweep($context, 10)->completed)->toBe(1)
+    expect(resolve(DueWakeupSweeper::class)->sweep($context, 10)->completed)->toBe(1)
         ->and($handler->payloads)->toBe([['message' => 'wake']]);
 });
 
@@ -173,7 +173,7 @@ it('keeps exact replay valid when only registry provenance changes', function ()
         resolve: static fn (string $class): DueWakeupHandler => $handler,
         registryFingerprint: 'registry-b',
     );
-    $context = app(TenantContextResolver::class)->current();
+    $context = resolve(TenantContextResolver::class)->current();
     $request = new WakeupRequest(
         context: $context,
         kind: 'test.reminder',
@@ -184,26 +184,26 @@ it('keeps exact replay valid when only registry provenance changes', function ()
     );
     $schedulerA = new SqlWakeupScheduler(
         connection: DB::connection(),
-        contexts: app(TenantContextResolver::class),
+        contexts: resolve(TenantContextResolver::class),
         handlers: $registryA,
         hints: [],
-        clock: app(ClockInterface::class),
+        clock: resolve(ClockInterface::class),
     );
     $schedulerB = new SqlWakeupScheduler(
         connection: DB::connection(),
-        contexts: app(TenantContextResolver::class),
+        contexts: resolve(TenantContextResolver::class),
         handlers: $registryB,
         hints: [],
-        clock: app(ClockInterface::class),
+        clock: resolve(ClockInterface::class),
     );
     $sweeper = new SweepRunner(
         connection: DB::connection(),
-        contexts: app(TenantContextResolver::class),
+        contexts: resolve(TenantContextResolver::class),
         handlers: $registryB,
         dueSources: [],
         leaseSeconds: 60,
         maxAttempts: 5,
-        clock: app(ClockInterface::class),
+        clock: resolve(ClockInterface::class),
     );
 
     expect($schedulerA->schedule($request)->status)->toBe('created')
@@ -222,7 +222,7 @@ it('retains the legacy digest algorithm for unstamped existing rows', function (
     app()->forgetInstance(WakeupOptions::class);
     app()->forgetInstance(WakeupHandlerRegistry::class);
     app()->forgetScopedInstances();
-    $context = app(TenantContextResolver::class)->current();
+    $context = resolve(TenantContextResolver::class)->current();
     $fireAt = new DateTimeImmutable('2026-06-01T12:00:00Z');
     $payload = ['message' => 'legacy'];
     $encoded = json_encode($payload, JSON_THROW_ON_ERROR);
@@ -233,7 +233,7 @@ it('retains the legacy digest algorithm for unstamped existing rows', function (
         'fire_at' => $fireAt,
     ]);
 
-    $result = app(WakeupScheduler::class)->schedule(new WakeupRequest(
+    $result = resolve(WakeupScheduler::class)->schedule(new WakeupRequest(
         context: $context,
         kind: 'test.reminder',
         requestKey: 'legacy-existing',
@@ -258,15 +258,15 @@ it('quarantines missing and mismatched stamps without invocation or retry', func
     app()->forgetInstance(WakeupOptions::class);
     app()->forgetInstance(WakeupHandlerRegistry::class);
     app()->forgetScopedInstances();
-    $context = app(TenantContextResolver::class)->current();
+    $context = resolve(TenantContextResolver::class)->current();
     insertLegacyWakeup(requestKey: 'missing-stamp', payload: ['message' => 'legacy']);
-    $registry = app(WakeupHandlerRegistry::class);
+    $registry = resolve(WakeupHandlerRegistry::class);
     $definition = $registry->definition('test.reminder');
     $mismatched = $registry->envelope($definition, ['message' => 'old']);
     $mismatched['_corex']['extension']['version'] = 'reminder/1';
     insertLegacyWakeup(requestKey: 'mismatched-stamp', payload: $mismatched);
 
-    $result = app(DueWakeupSweeper::class)->sweep($context, 10);
+    $result = resolve(DueWakeupSweeper::class)->sweep($context, 10);
     $rows = DB::table('sys_wakeup_requests')->orderBy('request_key')->get()->keyBy('request_key');
 
     expect($result->failed)->toBe(2)
@@ -299,7 +299,7 @@ it('admits unstamped rows only for the exact definition opt-in', function (): vo
         ->expectsOutputToContain('no rows were changed')
         ->assertExitCode(1);
 
-    $result = app(DueWakeupSweeper::class)->sweep(app(TenantContextResolver::class)->current(), 10);
+    $result = resolve(DueWakeupSweeper::class)->sweep(resolve(TenantContextResolver::class)->current(), 10);
 
     expect($result->completed)->toBe(1)
         ->and($handler->payloads)->toBe([['message' => 'legacy']]);
@@ -336,8 +336,8 @@ it('persists a retryable handler failure without reusing its generation', functi
     app()['config']->set('corex-wakeup.handlers', ['test.failure' => ['handler' => FailingWakeupTestHandler::class, 'version' => 'test/1']]);
     app()->forgetInstance(WakeupOptions::class);
     app()->forgetScopedInstances();
-    $context = app(TenantContextResolver::class)->current();
-    app(WakeupScheduler::class)->schedule(new WakeupRequest(
+    $context = resolve(TenantContextResolver::class)->current();
+    resolve(WakeupScheduler::class)->schedule(new WakeupRequest(
         context: $context,
         kind: 'test.failure',
         requestKey: 'failure-1',
@@ -346,7 +346,7 @@ it('persists a retryable handler failure without reusing its generation', functi
         payload: JsonDocuments::capture([]),
     ));
 
-    $result = app(DueWakeupSweeper::class)->sweep($context, 10);
+    $result = resolve(DueWakeupSweeper::class)->sweep($context, 10);
     $row = DB::table('sys_wakeup_requests')->where('request_key', 'failure-1')->first();
 
     expect($result->retried)->toBe(1)
@@ -360,7 +360,7 @@ it('rejects unsafe request data before writing a durable request', function (): 
     app()['config']->set('corex-wakeup.handlers', ['test.reminder' => ['handler' => WakeupTestHandler::class, 'version' => 'test/1']]);
     app()->forgetInstance(WakeupOptions::class);
     app()->forgetScopedInstances();
-    $context = app(TenantContextResolver::class)->current();
+    $context = resolve(TenantContextResolver::class)->current();
 
     expect(fn (): WakeupRequest => new WakeupRequest(
         context: $context,
@@ -371,7 +371,7 @@ it('rejects unsafe request data before writing a durable request', function (): 
         payload: JsonDocuments::capture([]),
     ))->toThrow(InvalidArgumentException::class);
 
-    expect(fn () => app(WakeupScheduler::class)->schedule(new WakeupRequest(
+    expect(fn () => resolve(WakeupScheduler::class)->schedule(new WakeupRequest(
         context: $context,
         kind: 'test.reminder',
         requestKey: 'float-payload',
@@ -393,8 +393,8 @@ it('keeps cancellation keys unambiguous across registered kinds and dispatches a
     app()->instance(RecordingWakeupHint::class, $hint);
     app()->tag(RecordingWakeupHint::class, 'corex.wakeup.hints');
     app()->forgetScopedInstances();
-    $context = app(TenantContextResolver::class)->current();
-    $scheduler = app(WakeupScheduler::class);
+    $context = resolve(TenantContextResolver::class)->current();
+    $scheduler = resolve(WakeupScheduler::class);
 
     expect($scheduler->schedule(new WakeupRequest(
         context: $context,
@@ -421,8 +421,8 @@ it('makes cancellation outcomes explicit without depending on a root hint', func
     app()['config']->set('corex-wakeup.handlers', ['test.reminder' => ['handler' => WakeupTestHandler::class, 'version' => 'test/1']]);
     app()->forgetInstance(WakeupOptions::class);
     app()->forgetScopedInstances();
-    $context = app(TenantContextResolver::class)->current();
-    $scheduler = app(WakeupScheduler::class);
+    $context = resolve(TenantContextResolver::class)->current();
+    $scheduler = resolve(WakeupScheduler::class);
 
     expect($scheduler->cancel(context: $context, requestKey: 'missing'))->status->toBe('not-found');
 
@@ -452,7 +452,7 @@ it('makes cancellation outcomes explicit without depending on a root hint', func
 });
 
 it('rejects unregistered handlers and invalid window contracts before scheduling', function (): void {
-    $context = app(TenantContextResolver::class)->current();
+    $context = resolve(TenantContextResolver::class)->current();
     $request = new WakeupRequest(
         context: $context,
         kind: 'test.unknown',
@@ -462,7 +462,7 @@ it('rejects unregistered handlers and invalid window contracts before scheduling
         payload: JsonDocuments::capture([]),
     );
 
-    expect(fn () => app(WakeupScheduler::class)->schedule($request))->toThrow(RuntimeException::class)
+    expect(fn () => resolve(WakeupScheduler::class)->schedule($request))->toThrow(RuntimeException::class)
         ->and(fn (): WakeupWindow => new WakeupWindow(
             start: new DateTimeImmutable('2026-09-15T12:00:00+03:00'),
             end: new DateTimeImmutable('2026-09-15T13:00:00+03:00'),
@@ -478,9 +478,9 @@ it('computes handler backoff from the injected clock', function (): void {
     $clock = new FrozenClock($anchor);
     app()->instance(ClockInterface::class, $clock);
     app()->forgetScopedInstances();
-    $context = app(TenantContextResolver::class)->current();
-    $scheduler = app(WakeupScheduler::class);
-    $sweeper = app(DueWakeupSweeper::class);
+    $context = resolve(TenantContextResolver::class)->current();
+    $scheduler = resolve(WakeupScheduler::class);
+    $sweeper = resolve(DueWakeupSweeper::class);
 
     $scheduler->schedule(new WakeupRequest(
         context: $context,
@@ -503,7 +503,7 @@ it('computes handler backoff from the injected clock', function (): void {
 
         $clock->advance(new DateInterval("PT{$offsetSeconds}S"));
         app()->forgetScopedInstances();
-        $sweeper = app(DueWakeupSweeper::class);
+        $sweeper = resolve(DueWakeupSweeper::class);
     }
 });
 
@@ -516,7 +516,7 @@ it('expires a running lease exactly at the clock boundary but not one second lat
     $clock = new FrozenClock($anchor);
     app()->instance(ClockInterface::class, $clock);
     app()->forgetScopedInstances();
-    $context = app(TenantContextResolver::class)->current();
+    $context = resolve(TenantContextResolver::class)->current();
     $scope = 'account';
 
     DB::table('sys_wakeup_requests')->insert([
@@ -535,7 +535,7 @@ it('expires a running lease exactly at the clock boundary but not one second lat
         'updated_at' => $anchor,
     ]);
 
-    app(DueWakeupSweeper::class)->sweep($context, 10);
+    resolve(DueWakeupSweeper::class)->sweep($context, 10);
 
     $row = DB::table('sys_wakeup_requests')->where('request_key', 'lease-boundary')->first();
 
@@ -549,7 +549,7 @@ it('expires a running lease exactly at the clock boundary but not one second lat
     ]);
 
     app()->forgetScopedInstances();
-    app(DueWakeupSweeper::class)->sweep($context, 10);
+    resolve(DueWakeupSweeper::class)->sweep($context, 10);
 
     expect(DB::table('sys_wakeup_requests')->where('request_key', 'lease-boundary')->value('status'))->toBe('running');
 });
@@ -559,28 +559,28 @@ it('resolves the scheduler and sweeper from the package clock without a host bin
 
     unset(app()[ClockInterface::class]);
     app()->forgetScopedInstances();
-    (new WakeupServiceProvider(app()))->register();
+    new WakeupServiceProvider(app())->register();
 
-    $clock = app(ClockInterface::class);
+    $clock = resolve(ClockInterface::class);
 
     expect($clock)->toBeInstanceOf(SystemClock::class)
         ->and($clock->now()->getTimezone()->getName())->toBe('UTC')
-        ->and(app(WakeupScheduler::class))->toBeInstanceOf(WakeupScheduler::class)
-        ->and(app(DueWakeupSweeper::class))->toBeInstanceOf(DueWakeupSweeper::class)
-        ->and(app(ClockInterface::class))->toBe($clock);
+        ->and(resolve(WakeupScheduler::class))->toBeInstanceOf(WakeupScheduler::class)
+        ->and(resolve(DueWakeupSweeper::class))->toBeInstanceOf(DueWakeupSweeper::class)
+        ->and(resolve(ClockInterface::class))->toBe($clock);
 });
 
 it('preserves a FrozenClock already bound when the wakeup provider registers', function (): void {
     $clock = new FrozenClock(new DateTimeImmutable('2026-03-04T05:06:07Z'));
     app()->instance(ClockInterface::class, $clock);
     app()->forgetScopedInstances();
-    (new WakeupServiceProvider(app()))->register();
+    new WakeupServiceProvider(app())->register();
 
-    expect(app(ClockInterface::class))->toBe($clock);
+    expect(resolve(ClockInterface::class))->toBe($clock);
 
-    app(WakeupScheduler::class);
-    app(DueWakeupSweeper::class);
+    resolve(WakeupScheduler::class);
+    resolve(DueWakeupSweeper::class);
 
-    expect(app(ClockInterface::class))->toBe($clock)
+    expect(resolve(ClockInterface::class))->toBe($clock)
         ->and($clock->now()->format(DateTimeImmutable::ATOM))->toBe('2026-03-04T05:06:07+00:00');
 });

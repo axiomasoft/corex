@@ -27,6 +27,6 @@ it('rejects duplicate normalized route identity and names both owners', function
     $alpha = ModuleManifest::make('example/alpha')->title('A')->tablePrefix('aaa')->extends([$operation()]);
     $beta = ModuleManifest::make('example/beta')->title('B')->tablePrefix('bbb')->extends([$operation()]);
 
-    expect(fn () => app(RegistryCompiler::class)->compile([$alpha, $beta], []))
+    expect(fn () => resolve(RegistryCompiler::class)->compile([$alpha, $beta], []))
         ->toThrow(CompilationException::class, 'Duplicate identity [api.operation:v1:notes.show]');
 });

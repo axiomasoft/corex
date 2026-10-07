@@ -9,6 +9,7 @@ use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\OutboxRelay;
 use CoreX\Messaging\Exceptions\OutboxLeaseLost;
 use Illuminate\Console\Command;
+use Illuminate\Support\Sleep;
 use Illuminate\Support\Str;
 use Throwable;
 
@@ -72,7 +73,7 @@ final class RelayOutbox extends Command
             }
 
             if (! $this->stopping && ! $this->option('once') && $leased === []) {
-                sleep(max(1, (int) $this->option('sleep')));
+                Sleep::sleep(max(1, (int) $this->option('sleep')));
             }
         } while (! $this->stopping && ! $this->option('once'));
 

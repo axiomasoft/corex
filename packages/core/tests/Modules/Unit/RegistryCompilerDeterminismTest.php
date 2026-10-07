@@ -43,8 +43,8 @@ it('publishes one fingerprint for shuffled module, declaration and associative o
         Permissions::group('widget', ['view'], 'app'),
     ]);
 
-    $first = app(RegistryCompiler::class)->compile([$alpha, $beta], []);
-    $second = app(RegistryCompiler::class)->compile([$beta, $alpha], []);
+    $first = resolve(RegistryCompiler::class)->compile([$alpha, $beta], []);
+    $second = resolve(RegistryCompiler::class)->compile([$beta, $alpha], []);
 
     expect($second->fingerprint)->toBe($first->fingerprint)
         ->and($second->toArray()['extensions'])->toBe($first->toArray()['extensions'])
@@ -58,7 +58,7 @@ it('keeps semantic menu order while hashing key-sorted payloads', function (): v
         Menu::item('app', 'things')->label('Things')->after('home'),
     ]);
 
-    $compiled = app(RegistryCompiler::class)->compile([$manifest], []);
+    $compiled = resolve(RegistryCompiler::class)->compile([$manifest], []);
     $menuIds = array_column(array_filter(
         $compiled->extensions,
         static fn (array $row): bool => $row['point'] === 'menu',
@@ -73,7 +73,7 @@ it('rejects every replacement error with distinct diagnostics', function (
     callable $manifests,
     string $needle,
 ): void {
-    expect(fn () => app(RegistryCompiler::class)->compile($manifests(), []))
+    expect(fn () => resolve(RegistryCompiler::class)->compile($manifests(), []))
         ->toThrow(CompilationException::class, $needle);
 })->with([
     'missing target' => [
@@ -124,7 +124,7 @@ it('removes a replaced target from the effective slice and keeps it in provenanc
     $beta = determinismManifest('example/beta', 'bbb', 'bbb.thing')
         ->replace('entity', 'aaa.thing', 'bbb.thing');
 
-    $compiled = app(RegistryCompiler::class)->compile([$alpha, $beta], []);
+    $compiled = resolve(RegistryCompiler::class)->compile([$alpha, $beta], []);
 
     expect($compiled->entities)->toHaveKey('bbb.thing')
         ->and($compiled->entities)->not->toHaveKey('aaa.thing')
@@ -136,7 +136,7 @@ it('removes a replaced target from the effective slice and keeps it in provenanc
 it('rejects a menu missing afterHandle target and a menu cycle', function (array $extenders, string $needle): void {
     $manifest = determinismManifest('example/alpha', 'aaa', 'aaa.thing', $extenders);
 
-    expect(fn () => app(RegistryCompiler::class)->compile([$manifest], []))
+    expect(fn () => resolve(RegistryCompiler::class)->compile([$manifest], []))
         ->toThrow(CompilationException::class, $needle);
 })->with([
     'missing after' => [
@@ -153,7 +153,7 @@ it('rejects a menu missing afterHandle target and a menu cycle', function (array
 ]);
 
 it('rejects unknown schema, missing fingerprint and hash mismatch', function (array $mutate, string $needle): void {
-    $compiled = app(RegistryCompiler::class)->compile([
+    $compiled = resolve(RegistryCompiler::class)->compile([
         determinismManifest('example/alpha', 'aaa', 'aaa.thing'),
     ], []);
     $array = $compiled->toArray();
@@ -179,7 +179,7 @@ it('does not let a hydrated mutation change authority bytes or fingerprint', fun
     $manifest = determinismManifest('example/alpha', 'aaa', 'aaa.thing', [
         Menu::item('app', 'home')->label('Home'),
     ]);
-    $compiled = app(RegistryCompiler::class)->compile([$manifest], []);
+    $compiled = resolve(RegistryCompiler::class)->compile([$manifest], []);
     $before = $compiled->toArray();
     $fingerprint = $compiled->fingerprint;
 
@@ -192,7 +192,7 @@ it('does not let a hydrated mutation change authority bytes or fingerprint', fun
         ->and($compiled->toArray())->toBe($before)
         ->and($compiled->toArray()['menu'][0]['handle'])->toBe('home');
 
-    $again = app(RegistryCompiler::class)->compile([$manifest], []);
+    $again = resolve(RegistryCompiler::class)->compile([$manifest], []);
 
     expect($again->fingerprint)->toBe($fingerprint)
         ->and($again->menu[0]->handle)->toBe('home');

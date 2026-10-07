@@ -53,7 +53,7 @@ final class DatabaseTenancyManager implements TenancyManager
     {
         $this->assertHealthy();
 
-        return $this->account === null ? null : new TenantContext($this->account, $this->workspace);
+        return $this->account === null ? null : new TenantContext(account: $this->account, workspace: $this->workspace);
     }
 
     #[Override]
@@ -76,7 +76,7 @@ final class DatabaseTenancyManager implements TenancyManager
         $this->end();
 
         try {
-            $current = $this->accounts->find($account->id, $this->centralConnection)
+            $current = $this->accounts->find(accountId: $account->id, connectionName: $this->centralConnection)
                 ?? throw TenantContextUnavailable::missingAccount($account->id);
             $database = $this->connections->resolve($current);
             $context = new TenantContext($current);
@@ -97,7 +97,7 @@ final class DatabaseTenancyManager implements TenancyManager
             try {
                 $this->revertAll(array_reverse($this->started));
             } catch (Throwable $cleanup) {
-                $this->reportCleanupFailure($failure, $cleanup);
+                $this->reportCleanupFailure(original: $failure, cleanup: $cleanup);
             } finally {
                 $this->started = [];
                 $this->resetScope();
@@ -168,7 +168,7 @@ final class DatabaseTenancyManager implements TenancyManager
                     }
                 } catch (Throwable $cleanup) {
                     if ($original !== null) {
-                        $this->reportCleanupFailure($original, $cleanup);
+                        $this->reportCleanupFailure(original: $original, cleanup: $cleanup);
                     }
 
                     throw $cleanup;
@@ -188,7 +188,7 @@ final class DatabaseTenancyManager implements TenancyManager
             // A failing log transport must not replace either runtime cause.
         }
 
-        throw new TenantCleanupFailure($original, $cleanup);
+        throw new TenantCleanupFailure(original: $original, cleanup: $cleanup);
     }
 
     /** @param list<TenantBootstrapper> $bootstrappers already in revert order */

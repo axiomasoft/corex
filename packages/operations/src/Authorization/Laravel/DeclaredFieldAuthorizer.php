@@ -17,13 +17,13 @@ final class DeclaredFieldAuthorizer implements OperationFieldAuthorizer
     #[Override]
     public function allowsRead(Operation $operation, RequestContext $context, string $path): bool
     {
-        return self::declares($operation->readFields, $path);
+        return self::declares(declared: $operation->readFields, path: $path);
     }
 
     #[Override]
     public function allowsWrite(Operation $operation, RequestContext $context, string $path): bool
     {
-        return self::declares($operation->writeFields, $path);
+        return self::declares(declared: $operation->writeFields, path: $path);
     }
 
     /** @param array<string, mixed> $input */
@@ -34,8 +34,8 @@ final class DeclaredFieldAuthorizer implements OperationFieldAuthorizer
         array $input,
     ): ?string {
         foreach (self::leafPaths($input) as $path) {
-            if (! self::declares($operation->writeFields, $path)
-                || ! $authorizer->allowsWrite($operation, $context, $path)) {
+            if (! self::declares(declared: $operation->writeFields, path: $path)
+                || ! $authorizer->allowsWrite(operation: $operation, context: $context, path: $path)) {
                 return $path;
             }
         }
@@ -79,7 +79,7 @@ final class DeclaredFieldAuthorizer implements OperationFieldAuthorizer
         foreach ($value as $key => $item) {
             $path = $pointer.'/'.self::escape((string) $key);
 
-            if (! self::covers($operation->readFields, $path)) {
+            if (! self::covers(declared: $operation->readFields, path: $path)) {
                 if ($list) {
                     $result[$key] = null;
                 }
@@ -88,13 +88,13 @@ final class DeclaredFieldAuthorizer implements OperationFieldAuthorizer
             }
 
             if (is_array($item) && $item !== []) {
-                $result[$key] = self::pruneArray($operation, $context, $authorizer, $item, $path);
+                $result[$key] = self::pruneArray(operation: $operation, context: $context, authorizer: $authorizer, value: $item, pointer: $path);
 
                 continue;
             }
 
-            if (self::declares($operation->readFields, $path)
-                && $authorizer->allowsRead($operation, $context, $path)) {
+            if (self::declares(declared: $operation->readFields, path: $path)
+                && $authorizer->allowsRead(operation: $operation, context: $context, path: $path)) {
                 $result[$key] = $item;
             } elseif ($list) {
                 $result[$key] = null;
@@ -116,7 +116,7 @@ final class DeclaredFieldAuthorizer implements OperationFieldAuthorizer
             $path = $pointer.'/'.self::escape((string) $key);
 
             if (is_array($item) && $item !== []) {
-                array_push($paths, ...self::leafPaths($item, $path));
+                array_push($paths, ...self::leafPaths(value: $item, pointer: $path));
 
                 continue;
             }
@@ -148,17 +148,11 @@ final class DeclaredFieldAuthorizer implements OperationFieldAuthorizer
     /** @param list<string>|null $declared */
     private static function covers(?array $declared, string $path): bool
     {
-        if (self::declares($declared, $path)) {
+        if (self::declares(declared: $declared, path: $path)) {
             return true;
         }
 
-        foreach ($declared ?? [] as $field) {
-            if (str_starts_with(self::pointer($field), $path.'/')) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($declared ?? [], fn ($field) => str_starts_with(self::pointer($field), $path.'/'));
     }
 
     private static function pointer(string $field): string

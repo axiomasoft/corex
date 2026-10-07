@@ -39,7 +39,7 @@ final class OpisToolSchemaValidator
             throw new InvalidArgumentException('Tool schema root must be an object.');
         }
 
-        $resources = SchemaBudget::admit($decoded, $schema->canonicalJson);
+        $resources = SchemaBudget::admit(schema: $decoded, rawJson: $schema->canonicalJson);
         $digest = hash('sha256', $schema->canonicalJson.'|'.$profile);
 
         return new SchemaHandle(
@@ -56,7 +56,7 @@ final class OpisToolSchemaValidator
         }
 
         $decoded = JsonCanonical::decode($value->canonicalJson);
-        SchemaBudget::assertPayload($value->canonicalJson, $decoded);
+        SchemaBudget::assertPayload(rawJson: $value->canonicalJson, decoded: $decoded);
 
         $rootSchema = json_decode(
             $schema->localResources['#'] ?? throw new InvalidArgumentException('Missing admitted schema root.'),

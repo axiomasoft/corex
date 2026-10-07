@@ -28,7 +28,7 @@ final readonly class ValidatedWebhookRequest
         array $signatureHeaders,
         public int $timeoutSeconds = 10,
     ) {
-        self::validateInput($canonicalHost, $url, $address, $body, $signatureHeaders, $timeoutSeconds);
+        self::validateInput(canonicalHost: $canonicalHost, url: $url, address: $address, body: $body, signatureHeaders: $signatureHeaders, timeoutSeconds: $timeoutSeconds);
         $this->signatureHeaders = [
             'webhook-id' => $signatureHeaders['webhook-id'],
             'webhook-timestamp' => $signatureHeaders['webhook-timestamp'],

@@ -1,6 +1,6 @@
 --- a/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 +++ b/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
-@@ -310,32 +310,23 @@
+@@ -311,32 +311,23 @@
              $migration = $this->runModuleMigrations($module);
              $codeVersion = $this->codeVersion($module);
  
@@ -12,7 +12,7 @@
 -            // leaving the module silently half-migrated and the caller none the
 -            // wiser (the symmetric silent-failure this closes).
 -            if ($migration['error'] instanceof Throwable) {
--                throw new ModuleUpgradeFailedException($module, $migration['error']);
+-                throw new ModuleUpgradeFailedException(module: $module, previous: $migration['error']);
 -            }
 -
 -            $fromVersion = $current->version;
@@ -24,8 +24,8 @@
                  'updated_at' => $this->timestamp(),
              ]);
  
--            $this->log($module, 'upgrade', $current->state, $current->state, 'success', [
-+            $this->log($module, 'upgrade', $current->state, $current->state, $migration['error'] === null ? 'success' : 'failed', [
+-            $this->log(module: $module, operation: 'upgrade', from: $current->state, to: $current->state, status: 'success', details: [
++            $this->log(module: $module, operation: 'upgrade', from: $current->state, to: $current->state, status: $migration['error'] === null ? 'success' : 'failed', details: [
                  'migrations_run' => $migration['ran'],
 -                'from_version' => $fromVersion,
 +                'from_version' => $current->version,
@@ -33,10 +33,10 @@
 +                'error' => $migration['error']?->getMessage(),
              ]);
  
--            $this->db()->afterCommit(fn () => $this->events->dispatch(new ModuleUpgraded($module, $fromVersion, $codeVersion, $migration['ran'])));
+-            $this->db()->afterCommit(fn () => $this->events->dispatch(new ModuleUpgraded(module: $module, fromVersion: $fromVersion, toVersion: $codeVersion, migrationsRun: $migration['ran'])));
 +            if ($migration['error'] === null) {
 +                $fromVersion = $current->version;
-+                $this->db()->afterCommit(fn () => $this->events->dispatch(new ModuleUpgraded($module, $fromVersion, $codeVersion, $migration['ran'])));
++                $this->db()->afterCommit(fn () => $this->events->dispatch(new ModuleUpgraded(module: $module, fromVersion: $fromVersion, toVersion: $codeVersion, migrationsRun: $migration['ran'])));
 +            }
          });
      }

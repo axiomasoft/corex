@@ -25,6 +25,6 @@ final class InvalidAttributeTables extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CustomFieldsErrorCode::InvalidAttributeTables, ErrorCategory::Internal, retryable: false);
+        return new ErrorDescriptor(code: CustomFieldsErrorCode::InvalidAttributeTables, category: ErrorCategory::Internal, retryable: false);
     }
 }

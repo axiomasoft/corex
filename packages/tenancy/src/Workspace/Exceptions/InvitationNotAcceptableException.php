@@ -22,6 +22,6 @@ final class InvitationNotAcceptableException extends CodedException
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TenancyErrorCode::InvitationNotAcceptableException, ErrorCategory::Conflict, retryable: false);
+        return new ErrorDescriptor(code: TenancyErrorCode::InvitationNotAcceptableException, category: ErrorCategory::Conflict, retryable: false);
     }
 }

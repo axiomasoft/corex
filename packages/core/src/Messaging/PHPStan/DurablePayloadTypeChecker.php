@@ -19,7 +19,7 @@ final class DurablePayloadTypeChecker
     /**
      * @var list<class-string>
      */
-    private const FORBIDDEN = ['Illuminate\Database\Eloquent\Model', 'Closure', 'Illuminate\Container\Container', 'Illuminate\Contracts\Container\Container', 'Psr\Container\ContainerInterface', 'Illuminate\Http\Request', 'Symfony\Component\HttpFoundation\Request', 'CoreX\Tenancy\Contracts\TenantContext'];
+    private const array FORBIDDEN = ['Illuminate\Database\Eloquent\Model', 'Closure', 'Illuminate\Container\Container', 'Illuminate\Contracts\Container\Container', 'Psr\Container\ContainerInterface', 'Illuminate\Http\Request', 'Symfony\Component\HttpFoundation\Request', 'CoreX\Tenancy\Contracts\TenantContext'];
 
     public static function implementsMarker(ClassReflection $classReflection): bool
     {

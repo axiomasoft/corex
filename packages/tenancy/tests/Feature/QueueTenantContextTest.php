@@ -38,7 +38,7 @@ beforeEach(function (): void {
         DB::statement('CREATE DATABASE '.$database);
         $configuration = DB::connection('pgsql')->getConfig();
         $configuration['database'] = $database;
-        $connection = (new ConnectionFactory(app()))->make($configuration, $database);
+        $connection = new ConnectionFactory(app())->make($configuration, $database);
 
         try {
             $connection->statement('CREATE TABLE wsp_workspaces (id uuid PRIMARY KEY, slug text, type text, path text, parent_id uuid, deleted_at timestamptz)');
@@ -87,10 +87,10 @@ it('stamps the payload of a job pushed inside a context with that account and wo
         $payloads[] = $event->job->payload()['corex_tenant'] ?? null;
     });
 
-    app(TenancyManager::class)->runFor($this->accounts['a'], ($this->workspace)('a'), function (): void {
-        RecordContextJob::dispatch('inside')->onConnection('sync');
+    resolve(TenancyManager::class)->runFor($this->accounts['a'], ($this->workspace)('a'), function (): void {
+        dispatch(new RecordContextJob('inside'))->onConnection('sync');
     });
-    RecordContextJob::dispatch('central')->onConnection('sync');
+    dispatch(new RecordContextJob('central'))->onConnection('sync');
 
     expect($payloads)->toBe([['account' => $this->accounts['a']->id, 'workspace' => $this->workspaceId], null])
         ->and(RecordContextJob::$runs[0])->toMatchArray(['account' => $this->accounts['a']->id, 'workspace' => 'ws-a'])
@@ -98,7 +98,7 @@ it('stamps the payload of a job pushed inside a context with that account and wo
 });
 
 it('a worker processes job A then job B in one process: each sees its own account and database, central in between', function (): void {
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $seen = [];
 
     foreach (['a', 'b'] as $name) {
@@ -118,11 +118,11 @@ it('a worker processes job A then job B in one process: each sees its own accoun
 });
 
 it('a sync job dispatched inside A/workspace runs under A/workspace and restores the caller afterwards', function (): void {
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->initialize($this->accounts['a']);
     $manager->setWorkspace(($this->workspace)('a'));
 
-    RecordContextJob::dispatch('sync-ok')->onConnection('sync');
+    dispatch(new RecordContextJob('sync-ok'))->onConnection('sync');
 
     expect(RecordContextJob::$runs)->toBe([[
         'account' => $this->accounts['a']->id, 'workspace' => 'ws-a', 'database' => $this->databases['a'], 'tag' => 'sync-ok',
@@ -132,19 +132,19 @@ it('a sync job dispatched inside A/workspace runs under A/workspace and restores
 });
 
 it('real nested sync jobs restore the outer account and workspace after success and after failure', function (): void {
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->initialize($this->accounts['a']);
     $manager->setWorkspace(($this->workspace)('a'));
 
     $manager->runFor($this->accounts['b'], ($this->workspace)('b'), function (): void {
-        RecordContextJob::dispatch('inner-ok')->onConnection('sync');
+        dispatch(new RecordContextJob('inner-ok'))->onConnection('sync');
     });
     expect(RecordContextJob::$runs[0])->toMatchArray(['account' => $this->accounts['b']->id, 'workspace' => 'ws-b', 'tag' => 'inner-ok'])
         ->and($manager->context()->account->id)->toBe($this->accounts['a']->id)
         ->and($manager->context()->workspace?->slug)->toBe('ws-a');
 
     $manager->runFor($this->accounts['b'], ($this->workspace)('b'), function (): void {
-        expect(fn () => RecordContextJob::dispatch('inner-fail', true)->onConnection('sync'))
+        expect(fn () => dispatch(new RecordContextJob('inner-fail', true))->onConnection('sync'))
             ->toThrow(RuntimeException::class, 'job failed: inner-fail');
     });
 
@@ -153,7 +153,7 @@ it('real nested sync jobs restore the outer account and workspace after success 
 });
 
 it('a nested sync job frame restores the outer context after success (explicit events)', function (): void {
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->initialize($this->accounts['a']);
     $manager->setWorkspace(($this->workspace)('a'));
     $inner = new SyncJob(app(), json_encode(tenantPayloadQTC($this->accounts['b']->id, $this->workspaceId) + ['job' => 'x', 'data' => []]), 'sync', 'default');
@@ -168,7 +168,7 @@ it('a nested sync job frame restores the outer context after success (explicit e
 });
 
 it('a nested sync job frame restores the outer context after a processing failure', function (): void {
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->initialize($this->accounts['a']);
     $manager->setWorkspace(($this->workspace)('a'));
     $inner = new SyncJob(app(), json_encode(tenantPayloadQTC($this->accounts['b']->id, (string) Str::uuid()) + ['job' => 'x', 'data' => []]), 'sync', 'default');
@@ -185,7 +185,7 @@ it('a nested sync job frame restores the outer context after a processing failur
 });
 
 it('an async job starts central, ends central, and a repeated completion cannot pop another job frame', function (): void {
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->initialize($this->accounts['a']); // left over from earlier code in the worker
     $job = queuedJobQTC(tenantPayloadQTC($this->accounts['b']->id));
 
@@ -202,7 +202,7 @@ it('an async job starts central, ends central, and a repeated completion cannot 
 });
 
 it('a job whose account is missing fails without falling back to the previous database', function (): void {
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->initialize($this->accounts['a']);
     $job = queuedJobQTC(tenantPayloadQTC((string) Str::uuid()));
 
@@ -226,7 +226,7 @@ it('a malformed payload is refused', function (mixed $payload): void {
 ]);
 
 it('queue:retry re-runs the stored payload under its original account', function (): void {
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $payload = tenantPayloadQTC($this->accounts['a']->id);
 
     foreach ([1, 2] as $attempt) {
@@ -239,7 +239,7 @@ it('queue:retry re-runs the stored payload under its original account', function
 });
 
 it('a central job (no payload key) runs central and a sync caller is restored only after it', function (): void {
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->initialize($this->accounts['a']);
     $sync = new SyncJob(app(), json_encode(['job' => 'x', 'data' => []]), 'sync', 'default');
 
@@ -251,5 +251,5 @@ it('a central job (no payload key) runs central and a sync caller is restored on
 });
 
 it('is a single instance keeping its frames per application, not in static state', function (): void {
-    expect(app(QueueTenantContext::class))->toBe(app(QueueTenantContext::class));
+    expect(resolve(QueueTenantContext::class))->toBe(resolve(QueueTenantContext::class));
 });

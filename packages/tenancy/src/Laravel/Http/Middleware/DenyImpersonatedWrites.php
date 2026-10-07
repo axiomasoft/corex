@@ -21,11 +21,11 @@ use Illuminate\Http\Response;
  * than inventing a second config surface for the same fact (D116/D121).
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class DenyImpersonatedWrites
+final readonly class DenyImpersonatedWrites
 {
     public function __construct(
-        private readonly ImpersonationService $impersonation,
-        private readonly StatusGatePolicy $statusGate,
+        private ImpersonationService $impersonation,
+        private StatusGatePolicy $statusGate,
     ) {}
 
     /** @return Response|mixed */

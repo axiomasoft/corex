@@ -19,13 +19,7 @@ final class NoSqlPrepareRule extends AbstractDatabaseCallRule
 {
     protected function isViolation(string $sql): bool
     {
-        foreach ($this->statements($sql) as $statement) {
-            if (preg_match('/^(prepare|deallocate)\b/i', $statement) === 1) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($this->statements($sql), fn ($statement) => preg_match('/^(prepare|deallocate)\b/i', $statement) === 1);
     }
 
     protected function message(): string

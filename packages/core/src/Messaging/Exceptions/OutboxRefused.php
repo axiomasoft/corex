@@ -31,6 +31,6 @@ final class OutboxRefused extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::OutboxRefused, ErrorCategory::Conflict, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::OutboxRefused, category: ErrorCategory::Conflict, retryable: false);
     }
 }

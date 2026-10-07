@@ -2617,7 +2617,7 @@
             "layer": "spi-call",
             "since": "1.0",
             "final": true,
-            "readonly": false,
+            "readonly": true,
             "abstract": false,
             "extends": [],
             "implements": [
@@ -2647,7 +2647,7 @@
                             "variadic": false,
                             "optional": true,
                             "default": "'amount_minor'",
-                            "flags": 68
+                            "flags": 4
                         },
                         {
                             "name": "currencyColumn",
@@ -2656,7 +2656,7 @@
                             "variadic": false,
                             "optional": true,
                             "default": "'currency'",
-                            "flags": 68
+                            "flags": 4
                         }
                     ],
                     "return": null,

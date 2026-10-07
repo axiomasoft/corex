@@ -60,17 +60,17 @@ final class DatabaseImpersonationService implements ImpersonationService
     private ?ImpersonationState $memoState = null;
 
     public function __construct(
-        private ImpersonationPolicy $policy,
-        private ImpersonationGrantStore $grants,
-        private ImpersonationAuditSink $audit,
-        private AccountRead $accounts,
-        private TenantContextResolver $contexts,
-        private Session $session,
-        private AuthFactory $auth,
-        private Dispatcher $events,
-        private ClockInterface $clock,
-        private string $guard,
-        private string $centralConnection,
+        private readonly ImpersonationPolicy $policy,
+        private readonly ImpersonationGrantStore $grants,
+        private readonly ImpersonationAuditSink $audit,
+        private readonly AccountRead $accounts,
+        private readonly TenantContextResolver $contexts,
+        private readonly Session $session,
+        private readonly AuthFactory $auth,
+        private readonly Dispatcher $events,
+        private readonly ClockInterface $clock,
+        private readonly string $guard,
+        private readonly string $centralConnection,
     ) {}
 
     #[Override]
@@ -93,7 +93,7 @@ final class DatabaseImpersonationService implements ImpersonationService
             throw OidcAuthenticationException::impersonationDenied();
         }
 
-        $targetUserId = $claimed->targetUserId ?? $this->accounts->ownerIdentityId($accountId, $this->centralConnection);
+        $targetUserId = $claimed->targetUserId ?? $this->accounts->ownerIdentityId(accountId: $accountId, connectionName: $this->centralConnection);
 
         if (! is_string($targetUserId) || $targetUserId === '') {
             throw OidcAuthenticationException::loginFailed();
@@ -110,24 +110,24 @@ final class DatabaseImpersonationService implements ImpersonationService
             self::SESSION_REASON => $claimed->reason,
         ]);
 
-        $this->memoState = new ImpersonationState($grantId, $staffIdentityId, $targetUserId, $claimed->expiresAt, $claimed->reason);
+        $this->memoState = new ImpersonationState(grantId: $grantId, staffIdentityId: $staffIdentityId, targetUserId: $targetUserId, expiresAt: $claimed->expiresAt, reason: $claimed->reason);
         $this->resolved = true;
 
         try {
             $authenticated = $this->statefulGuard()->loginUsingId($targetUserId);
         } catch (Throwable) {
-            $this->failStart($accountId, $grantId, $staffIdentityId, $targetUserId, $claimed->reason, $claimed->expiresAt);
+            $this->failStart(accountId: $accountId, grantId: $grantId, staffIdentityId: $staffIdentityId, targetUserId: $targetUserId, reason: $claimed->reason, expiresAt: $claimed->expiresAt);
 
             throw OidcAuthenticationException::loginFailed();
         }
 
         if ($authenticated === false) {
-            $this->failStart($accountId, $grantId, $staffIdentityId, $targetUserId, $claimed->reason, $claimed->expiresAt);
+            $this->failStart(accountId: $accountId, grantId: $grantId, staffIdentityId: $staffIdentityId, targetUserId: $targetUserId, reason: $claimed->reason, expiresAt: $claimed->expiresAt);
 
             throw OidcAuthenticationException::loginFailed();
         }
 
-        $this->events->dispatch(new ImpersonationStarted($grantId, $staffIdentityId, $targetUserId, $claimed->reason));
+        $this->events->dispatch(new ImpersonationStarted(grantId: $grantId, staffIdentityId: $staffIdentityId, targetUserId: $targetUserId, reason: $claimed->reason));
     }
 
     #[Override]
@@ -151,7 +151,7 @@ final class DatabaseImpersonationService implements ImpersonationService
             $this->record(event: 'impersonation.ended', accountId: $accountId, staffIdentityId: $state->staffIdentityId, grantId: $state->grantId, targetUserId: $state->targetUserId, reason: (string) $state->reason, expiresAt: $state->expiresAt);
         }
 
-        $this->events->dispatch(new ImpersonationEnded($state->grantId, $state->staffIdentityId, $state->targetUserId, (string) $state->reason));
+        $this->events->dispatch(new ImpersonationEnded(grantId: $state->grantId, staffIdentityId: $state->staffIdentityId, targetUserId: $state->targetUserId, reason: (string) $state->reason));
     }
 
     #[Override]
@@ -192,7 +192,7 @@ final class DatabaseImpersonationService implements ImpersonationService
             $this->session->put(self::SESSION_REASON, $reason);
         }
 
-        return $this->memoState = new ImpersonationState($grantId, $staffId, $targetId, new DateTimeImmutable($expiresAt), $reason);
+        return $this->memoState = new ImpersonationState(grantId: $grantId, staffIdentityId: $staffId, targetUserId: $targetId, expiresAt: new DateTimeImmutable($expiresAt), reason: $reason);
     }
 
     private function failStart(string $accountId, string $grantId, string $staffIdentityId, string $targetUserId, string $reason, DateTimeImmutable $expiresAt): void

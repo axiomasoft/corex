@@ -12,7 +12,14 @@ use CoreX\Errors\Exceptions\ProblemRegistryException;
 use CoreX\Errors\Internal\CompiledProblemRegistry;
 use CoreX\Errors\Internal\ProblemContribution;
 use FilesystemIterator;
-use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Enum_;
+use PhpParser\Node\Stmt\EnumCase;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
@@ -43,13 +50,13 @@ final class ErrorSourceScanner
             $nodes = $parser->parse((string) file_get_contents($path)) ?? [];
             $traverser = new NodeTraverser(new NameResolver);
             $nodes = $traverser->traverse($nodes);
-            foreach ($finder->findInstanceOf($nodes, Node\Expr\New_::class) as $node) {
-                if (! $node->class instanceof Node\Name || ! in_array($node->class->toString(), [ErrorDescriptor::class, 'CoreX\\Operations\\Errors\\Exceptions\\ApiError'], true)) {
+            foreach ($finder->findInstanceOf($nodes, New_::class) as $node) {
+                if (! $node->class instanceof Name || ! in_array($node->class->toString(), [ErrorDescriptor::class, 'CoreX\\Operations\\Errors\\Exceptions\\ApiError'], true)) {
                     continue;
                 }
                 $code = null;
                 foreach ($node->args as $position => $argument) {
-                    if (! $argument instanceof Node\Arg) {
+                    if (! $argument instanceof Arg) {
                         continue;
                     }
 
@@ -60,9 +67,9 @@ final class ErrorSourceScanner
                     }
                 }
 
-                if ($code instanceof Node\Scalar\String_) {
+                if ($code instanceof String_) {
                     $diagnostics[] = 'ERROR-LITERAL '.$path.':'.$node->getStartLine();
-                } elseif ($code instanceof Node\Expr\ClassConstFetch && $code->class instanceof Node\Name && $code->name instanceof Node\Identifier) {
+                } elseif ($code instanceof ClassConstFetch && $code->class instanceof Name && $code->name instanceof Identifier) {
                     $constant = $code->class->toString().'::'.$code->name->toString();
                     $identity = defined($constant) ? constant($constant) : null;
 
@@ -79,12 +86,12 @@ final class ErrorSourceScanner
                     }
                 }
             }
-            foreach ($finder->findInstanceOf($nodes, Node\Stmt\Enum_::class) as $enum) {
-                if (! in_array(ErrorCode::class, array_map(static fn (Node\Name $name): string => $name->toString(), $enum->implements), true)) {
+            foreach ($finder->findInstanceOf($nodes, Enum_::class) as $enum) {
+                if (! in_array(ErrorCode::class, array_map(static fn (Name $name): string => $name->toString(), $enum->implements), true)) {
                     continue;
                 }
                 foreach ($enum->stmts as $case) {
-                    if (! $case instanceof Node\Stmt\EnumCase) {
+                    if (! $case instanceof EnumCase) {
                         continue;
                     }
 
@@ -141,7 +148,7 @@ final class ErrorSourceScanner
                 if (! is_a($class, ProblemDefinitionProvider::class, true)) {
                     continue;
                 }
-                $contributions[] = new ProblemContribution($owner, new $class, $manifest['name'], [dirname($manifestPath).'/src']);
+                $contributions[] = new ProblemContribution(owner: $owner, provider: new $class, package: $manifest['name'], sourceRoots: [dirname($manifestPath).'/src']);
             }
         }
 

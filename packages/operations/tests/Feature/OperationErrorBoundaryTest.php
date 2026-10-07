@@ -79,7 +79,7 @@ final class OperationErrorBoundaryTest extends TestCase
             category: ErrorCategory::Authorization,
         );
 
-        $mapped = (app(ErrorMapper::class))->map($error);
+        $mapped = (resolve(ErrorMapper::class))->map($error);
 
         $this->assertSame($error, $mapped);
         $this->assertSame(404, $mapped->status);
@@ -104,7 +104,7 @@ final class OperationErrorBoundaryTest extends TestCase
         $this->app->instance(ProblemRegistry::class, SyntheticErrorCode::registry());
 
         foreach (ErrorCategory::cases() as $category) {
-            $mapped = (app(ErrorMapper::class))->map(new SyntheticPackageFailure(new ErrorDescriptor(
+            $mapped = (resolve(ErrorMapper::class))->map(new SyntheticPackageFailure(new ErrorDescriptor(
                 code: SyntheticErrorCode::fromCategory($category),
                 category: $category,
                 retryable: $category === ErrorCategory::Unavailable,
@@ -127,12 +127,12 @@ final class OperationErrorBoundaryTest extends TestCase
         $reported = [];
         $this->app->instance(ExceptionHandler::class, new ErrorBoundaryCountingHandler($reported));
 
-        $mapped = (app(ErrorMapper::class))->map(new RuntimeException('private SQLSTATE secret'));
+        $mapped = (resolve(ErrorMapper::class))->map(new RuntimeException('private SQLSTATE secret'));
         $this->assertCount(1, $reported);
         $this->assertSame('core.internal_error', $mapped->errorCode);
         $this->assertSame([], JsonDocuments::map($mapped->details));
         $this->assertStringNotContainsString('secret', $mapped->getMessage());
-        $this->assertSame($mapped->errorCode, (app(ErrorMapper::class))->map($mapped)->errorCode);
+        $this->assertSame($mapped->errorCode, (resolve(ErrorMapper::class))->map($mapped)->errorCode);
         $this->assertCount(1, $reported);
 
         $this->app['router']->get('/boom/{version}', static function (): never {
@@ -159,7 +159,7 @@ final class OperationErrorBoundaryTest extends TestCase
         $this->assertStringContainsString('no-store', (string) $response->headers->get('Cache-Control'));
         $this->assertStringNotContainsString('secret', (string) $response->getContent());
         $this->assertStringNotContainsString('SQLSTATE', (string) $response->getContent());
-        $this->assertSame(ErrorCategory::Internal, (app(ErrorMapper::class))->map(new RuntimeException('x'), reportUnexpected: false)->category);
+        $this->assertSame(ErrorCategory::Internal, (resolve(ErrorMapper::class))->map(new RuntimeException('x'), reportUnexpected: false)->category);
     }
 
     public function test_a_broken_descriptor_producer_maps_to_the_safe_internal_error(): void
@@ -172,7 +172,7 @@ final class OperationErrorBoundaryTest extends TestCase
             }
         };
 
-        $mapped = (app(ErrorMapper::class))->map($error, reportUnexpected: false);
+        $mapped = (resolve(ErrorMapper::class))->map($error, reportUnexpected: false);
         $this->assertSame('core.internal_error', $mapped->errorCode);
         $this->assertSame(500, $mapped->status);
         $this->assertStringNotContainsString('secret', $mapped->getMessage());
@@ -180,7 +180,7 @@ final class OperationErrorBoundaryTest extends TestCase
 
     public function test_framework_fallbacks_stay_safe_and_gain_a_category(): void
     {
-        $mapper = app(ErrorMapper::class);
+        $mapper = resolve(ErrorMapper::class);
         $validation = $mapper->map(ValidationException::withMessages(['title' => ['Required.']]));
         $http = $mapper->map(new HttpException(409, 'private secret'));
 

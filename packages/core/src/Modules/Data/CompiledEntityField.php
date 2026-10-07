@@ -45,7 +45,7 @@ final readonly class CompiledEntityField
     public static function fromArray(array $data): self
     {
         return new self(
-            extender: CompiledRegistry::extenderFromArray(EntityField::class, $data['extender']),
+            extender: CompiledRegistry::extenderFromArray(class: EntityField::class, data: $data['extender']),
             declaringModule: $data['declaringModule'],
             sleeping: $data['sleeping'],
         );

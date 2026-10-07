@@ -48,7 +48,7 @@ final readonly class CompositeFieldCatalogue implements FieldCatalogue
                 $existingId = $byKey[$key] ?? null;
 
                 if ($existingId !== null && $existingId !== $id) {
-                    $this->conflict('same_key_different_id', $sourceName, Value::text($key));
+                    $this->conflict(reason: 'same_key_different_id', source: $sourceName, key: Value::text($key));
                 }
 
                 if (! isset($byId[$id])) {
@@ -86,16 +86,16 @@ final readonly class CompositeFieldCatalogue implements FieldCatalogue
                     $aliases = [...Value::strings($newer['read_keys']), ...Value::strings($newer['write_keys'])];
 
                     if ($newer['lifecycle'] !== 'migrating' || ! in_array($older['key'], $aliases, true)) {
-                        $this->conflict('same_id_different_key_without_migrating_alias', $sourceName, Value::text($key));
+                        $this->conflict(reason: 'same_id_different_key_without_migrating_alias', source: $sourceName, key: Value::text($key));
                     }
                 }
 
                 if (Value::integer($current['revision']) === Value::integer($field['revision'])) {
                     if ($current['type'] !== $field['type']) {
-                        $this->conflict('same_id_revision_different_type', $sourceName, Value::text($key));
+                        $this->conflict(reason: 'same_id_revision_different_type', source: $sourceName, key: Value::text($key));
                     }
 
-                    $this->conflict('same_id_revision_flags_constraints_index_differ', $sourceName, Value::text($key));
+                    $this->conflict(reason: 'same_id_revision_flags_constraints_index_differ', source: $sourceName, key: Value::text($key));
                 }
 
                 $winner = Value::integer($field['revision']) > Value::integer($current['revision'])
@@ -111,7 +111,7 @@ final readonly class CompositeFieldCatalogue implements FieldCatalogue
         usort($fields, static fn (array $left, array $right): int => [$left['key'], $left['id'] ?? ''] <=> [$right['key'], $right['id'] ?? '']);
         $hash = hash('sha256', $entity."\n".$this->canonical($fields));
 
-        $fields = Validation::validatedMapList($fields, 'active fields');
+        $fields = Validation::validatedMapList(values: $fields, name: 'active fields');
 
         return new FieldSnapshot(
             entity: $entity,
@@ -148,7 +148,7 @@ final readonly class CompositeFieldCatalogue implements FieldCatalogue
         }
         $attributeId = Value::text($incoming['id'] ?? '');
 
-        if (! $this->policy->allowsShadow($incomingSource, $existing['source'], Value::text($attributeId), $difference)) {
+        if (! $this->policy->allowsShadow(higher: $incomingSource, lower: $existing['source'], attributeId: Value::text($attributeId), difference: $difference)) {
             return null;
         }
 

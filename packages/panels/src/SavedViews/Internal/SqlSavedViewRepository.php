@@ -24,20 +24,20 @@ use Psr\Clock\ClockInterface;
 use RuntimeException;
 
 /** @internal */
-final class SqlSavedViewRepository implements SavedViewRepository
+final readonly class SqlSavedViewRepository implements SavedViewRepository
 {
     public function __construct(
-        private readonly ViewSchemaProvider $schemas,
-        private readonly ViewAccessPolicy $policy,
-        private readonly ViewConfigValidator $validator,
-        private readonly CoreOptions $options,
-        private readonly DatabaseManager $database,
-        private readonly ClockInterface $clock,
+        private ViewSchemaProvider $schemas,
+        private ViewAccessPolicy $policy,
+        private ViewConfigValidator $validator,
+        private CoreOptions $options,
+        private DatabaseManager $database,
+        private ClockInterface $clock,
     ) {}
 
     public function viewsFor(ViewContext $context, ViewScope $scope): array
     {
-        $this->authorize($context, ViewAction::Read, $scope, null);
+        $this->authorize(context: $context, action: ViewAction::Read, scope: $scope, viewId: null);
 
         return array_values($this->db()->table($this->viewsTable())->where('entity_code', $scope->entityHandle)
             ->where('scope_key', $this->scopeKey($scope))->orderBy('position')->get()
@@ -46,9 +46,9 @@ final class SqlSavedViewRepository implements SavedViewRepository
 
     public function save(ViewContext $context, SaveViewInput $input): SavedViewRef
     {
-        $this->authorize($context, $input->id === null ? ViewAction::Create : ViewAction::Update, $input->scope, $input->id);
-        $schema = $this->schemas->schema($context, $input->scope->entityHandle);
-        $normalized = $this->validator->validate(JsonDocuments::map($input->config), $schema);
+        $this->authorize(context: $context, action: $input->id === null ? ViewAction::Create : ViewAction::Update, scope: $input->scope, viewId: $input->id);
+        $schema = $this->schemas->schema(context: $context, entityHandle: $input->scope->entityHandle);
+        $normalized = $this->validator->validate(config: JsonDocuments::map($input->config), schema: $schema);
 
         if ($input->kind === '' || count($input->localizedName) === 0 || strlen(json_encode(JsonDocuments::map($input->config), JSON_THROW_ON_ERROR)) > 65_536) {
             throw new InvalidArgumentException('Invalid saved view input.');
@@ -56,15 +56,15 @@ final class SqlSavedViewRepository implements SavedViewRepository
 
         return $this->db()->transaction(function () use ($context, $input, $schema, $normalized): SavedViewRef {
             $scopeKey = $this->scopeKey($input->scope);
-            $this->lockScope($input->scope, $scopeKey);
+            $this->lockScope(scope: $input->scope, scopeKey: $scopeKey);
             $table = $this->viewsTable();
 
             if ($input->id === null) {
                 $id = (string) Str::uuid7();
                 $isDefault = ! $this->db()->table($table)->where('entity_code', $input->scope->entityHandle)->where('scope_key', $scopeKey)->exists();
-                $this->db()->table($table)->insert($this->payload($context, $input, $schema->version, $scopeKey, $id, '1', $isDefault, $normalized));
+                $this->db()->table($table)->insert($this->payload(context: $context, input: $input, schemaVersion: $schema->version, scopeKey: $scopeKey, id: $id, revision: '1', isDefault: $isDefault, normalized: $normalized));
 
-                return new SavedViewRef($id, $input->scope, $input->kind, '1', $isDefault);
+                return new SavedViewRef(id: $id, scope: $input->scope, kind: $input->kind, revision: '1', isDefault: $isDefault);
             }
             $row = $this->db()->table($table)->where('id', $input->id)->lockForUpdate()->first();
 
@@ -72,11 +72,11 @@ final class SqlSavedViewRepository implements SavedViewRepository
                 throw new RuntimeException('Saved view revision conflict.');
             }
             $revision = (string) (Value::integer($row->revision) + 1);
-            $payload = $this->payload($context, $input, $schema->version, $scopeKey, $input->id, $revision, (bool) $row->is_default, $normalized);
+            $payload = $this->payload(context: $context, input: $input, schemaVersion: $schema->version, scopeKey: $scopeKey, id: $input->id, revision: $revision, isDefault: (bool) $row->is_default, normalized: $normalized);
             unset($payload['created_at'], $payload['created_by']);
             $this->db()->table($table)->where('id', $input->id)->update($payload);
 
-            return new SavedViewRef($input->id, $input->scope, $input->kind, $revision, (bool) $row->is_default);
+            return new SavedViewRef(id: $input->id, scope: $input->scope, kind: $input->kind, revision: $revision, isDefault: (bool) $row->is_default);
         });
     }
 
@@ -89,8 +89,8 @@ final class SqlSavedViewRepository implements SavedViewRepository
                 return;
             }
             $scope = $this->scopeFrom($row);
-            $this->authorize($context, ViewAction::Delete, $scope, $viewId);
-            $this->lockScope($scope, Value::text($row->scope_key));
+            $this->authorize(context: $context, action: ViewAction::Delete, scope: $scope, viewId: $viewId);
+            $this->lockScope(scope: $scope, scopeKey: Value::text($row->scope_key));
             $this->db()->table($this->viewsTable())->where('id', $viewId)->delete();
 
             if ((bool) $row->is_default) {
@@ -112,12 +112,12 @@ final class SqlSavedViewRepository implements SavedViewRepository
                 throw new RuntimeException('Saved view not found.');
             }
             $scope = $this->scopeFrom($row);
-            $this->authorize($context, ViewAction::SetDefault, $scope, $viewId);
-            $this->lockScope($scope, Value::text($row->scope_key));
+            $this->authorize(context: $context, action: ViewAction::SetDefault, scope: $scope, viewId: $viewId);
+            $this->lockScope(scope: $scope, scopeKey: Value::text($row->scope_key));
             $this->db()->table($this->viewsTable())->where('entity_code', $row->entity_code)->where('scope_key', $row->scope_key)->update(['is_default' => false, 'default_scope_key' => null]);
             $this->db()->table($this->viewsTable())->where('id', $viewId)->update(['is_default' => true, 'default_scope_key' => $row->scope_key]);
 
-            return new SavedViewRef(Value::text($row->id), $scope, Value::text($row->kind), Value::text($row->revision), true);
+            return new SavedViewRef(id: Value::text($row->id), scope: $scope, kind: Value::text($row->kind), revision: Value::text($row->revision), isDefault: true);
         });
     }
 
@@ -129,16 +129,16 @@ final class SqlSavedViewRepository implements SavedViewRepository
             throw new RuntimeException('Saved view not found.');
         }
         $scope = $this->scopeFrom($row);
-        $this->authorize($context, ViewAction::Read, $scope, $viewId);
-        $schema = $this->schemas->schema($context, $scope->entityHandle);
+        $this->authorize(context: $context, action: ViewAction::Read, scope: $scope, viewId: $viewId);
+        $schema = $this->schemas->schema(context: $context, entityHandle: $scope->entityHandle);
 
         if ($schema->version !== $row->schema_version) {
             throw new RuntimeException('Unsupported saved view schema.');
         }
         $config = json_decode(Value::text($row->config), true, flags: JSON_THROW_ON_ERROR);
-        $validated = $this->validator->validate(Value::map($config), $schema);
+        $validated = $this->validator->validate(config: Value::map($config), schema: $schema);
 
-        return new SavedQuery($schema->version, JsonDocuments::capture($validated['filters']), $validated['sorts'], $validated['columns'], $validated['groupBy']);
+        return new SavedQuery(schemaVersion: $schema->version, filters: JsonDocuments::capture($validated['filters']), sort: $validated['sorts'], projection: $validated['columns'], groupBy: $validated['groupBy']);
     }
 
     /**
@@ -154,7 +154,7 @@ final class SqlSavedViewRepository implements SavedViewRepository
 
     private function authorize(ViewContext $context, ViewAction $action, ViewScope $scope, ?string $viewId): void
     {
-        if (! $this->policy->allows($context, $action, new ViewSubject($scope, $viewId))) {
+        if (! $this->policy->allows(context: $context, action: $action, subject: new ViewSubject(scope: $scope, viewId: $viewId))) {
             throw new RuntimeException('Saved view action denied.');
         }
     }
@@ -172,12 +172,12 @@ final class SqlSavedViewRepository implements SavedViewRepository
 
     private function scopeFrom(object $row): ViewScope
     {
-        return new ViewScope(Value::text(Value::field($row, 'entity_code')), Value::nullableText(Value::field($row, 'workspace_id')), Value::nullableText(Value::field($row, 'owner_kind')), Value::nullableText(Value::field($row, 'owner_id')));
+        return new ViewScope(entityHandle: Value::text(Value::field(row: $row, name: 'entity_code')), workspaceId: Value::nullableText(Value::field(row: $row, name: 'workspace_id')), ownerKind: Value::nullableText(Value::field(row: $row, name: 'owner_kind')), ownerId: Value::nullableText(Value::field(row: $row, name: 'owner_id')));
     }
 
     private function reference(object $row): SavedViewRef
     {
-        return new SavedViewRef(Value::text(Value::field($row, 'id')), $this->scopeFrom($row), Value::text(Value::field($row, 'kind')), Value::text(Value::field($row, 'revision')), (bool) Value::field($row, 'is_default'));
+        return new SavedViewRef(id: Value::text(Value::field(row: $row, name: 'id')), scope: $this->scopeFrom($row), kind: Value::text(Value::field(row: $row, name: 'kind')), revision: Value::text(Value::field(row: $row, name: 'revision')), isDefault: (bool) Value::field(row: $row, name: 'is_default'));
     }
 
     private function db(): ConnectionInterface

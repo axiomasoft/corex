@@ -38,7 +38,7 @@ it('denies mismatched, restarted, and equality-bound clock readings', function (
 
 it('cancels a paused owner before its delayed commit can publish', function (): void {
     $this->expiryStore->admit(key: $this->expiryKey, operationId: EXPIRY_OPERATION);
-    $state = (new ExpiryScheduler(pairs: $this->expiryStore))->expire(key: $this->expiryKey, barrierId: EXPIRY_BARRIER);
+    $state = new ExpiryScheduler(pairs: $this->expiryStore)->expire(key: $this->expiryKey, barrierId: EXPIRY_BARRIER);
 
     expect($state->denied)->toBeTrue()
         ->and($this->expiryStore->commit(key: $this->expiryKey, operationId: EXPIRY_OPERATION))->toBeFalse();

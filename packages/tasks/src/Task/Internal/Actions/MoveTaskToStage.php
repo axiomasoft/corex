@@ -26,14 +26,14 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Validation\ValidationException;
 
-final class MoveTaskToStage implements MoveTaskToStageCommand
+final readonly class MoveTaskToStage implements MoveTaskToStageCommand
 {
     public function __construct(
-        private readonly TaskModuleGuard $moduleGuard,
-        private readonly TaskAccess $access,
-        private readonly TaskCompletion $completion,
-        private readonly ProjectRead $projects,
-        private readonly Dispatcher $events,
+        private TaskModuleGuard $moduleGuard,
+        private TaskAccess $access,
+        private TaskCompletion $completion,
+        private ProjectRead $projects,
+        private Dispatcher $events,
     ) {}
 
     public function handle(MoveTaskToStageData $data): TaskReference
@@ -61,22 +61,22 @@ final class MoveTaskToStage implements MoveTaskToStageCommand
         $stage = Stage::on($connectionName)->find($data->stageId);
 
         if ($task === null) {
-            $this->invalid('task_id', 'Задача не найдена в текущем аккаунте.');
+            $this->invalid(field: 'task_id', message: 'Задача не найдена в текущем аккаунте.');
         }
 
         if ($context->workspace !== null && $context->workspace->id !== $task->workspace_id) {
-            $this->invalid('task_id', 'Задача не принадлежит текущему рабочему пространству.');
+            $this->invalid(field: 'task_id', message: 'Задача не принадлежит текущему рабочему пространству.');
         }
 
         if ($stage === null || $task->project_id === null || $stage->project_id !== $task->project_id) {
-            $this->invalid('stage_id', 'Стадия не принадлежит проекту задачи.');
+            $this->invalid(field: 'stage_id', message: 'Стадия не принадлежит проекту задачи.');
         }
 
         /** @var ProjectView|null $project */
-        $project = $this->projects->find($stage->project_id, $connectionName);
+        $project = $this->projects->find(id: $stage->project_id, connectionName: $connectionName);
 
         if ($project === null || $project->workspaceId !== $task->workspace_id) {
-            $this->invalid('stage_id', 'Проект стадии не принадлежит рабочему пространству задачи.');
+            $this->invalid(field: 'stage_id', message: 'Проект стадии не принадлежит рабочему пространству задачи.');
         }
 
         if ($task->stage_id === $stage->id) {
@@ -92,7 +92,7 @@ final class MoveTaskToStage implements MoveTaskToStageCommand
         }
 
         if ($stage->auto_status === TaskStatus::Done) {
-            $completed = $this->completion->apply($task, new CompleteTaskData(taskId: $task->id, actor: $data->actor), $context);
+            $completed = $this->completion->apply(task: $task, data: new CompleteTaskData(taskId: $task->id, actor: $data->actor), context: $context);
         }
 
         $task->save();
@@ -100,13 +100,12 @@ final class MoveTaskToStage implements MoveTaskToStageCommand
         if ($completed) {
             $this->events->dispatch(new TaskCompleted(TaskSnapshot::fromTask($task)));
         }
-        $this->events->dispatch(new TaskMovedToStage(TaskSnapshot::fromTask($task), new StageView($stage->id, $stage->project_id, $stage->name, (bool) $stage->getAttribute('is_final'))));
+        $this->events->dispatch(new TaskMovedToStage(task: TaskSnapshot::fromTask($task), stage: new StageView(id: $stage->id, projectId: $stage->project_id, name: $stage->name, isFinal: (bool) $stage->getAttribute('is_final'))));
 
         return TaskReferenceFactory::fromTask($task);
     }
 
-    /** @return never */
-    private function invalid(string $field, string $message): void
+    private function invalid(string $field, string $message): never
     {
         throw ValidationException::withMessages([$field => [$message]]);
     }

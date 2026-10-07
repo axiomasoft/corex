@@ -23,6 +23,6 @@ final class NoDefaultWorkspaceException extends CodedException
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TenancyErrorCode::NoDefaultWorkspaceException, ErrorCategory::NotFound, retryable: false);
+        return new ErrorDescriptor(code: TenancyErrorCode::NoDefaultWorkspaceException, category: ErrorCategory::NotFound, retryable: false);
     }
 }

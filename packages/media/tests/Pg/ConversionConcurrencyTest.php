@@ -36,7 +36,7 @@ it('uses a PostgreSQL file-row lock across independent connections', function ()
     });
     app()->forgetScopedInstances();
 
-    $file = app(MediaLibrary::class)->store(
+    $file = resolve(MediaLibrary::class)->store(
         pgConversionContext(),
         new UploadInput('pg-lock-request', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.txt', 'postgres lock')), 'attachment'),
     );

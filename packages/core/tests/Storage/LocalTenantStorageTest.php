@@ -43,7 +43,7 @@ afterEach(function (): void {
 });
 
 it('isolates durable and ephemeral storage by the current account and invalidates retained handles', function (): void {
-    $storage = app(TenantStorage::class);
+    $storage = resolve(TenantStorage::class);
     $accountA = $storage->disk();
 
     expect($storage->usageBytes())->toBe(0);
@@ -66,7 +66,7 @@ it('isolates durable and ephemeral storage by the current account and invalidate
 });
 
 it('rejects path escape and reports unsupported export explicitly', function (): void {
-    $storage = app(TenantStorage::class);
+    $storage = resolve(TenantStorage::class);
 
     expect(fn () => $storage->disk()->put('../escape.txt', 'no'))->toThrow(StorageOperationFailed::class)
         ->and(fn () => $storage->disk()->put('%252e%252e/escape.txt', 'no'))->toThrow(StorageOperationFailed::class)
@@ -75,7 +75,7 @@ it('rejects path escape and reports unsupported export explicitly', function ():
 });
 
 it('keeps all relative filesystem operations inside the account root', function (): void {
-    $storage = app(TenantStorage::class);
+    $storage = resolve(TenantStorage::class);
     $disk = $storage->disk();
     $source = $this->storageRoot.'/source.txt';
     file_put_contents($source, 'uploaded');
@@ -90,7 +90,7 @@ it('keeps all relative filesystem operations inside the account root', function 
 });
 
 it('rejects symbolic links within an account root', function (): void {
-    $storage = app(TenantStorage::class);
+    $storage = resolve(TenantStorage::class);
     $disk = $storage->disk();
     $disk->put('source.txt', 'secret');
     $root = $this->storageRoot.'/durable/tenants/11111111-1111-7111-8111-111111111111';
@@ -101,18 +101,18 @@ it('rejects symbolic links within an account root', function (): void {
 });
 
 it('rejects encoded backslashes and NUL bytes before the driver sees them', function (string $path): void {
-    expect(fn () => app(TenantStorage::class)->disk()->put($path, 'unsafe'))
+    expect(fn () => resolve(TenantStorage::class)->disk()->put($path, 'unsafe'))
         ->toThrow(StorageOperationFailed::class);
 })->with(['%5cescape.txt', '%255cescape.txt', 'document%00.txt', 'document%2500.txt']);
 
 it('rejects a replaced account root even when listing without a directory', function (): void {
-    $disk = app(TenantStorage::class)->disk();
+    $disk = resolve(TenantStorage::class)->disk();
     $disk->put('document.txt', 'owned');
     $root = dirname($disk->path('document.txt'));
     rename($root, $root.'-original');
     symlink($root.'-original', $root);
 
     expect(fn () => $disk->allFiles())->toThrow(StorageOperationFailed::class);
-    expect(fn () => app(TenantStorage::class)->usageBytes())->toThrow(StorageOperationFailed::class);
+    expect(fn () => resolve(TenantStorage::class)->usageBytes())->toThrow(StorageOperationFailed::class);
     unlink($root);
 });

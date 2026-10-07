@@ -39,7 +39,7 @@ final class TenancyRuntimeFactory
     public static function manager(Application $app): DatabaseTenancyManager
     {
         $options = $app->make(TenancyOptions::class);
-        (new TenantFacilitiesValidator($app->make(FrameworkConfig::class), $options))->assertValid();
+        new TenantFacilitiesValidator(config: $app->make(FrameworkConfig::class), options: $options)->assertValid();
 
         $bootstrappers = [];
 

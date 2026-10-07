@@ -15,10 +15,10 @@ use NumberFormatter;
 use Override;
 use Throwable;
 
-final class PlainMoneyFormatter implements MoneyFormatter
+final readonly class PlainMoneyFormatter implements MoneyFormatter
 {
     public function __construct(
-        private readonly bool $icuEnabled,
+        private bool $icuEnabled,
     ) {}
 
     #[Override]

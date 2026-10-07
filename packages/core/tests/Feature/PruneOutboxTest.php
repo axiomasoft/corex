@@ -49,7 +49,7 @@ function pruneOutboxInstallSchema(): void
 
 function pruneOutboxInsertRow(array $overrides = []): void
 {
-    $now = app(ClockInterface::class)->now();
+    $now = resolve(ClockInterface::class)->now();
 
     DB::table('sys_outbox_messages')->insert([
         'id' => $overrides['id'] ?? 'msg-prune-1',
@@ -85,7 +85,7 @@ beforeEach(function (): void {
 });
 
 it('prunes published rows older than the published window and keeps newer ones', function (): void {
-    $now = app(ClockInterface::class)->now();
+    $now = resolve(ClockInterface::class)->now();
     pruneOutboxInsertRow([
         'id' => 'pub-old',
         'status' => 'published',
@@ -104,7 +104,7 @@ it('prunes published rows older than the published window and keeps newer ones',
 });
 
 it('prunes dead rows by the dead window not the published window', function (): void {
-    $now = app(ClockInterface::class)->now();
+    $now = resolve(ClockInterface::class)->now();
     pruneOutboxInsertRow([
         'id' => 'dead-old',
         'status' => 'dead',
@@ -126,7 +126,7 @@ it('prunes dead rows by the dead window not the published window', function (): 
 });
 
 it('never prunes pending or publishing rows', function (): void {
-    $now = app(ClockInterface::class)->now();
+    $now = resolve(ClockInterface::class)->now();
     pruneOutboxInsertRow([
         'id' => 'pending-1',
         'status' => 'pending',
@@ -147,7 +147,7 @@ it('never prunes pending or publishing rows', function (): void {
 });
 
 it('does not touch sys_inbox_messages', function (): void {
-    $now = app(ClockInterface::class)->now();
+    $now = resolve(ClockInterface::class)->now();
     pruneOutboxInsertRow([
         'id' => 'pub-stale',
         'status' => 'published',

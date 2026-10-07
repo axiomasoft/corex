@@ -36,7 +36,7 @@ final class InvocationFixtures
 
     public static function sqlBudget(Connection $connection, ClockInterface $clock, SecretRef $scopeHmacSecret, int $capacity = 100, int $restoreRate = 10): OperationBudget
     {
-        return new SqlOperationBudget($connection, $clock, $scopeHmacSecret, capacity: $capacity, restoreRate: $restoreRate);
+        return new SqlOperationBudget(connection: $connection, clock: $clock, scopeHmacSecret: $scopeHmacSecret, capacity: $capacity, restoreRate: $restoreRate);
     }
 
     /**
@@ -45,6 +45,6 @@ final class InvocationFixtures
      */
     public static function costInvoker(ModuleRegistry $modules, ClientScopeAuthorizer $clientScopes, OperationAuthorizer $authorizer, OperationFieldAuthorizer $fields, Container $container, OperationBudget $budget, string $installationId, Closure $costInput, Closure $clientId): OperationInvoker
     {
-        return new DefaultOperationInvoker($modules, $clientScopes, $authorizer, $fields, $container, new BudgetAdmission($budget, self::declaredCosts(), $installationId, $costInput, $clientId));
+        return new DefaultOperationInvoker(modules: $modules, clientScopes: $clientScopes, authorizer: $authorizer, fields: $fields, container: $container, budget: new BudgetAdmission(budget: $budget, estimator: self::declaredCosts(), installationId: $installationId, costInput: $costInput, clientId: $clientId));
     }
 }

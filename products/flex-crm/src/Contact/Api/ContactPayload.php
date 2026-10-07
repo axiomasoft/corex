@@ -24,7 +24,7 @@ final class ContactPayload
             'phones' => $contact->phones,
             'emails' => $contact->emails,
             'source_id' => $contact->source_id === null ? null : (string) $contact->source_id,
-            'owner_id' => $contact->owner_id === null ? null : $contact->owner_id,
+            'owner_id' => $contact->owner_id ?? null,
         ];
     }
 }

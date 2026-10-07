@@ -492,7 +492,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\AccessAzguard\\Internal\\WorkspacePermissionLayer": {
         "abstract": false,
@@ -1175,7 +1175,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Access\\Contracts\\AccessChecker": {
         "abstract": false,
@@ -1950,7 +1950,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Access\\Internal\\AccessSchemaSets": {
         "abstract": false,
@@ -4155,7 +4155,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Audit\\Internal\\CurrentActor": {
         "abstract": false,
@@ -4207,7 +4207,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Audit\\Internal\\CurrentActorResolver": {
         "abstract": false,
@@ -4381,7 +4381,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Audit\\Internal\\RecordAuditEntry": {
         "abstract": false,
@@ -7034,7 +7034,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Context\\Internal\\NullImpersonationService": {
         "abstract": false,
@@ -7172,7 +7172,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Context\\Internal\\SingleAccountResolver": {
         "abstract": false,
@@ -10025,7 +10025,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\CustomFields\\Internal\\SchemaOperationConflict": {
         "abstract": false,
@@ -10109,24 +10109,6 @@
                     }
                 ],
                 "return": "",
-                "static": false
-            },
-            "invalidate": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "scope",
-                        "type": "CoreX\\Data\\Data\\DataScope",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "entity",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
                 "static": false
             },
             "snapshot": {
@@ -14086,7 +14068,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Database\\Laravel\\BaseModel": {
         "abstract": true,
@@ -14754,7 +14736,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Departments\\Internal\\Models\\Department": {
         "abstract": false,
@@ -16707,7 +16689,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Features\\Internal\\Models\\FeatureFlag": {
         "abstract": false,
@@ -17705,7 +17687,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Intl\\Currency\\Internal\\RateSnapshotMapper": {
         "abstract": false,
@@ -17812,7 +17794,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Intl\\Currency\\Internal\\SqlRateProvider": {
         "abstract": false,
@@ -17851,7 +17833,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Intl\\Currency\\Internal\\Value": {
         "abstract": false,
@@ -18460,7 +18442,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Intl\\Internal\\IntlConfigSection": {
         "abstract": false,
@@ -19286,7 +19268,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Intl\\Locale\\Internal\\DefaultLocaleResolver": {
         "abstract": false,
@@ -19331,7 +19313,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Intl\\Locale\\Internal\\LocalePolicyBuilder": {
         "abstract": false,
@@ -19366,11 +19348,6 @@
         "internal": true,
         "kind": "class",
         "methods": {
-            "clear": {
-                "params": [],
-                "return": "void",
-                "static": false
-            },
             "current": {
                 "params": [],
                 "return": "?CoreX\\Intl\\Locale\\Data\\LocaleResolution",
@@ -19620,7 +19597,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Intl\\Territory\\Contracts\\AddressSuggestProvider": {
         "abstract": false,
@@ -20847,7 +20824,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Intl\\Territory\\Internal\\Address\\FixtureAddressSuggestProvider": {
         "abstract": false,
@@ -20898,7 +20875,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Intl\\Territory\\Internal\\Address\\MapAddressSuggestProvider": {
         "abstract": false,
@@ -20955,7 +20932,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Intl\\Territory\\Internal\\Address\\UnsupportedAddressSuggestProvider": {
         "abstract": false,
@@ -21000,7 +20977,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Intl\\Territory\\Internal\\Reference\\AbstractFixtureReferenceProvider": {
         "abstract": true,
@@ -21382,7 +21359,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Intl\\Territory\\Internal\\Reference\\SqlGeographyProvider": {
         "abstract": false,
@@ -21464,7 +21441,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Intl\\Territory\\Internal\\Value": {
         "abstract": false,
@@ -21761,7 +21738,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Media\\Contracts\\ConversionDriver": {
         "abstract": false,
@@ -23409,7 +23386,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Media\\Internal\\ConversionProfiles": {
         "abstract": false,
@@ -23453,18 +23430,6 @@
                     }
                 ],
                 "return": "?CoreX\\Media\\Contracts\\ConversionDriver",
-                "static": false
-            },
-            "profile": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "profile",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "?CoreX\\Media\\Data\\ConversionProfile",
                 "static": false
             }
         },
@@ -23553,7 +23518,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Media\\Internal\\Jobs\\ConvertMedia": {
         "abstract": false,
@@ -24883,7 +24848,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Media\\Internal\\MediaSchemaSets": {
         "abstract": false,
@@ -25044,7 +25009,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Media\\Internal\\SqlRelationLookup": {
         "abstract": false,
@@ -25144,7 +25109,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Media\\Internal\\Support\\MediaConfigSection": {
         "abstract": false,
@@ -27317,7 +27282,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Messaging\\Internal\\DefaultWorkerRuntime": {
         "abstract": false,
@@ -27354,7 +27319,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Messaging\\Internal\\DomainEventDefaults": {
         "abstract": false,
@@ -27611,7 +27576,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Messaging\\Internal\\PrunePubSubMessages": {
         "abstract": false,
@@ -27732,7 +27697,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Messaging\\Internal\\SqlDeliveryHealth": {
         "abstract": false,
@@ -34109,7 +34074,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Modules\\Internal\\Definition\\ModuleDependency": {
         "abstract": false,
@@ -34131,18 +34096,6 @@
                         "byRef": false,
                         "default": "*",
                         "name": "constraint",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "self",
-                "static": true
-            },
-            "phpExtension": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "extension",
                         "type": "string",
                         "variadic": false
                     }
@@ -34212,7 +34165,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Modules\\Internal\\Events\\ManifestListeners": {
         "abstract": false,
@@ -34273,74 +34226,11 @@
         "internal": true,
         "kind": "class",
         "methods": {
-            "pages": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "pages",
-                        "type": "array",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": "app",
-                        "name": "panel",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "self",
-                "static": true
-            },
             "resources": {
                 "params": [
                     {
                         "byRef": false,
                         "name": "resources",
-                        "type": "array",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": "app",
-                        "name": "panel",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "self",
-                "static": true
-            },
-            "tab": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "entityHandle",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "tabClass",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": "app",
-                        "name": "panel",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "self",
-                "static": true
-            },
-            "widgets": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "widgets",
                         "type": "array",
                         "variadic": false
                     },
@@ -34407,42 +34297,6 @@
                 "return": "self",
                 "static": false
             },
-            "badge": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "badgeResolverClass",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "self",
-                "static": false
-            },
-            "group": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "panel",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "handle",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "label",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "self",
-                "static": true
-            },
             "icon": {
                 "params": [
                     {
@@ -34490,18 +34344,6 @@
                     {
                         "byRef": false,
                         "name": "permission",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "self",
-                "static": false
-            },
-            "route": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "routeName",
                         "type": "string",
                         "variadic": false
                     }
@@ -34614,18 +34456,6 @@
                 ],
                 "return": "self",
                 "static": false
-            },
-            "web": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "file",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "self",
-                "static": true
             }
         },
         "parent": null,
@@ -34667,18 +34497,6 @@
         "internal": true,
         "kind": "class",
         "methods": {
-            "stepType": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "stepClass",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "self",
-                "static": true
-            },
             "trigger": {
                 "params": [
                     {
@@ -35136,7 +34954,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Modules\\Internal\\Lifecycle\\DatabaseModuleStateReader": {
         "abstract": false,
@@ -35182,7 +35000,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Modules\\Internal\\Lifecycle\\DatabaseRecordsRegistrar": {
         "abstract": false,
@@ -35277,7 +35095,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Modules\\Internal\\ReadRegistryIntrospection": {
         "abstract": false,
@@ -35409,7 +35227,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Modules\\Internal\\Registry\\ArrayModuleStateReader": {
         "abstract": false,
@@ -35449,7 +35267,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Modules\\Internal\\Registry\\CompiledModuleRegistry": {
         "abstract": false,
@@ -35645,7 +35463,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Modules\\Internal\\ServiceProviderModuleRegistrar": {
         "abstract": false,
@@ -35782,16 +35600,6 @@
                 "static": true
             },
             "sensitive": {
-                "params": [],
-                "return": "self",
-                "static": false
-            },
-            "userScoped": {
-                "params": [],
-                "return": "self",
-                "static": false
-            },
-            "workspaceScoped": {
                 "params": [],
                 "return": "self",
                 "static": false
@@ -36286,7 +36094,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Modules\\PHPStan\\Rules\\NoEvalRule": {
         "abstract": false,
@@ -36374,7 +36182,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Modules\\PHPStan\\Rules\\NoFsOutsideModuleRule": {
         "abstract": false,
@@ -36424,7 +36232,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Modules\\PHPStan\\Rules\\NoListenNotifyRule": {
         "abstract": false,
@@ -36681,7 +36489,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Modules\\Testing\\ExtensionContract": {
         "abstract": false,
@@ -37524,7 +37332,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Notifications\\Delivery\\Internal\\DeliveryStore": {
         "abstract": false,
@@ -37651,7 +37459,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Notifications\\Delivery\\Internal\\InAppChannelDriver": {
         "abstract": false,
@@ -38603,7 +38411,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Notifications\\Digest\\Internal\\DigestWakeupHandler": {
         "abstract": false,
@@ -38652,540 +38460,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
-    },
-    "CoreX\\Notifications\\Digest\\Internal\\Jobs\\DeliverDigest": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "Illuminate\\Contracts\\Queue\\ShouldQueue"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "deliveryId",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "__serialize": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "__unserialize": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "values",
-                        "type": "array",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "afterCommit": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "allOnConnection": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "connection",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "allOnQueue": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "queue",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "appendToChain": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "job",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "assertDeleted": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "assertDoesntHaveChain": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "assertFailed": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "assertFailedWith": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "exception",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "assertHasChain": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "expectedChain",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "assertNotDeleted": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "assertNotFailed": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "assertNotReleased": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "assertReleased": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "delay",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "attempts": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "beforeCommit": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "chain": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "chain",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "delay": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "delay",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "delete": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "dispatch": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "arguments",
-                        "type": "",
-                        "variadic": true
-                    }
-                ],
-                "return": "",
-                "static": true
-            },
-            "dispatchAfterResponse": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "arguments",
-                        "type": "",
-                        "variadic": true
-                    }
-                ],
-                "return": "",
-                "static": true
-            },
-            "dispatchIf": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "boolean",
-                        "type": "",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "arguments",
-                        "type": "",
-                        "variadic": true
-                    }
-                ],
-                "return": "",
-                "static": true
-            },
-            "dispatchNextJobInChain": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "dispatchSync": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "arguments",
-                        "type": "",
-                        "variadic": true
-                    }
-                ],
-                "return": "",
-                "static": true
-            },
-            "dispatchUnless": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "boolean",
-                        "type": "",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "arguments",
-                        "type": "",
-                        "variadic": true
-                    }
-                ],
-                "return": "",
-                "static": true
-            },
-            "fail": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "exception",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "handle": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "coordinator",
-                        "type": "CoreX\\Notifications\\Delivery\\Contracts\\DeliveryExecution",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": false
-            },
-            "invokeChainCatchCallbacks": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "e",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "onConnection": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "connection",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "onGroup": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "group",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "onQueue": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "queue",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "prependToChain": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "job",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "release": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "default": 0,
-                        "name": "delay",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "restoreModel": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "value",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "setJob": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "job",
-                        "type": "Illuminate\\Contracts\\Queue\\Job",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "through": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "middleware",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "withChain": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "chain",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": true
-            },
-            "withDeduplicator": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "deduplicator",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "withFakeQueueInteractions": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "withoutDelay": {
-                "params": [],
-                "return": "",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "afterCommit": {
-                "name": "afterCommit",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "chainCatchCallbacks": {
-                "name": "chainCatchCallbacks",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "chainConnection": {
-                "name": "chainConnection",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "chainQueue": {
-                "name": "chainQueue",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "chained": {
-                "name": "chained",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "connection": {
-                "name": "connection",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "debounceOwner": {
-                "name": "debounceOwner",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "deduplicator": {
-                "name": "deduplicator",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "delay": {
-                "name": "delay",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "deliveryId": {
-                "name": "deliveryId",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "job": {
-                "name": "job",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "messageGroup": {
-                "name": "messageGroup",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "middleware": {
-                "name": "middleware",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "queue": {
-                "name": "queue",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "tries": {
-                "name": "tries",
-                "readonly": false,
-                "static": false,
-                "type": "int"
-            },
-            "uniqueLockOwner": {
-                "name": "uniqueLockOwner",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            }
-        },
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Notifications\\Digest\\Internal\\NotificationDigestDueSource": {
         "abstract": false,
@@ -39260,7 +38535,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Notifications\\Digest\\Internal\\SqlDigestBuilder": {
         "abstract": false,
@@ -39323,7 +38598,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Notifications\\Digest\\Internal\\Value": {
         "abstract": false,
@@ -40357,7 +39632,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Notifications\\Inbox\\Internal\\Value": {
         "abstract": false,
@@ -40980,7 +40255,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Notifications\\Preferences\\Internal\\Value": {
         "abstract": false,
@@ -41715,23 +40990,11 @@
                 ],
                 "return": "mixed",
                 "static": false
-            },
-            "record": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "attributes",
-                        "type": "CoreX\\Observability\\Internal\\MetricAttributes",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": false
             }
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Observability\\Internal\\PsrLogOperationObserver": {
         "abstract": false,
@@ -41794,7 +41057,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Observability\\Laravel\\ObservabilityRegistrar": {
         "abstract": false,
@@ -46277,7 +45540,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Operations\\Definition\\Internal\\OperationSectionCompiler": {
         "abstract": false,
@@ -47110,7 +46373,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Operations\\Errors\\Internal\\ErrorWire": {
         "abstract": false,
@@ -47229,7 +46492,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Operations\\Errors\\Internal\\OperationErrorBoundary": {
         "abstract": false,
@@ -47278,7 +46541,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Operations\\Errors\\Internal\\PackageProblemDefinitions": {
         "abstract": false,
@@ -47341,7 +46604,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Operations\\Errors\\Internal\\RetryAfterPolicy": {
         "abstract": false,
@@ -48219,7 +47482,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Operations\\Idempotency\\Internal\\SqlIdempotencyStore": {
         "abstract": false,
@@ -48447,7 +47710,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Operations\\Internal\\Http\\DiscoveryController": {
         "abstract": false,
@@ -48513,7 +47776,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Operations\\Internal\\Http\\HttpOperationResponder": {
         "abstract": false,
@@ -49149,7 +48412,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Operations\\Invocation\\Internal\\CurrentRequestContext": {
         "abstract": false,
@@ -49181,7 +48444,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Operations\\Invocation\\Internal\\DefaultOperationInvoker": {
         "abstract": false,
@@ -49251,7 +48514,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Operations\\Invocation\\Internal\\InputEnvelopeReader": {
         "abstract": false,
@@ -49396,7 +48659,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Operations\\Invocation\\Internal\\QueryEnvelopeReader": {
         "abstract": false,
@@ -49541,7 +48804,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Operations\\Invocation\\Laravel\\InvocationMetadataFactory": {
         "abstract": false,
@@ -50498,7 +49761,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Operations\\OpenApi\\Internal\\OpenApiDocumentGenerator": {
         "abstract": false,
@@ -50550,7 +49813,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Operations\\OpenApi\\Internal\\SnapshotJson": {
         "abstract": false,
@@ -51694,7 +50957,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Operations\\Testing\\IdentityFixture": {
         "abstract": false,
@@ -53657,7 +52920,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Panels\\Internal\\ModulePanelCatalogue": {
         "abstract": false,
@@ -54924,7 +54187,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Panels\\SavedViews\\Internal\\UnavailableViewSchemaProvider": {
         "abstract": false,
@@ -56322,24 +55585,6 @@
                 "return": "string",
                 "static": true
             },
-            "pageDigest": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "set",
-                        "type": "CoreX\\Recurrence\\Data\\RecurrenceSet",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "window",
-                        "type": "CoreX\\Recurrence\\Data\\RecurrenceWindow",
-                        "variadic": false
-                    }
-                ],
-                "return": "string",
-                "static": true
-            },
             "windowHash": {
                 "params": [
                     {
@@ -57170,7 +56415,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\SearchIntl\\Internal\\LocalizedSearchHydrator": {
         "abstract": false,
@@ -57391,7 +56636,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\SearchIntl\\Internal\\TranslationRevision": {
         "abstract": false,
@@ -57417,24 +56662,6 @@
                     }
                 ],
                 "return": "string",
-                "static": false
-            },
-            "nextRevision": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "currentRevision",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "sequence",
-                        "type": "int",
-                        "variadic": false
-                    }
-                ],
-                "return": "int",
                 "static": false
             }
         },
@@ -57836,7 +57063,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\SearchMeilisearch\\Internal\\Value": {
         "abstract": false,
@@ -59537,7 +58764,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Search\\Internal\\Postgres\\SearchTextExpression": {
         "abstract": false,
@@ -60752,7 +59979,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Settings\\Internal\\Models\\Setting": {
         "abstract": false,
@@ -61167,7 +60394,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Storage\\Internal\\ScopedFilesystem": {
         "abstract": false,
@@ -61615,7 +60842,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Storage\\Laravel\\ScopedFilesystemFactory": {
         "abstract": false,
@@ -62373,7 +61600,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\TasksWorkflow\\Internal\\DangerousModesCheck": {
         "abstract": false,
@@ -62789,7 +62016,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\TasksWorkflow\\Internal\\MaterializationWakeupHandler": {
         "abstract": false,
@@ -62840,7 +62067,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\TasksWorkflow\\Internal\\ScopeConnectionGuard": {
         "abstract": false,
@@ -63073,7 +62300,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\TasksWorkflow\\Internal\\TaskWorkflowIntegration": {
         "abstract": false,
@@ -63832,7 +63059,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode": {
         "abstract": false,
@@ -64612,7 +63839,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tasks\\Planning\\Internal\\OperationStore": {
         "abstract": false,
@@ -64674,7 +63901,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tasks\\Planning\\Internal\\PlanningHasher": {
         "abstract": false,
@@ -64902,7 +64129,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tasks\\Project\\Contracts\\ProjectRead": {
         "abstract": false,
@@ -67330,7 +66557,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tasks\\Task\\Internal\\Actions\\CreateTask": {
         "abstract": false,
@@ -67393,7 +66620,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tasks\\Task\\Internal\\Actions\\MoveTaskToStage": {
         "abstract": false,
@@ -67456,7 +66683,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tasks\\Task\\Internal\\Actions\\UpdateTask": {
         "abstract": false,
@@ -67513,7 +66740,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tasks\\Task\\Internal\\Models\\Stage": {
         "abstract": false,
@@ -68789,7 +68016,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Account\\Internal\\DatabaseValue": {
         "abstract": false,
@@ -69582,7 +68809,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Account\\Internal\\Lifecycle\\AccountLifecycleFsm": {
         "abstract": false,
@@ -69889,7 +69116,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Account\\Internal\\SqlAccountRead": {
         "abstract": false,
@@ -70088,7 +69315,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Authentication\\Exceptions\\OidcAuthenticationException": {
         "abstract": false,
@@ -70239,7 +69466,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Authentication\\Internal\\Http\\Controllers\\OidcLoginController": {
         "abstract": false,
@@ -70348,7 +69575,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Authentication\\Internal\\Oidc\\IdTokenVerifier": {
         "abstract": false,
@@ -70421,7 +69648,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Authentication\\Internal\\Oidc\\JwksKeySet": {
         "abstract": false,
@@ -70488,7 +69715,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Authentication\\Internal\\Oidc\\OidcClient": {
         "abstract": false,
@@ -70580,7 +69807,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Authentication\\Internal\\Oidc\\OidcDiscovery": {
         "abstract": false,
@@ -70644,7 +69871,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Contracts\\CentralApiClient": {
         "abstract": false,
@@ -71805,7 +71032,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\DomainTrust\\Internal\\DomainTrustStateWriter": {
         "abstract": false,
@@ -71938,7 +71165,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\DomainTrust\\Internal\\Models\\Domain": {
         "abstract": false,
@@ -72504,7 +71731,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Identity\\Internal\\DatabaseValue": {
         "abstract": false,
@@ -74428,7 +73655,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Integration\\Internal\\Wakeup\\RootWakeupReconciler": {
         "abstract": false,
@@ -74520,7 +73747,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Integration\\Internal\\Wakeup\\SweepRootWakeups": {
         "abstract": false,
@@ -75035,7 +74262,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\AllowImpersonatedWrites": {
         "abstract": false,
@@ -75115,7 +74342,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\EnforceSessionLifetime": {
         "abstract": false,
@@ -75158,7 +74385,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ImpersonationSessionGuard": {
         "abstract": false,
@@ -75207,7 +74434,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\RequireActiveMembership": {
         "abstract": false,
@@ -75251,7 +74478,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveTenantFromHost": {
         "abstract": false,
@@ -75318,7 +74545,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveWorkspace": {
         "abstract": false,
@@ -75374,7 +74601,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ScopeSessionToTenant": {
         "abstract": false,
@@ -75417,7 +74644,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Laravel\\IdentityRegistrar": {
         "abstract": false,
@@ -78794,575 +78021,6 @@
         "properties": [],
         "readonly": true
     },
-    "CoreX\\Tenancy\\Membership\\Internal\\Jobs\\RefreshAccountMembership": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "Illuminate\\Contracts\\Queue\\ShouldQueue"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "identityId",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "accountId",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "product",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "requestId",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "__serialize": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "__unserialize": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "values",
-                        "type": "array",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "afterCommit": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "allOnConnection": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "connection",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "allOnQueue": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "queue",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "appendToChain": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "job",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "assertDeleted": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "assertDoesntHaveChain": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "assertFailed": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "assertFailedWith": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "exception",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "assertHasChain": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "expectedChain",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "assertNotDeleted": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "assertNotFailed": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "assertNotReleased": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "assertReleased": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "delay",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "attempts": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "beforeCommit": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "chain": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "chain",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "delay": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "delay",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "delete": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "dispatch": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "arguments",
-                        "type": "",
-                        "variadic": true
-                    }
-                ],
-                "return": "",
-                "static": true
-            },
-            "dispatchAfterResponse": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "arguments",
-                        "type": "",
-                        "variadic": true
-                    }
-                ],
-                "return": "",
-                "static": true
-            },
-            "dispatchIf": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "boolean",
-                        "type": "",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "arguments",
-                        "type": "",
-                        "variadic": true
-                    }
-                ],
-                "return": "",
-                "static": true
-            },
-            "dispatchNextJobInChain": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "dispatchSync": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "arguments",
-                        "type": "",
-                        "variadic": true
-                    }
-                ],
-                "return": "",
-                "static": true
-            },
-            "dispatchUnless": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "boolean",
-                        "type": "",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "arguments",
-                        "type": "",
-                        "variadic": true
-                    }
-                ],
-                "return": "",
-                "static": true
-            },
-            "fail": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "exception",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "handle": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "projection",
-                        "type": "CoreX\\Tenancy\\Identity\\Contracts\\MembershipProjection",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": false
-            },
-            "invokeChainCatchCallbacks": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "e",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "onConnection": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "connection",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "onGroup": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "group",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "onQueue": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "queue",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "prependToChain": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "job",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "release": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "default": 0,
-                        "name": "delay",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "restoreModel": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "value",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "setJob": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "job",
-                        "type": "Illuminate\\Contracts\\Queue\\Job",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "through": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "middleware",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "withChain": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "chain",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": true
-            },
-            "withDeduplicator": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "deduplicator",
-                        "type": "",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "withFakeQueueInteractions": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "withoutDelay": {
-                "params": [],
-                "return": "",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "accountId": {
-                "name": "accountId",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "afterCommit": {
-                "name": "afterCommit",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "chainCatchCallbacks": {
-                "name": "chainCatchCallbacks",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "chainConnection": {
-                "name": "chainConnection",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "chainQueue": {
-                "name": "chainQueue",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "chained": {
-                "name": "chained",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "connection": {
-                "name": "connection",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "debounceOwner": {
-                "name": "debounceOwner",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "deduplicator": {
-                "name": "deduplicator",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "delay": {
-                "name": "delay",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "identityId": {
-                "name": "identityId",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "job": {
-                "name": "job",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "messageGroup": {
-                "name": "messageGroup",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "middleware": {
-                "name": "middleware",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "product": {
-                "name": "product",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "queue": {
-                "name": "queue",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            },
-            "requestId": {
-                "name": "requestId",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "tries": {
-                "name": "tries",
-                "readonly": false,
-                "static": false,
-                "type": "int"
-            },
-            "uniqueLockOwner": {
-                "name": "uniqueLockOwner",
-                "readonly": false,
-                "static": false,
-                "type": ""
-            }
-        },
-        "readonly": false
-    },
     "CoreX\\Tenancy\\Membership\\Internal\\Persistence\\PairStore": {
         "abstract": false,
         "constants": [],
@@ -80206,24 +78864,6 @@
                     }
                 ],
                 "return": "void",
-                "static": true
-            },
-            "nonEmpty": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "value",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "field",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "string",
                 "static": true
             },
             "product": {
@@ -81545,7 +80185,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Provisioning\\Internal\\ClusterAccountConnectionResolver": {
         "abstract": false,
@@ -81590,7 +80230,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Provisioning\\Internal\\DatabaseTenantLifecycle": {
         "abstract": false,
@@ -81679,7 +80319,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Provisioning\\Internal\\DatabaseValue": {
         "abstract": false,
@@ -81866,23 +80506,11 @@
                 ],
                 "return": "bool",
                 "static": false
-            },
-            "deleteDatabase": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "name",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "bool",
-                "static": false
             }
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Provisioning\\Internal\\Database\\TemplateIntegrityLock": {
         "abstract": false,
@@ -82045,7 +80673,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Provisioning\\Internal\\Database\\TemplateManifest": {
         "abstract": false,
@@ -83172,7 +81800,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Runtime\\Internal\\Storage\\ObjectTenantStorage": {
         "abstract": false,
@@ -83242,7 +81870,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Runtime\\Internal\\TenancyManagerContextResolver": {
         "abstract": false,
@@ -83274,7 +81902,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Runtime\\Internal\\TenantCleanupFailure": {
         "abstract": false,
@@ -83501,7 +82129,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tenancy\\Workspace\\Internal\\Models\\Invitation": {
         "abstract": false,
@@ -84939,7 +83567,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tools\\Internal\\DenyToolPolicy": {
         "abstract": false,
@@ -85071,7 +83699,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tools\\Internal\\McpToolsProjection": {
         "abstract": false,
@@ -85160,7 +83788,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tools\\Internal\\OpisToolSchemaValidator": {
         "abstract": false,
@@ -85545,7 +84173,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tools\\Internal\\ToolSchemaWorker": {
         "abstract": false,
@@ -87919,7 +86547,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Transfer\\Internal\\Transfer\\NeverCancelled": {
         "abstract": false,
@@ -88590,7 +87218,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Wakeup\\Internal\\SweepRunner": {
         "abstract": false,
@@ -88683,7 +87311,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Wakeup\\Internal\\Value": {
         "abstract": false,
@@ -91686,12 +90314,6 @@
                     },
                     {
                         "byRef": false,
-                        "name": "subscriptions",
-                        "type": "CoreX\\Webhooks\\Contracts\\WebhookSubscriptionStore",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
                         "name": "cursors",
                         "type": "CoreX\\Operations\\Pagination\\Contracts\\CursorCodec",
                         "variadic": false
@@ -91712,36 +90334,6 @@
                         "byRef": false,
                         "name": "id",
                         "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "array",
-                "static": false
-            },
-            "create": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "scope",
-                        "type": "CoreX\\Data\\Data\\DataScope",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "subscription",
-                        "type": "CoreX\\Webhooks\\Data\\WebhookSubscription",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "sensitiveAbility",
-                        "type": "bool",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "policyAllows",
-                        "type": "bool",
                         "variadic": false
                     }
                 ],
@@ -91810,84 +90402,12 @@
                 "return": "CoreX\\Operations\\Pagination\\Contracts\\OrderingRegistry",
                 "static": true
             },
-            "disable": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "scope",
-                        "type": "CoreX\\Data\\Data\\DataScope",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "id",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "expectedRevision",
-                        "type": "int",
-                        "variadic": false
-                    }
-                ],
-                "return": "array",
-                "static": false
-            },
             "subscriptions": {
                 "params": [
                     {
                         "byRef": false,
                         "name": "scope",
                         "type": "CoreX\\Data\\Data\\DataScope",
-                        "variadic": false
-                    }
-                ],
-                "return": "array",
-                "static": false
-            },
-            "update": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "scope",
-                        "type": "CoreX\\Data\\Data\\DataScope",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "id",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "expectedRevision",
-                        "type": "int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "endpointUrl",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "keyRefs",
-                        "type": "array",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "sensitiveAbility",
-                        "type": "bool",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "policyAllows",
-                        "type": "bool",
                         "variadic": false
                     }
                 ],
@@ -93489,7 +92009,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Workflow\\Internal\\UnavailableEngineAdapter": {
         "abstract": false,
@@ -93979,7 +92499,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "Flex\\Crm\\Activity\\Enums\\ActivityType": {
         "abstract": false,
@@ -94156,7 +92676,7 @@
                 "type": "Flex\\Crm\\Activity\\Models\\Activity"
             }
         },
-        "readonly": false
+        "readonly": true
     },
     "Flex\\Crm\\Activity\\Models\\Activity": {
         "abstract": false,
@@ -94838,7 +93358,7 @@
                 "type": "Flex\\Crm\\Company\\Models\\Company"
             }
         },
-        "readonly": false
+        "readonly": true
     },
     "Flex\\Crm\\Company\\Models\\Company": {
         "abstract": false,
@@ -95460,7 +93980,7 @@
                 "type": "Flex\\Crm\\Contact\\Models\\ContactCompany"
             }
         },
-        "readonly": false
+        "readonly": true
     },
     "Flex\\Crm\\Contact\\Events\\ContactCreated": {
         "abstract": false,
@@ -95566,7 +94086,7 @@
                 "type": "Flex\\Crm\\Contact\\Models\\Contact"
             }
         },
-        "readonly": false
+        "readonly": true
     },
     "Flex\\Crm\\Contact\\Models\\Contact": {
         "abstract": false,
@@ -96076,7 +94596,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "Flex\\Crm\\Context\\Models\\Concerns\\HasActivities": {
         "abstract": false,
@@ -96283,7 +94803,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "Flex\\Crm\\Deal\\Actions\\MoveDealToStage": {
         "abstract": false,
@@ -96326,7 +94846,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "Flex\\Crm\\Deal\\Casts\\DealAmount": {
         "abstract": false,
@@ -96578,7 +95098,7 @@
                 "type": "Flex\\Crm\\Deal\\Models\\Deal"
             }
         },
-        "readonly": false
+        "readonly": true
     },
     "Flex\\Crm\\Deal\\Events\\DealMovedToStage": {
         "abstract": false,
@@ -96684,7 +95204,7 @@
                 "type": "Flex\\Crm\\Deal\\Models\\Stage"
             }
         },
-        "readonly": false
+        "readonly": true
     },
     "Flex\\Crm\\Deal\\Models\\Deal": {
         "abstract": false,
@@ -97013,7 +95533,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "Flex\\Crm\\Lead\\Actions\\CreateLead": {
         "abstract": false,
@@ -97092,7 +95612,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "Flex\\Crm\\Lead\\Enums\\LeadSource": {
         "abstract": false,
@@ -97396,7 +95916,7 @@
                 "type": "Flex\\Crm\\Lead\\Models\\Lead"
             }
         },
-        "readonly": false
+        "readonly": true
     },
     "Flex\\Crm\\Lead\\Events\\LeadCreated": {
         "abstract": false,
@@ -97490,7 +96010,7 @@
                 "type": "Flex\\Crm\\Lead\\Models\\Lead"
             }
         },
-        "readonly": false
+        "readonly": true
     },
     "Flex\\Crm\\Lead\\Models\\Lead": {
         "abstract": false,

@@ -53,7 +53,7 @@ it('migrates the complete core tenant baseline from its single platform set', fu
         ->and(Schema::connection('pgsql')->hasTable('mod_records'))->toBeTrue()
         ->and(Schema::connection('pgsql')->hasTable('mod_lifecycle_log'))->toBeTrue()
         ->and(Schema::connection('pgsql')->hasTable('root_accounts'))->toBeFalse();
-    expect(app(SchemaMigrator::class)->migrate(SchemaScope::Tenant, 'pgsql'))->toBe([]);
+    expect(resolve(SchemaMigrator::class)->migrate(SchemaScope::Tenant, 'pgsql'))->toBe([]);
 });
 
 it('includes a real module schema only when module execution is requested', function (): void {
@@ -100,7 +100,7 @@ it('preserves the monotonic audit sequence cursor (D42)', function (): void {
 
 it('reads the PostgreSQL journal and reports pending files on the selected connection', function (): void {
     $this->migrateSchemaScope(SchemaScope::Tenant, 'pgsql', includeModules: false);
-    foreach (app(SchemaMigrator::class)->status(SchemaScope::Tenant, 'pgsql') as $status) {
+    foreach (resolve(SchemaMigrator::class)->status(SchemaScope::Tenant, 'pgsql') as $status) {
         expect($status->pending)->toBe([])->and($status->unknown)->toBe([]);
     }
     DB::connection('pgsql')->table('migrations')->where('migration', '2026_10_01_010040_create_sys_settings')->delete();
@@ -113,7 +113,7 @@ it('ignores central legacy journal entries when tenant sets share one database',
     app()->forgetInstance(SchemaMigrator::class);
     $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
     $this->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
-    $status = app(SchemaMigrator::class)->status(SchemaScope::Tenant, 'pgsql')[0];
+    $status = resolve(SchemaMigrator::class)->status(SchemaScope::Tenant, 'pgsql')[0];
     expect($status->unknown)->toBe([])->and($status->pending)->toBe([]);
     $this->artisan('corex:schema:status', ['--database' => 'pgsql'])->assertSuccessful();
 });
@@ -142,7 +142,7 @@ it('enables a module using only its registered schema set path', function (): vo
     app()->forgetInstance('corex.modules.wiring');
     app()->forgetInstance(ModuleLifecycle::class);
     expect(Schema::connection('pgsql')->hasTable('schema_module'))->toBeFalse();
-    app(ModuleLifecycle::class)->enable('fixture/module');
+    resolve(ModuleLifecycle::class)->enable('fixture/module');
     expect(Schema::connection('pgsql')->hasTable('schema_module'))->toBeTrue()
         ->and(DB::connection('pgsql')->table('mod_modules')->where('name', 'fixture/module')->value('state'))->toBe('enabled')
         ->and(DB::connection('pgsql')->table('migrations')->where('migration', '2026_10_01_980030_create_schema_module')->exists())->toBeTrue();

@@ -1,0 +1,99 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Tooling\Rector\Laravel\Rector\Coalesce;
+
+use CoreX\Tooling\Rector\Laravel\AbstractRector;
+use CoreX\Tooling\Rector\Laravel\ValueObject\ApplyDefaultInsteadOfNullCoalesce;
+use Illuminate\Support\Env;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\BinaryOp\Coalesce;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Throw_;
+use PHPStan\Type\ObjectType;
+use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Webmozart\Assert\Assert;
+
+final class ApplyDefaultInsteadOfNullCoalesceRector extends AbstractRector implements ConfigurableRectorInterface
+{
+    /**
+     * @var ApplyDefaultInsteadOfNullCoalesce[]
+     */
+    private array $applyDefaultWith;
+
+    public function __construct()
+    {
+        $this->applyDefaultWith = self::defaultLaravelMethods();
+    }
+
+    /**
+     * @return ApplyDefaultInsteadOfNullCoalesce[]
+     */
+    public static function defaultLaravelMethods(): array
+    {
+        return [new ApplyDefaultInsteadOfNullCoalesce('config'), new ApplyDefaultInsteadOfNullCoalesce('env'), new ApplyDefaultInsteadOfNullCoalesce('data_get', argumentPosition: 2), new ApplyDefaultInsteadOfNullCoalesce('get', new ObjectType(Env::class))];
+    }
+
+    public function getNodeTypes(): array
+    {
+        return [Coalesce::class];
+    }
+
+    public function refactor(Node $node): MethodCall|StaticCall|FuncCall|null
+    {
+        if (! $node instanceof Coalesce) {
+            return null;
+        }
+
+        if (! $node->left instanceof FuncCall && ! $node->left instanceof MethodCall && ! $node->left instanceof StaticCall) {
+            return null;
+        }
+
+        if ($node->left->isFirstClassCallable()) {
+            return null;
+        }
+        $call = $node->left;
+
+        if ($call instanceof MethodCall) {
+            $objectType = $call->var;
+        } elseif ($call instanceof StaticCall) {
+            $objectType = $call->class;
+        } else {
+            $objectType = null;
+        }
+        foreach ($this->applyDefaultWith as $applyDefaultWith) {
+            $valid = false;
+
+            if ($applyDefaultWith->getObjectType() !== null && $objectType instanceof Node && $this->isObjectType($objectType, $applyDefaultWith->getObjectType()) && $this->isName($call->name, $applyDefaultWith->getMethodName()) && ! $node->right instanceof Throw_) {
+                $valid = true;
+            } elseif ($applyDefaultWith->getObjectType() === null && $this->isName($call->name, $applyDefaultWith->getMethodName()) && ! $node->right instanceof Throw_) {
+                $valid = true;
+            }
+
+            if (! $valid) {
+                continue;
+            }
+
+            if (count($call->args) === $applyDefaultWith->getArgumentPosition()) {
+                if ($this->getType($node->right)->isNull()->yes()) {
+                    return $call;
+                }
+                $call->args[count($call->args)] = new Arg($node->right);
+
+                return $call;
+            }
+        }
+
+        return null;
+    }
+
+    public function configure(array $configuration): void
+    {
+        Assert::allIsInstanceOf($configuration, ApplyDefaultInsteadOfNullCoalesce::class);
+        $this->applyDefaultWith = $configuration;
+    }
+}

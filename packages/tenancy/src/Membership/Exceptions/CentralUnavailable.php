@@ -15,6 +15,6 @@ final class CentralUnavailable extends CodedException
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TenancyErrorCode::CentralUnavailable, ErrorCategory::Unavailable, retryable: true);
+        return new ErrorDescriptor(code: TenancyErrorCode::CentralUnavailable, category: ErrorCategory::Unavailable, retryable: true);
     }
 }

@@ -22,7 +22,7 @@ final readonly class ResourceId implements Stringable
     {
         self::assertType($type);
 
-        return new self($type, $format, self::canonicalValue($value, $format));
+        return new self(type: $type, format: $format, value: self::canonicalValue(value: $value, format: $format));
     }
 
     public static function parse(
@@ -47,7 +47,7 @@ final readonly class ResourceId implements Stringable
             throw new InvalidArgumentException('Resource id format does not match the expected format.');
         }
 
-        $resourceId = self::fromValue($type, $value, $expectedFormat);
+        $resourceId = self::fromValue(type: $type, value: $value, format: $expectedFormat);
 
         if (! hash_equals($resourceId->toString(), $encoded)) {
             throw new InvalidArgumentException('Resource id is not canonically encoded.');
@@ -79,7 +79,7 @@ final readonly class ResourceId implements Stringable
             ResourceIdFormat::Integer => self::canonicalInteger($value),
             ResourceIdFormat::Ulid => self::canonicalUlid($value),
             ResourceIdFormat::Uuid => self::canonicalUuid($value),
-            ResourceIdFormat::Uuid7 => self::canonicalUuid($value, 7),
+            ResourceIdFormat::Uuid7 => self::canonicalUuid(value: $value, version: 7),
         };
     }
 

@@ -33,13 +33,13 @@ use stdClass;
  * (Scope Excluded) — this class only reserves the row and lays the
  * atomicity invariant for that later transition.
  */
-final class PendingPool
+final readonly class PendingPool
 {
     public function __construct(
-        private readonly string $centralConnection,
-        private readonly DatabaseTenantProvisioner $provisioner,
-        private readonly TemplateIntegrityChecks $templateIntegrityVerifier,
-        private readonly ConnectionResolverInterface $connections,
+        private string $centralConnection,
+        private DatabaseTenantProvisioner $provisioner,
+        private TemplateIntegrityChecks $templateIntegrityVerifier,
+        private ConnectionResolverInterface $connections,
     ) {}
 
     /**
@@ -54,7 +54,7 @@ final class PendingPool
         $created = [];
 
         for ($i = 0; $i < $count; $i++) {
-            $created[] = $this->cloneOne($clusterId, 'pending');
+            $created[] = $this->cloneOne(clusterId: $clusterId, status: 'pending');
         }
 
         return $created;
@@ -104,7 +104,7 @@ final class PendingPool
             if (! $account instanceof Account) {
                 throw new LogicException('Expected a pending account.');
             }
-            $this->templateIntegrityVerifier->verifyAccount(new TemplateAccountView($account->template_version, $account->cluster_id, $account->db_name));
+            $this->templateIntegrityVerifier->verifyAccount(new TemplateAccountView(templateVersion: $account->template_version, clusterId: $account->cluster_id, databaseName: $account->db_name));
 
             $this->db()
                 ->table('root_accounts')
@@ -114,7 +114,7 @@ final class PendingPool
             return DatabaseValue::text($candidate->id);
         });
 
-        $id = $claimedId ?? $this->cloneOne(null, 'provisioning');
+        $id = $claimedId ?? $this->cloneOne(clusterId: null, status: 'provisioning');
 
         return Account::on($this->centralConnection)->findOrFail($id);
     }

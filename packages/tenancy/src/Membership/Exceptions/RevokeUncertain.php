@@ -20,6 +20,6 @@ final class RevokeUncertain extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TenancyErrorCode::RevokeUncertain, ErrorCategory::Unavailable, retryable: true);
+        return new ErrorDescriptor(code: TenancyErrorCode::RevokeUncertain, category: ErrorCategory::Unavailable, retryable: true);
     }
 }

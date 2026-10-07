@@ -128,7 +128,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
         try {
             $this->selectSchema('api_budget_stub', 'sqlite', ':memory:', 'api_p1420_tenant', 'pgsql', $database);
 
-            $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+            $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
             $connection = DB::connection('api_p1420_tenant');
             $connection->getSchemaBuilder()->create('sys_inbox_messages', function (Blueprint $table): void {
                 $table->string('consumer', 120);
@@ -167,7 +167,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
                 name: 'orders.placed',
                 contractVersion: 1,
                 occurredAt: $now,
-                scope: app(DataScopeCodec::class)->encode($scope),
+                scope: resolve(DataScopeCodec::class)->encode($scope),
                 payload: new MessagePayload(['id' => 'order-1', 'secret' => 'hidden']),
                 piiClass: PiiClass::Personal,
                 correlationId: 'correlation-1',
@@ -192,7 +192,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
                 topics: $catalogue,
                 clock: $clock,
                 egress: new PermitPublicEgressPolicy,
-                scopeCodec: app(DataScopeCodec::class),
+                scopeCodec: resolve(DataScopeCodec::class),
             );
             $delivered = $worker->workOnce($scope, 'worker-local');
 
@@ -201,7 +201,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
             self::assertSame(1, $receiver->effects);
             self::assertNull($worker->workOnce($scope, 'worker-local'));
 
-            $signed = (new HmacWebhookSigner($keys))->sign($delivered->id, $clock->now()->getTimestamp(), $delivered->body, ['current']);
+            $signed = new HmacWebhookSigner($keys)->sign($delivered->id, $clock->now()->getTimestamp(), $delivered->body, ['current']);
             $replay = new ValidatedWebhookRequest(
                 'hooks.example',
                 'https://hooks.example/receiver',
@@ -276,7 +276,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
         $this->configureSqlite('api_tenant');
         $this->selectSchema('api_budget_stub', 'sqlite', ':memory:', 'api_tenant', 'sqlite', ':memory:');
 
-        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
         $connection = DB::connection('api_tenant');
         $account = new AccountRef('account-1', 'account', 'active', [], []);
         $contexts = new ContextFixture;

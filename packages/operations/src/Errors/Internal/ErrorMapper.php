@@ -22,20 +22,20 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
 /** @internal Shares safe normalization between dispatch and the surrounding middleware pipeline. */
-final class ErrorMapper implements ErrorMapping
+final readonly class ErrorMapper implements ErrorMapping
 {
     public function __construct(
-        private readonly ProblemRegistry $problems,
-        private readonly ExceptionHandler $exceptions,
+        private ProblemRegistry $problems,
+        private ExceptionHandler $exceptions,
     ) {}
 
     public function map(Throwable $error, bool $reportUnexpected = true): ApiError
     {
         if ($error instanceof ApiError) {
             try {
-                $this->problems->assertOccurrence($error->errorDescriptor(), $error->status);
+                $this->problems->assertOccurrence(descriptor: $error->errorDescriptor(), status: $error->status);
             } catch (Throwable) {
-                return $this->unexpected($error, $reportUnexpected);
+                return $this->unexpected(error: $error, reportUnexpected: $reportUnexpected);
             }
 
             return $error;
@@ -47,7 +47,7 @@ final class ErrorMapper implements ErrorMapping
                 $this->problems->assertOccurrence($descriptor);
                 $definition = $this->problems->get($descriptor->errorCode);
             } catch (Throwable) {
-                return $this->unexpected($error, $reportUnexpected);
+                return $this->unexpected(error: $error, reportUnexpected: $reportUnexpected);
             }
 
             return new ApiError(
@@ -120,7 +120,7 @@ final class ErrorMapper implements ErrorMapping
             $this->exceptions->report($error);
         }
 
-        return new ApiError(CoreErrorCode::InternalError, 500, 'Operation could not be completed.', category: ErrorCategory::Internal);
+        return new ApiError(errorCode: CoreErrorCode::InternalError, status: 500, message: 'Operation could not be completed.', category: ErrorCategory::Internal);
     }
 
     private function messageFor(ErrorCategory $category): string

@@ -31,15 +31,15 @@ use Throwable;
  * `sync_status=failed` (AC-16 г): retried later by `corex:tenancy:reconcile-identities`,
  * never left to throw across the whole fan-out.
  */
-final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, IdentitySyncer
+final readonly class DatabaseIdentitySyncer implements IdentityPasswordRehasher, IdentitySyncer
 {
     public function __construct(
-        private readonly string $centralConnection,
-        private readonly TenancyManager $tenancy,
-        private readonly AccountRead $accounts,
-        private readonly ConnectionResolverInterface $connections,
-        private readonly ClockInterface $clock,
-        private readonly Dispatcher $events,
+        private string $centralConnection,
+        private TenancyManager $tenancy,
+        private AccountRead $accounts,
+        private ConnectionResolverInterface $connections,
+        private ClockInterface $clock,
+        private Dispatcher $events,
     ) {}
 
     /** @param array<string, string> $columns */
@@ -65,10 +65,10 @@ final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, Identity
             ->where('id', $identityId)
             ->first();
 
-        $account = $this->accounts->find($accountId, $this->centralConnection);
+        $account = $this->accounts->find(accountId: $accountId, connectionName: $this->centralConnection);
 
         if ($identity === null || $account === null) {
-            $this->markFailed($identityId, $accountId);
+            $this->markFailed(identityId: $identityId, accountId: $accountId);
 
             return;
         }
@@ -82,7 +82,7 @@ final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, Identity
         $accountRef = $account;
 
         try {
-            $this->tenancy->runFor($accountRef, null, function () use ($identity, $identityId, $accountId): void {
+            $this->tenancy->runFor(account: $accountRef, workspace: null, callback: function () use ($identity, $identityId, $accountId): void {
                 /** @var Connection */
                 $connection = $this->connections->connection();
                 $connection->transaction(function () use ($connection, $identity, $identityId, $accountId): void {
@@ -124,7 +124,7 @@ final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, Identity
                 });
             });
         } catch (Throwable) {
-            $this->markFailed($identityId, $accountId);
+            $this->markFailed(identityId: $identityId, accountId: $accountId);
 
             return;
         }
@@ -149,7 +149,7 @@ final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, Identity
             ->pluck('account_id');
 
         foreach ($accountIds as $accountId) {
-            SyncIdentityToAccount::dispatch($identityId, DatabaseValue::text($accountId));
+            SyncIdentityToAccount::dispatch(identityId: $identityId, accountId: DatabaseValue::text($accountId));
         }
     }
 

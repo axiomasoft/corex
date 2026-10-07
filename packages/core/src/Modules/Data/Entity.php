@@ -17,9 +17,6 @@ use CoreX\Modules\Contracts\Extender;
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class Entity implements Extender
 {
-    /** @var class-string */
-    public string $model;
-
     public ?string $handle = null;
 
     public ?string $table = null;
@@ -46,10 +43,7 @@ final class Entity implements Extender
     public ?array $fieldDefinitions = null;
 
     /** @param class-string $model */
-    private function __construct(string $model)
-    {
-        $this->model = $model;
-    }
+    private function __construct(public string $model) {}
 
     /** @param  class-string  $model */
     public static function make(string $model): self

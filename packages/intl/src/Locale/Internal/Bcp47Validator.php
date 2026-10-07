@@ -8,14 +8,14 @@ use CoreX\Intl\Locale\Contracts\LocaleValidation;
 use CoreX\Intl\Locale\Exceptions\InvalidLocaleException;
 use Locale;
 
-final class Bcp47Validator implements LocaleValidation
+final readonly class Bcp47Validator implements LocaleValidation
 {
     /**
      * @param  list<string>  $supportedTags
      */
     public function __construct(
-        private readonly array $supportedTags,
-        private readonly int $maxTagLength = 128,
+        private array $supportedTags,
+        private int $maxTagLength = 128,
     ) {}
 
     public function canonicalizeTag(string $tag): string

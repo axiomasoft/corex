@@ -46,7 +46,7 @@ beforeEach(function (): void {
     DB::table('users')->insert(['id' => $this->userId, 'name' => 'Owner']);
 
     $this->actor = new ActorData(type: ActorType::User, id: $this->userId);
-    $this->context = app(TenantContextResolver::class)->current();
+    $this->context = resolve(TenantContextResolver::class)->current();
 });
 
 function planningToken(string $requestKey, string $payloadHash): PlanningToken
@@ -63,13 +63,13 @@ it('keeps existing create and complete commands byte-compatible', function (): v
         ->and($complete->getMethod('handle')->getParameters()[0]->getType()?->getName())
         ->toBe(CompleteTaskData::class);
 
-    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(
+    $reference = resolve(CreateTaskCommand::class)->handle(new TaskDraft(
         workspaceId: $this->workspaceId,
         title: 'Legacy command',
         actor: $this->actor,
     ));
 
-    app(CompleteTaskCommand::class)->handle(new CompleteTaskData(
+    resolve(CompleteTaskCommand::class)->handle(new CompleteTaskData(
         taskId: $reference->id,
         actor: $this->actor,
     ));
@@ -88,7 +88,7 @@ it('creates a project in the trusted workspace context', function (): void {
         payloadHash: PlanningHasher::project($draft, $this->context),
     );
 
-    $reference = app(TaskPlanningCommand::class)->createProject($draft, $token);
+    $reference = resolve(TaskPlanningCommand::class)->createProject($draft, $token);
 
     expect($reference->type)->toBe('tsk.project')
         ->and($reference->display)->toBe('Maintenance')
@@ -96,7 +96,7 @@ it('creates a project in the trusted workspace context', function (): void {
 });
 
 it('denies a project in another narrowed workspace', function (): void {
-    $current = app(TenantContextResolver::class)->current();
+    $current = resolve(TenantContextResolver::class)->current();
     $narrowed = new TenantContext(
         account: $current->account,
         workspace: new WorkspaceRef(
@@ -121,7 +121,7 @@ it('denies a project in another narrowed workspace', function (): void {
         payloadHash: PlanningHasher::project($draft, $narrowed),
     );
 
-    expect(fn () => app(TaskPlanningCommand::class)->createProject($draft, $token))
+    expect(fn () => resolve(TaskPlanningCommand::class)->createProject($draft, $token))
         ->toThrow(ValidationException::class);
 
     expect(Project::query()->count())->toBe(0);
@@ -137,7 +137,7 @@ it('replays the same project request key and rejects changed payloads', function
         requestKey: 'prim-03-project',
         payloadHash: PlanningHasher::project($draft, $this->context),
     );
-    $command = app(TaskPlanningCommand::class);
+    $command = resolve(TaskPlanningCommand::class);
 
     $first = $command->createProject($draft, $token);
     $second = $command->createProject($draft, $token);
@@ -178,7 +178,7 @@ it('validates sprint parent and date ordering before writes', function (): void 
         payloadHash: PlanningHasher::sprint($draft, $this->context, '2026-09-20', '2026-09-10'),
     );
 
-    expect(fn () => app(TaskPlanningCommand::class)->createSprint($draft, $token))
+    expect(fn () => resolve(TaskPlanningCommand::class)->createSprint($draft, $token))
         ->toThrow(InvalidPlanningDraft::class);
 
     expect(Sprint::query()->count())->toBe(0);
@@ -207,7 +207,7 @@ it('records time atomically with spent totals and operation receipts', function 
 
     DB::beginTransaction();
 
-    $reference = app(TaskPlanningCommand::class)->recordTime($draft, $token);
+    $reference = resolve(TaskPlanningCommand::class)->recordTime($draft, $token);
 
     expect(TimeLog::query()->count())->toBe(1)
         ->and(Task::query()->findOrFail($task->getKey())->spent_minutes)->toBe(45)
@@ -229,7 +229,7 @@ it('preserves existing completion policy without new workflow ownership', functi
         'status' => TaskStatus::Cancelled,
     ]);
 
-    expect(fn () => app(CompleteTaskCommand::class)->handle(new CompleteTaskData(
+    expect(fn () => resolve(CompleteTaskCommand::class)->handle(new CompleteTaskData(
         taskId: (string) $task->getKey(),
         actor: $this->actor,
     )))->toThrow(ValidationException::class);
@@ -238,12 +238,12 @@ it('preserves existing completion policy without new workflow ownership', functi
 it('supports boxed null workspace context for planning subjects', function (): void {
     $resolver = Mockery::mock(TenantContextResolver::class);
     $resolver->shouldReceive('current')->andReturn(new TenantContext(
-        account: app(TenantContextResolver::class)->current()->account,
+        account: resolve(TenantContextResolver::class)->current()->account,
         workspace: null,
     ));
     app()->instance(TenantContextResolver::class, $resolver);
 
-    $context = app(TenantContextResolver::class)->current();
+    $context = resolve(TenantContextResolver::class)->current();
     $draft = new ProjectDraft(
         workspaceId: $this->workspaceId,
         name: 'Boxed',
@@ -254,7 +254,7 @@ it('supports boxed null workspace context for planning subjects', function (): v
         payloadHash: PlanningHasher::project($draft, $context),
     );
 
-    $reference = app(TaskPlanningCommand::class)->createProject($draft, $token);
+    $reference = resolve(TaskPlanningCommand::class)->createProject($draft, $token);
 
     expect($reference->display)->toBe('Boxed');
 });
@@ -268,7 +268,7 @@ it('ships deny-by-default planning authorization', function (): void {
         actor: $this->actor,
     );
 
-    expect(fn () => app(TaskPlanningAccess::class)->authorize(
+    expect(fn () => resolve(TaskPlanningAccess::class)->authorize(
         operation: PlanningOperation::CreateProject,
         subject: new PlanningSubject(
             workspaceId: $this->workspaceId,
@@ -277,7 +277,7 @@ it('ships deny-by-default planning authorization', function (): void {
             userId: $this->userId,
         ),
         actor: $this->actor,
-        context: app(TenantContextResolver::class)->current(),
+        context: resolve(TenantContextResolver::class)->current(),
     ))->toThrow(AuthorizationException::class);
 });
 
@@ -309,7 +309,7 @@ it('creates maintenance project sprint and time log through the neutral fixture'
         requestKey: 'prim-08-project',
         payloadHash: PlanningHasher::project($projectDraft, $this->context),
     );
-    $project = app(TaskPlanningCommand::class)->createProject($projectDraft, $projectToken);
+    $project = resolve(TaskPlanningCommand::class)->createProject($projectDraft, $projectToken);
 
     $sprintDraft = new SprintDraft(
         projectId: $project->id,
@@ -322,7 +322,7 @@ it('creates maintenance project sprint and time log through the neutral fixture'
         requestKey: 'prim-08-sprint',
         payloadHash: PlanningHasher::sprint($sprintDraft, $this->context, '2026-09-01', '2026-09-14'),
     );
-    $sprint = app(TaskPlanningCommand::class)->createSprint($sprintDraft, $sprintToken);
+    $sprint = resolve(TaskPlanningCommand::class)->createSprint($sprintDraft, $sprintToken);
 
     $task = Task::query()->create([
         'workspace_id' => $this->workspaceId,
@@ -345,7 +345,7 @@ it('creates maintenance project sprint and time log through the neutral fixture'
         requestKey: 'prim-08-time',
         payloadHash: PlanningHasher::timeLog($timeDraft, $this->context),
     );
-    $time = app(TaskPlanningCommand::class)->recordTime($timeDraft, $timeToken);
+    $time = resolve(TaskPlanningCommand::class)->recordTime($timeDraft, $timeToken);
 
     expect($project->type)->toBe('tsk.project')
         ->and($sprint->type)->toBe('tsk.sprint')
@@ -355,7 +355,7 @@ it('creates maintenance project sprint and time log through the neutral fixture'
 
 it('replays sprint creation without creating a second sprint', function (): void {
     $projectDraft = new ProjectDraft($this->workspaceId, 'Planning', $this->actor);
-    $command = app(TaskPlanningCommand::class);
+    $command = resolve(TaskPlanningCommand::class);
     $project = $command->createProject($projectDraft, planningToken('coverage-project', PlanningHasher::project($projectDraft, $this->context)));
     $draft = new SprintDraft($project->id, 'Sprint', startDate: '2026-10-01', endDate: '2026-10-14', actor: $this->actor);
     $token = planningToken('coverage-sprint', PlanningHasher::sprint($draft, $this->context, '2026-10-01', '2026-10-14'));
@@ -368,7 +368,7 @@ it('rejects malformed planning tokens before writes', function (string $key, str
     $draft = new ProjectDraft($this->workspaceId, 'Planning', $this->actor);
 
     try {
-        app(TaskPlanningCommand::class)->createProject($draft, planningToken($key, $hash));
+        resolve(TaskPlanningCommand::class)->createProject($draft, planningToken($key, $hash));
         test()->fail('Invalid token was accepted.');
     } catch (InvalidPlanningDraft $exception) {
         expect($exception->errorDescriptor()->retryable)->toBeFalse();

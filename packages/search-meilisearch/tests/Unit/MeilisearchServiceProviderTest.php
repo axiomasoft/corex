@@ -40,9 +40,9 @@ final class MeilisearchServiceProviderTest extends TestCase
     public function test_meilisearch_driver_resolves_regardless_of_provider_registration_order(): void
     {
         $app = $this->app;
-        (new MeilisearchServiceProvider($app))->register();
-        (new SearchServiceProvider($app))->register();
-        (new MeilisearchServiceProvider($app))->boot();
+        new MeilisearchServiceProvider($app)->register();
+        new SearchServiceProvider($app)->register();
+        new MeilisearchServiceProvider($app)->boot();
 
         $app['config']->set('corex-search.driver', 'meilisearch');
         $app['config']->set('corex-search-meilisearch.host', 'http://127.0.0.1:7700');

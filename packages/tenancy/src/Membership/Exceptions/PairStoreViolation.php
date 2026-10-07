@@ -16,6 +16,6 @@ final class PairStoreViolation extends LogicException implements DescribesError
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TenancyErrorCode::PairStoreViolation, ErrorCategory::Internal, retryable: false);
+        return new ErrorDescriptor(code: TenancyErrorCode::PairStoreViolation, category: ErrorCategory::Internal, retryable: false);
     }
 }

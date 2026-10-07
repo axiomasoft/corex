@@ -33,7 +33,7 @@ final readonly class CreateCompany
             if (! $company->save()) {
                 throw ValidationException::withMessages(['company' => 'CRM creation was vetoed by an observer.']);
             }
-            CompanyCreated::dispatch($company, $ctx->actor);
+            event(new CompanyCreated($company, $ctx->actor));
 
             return $company;
         });

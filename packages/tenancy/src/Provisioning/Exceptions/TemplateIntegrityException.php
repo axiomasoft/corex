@@ -15,6 +15,6 @@ final class TemplateIntegrityException extends CodedException
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TenancyErrorCode::TemplateIntegrityException, ErrorCategory::Internal, retryable: false);
+        return new ErrorDescriptor(code: TenancyErrorCode::TemplateIntegrityException, category: ErrorCategory::Internal, retryable: false);
     }
 }

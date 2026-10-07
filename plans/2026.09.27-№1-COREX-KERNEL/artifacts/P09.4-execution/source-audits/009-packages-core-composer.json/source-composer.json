@@ -1,0 +1,105 @@
+{
+    "name": "axiomasoft/corex",
+    "description": "CoreX kernel — base model (ULID), optional multi-tenancy, entity registry, settings, audit log, and money for any Laravel application.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "kernel",
+        "multi-tenancy",
+        "ulid",
+        "entity-registry",
+        "audit",
+        "settings"
+    ],
+    "authors": [
+        {
+            "name": "Dmitry Vostrikov",
+            "email": "dv.vostrikov@gmail.com"
+        }
+    ],
+    "require": {
+        "ext-ctype": "*",
+        "ext-mbstring": "*",
+        "php": "^8.4",
+        "illuminate/auth": "^12.0|^13.0",
+        "illuminate/console": "^12.0|^13.0",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/events": "^12.0|^13.0",
+        "illuminate/queue": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "laravel/framework": "^12.0|^13.0",
+        "psr/clock": "^1.0"
+    },
+    "provide": {
+        "psr/clock-implementation": "1.0"
+    },
+    "require-dev": {
+        "ext-pdo": "*",
+        "phpstan/phpstan": "^2.2.16",
+        "larastan/larastan": "^3.12",
+        "mockery/mockery": "^1.6",
+        "nikic/php-parser": "^5.4",
+        "phpstan/phpdoc-parser": "^2.3",
+        "open-telemetry/api": "^1.4",
+        "open-telemetry/sdk": "^1.4",
+        "orchestra/testbench": "^10.12|^11.3",
+        "orchestra/testbench-core": "^10.12|^11.3",
+        "psr/log": "^3.0",
+        "symfony/console": "^7.2|^8.0",
+        "symfony/process": "^7.2|^8.0",
+        "symfony/filesystem": "^7.2|^8.0",
+        "phpunit/phpunit": "^12.0"
+    },
+    "suggest": {
+        "open-telemetry/api": "Optional operation and messaging traces. CoreX boots without it.",
+        "psr/log": "Optional PSR-3 projection of operation lifecycle events.",
+        "nikic/php-parser": "Development tooling for source API and error registry scans.",
+        "phpstan/phpdoc-parser": "Development tooling for source API PHPDoc parsing.",
+        "phpstan/phpstan": "Development tooling for shipped static analysis rules."
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CoreX\\Testing\\": "tests/Support/"
+        },
+        "classmap": [
+            "tests/Fixtures"
+        ]
+    },
+    "autoload": {
+        "psr-4": {
+            "CoreX\\": "src/"
+        }
+    },
+    "extra": {
+        "corex": {
+            "schema-version": 1,
+            "package-type": "foundation",
+            "stability": "stable"
+        },
+        "laravel": {
+            "providers": [
+                "CoreX\\CoreServiceProvider"
+            ]
+        },
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
+        },
+        "phpstan": {
+            "includes": [
+                "extension.neon"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "scripts": {
+        "test": "../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage,ModulesPackage --exclude-group=pg",
+        "test:pg": "../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage,ModulesPackage --group=pg",
+        "test:coverage": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage,ModulesPackage --exclude-group=pg --coverage --min=80",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/core/phpstan.neon --memory-limit=2G --no-progress",
+        "lint:check": "../../vendor/bin/pint --test"
+    },
+    "repositories": []
+}

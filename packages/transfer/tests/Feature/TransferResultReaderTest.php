@@ -65,7 +65,7 @@ it('refuses a result when the scope or policy does not match', function (): void
 
     expect(fn () => $reader->result(scope: readerScope($hash), ref: new TransferRef($jobId)))
         ->toThrow(TransferUnavailable::class)
-        ->and(fn () => (new SqlTransferResultReader(DB::connection(), new CallableDataScopeAuthorizer(static fn (): bool => true)))
+        ->and(fn () => new SqlTransferResultReader(DB::connection(), new CallableDataScopeAuthorizer(static fn (): bool => true))
             ->result(scope: readerScope(str_repeat('d', 64)), ref: new TransferRef($jobId)))
         ->toThrow(TransferUnavailable::class);
 });

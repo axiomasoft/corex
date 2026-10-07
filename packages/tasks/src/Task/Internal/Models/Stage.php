@@ -32,10 +32,10 @@ final class Stage extends Model
     /** @var array<string, mixed> */
     protected $attributes = ['position' => 0];
 
-    /** @return BelongsTo<covariant \Illuminate\Database\Eloquent\Model, $this> */
+    /** @return BelongsTo<covariant Model, $this> */
     public function project(): BelongsTo
     {
-        return ProjectRelations::belongsTo($this, 'project_id', null, 'project');
+        return ProjectRelations::belongsTo(model: $this, foreignKey: 'project_id', ownerKey: null, relation: 'project');
     }
 
     /** @return HasMany<Task, $this> */

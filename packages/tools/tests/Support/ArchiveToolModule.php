@@ -15,7 +15,7 @@ use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 /** Selected P3–P6 archive cohort contributions for CONTRIB qualification. */
 final class ArchiveToolModule implements ModuleRegistry
 {
-    public const COMPOSER_NAME = 'example/archive-tools';
+    public const string COMPOSER_NAME = 'example/archive-tools';
 
     public bool $enabled = true;
 
@@ -31,7 +31,7 @@ final class ArchiveToolModule implements ModuleRegistry
         $input = self::inputSchema();
         $output = self::outputSchema();
 
-        return app(RegistryCompiler::class)->compile([
+        return resolve(RegistryCompiler::class)->compile([
             ModuleManifest::make(self::COMPOSER_NAME)
                 ->title('Archive tools')
                 ->tablePrefix('arc')

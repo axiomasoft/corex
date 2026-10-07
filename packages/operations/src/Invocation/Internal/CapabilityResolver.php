@@ -20,15 +20,15 @@ use CoreX\Operations\Versioning\Data\EffectiveCapability;
 use Illuminate\Http\Request;
 
 /** Live capability view. Payload tenant, workspace and actor fields are ignored. */
-final class CapabilityResolver implements EffectiveCapabilities
+final readonly class CapabilityResolver implements EffectiveCapabilities
 {
     public function __construct(
-        private readonly ModuleRegistry $modules,
-        private readonly ApiOptions $options,
-        private readonly ApiProfileFactory $profiles,
-        private readonly PrincipalResolver $principals,
-        private readonly ContextResolver $contexts,
-        private readonly OperationAuthorizer $authorizer,
+        private ModuleRegistry $modules,
+        private ApiOptions $options,
+        private ApiProfileFactory $profiles,
+        private PrincipalResolver $principals,
+        private ContextResolver $contexts,
+        private OperationAuthorizer $authorizer,
     ) {}
 
     public function fingerprint(): string
@@ -40,21 +40,21 @@ final class CapabilityResolver implements EffectiveCapabilities
     public function effective(Request $request): array
     {
         $version = $request->route('version');
-        $metadata = InvocationMetadataFactory::fromRequest($request, is_string($version) ? $version : $this->options->defaultMajor);
+        $metadata = InvocationMetadataFactory::fromRequest(request: $request, version: is_string($version) ? $version : $this->options->defaultMajor);
         $principal = $this->principals->resolve($request)
-            ?? throw new ApiError(OperationsErrorCode::AuthenticationRequired, 401, 'Authentication is required.');
-        $context = $this->contexts->resolve($request, $principal, $metadata);
+            ?? throw new ApiError(errorCode: OperationsErrorCode::AuthenticationRequired, status: 401, message: 'Authentication is required.');
+        $context = $this->contexts->resolve(request: $request, principal: $principal, metadata: $metadata);
         $profile = $this->profile();
         $modules = [];
 
         foreach ($profile->operations as $operation) {
-            $modules[$operation->module] = $this->modules->isActive($operation->module, $context->tenant());
+            $modules[$operation->module] = $this->modules->isActive(name: $operation->module, ctx: $context->tenant());
         }
 
         $denied = [];
 
         foreach ($profile->capabilities as $capability) {
-            if ($this->hidden($profile, $capability->operationIds, $context)) {
+            if ($this->hidden(profile: $profile, operationIds: $capability->operationIds, context: $context)) {
                 $denied[] = $capability->id;
             }
         }
@@ -69,13 +69,13 @@ final class CapabilityResolver implements EffectiveCapabilities
 
         return array_map(
             static fn (EffectiveCapability $row): array => $row->publicMap(),
-            $this->profiles->effective($profile, $modules, knownIds: $visible),
+            $this->profiles->effective(profile: $profile, moduleAvailable: $modules, knownIds: $visible),
         );
     }
 
     private function profile(): ApiProfile
     {
-        return $this->profiles->make($this->modules->compiled(), $this->options);
+        return $this->profiles->make(registry: $this->modules->compiled(), options: $this->options);
     }
 
     /** @param  list<string>  $operationIds */
@@ -86,7 +86,7 @@ final class CapabilityResolver implements EffectiveCapabilities
                 continue;
             }
 
-            if (! $this->authorizer->allows($operation, $context)) {
+            if (! $this->authorizer->allows(operation: $operation, context: $context)) {
                 return true;
             }
         }

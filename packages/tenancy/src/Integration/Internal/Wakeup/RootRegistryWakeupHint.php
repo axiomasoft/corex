@@ -20,13 +20,13 @@ use Throwable;
  * Best-effort root routing hint. The tenant request remains authoritative;
  * losing this table merely makes the root process discover work later.
  */
-final class RootRegistryWakeupHint implements WakeupScheduleHint
+final readonly class RootRegistryWakeupHint implements WakeupScheduleHint
 {
     public function __construct(
-        private readonly ConnectionResolverInterface $connections,
-        private readonly string $rootConnection,
-        private readonly ClockInterface $clock,
-        private readonly LoggerInterface $logger,
+        private ConnectionResolverInterface $connections,
+        private string $rootConnection,
+        private ClockInterface $clock,
+        private LoggerInterface $logger,
     ) {}
 
     public function scheduled(TenantContext $context, DateTimeImmutable $fireAt): void

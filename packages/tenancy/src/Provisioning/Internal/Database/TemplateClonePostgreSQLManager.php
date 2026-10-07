@@ -10,6 +10,7 @@ use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\Contracts\TemplateDatabaseCloner;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Support\Sleep;
 use RuntimeException;
 use Throwable;
 
@@ -34,21 +35,21 @@ use Throwable;
  *
  * @internal spec: D24, premortem A3/B3, R-11 §2.3 п.2, F-DDL1
  */
-final class TemplateClonePostgreSQLManager implements TemplateDatabaseCloner
+final readonly class TemplateClonePostgreSQLManager implements TemplateDatabaseCloner
 {
     private const int QUARANTINE_RETRIES = 5;
 
     private const int QUARANTINE_BACKOFF_MS = 200;
 
     public function __construct(
-        private readonly TenancyOptions $options,
-        private readonly ConnectionResolverInterface $connections,
-        private readonly TemplateIntegrityVerifier $integrity,
+        private TenancyOptions $options,
+        private ConnectionResolverInterface $connections,
+        private TemplateIntegrityVerifier $integrity,
     ) {}
 
     public function createForAccount(AccountRef $account): bool
     {
-        $snapshot = AccountTemplateSnapshot::capture($account, $this->centralConnection());
+        $snapshot = AccountTemplateSnapshot::capture(account: $account, centralConnection: $this->centralConnection());
 
         $this->integrity->assertCurrent(
             version: $snapshot->templateVersion,
@@ -64,7 +65,7 @@ final class TemplateClonePostgreSQLManager implements TemplateDatabaseCloner
         $cluster = $this->resolveCluster($snapshot->clusterId);
         $this->validateParameter($cluster);
 
-        $created = $this->createDatabase($name, $template);
+        $created = $this->createDatabase(name: $name, templateDbName: $template);
 
         $this->connection()->statement("GRANT ALL PRIVILEGES ON DATABASE \"{$name}\" TO \"{$cluster}\"");
         $this->connection()->statement("ALTER DATABASE \"{$name}\" OWNER TO \"{$cluster}\"");
@@ -91,7 +92,7 @@ final class TemplateClonePostgreSQLManager implements TemplateDatabaseCloner
                     throw $e;
                 }
 
-                usleep(self::QUARANTINE_BACKOFF_MS * 1000 * $attempt);
+                Sleep::usleep(self::QUARANTINE_BACKOFF_MS * 1000 * $attempt);
             }
         }
 
@@ -134,13 +135,6 @@ final class TemplateClonePostgreSQLManager implements TemplateDatabaseCloner
         }
 
         return $cluster->app_db_user;
-    }
-
-    public function deleteDatabase(string $name): bool
-    {
-        $this->validateParameter($name);
-
-        return $this->connection()->statement('DROP DATABASE IF EXISTS "'.$name.'"');
     }
 
     public function databaseExists(string $name): bool

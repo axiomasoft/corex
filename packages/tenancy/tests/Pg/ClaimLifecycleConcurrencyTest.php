@@ -11,6 +11,7 @@ use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Sleep;
 use Illuminate\Support\Str;
 
 uses(TestCase::class)->group('pg');
@@ -29,7 +30,7 @@ final class P32ClaimWorker
     private array $pipes = [];
 
     /** @var resource */
-    private mixed $process;
+    private readonly mixed $process;
 
     private readonly string $errors;
 
@@ -186,7 +187,7 @@ function p32AssertBlocked(string $name): void
 
             return;
         }
-        usleep(10000);
+        Sleep::usleep(10000);
     } while (microtime(true) < $deadline);
 
     throw new RuntimeException('Independent claim did not reach the PostgreSQL lock barrier.');
@@ -247,7 +248,7 @@ it('rolls back a killed precommit worker and replays a committed response lost b
 
 it('denies every changed immutable fingerprint and soft-deleted replay without a second reservation', function (): void {
     $request = new ClaimRequest(requestKey: 'fingerprint', clusterId: $this->p32Cluster, templateId: $this->p32Template, requestDigest: hash('sha256', 'original'));
-    $claim = new ClaimAccountSignup(connections: app(ConnectionResolverInterface::class), centralConnection: 'pgsql', templateIntegrity: new P32ConcurrentTemplate);
+    $claim = new ClaimAccountSignup(connections: resolve(ConnectionResolverInterface::class), centralConnection: 'pgsql', templateIntegrity: new P32ConcurrentTemplate);
     $first = $claim->claim($request);
     foreach ([['cluster' => (string) Str::uuid()], ['template' => (string) Str::uuid()], ['digest' => hash('sha256', 'changed')]] as $change) {
         $changed = new ClaimRequest(requestKey: $request->requestKey, clusterId: $change['cluster'] ?? $request->clusterId, templateId: $change['template'] ?? $request->templateId, requestDigest: $change['digest'] ?? $request->requestDigest);

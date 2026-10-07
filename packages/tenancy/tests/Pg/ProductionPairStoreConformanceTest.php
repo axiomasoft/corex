@@ -28,7 +28,7 @@ beforeEach(function (): void {
 
     // Rollback guards belong to each table; schema construction still uses the registry.
     $this->membershipMigrations = [];
-    $set = app(SchemaSets::class)->get('axiomasoft/corex-tenancy:tenant');
+    $set = resolve(SchemaSets::class)->get('axiomasoft/corex-tenancy:tenant');
     foreach (glob($set->path.'/*_create_tnt_membership_*.php') as $file) {
         /** @var Migration $migration */
         $migration = require $file;

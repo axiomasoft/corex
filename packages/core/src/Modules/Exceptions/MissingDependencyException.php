@@ -24,6 +24,6 @@ final class MissingDependencyException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::MissingDependencyException, ErrorCategory::Conflict, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::MissingDependencyException, category: ErrorCategory::Conflict, retryable: false);
     }
 }

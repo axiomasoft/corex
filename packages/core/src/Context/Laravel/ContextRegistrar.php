@@ -27,15 +27,15 @@ final class ContextRegistrar implements PackageRegistrar
     public function register(Application $app): void
     {
         $app->bind(ImpersonationGuard::class, ImpersonationGuardImplementation::class);
-        $app->singleton(TenantContextResolver::class, static fn (Application $app): TenantContextResolver => ConfiguredImplementation::resolve($app, TenantContextResolver::class, $app->make(CoreOptions::class)->tenantContextResolver));
+        $app->singleton(TenantContextResolver::class, static fn (Application $app): TenantContextResolver => ConfiguredImplementation::resolve(app: $app, contract: TenantContextResolver::class, implementation: $app->make(CoreOptions::class)->tenantContextResolver));
         $app->scoped(
             TenantContextRestorer::class,
             static fn (Application $app): GuardedTenantContextRestorer => new GuardedTenantContextRestorer(
                 resolver: $app->make(TenantContextResolver::class),
             ),
         );
-        $app->singleton(TenancyManager::class, static fn (Application $app): TenancyManager => ConfiguredImplementation::resolve($app, TenancyManager::class, $app->make(CoreOptions::class)->tenancyManager));
-        $app->singleton(ImpersonationService::class, static fn (Application $app): ImpersonationService => ConfiguredImplementation::resolve($app, ImpersonationService::class, $app->make(CoreOptions::class)->impersonationService));
+        $app->singleton(TenancyManager::class, static fn (Application $app): TenancyManager => ConfiguredImplementation::resolve(app: $app, contract: TenancyManager::class, implementation: $app->make(CoreOptions::class)->tenancyManager));
+        $app->singleton(ImpersonationService::class, static fn (Application $app): ImpersonationService => ConfiguredImplementation::resolve(app: $app, contract: ImpersonationService::class, implementation: $app->make(CoreOptions::class)->impersonationService));
     }
 
     #[Override]

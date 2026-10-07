@@ -46,9 +46,9 @@ use InvalidArgumentException;
 
 final class AuthorizationLayersTest extends TestCase
 {
-    public const LocalResource = 'note:uuid:01890f3e-7b2a-7cc0-98c4-dc0c0c07398f';
+    public const string LocalResource = 'note:uuid:01890f3e-7b2a-7cc0-98c4-dc0c0c07398f';
 
-    public const ForeignTenantResource = 'note:uuid:01890f3e-7b2a-7cc0-98c4-dc0c0c073990';
+    public const string ForeignTenantResource = 'note:uuid:01890f3e-7b2a-7cc0-98c4-dc0c0c073990';
 
     private ModuleFixture $modules;
 
@@ -114,7 +114,7 @@ final class AuthorizationLayersTest extends TestCase
                 read: ['/id', '/title', '/owner', '/account', '/items'],
                 write: ['/title', '/owner', '/resource_id', '/claimed_account'],
             );
-        $registry = app(RegistryCompiler::class)->compile([
+        $registry = resolve(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$operation]),
         ], installedPackages: []);
 
@@ -221,7 +221,7 @@ final class AuthorizationLayersTest extends TestCase
         $this->app['config']->set('app.key', 'authorization-layers-secret');
         Schema::dropIfExists('sys_api_idempotency');
 
-        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
 
         $this->clientScopes->allow = false;
         self::assertSame('operations.scope_required', $this->dispatch($this->validInput(), 'scope-denied')->getData(true)['code']);

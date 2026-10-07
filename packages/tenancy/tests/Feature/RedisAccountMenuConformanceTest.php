@@ -17,6 +17,7 @@ use Illuminate\Cache\Repository;
 use Illuminate\Http\Client\Request;
 use Illuminate\Redis\RedisManager;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Sleep;
 
 function p3RedisRepository(): Repository
 {
@@ -132,7 +133,7 @@ it('rejects poisoned Redis bytes, separates product keys, expires bounded displa
         $result = p3RedisResult(query: $query, version: $version, accountIds: []);
         $cache->put(query: $query, result: $result, ttlSeconds: 1);
         expect($raw->ttl($poisonedKey))->toBeGreaterThan(0)->toBeLessThanOrEqual(1);
-        sleep(2);
+        Sleep::sleep(2);
         expect($cache->resultFor(query: $query, membershipVersion: $version))->toBeNull();
 
         $fixture = new AccountMenuFixture;

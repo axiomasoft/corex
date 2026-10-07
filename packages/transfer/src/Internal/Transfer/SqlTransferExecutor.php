@@ -205,30 +205,30 @@ final readonly class SqlTransferExecutor implements TransferRunner
 
     private function assertFence(object $job, DataScope $scope, StepToken $token): void
     {
-        if (Value::field($job, 'checkpoint_seq') !== $token->checkpointSequence || Value::field($job, 'claim_epoch') !== $token->epoch || Value::field($job, 'source_hash') !== $token->sourceHash || Value::field($job, 'mapping_hash') !== $token->mappingHash || Value::field($job, 'schema_hash') !== $token->schemaHash || Value::field($job, 'restore_epoch') !== $token->restoreEpoch) {
+        if (Value::field(row: $job, name: 'checkpoint_seq') !== $token->checkpointSequence || Value::field(row: $job, name: 'claim_epoch') !== $token->epoch || Value::field(row: $job, name: 'source_hash') !== $token->sourceHash || Value::field(row: $job, name: 'mapping_hash') !== $token->mappingHash || Value::field(row: $job, name: 'schema_hash') !== $token->schemaHash || Value::field(row: $job, name: 'restore_epoch') !== $token->restoreEpoch) {
             throw new TransferUnavailable('Transfer checkpoint token does not match the current job.');
         }
 
-        if (! $this->authorizer->authorize(scope: $scope, entity: '*', subjectId: Value::text(Value::field($job, 'id')), fields: [], action: 'transfer.run')->allowed) {
+        if (! $this->authorizer->authorize(scope: $scope, entity: '*', subjectId: Value::text(Value::field(row: $job, name: 'id')), fields: [], action: 'transfer.run')->allowed) {
             throw new TransferUnavailable('Transfer access is denied by the current policy.');
         }
     }
 
     private function cursor(object $job): SourceCursor
     {
-        $value = json_decode(Value::text(Value::field($job, 'cursor')), true, 16, JSON_THROW_ON_ERROR);
+        $value = json_decode(Value::text(Value::field(row: $job, name: 'cursor')), true, 16, JSON_THROW_ON_ERROR);
 
         if (! is_array($value) || ! isset($value['ordinal']) || ! array_key_exists('boundaryByteOffset', $value)) {
             throw new TransferUnavailable('Transfer checkpoint cursor is invalid.');
         }
 
-        return new SourceCursor(ordinal: Value::text($value['ordinal']), boundaryByteOffset: Value::nullableText($value['boundaryByteOffset']), sourceHash: Value::text(Value::field($job, 'source_hash')));
+        return new SourceCursor(ordinal: Value::text($value['ordinal']), boundaryByteOffset: Value::nullableText($value['boundaryByteOffset']), sourceHash: Value::text(Value::field(row: $job, name: 'source_hash')));
     }
 
     /** @return array<string, int> */
     private function stats(object $job): array
     {
-        $value = json_decode(Value::text(Value::field($job, 'stats')), true, 16, JSON_THROW_ON_ERROR);
+        $value = json_decode(Value::text(Value::field(row: $job, name: 'stats')), true, 16, JSON_THROW_ON_ERROR);
 
         if (! is_array($value) || ($value !== [] && array_is_list($value))) {
             throw new TransferUnavailable('Transfer statistics are invalid.');

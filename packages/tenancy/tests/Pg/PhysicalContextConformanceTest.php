@@ -58,7 +58,7 @@ beforeEach(function (): void {
         DB::statement('CREATE DATABASE '.$database);
         $configuration = DB::connection('pgsql')->getConfig();
         $configuration['database'] = $database;
-        $connection = (new ConnectionFactory(app()))->make($configuration, $database);
+        $connection = new ConnectionFactory(app())->make($configuration, $database);
 
         try {
             $connection->statement('CREATE TABLE context_sentinel (name text NOT NULL)');
@@ -78,7 +78,7 @@ beforeEach(function (): void {
 });
 
 afterEach(function (): void {
-    app(TenancyManager::class)->end();
+    resolve(TenancyManager::class)->end();
     DB::purge('tenant');
     foreach ($this->databases as $database) {
         DB::connection('pgsql')->statement('DROP DATABASE IF EXISTS '.$database);
@@ -87,7 +87,7 @@ afterEach(function (): void {
 });
 
 it('clears previous workspace for another job in the same account and refuses unavailable narrowing', function (): void {
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $account = $this->accounts['archive'];
     $job = physicalContextJob(physicalContextPayload($account->id, $this->workspaceId));
     Event::dispatch(new JobProcessing('database', $job));
@@ -103,14 +103,14 @@ it('clears previous workspace for another job in the same account and refuses un
 });
 
 it('runs archive and laboratory jobs on distinct physical databases with success exception retry and nested restoration', function (): void {
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $archive = $this->accounts['archive'];
     $lab = $this->accounts['lab'];
     $archivePayload = physicalContextPayload($archive->id, $this->workspaceId);
     $archiveJob = physicalContextJob($archivePayload);
     Event::dispatch(new JobProcessing('database', $archiveJob));
     expect(DB::table('context_sentinel')->value('name'))->toBe('archive');
-    $archiveDisk = app(TenantStorage::class)->disk();
+    $archiveDisk = resolve(TenantStorage::class)->disk();
     $archiveDisk->put('document.txt', 'archive');
     Event::dispatch(new JobAttempted('database', $archiveJob));
     expect($manager->context())->toBeNull()->and(DB::table('context_sentinel')->value('name'))->toBe('root');
@@ -125,7 +125,7 @@ it('runs archive and laboratory jobs on distinct physical databases with success
     Event::dispatch(new JobProcessing('database', $labJob));
     expect(DB::table('context_sentinel')->value('name'))->toBe('lab')
         ->and($manager->context()->workspace->slug)->toBe('lab')
-        ->and(app(TenantStorage::class)->disk()->exists('document.txt'))->toBeFalse();
+        ->and(resolve(TenantStorage::class)->disk()->exists('document.txt'))->toBeFalse();
     expect(fn () => $archiveDisk->get('document.txt'))->toThrow(StorageOperationFailed::class);
     Event::dispatch(new JobAttempted('database', $labJob, new RuntimeException('interrupted lab job')));
     expect($manager->context())->toBeNull()->and(DB::table('context_sentinel')->value('name'))->toBe('root');

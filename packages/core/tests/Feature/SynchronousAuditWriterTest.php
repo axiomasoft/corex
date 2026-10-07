@@ -35,7 +35,7 @@ it('commits a mandatory audit row with the event snapshot despite optional audit
         occurredAt: new DateTimeImmutable('2026-10-05T04:00:00+00:00'),
     );
 
-    app(SynchronousAuditWriter::class)->record($entry, 'testbench');
+    resolve(SynchronousAuditWriter::class)->record($entry, 'testbench');
 
     expect(DB::connection('testbench')->table('sys_audit_log')->count())->toBe(1)
         ->and(DB::connection('testbench')->transactionLevel())->toBe(0);
@@ -49,7 +49,7 @@ it('rejects an ambient transaction before writing the audit row', function (): v
     $connection->beginTransaction();
 
     try {
-        expect(fn () => app(SynchronousAuditWriter::class)->record(new AuditEntry(
+        expect(fn () => resolve(SynchronousAuditWriter::class)->record(new AuditEntry(
             action: 'impersonation.started', actorType: ActorType::Support,
             occurredAt: new DateTimeImmutable('2026-10-05T04:00:00+00:00'),
         ), 'testbench'))->toThrow(RuntimeException::class);

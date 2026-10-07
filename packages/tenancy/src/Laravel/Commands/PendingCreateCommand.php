@@ -41,13 +41,13 @@ final class PendingCreateCommand extends Command
 
         foreach ($clusters as $id) {
             $id = DatabaseValue::text($id);
-            $count = $explicitCount ?? $this->topUpCount($centralConnection, $pool, $id);
+            $count = $explicitCount ?? $this->topUpCount(centralConnection: $centralConnection, pool: $pool, clusterId: $id);
 
             if ($count <= 0) {
                 continue;
             }
 
-            $created = $pool->createPending($count, $id);
+            $created = $pool->createPending(count: $count, clusterId: $id);
 
             $this->components->info(sprintf('Cluster [%s]: created %d pending account(s).', $id, count($created)));
         }

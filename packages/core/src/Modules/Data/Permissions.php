@@ -16,27 +16,15 @@ use CoreX\Modules\Contracts\Extender;
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class Permissions implements Extender
 {
-    public string $entity;
-
-    public string $panel;
-
-    /** @var list<string> */
-    public array $actions;
-
     public bool $isScopeable = false;
 
     /** @param  list<string>  $actions  private constructor — build via group(). */
-    private function __construct(string $entity, array $actions, string $panel)
-    {
-        $this->entity = $entity;
-        $this->actions = $actions;
-        $this->panel = $panel;
-    }
+    private function __construct(public string $entity, public array $actions, public string $panel) {}
 
     /** @param  list<string>  $actions */
     public static function group(string $entity, array $actions, string $panel = 'app'): self
     {
-        return new self($entity, $actions, $panel);
+        return new self(entity: $entity, actions: $actions, panel: $panel);
     }
 
     public function scopeable(): self

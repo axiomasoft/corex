@@ -39,7 +39,7 @@ beforeEach(function (): void {
         DB::statement('CREATE DATABASE '.$database);
         $configuration = DB::connection('pgsql')->getConfig();
         $configuration['database'] = $database;
-        $connection = (new ConnectionFactory(app()))->make($configuration, $database);
+        $connection = new ConnectionFactory(app())->make($configuration, $database);
 
         try {
             $connection->statement('CREATE TABLE scope_markers (marker text NOT NULL)');
@@ -81,7 +81,7 @@ function markersSB(): array
     foreach (['central' => test()->central, 'a' => test()->databases['a'], 'b' => test()->databases['b']] as $label => $database) {
         $configuration = DB::connection('pgsql')->getConfig();
         $configuration['database'] = $database;
-        $connection = (new ConnectionFactory(app()))->make($configuration, 'probe-'.$label);
+        $connection = new ConnectionFactory(app())->make($configuration, 'probe-'.$label);
 
         try {
             $rows[$label] = $connection->table('scope_markers')->orderBy('marker')->pluck('marker')->all();
@@ -94,17 +94,17 @@ function markersSB(): array
 }
 
 it('a service resolved before a runFor keeps its database, the one resolved inside writes to the other, and re-resolution after is back (D95 п.3)', function (): void {
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->initialize($this->accounts['a']);
-    $held = app(MarkerWriter::class);
+    $held = resolve(MarkerWriter::class);
     expect($held->database())->toBe($this->databases['a']);
 
     $manager->runFor($this->accounts['b'], null, function (): void {
-        app(MarkerWriter::class)->write('inside');
+        resolve(MarkerWriter::class)->write('inside');
     });
 
     $held->write('held');
-    $after = app(MarkerWriter::class);
+    $after = resolve(MarkerWriter::class);
     $after->write('after');
 
     expect($after)->not->toBe($held)
@@ -112,12 +112,12 @@ it('a service resolved before a runFor keeps its database, the one resolved insi
 });
 
 it('central → A: a writer built central is not reused inside A (initialize resets scope without any compensating switch)', function (): void {
-    $manager = app(TenancyManager::class);
-    $central = app(MarkerWriter::class);
+    $manager = resolve(TenancyManager::class);
+    $central = resolve(MarkerWriter::class);
     expect($central->database())->toBe($this->central);
 
     $manager->initialize($this->accounts['a']);
-    $inside = app(MarkerWriter::class);
+    $inside = resolve(MarkerWriter::class);
     $inside->write('in-a');
 
     expect($inside)->not->toBe($central)
@@ -126,12 +126,12 @@ it('central → A: a writer built central is not reused inside A (initialize res
 });
 
 it('A → central: end() resets scope, the A writer is not reused centrally', function (): void {
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->initialize($this->accounts['a']);
-    $inA = app(MarkerWriter::class);
+    $inA = resolve(MarkerWriter::class);
 
     $manager->end();
-    $central = app(MarkerWriter::class);
+    $central = resolve(MarkerWriter::class);
     $central->write('central');
 
     expect($central)->not->toBe($inA)
@@ -154,10 +154,10 @@ it('transfers central URL credentials and options to the account connection and 
     DB::purge('pgsql');
     $before = config('database.connections.pgsql');
 
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->initialize($this->accounts['a']);
     $tenant = config('database.connections.tenant');
-    app(MarkerWriter::class)->write('only-a');
+    resolve(MarkerWriter::class)->write('only-a');
 
     expect($tenant)->not->toHaveKey('url')
         ->and($tenant['database'])->toBe($this->databases['a'])
@@ -195,7 +195,7 @@ it('keeps a host resolver\'s credential/option overrides and refuses routing opt
     };
     app()->instance(AccountConnectionResolver::class, $resolver);
     app()->forgetInstance(DatabaseTenancyManager::class);
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
 
     $manager->initialize($this->accounts['a']);
     expect(config('database.connections.tenant.application_name'))->toBe('resolver-name');
@@ -214,7 +214,7 @@ it('a replica overlay on the central connection never overrides the account rout
     config(['database.connections.pgsql.read' => ['host' => $central['host']], 'database.connections.pgsql.write' => ['host' => $central['host']]]);
     DB::purge('pgsql');
 
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->initialize($this->accounts['a']);
 
     expect(config('database.connections.tenant'))->not->toHaveKeys(['read', 'write'])
@@ -222,5 +222,5 @@ it('a replica overlay on the central connection never overrides the account rout
 });
 
 it('the stock resolver is bound as the account connection resolver', function (): void {
-    expect(app(AccountConnectionResolver::class))->toBeInstanceOf(CentralTemplateConnectionResolver::class);
+    expect(resolve(AccountConnectionResolver::class))->toBeInstanceOf(CentralTemplateConnectionResolver::class);
 });

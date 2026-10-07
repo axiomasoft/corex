@@ -117,7 +117,7 @@ it('AC-20: with a narrowed workspace, the scope keeps that workspace\'s rows plu
     [$workspaceScoped, $otherWorkspaceScoped, $accountWide] = seedScopeStubRecords();
 
     /** @var FakeTenancyManagerStub $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->setContext(new WorkspaceRef(id: 'ws-a', slug: 'a', type: 'company', path: 'a', parentId: null));
 
     $ids = WorkspaceScopedRecordStub::query()->pluck('id')->all();
@@ -131,7 +131,7 @@ it('AC-20: with no workspace narrowed (account-wide/admin context), the scope do
     seedScopeStubRecords();
 
     /** @var FakeTenancyManagerStub $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->initialize(new AccountRef(id: 'acc-1', slug: 'acc', status: 'active', features: [], limits: []));
 
     $ids = WorkspaceScopedRecordStub::query()->pluck('id')->all();

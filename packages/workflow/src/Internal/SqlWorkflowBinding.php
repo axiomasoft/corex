@@ -22,20 +22,20 @@ use Illuminate\Support\Str;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
-final class SqlWorkflowBinding implements WorkflowBinding
+final readonly class SqlWorkflowBinding implements WorkflowBinding
 {
     public function __construct(
-        private readonly ConnectionInterface $connection,
-        private readonly TenantContextResolver $contexts,
-        private readonly EngineAdapter $engine,
-        private readonly ?ModuleRegistry $modules,
-        private readonly bool $enforceDeclarations,
-        private readonly ClockInterface $clock,
+        private ConnectionInterface $connection,
+        private TenantContextResolver $contexts,
+        private EngineAdapter $engine,
+        private ?ModuleRegistry $modules,
+        private bool $enforceDeclarations,
+        private ClockInterface $clock,
     ) {}
 
     public function capture(TriggerRequest $request): CaptureResult
     {
-        $this->assertContext($request->context->account->id, $request->context->workspace?->id);
+        $this->assertContext(accountId: $request->context->account->id, workspaceId: $request->context->workspace?->id);
         $this->assertKey($request->requestKey);
         $this->assertTriggerDeclaration($request);
         $stamp = WorkflowDefinitionStamp::fromRequest(
@@ -63,7 +63,7 @@ final class SqlWorkflowBinding implements WorkflowBinding
 
     public function signal(SignalRequest $request): SignalResult
     {
-        $this->assertContext($request->context->account->id, $request->context->workspace?->id);
+        $this->assertContext(accountId: $request->context->account->id, workspaceId: $request->context->workspace?->id);
         $this->assertKey($request->requestKey);
 
         if ($request->expiresAt <= $this->clock->now()) {
@@ -75,7 +75,7 @@ final class SqlWorkflowBinding implements WorkflowBinding
 
     public function fire(TransitionRequest $request): TransitionResult
     {
-        $this->assertContext($request->context->account->id, $request->context->workspace?->id);
+        $this->assertContext(accountId: $request->context->account->id, workspaceId: $request->context->workspace?->id);
         $this->assertKey($request->requestKey);
 
         return $this->engine->fire($request);
@@ -94,7 +94,7 @@ final class SqlWorkflowBinding implements WorkflowBinding
         array $business,
         ExtensionStamp $stamp,
     ): CaptureResult {
-        $stored = WorkflowDefinitionStamp::storedPayload($business, $stamp);
+        $stored = WorkflowDefinitionStamp::storedPayload(businessPayload: $business, stamp: $stamp);
         $encoded = json_encode($stored, JSON_THROW_ON_ERROR);
         $hash = WorkflowDefinitionStamp::payloadHash(
             kind: $kind,
@@ -147,12 +147,12 @@ final class SqlWorkflowBinding implements WorkflowBinding
      */
     private function admitExisting(object $existing, string $kind, string $requestKey, array $business, ExtensionStamp $stamp, string $versionedHash): string
     {
-        $decoded = json_decode(Value::text(Value::field($existing, 'payload')), true);
+        $decoded = json_decode(Value::text(Value::field(row: $existing, name: 'payload')), true);
         $stored = is_array($decoded) ? Value::map($decoded) : null;
         $schema = WorkflowDefinitionStamp::schemaOf(
             stored: is_array($stored) ? $stored : null,
-            definitionRef: Value::text(Value::field($existing, 'definition_ref')),
-            versionRef: Value::text(Value::field($existing, 'version_ref')),
+            definitionRef: Value::text(Value::field(row: $existing, name: 'definition_ref')),
+            versionRef: Value::text(Value::field(row: $existing, name: 'version_ref')),
         );
 
         if ($schema === 'versioned') {
@@ -161,7 +161,7 @@ final class SqlWorkflowBinding implements WorkflowBinding
                 && ($identity['version'] ?? null) === $stamp->version
                 && ($identity['point'] ?? null) === $stamp->point;
 
-            return $sameIdentity && hash_equals(Value::text(Value::field($existing, 'payload_hash')), $versionedHash)
+            return $sameIdentity && hash_equals(Value::text(Value::field(row: $existing, name: 'payload_hash')), $versionedHash)
                 ? 'existing'
                 : 'conflict';
         }
@@ -173,7 +173,7 @@ final class SqlWorkflowBinding implements WorkflowBinding
                 businessPayload: $business,
             );
 
-            return hash_equals(Value::text(Value::field($existing, 'payload_hash')), $legacyHash) ? 'existing' : 'conflict';
+            return hash_equals(Value::text(Value::field(row: $existing, name: 'payload_hash')), $legacyHash) ? 'existing' : 'conflict';
         }
 
         return 'conflict';
@@ -194,7 +194,7 @@ final class SqlWorkflowBinding implements WorkflowBinding
             return;
         }
 
-        if ($this->modules === null || ! $this->modules->isActive($request->module, $request->context)) {
+        if ($this->modules === null || ! $this->modules->isActive(name: $request->module, ctx: $request->context)) {
             throw new UnsupportedWorkflowCapability('The workflow module is not active for the current tenant.');
         }
 

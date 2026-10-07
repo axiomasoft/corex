@@ -15,7 +15,7 @@ final readonly class SearchFilter
         public string $field,
         public array $values,
     ) {
-        self::validateInput($field, $values);
+        self::validateInput(field: $field, values: $values);
     }
 
     /** Runtime validation also rejects values from untyped integration callers.

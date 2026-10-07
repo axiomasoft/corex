@@ -39,7 +39,7 @@ final class OperationSectionCompiler implements ManifestSectionCompiler
             }
 
             foreach ($operations as $other) {
-                ApiOperationValidator::validateRoutePair($api, $other);
+                ApiOperationValidator::validateRoutePair(first: $api, second: $other);
             }
 
             $ids[$id] = true;

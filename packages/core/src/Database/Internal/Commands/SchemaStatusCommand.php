@@ -27,7 +27,7 @@ final class SchemaStatusCommand extends Command
         $database = $this->option('database');
         $rows = [];
         $pending = false;
-        foreach ($migrator->status($scope, is_string($database) ? $database : null) as $status) {
+        foreach ($migrator->status(scope: $scope, connection: is_string($database) ? $database : null) as $status) {
             $rows[] = [$status->set->id(), $status->set->scope->value, $status->set->lifecycle->value, $status->set->version, count($status->applied), count($status->pending), count($status->unknown)];
             $pending = $pending || $status->pending !== [] || $status->unknown !== [];
         }

@@ -1,0 +1,25 @@
+{
+  "classification": "source",
+  "commands": [
+    {
+      "exit": 0,
+      "output": "validate.json",
+      "role": "validate",
+      "sha256": "a9004a6821fd0fe316d9553cc39d0f09440871672cad344fe0cd86cadaf4b166"
+    },
+    {
+      "exit": 0,
+      "output": "audit.json",
+      "role": "audit",
+      "sha256": "41f6ad0a356411f4f1b3a6aa900db138170671380ff730ef66408cec2badc467"
+    }
+  ],
+  "effective_manifest_sha256": "76ba0f3cce753c8eeb599042784d8993a634007cb23f836245556a25627f049c",
+  "lock_kind": "source",
+  "lock_sha256": "9d17d050e0647725470c477396faf5703c4d040f146c22cf6aee80b8b14fe5a8",
+  "manifest": "products/flex-crm/composer.json",
+  "manifest_sha256": "76ba0f3cce753c8eeb599042784d8993a634007cb23f836245556a25627f049c",
+  "name": "flex/crm",
+  "source_lock_sha256": "9d17d050e0647725470c477396faf5703c4d040f146c22cf6aee80b8b14fe5a8",
+  "status": "GREEN"
+}

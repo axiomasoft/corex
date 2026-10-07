@@ -16,11 +16,11 @@ use Illuminate\Contracts\Cache\Repository as CacheRepository;
  *
  * @internal spec: D30/A1/A2, A45/A46
  */
-final class RepositoryModuleRegistryCache implements ModuleRegistryCache
+final readonly class RepositoryModuleRegistryCache implements ModuleRegistryCache
 {
     public function __construct(
-        private readonly CacheRepository $store,
-        private readonly ModulesOptions $options,
+        private CacheRepository $store,
+        private ModulesOptions $options,
     ) {}
 
     public function rememberEnabled(string $accountId, int $version, Closure $resolver): array

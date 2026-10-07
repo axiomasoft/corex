@@ -16,7 +16,7 @@ final class DealAmount implements CastsAttributes
     /** @param array<string, mixed> $attributes */
     public function get(Model $model, string $key, mixed $value, array $attributes): ?Money
     {
-        return (new MoneyCast('amount', 'currency'))->get($model, $key, $value, $attributes);
+        return new MoneyCast(amountColumn: 'amount', currencyColumn: 'currency')->get(model: $model, key: $key, value: $value, attributes: $attributes);
     }
 
     /**
@@ -28,6 +28,6 @@ final class DealAmount implements CastsAttributes
         // Unlike the generic nullable pair, CRM currency remains mandatory.
         return $value === null
             ? ['amount' => null, 'currency' => Value::text($attributes['currency'] ?? 'RUB')]
-            : (new MoneyCast('amount', 'currency'))->set($model, $key, $value, $attributes);
+            : new MoneyCast(amountColumn: 'amount', currencyColumn: 'currency')->set(model: $model, key: $key, value: $value, attributes: $attributes);
     }
 }

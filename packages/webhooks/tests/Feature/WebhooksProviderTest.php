@@ -47,7 +47,7 @@ final class WebhooksProviderTest extends TestCase
         self::assertArrayHasKey('corex:webhooks:prune', $commands);
         self::assertArrayHasKey('corex:operations:prune', $commands);
 
-        foreach ((new ReflectionMethod(PruneApiOperations::class, 'handle'))->getParameters() as $parameter) {
+        foreach (new ReflectionMethod(PruneApiOperations::class, 'handle')->getParameters() as $parameter) {
             self::assertNotSame(WebhookRetention::class, (string) $parameter->getType());
         }
     }

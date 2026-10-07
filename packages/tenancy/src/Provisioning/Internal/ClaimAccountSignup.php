@@ -17,16 +17,16 @@ use Illuminate\Database\QueryException;
 use stdClass;
 
 /** @internal */
-final class ClaimAccountSignup implements ProvisioningClaim
+final readonly class ClaimAccountSignup implements ProvisioningClaim
 {
     private const string SignupKeyIndex = 'root_accounts_signup_key_uq';
 
     private const int MaxTransactionAttempts = 3;
 
     public function __construct(
-        private readonly string $centralConnection,
-        private readonly TemplateIntegrityVerifier $templateIntegrity,
-        private readonly ConnectionResolverInterface $connections,
+        private string $centralConnection,
+        private TemplateIntegrityVerifier $templateIntegrity,
+        private ConnectionResolverInterface $connections,
     ) {}
 
     public function claim(ClaimRequest $request): ClaimResult
@@ -76,12 +76,12 @@ final class ClaimAccountSignup implements ProvisioningClaim
         $binding = $bindings->first();
 
         if ($binding !== null) {
-            return $this->replayResult($binding, $request);
+            return $this->replayResult(binding: $binding, request: $request);
         }
 
         $qualifiedTemplate = $this->templateIntegrity->qualify($request);
-        $this->validateQualifiedTemplate($qualifiedTemplate, $request);
-        $this->lockAndVerifyTemplate($connection, $qualifiedTemplate);
+        $this->validateQualifiedTemplate(qualifiedTemplate: $qualifiedTemplate, request: $request);
+        $this->lockAndVerifyTemplate(connection: $connection, qualifiedTemplate: $qualifiedTemplate);
 
         $candidate = $connection->table('root_accounts')
             ->select(['id', 'cluster_id', 'template_version', 'embedding_model', 'embedding_dim'])

@@ -20,6 +20,6 @@ final class AccessDeniedException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(IntlErrorCode::AccessDeniedException, ErrorCategory::Authorization, retryable: false);
+        return new ErrorDescriptor(code: IntlErrorCode::AccessDeniedException, category: ErrorCategory::Authorization, retryable: false);
     }
 }

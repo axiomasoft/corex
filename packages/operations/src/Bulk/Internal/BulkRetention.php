@@ -69,7 +69,7 @@ final readonly class BulkRetention
         $resultCutoff = $now->sub(new DateInterval('PT'.$this->resultRetentionSeconds.'S'));
         $metadataCutoff = $now->sub(new DateInterval('PT'.$this->metadataRetentionSeconds.'S'));
 
-        $removeRows = $this->terminal($scope, $now)
+        $removeRows = $this->terminal(scope: $scope, now: $now)
             ->whereNotNull('finished_at')
             ->where('finished_at', '<=', $metadataCutoff)
             ->orderBy('id')
@@ -78,8 +78,8 @@ final readonly class BulkRetention
         $removeIds = [];
 
         foreach ($removeRows as $row) {
-            if ($this->trusted($row, $scope)) {
-                $removeIds[] = DatabaseValue::text(DatabaseValue::field($row, 'id'));
+            if ($this->trusted(row: $row, scope: $scope)) {
+                $removeIds[] = DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id'));
             }
         }
 
@@ -87,7 +87,7 @@ final readonly class BulkRetention
         $clearIds = [];
 
         if ($remaining > 0) {
-            $clearRows = $this->terminal($scope, $now)
+            $clearRows = $this->terminal(scope: $scope, now: $now)
                 ->where(function (Builder $query) use ($now, $resultCutoff): void {
                     $query->where(function (Builder $expired) use ($now): void {
                         $expired->whereNotNull('expires_at')->where('expires_at', '<=', $now);
@@ -102,8 +102,8 @@ final readonly class BulkRetention
                 ->get();
 
             foreach ($clearRows as $row) {
-                if ($this->trusted($row, $scope)) {
-                    $clearIds[] = DatabaseValue::text(DatabaseValue::field($row, 'id'));
+                if ($this->trusted(row: $row, scope: $scope)) {
+                    $clearIds[] = DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id'));
                 }
             }
         }
@@ -178,11 +178,11 @@ final readonly class BulkRetention
 
     private function trusted(object $row, DataScope $scope): bool
     {
-        if (DatabaseValue::field($row, 'result_ref') === null) {
+        if (DatabaseValue::field(row: $row, name: 'result_ref') === null) {
             return true;
         }
 
-        $decoded = JsonCanonical::decode(DatabaseValue::text(DatabaseValue::field($row, 'result_ref')));
+        $decoded = JsonCanonical::decode(DatabaseValue::text(DatabaseValue::field(row: $row, name: 'result_ref')));
 
         if (! is_array($decoded)) {
             return false;
@@ -205,7 +205,7 @@ final readonly class BulkRetention
             return false;
         }
 
-        if (! is_string($operationId) || ! hash_equals(DatabaseValue::text(DatabaseValue::field($row, 'id')), $operationId)) {
+        if (! is_string($operationId) || ! hash_equals(DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id')), $operationId)) {
             return false;
         }
 

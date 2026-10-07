@@ -84,7 +84,7 @@ beforeEach(function (): void {
 function pgScope(object $test): DataScope
 {
     return DataScope::fromTenantContext(
-        context: app(TenantContextResolver::class)->current(),
+        context: resolve(TenantContextResolver::class)->current(),
         connectionIdentity: 'pgsql:'.DB::connection('pgsql')->getDatabaseName(),
         actorId: $test->userId,
         restoreEpoch: $test->restoreEpoch,
@@ -106,7 +106,7 @@ it('MAT-01 serializes concurrent materialization to one task per occurrence', fu
     $set = SeriesSeeder::dailySet('series-pg-01', 'rev-1', 2);
     $series = SeriesSeeder::seed('series-pg-01', $set, $this->template, $this->restoreEpoch);
     $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05');
-    $materializer = app(TaskRecurrenceCommand::class);
+    $materializer = resolve(TaskRecurrenceCommand::class);
 
     $materializer->materialize(pgScope($this), $series, $window, pgToken($this, $series, $window, 'pg-01-a'));
     $second = $materializer->materialize(pgScope($this), $series, $window, pgToken($this, $series, $window, 'pg-01-b'));
@@ -120,7 +120,7 @@ it('MAT-02 replays durable receipts after a failed outer attempt', function (): 
     $series = SeriesSeeder::seed('series-pg-02', $set, $this->template, $this->restoreEpoch);
     $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05');
     $token = pgToken($this, $series, $window, 'pg-02-op');
-    $materializer = app(TaskRecurrenceCommand::class);
+    $materializer = resolve(TaskRecurrenceCommand::class);
     $first = $materializer->materialize(pgScope($this), $series, $window, $token);
     $replay = $materializer->materialize(pgScope($this), $series, $window, $token);
 
@@ -138,7 +138,7 @@ it('MAT-06 schedules a stamped complete payload and materializes through the han
     $set = SeriesSeeder::dailySet('series-pg-06', 'rev-1', 1);
     $series = SeriesSeeder::seed('series-pg-06', $set, $this->template, $this->restoreEpoch);
     $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05');
-    app(TaskRecurrenceCommand::class)->materialize(pgScope($this), $series, $window, pgToken($this, $series, $window, 'pg-06-a'));
+    resolve(TaskRecurrenceCommand::class)->materialize(pgScope($this), $series, $window, pgToken($this, $series, $window, 'pg-06-a'));
 
     $stored = json_decode(
         (string) DB::table('sys_wakeup_requests')->where('request_key', 'materialize:series-pg-06')->value('payload'),
@@ -150,10 +150,10 @@ it('MAT-06 schedules a stamped complete payload and materializes through the han
         ->and($stored['_corex']['extension']['version'])->toBe(MaterializationHasher::HANDLER_VERSION)
         ->and($stored['data'])->toMatchArray(MaterializationHasher::wakeupPayload(series: $series, window: $window));
 
-    $context = app(TenantContextResolver::class)->current();
+    $context = resolve(TenantContextResolver::class)->current();
     $second = SeriesSeeder::dailySet('series-pg-06b', 'rev-1', 1);
     $secondSeries = SeriesSeeder::seed('series-pg-06b', $second, $this->template, $this->restoreEpoch);
-    expect(app(WakeupScheduler::class)->schedule(new WakeupRequest(
+    expect(resolve(WakeupScheduler::class)->schedule(new WakeupRequest(
         context: $context,
         kind: MaterializationHasher::HANDLER_KIND,
         requestKey: 'manual:series-pg-06b',
@@ -177,7 +177,7 @@ it('MAT-06b quarantines an exact handler version mismatch without invoking mater
     expect($this->migrateWakeup())->toBe(0);
     $set = SeriesSeeder::dailySet('series-pg-06b-mismatch', 'rev-1', 1);
     $series = SeriesSeeder::seed('series-pg-06b-mismatch', $set, $this->template, $this->restoreEpoch);
-    $registry = app(wakeup_bridge_registry());
+    $registry = resolve(wakeup_bridge_registry());
     $definition = $registry->definition(MaterializationHasher::HANDLER_KIND);
     $envelope = $registry->envelope(
         definition: $definition,
@@ -203,7 +203,7 @@ it('MAT-06b quarantines an exact handler version mismatch without invoking mater
         'updated_at' => $now,
     ]);
 
-    $result = wakeup_bridge_sweep(app(TenantContextResolver::class)->current(), 10);
+    $result = wakeup_bridge_sweep(resolve(TenantContextResolver::class)->current(), 10);
 
     expect($result->failed)->toBe(1)
         ->and(Task::query()->count())->toBe(0)
@@ -222,10 +222,10 @@ it('MAT-07 captures workflow completion inside the task transaction when enabled
     $set = SeriesSeeder::dailySet('series-pg-07', 'rev-1', 1);
     $series = SeriesSeeder::seed('series-pg-07', $set, $this->template, $this->restoreEpoch);
     $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05');
-    $receipt = app(TaskRecurrenceCommand::class)->materialize(pgScope($this), $series, $window, pgToken($this, $series, $window, 'pg-07-a'));
+    $receipt = resolve(TaskRecurrenceCommand::class)->materialize(pgScope($this), $series, $window, pgToken($this, $series, $window, 'pg-07-a'));
     $taskId = $receipt->taskRefs[0]->id;
 
-    app(CompleteTaskCommand::class)->handle(new CompleteTaskData(taskId: $taskId, actor: $this->actor));
+    resolve(CompleteTaskCommand::class)->handle(new CompleteTaskData(taskId: $taskId, actor: $this->actor));
 
     expect(DB::table('sys_workflow_intents')->where('subject_ref', 'task:'.$taskId)->exists())->toBeTrue()
         ->and(DB::table('sys_workflow_intents')->where('subject_ref', 'task:'.$taskId)->value('version_ref'))->toBe('task-completion/1')
@@ -238,13 +238,13 @@ it('MAT-08 denies cross-account restore epoch reuse on postgres', function (): v
     $series = SeriesSeeder::seed('series-pg-08', $set, $this->template, $this->restoreEpoch);
     $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05');
     $scope = DataScope::fromTenantContext(
-        context: app(TenantContextResolver::class)->current(),
+        context: resolve(TenantContextResolver::class)->current(),
         connectionIdentity: 'pgsql:another_account',
         actorId: $this->userId,
         restoreEpoch: $this->restoreEpoch,
     );
 
-    expect(fn () => app(TaskRecurrenceCommand::class)->materialize(
+    expect(fn () => resolve(TaskRecurrenceCommand::class)->materialize(
         $scope,
         $series,
         $window,

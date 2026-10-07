@@ -34,7 +34,7 @@ final readonly class ApplyMembershipProjection implements MembershipProjection
 
     public function refresh(string $identityId, string $accountId, string $product, string $requestId): void
     {
-        $account = $this->accounts->find($accountId, $this->centralConnection);
+        $account = $this->accounts->find(accountId: $accountId, connectionName: $this->centralConnection);
 
         if ($account === null) {
             return;

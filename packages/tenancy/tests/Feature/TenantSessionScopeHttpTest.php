@@ -59,7 +59,7 @@ beforeEach(function (): void {
         Route::get('/get', fn (Request $request): array => [
             'login' => $request->session()->get('login_web_probe'),
             'bound' => $request->session()->get('corex.tenancy.account_id'),
-            'account' => app(TenancyManager::class)->context()?->account->id,
+            'account' => resolve(TenancyManager::class)->context()?->account->id,
             'database' => DB::connection()->getDatabaseName(),
         ]);
         Route::get('/boom', function (Request $request): never {
@@ -91,8 +91,8 @@ function tenantSessionDirTSH(string $accountId): string
 }
 
 it('orders the assembled web+tenant route: host before StartSession, scope after it, gate next, errors/auth after', function (): void {
-    app(Kernel::class); // the kernel syncs its priority list into the router when it is resolved
-    $router = app('router');
+    resolve(Kernel::class); // the kernel syncs its priority list into the router when it is resolved
+    $router = resolve('router');
     $route = Route::middleware([ShareErrorsFromSession::class, StartSession::class, 'tenant'])->get('/order', fn () => 'x');
     $order = $router->gatherRouteMiddleware($route);
 
@@ -121,7 +121,7 @@ it('saves the session inside the account: tenant directory 0700 with a real file
         ->and($again['json']['account'])->toBe($this->accounts['a'])
         ->and($again['json']['database'])->toBe('tss_http_a_test');
 
-    $handler = app('session')->driver('file')->getHandler();
+    $handler = resolve('session')->driver('file')->getHandler();
     expect($handler->gc(0))->toBeInt();
 });
 
@@ -169,7 +169,7 @@ it('a resident process does not carry attributes or the login from A into the ne
 
 it('after a downstream exception the next request starts clean and the context is closed', function (): void {
     expect(visitTSH('a.example.test', '/boom')['status'])->toBe(500);
-    expect(app(TenancyManager::class)->initialized())->toBeFalse()
+    expect(resolve(TenancyManager::class)->initialized())->toBeFalse()
         ->and(DB::getDefaultConnection())->toBe('pgsql');
 
     $next = visitTSH('b.example.test', '/get');
@@ -181,6 +181,6 @@ it('an unknown host is refused with the typed error before any session or contex
 
     expect(fn () => test()->get('http://ghost.example.test/get'))
         ->toThrow(TenantCouldNotBeIdentifiedByHostException::class);
-    expect(app(TenancyManager::class)->initialized())->toBeFalse()
+    expect(resolve(TenancyManager::class)->initialized())->toBeFalse()
         ->and(DB::getDefaultConnection())->toBe('pgsql');
 });

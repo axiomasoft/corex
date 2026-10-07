@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — PHP 8.4 modernization (P09.4)
+
+- Modernize maintained PHP for PHP 8.4 with final concrete classes, immutable value state and controlled named calls; preserve current public native parameter names and extension behavior.
+- Refresh the PHP API metadata for equivalent readonly/type/promotion declarations (D130).
+
 ## Unreleased — strict Access types
 
 - `PrincipalIdentity::getAuthPassword()` now returns `string`, matching Laravel's authentication contract. Identities without a password hash return an empty string and still deny password authentication and rehashing.

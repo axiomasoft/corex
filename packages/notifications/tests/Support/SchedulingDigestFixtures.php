@@ -74,7 +74,7 @@ function schedulingFreeze(string $requestKey): ?object
     app()->instance(SettingsRepository::class, new SchedulingSettingsRepository);
     app()->instance(TenantContextResolver::class, new NotificationTenantContextResolver);
     app()->forgetScopedInstances();
-    app(NotificationCenter::class)->notify(schedulingContext(), new NotificationInput(
+    resolve(NotificationCenter::class)->notify(schedulingContext(), new NotificationInput(
         requestKey: $requestKey,
         eventType: 'document.ready',
         recipient: new RecipientReference(kind: 'user', id: '11111111-1111-7111-8111-111111111112'),
@@ -86,7 +86,7 @@ function schedulingFreeze(string $requestKey): ?object
     $start = $end->modify('-1 hour');
     DB::table('ntf_notifications')->update(['created_at' => $start->modify('+1 minute')]);
 
-    return app(DigestBuilder::class)->build(schedulingContext(), new DigestWindow(
+    return resolve(DigestBuilder::class)->build(schedulingContext(), new DigestWindow(
         start: $start,
         end: $end,
         period: 'hourly',

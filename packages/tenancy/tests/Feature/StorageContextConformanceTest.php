@@ -41,7 +41,7 @@ beforeEach(function (): void {
     $this->contexts = new ConformanceStorageContext(conformanceStorageContext('00000000-0000-4000-8000-000000000101'));
     $this->storage = new ContextTenantStorage(
         contexts: $this->contexts,
-        filesystems: app(FilesystemManager::class),
+        filesystems: resolve(FilesystemManager::class),
         durableDriver: 'local',
         durableRoot: $this->storageRoot.'/durable',
         ephemeralRoot: $this->storageRoot.'/ephemeral',
@@ -134,7 +134,7 @@ describe('native object integration', function (): void {
         $this->objectConfig = json_decode(file_get_contents($configPath), true, flags: JSON_THROW_ON_ERROR);
         $this->objectStorage = new ObjectTenantStorage(
             contexts: $this->contexts,
-            filesystems: app(FilesystemManager::class),
+            filesystems: resolve(FilesystemManager::class),
             durableConfig: $this->objectConfig,
             ephemeralRoot: $this->storageRoot.'/ephemeral',
         );
@@ -184,7 +184,7 @@ describe('native object integration', function (): void {
 
     it('refuses configured provider connection failure without a local or other account fallback', function (): void {
         $config = array_merge($this->objectConfig, ['endpoint' => 'http://127.0.0.1:1']);
-        $storage = new ObjectTenantStorage(contexts: $this->contexts, filesystems: app(FilesystemManager::class), durableConfig: $config, ephemeralRoot: $this->storageRoot.'/ephemeral');
+        $storage = new ObjectTenantStorage(contexts: $this->contexts, filesystems: resolve(FilesystemManager::class), durableConfig: $config, ephemeralRoot: $this->storageRoot.'/ephemeral');
         expect(fn () => $storage->disk()->get('document.txt'))->toThrow(StorageOperationFailed::class)
             ->and(fn () => $storage->disk()->put('document.txt', 'wrong-fallback'))->toThrow(StorageOperationFailed::class);
     });
@@ -237,7 +237,7 @@ it('refuses the optional object branch explicitly when its native SDK is absent'
     }
     expect(fn () => new ObjectTenantStorage(
         contexts: $this->contexts,
-        filesystems: app(FilesystemManager::class),
+        filesystems: resolve(FilesystemManager::class),
         durableConfig: ['driver' => 's3', 'bucket' => 'unconfigured'],
         ephemeralRoot: $this->storageRoot.'/ephemeral',
     ))->toThrow(StorageCapabilityUnavailable::class);

@@ -20,13 +20,13 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
 use Psr\Clock\ClockInterface;
 
-final class SqlDigestBuilder implements DigestBuilder
+final readonly class SqlDigestBuilder implements DigestBuilder
 {
     public function __construct(
-        private readonly ConnectionInterface $connection,
-        private readonly ?WakeupScheduler $wakeup,
-        private readonly bool $enabled,
-        private readonly ClockInterface $clock,
+        private ConnectionInterface $connection,
+        private ?WakeupScheduler $wakeup,
+        private bool $enabled,
+        private ClockInterface $clock,
     ) {
         if ($this->enabled && $this->wakeup === null) {
             throw new InvalidConfiguration([
@@ -87,7 +87,7 @@ final class SqlDigestBuilder implements DigestBuilder
                     kind: 'notification.digest.v1',
                     requestKey: "notification.digest:{$runId}",
                     fireAt: $window->end,
-                    window: new WakeupWindow($window->start, $window->end, $window->period),
+                    window: new WakeupWindow(start: $window->start, end: $window->end, period: $window->period),
                     payload: JsonDocuments::capture(['run_id' => $runId]),
                 ));
             }

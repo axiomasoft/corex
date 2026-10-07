@@ -27,14 +27,14 @@ use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
-final class CreateTask implements CreateTaskCommand
+final readonly class CreateTask implements CreateTaskCommand
 {
     public function __construct(
-        private readonly TaskModuleGuard $moduleGuard,
-        private readonly TaskAccess $access,
-        private readonly ProjectRead $projects,
-        private readonly SprintRead $sprints,
-        private readonly Dispatcher $events,
+        private TaskModuleGuard $moduleGuard,
+        private TaskAccess $access,
+        private ProjectRead $projects,
+        private SprintRead $sprints,
+        private Dispatcher $events,
     ) {}
 
     public function handle(TaskDraft $draft): TaskReference
@@ -43,7 +43,7 @@ final class CreateTask implements CreateTaskCommand
         $this->access->authorizeCreate(draft: $draft, context: $context);
 
         if ($context->workspace !== null && $context->workspace->id !== $draft->workspaceId) {
-            $this->invalid('workspace_id', 'Задачу нельзя создать в другом рабочем пространстве.');
+            $this->invalid(field: 'workspace_id', message: 'Задачу нельзя создать в другом рабочем пространстве.');
         }
 
         $connection = (new Task)->getConnection();
@@ -63,19 +63,19 @@ final class CreateTask implements CreateTaskCommand
         $title = trim($draft->title);
 
         if ($title === '' || mb_strlen($title) > 255) {
-            $this->invalid('title', 'Название задачи должно содержать от 1 до 255 символов.');
+            $this->invalid(field: 'title', message: 'Название задачи должно содержать от 1 до 255 символов.');
         }
 
         if (! Str::isUuid($draft->workspaceId) || ! $connection->table('wsp_workspaces')->where('id', $draft->workspaceId)->exists()) {
-            $this->invalid('workspace_id', 'Рабочее пространство не найдено в текущем аккаунте.');
+            $this->invalid(field: 'workspace_id', message: 'Рабочее пространство не найдено в текущем аккаунте.');
         }
 
         if ($draft->estimateMinutes !== null && $draft->estimateMinutes < 0) {
-            $this->invalid('estimate_minutes', 'Оценка времени не может быть отрицательной.');
+            $this->invalid(field: 'estimate_minutes', message: 'Оценка времени не может быть отрицательной.');
         }
 
         if ($draft->startsAt !== null && $draft->dueAt !== null && $draft->dueAt < $draft->startsAt) {
-            $this->invalid('due_at', 'Срок задачи не может быть раньше даты начала.');
+            $this->invalid(field: 'due_at', message: 'Срок задачи не может быть раньше даты начала.');
         }
 
         $authorId = $draft->authorId;
@@ -86,7 +86,7 @@ final class CreateTask implements CreateTaskCommand
 
         foreach (['author_id' => $authorId, 'assignee_id' => $draft->assigneeId] as $field => $userId) {
             if ($userId !== null && (! Str::isUuid($userId) || ! $connection->table('users')->where('id', $userId)->exists())) {
-                $this->invalid($field, 'Пользователь не найден в текущем аккаунте.');
+                $this->invalid(field: $field, message: 'Пользователь не найден в текущем аккаунте.');
             }
         }
 
@@ -103,13 +103,13 @@ final class CreateTask implements CreateTaskCommand
 
         foreach ($draft->targets as $target) {
             if ($target->type === '' || mb_strlen($target->type) > 64 || ! Str::isUuid($target->id)) {
-                $this->invalid('targets', 'Связанная сущность должна иметь непустой тип до 64 символов и UUID.');
+                $this->invalid(field: 'targets', message: 'Связанная сущность должна иметь непустой тип до 64 символов и UUID.');
             }
 
             $key = $target->type.':'.$target->id;
 
             if (isset($seenTargets[$key])) {
-                $this->invalid('targets', 'Связанные сущности задачи не должны повторяться.');
+                $this->invalid(field: 'targets', message: 'Связанные сущности задачи не должны повторяться.');
             }
 
             $seenTargets[$key] = true;
@@ -157,10 +157,10 @@ final class CreateTask implements CreateTaskCommand
         }
 
         /** @var ProjectView|null $project */
-        $project = $this->projects->find($id, $connectionName);
+        $project = $this->projects->find(id: $id, connectionName: $connectionName);
 
         if ($project === null || $project->workspaceId !== $workspaceId) {
-            $this->invalid('project_id', 'Проект не найден в рабочем пространстве задачи.');
+            $this->invalid(field: 'project_id', message: 'Проект не найден в рабочем пространстве задачи.');
         }
 
         return $project;
@@ -173,10 +173,10 @@ final class CreateTask implements CreateTaskCommand
         }
 
         /** @var SprintView|null $sprint */
-        $sprint = $this->sprints->find($id, $connectionName);
+        $sprint = $this->sprints->find(id: $id, connectionName: $connectionName);
 
         if ($project === null || $sprint === null || $sprint->projectId !== $project->id) {
-            $this->invalid('sprint_id', 'Спринт не принадлежит проекту задачи.');
+            $this->invalid(field: 'sprint_id', message: 'Спринт не принадлежит проекту задачи.');
         }
     }
 
@@ -190,7 +190,7 @@ final class CreateTask implements CreateTaskCommand
         $stage = Stage::on($connectionName)->find($id);
 
         if ($project === null || $stage === null || $stage->project_id !== $project->id) {
-            $this->invalid('stage_id', 'Стадия не принадлежит проекту задачи.');
+            $this->invalid(field: 'stage_id', message: 'Стадия не принадлежит проекту задачи.');
         }
     }
 
@@ -204,16 +204,15 @@ final class CreateTask implements CreateTaskCommand
         $parent = Task::on($connectionName)->find($id);
 
         if ($parent === null || $parent->workspace_id !== $workspaceId) {
-            $this->invalid('parent_id', 'Родительская задача не найдена в рабочем пространстве.');
+            $this->invalid(field: 'parent_id', message: 'Родительская задача не найдена в рабочем пространстве.');
         }
 
         if ($parent->parent_id !== null) {
-            $this->invalid('parent_id', 'Поддерживается только один уровень подзадач.');
+            $this->invalid(field: 'parent_id', message: 'Поддерживается только один уровень подзадач.');
         }
     }
 
-    /** @return never */
-    private function invalid(string $field, string $message): void
+    private function invalid(string $field, string $message): never
     {
         throw ValidationException::withMessages([$field => [$message]]);
     }

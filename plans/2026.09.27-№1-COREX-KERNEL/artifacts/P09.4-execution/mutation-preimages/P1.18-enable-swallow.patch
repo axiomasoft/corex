@@ -1,0 +1,16 @@
+diff --git a/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php b/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
+--- a/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
++++ b/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
+@@ -158,6 +158,11 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
+             // surfaces to the caller. No silent commit, no half-installed row.
+             if ($migration['error'] instanceof Throwable) {
+-                throw new ModuleEnableFailedException($module, $migration['error']);
++                $this->log($module, 'enable', $fromState, $fromState, 'failed', [
++                    'migrations_run' => $migration['ran'],
++                    'error' => $migration['error']->getMessage(),
++                ]);
++
++                return;
+             }
+ 
+             $this->upsertModuleRow($module, $current, ModuleState::Enabled, $edition, $migration['ran']);

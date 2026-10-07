@@ -48,7 +48,7 @@ beforeEach(function (): void {
         $table->string('scope');
         $table->timestamps();
     });
-    app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-access-azguard:tenant'], DB::getDefaultConnection());
+    resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-access-azguard:tenant'], DB::getDefaultConnection());
     Schema::create('aut_role_assignments', static function (Blueprint $table): void {
         $table->uuid('id')->primary();
         $table->uuid('role_id');
@@ -96,7 +96,7 @@ function bridgeRole(): string
 it('compiles through the registered bridge on the same tenant transaction and clean role schema', function (): void {
     $roleId = bridgeRole();
     $connection = DB::connection();
-    $versions = app(ScopeMapVersions::class);
+    $versions = resolve(ScopeMapVersions::class);
     $initial = $versions->current($roleId);
     $writes = [];
     $seen = [];
@@ -116,7 +116,7 @@ it('compiles through the registered bridge on the same tenant transaction and cl
         ];
     });
 
-    $compiler = app(RoleMatrixCompiler::class);
+    $compiler = resolve(RoleMatrixCompiler::class);
     expect($compiler)->toBeInstanceOf(DatabaseRoleMatrixCompiler::class);
     $compiler->compile($roleId);
 
@@ -141,9 +141,9 @@ it('compiles through the registered bridge on the same tenant transaction and cl
 
 it('propagates a missing role during compilation without invalidating scope', function (): void {
     $roleId = (string) Str::uuid();
-    $versions = app(ScopeMapVersions::class);
+    $versions = resolve(ScopeMapVersions::class);
     $initial = $versions->current($roleId);
-    expect(fn () => app(RoleMatrixCompiler::class)->compile($roleId))->toThrow(ModelNotFoundException::class);
+    expect(fn () => resolve(RoleMatrixCompiler::class)->compile($roleId))->toThrow(ModelNotFoundException::class);
     expect($versions->current($roleId))->toBe($initial)
         ->and(DB::table('aut_azguard_role_links')->count())->toBe(0)
         ->and(AzGuardRoleModel::query()->count())->toBe(0);
@@ -151,8 +151,8 @@ it('propagates a missing role during compilation without invalidating scope', fu
 
 it('rolls back native and bridge writes when the registered bridge listener fails', function (bool $existingMirror): void {
     $roleId = bridgeRole();
-    $compiler = app(RoleMatrixCompiler::class);
-    $versions = app(ScopeMapVersions::class);
+    $compiler = resolve(RoleMatrixCompiler::class);
+    $versions = resolve(ScopeMapVersions::class);
 
     if ($existingMirror) {
         $compiler->compile($roleId);
@@ -166,7 +166,7 @@ it('rolls back native and bridge writes when the registered bridge listener fail
 
     app()->instance(EntityActivity::class, new class($roleId, $seen) implements EntityActivity
     {
-        public function __construct(private string $roleId, private array &$seen) {}
+        public function __construct(private readonly string $roleId, private array &$seen) {}
 
         public function isActive(string $entityKey): bool
         {
@@ -191,8 +191,8 @@ it('rolls back native and bridge writes when the registered bridge listener fail
 
 it('defers scope invalidation to outer commit and drops it after rollback', function (): void {
     $roleId = bridgeRole();
-    $compiler = app(RoleMatrixCompiler::class);
-    $versions = app(ScopeMapVersions::class);
+    $compiler = resolve(RoleMatrixCompiler::class);
+    $versions = resolve(ScopeMapVersions::class);
     $initial = $versions->current($roleId);
 
     DB::beginTransaction();
@@ -226,8 +226,8 @@ it('reads compiled permissions through assignments and role links for each princ
         'id' => (string) Str::uuid(), 'role_id' => $roleId,
         'principal_type' => $type->value, 'principal_id' => $principal->principalId(),
     ]);
-    $compiler = app(RoleMatrixCompiler::class);
-    $source = app(AutMatrixGrantSource::class);
+    $compiler = resolve(RoleMatrixCompiler::class);
+    $source = resolve(AutMatrixGrantSource::class);
     expect($source->permissionsFor($principal, 'app')->keys())->toBe([]);
 
     $compiler->compile($roleId);
@@ -254,16 +254,16 @@ it('resolves compiled AzGuard permissions without a workspace', function (string
         'id' => (string) Str::uuid(), 'role_id' => $roleId,
         'principal_type' => 'user', 'principal_id' => $principal->principalId(),
     ]);
-    app(RoleMatrixCompiler::class)->compile($roleId);
+    resolve(RoleMatrixCompiler::class)->compile($roleId);
 
     set_error_handler(static function (int $severity, string $message): never {
         throw new ErrorException($message, 0, $severity);
     }, E_WARNING | E_NOTICE);
 
     try {
-        expect(app(PermissionLayer::class)->cacheDiscriminator('app'))->toBe('')
-            ->and(app(PermissionResolverInterface::class)->forUser($principal, 'app')->keys())->toBe(['app.crm.deal.read'])
-            ->and(app(PermissionResolverInterface::class)->forUser($principal, 'admin')->keys())->toBe([]);
+        expect(resolve(PermissionLayer::class)->cacheDiscriminator('app'))->toBe('')
+            ->and(resolve(PermissionResolverInterface::class)->forUser($principal, 'app')->keys())->toBe(['app.crm.deal.read'])
+            ->and(resolve(PermissionResolverInterface::class)->forUser($principal, 'admin')->keys())->toBe([]);
     } finally {
         restore_error_handler();
     }
@@ -290,9 +290,9 @@ it('keeps AzGuard permission cache entries separate while switching and clearing
         'principal_type' => 'user', 'principal_id' => $principal->principalId(),
         'workspace_id' => $workspaceA->id,
     ]);
-    app(RoleMatrixCompiler::class)->compile($roleId);
-    $resolver = app(PermissionResolverInterface::class);
-    $layer = app(PermissionLayer::class);
+    resolve(RoleMatrixCompiler::class)->compile($roleId);
+    $resolver = resolve(PermissionResolverInterface::class);
+    $layer = resolve(PermissionLayer::class);
 
     expect($layer->cacheDiscriminator('app'))->toBe($workspaceA->id)
         ->and($resolver->forUser($principal, 'app')->keys())->toBe(['app.crm.deal.read']);
@@ -317,8 +317,8 @@ it('excludes ineligible assignments and roles from the compiled grant chain', fu
         'id' => $assignmentId, 'role_id' => $roleId,
         'principal_type' => 'user', 'principal_id' => $principal->principalId(),
     ]);
-    app(RoleMatrixCompiler::class)->compile($roleId);
-    $source = app(AutMatrixGrantSource::class);
+    resolve(RoleMatrixCompiler::class)->compile($roleId);
+    $source = resolve(AutMatrixGrantSource::class);
     expect($source->permissionsFor($principal, 'app')->keys())->toBe(['app.crm.deal.read']);
 
     match ($exclusion) {

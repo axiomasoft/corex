@@ -43,22 +43,22 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class PlanningCommand implements TaskPlanningCommand
+final readonly class PlanningCommand implements TaskPlanningCommand
 {
     private const int MAX_DEADLOCK_RETRIES = 3;
 
     public function __construct(
-        private readonly TaskModuleGuard $moduleGuard,
-        private readonly TaskPlanningAccess $access,
-        private readonly ?TaskOperationReceipts $receipts = null,
+        private TaskModuleGuard $moduleGuard,
+        private TaskPlanningAccess $access,
+        private ?TaskOperationReceipts $receipts = null,
     ) {}
 
     public function createProject(ProjectDraft $draft, PlanningToken $token): ProjectReference
     {
         $context = $this->moduleGuard->context();
-        $name = $this->validatedName($draft->name, 'name');
-        $this->assertToken($token, PlanningHasher::project($draft, $context));
-        $this->assertWorkspace($draft->workspaceId, $context);
+        $name = $this->validatedName(name: $draft->name, field: 'name');
+        $this->assertToken(token: $token, expectedHash: PlanningHasher::project(draft: $draft, context: $context));
+        $this->assertWorkspace(workspaceId: $draft->workspaceId, context: $context);
 
         $subject = new PlanningSubject(
             workspaceId: $draft->workspaceId,
@@ -77,7 +77,7 @@ final class PlanningCommand implements TaskPlanningCommand
 
         return $connection->transaction(
             callback: function () use ($draft, $token, $context, $name, $subject, $connection): ProjectReference {
-                $store = new OperationStore($connection, $this->receipts());
+                $store = new OperationStore(connection: $connection, receipts: $this->receipts());
                 $restoreEpoch = PlanningHasher::restoreEpoch($context);
                 $replay = $store->claimOrReplay(
                     operation: PlanningOperation::CreateProject,
@@ -97,7 +97,7 @@ final class PlanningCommand implements TaskPlanningCommand
                 }
 
                 if (! Str::isUuid($draft->workspaceId) || ! $connection->table('wsp_workspaces')->where('id', $draft->workspaceId)->exists()) {
-                    $this->invalid('workspace_id', 'Рабочее пространство не найдено в текущем аккаунте.');
+                    $this->invalid(field: 'workspace_id', message: 'Рабочее пространство не найдено в текущем аккаунте.');
                 }
 
                 $project = new Project([
@@ -125,12 +125,12 @@ final class PlanningCommand implements TaskPlanningCommand
     public function createSprint(SprintDraft $draft, PlanningToken $token): SprintReference
     {
         $context = $this->moduleGuard->context();
-        $name = $this->validatedName($draft->name, 'name');
-        [$startDate, $endDate] = $this->validatedSprintDates($draft->startDate, $draft->endDate);
-        $this->assertToken($token, PlanningHasher::sprint($draft, $context, $startDate, $endDate));
+        $name = $this->validatedName(name: $draft->name, field: 'name');
+        [$startDate, $endDate] = $this->validatedSprintDates(startDate: $draft->startDate, endDate: $draft->endDate);
+        $this->assertToken(token: $token, expectedHash: PlanningHasher::sprint(draft: $draft, context: $context, startDate: $startDate, endDate: $endDate));
 
         $connection = (new Sprint)->getConnection();
-        $project = $this->resolvedProject($draft->projectId, $connection);
+        $project = $this->resolvedProject(projectId: $draft->projectId, connection: $connection);
 
         $subject = new PlanningSubject(
             workspaceId: (string) $project->workspace_id,
@@ -147,7 +147,7 @@ final class PlanningCommand implements TaskPlanningCommand
 
         return $connection->transaction(
             callback: function () use ($draft, $token, $context, $name, $startDate, $endDate, $subject, $connection, $project): SprintReference {
-                $store = new OperationStore($connection, $this->receipts());
+                $store = new OperationStore(connection: $connection, receipts: $this->receipts());
                 $restoreEpoch = PlanningHasher::restoreEpoch($context);
                 $replay = $store->claimOrReplay(
                     operation: PlanningOperation::CreateSprint,
@@ -192,14 +192,14 @@ final class PlanningCommand implements TaskPlanningCommand
     public function recordTime(TimeLogDraft $draft, PlanningToken $token): TimeLogReference
     {
         $context = $this->moduleGuard->context();
-        $this->assertToken($token, PlanningHasher::timeLog($draft, $context));
+        $this->assertToken(token: $token, expectedHash: PlanningHasher::timeLog(draft: $draft, context: $context));
         $connection = (new Task)->getConnection();
-        $this->validatedTimeLog($draft, $connection);
+        $this->validatedTimeLog(draft: $draft, connection: $connection);
 
         return $this->transactionWithRetry(
             connection: $connection,
             callback: function () use ($draft, $token, $context, $connection): TimeLogReference {
-                $store = new OperationStore($connection, $this->receipts());
+                $store = new OperationStore(connection: $connection, receipts: $this->receipts());
                 $restoreEpoch = PlanningHasher::restoreEpoch($context);
                 $replay = $store->claimOrReplay(
                     operation: PlanningOperation::RecordTime,
@@ -208,8 +208,8 @@ final class PlanningCommand implements TaskPlanningCommand
                 );
 
                 if ($replay !== null) {
-                    $task = $this->lockedTask($draft->taskId, $connection);
-                    $subject = $this->timeLogSubject($task, $draft->userId);
+                    $task = $this->lockedTask(taskId: $draft->taskId, connection: $connection);
+                    $subject = $this->timeLogSubject(task: $task, userId: $draft->userId);
                     $this->access->authorize(
                         operation: PlanningOperation::RecordTime,
                         subject: $subject,
@@ -220,8 +220,8 @@ final class PlanningCommand implements TaskPlanningCommand
                     return TimeLogReference::fromStored($replay);
                 }
 
-                $task = $this->lockedTask($draft->taskId, $connection);
-                $subject = $this->timeLogSubject($task, $draft->userId);
+                $task = $this->lockedTask(taskId: $draft->taskId, connection: $connection);
+                $subject = $this->timeLogSubject(task: $task, userId: $draft->userId);
                 $this->access->authorize(
                     operation: PlanningOperation::RecordTime,
                     subject: $subject,
@@ -246,7 +246,7 @@ final class PlanningCommand implements TaskPlanningCommand
                 $nextTotal = $task->spent_minutes + $draft->minutes;
 
                 if ($nextTotal > 2_147_483_647) {
-                    throw InvalidPlanningDraft::forField('minutes', 'Суммарное время задачи превышает допустимый предел.');
+                    throw InvalidPlanningDraft::forField(field: 'minutes', message: 'Суммарное время задачи превышает допустимый предел.');
                 }
 
                 $timeLog = new TimeLog([
@@ -279,22 +279,22 @@ final class PlanningCommand implements TaskPlanningCommand
     private function assertWorkspace(string $workspaceId, TenantContext $context): void
     {
         if ($context->workspace !== null && $context->workspace->id !== $workspaceId) {
-            $this->invalid('workspace_id', 'Проект нельзя создать в другом рабочем пространстве.');
+            $this->invalid(field: 'workspace_id', message: 'Проект нельзя создать в другом рабочем пространстве.');
         }
     }
 
     private function assertToken(PlanningToken $token, string $expectedHash): void
     {
         if ($token->requestKey === '' || strlen($token->requestKey) > 190) {
-            throw InvalidPlanningDraft::forField('request_key', 'Ключ запроса должен содержать от 1 до 190 байт.');
+            throw InvalidPlanningDraft::forField(field: 'request_key', message: 'Ключ запроса должен содержать от 1 до 190 байт.');
         }
 
         if (preg_match('/^[a-f0-9]{64}$/', $token->payloadHash) !== 1) {
-            throw InvalidPlanningDraft::forField('payload_hash', 'Хеш запроса должен быть SHA-256 в нижнем регистре.');
+            throw InvalidPlanningDraft::forField(field: 'payload_hash', message: 'Хеш запроса должен быть SHA-256 в нижнем регистре.');
         }
 
         if (! hash_equals($expectedHash, $token->payloadHash)) {
-            throw InvalidPlanningDraft::forField('payload_hash', 'Хеш запроса не совпадает с каноническим представлением.');
+            throw InvalidPlanningDraft::forField(field: 'payload_hash', message: 'Хеш запроса не совпадает с каноническим представлением.');
         }
     }
 
@@ -303,7 +303,7 @@ final class PlanningCommand implements TaskPlanningCommand
         $trimmed = trim($name);
 
         if ($trimmed === '' || mb_strlen($trimmed) > 190) {
-            throw InvalidPlanningDraft::forField($field, 'Название должно содержать от 1 до 190 символов.');
+            throw InvalidPlanningDraft::forField(field: $field, message: 'Название должно содержать от 1 до 190 символов.');
         }
 
         return $trimmed;
@@ -312,17 +312,17 @@ final class PlanningCommand implements TaskPlanningCommand
     /** @return array{0: string, 1: string} */
     private function validatedSprintDates(?string $startDate, ?string $endDate): array
     {
-        $start = $startDate ?? (new DateTimeImmutable('today'))->format('Y-m-d');
-        $end = $endDate ?? (new DateTimeImmutable($start))->modify('+13 days')->format('Y-m-d');
+        $start = $startDate ?? new DateTimeImmutable('today')->format('Y-m-d');
+        $end = $endDate ?? new DateTimeImmutable($start)->modify('+13 days')->format('Y-m-d');
 
         foreach (['startDate' => $start, 'endDate' => $end] as $field => $value) {
             if (! $this->isValidDate($value)) {
-                throw InvalidPlanningDraft::forField($field, 'Дата должна быть в формате YYYY-MM-DD.');
+                throw InvalidPlanningDraft::forField(field: $field, message: 'Дата должна быть в формате YYYY-MM-DD.');
             }
         }
 
         if ($end < $start) {
-            throw InvalidPlanningDraft::forField('endDate', 'Дата окончания спринта не может быть раньше даты начала.');
+            throw InvalidPlanningDraft::forField(field: 'endDate', message: 'Дата окончания спринта не может быть раньше даты начала.');
         }
 
         return [$start, $end];
@@ -331,33 +331,33 @@ final class PlanningCommand implements TaskPlanningCommand
     private function validatedTimeLog(TimeLogDraft $draft, Connection $connection): void
     {
         if ($draft->minutes < 1 || $draft->minutes > 2_147_483_647) {
-            throw InvalidPlanningDraft::forField('minutes', 'Минуты должны быть положительным целым числом.');
+            throw InvalidPlanningDraft::forField(field: 'minutes', message: 'Минуты должны быть положительным целым числом.');
         }
 
         if (! $this->isValidDate($draft->spentOn)) {
-            throw InvalidPlanningDraft::forField('spentOn', 'Дата должна быть в формате YYYY-MM-DD.');
+            throw InvalidPlanningDraft::forField(field: 'spentOn', message: 'Дата должна быть в формате YYYY-MM-DD.');
         }
 
         if ($draft->comment !== null && mb_strlen($draft->comment) > 2000) {
-            throw InvalidPlanningDraft::forField('comment', 'Комментарий не может превышать 2000 символов.');
+            throw InvalidPlanningDraft::forField(field: 'comment', message: 'Комментарий не может превышать 2000 символов.');
         }
 
         if (! Str::isUuid($draft->userId) || ! $connection->table('users')->where('id', $draft->userId)->exists()) {
-            throw InvalidPlanningDraft::forField('user_id', 'Пользователь не найден в текущем аккаунте.');
+            throw InvalidPlanningDraft::forField(field: 'user_id', message: 'Пользователь не найден в текущем аккаунте.');
         }
     }
 
     private function resolvedProject(string $projectId, Connection $connection): Project
     {
         if (! Str::isUuid($projectId)) {
-            throw InvalidPlanningDraft::forField('project_id', 'Проект не найден в текущем аккаунте.');
+            throw InvalidPlanningDraft::forField(field: 'project_id', message: 'Проект не найден в текущем аккаунте.');
         }
 
         /** @var Project|null $project */
         $project = Project::on($connection->getName())->find($projectId);
 
         if ($project === null) {
-            throw InvalidPlanningDraft::forField('project_id', 'Проект не найден в текущем аккаунте.');
+            throw InvalidPlanningDraft::forField(field: 'project_id', message: 'Проект не найден в текущем аккаунте.');
         }
 
         return $project;
@@ -366,7 +366,7 @@ final class PlanningCommand implements TaskPlanningCommand
     private function lockedTask(string $taskId, Connection $connection): Task
     {
         if (! Str::isUuid($taskId)) {
-            $this->invalid('task_id', 'Задача не найдена в текущем аккаунте.');
+            $this->invalid(field: 'task_id', message: 'Задача не найдена в текущем аккаунте.');
         }
 
         /** @var Task|null $task */
@@ -376,7 +376,7 @@ final class PlanningCommand implements TaskPlanningCommand
             ->first();
 
         if ($task === null) {
-            $this->invalid('task_id', 'Задача не найдена в текущем аккаунте.');
+            $this->invalid(field: 'task_id', message: 'Задача не найдена в текущем аккаунте.');
         }
 
         return $task;
@@ -424,8 +424,7 @@ final class PlanningCommand implements TaskPlanningCommand
         return in_array($code, ['40001', '40P01'], true);
     }
 
-    /** @return never */
-    private function invalid(string $field, string $message): void
+    private function invalid(string $field, string $message): never
     {
         throw ValidationException::withMessages([$field => [$message]]);
     }

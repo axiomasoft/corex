@@ -13,7 +13,7 @@ final readonly class PanelDescriptor
     /** @param list<string> $supportedActions */
     public function __construct(public string $version, public string $key, public string $owningModule, public ?string $requiredCapability, public array $supportedActions, public string $label)
     {
-        self::validateInput($version, $key, $owningModule, $requiredCapability, $supportedActions, $label);
+        self::validateInput(version: $version, key: $key, owningModule: $owningModule, requiredCapability: $requiredCapability, supportedActions: $supportedActions, label: $label);
     }
 
     private static function validKey(string $value): bool

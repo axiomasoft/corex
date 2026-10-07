@@ -15,6 +15,6 @@ final class CentralProtocolViolation extends CodedException
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TenancyErrorCode::CentralProtocolViolation, ErrorCategory::Internal, retryable: false);
+        return new ErrorDescriptor(code: TenancyErrorCode::CentralProtocolViolation, category: ErrorCategory::Internal, retryable: false);
     }
 }

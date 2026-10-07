@@ -49,11 +49,11 @@ final readonly class ModuleFieldCatalogue implements FieldCatalogue
                 continue;
             }
 
-            if ($compiled->sleeping && ! $this->modules->isActive($compiled->declaringModule, $context)) {
+            if ($compiled->sleeping && ! $this->modules->isActive(name: $compiled->declaringModule, ctx: $context)) {
                 continue;
             }
 
-            $definitions[] = $this->definition($entity, $field);
+            $definitions[] = $this->definition(entity: $entity, field: $field);
         }
 
         $definitions = AttributeDefinition::canonicalList($definitions);
@@ -61,11 +61,11 @@ final readonly class ModuleFieldCatalogue implements FieldCatalogue
         return new FieldSnapshot(
             entity: $entity,
             schemaVersion: 'attributes/2',
-            schemaHash: AttributeDefinition::schemaHash($entity, $definitions),
-            activeFields: Validation::validatedMapList(array_map(
+            schemaHash: AttributeDefinition::schemaHash(entity: $entity, definitions: $definitions),
+            activeFields: Validation::validatedMapList(values: array_map(
                 static fn (AttributeDefinition $definition): array => $definition->snapshotRow(),
                 $definitions,
-            ), 'active fields'),
+            ), name: 'active fields'),
             driverCapabilities: $this->drivers,
         );
     }
@@ -78,13 +78,13 @@ final readonly class ModuleFieldCatalogue implements FieldCatalogue
         if (is_string($pinned) && $pinned !== '') {
             $id = AttributeId::v7($pinned);
         } else {
-            $id = AttributeId::legacy($entity, $field->fieldHandle);
+            $id = AttributeId::legacy(entity: $entity, key: $field->fieldHandle);
             $meta['legacy_identity'] = true;
         }
 
         unset($meta['attribute_id']);
 
-        $meta = Validation::validatedMap($meta, 'attribute metadata');
+        $meta = Validation::validatedMap(value: $meta, name: 'attribute metadata');
 
         return new AttributeDefinition(
             id: $id,

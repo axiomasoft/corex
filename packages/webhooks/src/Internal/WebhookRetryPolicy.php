@@ -25,7 +25,7 @@ final readonly class WebhookRetryPolicy
     public function __construct(private WebhookOptions $options, ?callable $random = null)
     {
         $this->random = $random === null
-            ? static fn (int $min, int $max): int => random_int($min, $max)
+            ? random_int(...)
             : Closure::fromCallable($random);
     }
 
@@ -47,17 +47,17 @@ final readonly class WebhookRetryPolicy
             ];
         }
 
-        if (($failure = $this->budgetFailure($delivery, $now)) !== null) {
+        if (($failure = $this->budgetFailure(delivery: $delivery, instant: $now)) !== null) {
             return ['status' => 'dead', 'next' => $now, 'error' => $failure];
         }
 
         $cap = min(3_600, 5 * (2 ** min(10, max(0, $delivery->attempt - 1))));
         $jitter = max(1, ($this->random)(0, $cap));
-        $retryAfter = $this->retryAfterSeconds($result->retryAfter, $now);
+        $retryAfter = $this->retryAfterSeconds(value: $result->retryAfter, now: $now);
         $delay = max($jitter, $retryAfter ?? 0);
         $next = $now->add(new DateInterval("PT{$delay}S"));
 
-        if (($failure = $this->budgetFailure($delivery, $next)) !== null) {
+        if (($failure = $this->budgetFailure(delivery: $delivery, instant: $next)) !== null) {
             return ['status' => 'dead', 'next' => $now, 'error' => $failure];
         }
 

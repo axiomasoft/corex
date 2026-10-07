@@ -155,7 +155,7 @@ function limitToken(string $hash): StepToken
 
 function limitRunner(SourceManifest $manifest, object $calls, int $rows, TransferLimits $limits, ?ExecutionGuard $guard = null, ?TransferLimitReached $raise = null): SqlTransferExecutor
 {
-    $source = new class($manifest, $rows) implements TransferSource
+    $source = new readonly class($manifest, $rows) implements TransferSource
     {
         public function __construct(private SourceManifest $manifest, private int $rows) {}
 
@@ -176,7 +176,7 @@ function limitRunner(SourceManifest $manifest, object $calls, int $rows, Transfe
         }
     };
     $record = new CanonicalRecord('contact', 'archive', 'doc-1', 'rev-1', null, ['name' => 'Ada'], $manifest->sha256);
-    $mapper = new class($record) implements RecordMapper
+    $mapper = new readonly class($record) implements RecordMapper
     {
         public function __construct(private CanonicalRecord $record) {}
 
@@ -185,7 +185,7 @@ function limitRunner(SourceManifest $manifest, object $calls, int $rows, Transfe
             return new MappingResult('mapped', $this->record, null);
         }
     };
-    $target = new class($calls, $raise) implements TransferSink
+    $target = new readonly class($calls, $raise) implements TransferSink
     {
         public function __construct(private object $calls, private ?TransferLimitReached $raise) {}
 

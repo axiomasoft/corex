@@ -6,7 +6,6 @@ namespace CoreX\Recurrence\Internal;
 
 use CoreX\Recurrence\Data\DateStart;
 use CoreX\Recurrence\Data\RecurrenceOverride;
-use CoreX\Recurrence\Data\RecurrenceSet;
 use CoreX\Recurrence\Data\RecurrenceWindow;
 
 final class CanonicalHasher
@@ -78,10 +77,5 @@ final class CanonicalHasher
         }
 
         return hash('sha256', $canonical);
-    }
-
-    public static function pageDigest(RecurrenceSet $set, RecurrenceWindow $window): string
-    {
-        return hash('sha256', $set->definitionHash."\0".self::windowHash(window: $window));
     }
 }

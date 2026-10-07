@@ -25,6 +25,7 @@
         }
     },
     "notPath": [
+        "/^(?:packages|products)\\/[^\\/]+\\/database\\/migrations\\/.*\\.php$/",
         "/^packages\\/[^\\/]+\\/database\\/migrations\\//",
         "/^products\\/[^\\/]+\\/database\\/migrations\\//",
         "/^plans\\/.*\\/preimage\\//",

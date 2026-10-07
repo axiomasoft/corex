@@ -1,0 +1,14 @@
+{
+  "command": [
+    "composer",
+    "--no-interaction",
+    "--no-plugins",
+    "--no-scripts",
+    "validate",
+    "--strict"
+  ],
+  "cwd": "/home/vostrikov/projects/packages/corex/packages/operations",
+  "exit": 0,
+  "stderr": "",
+  "stdout": "./composer.json is valid\n"
+}

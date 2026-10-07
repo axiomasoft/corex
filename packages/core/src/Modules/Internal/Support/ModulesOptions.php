@@ -25,8 +25,8 @@ final readonly class ModulesOptions
 
         $cache = is_array($config['cache'] ?? null) ? $config['cache'] : [];
         $cacheStore = self::nullableNonEmptyString($cache['store'] ?? null);
-        $cacheTtl = self::positiveInt($violations, 'cache.ttl', $cache['ttl'] ?? 3600);
-        $cachePrefix = self::nonEmpty($violations, 'cache.prefix', $cache['prefix'] ?? 'corex.modules');
+        $cacheTtl = self::positiveInt(violations: $violations, path: 'cache.ttl', value: $cache['ttl'] ?? 3600);
+        $cachePrefix = self::nonEmpty(violations: $violations, path: 'cache.prefix', value: $cache['prefix'] ?? 'corex.modules');
 
         $violations->failIfAny();
 
@@ -44,7 +44,7 @@ final readonly class ModulesOptions
             return $value;
         }
 
-        $violations->add($path, 'must be a non-empty string');
+        $violations->add(path: $path, message: 'must be a non-empty string');
 
         return 'invalid';
     }
@@ -60,7 +60,7 @@ final readonly class ModulesOptions
             return $value;
         }
 
-        $violations->add($path, 'must be a positive integer');
+        $violations->add(path: $path, message: 'must be a positive integer');
 
         return 1;
     }

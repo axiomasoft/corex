@@ -20,6 +20,6 @@ final class UnsupportedFormattingException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(IntlErrorCode::UnsupportedFormattingException, ErrorCategory::Unsupported, retryable: false);
+        return new ErrorDescriptor(code: IntlErrorCode::UnsupportedFormattingException, category: ErrorCategory::Unsupported, retryable: false);
     }
 }

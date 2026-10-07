@@ -62,7 +62,7 @@ final class WebhookReplayTest extends TestCase
         $this->selectSchema();
         $this->connection = DB::connection('api_tenant');
 
-        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-26T16:00:00.000000+00:00'));
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
@@ -218,7 +218,7 @@ final class WebhookReplayTest extends TestCase
         try {
             $this->selectPostgresSchema($database);
 
-            $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+            $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
             $this->connection = DB::connection('api_p1416_tenant');
             $contexts = new ContextFixture;
             $contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
@@ -264,8 +264,8 @@ final class WebhookReplayTest extends TestCase
             self::fail("Replay [{$delivery}] unexpectedly succeeded.");
         } catch (ApiError $error) {
             self::assertSame($code, $error->errorCode);
-            $problems = app(ProblemRegistry::class);
-            self::assertSame($error, (new ErrorMapper($problems, app(ExceptionHandler::class)))->map($error, reportUnexpected: false));
+            $problems = resolve(ProblemRegistry::class);
+            self::assertSame($error, new ErrorMapper($problems, resolve(ExceptionHandler::class))->map($error, reportUnexpected: false));
             $restored = StoredOperationOutcome::fromCanonicalJson(StoredOperationOutcome::failure($error)->canonicalJson(), $problems)->error($problems);
             self::assertSame($error->status, $restored->status);
             self::assertSame($error->category, $restored->category);

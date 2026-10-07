@@ -24,11 +24,11 @@ final readonly class BudgetScope
         ?string $clientId,
         ?string $actorId,
     ) {
-        $this->assertIdentifier($installationId, 'installation');
-        $this->assertIdentifier($accountId, 'account');
+        $this->assertIdentifier(value: $installationId, label: 'installation');
+        $this->assertIdentifier(value: $accountId, label: 'account');
 
-        $this->clientId = $this->optionalIdentifier($clientId, self::AnonymousClient, 'client');
-        $this->actorId = $this->optionalIdentifier($actorId, self::AnonymousActor, 'actor');
+        $this->clientId = $this->optionalIdentifier(value: $clientId, anonymous: self::AnonymousClient, label: 'client');
+        $this->actorId = $this->optionalIdentifier(value: $actorId, anonymous: self::AnonymousActor, label: 'actor');
     }
 
     private function assertIdentifier(string $value, string $label): void
@@ -46,7 +46,7 @@ final readonly class BudgetScope
             return $anonymous;
         }
 
-        $this->assertIdentifier($value, $label);
+        $this->assertIdentifier(value: $value, label: $label);
 
         if ($value === $anonymous) {
             throw new InvalidArgumentException("Budget {$label} identifier uses a reserved anonymous sentinel.");

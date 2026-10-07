@@ -15,6 +15,6 @@ final class StorageCapabilityUnavailable extends CodedException
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::StorageCapabilityUnavailable, ErrorCategory::Unavailable, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::StorageCapabilityUnavailable, category: ErrorCategory::Unavailable, retryable: false);
     }
 }

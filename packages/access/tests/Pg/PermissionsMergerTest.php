@@ -28,7 +28,7 @@ beforeEach(function (): void {
     $this->resetPgSchema();
     $this->migrateAutSchema();
 
-    app(ArrayEntityRegistry::class)->register(new EntityDefinition(
+    resolve(ArrayEntityRegistry::class)->register(new EntityDefinition(
         handle: 'crm.deal', model: Deal::class, table: 'deals', module: 'corex/access-tests',
         labelSingular: 'Deal', labelPlural: 'Deals', capabilities: [], fields: [], titleAttribute: null,
     ));
@@ -52,10 +52,10 @@ it('keeps a native matrix row while inactive and denies its capability', functio
     app()->instance(ModuleRegistry::class, $modules);
     [$role, $principal] = mergerRole();
 
-    app(PermissionsMerger::class)->merge();
+    resolve(PermissionsMerger::class)->merge();
 
     expect(RoleMatrixRow::query()->where('role_id', $role->id)->count())->toBe(1)
-        ->and(app(AccessChecker::class)->allowed($principal, 'crm.deal', 'read'))->toBeFalse();
+        ->and(resolve(AccessChecker::class)->allowed($principal, 'crm.deal', 'read'))->toBeFalse();
 });
 
 it('reacts to enable, disable and re-enable events while preserving native matrix rows', function (): void {
@@ -66,7 +66,7 @@ it('reacts to enable, disable and re-enable events while preserving native matri
     Event::listen(RoleMatrixCompiled::class, function (RoleMatrixCompiled $event) use (&$compiled): void {
         $compiled[] = $event->roleId;
     });
-    $checker = app(AccessChecker::class);
+    $checker = resolve(AccessChecker::class);
 
     expect($checker->allowed($principal, 'crm.deal', 'read'))->toBeFalse();
 
@@ -104,7 +104,7 @@ it('warns and creates no matrix row for a declaration with an unknown entity', f
         permissions: [Permissions::group('ghost.entity', ['read'])],
     ));
 
-    $warnings = app(PermissionsMerger::class)->merge();
+    $warnings = resolve(PermissionsMerger::class)->merge();
 
     expect($warnings)->toHaveCount(1)
         ->and($warnings[0])->toContain('ghost.entity')
@@ -117,5 +117,5 @@ it('returns no warning for a declaration whose entity is registered', function (
         permissions: [Permissions::group('crm.deal', ['read'])->scopeable()],
     ));
 
-    expect(app(PermissionsMerger::class)->merge())->toBeEmpty();
+    expect(resolve(PermissionsMerger::class)->merge())->toBeEmpty();
 });

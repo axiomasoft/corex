@@ -25,11 +25,11 @@ use RuntimeException;
  * length of the cache TTL.
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class ImpersonationSessionGuard
+final readonly class ImpersonationSessionGuard
 {
     public function __construct(
-        private readonly ImpersonationService $impersonation,
-        private readonly TenancyOptions $options,
+        private ImpersonationService $impersonation,
+        private TenancyOptions $options,
     ) {}
 
     /** @return Response|mixed */

@@ -30,9 +30,9 @@ it('persists only a validated AST and compiles it without SQL or identifiers', f
     $schema = new ViewSchema('neutral/1', 'lab.sample', [
         new ViewField('name', 'string', ['eq', 'ne', 'in', 'is_null'], true, true, true, true, 'name'),
     ]);
-    $schemas = new class($schema) implements ViewSchemaProvider
+    $schemas = new readonly class($schema) implements ViewSchemaProvider
     {
-        public function __construct(private readonly ViewSchema $schema) {}
+        public function __construct(private ViewSchema $schema) {}
 
         public function schema(ViewContext $context, string $entityHandle): ViewSchema
         {
@@ -46,7 +46,7 @@ it('persists only a validated AST and compiles it without SQL or identifiers', f
             return true;
         }
     };
-    $repository = new SqlSavedViewRepository($schemas, $policy, new ViewConfigValidator, CoreOptionsParser::fromArray([]), app('db'), new SystemClock);
+    $repository = new SqlSavedViewRepository($schemas, $policy, new ViewConfigValidator, CoreOptionsParser::fromArray([]), resolve('db'), new SystemClock);
     $context = new ViewContext(new TenantContext(new AccountRef('account', 'account', 'active', [], []), boxed: true), 'user', 'actor');
     $scope = new ViewScope('lab.sample', null, null, null);
 
@@ -131,9 +131,9 @@ function corexSavedViewConnectionProbe(Application $app, ?string $override = nul
     $schema = new ViewSchema('neutral/1', 'lab.sample', [
         new ViewField('name', 'string', ['eq', 'ne', 'in', 'is_null'], true, true, true, true, 'name'),
     ]);
-    $schemas = new class($schema) implements ViewSchemaProvider
+    $schemas = new readonly class($schema) implements ViewSchemaProvider
     {
-        public function __construct(private readonly ViewSchema $schema) {}
+        public function __construct(private ViewSchema $schema) {}
 
         public function schema(ViewContext $context, string $entityHandle): ViewSchema
         {
@@ -169,9 +169,9 @@ it('updates saved views optimistically and replaces deleted defaults', function 
     $schema = new ViewSchema('neutral/1', 'lab.sample', [
         new ViewField('name', 'string', ['eq', 'ne', 'in', 'is_null'], true, true, true, true, 'name'),
     ]);
-    $schemas = new class($schema) implements ViewSchemaProvider
+    $schemas = new readonly class($schema) implements ViewSchemaProvider
     {
-        public function __construct(private readonly ViewSchema $schema) {}
+        public function __construct(private ViewSchema $schema) {}
 
         public function schema(ViewContext $context, string $entityHandle): ViewSchema
         {
@@ -185,7 +185,7 @@ it('updates saved views optimistically and replaces deleted defaults', function 
             return true;
         }
     };
-    $repository = new SqlSavedViewRepository($schemas, $policy, new ViewConfigValidator, CoreOptionsParser::fromArray([]), app('db'), new SystemClock);
+    $repository = new SqlSavedViewRepository($schemas, $policy, new ViewConfigValidator, CoreOptionsParser::fromArray([]), resolve('db'), new SystemClock);
     $context = new ViewContext(new TenantContext(new AccountRef('account', 'account', 'active', [], []), boxed: true), 'user', 'actor');
     $scope = new ViewScope('lab.sample', null, null, null);
 

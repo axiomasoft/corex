@@ -51,7 +51,7 @@ it('keeps local and fake-cloud durable storage semantically identical', function
     app()->forgetInstance(TenancyOptions::class);
     app()->forgetScopedInstances();
 
-    $storage = app(TenantStorage::class);
+    $storage = resolve(TenantStorage::class);
     $handleA = $storage->disk();
 
     expect($storage->usageBytes())->toBe(0);
@@ -82,7 +82,7 @@ it('rejects traversal and a retained worker handle after tenancy clears', functi
     app()->forgetInstance(TenancyOptions::class);
     app()->forgetScopedInstances();
 
-    $storage = app(TenantStorage::class);
+    $storage = resolve(TenantStorage::class);
     $handle = $storage->disk();
     $handle->put('safe.txt', 'safe');
 

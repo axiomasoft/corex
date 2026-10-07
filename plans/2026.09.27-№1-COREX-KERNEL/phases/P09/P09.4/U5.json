@@ -1,0 +1,40 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:unit:v1",
+  "id": "U5",
+  "item": "P09.4",
+  "title": "Native Laravel Rector subset and fixtures",
+  "goal": "Implement measured root-dev native Laravel Rector36rule subset preserving46file closure, deterministic provenance importer and official fixtures strict controls",
+  "files": [
+    "scripts/quality/rector/**",
+    "tests/Tooling/Rector/**",
+    "tests/Arch/RectorLaravelSubsetTest.php"
+  ],
+  "checks": [
+    {
+      "id": "V1",
+      "cmd": "scripts/php84 vendor/bin/pest tests/Arch/RectorLaravelSubsetTest.php",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    }
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "xhigh"
+  },
+  "mode": "delegate",
+  "instructions": "Owner delegated best architecture; research recommendation accepted. Preserve PHP84, no audit weakening, all code remains root PHPStan scope. Implement derivative honest CoreX\\Tooling\\Rector\\Laravel namespace, MIT + pinned source hashes and AST-only docs/interface erasure/namespace rename. Import exact selected36rules+46closure and2visitors. Deterministic reproducibility + tamper negative. Actual official173fixtures per rule preserving Composer version inputs, isolate79stubs from root Laravel. Integrator owns composer autoload/deps/config and decisions; do not modify them, request exact interface. No commits/plan edits. Logs /tmp/corex-P09.4-U5-*.",
+  "status": "accepted",
+  "outcome": {
+    "agent": {
+      "provider": "codex",
+      "model": "gpt-6.4-sol",
+      "effort": "xhigh"
+    },
+    "at": "2026-10-07T08:56:22Z",
+    "notes": "Reviewed honest dev-only namespace/MIT/pinned inputs, 36rules46production closure/50PHP outputs, supported native types and exact behavior policies. Integrator actual V1 passes2Archtests25assertions, including all173official+3policy child tests and suppression/provenance negatives; V3 fullRector0changes, V4 Pint and V5 maxstrict0errors. No ignored native source or suppressed errors. PHP8.5 execution not claimed.",
+    "evidence": [
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/U5.json"
+    ]
+  },
+  "updated_at": "2026-10-07T08:56:22Z"
+}

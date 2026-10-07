@@ -21,7 +21,7 @@ function makeSurface(ArrayEntityRegistry $registry, FakeModuleRegistry $modules)
 {
     $activeEntities = new ActiveEntityFilter($registry, $modules, new SingleAccountResolver);
 
-    return new PermissionSurface($modules, $activeEntities, new ScopeAvailability($registry, app(ConnectionResolverInterface::class)));
+    return new PermissionSurface($modules, $activeEntities, new ScopeAvailability($registry, resolve(ConnectionResolverInterface::class)));
 }
 
 // isScopeable() ⇒ every declared action row, scopes normalized per-entity capability.

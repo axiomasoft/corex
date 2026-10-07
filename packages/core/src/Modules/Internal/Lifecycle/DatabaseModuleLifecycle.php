@@ -70,13 +70,13 @@ use Throwable;
  *
  * @internal spec: B-10 §3.3/§5.1/§5.3/§5.4, B-10 §7.3 п.3, AC-11, D40, AC-7, D41
  */
-final class DatabaseModuleLifecycle implements ModuleLifecycle
+final readonly class DatabaseModuleLifecycle implements ModuleLifecycle
 {
-    private const MODULES_TABLE = 'mod_modules';
+    private const string MODULES_TABLE = 'mod_modules';
 
-    private const RECORDS_TABLE = 'mod_records';
+    private const string RECORDS_TABLE = 'mod_records';
 
-    private const LOG_TABLE = 'mod_lifecycle_log';
+    private const string LOG_TABLE = 'mod_lifecycle_log';
 
     /**
      * @param  array<string, string>  $codeVersions
@@ -86,17 +86,17 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
      * @internal spec: D12
      */
     public function __construct(
-        private readonly ModuleRegistry $registry,
-        private readonly ModuleDiscovery $discovery,
-        private readonly RecordsRegistrar $records,
-        private readonly Container $container,
-        private readonly TenantContextResolver $tenantContextResolver,
-        private readonly ConnectionResolverInterface $connections,
-        private readonly EventDispatcher $events,
-        private readonly ClockInterface $clock,
-        private readonly array $codeVersions = [],
-        private readonly array $migrationPaths = [],
-        private readonly ?string $connection = null,
+        private ModuleRegistry $registry,
+        private ModuleDiscovery $discovery,
+        private RecordsRegistrar $records,
+        private Container $container,
+        private TenantContextResolver $tenantContextResolver,
+        private ConnectionResolverInterface $connections,
+        private EventDispatcher $events,
+        private ClockInterface $clock,
+        private array $codeVersions = [],
+        private array $migrationPaths = [],
+        private ?string $connection = null,
     ) {}
 
     private function db(): Connection
@@ -151,18 +151,18 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
 
             foreach ($compiled->requires as $dep) {
                 if ($dep['kind'] === 'module') {
-                    $this->ensureDependencyEnabled($module, $dep['package'], $cascade);
+                    $this->ensureDependencyEnabled(module: $module, target: $dep['package'], cascade: $cascade);
                 }
             }
 
             $fromState = $current === null ? ModuleState::Available->value : $current->state;
-            $context = new ModuleRuntimeContext($module, $tenant, $this->records);
+            $context = new ModuleRuntimeContext(module: $module, tenant: $tenant, records: $this->records);
 
             $migration = $this->runModuleMigrations($module);
 
             if ($migration['error'] === null) {
                 try {
-                    $this->invokeHook($this->manifestFor($module)->onEnableHook, $context);
+                    $this->invokeHook(hookClass: $this->manifestFor($module)->onEnableHook, context: $context);
                 } catch (Throwable $e) {
                     $migration['error'] = $e;
                 }
@@ -172,19 +172,19 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
             // migrations 1..K, claims and the log row all roll back — and
             // surfaces to the caller. No silent commit, no half-installed row.
             if ($migration['error'] instanceof Throwable) {
-                throw new ModuleEnableFailedException($module, $migration['error']);
+                throw new ModuleEnableFailedException(module: $module, previous: $migration['error']);
             }
 
-            $this->upsertModuleRow($module, $current, ModuleState::Enabled, $edition, $migration['ran']);
+            $this->upsertModuleRow(module: $module, current: $current, state: ModuleState::Enabled, edition: $edition, migrationsRun: $migration['ran']);
 
             $this->defineManifestFeatureFlags($module);
 
-            $this->log($module, 'enable', $fromState, ModuleState::Enabled->value, 'success', [
+            $this->log(module: $module, operation: 'enable', from: $fromState, to: ModuleState::Enabled->value, status: 'success', details: [
                 'migrations_run' => $migration['ran'],
             ]);
 
             $this->db()->afterCommit(function () use ($module, $edition, $migration): void {
-                $this->events->dispatch(new ModuleEnabled($module, $edition, $migration['ran']));
+                $this->events->dispatch(new ModuleEnabled(module: $module, edition: $edition, migrationsRun: $migration['ran']));
             });
         });
     }
@@ -229,15 +229,15 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
             $dependents = $this->enabledDependents($module);
 
             if ($dependents !== [] && ! $cascade) {
-                throw new HasEnabledDependentsException($module, $dependents);
+                throw new HasEnabledDependentsException(module: $module, dependents: $dependents);
             }
 
             foreach ($dependents as $dependent) {
-                $this->disable($dependent, DisableReason::Dependency, cascade: true);
+                $this->disable(module: $dependent, reason: DisableReason::Dependency, cascade: true);
             }
 
-            $context = new ModuleRuntimeContext($module, $tenant, $this->records);
-            $this->invokeHook($this->manifestFor($module)->onDisableHook, $context);
+            $context = new ModuleRuntimeContext(module: $module, tenant: $tenant, records: $this->records);
+            $this->invokeHook(hookClass: $this->manifestFor($module)->onDisableHook, context: $context);
 
             $this->db()->table(self::MODULES_TABLE)->where('name', $module)->update([
                 'state' => ModuleState::Disabled->value,
@@ -246,11 +246,11 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
                 'updated_at' => $this->timestamp(),
             ]);
 
-            $this->log($module, 'disable', ModuleState::Enabled->value, ModuleState::Disabled->value, 'success', [
+            $this->log(module: $module, operation: 'disable', from: ModuleState::Enabled->value, to: ModuleState::Disabled->value, status: 'success', details: [
                 'reason' => $reason->value,
             ]);
 
-            $this->db()->afterCommit(fn () => $this->events->dispatch(new ModuleDisabled($module, $reason)));
+            $this->db()->afterCommit(fn () => $this->events->dispatch(new ModuleDisabled(module: $module, reason: $reason)));
         });
     }
 
@@ -281,14 +281,14 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
                     'updated_at' => $this->timestamp(),
                 ]);
 
-                $this->log($module, 'archive', $current->state, ModuleState::Archived->value, 'success', []);
+                $this->log(module: $module, operation: 'archive', from: $current->state, to: ModuleState::Archived->value, status: 'success', details: []);
 
                 $this->db()->afterCommit(fn () => $this->events->dispatch(new ModuleArchived($module)));
 
                 return;
             }
 
-            $this->purge($module, $current->state, $tenant);
+            $this->purge(module: $module, fromState: $current->state, tenant: $tenant);
         });
     }
 
@@ -305,7 +305,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
 
             // FSM gate: catch-up migrations only make sense for a live module.
             if ($current->state !== ModuleState::Enabled->value) {
-                throw InvalidStateTransitionException::upgradeRequiresEnabled($module, $current->state);
+                throw InvalidStateTransitionException::upgradeRequiresEnabled(module: $module, state: $current->state);
             }
 
             $migration = $this->runModuleMigrations($module);
@@ -319,7 +319,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
             // leaving the module silently half-migrated and the caller none the
             // wiser (the symmetric silent-failure this closes).
             if ($migration['error'] instanceof Throwable) {
-                throw new ModuleUpgradeFailedException($module, $migration['error']);
+                throw new ModuleUpgradeFailedException(module: $module, previous: $migration['error']);
             }
 
             $fromVersion = $current->version;
@@ -330,13 +330,13 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
                 'updated_at' => $this->timestamp(),
             ]);
 
-            $this->log($module, 'upgrade', $current->state, $current->state, 'success', [
+            $this->log(module: $module, operation: 'upgrade', from: $current->state, to: $current->state, status: 'success', details: [
                 'migrations_run' => $migration['ran'],
                 'from_version' => $fromVersion,
                 'to_version' => $codeVersion,
             ]);
 
-            $this->db()->afterCommit(fn () => $this->events->dispatch(new ModuleUpgraded($module, $fromVersion, $codeVersion, $migration['ran'])));
+            $this->db()->afterCommit(fn () => $this->events->dispatch(new ModuleUpgraded(module: $module, fromVersion: $fromVersion, toVersion: $codeVersion, migrationsRun: $migration['ran'])));
         });
     }
 
@@ -372,7 +372,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
         $codeVersion = $this->codeVersion($module);
 
         if ($current === null) {
-            return new ModuleStatus($module, ModuleState::Available, $codeVersion, null, false, 'standard');
+            return new ModuleStatus(name: $module, state: ModuleState::Available, codeVersion: $codeVersion, dbVersion: null, pendingUpgrade: false, edition: 'standard');
         }
 
         return new ModuleStatus(
@@ -418,10 +418,10 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
         }
 
         if (! $cascade) {
-            throw new MissingDependencyException($module, $target);
+            throw new MissingDependencyException(module: $module, missingDependency: $target);
         }
 
-        $this->enable($target, cascade: true);
+        $this->enable(module: $target, cascade: true);
     }
 
     /** @return list<string> */
@@ -453,11 +453,11 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
         $dependents = $this->enabledDependents($module);
 
         if ($dependents !== []) {
-            throw new HasEnabledDependentsException($module, $dependents);
+            throw new HasEnabledDependentsException(module: $module, dependents: $dependents);
         }
 
-        $context = new ModuleRuntimeContext($module, $tenant, $this->records);
-        $this->invokeHook($this->manifestFor($module)->onPurgeHook, $context);
+        $context = new ModuleRuntimeContext(module: $module, tenant: $tenant, records: $this->records);
+        $this->invokeHook(hookClass: $this->manifestFor($module)->onPurgeHook, context: $context);
 
         // Tear every owned object down in REVERSE creation order (`seq`,
         // not the clock), across ALL claim types, so FK children drop
@@ -472,7 +472,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
         foreach ($claims as $claim) {
             assert(is_string($claim->reference));
             match ($claim->record_type) {
-                'table' => $this->dropOwnedTable($claim->reference, $droppedTables),
+                'table' => $this->dropOwnedTable(table: $claim->reference, droppedTables: $droppedTables),
                 'column' => $this->dropOwnedColumn($claim->reference),
                 'index' => $this->dropOwnedIndex($claim->reference),
                 // role/permission/menu/setting/seed/blueprint/feature_flag/other
@@ -491,11 +491,11 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
             'updated_at' => $this->timestamp(),
         ]);
 
-        $this->log($module, 'purge', $fromState, ModuleState::Purged->value, 'success', [
+        $this->log(module: $module, operation: 'purge', from: $fromState, to: ModuleState::Purged->value, status: 'success', details: [
             'dropped_tables' => $droppedTables,
         ]);
 
-        $this->db()->afterCommit(fn () => $this->events->dispatch(new ModulePurged($module, $droppedTables)));
+        $this->db()->afterCommit(fn () => $this->events->dispatch(new ModulePurged(module: $module, droppedTables: $droppedTables)));
     }
 
     /** @param  list<string>  $droppedTables */
@@ -633,7 +633,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
 
             $before = $repository->getRan();
 
-            $error = $this->withMigrationClaims($module, static function () use ($migrator, $path): void {
+            $error = $this->withMigrationClaims(module: $module, run: static function () use ($migrator, $path): void {
                 $migrator->run([$path]);
             });
 
@@ -672,7 +672,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
                 return;
             }
 
-            $this->claimSchemaDelta($module, $snapshot, $this->schemaObjects());
+            $this->claimSchemaDelta(module: $module, before: $snapshot, after: $this->schemaObjects());
             $snapshot = null;
         };
 
@@ -695,7 +695,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
 
                     if ($listener !== $owned) {
                         if (is_string($listener)) {
-                            $this->restoreStringListener($events, $event, $listener);
+                            $this->restoreStringListener(events: $events, event: $event, listener: $listener);
                         } else {
                             $events->listen($event, $listener);
                         }
@@ -723,7 +723,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
         asort($newTables);
 
         foreach (array_keys($newTables) as $table) {
-            $this->records->claim($module, 'table', $table);
+            $this->records->claim(module: $module, recordType: 'table', reference: $table);
         }
 
         // Columns added to a table that ALREADY existed (cross-module extension
@@ -738,7 +738,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
             $table = explode('.', $key, 2)[0];
 
             if (isset($before['tables'][$table])) {
-                $this->records->claim($module, 'column', $key);
+                $this->records->claim(module: $module, recordType: 'column', reference: $key);
             }
         }
 
@@ -749,7 +749,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
             }
 
             if (isset($before['tables'][$table])) {
-                $this->records->claim($module, 'index', $index);
+                $this->records->claim(module: $module, recordType: 'index', reference: $index);
             }
         }
     }

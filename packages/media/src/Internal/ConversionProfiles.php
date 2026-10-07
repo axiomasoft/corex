@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Media\Internal;
 
 use CoreX\Media\Contracts\ConversionDriver;
-use CoreX\Media\Data\ConversionProfile;
 
 final class ConversionProfiles
 {
@@ -33,10 +32,5 @@ final class ConversionProfiles
     public function digest(ConversionDriver $driver): string
     {
         return $driver->profile()->digest($driver::class);
-    }
-
-    public function profile(string $profile): ?ConversionProfile
-    {
-        return $this->driver($profile)?->profile();
     }
 }

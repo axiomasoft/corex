@@ -63,14 +63,14 @@ final readonly class SqlTransferResultReader implements TransferResultReader
     public function result(DataScope $scope, TransferRef $ref): array
     {
         $job = $this->authorize(scope: $scope, ref: $ref);
-        $cursor = json_decode(Value::text(Value::field($job, 'cursor')), true);
-        $stats = json_decode(Value::text(Value::field($job, 'stats')), true);
+        $cursor = json_decode(Value::text(Value::field(row: $job, name: 'cursor')), true);
+        $stats = json_decode(Value::text(Value::field(row: $job, name: 'stats')), true);
 
         return [
-            'id' => Value::text(Value::field($job, 'id')),
-            'state' => Value::text(Value::field($job, 'state')),
-            'mode' => Value::text(Value::field($job, 'mode')),
-            'checkpointSequence' => Value::text(Value::field($job, 'checkpoint_seq')),
+            'id' => Value::text(Value::field(row: $job, name: 'id')),
+            'state' => Value::text(Value::field(row: $job, name: 'state')),
+            'mode' => Value::text(Value::field(row: $job, name: 'mode')),
+            'checkpointSequence' => Value::text(Value::field(row: $job, name: 'checkpoint_seq')),
             'cursor' => is_array($cursor) ? [
                 'ordinal' => isset($cursor['ordinal']) ? Value::text($cursor['ordinal']) : '0',
                 'boundaryByteOffset' => array_key_exists('boundaryByteOffset', $cursor) && $cursor['boundaryByteOffset'] !== null

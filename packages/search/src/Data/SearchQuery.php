@@ -13,7 +13,7 @@ final readonly class SearchQuery
     /** @param list<SearchFilter> $filters */
     public function __construct(public string $entity, public string $schemaHash, public string $text, public array $filters = [], public int $limit = 25, public ?string $afterId = null, public int $scanBudget = 1000)
     {
-        self::validateInput($entity, $schemaHash, $text, $filters, $limit, $afterId, $scanBudget);
+        self::validateInput(entity: $entity, schemaHash: $schemaHash, text: $text, filters: $filters, limit: $limit, afterId: $afterId, scanBudget: $scanBudget);
     }
 
     /** Runtime validation also rejects values from untyped integration callers.

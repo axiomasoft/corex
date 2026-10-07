@@ -55,12 +55,10 @@ final readonly class BudgetRetention
             return 0;
         }
 
-        return $this->connection->transaction(function () use ($ids): int {
-            return $this->connection->table(self::Reservations)
-                ->whereIn('id', $ids)
-                ->where('state', 'held')
-                ->update(['state' => 'abandoned']);
-        }, $this->attempts());
+        return $this->connection->transaction(fn (): int => $this->connection->table(self::Reservations)
+            ->whereIn('id', $ids)
+            ->where('state', 'held')
+            ->update(['state' => 'abandoned']), $this->attempts());
     }
 
     public function release(string $id): bool
@@ -71,11 +69,11 @@ final readonly class BudgetRetention
                 ->lockForUpdate()
                 ->first();
 
-            if ($row === null || DatabaseValue::text(DatabaseValue::field($row, 'state')) !== 'held') {
+            if ($row === null || DatabaseValue::text(DatabaseValue::field(row: $row, name: 'state')) !== 'held') {
                 return false;
             }
 
-            if ($this->instant(DatabaseValue::field($row, 'expires_at')) > $this->clock->now()) {
+            if ($this->instant(DatabaseValue::field(row: $row, name: 'expires_at')) > $this->clock->now()) {
                 return false;
             }
 
@@ -155,7 +153,7 @@ final readonly class BudgetRetention
         $protected = [];
 
         foreach ($this->connection->table(self::Reservations)->where('state', 'held')->get(['keys']) as $row) {
-            $keys = JsonCanonical::decode(DatabaseValue::text(DatabaseValue::field($row, 'keys')));
+            $keys = JsonCanonical::decode(DatabaseValue::text(DatabaseValue::field(row: $row, name: 'keys')));
 
             if (! is_array($keys) || ! array_is_list($keys)) {
                 return null;

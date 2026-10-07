@@ -11,9 +11,9 @@ use CoreX\Intl\Translation\Data\TranslationResult;
 use CoreX\SearchIntl\Contracts\SavedViewLabelReader;
 use Override;
 
-final class SqlSavedViewLabelReader implements SavedViewLabelReader
+final readonly class SqlSavedViewLabelReader implements SavedViewLabelReader
 {
-    public function __construct(private readonly TranslationReader $translations) {}
+    public function __construct(private TranslationReader $translations) {}
 
     #[Override]
     public function read(array $localizedName, LocaleResolution $locale): TranslationResult

@@ -20,10 +20,10 @@ use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Builder;
 use InvalidArgumentException;
 
-final class PostgresSearchProvider implements SearchProvider
+final readonly class PostgresSearchProvider implements SearchProvider
 {
     /** @var list<string> */
-    private const AllowedConfigurations = ['simple', 'english'];
+    private const array AllowedConfigurations = ['simple', 'english'];
 
     public function __construct(
         private ConnectionInterface $connection,
@@ -64,7 +64,7 @@ final class PostgresSearchProvider implements SearchProvider
             $this->applyFilter(builder: $builder, schema: $schema, filter: $filter);
         }
 
-        $builder->whereRaw(new SearchTextExpression($schema, $this->configuration), [$this->configuration, $query->text]);
+        $builder->whereRaw(new SearchTextExpression(schema: $schema, configuration: $this->configuration), [$this->configuration, $query->text]);
 
         $rows = $builder->get();
         $truncated = $rows->count() > $query->limit;

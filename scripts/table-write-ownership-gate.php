@@ -5,6 +5,9 @@ declare(strict_types=1);
 
 /** DATA-003: check source-level query-builder and Eloquent writes against the table catalog. */
 
+use CoreX\Access\Laravel\AuthOptions;
+use CoreX\Config\Data\CoreOptions;
+use CoreX\CustomFields\Data\AttributeTables;
 use Illuminate\Support\Str;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -29,7 +32,7 @@ foreach ((($lines = file($root.'/docs/architecture/table-ownership.md')) === fal
     if (preg_match('/^\| ([^|]+) \| ([a-z][a-z0-9-]*\/[a-z][a-z0-9-]*) \| ([^|]*) \| ([^|]*) \|/', $line, $m) !== 1) {
         continue;
     }
-    $catalog[trim($m[1])] = ['owner' => trim($m[2]), 'writers' => array_filter(array_map('trim', explode(',', $m[4])), static fn (string $writer): bool => $writer !== '' && $writer !== '0')];
+    $catalog[trim($m[1])] = ['owner' => trim($m[2]), 'writers' => array_filter(array_map(trim(...), explode(',', $m[4])), static fn (string $writer): bool => $writer !== '' && $writer !== '0')];
 }
 
 if ($catalog === []) {
@@ -129,20 +132,18 @@ foreach ($files as $file => $owner) {
             }
         }
 
-        if (! isset($modelTables[$name])) {
-            $modelTables[$name] = $class->getMethod('getTable') === null
-                ? Str::snake(Str::pluralStudly($class->name?->toString() ?? ''))
-                : '';
-        }
+        $modelTables[$name] ??= $class->getMethod('getTable') === null
+            ? Str::snake(Str::pluralStudly($class->name?->toString() ?? ''))
+            : '';
     }
 }
 
 // Resolve defaults by the declared options FQN, including cross-package consumers.
 // A property with the same spelling on an unrelated object remains unresolved.
 $optionOwners = [
-    'CoreX\Config\Data\CoreOptions' => 'axiomasoft/corex',
-    'CoreX\Access\Laravel\AuthOptions' => 'axiomasoft/corex-access',
-    'CoreX\CustomFields\Data\AttributeTables' => 'axiomasoft/corex-custom-fields',
+    CoreOptions::class => 'axiomasoft/corex',
+    AuthOptions::class => 'axiomasoft/corex-access',
+    AttributeTables::class => 'axiomasoft/corex-custom-fields',
 ];
 $typedDefaults = [];
 foreach ($optionOwners as $type => $owner) {

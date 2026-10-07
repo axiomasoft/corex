@@ -26,19 +26,19 @@ use RuntimeException;
  * digest and tenant ownership to a trusted durable archive manifest. Size
  * alone never authorizes ready or DROP, including local archives.
  */
-final class DatabaseTenantLifecycle implements TenantDatabaseLifecycle
+final readonly class DatabaseTenantLifecycle implements TenantDatabaseLifecycle
 {
     /**
      * @param  Closure(AccountRef, string):array{storage_path: string, size_bytes: int}|null  $writer
      * @param  (Closure(string, int): bool)|null  $verifier
      */
     public function __construct(
-        private readonly string $centralConnection,
-        private readonly ConnectionResolverInterface $connections,
-        private readonly ClockInterface $clock,
-        private readonly Dispatcher $events,
-        private readonly ?Closure $writer = null,
-        private readonly ?Closure $verifier = null,
+        private string $centralConnection,
+        private ConnectionResolverInterface $connections,
+        private ClockInterface $clock,
+        private Dispatcher $events,
+        private ?Closure $writer = null,
+        private ?Closure $verifier = null,
     ) {}
 
     public function export(AccountRef $account, string $kind): string
@@ -68,7 +68,7 @@ final class DatabaseTenantLifecycle implements TenantDatabaseLifecycle
 
         $writer = $this->writer;
         $result = $writer($account, $exportId);
-        $this->verifyArchive($result['storage_path'], $result['size_bytes']);
+        $this->verifyArchive(path: $result['storage_path'], size: $result['size_bytes']);
 
         $this->db()->table('root_account_exports')
             ->where('id', $exportId)
@@ -87,8 +87,7 @@ final class DatabaseTenantLifecycle implements TenantDatabaseLifecycle
     public function drop(AccountRef $account): void
     {
         $latestExport = $this->db()->table('root_account_exports')
-            ->where('account_id', $account->id)
-            ->orderByDesc('created_at')
+            ->where('account_id', $account->id)->latest()
             ->orderByDesc('id')
             ->first();
 
@@ -98,7 +97,7 @@ final class DatabaseTenantLifecycle implements TenantDatabaseLifecycle
             );
         }
 
-        $this->verifyArchive(DatabaseValue::text($latestExport->storage_path), DatabaseValue::integer($latestExport->size_bytes));
+        $this->verifyArchive(path: DatabaseValue::text($latestExport->storage_path), size: DatabaseValue::integer($latestExport->size_bytes));
 
         $dbName = $this->db()->table('root_accounts')
             ->where('id', $account->id)

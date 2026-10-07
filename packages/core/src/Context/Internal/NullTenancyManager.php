@@ -19,10 +19,10 @@ use CoreX\Context\Data\WorkspaceRef;
  *
  * @internal spec: D10, B-11 §6.1 L892–907
  */
-final class NullTenancyManager implements TenancyManager
+final readonly class NullTenancyManager implements TenancyManager
 {
     public function __construct(
-        private readonly TenantContextResolver $resolver,
+        private TenantContextResolver $resolver,
     ) {}
 
     public function context(): TenantContext

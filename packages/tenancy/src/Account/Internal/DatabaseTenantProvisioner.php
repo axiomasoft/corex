@@ -15,11 +15,11 @@ use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks;
  * Persists verified provisioning parameters, then clones synchronously. Replays verify the
  * existing account database instead of cloning again.
  */
-final class DatabaseTenantProvisioner implements TenantDatabaseProvisioner
+final readonly class DatabaseTenantProvisioner implements TenantDatabaseProvisioner
 {
     public function __construct(
-        private readonly string $centralConnection,
-        private readonly TemplateIntegrityChecks $templateIntegrityVerifier,
+        private string $centralConnection,
+        private TemplateIntegrityChecks $templateIntegrityVerifier,
     ) {}
 
     public function provision(ProvisionParams $params): void
@@ -40,9 +40,6 @@ final class DatabaseTenantProvisioner implements TenantDatabaseProvisioner
             'locale' => $params->locale,
         ])->save();
 
-        CreateDatabaseFromTemplate::dispatchSync(
-            new AccountRef($account->id, $account->slug ?? '', $account->status, [], []),
-            $params,
-        );
+        dispatch_sync(new CreateDatabaseFromTemplate(account: new AccountRef(id: $account->id, slug: $account->slug ?? '', status: $account->status, features: [], limits: []), params: $params));
     }
 }

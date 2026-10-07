@@ -23,9 +23,9 @@ use PHPStan\Rules\Rule;
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class DurablePayloadRule implements Rule
 {
-    public const IDENTIFIER = 'corex.durablePayload.nonSerializableProperty';
+    public const string IDENTIFIER = 'corex.durablePayload.nonSerializableProperty';
 
-    public const UNTYPED_ARRAY_IDENTIFIER = 'corex.durablePayload.untypedArrayProperty';
+    public const string UNTYPED_ARRAY_IDENTIFIER = 'corex.durablePayload.untypedArrayProperty';
 
     public function getNodeType(): string
     {
@@ -51,7 +51,7 @@ final class DurablePayloadRule implements Rule
             $forbidden = DurablePayloadTypeChecker::forbiddenInType($readableType);
 
             if ($forbidden !== null) {
-                $errors[] = DurablePayloadTypeChecker::buildError($classReflection->getDisplayName(), $propertyName, $forbidden, $property->getStartLine());
+                $errors[] = DurablePayloadTypeChecker::buildError(className: $classReflection->getDisplayName(), propertyName: $propertyName, forbidden: $forbidden, line: $property->getStartLine());
             }
             $errors = [...$errors, ...DurablePayloadTypeChecker::untypedArrayErrors(type: $readableType, propertyName: $propertyName, line: $property->getStartLine())];
         }

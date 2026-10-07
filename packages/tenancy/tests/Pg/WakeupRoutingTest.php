@@ -114,10 +114,10 @@ function wakeupRoutingAccount(): AccountRef
 function wakeupRoutingHint(): RootRegistryWakeupHint
 {
     return new RootRegistryWakeupHint(
-        connections: app(ConnectionResolverInterface::class),
+        connections: resolve(ConnectionResolverInterface::class),
         rootConnection: 'pgsql',
-        clock: app(ClockInterface::class),
-        logger: app(LoggerInterface::class),
+        clock: resolve(ClockInterface::class),
+        logger: resolve(LoggerInterface::class),
     );
 }
 
@@ -138,7 +138,7 @@ it('keeps the earliest root hint and increments its revision on every upsert', f
     $row = DB::connection('pgsql')->table('root_wakeup_hints')->first();
 
     expect($row->hint_revision)->toBe(3)
-        ->and((new DateTimeImmutable((string) $row->next_fire_at))->format('c'))->toBe('2026-09-15T12:00:00+00:00')
+        ->and(new DateTimeImmutable((string) $row->next_fire_at)->format('c'))->toBe('2026-09-15T12:00:00+00:00')
         ->and($row->claim_epoch)->toBe(0);
 });
 
@@ -153,9 +153,9 @@ it('does not let a stale root claimant delete a concurrently refreshed hint', fu
     };
 
     $reconciler = new RootWakeupReconciler(
-        connections: app(ConnectionResolverInterface::class),
+        connections: resolve(ConnectionResolverInterface::class),
         rootConnection: 'pgsql',
-        clock: app(ClockInterface::class),
+        clock: resolve(ClockInterface::class),
         hint: wakeupRoutingHint(),
         tenancy: new WakeupRoutingTenancyManager,
         sweeper: $sweeper,
@@ -181,9 +181,9 @@ it('reclaims expired root leases and rebuilds lost hints in bounded account page
     ]);
     $sweeper = new WakeupRoutingSweeper;
     $reconciler = new RootWakeupReconciler(
-        connections: app(ConnectionResolverInterface::class),
+        connections: resolve(ConnectionResolverInterface::class),
         rootConnection: 'pgsql',
-        clock: app(ClockInterface::class),
+        clock: resolve(ClockInterface::class),
         hint: wakeupRoutingHint(),
         tenancy: new WakeupRoutingTenancyManager,
         sweeper: $sweeper,
@@ -215,9 +215,9 @@ it('runs valid root sweeps and rejects invalid limits before doing root work', f
     $this->app->instance(
         RootWakeupReconciler::class,
         new RootWakeupReconciler(
-            connections: app(ConnectionResolverInterface::class),
+            connections: resolve(ConnectionResolverInterface::class),
             rootConnection: 'pgsql',
-            clock: app(ClockInterface::class),
+            clock: resolve(ClockInterface::class),
             hint: wakeupRoutingHint(),
             tenancy: new WakeupRoutingTenancyManager,
             sweeper: new WakeupRoutingSweeper,

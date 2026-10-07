@@ -16,9 +16,9 @@ afterAll(static function (): void {
 });
 
 it('разрешает physical account до аутентификации пользователя', function (): void {
-    app(Kernel::class);
+    resolve(Kernel::class);
 
-    $priority = app('router')->middlewarePriority;
+    $priority = resolve('router')->middlewarePriority;
     $tenantIndex = array_search(ResolveTenantFromHost::class, $priority, true);
     $authIndex = array_search(AuthenticatesRequests::class, $priority, true);
 

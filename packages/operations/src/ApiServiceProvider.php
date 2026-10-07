@@ -45,7 +45,7 @@ final class ApiServiceProvider extends ServiceProvider
     {
         $this->app->tag([OperationsSchemaSets::class], SchemaSetProvider::class);
 
-        ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
+        ProblemDefinitions::register(app: $this->app, composerManifest: __DIR__.'/../composer.json', provider: PackageProblemDefinitions::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-operations.php', 'corex-operations');
 

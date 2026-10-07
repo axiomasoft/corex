@@ -274,12 +274,12 @@ final readonly class DatabaseExportRunner implements ExportRunner
     private function storedManifest(object $stored): ExportManifest
     {
         return new ExportManifest(
-            id: Value::text(Value::field($stored, 'id')),
-            snapshotMode: Value::text(Value::field($stored, 'snapshot_mode')),
-            schemaHash: Value::text(Value::field($stored, 'schema_hash')),
-            restoreEpoch: Value::text(Value::field($stored, 'restore_epoch')),
-            roster: JsonDocuments::capture(json_decode(Value::text(Value::field($stored, 'roster')), true, flags: JSON_THROW_ON_ERROR)),
-            partsHash: Value::text(Value::field($stored, 'parts_hash')),
+            id: Value::text(Value::field(row: $stored, name: 'id')),
+            snapshotMode: Value::text(Value::field(row: $stored, name: 'snapshot_mode')),
+            schemaHash: Value::text(Value::field(row: $stored, name: 'schema_hash')),
+            restoreEpoch: Value::text(Value::field(row: $stored, name: 'restore_epoch')),
+            roster: JsonDocuments::capture(json_decode(Value::text(Value::field(row: $stored, name: 'roster')), true, flags: JSON_THROW_ON_ERROR)),
+            partsHash: Value::text(Value::field(row: $stored, name: 'parts_hash')),
         );
     }
 }

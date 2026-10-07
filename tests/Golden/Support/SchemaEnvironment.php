@@ -41,7 +41,7 @@ trait SchemaEnvironment
         app()->forgetInstance(SchemaSets::class);
         app()->forgetInstance(SchemaMigrator::class);
 
-        return app(SchemaSets::class);
+        return resolve(SchemaSets::class);
     }
 
     public function freshSchema(Connection $connection): void
@@ -88,7 +88,7 @@ trait SchemaEnvironment
 
     public function schemaMigrator(): SchemaMigrator
     {
-        return app(SchemaMigrator::class);
+        return resolve(SchemaMigrator::class);
     }
 
     /** @param Catalogue $catalogue */

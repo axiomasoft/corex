@@ -47,12 +47,12 @@ final readonly class ArrayDataScopeCodec implements DataScopeCodec
         }
 
         return new DataScope(
-            accountId: self::requireString($payload, 'account'),
-            workspaceId: self::optionalString($payload, 'workspace'),
-            connectionIdentity: self::requireString($payload, 'connection'),
-            actorId: self::requireString($payload, 'actor'),
-            restoreEpoch: self::requireString($payload, 'restoreEpoch'),
-            boxed: self::requireBool($payload, 'boxed'),
+            accountId: self::requireString(payload: $payload, key: 'account'),
+            workspaceId: self::optionalString(payload: $payload, key: 'workspace'),
+            connectionIdentity: self::requireString(payload: $payload, key: 'connection'),
+            actorId: self::requireString(payload: $payload, key: 'actor'),
+            restoreEpoch: self::requireString(payload: $payload, key: 'restoreEpoch'),
+            boxed: self::requireBool(payload: $payload, key: 'boxed'),
             version: $version,
         );
     }

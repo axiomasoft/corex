@@ -11,15 +11,15 @@ use CoreX\Intl\Territory\Data\SuggestionLimits;
 use CoreX\Intl\Territory\Data\SuggestionResult;
 use Override;
 
-final class MapAddressSuggestProvider implements AddressSuggestProvider
+final readonly class MapAddressSuggestProvider implements AddressSuggestProvider
 {
     /**
      * @param  array<string, list<array<string, string>>>  $responses
      */
     public function __construct(
-        private readonly string $source,
-        private readonly array $responses,
-        private readonly AddressSuggestGuard $guard,
+        private string $source,
+        private array $responses,
+        private AddressSuggestGuard $guard,
     ) {}
 
     #[Override]

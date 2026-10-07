@@ -31,7 +31,7 @@ final class SchemaMigrateCommand extends Command
             return self::INVALID;
         }
         $database = $this->option('database');
-        $ran = $migrator->migrate($scope, is_string($database) ? $database : null, $this->option('modules'));
+        $ran = $migrator->migrate(scope: $scope, connection: is_string($database) ? $database : null, includeModules: $this->option('modules'));
         $this->line($ran === [] ? 'Nothing to migrate.' : implode(PHP_EOL, $ran));
 
         return self::SUCCESS;

@@ -20,6 +20,6 @@ final class InvalidLocaleException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(IntlErrorCode::InvalidLocaleException, ErrorCategory::Validation, retryable: false);
+        return new ErrorDescriptor(code: IntlErrorCode::InvalidLocaleException, category: ErrorCategory::Validation, retryable: false);
     }
 }

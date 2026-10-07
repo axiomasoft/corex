@@ -36,26 +36,26 @@ final readonly class WebhookDeliveryWorker
 
     public function workOnce(DataScope $scope, string $worker): ?WebhookDelivery
     {
-        $delivery = $this->store->claim($scope, $worker);
+        $delivery = $this->store->claim(scope: $scope, worker: $worker);
 
         if ($delivery === null) {
             return null;
         }
 
-        $keyRefs = $this->store->signingKeyRefs($scope, $delivery);
+        $keyRefs = $this->store->signingKeyRefs(scope: $scope, delivery: $delivery);
 
         if ($keyRefs === null) {
-            return $this->store->find($scope, $delivery->id) ?? $delivery;
+            return $this->store->find(scope: $scope, id: $delivery->id) ?? $delivery;
         }
 
         try {
-            $topic = $this->topics->get($delivery->topic, $delivery->topicVersion);
+            $topic = $this->topics->get(name: $delivery->topic, version: $delivery->topicVersion);
 
             if ($topic->major !== $delivery->major) {
-                throw new ApiError(OperationsErrorCode::UnknownMessageContract, 422, 'Webhook topic major changed.');
+                throw new ApiError(errorCode: OperationsErrorCode::UnknownMessageContract, status: 422, message: 'Webhook topic major changed.');
             }
         } catch (ApiError) {
-            return $this->finish($scope, $delivery, new WebhookHttpResult(
+            return $this->finish(scope: $scope, delivery: $delivery, result: new WebhookHttpResult(
                 status: null,
                 retryAfter: null,
                 errorCode: WebhookFailureReason::TopicUnavailable,
@@ -71,7 +71,7 @@ final readonly class WebhookDeliveryWorker
                 secretRefs: $keyRefs,
             );
         } catch (Throwable) {
-            return $this->finish($scope, $delivery, new WebhookHttpResult(
+            return $this->finish(scope: $scope, delivery: $delivery, result: new WebhookHttpResult(
                 status: null,
                 retryAfter: null,
                 errorCode: WebhookFailureReason::SigningUnavailable,
@@ -82,7 +82,7 @@ final readonly class WebhookDeliveryWorker
         try {
             $destination = WebhookDestination::fromUrl($delivery->endpointSnapshot);
         } catch (InvalidArgumentException) {
-            return $this->finish($scope, $delivery, new WebhookHttpResult(
+            return $this->finish(scope: $scope, delivery: $delivery, result: new WebhookHttpResult(
                 status: null,
                 retryAfter: null,
                 errorCode: WebhookFailureReason::UrlForbidden,
@@ -92,8 +92,8 @@ final readonly class WebhookDeliveryWorker
 
         $deliveryScope = $this->scopeCodec->decode($delivery->scope);
 
-        if (! $this->egress->allows($deliveryScope, $destination)) {
-            return $this->finish($scope, $delivery, new WebhookHttpResult(
+        if (! $this->egress->allows(scope: $deliveryScope, destination: $destination)) {
+            return $this->finish(scope: $scope, delivery: $delivery, result: new WebhookHttpResult(
                 status: null,
                 retryAfter: null,
                 errorCode: WebhookFailureReason::EgressDenied,
@@ -108,14 +108,14 @@ final readonly class WebhookDeliveryWorker
                 signedHeaders: $signed,
             );
         } catch (InvalidArgumentException) {
-            return $this->finish($scope, $delivery, new WebhookHttpResult(
+            return $this->finish(scope: $scope, delivery: $delivery, result: new WebhookHttpResult(
                 status: null,
                 retryAfter: null,
                 errorCode: WebhookFailureReason::UrlForbidden,
                 durationMs: 0,
             ));
         } catch (RuntimeException) {
-            return $this->finish($scope, $delivery, new WebhookHttpResult(
+            return $this->finish(scope: $scope, delivery: $delivery, result: new WebhookHttpResult(
                 status: null,
                 retryAfter: null,
                 errorCode: WebhookFailureReason::DnsUnavailable,
@@ -134,7 +134,7 @@ final readonly class WebhookDeliveryWorker
             );
         }
 
-        return $this->finish($scope, $delivery, $result);
+        return $this->finish(scope: $scope, delivery: $delivery, result: $result);
     }
 
     private function finish(
@@ -142,8 +142,8 @@ final readonly class WebhookDeliveryWorker
         WebhookDelivery $delivery,
         WebhookHttpResult $result,
     ): WebhookDelivery {
-        $this->store->finish($delivery, $result);
+        $this->store->finish(delivery: $delivery, result: $result);
 
-        return $this->store->find($scope, $delivery->id) ?? $delivery;
+        return $this->store->find(scope: $scope, id: $delivery->id) ?? $delivery;
     }
 }

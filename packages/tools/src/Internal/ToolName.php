@@ -9,9 +9,9 @@ use InvalidArgumentException;
 /** Canonical tool-name/1 projection and validation. */
 final class ToolName
 {
-    private const CANONICAL_PATTERN = '/^[a-z][a-z0-9]*\.[a-z][a-z0-9_]*$/';
+    private const string CANONICAL_PATTERN = '/^[a-z][a-z0-9]*\.[a-z][a-z0-9_]*$/';
 
-    private const VERSION_PATTERN = '/^v[1-9][0-9]*$/';
+    private const string VERSION_PATTERN = '/^v[1-9][0-9]*$/';
 
     public static function assertCanonical(string $code): void
     {

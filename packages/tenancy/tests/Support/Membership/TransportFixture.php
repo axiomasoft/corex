@@ -16,17 +16,17 @@ use OpenSSLAsymmetricKey;
 /** Fixed isolated reference consumer: real signatures, fake HTTP, no deployment. */
 final class TransportFixture
 {
-    public const IDENTITY = '11111111-1111-4111-8111-111111111111';
+    public const string IDENTITY = '11111111-1111-4111-8111-111111111111';
 
-    public const ACCOUNT = '22222222-2222-4222-8222-222222222222';
+    public const string ACCOUNT = '22222222-2222-4222-8222-222222222222';
 
-    public const REQUEST = '33333333-3333-4333-8333-333333333333';
+    public const string REQUEST = '33333333-3333-4333-8333-333333333333';
 
-    public const MEMBERSHIP = '44444444-4444-4444-8444-444444444444';
+    public const string MEMBERSHIP = '44444444-4444-4444-8444-444444444444';
 
-    public const OTHER = '55555555-5555-4555-8555-555555555555';
+    public const string OTHER = '55555555-5555-4555-8555-555555555555';
 
-    public const PRODUCT = 'reference:app';
+    public const string PRODUCT = 'reference:app';
 
     private static ?OpenSSLAsymmetricKey $sharedAccessKey = null;
 
@@ -93,7 +93,7 @@ final class TransportFixture
     /** @param array<string, mixed>|null $claims */
     public function client(?array $claims = null, ?ChannelBinding $binding = null, bool $permission = true, string $contextAccount = self::ACCOUNT, string $contextProduct = self::PRODUCT): StrictTransport
     {
-        return new StrictTransport(http: app(HttpFactory::class), binding: $binding ?? $this->binding, accessToken: $this->sign($claims ?? $this->accessClaims()), tokenValidator: new AccessTokenValidator($this->verifier), clock: fn (): int => $this->now, context: fn (): array => ['accountId' => $contextAccount, 'product' => $contextProduct], removalPermission: fn (): bool => $permission);
+        return new StrictTransport(http: resolve(HttpFactory::class), binding: $binding ?? $this->binding, accessToken: $this->sign($claims ?? $this->accessClaims()), tokenValidator: new AccessTokenValidator($this->verifier), clock: fn (): int => $this->now, context: fn (): array => ['accountId' => $contextAccount, 'product' => $contextProduct], removalPermission: fn (): bool => $permission);
     }
 
     /** @param array<string, mixed> $claims

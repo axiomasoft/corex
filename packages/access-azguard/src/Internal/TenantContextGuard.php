@@ -20,10 +20,10 @@ use Override;
  * Tenant isolation of the resolved entity is physical (DB-per-account, B-11):
  * an entity loaded here already came from its account's database.
  */
-final class TenantContextGuard implements ContextGuard
+final readonly class TenantContextGuard implements ContextGuard
 {
     public function __construct(
-        private readonly EntityRegistry $entities,
+        private EntityRegistry $entities,
     ) {}
 
     #[Override]
@@ -34,7 +34,7 @@ final class TenantContextGuard implements ContextGuard
         string $permission,
         string $panelId,
     ): bool {
-        $entity = $this->resolveContext($contextType, $contextId);
+        $entity = $this->resolveContext(contextType: $contextType, contextId: $contextId);
 
         if (! $entity instanceof Model) {
             return false;

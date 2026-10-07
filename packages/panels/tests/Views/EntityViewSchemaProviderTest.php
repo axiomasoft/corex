@@ -37,7 +37,7 @@ it('maps only a current active entity registry entry into a neutral view schema'
     $registry->shouldReceive('get')->twice()->with('sample.note')->andReturn($entity);
     $registry->shouldReceive('all')->once()->with(Mockery::type(TenantContext::class))->andReturn([$entity]);
 
-    $schema = (new EntityViewSchemaProvider($registry))->schema(savedViewContext(), 'sample.note');
+    $schema = new EntityViewSchemaProvider($registry)->schema(savedViewContext(), 'sample.note');
 
     expect($schema->version)->toBe('modules/1')
         ->and($schema->entityHandle)->toBe('sample.note')
@@ -62,6 +62,6 @@ it('rejects an unknown or inactive entity instead of retaining a stale schema', 
     $registry->shouldReceive('get')->once()->with('sample.note')->andReturn($entity);
     $registry->shouldReceive('all')->once()->with(Mockery::type(TenantContext::class))->andReturn([]);
 
-    expect(fn (): ViewSchema => (new EntityViewSchemaProvider($registry))->schema(savedViewContext(), 'sample.note'))
+    expect(fn (): ViewSchema => new EntityViewSchemaProvider($registry)->schema(savedViewContext(), 'sample.note'))
         ->toThrow(LogicException::class, 'Saved-view entity schema is unavailable.');
 });

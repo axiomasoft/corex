@@ -13,10 +13,10 @@ use CoreX\Observability\Data\OperationContext;
  * Messaging binding for the Foundation OpenTelemetry adapter.
  * SDK names stay in {@see OpenTelemetryBridge}.
  */
-final class OpenTelemetryTraceContextBridge implements TraceContextBridge
+final readonly class OpenTelemetryTraceContextBridge implements TraceContextBridge
 {
     public function __construct(
-        private readonly OpenTelemetryBridge $bridge,
+        private OpenTelemetryBridge $bridge,
     ) {}
 
     public function inject(array $metadata): array

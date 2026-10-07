@@ -50,16 +50,16 @@ final class Task extends BaseModel
     /** @var array<string, mixed> */
     protected $attributes = ['status' => 'open', 'priority' => 'normal', 'requires_acceptance' => false, 'spent_minutes' => 0, 'position' => 0];
 
-    /** @return BelongsTo<covariant \Illuminate\Database\Eloquent\Model, $this> */
+    /** @return BelongsTo<covariant Model, $this> */
     public function project(): BelongsTo
     {
-        return ProjectRelations::belongsTo($this, 'project_id', null, 'project');
+        return ProjectRelations::belongsTo(model: $this, foreignKey: 'project_id', ownerKey: null, relation: 'project');
     }
 
-    /** @return BelongsTo<covariant \Illuminate\Database\Eloquent\Model, $this> */
+    /** @return BelongsTo<covariant Model, $this> */
     public function sprint(): BelongsTo
     {
-        return SprintRelations::belongsTo($this, 'sprint_id', null, 'sprint');
+        return SprintRelations::belongsTo(model: $this, foreignKey: 'sprint_id', ownerKey: null, relation: 'sprint');
     }
 
     /** @return BelongsTo<Stage, $this> */
@@ -92,7 +92,7 @@ final class Task extends BaseModel
         return $this->hasMany(TaskWatcher::class);
     }
 
-    /** @return HasMany<covariant \Illuminate\Database\Eloquent\Model, $this> */
+    /** @return HasMany<covariant Model, $this> */
     public function timeLogs(): HasMany
     {
         return TimeLogRelations::hasMany($this);

@@ -20,6 +20,6 @@ final class EntityNotFound extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::EntityNotFound, ErrorCategory::NotFound, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::EntityNotFound, category: ErrorCategory::NotFound, retryable: false);
     }
 }

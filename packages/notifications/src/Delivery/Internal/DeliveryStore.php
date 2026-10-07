@@ -16,13 +16,13 @@ use Illuminate\Database\Query\Builder;
 use JsonException;
 use Psr\Clock\ClockInterface;
 
-final class DeliveryStore
+final readonly class DeliveryStore
 {
     public function __construct(
-        private readonly ConnectionInterface $connection,
-        private readonly int $claimSeconds,
-        private readonly int $maxAttempts,
-        private readonly ClockInterface $clock,
+        private ConnectionInterface $connection,
+        private int $claimSeconds,
+        private int $maxAttempts,
+        private ClockInterface $clock,
     ) {}
 
     /** @return list<string> */
@@ -127,12 +127,12 @@ final class DeliveryStore
 
     public function skip(DeliveryClaim $claim, string $reason): void
     {
-        $this->finish($claim, state: 'skipped', error: ['reason' => $reason]);
+        $this->finish(claim: $claim, state: 'skipped', error: ['reason' => $reason]);
     }
 
     public function markUnknown(DeliveryClaim $claim, string $reason): void
     {
-        $this->finish($claim, state: 'unknown', error: ['reason' => $reason]);
+        $this->finish(claim: $claim, state: 'unknown', error: ['reason' => $reason]);
     }
 
     private function retryAfter(?int $retryAfter): int

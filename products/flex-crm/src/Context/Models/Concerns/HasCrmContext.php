@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Flex\Crm\Context\Models\Concerns;
 
 use Flex\Crm\Activity\Models\Activity;
+use Flex\Crm\Company\Models\Company;
+use Flex\Crm\Contact\Models\Contact;
 use Flex\Crm\Context\CrmScope;
 use Flex\Crm\Context\Internal\RecordRules;
+use Flex\Crm\Deal\Models\Deal;
 use Flex\Crm\Internal\Value;
+use Flex\Crm\Lead\Models\Lead;
 use Override;
 
 trait HasCrmContext
@@ -15,7 +19,7 @@ trait HasCrmContext
     public static function bootHasCrmContext(): void
     {
         static::addGlobalScope(new CrmScope);
-        static::saving(static fn (\Flex\Crm\Company\Models\Company|\Flex\Crm\Contact\Models\Contact|\Flex\Crm\Lead\Models\Lead|\Flex\Crm\Deal\Models\Deal|Activity $record) => app(RecordRules::class)->saving($record));
+        static::saving(static fn (Company|Contact|Lead|Deal|Activity $record) => resolve(RecordRules::class)->saving($record));
     }
 
     /** @return array<string, mixed> */
@@ -23,7 +27,7 @@ trait HasCrmContext
     protected function getAttributesForInsert(): array
     {
         // Run after all saving/creating observers, including saveQuietly paths.
-        app(RecordRules::class)->saving($this);
+        resolve(RecordRules::class)->saving($this);
 
         return Value::map(parent::getAttributesForInsert());
     }
@@ -32,7 +36,7 @@ trait HasCrmContext
     #[Override]
     protected function getDirtyForUpdate(): array
     {
-        app(RecordRules::class)->saving($this);
+        resolve(RecordRules::class)->saving($this);
 
         return parent::getDirtyForUpdate();
     }

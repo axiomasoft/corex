@@ -34,10 +34,10 @@ use Override;
  *
  * @internal spec: B-10 §3.1, AC-22, D27, D38, D12
  */
-final class DatabaseFeatureFlags implements FeatureFlags
+final readonly class DatabaseFeatureFlags implements FeatureFlags
 {
     public function __construct(
-        private readonly ?string $connection = null,
+        private ?string $connection = null,
     ) {}
 
     #[Override]
@@ -49,7 +49,7 @@ final class DatabaseFeatureFlags implements FeatureFlags
             return false;
         }
 
-        $override = $this->findOverride($flag->id, $scope);
+        $override = $this->findOverride(flagId: $flag->id, scope: $scope);
 
         return $override instanceof FeatureOverride ? $override->is_enabled : $flag->is_enabled;
     }
@@ -63,7 +63,7 @@ final class DatabaseFeatureFlags implements FeatureFlags
             return JsonDocuments::capture(null);
         }
 
-        $override = $this->findOverride($flag->id, $scope);
+        $override = $this->findOverride(flagId: $flag->id, scope: $scope);
 
         // A NULL override payload means "this override only toggles
         // is_enabled" — it must fall back to the flag's own payload, not

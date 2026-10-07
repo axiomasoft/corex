@@ -50,6 +50,6 @@ final class WorkspaceScope implements Scope
      */
     private function manager(): TenancyManager
     {
-        return app(TenancyManager::class);
+        return resolve(TenancyManager::class);
     }
 }

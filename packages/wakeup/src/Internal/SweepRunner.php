@@ -22,17 +22,17 @@ use Psr\Clock\ClockInterface;
 use RuntimeException;
 use Throwable;
 
-final class SweepRunner implements DueWakeupSweeper
+final readonly class SweepRunner implements DueWakeupSweeper
 {
     /** @param list<DueWakeupSource> $dueSources */
     public function __construct(
-        private readonly Connection $connection,
-        private readonly TenantContextResolver $contexts,
-        private readonly WakeupHandlerRegistry $handlers,
-        private readonly array $dueSources,
-        private readonly int $leaseSeconds,
-        private readonly int $maxAttempts,
-        private readonly ClockInterface $clock,
+        private Connection $connection,
+        private TenantContextResolver $contexts,
+        private WakeupHandlerRegistry $handlers,
+        private array $dueSources,
+        private int $leaseSeconds,
+        private int $maxAttempts,
+        private ClockInterface $clock,
     ) {}
 
     public function sweep(TenantContext $context, int $limit): SweepResult
@@ -102,7 +102,7 @@ final class SweepRunner implements DueWakeupSweeper
                 ->where('attempt', '<', $this->maxAttempts)
                 ->where('fire_at', '<=', $now)
                 ->where(static fn (Builder $query) => $query->whereNull('retry_at')->orWhere('retry_at', '<=', $now))
-                ->orderBy('fire_at')
+                ->oldest('fire_at')
                 ->orderBy('id')
                 ->limit($limit);
 
@@ -200,20 +200,20 @@ final class SweepRunner implements DueWakeupSweeper
     private function payload(object $row): array
     {
         try {
-            $payload = json_decode(Value::text(Value::field($row, 'payload')), true, flags: JSON_THROW_ON_ERROR);
+            $payload = json_decode(Value::text(Value::field(row: $row, name: 'payload')), true, flags: JSON_THROW_ON_ERROR);
         } catch (Throwable) {
             return ['status' => 'handler-stamp-missing'];
         }
 
-        return $this->handlers->inspectPayload(kind: Value::text(Value::field($row, 'kind')), payload: $payload);
+        return $this->handlers->inspectPayload(kind: Value::text(Value::field(row: $row, name: 'kind')), payload: $payload);
     }
 
     /** @param array<string, mixed> $payload */
     private function request(TenantContext $context, object $row, array $payload): WakeupRequest
     {
-        $window = Value::field($row, 'window_start') === null ? null : new WakeupWindow(start: $this->date(Value::field($row, 'window_start')), end: $this->date(Value::field($row, 'window_end')), period: Value::text(Value::field($row, 'period')));
+        $window = Value::field(row: $row, name: 'window_start') === null ? null : new WakeupWindow(start: $this->date(Value::field(row: $row, name: 'window_start')), end: $this->date(Value::field(row: $row, name: 'window_end')), period: Value::text(Value::field(row: $row, name: 'period')));
 
-        return new WakeupRequest(context: $context, kind: Value::text(Value::field($row, 'kind')), requestKey: Value::text(Value::field($row, 'request_key')), fireAt: $this->date(Value::field($row, 'fire_at')), window: $window, payload: JsonDocuments::capture($payload));
+        return new WakeupRequest(context: $context, kind: Value::text(Value::field(row: $row, name: 'kind')), requestKey: Value::text(Value::field(row: $row, name: 'request_key')), fireAt: $this->date(Value::field(row: $row, name: 'fire_at')), window: $window, payload: JsonDocuments::capture($payload));
     }
 
     private function terminalFailure(string $id, string $code, DateTimeImmutable $now): void

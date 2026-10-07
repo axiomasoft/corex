@@ -33,7 +33,7 @@ final class ContactCompany extends Pivot
     protected static function booted(): void
     {
         self::addGlobalScope('crm-context', static function (Builder $builder): void {
-            $ctx = app(ContextGuard::class)->current();
+            $ctx = resolve(ContextGuard::class)->current();
 
             if ($builder->getModel()->getConnection()->getName() !== $ctx->connectionName) {
                 throw new AuthorizationException('CRM association query requires its context connection.');
@@ -45,7 +45,7 @@ final class ContactCompany extends Pivot
 
     private function assertContext(): void
     {
-        $guard = app(ContextGuard::class);
+        $guard = resolve(ContextGuard::class);
         $ctx = $guard->current(lock: $this->getConnection()->transactionLevel() > 0);
 
         if ($this->getConnection()->getName() !== $ctx->connectionName) {

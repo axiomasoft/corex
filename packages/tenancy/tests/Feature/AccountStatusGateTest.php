@@ -108,9 +108,9 @@ function initializedAccountASG(string $status, array $overrides = []): Account
 /** Swaps the `auth` container binding for a {@see Guard} stub — mirrors WorkspaceResolverTest's actingAsIdWsp(). */
 function actingAsIdASG(?string $userId): void
 {
-    $guard = new class($userId) implements Guard
+    $guard = new readonly class($userId) implements Guard
     {
-        public function __construct(private readonly ?string $id) {}
+        public function __construct(private ?string $id) {}
 
         public function check(): bool
         {
@@ -148,9 +148,9 @@ function actingAsIdASG(?string $userId): void
         }
     };
 
-    app()->instance('auth', new class($guard) implements AuthFactory
+    app()->instance('auth', new readonly class($guard) implements AuthFactory
     {
-        public function __construct(private readonly Guard $guard) {}
+        public function __construct(private Guard $guard) {}
 
         public function guard($name = null): Guard
         {
@@ -177,10 +177,10 @@ function statusOfASG(Closure $dispatch): int
 function gateASG(?AccountRead $accounts = null, ?TenantContextResolver $contexts = null): AccountStatusGate
 {
     return new AccountStatusGate(
-        statusGate: app(StatusGatePolicy::class),
-        contexts: $contexts ?? app(TenantContextResolver::class),
-        accounts: $accounts ?? app(AccountRead::class),
-        auth: app('auth'),
+        statusGate: resolve(StatusGatePolicy::class),
+        contexts: $contexts ?? resolve(TenantContextResolver::class),
+        accounts: $accounts ?? resolve(AccountRead::class),
+        auth: resolve('auth'),
         centralConnection: 'pgsql',
     );
 }
@@ -264,9 +264,9 @@ it('pending/provisioning/выдуманный статус → 403 (fail-closed)
     $account = initializedAccountASG('trial'); // CHECK constraint allows only pending/provisioning with slug=null
     actingAsIdASG($account->owner_identity_id);
     // A status the DB CHECK forbids persisting exists only on the in-memory context.
-    $contexts = new class(new AccountRef(id: $account->id, slug: (string) $account->slug, status: $status, features: [], limits: [])) implements TenantContextResolver
+    $contexts = new readonly class(new AccountRef(id: $account->id, slug: (string) $account->slug, status: $status, features: [], limits: [])) implements TenantContextResolver
     {
-        public function __construct(private readonly AccountRef $account) {}
+        public function __construct(private AccountRef $account) {}
 
         public function current(): TenantContext
         {
@@ -302,7 +302,7 @@ it('смена status у аккаунта → следующий запрос в
         'verified_at' => now(),
     ]);
 
-    $pipeline = fn (Request $request): mixed => app(ResolveTenantFromHost::class)->handle(
+    $pipeline = fn (Request $request): mixed => resolve(ResolveTenantFromHost::class)->handle(
         $request,
         fn (Request $r): mixed => gateASG()->handle($r, fn (Request $rr): Response => new Response('ok', 200)),
     );
@@ -321,7 +321,7 @@ it('смена status у аккаунта → следующий запрос в
 /** @param list<array{string, ?string}> $calls */
 function recordingAccountReadASG(array &$calls, ?string $owner): AccountRead
 {
-    return new class($calls, $owner, app(AccountRead::class)) implements AccountRead
+    return new class($calls, $owner, resolve(AccountRead::class)) implements AccountRead
     {
         /** @param list<array{string, ?string}> $calls */
         public function __construct(private array &$calls, private readonly ?string $owner, private readonly AccountRead $inner) {}
@@ -371,10 +371,10 @@ it('неаутентифицированный пользователь не в�
 });
 
 it('HttpRegistrar собирает AccountStatusGate с пятью зависимостями и central-соединением из options', function (): void {
-    $gate = app(AccountStatusGate::class);
-    $constructor = (new ReflectionClass(AccountStatusGate::class))->getConstructor();
-    $central = (new ReflectionProperty($gate, 'centralConnection'))->getValue($gate);
+    $gate = resolve(AccountStatusGate::class);
+    $constructor = new ReflectionClass(AccountStatusGate::class)->getConstructor();
+    $central = new ReflectionProperty($gate, 'centralConnection')->getValue($gate);
 
     expect($constructor->getNumberOfRequiredParameters())->toBe(5)
-        ->and($central)->toBe(app(TenancyOptions::class)->centralConnection);
+        ->and($central)->toBe(resolve(TenancyOptions::class)->centralConnection);
 });

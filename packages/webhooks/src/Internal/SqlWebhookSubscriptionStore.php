@@ -47,18 +47,18 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
         bool $policyAllows,
     ): WebhookSubscription {
         $this->assertScope($scope);
-        $topic = $this->catalogue->get($subscription->topic, $subscription->topicVersion);
-        $this->catalogue->admit($topic, $sensitiveAbility, $policyAllows);
+        $topic = $this->catalogue->get(name: $subscription->topic, version: $subscription->topicVersion);
+        $this->catalogue->admit(topic: $topic, sensitiveAbility: $sensitiveAbility, policyAllows: $policyAllows);
 
         if ($subscription->maxPiiClass !== $topic->piiClass || $subscription->major !== $topic->major) {
-            throw new ApiError(OperationsErrorCode::UnknownMessageContract, 422, 'The subscription does not match the declared topic.', category: ErrorCategory::Validation);
+            throw new ApiError(errorCode: OperationsErrorCode::UnknownMessageContract, status: 422, message: 'The subscription does not match the declared topic.', category: ErrorCategory::Validation);
         }
 
-        $this->assertEgress($scope, $subscription->endpointUrl);
+        $this->assertEgress(scope: $scope, url: $subscription->endpointUrl);
 
         return $this->connection->transaction(function () use ($subscription): WebhookSubscription {
             if ($this->connection->table(self::Table)->count() >= self::CAP) {
-                throw new ApiError(WebhooksErrorCode::WebhookSubscriptionCap, 422, 'The webhook subscription cap is 100.', category: ErrorCategory::Validation);
+                throw new ApiError(errorCode: WebhooksErrorCode::WebhookSubscriptionCap, status: 422, message: 'The webhook subscription cap is 100.', category: ErrorCategory::Validation);
             }
 
             $now = $this->clock->now();
@@ -93,8 +93,8 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
         $this->assertScope($scope);
         $this->assertRevision($expectedRevision);
         $current = $this->requireRow($id);
-        $topic = $this->catalogue->get($current->topic, $current->topicVersion);
-        $this->catalogue->admit($topic, $sensitiveAbility, $policyAllows);
+        $topic = $this->catalogue->get(name: $current->topic, version: $current->topicVersion);
+        $this->catalogue->admit(topic: $topic, sensitiveAbility: $sensitiveAbility, policyAllows: $policyAllows);
         $replacement = new WebhookSubscription(
             id: $current->id,
             revision: $current->revision,
@@ -109,7 +109,7 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
             updatedAt: $current->updatedAt,
         );
 
-        $this->assertEgress($scope, $replacement->endpointUrl);
+        $this->assertEgress(scope: $scope, url: $replacement->endpointUrl);
 
         return $this->connection->transaction(function () use ($id, $expectedRevision, $replacement): WebhookSubscription {
             $updated = $this->connection->table(self::Table)
@@ -123,7 +123,7 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
                 ]);
 
             if ($updated !== 1) {
-                throw new ApiError(OperationsErrorCode::Conflict, 409, 'The webhook subscription revision is stale.', category: ErrorCategory::Conflict);
+                throw new ApiError(errorCode: OperationsErrorCode::Conflict, status: 409, message: 'The webhook subscription revision is stale.', category: ErrorCategory::Conflict);
             }
 
             return $this->requireRow($id);
@@ -158,7 +158,7 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
                 ]);
 
             if ($updated !== 1) {
-                throw new ApiError(OperationsErrorCode::Conflict, 409, 'The webhook subscription revision is stale.', category: ErrorCategory::Conflict);
+                throw new ApiError(errorCode: OperationsErrorCode::Conflict, status: 409, message: 'The webhook subscription revision is stale.', category: ErrorCategory::Conflict);
             }
 
             return $this->requireRow($id);
@@ -167,8 +167,8 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
 
     private function assertEgress(DataScope $scope, string $url): void
     {
-        if (! $this->egress->allows($scope, WebhookDestination::fromUrl($url))) {
-            throw new ApiError(WebhooksErrorCode::WebhookEgressDenied, 422, 'Webhook destination is denied by tenant egress policy.', category: ErrorCategory::Validation);
+        if (! $this->egress->allows(scope: $scope, destination: WebhookDestination::fromUrl($url))) {
+            throw new ApiError(errorCode: WebhooksErrorCode::WebhookEgressDenied, status: 422, message: 'Webhook destination is denied by tenant egress policy.', category: ErrorCategory::Validation);
         }
     }
 
@@ -196,7 +196,7 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
         $row = $this->connection->table(self::Table)->where('id', $id)->first();
 
         if ($row === null) {
-            throw new ApiError(OperationsErrorCode::NotFound, 404, 'The webhook subscription does not exist.', category: ErrorCategory::NotFound);
+            throw new ApiError(errorCode: OperationsErrorCode::NotFound, status: 404, message: 'The webhook subscription does not exist.', category: ErrorCategory::NotFound);
         }
 
         return $this->subscription($row);
@@ -204,7 +204,7 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
 
     private function subscription(object $row): WebhookSubscription
     {
-        $decoded = JsonCanonical::decode(DatabaseValue::text(DatabaseValue::field($row, 'key_refs')));
+        $decoded = JsonCanonical::decode(DatabaseValue::text(DatabaseValue::field(row: $row, name: 'key_refs')));
 
         if (! is_array($decoded) || ! array_is_list($decoded)) {
             throw new RuntimeException('Stored webhook key references must be a list.');
@@ -218,17 +218,17 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
         }
 
         return new WebhookSubscription(
-            id: DatabaseValue::text(DatabaseValue::field($row, 'id')),
-            revision: DatabaseValue::integer(DatabaseValue::field($row, 'revision')),
-            major: DatabaseValue::text(DatabaseValue::field($row, 'major')),
-            topic: DatabaseValue::text(DatabaseValue::field($row, 'topic')),
-            topicVersion: DatabaseValue::integer(DatabaseValue::field($row, 'topic_version')),
-            endpointUrl: DatabaseValue::text(DatabaseValue::field($row, 'endpoint_url')),
-            status: DatabaseValue::text(DatabaseValue::field($row, 'status')),
-            maxPiiClass: DatabaseValue::text(DatabaseValue::field($row, 'max_pii_class')),
+            id: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id')),
+            revision: DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'revision')),
+            major: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'major')),
+            topic: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'topic')),
+            topicVersion: DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'topic_version')),
+            endpointUrl: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'endpoint_url')),
+            status: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'status')),
+            maxPiiClass: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'max_pii_class')),
             keyRefs: $keyRefs,
-            createdAt: $this->instant(DatabaseValue::field($row, 'created_at')),
-            updatedAt: $this->instant(DatabaseValue::field($row, 'updated_at')),
+            createdAt: $this->instant(DatabaseValue::field(row: $row, name: 'created_at')),
+            updatedAt: $this->instant(DatabaseValue::field(row: $row, name: 'updated_at')),
         );
     }
 

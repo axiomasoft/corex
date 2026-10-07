@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — PHP 8.4 modernization (P09.4)
+
+- Modernize maintained PHP for PHP 8.4 with final concrete classes, immutable value state and controlled named calls; preserve current public native parameter names and extension behavior.
+- Refresh the PHP API metadata for equivalent readonly/type/promotion declarations (D130).
+- Remove verified unused Internal helpers: `ModuleDependency::phpExtension`, `DefaultSettingDefinition::workspaceScoped`, `DefaultSettingDefinition::userScoped`, `Filament::pages`, `Filament::widgets`, `Filament::tab`, `Menu::group`, `Menu::route`, `Menu::badge`, `Routes::web`, `Workflow::stepType`, `OpenTelemetryBridge::record`.
+- `OpenTelemetryBridge::record()` was namespace-exported by the historical unpublished BC base; its exact removal is admitted by D130 before release. Current Api/Spi manifests do not export this Internal helper.
+
 ## Unreleased — foundation typing (P09.1, D126)
 
 - Refine the serialized PHPDoc contracts of CompiledModule, CompiledRegistry, EntityField, EntityDefinition, FieldDefinition and ModuleManifest; validate raw compiled payloads at deserialization. Native public signatures and schema remain unchanged. Feature flag JSON payloads retain scalar, list and map round-trips.

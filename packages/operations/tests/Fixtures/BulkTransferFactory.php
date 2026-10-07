@@ -63,7 +63,7 @@ final class BulkTransferFactory implements \CoreX\Operations\Bulk\Contracts\Bulk
             restoreEpoch: $restore,
         );
         $transfer = new TransferRef($this->tokens[$id]);
-        $signal = new class($this->cancelled) implements CancellationSignal
+        $signal = new readonly class($this->cancelled) implements CancellationSignal
         {
             public function __construct(private bool $cancelled) {}
 
@@ -116,7 +116,7 @@ final class BulkTransferFactory implements \CoreX\Operations\Bulk\Contracts\Bulk
     }
 }
 
-final class ImportProbe implements TransferRunner
+final readonly class ImportProbe implements TransferRunner
 {
     public function __construct(private BulkTransferFactory $factory) {}
 
@@ -158,7 +158,7 @@ final class ImportProbe implements TransferRunner
     }
 }
 
-final class ExportProbe implements ExportRunner
+final readonly class ExportProbe implements ExportRunner
 {
     public function __construct(private BulkTransferFactory $factory) {}
 

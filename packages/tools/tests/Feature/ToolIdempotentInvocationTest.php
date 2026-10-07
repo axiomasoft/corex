@@ -94,7 +94,7 @@ final class ToolIdempotentInvocationTest extends TestCase
         $this->connection = DB::connection('sqlite');
         Schema::dropIfExists('sys_api_idempotency');
         Schema::dropIfExists('idempotent_effects');
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
         Schema::create('idempotent_effects', static function (Blueprint $table): void {
             $table->id();
             $table->string('value');
@@ -104,7 +104,7 @@ final class ToolIdempotentInvocationTest extends TestCase
         $this->principal = new IdentityFixture;
         $this->authorizer = new ToolIdempotentInvocationReplayAuthorizerFixture;
         $this->operationAuthorizer = new ToolIdempotentInvocationOperationAuthorizerFixture;
-        $this->modules = new ModuleFixture(app(RegistryCompiler::class)->compile([], installedPackages: []));
+        $this->modules = new ModuleFixture(resolve(RegistryCompiler::class)->compile([], installedPackages: []));
     }
 
     protected function tearDown(): void
@@ -117,7 +117,7 @@ final class ToolIdempotentInvocationTest extends TestCase
     public function test_http_key_and_exposed_tool_operation_key_share_one_effect(): void
     {
         $schema = ['type' => 'object'];
-        $registry = app(RegistryCompiler::class)->compile([
+        $registry = resolve(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
                 Api::operation('notes.create', 'POST', '/notes', ToolIdempotentInvocationIdempotentHttpHandler::class, 'notes.write', $schema, $schema, ['name' => ['required', 'string']])
                     ->asCommand()->idempotency('required')->effect('tenant_transactional'),

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
         });
 
-        app(RecordsRegistrar::class)->claim('corex/stub-failing', 'table', 'sbf_ok');
+        resolve(RecordsRegistrar::class)->claim('corex/stub-failing', 'table', 'sbf_ok');
     }
 
     public function down(): void

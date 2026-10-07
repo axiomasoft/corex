@@ -12,9 +12,9 @@ use CoreX\Recurrence\Data\RecurrenceWindow;
 use CoreX\Recurrence\Internal\RuntimeProfile;
 use DateTimeImmutable;
 
-final class CommunityTimetableConsumer
+final readonly class CommunityTimetableConsumer
 {
-    public function __construct(private readonly RecurrenceExpander $expander) {}
+    public function __construct(private RecurrenceExpander $expander) {}
 
     /** @return list<string> */
     public function weeklySessionOffsets(): array

@@ -50,7 +50,7 @@ final class WebhookSubscriptionTest extends TestCase
         $this->configure('api_tenant');
         $this->selectSchema();
 
-        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
         $connection = DB::connection('api_tenant');
@@ -187,7 +187,7 @@ final class WebhookSubscriptionTest extends TestCase
             $this->app->forgetInstance(SchemaSets::class);
             $this->app->forgetInstance(SchemaMigrator::class);
 
-            $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+            $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
             $connection = DB::connection('api_pg_tenant');
             $contexts = new ContextFixture;
             $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));

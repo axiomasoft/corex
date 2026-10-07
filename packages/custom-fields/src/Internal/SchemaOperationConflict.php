@@ -22,8 +22,8 @@ final class SchemaOperationConflict extends RuntimeException implements Describe
     public static function notReady(): self
     {
         return new self(
-            'The schema operation is not ready for execution.',
-            new ErrorDescriptor(
+            message: 'The schema operation is not ready for execution.',
+            descriptor: new ErrorDescriptor(
                 code: CustomFieldsErrorCode::AttributeSchemaConflict,
                 category: ErrorCategory::Conflict,
                 retryable: true,
@@ -35,8 +35,8 @@ final class SchemaOperationConflict extends RuntimeException implements Describe
     public static function staleSnapshot(): self
     {
         return new self(
-            'The schema operation was requested against a stale field snapshot.',
-            new ErrorDescriptor(
+            message: 'The schema operation was requested against a stale field snapshot.',
+            descriptor: new ErrorDescriptor(
                 code: CustomFieldsErrorCode::AttributeSchemaConflict,
                 category: ErrorCategory::Conflict,
                 retryable: false,
@@ -48,8 +48,8 @@ final class SchemaOperationConflict extends RuntimeException implements Describe
     public static function retryExhausted(): self
     {
         return new self(
-            'The schema operation retry limit is exhausted.',
-            new ErrorDescriptor(
+            message: 'The schema operation retry limit is exhausted.',
+            descriptor: new ErrorDescriptor(
                 code: CustomFieldsErrorCode::AttributeSchemaRetryExhausted,
                 category: ErrorCategory::Conflict,
                 retryable: false,

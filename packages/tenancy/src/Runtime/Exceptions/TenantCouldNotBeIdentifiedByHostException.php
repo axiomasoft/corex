@@ -27,6 +27,6 @@ final class TenantCouldNotBeIdentifiedByHostException extends RuntimeException i
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TenancyErrorCode::TenantCouldNotBeIdentifiedByHostException, ErrorCategory::NotFound, retryable: false);
+        return new ErrorDescriptor(code: TenancyErrorCode::TenantCouldNotBeIdentifiedByHostException, category: ErrorCategory::NotFound, retryable: false);
     }
 }

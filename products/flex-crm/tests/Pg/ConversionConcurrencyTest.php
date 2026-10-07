@@ -24,7 +24,7 @@ it('serializes concurrent conversion and returns the committed result on retry',
     Event::fake([LeadConverted::class]);
     $fixture = TestContext::seed('pgsql');
     $original = $fixture->current();
-    $lead = app(CreateLead::class)->handle(title: 'Once', contactName: 'Jane');
+    $lead = resolve(CreateLead::class)->handle(title: 'Once', contactName: 'Jane');
     $other = clone $lead;
     $other->setConnection('conversion_race');
     DB::connection('conversion_race')->beginTransaction();
@@ -38,7 +38,7 @@ it('serializes concurrent conversion and returns the committed result on retry',
 
         try {
             $fixture->context = new ExecutionContext(tenant: $original->tenant, connectionName: 'conversion_race', actor: $original->actor, principalId: $original->principalId);
-            app(ConvertLead::class)->handle($other);
+            resolve(ConvertLead::class)->handle($other);
             test()->fail('Concurrent conversion did not serialize.');
         } catch (QueryException $exception) {
             expect($exception->errorInfo[0])->toBe('55P03');
@@ -48,9 +48,9 @@ it('serializes concurrent conversion and returns the committed result on retry',
     });
 
     try {
-        $first = app(ConvertLead::class)->handle($lead);
+        $first = resolve(ConvertLead::class)->handle($lead);
         $fixture->context = new ExecutionContext(tenant: $original->tenant, connectionName: 'conversion_race', actor: $original->actor, principalId: $original->principalId);
-        $retry = app(ConvertLead::class)->handle($other);
+        $retry = resolve(ConvertLead::class)->handle($other);
         expect($observed)->toBeTrue()->and($retry->id)->toBe($first->id)->and(Contact::on('conversion_race')->count())->toBe(1);
         Event::assertDispatchedTimes(LeadConverted::class, 1);
     } finally {

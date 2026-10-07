@@ -20,6 +20,6 @@ final class OperationConflictException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(IntlErrorCode::OperationConflictException, ErrorCategory::Conflict, retryable: false);
+        return new ErrorDescriptor(code: IntlErrorCode::OperationConflictException, category: ErrorCategory::Conflict, retryable: false);
     }
 }

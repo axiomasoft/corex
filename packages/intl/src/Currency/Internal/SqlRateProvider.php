@@ -12,10 +12,10 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 use Override;
 
-final class SqlRateProvider implements RateProvider
+final readonly class SqlRateProvider implements RateProvider
 {
     public function __construct(
-        private readonly Connection $connection,
+        private Connection $connection,
     ) {}
 
     #[Override]
@@ -36,8 +36,8 @@ final class SqlRateProvider implements RateProvider
                 $query->publicationCutoff !== null,
                 fn (Builder $builder) => $builder->where('observed_at', '<=', $query->publicationCutoff?->format('Y-m-d H:i:s')),
             )
-            ->orderByDesc('valid_on')
-            ->orderByDesc('observed_at')
+            ->latest('valid_on')
+            ->latest('observed_at')
             ->orderByDesc('publication_revision')
             ->first();
 
@@ -53,7 +53,7 @@ final class SqlRateProvider implements RateProvider
         }
 
         $snapshot = RateSnapshotMapper::fromRow(row: $row);
-        $ageDays = (new DateTimeImmutable($query->onDate))->diff(new DateTimeImmutable($snapshot->validOn))->days ?? 0;
+        $ageDays = new DateTimeImmutable($query->onDate)->diff(new DateTimeImmutable($snapshot->validOn))->days ?? 0;
 
         if ($ageDays > $query->maxAgeDays) {
             if (! $query->allowStale) {

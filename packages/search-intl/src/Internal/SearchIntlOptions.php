@@ -21,7 +21,7 @@ final readonly class SearchIntlOptions
         $enabled = $config['enabled'] ?? false;
 
         if (! is_bool($enabled)) {
-            $violations->add('enabled', 'must be a boolean');
+            $violations->add(path: 'enabled', message: 'must be a boolean');
             $enabled = false;
         }
 

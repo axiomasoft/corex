@@ -21,7 +21,7 @@ final class FakeWorkspaceScope implements Scope
 {
     public function apply(Builder $builder, Model $model): void
     {
-        $workspace = app(TenancyManager::class)->context()?->workspace;
+        $workspace = resolve(TenancyManager::class)->context()?->workspace;
 
         if ($workspace === null) {
             return;

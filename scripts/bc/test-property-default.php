@@ -31,7 +31,7 @@ echo "BC enum default: unchanged compatible; changed detected\n";
 $reflectNew = static function (string $argument, bool $dependency = true) {
     $source = '<?php '.($dependency ? 'final readonly class Data { public function __construct(public string $id) {} } ' : '').'class Example { public function __construct(public Data $data = new Data("'.$argument.'")) {} }';
 
-    return (new DefaultReflector(new StringSourceLocator($source, (new BetterReflection)->astLocator())))->reflectClass('Example')->getProperty('data') ?? throw new RuntimeException('Missing initializer property');
+    return new DefaultReflector(new StringSourceLocator($source, (new BetterReflection)->astLocator()))->reflectClass('Example')->getProperty('data') ?? throw new RuntimeException('Missing initializer property');
 };
 
 if (count($compare($reflectNew('a'), $reflectNew('a'))) !== 0 || count($compare($reflectNew('a'), $reflectNew('b'))) !== 1) {

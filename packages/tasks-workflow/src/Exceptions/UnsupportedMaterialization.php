@@ -25,6 +25,6 @@ final class UnsupportedMaterialization extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TasksWorkflowErrorCode::UnsupportedMaterialization, ErrorCategory::Unsupported, retryable: false);
+        return new ErrorDescriptor(code: TasksWorkflowErrorCode::UnsupportedMaterialization, category: ErrorCategory::Unsupported, retryable: false);
     }
 }

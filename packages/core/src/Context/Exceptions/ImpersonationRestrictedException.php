@@ -46,6 +46,6 @@ final class ImpersonationRestrictedException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::ImpersonationRestrictedException, ErrorCategory::Authorization, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::ImpersonationRestrictedException, category: ErrorCategory::Authorization, retryable: false);
     }
 }

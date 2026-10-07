@@ -179,7 +179,7 @@ final class RuntimeRegistrar implements PackageRegistrar
      */
     private static function tenancySection(Application $app): array
     {
-        $section = self::configSection($app, 'corex-tenancy');
+        $section = self::configSection(app: $app, key: 'corex-tenancy');
 
         if (($section['cache_stores'] ?? null) === null) {
             $default = TenancyRuntimeFactory::frameworkConfig()->get('cache.default');
@@ -198,6 +198,6 @@ final class RuntimeRegistrar implements PackageRegistrar
             return [];
         }
 
-        return array_filter($section, static fn (mixed $key): bool => is_string($key), ARRAY_FILTER_USE_KEY);
+        return array_filter($section, is_string(...), ARRAY_FILTER_USE_KEY);
     }
 }

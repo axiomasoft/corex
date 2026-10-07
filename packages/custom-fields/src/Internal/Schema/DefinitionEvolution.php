@@ -37,7 +37,7 @@ final readonly class DefinitionEvolution
         string $newType,
         ?string $transformer = null,
     ): AttributeDefinition {
-        $this->assertTransition($current->lifecycle, AttributeLifecycle::Migrating);
+        $this->assertTransition(from: $current->lifecycle, to: AttributeLifecycle::Migrating);
 
         if ($current->id->isLegacy()) {
             throw new InvalidArgumentException('Legacy attribute identities cannot be evolved before they are pinned.');
@@ -86,7 +86,7 @@ final readonly class DefinitionEvolution
             throw new InvalidArgumentException('Attribute backfill digest does not permit the write switch.');
         }
 
-        $this->assertTransition($migrating->lifecycle, AttributeLifecycle::Active);
+        $this->assertTransition(from: $migrating->lifecycle, to: AttributeLifecycle::Active);
 
         return $this->revision(
             current: $migrating,
@@ -142,9 +142,9 @@ final readonly class DefinitionEvolution
             throw new InvalidArgumentException('Only an expanded migrating definition can roll back before switch.');
         }
 
-        $sourceLifecycle = AttributeLifecycle::from($this->metaString($migrating, 'evolution_source_lifecycle'));
+        $sourceLifecycle = AttributeLifecycle::from($this->metaString(definition: $migrating, key: 'evolution_source_lifecycle'));
 
-        return $this->rollback($migrating, $sourceLifecycle, 'rolled_back_before_switch');
+        return $this->rollback(current: $migrating, lifecycle: $sourceLifecycle, stage: 'rolled_back_before_switch');
     }
 
     public function rollbackAfterSwitch(AttributeDefinition $switched): AttributeDefinition
@@ -153,10 +153,10 @@ final readonly class DefinitionEvolution
             throw new InvalidArgumentException('Only a switched definition can roll back after switch.');
         }
 
-        $sourceKey = $this->metaString($switched, 'evolution_source_key');
-        $sourceType = $this->metaString($switched, 'evolution_source_type');
-        $targetKey = $this->metaString($switched, 'evolution_target_key');
-        $targetType = $this->metaString($switched, 'evolution_target_type');
+        $sourceKey = $this->metaString(definition: $switched, key: 'evolution_source_key');
+        $sourceType = $this->metaString(definition: $switched, key: 'evolution_source_type');
+        $targetKey = $this->metaString(definition: $switched, key: 'evolution_target_key');
+        $targetType = $this->metaString(definition: $switched, key: 'evolution_target_type');
 
         return $this->revision(
             current: $switched,
@@ -196,8 +196,8 @@ final readonly class DefinitionEvolution
 
     private function rollback(AttributeDefinition $current, AttributeLifecycle $lifecycle, string $stage): AttributeDefinition
     {
-        $sourceKey = $this->metaString($current, 'evolution_source_key');
-        $sourceType = $this->metaString($current, 'evolution_source_type');
+        $sourceKey = $this->metaString(definition: $current, key: 'evolution_source_key');
+        $sourceType = $this->metaString(definition: $current, key: 'evolution_source_type');
 
         return $this->revision(
             current: $current,
@@ -224,7 +224,7 @@ final readonly class DefinitionEvolution
         array $writeKeys,
         array $meta,
     ): AttributeDefinition {
-        $meta = Validation::validatedMap($meta, 'attribute metadata');
+        $meta = Validation::validatedMap(value: $meta, name: 'attribute metadata');
 
         return new AttributeDefinition(
             id: $current->id,

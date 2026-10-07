@@ -171,11 +171,11 @@ function domainTrustCoordinatorDT(): array
     app()->instance(DomainOwnershipProofVerifier::class, $verifier);
     app()->instance(DomainTrustAuthorizer::class, $authorizer);
 
-    return [app(DomainTrustCoordinator::class), $store, $verifier, $authorizer];
+    return [resolve(DomainTrustCoordinator::class), $store, $verifier, $authorizer];
 }
 
 it('keeps custom-domain verification disabled without consumer port bindings', function (): void {
-    expect(fn (): DomainTrustCoordinator => app(DomainTrustCoordinator::class))
+    expect(fn (): DomainTrustCoordinator => resolve(DomainTrustCoordinator::class))
         ->toThrow(DomainTrustDisabled::class);
 });
 
@@ -192,11 +192,9 @@ it('issues and consumes a proof once, persisting only trusted state and notifica
     expect($transition->newGeneration)->toBe(1)
         ->and(DB::table('root_domains')->where('host', 'shop.example.test')->value('verified_at'))->not->toBeNull()
         ->and($store->records)->toBeEmpty();
-    Event::assertDispatched(DomainTrustChanged::class, function (DomainTrustChanged $event) use ($issued): bool {
-        return $event->transition->host->value === 'shop.example.test'
-            && $event->transition->reason->value === 'verified'
-            && ! str_contains(serialize($event), $issued->token);
-    });
+    Event::assertDispatched(DomainTrustChanged::class, fn (DomainTrustChanged $event): bool => $event->transition->host->value === 'shop.example.test'
+        && $event->transition->reason->value === 'verified'
+        && ! str_contains(serialize($event), $issued->token));
 
     expect(fn (): mixed => $coordinator->verify(actor: $actor, accountId: $accountId, host: 'shop.example.test'))
         ->toThrow(DomainTrustDenied::class);
@@ -261,7 +259,7 @@ it('denies verification and rolls back trusted state when resolver-cache invalid
         'cache_store' => 'domain_trust_failure',
     ]]);
     app()->forgetInstance(TenancyOptions::class);
-    app('cache')->extend('domain_trust_failure', function (): never {
+    resolve('cache')->extend('domain_trust_failure', function (): never {
         throw new RuntimeException('The cache store is unavailable.');
     });
     config(['cache.stores.domain_trust_failure' => ['driver' => 'domain_trust_failure']]);

@@ -31,16 +31,16 @@ final class LoadContourModule implements OperationHandler
             ],
         ];
         $operation = Api::operation(
-            'notes.create',
-            'POST',
-            '/notes',
-            self::class,
-            'notes.read',
-            $schema,
-            $schema,
-            ['title' => ['required', 'string']],
+            id: 'notes.create',
+            method: 'POST',
+            path: '/notes',
+            handler: self::class,
+            ability: 'notes.read',
+            requestSchema: $schema,
+            responseSchema: $schema,
+            rules: ['title' => ['required', 'string']],
         )->cost(['base' => 1, 'row' => 1, 'max_units' => 10]);
-        $tool = Api::exposeTool('notes.create', 'v1', 'notes.create', 'v1', 'read', 'read-only', $schema, $schema, ['title' => 'title']);
+        $tool = Api::exposeTool(operationId: 'notes.create', operationVersion: 'v1', code: 'notes.create', toolVersion: 'v1', sideEffect: 'read', idempotency: 'read-only', argumentSchema: $schema, resultSchema: $schema, parameterMap: ['title' => 'title']);
         $operation->declaringModule = 'example/notes';
         $tool->declaringModule = 'example/notes';
 

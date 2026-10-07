@@ -8,7 +8,7 @@ use Psr\Clock\ClockInterface;
 
 final readonly class WebhookReceiverVerifier
 {
-    private const TOLERANCE_SECONDS = 300;
+    private const int TOLERANCE_SECONDS = 300;
 
     /** @param list<string> $secrets */
     public function __construct(

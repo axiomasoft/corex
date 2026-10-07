@@ -24,7 +24,7 @@ it('accepts all supported typed values from the active registry snapshot', funct
         ['code' => 'phone_value', 'type' => 'phone'], ['code' => 'file_value', 'type' => 'file'],
         ['code' => 'json_value', 'type' => 'json'],
     ];
-    $catalogue = new class(new FieldSnapshot('contact', $hash, $hash, $fields, [])) implements FieldCatalogue
+    $catalogue = new readonly class(new FieldSnapshot('contact', $hash, $hash, $fields, [])) implements FieldCatalogue
     {
         public function __construct(private FieldSnapshot $snapshot) {}
 
@@ -38,7 +38,7 @@ it('accepts all supported typed values from the active registry snapshot', funct
         connectionIdentity: 'pgsql:corex_test', actorId: 'user-1', restoreEpoch: $hash,
     );
 
-    (new FieldValueValidator($catalogue))->validatePatch(
+    new FieldValueValidator($catalogue)->validatePatch(
         scope: $scope,
         record: new RecordRef(entity: 'contact', id: 'record-1'),
         patch: new ValuePatch(values: [
@@ -55,7 +55,7 @@ it('accepts all supported typed values from the active registry snapshot', funct
 
 it('rejects an unknown field and floating point money values', function (): void {
     $hash = str_repeat('a', 64);
-    $catalogue = new class(new FieldSnapshot('contact', $hash, $hash, [['code' => 'money', 'type' => 'money']], [])) implements FieldCatalogue
+    $catalogue = new readonly class(new FieldSnapshot('contact', $hash, $hash, [['code' => 'money', 'type' => 'money']], [])) implements FieldCatalogue
     {
         public function __construct(private FieldSnapshot $snapshot) {}
 

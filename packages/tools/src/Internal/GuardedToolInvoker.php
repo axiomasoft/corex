@@ -38,15 +38,15 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
 /** Guarded headless invocation over compiled tool declarations and owning handlers. */
-final class GuardedToolInvoker implements ToolInvoker
+final readonly class GuardedToolInvoker implements ToolInvoker
 {
     public function __construct(
-        private readonly ModuleRegistry $modules,
-        private readonly ToolPolicy $policy,
-        private readonly ToolSchemaValidator $schemas,
-        private readonly ToolExecutionGuard $guard,
-        private readonly Container $container,
-        private readonly OperationInvoker $operations,
+        private ModuleRegistry $modules,
+        private ToolPolicy $policy,
+        private ToolSchemaValidator $schemas,
+        private ToolExecutionGuard $guard,
+        private Container $container,
+        private OperationInvoker $operations,
     ) {}
 
     #[Override]
@@ -58,7 +58,7 @@ final class GuardedToolInvoker implements ToolInvoker
             return $this->denied(errorCode: ToolsErrorCode::ToolUnavailable, call: $call);
         }
 
-        if (! $this->modules->isActive($declaration->declaringModule, $context->tenant())) {
+        if (! $this->modules->isActive(name: $declaration->declaringModule, ctx: $context->tenant())) {
             return $this->denied(errorCode: ToolsErrorCode::ToolUnavailable, call: $call);
         }
 
@@ -68,11 +68,11 @@ final class GuardedToolInvoker implements ToolInvoker
             return $this->denied(errorCode: ToolsErrorCode::ToolRevisionConflict, call: $call);
         }
 
-        if (! $this->policy->invoke($tool, $context, $call->arguments)) {
+        if (! $this->policy->invoke(tool: $tool, context: $context, arguments: $call->arguments)) {
             return $this->denied(errorCode: ToolsErrorCode::ToolUnavailable, call: $call);
         }
 
-        $inputError = $this->validateInput($tool, $call);
+        $inputError = $this->validateInput(tool: $tool, call: $call);
 
         if ($inputError !== null) {
             return $inputError;
@@ -102,7 +102,7 @@ final class GuardedToolInvoker implements ToolInvoker
             );
         };
 
-        $result = $this->guard->execute($tool, $context, $call, $effect);
+        $result = $this->guard->execute(tool: $tool, context: $context, call: $call, effect: $effect);
 
         if (
             $callbackInvocations === 0
@@ -229,11 +229,11 @@ final class GuardedToolInvoker implements ToolInvoker
 
         foreach ($this->modules->compiled()->api as $api) {
             if ($api->mode === 'operation' && $api->version.':'.$api->operationId === $ref) {
-                return OperationFactory::fromDeclaration($api, $this->modules->compiled()->fingerprint);
+                return OperationFactory::fromDeclaration(api: $api, registryFingerprint: $this->modules->compiled()->fingerprint);
             }
         }
 
-        throw new ApiError(OperationsErrorCode::OperationNotFound, 404, 'Operation not found.');
+        throw new ApiError(errorCode: OperationsErrorCode::OperationNotFound, status: 404, message: 'Operation not found.');
     }
 
     /**

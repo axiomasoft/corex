@@ -51,11 +51,11 @@ it('uses the stock writer to commit central and tenant audit before login with o
     $staffId = makeStaffIdentityIM();
     $grantId = makeGrantIM($staffId, $account->id);
 
-    expect(app(ImpersonationService::class))->toBeInstanceOf(ImpersonationService::class)
-        ->and(app(ImpersonationAuditSink::class))->toBeInstanceOf(DualImpersonationAuditSink::class)
-        ->and(app(SynchronousAuditWriter::class))->toBeInstanceOf(SynchronousAuditWriter::class);
-    expect(app(AuditLogger::class))->toBeInstanceOf(AuditLogger::class);
-    app(ImpersonationService::class)->start($grantId, $staffId);
+    expect(resolve(ImpersonationService::class))->toBeInstanceOf(ImpersonationService::class)
+        ->and(resolve(ImpersonationAuditSink::class))->toBeInstanceOf(DualImpersonationAuditSink::class)
+        ->and(resolve(SynchronousAuditWriter::class))->toBeInstanceOf(SynchronousAuditWriter::class);
+    expect(resolve(AuditLogger::class))->toBeInstanceOf(AuditLogger::class);
+    resolve(ImpersonationService::class)->start($grantId, $staffId);
 
     $central = DB::connection('pgsql')->table('root_account_events')->where('event', 'impersonation.started')->sole();
     $tenant = DB::connection('tenant')->table('sys_audit_log')->where('action', 'impersonation.started')->sole();
@@ -67,7 +67,7 @@ it('uses the stock writer to commit central and tenant audit before login with o
         ->and($tenant->actor_id)->toBe($staffId)
         ->and(Auth::guard('web')->check())->toBeTrue();
 
-    app(ImpersonationService::class)->stop();
+    resolve(ImpersonationService::class)->stop();
     expect(DB::connection('pgsql')->table('root_account_events')->where('event', 'impersonation.ended')->count())->toBe(1)
         ->and(DB::connection('tenant')->table('sys_audit_log')->where('action', 'impersonation.ended')->count())->toBe(1);
 });
@@ -85,7 +85,7 @@ it('keeps committed central intent and a consumed grant when the tenant writer f
             throw new RuntimeException('tenant mirror failed');
         }
     });
-    expect(fn () => app(ImpersonationService::class)->start($grantId, $staffId))->toThrow(RuntimeException::class);
+    expect(fn () => resolve(ImpersonationService::class)->start($grantId, $staffId))->toThrow(RuntimeException::class);
     expect(grantRowIM($grantId)->used_at)->not->toBeNull()
         ->and(DB::connection('pgsql')->table('root_account_events')->where('event', 'impersonation.started')->count())->toBe(1)
         ->and(Auth::guard('web')->check())->toBeFalse()
@@ -99,7 +99,7 @@ it('refuses login and consumes the grant when the central audit insert fails', f
     $grantId = makeGrantIM($staffId, $account->id);
     DB::connection('pgsql')->statement('DROP TABLE root_account_events');
 
-    expect(fn () => app(ImpersonationService::class)->start($grantId, $staffId))->toThrow(QueryException::class);
+    expect(fn () => resolve(ImpersonationService::class)->start($grantId, $staffId))->toThrow(QueryException::class);
     expect(grantRowIM($grantId)->used_at)->not->toBeNull()
         ->and(DB::connection('tenant')->table('sys_audit_log')->count())->toBe(0)
         ->and(Auth::guard('web')->check())->toBeFalse();
@@ -114,7 +114,7 @@ it('rejects an ambient tenant transaction after consuming the grant', function (
     $tenant->beginTransaction();
 
     try {
-        expect(fn () => app(ImpersonationService::class)->start($grantId, $staffId))->toThrow(RuntimeException::class);
+        expect(fn () => resolve(ImpersonationService::class)->start($grantId, $staffId))->toThrow(RuntimeException::class);
         expect(grantRowIM($grantId)->used_at)->not->toBeNull()
             ->and(DB::connection('pgsql')->table('root_account_events')->where('event', 'impersonation.started')->count())->toBe(0)
             ->and(Auth::guard('web')->check())->toBeFalse();
@@ -132,13 +132,13 @@ it('omits tenant mirror in dev and requires production acknowledgement', functio
     seedTenantUserIM($account, $account->owner_identity_id);
     $staffId = makeStaffIdentityIM();
     $grantId = makeGrantIM($staffId, $account->id, ['expires_at' => now()->addHours(4)]);
-    app(ImpersonationService::class)->start($grantId, $staffId);
+    resolve(ImpersonationService::class)->start($grantId, $staffId);
 
     expect(DB::connection('pgsql')->table('root_account_events')->where('event', 'impersonation.started')->count())->toBe(1)
         ->and(DB::connection('tenant')->table('sys_audit_log')->count())->toBe(0);
 
-    $options = app(TenancyOptions::class);
+    $options = resolve(TenancyOptions::class);
     $path = 'corex-tenancy.impersonation.profile';
-    expect((new DangerousModesCheck($options, CoreOptionsParser::fromArray([])))->violations(true))->toContain($path.': dangerous mode is not acknowledged for production')
-        ->and((new DangerousModesCheck($options, CoreOptionsParser::fromArray(['acknowledged_dangerous_modes' => [$path]])))->violations(true))->toBe([]);
+    expect(new DangerousModesCheck($options, CoreOptionsParser::fromArray([]))->violations(true))->toContain($path.': dangerous mode is not acknowledged for production')
+        ->and(new DangerousModesCheck($options, CoreOptionsParser::fromArray(['acknowledged_dangerous_modes' => [$path]]))->violations(true))->toBe([]);
 });

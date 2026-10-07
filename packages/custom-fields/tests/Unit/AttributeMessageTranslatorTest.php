@@ -31,7 +31,7 @@ function attributeValuesChanged(): AttributeValuesChanged
 }
 
 it('translates a mutation into the declared metadata-only contract', function (): void {
-    $message = (new AttributeMessageTranslator(new ArrayDataScopeCodec))
+    $message = new AttributeMessageTranslator(new ArrayDataScopeCodec)
         ->translate(attributeValuesChanged());
 
     expect($message->contract())->toBe('attributes.values.changed.v1')

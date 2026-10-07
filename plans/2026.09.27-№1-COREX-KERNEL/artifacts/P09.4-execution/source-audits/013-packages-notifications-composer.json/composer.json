@@ -1,0 +1,71 @@
+{
+    "name": "axiomasoft/corex-notifications",
+    "description": "Durable tenant-scoped notification primitives for CoreX.",
+    "type": "corex-module",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "axiomasoft/corex": "^1.0@dev",
+        "laravel/framework": "^12.0|^13.0",
+        "psr/clock": "^1.0"
+    },
+    "require-dev": {
+        "axiomasoft/corex-wakeup": "^1.0@dev",
+        "ext-pdo": "*",
+        "larastan/larastan": "^3.12",
+        "laravel/pint": "^1.32",
+        "orchestra/testbench": "^10.12|^11.3",
+        "orchestra/testbench-core": "^10.12|^11.3",
+        "pestphp/pest": "^5.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "CoreX\\Notifications\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CoreX\\Notifications\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "corex": {
+            "schema-version": 1,
+            "module": "CoreX\\Notifications\\NotificationsModule",
+            "package-type": "capability",
+            "stability": "stable"
+        },
+        "laravel": {
+            "providers": [
+                "CoreX\\Notifications\\NotificationsServiceProvider"
+            ]
+        },
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../core"
+        },
+        {
+            "type": "path",
+            "url": "../wakeup"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "scripts": {
+        "test": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg",
+        "test:pg": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=pg",
+        "test:coverage": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg --coverage --min=80",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/notifications/phpstan.neon --memory-limit=2G --no-progress",
+        "lint:check": "../../vendor/bin/pint --config=pint.json --test"
+    }
+}

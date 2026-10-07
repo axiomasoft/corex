@@ -27,10 +27,10 @@ it('projects tool identity without leaking its handler into introspection', func
     $manifest = ModuleManifest::make('example/tools')->title('Tools')->tablePrefix('tls')->extends([
         Api::tool('demo.read', StubOperationHandler::class, 'demo.read', ['type' => 'object'], ['type' => 'object'], 'read', 'read-only'),
     ]);
-    $compiled = app(RegistryCompiler::class)->compile([$manifest], installedPackages: []);
+    $compiled = resolve(RegistryCompiler::class)->compile([$manifest], installedPackages: []);
     $this->app->instance(ModuleRegistry::class, new CatalogueModuleFixture($compiled));
 
-    $map = app(RegistryIntrospection::class)->extensionPoints();
+    $map = resolve(RegistryIntrospection::class)->extensionPoints();
     $encoded = json_encode($map->extensionPoints, JSON_THROW_ON_ERROR);
 
     $api = collect($map->extensionPoints)->firstWhere('name', 'api');

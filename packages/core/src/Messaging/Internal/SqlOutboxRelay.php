@@ -66,7 +66,7 @@ final readonly class SqlOutboxRelay implements OutboxRelay
             $query = $this->connection->table($table)
                 ->where('status', 'pending')
                 ->where('available_at', '<=', $now)
-                ->orderBy('occurred_at')
+                ->oldest('occurred_at')
                 ->orderBy('id')
                 ->limit($batchSize);
 
@@ -224,9 +224,9 @@ final readonly class SqlOutboxRelay implements OutboxRelay
             scope: $scope,
             payload: MessagePayload::fromJson($row->payload),
             piiClass: PiiClass::from($row->pii_class),
-            subject: $row->subject === null ? null : $row->subject,
-            correlationId: $row->correlation_id === null ? null : $row->correlation_id,
-            causationId: $row->causation_id === null ? null : $row->causation_id,
+            subject: $row->subject ?? null,
+            correlationId: $row->correlation_id ?? null,
+            causationId: $row->causation_id ?? null,
             metadata: $metadata,
             envelopeVersion: (int) $row->envelope_version,
         );

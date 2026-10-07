@@ -24,7 +24,7 @@ use LogicException;
 
 final class CursorCodecTest extends TestCase
 {
-    private const SECRET = 'cursor-test-secret';
+    private const string SECRET = 'cursor-test-secret';
 
     private FrozenClock $clock;
 

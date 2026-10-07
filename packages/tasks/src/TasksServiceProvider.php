@@ -42,7 +42,7 @@ final class TasksServiceProvider extends ServiceProvider
     {
         $this->app->tag([TasksSchemaSets::class], SchemaSetProvider::class);
 
-        ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
+        ProblemDefinitions::register(app: $this->app, composerManifest: __DIR__.'/../composer.json', provider: PackageProblemDefinitions::class);
 
         TaskPortBindings::register($this->app);
 

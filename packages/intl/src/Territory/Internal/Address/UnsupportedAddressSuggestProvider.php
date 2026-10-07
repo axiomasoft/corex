@@ -11,9 +11,9 @@ use CoreX\Intl\Territory\Data\SuggestionLimits;
 use CoreX\Intl\Territory\Data\SuggestionResult;
 use Override;
 
-final class UnsupportedAddressSuggestProvider implements AddressSuggestProvider
+final readonly class UnsupportedAddressSuggestProvider implements AddressSuggestProvider
 {
-    public function __construct(private readonly AddressSuggestGuard $guard) {}
+    public function __construct(private AddressSuggestGuard $guard) {}
 
     #[Override]
     public function suggest(AddressQuery $query, SuggestionLimits $limits): SuggestionResult

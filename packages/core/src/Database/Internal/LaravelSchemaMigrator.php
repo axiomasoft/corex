@@ -25,7 +25,7 @@ final readonly class LaravelSchemaMigrator implements SchemaMigrator
             throw new InvalidArgumentException('Dedicated schema sets run on their own connections.');
         }
 
-        return $this->run($this->sets->forScope($scope, $includeModules), $connection);
+        return $this->run(sets: $this->sets->forScope(scope: $scope, includeModules: $includeModules), connection: $connection);
     }
 
     public function migrateSets(array $ids, ?string $connection = null): array
@@ -37,7 +37,7 @@ final readonly class LaravelSchemaMigrator implements SchemaMigrator
             throw new InvalidArgumentException('Explicit schema sets must belong to one scope.');
         }
 
-        return $this->run($sets, $connection);
+        return $this->run(sets: $sets, connection: $connection);
     }
 
     public function status(SchemaScope $scope, ?string $connection = null): array
@@ -45,8 +45,8 @@ final readonly class LaravelSchemaMigrator implements SchemaMigrator
         if ($scope === SchemaScope::Dedicated && $connection !== null) {
             throw new InvalidArgumentException('Dedicated schema sets run on their own connections.');
         }
-        $sets = $this->sets->forScope($scope, includeModules: true);
-        $groups = $this->groups($sets, $connection);
+        $sets = $this->sets->forScope(scope: $scope, includeModules: true);
+        $groups = $this->groups(sets: $sets, connection: $connection);
         $known = array_keys($this->migrator->getMigrationFiles(array_map(static fn (SchemaSet $set): string => $set->path, $this->sets->all())));
         $result = [];
         foreach ($groups as $name => $group) {
@@ -62,10 +62,8 @@ final readonly class LaravelSchemaMigrator implements SchemaMigrator
                             $prefixes[] = $match[1];
                         }
                     }
-                    $unknown = array_values(array_filter(array_diff($ran, $known), static function (string $file) use ($prefixes): bool {
-                        return preg_match('/^\d{4}_\d{2}_\d{2}_(\d{2})\d{4}_/', $file, $match) === 1 && in_array($match[1], $prefixes, true);
-                    }));
-                    $result[] = new SchemaSetStatus($set, array_values(array_intersect($files, $ran)), array_values(array_diff($files, $ran)), $unknown);
+                    $unknown = array_values(array_filter(array_diff($ran, $known), static fn (string $file): bool => preg_match('/^\d{4}_\d{2}_\d{2}_(\d{2})\d{4}_/', $file, $match) === 1 && in_array($match[1], $prefixes, true)));
+                    $result[] = new SchemaSetStatus(set: $set, applied: array_values(array_intersect($files, $ran)), pending: array_values(array_diff($files, $ran)), unknown: $unknown);
                 }
             });
         }
@@ -91,7 +89,7 @@ final readonly class LaravelSchemaMigrator implements SchemaMigrator
             $driver = $this->db->connection($name)->getDriverName();
 
             if (! in_array($driver, $set->drivers, true)) {
-                throw SchemaSetException::unsupportedDriver($set->id(), $driver);
+                throw SchemaSetException::unsupportedDriver(id: $set->id(), driver: $driver);
             }
             $groups[$name][] = $set;
         }
@@ -105,7 +103,7 @@ final readonly class LaravelSchemaMigrator implements SchemaMigrator
      */
     private function run(array $sets, ?string $connection): array
     {
-        $groups = $this->groups($sets, $connection);
+        $groups = $this->groups(sets: $sets, connection: $connection);
         $ran = [];
         foreach ($groups as $name => $group) {
             $ran = [...$ran, ...$this->migrator->usingConnection($name, function () use ($group): array {

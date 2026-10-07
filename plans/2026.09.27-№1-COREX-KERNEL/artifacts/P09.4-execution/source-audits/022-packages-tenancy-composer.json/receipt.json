@@ -1,0 +1,25 @@
+{
+  "classification": "source",
+  "commands": [
+    {
+      "exit": 0,
+      "output": "validate.json",
+      "role": "validate",
+      "sha256": "3cab4cae0d54fa78d2b6b2e7ff034d7a11473cade66b14ad6926f6ed8395062a"
+    },
+    {
+      "exit": 0,
+      "output": "audit.json",
+      "role": "audit",
+      "sha256": "e61e80accec2cdc03bea7012f2e3b816102a3c1d55d1eef1bf15a0461901d454"
+    }
+  ],
+  "effective_manifest_sha256": "1d420aae00dfdca7c7d7faa915f0a2effb46a2f13d188e62923c3a4e1b5d1553",
+  "lock_kind": "source",
+  "lock_sha256": "af54dc2b943d263865d99dcbbbb824a92c9ca44f6e53896111da22517b6137b3",
+  "manifest": "packages/tenancy/composer.json",
+  "manifest_sha256": "1d420aae00dfdca7c7d7faa915f0a2effb46a2f13d188e62923c3a4e1b5d1553",
+  "name": "axiomasoft/corex-tenancy",
+  "source_lock_sha256": "af54dc2b943d263865d99dcbbbb824a92c9ca44f6e53896111da22517b6137b3",
+  "status": "GREEN"
+}

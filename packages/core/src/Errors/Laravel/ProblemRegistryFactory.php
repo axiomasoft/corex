@@ -23,7 +23,7 @@ final class ProblemRegistryFactory
 
         foreach ($app->tagged(ProblemDefinitionProvider::class) as $contribution) {
             if (! $contribution instanceof ProblemContribution) {
-                throw new ProblemRegistryException(CoreErrorCode::InvalidDefinition, 'ERROR-INVALID-CONTRIBUTION');
+                throw new ProblemRegistryException(errorCode: CoreErrorCode::InvalidDefinition, diagnostic: 'ERROR-INVALID-CONTRIBUTION');
             }
 
             $contributions[] = $contribution;

@@ -34,31 +34,31 @@ final readonly class CompiledProblemRegistry implements ProblemRegistry
                 $code = $definition->code->value();
 
                 if (isset($definitions[$code])) {
-                    throw new ProblemRegistryException(CoreErrorCode::DuplicateCode, 'ERROR-DUPLICATE-CODE '.$code);
+                    throw new ProblemRegistryException(errorCode: CoreErrorCode::DuplicateCode, diagnostic: 'ERROR-DUPLICATE-CODE '.$code);
                 }
 
                 if (! str_starts_with($code, $contribution->owner.'.')) {
-                    throw new ProblemRegistryException(CoreErrorCode::ForeignPrefix, 'ERROR-FOREIGN-PREFIX '.$code);
+                    throw new ProblemRegistryException(errorCode: CoreErrorCode::ForeignPrefix, diagnostic: 'ERROR-FOREIGN-PREFIX '.$code);
                 }
 
                 if ($contribution->sourceRoots !== []) {
-                    $file = (new ReflectionClass($definition->code))->getFileName();
+                    $file = new ReflectionClass($definition->code)->getFileName();
                     $owned = false;
                     foreach ($contribution->sourceRoots as $root) {
                         $owned = $owned || ($file !== false && str_starts_with($file, $root.DIRECTORY_SEPARATOR));
                     }
 
                     if (! $owned) {
-                        throw new ProblemRegistryException(CoreErrorCode::ForeignPrefix, 'ERROR-FOREIGN-TYPE '.$code);
+                        throw new ProblemRegistryException(errorCode: CoreErrorCode::ForeignPrefix, diagnostic: 'ERROR-FOREIGN-TYPE '.$code);
                     }
                 }
 
                 if (isset($types[$definition->type])) {
-                    throw new ProblemRegistryException(CoreErrorCode::DuplicateType, 'ERROR-DUPLICATE-TYPE '.$definition->type);
+                    throw new ProblemRegistryException(errorCode: CoreErrorCode::DuplicateType, diagnostic: 'ERROR-DUPLICATE-TYPE '.$definition->type);
                 }
 
                 if ($definition->defaultStatus < 400 || $definition->defaultStatus > 599) {
-                    throw new ProblemRegistryException(CoreErrorCode::InvalidStatus, 'ERROR-INVALID-STATUS '.$code);
+                    throw new ProblemRegistryException(errorCode: CoreErrorCode::InvalidStatus, diagnostic: 'ERROR-INVALID-STATUS '.$code);
                 }
 
                 if (! $definition->code instanceof BackedEnum
@@ -66,12 +66,12 @@ final readonly class CompiledProblemRegistry implements ProblemRegistry
                     || strlen($code) > ErrorDescriptor::MAX_CODE_BYTES
                     || $definition->type !== 'urn:corex:problem:'.$code
                     || trim($definition->title) === '' || preg_match('/[\x00-\x1F\x7F]/', $definition->title) === 1
-                    || $definition->category !== self::categoryForStatus($definition->defaultStatus, $definition->category)) {
-                    throw new ProblemRegistryException(CoreErrorCode::InvalidDefinition, 'ERROR-INVALID-DEFINITION '.$code);
+                    || $definition->category !== self::categoryForStatus(status: $definition->defaultStatus, declared: $definition->category)) {
+                    throw new ProblemRegistryException(errorCode: CoreErrorCode::InvalidDefinition, diagnostic: 'ERROR-INVALID-DEFINITION '.$code);
                 }
                 foreach ($definition->detailKeys as $key) {
                     if ($key === '' || preg_match('/[\x00-\x1F\x7F]/', $key) === 1) {
-                        throw new ProblemRegistryException(CoreErrorCode::InvalidDefinition, 'ERROR-INVALID-DEFINITION '.$code);
+                        throw new ProblemRegistryException(errorCode: CoreErrorCode::InvalidDefinition, diagnostic: 'ERROR-INVALID-DEFINITION '.$code);
                     }
                 }
                 $definitions[$code] = $definition;
@@ -89,7 +89,7 @@ final readonly class CompiledProblemRegistry implements ProblemRegistry
         $definition = $this->fromWire($code->value());
 
         if ($definition->code !== $code) {
-            throw new ProblemRegistryException(CoreErrorCode::UnknownCode, 'ERROR-UNREGISTERED-IDENTITY '.$code->value());
+            throw new ProblemRegistryException(errorCode: CoreErrorCode::UnknownCode, diagnostic: 'ERROR-UNREGISTERED-IDENTITY '.$code->value());
         }
 
         return $definition;
@@ -97,7 +97,7 @@ final readonly class CompiledProblemRegistry implements ProblemRegistry
 
     public function fromWire(string $code): ProblemDefinition
     {
-        return $this->definitions[$code] ?? throw new ProblemRegistryException(CoreErrorCode::UnknownCode, 'ERROR-UNKNOWN-CODE');
+        return $this->definitions[$code] ?? throw new ProblemRegistryException(errorCode: CoreErrorCode::UnknownCode, diagnostic: 'ERROR-UNKNOWN-CODE');
     }
 
     public function owner(ErrorCode $code): string
@@ -113,12 +113,12 @@ final readonly class CompiledProblemRegistry implements ProblemRegistry
             || ($descriptor->retryable && ! $definition->retryable)
             || ($status !== null && ($status < 400 || $status > 599
                 || ($status !== 404 || $descriptor->category !== ErrorCategory::Authorization)
-                    && self::categoryForStatus($status, $descriptor->category) !== $descriptor->category))) {
-            throw new ProblemRegistryException(CoreErrorCode::InvalidDefinition, 'ERROR-OCCURRENCE-MISMATCH '.$descriptor->code);
+                    && self::categoryForStatus(status: $status, declared: $descriptor->category) !== $descriptor->category))) {
+            throw new ProblemRegistryException(errorCode: CoreErrorCode::InvalidDefinition, diagnostic: 'ERROR-OCCURRENCE-MISMATCH '.$descriptor->code);
         }
 
         if (! in_array('*', $definition->detailKeys, true) && array_diff(array_keys($descriptor->details), $definition->detailKeys) !== []) {
-            throw new ProblemRegistryException(CoreErrorCode::InvalidDefinition, 'ERROR-DETAIL-KEY '.$descriptor->code);
+            throw new ProblemRegistryException(errorCode: CoreErrorCode::InvalidDefinition, diagnostic: 'ERROR-DETAIL-KEY '.$descriptor->code);
         }
     }
 

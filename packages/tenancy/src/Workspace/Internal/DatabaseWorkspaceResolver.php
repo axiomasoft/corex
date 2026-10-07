@@ -11,6 +11,7 @@ use CoreX\Tenancy\Workspace\Exceptions\NoDefaultWorkspaceException;
 use CoreX\Tenancy\Workspace\Internal\Models\Workspace;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Override;
 
@@ -22,9 +23,9 @@ use Override;
  *
  * @internal
  */
-final class DatabaseWorkspaceResolver implements PrincipalWorkspaceResolver, WorkspaceResolver
+final readonly class DatabaseWorkspaceResolver implements PrincipalWorkspaceResolver, WorkspaceResolver
 {
-    public function __construct(private readonly AuthFactory $auth) {}
+    public function __construct(private AuthFactory $auth) {}
 
     #[Override]
     public function resolve(?string $slug): WorkspaceRef
@@ -35,7 +36,7 @@ final class DatabaseWorkspaceResolver implements PrincipalWorkspaceResolver, Wor
             throw new AuthorizationException('Authentication required to resolve a workspace.');
         }
 
-        return $this->resolveFor($userId, $slug);
+        return $this->resolveFor(principalId: $userId, slug: $slug);
     }
 
     #[Override]
@@ -47,7 +48,7 @@ final class DatabaseWorkspaceResolver implements PrincipalWorkspaceResolver, Wor
 
         $workspace = $slug === null
             ? $this->defaultWorkspaceFor($principalId)
-            : $this->workspaceBySlug($slug, $principalId);
+            : $this->workspaceBySlug(slug: $slug, userId: $principalId);
 
         return new WorkspaceRef(
             id: $workspace->id,
@@ -81,7 +82,7 @@ final class DatabaseWorkspaceResolver implements PrincipalWorkspaceResolver, Wor
     {
         /** @var ?Workspace $workspace */
         $workspace = Workspace::query()
-            ->whereHas('members', static function ($query) use ($userId): void {
+            ->whereHas('members', static function (Builder $query) use ($userId): void {
                 $query->where('user_id', $userId)
                     ->where('status', 'active')
                     ->where('is_default', true);

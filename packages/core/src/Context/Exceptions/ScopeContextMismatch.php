@@ -41,6 +41,6 @@ final class ScopeContextMismatch extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::ScopeContextMismatch, ErrorCategory::Authorization, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::ScopeContextMismatch, category: ErrorCategory::Authorization, retryable: false);
     }
 }

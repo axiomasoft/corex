@@ -139,8 +139,8 @@ it('links the consumer span to the producer trace and exports five health instru
 });
 
 it('boots null observer and trace bridge without an OpenTelemetry binding', function (): void {
-    expect(app(OperationObserver::class))->toBeInstanceOf(NullOperationObserver::class)
-        ->and(app(TraceContextBridge::class))->toBeInstanceOf(NullTraceContextBridge::class)
+    expect(resolve(OperationObserver::class))->toBeInstanceOf(NullOperationObserver::class)
+        ->and(resolve(TraceContextBridge::class))->toBeInstanceOf(NullTraceContextBridge::class)
         ->and(class_exists(OpenTelemetryBridge::class))->toBeTrue();
 });
 
@@ -154,11 +154,11 @@ final class RecordingMeter
      */
     public function createGauge(string $name, ?string $unit = null, ?string $description = null, array $advisory = []): object
     {
-        return new class($name, $this)
+        return new readonly class($name, $this)
         {
             public function __construct(
-                private readonly string $name,
-                private readonly RecordingMeter $meter,
+                private string $name,
+                private RecordingMeter $meter,
             ) {}
 
             /**

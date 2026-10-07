@@ -89,6 +89,6 @@ final class OidcAuthenticationException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TenancyErrorCode::OidcAuthenticationException, ErrorCategory::Authentication, retryable: false);
+        return new ErrorDescriptor(code: TenancyErrorCode::OidcAuthenticationException, category: ErrorCategory::Authentication, retryable: false);
     }
 }

@@ -15,9 +15,6 @@ use CoreX\Modules\Contracts\Extender;
  */
 final class Workflow implements Extender
 {
-    /** @var 'stepType'|'trigger' */
-    public string $kind;
-
     /** @var class-string|null */
     public ?string $stepClass = null;
 
@@ -27,19 +24,7 @@ final class Workflow implements Extender
     public array $eventNames = [];
 
     /** @param 'stepType'|'trigger' $kind */
-    private function __construct(string $kind)
-    {
-        $this->kind = $kind;
-    }
-
-    /** @param  class-string  $stepClass */
-    public static function stepType(string $stepClass): self
-    {
-        $workflow = new self('stepType');
-        $workflow->stepClass = $stepClass;
-
-        return $workflow;
-    }
+    private function __construct(public string $kind) {}
 
     /** @param  list<string>  $eventNames */
     public static function trigger(string $entityHandle, array $eventNames): self

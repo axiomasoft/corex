@@ -1,3 +1,9 @@
+## Unreleased — PHP 8.4 modernization (P09.4)
+
+- Modernize maintained PHP for PHP 8.4 with final concrete classes, immutable value state and controlled named calls; preserve current public native parameter names and extension behavior.
+- Remove verified unused Internal helpers: `WebhookManagement::create`, `WebhookManagement::update`, `WebhookManagement::disable`.
+- Remove the unused Internal WebhookManagement subscription-store constructor dependency and private projection after deleting the unused mutation helpers.
+
 ## Unreleased — delivery budget and tenant egress
 
 ## Unreleased — baseline v1

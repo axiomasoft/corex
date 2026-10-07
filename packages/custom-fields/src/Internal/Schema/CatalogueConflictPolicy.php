@@ -41,23 +41,13 @@ final readonly class CatalogueConflictPolicy
         }
     }
 
-    public function allowsShadow(
-        string $higher,
-        string $lower,
-        string $attributeId,
-        string $difference,
-    ): bool {
-        foreach ($this->overrides as $override) {
-            if ($override === [
-                'higher' => $higher,
-                'lower' => $lower,
-                'attribute_id' => $attributeId,
-                'allowed_difference' => $difference,
-            ]) {
-                return true;
-            }
-        }
-
-        return false;
+    public function allowsShadow(string $higher, string $lower, string $attributeId, string $difference): bool
+    {
+        return array_any($this->overrides, fn ($override) => $override === [
+            'higher' => $higher,
+            'lower' => $lower,
+            'attribute_id' => $attributeId,
+            'allowed_difference' => $difference,
+        ]);
     }
 }

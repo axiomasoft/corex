@@ -9299,7 +9299,7 @@
             "layer": "spi-call",
             "since": "1.0",
             "final": true,
-            "readonly": false,
+            "readonly": true,
             "abstract": false,
             "extends": [],
             "implements": [
@@ -9322,7 +9322,7 @@
                             "variadic": false,
                             "optional": false,
                             "default": null,
-                            "flags": 68
+                            "flags": 4
                         }
                     ],
                     "return": null,
@@ -10472,14 +10472,14 @@
             "properties": [],
             "constants": {
                 "SAFE_INTEGER_MAX": {
-                    "type": null,
+                    "type": "int",
                     "value": "9007199254740991",
                     "visibility": "public",
                     "final": false,
                     "doc": []
                 },
                 "SAFE_INTEGER_MIN": {
-                    "type": null,
+                    "type": "int",
                     "value": "-9007199254740991",
                     "visibility": "public",
                     "final": false,
@@ -10691,63 +10691,63 @@
             "properties": [],
             "constants": {
                 "MAX_DEPTH": {
-                    "type": null,
+                    "type": "int",
                     "value": "32",
                     "visibility": "public",
                     "final": false,
                     "doc": []
                 },
                 "MAX_ERRORS": {
-                    "type": null,
+                    "type": "int",
                     "value": "16",
                     "visibility": "public",
                     "final": false,
                     "doc": []
                 },
                 "MAX_NODES": {
-                    "type": null,
+                    "type": "int",
                     "value": "4096",
                     "visibility": "public",
                     "final": false,
                     "doc": []
                 },
                 "MAX_PAYLOAD_BYTES": {
-                    "type": null,
+                    "type": "int",
                     "value": "131072",
                     "visibility": "public",
                     "final": false,
                     "doc": []
                 },
                 "MAX_PAYLOAD_MEMBERS": {
-                    "type": null,
+                    "type": "int",
                     "value": "4096",
                     "visibility": "public",
                     "final": false,
                     "doc": []
                 },
                 "MAX_REGEX_BYTES": {
-                    "type": null,
+                    "type": "int",
                     "value": "256",
                     "visibility": "public",
                     "final": false,
                     "doc": []
                 },
                 "MAX_RESOURCES": {
-                    "type": null,
+                    "type": "int",
                     "value": "128",
                     "visibility": "public",
                     "final": false,
                     "doc": []
                 },
                 "MAX_SCHEMA_BYTES": {
-                    "type": null,
+                    "type": "int",
                     "value": "131072",
                     "visibility": "public",
                     "final": false,
                     "doc": []
                 },
                 "REJECTED_KEYWORDS": {
-                    "type": null,
+                    "type": "array",
                     "value": "['$dynamicRef', '$dynamicAnchor']",
                     "visibility": "public",
                     "final": false,
@@ -10758,14 +10758,14 @@
                     }
                 },
                 "TOOL_SCHEMA_V1": {
-                    "type": null,
+                    "type": "string",
                     "value": "'tool-schema/1'",
                     "visibility": "public",
                     "final": false,
                     "doc": []
                 },
                 "WORKER_DEADLINE_MS": {
-                    "type": null,
+                    "type": "int",
                     "value": "100",
                     "visibility": "public",
                     "final": false,
@@ -11394,7 +11394,7 @@
             },
             "constants": {
                 "FORBIDDEN_KEYS": {
-                    "type": null,
+                    "type": "array",
                     "value": "['driver', 'connection', 'class', 'table', 'path', 'secret', 'package', 'host']",
                     "visibility": "public",
                     "final": false,
@@ -11405,7 +11405,7 @@
                     }
                 },
                 "PUBLIC_KEYS": {
-                    "type": null,
+                    "type": "array",
                     "value": "['id', 'status', 'limits', 'operations']",
                     "visibility": "public",
                     "final": false,

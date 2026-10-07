@@ -28,12 +28,12 @@ final readonly class CachedFieldCatalogue implements FieldCatalogue
 
     public function snapshot(DataScope $scope, string $entity): FieldSnapshot
     {
-        $key = $this->key($scope, $entity);
+        $key = $this->key(scope: $scope, entity: $entity);
 
         try {
             $cached = $this->cache->get($key);
         } catch (Throwable) {
-            return $this->source->snapshot($scope, $entity);
+            return $this->source->snapshot(scope: $scope, entity: $entity);
         }
 
         if ($cached !== null) {
@@ -49,7 +49,7 @@ final readonly class CachedFieldCatalogue implements FieldCatalogue
             return $cached;
         }
 
-        $snapshot = $this->source->snapshot($scope, $entity);
+        $snapshot = $this->source->snapshot(scope: $scope, entity: $entity);
 
         try {
             $this->cache->put($key, $snapshot, $this->ttlSeconds);
@@ -57,14 +57,6 @@ final readonly class CachedFieldCatalogue implements FieldCatalogue
         }
 
         return $snapshot;
-    }
-
-    public function invalidate(DataScope $scope, string $entity): void
-    {
-        try {
-            $this->cache->forget($this->key($scope, $entity));
-        } catch (Throwable) {
-        }
     }
 
     private function key(DataScope $scope, string $entity): string

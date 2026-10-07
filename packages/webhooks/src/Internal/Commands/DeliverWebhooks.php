@@ -43,7 +43,7 @@ final class DeliverWebhooks extends Command
         $scope = $this->laravel->make(DataScope::class);
         $delivered = 0;
 
-        while ($delivered < $max && $worker->workOnce($scope, $leaseOwner) !== null) {
+        while ($delivered < $max && $worker->workOnce(scope: $scope, worker: $leaseOwner) !== null) {
             $delivered++;
         }
 

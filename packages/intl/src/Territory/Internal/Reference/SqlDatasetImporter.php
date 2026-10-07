@@ -19,14 +19,14 @@ use Illuminate\Database\Connection;
 use Override;
 use Psr\Clock\ClockInterface;
 
-final class SqlDatasetImporter implements DatasetImporter
+final readonly class SqlDatasetImporter implements DatasetImporter
 {
     public function __construct(
-        private readonly Connection $connection,
-        private readonly string $datasetKey,
-        private readonly FixtureReferenceNormalizer $normalizer,
-        private readonly DataScopeAuthorizer $authorizer,
-        private readonly ClockInterface $clock,
+        private Connection $connection,
+        private string $datasetKey,
+        private FixtureReferenceNormalizer $normalizer,
+        private DataScopeAuthorizer $authorizer,
+        private ClockInterface $clock,
     ) {}
 
     #[Override]

@@ -70,7 +70,7 @@ it('ends tenancy on JobAttempted after a throwing job so the next job starts in 
     ]);
 
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $failure = new RuntimeException('job blew up');
 
     $job = Mockery::mock(Job::class);

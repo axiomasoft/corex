@@ -21,17 +21,17 @@ final class CurlWebhookTransport implements WebhookHttpTransport
         $startedAt = hrtime(true);
 
         if (! function_exists('curl_init')) {
-            return $this->failure(WebhookFailureReason::TransportFailure, $startedAt);
+            return $this->failure(errorCode: WebhookFailureReason::TransportFailure, startedAt: $startedAt);
         }
 
         if ($request->url === '' || ! WebhookUrlPolicy::allowsPublicAddress($request->address)) {
-            return $this->failure(WebhookFailureReason::AddressNotAllowed, $startedAt);
+            return $this->failure(errorCode: WebhookFailureReason::AddressNotAllowed, startedAt: $startedAt);
         }
 
         $handle = curl_init();
 
         if ($handle === false) {
-            return $this->failure(WebhookFailureReason::TransportFailure, $startedAt);
+            return $this->failure(errorCode: WebhookFailureReason::TransportFailure, startedAt: $startedAt);
         }
 
         $responseBodyBytes = 0;
@@ -101,31 +101,31 @@ final class CurlWebhookTransport implements WebhookHttpTransport
             ]);
 
             if (! $configured) {
-                return $this->failure(WebhookFailureReason::TransportFailure, $startedAt);
+                return $this->failure(errorCode: WebhookFailureReason::TransportFailure, startedAt: $startedAt);
             }
 
             $executed = curl_exec($handle);
             $status = curl_getinfo($handle, CURLINFO_RESPONSE_CODE);
             $peerAddress = curl_getinfo($handle, CURLINFO_PRIMARY_IP);
 
-            if ($peerAddress !== '' && ! $this->sameAddress($peerAddress, $request->address)) {
-                return $this->failure(WebhookFailureReason::AddressNotAllowed, $startedAt, $status);
+            if ($peerAddress !== '' && ! $this->sameAddress(actual: $peerAddress, expected: $request->address)) {
+                return $this->failure(errorCode: WebhookFailureReason::AddressNotAllowed, startedAt: $startedAt, status: $status);
             }
 
             if ($bodyOverflow) {
-                return $this->failure(WebhookFailureReason::PayloadTooLarge, $startedAt, $status);
+                return $this->failure(errorCode: WebhookFailureReason::PayloadTooLarge, startedAt: $startedAt, status: $status);
             }
 
             if ($headerOverflow) {
-                return $this->failure(WebhookFailureReason::PayloadTooLarge, $startedAt, $status);
+                return $this->failure(errorCode: WebhookFailureReason::PayloadTooLarge, startedAt: $startedAt, status: $status);
             }
 
             if ($executed === false) {
-                return $this->failure($this->curlErrorCode(curl_errno($handle)), $startedAt);
+                return $this->failure(errorCode: $this->curlErrorCode(curl_errno($handle)), startedAt: $startedAt);
             }
 
-            if (! $this->sameAddress($peerAddress, $request->address)) {
-                return $this->failure(WebhookFailureReason::AddressNotAllowed, $startedAt, $status);
+            if (! $this->sameAddress(actual: $peerAddress, expected: $request->address)) {
+                return $this->failure(errorCode: WebhookFailureReason::AddressNotAllowed, startedAt: $startedAt, status: $status);
             }
 
             return new WebhookHttpResult(
@@ -135,7 +135,7 @@ final class CurlWebhookTransport implements WebhookHttpTransport
                 durationMs: $this->durationMs($startedAt),
             );
         } catch (Throwable) {
-            return $this->failure(WebhookFailureReason::TransportFailure, $startedAt);
+            return $this->failure(errorCode: WebhookFailureReason::TransportFailure, startedAt: $startedAt);
         } finally {
             curl_close($handle);
         }

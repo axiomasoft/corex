@@ -18,7 +18,7 @@ it('invalidates the captured tenant even when the active context changes before 
     $resolver->shouldReceive('current')->andReturnUsing(function () use (&$context) {
         return $context;
     });
-    $versions = new ScopeMapVersion($resolver, app(Factory::class), app(AuthOptions::class));
+    $versions = new ScopeMapVersion($resolver, resolve(Factory::class), resolve(AuthOptions::class));
     $invalidate = $versions->invalidator('captured-role');
     $context = new TenantContext(new AccountRef('another-account', 'other', 'active', [], []), null);
     $invalidate();
@@ -40,5 +40,5 @@ it('retains every concurrent invalidation even on the non-atomic file cache', fu
         expect($process->wait())->toBe(0, $process->getErrorOutput());
     }
     $remediationOptions = AuthOptions::fromArray(['cache' => ['store' => 'remediation']]);
-    expect((new ScopeMapVersion(new SingleAccountResolver, app(Factory::class), $remediationOptions))->current('concurrent-role'))->toBe(400);
+    expect(new ScopeMapVersion(new SingleAccountResolver, resolve(Factory::class), $remediationOptions)->current('concurrent-role'))->toBe(400);
 });

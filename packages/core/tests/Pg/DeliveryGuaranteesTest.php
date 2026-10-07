@@ -50,7 +50,7 @@ function deliveryGuaranteesInstallDurableStore(): void
  */
 function deliveryGuaranteesConsume(MessageEnvelope $envelope, string $consumer = 'delivery.guarantees.v1'): array
 {
-    $inbox = app(Inbox::class);
+    $inbox = resolve(Inbox::class);
     $claims = [];
 
     DB::connection('pgsql')->transaction(function () use ($inbox, $envelope, $consumer, &$claims): void {
@@ -67,8 +67,8 @@ function deliveryGuaranteesConsume(MessageEnvelope $envelope, string $consumer =
         DB::connection('pgsql')->table('dg_business_effects')->insert([
             'message_id' => $envelope->messageId,
             'consumer' => $consumer,
-            'created_at' => app(ClockInterface::class)->now(),
-            'updated_at' => app(ClockInterface::class)->now(),
+            'created_at' => resolve(ClockInterface::class)->now(),
+            'updated_at' => resolve(ClockInterface::class)->now(),
         ]);
     });
 
@@ -79,7 +79,7 @@ function deliveryGuaranteesRelayOnConnection(string $connectionName): SqlOutboxR
 {
     return new SqlOutboxRelay(
         connection: DB::connection($connectionName),
-        clock: app(ClockInterface::class),
+        clock: resolve(ClockInterface::class),
         leaseSeconds: 120,
         maxAttempts: 8,
         backoffCapSeconds: 300,
@@ -178,7 +178,7 @@ it('partitions concurrent relay leases without overlap or blocking', function ()
 })->group('pg');
 
 it('rolls back outbox rows with the business transaction and commits both on success', function (): void {
-    $outbox = app(Outbox::class);
+    $outbox = resolve(Outbox::class);
     $messageId = '01932f5a-0000-7000-8000-000000000103';
 
     try {
@@ -186,8 +186,8 @@ it('rolls back outbox rows with the business transaction and commits both on suc
             DB::connection('pgsql')->table('dg_business_effects')->insert([
                 'message_id' => $messageId,
                 'consumer' => 'rollback.probe',
-                'created_at' => app(ClockInterface::class)->now(),
-                'updated_at' => app(ClockInterface::class)->now(),
+                'created_at' => resolve(ClockInterface::class)->now(),
+                'updated_at' => resolve(ClockInterface::class)->now(),
             ]);
             $outbox->append(messagingSampleEnvelope(['messageId' => $messageId]));
 
@@ -204,8 +204,8 @@ it('rolls back outbox rows with the business transaction and commits both on suc
         DB::connection('pgsql')->table('dg_business_effects')->insert([
             'message_id' => $messageId,
             'consumer' => 'rollback.probe',
-            'created_at' => app(ClockInterface::class)->now(),
-            'updated_at' => app(ClockInterface::class)->now(),
+            'created_at' => resolve(ClockInterface::class)->now(),
+            'updated_at' => resolve(ClockInterface::class)->now(),
         ]);
         $outbox->append(messagingSampleEnvelope(['messageId' => $messageId]));
     });
@@ -223,7 +223,7 @@ it('hands off durably to a restarted consumer and rejects lossy publishers befor
                 'message_id' => $message->messageId,
                 'name' => $message->name,
                 'payload' => $message->payload->encode(),
-                'stored_at' => app(ClockInterface::class)->now(),
+                'stored_at' => resolve(ClockInterface::class)->now(),
             ]);
         }
     };
@@ -259,7 +259,7 @@ it('hands off durably to a restarted consumer and rejects lossy publishers befor
 })->group('pg');
 
 it('terminates expired publishing rows at maxAttempts without another publish and fences corrupt envelopes', function (): void {
-    $now = app(ClockInterface::class)->now();
+    $now = resolve(ClockInterface::class)->now();
     $exhaustedId = outboxRelayInsertRow([
         'id' => '01932f5a-0000-7000-8000-000000000106',
         'status' => 'publishing',

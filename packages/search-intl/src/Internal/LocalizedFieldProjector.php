@@ -8,9 +8,9 @@ use CoreX\Intl\Locale\Data\LocaleResolution;
 use CoreX\Intl\Translation\Contracts\TranslationReader;
 use CoreX\Intl\Translation\Data\LocalizedText;
 
-final class LocalizedFieldProjector
+final readonly class LocalizedFieldProjector
 {
-    public function __construct(private readonly TranslationReader $translations) {}
+    public function __construct(private TranslationReader $translations) {}
 
     public function project(LocalizedText $text, LocaleResolution $locale): ?string
     {

@@ -34,7 +34,7 @@ final readonly class AttributeBackfill
 
     public function start(DataScope $scope, string $operationId, AttributeDefinition $from, AttributeDefinition $to): void
     {
-        (new ScopeConnectionGuard($this->connection))->assertMatches($scope);
+        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
 
         if (preg_match('/\A[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\z/iD', $operationId) !== 1) {
             throw new InvalidArgumentException('Attribute backfill operation id must be a UUID.');
@@ -92,7 +92,7 @@ final readonly class AttributeBackfill
     /** @return array{status: string, attempted: int, changed: int, cursor: ?string} */
     public function runBatch(DataScope $scope, string $operationId, int $batchSize = 100): array
     {
-        (new ScopeConnectionGuard($this->connection))->assertMatches($scope);
+        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
 
         if ($batchSize < 1 || $batchSize > 1000) {
             throw new InvalidArgumentException('Attribute backfill batch size must be between 1 and 1000.');
@@ -109,7 +109,7 @@ final readonly class AttributeBackfill
                 return $this->batchReceipt($operation);
             }
 
-            $records = $this->recordRows($operation, $batchSize);
+            $records = $this->recordRows(operation: $operation, batchSize: $batchSize);
 
             if ($records === []) {
                 $this->backfills()->where('id', $operationId)->update([
@@ -127,7 +127,7 @@ final readonly class AttributeBackfill
             $changed = 0;
             foreach ($records as $selected) {
                 $attempted++;
-                $changed += $this->backfillRecord($operation, $selected, $meta) ? 1 : 0;
+                $changed += $this->backfillRecord(operation: $operation, selected: $selected, meta: $meta) ? 1 : 0;
             }
 
             $cursor = Value::text(end($records)->record_id);
@@ -152,7 +152,7 @@ final readonly class AttributeBackfill
     /** @return array{status: string, source_digest: string, target_digest: string} */
     public function verify(DataScope $scope, string $operationId): array
     {
-        (new ScopeConnectionGuard($this->connection))->assertMatches($scope);
+        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
 
         $result = $this->connection->transaction(function () use ($operationId): array {
             $operation = $this->operationForUpdate($operationId);
@@ -162,7 +162,7 @@ final readonly class AttributeBackfill
             }
 
             $meta = $this->targetMeta($operation);
-            [$sourceDigest, $targetDigest, $failed] = $this->digests($operation, $meta);
+            [$sourceDigest, $targetDigest, $failed] = $this->digests(operation: $operation, meta: $meta);
             $status = $failed === 0 && hash_equals($sourceDigest, $targetDigest) ? 'verified' : 'backfilled';
             $this->backfills()->where('id', $operationId)->update([
                 'status' => $status,
@@ -194,7 +194,7 @@ final readonly class AttributeBackfill
 
     public function abort(DataScope $scope, string $operationId): void
     {
-        (new ScopeConnectionGuard($this->connection))->assertMatches($scope);
+        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
         $this->connection->transaction(function () use ($operationId): void {
             $operation = $this->operationForUpdate($operationId);
 
@@ -232,10 +232,10 @@ final readonly class AttributeBackfill
     private function backfillRecord(stdClass $operation, stdClass $selected, array $meta): bool
     {
         if ($this->engine === 'jsonb') {
-            return $this->backfillJsonbRecord($operation, $selected, $meta);
+            return $this->backfillJsonbRecord(operation: $operation, selected: $selected, meta: $meta);
         }
 
-        return $this->backfillEavRecord($operation, $selected, $meta);
+        return $this->backfillEavRecord(operation: $operation, selected: $selected, meta: $meta);
     }
 
     /** @param array<string, mixed> $meta */
@@ -246,17 +246,17 @@ final readonly class AttributeBackfill
             ->where('record_id', $selected->record_id)
             ->lockForUpdate()
             ->first();
-        $this->assertRecordVersion($selected, $record);
+        $this->assertRecordVersion(selected: $selected, current: $record);
         $values = $this->decodeMap(Value::text($record->values));
 
         if (! array_key_exists(Value::text($operation->source_key), $values)) {
             return false;
         }
 
-        $expected = $this->transformers->toTarget($meta, $values[Value::text($operation->source_key)]);
+        $expected = $this->transformers->toTarget(meta: $meta, value: $values[Value::text($operation->source_key)]);
 
         if (array_key_exists(Value::text($operation->target_key), $values)) {
-            if (! $this->sameValue($expected, $values[Value::text($operation->target_key)])) {
+            if (! $this->sameValue(left: $expected, right: $values[Value::text($operation->target_key)])) {
                 throw new RuntimeException('Concurrent attribute values diverged during backfill.');
             }
 
@@ -269,7 +269,7 @@ final readonly class AttributeBackfill
             ->where('record_id', $selected->record_id)
             ->update([
                 'values' => $this->encode($values),
-                'record_version' => $this->backfillVersion($operation, $selected),
+                'record_version' => $this->backfillVersion(operation: $operation, selected: $selected),
             ]);
 
         return true;
@@ -283,7 +283,7 @@ final readonly class AttributeBackfill
             ->where('record_id', $selected->record_id)
             ->lockForUpdate()
             ->first();
-        $this->assertRecordVersion($selected, $record);
+        $this->assertRecordVersion(selected: $selected, current: $record);
         $values = $this->connection->table($this->tables->eavValues)
             ->where('entity', $operation->entity)
             ->where('record_id', $selected->record_id)
@@ -295,10 +295,10 @@ final readonly class AttributeBackfill
             return false;
         }
 
-        $expected = $this->transformers->toTarget($meta, $this->decode(Value::text($values[Value::text($operation->source_key)])));
+        $expected = $this->transformers->toTarget(meta: $meta, value: $this->decode(Value::text($values[Value::text($operation->source_key)])));
 
         if (array_key_exists(Value::text($operation->target_key), $values)) {
-            if (! $this->sameValue($expected, $this->decode(Value::text($values[Value::text($operation->target_key)])))) {
+            if (! $this->sameValue(left: $expected, right: $this->decode(Value::text($values[Value::text($operation->target_key)])))) {
                 throw new RuntimeException('Concurrent attribute values diverged during backfill.');
             }
 
@@ -314,7 +314,7 @@ final readonly class AttributeBackfill
         $this->connection->table($this->tables->eavRecords)
             ->where('entity', $operation->entity)
             ->where('record_id', $selected->record_id)
-            ->update(['record_version' => $this->backfillVersion($operation, $selected)]);
+            ->update(['record_version' => $this->backfillVersion(operation: $operation, selected: $selected)]);
 
         return true;
     }
@@ -332,7 +332,7 @@ final readonly class AttributeBackfill
                 continue;
             }
 
-            $target = $this->transformers->toTarget($meta, $values[Value::text($operation->source_key)]);
+            $target = $this->transformers->toTarget(meta: $meta, value: $values[Value::text($operation->source_key)]);
             $expected[$recordId] = $target;
 
             if (! array_key_exists(Value::text($operation->target_key), $values)) {
@@ -343,7 +343,7 @@ final readonly class AttributeBackfill
 
             $actual[$recordId] = $values[Value::text($operation->target_key)];
 
-            if (! $this->sameValue($target, $actual[$recordId])) {
+            if (! $this->sameValue(left: $target, right: $actual[$recordId])) {
                 $failed++;
             }
         }

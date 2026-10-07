@@ -11,10 +11,10 @@ use CoreX\Intl\Locale\Data\LocaleResolution;
 use CoreX\Intl\Locale\Exceptions\InvalidLocaleException;
 use Override;
 
-final class DefaultLocaleResolver implements LocaleResolver
+final readonly class DefaultLocaleResolver implements LocaleResolver
 {
     public function __construct(
-        private readonly Bcp47Validator $validator,
+        private Bcp47Validator $validator,
     ) {}
 
     #[Override]

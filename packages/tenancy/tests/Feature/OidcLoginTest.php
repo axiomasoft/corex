@@ -59,7 +59,7 @@ beforeEach(function (): void {
     // (CSRF included) — into the 'tenant' group itself (not appended per
     // route): EnforceSessionLifetime is already a 'tenant' member and reads
     // the session too, so it must run AFTER, not before, StartSession.
-    app('router')->prependMiddlewareToGroup('tenant', StartSession::class);
+    resolve('router')->prependMiddlewareToGroup('tenant', StartSession::class);
 });
 
 afterEach(function (): void {
@@ -146,10 +146,10 @@ function initAccountWithTenantOL(): Account
 
     $ref = new AccountRef(id: $account->id, slug: (string) $account->slug, status: $account->status, features: [], limits: []);
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->runFor($ref, null, function (): void {
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex:tenant'], 'tenant');
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-tenancy:tenant'], 'tenant');
+        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex:tenant'], 'tenant');
+        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-tenancy:tenant'], 'tenant');
     });
 
     return $account;
@@ -602,7 +602,7 @@ it('о: happy-path — users создан IdentitySyncer, Auth::id()===sub, се
 
     $ref = new AccountRef(id: $account->id, slug: (string) $account->slug, status: $account->status, features: [], limits: []);
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $row = $manager->runFor($ref, null, fn (): ?object => DB::table('users')->where('id', $sub)->first());
 
     expect($row)->not->toBeNull()
@@ -669,7 +669,7 @@ it('с: parity половина 2 — вход выполнен через ск�
 
     callbackOL($state, $nonce)->assertRedirect();
 
-    $stub = app(StubIdentityProvider::class);
+    $stub = resolve(StubIdentityProvider::class);
     expect($stub->retrievedByIdCalls)->toContain($sub)
         ->and(auth('web')->id())->toBe($sub);
 });

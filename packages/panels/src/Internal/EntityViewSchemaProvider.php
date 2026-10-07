@@ -13,9 +13,9 @@ use CoreX\Panels\SavedViews\Data\ViewSchema;
 use LogicException;
 
 /** @internal */
-final class EntityViewSchemaProvider implements ViewSchemaProvider
+final readonly class EntityViewSchemaProvider implements ViewSchemaProvider
 {
-    public function __construct(private readonly EntityRegistry $entities) {}
+    public function __construct(private EntityRegistry $entities) {}
 
     public function schema(ViewContext $context, string $entityHandle): ViewSchema
     {
@@ -24,7 +24,7 @@ final class EntityViewSchemaProvider implements ViewSchemaProvider
         }
         $entity = $this->entities->get($entityHandle);
 
-        return new ViewSchema('modules/1', $entityHandle, array_map(
+        return new ViewSchema(version: 'modules/1', entityHandle: $entityHandle, fields: array_map(
             static fn (FieldDefinition $field): ViewField => new ViewField(
                 key: $field->handle,
                 type: $field->type,

@@ -41,7 +41,7 @@ final class WriteApiSnapshots extends Command
             $sections[] = $section;
         }
 
-        $builder = new ContractSnapshotBuilder($operations, $openApi, $profiles->make($modules->compiled(), $options), $problems, $sections);
+        $builder = new ContractSnapshotBuilder(operations: $operations, openApi: $openApi, profile: $profiles->make(registry: $modules->compiled(), options: $options), problems: $problems, sections: $sections);
 
         $directory = $this->argument('directory');
         $major = $this->option('major');
@@ -52,8 +52,8 @@ final class WriteApiSnapshots extends Command
 
         $fixture = $this->option('fixture');
         $contracts = $this->contracts(is_string($fixture) ? $fixture : null);
-        $documents = $builder->documents($contracts, $major);
-        $paths = $this->paths($directory, $builder->files());
+        $documents = $builder->documents(errorContracts: $contracts, major: $major);
+        $paths = $this->paths(directory: $directory, files: $builder->files());
 
         if ($this->option('check') === true) {
             foreach ($documents as $name => $bytes) {
@@ -73,7 +73,7 @@ final class WriteApiSnapshots extends Command
             throw new RuntimeException('Snapshot directory cannot be created.');
         }
 
-        $this->assertClean($directory, $builder->files());
+        $this->assertClean(directory: $directory, files: $builder->files());
         $temporary = [];
 
         try {

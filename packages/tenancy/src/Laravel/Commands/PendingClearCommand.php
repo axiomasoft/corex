@@ -8,7 +8,7 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\Account\Internal\PendingPool;
 use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use InvalidArgumentException;
 
 /**
@@ -32,10 +32,10 @@ final class PendingClearCommand extends Command
 
         $olderThanOption = $this->option('older-than');
         $olderThan = $olderThanOption !== null
-            ? Carbon::now()->subSeconds($this->parseDurationToSeconds($olderThanOption))
+            ? Date::now()->subSeconds($this->parseDurationToSeconds($olderThanOption))
             : null;
 
-        $cleared = $pool->clearPending($templateVersion, $olderThan);
+        $cleared = $pool->clearPending(templateVersion: $templateVersion, olderThan: $olderThan);
 
         $this->components->info(sprintf('Cleared %d stale pending account(s).', $cleared));
 

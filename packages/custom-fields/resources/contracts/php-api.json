@@ -450,7 +450,7 @@
             "uses": [],
             "doc": {
                 "@phpstan-import-type": [
-                    "JsonMap from \\CoreX\\CustomFields\\Data\\ValueBag"
+                    "JsonMap from ValueBag"
                 ]
             },
             "methods": {
@@ -1031,7 +1031,7 @@
             },
             "constants": {
                 "LEGACY_NAMESPACE": {
-                    "type": null,
+                    "type": "string",
                     "value": "'c0e1a000-a77e-4000-8000-000000000001'",
                     "visibility": "public",
                     "final": false,
@@ -1486,7 +1486,7 @@
             "uses": [],
             "doc": {
                 "@phpstan-import-type": [
-                    "JsonMap from \\CoreX\\CustomFields\\Data\\ValueBag"
+                    "JsonMap from ValueBag"
                 ]
             },
             "methods": {
@@ -1673,7 +1673,7 @@
             "uses": [],
             "doc": {
                 "@phpstan-import-type": [
-                    "JsonMap from \\CoreX\\CustomFields\\Data\\ValueBag"
+                    "JsonMap from ValueBag"
                 ]
             },
             "methods": {
@@ -1832,7 +1832,7 @@
             "uses": [],
             "doc": {
                 "@phpstan-import-type": [
-                    "JsonMap from \\CoreX\\CustomFields\\Data\\ValueBag"
+                    "JsonMap from ValueBag"
                 ]
             },
             "methods": {
@@ -1893,7 +1893,7 @@
             "uses": [],
             "doc": {
                 "@phpstan-import-type": [
-                    "JsonMap from \\CoreX\\CustomFields\\Data\\ValueBag"
+                    "JsonMap from ValueBag"
                 ]
             },
             "methods": {
@@ -2047,7 +2047,7 @@
             "uses": [],
             "doc": {
                 "@phpstan-import-type": [
-                    "JsonMap from \\CoreX\\CustomFields\\Data\\ValueBag"
+                    "JsonMap from ValueBag"
                 ]
             },
             "methods": {
@@ -2108,7 +2108,7 @@
             "uses": [],
             "doc": {
                 "@phpstan-import-type": [
-                    "JsonMap from \\CoreX\\CustomFields\\Data\\ValueBag"
+                    "JsonMap from ValueBag"
                 ]
             },
             "methods": {
@@ -2513,7 +2513,7 @@
             "uses": [],
             "doc": {
                 "@phpstan-import-type": [
-                    "JsonMap from \\CoreX\\CustomFields\\Data\\ValueBag"
+                    "JsonMap from ValueBag"
                 ]
             },
             "methods": {
@@ -2574,7 +2574,7 @@
             "uses": [],
             "doc": {
                 "@phpstan-import-type": [
-                    "JsonMap from \\CoreX\\CustomFields\\Data\\ValueBag"
+                    "JsonMap from ValueBag"
                 ]
             },
             "methods": {

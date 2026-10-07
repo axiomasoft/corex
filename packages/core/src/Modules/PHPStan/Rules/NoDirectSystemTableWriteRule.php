@@ -29,25 +29,25 @@ use PHPStan\Rules\RuleErrorBuilder;
  * @implements Rule<CallLike>
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class NoDirectSystemTableWriteRule implements Rule
+final readonly class NoDirectSystemTableWriteRule implements Rule
 {
-    private const WRITE_METHODS = [
+    private const array WRITE_METHODS = [
         'insert', 'insertgetid', 'insertorignore', 'update', 'updateorinsert',
         'upsert', 'delete', 'truncate',
     ];
 
-    private const SCHEMA_METHODS = [
+    private const array SCHEMA_METHODS = [
         'create', 'table', 'drop', 'dropifexists', 'rename',
     ];
 
-    private const SYSTEM_TABLE = '/^(sys|mod)_[a-z0-9_]+$/i';
+    private const string SYSTEM_TABLE = '/^(sys|mod)_[a-z0-9_]+$/i';
 
-    private const WRITE_SQL = '/\b(?:insert\s+into|update|delete\s+from|alter\s+table|drop\s+table|truncate(?:\s+table)?)\s+"?((?:sys|mod)_[a-z0-9_]+)/i';
+    private const string WRITE_SQL = '/\b(?:insert\s+into|update|delete\s+from|alter\s+table|drop\s+table|truncate(?:\s+table)?)\s+"?((?:sys|mod)_[a-z0-9_]+)/i';
 
     /**
      * @param  list<string>  $systemTableNamespaces  неймспейсы-владельцы контрактов ядра
      */
-    public function __construct(private readonly array $systemTableNamespaces) {}
+    public function __construct(private array $systemTableNamespaces) {}
 
     public function getNodeType(): string
     {
@@ -64,7 +64,7 @@ final class NoDirectSystemTableWriteRule implements Rule
             return [];
         }
 
-        $table = $this->writtenSystemTable($node, $scope);
+        $table = $this->writtenSystemTable(node: $node, scope: $scope);
 
         if ($table === null) {
             return [];
@@ -97,11 +97,11 @@ final class NoDirectSystemTableWriteRule implements Rule
             && strtolower($node->class->getLast()) === 'schema'
             && in_array($method, self::SCHEMA_METHODS, true)
         ) {
-            return $this->firstSystemTableArgument($node, $scope);
+            return $this->firstSystemTableArgument(node: $node, scope: $scope);
         }
 
         if (DatabaseCall::matches($node)) {
-            foreach (DatabaseCall::constantStringArguments($node, $scope) as $sql) {
+            foreach (DatabaseCall::constantStringArguments(node: $node, scope: $scope) as $sql) {
                 if (preg_match(self::WRITE_SQL, $sql, $matches) === 1) {
                     return $matches[1];
                 }
@@ -109,7 +109,7 @@ final class NoDirectSystemTableWriteRule implements Rule
         }
 
         if ($node instanceof MethodCall && in_array($method, self::WRITE_METHODS, true)) {
-            return $this->systemTableInChain($node->var, $scope);
+            return $this->systemTableInChain(expr: $node->var, scope: $scope);
         }
 
         return null;
@@ -117,7 +117,7 @@ final class NoDirectSystemTableWriteRule implements Rule
 
     private function firstSystemTableArgument(CallLike $node, Scope $scope): ?string
     {
-        foreach (DatabaseCall::constantStringArguments($node, $scope) as $value) {
+        foreach (DatabaseCall::constantStringArguments(node: $node, scope: $scope) as $value) {
             if (preg_match(self::SYSTEM_TABLE, $value) === 1) {
                 return $value;
             }
@@ -135,7 +135,7 @@ final class NoDirectSystemTableWriteRule implements Rule
             if ($expr->name instanceof Identifier
                 && in_array(strtolower($expr->name->toString()), ['table', 'from'], true)
             ) {
-                $table = $this->firstSystemTableArgument($expr, $scope);
+                $table = $this->firstSystemTableArgument(node: $expr, scope: $scope);
 
                 if ($table !== null) {
                     return $table;
@@ -172,12 +172,6 @@ final class NoDirectSystemTableWriteRule implements Rule
             return false;
         }
 
-        foreach ($this->systemTableNamespaces as $coreNamespace) {
-            if (str_starts_with($namespace, rtrim($coreNamespace, '\\').'\\')) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($this->systemTableNamespaces, fn ($coreNamespace) => str_starts_with($namespace, rtrim($coreNamespace, '\\').'\\'));
     }
 }

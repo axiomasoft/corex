@@ -61,7 +61,7 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
         $app->singleton(WebhookTopicCatalogue::class, static fn (Application $app): WebhookTopicCatalogue => new WebhookTopicCatalogue(
             contracts: $app->make(MessageContractRegistry::class),
             topics: $app->make(WebhookOptions::class)->topics,
-            projectors: self::projectors($app, $app->make(WebhookOptions::class)),
+            projectors: self::projectors(app: $app, options: $app->make(WebhookOptions::class)),
         ));
         $app->scoped(WebhookSubscriptionStore::class, static fn (Application $app): SqlWebhookSubscriptionStore => new SqlWebhookSubscriptionStore(
             connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
@@ -70,11 +70,10 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
             clock: $app->make(ClockInterface::class),
             egress: $app->make(WebhookEgressPolicy::class),
         ));
-        $app->scoped(WebhookDeliveryStore::class, static fn (Application $app): SqlWebhookDeliveryStore => self::deliveryStore($app, $app->make(WebhookOptions::class)));
+        $app->scoped(WebhookDeliveryStore::class, static fn (Application $app): SqlWebhookDeliveryStore => self::deliveryStore(app: $app, options: $app->make(WebhookOptions::class)));
         $app->scoped(WebhookManagement::class, static fn (Application $app): WebhookManagement => new WebhookManagement(
             connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
             contexts: $app->make(TenantContextRestorer::class),
-            subscriptions: $app->make(WebhookSubscriptionStore::class),
             cursors: $app->make(CursorCodec::class),
         ));
         $app->scoped(WebhookReplay::class, static fn (Application $app): WebhookReplay => new WebhookReplay(
@@ -89,7 +88,7 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
             connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
             inbox: $app->make(Inbox::class),
             catalogue: $app->make(WebhookTopicCatalogue::class),
-            projectors: self::projectors($app, $app->make(WebhookOptions::class)),
+            projectors: self::projectors(app: $app, options: $app->make(WebhookOptions::class)),
             clock: $app->make(ClockInterface::class),
             codec: $app->make(CloudEventCodec::class),
         ));
@@ -167,10 +166,10 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
 
     private static function deliveryWorker(Application $app): WebhookDeliveryWorker
     {
-        self::assertDeliveryReady($app, $app->make(WebhookOptions::class));
+        self::assertDeliveryReady(app: $app, options: $app->make(WebhookOptions::class));
 
         return new WebhookDeliveryWorker(
-            store: self::deliveryStore($app, $app->make(WebhookOptions::class)),
+            store: self::deliveryStore(app: $app, options: $app->make(WebhookOptions::class)),
             signer: $app->make(WebhookSigner::class),
             urlPolicy: $app->make(WebhookUrlPolicy::class),
             transport: $app->make(WebhookHttpTransport::class),

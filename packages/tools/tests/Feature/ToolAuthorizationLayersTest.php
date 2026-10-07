@@ -59,9 +59,9 @@ final class ToolAuthorizationLayersTest extends TestCase
         $app['config']->set('queue.default', 'sync');
     }
 
-    public const LocalResource = 'note:uuid:01890f3e-7b2a-7cc0-98c4-dc0c0c07398f';
+    public const string LocalResource = 'note:uuid:01890f3e-7b2a-7cc0-98c4-dc0c0c07398f';
 
-    public const ForeignTenantResource = 'note:uuid:01890f3e-7b2a-7cc0-98c4-dc0c0c073990';
+    public const string ForeignTenantResource = 'note:uuid:01890f3e-7b2a-7cc0-98c4-dc0c0c073990';
 
     private ModuleFixture $modules;
 
@@ -144,7 +144,7 @@ final class ToolAuthorizationLayersTest extends TestCase
                 'secret' => 'secret',
             ],
         );
-        $registry = app(RegistryCompiler::class)->compile([
+        $registry = resolve(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$operation, $tool]),
         ], installedPackages: []);
 

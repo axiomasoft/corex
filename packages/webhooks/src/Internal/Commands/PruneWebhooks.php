@@ -31,7 +31,7 @@ final class PruneWebhooks extends Command
             return self::SUCCESS;
         }
 
-        $result = $webhooks->prune($this->laravel->make(DataScope::class), $max);
+        $result = $webhooks->prune(scope: $this->laravel->make(DataScope::class), limit: $max);
         $this->components->info(sprintf('Webhook retention: bodies %d attempts %d inbox %d.', $result['bodies'], $result['attempts'], $result['inbox']));
 
         return self::SUCCESS;

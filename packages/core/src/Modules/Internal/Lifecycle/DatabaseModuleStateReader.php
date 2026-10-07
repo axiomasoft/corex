@@ -20,11 +20,11 @@ use stdClass;
  *
  * @internal spec: P1.5, D13
  */
-final class DatabaseModuleStateReader implements ModuleStateReader
+final readonly class DatabaseModuleStateReader implements ModuleStateReader
 {
     public function __construct(
-        private readonly ConnectionResolverInterface $connections,
-        private readonly ?string $connection = null,
+        private ConnectionResolverInterface $connections,
+        private ?string $connection = null,
     ) {}
 
     /** @return array<string, array{state: string, edition: string}> */

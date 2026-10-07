@@ -15,6 +15,6 @@ final class InboxConflict extends CodedException
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TenancyErrorCode::InboxConflict, ErrorCategory::Conflict, retryable: false);
+        return new ErrorDescriptor(code: TenancyErrorCode::InboxConflict, category: ErrorCategory::Conflict, retryable: false);
     }
 }

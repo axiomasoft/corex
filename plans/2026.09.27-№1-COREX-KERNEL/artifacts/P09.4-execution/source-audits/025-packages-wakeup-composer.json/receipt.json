@@ -1,0 +1,25 @@
+{
+  "classification": "source",
+  "commands": [
+    {
+      "exit": 0,
+      "output": "validate.json",
+      "role": "validate",
+      "sha256": "dbff56c3cc273c97ea301412a1a93451a36b83d0c27a3cb45fd9e93386122c2c"
+    },
+    {
+      "exit": 0,
+      "output": "audit.json",
+      "role": "audit",
+      "sha256": "89276f4eee30ee36798a51eb9d0be70aa7e8c4ba6dfafe430543407a145f2a16"
+    }
+  ],
+  "effective_manifest_sha256": "872564e76d043e95e0cc605d1256a250999f1ce07ed1938600f6311e5462541f",
+  "lock_kind": "source",
+  "lock_sha256": "3b4ed47eb392c9764907af1e1a0a193ba963396752cf423c775465a231e5325e",
+  "manifest": "packages/wakeup/composer.json",
+  "manifest_sha256": "872564e76d043e95e0cc605d1256a250999f1ce07ed1938600f6311e5462541f",
+  "name": "axiomasoft/corex-wakeup",
+  "source_lock_sha256": "3b4ed47eb392c9764907af1e1a0a193ba963396752cf423c775465a231e5325e",
+  "status": "GREEN"
+}

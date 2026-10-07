@@ -351,7 +351,7 @@ final class OperationBudgetTest extends TestCase
     /** @return list<string> */
     private function reservationKeys(int $offset): array
     {
-        $json = (string) $this->connection->table('sys_api_budget_reservations')->orderBy('created_at')->orderBy('id')->offset($offset - 1)->value('keys');
+        $json = (string) $this->connection->table('sys_api_budget_reservations')->oldest()->orderBy('id')->offset($offset - 1)->value('keys');
         $keys = JsonCanonical::decode($json);
 
         if (! is_array($keys) || ! array_is_list($keys)) {

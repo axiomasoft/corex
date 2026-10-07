@@ -23,6 +23,6 @@ final class OutboxLeaseLost extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::OutboxLeaseLost, ErrorCategory::Conflict, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::OutboxLeaseLost, category: ErrorCategory::Conflict, retryable: false);
     }
 }

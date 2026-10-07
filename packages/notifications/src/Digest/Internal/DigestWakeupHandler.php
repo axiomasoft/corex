@@ -12,12 +12,12 @@ use Illuminate\Support\Str;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
-final class DigestWakeupHandler
+final readonly class DigestWakeupHandler
 {
     public function __construct(
-        private readonly ConnectionInterface $connection,
-        private readonly PreferenceRepository $preferences,
-        private readonly ClockInterface $clock,
+        private ConnectionInterface $connection,
+        private PreferenceRepository $preferences,
+        private ClockInterface $clock,
     ) {}
 
     public function __invoke(DigestTick $tick): void
@@ -55,7 +55,7 @@ final class DigestWakeupHandler
 
             $notificationIds = [];
             foreach ($items as $item) {
-                if ($this->preferences->get($context, Value::text($item->event_type))->digest === $run->period) {
+                if ($this->preferences->get(context: $context, eventType: Value::text($item->event_type))->digest === $run->period) {
                     $notificationIds[] = $item->id;
                 }
             }

@@ -8,7 +8,7 @@ use CoreX\Attributes\Api;
 use CoreX\CustomFields\Internal\Support\Validation;
 use InvalidArgumentException;
 
-/** @phpstan-import-type JsonMap from \CoreX\CustomFields\Data\ValueBag */
+/** @phpstan-import-type JsonMap from ValueBag */
 #[Api(since: '1.0')]
 final readonly class ValuePatch
 {

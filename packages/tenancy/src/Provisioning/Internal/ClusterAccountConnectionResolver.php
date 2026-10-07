@@ -16,11 +16,11 @@ use RuntimeException;
  * every call re-reads both tables, so a `cluster_id` cell-migration on
  * `root_accounts` changes the resolved connection without a deploy.
  */
-final class ClusterAccountConnectionResolver implements AccountConnectionResolver
+final readonly class ClusterAccountConnectionResolver implements AccountConnectionResolver
 {
     public function __construct(
-        private readonly string $centralConnection,
-        private readonly ConnectionResolverInterface $connections,
+        private string $centralConnection,
+        private ConnectionResolverInterface $connections,
     ) {}
 
     public function resolve(AccountRef $account): DatabaseConnectionConfig

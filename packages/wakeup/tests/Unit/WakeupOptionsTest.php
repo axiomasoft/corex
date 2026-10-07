@@ -41,8 +41,8 @@ it('lists a legacy-unstamped handler as a dangerous mode that production must ac
     $path = 'corex-wakeup.handlers.test.reminder.accept_legacy_unstamped';
 
     expect($options->dangerousModes())->toBe([$path])
-        ->and((new DangerousModesCheck($options, CoreOptionsParser::fromArray([])))->violations(true))
+        ->and(new DangerousModesCheck($options, CoreOptionsParser::fromArray([]))->violations(true))
         ->toBe([$path.': dangerous mode is not acknowledged for production'])
-        ->and((new DangerousModesCheck($options, CoreOptionsParser::fromArray(['acknowledged_dangerous_modes' => [$path]])))->violations(true))
+        ->and(new DangerousModesCheck($options, CoreOptionsParser::fromArray(['acknowledged_dangerous_modes' => [$path]]))->violations(true))
         ->toBe([]);
 });

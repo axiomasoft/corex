@@ -37,7 +37,7 @@ function p32Probe(string $database): Connection
     $configuration = DB::connection('pgsql')->getConfig();
     $configuration['database'] = $database;
 
-    return (new ConnectionFactory(app()))->make($configuration, 'p32-probe');
+    return new ConnectionFactory(app())->make($configuration, 'p32-probe');
 }
 
 /** @param list<string> $command */
@@ -76,13 +76,13 @@ function p32ArchiveCommand(array $command, string $path, bool $input = false): v
 function p32Lifecycle(DatabaseTenantLifecycle $database): AccountLifecycle
 {
     return new AccountLifecycle(
-        lifecycle: app(AccountLifecyclePolicy::class), connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), connectionFactory: app(ConnectionFactory::class), hostCache: app(HostResolverCacheInvalidator::class),
+        lifecycle: resolve(AccountLifecyclePolicy::class), connections: resolve(ConnectionResolverInterface::class), clock: resolve(ClockInterface::class), events: resolve(Dispatcher::class), connectionFactory: resolve(ConnectionFactory::class), hostCache: resolve(HostResolverCacheInvalidator::class),
         centralConnection: 'pgsql',
-        pendingPool: app(PendingPool::class),
+        pendingPool: resolve(PendingPool::class),
         fsm: new AccountLifecycleFsm,
         tenantDatabaseLifecycle: $database,
         impersonationGuard: app()->makeWith(ImpersonationGuard::class, ['impersonation' => new NullImpersonationService]),
-        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
+        templateIntegrityVerifier: resolve(TemplateIntegrityVerifier::class),
     );
 }
 
@@ -146,7 +146,7 @@ final class P32ArchiveFixture
 
     public function adapter(): DatabaseTenantLifecycle
     {
-        return new DatabaseTenantLifecycle(connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), centralConnection: 'pgsql', writer: $this->write(...), verifier: $this->verify(...));
+        return new DatabaseTenantLifecycle(connections: resolve(ConnectionResolverInterface::class), clock: resolve(ClockInterface::class), events: resolve(Dispatcher::class), centralConnection: 'pgsql', writer: $this->write(...), verifier: $this->verify(...));
     }
 }
 
@@ -203,7 +203,7 @@ afterEach(function (): void {
 
 it('refuses size-only archives without a qualified integrity verifier', function (): void {
     $account = $this->p32Accounts[0];
-    $adapter = new DatabaseTenantLifecycle(connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), centralConnection: 'pgsql', writer: $this->p32Archive->write(...));
+    $adapter = new DatabaseTenantLifecycle(connections: resolve(ConnectionResolverInterface::class), clock: resolve(ClockInterface::class), events: resolve(Dispatcher::class), centralConnection: 'pgsql', writer: $this->p32Archive->write(...));
     expect(fn () => p32Lifecycle($adapter)->requestExport($account))->toThrow(RuntimeException::class, 'verifier');
     expect(DB::table('root_account_exports')->where('status', 'ready')->count())->toBe(0);
     expect(fn () => p32Lifecycle($adapter)->purge($account))->toThrow(ValidationException::class);
@@ -284,7 +284,7 @@ it('rechecks integrity and ownership after ready without dropping another tenant
     $probe->statement('CREATE TABLE tampered (id integer)');
     $probe->disconnect();
     $model = Account::query()->findOrFail($lab->id);
-    expect(fn () => app(TemplateIntegrityVerifier::class)->assertAccount($model))->toThrow(TemplateIntegrityException::class);
+    expect(fn () => resolve(TemplateIntegrityVerifier::class)->assertAccount($model))->toThrow(TemplateIntegrityException::class);
 });
 
 it('a newer interrupted export wins even when export timestamps are equal', function (): void {
@@ -303,7 +303,7 @@ it('a newer interrupted export wins even when export timestamps are equal', func
 
 it('refuses exhausted soft-deleted pools and a physically tampered signed template before reserving', function (): void {
     $request = new ClaimRequest(requestKey: 'pool-denial', clusterId: $this->p32Cluster, templateId: $this->p32Template, requestDigest: hash('sha256', 'pool'));
-    $claim = new ClaimAccountSignup(connections: app(ConnectionResolverInterface::class), centralConnection: 'pgsql', templateIntegrity: app(TemplateIntegrityVerifier::class));
+    $claim = new ClaimAccountSignup(connections: resolve(ConnectionResolverInterface::class), centralConnection: 'pgsql', templateIntegrity: resolve(TemplateIntegrityVerifier::class));
     expect(fn () => $claim->claim($request))->toThrow(ClaimUnavailable::class);
     DB::table('root_accounts')->where('id', $this->p32Accounts[1]->id)->update(['status' => 'pending', 'deleted_at' => now()]);
     expect(fn () => $claim->claim($request))->toThrow(ClaimUnavailable::class);

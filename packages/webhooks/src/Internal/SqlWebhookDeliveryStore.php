@@ -65,7 +65,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
     public function claim(DataScope $scope, string $worker): ?WebhookDelivery
     {
         $this->assertScope($scope);
-        $this->assertIdentifier($worker, 'worker');
+        $this->assertIdentifier(value: $worker, name: 'worker');
 
         return $this->connection->transaction(function () use ($worker): ?WebhookDelivery {
             $now = $this->clock->now();
@@ -74,8 +74,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
                 ->whereIn('status', ['pending', 'retry'])
                 ->where('next_attempt_at', '<=', $now)
                 ->whereNull('lease_owner')
-                ->orderBy('next_attempt_at')
-                ->orderBy('created_at')
+                ->oldest('next_attempt_at')->oldest()
                 ->orderBy('id')
                 ->limit(1);
             $this->lockClaimQuery($query);
@@ -85,12 +84,12 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
                 return null;
             }
 
-            $attempt = DatabaseValue::integer(DatabaseValue::field($row, 'attempt')) + 1;
+            $attempt = DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'attempt')) + 1;
             $leaseUntil = $now->add(new DateInterval("PT{$this->leaseSeconds}S"));
             $changed = $this->connection->table(self::Table)
-                ->where('id', DatabaseValue::text(DatabaseValue::field($row, 'id')))
-                ->where('status', DatabaseValue::text(DatabaseValue::field($row, 'status')))
-                ->where('attempt', DatabaseValue::integer(DatabaseValue::field($row, 'attempt')))
+                ->where('id', DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id')))
+                ->where('status', DatabaseValue::text(DatabaseValue::field(row: $row, name: 'status')))
+                ->where('attempt', DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'attempt')))
                 ->whereNull('lease_owner')
                 ->update([
                     'status' => 'sending',
@@ -105,8 +104,8 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
             }
 
             $this->connection->table('sys_api_webhook_attempts')->insert([
-                'id' => substr(hash('sha256', DatabaseValue::text(DatabaseValue::field($row, 'id')).'|'.$attempt), 0, 32),
-                'delivery_id' => DatabaseValue::field($row, 'id'),
+                'id' => substr(hash('sha256', DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id')).'|'.$attempt), 0, 32),
+                'delivery_id' => DatabaseValue::field(row: $row, name: 'id'),
                 'attempt' => $attempt,
                 'lease_owner' => $worker,
                 'started_at' => $now,
@@ -117,7 +116,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
                 'error_code' => null,
             ]);
 
-            return $this->delivery($this->requiredRow(DatabaseValue::text(DatabaseValue::field($row, 'id'))));
+            return $this->delivery($this->requiredRow(DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id'))));
         }, $this->transactionAttempts());
     }
 
@@ -151,7 +150,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
                 || ! hash_equals(DatabaseValue::text($subscription->endpoint_url), $delivery->endpointSnapshot)
                 || ! hash_equals(DatabaseValue::text($subscription->topic), $delivery->topic)
                 || DatabaseValue::integer($subscription->topic_version) !== $delivery->topicVersion) {
-                $this->rejectClaim($delivery, WebhookFailureReason::EndpointChanged, $now);
+                $this->rejectClaim(delivery: $delivery, error: WebhookFailureReason::EndpointChanged, now: $now);
 
                 return null;
             }
@@ -160,7 +159,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
 
             if (! is_array($decoded) || ! array_is_list($decoded) || $decoded === [] || count($decoded) > 2
                 || array_filter($decoded, is_string(...)) !== $decoded) {
-                $this->rejectClaim($delivery, WebhookFailureReason::SigningUnavailable, $now);
+                $this->rejectClaim(delivery: $delivery, error: WebhookFailureReason::SigningUnavailable, now: $now);
 
                 return null;
             }
@@ -191,7 +190,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
             }
 
             $current = $this->delivery($row);
-            $decision = $this->retry->decide($current, $result, $now);
+            $decision = $this->retry->decide(delivery: $current, result: $result, now: $now);
             $terminal = $decision['status'] !== 'retry';
             $changed = $this->connection->table(self::Table)
                 ->where('id', $delivery->id)
@@ -212,10 +211,10 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
                 return false;
             }
 
-            $this->finishAttempt($delivery, $result, $decision['status'], $decision['error'], $now);
+            $this->finishAttempt(delivery: $delivery, result: $result, outcome: $decision['status'], error: $decision['error'], now: $now);
 
             if ($result->status === 410 && $decision['error'] === WebhookFailureReason::EndpointGone) {
-                $this->disableGoneSubscription($delivery, $now);
+                $this->disableGoneSubscription(delivery: $delivery, now: $now);
             }
 
             return true;
@@ -244,7 +243,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
 
         foreach ($query->get() as $row) {
             $delivery = $this->delivery($row);
-            $failure = $this->retry->budgetFailure($delivery, $now);
+            $failure = $this->retry->budgetFailure(delivery: $delivery, instant: $now);
             $dead = $failure !== null;
             $error = $failure ?? WebhookFailureReason::AckUnknown;
             $this->connection->table('sys_api_webhook_attempts')
@@ -373,7 +372,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
 
     private function delivery(object $row): WebhookDelivery
     {
-        $decodedScope = JsonCanonical::decode(DatabaseValue::text(DatabaseValue::field($row, 'scope')));
+        $decodedScope = JsonCanonical::decode(DatabaseValue::text(DatabaseValue::field(row: $row, name: 'scope')));
 
         if (! is_array($decodedScope)) {
             throw new RuntimeException('Stored webhook scope must be an object.');
@@ -387,27 +386,27 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
         }
 
         return new WebhookDelivery(
-            id: DatabaseValue::text(DatabaseValue::field($row, 'id')),
-            subscriptionId: DatabaseValue::text(DatabaseValue::field($row, 'subscription_id')),
-            subscriptionRevision: DatabaseValue::integer(DatabaseValue::field($row, 'subscription_revision')),
-            eventId: DatabaseValue::text(DatabaseValue::field($row, 'event_id')),
-            topic: DatabaseValue::text(DatabaseValue::field($row, 'topic')),
-            topicVersion: DatabaseValue::integer(DatabaseValue::field($row, 'topic_version')),
-            major: DatabaseValue::text(DatabaseValue::field($row, 'major')),
-            endpointSnapshot: DatabaseValue::text(DatabaseValue::field($row, 'endpoint_snapshot')),
+            id: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id')),
+            subscriptionId: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'subscription_id')),
+            subscriptionRevision: DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'subscription_revision')),
+            eventId: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'event_id')),
+            topic: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'topic')),
+            topicVersion: DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'topic_version')),
+            major: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'major')),
+            endpointSnapshot: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'endpoint_snapshot')),
             scope: $scope,
-            body: DatabaseValue::text(DatabaseValue::field($row, 'body')),
-            bodyHash: DatabaseValue::text(DatabaseValue::field($row, 'body_hash')),
-            status: DatabaseValue::text(DatabaseValue::field($row, 'status')),
-            attempt: DatabaseValue::integer(DatabaseValue::field($row, 'attempt')),
-            replayCount: DatabaseValue::integer(DatabaseValue::field($row, 'replay_count')),
-            leaseOwner: DatabaseValue::field($row, 'lease_owner') !== null ? DatabaseValue::text(DatabaseValue::field($row, 'lease_owner')) : null,
-            leaseUntil: DatabaseValue::field($row, 'lease_until') !== null ? $this->instant(DatabaseValue::field($row, 'lease_until')) : null,
-            nextAttemptAt: $this->instant(DatabaseValue::field($row, 'next_attempt_at')),
-            createdAt: $this->instant(DatabaseValue::field($row, 'created_at')),
-            finishedAt: DatabaseValue::field($row, 'finished_at') !== null ? $this->instant(DatabaseValue::field($row, 'finished_at')) : null,
-            expiresAt: $this->instant(DatabaseValue::field($row, 'expires_at')),
-            lastError: DatabaseValue::field($row, 'last_error') !== null ? DatabaseValue::text(DatabaseValue::field($row, 'last_error')) : null,
+            body: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'body')),
+            bodyHash: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'body_hash')),
+            status: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'status')),
+            attempt: DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'attempt')),
+            replayCount: DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'replay_count')),
+            leaseOwner: DatabaseValue::field(row: $row, name: 'lease_owner') !== null ? DatabaseValue::text(DatabaseValue::field(row: $row, name: 'lease_owner')) : null,
+            leaseUntil: DatabaseValue::field(row: $row, name: 'lease_until') !== null ? $this->instant(DatabaseValue::field(row: $row, name: 'lease_until')) : null,
+            nextAttemptAt: $this->instant(DatabaseValue::field(row: $row, name: 'next_attempt_at')),
+            createdAt: $this->instant(DatabaseValue::field(row: $row, name: 'created_at')),
+            finishedAt: DatabaseValue::field(row: $row, name: 'finished_at') !== null ? $this->instant(DatabaseValue::field(row: $row, name: 'finished_at')) : null,
+            expiresAt: $this->instant(DatabaseValue::field(row: $row, name: 'expires_at')),
+            lastError: DatabaseValue::field(row: $row, name: 'last_error') !== null ? DatabaseValue::text(DatabaseValue::field(row: $row, name: 'last_error')) : null,
         );
     }
 

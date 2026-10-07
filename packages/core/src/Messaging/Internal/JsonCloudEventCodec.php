@@ -117,7 +117,7 @@ final readonly class JsonCloudEventCodec implements CloudEventCodec
 
         $contract = $this->contracts->get(name: $type[1], version: (int) $type[2]);
 
-        $schema = self::optionalString($attributes, 'dataschema');
+        $schema = self::optionalString(attributes: $attributes, key: 'dataschema');
 
         if ($schema !== null && (! UriReference::isAbsolute($schema) || $schema !== $contract->dataSchema)) {
             throw InvalidMessage::identity('CloudEvent data schema');
@@ -149,8 +149,8 @@ final readonly class JsonCloudEventCodec implements CloudEventCodec
             messageId: $attributes['id'], source: $attributes['source'], name: $type[1], contractVersion: (int) $type[2],
             occurredAt: self::time($attributes['time']), scope: $scope,
             payload: MessagePayload::fromJson(self::json($attributes['data'])), piiClass: $pii,
-            subject: self::optionalString($attributes, 'subject'), correlationId: self::optionalString($attributes, 'corexcorrelation'),
-            causationId: self::optionalString($attributes, 'corexcausation'), metadata: $metadata,
+            subject: self::optionalString(attributes: $attributes, key: 'subject'), correlationId: self::optionalString(attributes: $attributes, key: 'corexcorrelation'),
+            causationId: self::optionalString(attributes: $attributes, key: 'corexcausation'), metadata: $metadata,
         );
     }
 

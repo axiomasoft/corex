@@ -40,6 +40,6 @@ final class InvalidStateTransitionException extends LogicException implements De
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::InvalidStateTransitionException, ErrorCategory::Conflict, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::InvalidStateTransitionException, category: ErrorCategory::Conflict, retryable: false);
     }
 }

@@ -6,7 +6,7 @@ namespace CoreX\Transfer\Data;
 
 use CoreX\Attributes\Api;
 
-/** @phpstan-import-type JsonMap from \CoreX\Transfer\Data\SourceRow */
+/** @phpstan-import-type JsonMap from SourceRow */
 #[Api(since: '1.0')]
 final readonly class MappingSnapshot
 {

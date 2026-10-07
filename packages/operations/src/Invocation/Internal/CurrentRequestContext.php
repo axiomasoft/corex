@@ -12,9 +12,9 @@ use Illuminate\Contracts\Container\Container;
 use Override;
 
 /** @internal Holds no request state; reads the active Laravel request on every call. */
-final class CurrentRequestContext implements RequestContextProvider
+final readonly class CurrentRequestContext implements RequestContextProvider
 {
-    public function __construct(private readonly Container $container) {}
+    public function __construct(private Container $container) {}
 
     #[Override]
     public function current(): RequestContext
@@ -23,6 +23,6 @@ final class CurrentRequestContext implements RequestContextProvider
         $context = $request->attributes->get(RequestContext::class);
 
         return $context instanceof RequestContext ? $context
-            : throw new ApiError(OperationsErrorCode::ContextRequired, 403, 'An API operation context is required.');
+            : throw new ApiError(errorCode: OperationsErrorCode::ContextRequired, status: 403, message: 'An API operation context is required.');
     }
 }

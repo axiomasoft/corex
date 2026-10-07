@@ -30,9 +30,9 @@ use PHPStan\Rules\RuleErrorBuilder;
  * @implements Rule<FuncCall>
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class NoFsOutsideModuleRule implements Rule
+final readonly class NoFsOutsideModuleRule implements Rule
 {
-    private const FS_FUNCTIONS = [
+    private const array FS_FUNCTIONS = [
         'file_put_contents', 'file_get_contents', 'fopen', 'unlink', 'mkdir', 'rmdir',
         'rename', 'copy', 'touch', 'scandir', 'opendir', 'file',
     ];
@@ -40,7 +40,7 @@ final class NoFsOutsideModuleRule implements Rule
     /**
      * @param  list<string>  $moduleNamespaces
      */
-    public function __construct(private readonly array $moduleNamespaces) {}
+    public function __construct(private array $moduleNamespaces) {}
 
     public function getNodeType(): string
     {
@@ -113,12 +113,6 @@ final class NoFsOutsideModuleRule implements Rule
             return false;
         }
 
-        foreach ($this->moduleNamespaces as $moduleNamespace) {
-            if (str_starts_with($namespace, rtrim($moduleNamespace, '\\').'\\')) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($this->moduleNamespaces, fn ($moduleNamespace) => str_starts_with($namespace, rtrim($moduleNamespace, '\\').'\\'));
     }
 }

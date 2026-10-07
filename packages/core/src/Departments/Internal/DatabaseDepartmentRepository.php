@@ -25,12 +25,12 @@ use RuntimeException;
  *
  * @internal spec: B-10 §2/§3.1/§5.7, D12
  */
-final class DatabaseDepartmentRepository implements DepartmentRepository
+final readonly class DatabaseDepartmentRepository implements DepartmentRepository
 {
     public function __construct(
-        private readonly ConnectionResolverInterface $connections,
-        private readonly Dispatcher $events,
-        private readonly ?string $connection = null,
+        private ConnectionResolverInterface $connections,
+        private Dispatcher $events,
+        private ?string $connection = null,
     ) {}
 
     #[Override]
@@ -119,11 +119,11 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
                 // layer — reparenting into another tenant's subtree would be a
                 // silent cross-tenant integrity breach, not a legal move.
                 if ($newParent->workspace_id !== $lockWorkspaceId) {
-                    throw new CrossWorkspaceMoveException($departmentId, $newParentId);
+                    throw new CrossWorkspaceMoveException(departmentId: $departmentId, newParentId: $newParentId);
                 }
 
                 if ($newParent->path === $moving->path || str_starts_with($newParent->path, $moving->path.'.')) {
-                    throw new DepartmentCycleException($departmentId, $newParentId);
+                    throw new DepartmentCycleException(departmentId: $departmentId, newParentId: $newParentId);
                 }
 
                 $newParentPath = $newParent->path;

@@ -15,15 +15,15 @@ use JsonException;
 use Override;
 
 /** Subprocess supervisor enforcing validation-only memory and deadline bounds. */
-final class ToolSchemaSupervisor implements ToolSchemaValidator
+final readonly class ToolSchemaSupervisor implements ToolSchemaValidator
 {
     private const int WORKER_STARTUP_MS = 5_000;
 
     private const int TERMINATE_MS = 50;
 
     public function __construct(
-        private readonly ?string $phpBinary = null,
-        private readonly ?int $startupMs = null,
+        private ?string $phpBinary = null,
+        private ?int $startupMs = null,
     ) {}
 
     #[Override]
@@ -105,13 +105,7 @@ final class ToolSchemaSupervisor implements ToolSchemaValidator
             return false;
         }
 
-        foreach ($handle['localResources'] as $key => $resource) {
-            if (! is_string($key) || ! is_string($resource)) {
-                return false;
-            }
-        }
-
-        return true;
+        return array_all($handle['localResources'], fn ($resource, $key) => ! (! is_string($key) || ! is_string($resource)));
     }
 
     /** @phpstan-assert-if-true array{valid: bool, errors: list<array{code: string, pointer: string}>} $validation */
@@ -124,13 +118,7 @@ final class ToolSchemaSupervisor implements ToolSchemaValidator
             return false;
         }
 
-        foreach ($validation['errors'] as $error) {
-            if (! is_array($error) || ! is_string($error['code'] ?? null) || ! is_string($error['pointer'] ?? null)) {
-                return false;
-            }
-        }
-
-        return true;
+        return array_all($validation['errors'], fn ($error) => ! (! is_array($error) || ! is_string($error['code'] ?? null) || ! is_string($error['pointer'] ?? null)));
     }
 
     /**
@@ -168,9 +156,9 @@ final class ToolSchemaSupervisor implements ToolSchemaValidator
             $stdout = '';
             $deadline = hrtime(true) / 1_000_000 + ($this->startupMs ?? self::WORKER_STARTUP_MS);
             while (true) {
-                $this->checkDeadline($deadline, $failure);
-                $this->readOutput($pipes, $stdout, $failure);
-                $this->checkDeadline($deadline, $failure);
+                $this->checkDeadline(deadline: $deadline, failure: $failure);
+                $this->readOutput(pipes: $pipes, stdout: $stdout, failure: $failure);
+                $this->checkDeadline(deadline: $deadline, failure: $failure);
                 $newline = strpos($stdout, "\n");
 
                 if ($newline !== false) {
@@ -195,7 +183,7 @@ final class ToolSchemaSupervisor implements ToolSchemaValidator
             $input = json_encode($request, JSON_THROW_ON_ERROR);
             $offset = 0;
             while (true) {
-                $this->checkDeadline($deadline, $failure);
+                $this->checkDeadline(deadline: $deadline, failure: $failure);
 
                 if (isset($pipes[0])) {
                     $written = @fwrite($pipes[0], substr($input, $offset, 65_536));
@@ -210,7 +198,7 @@ final class ToolSchemaSupervisor implements ToolSchemaValidator
                         unset($pipes[0]);
                     }
                 }
-                $this->readOutput($pipes, $stdout, $failure);
+                $this->readOutput(pipes: $pipes, stdout: $stdout, failure: $failure);
                 $status = proc_get_status($process);
 
                 if (! $status['running'] && feof($pipes[1])) {
@@ -220,11 +208,11 @@ final class ToolSchemaSupervisor implements ToolSchemaValidator
 
                     break;
                 }
-                $this->waitForIO($pipes, writeInput: isset($pipes[0]));
+                $this->waitForIO(pipes: $pipes, writeInput: isset($pipes[0]));
             }
 
             $decoded = json_decode($stdout, true, 512, JSON_THROW_ON_ERROR);
-            $this->checkDeadline($deadline, $failure);
+            $this->checkDeadline(deadline: $deadline, failure: $failure);
 
             if (! is_array($decoded) || ! is_bool($decoded['ok'] ?? null)
                 || (! $decoded['ok'] && (! is_string($decoded['error'] ?? null) || $decoded['error'] === ''))) {
@@ -235,7 +223,7 @@ final class ToolSchemaSupervisor implements ToolSchemaValidator
         } catch (JsonException) {
             throw new ToolSchemaFailure(errorCode: $failure);
         } finally {
-            $this->cleanup($process, $pipes);
+            $this->cleanup(process: $process, pipes: $pipes);
         }
     }
 

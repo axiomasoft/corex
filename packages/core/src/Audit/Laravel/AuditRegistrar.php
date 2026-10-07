@@ -29,7 +29,7 @@ final class AuditRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
-        $app->scoped(AuditLogger::class, static fn (Application $app): AuditLogger => ConfiguredImplementation::resolve($app, AuditLogger::class, $app->make(CoreOptions::class)->auditLogger));
+        $app->scoped(AuditLogger::class, static fn (Application $app): AuditLogger => ConfiguredImplementation::resolve(app: $app, contract: AuditLogger::class, implementation: $app->make(CoreOptions::class)->auditLogger));
         $app->scoped(SynchronousAuditWriter::class, static fn (Application $app): SynchronousAuditWriter => new DatabaseSynchronousAuditWriter($app->make(ConnectionResolverInterface::class)));
         $app->scoped(CurrentActor::class, static fn (Application $app): CurrentActor => new CurrentActor(
             auth: $app->make(AuthFactory::class),
@@ -37,7 +37,7 @@ final class AuditRegistrar implements PackageRegistrar
             request: static fn (): ?Request => $app->runningInConsole() || ! $app->bound('request') ? null : $app->make(Request::class),
         ));
         $app->scoped(AuditObserver::class);
-        $app->singleton(AuditRetention::class, static fn (Application $app): AuditRetention => ConfiguredImplementation::resolve($app, AuditRetention::class, $app->make(CoreOptions::class)->auditRetention));
+        $app->singleton(AuditRetention::class, static fn (Application $app): AuditRetention => ConfiguredImplementation::resolve(app: $app, contract: AuditRetention::class, implementation: $app->make(CoreOptions::class)->auditRetention));
     }
 
     #[Override]

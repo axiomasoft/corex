@@ -11,10 +11,10 @@ use InvalidArgumentException;
 final readonly class CapabilityDescriptor
 {
     /** @var list<string> */
-    public const PUBLIC_KEYS = ['id', 'status', 'limits', 'operations'];
+    public const array PUBLIC_KEYS = ['id', 'status', 'limits', 'operations'];
 
     /** @var list<string> */
-    public const FORBIDDEN_KEYS = ['driver', 'connection', 'class', 'table', 'path', 'secret', 'package', 'host'];
+    public const array FORBIDDEN_KEYS = ['driver', 'connection', 'class', 'table', 'path', 'secret', 'package', 'host'];
 
     /**
      * @param  list<string>  $operationIds

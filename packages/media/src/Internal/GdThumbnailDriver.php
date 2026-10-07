@@ -9,9 +9,9 @@ use CoreX\Media\Data\ConversionInput;
 use CoreX\Media\Data\ConversionOutput;
 use CoreX\Media\Data\ConversionProfile;
 
-final class GdThumbnailDriver implements ConversionDriver
+final readonly class GdThumbnailDriver implements ConversionDriver
 {
-    public function __construct(private readonly ConversionProfile $profile) {}
+    public function __construct(private ConversionProfile $profile) {}
 
     public function profile(): ConversionProfile
     {
@@ -39,7 +39,7 @@ final class GdThumbnailDriver implements ConversionDriver
             throw new MediaOperationConflict('The conversion source could not be decoded.');
         }
 
-        [$width, $height] = $this->dimensions($sourceWidth, $sourceHeight);
+        [$width, $height] = $this->dimensions(sourceWidth: $sourceWidth, sourceHeight: $sourceHeight);
         $target = imagecreatetruecolor($width, $height);
 
         if ($target === false) {
@@ -72,7 +72,7 @@ final class GdThumbnailDriver implements ConversionDriver
                 throw new MediaOperationConflict('The conversion output is invalid.');
             }
 
-            return new ConversionOutput($bytes, $facts['mime'], $width, $height);
+            return new ConversionOutput(bytes: $bytes, mimeType: $facts['mime'], width: $width, height: $height);
         } finally {
             imagedestroy($source);
             imagedestroy($target);

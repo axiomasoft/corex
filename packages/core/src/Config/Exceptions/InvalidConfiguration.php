@@ -24,6 +24,6 @@ final class InvalidConfiguration extends InvalidArgumentException implements Des
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::InvalidConfiguration, ErrorCategory::Internal, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::InvalidConfiguration, category: ErrorCategory::Internal, retryable: false);
     }
 }

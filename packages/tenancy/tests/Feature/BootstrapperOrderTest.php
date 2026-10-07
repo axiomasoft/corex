@@ -15,7 +15,7 @@ it('сохраняет порядок трёх штатных bootstrapper-ов 
     ];
 
     expect(config('corex-tenancy.bootstrappers'))->toBe($expected)
-        ->and(app(TenancyOptions::class)->bootstrappers)->toBe($expected);
+        ->and(resolve(TenancyOptions::class)->bootstrappers)->toBe($expected);
 });
 
 it('uses only the package configuration namespace', function (): void {
@@ -23,7 +23,7 @@ it('uses only the package configuration namespace', function (): void {
 });
 
 it('штатные bootstrapper-ы — singleton в контейнере, а порядок в менеджере совпадает с options', function (): void {
-    foreach (app(TenancyOptions::class)->bootstrappers as $class) {
-        expect(app($class))->toBe(app($class));
+    foreach (resolve(TenancyOptions::class)->bootstrappers as $class) {
+        expect(resolve($class))->toBe(resolve($class));
     }
 });

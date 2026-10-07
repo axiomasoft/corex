@@ -25,6 +25,6 @@ final class MaterializationConflict extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TasksWorkflowErrorCode::MaterializationConflict, ErrorCategory::Conflict, retryable: false);
+        return new ErrorDescriptor(code: TasksWorkflowErrorCode::MaterializationConflict, category: ErrorCategory::Conflict, retryable: false);
     }
 }

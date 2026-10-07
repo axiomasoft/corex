@@ -26,6 +26,6 @@ it('р: oidc.enabled=false → OIDC routes are not registered, the app still boo
 
 it('е: oidc.enabled=false → EnforceSessionLifetime is absent from the tenant middleware group', function (): void {
     expect(config('corex-tenancy.oidc.enabled'))->toBeFalse()
-        ->and(app('router')->getMiddlewareGroups()['tenant'] ?? [])->not->toContain(EnforceSessionLifetime::class)
-        ->and(app('router')->getMiddleware())->not->toHaveKey('tenancy.oidc.session_lifetime');
+        ->and(resolve('router')->getMiddlewareGroups()['tenant'] ?? [])->not->toContain(EnforceSessionLifetime::class)
+        ->and(resolve('router')->getMiddleware())->not->toHaveKey('tenancy.oidc.session_lifetime');
 });

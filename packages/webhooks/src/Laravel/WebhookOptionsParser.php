@@ -20,51 +20,51 @@ final class WebhookOptionsParser
     public static function fromArray(array $config): WebhookOptions
     {
         $violations = new ConfigurationValidator;
-        $deliveryEnabled = self::bool($violations, 'delivery_enabled', $config['delivery_enabled'] ?? false);
-        $workerReady = self::bool($violations, 'worker_ready', $config['worker_ready'] ?? false);
-        $lease = self::positiveInt($violations, 'lease_seconds', $config['lease_seconds'] ?? 30);
-        $bodyRetention = self::positiveInt($violations, 'body_retention_seconds', $config['body_retention_seconds'] ?? 604_800);
-        $historyRetention = self::positiveInt($violations, 'history_retention_seconds', $config['history_retention_seconds'] ?? 2_592_000);
-        $replayHorizon = self::positiveInt($violations, 'replay_horizon_seconds', $config['replay_horizon_seconds'] ?? 604_800);
-        $maxAttempts = self::positiveInt($violations, 'max_attempts', $config['max_attempts'] ?? 12);
-        $retryHorizon = self::positiveInt($violations, 'retry_horizon_seconds', $config['retry_horizon_seconds'] ?? 259_200);
-        $deniedCidrs = self::stringList($violations, 'organization_denied_cidrs', $config['organization_denied_cidrs'] ?? []);
-        $projectors = self::projectors($violations, $config['projectors'] ?? []);
-        $topics = self::topics($violations, $config['topics'] ?? []);
+        $deliveryEnabled = self::bool(violations: $violations, path: 'delivery_enabled', value: $config['delivery_enabled'] ?? false);
+        $workerReady = self::bool(violations: $violations, path: 'worker_ready', value: $config['worker_ready'] ?? false);
+        $lease = self::positiveInt(violations: $violations, path: 'lease_seconds', value: $config['lease_seconds'] ?? 30);
+        $bodyRetention = self::positiveInt(violations: $violations, path: 'body_retention_seconds', value: $config['body_retention_seconds'] ?? 604_800);
+        $historyRetention = self::positiveInt(violations: $violations, path: 'history_retention_seconds', value: $config['history_retention_seconds'] ?? 2_592_000);
+        $replayHorizon = self::positiveInt(violations: $violations, path: 'replay_horizon_seconds', value: $config['replay_horizon_seconds'] ?? 604_800);
+        $maxAttempts = self::positiveInt(violations: $violations, path: 'max_attempts', value: $config['max_attempts'] ?? 12);
+        $retryHorizon = self::positiveInt(violations: $violations, path: 'retry_horizon_seconds', value: $config['retry_horizon_seconds'] ?? 259_200);
+        $deniedCidrs = self::stringList(violations: $violations, path: 'organization_denied_cidrs', value: $config['organization_denied_cidrs'] ?? []);
+        $projectors = self::projectors(violations: $violations, value: $config['projectors'] ?? []);
+        $topics = self::topics(violations: $violations, value: $config['topics'] ?? []);
         $topicIds = array_map(static fn (WebhookTopic $topic): string => $topic->id(), $topics);
 
         if ($deliveryEnabled && ! $workerReady) {
-            $violations->add('worker_ready', 'must be true before remote delivery is enabled');
+            $violations->add(path: 'worker_ready', message: 'must be true before remote delivery is enabled');
         }
 
         if ($lease <= 10) {
-            $violations->add('lease_seconds', 'must exceed the ten-second HTTP timeout');
+            $violations->add(path: 'lease_seconds', message: 'must exceed the ten-second HTTP timeout');
         }
 
         if ($bodyRetention > $historyRetention) {
-            $violations->add('body_retention_seconds', 'must not exceed history_retention_seconds');
+            $violations->add(path: 'body_retention_seconds', message: 'must not exceed history_retention_seconds');
         }
 
         if ($replayHorizon !== $bodyRetention) {
-            $violations->add('replay_horizon_seconds', 'must equal body_retention_seconds');
+            $violations->add(path: 'replay_horizon_seconds', message: 'must equal body_retention_seconds');
         }
 
         if ($maxAttempts > 20) {
-            $violations->add('max_attempts', 'must be between 1 and 20');
+            $violations->add(path: 'max_attempts', message: 'must be between 1 and 20');
         }
 
         if ($retryHorizon < 3600 || $retryHorizon > 604_800 || $retryHorizon > $replayHorizon) {
-            $violations->add('retry_horizon_seconds', 'must be between 3600 and 604800 and not exceed replay_horizon_seconds');
+            $violations->add(path: 'retry_horizon_seconds', message: 'must be between 3600 and 604800 and not exceed replay_horizon_seconds');
         }
 
         foreach ($topics as $index => $topic) {
             if (! array_key_exists($topic->projectorService, $projectors)) {
-                $violations->add('topics.'.$index.'.projector_service', 'must name an installed projector mapping');
+                $violations->add(path: 'topics.'.$index.'.projector_service', message: 'must name an installed projector mapping');
             }
         }
 
         if (count(array_unique($topicIds)) !== count($topicIds)) {
-            $violations->add('topics', 'must not declare the same topic version twice');
+            $violations->add(path: 'topics', message: 'must not declare the same topic version twice');
         }
 
         $violations->failIfAny();
@@ -90,7 +90,7 @@ final class WebhookOptionsParser
             return $value;
         }
 
-        $violations->add($path, 'must be a boolean');
+        $violations->add(path: $path, message: 'must be a boolean');
 
         return false;
     }
@@ -101,7 +101,7 @@ final class WebhookOptionsParser
             return $value;
         }
 
-        $violations->add($path, 'must be a positive integer');
+        $violations->add(path: $path, message: 'must be a positive integer');
 
         return 1;
     }
@@ -110,7 +110,7 @@ final class WebhookOptionsParser
     private static function stringList(ConfigurationValidator $violations, string $path, mixed $value): array
     {
         if (! is_array($value) || ! array_is_list($value)) {
-            $violations->add($path, 'must be a list of non-empty strings');
+            $violations->add(path: $path, message: 'must be a list of non-empty strings');
 
             return [];
         }
@@ -119,7 +119,7 @@ final class WebhookOptionsParser
 
         foreach ($value as $index => $entry) {
             if (! is_string($entry) || $entry === '') {
-                $violations->add($path.'.'.$index, 'must be a non-empty string');
+                $violations->add(path: $path.'.'.$index, message: 'must be a non-empty string');
 
                 continue;
             }
@@ -134,7 +134,7 @@ final class WebhookOptionsParser
     private static function projectors(ConfigurationValidator $violations, mixed $value): array
     {
         if (! is_array($value) || array_is_list($value) && $value !== []) {
-            $violations->add('projectors', 'must be a service-id map');
+            $violations->add(path: 'projectors', message: 'must be a service-id map');
 
             return [];
         }
@@ -146,7 +146,7 @@ final class WebhookOptionsParser
                 || preg_match('/\A[a-z][a-z0-9]*(?:\.[a-z][a-z0-9]*)*\z/D', $id) !== 1
                 || ! is_string($service)
                 || $service === '') {
-                $violations->add('projectors', 'must map safe ids to non-empty container services');
+                $violations->add(path: 'projectors', message: 'must map safe ids to non-empty container services');
 
                 continue;
             }
@@ -163,7 +163,7 @@ final class WebhookOptionsParser
     private static function topics(ConfigurationValidator $violations, mixed $value): array
     {
         if (! is_array($value) || ! array_is_list($value)) {
-            $violations->add('topics', 'must be a list of webhook topic declarations');
+            $violations->add(path: 'topics', message: 'must be a list of webhook topic declarations');
 
             return [];
         }
@@ -178,7 +178,7 @@ final class WebhookOptionsParser
             }
 
             if (! is_array($row)) {
-                $violations->add('topics.'.$index, 'must be a WebhookTopic or declaration map');
+                $violations->add(path: 'topics.'.$index, message: 'must be a WebhookTopic or declaration map');
 
                 continue;
             }
@@ -204,7 +204,7 @@ final class WebhookOptionsParser
                     projectorService: is_string($row['projector_service'] ?? null) ? $row['projector_service'] : '',
                 );
             } catch (InvalidArgumentException $exception) {
-                $violations->add('topics.'.$index, $exception->getMessage());
+                $violations->add(path: 'topics.'.$index, message: $exception->getMessage());
             }
         }
 

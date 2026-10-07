@@ -16,10 +16,10 @@ use Illuminate\Config\Repository;
 use Illuminate\Foundation\Application;
 
 it('resolves bridge options as a shared immutable snapshot', function (): void {
-    $options = app(AccessAzguardOptions::class);
+    $options = resolve(AccessAzguardOptions::class);
     config()->set('corex-access-azguard.azguard_pins.table_names.roles', 'changed_roles');
 
-    expect(app(AccessAzguardOptions::class))->toBe($options)
+    expect(resolve(AccessAzguardOptions::class))->toBe($options)
         ->and($options->rolesTable)->toBe('az_guard_roles');
     expect(function () use ($options): void {
         $options->rolesTable = 'mutable_roles';
@@ -29,7 +29,7 @@ it('resolves bridge options as a shared immutable snapshot', function (): void {
 it('keeps the shared bridge options unresolved during registration', function (): void {
     $application = new Application;
     $application->instance('config', new Repository);
-    (new AccessAzguardServiceProvider($application))->register();
+    new AccessAzguardServiceProvider($application)->register();
 
     expect($application->resolved(AccessAzguardOptions::class))->toBeFalse();
     $application->make('config')->set('corex-access-azguard.bind_permission_layer', false);
@@ -49,8 +49,8 @@ it('applies bridge pins through the public registrar over conflicting AzGuard co
     expect(config('az-guard.table_names.roles'))->toBe('bridge_roles')
         ->and(config('az-guard.column_names.morph_type'))->toBe('uuid')
         ->and(config('az-guard.models.role'))->toBe(AzGuardRoleModel::class)
-        ->and(app(ContextGuard::class))->toBeInstanceOf(TenantContextGuard::class)
-        ->and(app(PermissionLayer::class))->toBeInstanceOf(WorkspacePermissionLayer::class);
+        ->and(resolve(ContextGuard::class))->toBeInstanceOf(TenantContextGuard::class)
+        ->and(resolve(PermissionLayer::class))->toBeInstanceOf(WorkspacePermissionLayer::class);
 });
 
 it('retains an existing permission layer binding when bridge binding is disabled', function (): void {
@@ -60,7 +60,7 @@ it('retains an existing permission layer binding when bridge binding is disabled
 
     (new AccessAzguardRegistrar)->register($this->app);
 
-    expect(app(PermissionLayer::class))->toBe($layer);
+    expect(resolve(PermissionLayer::class))->toBe($layer);
 });
 
 it('has usable bridge options defaults on an empty configuration', function (): void {

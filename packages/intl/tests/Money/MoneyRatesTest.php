@@ -54,7 +54,7 @@ function sampleRate(string $base = 'USD', string $quote = 'EUR', string $rate = 
 }
 
 it('FX-01 returns pinned currency exponents and rejects unknown codes', function (): void {
-    $metadata = app(CurrencyMetadata::class);
+    $metadata = resolve(CurrencyMetadata::class);
 
     expect($metadata->get('USD')->exponent)->toBe(2)
         ->and($metadata->get('JPY')->exponent)->toBe(0)
@@ -71,7 +71,7 @@ it('FX-02 stores positive canonical decimal rates with base to quote orientation
 });
 
 it('FX-03 imports immutable snapshots idempotently and detects conflicts', function (): void {
-    $importer = app(RateImporter::class);
+    $importer = resolve(RateImporter::class);
     $snapshot = sampleRate();
     $token = new WriteToken(
         operationKey: hash('sha256', 'fx-03'),
@@ -97,7 +97,7 @@ it('FX-03 imports immutable snapshots idempotently and detects conflicts', funct
 });
 
 it('FX-05 distinguishes missing and stale lookup results', function (): void {
-    $provider = app(RateProvider::class);
+    $provider = resolve(RateProvider::class);
 
     $missing = $provider->lookup(new RateQuery(
         base: 'USD', quote: 'EUR', onDate: '2026-09-15', sourceSelection: ['manual'], publicationCutoff: null, maxAgeDays: 0,
@@ -105,7 +105,7 @@ it('FX-05 distinguishes missing and stale lookup results', function (): void {
 
     expect($missing->status)->toBe('missing');
 
-    $importer = app(RateImporter::class);
+    $importer = resolve(RateImporter::class);
     $snapshot = sampleRate(validOn: '2026-01-01');
     $importer->import(
         scope: intlScope(),
@@ -121,7 +121,7 @@ it('FX-05 distinguishes missing and stale lookup results', function (): void {
 });
 
 it('FX-06 converts with explicit rounding and deterministic receipts', function (): void {
-    $converter = app(CurrencyConverter::class);
+    $converter = resolve(CurrencyConverter::class);
     $rate = sampleRate();
     $policy = new ConversionPolicy(
         roundingMode: RoundingMode::HalfUp,
@@ -139,7 +139,7 @@ it('FX-06 converts with explicit rounding and deterministic receipts', function 
 });
 
 it('FX-07 preserves same-currency identity without provider lookup', function (): void {
-    $converter = app(CurrencyConverter::class);
+    $converter = resolve(CurrencyConverter::class);
     $amount = Money::of('42.00', 'USD');
     $rate = sampleRate(base: 'USD', quote: 'USD', rate: '1');
     $policy = new ConversionPolicy(
@@ -155,7 +155,7 @@ it('FX-07 preserves same-currency identity without provider lookup', function ()
 });
 
 it('FX-08 converts negative zero and large signed amounts exactly', function (): void {
-    $converter = app(CurrencyConverter::class);
+    $converter = resolve(CurrencyConverter::class);
     $rate = sampleRate(rate: '2');
     $policy = new ConversionPolicy(
         roundingMode: RoundingMode::HalfUp,
@@ -172,10 +172,10 @@ it('FX-08 converts negative zero and large signed amounts exactly', function ():
 });
 
 it('FX-09 formats with plain exact ISO fallback', function (): void {
-    $formatter = app(MoneyFormatter::class);
-    $locale = app(LocaleResolver::class)->resolve(
+    $formatter = resolve(MoneyFormatter::class);
+    $locale = resolve(LocaleResolver::class)->resolve(
         inputs: new LocaleInputs(projectedUserTag: 'en', accountSettingsTag: null, requestContextKey: 'fx'),
-        policy: app(LocalePolicy::class),
+        policy: resolve(LocalePolicy::class),
     );
 
     $formatted = $formatter->format(
@@ -189,7 +189,7 @@ it('FX-09 formats with plain exact ISO fallback', function (): void {
 });
 
 it('FX-10 keeps old snapshots addressable after corrected import revision', function (): void {
-    $importer = app(RateImporter::class);
+    $importer = resolve(RateImporter::class);
     $old = sampleRate(rate: '0.90', validOn: '2026-09-14');
     $old = new RateSnapshot(
         schema: $old->schema,

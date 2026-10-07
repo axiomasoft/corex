@@ -20,6 +20,6 @@ final class StaleRegistryRevision extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::StaleRegistryRevision, ErrorCategory::Conflict, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::StaleRegistryRevision, category: ErrorCategory::Conflict, retryable: false);
     }
 }

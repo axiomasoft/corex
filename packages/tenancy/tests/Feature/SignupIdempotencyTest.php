@@ -99,11 +99,11 @@ function pendingSignupAccount(string $clusterId, array $signup = []): string
 
 function qualifiedSignupTemplate(string $clusterId, string $templateId): TemplateIntegrityVerifier
 {
-    return new class($clusterId, $templateId) implements TemplateIntegrityVerifier
+    return new readonly class($clusterId, $templateId) implements TemplateIntegrityVerifier
     {
         public function __construct(
-            private readonly string $clusterId,
-            private readonly string $templateId,
+            private string $clusterId,
+            private string $templateId,
         ) {}
 
         public function qualify(ClaimRequest $request): QualifiedTemplate
@@ -144,7 +144,7 @@ function signupClaim(string $connection, TemplateIntegrityVerifier $verifier): C
     signupConnection($connection);
 
     return new ClaimAccountSignup(
-        connections: app(ConnectionResolverInterface::class),
+        connections: resolve(ConnectionResolverInterface::class),
         centralConnection: $connection,
         templateIntegrity: $verifier,
     );

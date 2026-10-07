@@ -27,7 +27,7 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Schema;
@@ -105,9 +105,9 @@ final class MutableTenantResolver implements TenantContextResolver
 }
 
 /** AuditRetention with a fixed cutoff, for the prune test. */
-final class FixedAuditRetention implements AuditRetention
+final readonly class FixedAuditRetention implements AuditRetention
 {
-    public function __construct(private readonly ?DateTimeImmutable $cutoff) {}
+    public function __construct(private ?DateTimeImmutable $cutoff) {}
 
     public function olderThan(): ?DateTimeImmutable
     {
@@ -167,7 +167,7 @@ beforeEach(function (): void {
 });
 
 afterEach(function (): void {
-    Carbon::setTestNow();
+    Date::setTestNow();
 });
 
 it('enqueues on the sync path instead of writing synchronously (AC-23)', function (): void {
@@ -430,7 +430,7 @@ it('snapshots occurred_at and workspace_id at enqueue, not in the worker (A17)',
 
     $logger = app()->make(QueuedAuditLogger::class, ['connection' => AUDIT_TEST_CONNECTION, 'tenantContext' => $resolver]);
 
-    Carbon::setTestNow('2026-07-14 10:00:00');
+    Date::setTestNow('2026-07-14 10:00:00');
 
     $logger->record(new AuditEntry(
         action: 'created',
@@ -449,7 +449,7 @@ it('snapshots occurred_at and workspace_id at enqueue, not in the worker (A17)',
     // Tenant context and clock move AFTER dispatch but BEFORE the worker runs —
     // a worker that resolved tenant/now itself would write the wrong values.
     $resolver->workspaceId = (string) Str::uuid7();
-    Carbon::setTestNow('2026-07-14 12:00:00');
+    Date::setTestNow('2026-07-14 12:00:00');
 
     app()->call([$captured, 'handle']);
 
@@ -517,7 +517,7 @@ it('paginates the audit journal by the monotonic seq cursor in insertion order (
 });
 
 it('corex:audit:prune deletes rows older than the retention boundary and keeps fresh ones (A64)', function (): void {
-    Carbon::setTestNow('2026-06-01 00:00:00');
+    Date::setTestNow('2026-06-01 00:00:00');
     auditLogger()->record(new AuditEntry(
         action: 'created',
         actorType: ActorType::System,
@@ -525,7 +525,7 @@ it('corex:audit:prune deletes rows older than the retention boundary and keeps f
         entityId: (string) Str::uuid7(),
     ));
 
-    Carbon::setTestNow('2026-07-14 00:00:00');
+    Date::setTestNow('2026-07-14 00:00:00');
     auditLogger()->record(new AuditEntry(
         action: 'created',
         actorType: ActorType::System,
@@ -533,7 +533,7 @@ it('corex:audit:prune deletes rows older than the retention boundary and keeps f
         entityId: (string) Str::uuid7(),
     ));
 
-    Carbon::setTestNow();
+    Date::setTestNow();
 
     expect(AuditLog::on(AUDIT_TEST_CONNECTION)->count())->toBe(2);
 
@@ -553,7 +553,7 @@ it('corex:audit:prune with the default NullAuditRetention deletes nothing', func
         entityId: (string) Str::uuid7(),
     ));
 
-    expect(app(AuditRetention::class))->toBeInstanceOf(NullAuditRetention::class);
+    expect(resolve(AuditRetention::class))->toBeInstanceOf(NullAuditRetention::class);
 
     $this->artisan('corex:audit:prune', ['--database' => AUDIT_TEST_CONNECTION])->assertSuccessful();
 

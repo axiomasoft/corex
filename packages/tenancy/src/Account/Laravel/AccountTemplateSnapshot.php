@@ -18,6 +18,6 @@ final class AccountTemplateSnapshot
     {
         $tenant = Account::on($centralConnection)->findOrFail($account->id);
 
-        return new TemplateAccountView($tenant->template_version, $tenant->cluster_id, $tenant->db_name);
+        return new TemplateAccountView(templateVersion: $tenant->template_version, clusterId: $tenant->cluster_id, databaseName: $tenant->db_name);
     }
 }

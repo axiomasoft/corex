@@ -1,0 +1,25 @@
+{
+  "classification": "source",
+  "commands": [
+    {
+      "exit": 0,
+      "output": "validate.json",
+      "role": "validate",
+      "sha256": "69e66fb0c56336ecb0ad2e078cfee655fc448dcfe1c8f7301e50f7325596d048"
+    },
+    {
+      "exit": 0,
+      "output": "audit.json",
+      "role": "audit",
+      "sha256": "c45a2e4ef95d39ab0ee1481ac3d63c6fa58070593ea7a6a1df2602618894d012"
+    }
+  ],
+  "effective_manifest_sha256": "1a058a287c9d0edcad01d1ce286e2c9e81f839e52159e0c4bbe9f069c9bd56a8",
+  "lock_kind": "source",
+  "lock_sha256": "b9b0f90ccf8c13a72b8e073ba9852c68871d11dc982ece2405a9d75434544a19",
+  "manifest": "packages/tasks/composer.json",
+  "manifest_sha256": "1a058a287c9d0edcad01d1ce286e2c9e81f839e52159e0c4bbe9f069c9bd56a8",
+  "name": "axiomasoft/corex-tasks",
+  "source_lock_sha256": "b9b0f90ccf8c13a72b8e073ba9852c68871d11dc982ece2405a9d75434544a19",
+  "status": "GREEN"
+}

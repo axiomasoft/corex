@@ -31,6 +31,6 @@ final class CrossWorkspaceMoveException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::CrossWorkspaceMoveException, ErrorCategory::Conflict, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::CrossWorkspaceMoveException, category: ErrorCategory::Conflict, retryable: false);
     }
 }

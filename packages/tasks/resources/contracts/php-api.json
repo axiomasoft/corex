@@ -1023,7 +1023,7 @@
             "layer": "spi-call",
             "since": "1.0",
             "final": true,
-            "readonly": false,
+            "readonly": true,
             "abstract": false,
             "extends": [],
             "implements": [
@@ -1046,7 +1046,7 @@
                             "variadic": false,
                             "optional": false,
                             "default": null,
-                            "flags": 68
+                            "flags": 4
                         },
                         {
                             "name": "access",
@@ -1055,7 +1055,7 @@
                             "variadic": false,
                             "optional": false,
                             "default": null,
-                            "flags": 68
+                            "flags": 4
                         },
                         {
                             "name": "receipts",
@@ -1064,7 +1064,7 @@
                             "variadic": false,
                             "optional": true,
                             "default": "null",
-                            "flags": 68
+                            "flags": 4
                         }
                     ],
                     "return": null,

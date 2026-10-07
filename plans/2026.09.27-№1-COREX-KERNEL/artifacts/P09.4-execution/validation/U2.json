@@ -1,0 +1,29 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:check-evidence:v1",
+  "evidence_id": "PLAN3.P09.4.U2.2026-10-07T08:41:09.688102+00:00",
+  "check_id": "V1",
+  "subject": "PLAN3.P09.4/U2",
+  "procedure": {
+    "cmd": "scripts/php84 vendor/bin/pest tests/Arch/UnusedPublicGateTest.php",
+    "cwd": "/home/vostrikov/projects/packages/corex"
+  },
+  "candidate": {
+    "head": "9cff6888700e794ce6b310a7ece96a89544a9c7e",
+    "dirty_digest": "e527c6d511bce3332a1c4ac9996e1ccab2fa61fe6eb60d3dd85072e72f8f07cb"
+  },
+  "started_at": "2026-10-07T08:41:09.688102+00:00",
+  "finished_at": "2026-10-07T08:41:11.212281+00:00",
+  "producer": {
+    "kind": "executor",
+    "actor": {
+      "provider": "codex",
+      "model": "gpt-6.4-sol",
+      "effort": "xhigh"
+    }
+  },
+  "log": {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/U2.log",
+    "sha256": "2e34e0c3fd2d3c0c0dae3218dd77356db89ccbe12e6b9ae350b318fd739e825b"
+  },
+  "exit": 0
+}

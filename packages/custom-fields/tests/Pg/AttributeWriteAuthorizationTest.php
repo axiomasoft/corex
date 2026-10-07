@@ -81,7 +81,7 @@ it('denies each engine atomically before database mutation', function (string $e
 
 it('checks the tenant connection before catalogue or database mutation', function (string $engine): void {
     $counter = (object) ['calls' => 0];
-    $catalogue = new class($counter) implements FieldCatalogue
+    $catalogue = new readonly class($counter) implements FieldCatalogue
     {
         public function __construct(private object $counter) {}
 

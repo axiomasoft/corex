@@ -16,6 +16,6 @@ final class StaleCursorException extends InvalidArgumentException implements Des
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(RecurrenceErrorCode::StaleCursorException, ErrorCategory::Conflict, retryable: false);
+        return new ErrorDescriptor(code: RecurrenceErrorCode::StaleCursorException, category: ErrorCategory::Conflict, retryable: false);
     }
 }

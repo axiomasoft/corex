@@ -26,33 +26,33 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 use UnexpectedValueException;
 
-final class OperationDispatcher implements \CoreX\Operations\Invocation\Contracts\OperationDispatcher
+final readonly class OperationDispatcher implements \CoreX\Operations\Invocation\Contracts\OperationDispatcher
 {
     public function __construct(
-        private readonly OperationRegistry $operations,
-        private readonly PrincipalResolver $principals,
-        private readonly ContextResolver $contexts,
-        private readonly ResponseSerializer $serializer,
-        private readonly Factory $validation,
-        private readonly Container $container,
-        private readonly ErrorMapper $errors,
-        private readonly OperationInvoker $invoker,
+        private OperationRegistry $operations,
+        private PrincipalResolver $principals,
+        private ContextResolver $contexts,
+        private ResponseSerializer $serializer,
+        private Factory $validation,
+        private Container $container,
+        private ErrorMapper $errors,
+        private OperationInvoker $invoker,
     ) {}
 
     /** The application explicitly mounts this boundary after its trusted tenancy/auth pipeline. */
     public function dispatch(Request $request, string $version, string $path): JsonResponse
     {
         $inherited = $request->attributes->get(InvocationMetadata::class);
-        $metadata = $inherited instanceof InvocationMetadata ? $inherited : InvocationMetadataFactory::fromRequest($request, $version);
+        $metadata = $inherited instanceof InvocationMetadata ? $inherited : InvocationMetadataFactory::fromRequest(request: $request, version: $version);
         $requestId = $metadata->requestId;
 
         try {
-            [$operation, $parameters] = $this->operations->match($version, $request->method(), '/'.ltrim($path, '/'));
-            $metadata = new InvocationMetadata($requestId, $version, $operation->id, $request->method(), $metadata->correlationId, $metadata->accept);
+            [$operation, $parameters] = $this->operations->match(version: $version, method: $request->method(), path: '/'.ltrim($path, '/'));
+            $metadata = new InvocationMetadata(requestId: $requestId, version: $version, operationId: $operation->id, method: $request->method(), correlationId: $metadata->correlationId, accept: $metadata->accept);
             $principal = $this->principals->resolve($request)
-                ?? throw new ApiError(OperationsErrorCode::AuthenticationRequired, 401, 'Authentication is required.');
-            $context = $this->contexts->resolve($request, $principal, $metadata);
-            $input = $this->input($request, $operation);
+                ?? throw new ApiError(errorCode: OperationsErrorCode::AuthenticationRequired, status: 401, message: 'Authentication is required.');
+            $context = $this->contexts->resolve(request: $request, principal: $principal, metadata: $metadata);
+            $input = $this->input(request: $request, operation: $operation);
             $previousRequest = $this->container->bound('request') ? $this->container->make('request') : null;
             $this->container->instance('request', $request);
 
@@ -70,7 +70,7 @@ final class OperationDispatcher implements \CoreX\Operations\Invocation\Contract
                 }
             }
 
-            $response = $this->serializer->success(JsonDocuments::array($result->data), $operation->successStatus, $metadata);
+            $response = $this->serializer->success(data: JsonDocuments::array($result->data), status: $operation->successStatus, metadata: $metadata);
 
             if (JsonDocuments::map($result->metadata) !== []) {
                 $body = $response->getData(true);
@@ -85,7 +85,7 @@ final class OperationDispatcher implements \CoreX\Operations\Invocation\Contract
 
             return $response;
         } catch (Throwable $error) {
-            $response = $this->serializer->error($this->errors->map($error), $metadata);
+            $response = $this->serializer->error(error: $this->errors->map($error), metadata: $metadata);
 
             if ($response->getStatusCode() === 429 && $error instanceof HttpExceptionInterface) {
                 $seconds = filter_var($error->getHeaders()['Retry-After'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);

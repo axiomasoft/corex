@@ -28,6 +28,6 @@ final class UnknownMessageContract extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::UnknownMessageContract, ErrorCategory::Validation, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::UnknownMessageContract, category: ErrorCategory::Validation, retryable: false);
     }
 }

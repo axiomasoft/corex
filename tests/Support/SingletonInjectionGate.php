@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Support;
 
+use Illuminate\Contracts\Config\Repository;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionInterface;
+use Illuminate\Http\Request;
 use ReflectionClass;
 use ReflectionIntersectionType;
 use ReflectionNamedType;
@@ -21,16 +26,16 @@ use Stringable;
 final class SingletonInjectionGate
 {
     /** @var list<string> */
-    public const FORBIDDEN_TYPES = [
-        'Illuminate\Contracts\Foundation\Application',
-        'Illuminate\Http\Request',
-        'Illuminate\Contracts\Config\Repository',
+    public const array FORBIDDEN_TYPES = [
+        Application::class,
+        Request::class,
+        Repository::class,
     ];
 
     /** @var list<string> */
-    public const CONNECTION_TYPES = [
-        'Illuminate\Database\Connection',
-        'Illuminate\Database\ConnectionInterface',
+    public const array CONNECTION_TYPES = [
+        Connection::class,
+        ConnectionInterface::class,
     ];
 
     /**
@@ -608,13 +613,7 @@ final class SingletonInjectionGate
      */
     private static function isAnyOf(string $name, array $types): bool
     {
-        foreach ($types as $type) {
-            if (is_a($name, $type, true)) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($types, fn ($type) => is_a($name, $type, true));
     }
 
     /**

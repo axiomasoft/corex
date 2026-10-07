@@ -65,9 +65,9 @@ it('persists and dispatches a versioned wakeup envelope on PostgreSQL', function
     ]);
     app()->forgetInstance(WakeupOptions::class);
     app()->forgetScopedInstances();
-    $context = app(TenantContextResolver::class)->current();
+    $context = resolve(TenantContextResolver::class)->current();
 
-    app(WakeupScheduler::class)->schedule(new WakeupRequest(
+    resolve(WakeupScheduler::class)->schedule(new WakeupRequest(
         context: $context,
         kind: 'test.pg-versioned',
         requestKey: 'pg-versioned-envelope',
@@ -81,7 +81,7 @@ it('persists and dispatches a versioned wakeup envelope on PostgreSQL', function
         true,
         flags: JSON_THROW_ON_ERROR,
     );
-    $result = app(DueWakeupSweeper::class)->sweep($context, 10);
+    $result = resolve(DueWakeupSweeper::class)->sweep($context, 10);
 
     expect($payload['_corex']['extension']['version'])->toBe('pg-versioned/1')
         ->and($payload['data'])->toBe(['message' => 'wake'])

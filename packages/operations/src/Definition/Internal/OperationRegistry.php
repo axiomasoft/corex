@@ -11,9 +11,9 @@ use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use LogicException;
 
-final class OperationRegistry implements \CoreX\Operations\Definition\Contracts\OperationRegistry
+final readonly class OperationRegistry implements \CoreX\Operations\Definition\Contracts\OperationRegistry
 {
-    public function __construct(private readonly ModuleRegistry $modules) {}
+    public function __construct(private ModuleRegistry $modules) {}
 
     /** @return list<Operation> Installed code catalogue; activation and authorization are checked on every dispatch. */
     public function all(string $version): array
@@ -26,7 +26,7 @@ final class OperationRegistry implements \CoreX\Operations\Definition\Contracts\
                 continue;
             }
 
-            $operation = OperationFactory::fromDeclaration($api, $this->modules->compiled()->fingerprint);
+            $operation = OperationFactory::fromDeclaration(api: $api, registryFingerprint: $this->modules->compiled()->fingerprint);
             $key = $operation->method.':'.preg_replace('/\{[a-zA-Z_][a-zA-Z0-9_]*\}/', '{}', $operation->path);
 
             if (isset($keys[$key]) || isset($keys['id:'.$operation->id])) {
@@ -76,6 +76,6 @@ final class OperationRegistry implements \CoreX\Operations\Definition\Contracts\
             }
         }
 
-        throw new ApiError(OperationsErrorCode::OperationNotFound, 404, 'Operation not found.');
+        throw new ApiError(errorCode: OperationsErrorCode::OperationNotFound, status: 404, message: 'Operation not found.');
     }
 }

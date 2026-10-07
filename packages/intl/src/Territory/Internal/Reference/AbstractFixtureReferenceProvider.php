@@ -18,9 +18,9 @@ use CoreX\Intl\Territory\Internal\Value;
 abstract class AbstractFixtureReferenceProvider implements GeographyProvider
 {
     /** @var list<array<string, mixed>> */
-    private array $records;
+    private readonly array $records;
 
-    private DatasetManifest $manifest;
+    private readonly DatasetManifest $manifest;
 
     public function __construct(
         private readonly string $provider,

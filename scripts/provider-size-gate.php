@@ -3,6 +3,8 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\ServiceProvider;
+
 /**
  * Blocking provider-size gate (P8.6, D45; thin providers P05.2, D70).
  *
@@ -18,7 +20,7 @@ const EXIT_OK = 0;
 const EXIT_VIOLATION = 1;
 const EXIT_CONFIG = 2;
 
-const PROVIDER_PARENT = 'Illuminate\\Support\\ServiceProvider';
+const PROVIDER_PARENT = ServiceProvider::class;
 const BINDING_METHODS = ['singleton', 'scoped', 'bind', 'bindIf'];
 const MAX_BINDINGS = 8;
 
@@ -439,7 +441,7 @@ function countBindingCalls(string $file): ?array
 
     try {
         $tokens = token_get_all($code, TOKEN_PARSE);
-    } catch (ParseError $error) {
+    } catch (ParseError) {
         fwrite(STDOUT, 'provider-size-gate: '.relativeFromRepo($file)." parse error\n");
         exit(EXIT_VIOLATION);
     }

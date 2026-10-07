@@ -155,7 +155,7 @@ function exportLimitRunner(int $records, int $pages = 1, ?TransferLimits $limits
     {
         private int $served = 0;
 
-        public function __construct(private int $records, private int $pages) {}
+        public function __construct(private readonly int $records, private readonly int $pages) {}
 
         public function page(DataScope $scope, ExportManifest $manifest, ExportCursor $after, TransferLimits $limits): ExportPage
         {
@@ -171,7 +171,7 @@ function exportLimitRunner(int $records, int $pages = 1, ?TransferLimits $limits
             return new ExportPage($rows, $complete ? null : new ExportCursor((string) $this->served, '0', $manifest->schemaHash), $complete);
         }
     };
-    $storage = new class implements TenantStorage
+    $storage = new readonly class implements TenantStorage
     {
         private Filesystem $disk;
 

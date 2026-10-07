@@ -48,21 +48,21 @@ use RuntimeException;
  *
  * @internal
  */
-final class AccountLifecycle
+final readonly class AccountLifecycle
 {
     public function __construct(
-        private readonly string $centralConnection,
-        private readonly PendingPool $pendingPool,
-        private readonly AccountLifecycleFsm $fsm,
-        private readonly TenantDatabaseLifecycle $tenantDatabaseLifecycle,
-        private readonly ImpersonationGuard $impersonationGuard,
-        private readonly TemplateIntegrityVerifier $templateIntegrityVerifier,
-        private readonly AccountLifecyclePolicy $lifecycle,
-        private readonly ConnectionResolverInterface $connections,
-        private readonly ClockInterface $clock,
-        private readonly Dispatcher $events,
-        private readonly ConnectionFactory $connectionFactory,
-        private readonly HostResolverCacheInvalidator $hostCache,
+        private string $centralConnection,
+        private PendingPool $pendingPool,
+        private AccountLifecycleFsm $fsm,
+        private TenantDatabaseLifecycle $tenantDatabaseLifecycle,
+        private ImpersonationGuard $impersonationGuard,
+        private TemplateIntegrityVerifier $templateIntegrityVerifier,
+        private AccountLifecyclePolicy $lifecycle,
+        private ConnectionResolverInterface $connections,
+        private ClockInterface $clock,
+        private Dispatcher $events,
+        private ConnectionFactory $connectionFactory,
+        private HostResolverCacheInvalidator $hostCache,
     ) {}
 
     /**
@@ -119,7 +119,7 @@ final class AccountLifecycle
         $trialEndsAt = $this->clock->now()->modify('+'.$this->lifecycle->trialDays.' days');
 
         $this->db()->transaction(function () use ($account, $trialEndsAt): void {
-            $this->assertLockedTransition($account->id, 'trial');
+            $this->assertLockedTransition(accountId: $account->id, to: 'trial');
             $this->db()->table('root_accounts')
                 ->where('id', $account->id)
                 ->update(['status' => 'trial', 'trial_ends_at' => $trialEndsAt, 'updated_at' => $this->clock->now()]);
@@ -139,7 +139,7 @@ final class AccountLifecycle
                 'updated_at' => $this->clock->now(),
             ]);
 
-            $this->writeEvent($account->id, 'account.trial_started');
+            $this->writeEvent(accountId: $account->id, event: 'account.trial_started');
         });
 
         $this->events->dispatch(new TrialStarted(account: $account, trialEndsAt: $trialEndsAt));
@@ -152,12 +152,12 @@ final class AccountLifecycle
         $this->assertAccountIntegrity($account->id);
 
         $this->db()->transaction(function () use ($account): void {
-            $this->assertLockedTransition($account->id, 'active');
+            $this->assertLockedTransition(accountId: $account->id, to: 'active');
             $this->db()->table('root_accounts')
                 ->where('id', $account->id)
                 ->update(['status' => 'active', 'suspended_at' => null, 'updated_at' => $this->clock->now()]);
 
-            $this->writeEvent($account->id, 'account.activated');
+            $this->writeEvent(accountId: $account->id, event: 'account.activated');
         });
     }
 
@@ -167,12 +167,12 @@ final class AccountLifecycle
         $this->impersonationGuard->assertAllowed(ImpersonationRestrictedAction::DeleteAccount);
 
         $this->db()->transaction(function () use ($account, $reason): void {
-            $this->assertLockedTransition($account->id, 'suspended');
+            $this->assertLockedTransition(accountId: $account->id, to: 'suspended');
             $this->db()->table('root_accounts')
                 ->where('id', $account->id)
                 ->update(['status' => 'suspended', 'suspended_at' => $this->clock->now(), 'updated_at' => $this->clock->now()]);
 
-            $this->writeEvent($account->id, 'account.suspended', ['reason' => $reason]);
+            $this->writeEvent(accountId: $account->id, event: 'account.suspended', payload: ['reason' => $reason]);
         });
 
         $this->events->dispatch(new AccountSuspended(account: $account, reason: $reason));
@@ -185,12 +185,12 @@ final class AccountLifecycle
         $this->assertAccountIntegrity($account->id);
 
         $this->db()->transaction(function () use ($account): void {
-            $this->assertLockedTransition($account->id, 'active');
+            $this->assertLockedTransition(accountId: $account->id, to: 'active');
             $this->db()->table('root_accounts')
                 ->where('id', $account->id)
                 ->update(['status' => 'active', 'suspended_at' => null, 'updated_at' => $this->clock->now()]);
 
-            $this->writeEvent($account->id, 'account.resumed');
+            $this->writeEvent(accountId: $account->id, event: 'account.resumed');
         });
     }
 
@@ -203,7 +203,7 @@ final class AccountLifecycle
         $purgeAfter = $graceUntil->modify('+30 days');
 
         $this->db()->transaction(function () use ($account, $graceUntil, $purgeAfter): void {
-            $this->assertLockedTransition($account->id, 'grace');
+            $this->assertLockedTransition(accountId: $account->id, to: 'grace');
             $this->db()->table('root_accounts')
                 ->where('id', $account->id)
                 ->update([
@@ -213,7 +213,7 @@ final class AccountLifecycle
                     'updated_at' => $this->clock->now(),
                 ]);
 
-            $this->writeEvent($account->id, 'account.grace_started');
+            $this->writeEvent(accountId: $account->id, event: 'account.grace_started');
         });
 
         $this->events->dispatch(new GraceStarted(account: $account, graceUntil: $graceUntil));
@@ -224,21 +224,21 @@ final class AccountLifecycle
     {
         $this->impersonationGuard->assertAllowed(ImpersonationRestrictedAction::DeleteAccount);
 
-        return $this->externalOperation($account->id, function () use ($account): string {
+        return $this->externalOperation(accountId: $account->id, operation: function () use ($account): string {
             $this->db()->transaction(function () use ($account): void {
                 // An interrupted export can be retried while access remains closed.
                 if ($this->currentStatus($account->id) === 'exporting') {
                     return;
                 }
-                $this->assertLockedTransition($account->id, 'exporting');
+                $this->assertLockedTransition(accountId: $account->id, to: 'exporting');
                 $this->db()->table('root_accounts')
                     ->where('id', $account->id)
                     ->update(['status' => 'exporting', 'updated_at' => $this->clock->now()]);
 
-                $this->writeEvent($account->id, 'account.export_requested');
+                $this->writeEvent(accountId: $account->id, event: 'account.export_requested');
             });
 
-            return $this->tenantDatabaseLifecycle->export($account, 'offboarding');
+            return $this->tenantDatabaseLifecycle->export(account: $account, kind: 'offboarding');
         });
     }
 
@@ -251,17 +251,16 @@ final class AccountLifecycle
     {
         $this->impersonationGuard->assertAllowed(ImpersonationRestrictedAction::DeleteAccount);
 
-        $this->externalOperation($account->id, function () use ($account): void {
+        $this->externalOperation(accountId: $account->id, operation: function () use ($account): void {
             $current = $this->currentStatus($account->id);
 
             if ($current === 'deleted') {
                 return;
             }
-            $this->fsm->assertTransition($current, 'deleted');
+            $this->fsm->assertTransition(from: $current, to: 'deleted');
 
             $latestExportStatus = $this->db()->table('root_account_exports')
-                ->where('account_id', $account->id)
-                ->orderByDesc('created_at')
+                ->where('account_id', $account->id)->latest()
                 ->orderByDesc('id')
                 ->value('status');
 
@@ -275,7 +274,7 @@ final class AccountLifecycle
             $this->tenantDatabaseLifecycle->drop($account);
 
             $this->db()->transaction(function () use ($account): void {
-                $this->assertLockedTransition($account->id, 'deleted');
+                $this->assertLockedTransition(accountId: $account->id, to: 'deleted');
                 $this->db()->table('root_accounts')
                     ->where('id', $account->id)
                     ->update(['status' => 'deleted', 'deleted_at' => $this->clock->now(), 'updated_at' => $this->clock->now()]);
@@ -288,7 +287,7 @@ final class AccountLifecycle
                     ->whereNull('deleted_at')
                     ->update(['deleted_at' => $this->clock->now(), 'updated_at' => $this->clock->now()]);
 
-                $this->writeEvent($account->id, 'account.purged');
+                $this->writeEvent(accountId: $account->id, event: 'account.purged');
             });
         });
     }
@@ -301,14 +300,14 @@ final class AccountLifecycle
         if ($status === null) {
             throw new RuntimeException("Account [{$accountId}] not found in root_accounts.");
         }
-        $this->fsm->assertTransition(DatabaseValue::text($status), $to);
+        $this->fsm->assertTransition(from: DatabaseValue::text($status), to: $to);
     }
 
     private function assertAccountIntegrity(string $accountId): void
     {
         $account = Account::on($this->centralConnection)->findOrFail($accountId);
 
-        $this->templateIntegrityVerifier->verifyAccount(new TemplateAccountView($account->template_version, $account->cluster_id, $account->db_name));
+        $this->templateIntegrityVerifier->verifyAccount(new TemplateAccountView(templateVersion: $account->template_version, clusterId: $account->cluster_id, databaseName: $account->db_name));
     }
 
     /**

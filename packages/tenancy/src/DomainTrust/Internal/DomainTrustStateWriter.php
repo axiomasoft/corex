@@ -23,13 +23,13 @@ use Illuminate\Support\Str;
 use Psr\Clock\ClockInterface;
 use Throwable;
 
-final class DomainTrustStateWriter
+final readonly class DomainTrustStateWriter
 {
     public function __construct(
-        private readonly ConnectionResolverInterface $connections,
-        private readonly ClockInterface $clock,
-        private readonly Dispatcher $events,
-        private readonly string $centralConnection,
+        private ConnectionResolverInterface $connections,
+        private ClockInterface $clock,
+        private Dispatcher $events,
+        private string $centralConnection,
     ) {}
 
     public function generationFor(string $accountId, NormalizedHost $host): int

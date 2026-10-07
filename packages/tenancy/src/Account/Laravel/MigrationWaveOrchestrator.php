@@ -34,17 +34,17 @@ use Throwable;
  * something this class enforces — deliberately out of scope.
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class MigrationWaveOrchestrator
+final readonly class MigrationWaveOrchestrator
 {
     /**
      * @param  Closure(AccountRef):void|null  $migrationRunner
      */
     public function __construct(
-        private readonly string $centralConnection,
-        private readonly TenancyManager $tenancy,
-        private readonly TemplateIntegrityVerifier $templateIntegrityVerifier,
-        private readonly SchemaMigrator $schema,
-        private readonly ?Closure $migrationRunner = null,
+        private string $centralConnection,
+        private TenancyManager $tenancy,
+        private TemplateIntegrityVerifier $templateIntegrityVerifier,
+        private SchemaMigrator $schema,
+        private ?Closure $migrationRunner = null,
     ) {}
 
     public function runBatch(string $batchId, int $chunkSize = 5): void
@@ -59,7 +59,7 @@ final class MigrationWaveOrchestrator
         foreach ($this->targetAccountStates($batch)->chunk($chunkSize) as $chunk) {
             /** @var Collection<int, AccountSchemaState> $chunk */
             foreach ($chunk as $state) {
-                $this->migrateOne($state, $batch);
+                $this->migrateOne(state: $state, batch: $batch);
             }
         }
 
@@ -131,7 +131,7 @@ final class MigrationWaveOrchestrator
         );
 
         try {
-            $this->tenancy->runFor($accountRef, null, function () use ($accountRef): void {
+            $this->tenancy->runFor(account: $accountRef, workspace: null, callback: function () use ($accountRef): void {
                 $runner = $this->migrationRunner ?? $this->defaultMigrationRunner();
                 $runner($accountRef);
             });
@@ -167,7 +167,7 @@ final class MigrationWaveOrchestrator
                 // transaction end.
                 DB::connection('tenant')->select("SELECT pg_advisory_xact_lock(hashtext('fld_ddl')) /* account:{$account->id} */");
 
-                $this->schema->migrate(SchemaScope::Tenant, 'tenant');
+                $this->schema->migrate(scope: SchemaScope::Tenant, connection: 'tenant');
             });
         };
     }

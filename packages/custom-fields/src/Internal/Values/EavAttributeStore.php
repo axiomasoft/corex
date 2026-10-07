@@ -51,10 +51,10 @@ final readonly class EavAttributeStore implements AttributeStore
 
     public function read(DataScope $scope, RecordRef $record, FieldSelection $fields): ValueBag
     {
-        (new ScopeConnectionGuard($this->connection))->assertMatches($scope);
-        $this->authorize($scope, $record, $fields->fields, 'read');
+        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
+        $this->authorize(scope: $scope, record: $record, fields: $fields->fields, action: 'read');
         $this->validator()->validateSelection(scope: $scope, record: $record, selection: $fields);
-        $definitions = $this->definitions($scope, $record->entity, $fields->fields);
+        $definitions = $this->definitions(scope: $scope, entity: $record->entity, fields: $fields->fields);
         $physicalFields = $this->physicalReadKeys($definitions);
         $rows = $this->connection->table($this->tables->eavValues)->where('entity', $record->entity)->where('record_id', $record->id)->whereIn('field', $physicalFields)->get();
         $values = [];
@@ -62,18 +62,18 @@ final readonly class EavAttributeStore implements AttributeStore
             $values[Value::text($row->field)] = $this->decode(Value::text($row->value));
         }
 
-        $values = $this->projectValues($definitions, Value::map($values));
-        $values = Validation::validatedMap($values, 'attribute values');
+        $values = $this->projectValues(definitions: $definitions, stored: Value::map($values));
+        $values = Validation::validatedMap(value: $values, name: 'attribute values');
 
         return new ValueBag(values: $values);
     }
 
     public function write(DataScope $scope, RecordRef $record, ValuePatch $patch, WriteToken $token): AttributeWriteResult
     {
-        (new ScopeConnectionGuard($this->connection))->assertMatches($scope);
+        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
         $fields = array_keys($patch->values);
         $snapshot = $this->writeGuard()->assertCanWrite(scope: $scope, record: $record, patch: $patch);
-        $definitions = $this->definitionsFromSnapshot($snapshot, $fields);
+        $definitions = $this->definitionsFromSnapshot(snapshot: $snapshot, fields: $fields);
 
         return $this->connection->transaction(function () use ($scope, $record, $patch, $token, $snapshot, $definitions): AttributeWriteResult {
             $tokens = $this->connection->table($this->tables->writeTokens);
@@ -102,10 +102,10 @@ final readonly class EavAttributeStore implements AttributeStore
                 ->pluck('value', 'field')
                 ->map(fn (mixed $value): mixed => $this->decode(Value::text($value)))
                 ->all();
-            $this->assertNoDrift($definitions, Value::map($existingValues));
+            $this->assertNoDrift(definitions: $definitions, stored: Value::map($existingValues));
 
             $version = hash('sha256', $token->operationKey."\n".$token->payloadHash."\n".$currentVersion);
-            foreach ($this->expandPatch($definitions, $patch->values) as $field => $value) {
+            foreach ($this->expandPatch(definitions: $definitions, patch: $patch->values) as $field => $value) {
                 $this->connection->table($this->tables->eavValues)->updateOrInsert(
                     ['entity' => $record->entity, 'record_id' => $record->id, 'field' => $field],
                     ['value' => $this->encode($value)],
@@ -130,15 +130,15 @@ final readonly class EavAttributeStore implements AttributeStore
 
     public function loadMany(DataScope $scope, RecordSelection $records, FieldSelection $fields): ValueBatch
     {
-        (new ScopeConnectionGuard($this->connection))->assertMatches($scope);
+        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
         foreach ($records->records as $record) {
-            $this->authorize($scope, $record, $fields->fields, 'read');
+            $this->authorize(scope: $scope, record: $record, fields: $fields->fields, action: 'read');
             $this->validator()->validateSelection(scope: $scope, record: $record, selection: $fields);
         }
         $definitionsByEntity = [];
         $physicalFields = [];
         foreach ($this->recordsByEntity($records) as $entity => $_ids) {
-            $definitionsByEntity[$entity] = $this->definitions($scope, $entity, $fields->fields);
+            $definitionsByEntity[$entity] = $this->definitions(scope: $scope, entity: $entity, fields: $fields->fields);
             $physicalFields = array_merge($physicalFields, $this->physicalReadKeys($definitionsByEntity[$entity]));
         }
 
@@ -159,10 +159,10 @@ final readonly class EavAttributeStore implements AttributeStore
         }
 
         return new ValueBatch(records: array_map(
-            fn (RecordRef $record): ValueBag => new ValueBag(values: Validation::validatedMap($this->projectValues(
-                $definitionsByEntity[$record->entity],
-                Value::map($valuesByRecord[$record->entity."\n".$record->id] ?? []),
-            ), 'attribute values')),
+            fn (RecordRef $record): ValueBag => new ValueBag(values: Validation::validatedMap(value: $this->projectValues(
+                definitions: $definitionsByEntity[$record->entity],
+                stored: Value::map($valuesByRecord[$record->entity."\n".$record->id] ?? []),
+            ), name: 'attribute values')),
             $records->records,
         ));
     }
@@ -225,7 +225,7 @@ final readonly class EavAttributeStore implements AttributeStore
      */
     private function definitions(DataScope $scope, string $entity, array $fields): array
     {
-        return $this->definitionsFromSnapshot($this->catalogue->snapshot($scope, $entity), $fields);
+        return $this->definitionsFromSnapshot(snapshot: $this->catalogue->snapshot(scope: $scope, entity: $entity), fields: $fields);
     }
 
     /**
@@ -255,7 +255,7 @@ final readonly class EavAttributeStore implements AttributeStore
     {
         $keys = [];
         foreach ($definitions as $logicalKey => $definition) {
-            $keys = array_merge($keys, $this->readKeys($logicalKey, $definition));
+            $keys = array_merge($keys, $this->readKeys(logicalKey: $logicalKey, definition: $definition));
         }
 
         return array_values(array_unique($keys));
@@ -270,12 +270,12 @@ final readonly class EavAttributeStore implements AttributeStore
     {
         $projected = [];
         foreach ($definitions as $logicalKey => $definition) {
-            foreach ($this->readKeys($logicalKey, $definition) as $physicalKey) {
+            foreach ($this->readKeys(logicalKey: $logicalKey, definition: $definition) as $physicalKey) {
                 if (! array_key_exists($physicalKey, $stored)) {
                     continue;
                 }
 
-                $projected[$logicalKey] = $this->toLogicalValue($definition, $physicalKey, $stored[$physicalKey]);
+                $projected[$logicalKey] = $this->toLogicalValue(definition: $definition, physicalKey: $physicalKey, value: $stored[$physicalKey]);
 
                 break;
             }
@@ -294,10 +294,10 @@ final readonly class EavAttributeStore implements AttributeStore
         $expanded = [];
         foreach ($patch as $logicalKey => $value) {
             $definition = $definitions[$logicalKey] ?? ['key' => $logicalKey];
-            foreach ($this->writeKeys($logicalKey, $definition) as $physicalKey) {
-                $physicalValue = $this->toPhysicalValue($definition, $physicalKey, $value);
+            foreach ($this->writeKeys(logicalKey: $logicalKey, definition: $definition) as $physicalKey) {
+                $physicalValue = $this->toPhysicalValue(definition: $definition, physicalKey: $physicalKey, value: $value);
 
-                if (array_key_exists($physicalKey, $expanded) && ! $this->sameValue($expanded[$physicalKey], $physicalValue)) {
+                if (array_key_exists($physicalKey, $expanded) && ! $this->sameValue(left: $expanded[$physicalKey], right: $physicalValue)) {
                     throw new KeyConflict("Attribute writes disagree on physical key [{$physicalKey}].");
                 }
                 $expanded[$physicalKey] = $physicalValue;
@@ -316,14 +316,14 @@ final readonly class EavAttributeStore implements AttributeStore
         foreach ($definitions as $logicalKey => $definition) {
             $canonical = null;
             $found = false;
-            foreach ($this->readKeys($logicalKey, $definition) as $physicalKey) {
+            foreach ($this->readKeys(logicalKey: $logicalKey, definition: $definition) as $physicalKey) {
                 if (! array_key_exists($physicalKey, $stored)) {
                     continue;
                 }
 
-                $value = $this->toLogicalValue($definition, $physicalKey, $stored[$physicalKey]);
+                $value = $this->toLogicalValue(definition: $definition, physicalKey: $physicalKey, value: $stored[$physicalKey]);
 
-                if ($found && ! $this->sameValue($canonical, $value)) {
+                if ($found && ! $this->sameValue(left: $canonical, right: $value)) {
                     throw new VersionConflict("Attribute migration values diverged for [{$logicalKey}].");
                 }
                 $canonical = $value;
@@ -358,7 +358,7 @@ final readonly class EavAttributeStore implements AttributeStore
         $meta = is_array($definition['meta'] ?? null) ? $definition['meta'] : [];
 
         return ($meta['evolution_source_key'] ?? null) === $physicalKey
-            ? $this->transformerRegistry()->toTarget(Value::map($meta), $value)
+            ? $this->transformerRegistry()->toTarget(meta: Value::map($meta), value: $value)
             : $value;
     }
 
@@ -368,7 +368,7 @@ final readonly class EavAttributeStore implements AttributeStore
         $meta = is_array($definition['meta'] ?? null) ? $definition['meta'] : [];
 
         return ($meta['evolution_source_key'] ?? null) === $physicalKey
-            ? $this->transformerRegistry()->toSource(Value::map($meta), $value)
+            ? $this->transformerRegistry()->toSource(meta: Value::map($meta), value: $value)
             : $value;
     }
 

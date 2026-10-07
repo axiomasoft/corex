@@ -400,7 +400,7 @@ final class WebhookApiRetentionTest extends TestCase
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
-        $this->migrateSchemaSets(["axiomasoft/corex-webhooks:{$directory}"], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(["axiomasoft/corex-webhooks:{$directory}"], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
     }
 
     private function configure(string $name, string $driver, string $database): void

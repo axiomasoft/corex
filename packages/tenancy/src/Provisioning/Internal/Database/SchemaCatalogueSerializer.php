@@ -50,9 +50,9 @@ final class SchemaCatalogueSerializer
                 'name' => $table,
                 'persistence' => DatabaseValue::text($relation->persistence),
                 'replica_identity' => DatabaseValue::text($relation->replica_identity),
-                'columns' => $this->columns($connection, schema: $schema, table: $table),
-                'constraints' => $this->constraints($connection, schema: $schema, table: $table),
-                'indexes' => $this->indexes($connection, schema: $schema, table: $table),
+                'columns' => $this->columns(connection: $connection, schema: $schema, table: $table),
+                'constraints' => $this->constraints(connection: $connection, schema: $schema, table: $table),
+                'indexes' => $this->indexes(connection: $connection, schema: $schema, table: $table),
             ];
         }
 
@@ -185,11 +185,11 @@ final class SchemaCatalogueSerializer
         }
 
         if (array_is_list($value)) {
-            return array_map(fn (mixed $item): mixed => $this->sortRecursively($item), $value);
+            return array_map($this->sortRecursively(...), $value);
         }
 
         ksort($value, SORT_STRING);
 
-        return array_map(fn (mixed $item): mixed => $this->sortRecursively($item), $value);
+        return array_map($this->sortRecursively(...), $value);
     }
 }

@@ -53,7 +53,7 @@ final class DurablePayloadPromotedPropertyRule implements Rule
             $forbidden = DurablePayloadTypeChecker::forbiddenInType($readableType);
 
             if ($forbidden !== null) {
-                $errors[] = DurablePayloadTypeChecker::buildError($classReflection->getDisplayName(), $propertyName, $forbidden, $param->getStartLine());
+                $errors[] = DurablePayloadTypeChecker::buildError(className: $classReflection->getDisplayName(), propertyName: $propertyName, forbidden: $forbidden, line: $param->getStartLine());
             }
             $errors = [...$errors, ...DurablePayloadTypeChecker::untypedArrayErrors(type: $readableType, propertyName: $propertyName, line: $param->getStartLine())];
         }

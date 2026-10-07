@@ -11,9 +11,9 @@ use InvalidArgumentException;
 
 final readonly class HmacWebhookSigner implements WebhookSigner
 {
-    private const SECRET_PREFIX = 'whsec_';
+    private const string SECRET_PREFIX = 'whsec_';
 
-    private const SECRET_BYTES = 32;
+    private const int SECRET_BYTES = 32;
 
     public function __construct(
         private WebhookKeyRing $keyRing,

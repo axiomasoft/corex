@@ -50,7 +50,7 @@ final class StrictJson
             }
         }
 
-        return array_filter($members, static fn (int|string $key): bool => is_string($key), ARRAY_FILTER_USE_KEY);
+        return array_filter($members, is_string(...), ARRAY_FILTER_USE_KEY);
     }
 
     private function value(int $depth): mixed

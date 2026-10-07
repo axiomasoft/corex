@@ -86,11 +86,11 @@ function lifecycleStubsPath(string $dir): string
 function lifecycleFor(array $migrationPaths = [], array $codeVersions = []): DatabaseModuleLifecycle
 {
     return new DatabaseModuleLifecycle(
-        registry: app(ModuleRegistry::class),
-        discovery: app(ModuleDiscovery::class),
+        registry: resolve(ModuleRegistry::class),
+        discovery: resolve(ModuleDiscovery::class),
         records: app()->make(DatabaseRecordsRegistrar::class, ['connection' => LIFECYCLE_TEST_CONNECTION]),
         container: app(),
-        tenantContextResolver: app(TenantContextResolver::class), connections: app(ConnectionResolverInterface::class), events: app(Dispatcher::class), clock: app(ClockInterface::class),
+        tenantContextResolver: resolve(TenantContextResolver::class), connections: resolve(ConnectionResolverInterface::class), events: resolve(Dispatcher::class), clock: resolve(ClockInterface::class),
         codeVersions: $codeVersions,
         migrationPaths: $migrationPaths,
         connection: LIFECYCLE_TEST_CONNECTION,
@@ -114,7 +114,7 @@ function lifecycleFromContainer(array $migrationPaths = [], array $codeVersions 
     app()->forgetInstance(RecordsRegistrar::class);
     app()->forgetInstance(ModuleLifecycle::class);
 
-    return app(ModuleLifecycle::class);
+    return resolve(ModuleLifecycle::class);
 }
 
 /** A second, independent session on the same pg database — models a concurrent caller. */
@@ -421,7 +421,7 @@ it('records every transition in mod_lifecycle_log (AC-13)', function (): void {
     // `id` (UUIDv7, ADR-003) is the tiebreak: it's time-sortable and generated
     // immediately before each insert, so it orders correctly even when two
     // entries tie on created_at's wall-clock resolution.
-    $operations = lifecyclePg()->table('mod_lifecycle_log')->where('module_name', 'corex/stub-base')->orderBy('created_at')->orderBy('id')->pluck('operation')->all();
+    $operations = lifecyclePg()->table('mod_lifecycle_log')->where('module_name', 'corex/stub-base')->oldest()->orderBy('id')->pluck('operation')->all();
     expect($operations)->toBe(['enable', 'disable', 'archive']);
 });
 
@@ -644,7 +644,7 @@ it('reads the module state from the injected connection, not the ambient default
 });
 
 it('carries a UUIDv7 eventId, occurredAt, tenant and the canonical B-10 §3.1 name on every lifecycle event (P1.25, A68, test а)', function (): void {
-    $tenant = app(TenantContextResolver::class)->current();
+    $tenant = resolve(TenantContextResolver::class)->current();
 
     $events = [
         new ModuleEnabled('corex/stub-base', 'standard', ['0001_x.php']),
@@ -729,12 +729,12 @@ it('resolves ModuleStateReader from the registered ModulesOptions connection, no
         'edition' => 'standard',
     ]);
 
-    expect(app(ModulesOptions::class)->connection)->toBe(LIFECYCLE_TEST_CONNECTION);
+    expect(resolve(ModulesOptions::class)->connection)->toBe(LIFECYCLE_TEST_CONNECTION);
     app()->forgetInstance(ModuleStateReader::class);
 
     // NO manual `app()->make(DatabaseModuleStateReader::class, ['connection' => ...])` override —
     // resolve straight from the container, exactly as CompiledModuleRegistry does.
-    $reader = app(ModuleStateReader::class);
+    $reader = resolve(ModuleStateReader::class);
 
     expect($reader->enabledFor(lifecycleCtx()))->toHaveKey('corex/stub-base');
 });
@@ -751,6 +751,6 @@ it('enables a module using its registered set without an installed migration dir
     app()->forgetInstance('corex.modules.wiring');
     app()->forgetInstance(ModuleLifecycle::class);
     app()->forgetInstance(RecordsRegistrar::class);
-    app(ModuleLifecycle::class)->enable('corex/stub-base');
+    resolve(ModuleLifecycle::class)->enable('corex/stub-base');
     expect(Schema::connection(LIFECYCLE_TEST_CONNECTION)->hasTable('sba_widgets'))->toBeTrue();
 });

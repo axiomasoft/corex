@@ -21,7 +21,7 @@ final readonly class PanelsOptions
         $providerTag = $config['provider_tag'] ?? 'corex.panels.providers';
 
         if (! is_string($providerTag) || $providerTag === '') {
-            $violations->add('provider_tag', 'must be a non-empty string');
+            $violations->add(path: 'provider_tag', message: 'must be a non-empty string');
             $providerTag = 'corex.panels.providers';
         }
 

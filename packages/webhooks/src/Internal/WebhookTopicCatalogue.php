@@ -45,8 +45,8 @@ final readonly class WebhookTopicCatalogue
                 throw new InvalidArgumentException("Webhook projector [{$topic->projectorService}] is not installed.");
             }
 
-            $contract = $this->declared($topic->name, $topic->version);
-            $this->assertMatchesContract($topic, $contract);
+            $contract = $this->declared(name: $topic->name, version: $topic->version);
+            $this->assertMatchesContract(topic: $topic, contract: $contract);
             $indexed[$topic->id()] = $topic;
         }
 
@@ -56,11 +56,11 @@ final readonly class WebhookTopicCatalogue
 
     public function get(string $name, int $version): WebhookTopic
     {
-        $this->declared($name, $version);
+        $this->declared(name: $name, version: $version);
         $topic = $this->topics["{$name}.v{$version}"] ?? null;
 
         if (! $topic instanceof WebhookTopic) {
-            throw self::rejected(WebhooksErrorCode::UnknownMessageContract, 'The message contract is not a declared webhook topic.');
+            throw self::rejected(code: WebhooksErrorCode::UnknownMessageContract, message: 'The message contract is not a declared webhook topic.');
         }
 
         return $topic;
@@ -71,10 +71,10 @@ final readonly class WebhookTopicCatalogue
      */
     public function assertSchema(string $name, int $version, array $schema): WebhookTopic
     {
-        $topic = $this->get($name, $version);
+        $topic = $this->get(name: $name, version: $version);
 
         if ($schema !== $topic->schema) {
-            throw self::rejected(WebhooksErrorCode::UnknownMessageSchema, 'The message schema is not the declared webhook topic schema.');
+            throw self::rejected(code: WebhooksErrorCode::UnknownMessageSchema, message: 'The message schema is not the declared webhook topic schema.');
         }
 
         return $topic;
@@ -82,34 +82,34 @@ final readonly class WebhookTopicCatalogue
 
     public function admit(WebhookTopic $topic, bool $sensitiveAbility, bool $policyAllows): void
     {
-        $this->get($topic->name, $topic->version);
+        $this->get(name: $topic->name, version: $topic->version);
 
         if ($topic->secret()) {
-            throw self::rejected(WebhooksErrorCode::WebhookSecretDenied, 'Secret webhook topics cannot be subscribed.', 403, ErrorCategory::Authorization);
+            throw self::rejected(code: WebhooksErrorCode::WebhookSecretDenied, message: 'Secret webhook topics cannot be subscribed.', status: 403, category: ErrorCategory::Authorization);
         }
 
         if ($topic->sensitive() && (! $sensitiveAbility || ! $policyAllows)) {
-            throw self::rejected(WebhooksErrorCode::WebhookSensitiveDenied, 'Sensitive webhook topics require an explicit ability.', 403, ErrorCategory::Authorization);
+            throw self::rejected(code: WebhooksErrorCode::WebhookSensitiveDenied, message: 'Sensitive webhook topics require an explicit ability.', status: 403, category: ErrorCategory::Authorization);
         }
     }
 
     private function declared(string $name, int $version): MessageContract
     {
-        if ($version < 1 || ! $this->contracts->has($name, $version)) {
-            throw self::rejected(WebhooksErrorCode::UnknownMessageContract, 'The message contract is not declared.');
+        if ($version < 1 || ! $this->contracts->has(name: $name, version: $version)) {
+            throw self::rejected(code: WebhooksErrorCode::UnknownMessageContract, message: 'The message contract is not declared.');
         }
 
-        return $this->contracts->get($name, $version);
+        return $this->contracts->get(name: $name, version: $version);
     }
 
     private function assertMatchesContract(WebhookTopic $topic, MessageContract $contract): void
     {
         if ($topic->secret()) {
-            throw self::rejected(WebhooksErrorCode::WebhookSecretDenied, 'Secret webhook topics cannot be declared.', 403, ErrorCategory::Authorization);
+            throw self::rejected(code: WebhooksErrorCode::WebhookSecretDenied, message: 'Secret webhook topics cannot be declared.', status: 403, category: ErrorCategory::Authorization);
         }
 
         if ($topic->rank() > $contract->maxPiiClass->rank()) {
-            throw self::rejected(WebhooksErrorCode::UnknownMessageContract, 'The webhook topic exceeds the declared message PII class.');
+            throw self::rejected(code: WebhooksErrorCode::UnknownMessageContract, message: 'The webhook topic exceeds the declared message PII class.');
         }
     }
 
@@ -119,6 +119,6 @@ final readonly class WebhookTopicCatalogue
         int $status = 422,
         ErrorCategory $category = ErrorCategory::Validation,
     ): ApiError {
-        return new ApiError($code, $status, $message, category: $category);
+        return new ApiError(errorCode: $code, status: $status, message: $message, category: $category);
     }
 }

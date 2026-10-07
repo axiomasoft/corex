@@ -38,7 +38,7 @@ beforeEach(function (): void {
     // under its own 'web' group) — EnforceSessionLifetime is already a
     // 'tenant' member and reads the session too, so StartSession must be
     // PREPENDED, not appended, to run first.
-    app('router')->prependMiddlewareToGroup('tenant', StartSession::class);
+    resolve('router')->prependMiddlewareToGroup('tenant', StartSession::class);
 });
 
 afterEach(function (): void {

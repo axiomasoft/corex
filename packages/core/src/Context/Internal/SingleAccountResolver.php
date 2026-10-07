@@ -17,11 +17,11 @@ use CoreX\Context\Data\TenantContext;
  */
 final class SingleAccountResolver implements TenantContextResolver
 {
-    private const ACCOUNT_ID = '00000000-0000-7000-8000-000000000000';
+    private const string ACCOUNT_ID = '00000000-0000-7000-8000-000000000000';
 
-    private const ACCOUNT_SLUG = 'boxed';
+    private const string ACCOUNT_SLUG = 'boxed';
 
-    private const ACCOUNT_STATUS = 'active';
+    private const string ACCOUNT_STATUS = 'active';
 
     public function current(): TenantContext
     {

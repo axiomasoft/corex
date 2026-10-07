@@ -107,12 +107,12 @@ function notificationPreferences(): PreferenceRepository
     app()->instance(SettingsRepository::class, new InMemorySettingsRepository);
     app()->forgetScopedInstances();
 
-    return app(PreferenceRepository::class);
+    return resolve(PreferenceRepository::class);
 }
 
 it('persists a tenant-local inbox intent and replays an identical request', function (): void {
     allowNotifications();
-    $center = app(NotificationCenter::class);
+    $center = resolve(NotificationCenter::class);
 
     $created = $center->notify(notificationContext(), notificationInput('request-1'));
     $replayed = $center->notify(notificationContext(), notificationInput('request-1'));
@@ -132,13 +132,13 @@ it('does not admit notification work before a consumer policy allows it', functi
     app()->instance(NotificationPolicy::class, new DenyNotificationPolicy);
     app()->forgetScopedInstances();
 
-    expect(fn (): mixed => app(NotificationCenter::class)->notify(notificationContext(), notificationInput('denied')))
+    expect(fn (): mixed => resolve(NotificationCenter::class)->notify(notificationContext(), notificationInput('denied')))
         ->toThrow(NotificationAccessDenied::class);
 });
 
 it('rejects a replay key with different notification bytes', function (): void {
     allowNotifications();
-    $center = app(NotificationCenter::class);
+    $center = resolve(NotificationCenter::class);
     $center->notify(notificationContext(), notificationInput('conflict', 'first'));
 
     expect(fn (): mixed => $center->notify(notificationContext(), notificationInput('conflict', 'second')))
@@ -147,7 +147,7 @@ it('rejects a replay key with different notification bytes', function (): void {
 
 it('cancels pending deliveries but reports irrevocable dispatched channels', function (): void {
     allowNotifications();
-    $center = app(NotificationCenter::class);
+    $center = resolve(NotificationCenter::class);
     $notification = $center->notify(notificationContext(), notificationInput('cancel'));
 
     $cancelled = $center->cancel(notificationContext(), $notification->id);
@@ -159,9 +159,9 @@ it('cancels pending deliveries but reports irrevocable dispatched channels', fun
 
 it('rejects a stale delivery completion after a newer claim epoch', function (): void {
     allowNotifications();
-    $notification = app(NotificationCenter::class)->notify(notificationContext(), notificationInput('claim-epoch'));
+    $notification = resolve(NotificationCenter::class)->notify(notificationContext(), notificationInput('claim-epoch'));
     $id = DB::table('ntf_deliveries')->where('notification_id', $notification->id)->value('id');
-    $deliveries = app(DeliveryStore::class);
+    $deliveries = resolve(DeliveryStore::class);
 
     $first = $deliveries->claim($id);
     DB::table('ntf_deliveries')->where('id', $id)->update(['state' => 'pending', 'lease_until' => null]);
@@ -181,9 +181,9 @@ it('rejects a stale delivery completion after a newer claim epoch', function ():
 
 it('does not claim a delivery before its next attempt time', function (): void {
     allowNotifications();
-    $notification = app(NotificationCenter::class)->notify(notificationContext(), notificationInput('next-attempt'));
+    $notification = resolve(NotificationCenter::class)->notify(notificationContext(), notificationInput('next-attempt'));
     $id = DB::table('ntf_deliveries')->where('notification_id', $notification->id)->value('id');
-    $deliveries = app(DeliveryStore::class);
+    $deliveries = resolve(DeliveryStore::class);
 
     DB::table('ntf_deliveries')->where('id', $id)->update(['next_attempt' => now()->addHour()]);
     expect($deliveries->claim($id))->toBeNull();
@@ -219,10 +219,10 @@ it('admits an in-app delivery through the registered driver only after the durab
     allowNotifications();
     app()->instance(TenantContextResolver::class, new FixedTenantContextResolver);
     app()->forgetScopedInstances();
-    $notification = app(NotificationCenter::class)->notify(notificationContext(), notificationInput('coordinator'));
+    $notification = resolve(NotificationCenter::class)->notify(notificationContext(), notificationInput('coordinator'));
     $id = DB::table('ntf_deliveries')->where('notification_id', $notification->id)->value('id');
 
-    app(DeliveryCoordinator::class)->deliver($id);
+    resolve(DeliveryCoordinator::class)->deliver($id);
 
     expect(DB::table('ntf_deliveries')->where('id', $id)->value('state'))->toBe('sent')
         ->and(DB::table('ntf_deliveries')->where('id', $id)->value('provider_ref'))->not->toBeNull();
@@ -230,10 +230,10 @@ it('admits an in-app delivery through the registered driver only after the durab
 
 it('freezes at most one hundred notifications in a half-open digest window', function (): void {
     allowNotifications();
-    app(NotificationCenter::class)->notify(notificationContext(), notificationInput('digest-window'));
+    resolve(NotificationCenter::class)->notify(notificationContext(), notificationInput('digest-window'));
     $now = new DateTimeImmutable('now');
 
-    $digest = app(DigestBuilder::class)->build(notificationContext(), new DigestWindow(
+    $digest = resolve(DigestBuilder::class)->build(notificationContext(), new DigestWindow(
         start: $now->modify('-1 minute'),
         end: $now->add(new DateInterval('PT1M')),
         period: 'hourly',
@@ -254,7 +254,7 @@ it('admits a closed digest through the shared wakeup runner and freezes residual
         digest: 'hourly',
         expectedVersion: '1',
     ));
-    $center = app(NotificationCenter::class);
+    $center = resolve(NotificationCenter::class);
 
     foreach (range(1, 101) as $number) {
         $center->notify(notificationContext(), notificationInput("digest-residual-{$number}"));
@@ -265,7 +265,7 @@ it('admits a closed digest through the shared wakeup runner and freezes residual
         end: new DateTimeImmutable('-1 minute'),
         period: 'hourly',
     );
-    $first = app(DigestBuilder::class)->build(notificationContext(), $window);
+    $first = resolve(DigestBuilder::class)->build(notificationContext(), $window);
 
     expect($first)->not->toBeNull()
         ->and(DB::table('ntf_digest_items')->where('run_id', $first->id)->count())->toBe(100);
@@ -287,9 +287,9 @@ it('keeps an admitted digest effect when a later preference change disables futu
         digest: 'hourly',
         expectedVersion: '1',
     ));
-    $notification = app(NotificationCenter::class)->notify(notificationContext(), notificationInput('digest-admission'));
+    $notification = resolve(NotificationCenter::class)->notify(notificationContext(), notificationInput('digest-admission'));
     DB::table('ntf_notifications')->where('id', $notification->id)->update(['created_at' => now()->subSeconds(90)]);
-    $digest = app(DigestBuilder::class)->build(notificationContext(), new DigestWindow(
+    $digest = resolve(DigestBuilder::class)->build(notificationContext(), new DigestWindow(
         start: new DateTimeImmutable('-2 minutes'),
         end: new DateTimeImmutable('-1 minute'),
         period: 'hourly',
@@ -305,7 +305,7 @@ it('keeps an admitted digest effect when a later preference change disables futu
         digest: 'off',
         expectedVersion: '2',
     ));
-    app(DeliveryCoordinator::class)->deliver($deliveryId);
+    resolve(DeliveryCoordinator::class)->deliver($deliveryId);
 
     expect(DB::table('ntf_deliveries')->where('id', $deliveryId)->value('state'))->toBe('sent')
         ->and(DB::table('ntf_digest_runs')->where('id', $digest->id)->value('state'))->toBe('sent');

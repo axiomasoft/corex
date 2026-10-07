@@ -21,13 +21,13 @@ use Throwable;
  *
  * Account, workspace, actor and operation ids are not metric labels.
  */
-final class OpenTelemetryBridge implements TracePropagation
+final readonly class OpenTelemetryBridge implements TracePropagation
 {
-    public const SEMCONV_SCHEMA_URL = 'https://opentelemetry.io/schemas/1.32.0';
+    public const string SEMCONV_SCHEMA_URL = 'https://opentelemetry.io/schemas/1.32.0';
 
     public function __construct(
-        private readonly ?object $tracer = null,
-        private readonly ?object $meter = null,
+        private ?object $tracer = null,
+        private ?object $meter = null,
     ) {}
 
     /**
@@ -129,19 +129,6 @@ final class OpenTelemetryBridge implements TracePropagation
             if (is_object($gauge)) {
                 $this->call($gauge, 'record', $value);
             }
-        }
-    }
-
-    public function record(MetricAttributes $attributes): void
-    {
-        if ($this->meter === null) {
-            return;
-        }
-
-        $counter = $this->call($this->meter, 'createCounter', 'corex.operation', null, null, ['schema_url' => self::SEMCONV_SCHEMA_URL]);
-
-        if (is_object($counter)) {
-            $this->call($counter, 'add', 1, $attributes->all());
         }
     }
 

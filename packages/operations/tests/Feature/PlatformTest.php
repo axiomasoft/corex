@@ -81,7 +81,7 @@ final class PlatformTest extends TestCase
     /** @param list<Api> $declarations */
     private function compile(array $declarations): CompiledRegistry
     {
-        return app(RegistryCompiler::class)->compile([
+        return resolve(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends($declarations),
         ], installedPackages: []);
     }
@@ -334,9 +334,9 @@ final class PlatformTest extends TestCase
         $this->allow();
         $this->app['router']->get('/adapters/{version}/{path}', ApiController::class)->where('path', '.*');
         $provider = $this->app->make(RequestContextProvider::class);
-        $handler = new class($provider) implements OperationHandler
+        $handler = new readonly class($provider) implements OperationHandler
         {
-            public function __construct(private readonly RequestContextProvider $provider) {}
+            public function __construct(private RequestContextProvider $provider) {}
 
             public function handle(RequestContext $context, array $input, array $parameters): array
             {

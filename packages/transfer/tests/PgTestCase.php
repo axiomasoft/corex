@@ -28,7 +28,7 @@ abstract class PgTestCase extends Orchestra
         DB::statement('CREATE SCHEMA public');
         DB::purge('pgsql');
 
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-transfer:tenant'], DB::getDefaultConnection());
+        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-transfer:tenant'], DB::getDefaultConnection());
     }
 
     #[Override]

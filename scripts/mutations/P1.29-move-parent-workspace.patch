@@ -1,8 +1,6 @@
-diff --git a/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php b/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
-index 3536fea..e967beb 100644
 --- a/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
 +++ b/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
-@@ -112,17 +112,6 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
+@@ -111,17 +111,6 @@
                  /** @var Models\Department $newParent */
                  $newParent = Models\Department::on($this->connection)->where('id', $newParentId)->firstOrFail();
  
@@ -14,9 +12,9 @@ index 3536fea..e967beb 100644
 -                // layer — reparenting into another tenant's subtree would be a
 -                // silent cross-tenant integrity breach, not a legal move.
 -                if ($newParent->workspace_id !== $lockWorkspaceId) {
--                    throw new CrossWorkspaceMoveException($departmentId, $newParentId);
+-                    throw new CrossWorkspaceMoveException(departmentId: $departmentId, newParentId: $newParentId);
 -                }
 -
                  if ($newParent->path === $moving->path || str_starts_with($newParent->path, $moving->path.'.')) {
-                     throw new DepartmentCycleException($departmentId, $newParentId);
+                     throw new DepartmentCycleException(departmentId: $departmentId, newParentId: $newParentId);
                  }

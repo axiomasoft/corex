@@ -75,7 +75,7 @@ function insertTrustedIntegrityTemplate(): array
 it('accepts a trusted expected, recorded, and actual schema-hash triple', function (): void {
     [$clusterId, $templateId] = insertTrustedIntegrityTemplate();
 
-    $template = app(TemplateIntegrityVerifier::class)->assertCurrent(
+    $template = resolve(TemplateIntegrityVerifier::class)->assertCurrent(
         version: 1,
         clusterId: $clusterId,
     );
@@ -103,7 +103,7 @@ it('rejects catalogue drift after a template was sealed', function (): void {
     templateIntegrityConnection()->statement('ALTER TABLE integrity_markers ADD COLUMN drifted boolean NOT NULL DEFAULT false');
     DB::disconnect('template_integrity');
 
-    expect(fn () => app(TemplateIntegrityVerifier::class)->assertCurrent(
+    expect(fn () => resolve(TemplateIntegrityVerifier::class)->assertCurrent(
         version: 1,
         clusterId: $clusterId,
     ))->toThrow(TemplateIntegrityException::class);

@@ -134,8 +134,8 @@ it('щ: L2 blocks Model::save()/delete() under impersonation; passes outside it'
     app()->instance(ImpersonationService::class, $fake);
 
     $guard = app()->make(ImpersonatedModelWriteGuard::class);
-    Event::listen('eloquent.saving: *', [$guard, 'handle']);
-    Event::listen('eloquent.deleting: *', [$guard, 'handle']);
+    Event::listen('eloquent.saving: *', $guard->handle(...));
+    Event::listen('eloquent.deleting: *', $guard->handle(...));
 
     // Outside impersonation — passes.
     $model = ImpersonationGuardWriteStub::create(['id' => (string) Str::uuid(), 'name' => 'one']);
@@ -156,7 +156,7 @@ it('ъ: L2 exempts AuditLog — the compliance record can write while queue=sync
     app()->instance(ImpersonationService::class, $fake);
 
     $guard = app()->make(ImpersonatedModelWriteGuard::class);
-    Event::listen('eloquent.saving: *', [$guard, 'handle']);
+    Event::listen('eloquent.saving: *', $guard->handle(...));
 
     app()->instance(TenantContextResolver::class, new class implements TenantContextResolver
     {
@@ -167,7 +167,7 @@ it('ъ: L2 exempts AuditLog — the compliance record can write while queue=sync
             ));
         }
     });
-    app(AuditLogger::class)->record(new AuditEntry(
+    resolve(AuditLogger::class)->record(new AuditEntry(
         action: 'created', actorType: ActorType::Support,
     ));
     expect(DB::connection('pgsql')->table('sys_audit_log')->count())->toBe(1);
@@ -178,7 +178,7 @@ it('ъ: L2 exempts ImpersonationGrant — the grant row itself is not blocked', 
     app()->instance(ImpersonationService::class, $fake);
 
     $guard = app()->make(ImpersonatedModelWriteGuard::class);
-    Event::listen('eloquent.saving: *', [$guard, 'handle']);
+    Event::listen('eloquent.saving: *', $guard->handle(...));
 
     // FK-satisfying real rows (root_impersonation_grants references both).
     $staffId = (string) Str::uuid();
@@ -219,7 +219,7 @@ it('ы: L2 allowing() lets an intentional write through, then blocks again after
     app()->instance(ImpersonationService::class, $fake);
 
     $guard = app()->make(ImpersonatedModelWriteGuard::class);
-    Event::listen('eloquent.saving: *', [$guard, 'handle']);
+    Event::listen('eloquent.saving: *', $guard->handle(...));
 
     $guard->allowing(function (): void {
         ImpersonationGuardWriteStub::create(['id' => (string) Str::uuid(), 'name' => 'inside-allowing']);

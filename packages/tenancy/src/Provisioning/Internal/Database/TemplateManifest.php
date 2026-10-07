@@ -42,7 +42,7 @@ final readonly class TemplateManifest
         }
 
         return new self(
-            payload: array_filter($manifest['payload'], static fn (int|string $key): bool => is_string($key), ARRAY_FILTER_USE_KEY),
+            payload: array_filter($manifest['payload'], is_string(...), ARRAY_FILTER_USE_KEY),
             signature: $manifest['signature'],
             trustedKeyId: $manifest['trusted_key_id'],
         );

@@ -31,10 +31,10 @@ use Illuminate\Support\Str;
  * ImpersonationTest.php instead). This file tests axiomasoft/corex's own branch
  * logic in isolation, same spirit as AuditLogTest.php's inline fakes.
  */
-final class FakeImpersonationService implements ImpersonationService
+final readonly class FakeImpersonationService implements ImpersonationService
 {
     public function __construct(
-        private readonly ?ImpersonationState $fakeState = null,
+        private ?ImpersonationState $fakeState = null,
     ) {}
 
     public function start(string $grantId, string $staffIdentityId): void
@@ -60,9 +60,9 @@ final class FakeImpersonationService implements ImpersonationService
 }
 
 it('boxed default: ImpersonationService binds to NullImpersonationService — no grants exist (аа, AC-28)', function (): void {
-    expect(app(ImpersonationService::class))->toBeInstanceOf(NullImpersonationService::class)
-        ->and(app(ImpersonationService::class)->state())->toBeNull()
-        ->and(app(ImpersonationService::class)->active())->toBeNull();
+    expect(resolve(ImpersonationService::class))->toBeInstanceOf(NullImpersonationService::class)
+        ->and(resolve(ImpersonationService::class)->state())->toBeNull()
+        ->and(resolve(ImpersonationService::class)->active())->toBeNull();
 });
 
 it('NullImpersonationService::start() throws — boxed installs have no grants (B-11 §6.1)', function (): void {

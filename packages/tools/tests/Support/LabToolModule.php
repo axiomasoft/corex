@@ -15,7 +15,7 @@ use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 /** Selected P7 laboratory cohort contributions; disjoint from archive cohort. */
 final class LabToolModule implements ModuleRegistry
 {
-    public const COMPOSER_NAME = 'example/lab-tools';
+    public const string COMPOSER_NAME = 'example/lab-tools';
 
     public bool $enabled = true;
 
@@ -31,7 +31,7 @@ final class LabToolModule implements ModuleRegistry
         $input = ArchiveToolModule::inputSchema();
         $output = ArchiveToolModule::outputSchema();
 
-        return app(RegistryCompiler::class)->compile([
+        return resolve(RegistryCompiler::class)->compile([
             ModuleManifest::make(self::COMPOSER_NAME)
                 ->title('Lab tools')
                 ->tablePrefix('lab')

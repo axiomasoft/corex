@@ -36,14 +36,14 @@ use Override;
  *
  * @internal
  */
-final class ReadRegistryIntrospection implements RegistryIntrospection
+final readonly class ReadRegistryIntrospection implements RegistryIntrospection
 {
     public const string MAP_SCHEMA = 'registry-map/1';
 
     public const string EXPLANATION_SCHEMA = 'module-explanation/1';
 
     /** @var array<class-string, string> */
-    private const EXTENDER_NAMES = [
+    private const array EXTENDER_NAMES = [
         Entity::class => 'entity',
         EntityField::class => 'entity_field',
         Permissions::class => 'permissions',
@@ -55,11 +55,11 @@ final class ReadRegistryIntrospection implements RegistryIntrospection
     ];
 
     public function __construct(
-        private readonly ModuleRegistry $registry,
-        private readonly ModuleActivationGate $activationGate,
-        private readonly string $cachePath,
-        private readonly bool $failIfMissing = false,
-        private readonly ?string $installedJsonPath = null,
+        private ModuleRegistry $registry,
+        private ModuleActivationGate $activationGate,
+        private string $cachePath,
+        private bool $failIfMissing = false,
+        private ?string $installedJsonPath = null,
     ) {}
 
     #[Override]
@@ -97,7 +97,7 @@ final class ReadRegistryIntrospection implements RegistryIntrospection
         $constraints = $this->declaredConstraints($compiledModule);
         $reasons = [];
 
-        if (! $this->dependenciesSatisfied($compiledModule, $modules)) {
+        if (! $this->dependenciesSatisfied(module: $compiledModule, modules: $modules)) {
             $reasons[] = 'missing_dependency';
         }
 
@@ -112,7 +112,7 @@ final class ReadRegistryIntrospection implements RegistryIntrospection
             );
         }
 
-        $active = $this->registry->isActive($module, $context);
+        $active = $this->registry->isActive(name: $module, ctx: $context);
 
         if (! $active) {
             if ($reasons === []) {
@@ -130,7 +130,7 @@ final class ReadRegistryIntrospection implements RegistryIntrospection
         }
 
         $edition = $this->resolveEdition($compiledModule);
-        $gate = $this->activationGate->check($context, $module, $edition);
+        $gate = $this->activationGate->check(ctx: $context, module: $module, edition: $edition);
 
         if (! $gate->allowed) {
             $reasons[] = 'activation_gate_denied';
@@ -158,7 +158,7 @@ final class ReadRegistryIntrospection implements RegistryIntrospection
     public static function assertRevision(RegistryMap $map, string $expectedRevision): void
     {
         if ($map->revision !== $expectedRevision) {
-            throw StaleRegistryRevision::mismatch($expectedRevision, $map->revision);
+            throw StaleRegistryRevision::mismatch(expected: $expectedRevision, actual: $map->revision);
         }
     }
 
@@ -231,9 +231,9 @@ final class ReadRegistryIntrospection implements RegistryIntrospection
         $entityOwners = $this->ownersFromEntities($compiled->entities);
         $fieldOwners = $this->ownersFromEntityFields($compiled->entityFields);
         $apiOwners = $this->ownersFromApi($compiled->api);
-        $permissionOwners = $this->ownersFromPermissions($compiled->permissions, $compiled->entities);
-        $filamentOwners = $this->ownersFromFilament($compiled->filament, $compiled->entities);
-        $workflowOwners = $this->ownersFromWorkflow($compiled->workflow, $compiled->entities);
+        $permissionOwners = $this->ownersFromPermissions(permissions: $compiled->permissions, entities: $compiled->entities);
+        $filamentOwners = $this->ownersFromFilament(filament: $compiled->filament, entities: $compiled->entities);
+        $workflowOwners = $this->ownersFromWorkflow(workflow: $compiled->workflow, entities: $compiled->entities);
 
         $points = [];
 
@@ -247,7 +247,7 @@ final class ReadRegistryIntrospection implements RegistryIntrospection
                 'api' => $apiOwners,
                 'filament' => $filamentOwners,
                 'workflow' => $workflowOwners,
-                default => $this->ownersByCount($this->sliceCount($compiled, $name)),
+                default => $this->ownersByCount($this->sliceCount(compiled: $compiled, name: $name)),
             };
 
             $points[] = [

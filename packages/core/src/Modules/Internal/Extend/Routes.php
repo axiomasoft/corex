@@ -14,31 +14,17 @@ use CoreX\Modules\Contracts\Extender;
  */
 final class Routes implements Extender
 {
-    /** @var 'api'|'web' */
-    public string $kind;
-
-    public string $file;
-
     /** @var list<string> */
     public array $middlewares = [];
 
     public ?string $routePrefix = null;
 
     /** @param 'api'|'web' $kind */
-    private function __construct(string $kind, string $file)
-    {
-        $this->kind = $kind;
-        $this->file = $file;
-    }
+    private function __construct(public string $kind, public string $file) {}
 
     public static function api(string $file): self
     {
-        return new self('api', $file);
-    }
-
-    public static function web(string $file): self
-    {
-        return new self('web', $file);
+        return new self(kind: 'api', file: $file);
     }
 
     /** @param  list<string>  $mw */

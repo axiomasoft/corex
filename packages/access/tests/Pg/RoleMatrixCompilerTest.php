@@ -26,7 +26,7 @@ beforeEach(function (): void {
     $this->resetPgSchema();
     $this->migrateAutSchema();
 
-    app(ArrayEntityRegistry::class)->register(new EntityDefinition(
+    resolve(ArrayEntityRegistry::class)->register(new EntityDefinition(
         handle: 'crm.deal', model: Deal::class, table: 'deals', module: 'corex/access-tests',
         labelSingular: 'Deal', labelPlural: 'Deals', capabilities: [Capability::Ownable], fields: [], titleAttribute: null,
     ));
@@ -56,7 +56,7 @@ it('dispatches the native compilation event synchronously inside the tenant tran
         ];
     });
 
-    app(DatabaseRoleMatrixCompiler::class)->compile($role->id);
+    resolve(DatabaseRoleMatrixCompiler::class)->compile($role->id);
 
     expect($seen)->toBe([[$role->id, 1, 1]])
         ->and(RoleMatrixRow::query()->where('role_id', $role->id)->count())->toBe(1);
@@ -64,7 +64,7 @@ it('dispatches the native compilation event synchronously inside the tenant tran
 
 it('rolls back a listener write and leaves the scope version unchanged when a listener fails', function (): void {
     $role = nativeRole();
-    $versions = app(ScopeMapVersion::class);
+    $versions = resolve(ScopeMapVersion::class);
     $initial = $versions->current($role->id);
 
     Event::listen(RoleMatrixCompiled::class, function (RoleMatrixCompiled $event): void {
@@ -73,7 +73,7 @@ it('rolls back a listener write and leaves the scope version unchanged when a li
         throw new RuntimeException('listener failure');
     });
 
-    expect(fn () => app(DatabaseRoleMatrixCompiler::class)->compile($role->id))
+    expect(fn () => resolve(DatabaseRoleMatrixCompiler::class)->compile($role->id))
         ->toThrow(RuntimeException::class, 'listener failure');
     expect($role->fresh()->name)->toBe('Role')
         ->and($versions->current($role->id))->toBe($initial);
@@ -81,17 +81,17 @@ it('rolls back a listener write and leaves the scope version unchanged when a li
 
 it('invalidates scope only after outer commit and never after rollback', function (): void {
     $role = nativeRole();
-    $versions = app(ScopeMapVersion::class);
+    $versions = resolve(ScopeMapVersion::class);
     $initial = $versions->current($role->id);
 
     DB::beginTransaction();
-    app(DatabaseRoleMatrixCompiler::class)->compile($role->id);
+    resolve(DatabaseRoleMatrixCompiler::class)->compile($role->id);
     expect($versions->current($role->id))->toBe($initial);
     DB::rollBack();
     expect($versions->current($role->id))->toBe($initial);
 
     DB::beginTransaction();
-    app(DatabaseRoleMatrixCompiler::class)->compile($role->id);
+    resolve(DatabaseRoleMatrixCompiler::class)->compile($role->id);
     expect($versions->current($role->id))->toBe($initial);
     DB::commit();
     expect($versions->current($role->id))->toBe($initial + 1);
@@ -106,7 +106,7 @@ it('recompileAll emits once for every role and retains native matrix rows', func
     Event::listen(RoleMatrixCompiled::class, function (RoleMatrixCompiled $event) use (&$events): void {
         $events[] = $event->roleId;
     });
-    app(DatabaseRoleMatrixCompiler::class)->recompileAll();
+    resolve(DatabaseRoleMatrixCompiler::class)->recompileAll();
 
     expect($events)->toEqualCanonicalizing([$first->id, $second->id])
         ->and(RoleMatrixRow::query()->where('role_id', $first->id)->count())->toBe(1);
@@ -118,7 +118,7 @@ it('warns when a role assignable to agent uses own scope', function (): void {
     $role->save();
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'own']);
 
-    $warnings = app(MatrixValidator::class)->validate(RoleMatrixData::role($role->id));
+    $warnings = resolve(MatrixValidator::class)->validate(RoleMatrixData::role($role->id));
 
     expect($warnings)->not->toBeEmpty()
         ->and($warnings[0])->toContain('agent');
@@ -128,5 +128,5 @@ it('returns no agent-scope warning for a user-only role', function (): void {
     $role = nativeRole();
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'own']);
 
-    expect(app(MatrixValidator::class)->validate(RoleMatrixData::role($role->id)))->toBeEmpty();
+    expect(resolve(MatrixValidator::class)->validate(RoleMatrixData::role($role->id)))->toBeEmpty();
 });

@@ -15,7 +15,7 @@ use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
 
-final class RecordingAttributeStore implements AttributeStore
+final readonly class RecordingAttributeStore implements AttributeStore
 {
     public function __construct(private string $engine) {}
 

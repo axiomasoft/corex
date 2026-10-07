@@ -71,51 +71,51 @@ final readonly class TenancyOptions
     {
         $violations = new ConfigurationValidator;
 
-        $centralConnection = self::nonEmpty($violations, 'central_connection', $config['central_connection'] ?? 'pgsql');
-        $bootstrappers = self::bootstrappers($violations, $config['bootstrappers'] ?? null);
+        $centralConnection = self::nonEmpty(violations: $violations, path: 'central_connection', value: $config['central_connection'] ?? 'pgsql');
+        $bootstrappers = self::bootstrappers(violations: $violations, value: $config['bootstrappers'] ?? null);
 
-        $cachePrefix = self::nonEmpty($violations, 'cache_prefix', $config['cache_prefix'] ?? 'tenant_%tenant%_');
+        $cachePrefix = self::nonEmpty(violations: $violations, path: 'cache_prefix', value: $config['cache_prefix'] ?? 'tenant_%tenant%_');
 
         if (! str_contains($cachePrefix, '%tenant%')) {
-            $violations->add('corex-tenancy.cache_prefix', 'must contain %tenant%');
+            $violations->add(path: 'corex-tenancy.cache_prefix', message: 'must contain %tenant%');
         }
 
-        $cacheStores = self::cacheStores($violations, $config['cache_stores'] ?? []);
+        $cacheStores = self::cacheStores(violations: $violations, value: $config['cache_stores'] ?? []);
 
         $storage = is_array($config['storage'] ?? null) ? $config['storage'] : [];
         $storageDurableDriver = self::nonEmpty(
-            $violations,
-            'storage.durable_driver',
-            $storage['durable_driver'] ?? 'local',
+            violations: $violations,
+            path: 'storage.durable_driver',
+            value: $storage['durable_driver'] ?? 'local',
         );
         $storageDurableRoot = self::nonEmpty(
-            $violations,
-            'storage.durable_root',
-            $storage['durable_root'] ?? 'storage/app/corex/tenancy-durable',
+            violations: $violations,
+            path: 'storage.durable_root',
+            value: $storage['durable_root'] ?? 'storage/app/corex/tenancy-durable',
         );
         $storageEphemeralRoot = self::nonEmpty(
-            $violations,
-            'storage.ephemeral_root',
-            $storage['ephemeral_root'] ?? 'storage/app/corex/tenancy-ephemeral',
+            violations: $violations,
+            path: 'storage.ephemeral_root',
+            value: $storage['ephemeral_root'] ?? 'storage/app/corex/tenancy-ephemeral',
         );
 
         $hostIdentification = is_array($config['host_identification'] ?? null)
             ? $config['host_identification']
             : [];
         $hostIdentificationEnabled = self::bool(
-            $violations,
-            'host_identification.enabled',
-            $hostIdentification['enabled'] ?? false,
+            violations: $violations,
+            path: 'host_identification.enabled',
+            value: $hostIdentification['enabled'] ?? false,
         );
         $hostCache = self::bool(
-            $violations,
-            'host_identification.cache',
-            $hostIdentification['cache'] ?? true,
+            violations: $violations,
+            path: 'host_identification.cache',
+            value: $hostIdentification['cache'] ?? true,
         );
         $hostCacheTtl = self::nonNegativeInt(
-            $violations,
-            'host_identification.cache_ttl',
-            $hostIdentification['cache_ttl'] ?? 300,
+            violations: $violations,
+            path: 'host_identification.cache_ttl',
+            value: $hostIdentification['cache_ttl'] ?? 300,
         );
         $hostCacheStore = self::nullableNonEmptyString(
             $hostIdentification['cache_store'] ?? null,
@@ -124,44 +124,44 @@ final readonly class TenancyOptions
         // Host lookups run before any account context and must stay central: the host store is
         // never one of the per-account (prefixed) stores.
         if ($hostCacheStore !== null && in_array($hostCacheStore, $cacheStores, true)) {
-            $violations->add('corex-tenancy.host_identification.cache_store', 'must not be one of cache_stores');
+            $violations->add(path: 'corex-tenancy.host_identification.cache_store', message: 'must not be one of cache_stores');
         }
 
         $domainTrust = is_array($config['domain_trust'] ?? null) ? $config['domain_trust'] : [];
-        $domainTrustEnabled = self::bool($violations, 'domain_trust.enabled', $domainTrust['enabled'] ?? false);
+        $domainTrustEnabled = self::bool(violations: $violations, path: 'domain_trust.enabled', value: $domainTrust['enabled'] ?? false);
         $domainTrustChallengeTtlSeconds = self::positiveInt(
-            $violations,
-            'domain_trust.challenge_ttl_seconds',
-            $domainTrust['challenge_ttl_seconds'] ?? 300,
+            violations: $violations,
+            path: 'domain_trust.challenge_ttl_seconds',
+            value: $domainTrust['challenge_ttl_seconds'] ?? 300,
         );
 
-        $statusGate = self::statusGate($violations, $config);
+        $statusGate = self::statusGate(violations: $violations, config: $config);
 
         $oidc = is_array($config['oidc'] ?? null) ? $config['oidc'] : [];
-        $oidcEnabled = self::bool($violations, 'oidc.enabled', $oidc['enabled'] ?? false);
+        $oidcEnabled = self::bool(violations: $violations, path: 'oidc.enabled', value: $oidc['enabled'] ?? false);
         $oidcIssuer = self::nullableNonEmptyString($oidc['issuer'] ?? null);
         $oidcClientId = self::nullableNonEmptyString($oidc['client_id'] ?? null);
-        $oidcClientSecret = self::optionalSecret($violations, 'oidc.client_secret', $oidc['client_secret'] ?? null);
+        $oidcClientSecret = self::optionalSecret(violations: $violations, path: 'oidc.client_secret', value: $oidc['client_secret'] ?? null);
         $oidcRedirectUri = self::nullableNonEmptyString($oidc['redirect_uri'] ?? null);
         $oidcAllowedAlgs = self::stringList($oidc['allowed_algs'] ?? ['RS256']);
-        $oidcLeewaySeconds = self::nonNegativeInt($violations, 'oidc.leeway_seconds', $oidc['leeway_seconds'] ?? 30);
-        $oidcGuard = self::nonEmpty($violations, 'oidc.guard', $oidc['guard'] ?? 'web');
+        $oidcLeewaySeconds = self::nonNegativeInt(violations: $violations, path: 'oidc.leeway_seconds', value: $oidc['leeway_seconds'] ?? 30);
+        $oidcGuard = self::nonEmpty(violations: $violations, path: 'oidc.guard', value: $oidc['guard'] ?? 'web');
 
         $discovery = is_array($oidc['discovery'] ?? null) ? $oidc['discovery'] : [];
         $oidcDiscoveryCacheStore = self::nullableNonEmptyString($discovery['cache_store'] ?? null);
         $oidcDiscoveryCacheTtl = self::positiveInt(
-            $violations,
-            'oidc.discovery.cache_ttl',
-            $discovery['cache_ttl'] ?? 3600,
+            violations: $violations,
+            path: 'oidc.discovery.cache_ttl',
+            value: $discovery['cache_ttl'] ?? 3600,
         );
 
         $jwks = is_array($oidc['jwks'] ?? null) ? $oidc['jwks'] : [];
         $oidcJwksCacheStore = self::nullableNonEmptyString($jwks['cache_store'] ?? null);
-        $oidcJwksCacheTtl = self::positiveInt($violations, 'oidc.jwks.cache_ttl', $jwks['cache_ttl'] ?? 3600);
+        $oidcJwksCacheTtl = self::positiveInt(violations: $violations, path: 'oidc.jwks.cache_ttl', value: $jwks['cache_ttl'] ?? 3600);
         $oidcJwksRefetchCooldownSeconds = self::positiveInt(
-            $violations,
-            'oidc.jwks.refetch_cooldown_seconds',
-            $jwks['refetch_cooldown_seconds'] ?? 60,
+            violations: $violations,
+            path: 'oidc.jwks.refetch_cooldown_seconds',
+            value: $jwks['refetch_cooldown_seconds'] ?? 60,
         );
 
         $impersonationConfig = is_array($oidc['impersonation'] ?? null) ? $oidc['impersonation'] : [];
@@ -170,40 +170,40 @@ final readonly class TenancyOptions
         $profile = is_string($configuredProfile) ? ImpersonationProfile::tryFrom($configuredProfile) : null;
 
         if ($profile === null) {
-            $violations->add('corex-tenancy.impersonation.profile', 'must be dev, standard, or regulated');
+            $violations->add(path: 'corex-tenancy.impersonation.profile', message: 'must be dev, standard, or regulated');
             $profile = ImpersonationProfile::Standard;
         }
 
         $impersonation = new ImpersonationPolicy(
-            enabled: self::bool($violations, 'oidc.impersonation.enabled', $impersonationConfig['enabled'] ?? false),
+            enabled: self::bool(violations: $violations, path: 'oidc.impersonation.enabled', value: $impersonationConfig['enabled'] ?? false),
             profile: $profile,
         );
 
         $oidcMaxSessionLifetimeMinutes = self::positiveInt(
-            $violations,
-            'oidc.max_session_lifetime_minutes',
-            $oidc['max_session_lifetime_minutes'] ?? 720,
+            violations: $violations,
+            path: 'oidc.max_session_lifetime_minutes',
+            value: $oidc['max_session_lifetime_minutes'] ?? 720,
         );
 
         if ($oidcEnabled) {
             if ($oidcIssuer === null) {
-                $violations->add('oidc.issuer', 'must be non-empty when oidc.enabled is true');
+                $violations->add(path: 'oidc.issuer', message: 'must be non-empty when oidc.enabled is true');
             }
 
             if ($oidcClientId === null) {
-                $violations->add('oidc.client_id', 'must be non-empty when oidc.enabled is true');
+                $violations->add(path: 'oidc.client_id', message: 'must be non-empty when oidc.enabled is true');
             }
 
             if ($oidcRedirectUri === null) {
-                $violations->add('oidc.redirect_uri', 'must be non-empty when oidc.enabled is true');
+                $violations->add(path: 'oidc.redirect_uri', message: 'must be non-empty when oidc.enabled is true');
             }
 
             if ($oidcClientSecret === null || ! $oidcClientSecret->isPresent()) {
-                $violations->add('oidc.client_secret', 'must be present when oidc.enabled is true');
+                $violations->add(path: 'oidc.client_secret', message: 'must be present when oidc.enabled is true');
             }
 
             if ($oidcAllowedAlgs === []) {
-                $violations->add('oidc.allowed_algs', 'must not be empty when oidc.enabled is true');
+                $violations->add(path: 'oidc.allowed_algs', message: 'must not be empty when oidc.enabled is true');
             }
         }
 
@@ -211,16 +211,16 @@ final readonly class TenancyOptions
         $workspacePathSegment = self::nullableNonEmptyString($workspace['path_segment'] ?? 'w');
 
         $lifecycle = new AccountLifecyclePolicy(
-            trialDays: self::nonNegativeInt($violations, 'trial_days', $config['trial_days'] ?? 14),
-            graceDays: self::nonNegativeInt($violations, 'grace_days', $config['grace_days'] ?? 30),
-            platformDomain: self::nonEmpty($violations, 'platform_domain', $config['platform_domain'] ?? 'example.test'),
+            trialDays: self::nonNegativeInt(violations: $violations, path: 'trial_days', value: $config['trial_days'] ?? 14),
+            graceDays: self::nonNegativeInt(violations: $violations, path: 'grace_days', value: $config['grace_days'] ?? 30),
+            platformDomain: self::nonEmpty(violations: $violations, path: 'platform_domain', value: $config['platform_domain'] ?? 'example.test'),
         );
 
         $wakeup = is_array($config['wakeup'] ?? null) ? $config['wakeup'] : [];
         $wakeupDriver = is_string($wakeup['driver'] ?? null) ? $wakeup['driver'] : 'local_sweep';
 
         if (! in_array($wakeupDriver, ['local_sweep', 'root_registry'], true)) {
-            $violations->add('wakeup.driver', 'must be local_sweep or root_registry');
+            $violations->add(path: 'wakeup.driver', message: 'must be local_sweep or root_registry');
             $wakeupDriver = 'local_sweep';
         }
 
@@ -229,10 +229,10 @@ final readonly class TenancyOptions
             : '';
 
         if ($wakeupDriver === 'root_registry' && $wakeupRootConnection === '') {
-            $violations->add('wakeup.root_connection', 'must be non-empty when wakeup.driver is root_registry');
+            $violations->add(path: 'wakeup.root_connection', message: 'must be non-empty when wakeup.driver is root_registry');
         }
 
-        $wakeupLeaseSeconds = self::positiveInt($violations, 'wakeup.lease_seconds', $wakeup['lease_seconds'] ?? 60);
+        $wakeupLeaseSeconds = self::positiveInt(violations: $violations, path: 'wakeup.lease_seconds', value: $wakeup['lease_seconds'] ?? 60);
 
         $templateIntegrity = is_array($config['template_integrity'] ?? null)
             ? $config['template_integrity']
@@ -244,9 +244,9 @@ final readonly class TenancyOptions
             ? $config['membership_guard']
             : [];
         $membershipGuard = self::nonEmpty(
-            $violations,
-            'membership_guard.guard',
-            $membershipGuardConfig['guard'] ?? 'web',
+            violations: $violations,
+            path: 'membership_guard.guard',
+            value: $membershipGuardConfig['guard'] ?? 'web',
         );
 
         $violations->failIfAny();
@@ -300,12 +300,12 @@ final readonly class TenancyOptions
         $exportRoute = self::nullableNonEmptyString($statusGate['export_route'] ?? null);
         $methods = self::stringList($statusGate['read_only_methods'] ?? ['GET', 'HEAD', 'OPTIONS']);
         $normalized = array_values(array_unique(array_map(
-            static fn (string $method): string => strtoupper($method),
+            strtoupper(...),
             $methods,
         )));
 
         if ($normalized === []) {
-            $violations->add('status_gate.read_only_methods', 'must not be empty');
+            $violations->add(path: 'status_gate.read_only_methods', message: 'must not be empty');
             $normalized = ['GET'];
         }
 
@@ -331,7 +331,7 @@ final readonly class TenancyOptions
         ];
 
         if (! is_array($value) || $value === []) {
-            $violations->add('corex-tenancy.bootstrappers', 'must be a non-empty list of class names');
+            $violations->add(path: 'corex-tenancy.bootstrappers', message: 'must be a non-empty list of class names');
 
             return [];
         }
@@ -345,13 +345,13 @@ final readonly class TenancyOptions
             $path = 'corex-tenancy.bootstrappers.'.$index;
 
             if (! is_string($class) || ! class_exists($class) || ! is_a($class, TenantBootstrapper::class, true)) {
-                $violations->add($path, 'must be an existing class implementing '.TenantBootstrapper::class);
+                $violations->add(path: $path, message: 'must be an existing class implementing '.TenantBootstrapper::class);
 
                 continue;
             }
 
             if (in_array($class, $resolved, true)) {
-                $violations->add($path, 'must not be listed twice');
+                $violations->add(path: $path, message: 'must not be listed twice');
 
                 continue;
             }
@@ -361,7 +361,7 @@ final readonly class TenancyOptions
             if ($position === false) {
                 $hostSeen = true;
             } elseif ($hostSeen || $position < $lastStock) {
-                $violations->add($path, 'stock bootstrappers must keep their order and precede host bootstrappers');
+                $violations->add(path: $path, message: 'stock bootstrappers must keep their order and precede host bootstrappers');
             } else {
                 $lastStock = $position;
             }
@@ -370,7 +370,7 @@ final readonly class TenancyOptions
         }
 
         if (($resolved[0] ?? null) !== ConnectionBootstrapper::class) {
-            $violations->add('corex-tenancy.bootstrappers.0', ConnectionBootstrapper::class.' must come first');
+            $violations->add(path: 'corex-tenancy.bootstrappers.0', message: ConnectionBootstrapper::class.' must come first');
         }
 
         return $resolved;
@@ -380,7 +380,7 @@ final readonly class TenancyOptions
     private static function cacheStores(ConfigurationValidator $violations, mixed $value): array
     {
         if (! is_array($value)) {
-            $violations->add('corex-tenancy.cache_stores', 'must be a list of cache store names');
+            $violations->add(path: 'corex-tenancy.cache_stores', message: 'must be a list of cache store names');
 
             return [];
         }
@@ -389,13 +389,13 @@ final readonly class TenancyOptions
 
         foreach (array_values($value) as $index => $store) {
             if (! is_string($store) || $store === '') {
-                $violations->add('corex-tenancy.cache_stores.'.$index, 'must be a non-empty store name');
+                $violations->add(path: 'corex-tenancy.cache_stores.'.$index, message: 'must be a non-empty store name');
 
                 continue;
             }
 
             if (in_array($store, $stores, true)) {
-                $violations->add('corex-tenancy.cache_stores.'.$index, 'must be unique');
+                $violations->add(path: 'corex-tenancy.cache_stores.'.$index, message: 'must be unique');
 
                 continue;
             }
@@ -416,7 +416,7 @@ final readonly class TenancyOptions
             return new SecretRef($value);
         }
 
-        $violations->add($path, 'must be a string or null');
+        $violations->add(path: $path, message: 'must be a string or null');
 
         return null;
     }
@@ -470,7 +470,7 @@ final readonly class TenancyOptions
 
         foreach ($value as $key => $item) {
             if (is_string($key) && $key !== '' && is_array($item)) {
-                $resolved[$key] = array_filter($item, static fn (int|string $key): bool => is_string($key), ARRAY_FILTER_USE_KEY);
+                $resolved[$key] = array_filter($item, is_string(...), ARRAY_FILTER_USE_KEY);
             }
         }
 
@@ -483,7 +483,7 @@ final readonly class TenancyOptions
             return $value;
         }
 
-        $violations->add($path, 'must be a boolean');
+        $violations->add(path: $path, message: 'must be a boolean');
 
         return false;
     }
@@ -494,7 +494,7 @@ final readonly class TenancyOptions
             return $value;
         }
 
-        $violations->add($path, 'must be a non-empty string');
+        $violations->add(path: $path, message: 'must be a non-empty string');
 
         return 'invalid';
     }
@@ -510,7 +510,7 @@ final readonly class TenancyOptions
             return $value;
         }
 
-        $violations->add($path, 'must be a non-negative integer');
+        $violations->add(path: $path, message: 'must be a non-negative integer');
 
         return 0;
     }
@@ -521,7 +521,7 @@ final readonly class TenancyOptions
             return $value;
         }
 
-        $violations->add($path, 'must be a positive integer');
+        $violations->add(path: $path, message: 'must be a positive integer');
 
         return 1;
     }

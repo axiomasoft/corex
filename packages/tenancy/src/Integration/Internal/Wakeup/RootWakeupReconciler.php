@@ -24,16 +24,16 @@ use Throwable;
  * Claims one root hint at a time and invokes the existing tenant-local
  * sweeper through TenancyManager. It never constructs a tenant DSN itself.
  */
-final class RootWakeupReconciler
+final readonly class RootWakeupReconciler
 {
     public function __construct(
-        private readonly ConnectionResolverInterface $connections,
-        private readonly string $rootConnection,
-        private readonly ClockInterface $clock,
-        private readonly RootRegistryWakeupHint $hint,
-        private readonly TenancyManager $tenancy,
-        private readonly DueWakeupSweeper $sweeper,
-        private readonly int $leaseSeconds,
+        private ConnectionResolverInterface $connections,
+        private string $rootConnection,
+        private ClockInterface $clock,
+        private RootRegistryWakeupHint $hint,
+        private TenancyManager $tenancy,
+        private DueWakeupSweeper $sweeper,
+        private int $leaseSeconds,
     ) {}
 
     public function sweep(int $limit): int
@@ -161,7 +161,7 @@ final class RootWakeupReconciler
                 $hint = $this->root()->table('root_wakeup_hints')
                     ->where('next_fire_at', '<=', $now)
                     ->where(static fn (Builder $query) => $query->whereNull('leased_until')->orWhere('leased_until', '<=', $now))
-                    ->orderBy('next_fire_at')
+                    ->oldest('next_fire_at')
                     ->lockForUpdate()
                     ->first();
 

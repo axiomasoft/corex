@@ -41,7 +41,7 @@ it('stamps observer and direct logger entries from authority and keeps unrelated
     app()->instance(ImpersonationService::class, new FixedImpersonationService($state));
     app()->instance(AuditLogger::class, app()->make(QueuedAuditLogger::class, ['connection' => 'pgsql', 'tenantContext' => $tenant]));
 
-    app(AuditObserver::class)->record(auditSubject((string) Str::uuid7()), 'updated');
+    resolve(AuditObserver::class)->record(auditSubject((string) Str::uuid7()), 'updated');
     (app()->make(QueuedAuditLogger::class, ['connection' => 'pgsql', 'tenantContext' => $tenant]))->record(new AuditEntry(
         action: 'direct',
         actorType: ActorType::User,
@@ -107,7 +107,7 @@ it('writes the captured snapshot from a worker that has no session', function ()
 
     Auth::logout();
     app()->instance(ImpersonationService::class, new NullImpersonationService);
-    expect(app(ImpersonationService::class)->state())->toBeNull();
+    expect(resolve(ImpersonationService::class)->state())->toBeNull();
 
     $jobs = Queue::pushed(RecordAuditEntry::class);
     expect($jobs)->toHaveCount(1);
@@ -159,9 +159,9 @@ function impersonationState(string $reason): ImpersonationState
 
 function fixedTenant(string $workspaceId): TenantContextResolver
 {
-    return new class($workspaceId) implements TenantContextResolver
+    return new readonly class($workspaceId) implements TenantContextResolver
     {
-        public function __construct(private readonly string $workspaceId) {}
+        public function __construct(private string $workspaceId) {}
 
         public function current(): TenantContext
         {
@@ -194,9 +194,9 @@ function auditSubject(string $id): Model
     return $model;
 }
 
-final class FixedImpersonationService implements ImpersonationService
+final readonly class FixedImpersonationService implements ImpersonationService
 {
-    public function __construct(private readonly ?ImpersonationState $fixed) {}
+    public function __construct(private ?ImpersonationState $fixed) {}
 
     public function start(string $grantId, string $staffIdentityId): void {}
 

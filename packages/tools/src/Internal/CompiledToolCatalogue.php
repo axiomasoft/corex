@@ -16,13 +16,13 @@ use CoreX\Tools\Data\ToolDescriptor;
 use Override;
 
 /** Fresh current-policy catalogue projection over the compiled API slice. */
-final class CompiledToolCatalogue implements ToolCatalogue
+final readonly class CompiledToolCatalogue implements ToolCatalogue
 {
-    public const MAX_DESCRIPTORS = 1000;
+    public const int MAX_DESCRIPTORS = 1000;
 
     public function __construct(
-        private readonly ModuleRegistry $modules,
-        private readonly ToolPolicy $policy,
+        private ModuleRegistry $modules,
+        private ToolPolicy $policy,
     ) {}
 
     #[Override]
@@ -35,7 +35,7 @@ final class CompiledToolCatalogue implements ToolCatalogue
                 continue;
             }
 
-            if (! $this->modules->isActive($api->declaringModule, $context->tenant())) {
+            if (! $this->modules->isActive(name: $api->declaringModule, ctx: $context->tenant())) {
                 continue;
             }
 
@@ -45,7 +45,7 @@ final class CompiledToolCatalogue implements ToolCatalogue
                 continue;
             }
 
-            if (! $this->policy->discover($descriptor, $context)) {
+            if (! $this->policy->discover(tool: $descriptor, context: $context)) {
                 continue;
             }
 
@@ -59,7 +59,7 @@ final class CompiledToolCatalogue implements ToolCatalogue
         );
 
         if (count($descriptors) > self::MAX_DESCRIPTORS) {
-            throw new ApiError(OperationsErrorCode::CatalogueLimit, 403, 'Catalogue descriptor limit exceeded.');
+            throw new ApiError(errorCode: OperationsErrorCode::CatalogueLimit, status: 403, message: 'Catalogue descriptor limit exceeded.');
         }
 
         return new ToolCatalogueView(

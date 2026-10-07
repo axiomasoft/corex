@@ -22,10 +22,10 @@ use Illuminate\Support\Facades\Auth;
  * unaffected.
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class EnforceSessionLifetime
+final readonly class EnforceSessionLifetime
 {
     public function __construct(
-        private readonly TenancyOptions $options,
+        private TenancyOptions $options,
     ) {}
 
     /** @return Response|mixed */

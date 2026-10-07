@@ -30,14 +30,14 @@ use Psr\Clock\ClockInterface;
  *
  * @internal spec: B-10 §7.1, P1.7, D12
  */
-final class QueuedAuditLogger implements AuditLogger
+final readonly class QueuedAuditLogger implements AuditLogger
 {
     public function __construct(
-        private readonly CoreOptions $options,
-        private readonly ImpersonationService $impersonation,
-        private readonly TenantContextResolver $tenantContext,
-        private readonly ClockInterface $clock,
-        private readonly ?string $connection = null,
+        private CoreOptions $options,
+        private ImpersonationService $impersonation,
+        private TenantContextResolver $tenantContext,
+        private ClockInterface $clock,
+        private ?string $connection = null,
     ) {}
 
     public function record(AuditEntry $entry): void
@@ -59,12 +59,6 @@ final class QueuedAuditLogger implements AuditLogger
             $entry = $entry->withImpersonation($state);
         }
 
-        RecordAuditEntry::dispatch(
-            $entry->withSnapshot(
-                occurredAt: $this->clock->now(),
-                workspaceId: $this->tenantContext->current()->workspace?->id,
-            ),
-            $this->connection,
-        );
+        RecordAuditEntry::dispatch(entry: $entry->withSnapshot(occurredAt: $this->clock->now(), workspaceId: $this->tenantContext->current()->workspace?->id), writeConnection: $this->connection);
     }
 }

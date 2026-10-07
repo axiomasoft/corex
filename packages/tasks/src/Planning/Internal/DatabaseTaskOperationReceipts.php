@@ -15,9 +15,9 @@ use Psr\Clock\ClockInterface;
 use UnexpectedValueException;
 
 /** @internal SQL representation of the tasks-owned operation ledger. */
-final class DatabaseTaskOperationReceipts implements TaskOperationReceipts
+final readonly class DatabaseTaskOperationReceipts implements TaskOperationReceipts
 {
-    public function __construct(private readonly ClockInterface $clock) {}
+    public function __construct(private ClockInterface $clock) {}
 
     #[Override]
     public function find(Connection $connection, string $requestKey): ?TaskOperationReceipt

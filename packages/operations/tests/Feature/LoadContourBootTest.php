@@ -11,6 +11,7 @@ use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Database\Contracts\SchemaSets;
+use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Bulk\Contracts\BulkTransferFactory;
 use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
 use CoreX\Operations\Bulk\Internal\SqlBulkOperationStore;
@@ -39,8 +40,8 @@ final class LoadContourBootTest extends TestCase
 
         self::assertArrayNotHasKey('public-api', $composer['extra']['corex']);
         $surface = json_decode((string) file_get_contents(dirname(__DIR__, 2).'/resources/contracts/php-api.json'), true, flags: JSON_THROW_ON_ERROR);
-        self::assertArrayHasKey('CoreX\\Operations\\ApiServiceProvider', $surface['symbols']);
-        self::assertSame('spi-call', $surface['symbols']['CoreX\\Operations\\ApiServiceProvider']['layer']);
+        self::assertArrayHasKey(ApiServiceProvider::class, $surface['symbols']);
+        self::assertSame('spi-call', $surface['symbols'][ApiServiceProvider::class]['layer']);
         self::assertSame(['ext-filter', 'ext-mbstring', 'php', 'axiomasoft/corex', 'illuminate/auth', 'illuminate/console', 'illuminate/contracts', 'illuminate/database', 'illuminate/http', 'illuminate/support', 'illuminate/validation', 'psr/clock', 'symfony/http-kernel'], array_keys($require));
         self::assertSame('^12.0|^13.0', $require['illuminate/http']);
         self::assertSame('^12.0|^13.0', $require['illuminate/support']);
@@ -83,7 +84,7 @@ final class LoadContourBootTest extends TestCase
         ]);
         $connection = DB::connection('api_tenant');
 
-        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
         $clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
@@ -133,7 +134,7 @@ final class LoadContourBootTest extends TestCase
         }
 
         self::assertSame(0, $connection->table('sys_api_bulk_operations')->count());
-        (new TransferBulkExecutor(new \CoreX\Operations\Tests\Fixtures\BulkTransferFactory, $store, $clock, transferInstalled: true, scopes: new ArrayDataScopeCodec))
+        new TransferBulkExecutor(new \CoreX\Operations\Tests\Fixtures\BulkTransferFactory, $store, $clock, transferInstalled: true, scopes: new ArrayDataScopeCodec)
             ->submit($definition);
         self::assertSame(1, $connection->table('sys_api_bulk_operations')->count());
     }

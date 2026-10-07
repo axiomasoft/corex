@@ -20,6 +20,6 @@ final class SnapshotExpiredException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(IntlErrorCode::SnapshotExpiredException, ErrorCategory::NotFound, retryable: false);
+        return new ErrorDescriptor(code: IntlErrorCode::SnapshotExpiredException, category: ErrorCategory::NotFound, retryable: false);
     }
 }

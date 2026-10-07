@@ -31,7 +31,7 @@ use ReflectionClass;
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class CompiledRegistry
 {
-    public const SCHEMA = 'corex-registry/1';
+    public const string SCHEMA = 'corex-registry/1';
 
     /** @var RegistryPayload Detached scalar publication, independent of hydrated extenders. */
     private array $snapshot;
@@ -77,7 +77,7 @@ final readonly class CompiledRegistry
         public array $replacements = [],
     ) {
         $this->schemaVersion = self::SCHEMA;
-        $this->fingerprint = $fingerprint !== '' ? $fingerprint : self::hashCanonical($compiler, $modules, $extensions, $replacements);
+        $this->fingerprint = $fingerprint !== '' ? $fingerprint : self::hashCanonical(compiler: $compiler, modules: $modules, extensions: $extensions, replacements: $replacements);
         $this->snapshot = [
             ...$this->projectSlices(),
             'schema' => $this->schemaVersion,
@@ -158,7 +158,7 @@ final readonly class CompiledRegistry
         self::assertPayload($data);
         assert(is_string($data['fingerprint']));
 
-        $expected = self::hashCanonical($data['compiler'] ?? [], $data['modules'] ?? [], $data['extensions'] ?? [], $data['replacements'] ?? []);
+        $expected = self::hashCanonical(compiler: $data['compiler'] ?? [], modules: $data['modules'] ?? [], extensions: $data['extensions'] ?? [], replacements: $data['replacements'] ?? []);
 
         if (! hash_equals($expected, $data['fingerprint'])) {
             throw CompilationException::corruptArtifact('fingerprint mismatch');
@@ -167,23 +167,23 @@ final readonly class CompiledRegistry
         return new self(
             entities: array_map(
                 /** @param array{handle: string, model: class-string, table: string, module: string, labelSingular: string, labelPlural: string, capabilities: list<string>, fields: list<array{handle: string, type: 'string'|'int'|'decimal'|'bool'|'date'|'datetime'|'json'|'money'|'relation'|'enum', required?: bool, searchable?: bool, meta?: array<string, mixed>|null}>, titleAttribute: string|null} $entity */
-                static fn (array $entity): EntityDefinition => EntityDefinition::fromArray($entity),
+                EntityDefinition::fromArray(...),
                 $data['entities'] ?? [],
             ),
             entityFields: array_map(
                 /** @param array{extender: array<string, mixed>, declaringModule: string, sleeping: bool} $field */
-                static fn (array $field): CompiledEntityField => CompiledEntityField::fromArray($field),
+                CompiledEntityField::fromArray(...),
                 $data['entityFields'] ?? [],
             ),
-            permissions: array_map(static fn (array $row): Permissions => self::extenderFromArray(Permissions::class, $row), $data['permissions'] ?? []),
-            api: array_map(static fn (array $row): Api => self::extenderFromArray(Api::class, $row), $data['api'] ?? []),
-            filament: array_map(static fn (array $row): Filament => self::extenderFromArray(Filament::class, $row), $data['filament'] ?? []),
-            menu: array_map(static fn (array $row): Menu => self::extenderFromArray(Menu::class, $row), $data['menu'] ?? []),
-            routes: array_map(static fn (array $row): Routes => self::extenderFromArray(Routes::class, $row), $data['routes'] ?? []),
-            workflow: array_map(static fn (array $row): Workflow => self::extenderFromArray(Workflow::class, $row), $data['workflow'] ?? []),
+            permissions: array_map(static fn (array $row): Permissions => self::extenderFromArray(class: Permissions::class, data: $row), $data['permissions'] ?? []),
+            api: array_map(static fn (array $row): Api => self::extenderFromArray(class: Api::class, data: $row), $data['api'] ?? []),
+            filament: array_map(static fn (array $row): Filament => self::extenderFromArray(class: Filament::class, data: $row), $data['filament'] ?? []),
+            menu: array_map(static fn (array $row): Menu => self::extenderFromArray(class: Menu::class, data: $row), $data['menu'] ?? []),
+            routes: array_map(static fn (array $row): Routes => self::extenderFromArray(class: Routes::class, data: $row), $data['routes'] ?? []),
+            workflow: array_map(static fn (array $row): Workflow => self::extenderFromArray(class: Workflow::class, data: $row), $data['workflow'] ?? []),
             settings: array_map(
                 /** @param  array{namespace: string, definition: array<string, mixed>}  $setting */
-                static fn (array $setting): CompiledSettingDefault => CompiledSettingDefault::fromArray($setting),
+                CompiledSettingDefault::fromArray(...),
                 $data['settings'] ?? [],
             ),
             featureFlags: array_map(self::featureFlagFromArray(...), $data['featureFlags'] ?? []),
@@ -209,7 +209,7 @@ final readonly class CompiledRegistry
             }
         }
         foreach (['permissions', 'api', 'filament', 'menu', 'routes', 'workflow', 'modules', 'extensions', 'replacements'] as $key) {
-            if (! self::rows($data[$key] ?? [], self::map(...))) {
+            if (! self::rows(value: $data[$key] ?? [], valid: self::map(...))) {
                 throw CompilationException::corruptArtifact($key);
             }
         }
@@ -233,29 +233,27 @@ final readonly class CompiledRegistry
             }
 
             if ((! class_exists($row['model']) && ! interface_exists($row['model'])) || ! self::strings($row['capabilities'] ?? null)
-                || ! self::rows($row['fields'] ?? null, static function (mixed $field): bool {
-                    return self::map($field) && is_string($field['handle'] ?? null)
-                        && in_array($field['type'] ?? null, ['string', 'int', 'decimal', 'bool', 'date', 'datetime', 'json', 'money', 'relation', 'enum'], true)
-                        && (! isset($field['required']) || is_bool($field['required']))
-                        && (! isset($field['searchable']) || is_bool($field['searchable']))
-                        && (! isset($field['meta']) || self::map($field['meta']));
-                }) || ! array_key_exists('titleAttribute', $row)
+                || ! self::rows(value: $row['fields'] ?? null, valid: static fn (mixed $field): bool => self::map($field) && is_string($field['handle'] ?? null)
+                    && in_array($field['type'] ?? null, ['string', 'int', 'decimal', 'bool', 'date', 'datetime', 'json', 'money', 'relation', 'enum'], true)
+                    && (! isset($field['required']) || is_bool($field['required']))
+                    && (! isset($field['searchable']) || is_bool($field['searchable']))
+                    && (! isset($field['meta']) || self::map($field['meta']))) || ! array_key_exists('titleAttribute', $row)
                 || ($row['titleAttribute'] !== null && ! is_string($row['titleAttribute']))) {
                 throw CompilationException::corruptArtifact('entity shape');
             }
         }
 
-        if (! self::rows($data['entityFields'] ?? [], static fn (mixed $row): bool => self::map($row)
+        if (! self::rows(value: $data['entityFields'] ?? [], valid: static fn (mixed $row): bool => self::map($row)
             && self::map($row['extender'] ?? null) && is_string($row['declaringModule'] ?? null) && is_bool($row['sleeping'] ?? null))) {
             throw CompilationException::corruptArtifact('entityFields');
         }
 
-        if (! self::rows($data['settings'] ?? [], static fn (mixed $row): bool => self::map($row)
+        if (! self::rows(value: $data['settings'] ?? [], valid: static fn (mixed $row): bool => self::map($row)
             && is_string($row['namespace'] ?? null) && self::map($row['definition'] ?? null))) {
             throw CompilationException::corruptArtifact('settings');
         }
 
-        if (! self::rows($data['featureFlags'] ?? [], static fn (mixed $row): bool => self::map($row)
+        if (! self::rows(value: $data['featureFlags'] ?? [], valid: static fn (mixed $row): bool => self::map($row)
             && is_string($row['key'] ?? null) && is_bool($row['default'] ?? null)
             && array_key_exists('module', $row) && ($row['module'] === null || is_string($row['module']))
             && array_key_exists('payload', $row))) {

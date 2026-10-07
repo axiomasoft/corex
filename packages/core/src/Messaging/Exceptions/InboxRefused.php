@@ -23,6 +23,6 @@ final class InboxRefused extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::InboxRefused, ErrorCategory::Conflict, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::InboxRefused, category: ErrorCategory::Conflict, retryable: false);
     }
 }

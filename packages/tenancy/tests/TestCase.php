@@ -195,8 +195,8 @@ abstract class TestCase extends Orchestra
         $central = DB::connection('pgsql');
         $configuration = $central->getConfig();
         $configuration['database'] = $database;
-        $templateConnection = (new ConnectionFactory(app()))->make($configuration, 'corex-template-test-catalogue');
-        $serializer = app(SchemaCatalogueSerializer::class);
+        $templateConnection = new ConnectionFactory(app())->make($configuration, 'corex-template-test-catalogue');
+        $serializer = resolve(SchemaCatalogueSerializer::class);
 
         try {
             $schemaHash = $serializer->hash($templateConnection);

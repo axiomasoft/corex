@@ -32,7 +32,7 @@ final class ViewConfigValidator
             throw new InvalidArgumentException('Invalid view filters.');
         }
         $nodes = 0;
-        $this->filter($filters, $fields, depth: 1, nodes: $nodes);
+        $this->filter(node: $filters, fields: $fields, depth: 1, nodes: $nodes);
 
         $columns = $config['columns'] ?? [];
 
@@ -54,7 +54,7 @@ final class ViewConfigValidator
         }
         $validatedSorts = [];
         foreach ($sorts as $sort) {
-            $this->validateSort($sort, $fields);
+            $this->validateSort(sort: $sort, fields: $fields);
             $validatedSorts[] = $sort;
         }
 
@@ -104,7 +104,7 @@ final class ViewConfigValidator
                 if (! is_array($child)) {
                     throw new InvalidArgumentException('Invalid view filter node.');
                 }
-                $this->filter($child, $fields, $depth + 1, $nodes);
+                $this->filter(node: $child, fields: $fields, depth: $depth + 1, nodes: $nodes);
             }
 
             return;

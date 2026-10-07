@@ -25,6 +25,6 @@ final class HasEnabledDependentsException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::HasEnabledDependentsException, ErrorCategory::Conflict, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::HasEnabledDependentsException, category: ErrorCategory::Conflict, retryable: false);
     }
 }

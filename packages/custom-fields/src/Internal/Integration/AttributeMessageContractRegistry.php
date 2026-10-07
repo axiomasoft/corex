@@ -22,7 +22,7 @@ final readonly class AttributeMessageContractRegistry implements MessageContract
         foreach (AttributeMessageContracts::all() as $contract) {
             $id = $contract->id();
 
-            if (isset($owned[$id]) || $base->has($contract->name, $contract->version)) {
+            if (isset($owned[$id]) || $base->has(name: $contract->name, version: $contract->version)) {
                 throw new InvalidArgumentException("Duplicate message contract: {$id}");
             }
 
@@ -35,13 +35,13 @@ final readonly class AttributeMessageContractRegistry implements MessageContract
     #[Override]
     public function has(string $name, int $version): bool
     {
-        return isset($this->owned["{$name}.v{$version}"]) || $this->base->has($name, $version);
+        return isset($this->owned["{$name}.v{$version}"]) || $this->base->has(name: $name, version: $version);
     }
 
     #[Override]
     public function get(string $name, int $version): MessageContract
     {
-        return $this->owned["{$name}.v{$version}"] ?? $this->base->get($name, $version);
+        return $this->owned["{$name}.v{$version}"] ?? $this->base->get(name: $name, version: $version);
     }
 
     #[Override]

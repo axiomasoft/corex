@@ -11034,14 +11034,14 @@
             "properties": [],
             "constants": {
                 "IDENTIFIER": {
-                    "type": null,
+                    "type": "string",
                     "value": "'corex.durablePayload.nonSerializableProperty'",
                     "visibility": "public",
                     "final": false,
                     "doc": []
                 },
                 "UNTYPED_ARRAY_IDENTIFIER": {
-                    "type": null,
+                    "type": "string",
                     "value": "'corex.durablePayload.untypedArrayProperty'",
                     "visibility": "public",
                     "final": false,
@@ -15014,7 +15014,7 @@
             },
             "constants": {
                 "SCHEMA": {
-                    "type": null,
+                    "type": "string",
                     "value": "'corex-registry/1'",
                     "visibility": "public",
                     "final": false,
@@ -15349,8 +15349,8 @@
                     "static": false,
                     "default": null,
                     "doc": {
-                        "@var": [
-                            "class-string"
+                        "@param": [
+                            "class-string $model"
                         ]
                     },
                     "hooks": []
@@ -17738,8 +17738,8 @@
                     "static": false,
                     "default": null,
                     "doc": {
-                        "@var": [
-                            "list<string>"
+                        "@param": [
+                            "list<string> $actions"
                         ]
                     },
                     "hooks": []
@@ -17751,7 +17751,11 @@
                     "visibility": "public",
                     "static": false,
                     "default": null,
-                    "doc": [],
+                    "doc": {
+                        "@param": [
+                            "list<string> $actions"
+                        ]
+                    },
                     "hooks": []
                 },
                 "isScopeable": {
@@ -17771,7 +17775,11 @@
                     "visibility": "public",
                     "static": false,
                     "default": null,
-                    "doc": [],
+                    "doc": {
+                        "@param": [
+                            "list<string> $actions"
+                        ]
+                    },
                     "hooks": []
                 }
             },
@@ -20489,7 +20497,7 @@
             "layer": "spi-call",
             "since": "1.0",
             "final": true,
-            "readonly": false,
+            "readonly": true,
             "abstract": false,
             "extends": [],
             "implements": [
@@ -20516,7 +20524,7 @@
                             "variadic": false,
                             "optional": false,
                             "default": null,
-                            "flags": 68
+                            "flags": 4
                         }
                     ],
                     "return": null,
@@ -20653,7 +20661,7 @@
             "layer": "spi-call",
             "since": "1.0",
             "final": true,
-            "readonly": false,
+            "readonly": true,
             "abstract": false,
             "extends": [],
             "implements": [
@@ -20680,7 +20688,7 @@
                             "variadic": false,
                             "optional": false,
                             "default": null,
-                            "flags": 68
+                            "flags": 4
                         }
                     ],
                     "return": null,
@@ -20747,7 +20755,7 @@
             "layer": "spi-call",
             "since": "1.0",
             "final": true,
-            "readonly": false,
+            "readonly": true,
             "abstract": false,
             "extends": [],
             "implements": [
@@ -20774,7 +20782,7 @@
                             "variadic": false,
                             "optional": false,
                             "default": null,
-                            "flags": 68
+                            "flags": 4
                         }
                     ],
                     "return": null,
@@ -21286,7 +21294,7 @@
             "layer": "spi-call",
             "since": "1.0",
             "final": true,
-            "readonly": false,
+            "readonly": true,
             "abstract": false,
             "extends": [],
             "implements": [
@@ -21318,7 +21326,7 @@
                             "variadic": false,
                             "optional": true,
                             "default": "null",
-                            "flags": 68
+                            "flags": 4
                         }
                     ],
                     "return": null,

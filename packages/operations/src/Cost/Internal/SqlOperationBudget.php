@@ -52,7 +52,7 @@ final readonly class SqlOperationBudget implements OperationBudget
             throw new InvalidArgumentException('Budget scope HMAC secret must be configured.');
         }
 
-        $this->toMicroUnits($capacity, 'capacity');
+        $this->toMicroUnits(units: $capacity, label: 'capacity');
 
         if ($restoreRate < 1 || $restoreRate > intdiv(PHP_INT_MAX, self::MicroUnits)) {
             throw new InvalidArgumentException('Budget restore rate is outside its safe bounds.');
@@ -74,13 +74,13 @@ final readonly class SqlOperationBudget implements OperationBudget
     #[Override]
     public function reserve(BudgetScope $scope, EstimatedCost $cost): BudgetReservation
     {
-        $estimate = $this->toMicroUnits($cost->units, 'estimated cost');
+        $estimate = $this->toMicroUnits(units: $cost->units, label: 'estimated cost');
         $keysByLevel = $this->keys($scope);
         $attempts = $this->connection->getDriverName() === 'pgsql' ? 3 : 1;
 
         return $this->connection->transaction(function () use ($cost, $estimate, $keysByLevel): SqlBudgetReservation {
             $now = $this->clock->now();
-            $capacity = $this->toMicroUnits($this->capacity, 'capacity');
+            $capacity = $this->toMicroUnits(units: $this->capacity, label: 'capacity');
             $timestamp = $this->timestamp($now);
 
             foreach ($keysByLevel as $key) {
@@ -100,13 +100,13 @@ final readonly class SqlOperationBudget implements OperationBudget
             $available = [];
 
             foreach ($rows as $key => $row) {
-                $available[$key] = $this->refilledAvailable($row, $now);
+                $available[$key] = $this->refilledAvailable(row: $row, now: $now);
             }
 
             $retryAfter = 0;
 
             foreach ($this->enforcedLevels as $level) {
-                $deficit = $this->deficit($estimate, $available[$keysByLevel[$level]]);
+                $deficit = $this->deficit(required: $estimate, available: $available[$keysByLevel[$level]]);
 
                 if ($deficit > 0) {
                     $restorePerSecond = $this->restoreRate * self::MicroUnits;
@@ -122,8 +122,8 @@ final readonly class SqlOperationBudget implements OperationBudget
                 $this->connection->table(self::BucketTable)
                     ->where('key', $key)
                     ->update([
-                        'available' => $this->subtract($available[$key], $estimate),
-                        'last_refill_at' => $this->timestamp($this->monotonicTime($rows[$key], $now)),
+                        'available' => $this->subtract(left: $available[$key], right: $estimate),
+                        'last_refill_at' => $this->timestamp($this->monotonicTime(row: $rows[$key], now: $now)),
                         'last_used_at' => $timestamp,
                     ]);
             }
@@ -157,12 +157,12 @@ final readonly class SqlOperationBudget implements OperationBudget
 
     public function settle(string $id, ActualCost $cost): void
     {
-        $this->finish($id, 'settled', $this->toMicroUnits($cost->units, 'actual cost'));
+        $this->finish(id: $id, outcome: 'settled', charged: $this->toMicroUnits(units: $cost->units, label: 'actual cost'));
     }
 
     public function reject(string $id): void
     {
-        $this->finish($id, 'rejected', 0);
+        $this->finish(id: $id, outcome: 'rejected', charged: 0);
     }
 
     private function finish(string $id, string $outcome, int $charged): void
@@ -179,8 +179,8 @@ final readonly class SqlOperationBudget implements OperationBudget
                 return;
             }
 
-            $state = DatabaseValue::text(DatabaseValue::field($reservation, 'state'));
-            $storedCharge = DatabaseValue::integer(DatabaseValue::field($reservation, 'charged'));
+            $state = DatabaseValue::text(DatabaseValue::field(row: $reservation, name: 'state'));
+            $storedCharge = DatabaseValue::integer(DatabaseValue::field(row: $reservation, name: 'charged'));
 
             if ($state === $outcome && $storedCharge === $charged) {
                 return;
@@ -192,7 +192,7 @@ final readonly class SqlOperationBudget implements OperationBudget
 
             $now = $this->clock->now();
 
-            if ($this->date(DatabaseValue::field($reservation, 'expires_at')) <= $now) {
+            if ($this->date(DatabaseValue::field(row: $reservation, name: 'expires_at')) <= $now) {
                 $this->connection->table(self::ReservationTable)
                     ->where('id', $id)
                     ->where('state', 'held')
@@ -201,7 +201,7 @@ final readonly class SqlOperationBudget implements OperationBudget
                 return;
             }
 
-            $keys = JsonCanonical::decode(DatabaseValue::text(DatabaseValue::field($reservation, 'keys')));
+            $keys = JsonCanonical::decode(DatabaseValue::text(DatabaseValue::field(row: $reservation, name: 'keys')));
 
             if (! is_array($keys) || ! array_is_list($keys) || count($keys) !== 4) {
                 throw new RuntimeException('Budget reservation contains invalid bucket keys.');
@@ -222,21 +222,21 @@ final readonly class SqlOperationBudget implements OperationBudget
 
             sort($keys, SORT_STRING);
             $rows = $this->lockedBuckets($keys);
-            $estimate = DatabaseValue::integer(DatabaseValue::field($reservation, 'estimate'));
+            $estimate = DatabaseValue::integer(DatabaseValue::field(row: $reservation, name: 'estimate'));
             $adjustment = $estimate - $charged;
 
             foreach ($rows as $key => $row) {
-                $available = $this->refilledAvailable($row, $now);
-                $capacity = DatabaseValue::integer(DatabaseValue::field($row, 'capacity'));
+                $available = $this->refilledAvailable(row: $row, now: $now);
+                $capacity = DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'capacity'));
                 $next = $adjustment >= 0
-                    ? min($capacity, $this->add($available, $adjustment))
-                    : $this->subtract($available, -$adjustment);
+                    ? min($capacity, $this->add(left: $available, right: $adjustment))
+                    : $this->subtract(left: $available, right: -$adjustment);
 
                 $this->connection->table(self::BucketTable)
                     ->where('key', $key)
                     ->update([
                         'available' => $next,
-                        'last_refill_at' => $this->timestamp($this->monotonicTime($row, $now)),
+                        'last_refill_at' => $this->timestamp($this->monotonicTime(row: $row, now: $now)),
                     ]);
             }
 
@@ -278,23 +278,23 @@ final readonly class SqlOperationBudget implements OperationBudget
 
     private function refilledAvailable(object $row, DateTimeImmutable $now): int
     {
-        $available = DatabaseValue::integer(DatabaseValue::field($row, 'available'));
-        $capacity = DatabaseValue::integer(DatabaseValue::field($row, 'capacity'));
-        $elapsed = max(0, $this->epochMicroseconds($now) - $this->epochMicroseconds($this->date(DatabaseValue::field($row, 'last_refill_at'))));
+        $available = DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'available'));
+        $capacity = DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'capacity'));
+        $elapsed = max(0, $this->epochMicroseconds($now) - $this->epochMicroseconds($this->date(DatabaseValue::field(row: $row, name: 'last_refill_at'))));
 
         if ($elapsed === 0 || $available >= $capacity) {
             return min($available, $capacity);
         }
 
-        $rate = DatabaseValue::integer(DatabaseValue::field($row, 'refill_rate'));
+        $rate = DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'refill_rate'));
         $refill = $elapsed > intdiv(PHP_INT_MAX, $rate) ? PHP_INT_MAX : $elapsed * $rate;
 
-        return min($capacity, $this->add($available, $refill));
+        return min($capacity, $this->add(left: $available, right: $refill));
     }
 
     private function monotonicTime(object $row, DateTimeImmutable $now): DateTimeImmutable
     {
-        $previous = $this->date(DatabaseValue::field($row, 'last_refill_at'));
+        $previous = $this->date(DatabaseValue::field(row: $row, name: 'last_refill_at'));
 
         return $now >= $previous ? $now : $previous;
     }

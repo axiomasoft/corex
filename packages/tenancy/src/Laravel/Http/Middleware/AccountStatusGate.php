@@ -23,14 +23,14 @@ use Illuminate\Http\Response;
  * falls through to 403.
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class AccountStatusGate
+final readonly class AccountStatusGate
 {
     public function __construct(
-        private readonly StatusGatePolicy $statusGate,
-        private readonly TenantContextResolver $contexts,
-        private readonly AccountRead $accounts,
-        private readonly AuthFactory $auth,
-        private readonly string $centralConnection,
+        private StatusGatePolicy $statusGate,
+        private TenantContextResolver $contexts,
+        private AccountRead $accounts,
+        private AuthFactory $auth,
+        private string $centralConnection,
     ) {}
 
     /** @return Response|mixed */
@@ -41,12 +41,12 @@ final class AccountStatusGate
         return match ($account->status) {
             'trial', 'active' => $next($request),
             'suspended' => $this->ownerOnRoute(
-                $request,
-                $next,
-                $account,
-                $this->statusGate->paymentRoute,
+                request: $request,
+                next: $next,
+                account: $account,
+                route: $this->statusGate->paymentRoute,
             ),
-            'grace' => $this->graceGate($request, $next, $account),
+            'grace' => $this->graceGate(request: $request, next: $next, account: $account),
             'exporting', 'deleted' => abort(410),
             default => abort(403),
         };
@@ -59,7 +59,7 @@ final class AccountStatusGate
         AccountRef $account,
         ?string $route,
     ): mixed {
-        if (! $this->isOwner($account) || ! $this->matchesConfiguredRoute($request, $route)) {
+        if (! $this->isOwner($account) || ! $this->matchesConfiguredRoute(request: $request, routeConfig: $route)) {
             abort(403);
         }
 
@@ -74,7 +74,7 @@ final class AccountStatusGate
         }
 
         $readOnly = $this->statusGate->isReadOnlyMethod($request->method());
-        $onExportRoute = $this->matchesConfiguredRoute($request, $this->statusGate->exportRoute);
+        $onExportRoute = $this->matchesConfiguredRoute(request: $request, routeConfig: $this->statusGate->exportRoute);
 
         if (! $readOnly && ! $onExportRoute) {
             abort(403);
@@ -88,7 +88,7 @@ final class AccountStatusGate
         $userId = $this->auth->guard()->id();
 
         return $userId !== null
-            && $this->accounts->ownerIdentityId($account->id, $this->centralConnection) === $userId;
+            && $this->accounts->ownerIdentityId(accountId: $account->id, connectionName: $this->centralConnection) === $userId;
     }
 
     private function matchesConfiguredRoute(Request $request, mixed $routeConfig): bool

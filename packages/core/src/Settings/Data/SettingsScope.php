@@ -34,16 +34,16 @@ final readonly class SettingsScope
 
     public static function workspace(string $workspaceId): self
     {
-        return new self(SettingScope::Workspace, $workspaceId);
+        return new self(type: SettingScope::Workspace, id: $workspaceId);
     }
 
     public static function user(string $userId): self
     {
-        return new self(SettingScope::User, $userId);
+        return new self(type: SettingScope::User, id: $userId);
     }
 
     public static function department(string $departmentId): self
     {
-        return new self(SettingScope::Department, $departmentId);
+        return new self(type: SettingScope::Department, id: $departmentId);
     }
 }

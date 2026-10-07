@@ -57,7 +57,7 @@ final class TestContext implements AccountConnectionResolver, CrmExecutionContex
     {
         app()->instance(CrmExecutionContext::class, $this);
         $self = $this;
-        app()->instance(TenantContextResolver::class, new class($self) implements TenantContextResolver
+        app()->instance(TenantContextResolver::class, new readonly class($self) implements TenantContextResolver
         {
             public function __construct(private TestContext $fixture) {}
 

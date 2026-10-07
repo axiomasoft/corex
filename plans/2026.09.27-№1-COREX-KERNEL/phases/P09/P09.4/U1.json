@@ -1,0 +1,40 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:unit:v1",
+  "id": "U1",
+  "item": "P09.4",
+  "title": "AST class and call quality gates",
+  "goal": "AST class and call quality gates with fail closed meaningful negative controls",
+  "files": [
+    "scripts/quality/release-quality.php",
+    "scripts/quality/source-quality.php",
+    "tests/Arch/QualityReleaseGateTest.php"
+  ],
+  "checks": [
+    {
+      "id": "V1",
+      "cmd": "scripts/php84 vendor/bin/pest tests/Arch/QualityReleaseGateTest.php",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    }
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "xhigh"
+  },
+  "mode": "delegate",
+  "instructions": "Read executor-handoff and required reads from brief. Repository-only D125; no release work. PHP84 mandatory. Only owned files; no plan edits/commits or source changes outside files. Save checks /tmp/corex-P09.4-U1-*. Return paths/exact checks/exits/evidence/open issues. Integrator modernizes sources and copies artifacts.",
+  "status": "accepted",
+  "outcome": {
+    "agent": {
+      "provider": "codex",
+      "model": "gpt-6.4-sol",
+      "effort": "xhigh"
+    },
+    "at": "2026-10-07T08:56:20Z",
+    "notes": "Reviewed AST final/readonly/named resolution and fail-closed controls; integrator reran V1 negative controls, V6 fullsource and V5 maxstrict analysis successfully. AbstractFixtureReferenceProvider is retained as a real shared Internal base of Boxes/Compact providers; no public extension exception added.",
+    "evidence": [
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/U1.json"
+    ]
+  },
+  "updated_at": "2026-10-07T08:56:20Z"
+}

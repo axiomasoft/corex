@@ -15,12 +15,12 @@ final readonly class DurableIndexRebuild
 
     public function begin(string $rebuildId, string $laneKey, string $fromGeneration, string $toGeneration, string $restoreEpoch, string $schemaHash): void
     {
-        $this->assertIdentifier($rebuildId, 'Rebuild identifier');
-        $this->assertIdentifier($laneKey, 'Lane key');
-        $this->assertIdentifier($fromGeneration, 'Source generation');
-        $this->assertIdentifier($toGeneration, 'Target generation');
-        $this->assertHash($restoreEpoch, 'Restore epoch');
-        $this->assertHash($schemaHash, 'Schema hash');
+        $this->assertIdentifier(value: $rebuildId, name: 'Rebuild identifier');
+        $this->assertIdentifier(value: $laneKey, name: 'Lane key');
+        $this->assertIdentifier(value: $fromGeneration, name: 'Source generation');
+        $this->assertIdentifier(value: $toGeneration, name: 'Target generation');
+        $this->assertHash(value: $restoreEpoch, name: 'Restore epoch');
+        $this->assertHash(value: $schemaHash, name: 'Schema hash');
 
         if ($fromGeneration === $toGeneration) {
             throw new InvalidArgumentException('A rebuild must target a new generation.');
@@ -75,7 +75,7 @@ final readonly class DurableIndexRebuild
             throw new InvalidArgumentException('Swap task identifier is invalid.');
         }
 
-        $this->assertHash($markerHash, 'Swap marker hash');
+        $this->assertHash(value: $markerHash, name: 'Swap marker hash');
 
         $this->connection->transaction(function () use ($rebuildId, $taskId, $markerHash): void {
             $rebuild = $this->connection->table('corex_search_rebuilds')->where('rebuild_id', $rebuildId)->lockForUpdate()->first();

@@ -12,14 +12,39 @@ it('keeps migration bytes untouched by Pint and Rector with working negative con
     $migration = '<?php return new class extends \\Illuminate\\Database\\Migrations\\Migration { public function up(): void { $flag = strpos("sample", "sam") !== false; } };';
 
     try {
-        foreach (['packages/core/src', 'tests', 'packages/core/database/migrations/tenant', 'products/demo/database/migrations/budget'] as $dir) {
+        foreach (['packages/core/src', 'tests', 'scripts', 'packages/core/database/migrations/tenant', 'products/demo/database/migrations/budget'] as $dir) {
             $files->makeDirectory($fixture.'/'.$dir, 0755, true);
         }
-        $paths = ['packages/core/database/migrations/tenant/0001.php', 'products/demo/database/migrations/budget/0001.php'];
+        $inventory = json_decode($files->get($root.'/scripts/schema-sets.json'), true, flags: JSON_THROW_ON_ERROR);
+        $paths = ['products/demo/database/migrations/budget/0001.php'];
+        $before = [];
+        foreach ($inventory['sets'] as $set) {
+            $dir = $set['path'];
+            $files->ensureDirectoryExists($fixture.'/'.$dir);
+            foreach ($files->allFiles($root.'/'.$dir) as $file) {
+                if ($file->getExtension() !== 'php') {
+                    continue;
+                }
+                $path = $dir.'/'.$file->getRelativePathname();
+                $files->ensureDirectoryExists(dirname($fixture.'/'.$path));
+                $files->copy($file->getPathname(), $fixture.'/'.$path);
+                $before[$path] = hash_file('sha256', $fixture.'/'.$path);
+            }
+            $paths[] = $dir.'/tooling_negative_control.php';
+        }
         foreach ($paths as $path) {
             $files->put($fixture.'/'.$path, $migration);
+            $before[$path] = hash_file('sha256', $fixture.'/'.$path);
         }
         $files->copy($root.'/pint.json', $fixture.'/pint.json');
+        $files->ensureDirectoryExists($fixture.'/vendor/composer');
+        $files->copy($root.'/vendor/composer/installed.json', $fixture.'/vendor/composer/installed.json');
+        $files->copy($root.'/composer.json', $fixture.'/composer.json');
+        $files->copy($root.'/composer.lock', $fixture.'/composer.lock');
+        $files->copyDirectory($root.'/scripts/quality/rector/Laravel/config', $fixture.'/scripts/quality/rector/Laravel/config');
+        $cliGuard = 'packages/core/src/Modules/Laravel/ModulesBootRegistrar.php';
+        $files->ensureDirectoryExists(dirname($fixture.'/'.$cliGuard));
+        $files->copy($root.'/'.$cliGuard, $fixture.'/'.$cliGuard);
         $rector = $files->get($root.'/rector.php');
         $files->put($fixture.'/rector.php', $rector);
         $run = static function (array $command) use ($fixture): Process {
@@ -29,12 +54,12 @@ it('keeps migration bytes untouched by Pint and Rector with working negative con
             return $process;
         };
         $pint = [PHP_BINARY, $root.'/vendor/bin/pint', '--config='.$fixture.'/pint.json'];
-        $rectorCommand = [PHP_BINARY, $root.'/vendor/bin/rector', 'process', 'packages', 'products', '--config='.$fixture.'/rector.php', '--no-progress-bar'];
+        $rectorCommand = [PHP_BINARY, $root.'/vendor/bin/rector', 'process', 'packages', 'products', '--config='.$fixture.'/rector.php', '--no-progress-bar', '--debug'];
         foreach ([$pint, $rectorCommand] as $command) {
             $result = $run($command);
             expect($result->getExitCode())->toBe(0, $result->getOutput().$result->getErrorOutput());
-            foreach ($paths as $path) {
-                expect($files->get($fixture.'/'.$path))->toBe($migration);
+            foreach ($before as $path => $hash) {
+                expect(hash_file('sha256', $fixture.'/'.$path))->toBe($hash, $path);
             }
         }
         $config = json_decode($files->get($fixture.'/pint.json'), true, flags: JSON_THROW_ON_ERROR);

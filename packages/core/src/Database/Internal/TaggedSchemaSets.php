@@ -12,10 +12,10 @@ use CoreX\Database\Enums\SchemaScope;
 use CoreX\Database\Exceptions\SchemaSetException;
 
 /** @internal */
-final class TaggedSchemaSets implements SchemaSets
+final readonly class TaggedSchemaSets implements SchemaSets
 {
     /** @var array<string, SchemaSet> */
-    private readonly array $sets;
+    private array $sets;
 
     /** @param iterable<SchemaSetProvider> $providers */
     public function __construct(iterable $providers)
@@ -45,7 +45,7 @@ final class TaggedSchemaSets implements SchemaSets
                 $key = $set->scope->value.'/'.basename($file, '.php');
 
                 if (isset($seen[$key])) {
-                    throw SchemaSetException::duplicateMigration(basename($file), $seen[$key], $set->id());
+                    throw SchemaSetException::duplicateMigration(name: basename($file), first: $seen[$key], second: $set->id());
                 }
                 $seen[$key] = $set->id();
             }

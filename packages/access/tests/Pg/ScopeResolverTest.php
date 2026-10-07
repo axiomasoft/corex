@@ -40,7 +40,7 @@ beforeEach(function (): void {
     $this->migrateFixtures();
     $this->migrateCoreDepartments();
 
-    app(ArrayEntityRegistry::class)->register(new EntityDefinition(
+    resolve(ArrayEntityRegistry::class)->register(new EntityDefinition(
         handle: 'crm.deal',
         model: Deal::class,
         table: 'deals',
@@ -56,17 +56,15 @@ beforeEach(function (): void {
     app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/access-tests']));
 
     $this->compileRole = function (string $roleId): void {
-        app(DatabaseRoleMatrixCompiler::class)->compile($roleId);
+        resolve(DatabaseRoleMatrixCompiler::class)->compile($roleId);
     };
 
-    $this->newRole = function (array $overrides = []): Role {
-        return Role::query()->create(array_merge([
-            'slug' => 'role-'.Str::uuid7(),
-            'name' => 'Role',
-            'is_system' => false,
-            'assignable_to' => [PrincipalType::User->value],
-        ], $overrides));
-    };
+    $this->newRole = (fn (array $overrides = []): Role => Role::query()->create(array_merge([
+        'slug' => 'role-'.Str::uuid7(),
+        'name' => 'Role',
+        'is_system' => false,
+        'assignable_to' => [PrincipalType::User->value],
+    ], $overrides)));
 
     $this->grantScope = function (Role $role, Scope $scope, ?string $contextType = null, ?string $contextId = null): void {
         RoleMatrixRow::query()->create([
@@ -136,7 +134,7 @@ it('own scope on the builder narrows to only the rows the principal owns', funct
     Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => (string) Str::uuid7()]);
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-    $ids = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
+    $ids = resolve(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
 
     expect($ids)->toBe([$mine->id]);
 });
@@ -160,7 +158,7 @@ it("dept scope on the builder narrows to rows owned by users in the principal's 
     Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => $ownerOtherDept]);
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-    $ids = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
+    $ids = resolve(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
 
     expect($ids)->toBe([$inDept->id]);
 });
@@ -186,7 +184,7 @@ it('dept_tree scope on the builder narrows via the department subtree in a singl
 
     DB::enableQueryLog();
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-    $ids = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
+    $ids = resolve(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
     $queries = DB::getQueryLog();
     DB::disableQueryLog();
 
@@ -213,7 +211,7 @@ it("workspace scope on the builder shows only the context workspace's rows plus 
     Deal::query()->create(['id' => (string) Str::uuid7(), 'workspace_id' => $otherWorkspaceId]);
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-    $ids = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
+    $ids = resolve(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
 
     expect($ids)->toEqualCanonicalizing([$matching->id, $accountWide->id]);
 });
@@ -232,7 +230,7 @@ it('workspace scope shows only account-wide rows when no workspace is narrowed i
     Deal::query()->create(['id' => (string) Str::uuid7(), 'workspace_id' => (string) Str::uuid7()]);
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-    $ids = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
+    $ids = resolve(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
 
     expect($ids)->toBe([$accountWide->id]);
 });
@@ -255,12 +253,12 @@ it('cascade_view off hides child-workspace rows; on shows them', function (): vo
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
 
-    $idsOff = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
+    $idsOff = resolve(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
     expect($idsOff)->not->toContain($childRow->id);
 
     DB::table('wsp_workspaces')->where('id', $parentWs)->update(['settings' => json_encode(['cascade_view' => true], JSON_THROW_ON_ERROR)]);
 
-    $idsOn = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
+    $idsOn = resolve(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
     expect($idsOn)->toContain($childRow->id);
 });
 
@@ -291,7 +289,7 @@ it('account scope lifts exactly the pinned workspace scope class, never an unrel
     expect($query->clone()->pluck('id')->all())->not->toContain($hiddenByWorkspace->id);
 
     $identity = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
-    $result = app(ScopePredicate::class)->applyTo($query, Scope::Account, $identity)->pluck('id')->all();
+    $result = resolve(ScopePredicate::class)->applyTo($query, Scope::Account, $identity)->pluck('id')->all();
 
     expect($result)->toContain($hiddenByWorkspace->id)
         ->and($result)->not->toContain($hiddenBySentinel->id);
@@ -314,7 +312,7 @@ it('resolves the max weight across multiple roles held by the same principal', f
     $other = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => (string) Str::uuid7()]);
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-    $ids = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
+    $ids = resolve(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
 
     expect($ids)->toEqualCanonicalizing([$mine->id, $other->id]);
 });
@@ -334,8 +332,8 @@ it('a context row narrows the builder scope for its own context only', function 
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
 
-    $baseIds = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
-    $narrowedIds = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read', new RecordContext('stage', $stageId))->pluck('id')->all();
+    $baseIds = resolve(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
+    $narrowedIds = resolve(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read', new RecordContext('stage', $stageId))->pluck('id')->all();
 
     expect($baseIds)->toHaveCount(1)
         ->and($narrowedIds)->toBeEmpty();
@@ -354,7 +352,7 @@ it('agent principals degrade own/dept/dept_tree to none on the builder path, but
     Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => (string) Str::uuid7()]);
 
     $identity = new PrincipalIdentity(PrincipalType::Agent, $principalId);
-    $ids = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
+    $ids = resolve(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
 
     expect($ids)->toHaveCount($expectEmpty ? 0 : 2);
 })->with([
@@ -377,9 +375,9 @@ it('apply() and canOnRecord() agree for every scope across every principal type'
     $other = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => (string) Str::uuid7(), 'workspace_id' => null]);
 
     $identity = new PrincipalIdentity($type, $principalId);
-    $checker = app(AccessChecker::class);
+    $checker = resolve(AccessChecker::class);
 
-    $builderIds = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->sort()->values()->all();
+    $builderIds = resolve(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->sort()->values()->all();
     $recordIds = collect([$mine, $other])
         ->filter(fn (Deal $deal): bool => $checker->canOnRecord($identity, 'read', $deal))
         ->pluck('id')
@@ -417,9 +415,9 @@ it('matches real department records to the same IDs through ScopeResolver and Ac
     ];
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-    $builderIds = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->sort()->values()->all();
+    $builderIds = resolve(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->sort()->values()->all();
     $recordIds = collect($records)
-        ->filter(fn (Deal $record): bool => app(AccessChecker::class)->canOnRecord($identity, 'read', $record))
+        ->filter(fn (Deal $record): bool => resolve(AccessChecker::class)->canOnRecord($identity, 'read', $record))
         ->pluck('id')
         ->sort()
         ->values()
@@ -454,7 +452,7 @@ it('own ⊆ dept ⊆ dept_tree ⊆ workspace ⊆ account on a fixture where ever
     app()->instance(TenancyManager::class, new FakeTenancyManager(new WorkspaceRef($workspaceId, 'm', 'team', 'wsMono', null)));
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-    $predicate = app(ScopePredicate::class);
+    $predicate = resolve(ScopePredicate::class);
     $rowsFor = fn (Scope $scope): array => $predicate->applyTo(Deal::query(), $scope, $identity)->pluck('id')->all();
 
     $own = $rowsFor(Scope::Own);
@@ -489,7 +487,7 @@ it('is NOT monotone in general — dept_tree can include a record outside the vi
     app()->instance(TenancyManager::class, new FakeTenancyManager(new WorkspaceRef($workspaceId, 'c', 'team', 'wsCounter', null)));
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-    $predicate = app(ScopePredicate::class);
+    $predicate = resolve(ScopePredicate::class);
 
     $deptTreeIds = $predicate->applyTo(Deal::query(), Scope::DeptTree, $identity)->pluck('id')->all();
     $workspaceIds = $predicate->applyTo(Deal::query(), Scope::Workspace, $identity)->pluck('id')->all();
@@ -505,7 +503,7 @@ it('denies dept/dept_tree on the builder when the principal has no department', 
     Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => $owner]);
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-    $ids = app(ScopePredicate::class)->applyTo(Deal::query(), $scope, $identity)->pluck('id')->all();
+    $ids = resolve(ScopePredicate::class)->applyTo(Deal::query(), $scope, $identity)->pluck('id')->all();
 
     expect($ids)->toBeEmpty();
 })->with(fn (): array => [Scope::Dept, Scope::DeptTree]);
@@ -524,14 +522,14 @@ it('denies dept/dept_tree on the builder when users/sys_departments tables do no
     Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => (string) Str::uuid7()]);
 
     $identity = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
-    $ids = app(ScopePredicate::class)->applyTo(Deal::query(), $scope, $identity)->pluck('id')->all();
+    $ids = resolve(ScopePredicate::class)->applyTo(Deal::query(), $scope, $identity)->pluck('id')->all();
 
     expect($ids)->toBeEmpty();
 })->with(fn (): array => [Scope::Dept, Scope::DeptTree]);
 
 // D114 — MatrixValidator's second rule: declaration drift produces a warning, never an exception, at matrix-authoring time.
 it('MatrixValidator warns when a matrix row names a scope the entity is missing the capability for', function (): void {
-    app(ArrayEntityRegistry::class)->register(new EntityDefinition(
+    resolve(ArrayEntityRegistry::class)->register(new EntityDefinition(
         handle: 'crm.drift',
         model: Deal::class,
         table: 'deals',
@@ -546,7 +544,7 @@ it('MatrixValidator warns when a matrix row names a scope the entity is missing 
     $role = ($this->newRole)();
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.drift', 'action' => 'read', 'scope' => 'own']);
 
-    $warnings = (app(MatrixValidator::class))->validate(RoleMatrixData::role((string) $role->getKey()));
+    $warnings = (resolve(MatrixValidator::class))->validate(RoleMatrixData::role((string) $role->getKey()));
 
     expect($warnings)->not->toBeEmpty()
         ->and($warnings[0])->toContain('crm.drift')

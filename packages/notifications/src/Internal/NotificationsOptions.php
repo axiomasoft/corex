@@ -23,14 +23,14 @@ final readonly class NotificationsOptions
         $digest = is_array($config['digest'] ?? null) ? $config['digest'] : [];
         $delivery = is_array($config['delivery'] ?? null) ? $config['delivery'] : [];
 
-        $digestEnabled = self::bool($violations, 'digest.enabled', $digest['enabled'] ?? false);
-        $acceptLegacy = self::bool($violations, 'digest.accept_legacy_unstamped', $digest['accept_legacy_unstamped'] ?? false);
-        $claimSeconds = self::positiveInt($violations, 'delivery.claim_seconds', $delivery['claim_seconds'] ?? 60);
-        $maxAttempts = self::positiveInt($violations, 'delivery.max_attempts', $delivery['max_attempts'] ?? 5);
+        $digestEnabled = self::bool(violations: $violations, path: 'digest.enabled', value: $digest['enabled'] ?? false);
+        $acceptLegacy = self::bool(violations: $violations, path: 'digest.accept_legacy_unstamped', value: $digest['accept_legacy_unstamped'] ?? false);
+        $claimSeconds = self::positiveInt(violations: $violations, path: 'delivery.claim_seconds', value: $delivery['claim_seconds'] ?? 60);
+        $maxAttempts = self::positiveInt(violations: $violations, path: 'delivery.max_attempts', value: $delivery['max_attempts'] ?? 5);
 
         $violations->failIfAny();
 
-        return new self($digestEnabled, $acceptLegacy, $claimSeconds, $maxAttempts);
+        return new self(digestEnabled: $digestEnabled, digestAcceptLegacyUnstamped: $acceptLegacy, deliveryClaimSeconds: $claimSeconds, deliveryMaxAttempts: $maxAttempts);
     }
 
     /** @return list<string> config paths of enabled dangerous modes */
@@ -45,7 +45,7 @@ final readonly class NotificationsOptions
             return $value;
         }
 
-        $violations->add($path, 'must be a boolean');
+        $violations->add(path: $path, message: 'must be a boolean');
 
         return false;
     }
@@ -56,7 +56,7 @@ final readonly class NotificationsOptions
             return $value;
         }
 
-        $violations->add($path, 'must be a positive integer');
+        $violations->add(path: $path, message: 'must be a positive integer');
 
         return 1;
     }

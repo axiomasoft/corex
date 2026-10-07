@@ -17,7 +17,7 @@ final readonly class WebhookTopic
     /** @param  array<string, string>  $schema */
     public function __construct(public string $name, public int $version, public string $major, public array $schema, public string $schemaHash, public string $piiClass, public string $projectorService)
     {
-        self::validateInput($name, $version, $major, $schema, $schemaHash, $piiClass, $projectorService);
+        self::validateInput(name: $name, version: $version, major: $major, schema: $schema, schemaHash: $schemaHash, piiClass: $piiClass, projectorService: $projectorService);
     }
 
     public function id(): string

@@ -31,7 +31,7 @@ beforeEach(function (): void {
 
     $probe = pendingConnectTo(PENDING_TEMPLATE_DB);
     $fixtureSql = file_get_contents(__DIR__.'/../Stubs/tpl_tenant_v1/schema.sql');
-    foreach (array_filter(array_map('trim', explode(';', (string) $fixtureSql))) as $statement) {
+    foreach (array_filter(array_map(trim(...), explode(';', (string) $fixtureSql))) as $statement) {
         $probe->statement($statement);
     }
     DB::disconnect('probe_'.PENDING_TEMPLATE_DB);
@@ -115,10 +115,10 @@ function makePendingTemplateRow(int $version = 1, string $dbName = PENDING_TEMPL
 
 function pendingPool(): PendingPool
 {
-    $templateIntegrityVerifier = app(TemplateIntegrityVerifier::class);
+    $templateIntegrityVerifier = resolve(TemplateIntegrityVerifier::class);
 
     return new PendingPool(
-        connections: app(ConnectionResolverInterface::class),
+        connections: resolve(ConnectionResolverInterface::class),
         centralConnection: 'pgsql',
         provisioner: new DatabaseTenantProvisioner(
             centralConnection: 'pgsql',

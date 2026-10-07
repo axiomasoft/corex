@@ -1,0 +1,179 @@
+<?php
+
+declare(strict_types=1);
+
+use Isolated\Symfony\Component\Finder\Finder;
+use Nette\Utils\DateTime;
+use Nette\Utils\Strings;
+use Rector\Application\VersionResolver;
+use Rector\Utils\Compiler\Unprefixer;
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+// remove phpstan, because it is already prefixed in its own scope
+$dateTime = DateTime::from('now');
+$timestamp = $dateTime->format('Ym');
+
+// @see https://github.com/humbug/php-scoper/blob/master/docs/further-reading.md
+$polyfillFinder = Finder::create()
+    ->files()
+    ->in(__DIR__ . '/vendor/symfony/polyfill-*')
+    ->name('bootstrap*.php');
+
+$excludedFiles = array_map(
+    static fn (SplFileInfo $fileInfo): string => $fileInfo->getPathname(),
+    iterator_to_array($polyfillFinder->getIterator()),
+);
+
+// see https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#configuration
+return [
+    'prefix' => 'RectorPrefix' . $timestamp,
+
+    // exclude
+    'exclude-classes' => [
+        'PHPUnit\Framework\Constraint\IsEqual',
+        'PHPUnit\Framework\TestCase',
+        'PHPUnit\Runner\Version',
+        'PHPUnit\Framework\ExpectationFailedException',
+    ],
+    'exclude-namespaces' => [
+        '#^Rector#',
+        '#^PhpParser#',
+        '#^PHPStan#',
+        '#^Symplify\\\\RuleDocGenerator#',
+        '#^Symfony\\\\Polyfill#',
+    ],
+
+    'exclude-files' => $excludedFiles,
+
+    // expose
+    'expose-classes' => ['Normalizer'],
+    'expose-functions' => [
+        'u',
+        'b',
+        's',
+        'trigger_deprecation',
+        'dump_with_depth',
+        'dn',
+        'dump_node',
+        'print_node',
+    ],
+    'expose-constants' => ['__RECTOR_RUNNING__', '#^SYMFONY\_[\p{L}_]+$#'],
+
+    'patchers' => [
+        // fix short import bug, @see https://github.com/rectorphp/rector-scoper-017/blob/23f3256a6f5a18483d6eb4659d69ba117501e2e3/vendor/nikic/php-parser/lib/PhpParser/Builder/Declaration.php#L6
+        static fn (string $filePath, string $prefix, string $content): string => str_replace(
+            sprintf('use %s\PhpParser;', $prefix),
+            'use PhpParser;',
+            $content
+        ),
+
+        static fn (string $filePath, string $prefix, string $content): string =>
+            // comment out
+            str_replace('\\' . $prefix . '\trigger_deprecation(', '// \trigger_deprecation(', $content),
+
+        // make external rules easier to write without enforcing getRuleDefinition()
+        // as they are not designed for open-sourcing
+        // remove implements is the safest way to avoid error on conflict with real dependency of symplify/rule-doc-generator
+        static function (string $filePath, string $prefix, string $content): string {
+            if (! \str_ends_with($filePath, 'src/Contract/Rector/RectorInterface.php')) {
+                return $content;
+            }
+
+            // remove DocumentedRuleInterface implements
+            $content = str_replace(
+                'interface RectorInterface extends NodeVisitor, DocumentedRuleInterface',
+                'interface RectorInterface extends NodeVisitor',
+                $content
+            );
+
+            // remove use import itself, to make contract clean
+            return str_replace('use Symplify\RuleDocGenerator\Contract\DocumentedRuleInterface;', '', $content);
+        },
+
+        static function (string $filePath, string $prefix, string $content): string {
+            if (! \str_ends_with($filePath, 'src/Application/VersionResolver.php')) {
+                return $content;
+            }
+
+            $releaseDateTime = VersionResolver::resolverReleaseDateTime();
+
+            return strtr(
+                $content,
+                [
+                    '@package_version@' => VersionResolver::resolvePackageVersion(),
+                    '@release_date@' => $releaseDateTime->format('Y-m-d H:i:s'),
+                ]
+            );
+        },
+
+        // keep public documentation examples readable
+        static function (string $filePath, string $prefix, string $content): string {
+            if (! \str_contains($filePath, 'rules/')) {
+                return $content;
+            }
+
+            if (! \str_ends_with($filePath, 'Rector.php')) {
+                return $content;
+            }
+
+            return Strings::replace(
+                $content,
+                '#(public function getRuleDefinition\(\): RuleDefinition\s+\{\R)(.*?)(\R[^\r\n]*[\]\)]{2,};\R\s*\})#s',
+                static function (array $ruleDefinitionMatch) use ($prefix): string {
+                    $ruleDefinitionContent = Strings::replace(
+                        $ruleDefinitionMatch[2],
+                        "#(<<<'?(?<label>CODE_SAMPLE|SAMPLE)'?\\R)(.*?)(\\R\\s*\\k<label>)#s",
+                        static function (array $codeSampleMatch) use ($prefix): string {
+                            $body = str_replace($prefix . '\\', '', $codeSampleMatch[3]);
+                            $body = Strings::replace(
+                                $body,
+                                '#^[ \t]*namespace ' . preg_quote($prefix, '#') . ';\R\R?#m',
+                                ''
+                            );
+                            $body = Strings::replace($body, '#\R[ \t]*\\\\class_alias\(.*?\);$#', '');
+
+                            return $codeSampleMatch[1] . $body . $codeSampleMatch[4];
+                        }
+                    );
+
+                    return $ruleDefinitionMatch[1] . $ruleDefinitionContent . $ruleDefinitionMatch[3];
+                }
+            );
+        },
+
+        // un-prefix composer plugin
+        static function (string $filePath, string $prefix, string $content): string {
+            if (! \str_ends_with($filePath, 'vendor/rector/extension-installer/src/Plugin.php')) {
+                return $content;
+            }
+
+            // see https://regex101.com/r/v8zRMm/1
+            return Strings::replace($content, '#' . $prefix . '\\\\Composer\\\\#', 'Composer\\');
+        },
+
+        // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
+        static function (string $filePath, string $prefix, string $content): string {
+            // skip vendor, expect rector packages
+            if (\str_contains($filePath, 'vendor/') && ! \str_contains($filePath, 'vendor/rector')) {
+                return $content;
+            }
+
+            // skip bin/rector.php for composer autoload class
+            if (\str_ends_with($filePath, 'bin/rector.php')) {
+                return $content;
+            }
+
+            return Unprefixer::unprefixQuoted($content, $prefix);
+        },
+
+        // unprefix regex content on doctrine inflector
+        static function (string $filePath, string $prefix, string $content): string {
+            if (! \str_contains($filePath, 'vendor/doctrine/inflector')) {
+                return $content;
+            }
+
+            return str_replace("'" . $prefix . '\\', "'\\", $content);
+        },
+    ],
+];

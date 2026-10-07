@@ -53,7 +53,7 @@ final readonly class FieldValueValidator
                 continue;
             }
 
-            if (! $this->matches(Value::text($field['type']), $value)) {
+            if (! $this->matches(type: Value::text($field['type']), value: $value)) {
                 $type = Value::text($field['type']);
 
                 throw new InvalidAttributeValue("Attribute field [{$code}] does not contain a valid {$type} value.");
@@ -112,12 +112,12 @@ final readonly class FieldValueValidator
 
         foreach ($constraints as $constraint => $expected) {
             $valid = match ($constraint) {
-                'enum' => $this->matchesEnum($value, $expected),
+                'enum' => $this->matchesEnum(value: $value, expected: $expected),
                 'min', 'min_length' => $this->isBound($expected)
                     && $this->measure($value) >= $expected,
                 'max', 'max_length' => $this->isBound($expected)
                     && $this->measure($value) <= $expected,
-                'format' => is_string($expected) && $this->matchesFormat($expected, $value),
+                'format' => is_string($expected) && $this->matchesFormat(format: $expected, value: $value),
                 'reference_prefix' => is_string($value) && is_string($expected)
                     && $expected !== '' && str_starts_with($value, $expected),
                 default => false,
@@ -136,13 +136,7 @@ final readonly class FieldValueValidator
         }
 
         if (is_array($value) && array_is_list($value)) {
-            foreach ($value as $item) {
-                if (! in_array($item, $expected, true)) {
-                    return false;
-                }
-            }
-
-            return true;
+            return array_all($value, fn ($item) => in_array($item, $expected, true));
         }
 
         return in_array($value, $expected, true);
@@ -222,13 +216,7 @@ final readonly class FieldValueValidator
     /** @param array<array-key, mixed> $values */
     private function allStrings(array $values): bool
     {
-        foreach ($values as $value) {
-            if (! is_string($value)) {
-                return false;
-            }
-        }
-
-        return true;
+        return array_all($values, fn ($value) => is_string($value));
     }
 
     private function isDateTime(string $value): bool

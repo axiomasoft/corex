@@ -1,0 +1,341 @@
+{
+  "composer_version": {
+    "exit": 0,
+    "output": "composer-version.json",
+    "role": "composer-version",
+    "sha256": "6168d72225d7541f9c1697d4f8ceda70104a8fb47a32fb43a62d1603b407e657"
+  },
+  "errors": [],
+  "inventory": [
+    {
+      "classification": "source",
+      "manifest": "composer.json",
+      "manifest_sha256": "9dabc7d0fe3f302e5771062df60808b8a89dc1f1ea0a5a89cd712d59e0df55a5",
+      "name": "corex/monorepo"
+    },
+    {
+      "anchor": "extensions.materialize_repository(built, repository)",
+      "classification": "release-only",
+      "manifest": "fixtures/consumers/equipment-registry/composer.json",
+      "manifest_sha256": "dbeae645b963626fe1c65c2c9326518b81f16b8c91fe2ae0b5eebc6fedb77d5b",
+      "name": "equipment/registry",
+      "owner": "scripts/distribution/verify_equipment_consumer.py",
+      "owner_sha256": "a11f894028e1f586ced749f29fdf04e516ce24b510d9e9f31b2a6e228be0c306",
+      "reason": "D125: dist candidate consumer; no source install/lock"
+    },
+    {
+      "anchor": "materialize_repository(candidate, repository)",
+      "classification": "release-only",
+      "manifest": "fixtures/extensions/custom-attribute-source/composer.json",
+      "manifest_sha256": "ef4e33b7bb451dfdbc2aef916ab89d3779a96e385f12655d66d69018f8577ff6",
+      "name": "thirdparty/custom-attribute-source",
+      "owner": "scripts/distribution/verify_extension_fixtures.py",
+      "owner_sha256": "5a5c4f15eef1ba7b7612837a30c857589fc33251039ce2737c8d78a156894509",
+      "reason": "D125: dist candidate consumer; no source install/lock"
+    },
+    {
+      "anchor": "materialize_repository(candidate, repository)",
+      "classification": "release-only",
+      "manifest": "fixtures/extensions/custom-panel-provider/composer.json",
+      "manifest_sha256": "b94dd8fae8624504a56fb97cc9d799003de69d4f1acb946c90268157275e6aba",
+      "name": "thirdparty/custom-panel-provider",
+      "owner": "scripts/distribution/verify_extension_fixtures.py",
+      "owner_sha256": "5a5c4f15eef1ba7b7612837a30c857589fc33251039ce2737c8d78a156894509",
+      "reason": "D125: dist candidate consumer; no source install/lock"
+    },
+    {
+      "anchor": "materialize_repository(candidate, repository)",
+      "classification": "release-only",
+      "manifest": "fixtures/extensions/custom-search-provider/composer.json",
+      "manifest_sha256": "4bc659c6895174cfb84c0f89adb19cfcc9ab754d3e286878baafcd8ac5d0c927",
+      "name": "thirdparty/custom-search-provider",
+      "owner": "scripts/distribution/verify_extension_fixtures.py",
+      "owner_sha256": "5a5c4f15eef1ba7b7612837a30c857589fc33251039ce2737c8d78a156894509",
+      "reason": "D125: dist candidate consumer; no source install/lock"
+    },
+    {
+      "anchor": "materialize_repository(candidate, repository)",
+      "classification": "release-only",
+      "manifest": "fixtures/extensions/custom-transfer-codec/composer.json",
+      "manifest_sha256": "e8d3340d28862ffdbfe4c0d6a0aed050237366ca66a046b6e3fe0d26ef46ca36",
+      "name": "thirdparty/custom-transfer-codec",
+      "owner": "scripts/distribution/verify_extension_fixtures.py",
+      "owner_sha256": "5a5c4f15eef1ba7b7612837a30c857589fc33251039ce2737c8d78a156894509",
+      "reason": "D125: dist candidate consumer; no source install/lock"
+    },
+    {
+      "anchor": "materialize_repository(candidate, repository)",
+      "classification": "release-only",
+      "manifest": "fixtures/extensions/custom-workflow-activity/composer.json",
+      "manifest_sha256": "6bf579830e16e7a4f4c7a2875626280bc680413fa3bc4e9db72656005aabf9fd",
+      "name": "thirdparty/custom-workflow-activity",
+      "owner": "scripts/distribution/verify_extension_fixtures.py",
+      "owner_sha256": "5a5c4f15eef1ba7b7612837a30c857589fc33251039ce2737c8d78a156894509",
+      "reason": "D125: dist candidate consumer; no source install/lock"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/access-azguard/composer.json",
+      "manifest_sha256": "9a393fff3bf11b6b45049bc6fdb78b7a0ba4e37b671f27a6988735bd4f0ae168",
+      "name": "axiomasoft/corex-access-azguard"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/access/composer.json",
+      "manifest_sha256": "929e8bafd28f1814fefb1bbde13e2819158d0b7d23708ea0cab1779c0ce600ad",
+      "name": "axiomasoft/corex-access"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/core/composer.json",
+      "manifest_sha256": "d13dd16782b006ce191b88c5b71d91b0c6fde15ba2220ac7d50c2ff6acd01aa7",
+      "name": "axiomasoft/corex"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/custom-fields/composer.json",
+      "manifest_sha256": "01b7212940c87e59fe63ebff450b116b71e984b8df5a99e568202596d4908874",
+      "name": "axiomasoft/corex-custom-fields"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/intl/composer.json",
+      "manifest_sha256": "ad63ec52e2534c43245791d3f91703d1609380f6eddcd101a5403120877897b6",
+      "name": "axiomasoft/corex-intl"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/media/composer.json",
+      "manifest_sha256": "a1558119cdf2e06595a2b64d6a77f22d43d7d3f36f40bb8decd55a81247df0d5",
+      "name": "axiomasoft/corex-media"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/notifications/composer.json",
+      "manifest_sha256": "afe5fe1be197a307e6fecdbb8e44179674b8898fe2adfef2aea39630cbf05ec8",
+      "name": "axiomasoft/corex-notifications"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/operations/composer.json",
+      "manifest_sha256": "215e90ea61f9d5eb39fe6f3fa18406bb253660fb08a13a5aed393409f8534eeb",
+      "name": "axiomasoft/corex-operations"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/panels/composer.json",
+      "manifest_sha256": "57d1959a255245b38b5fe4cdfca3e17e4df898a70e3b98f398b57d8ed8aec46d",
+      "name": "axiomasoft/corex-panels"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/recurrence/composer.json",
+      "manifest_sha256": "404635fae6ad6877a52e96adc38ff4c11e87753694ad41df5fe49a75a387fb79",
+      "name": "axiomasoft/corex-recurrence"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/search-intl/composer.json",
+      "manifest_sha256": "9d1b9716557bda5c65b47148ef92e9fccfd35c14bc1ecf1a82d91691b6d7a39a",
+      "name": "axiomasoft/corex-search-intl"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/search-meilisearch/composer.json",
+      "manifest_sha256": "dac858d3e266fd54cee8698e1abf6f6b9f1688e68cedb270a94c352a75f09f24",
+      "name": "axiomasoft/corex-search-meilisearch"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/search/composer.json",
+      "manifest_sha256": "7a0ba09d07eb6fb9872a5e0e85320b096c1837fd9b9ac0008b779830fb899760",
+      "name": "axiomasoft/corex-search"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/tasks-workflow/composer.json",
+      "manifest_sha256": "dcea421ce750876ef3e7ca33cd75497a88554d0c4139a47a2eb22ee90a82cdb4",
+      "name": "axiomasoft/corex-tasks-workflow"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/tasks/composer.json",
+      "manifest_sha256": "1a058a287c9d0edcad01d1ce286e2c9e81f839e52159e0c4bbe9f069c9bd56a8",
+      "name": "axiomasoft/corex-tasks"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/tenancy/composer.json",
+      "manifest_sha256": "1d420aae00dfdca7c7d7faa915f0a2effb46a2f13d188e62923c3a4e1b5d1553",
+      "name": "axiomasoft/corex-tenancy"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/tools/composer.json",
+      "manifest_sha256": "52a9803272e8bf4b568177f4909ae0a80c1c66738c8b0a95926d6414757f370a",
+      "name": "axiomasoft/corex-tools"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/transfer/composer.json",
+      "manifest_sha256": "1010cd7102bb2e1191a80be7e7632c420433264beee9b7c833882874c45575b2",
+      "name": "axiomasoft/corex-transfer"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/wakeup/composer.json",
+      "manifest_sha256": "872564e76d043e95e0cc605d1256a250999f1ce07ed1938600f6311e5462541f",
+      "name": "axiomasoft/corex-wakeup"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/webhooks/composer.json",
+      "manifest_sha256": "ff00d2e2eae63995d3b344e349b1eaae3281888d90cd1d278329b08f9c424284",
+      "name": "axiomasoft/corex-webhooks"
+    },
+    {
+      "classification": "source",
+      "manifest": "packages/workflow/composer.json",
+      "manifest_sha256": "d074ed2860c01d94ea980ee27ac00def93dff1b68cb800e3a88b9bc0e32a39a8",
+      "name": "axiomasoft/corex-workflow"
+    },
+    {
+      "classification": "source",
+      "manifest": "products/flex-crm/composer.json",
+      "manifest_sha256": "76ba0f3cce753c8eeb599042784d8993a634007cb23f836245556a25627f049c",
+      "name": "flex/crm"
+    },
+    {
+      "anchor": "sealed ZIP dist artifacts",
+      "classification": "release-only",
+      "manifest": "tests/Distribution/fixtures/public-consumer/composer.json",
+      "manifest_sha256": "e9bb6d22b675c0a8c03ca243fcd67a51b40873230a12711cff5f371fdb4dd02b",
+      "name": "corex/distribution-proof-consumer",
+      "owner": "tests/Distribution/fixtures/public-consumer/README.md",
+      "owner_sha256": "08db5fc0e46ed8d5929c67d278c34ff3aef8534e25a413a2a120044481b57c32",
+      "reason": "D125: dist candidate consumer; no source install/lock"
+    }
+  ],
+  "roots": [
+    {
+      "directory": "000-composer.json",
+      "manifest": "composer.json",
+      "sha256": "bb29be2305e0c5a2818457dad33f24e4242874f604f1bad6d44b786e846898c3"
+    },
+    {
+      "directory": "007-packages-access-azguard-composer.json",
+      "manifest": "packages/access-azguard/composer.json",
+      "sha256": "65393da4686ed8eb84d770f83f6d01a15e59f7e241860b8cc24b42d1e270e6ca"
+    },
+    {
+      "directory": "008-packages-access-composer.json",
+      "manifest": "packages/access/composer.json",
+      "sha256": "bafc906b0903adc76d8ee53bfdd862a4f784e08989de782aaca1b825a28871bb"
+    },
+    {
+      "directory": "009-packages-core-composer.json",
+      "manifest": "packages/core/composer.json",
+      "sha256": "3a29eacc09bb67994444d9f6ede3100761d913f8d2cea26b0f847db3d9f5793c"
+    },
+    {
+      "directory": "010-packages-custom-fields-composer.json",
+      "manifest": "packages/custom-fields/composer.json",
+      "sha256": "4c33f7fbe41a7e7ae76865f11327f2f19e02b377d02d94a98d48ef751420ea32"
+    },
+    {
+      "directory": "011-packages-intl-composer.json",
+      "manifest": "packages/intl/composer.json",
+      "sha256": "bc09d06cb1693f314257dcd25da40025a31692ff031e229f286ca90309e06c65"
+    },
+    {
+      "directory": "012-packages-media-composer.json",
+      "manifest": "packages/media/composer.json",
+      "sha256": "86a34b79f9bd7c2b297f5569e544f2f2e40486d9d72f34cd936aa6a64a898178"
+    },
+    {
+      "directory": "013-packages-notifications-composer.json",
+      "manifest": "packages/notifications/composer.json",
+      "sha256": "c87d60ad5926b29d66f00cbcecb7b055bc82303340550ab89c16257c78dd0a46"
+    },
+    {
+      "directory": "014-packages-operations-composer.json",
+      "manifest": "packages/operations/composer.json",
+      "sha256": "4ccbfb10f90e392dc98bd443c3bd49c24add637b28439bf47b26aaf6b39e115b"
+    },
+    {
+      "directory": "015-packages-panels-composer.json",
+      "manifest": "packages/panels/composer.json",
+      "sha256": "52c3614198622349e51c268b3224b0a71bda70d41cbcc342770a383dc5598258"
+    },
+    {
+      "directory": "016-packages-recurrence-composer.json",
+      "manifest": "packages/recurrence/composer.json",
+      "sha256": "cd2a1368b8da9a45a85def0c33724a06e9bbc6faf7e2e9269ebffb5873429eb2"
+    },
+    {
+      "directory": "017-packages-search-intl-composer.json",
+      "manifest": "packages/search-intl/composer.json",
+      "sha256": "7c7976e063dbe1dda5d7653445d4c7b901d6c4ae737e9f1941838cdf01c90539"
+    },
+    {
+      "directory": "018-packages-search-meilisearch-composer.json",
+      "manifest": "packages/search-meilisearch/composer.json",
+      "sha256": "759848c876497b1471c13f3c11178ce58798c70a7ff84d85136565f6a83773ff"
+    },
+    {
+      "directory": "019-packages-search-composer.json",
+      "manifest": "packages/search/composer.json",
+      "sha256": "4ecee0e4f3b753bd4cb8069050c9534448145c0b1a2c9c5120dab9a500f9bd54"
+    },
+    {
+      "directory": "020-packages-tasks-workflow-composer.json",
+      "manifest": "packages/tasks-workflow/composer.json",
+      "sha256": "16d3895d08f62e7fc03d7effced2951a92cfcbb6296b3b92fe79b0e51bcd2b01"
+    },
+    {
+      "directory": "021-packages-tasks-composer.json",
+      "manifest": "packages/tasks/composer.json",
+      "sha256": "46b7a7150bed133b36f8b4fc29c843f9ec662eb9e81a312cbd2a701f60bde923"
+    },
+    {
+      "directory": "022-packages-tenancy-composer.json",
+      "manifest": "packages/tenancy/composer.json",
+      "sha256": "ef7464931cdf06f6c461ef22e56f498eb0f6ba267fa95c9e2dbf94635b4a5106"
+    },
+    {
+      "directory": "023-packages-tools-composer.json",
+      "manifest": "packages/tools/composer.json",
+      "sha256": "9c37ba269eba8133d38ac0b7eb755fcfa7df976c3c80437ee4e9cf8951c496f2"
+    },
+    {
+      "directory": "024-packages-transfer-composer.json",
+      "manifest": "packages/transfer/composer.json",
+      "sha256": "3243c9c7a6dadb8c680c01eede07cbcb85507700d5025446fc454d00ade187aa"
+    },
+    {
+      "directory": "025-packages-wakeup-composer.json",
+      "manifest": "packages/wakeup/composer.json",
+      "sha256": "4d9c953404baa579f0062445cd883821e25277e1de7fba149a7eb1f453935474"
+    },
+    {
+      "directory": "026-packages-webhooks-composer.json",
+      "manifest": "packages/webhooks/composer.json",
+      "sha256": "4a9601b2809e828dfe583458a63a931ae5d4258f14c7229fa670a9a147b4d539"
+    },
+    {
+      "directory": "027-packages-workflow-composer.json",
+      "manifest": "packages/workflow/composer.json",
+      "sha256": "12c43ece9455ee989d88d18989b7dcf28e1eea405cd4500dbad1bfb7106d5e3d"
+    },
+    {
+      "directory": "028-products-flex-crm-composer.json",
+      "manifest": "products/flex-crm/composer.json",
+      "sha256": "4954095a276a3cdcc407c48cedf2af0ba584d59f7f6561f142a4d750ab449a0f"
+    }
+  ],
+  "schema": "corex-source-audits/1",
+  "scope": "source",
+  "source_inventory_sha256": "415c29d83ff6a24615e31db926a0d4c75883f56a76c7e746443176bf2ab4f730",
+  "source_sha256": "b6f9b41722cb4126f554cffd22d8b0e7a6995b9c6afae23e426e198b814e493a",
+  "status": "GREEN"
+}

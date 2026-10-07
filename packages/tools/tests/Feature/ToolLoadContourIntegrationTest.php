@@ -122,7 +122,7 @@ final class ToolLoadContourIntegrationTest extends TestCase
             new ToolCall('notes.create', 'v1', $descriptor->contractHash, new JsonObject(JsonCanonical::encode(['title' => 'Hello'])), 'request-123'),
         );
         $operation = array_values(array_filter(
-            (new OperationRegistry($this->modules))->all('v1'),
+            new OperationRegistry($this->modules)->all('v1'),
             static fn (Operation $candidate): bool => $candidate->id === 'notes.create',
         ))[0];
         $estimator = InvocationFixtures::declaredCosts();

@@ -68,8 +68,8 @@ final readonly class EntityDefinition
             module: $data['module'],
             labelSingular: $data['labelSingular'],
             labelPlural: $data['labelPlural'],
-            capabilities: array_map(static fn (string $value): Capability => Capability::from($value), $data['capabilities']),
-            fields: array_map(static fn (array $field): FieldDefinition => FieldDefinition::fromArray($field), $data['fields']),
+            capabilities: array_map(Capability::from(...), $data['capabilities']),
+            fields: array_map(FieldDefinition::fromArray(...), $data['fields']),
             titleAttribute: $data['titleAttribute'],
         );
     }

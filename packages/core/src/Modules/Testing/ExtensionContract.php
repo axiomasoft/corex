@@ -60,7 +60,7 @@ final readonly class ExtensionContract
                 installedVersions: $versions,
             );
         } catch (Throwable $exception) {
-            return new self([get_class($exception).': '.$exception->getMessage()], null);
+            return new self(errors: [$exception::class.': '.$exception->getMessage()], fingerprint: null);
         }
 
         $errors = [];
@@ -174,7 +174,7 @@ final readonly class ExtensionContract
             }
         }
 
-        return new self($errors, $first->fingerprint);
+        return new self(errors: $errors, fingerprint: $first->fingerprint);
     }
 
     public static function sameImplementation(ExtensionStamp $stored, ExtensionStamp $current): bool

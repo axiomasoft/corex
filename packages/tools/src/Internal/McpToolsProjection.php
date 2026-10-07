@@ -17,15 +17,15 @@ use CoreX\Tools\Data\ToolResult;
 use CoreX\Tools\Errors\Enums\ToolsErrorCode;
 
 /** Fake in-memory MCP2025-11-25 tools/list and tools/call parity adapter. */
-final class McpToolsProjection
+final readonly class McpToolsProjection
 {
-    public const PROFILE = 'mcp-tools-projection/1';
+    public const string PROFILE = 'mcp-tools-projection/1';
 
-    public const PROTOCOL_VERSION = 'MCP2025-11-25';
+    public const string PROTOCOL_VERSION = 'MCP2025-11-25';
 
     public function __construct(
-        private readonly ToolCatalogue $catalogue,
-        private readonly ToolInvoker $invoker,
+        private ToolCatalogue $catalogue,
+        private ToolInvoker $invoker,
     ) {}
 
     /**
@@ -39,7 +39,7 @@ final class McpToolsProjection
             'profile' => self::PROFILE,
             'protocol' => self::PROTOCOL_VERSION,
             'tools' => array_map(
-                fn (ToolDescriptor $tool): array => $this->toolEntry($tool),
+                $this->toolEntry(...),
                 $view->descriptors,
             ),
         ];
@@ -56,7 +56,7 @@ final class McpToolsProjection
         string $requestId,
         ?string $operationKey = null,
     ): array {
-        $descriptor = $this->resolveByWireName($context, $wireName);
+        $descriptor = $this->resolveByWireName(context: $context, wireName: $wireName);
 
         if ($descriptor === null) {
             return $this->protocolError(
@@ -74,7 +74,7 @@ final class McpToolsProjection
             operationKey: $operationKey,
         );
 
-        $result = $this->invoker->invoke($context, $call);
+        $result = $this->invoker->invoke(context: $context, call: $call);
 
         return $this->mapResult($result);
     }

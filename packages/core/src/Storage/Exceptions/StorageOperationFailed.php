@@ -15,6 +15,6 @@ final class StorageOperationFailed extends CodedException
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::StorageOperationFailed, ErrorCategory::Unavailable, retryable: true);
+        return new ErrorDescriptor(code: CoreErrorCode::StorageOperationFailed, category: ErrorCategory::Unavailable, retryable: true);
     }
 }

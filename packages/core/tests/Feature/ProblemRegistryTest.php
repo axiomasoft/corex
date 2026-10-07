@@ -15,9 +15,9 @@ use CoreX\Errors\Internal\ProblemContribution;
 use CoreX\Errors\Laravel\ProblemDefinitions;
 
 test('ProblemRegistry boots with the isolated kernel and freezes its catalogue', function (): void {
-    $registry = app(ProblemRegistry::class);
+    $registry = resolve(ProblemRegistry::class);
     expect($registry->get(CoreErrorCode::InternalError)->type)->toBe('urn:corex:problem:core.internal_error')
-        ->and($registry)->toBe(app(ProblemRegistry::class))
+        ->and($registry)->toBe(resolve(ProblemRegistry::class))
         ->and(array_filter($registry->all(), static fn (ProblemDefinition $row): bool => ! str_starts_with($row->code->value(), 'core.')))->toBe([]);
     ProblemDefinitions::register($this->app, dirname(__DIR__, 2).'/composer.json', PackageProblemDefinitions::class);
     expect(fn () => ProblemDefinitions::register($this->app, dirname(__DIR__, 2).'/composer.json', 'CoreX\\Errors\\Internal\\LateProvider'))
@@ -25,7 +25,7 @@ test('ProblemRegistry boots with the isolated kernel and freezes its catalogue',
 });
 
 test('ProblemRegistry rejects invalid boot contributions with typed diagnostics', function (string $failure, array $definitions, string $owner): void {
-    $provider = new class($definitions) implements ProblemDefinitionProvider
+    $provider = new readonly class($definitions) implements ProblemDefinitionProvider
     {
         public function __construct(private array $rows) {}
 
@@ -56,7 +56,7 @@ test('ProblemRegistry rejects invalid boot contributions with typed diagnostics'
 });
 
 test('ProblemRegistry rejects unknown persisted identities and descriptor category drift', function (): void {
-    $registry = app(ProblemRegistry::class);
+    $registry = resolve(ProblemRegistry::class);
     expect(fn () => $registry->fromWire('user.secret'))->toThrow(ProblemRegistryException::class, 'ERROR-UNKNOWN-CODE')
         ->and(fn () => $registry->assertOccurrence(new ErrorDescriptor(CoreErrorCode::InternalError, ErrorCategory::Conflict)))
         ->toThrow(ProblemRegistryException::class, 'ERROR-OCCURRENCE-MISMATCH');

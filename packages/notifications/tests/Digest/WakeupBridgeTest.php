@@ -131,7 +131,7 @@ it('admits an explicit bounded legacy fixture for this definition only', functio
 it('quarantines a version mismatch without invoking the adapter', function (): void {
     $seen = [];
     bindRecordingDigestAdapter($seen);
-    $registry = app(wakeup_bridge_registry());
+    $registry = resolve(wakeup_bridge_registry());
     $definition = $registry->definition('notification.digest.v1');
     $envelope = $registry->envelope(definition: $definition, data: ['run_id' => 'mismatch-run']);
     $envelope['_corex']['extension']['version'] = 'notification-digest/0';
@@ -158,7 +158,7 @@ function freezeDigest(string $requestKey): object
     app()->instance(NotificationPolicy::class, new AllowDigestPolicy);
     app()->instance(SettingsRepository::class, new DigestBridgeSettingsRepository);
     app()->forgetScopedInstances();
-    app(NotificationCenter::class)->notify(digestContext(), new NotificationInput(
+    resolve(NotificationCenter::class)->notify(digestContext(), new NotificationInput(
         requestKey: $requestKey,
         eventType: 'document.ready',
         recipient: new RecipientReference(kind: 'user', id: '11111111-1111-7111-8111-111111111112'),
@@ -170,7 +170,7 @@ function freezeDigest(string $requestKey): object
     $start = $end->modify('-1 hour');
     DB::table('ntf_notifications')->update(['created_at' => $start->modify('+1 minute')]);
 
-    $digest = app(DigestBuilder::class)->build(digestContext(), new DigestWindow(
+    $digest = resolve(DigestBuilder::class)->build(digestContext(), new DigestWindow(
         start: $start,
         end: $end,
         period: 'hourly',

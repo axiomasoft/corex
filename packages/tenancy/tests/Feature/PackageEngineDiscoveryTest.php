@@ -16,7 +16,7 @@ it('boots the package engine and generates account ids', function (): void {
     DB::purge('pgsql');
     $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
-    expect(app(TenancyManager::class))->toBeInstanceOf(DatabaseTenancyManager::class);
+    expect(resolve(TenancyManager::class))->toBeInstanceOf(DatabaseTenancyManager::class);
 
     $cluster = (string) Str::uuid();
     $identity = (string) Str::uuid();

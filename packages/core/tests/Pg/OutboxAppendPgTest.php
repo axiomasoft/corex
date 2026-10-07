@@ -15,7 +15,7 @@ beforeEach(function (): void {
 });
 
 it('rolls back an outbox row with the business transaction', function (): void {
-    $outbox = app(Outbox::class);
+    $outbox = resolve(Outbox::class);
 
     try {
         DB::connection('pgsql')->transaction(function () use ($outbox): void {

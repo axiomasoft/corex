@@ -54,7 +54,7 @@ final readonly class AttributeIndexPlanner
         string $schemaHash,
         string $approvalDigest,
     ): AttributeIndexReceipt {
-        (new ScopeConnectionGuard($this->connection))->assertMatches($scope);
+        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
 
         if ($definition->index === IndexPolicy::None) {
             return new AttributeIndexReceipt(mode: 'none', ddl: false, indexName: null, expression: null, orderBy: null, owner: 'attributes');
@@ -72,7 +72,7 @@ final readonly class AttributeIndexPlanner
 
         $name = $this->indexName($definition);
         $orderBy = $this->orderBy($definition);
-        $before = $this->explain($definition->entity, $expression);
+        $before = $this->explain(entity: $definition->entity, expression: $expression);
         $payload = [
             'field' => $definition->key,
             'attribute_id' => $definition->id->value,
@@ -109,7 +109,7 @@ final readonly class AttributeIndexPlanner
             'error_code' => null,
             'finished_at' => $this->clock->now(),
         ]);
-        $after = $this->explain($definition->entity, $expression);
+        $after = $this->explain(entity: $definition->entity, expression: $expression);
 
         if (! str_contains(json_encode($after, JSON_THROW_ON_ERROR), $name)) {
             throw new RuntimeException('The verified query did not use the expression B-tree.');
@@ -158,7 +158,7 @@ final readonly class AttributeIndexPlanner
             return $row;
         });
 
-        $plan = $row === null ? null : Value::field($row, 'QUERY PLAN');
+        $plan = $row === null ? null : Value::field(row: $row, name: 'QUERY PLAN');
 
         return Value::array(json_decode(is_string($plan) ? $plan : json_encode($plan, JSON_THROW_ON_ERROR), true, 32, JSON_THROW_ON_ERROR));
     }

@@ -15,6 +15,6 @@ final class ProjectionDenied extends CodedException
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TenancyErrorCode::ProjectionDenied, ErrorCategory::Authorization, retryable: false);
+        return new ErrorDescriptor(code: TenancyErrorCode::ProjectionDenied, category: ErrorCategory::Authorization, retryable: false);
     }
 }

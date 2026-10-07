@@ -242,7 +242,7 @@ final class GoldenSnapshot
     {
         $names = [];
         foreach ($classes as $class) {
-            if (is_subclass_of($class, DomainEvent::class) && ! (new ReflectionClass($class))->isAbstract()) {
+            if (is_subclass_of($class, DomainEvent::class) && ! new ReflectionClass($class)->isAbstract()) {
                 $names[$class] = $class::name();
             }
         }
@@ -252,7 +252,7 @@ final class GoldenSnapshot
         $registry = MessageContractRegistry::class;
 
         if (app()->bound($registry)) {
-            foreach (app($registry)->all() as $contract) {
+            foreach (resolve($registry)->all() as $contract) {
                 $contracts[$contract->id()] = self::surfaceValue(get_object_vars($contract));
             }
         }

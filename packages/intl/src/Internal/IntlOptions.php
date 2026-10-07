@@ -46,30 +46,30 @@ final readonly class IntlOptions
         $reference = is_array($config['reference'] ?? null) ? $config['reference'] : [];
         $formatting = is_array($config['formatting'] ?? null) ? $config['formatting'] : [];
 
-        $supportedTags = self::stringList($violations, 'locale.supported_tags', $locale['supported_tags'] ?? ['en', 'en-US', 'ru', 'ru-RU']);
-        $appTag = self::nonEmpty($violations, 'locale.app_tag', $locale['app_tag'] ?? 'en');
-        $fallbackTags = self::stringList($violations, 'locale.explicit_fallback_tags', $locale['explicit_fallback_tags'] ?? ['en']);
-        $allowParent = self::bool($violations, 'locale.allow_parent', $locale['allow_parent'] ?? true);
-        $settingsNamespace = self::nonEmpty($violations, 'locale.settings_namespace', $locale['settings_namespace'] ?? 'intl');
-        $settingsKey = self::nonEmpty($violations, 'locale.settings_key', $locale['settings_key'] ?? 'locale');
-        $maxSupportedTags = self::positiveInt($violations, 'locale.max_supported_tags', $locale['max_supported_tags'] ?? 100);
-        $maxTagLength = self::positiveInt($violations, 'locale.max_tag_length', $locale['max_tag_length'] ?? 128);
+        $supportedTags = self::stringList(violations: $violations, path: 'locale.supported_tags', value: $locale['supported_tags'] ?? ['en', 'en-US', 'ru', 'ru-RU']);
+        $appTag = self::nonEmpty(violations: $violations, path: 'locale.app_tag', value: $locale['app_tag'] ?? 'en');
+        $fallbackTags = self::stringList(violations: $violations, path: 'locale.explicit_fallback_tags', value: $locale['explicit_fallback_tags'] ?? ['en']);
+        $allowParent = self::bool(violations: $violations, path: 'locale.allow_parent', value: $locale['allow_parent'] ?? true);
+        $settingsNamespace = self::nonEmpty(violations: $violations, path: 'locale.settings_namespace', value: $locale['settings_namespace'] ?? 'intl');
+        $settingsKey = self::nonEmpty(violations: $violations, path: 'locale.settings_key', value: $locale['settings_key'] ?? 'locale');
+        $maxSupportedTags = self::positiveInt(violations: $violations, path: 'locale.max_supported_tags', value: $locale['max_supported_tags'] ?? 100);
+        $maxTagLength = self::positiveInt(violations: $violations, path: 'locale.max_tag_length', value: $locale['max_tag_length'] ?? 128);
 
-        $metadataVersion = self::nonEmpty($violations, 'money.metadata_version', $money['metadata_version'] ?? 'brick/1');
-        $defaultSource = self::nonEmpty($violations, 'money.default_source', $money['default_source'] ?? 'manual');
-        $batchLimit = self::positiveInt($violations, 'money.batch_limit', $money['batch_limit'] ?? 1000);
+        $metadataVersion = self::nonEmpty(violations: $violations, path: 'money.metadata_version', value: $money['metadata_version'] ?? 'brick/1');
+        $defaultSource = self::nonEmpty(violations: $violations, path: 'money.default_source', value: $money['default_source'] ?? 'manual');
+        $batchLimit = self::positiveInt(violations: $violations, path: 'money.batch_limit', value: $money['batch_limit'] ?? 1000);
 
-        $datasetKey = self::nonEmpty($violations, 'reference.dataset_key', $reference['dataset_key'] ?? 'geography');
+        $datasetKey = self::nonEmpty(violations: $violations, path: 'reference.dataset_key', value: $reference['dataset_key'] ?? 'geography');
         $cursorSecret = $reference['cursor_secret'] ?? '';
 
         if (! is_string($cursorSecret)) {
-            $violations->add('reference.cursor_secret', 'must be a string');
+            $violations->add(path: 'reference.cursor_secret', message: 'must be a string');
             $cursorSecret = '';
         }
         $configuredProviders = $reference['providers'] ?? [];
 
         if (! is_array($configuredProviders)) {
-            $violations->add('reference.providers', 'must be a map');
+            $violations->add(path: 'reference.providers', message: 'must be a map');
             $configuredProviders = [];
         }
 
@@ -77,7 +77,7 @@ final readonly class IntlOptions
 
         foreach ($configuredProviders as $name => $definition) {
             if (! is_string($name) || ! is_array($definition)) {
-                $violations->add('reference.providers', 'must map each provider name to its settings');
+                $violations->add(path: 'reference.providers', message: 'must map each provider name to its settings');
 
                 continue;
             }
@@ -85,7 +85,7 @@ final readonly class IntlOptions
             $providers[$name] = $definition;
         }
 
-        $icuEnabled = self::bool($violations, 'formatting.icu_enabled', $formatting['icu_enabled'] ?? false);
+        $icuEnabled = self::bool(violations: $violations, path: 'formatting.icu_enabled', value: $formatting['icu_enabled'] ?? false);
 
         $violations->failIfAny();
 
@@ -125,7 +125,7 @@ final readonly class IntlOptions
     private static function stringList(ConfigurationValidator $violations, string $path, mixed $value): array
     {
         if (! is_array($value) || ! array_is_list($value)) {
-            $violations->add($path, 'must be a list of strings');
+            $violations->add(path: $path, message: 'must be a list of strings');
 
             return [];
         }
@@ -133,7 +133,7 @@ final readonly class IntlOptions
         $items = [];
         foreach ($value as $index => $item) {
             if (! is_string($item)) {
-                $violations->add($path.'.'.$index, 'must be a string');
+                $violations->add(path: $path.'.'.$index, message: 'must be a string');
 
                 continue;
             }
@@ -150,7 +150,7 @@ final readonly class IntlOptions
             return $value;
         }
 
-        $violations->add($path, 'must be a non-empty string');
+        $violations->add(path: $path, message: 'must be a non-empty string');
 
         return 'invalid';
     }
@@ -161,7 +161,7 @@ final readonly class IntlOptions
             return $value;
         }
 
-        $violations->add($path, 'must be a boolean');
+        $violations->add(path: $path, message: 'must be a boolean');
 
         return false;
     }
@@ -172,7 +172,7 @@ final readonly class IntlOptions
             return $value;
         }
 
-        $violations->add($path, 'must be a positive integer');
+        $violations->add(path: $path, message: 'must be a positive integer');
 
         return 1;
     }

@@ -33,9 +33,7 @@ final class ApiProfileFactory implements ApiProfiles
             $declarations[] = $declaration;
         }
 
-        usort($declarations, static function (Api $left, Api $right): int {
-            return [$left->version, $left->operationId] <=> [$right->version, $right->operationId];
-        });
+        usort($declarations, static fn (Api $left, Api $right): int => [$left->version, $left->operationId] <=> [$right->version, $right->operationId]);
 
         $operations = [];
         $seen = [];
@@ -48,16 +46,16 @@ final class ApiProfileFactory implements ApiProfiles
             }
 
             $seen[$key] = true;
-            $operation = OperationFactory::fromDeclaration($declaration, $registry->fingerprint);
+            $operation = OperationFactory::fromDeclaration(api: $declaration, registryFingerprint: $registry->fingerprint);
 
-            if ($operation->version !== $options->defaultVersion()->major && ! $this->declaresMajor($options, $operation->version)) {
+            if ($operation->version !== $options->defaultVersion()->major && ! $this->declaresMajor(options: $options, major: $operation->version)) {
                 throw new InvalidArgumentException('profile: operation version is not a configured major');
             }
 
             $operations[] = $operation;
         }
 
-        $capabilities = $this->capabilities($operations, $options);
+        $capabilities = $this->capabilities(operations: $operations, options: $options);
         $deprecations = $this->deprecations($operations);
         $version = $options->defaultVersion();
         $preimage = [
@@ -113,12 +111,12 @@ final class ApiProfileFactory implements ApiProfiles
                 continue;
             }
 
-            $owners = $this->owners($profile, $capability);
+            $owners = $this->owners(profile: $profile, capability: $capability);
             $available = $owners !== [] && ! in_array(false, array_map(
                 static fn (string $module) => $moduleAvailable[$module] ?? false,
                 $owners,
             ), true);
-            $supported = $this->supported($profile, $capability);
+            $supported = $this->supported(profile: $profile, capability: $capability);
             $reason = null;
             $enabled = $available && $supported && ! in_array($capability->id, $deniedIds, true);
 
@@ -138,7 +136,7 @@ final class ApiProfileFactory implements ApiProfiles
                 $reason = UnavailabilityReason::AccessDenied->value;
             }
 
-            $resolved[] = new EffectiveCapability($capability->id, $enabled, $reason, $capability->limits);
+            $resolved[] = new EffectiveCapability(id: $capability->id, enabled: $enabled, reason: $reason, limits: $capability->limits);
         }
 
         return $resolved;
@@ -146,13 +144,7 @@ final class ApiProfileFactory implements ApiProfiles
 
     private function declaresMajor(ApiOptions $options, string $major): bool
     {
-        foreach ($options->versions as $version) {
-            if ($version->major === $major) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($options->versions, fn ($version) => $version->major === $major);
     }
 
     /**
@@ -182,7 +174,7 @@ final class ApiProfileFactory implements ApiProfiles
         foreach ($owners as $id => $operationIds) {
             $meta = $options->capabilities[$id] ?? ['status' => 'available', 'limits' => []];
             sort($operationIds);
-            $descriptors[] = new CapabilityDescriptor($id, $meta['status'], $operationIds, $meta['limits']);
+            $descriptors[] = new CapabilityDescriptor(id: $id, status: $meta['status'], operationIds: $operationIds, limits: $meta['limits']);
         }
 
         return $descriptors;
@@ -232,12 +224,6 @@ final class ApiProfileFactory implements ApiProfiles
 
     private function supported(ApiProfile $profile, CapabilityDescriptor $capability): bool
     {
-        foreach ($profile->operations as $operation) {
-            if (in_array($operation->version.':'.$operation->id, $capability->operationIds, true) && $operation->executionSupported) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($profile->operations, fn ($operation) => in_array($operation->version.':'.$operation->id, $capability->operationIds, true) && $operation->executionSupported);
     }
 }

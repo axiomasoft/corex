@@ -26,7 +26,7 @@ final class CompanyPayload
             'address' => $company->address,
             'bank_details' => $company->bank_details,
             'source_id' => $company->source_id === null ? null : (string) $company->source_id,
-            'owner_id' => $company->owner_id === null ? null : $company->owner_id,
+            'owner_id' => $company->owner_id ?? null,
         ];
     }
 }

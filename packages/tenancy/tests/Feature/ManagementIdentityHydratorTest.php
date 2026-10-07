@@ -38,7 +38,7 @@ beforeEach(function (): void {
             DB::setDefaultConnection($original);
         }
     });
-    $this->hydrator = new ManagementIdentityHydrator(connections: app(ConnectionResolverInterface::class), centralConnection: 'identity-root-fixture', tenancy: $this->manager, managementScope: 'management-root');
+    $this->hydrator = new ManagementIdentityHydrator(connections: resolve(ConnectionResolverInterface::class), centralConnection: 'identity-root-fixture', tenancy: $this->manager, managementScope: 'management-root');
 });
 
 function identityHydrationRow(object $test, array $overrides = []): void
@@ -120,7 +120,7 @@ it('denies tenant or absent management authority before root reads or bookkeepin
     if ($tenant) {
         $this->manager->shouldReceive('initialized')->andReturn(true);
     }
-    $hydrator = new ManagementIdentityHydrator(connections: app(ConnectionResolverInterface::class), centralConnection: 'identity-root-fixture', tenancy: $this->manager, managementScope: $tenant ? 'management-root' : '');
+    $hydrator = new ManagementIdentityHydrator(connections: resolve(ConnectionResolverInterface::class), centralConnection: 'identity-root-fixture', tenancy: $this->manager, managementScope: $tenant ? 'management-root' : '');
     DB::connection('identity-root-fixture')->enableQueryLog();
     expect(fn () => $hydrator->hydrate(identityId: $this->identity, accountId: $this->account))->toThrow(DomainException::class);
     expect(fn () => $hydrator->fanOut($this->identity))->toThrow(DomainException::class);

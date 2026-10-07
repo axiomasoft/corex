@@ -14,7 +14,7 @@ final readonly class ExportPage
     /** @param list<CanonicalRecord> $rows */
     public function __construct(public array $rows, public ?ExportCursor $next, public bool $complete)
     {
-        self::validateInput($rows, $next, $complete);
+        self::validateInput(rows: $rows, next: $next, complete: $complete);
     }
 
     /** Runtime validation also rejects values from untyped integration callers.

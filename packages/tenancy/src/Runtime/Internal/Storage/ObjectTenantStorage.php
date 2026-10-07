@@ -18,17 +18,17 @@ use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
 
 /** Explicitly constructed with trusted server configuration; never auto-bound.  * @internal
  */
-final class ObjectTenantStorage implements TenantStorage
+final readonly class ObjectTenantStorage implements TenantStorage
 {
     /** @var array<string, mixed> */
-    private readonly array $durableConfig;
+    private array $durableConfig;
 
     /** @param array<string, mixed> $durableConfig */
     public function __construct(
-        private readonly TenantContextResolver $contexts,
-        private readonly FilesystemManager $filesystems,
+        private TenantContextResolver $contexts,
+        private FilesystemManager $filesystems,
         array $durableConfig,
-        private readonly string $ephemeralRoot,
+        private string $ephemeralRoot,
     ) {
         if (! class_exists(AwsS3V3Adapter::class) || ! class_exists(S3Client::class)) {
             throw new StorageCapabilityUnavailable('The optional native S3 adapter is not installed.');

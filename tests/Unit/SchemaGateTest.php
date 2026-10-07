@@ -24,7 +24,7 @@ function schemaGateProbe(string $source, string $filename = '2026_10_01_010010_c
             'drivers' => ['pgsql', 'sqlite'], 'lifecycle' => 'platform', 'requires' => [], 'connection' => null,
         ]]];
 
-        return (new SchemaGate($root, $manifest, $allowlist))->run();
+        return new SchemaGate($root, $manifest, $allowlist)->run();
     } finally {
         $filesystem->deleteDirectory($root);
     }

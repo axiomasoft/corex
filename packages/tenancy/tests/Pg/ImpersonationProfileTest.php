@@ -50,7 +50,7 @@ it('enforces all 27 grant profile matrix cells in the atomic claim', function ()
         ['minutes' => 120, 'approver' => null, 'staff' => true, 'reason' => 'ticket', 'accepted' => [true, false, false]],
         ['minutes' => 20, 'approver' => null, 'staff' => true, 'reason' => '', 'accepted' => [false, false, false]],
     ];
-    $store = new DatabaseImpersonationGrantStore(connections: app(ConnectionResolverInterface::class), centralConnection: 'pgsql');
+    $store = new DatabaseImpersonationGrantStore(connections: resolve(ConnectionResolverInterface::class), centralConnection: 'pgsql');
     $assertions = 0;
 
     foreach ($cases as $case) {

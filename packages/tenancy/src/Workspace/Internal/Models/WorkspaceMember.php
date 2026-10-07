@@ -40,10 +40,10 @@ final class WorkspaceMember extends Model
         return $this->belongsTo(Workspace::class);
     }
 
-    /** @return BelongsTo<covariant \Illuminate\Database\Eloquent\Model, $this> */
+    /** @return BelongsTo<covariant Model, $this> */
     public function user(): BelongsTo
     {
-        return UserRelations::belongsTo($this, 'user_id', null, 'user');
+        return UserRelations::belongsTo(model: $this, foreignKey: 'user_id', ownerKey: null, relation: 'user');
     }
 
     /** @return array<string, string> */

@@ -31,12 +31,12 @@ final class IdentityRegistrar implements PackageRegistrar
         $app->singleton(
             DatabaseIdentitySyncer::class,
             static fn (Application $app): DatabaseIdentitySyncer => new DatabaseIdentitySyncer(
-                $app->make(TenancyOptions::class)->centralConnection,
-                $app->make(TenancyManager::class),
-                $app->make(AccountRead::class),
-                $app->make(ConnectionResolverInterface::class),
-                $app->make(ClockInterface::class),
-                $app->make(Dispatcher::class),
+                centralConnection: $app->make(TenancyOptions::class)->centralConnection,
+                tenancy: $app->make(TenancyManager::class),
+                accounts: $app->make(AccountRead::class),
+                connections: $app->make(ConnectionResolverInterface::class),
+                clock: $app->make(ClockInterface::class),
+                events: $app->make(Dispatcher::class),
             ),
         );
         $app->singleton(IdentitySyncer::class, static fn (Application $app): DatabaseIdentitySyncer => $app->make(DatabaseIdentitySyncer::class));

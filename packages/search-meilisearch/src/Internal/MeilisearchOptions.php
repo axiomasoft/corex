@@ -26,13 +26,13 @@ final readonly class MeilisearchOptions
     {
         $violations = new ConfigurationValidator;
 
-        $host = self::nullableString($violations, 'host', $config['host'] ?? null);
-        $indexUid = self::nullableString($violations, 'index_uid', $config['index_uid'] ?? null);
-        $key = self::nullableString($violations, 'key', $config['key'] ?? null);
+        $host = self::nullableString(violations: $violations, path: 'host', value: $config['host'] ?? null);
+        $indexUid = self::nullableString(violations: $violations, path: 'index_uid', value: $config['index_uid'] ?? null);
+        $key = self::nullableString(violations: $violations, path: 'key', value: $config['key'] ?? null);
 
         $violations->failIfAny();
 
-        return new self($host, $indexUid, $key === null || $key === '' ? null : new SecretRef($key));
+        return new self(host: $host, indexUid: $indexUid, key: $key === null || $key === '' ? null : new SecretRef($key));
     }
 
     private static function nullableString(ConfigurationValidator $violations, string $path, mixed $value): ?string
@@ -41,7 +41,7 @@ final readonly class MeilisearchOptions
             return $value;
         }
 
-        $violations->add($path, 'must be null or a string');
+        $violations->add(path: $path, message: 'must be null or a string');
 
         return null;
     }

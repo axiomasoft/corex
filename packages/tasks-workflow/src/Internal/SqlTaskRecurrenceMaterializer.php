@@ -34,21 +34,21 @@ use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Connection;
 use Override;
 
-final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
+final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
 {
     private const string VERSION = MaterializationHasher::HANDLER_VERSION;
 
     public function __construct(
-        private readonly Connection $connection,
-        private readonly RecurrenceExpander $expander,
-        private readonly CreateTaskCommand $createTask,
-        private readonly TaskAccess $taskAccess,
-        private readonly bool $wakeupEnabled,
-        private readonly string $wakeupHandlerKind,
-        private readonly Container $container,
-        private readonly DataScopeAuthorizer $authorizer,
-        private readonly TenantContextRestorer $contexts,
-        private readonly TaskOperationReceipts $receipts,
+        private Connection $connection,
+        private RecurrenceExpander $expander,
+        private CreateTaskCommand $createTask,
+        private TaskAccess $taskAccess,
+        private bool $wakeupEnabled,
+        private string $wakeupHandlerKind,
+        private Container $container,
+        private DataScopeAuthorizer $authorizer,
+        private TenantContextRestorer $contexts,
+        private TaskOperationReceipts $receipts,
     ) {}
 
     #[Override]
@@ -58,7 +58,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
         MaterializationWindow $window,
         WriteToken $token,
     ): MaterializationReceipt {
-        (new ScopeConnectionGuard($this->connection))->assertMatches($scope);
+        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
 
         $context = $this->contexts->restore($scope);
 
@@ -67,20 +67,20 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
         }
 
         if ($token->expectedRecordVersion !== $series->immutableRevision) {
-            throw StaleMaterialization::revision($series->id, $series->immutableRevision, $token->expectedRecordVersion);
+            throw StaleMaterialization::revision(seriesKey: $series->id, expected: $series->immutableRevision, actual: $token->expectedRecordVersion);
         }
 
-        $payloadHash = MaterializationHasher::payload($scope, $series, $window);
+        $payloadHash = MaterializationHasher::payload(scope: $scope, series: $series, window: $window);
 
         if ($token->payloadHash !== $payloadHash) {
             throw StaleMaterialization::definition($series->id);
         }
 
-        $store = new MaterializationStore($this->connection, $this->receipts);
+        $store = new MaterializationStore(connection: $this->connection, receipts: $this->receipts);
         $existing = $store->findOperation($token->operationKey);
 
         if ($existing !== null) {
-            return $store->assertReplayable($existing, $payloadHash);
+            return $store->assertReplayable(existing: $existing, payloadHash: $payloadHash);
         }
 
         $seriesRow = $this->connection
@@ -105,7 +105,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
             }
 
             if (Value::text($state->active_revision) !== $series->immutableRevision) {
-                throw StaleMaterialization::revision($series->id, $series->immutableRevision, Value::text($state->active_revision));
+                throw StaleMaterialization::revision(seriesKey: $series->id, expected: $series->immutableRevision, actual: Value::text($state->active_revision));
             }
 
             if (! hash_equals(Value::text($state->restore_epoch), $scope->restoreEpoch)) {
@@ -207,7 +207,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
                     retired: false,
                     unknown: true,
                 );
-                $store->persistOperation($token->operationKey, $payloadHash, $scope->restoreEpoch, $store->receiptToStored($receipt));
+                $store->persistOperation(operationKey: $token->operationKey, payloadHash: $payloadHash, restoreEpoch: $scope->restoreEpoch, resultRef: $store->receiptToStored($receipt));
 
                 return $receipt;
             }
@@ -244,7 +244,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
                 unknown: false,
             );
 
-            $store->persistOperation($token->operationKey, $payloadHash, $scope->restoreEpoch, $store->receiptToStored($receipt));
+            $store->persistOperation(operationKey: $token->operationKey, payloadHash: $payloadHash, restoreEpoch: $scope->restoreEpoch, resultRef: $store->receiptToStored($receipt));
 
             return $receipt;
         });
@@ -263,7 +263,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
         TaskDraft $template,
         Occurrence $occurrence,
     ): array {
-        $existing = $store->lockOccurrence($series->id, $series->immutableRevision, $occurrence->key);
+        $existing = $store->lockOccurrence(seriesKey: $series->id, revision: $series->immutableRevision, occurrenceKey: $occurrence->key);
 
         if ($existing !== null) {
             if ($existing->state === 'unknown') {
@@ -291,7 +291,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
             return ['reference' => null, 'created' => false, 'conflict' => true, 'unknown' => false];
         }
 
-        $operationKey = MaterializationHasher::occurrenceOperationKey($series->id, $series->immutableRevision, $occurrence->key);
+        $operationKey = MaterializationHasher::occurrenceOperationKey(seriesKey: $series->id, revision: $series->immutableRevision, occurrenceKey: $occurrence->key);
         $occurrenceId = $store->insertPendingOccurrence(
             seriesKey: $series->id,
             revision: $series->immutableRevision,
@@ -311,9 +311,9 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
             context: $context,
         );
 
-        $draft = $this->draftForOccurrence($template, $occurrence);
+        $draft = $this->draftForOccurrence(template: $template, occurrence: $occurrence);
         $reference = $this->createTask->handle($draft);
-        $store->commitOccurrence($occurrenceId, [
+        $store->commitOccurrence(occurrenceId: $occurrenceId, taskRef: [
             'id' => $reference->id,
             'type' => $reference->type,
             'display' => $reference->display,
@@ -361,7 +361,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
 
         if ($valueType === 'DATE') {
             $endDate = new DateTimeImmutable($end);
-            $aheadEnd = (new DateTimeImmutable($start))->add(new DateInterval('P'.$window->aheadDays.'D'));
+            $aheadEnd = new DateTimeImmutable($start)->add(new DateInterval('P'.$window->aheadDays.'D'));
 
             if ($aheadEnd < $endDate) {
                 $end = $aheadEnd->format('Y-m-d');
@@ -428,7 +428,7 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
         }
 
         $kind = $this->wakeupHandlerKind;
-        $fireAt = (new DateTimeImmutable($window->end))->sub(new DateInterval('P1D'));
+        $fireAt = new DateTimeImmutable($window->end)->sub(new DateInterval('P1D'));
 
         $this->container->make(WakeupScheduler::class)->schedule(new WakeupRequest(
             context: $context,

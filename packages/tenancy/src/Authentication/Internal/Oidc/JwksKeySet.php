@@ -20,18 +20,18 @@ use Illuminate\Http\Client\Factory as HttpFactory;
  *
  * @internal
  */
-final class JwksKeySet
+final readonly class JwksKeySet
 {
     private const string CACHE_KEY_PREFIX = 'corex_tenancy_oidc_jwks:';
 
     private const string COOLDOWN_KEY_PREFIX = 'corex_tenancy_oidc_jwks_refetch_cooldown:';
 
     public function __construct(
-        private readonly HttpFactory $http,
-        private readonly CacheFactory $cache,
-        private readonly ?string $cacheStore,
-        private readonly int $cacheTtl,
-        private readonly int $refetchCooldownSeconds,
+        private HttpFactory $http,
+        private CacheFactory $cache,
+        private ?string $cacheStore,
+        private int $cacheTtl,
+        private int $refetchCooldownSeconds,
     ) {}
 
     /**

@@ -53,9 +53,9 @@ final class CompileModulesCommand extends Command
 
         $cachePath = $this->laravel->basePath(CompiledModuleRegistry::CACHE_PATH);
         CompiledModuleRegistry::writeAtomic(
-            $cachePath,
-            array_map(CompiledModule::fromManifest(...), $manifests),
-            $compiled,
+            path: $cachePath,
+            modules: array_map(CompiledModule::fromManifest(...), $manifests),
+            registry: $compiled,
         );
 
         $this->components->info(sprintf('Wrote compiled registry to %s.', $cachePath));

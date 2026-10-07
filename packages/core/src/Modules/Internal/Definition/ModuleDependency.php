@@ -23,9 +23,4 @@ final readonly class ModuleDependency
     {
         return new self(kind: 'module', package: $composerName, constraint: $constraint);
     }
-
-    public static function phpExtension(string $extension): self
-    {
-        return new self(kind: 'php-extension', package: $extension, constraint: '*');
-    }
 }

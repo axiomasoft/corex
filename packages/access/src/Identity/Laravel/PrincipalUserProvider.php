@@ -36,10 +36,10 @@ use stdClass;
  * provider.
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class PrincipalUserProvider implements UserProvider
+final readonly class PrincipalUserProvider implements UserProvider
 {
     public function __construct(
-        private readonly AuthOptions $options,
+        private AuthOptions $options,
     ) {}
 
     #[Override]
@@ -116,7 +116,7 @@ final class PrincipalUserProvider implements UserProvider
             return;
         }
 
-        app(IdentityPasswordRehasher::class)->rehash(
+        resolve(IdentityPasswordRehasher::class)->rehash(
             identityId: $user->getAuthIdentifier(),
             expectedHash: $hash,
             replacementHash: Hash::make($password),

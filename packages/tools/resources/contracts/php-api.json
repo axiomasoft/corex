@@ -913,7 +913,7 @@
             },
             "constants": {
                 "SCHEMA_PROFILE": {
-                    "type": null,
+                    "type": "string",
                     "value": "'tool-schema/1'",
                     "visibility": "public",
                     "final": false,

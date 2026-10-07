@@ -59,11 +59,11 @@ final readonly class AutMatrixGrantSource implements GrantSource
 
         $workspaceId = $this->tenancyManager->context()?->workspace?->id;
 
-        if ($this->hasActiveOwnerAssignment($principalType, $principalId, $workspaceId)) {
+        if ($this->hasActiveOwnerAssignment(principalType: $principalType, principalId: $principalId, workspaceId: $workspaceId)) {
             return PermissionSet::wildcard();
         }
 
-        $keys = $this->assignmentsQuery($principalType, $principalId, $workspaceId)
+        $keys = $this->assignmentsQuery(principalType: $principalType, principalId: $principalId, workspaceId: $workspaceId)
             ->join('aut_azguard_role_links as links', 'links.role_id', '=', 'aut_role_assignments.role_id')
             ->join('aut_roles', 'aut_roles.id', '=', 'links.role_id')
             ->join(AzGuardConfig::rolePermissionsTable().' as azgrp', static function (JoinClause $join) use ($panelId): void {
@@ -91,7 +91,7 @@ final readonly class AutMatrixGrantSource implements GrantSource
 
     private function hasActiveOwnerAssignment(PrincipalType $principalType, string $principalId, ?string $workspaceId): bool
     {
-        return $this->assignmentsQuery($principalType, $principalId, $workspaceId)
+        return $this->assignmentsQuery(principalType: $principalType, principalId: $principalId, workspaceId: $workspaceId)
             ->join('aut_roles', 'aut_roles.id', '=', 'aut_role_assignments.role_id')
             ->where('aut_roles.slug', 'owner')
             ->where('aut_roles.is_system', true)

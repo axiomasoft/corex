@@ -19,6 +19,6 @@ final class ProblemRegistryException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor($this->errorCode, ErrorCategory::Internal);
+        return new ErrorDescriptor(code: $this->errorCode, category: ErrorCategory::Internal);
     }
 }

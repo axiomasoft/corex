@@ -20,13 +20,13 @@ use InvalidArgumentException;
 use Override;
 use stdClass;
 
-final class SqlGeographyProvider implements GeographyProvider
+final readonly class SqlGeographyProvider implements GeographyProvider
 {
     public function __construct(
-        private readonly Connection $connection,
-        private readonly string $datasetKey,
-        private readonly FixtureReferenceNormalizer $normalizer,
-        private readonly ReferenceCursorCodec $cursors,
+        private Connection $connection,
+        private string $datasetKey,
+        private FixtureReferenceNormalizer $normalizer,
+        private ReferenceCursorCodec $cursors,
     ) {}
 
     #[Override]

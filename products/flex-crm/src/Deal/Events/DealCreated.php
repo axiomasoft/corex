@@ -8,11 +8,11 @@ use Flex\Crm\Deal\Models\Deal;
 use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
 use Illuminate\Foundation\Events\Dispatchable;
 
-final class DealCreated implements ShouldDispatchAfterCommit
+final readonly class DealCreated implements ShouldDispatchAfterCommit
 {
     use Dispatchable;
 
     public function __construct(
-        public readonly Deal $deal,
+        public Deal $deal,
     ) {}
 }

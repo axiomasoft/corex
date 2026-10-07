@@ -8,17 +8,17 @@ use Closure;
 use CoreX\Transfer\Data\SourceCursor;
 use CoreX\Transfer\Data\TransferLimits;
 
-final class ExecutionGuard
+final readonly class ExecutionGuard
 {
     /**
      * @param  Closure(): int  $monotonicNanoseconds
      * @param  Closure(): int  $memoryBytes
      */
     public function __construct(
-        private readonly TransferLimits $limits,
-        private readonly Closure $monotonicNanoseconds,
-        private readonly Closure $memoryBytes,
-        private readonly int $startedAt,
+        private TransferLimits $limits,
+        private Closure $monotonicNanoseconds,
+        private Closure $memoryBytes,
+        private int $startedAt,
     ) {}
 
     public static function production(TransferLimits $limits): self

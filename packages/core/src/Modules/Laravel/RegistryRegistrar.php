@@ -54,13 +54,11 @@ final class RegistryRegistrar implements PackageRegistrar
         // predicate is wired to the real ModuleRegistry::isActive
         // — resolved lazily at call time so all(null) at boot never triggers it
         // (and never a DB read).
-        $app->singleton(InMemoryEntityRegistry::class, static function (Application $app): InMemoryEntityRegistry {
-            return new InMemoryEntityRegistry(
-                moduleActive: static fn (string $module, mixed $ctx): bool => $app
-                    ->make(ModuleRegistry::class)
-                    ->isActive($module, $ctx),
-            );
-        });
+        $app->singleton(InMemoryEntityRegistry::class, static fn (Application $app): InMemoryEntityRegistry => new InMemoryEntityRegistry(
+            moduleActive: static fn (string $module, mixed $ctx): bool => $app
+                ->make(ModuleRegistry::class)
+                ->isActive($module, $ctx),
+        ));
         $app->singleton(
             EntityRegistry::class,
             static fn (Application $app): InMemoryEntityRegistry => $app->make(InMemoryEntityRegistry::class),
@@ -80,31 +78,27 @@ final class RegistryRegistrar implements PackageRegistrar
             options: $app->make(ModulesOptions::class),
         ));
 
-        $app->singleton(ModuleRegistry::class, function (Application $app): CompiledModuleRegistry {
-            return new CompiledModuleRegistry(
-                cachePath: $app->basePath(CompiledModuleRegistry::CACHE_PATH),
-                stateReader: $app->make(ModuleStateReader::class),
-                cache: $app->make(ModuleRegistryCache::class),
-                // Epoch: monotonic per-account registry version read from
-                // the module connection. ctx is accepted for future per-account
-                // resolution; today it reads the (single) module DB.
-                versionResolver: fn (mixed $ctx): int => $this->registryVersion($app),
-                // Production must have compiled the registry at deploy; a
-                // missing file there is a hard failure, not a silent empty
-                // runtime (a defect class caught in an earlier pre-mortem).
-                failIfMissing: $app->environment('production'),
-            );
-        });
+        $app->singleton(ModuleRegistry::class, fn (Application $app): CompiledModuleRegistry => new CompiledModuleRegistry(
+            cachePath: $app->basePath(CompiledModuleRegistry::CACHE_PATH),
+            stateReader: $app->make(ModuleStateReader::class),
+            cache: $app->make(ModuleRegistryCache::class),
+            // Epoch: monotonic per-account registry version read from
+            // the module connection. ctx is accepted for future per-account
+            // resolution; today it reads the (single) module DB.
+            versionResolver: fn (mixed $ctx): int => $this->registryVersion($app),
+            // Production must have compiled the registry at deploy; a
+            // missing file there is a hard failure, not a silent empty
+            // runtime (a defect class caught in an earlier pre-mortem).
+            failIfMissing: $app->environment('production'),
+        ));
 
-        $app->singleton(RegistryIntrospection::class, static function (Application $app): ReadRegistryIntrospection {
-            return new ReadRegistryIntrospection(
-                registry: $app->make(ModuleRegistry::class),
-                activationGate: $app->make(ModuleActivationGate::class),
-                cachePath: $app->basePath(CompiledModuleRegistry::CACHE_PATH),
-                failIfMissing: $app->environment('production'),
-                installedJsonPath: $app->basePath(self::INSTALLED_JSON),
-            );
-        });
+        $app->singleton(RegistryIntrospection::class, static fn (Application $app): ReadRegistryIntrospection => new ReadRegistryIntrospection(
+            registry: $app->make(ModuleRegistry::class),
+            activationGate: $app->make(ModuleActivationGate::class),
+            cachePath: $app->basePath(CompiledModuleRegistry::CACHE_PATH),
+            failIfMissing: $app->environment('production'),
+            installedJsonPath: $app->basePath(self::INSTALLED_JSON),
+        ));
     }
 
     /**

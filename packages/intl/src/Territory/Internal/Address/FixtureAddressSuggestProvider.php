@@ -13,14 +13,14 @@ use CoreX\Intl\Territory\Internal\Value;
 use InvalidArgumentException;
 use Override;
 
-final class FixtureAddressSuggestProvider implements AddressSuggestProvider
+final readonly class FixtureAddressSuggestProvider implements AddressSuggestProvider
 {
     /** @var list<array<string, mixed>> */
-    private readonly array $entries;
+    private array $entries;
 
     public function __construct(
-        private readonly string $fixturePath,
-        private readonly AddressSuggestGuard $guard,
+        private string $fixturePath,
+        private AddressSuggestGuard $guard,
     ) {
         if (! is_file($fixturePath)) {
             throw new InvalidArgumentException('Address fixture is missing.');

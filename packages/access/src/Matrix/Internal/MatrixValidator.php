@@ -92,7 +92,7 @@ final readonly class MatrixValidator
         $warnings = [];
 
         foreach ($rows as $row) {
-            $warning = $this->capabilityDriftWarning($role, $row->entityKey, $row->scope->value);
+            $warning = $this->capabilityDriftWarning(role: $role, entityKey: $row->entityKey, scope: $row->scope->value);
 
             if ($warning !== null) {
                 $warnings[] = $warning;

@@ -108,13 +108,11 @@ it('encrypts a sensitive value at rest and masks it in SettingChanged', function
     expect($raw)->not->toContain('super-secret')
         ->and(JsonDocuments::decode($repository->get('crm', 'api_key')))->toBe('super-secret');
 
-    Event::assertDispatched(SettingChanged::class, function (SettingChanged $event): bool {
-        return $event->namespace === 'crm'
-            && $event->key === 'api_key'
-            && $event->sensitive === true
-            && JsonDocuments::decode($event->old) === '••••••'
-            && JsonDocuments::decode($event->new) === '••••••';
-    });
+    Event::assertDispatched(SettingChanged::class, fn (SettingChanged $event): bool => $event->namespace === 'crm'
+        && $event->key === 'api_key'
+        && $event->sensitive === true
+        && JsonDocuments::decode($event->old) === '••••••'
+        && JsonDocuments::decode($event->new) === '••••••');
 });
 
 it('updates in place through the repository rather than duplicating a row', function (): void {

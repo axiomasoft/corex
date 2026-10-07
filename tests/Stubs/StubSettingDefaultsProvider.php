@@ -7,15 +7,15 @@ namespace CoreX\Tests\Stubs;
 use CoreX\Settings\Contracts\SettingDefaultsProvider;
 use Override;
 
-final class StubSettingDefaultsProvider implements SettingDefaultsProvider
+final readonly class StubSettingDefaultsProvider implements SettingDefaultsProvider
 {
     /**
      * @param  array<string, mixed>  $defaults  keyed by "namespace.key"
      * @param  list<string>  $sensitive  "namespace.key" entries treated as sensitive
      */
     public function __construct(
-        private readonly array $defaults = [],
-        private readonly array $sensitive = [],
+        private array $defaults = [],
+        private array $sensitive = [],
     ) {}
 
     #[Override]

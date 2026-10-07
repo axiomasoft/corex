@@ -25,6 +25,6 @@ final class RegistryInputUnavailable extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::RegistryInputUnavailable, ErrorCategory::Unavailable, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::RegistryInputUnavailable, category: ErrorCategory::Unavailable, retryable: false);
     }
 }

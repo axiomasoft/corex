@@ -68,7 +68,7 @@ final readonly class PermissionSurface
         $scopes = [];
 
         foreach (Scope::cases() as $case) {
-            $normalized = $this->scopeAvailability->normalize($declaration->entity, $case);
+            $normalized = $this->scopeAvailability->normalize(entityKey: $declaration->entity, scope: $case);
 
             if (! in_array($normalized, $scopes, true)) {
                 $scopes[] = $normalized;

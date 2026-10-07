@@ -33,7 +33,7 @@ it('resolves explicit principals across two isolated account databases without a
             DB::setDefaultConnection($connection);
             expect(DB::connection()->getDatabaseName())->toBe($database);
 
-            foreach ([app(SchemaSets::class)->get('axiomasoft/corex:tenant')->path, app(SchemaSets::class)->get('axiomasoft/corex-tenancy:tenant')->path] as $path) {
+            foreach ([resolve(SchemaSets::class)->get('axiomasoft/corex:tenant')->path, resolve(SchemaSets::class)->get('axiomasoft/corex-tenancy:tenant')->path] as $path) {
                 $this->artisan('migrate', ['--database' => $connection, '--path' => realpath($path), '--realpath' => true, '--force' => true])->assertExitCode(0);
             }
 
@@ -44,7 +44,7 @@ it('resolves explicit principals across two isolated account databases without a
             $workspaceIds[$connection] = $workspace->id;
         }
 
-        $resolver = app(PrincipalWorkspaceResolver::class);
+        $resolver = resolve(PrincipalWorkspaceResolver::class);
         expect($resolver)->toBeInstanceOf(DatabaseWorkspaceResolver::class);
         // No auth binding is involved; the same resolver is reused A -> B -> A.
         foreach (['principal_a', 'principal_b', 'principal_a'] as $connection) {

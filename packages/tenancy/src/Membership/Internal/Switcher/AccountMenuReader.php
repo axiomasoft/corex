@@ -14,7 +14,7 @@ use Throwable;
 /** @internal Unregistered local reference; menu output never grants account access. */
 final readonly class AccountMenuReader
 {
-    public const CACHE_TTL_SECONDS = 300;
+    public const int CACHE_TTL_SECONDS = 300;
 
     public function __construct(
         private AccountsReadTransport $transport,

@@ -37,7 +37,7 @@ final class TasksWorkflowServiceProvider extends ServiceProvider
     {
         $this->app->tag([TasksWorkflowSchemaSets::class], SchemaSetProvider::class);
 
-        ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
+        ProblemDefinitions::register(app: $this->app, composerManifest: __DIR__.'/../composer.json', provider: PackageProblemDefinitions::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-tasks-workflow.php', 'corex-tasks-workflow');
 
@@ -48,20 +48,18 @@ final class TasksWorkflowServiceProvider extends ServiceProvider
 
         $this->app->singleton(RecurrenceExpander::class, static fn (): RecurrenceExpander => RecurrenceFactory::create());
 
-        $this->app->scoped(TaskRecurrenceCommand::class, function (Application $app): SqlTaskRecurrenceMaterializer {
-            return new SqlTaskRecurrenceMaterializer(
-                connection: $app->make(DatabaseManager::class)->connection(),
-                expander: $app->make(RecurrenceExpander::class),
-                createTask: $app->make(CreateTaskCommand::class),
-                taskAccess: $app->make(TaskAccess::class),
-                wakeupEnabled: $app->make(TasksWorkflowOptions::class)->wakeupEnabled,
-                wakeupHandlerKind: $app->make(TasksWorkflowOptions::class)->wakeupHandlerKind,
-                container: $app,
-                authorizer: $app->make(DataScopeAuthorizer::class),
-                contexts: $app->make(TenantContextRestorer::class),
-                receipts: $app->make(TaskOperationReceipts::class),
-            );
-        });
+        $this->app->scoped(TaskRecurrenceCommand::class, fn (Application $app): SqlTaskRecurrenceMaterializer => new SqlTaskRecurrenceMaterializer(
+            connection: $app->make(DatabaseManager::class)->connection(),
+            expander: $app->make(RecurrenceExpander::class),
+            createTask: $app->make(CreateTaskCommand::class),
+            taskAccess: $app->make(TaskAccess::class),
+            wakeupEnabled: $app->make(TasksWorkflowOptions::class)->wakeupEnabled,
+            wakeupHandlerKind: $app->make(TasksWorkflowOptions::class)->wakeupHandlerKind,
+            container: $app,
+            authorizer: $app->make(DataScopeAuthorizer::class),
+            contexts: $app->make(TenantContextRestorer::class),
+            receipts: $app->make(TaskOperationReceipts::class),
+        ));
     }
 
     public function boot(): void

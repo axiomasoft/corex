@@ -40,20 +40,20 @@ use Psr\Clock\ClockInterface;
  * ordinary (non-`imp`) lane is UNCHANGED from P2.22 — its own Validation
  * suite must stay green without edits (D145).
  */
-final class OidcLoginController
+final readonly class OidcLoginController
 {
     public function __construct(
-        private readonly OidcDiscovery $discovery,
-        private readonly OidcClient $client,
-        private readonly IdTokenVerifier $verifier,
-        private readonly IdentitySyncer $syncer,
-        private readonly ImpersonationService $impersonation,
-        private readonly ImpersonationPolicy $impersonationPolicy,
-        private readonly TenancyOptions $options,
-        private readonly AuthFactory $auth,
-        private readonly ConnectionResolverInterface $connections,
-        private readonly ClockInterface $clock,
-        private readonly TenantContextResolver $contexts,
+        private OidcDiscovery $discovery,
+        private OidcClient $client,
+        private IdTokenVerifier $verifier,
+        private IdentitySyncer $syncer,
+        private ImpersonationService $impersonation,
+        private ImpersonationPolicy $impersonationPolicy,
+        private TenancyOptions $options,
+        private AuthFactory $auth,
+        private ConnectionResolverInterface $connections,
+        private ClockInterface $clock,
+        private TenantContextResolver $contexts,
     ) {}
 
     public function redirect(Request $request): RedirectResponse
@@ -67,7 +67,7 @@ final class OidcLoginController
         $nonce = $this->consumeNonce($request);
 
         $tokens = $this->client->exchangeCodeForTokens(
-            code: $this->requireQueryString($request, 'code'),
+            code: $this->requireQueryString(request: $request, key: 'code'),
             codeVerifier: $codeVerifier,
         );
 
@@ -87,7 +87,7 @@ final class OidcLoginController
 
         $account = $this->contexts->current()->account;
 
-        $this->assertAccountClaim($claims, $account);
+        $this->assertAccountClaim(claims: $claims, account: $account);
 
         $grantId = $this->impersonationClaim($claims);
 
@@ -98,16 +98,16 @@ final class OidcLoginController
             // identity into the client's own `users` table).
             $request->session()->regenerate();
 
-            $this->impersonation->start($grantId, $sub);
+            $this->impersonation->start(grantId: $grantId, staffIdentityId: $sub);
 
             $request->session()->put('_corex_auth_at', $this->clock->now()->format(DATE_ATOM));
 
             return redirect()->intended('/');
         }
 
-        $this->assertMembership($sub, $account);
+        $this->assertMembership(sub: $sub, account: $account);
 
-        $this->syncer->syncToAccount($sub, $account->id);
+        $this->syncer->syncToAccount(identityId: $sub, accountId: $account->id);
 
         $request->session()->regenerate();
 

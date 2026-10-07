@@ -62,7 +62,7 @@ final class CachePrefixBootstrapper implements TenantBootstrapper
                 $base['path'] = rtrim($path, '/').'/corex-tenants/'.$suffix;
                 $base['lock_path'] = rtrim($lockPath, '/').'/corex-tenants/'.$suffix;
             } else {
-                $existing = $base['prefix'] ?? $this->config->get('cache.prefix', '');
+                $existing = $base['prefix'] ?? $this->config->get(key: 'cache.prefix', default: '');
                 $base['prefix'] = str_replace('%tenant%', $suffix, $this->prefix).(is_string($existing) ? $existing : '');
             }
 
@@ -72,7 +72,7 @@ final class CachePrefixBootstrapper implements TenantBootstrapper
                 $base['lock_connection'] ??= $base['connection'];
             }
 
-            $this->config->set($key, $base);
+            $this->config->set(key: $key, value: $base);
             $this->cache->forgetDriver($store);
         }
     }
@@ -81,7 +81,7 @@ final class CachePrefixBootstrapper implements TenantBootstrapper
     public function revert(): void
     {
         foreach ($this->original as $store => $base) {
-            $this->config->set("cache.stores.{$store}", $base);
+            $this->config->set(key: "cache.stores.{$store}", value: $base);
             $this->cache->forgetDriver($store);
         }
 

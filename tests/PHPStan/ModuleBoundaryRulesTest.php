@@ -18,7 +18,7 @@ use PHPStan\Testing\RuleTestCase;
  */
 final class ModuleBoundaryRulesTest extends RuleTestCase
 {
-    private const MODULE_NAMESPACE = 'CoreX\Tests\PHPStan\Data\Billing\\';
+    private const string MODULE_NAMESPACE = 'CoreX\Tests\PHPStan\Data\Billing\\';
 
     private Rule $rule;
 

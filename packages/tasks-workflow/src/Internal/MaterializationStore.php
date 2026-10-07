@@ -19,13 +19,13 @@ use InvalidArgumentException;
 use stdClass;
 
 /** @internal Durable materialization receipts and occurrence rows. */
-final class MaterializationStore
+final readonly class MaterializationStore
 {
-    public function __construct(private readonly Connection $connection, private readonly TaskOperationReceipts $receipts) {}
+    public function __construct(private Connection $connection, private TaskOperationReceipts $receipts) {}
 
     public function findOperation(string $operationKey): ?TaskOperationReceipt
     {
-        return $this->receipts->find($this->connection, $operationKey);
+        return $this->receipts->find(connection: $this->connection, requestKey: $operationKey);
     }
 
     public function assertReplayable(TaskOperationReceipt $existing, string $payloadHash): MaterializationReceipt

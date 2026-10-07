@@ -18,10 +18,10 @@ use Override;
  *
  * @internal spec: Implementation Rules, P1.24
  */
-final class DefaultWorkerRuntime implements WorkerRuntime
+final readonly class DefaultWorkerRuntime implements WorkerRuntime
 {
     /** @param  Closure(): Application  $application  resolves the running application at call time. */
-    public function __construct(private readonly Closure $application) {}
+    public function __construct(private Closure $application) {}
 
     #[Override]
     public function isOctane(): bool

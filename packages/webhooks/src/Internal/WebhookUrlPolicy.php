@@ -8,17 +8,18 @@ use Closure;
 use CoreX\Webhooks\Data\ValidatedWebhookRequest;
 use CoreX\Webhooks\Data\WebhookDestination;
 use CoreX\Webhooks\Data\WebhookSignedHeaders;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 use RuntimeException;
 
 final readonly class WebhookUrlPolicy
 {
-    private const MAX_DNS_RECORDS = 64;
+    private const int MAX_DNS_RECORDS = 64;
 
-    private const MAX_CNAME_DEPTH = 8;
+    private const int MAX_CNAME_DEPTH = 8;
 
     /** @var list<string> */
-    private const DENIED_IPV4_CIDRS = [
+    private const array DENIED_IPV4_CIDRS = [
         '0.0.0.0/8',
         '10.0.0.0/8',
         '100.64.0.0/10',
@@ -36,7 +37,7 @@ final readonly class WebhookUrlPolicy
     ];
 
     /** @var list<string> */
-    private const DENIED_IPV6_CIDRS = [
+    private const array DENIED_IPV6_CIDRS = [
         '2001::/23',
         '2001:db8::/32',
         '2002::/16',
@@ -117,31 +118,19 @@ final readonly class WebhookUrlPolicy
         }
 
         if (strlen($packed) === 4) {
-            foreach (self::DENIED_IPV4_CIDRS as $cidr) {
-                if (self::matchesCidr($packed, $cidr)) {
-                    return false;
-                }
-            }
-
-            return true;
+            return array_all(self::DENIED_IPV4_CIDRS, fn ($cidr) => ! self::matchesCidr(packedAddress: $packed, cidr: $cidr));
         }
 
-        if (substr($packed, 0, 10) === str_repeat("\0", 10)
+        if (Str::startsWith($packed, str_repeat("\0", 10))
             && substr($packed, 10, 2) === "\xff\xff") {
             return false;
         }
 
-        if (! self::matchesCidr($packed, '2000::/3')) {
+        if (! self::matchesCidr(packedAddress: $packed, cidr: '2000::/3')) {
             return false;
         }
 
-        foreach (self::DENIED_IPV6_CIDRS as $cidr) {
-            if (self::matchesCidr($packed, $cidr)) {
-                return false;
-            }
-        }
-
-        return true;
+        return array_all(self::DENIED_IPV6_CIDRS, fn ($cidr) => ! self::matchesCidr(packedAddress: $packed, cidr: $cidr));
     }
 
     private static function isCanonicalDnsName(string $host): bool
@@ -160,13 +149,7 @@ final readonly class WebhookUrlPolicy
             return false;
         }
 
-        foreach ($labels as $label) {
-            if (preg_match('/\A[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\z/D', $label) !== 1) {
-                return false;
-            }
-        }
-
-        return true;
+        return array_all($labels, fn ($label) => ! (preg_match('/\A[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\z/D', $label) !== 1));
     }
 
     /** @return list<string> */
@@ -233,13 +216,7 @@ final readonly class WebhookUrlPolicy
             return true;
         }
 
-        foreach ($this->organizationDeniedCidrs as $cidr) {
-            if (self::matchesCidr($packed, $cidr)) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($this->organizationDeniedCidrs, fn ($cidr) => self::matchesCidr(packedAddress: $packed, cidr: $cidr));
     }
 
     private static function matchesCidr(string $packedAddress, string $cidr): bool

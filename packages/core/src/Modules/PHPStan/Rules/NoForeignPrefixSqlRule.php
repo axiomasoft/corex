@@ -29,21 +29,21 @@ use PHPStan\Rules\RuleErrorBuilder;
  * @implements Rule<CallLike>
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class NoForeignPrefixSqlRule implements Rule
+final readonly class NoForeignPrefixSqlRule implements Rule
 {
     /** Префиксы ядра — их не может трогать ни один модуль. */
-    private const CORE_PREFIXES = ['sys', 'mod'];
+    private const array CORE_PREFIXES = ['sys', 'mod'];
 
     /**
      * Методы, чей первый строковый аргумент — ИМЯ ТАБЛИЦЫ целиком (не SQL-текст):
      * `DB::table()`/`Schema::*`. Матчится по полному совпадению строки, не regex-сканом.
      */
-    private const TABLE_NAME_METHODS = ['table', 'from', 'create', 'drop', 'dropifexists', 'hastable', 'rename'];
+    private const array TABLE_NAME_METHODS = ['table', 'from', 'create', 'drop', 'dropifexists', 'hastable', 'rename'];
 
     /**
      * @param  array<string, string>  $modulePrefixes  PSR-4-неймспейс модуля => tablePrefix
      */
-    public function __construct(private readonly array $modulePrefixes) {}
+    public function __construct(private array $modulePrefixes) {}
 
     public function getNodeType(): string
     {
@@ -65,8 +65,8 @@ final class NoForeignPrefixSqlRule implements Rule
         $known = array_values(array_unique([...self::CORE_PREFIXES, ...array_values($this->modulePrefixes)]));
         $errors = [];
         $tables = $this->isTableNameCall($node)
-            ? $this->foreignTableLiterals($node, $scope, $ownPrefix, $known)
-            : $this->foreignTablesInSql($node, $scope, $ownPrefix, $known);
+            ? $this->foreignTableLiterals(node: $node, scope: $scope, ownPrefix: $ownPrefix, knownPrefixes: $known)
+            : $this->foreignTablesInSql(node: $node, scope: $scope, ownPrefix: $ownPrefix, knownPrefixes: $known);
 
         foreach ($tables as $table) {
             $errors[] = RuleErrorBuilder::message(sprintf(
@@ -142,7 +142,7 @@ final class NoForeignPrefixSqlRule implements Rule
     {
         $tables = [];
 
-        foreach (DatabaseCall::constantStringArguments($node, $scope) as $sql) {
+        foreach (DatabaseCall::constantStringArguments(node: $node, scope: $scope) as $sql) {
             if (preg_match_all(
                 '/\b(?:FROM|JOIN|INTO|UPDATE|TABLE)\s+([a-z][a-z0-9]{0,2})_[a-z0-9_]+\b/i',
                 $sql,

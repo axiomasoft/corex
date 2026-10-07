@@ -21,13 +21,13 @@ final readonly class TransferOptions
         $violations = new ConfigurationValidator;
         $limits = is_array($config['limits'] ?? null) ? $config['limits'] : [];
 
-        $maxRecordBytes = self::positiveInt($violations, 'limits.max_record_bytes', $limits['max_record_bytes'] ?? 1_048_576);
-        $maxFields = self::positiveInt($violations, 'limits.max_fields', $limits['max_fields'] ?? 256);
-        $batchRows = self::positiveInt($violations, 'limits.batch_rows', $limits['batch_rows'] ?? 500);
+        $maxRecordBytes = self::positiveInt(violations: $violations, path: 'limits.max_record_bytes', value: $limits['max_record_bytes'] ?? 1_048_576);
+        $maxFields = self::positiveInt(violations: $violations, path: 'limits.max_fields', value: $limits['max_fields'] ?? 256);
+        $batchRows = self::positiveInt(violations: $violations, path: 'limits.batch_rows', value: $limits['batch_rows'] ?? 500);
 
         $violations->failIfAny();
 
-        return new self($maxRecordBytes, $maxFields, $batchRows);
+        return new self(limitsMaxRecordBytes: $maxRecordBytes, limitsMaxFields: $maxFields, limitsBatchRows: $batchRows);
     }
 
     private static function positiveInt(ConfigurationValidator $violations, string $path, mixed $value): int
@@ -36,7 +36,7 @@ final readonly class TransferOptions
             return $value;
         }
 
-        $violations->add($path, 'must be a positive integer');
+        $violations->add(path: $path, message: 'must be a positive integer');
 
         return 1;
     }

@@ -11,9 +11,9 @@ use CoreX\Recurrence\Data\RecurrenceSet;
 use CoreX\Recurrence\Data\RecurrenceWindow;
 use CoreX\Recurrence\Internal\RuntimeProfile;
 
-final class EquipmentMaintenanceConsumer
+final readonly class EquipmentMaintenanceConsumer
 {
-    public function __construct(private readonly RecurrenceExpander $expander) {}
+    public function __construct(private RecurrenceExpander $expander) {}
 
     /** @return list<string> */
     public function plannedServiceDates(string $equipmentId): array

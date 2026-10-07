@@ -31,16 +31,16 @@ trait HasAuditLog
         // is cached across the process, so a boot-time skip would never
         // re-enable when the config flips (and the capability path never saw
         // the flag at all).
-        static::created(static fn (Model $model): null => self::recordAudit($model, 'created'));
-        static::updated(static fn (Model $model): null => self::recordAudit($model, 'updated'));
-        static::deleted(static fn (Model $model): null => self::recordAudit($model, 'deleted'));
+        static::created(static fn (Model $model): null => self::recordAudit(model: $model, action: 'created'));
+        static::updated(static fn (Model $model): null => self::recordAudit(model: $model, action: 'updated'));
+        static::deleted(static fn (Model $model): null => self::recordAudit(model: $model, action: 'deleted'));
 
         // restored/forceDeleted registrars live in the SoftDeletes trait, not
         // on the base Model — register through registerModelEvent so HasAuditLog
         // stays usable on non-SoftDeletes models too (the events simply never
         // fire there). Both are meaningful only under SoftDeletes.
-        static::registerModelEvent('restored', static fn (Model $model): null => self::recordAudit($model, 'restored'));
-        static::registerModelEvent('forceDeleted', static fn (Model $model): null => self::recordAudit($model, 'forceDeleted'));
+        static::registerModelEvent('restored', static fn (Model $model): null => self::recordAudit(model: $model, action: 'restored'));
+        static::registerModelEvent('forceDeleted', static fn (Model $model): null => self::recordAudit(model: $model, action: 'forceDeleted'));
     }
 
     /**

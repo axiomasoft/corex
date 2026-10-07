@@ -1,3 +1,8 @@
+## Unreleased — PHP 8.4 modernization (P09.4)
+
+- Modernize maintained PHP for PHP 8.4 with final concrete classes, immutable value state and controlled named calls; preserve current public native parameter names and extension behavior.
+- Refresh the PHP API metadata for equivalent readonly/type/promotion declarations (D130).
+
 ## Unreleased — tool error taxonomy
 
 - Breaking (PLAN3.P06.2, D90/D92/D93, pre-1.0): tool runtime and guard refusals use thirteen registered `tools.*` codes, including approval, visibility, idempotency and unknown-effect refusals. Forwarded operations codes retain their namespace; MCP serializes the registered code.

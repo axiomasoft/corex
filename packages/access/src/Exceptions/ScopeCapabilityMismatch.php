@@ -36,6 +36,6 @@ final class ScopeCapabilityMismatch extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(AccessErrorCode::ScopeCapabilityMismatch, ErrorCategory::Unsupported, retryable: false);
+        return new ErrorDescriptor(code: AccessErrorCode::ScopeCapabilityMismatch, category: ErrorCategory::Unsupported, retryable: false);
     }
 }

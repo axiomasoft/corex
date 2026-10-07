@@ -24,5 +24,5 @@ it('Attributes reject a method target at instantiation', function (): void {
         #[Api]
         public function method(): void {}
     };
-    (new ReflectionMethod($subject, 'method'))->getAttributes()[0]->newInstance();
+    new ReflectionMethod($subject, 'method')->getAttributes()[0]->newInstance();
 })->throws(Error::class, 'cannot target method');

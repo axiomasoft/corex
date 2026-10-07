@@ -8,7 +8,7 @@ use CoreX\Attributes\Api;
 use DateTimeImmutable;
 use InvalidArgumentException;
 
-/** @phpstan-import-type JsonMap from \CoreX\Transfer\Data\SourceRow */
+/** @phpstan-import-type JsonMap from SourceRow */
 #[Api(since: '1.0')]
 final readonly class CanonicalRecord
 {

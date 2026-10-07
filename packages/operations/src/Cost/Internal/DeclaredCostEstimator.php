@@ -19,7 +19,7 @@ use CoreX\Operations\Validation\Laravel\JsonCanonical;
 final readonly class DeclaredCostEstimator implements OperationCostEstimator
 {
     /** @var array<string, int> */
-    private const DEFAULTS = [
+    private const array DEFAULTS = [
         'base' => 1,
         'row' => 0,
         'field' => 0,
@@ -33,7 +33,7 @@ final readonly class DeclaredCostEstimator implements OperationCostEstimator
     public function estimate(Operation $operation, CostInput $input): EstimatedCost
     {
         $recipe = $this->recipe($operation);
-        $units = $this->units($operation, $input, $recipe);
+        $units = $this->units(operation: $operation, input: $input, recipe: $recipe);
 
         return new EstimatedCost(
             units: $units,
@@ -43,7 +43,7 @@ final readonly class DeclaredCostEstimator implements OperationCostEstimator
 
     public function actual(Operation $operation, CostInput $observed): ActualCost
     {
-        return new ActualCost(units: $this->units($operation, $observed, $this->recipe($operation)));
+        return new ActualCost(units: $this->units(operation: $operation, input: $observed, recipe: $this->recipe($operation)));
     }
 
     /** @return array<string, int> */
@@ -67,19 +67,19 @@ final readonly class DeclaredCostEstimator implements OperationCostEstimator
         $exportRows = $input->exportRows;
 
         if ($exportRows === 0 && $recipe['row'] > 0 && in_array($operation->mode, [OperationMode::BulkQuery, OperationMode::BulkCommand], true) && $pageRows === 0) {
-            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Export requires a bounded row count.');
+            throw new ApiError(errorCode: OperationsErrorCode::ValidationFailed, status: 422, message: 'Export requires a bounded row count.');
         }
 
         $units = $recipe['base'];
-        $units = $this->add($units, $this->multiply($recipe['row'], max($pageRows, $exportRows)));
-        $units = $this->add($units, $this->multiply($recipe['field'], $input->selectedFields));
-        $units = $this->add($units, $this->multiply($recipe['relation'], $input->relationNodes));
-        $units = $this->add($units, $this->multiply($recipe['attribute_filter'], $input->attributeFilters));
-        $units = $this->add($units, $this->multiply($recipe['highlight'], $input->highlight ? 1 : 0));
-        $units = $this->add($units, $this->multiply($recipe['side_effect'], $input->sideEffects));
+        $units = $this->add(left: $units, right: $this->multiply(left: $recipe['row'], right: max($pageRows, $exportRows)));
+        $units = $this->add(left: $units, right: $this->multiply(left: $recipe['field'], right: $input->selectedFields));
+        $units = $this->add(left: $units, right: $this->multiply(left: $recipe['relation'], right: $input->relationNodes));
+        $units = $this->add(left: $units, right: $this->multiply(left: $recipe['attribute_filter'], right: $input->attributeFilters));
+        $units = $this->add(left: $units, right: $this->multiply(left: $recipe['highlight'], right: $input->highlight ? 1 : 0));
+        $units = $this->add(left: $units, right: $this->multiply(left: $recipe['side_effect'], right: $input->sideEffects));
 
         if ($units > $recipe['max_units']) {
-            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Operation cost exceeds the declared maximum.');
+            throw new ApiError(errorCode: OperationsErrorCode::ValidationFailed, status: 422, message: 'Operation cost exceeds the declared maximum.');
         }
 
         return $units;
@@ -101,7 +101,7 @@ final readonly class DeclaredCostEstimator implements OperationCostEstimator
     private function add(int $left, int $right): int
     {
         if ($right > 0 && $left > PHP_INT_MAX - $right) {
-            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Operation cost overflow.');
+            throw new ApiError(errorCode: OperationsErrorCode::ValidationFailed, status: 422, message: 'Operation cost overflow.');
         }
 
         return $left + $right;
@@ -114,7 +114,7 @@ final readonly class DeclaredCostEstimator implements OperationCostEstimator
         }
 
         if ($right > 0 && $left > intdiv(PHP_INT_MAX, $right)) {
-            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Operation cost overflow.');
+            throw new ApiError(errorCode: OperationsErrorCode::ValidationFailed, status: 422, message: 'Operation cost overflow.');
         }
 
         return $left * $right;

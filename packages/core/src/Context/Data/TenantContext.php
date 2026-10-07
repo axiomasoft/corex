@@ -33,6 +33,6 @@ final readonly class TenantContext
 
     public function forWorkspace(WorkspaceRef $workspace): self
     {
-        return new self($this->account, $workspace, $this->boxed);
+        return new self(account: $this->account, workspace: $workspace, boxed: $this->boxed);
     }
 }

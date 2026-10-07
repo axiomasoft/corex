@@ -14,6 +14,6 @@ final class PackageProblemDefinitions implements ProblemDefinitionProvider
 {
     public function definitions(): iterable
     {
-        yield new ProblemDefinition(SearchMeilisearchErrorCode::InvalidMeilisearchConfiguration, 'urn:corex:problem:search-meilisearch.invalid_meilisearch_configuration', 500, 'Invalid meilisearch configuration.', false, ErrorCategory::Internal, []);
+        yield new ProblemDefinition(code: SearchMeilisearchErrorCode::InvalidMeilisearchConfiguration, type: 'urn:corex:problem:search-meilisearch.invalid_meilisearch_configuration', defaultStatus: 500, title: 'Invalid meilisearch configuration.', retryable: false, category: ErrorCategory::Internal, detailKeys: []);
     }
 }

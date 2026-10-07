@@ -22,7 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 it('declares and dispatches company, contact and association operations through the platform boundary', function (): void {
-    $compiled = app(RegistryCompiler::class)->compile(manifests: [(new CrmModule)->manifest()], installedPackages: []);
+    $compiled = resolve(RegistryCompiler::class)->compile(manifests: [(new CrmModule)->manifest()], installedPackages: []);
     $registry = Mockery::mock(ModuleRegistry::class);
     $registry->shouldReceive('compiled')->andReturn($compiled);
     $registry->shouldReceive('isActive')->with('flex/crm', Mockery::type(TenantContext::class))->andReturn(true);
@@ -35,20 +35,20 @@ it('declares and dispatches company, contact and association operations through 
             return 'trusted-user';
         }
     };
-    app()->instance(PrincipalResolver::class, new class($principal) implements PrincipalResolver
+    app()->instance(PrincipalResolver::class, new readonly class($principal) implements PrincipalResolver
     {
-        public function __construct(private readonly Principal $principal) {}
+        public function __construct(private Principal $principal) {}
 
         public function resolve(Request $request): ?Principal
         {
             return $this->principal;
         }
     });
-    app()->instance(ContextResolver::class, new class($this->crmContext, $principal) implements ContextResolver
+    app()->instance(ContextResolver::class, new readonly class($this->crmContext, $principal) implements ContextResolver
     {
         public function __construct(
-            private readonly TestContext $context,
-            private readonly Principal $principal,
+            private TestContext $context,
+            private Principal $principal,
         ) {}
 
         public function resolve(Request $request, Principal $principal, InvocationMetadata $metadata): RequestContext
@@ -73,7 +73,7 @@ it('declares and dispatches company, contact and association operations through 
             content: $method === 'GET' ? null : json_encode($input, JSON_THROW_ON_ERROR),
         );
 
-        return app(OperationDispatcher::class)->dispatch(request: $request, version: 'v1', path: $path);
+        return resolve(OperationDispatcher::class)->dispatch(request: $request, version: 'v1', path: $path);
     };
 
     $company = $dispatch('POST', 'companies', ['name' => 'Acme', 'inn' => '7700000000']);

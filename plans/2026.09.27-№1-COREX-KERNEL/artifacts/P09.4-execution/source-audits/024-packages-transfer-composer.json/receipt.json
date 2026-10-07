@@ -1,0 +1,25 @@
+{
+  "classification": "source",
+  "commands": [
+    {
+      "exit": 0,
+      "output": "validate.json",
+      "role": "validate",
+      "sha256": "966ac8cbdf2edb45b932f066f78b4e293bcd2a3ee83a758b342aef034afd7c95"
+    },
+    {
+      "exit": 0,
+      "output": "audit.json",
+      "role": "audit",
+      "sha256": "0be223ec2344e52a08fd649b3eeb53a175c5161514ac3fcafb25eaeb8de2a4a4"
+    }
+  ],
+  "effective_manifest_sha256": "1010cd7102bb2e1191a80be7e7632c420433264beee9b7c833882874c45575b2",
+  "lock_kind": "source",
+  "lock_sha256": "e055b3f696872b71f57c546bcc8b33bb9b635de9558c56dfa93bb966bf53631d",
+  "manifest": "packages/transfer/composer.json",
+  "manifest_sha256": "1010cd7102bb2e1191a80be7e7632c420433264beee9b7c833882874c45575b2",
+  "name": "axiomasoft/corex-transfer",
+  "source_lock_sha256": "e055b3f696872b71f57c546bcc8b33bb9b635de9558c56dfa93bb966bf53631d",
+  "status": "GREEN"
+}

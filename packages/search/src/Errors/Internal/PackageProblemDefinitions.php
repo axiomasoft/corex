@@ -14,6 +14,6 @@ final class PackageProblemDefinitions implements ProblemDefinitionProvider
 {
     public function definitions(): iterable
     {
-        yield new ProblemDefinition(SearchErrorCode::InvalidSearchConfiguration, 'urn:corex:problem:search.invalid_search_configuration', 500, 'Invalid search configuration.', false, ErrorCategory::Internal, []);
+        yield new ProblemDefinition(code: SearchErrorCode::InvalidSearchConfiguration, type: 'urn:corex:problem:search.invalid_search_configuration', defaultStatus: 500, title: 'Invalid search configuration.', retryable: false, category: ErrorCategory::Internal, detailKeys: []);
     }
 }

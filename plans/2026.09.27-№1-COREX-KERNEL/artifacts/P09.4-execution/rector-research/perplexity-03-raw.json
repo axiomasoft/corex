@@ -1,0 +1,13 @@
+{
+  "captured_at": "2026-10-07T08:05:58.154Z",
+  "tool": "mcp__perplexity__search",
+  "query": "driftingly/rector-laravel upstream issue #574 and Symplify contracts abandonment: compare a minimal maintained fork of the contracts package (real code/provenance/tests) against a Rector-Laravel fork removing documentation-only getRuleDefinition methods and DocumentedRuleInterface. Rector 2 official guide removed this API; Rector 2.6.7 currently bundles unprefixed Symplify\\\\RuleDocGenerator classes in vendor. Is relying on these bundled classes an officially supported replacement or just undocumented internals? Give maintainability recommendation for strict no-abandoned Composer audit and no fake replace. Cite primary source code and latest upstream issue comments only.",
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "For your strict “no abandoned packages, no fake replace” policy, I recommend a small Rector-Laravel fork that removes its documentation contract—not a fork that merely starts importing Rector’s bundled Symplify classes. A genuine maintained contracts fork is defensible and may involve fewer immediate code changes, but Rector 2 explicitly supports rules without getRuleDefinition(); that is the stronger long-term integration boundary.\n\n## Supported API versus bundled code\n\nThe important distinction is between availability and support:\n- Rector’s official upgrading guide says: “AbstractRector get focused on code, the getRuleDefinition() is no longer required.” This supports implementing transformation rules without that documentation method.\n- I verified that the Rector 2.6.7 distribution contains vendor/symplify/rule-doc-generator-contracts, including its source directory, Composer metadata and licence, at distribution commit 96bb5f83520f0f41e3130cf2178cd13890a242b7. See the .\n- That presence does not establish an official replacement package or a compatibility promise\n\nSources:\n1. [github](https://github.com/rectorphp/rector-src/blob/main/UPGRADING.md)\n2. [tagged bundled source](https://github.com/rectorphp/rector/tree/96bb5f83520f0f41e3130cf2178cd13890a242b7/vendor/symplify/rule-doc-generator-contracts)"
+      }
+    ]
+  }
+}

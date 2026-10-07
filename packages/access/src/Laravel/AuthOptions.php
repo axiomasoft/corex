@@ -29,7 +29,7 @@ final readonly class AuthOptions
     {
         $violations = new ConfigurationValidator;
 
-        $panel = self::nonEmpty($violations, 'panel', $config['panel'] ?? 'app');
+        $panel = self::nonEmpty(violations: $violations, path: 'panel', value: $config['panel'] ?? 'app');
 
         $cache = is_array($config['cache'] ?? null) ? $config['cache'] : [];
         $cacheStore = self::nullableString($cache['store'] ?? null);
@@ -41,9 +41,9 @@ final readonly class AuthOptions
         }
 
         $identity = is_array($config['identity'] ?? null) ? $config['identity'] : [];
-        $identityEnabled = self::bool($violations, 'identity.enabled', $identity['enabled'] ?? true);
+        $identityEnabled = self::bool(violations: $violations, path: 'identity.enabled', value: $identity['enabled'] ?? true);
         $identityConnection = self::nullableString($identity['connection'] ?? null);
-        $identityTable = self::nonEmpty($violations, 'identity.table', $identity['table'] ?? 'users');
+        $identityTable = self::nonEmpty(violations: $violations, path: 'identity.table', value: $identity['table'] ?? 'users');
 
         $defaults = [
             'id' => 'id',
@@ -60,7 +60,7 @@ final readonly class AuthOptions
         } else {
             foreach ($defaults as $key => $default) {
                 if (! array_key_exists($key, $rawColumns)) {
-                    $violations->add('identity.columns.'.$key, 'must be a non-empty string');
+                    $violations->add(path: 'identity.columns.'.$key, message: 'must be a non-empty string');
                     $identityColumns[$key] = $default;
 
                     continue;
@@ -74,7 +74,7 @@ final readonly class AuthOptions
                     continue;
                 }
 
-                $violations->add('identity.columns.'.$key, 'must be a non-empty string');
+                $violations->add(path: 'identity.columns.'.$key, message: 'must be a non-empty string');
                 $identityColumns[$key] = $default;
             }
         }
@@ -98,7 +98,7 @@ final readonly class AuthOptions
             return $value;
         }
 
-        $violations->add($path, 'must be a boolean');
+        $violations->add(path: $path, message: 'must be a boolean');
 
         return false;
     }
@@ -109,7 +109,7 @@ final readonly class AuthOptions
             return $value;
         }
 
-        $violations->add($path, 'must be a non-empty string');
+        $violations->add(path: $path, message: 'must be a non-empty string');
 
         return 'invalid';
     }

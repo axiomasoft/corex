@@ -22,8 +22,8 @@ final readonly class DeprecationDescriptor
             throw new InvalidArgumentException('deprecation: id is required');
         }
 
-        $deprecated = self::date('deprecatedAt', $deprecatedAt);
-        $sunset = $sunsetAt === null ? null : self::date('sunsetAt', $sunsetAt);
+        $deprecated = self::date(path: 'deprecatedAt', value: $deprecatedAt);
+        $sunset = $sunsetAt === null ? null : self::date(path: 'sunsetAt', value: $sunsetAt);
 
         if ($sunset !== null && $sunset < $deprecated) {
             throw new InvalidArgumentException('deprecation: sunsetAt must not precede deprecatedAt');

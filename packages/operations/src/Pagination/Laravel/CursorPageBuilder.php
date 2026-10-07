@@ -24,6 +24,6 @@ final class CursorPageBuilder
     {
         $next = $nextValues === null ? null : $codec->encode(registry: $registry, accountId: $accountId, workspaceId: $workspaceId, apiMajor: $apiMajor, operationId: $operationId, filters: $filters, fields: $fields, orderingId: $orderingId, values: $nextValues);
 
-        return new CursorPage(JsonDocuments::capture($items), $next);
+        return new CursorPage(items: JsonDocuments::capture($items), next: $next);
     }
 }

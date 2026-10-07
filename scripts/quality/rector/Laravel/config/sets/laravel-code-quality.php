@@ -1,0 +1,58 @@
+<?php
+
+declare(strict_types=1);
+use CoreX\Tooling\Rector\Laravel\Rector\ArrayDimFetch\EnvVariableToEnvHelperRector;
+use CoreX\Tooling\Rector\Laravel\Rector\ArrayDimFetch\RequestVariablesToRequestFacadeRector;
+use CoreX\Tooling\Rector\Laravel\Rector\ArrayDimFetch\ServerVariableToRequestFacadeRector;
+use CoreX\Tooling\Rector\Laravel\Rector\ArrayDimFetch\SessionVariableToSessionFacadeRector;
+use CoreX\Tooling\Rector\Laravel\Rector\Assign\CallOnAppArrayAccessToStandaloneAssignRector;
+use CoreX\Tooling\Rector\Laravel\Rector\Class_\AnonymousMigrationsRector;
+use CoreX\Tooling\Rector\Laravel\Rector\ClassMethod\MakeModelAttributesAndScopesProtectedRector;
+use CoreX\Tooling\Rector\Laravel\Rector\Coalesce\ApplyDefaultInsteadOfNullCoalesceRector;
+use CoreX\Tooling\Rector\Laravel\Rector\Expr\AppEnvironmentComparisonToParameterRector;
+use CoreX\Tooling\Rector\Laravel\Rector\Expr\SubStrToStartsWithOrEndsWithStaticMethodCallRector\SubStrToStartsWithOrEndsWithStaticMethodCallRector;
+use CoreX\Tooling\Rector\Laravel\Rector\FuncCall\AppToResolveRector;
+use CoreX\Tooling\Rector\Laravel\Rector\FuncCall\NotFilledBlankFuncCallToBlankFilledFuncCallRector;
+use CoreX\Tooling\Rector\Laravel\Rector\FuncCall\NowFuncWithStartOfDayMethodCallToTodayFuncRector;
+use CoreX\Tooling\Rector\Laravel\Rector\FuncCall\RemoveRedundantValueCallsRector;
+use CoreX\Tooling\Rector\Laravel\Rector\FuncCall\RemoveRedundantWithCallsRector;
+use CoreX\Tooling\Rector\Laravel\Rector\FuncCall\SleepFuncToSleepStaticCallRector;
+use CoreX\Tooling\Rector\Laravel\Rector\FuncCall\ThrowIfAndThrowUnlessExceptionsToUseClassStringRector;
+use CoreX\Tooling\Rector\Laravel\Rector\MethodCall\EloquentOrderByToLatestOrOldestRector;
+use CoreX\Tooling\Rector\Laravel\Rector\MethodCall\RedirectBackToBackHelperRector;
+use CoreX\Tooling\Rector\Laravel\Rector\MethodCall\RedirectRouteToToRouteHelperRector;
+use CoreX\Tooling\Rector\Laravel\Rector\MethodCall\ReverseConditionableMethodCallRector;
+use CoreX\Tooling\Rector\Laravel\Rector\MethodCall\ValidationRuleArrayStringValueToArrayRector;
+use CoreX\Tooling\Rector\Laravel\Rector\PropertyFetch\OptionalToNullsafeOperatorRector;
+use CoreX\Tooling\Rector\Laravel\Rector\StaticCall\CarbonToDateFacadeRector;
+use CoreX\Tooling\Rector\Laravel\Rector\StaticCall\DispatchToHelperFunctionsRector;
+use Rector\Config\RectorConfig;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->import(__DIR__.'/../config.php');
+    $rectorConfig->rule(CallOnAppArrayAccessToStandaloneAssignRector::class);
+    $rectorConfig->rule(ReverseConditionableMethodCallRector::class);
+    $rectorConfig->rule(ApplyDefaultInsteadOfNullCoalesceRector::class);
+    $rectorConfig->rule(MakeModelAttributesAndScopesProtectedRector::class);
+    $rectorConfig->rule(AppEnvironmentComparisonToParameterRector::class);
+    $rectorConfig->rule(ThrowIfAndThrowUnlessExceptionsToUseClassStringRector::class);
+    $rectorConfig->rule(EnvVariableToEnvHelperRector::class);
+    $rectorConfig->rule(RequestVariablesToRequestFacadeRector::class);
+    $rectorConfig->rule(ServerVariableToRequestFacadeRector::class);
+    $rectorConfig->rule(SessionVariableToSessionFacadeRector::class);
+    $rectorConfig->rule(SubStrToStartsWithOrEndsWithStaticMethodCallRector::class);
+    $rectorConfig->rule(NowFuncWithStartOfDayMethodCallToTodayFuncRector::class);
+    $rectorConfig->rule(RemoveRedundantValueCallsRector::class);
+    $rectorConfig->rule(RemoveRedundantWithCallsRector::class);
+    $rectorConfig->rule(OptionalToNullsafeOperatorRector::class);
+    $rectorConfig->rule(ValidationRuleArrayStringValueToArrayRector::class);
+    $rectorConfig->rule(RedirectBackToBackHelperRector::class);
+    $rectorConfig->rule(RedirectRouteToToRouteHelperRector::class);
+    $rectorConfig->rule(AnonymousMigrationsRector::class);
+    $rectorConfig->rule(SleepFuncToSleepStaticCallRector::class);
+    $rectorConfig->rule(CarbonToDateFacadeRector::class);
+    $rectorConfig->rule(DispatchToHelperFunctionsRector::class);
+    $rectorConfig->rule(NotFilledBlankFuncCallToBlankFilledFuncCallRector::class);
+    $rectorConfig->rule(EloquentOrderByToLatestOrOldestRector::class);
+    $rectorConfig->rule(AppToResolveRector::class);
+};

@@ -18,25 +18,25 @@ final class CostOptionsParser
     public static function fromArray(array $config): CostOptions
     {
         $violations = new ConfigurationValidator;
-        $enabled = self::bool($violations, 'enabled', $config['enabled'] ?? false);
-        $installationId = self::nonEmpty($violations, 'installation_id', $config['installation_id'] ?? 'corex');
-        $scopeHmacSecret = self::secret($violations, $config['scope_hmac_secret'] ?? '');
-        $capacity = self::boundedPositiveInt($violations, 'capacity', $config['capacity'] ?? 10_000);
-        $restoreRate = self::boundedPositiveInt($violations, 'restore_rate', $config['restore_rate'] ?? 1_000);
-        $enforcedLevels = self::enforcedLevels($violations, $config['enforced_levels'] ?? ['global']);
-        $reservationTtl = self::positiveInt($violations, 'reservation_ttl_seconds', $config['reservation_ttl_seconds'] ?? 3_600);
-        $terminalRetention = self::positiveInt($violations, 'terminal_retention_seconds', $config['terminal_retention_seconds'] ?? 2_592_000);
+        $enabled = self::bool(violations: $violations, path: 'enabled', value: $config['enabled'] ?? false);
+        $installationId = self::nonEmpty(violations: $violations, path: 'installation_id', value: $config['installation_id'] ?? 'corex');
+        $scopeHmacSecret = self::secret(violations: $violations, value: $config['scope_hmac_secret'] ?? '');
+        $capacity = self::boundedPositiveInt(violations: $violations, path: 'capacity', value: $config['capacity'] ?? 10_000);
+        $restoreRate = self::boundedPositiveInt(violations: $violations, path: 'restore_rate', value: $config['restore_rate'] ?? 1_000);
+        $enforcedLevels = self::enforcedLevels(violations: $violations, value: $config['enforced_levels'] ?? ['global']);
+        $reservationTtl = self::positiveInt(violations: $violations, path: 'reservation_ttl_seconds', value: $config['reservation_ttl_seconds'] ?? 3_600);
+        $terminalRetention = self::positiveInt(violations: $violations, path: 'terminal_retention_seconds', value: $config['terminal_retention_seconds'] ?? 2_592_000);
 
         if ($enabled && ! $scopeHmacSecret->isPresent()) {
-            $violations->add('scope_hmac_secret', 'must be configured when cost enforcement is enabled');
+            $violations->add(path: 'scope_hmac_secret', message: 'must be configured when cost enforcement is enabled');
         }
 
         if ($reservationTtl > 3_600) {
-            $violations->add('reservation_ttl_seconds', 'must not exceed 3600');
+            $violations->add(path: 'reservation_ttl_seconds', message: 'must not exceed 3600');
         }
 
         if ($terminalRetention < $reservationTtl) {
-            $violations->add('terminal_retention_seconds', 'must not be shorter than reservation_ttl_seconds');
+            $violations->add(path: 'terminal_retention_seconds', message: 'must not be shorter than reservation_ttl_seconds');
         }
 
         $violations->failIfAny();
@@ -59,7 +59,7 @@ final class CostOptionsParser
             return $value;
         }
 
-        $violations->add($path, 'must be a boolean');
+        $violations->add(path: $path, message: 'must be a boolean');
 
         return false;
     }
@@ -70,7 +70,7 @@ final class CostOptionsParser
             return $value;
         }
 
-        $violations->add($path, 'must be a non-empty string');
+        $violations->add(path: $path, message: 'must be a non-empty string');
 
         return 'invalid';
     }
@@ -85,7 +85,7 @@ final class CostOptionsParser
             return new SecretRef($value);
         }
 
-        $violations->add('scope_hmac_secret', 'must be a SecretRef or string');
+        $violations->add(path: 'scope_hmac_secret', message: 'must be a SecretRef or string');
 
         return new SecretRef('');
     }
@@ -96,17 +96,17 @@ final class CostOptionsParser
             return $value;
         }
 
-        $violations->add($path, 'must be a positive integer');
+        $violations->add(path: $path, message: 'must be a positive integer');
 
         return 1;
     }
 
     private static function boundedPositiveInt(ConfigurationValidator $violations, string $path, mixed $value): int
     {
-        $resolved = self::positiveInt($violations, $path, $value);
+        $resolved = self::positiveInt(violations: $violations, path: $path, value: $value);
 
         if ($resolved > intdiv(PHP_INT_MAX, 1_000_000)) {
-            $violations->add($path, 'is outside the safe micro-unit range');
+            $violations->add(path: $path, message: 'is outside the safe micro-unit range');
 
             return 1;
         }
@@ -120,21 +120,21 @@ final class CostOptionsParser
         $known = ['global', 'account', 'client', 'actor'];
 
         if (! is_array($value) || ! array_is_list($value)) {
-            $violations->add('enforced_levels', 'must be a list containing global');
+            $violations->add(path: 'enforced_levels', message: 'must be a list containing global');
 
             return ['global'];
         }
 
         foreach ($value as $level) {
             if (! is_string($level) || ! in_array($level, $known, true)) {
-                $violations->add('enforced_levels', 'must contain only global, account, client, and actor');
+                $violations->add(path: 'enforced_levels', message: 'must contain only global, account, client, and actor');
 
                 return ['global'];
             }
         }
 
         if (! in_array('global', $value, true) || count(array_unique($value)) !== count($value)) {
-            $violations->add('enforced_levels', 'must contain global and no duplicates');
+            $violations->add(path: 'enforced_levels', message: 'must contain global and no duplicates');
         }
 
         return $value;

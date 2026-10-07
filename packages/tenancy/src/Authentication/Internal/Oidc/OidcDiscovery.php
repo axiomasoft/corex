@@ -17,16 +17,16 @@ use Illuminate\Http\Client\Factory as HttpFactory;
  *
  * @internal
  */
-final class OidcDiscovery
+final readonly class OidcDiscovery
 {
     private const string CACHE_KEY_PREFIX = 'corex_tenancy_oidc_discovery:';
 
     public function __construct(
-        private readonly HttpFactory $http,
-        private readonly CacheFactory $cache,
-        private readonly string $issuer,
-        private readonly ?string $cacheStore,
-        private readonly int $cacheTtl,
+        private HttpFactory $http,
+        private CacheFactory $cache,
+        private string $issuer,
+        private ?string $cacheStore,
+        private int $cacheTtl,
     ) {}
 
     public function authorizationEndpoint(): string

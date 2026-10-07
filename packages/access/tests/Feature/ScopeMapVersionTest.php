@@ -11,11 +11,11 @@ use Illuminate\Contracts\Cache\Repository;
 
 it('reads valid cache versions without losing their numeric value', function (int|string $stored, int $expected): void {
     $context = new SingleAccountResolver;
-    $options = app(AuthOptions::class);
-    $store = app(Factory::class)->store($options->cacheStore);
+    $options = resolve(AuthOptions::class);
+    $store = resolve(Factory::class)->store($options->cacheStore);
     $store->put('corex-access.scope-map.'.$context->current()->account->id.'.role', $stored);
 
-    expect((new ScopeMapVersion($context, app(Factory::class), $options))->current('role'))->toBe($expected);
+    expect(new ScopeMapVersion($context, resolve(Factory::class), $options)->current('role'))->toBe($expected);
 })->with([
     'integer' => [3, 3],
     'numeric string' => ['3', 3],
@@ -24,10 +24,10 @@ it('reads valid cache versions without losing their numeric value', function (in
 
 it('rejects malformed cached versions rather than using a stale zero version', function (mixed $stored): void {
     $context = new SingleAccountResolver;
-    $options = app(AuthOptions::class);
-    $store = app(Factory::class)->store($options->cacheStore);
+    $options = resolve(AuthOptions::class);
+    $store = resolve(Factory::class)->store($options->cacheStore);
     $store->put('corex-access.scope-map.'.$context->current()->account->id.'.role', $stored);
-    $versions = new ScopeMapVersion($context, app(Factory::class), $options);
+    $versions = new ScopeMapVersion($context, resolve(Factory::class), $options);
 
     expect(fn () => $versions->current('role'))->toThrow(UnexpectedValueException::class);
 })->with([
@@ -46,7 +46,7 @@ it('does not report a successful invalidation when the backend fails to incremen
     $store->shouldReceive('increment')->once()->andReturn(false);
     $factory = Mockery::mock(Factory::class);
     $factory->shouldReceive('store')->andReturn($store);
-    $versions = new ScopeMapVersion(new SingleAccountResolver, $factory, app(AuthOptions::class));
+    $versions = new ScopeMapVersion(new SingleAccountResolver, $factory, resolve(AuthOptions::class));
 
     expect(fn () => $versions->bump('role'))->toThrow(UnexpectedValueException::class);
 });

@@ -21,13 +21,13 @@ use Override;
  *
  * @internal spec: B-10 §6.1, D44
  */
-final class RedisPubSub implements PubSub
+final readonly class RedisPubSub implements PubSub
 {
     public function __construct(
-        private readonly RedisFactory $redis,
-        private readonly CoreOptions $options,
-        private readonly WorkerRuntime $runtime,
-        private readonly ?string $connection = null,
+        private RedisFactory $redis,
+        private CoreOptions $options,
+        private WorkerRuntime $runtime,
+        private ?string $connection = null,
     ) {}
 
     #[Override]
@@ -40,7 +40,7 @@ final class RedisPubSub implements PubSub
     #[Override]
     public function subscribe(string $channel, Closure $handler): void
     {
-        SubscribeGuard::assert($this->runtime, $this->options->pubsubOctaneWorkerOptIn, self::class);
+        SubscribeGuard::assert(runtime: $this->runtime, octaneWorkerOptIn: $this->options->pubsubOctaneWorkerOptIn, driverClass: self::class);
 
         $this->redis->connection($this->connection)->subscribe([$channel], function (string $message) use ($handler): void {
             /** @var array<string, mixed> $payload */

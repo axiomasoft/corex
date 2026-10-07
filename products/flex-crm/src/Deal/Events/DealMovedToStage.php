@@ -9,12 +9,12 @@ use Flex\Crm\Deal\Models\Stage;
 use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
 use Illuminate\Foundation\Events\Dispatchable;
 
-final class DealMovedToStage implements ShouldDispatchAfterCommit
+final readonly class DealMovedToStage implements ShouldDispatchAfterCommit
 {
     use Dispatchable;
 
     public function __construct(
-        public readonly Deal $deal,
-        public readonly Stage $stage,
+        public Deal $deal,
+        public Stage $stage,
     ) {}
 }

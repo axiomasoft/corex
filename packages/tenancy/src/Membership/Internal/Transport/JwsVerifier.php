@@ -24,7 +24,7 @@ final readonly class JwsVerifier
             throw new CentralUnauthorized('Invalid compact JWS.');
         }
         $header = StrictJson::namedObject(self::decode($parts[0]));
-        Value::fields($header, ['alg', 'typ', 'kid']);
+        Value::fields(payload: $header, fields: ['alg', 'typ', 'kid']);
         $kid = $header['kid'];
 
         if ($header['alg'] !== 'RS256' || $header['typ'] !== $type || ! is_string($kid)

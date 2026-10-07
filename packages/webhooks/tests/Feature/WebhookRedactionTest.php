@@ -15,7 +15,6 @@ use CoreX\Operations\Pagination\Internal\SignedCursorCodec;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Time\Testing\FrozenClock;
-use CoreX\Webhooks\Contracts\WebhookSubscriptionStore;
 use CoreX\Webhooks\Internal\WebhookManagement;
 use CoreX\Webhooks\Tests\TestCase;
 use DateInterval;
@@ -32,7 +31,7 @@ final class WebhookRedactionTest extends TestCase
         $this->selectSchema();
         $connection = DB::connection('api_tenant');
 
-        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
         $clock = new FrozenClock(new DateTimeImmutable('2026-09-26T17:00:00.000000+00:00'));
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
@@ -41,7 +40,6 @@ final class WebhookRedactionTest extends TestCase
         $management = new WebhookManagement(
             $connection,
             new GuardedTenantContextRestorer($contexts),
-            $this->createMock(WebhookSubscriptionStore::class),
             new SignedCursorCodec($clock, $this->keyring()),
         );
 

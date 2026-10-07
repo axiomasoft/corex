@@ -56,6 +56,6 @@ final class InvalidManifestException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::InvalidManifestException, ErrorCategory::Validation, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::InvalidManifestException, category: ErrorCategory::Validation, retryable: false);
     }
 }

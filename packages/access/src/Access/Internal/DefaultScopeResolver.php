@@ -49,17 +49,17 @@ final readonly class DefaultScopeResolver implements ScopeResolver
 
         $key = "{$this->panel()}.{$entityKey}.{$action}";
 
-        if ($this->directGrants->hasActive($p, $key)) {
+        if ($this->directGrants->hasActive(p: $p, key: $key)) {
             return $q;
         }
 
-        if (! $this->accessChecker->allowed($p, $entityKey, $action)) {
+        if (! $this->accessChecker->allowed(p: $p, entityKey: $entityKey, action: $action)) {
             return $this->deny($q);
         }
 
-        $scope = $this->availability->normalize($entityKey, $this->accessChecker->scopeFor($p, $entityKey, $action, $ctx));
+        $scope = $this->availability->normalize(entityKey: $entityKey, scope: $this->accessChecker->scopeFor(p: $p, entityKey: $entityKey, action: $action, ctx: $ctx));
 
-        return $this->predicate->applyTo($q, $scope, $p);
+        return $this->predicate->applyTo(q: $q, scope: $scope, p: $p);
     }
 
     private function panel(): string

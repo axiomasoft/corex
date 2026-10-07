@@ -45,7 +45,7 @@ final readonly class ContextGuard
             throw new AuthorizationException('CRM active PDO database differs from the account connection.');
         }
 
-        if (! $this->modules->isActive('flex/crm', $tenant)) {
+        if (! $this->modules->isActive(name: 'flex/crm', ctx: $tenant)) {
             throw new AuthorizationException('CRM is not enabled in the current account.');
         }
 

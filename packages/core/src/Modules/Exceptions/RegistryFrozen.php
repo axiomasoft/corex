@@ -36,6 +36,6 @@ final class RegistryFrozen extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::RegistryFrozen, ErrorCategory::Internal, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::RegistryFrozen, category: ErrorCategory::Internal, retryable: false);
     }
 }

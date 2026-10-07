@@ -59,7 +59,7 @@ final class RuntimeConfigGate
     /** @throws InvalidConfiguration with every violation of every check */
     public static function assert(Application $app): void
     {
-        $violations = self::violations($app, $app->environment('production'));
+        $violations = self::violations(app: $app, production: $app->environment('production'));
 
         if ($violations !== []) {
             throw new InvalidConfiguration($violations);

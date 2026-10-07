@@ -1,0 +1,2105 @@
+[
+  {
+    "path": [
+      "packages/tasks/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tasks\\Planning\\Laravel\\PlanningCommand",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "moduleGuard",
+        "type": "CoreX\\Tasks\\Access\\Contracts\\TaskModuleContext",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "access",
+        "type": "CoreX\\Tasks\\Access\\Contracts\\TaskPlanningAccess",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "receipts",
+        "type": "?CoreX\\Tasks\\Planning\\Contracts\\TaskOperationReceipts",
+        "by_reference": false,
+        "variadic": false,
+        "optional": true,
+        "default": "null",
+        "flags": 68
+      }
+    ],
+    "after": [
+      {
+        "name": "moduleGuard",
+        "type": "CoreX\\Tasks\\Access\\Contracts\\TaskModuleContext",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "access",
+        "type": "CoreX\\Tasks\\Access\\Contracts\\TaskPlanningAccess",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "receipts",
+        "type": "?CoreX\\Tasks\\Planning\\Contracts\\TaskOperationReceipts",
+        "by_reference": false,
+        "variadic": false,
+        "optional": true,
+        "default": "null",
+        "flags": 4
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/tasks/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tasks\\Planning\\Laravel\\PlanningCommand",
+      "readonly"
+    ],
+    "before": false,
+    "after": true
+  },
+  {
+    "path": [
+      "packages/custom-fields/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\CustomFields\\Data\\AttributeDefinition",
+      "doc",
+      "@phpstan-import-type"
+    ],
+    "before": [
+      "JsonMap from \\CoreX\\CustomFields\\Data\\ValueBag"
+    ],
+    "after": [
+      "JsonMap from ValueBag"
+    ]
+  },
+  {
+    "path": [
+      "packages/custom-fields/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\CustomFields\\Data\\AttributeId",
+      "constants",
+      "LEGACY_NAMESPACE",
+      "type"
+    ],
+    "before": null,
+    "after": "string"
+  },
+  {
+    "path": [
+      "packages/custom-fields/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\CustomFields\\Data\\DriftReport",
+      "doc",
+      "@phpstan-import-type"
+    ],
+    "before": [
+      "JsonMap from \\CoreX\\CustomFields\\Data\\ValueBag"
+    ],
+    "after": [
+      "JsonMap from ValueBag"
+    ]
+  },
+  {
+    "path": [
+      "packages/custom-fields/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\CustomFields\\Data\\FieldSnapshot",
+      "doc",
+      "@phpstan-import-type"
+    ],
+    "before": [
+      "JsonMap from \\CoreX\\CustomFields\\Data\\ValueBag"
+    ],
+    "after": [
+      "JsonMap from ValueBag"
+    ]
+  },
+  {
+    "path": [
+      "packages/custom-fields/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\CustomFields\\Data\\FilterNode",
+      "doc",
+      "@phpstan-import-type"
+    ],
+    "before": [
+      "JsonMap from \\CoreX\\CustomFields\\Data\\ValueBag"
+    ],
+    "after": [
+      "JsonMap from ValueBag"
+    ]
+  },
+  {
+    "path": [
+      "packages/custom-fields/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\CustomFields\\Data\\FilterPlan",
+      "doc",
+      "@phpstan-import-type"
+    ],
+    "before": [
+      "JsonMap from \\CoreX\\CustomFields\\Data\\ValueBag"
+    ],
+    "after": [
+      "JsonMap from ValueBag"
+    ]
+  },
+  {
+    "path": [
+      "packages/custom-fields/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\CustomFields\\Data\\RecordSelection",
+      "doc",
+      "@phpstan-import-type"
+    ],
+    "before": [
+      "JsonMap from \\CoreX\\CustomFields\\Data\\ValueBag"
+    ],
+    "after": [
+      "JsonMap from ValueBag"
+    ]
+  },
+  {
+    "path": [
+      "packages/custom-fields/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\CustomFields\\Data\\SchemaChange",
+      "doc",
+      "@phpstan-import-type"
+    ],
+    "before": [
+      "JsonMap from \\CoreX\\CustomFields\\Data\\ValueBag"
+    ],
+    "after": [
+      "JsonMap from ValueBag"
+    ]
+  },
+  {
+    "path": [
+      "packages/custom-fields/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\CustomFields\\Data\\ValueBatch",
+      "doc",
+      "@phpstan-import-type"
+    ],
+    "before": [
+      "JsonMap from \\CoreX\\CustomFields\\Data\\ValueBag"
+    ],
+    "after": [
+      "JsonMap from ValueBag"
+    ]
+  },
+  {
+    "path": [
+      "packages/custom-fields/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\CustomFields\\Data\\ValuePatch",
+      "doc",
+      "@phpstan-import-type"
+    ],
+    "before": [
+      "JsonMap from \\CoreX\\CustomFields\\Data\\ValueBag"
+    ],
+    "after": [
+      "JsonMap from ValueBag"
+    ]
+  },
+  {
+    "path": [
+      "packages/transfer/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Transfer\\Data\\CanonicalRecord",
+      "doc",
+      "@phpstan-import-type"
+    ],
+    "before": [
+      "JsonMap from \\CoreX\\Transfer\\Data\\SourceRow"
+    ],
+    "after": [
+      "JsonMap from SourceRow"
+    ]
+  },
+  {
+    "path": [
+      "packages/transfer/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Transfer\\Data\\MappingSnapshot",
+      "doc",
+      "@phpstan-import-type"
+    ],
+    "before": [
+      "JsonMap from \\CoreX\\Transfer\\Data\\SourceRow"
+    ],
+    "after": [
+      "JsonMap from SourceRow"
+    ]
+  },
+  {
+    "path": [
+      "packages/transfer/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Transfer\\Data\\RowBatch",
+      "doc",
+      "@phpstan-import-type"
+    ],
+    "before": [
+      "JsonMap from \\CoreX\\Transfer\\Data\\SourceRow"
+    ],
+    "after": [
+      "JsonMap from SourceRow"
+    ]
+  },
+  {
+    "path": [
+      "packages/transfer/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Transfer\\Data\\TransferReceipt",
+      "doc",
+      "@phpstan-import-type"
+    ],
+    "before": [
+      "JsonMap from \\CoreX\\Transfer\\Data\\SourceRow"
+    ],
+    "after": [
+      "JsonMap from SourceRow"
+    ]
+  },
+  {
+    "path": [
+      "packages/wakeup/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Wakeup\\Testing\\WakeupFixtures",
+      "constants",
+      "POINT",
+      "type"
+    ],
+    "before": null,
+    "after": "string"
+  },
+  {
+    "path": [
+      "packages/wakeup/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Wakeup\\Testing\\WakeupFixtures",
+      "constants",
+      "SCHEMA",
+      "type"
+    ],
+    "before": null,
+    "after": "string"
+  },
+  {
+    "path": [
+      "packages/operations/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Operations\\Testing\\HttpDependentHandler",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "contexts",
+        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContextProvider",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      }
+    ],
+    "after": [
+      {
+        "name": "contexts",
+        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContextProvider",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/operations/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Operations\\Testing\\HttpDependentHandler",
+      "readonly"
+    ],
+    "before": false,
+    "after": true
+  },
+  {
+    "path": [
+      "packages/operations/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Operations\\Validation\\Laravel\\JsonCanonical",
+      "constants",
+      "SAFE_INTEGER_MAX",
+      "type"
+    ],
+    "before": null,
+    "after": "int"
+  },
+  {
+    "path": [
+      "packages/operations/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Operations\\Validation\\Laravel\\JsonCanonical",
+      "constants",
+      "SAFE_INTEGER_MIN",
+      "type"
+    ],
+    "before": null,
+    "after": "int"
+  },
+  {
+    "path": [
+      "packages/operations/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Operations\\Validation\\Laravel\\SchemaProfile",
+      "constants",
+      "MAX_DEPTH",
+      "type"
+    ],
+    "before": null,
+    "after": "int"
+  },
+  {
+    "path": [
+      "packages/operations/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Operations\\Validation\\Laravel\\SchemaProfile",
+      "constants",
+      "MAX_ERRORS",
+      "type"
+    ],
+    "before": null,
+    "after": "int"
+  },
+  {
+    "path": [
+      "packages/operations/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Operations\\Validation\\Laravel\\SchemaProfile",
+      "constants",
+      "MAX_NODES",
+      "type"
+    ],
+    "before": null,
+    "after": "int"
+  },
+  {
+    "path": [
+      "packages/operations/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Operations\\Validation\\Laravel\\SchemaProfile",
+      "constants",
+      "MAX_PAYLOAD_BYTES",
+      "type"
+    ],
+    "before": null,
+    "after": "int"
+  },
+  {
+    "path": [
+      "packages/operations/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Operations\\Validation\\Laravel\\SchemaProfile",
+      "constants",
+      "MAX_PAYLOAD_MEMBERS",
+      "type"
+    ],
+    "before": null,
+    "after": "int"
+  },
+  {
+    "path": [
+      "packages/operations/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Operations\\Validation\\Laravel\\SchemaProfile",
+      "constants",
+      "MAX_REGEX_BYTES",
+      "type"
+    ],
+    "before": null,
+    "after": "int"
+  },
+  {
+    "path": [
+      "packages/operations/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Operations\\Validation\\Laravel\\SchemaProfile",
+      "constants",
+      "MAX_RESOURCES",
+      "type"
+    ],
+    "before": null,
+    "after": "int"
+  },
+  {
+    "path": [
+      "packages/operations/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Operations\\Validation\\Laravel\\SchemaProfile",
+      "constants",
+      "MAX_SCHEMA_BYTES",
+      "type"
+    ],
+    "before": null,
+    "after": "int"
+  },
+  {
+    "path": [
+      "packages/operations/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Operations\\Validation\\Laravel\\SchemaProfile",
+      "constants",
+      "REJECTED_KEYWORDS",
+      "type"
+    ],
+    "before": null,
+    "after": "array"
+  },
+  {
+    "path": [
+      "packages/operations/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Operations\\Validation\\Laravel\\SchemaProfile",
+      "constants",
+      "TOOL_SCHEMA_V1",
+      "type"
+    ],
+    "before": null,
+    "after": "string"
+  },
+  {
+    "path": [
+      "packages/operations/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Operations\\Validation\\Laravel\\SchemaProfile",
+      "constants",
+      "WORKER_DEADLINE_MS",
+      "type"
+    ],
+    "before": null,
+    "after": "int"
+  },
+  {
+    "path": [
+      "packages/operations/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Operations\\Versioning\\Data\\CapabilityDescriptor",
+      "constants",
+      "FORBIDDEN_KEYS",
+      "type"
+    ],
+    "before": null,
+    "after": "array"
+  },
+  {
+    "path": [
+      "packages/operations/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Operations\\Versioning\\Data\\CapabilityDescriptor",
+      "constants",
+      "PUBLIC_KEYS",
+      "type"
+    ],
+    "before": null,
+    "after": "array"
+  },
+  {
+    "path": [
+      "packages/core/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Messaging\\PHPStan\\Rules\\DurablePayloadRule",
+      "constants",
+      "IDENTIFIER",
+      "type"
+    ],
+    "before": null,
+    "after": "string"
+  },
+  {
+    "path": [
+      "packages/core/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Messaging\\PHPStan\\Rules\\DurablePayloadRule",
+      "constants",
+      "UNTYPED_ARRAY_IDENTIFIER",
+      "type"
+    ],
+    "before": null,
+    "after": "string"
+  },
+  {
+    "path": [
+      "packages/core/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Modules\\Data\\CompiledRegistry",
+      "constants",
+      "SCHEMA",
+      "type"
+    ],
+    "before": null,
+    "after": "string"
+  },
+  {
+    "path": [
+      "packages/core/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Modules\\Data\\Entity",
+      "properties",
+      "model",
+      "doc",
+      "@param"
+    ],
+    "before": null,
+    "after": [
+      "class-string $model"
+    ]
+  },
+  {
+    "path": [
+      "packages/core/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Modules\\Data\\Entity",
+      "properties",
+      "model",
+      "doc",
+      "@var"
+    ],
+    "before": [
+      "class-string"
+    ],
+    "after": null
+  },
+  {
+    "path": [
+      "packages/core/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Modules\\Data\\Permissions",
+      "properties",
+      "actions",
+      "doc",
+      "@param"
+    ],
+    "before": null,
+    "after": [
+      "list<string> $actions"
+    ]
+  },
+  {
+    "path": [
+      "packages/core/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Modules\\Data\\Permissions",
+      "properties",
+      "actions",
+      "doc",
+      "@var"
+    ],
+    "before": [
+      "list<string>"
+    ],
+    "after": null
+  },
+  {
+    "path": [
+      "packages/core/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Modules\\Data\\Permissions",
+      "properties",
+      "entity",
+      "doc"
+    ],
+    "before": [],
+    "after": {
+      "@param": [
+        "list<string> $actions"
+      ]
+    }
+  },
+  {
+    "path": [
+      "packages/core/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Modules\\Data\\Permissions",
+      "properties",
+      "panel",
+      "doc"
+    ],
+    "before": [],
+    "after": {
+      "@param": [
+        "list<string> $actions"
+      ]
+    }
+  },
+  {
+    "path": [
+      "packages/core/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Modules\\PHPStan\\Rules\\NoDirectSystemTableWriteRule",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "systemTableNamespaces",
+        "type": "array",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      }
+    ],
+    "after": [
+      {
+        "name": "systemTableNamespaces",
+        "type": "array",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/core/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Modules\\PHPStan\\Rules\\NoDirectSystemTableWriteRule",
+      "readonly"
+    ],
+    "before": false,
+    "after": true
+  },
+  {
+    "path": [
+      "packages/core/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Modules\\PHPStan\\Rules\\NoForeignPrefixSqlRule",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "modulePrefixes",
+        "type": "array",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      }
+    ],
+    "after": [
+      {
+        "name": "modulePrefixes",
+        "type": "array",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/core/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Modules\\PHPStan\\Rules\\NoForeignPrefixSqlRule",
+      "readonly"
+    ],
+    "before": false,
+    "after": true
+  },
+  {
+    "path": [
+      "packages/core/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Modules\\PHPStan\\Rules\\NoFsOutsideModuleRule",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "moduleNamespaces",
+        "type": "array",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      }
+    ],
+    "after": [
+      {
+        "name": "moduleNamespaces",
+        "type": "array",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/core/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Modules\\PHPStan\\Rules\\NoFsOutsideModuleRule",
+      "readonly"
+    ],
+    "before": false,
+    "after": true
+  },
+  {
+    "path": [
+      "packages/core/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Modules\\Testing\\ArrayEntityRegistry",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "moduleActive",
+        "type": "?Closure",
+        "by_reference": false,
+        "variadic": false,
+        "optional": true,
+        "default": "null",
+        "flags": 0
+      },
+      {
+        "name": "activeModules",
+        "type": "?Closure",
+        "by_reference": false,
+        "variadic": false,
+        "optional": true,
+        "default": "null",
+        "flags": 68
+      }
+    ],
+    "after": [
+      {
+        "name": "moduleActive",
+        "type": "?Closure",
+        "by_reference": false,
+        "variadic": false,
+        "optional": true,
+        "default": "null",
+        "flags": 0
+      },
+      {
+        "name": "activeModules",
+        "type": "?Closure",
+        "by_reference": false,
+        "variadic": false,
+        "optional": true,
+        "default": "null",
+        "flags": 4
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/core/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Modules\\Testing\\ArrayEntityRegistry",
+      "readonly"
+    ],
+    "before": false,
+    "after": true
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Account\\Laravel\\MigrationWaveOrchestrator",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "centralConnection",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "tenancy",
+        "type": "CoreX\\Context\\Contracts\\TenancyManager",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "templateIntegrityVerifier",
+        "type": "CoreX\\Tenancy\\Provisioning\\Internal\\Database\\TemplateIntegrityVerifier",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "schema",
+        "type": "CoreX\\Database\\Contracts\\SchemaMigrator",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "migrationRunner",
+        "type": "?Closure",
+        "by_reference": false,
+        "variadic": false,
+        "optional": true,
+        "default": "null",
+        "flags": 68
+      }
+    ],
+    "after": [
+      {
+        "name": "centralConnection",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "tenancy",
+        "type": "CoreX\\Context\\Contracts\\TenancyManager",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "templateIntegrityVerifier",
+        "type": "CoreX\\Tenancy\\Provisioning\\Internal\\Database\\TemplateIntegrityVerifier",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "schema",
+        "type": "CoreX\\Database\\Contracts\\SchemaMigrator",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "migrationRunner",
+        "type": "?Closure",
+        "by_reference": false,
+        "variadic": false,
+        "optional": true,
+        "default": "null",
+        "flags": 4
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Account\\Laravel\\MigrationWaveOrchestrator",
+      "readonly"
+    ],
+    "before": false,
+    "after": true
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\DomainTrust\\Data\\NormalizedHost",
+      "implements"
+    ],
+    "before": [],
+    "after": [
+      "Stringable"
+    ]
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\AccountStatusGate",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "statusGate",
+        "type": "CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "contexts",
+        "type": "CoreX\\Context\\Contracts\\TenantContextResolver",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "accounts",
+        "type": "CoreX\\Tenancy\\Account\\Contracts\\AccountRead",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "auth",
+        "type": "Illuminate\\Contracts\\Auth\\Factory",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "centralConnection",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      }
+    ],
+    "after": [
+      {
+        "name": "statusGate",
+        "type": "CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "contexts",
+        "type": "CoreX\\Context\\Contracts\\TenantContextResolver",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "accounts",
+        "type": "CoreX\\Tenancy\\Account\\Contracts\\AccountRead",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "auth",
+        "type": "Illuminate\\Contracts\\Auth\\Factory",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "centralConnection",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\AccountStatusGate",
+      "readonly"
+    ],
+    "before": false,
+    "after": true
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\DenyImpersonatedWrites",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "impersonation",
+        "type": "CoreX\\Context\\Contracts\\ImpersonationService",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "statusGate",
+        "type": "CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      }
+    ],
+    "after": [
+      {
+        "name": "impersonation",
+        "type": "CoreX\\Context\\Contracts\\ImpersonationService",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "statusGate",
+        "type": "CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\DenyImpersonatedWrites",
+      "readonly"
+    ],
+    "before": false,
+    "after": true
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\EnforceSessionLifetime",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "options",
+        "type": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      }
+    ],
+    "after": [
+      {
+        "name": "options",
+        "type": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\EnforceSessionLifetime",
+      "readonly"
+    ],
+    "before": false,
+    "after": true
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ImpersonationSessionGuard",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "impersonation",
+        "type": "CoreX\\Context\\Contracts\\ImpersonationService",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "options",
+        "type": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      }
+    ],
+    "after": [
+      {
+        "name": "impersonation",
+        "type": "CoreX\\Context\\Contracts\\ImpersonationService",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "options",
+        "type": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ImpersonationSessionGuard",
+      "readonly"
+    ],
+    "before": false,
+    "after": true
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\RequireActiveMembership",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "options",
+        "type": "?CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+        "by_reference": false,
+        "variadic": false,
+        "optional": true,
+        "default": "null",
+        "flags": 68
+      }
+    ],
+    "after": [
+      {
+        "name": "options",
+        "type": "?CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+        "by_reference": false,
+        "variadic": false,
+        "optional": true,
+        "default": "null",
+        "flags": 4
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\RequireActiveMembership",
+      "readonly"
+    ],
+    "before": false,
+    "after": true
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveTenantFromHost",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "manager",
+        "type": "CoreX\\Context\\Contracts\\TenancyManager",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "hosts",
+        "type": "CoreX\\Tenancy\\Runtime\\Internal\\HostAccountResolver",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "accounts",
+        "type": "CoreX\\Tenancy\\Account\\Contracts\\AccountRead",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "container",
+        "type": "Illuminate\\Contracts\\Container\\Container",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "centralConnection",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      }
+    ],
+    "after": [
+      {
+        "name": "manager",
+        "type": "CoreX\\Context\\Contracts\\TenancyManager",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "hosts",
+        "type": "CoreX\\Tenancy\\Runtime\\Internal\\HostAccountResolver",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "accounts",
+        "type": "CoreX\\Tenancy\\Account\\Contracts\\AccountRead",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "container",
+        "type": "Illuminate\\Contracts\\Container\\Container",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "centralConnection",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveTenantFromHost",
+      "readonly"
+    ],
+    "before": false,
+    "after": true
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveWorkspace",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "manager",
+        "type": "CoreX\\Context\\Contracts\\TenancyManager",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "resolver",
+        "type": "CoreX\\Tenancy\\Workspace\\Contracts\\WorkspaceResolver",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "options",
+        "type": "?CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+        "by_reference": false,
+        "variadic": false,
+        "optional": true,
+        "default": "null",
+        "flags": 68
+      }
+    ],
+    "after": [
+      {
+        "name": "manager",
+        "type": "CoreX\\Context\\Contracts\\TenancyManager",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "resolver",
+        "type": "CoreX\\Tenancy\\Workspace\\Contracts\\WorkspaceResolver",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "options",
+        "type": "?CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+        "by_reference": false,
+        "variadic": false,
+        "optional": true,
+        "default": "null",
+        "flags": 4
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveWorkspace",
+      "readonly"
+    ],
+    "before": false,
+    "after": true
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ScopeSessionToTenant",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "manager",
+        "type": "CoreX\\Context\\Contracts\\TenancyManager",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      }
+    ],
+    "after": [
+      {
+        "name": "manager",
+        "type": "CoreX\\Context\\Contracts\\TenancyManager",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ScopeSessionToTenant",
+      "readonly"
+    ],
+    "before": false,
+    "after": true
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Membership\\Data\\MembershipSnapshot",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "profileVersion",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "requestId",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "identityId",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "accountId",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "product",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "membershipId",
+        "type": "?string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "state",
+        "type": "CoreX\\Tenancy\\Membership\\Enums\\MembershipState",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "revision",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "revokeGeneration",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "readStartedAt",
+        "type": "DateTimeImmutable",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "observedAt",
+        "type": "DateTimeImmutable",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      }
+    ],
+    "after": [
+      {
+        "name": "profileVersion",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "requestId",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "identityId",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "accountId",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "product",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "membershipId",
+        "type": "?string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "state",
+        "type": "CoreX\\Tenancy\\Membership\\Enums\\MembershipState",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 1
+      },
+      {
+        "name": "revision",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "revokeGeneration",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "readStartedAt",
+        "type": "DateTimeImmutable",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 1
+      },
+      {
+        "name": "observedAt",
+        "type": "DateTimeImmutable",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 1
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/tenancy/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tenancy\\Membership\\Data\\RevokeMembershipReceipt",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "profileVersion",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "requestId",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "identityId",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "accountId",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "product",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "commitRef",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "revision",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "revokeGeneration",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "committedAt",
+        "type": "DateTimeImmutable",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      }
+    ],
+    "after": [
+      {
+        "name": "profileVersion",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "requestId",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "identityId",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "accountId",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "product",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "commitRef",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 1
+      },
+      {
+        "name": "revision",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "revokeGeneration",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 0
+      },
+      {
+        "name": "committedAt",
+        "type": "DateTimeImmutable",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 1
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/intl/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Intl\\Money\\Laravel\\MoneyCast",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "amountColumn",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": true,
+        "default": "'amount_minor'",
+        "flags": 68
+      },
+      {
+        "name": "currencyColumn",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": true,
+        "default": "'currency'",
+        "flags": 68
+      }
+    ],
+    "after": [
+      {
+        "name": "amountColumn",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": true,
+        "default": "'amount_minor'",
+        "flags": 4
+      },
+      {
+        "name": "currencyColumn",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": true,
+        "default": "'currency'",
+        "flags": 4
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/intl/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Intl\\Money\\Laravel\\MoneyCast",
+      "readonly"
+    ],
+    "before": false,
+    "after": true
+  },
+  {
+    "path": [
+      "packages/tools/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Tools\\Data\\ToolDescriptor",
+      "constants",
+      "SCHEMA_PROFILE",
+      "type"
+    ],
+    "before": null,
+    "after": "string"
+  },
+  {
+    "path": [
+      "packages/access/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Access\\Access\\Laravel\\PrincipalIdentity",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "type",
+        "type": "CoreX\\Access\\Enums\\PrincipalType",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "id",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      },
+      {
+        "name": "passwordHash",
+        "type": "?string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": true,
+        "default": "null",
+        "flags": 68
+      }
+    ],
+    "after": [
+      {
+        "name": "type",
+        "type": "CoreX\\Access\\Enums\\PrincipalType",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "id",
+        "type": "string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      },
+      {
+        "name": "passwordHash",
+        "type": "?string",
+        "by_reference": false,
+        "variadic": false,
+        "optional": true,
+        "default": "null",
+        "flags": 4
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/access/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Access\\Access\\Laravel\\PrincipalIdentity",
+      "readonly"
+    ],
+    "before": false,
+    "after": true
+  },
+  {
+    "path": [
+      "packages/access/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Access\\Identity\\Laravel\\PrincipalUserProvider",
+      "methods",
+      "__construct",
+      "parameters"
+    ],
+    "before": [
+      {
+        "name": "options",
+        "type": "CoreX\\Access\\Laravel\\AuthOptions",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 68
+      }
+    ],
+    "after": [
+      {
+        "name": "options",
+        "type": "CoreX\\Access\\Laravel\\AuthOptions",
+        "by_reference": false,
+        "variadic": false,
+        "optional": false,
+        "default": null,
+        "flags": 4
+      }
+    ]
+  },
+  {
+    "path": [
+      "packages/access/resources/contracts/php-api.json",
+      "symbols",
+      "CoreX\\Access\\Identity\\Laravel\\PrincipalUserProvider",
+      "readonly"
+    ],
+    "before": false,
+    "after": true
+  }
+]

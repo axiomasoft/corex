@@ -19,11 +19,11 @@ use Symfony\Component\HttpFoundation\Response;
  * before any user resolution.
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class ScopeSessionToTenant
+final readonly class ScopeSessionToTenant
 {
     private const string KEY = 'corex.tenancy.account_id';
 
-    public function __construct(private readonly TenancyManager $manager) {}
+    public function __construct(private TenancyManager $manager) {}
 
     public function handle(Request $request, Closure $next): Response
     {

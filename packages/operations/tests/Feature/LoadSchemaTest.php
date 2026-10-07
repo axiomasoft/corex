@@ -202,8 +202,8 @@ final class LoadSchemaTest extends TestCase
         if ($includeBudget) {
             $this->migrateSchemaSets(['axiomasoft/corex-operations:budget']);
         }
-        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
-        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
 
         return [$budget, $bulk, $webhook];
     }
@@ -303,8 +303,8 @@ final class LoadSchemaTest extends TestCase
 
     private function runDown(string $id): void
     {
-        $set = app(SchemaSets::class)->get($id);
-        $this->rollbackSchemaSet($id, $set->connection ?? app(ApiSchemaRegistrar::class)->tenant()->getName());
+        $set = resolve(SchemaSets::class)->get($id);
+        $this->rollbackSchemaSet($id, $set->connection ?? resolve(ApiSchemaRegistrar::class)->tenant()->getName());
     }
 
     private function expectQueryFailure(callable $operation): void

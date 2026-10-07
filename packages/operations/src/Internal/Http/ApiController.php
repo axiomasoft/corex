@@ -11,12 +11,12 @@ use CoreX\Operations\Invocation\Contracts\OperationDispatcher;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-final class ApiController
+final readonly class ApiController
 {
     public function __construct(
-        private readonly OperationDispatcher $dispatcher,
-        private readonly OperationRegistry $operations,
-        private readonly HttpOperationResponder $responder,
+        private OperationDispatcher $dispatcher,
+        private OperationRegistry $operations,
+        private HttpOperationResponder $responder,
     ) {}
 
     public function __invoke(Request $request): JsonResponse
@@ -25,18 +25,18 @@ final class ApiController
         $path = $request->route('path');
 
         if (! is_string($version) || ($path !== null && ! is_string($path))) {
-            throw new ApiError(OperationsErrorCode::OperationNotFound, 404, 'Operation not found.');
+            throw new ApiError(errorCode: OperationsErrorCode::OperationNotFound, status: 404, message: 'Operation not found.');
         }
 
-        $response = $this->dispatcher->dispatch($request, $version, $path ?? '');
+        $response = $this->dispatcher->dispatch(request: $request, version: $version, path: $path ?? '');
         $operation = null;
 
         try {
-            [$operation] = $this->operations->match($version, $request->method(), '/'.ltrim($path ?? '', '/'));
+            [$operation] = $this->operations->match(version: $version, method: $request->method(), path: '/'.ltrim($path ?? '', '/'));
         } catch (ApiError) {
             $operation = null;
         }
 
-        return $this->responder->project($operation, $response);
+        return $this->responder->project(operation: $operation, response: $response);
     }
 }

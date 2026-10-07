@@ -21,6 +21,6 @@ final class InvalidPlanningDraft extends DomainException implements DescribesErr
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TasksErrorCode::InvalidPlanningDraft, ErrorCategory::Validation, retryable: false);
+        return new ErrorDescriptor(code: TasksErrorCode::InvalidPlanningDraft, category: ErrorCategory::Validation, retryable: false);
     }
 }

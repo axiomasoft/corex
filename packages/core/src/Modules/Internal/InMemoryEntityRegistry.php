@@ -43,11 +43,11 @@ final class InMemoryEntityRegistry implements EntityRegistry
     public function register(EntityDefinition $definition): void
     {
         if ($this->frozen) {
-            throw RegistryFrozen::late('entity', $definition->handle);
+            throw RegistryFrozen::late(point: 'entity', id: $definition->handle);
         }
 
         if (isset($this->entities[$definition->handle])) {
-            throw RegistryFrozen::duplicate('entity', $definition->handle);
+            throw RegistryFrozen::duplicate(point: 'entity', id: $definition->handle);
         }
 
         $this->entities[$definition->handle] = $definition;

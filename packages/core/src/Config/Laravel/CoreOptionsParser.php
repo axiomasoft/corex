@@ -39,7 +39,7 @@ final class CoreOptionsParser
     /** @deprecated Resolve `CoreOptions` from the container; it is a shared lazy singleton. */
     public static function current(): CoreOptions
     {
-        return app(CoreOptions::class);
+        return resolve(CoreOptions::class);
     }
 
     /** @param  array<array-key, mixed>  $config */
@@ -55,43 +55,43 @@ final class CoreOptionsParser
         $pubsub = is_array($config['pubsub'] ?? null) ? $config['pubsub'] : [];
         $messaging = is_array($config['messaging'] ?? null) ? $config['messaging'] : [];
 
-        $tenantContextResolver = self::classString($violations, 'tenant_context.resolver', $tenant['resolver'] ?? SingleAccountResolver::class, TenantContextResolver::class);
-        $tenancyManager = self::classString($violations, 'tenant_context.manager', $tenant['manager'] ?? NullTenancyManager::class, TenancyManager::class);
-        $impersonationService = self::classString($violations, 'tenant_context.impersonation', $tenant['impersonation'] ?? NullImpersonationService::class, ImpersonationService::class);
-        $settingsRepository = self::classString($violations, 'bindings.settings', $bindings['settings'] ?? DatabaseSettingsRepository::class, SettingsRepository::class);
-        $auditLogger = self::classString($violations, 'bindings.audit_logger', $bindings['audit_logger'] ?? QueuedAuditLogger::class, AuditLogger::class);
-        $auditRetention = self::classString($violations, 'bindings.audit_retention', $bindings['audit_retention'] ?? NullAuditRetention::class, AuditRetention::class);
-        $settingDefaultsProvider = self::classString($violations, 'bindings.setting_defaults', $bindings['setting_defaults'] ?? NullSettingDefaultsProvider::class, SettingDefaultsProvider::class);
-        $featureFlags = self::classString($violations, 'bindings.feature_flags', $bindings['feature_flags'] ?? DatabaseFeatureFlags::class, FeatureFlags::class);
-        $departmentRepository = self::classString($violations, 'bindings.departments', $bindings['departments'] ?? DatabaseDepartmentRepository::class, DepartmentRepository::class);
-        $dataScopeAuthorizer = self::classString($violations, 'bindings.data_scope_authorizer', $bindings['data_scope_authorizer'] ?? DenyDataScopeAuthorizer::class, DataScopeAuthorizer::class);
+        $tenantContextResolver = self::classString(violations: $violations, path: 'tenant_context.resolver', value: $tenant['resolver'] ?? SingleAccountResolver::class, contract: TenantContextResolver::class);
+        $tenancyManager = self::classString(violations: $violations, path: 'tenant_context.manager', value: $tenant['manager'] ?? NullTenancyManager::class, contract: TenancyManager::class);
+        $impersonationService = self::classString(violations: $violations, path: 'tenant_context.impersonation', value: $tenant['impersonation'] ?? NullImpersonationService::class, contract: ImpersonationService::class);
+        $settingsRepository = self::classString(violations: $violations, path: 'bindings.settings', value: $bindings['settings'] ?? DatabaseSettingsRepository::class, contract: SettingsRepository::class);
+        $auditLogger = self::classString(violations: $violations, path: 'bindings.audit_logger', value: $bindings['audit_logger'] ?? QueuedAuditLogger::class, contract: AuditLogger::class);
+        $auditRetention = self::classString(violations: $violations, path: 'bindings.audit_retention', value: $bindings['audit_retention'] ?? NullAuditRetention::class, contract: AuditRetention::class);
+        $settingDefaultsProvider = self::classString(violations: $violations, path: 'bindings.setting_defaults', value: $bindings['setting_defaults'] ?? NullSettingDefaultsProvider::class, contract: SettingDefaultsProvider::class);
+        $featureFlags = self::classString(violations: $violations, path: 'bindings.feature_flags', value: $bindings['feature_flags'] ?? DatabaseFeatureFlags::class, contract: FeatureFlags::class);
+        $departmentRepository = self::classString(violations: $violations, path: 'bindings.departments', value: $bindings['departments'] ?? DatabaseDepartmentRepository::class, contract: DepartmentRepository::class);
+        $dataScopeAuthorizer = self::classString(violations: $violations, path: 'bindings.data_scope_authorizer', value: $bindings['data_scope_authorizer'] ?? DenyDataScopeAuthorizer::class, contract: DataScopeAuthorizer::class);
 
-        $durable = self::nonEmpty($violations, 'storage.durable_root', $storage['durable_root'] ?? 'storage/app/corex/durable');
-        $ephemeral = self::nonEmpty($violations, 'storage.ephemeral_root', $storage['ephemeral_root'] ?? 'storage/app/corex/ephemeral');
+        $durable = self::nonEmpty(violations: $violations, path: 'storage.durable_root', value: $storage['durable_root'] ?? 'storage/app/corex/durable');
+        $ephemeral = self::nonEmpty(violations: $violations, path: 'storage.ephemeral_root', value: $storage['ephemeral_root'] ?? 'storage/app/corex/ephemeral');
         $connection = $views['connection'] ?? null;
         $viewsConnection = is_string($connection) && $connection !== '' ? $connection : null;
-        $auditEnabled = self::bool($violations, 'audit.enabled', $audit['enabled'] ?? true);
-        $cacheStore = self::nonEmpty($violations, 'settings.cache_store', $settings['cache_store'] ?? 'array');
+        $auditEnabled = self::bool(violations: $violations, path: 'audit.enabled', value: $audit['enabled'] ?? true);
+        $cacheStore = self::nonEmpty(violations: $violations, path: 'settings.cache_store', value: $settings['cache_store'] ?? 'array');
         $cacheTtl = self::nullableNonNegativeInt(
-            $violations,
-            'settings.cache_ttl',
-            array_key_exists('cache_ttl', $settings) ? $settings['cache_ttl'] : 3600,
+            violations: $violations,
+            path: 'settings.cache_ttl',
+            value: array_key_exists('cache_ttl', $settings) ? $settings['cache_ttl'] : 3600,
         );
-        $cachePrefix = self::nonEmpty($violations, 'settings.cache_prefix', $settings['cache_prefix'] ?? 'corex.settings');
-        $pubsubDriver = self::enum($violations, 'pubsub.driver', $pubsub['driver'] ?? PubSubDriver::Null, PubSubDriver::class);
-        $poll = self::positiveInt($violations, 'pubsub.poll_interval_microseconds', $pubsub['poll_interval_microseconds'] ?? 50_000);
-        $optIn = self::bool($violations, 'pubsub.octane_worker_opt_in', $pubsub['octane_worker_opt_in'] ?? false);
-        $retention = self::interval($violations, 'pubsub.retention', $pubsub['retention'] ?? '30 days');
-        $lease = self::positiveInt($violations, 'messaging.lease_seconds', $messaging['lease_seconds'] ?? 120);
-        $batch = self::positiveInt($violations, 'messaging.batch_size', $messaging['batch_size'] ?? 100);
-        $attempts = self::positiveInt($violations, 'messaging.max_attempts', $messaging['max_attempts'] ?? 8);
-        $backoff = self::positiveInt($violations, 'messaging.backoff_cap_seconds', $messaging['backoff_cap_seconds'] ?? 300);
-        $outboxRetention = self::interval($violations, 'messaging.outbox_retention', $messaging['outbox_retention'] ?? '14 days');
-        $deadRetention = self::interval($violations, 'messaging.dead_retention', $messaging['dead_retention'] ?? '90 days');
+        $cachePrefix = self::nonEmpty(violations: $violations, path: 'settings.cache_prefix', value: $settings['cache_prefix'] ?? 'corex.settings');
+        $pubsubDriver = self::enum(violations: $violations, path: 'pubsub.driver', value: $pubsub['driver'] ?? PubSubDriver::Null, enumClass: PubSubDriver::class);
+        $poll = self::positiveInt(violations: $violations, path: 'pubsub.poll_interval_microseconds', value: $pubsub['poll_interval_microseconds'] ?? 50_000);
+        $optIn = self::bool(violations: $violations, path: 'pubsub.octane_worker_opt_in', value: $pubsub['octane_worker_opt_in'] ?? false);
+        $retention = self::interval(violations: $violations, path: 'pubsub.retention', value: $pubsub['retention'] ?? '30 days');
+        $lease = self::positiveInt(violations: $violations, path: 'messaging.lease_seconds', value: $messaging['lease_seconds'] ?? 120);
+        $batch = self::positiveInt(violations: $violations, path: 'messaging.batch_size', value: $messaging['batch_size'] ?? 100);
+        $attempts = self::positiveInt(violations: $violations, path: 'messaging.max_attempts', value: $messaging['max_attempts'] ?? 8);
+        $backoff = self::positiveInt(violations: $violations, path: 'messaging.backoff_cap_seconds', value: $messaging['backoff_cap_seconds'] ?? 300);
+        $outboxRetention = self::interval(violations: $violations, path: 'messaging.outbox_retention', value: $messaging['outbox_retention'] ?? '14 days');
+        $deadRetention = self::interval(violations: $violations, path: 'messaging.dead_retention', value: $messaging['dead_retention'] ?? '90 days');
         $inboxRetention = array_key_exists('inbox_retention', $messaging) && $messaging['inbox_retention'] !== null
-            ? self::interval($violations, 'messaging.inbox_retention', $messaging['inbox_retention'])
+            ? self::interval(violations: $violations, path: 'messaging.inbox_retention', value: $messaging['inbox_retention'])
             : null;
-        $acknowledged = self::acknowledgedDangerousModes($violations, $config['acknowledged_dangerous_modes'] ?? []);
+        $acknowledged = self::acknowledgedDangerousModes(violations: $violations, value: $config['acknowledged_dangerous_modes'] ?? []);
 
         $violations->failIfAny();
 
@@ -148,7 +148,7 @@ final class CoreOptionsParser
             }
         }
 
-        $violations->add($path, 'must be a '.$enumClass.' value');
+        $violations->add(path: $path, message: 'must be a '.$enumClass.' value');
 
         return $enumClass::cases()[0];
     }
@@ -165,7 +165,7 @@ final class CoreOptionsParser
             return $value;
         }
 
-        $violations->add($path, 'must be a class implementing '.$contract);
+        $violations->add(path: $path, message: 'must be a class implementing '.$contract);
 
         return $contract;
     }
@@ -174,7 +174,7 @@ final class CoreOptionsParser
     private static function acknowledgedDangerousModes(ConfigurationValidator $violations, mixed $value): array
     {
         if (! is_array($value) || ! array_is_list($value)) {
-            $violations->add('acknowledged_dangerous_modes', 'must be a list of exact config paths');
+            $violations->add(path: 'acknowledged_dangerous_modes', message: 'must be a list of exact config paths');
 
             return [];
         }
@@ -182,7 +182,7 @@ final class CoreOptionsParser
         $paths = [];
         foreach ($value as $index => $path) {
             if (! is_string($path) || $path === '' || str_contains($path, '*')) {
-                $violations->add('acknowledged_dangerous_modes.'.$index, 'must be an exact config path without wildcards');
+                $violations->add(path: 'acknowledged_dangerous_modes.'.$index, message: 'must be an exact config path without wildcards');
 
                 continue;
             }
@@ -199,7 +199,7 @@ final class CoreOptionsParser
             return $value;
         }
 
-        $violations->add($path, 'must be a boolean');
+        $violations->add(path: $path, message: 'must be a boolean');
 
         return false;
     }
@@ -210,7 +210,7 @@ final class CoreOptionsParser
             return $value;
         }
 
-        $violations->add($path, 'must be a positive integer');
+        $violations->add(path: $path, message: 'must be a positive integer');
 
         return 1;
     }
@@ -225,7 +225,7 @@ final class CoreOptionsParser
             return $value;
         }
 
-        $violations->add($path, 'must be null or a non-negative integer');
+        $violations->add(path: $path, message: 'must be null or a non-negative integer');
 
         return null;
     }
@@ -236,7 +236,7 @@ final class CoreOptionsParser
             return $value;
         }
 
-        $violations->add($path, 'must be a non-empty string');
+        $violations->add(path: $path, message: 'must be a non-empty string');
 
         return 'invalid';
     }
@@ -247,7 +247,7 @@ final class CoreOptionsParser
             return $value;
         }
 
-        $violations->add($path, 'must be a DateInterval string');
+        $violations->add(path: $path, message: 'must be a DateInterval string');
 
         return '30 days';
     }

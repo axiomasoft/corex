@@ -11,7 +11,7 @@ use InvalidArgumentException;
 #[Api(since: '1.0')]
 final readonly class WebhookDestination
 {
-    private const MAX_URL_BYTES = 2048;
+    private const int MAX_URL_BYTES = 2048;
 
     public function __construct(
         public string $scheme,
@@ -59,7 +59,7 @@ final readonly class WebhookDestination
             throw new InvalidArgumentException('webhook_url_forbidden');
         }
 
-        return new self('https', $host, 443, $path);
+        return new self(scheme: 'https', host: $host, port: 443, path: $path);
     }
 
     private static function isCanonicalDnsName(string $host): bool
@@ -78,12 +78,6 @@ final readonly class WebhookDestination
             return false;
         }
 
-        foreach ($labels as $label) {
-            if (preg_match('/\A[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\z/D', $label) !== 1) {
-                return false;
-            }
-        }
-
-        return true;
+        return array_all($labels, fn ($label) => ! (preg_match('/\A[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\z/D', $label) !== 1));
     }
 }

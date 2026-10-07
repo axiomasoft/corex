@@ -11,6 +11,7 @@ use CoreX\CustomFields\Data\AttributeLifecycle;
 use CoreX\CustomFields\Data\AttributeTables;
 use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Data\IndexPolicy;
+use CoreX\CustomFields\Data\ValueBag;
 use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
 use CoreX\CustomFields\Internal\Support\Validation;
 use CoreX\CustomFields\Internal\Value;
@@ -22,7 +23,7 @@ use RuntimeException;
 use stdClass;
 use ValueError;
 
-/** @phpstan-import-type JsonMap from \CoreX\CustomFields\Data\ValueBag */
+/** @phpstan-import-type JsonMap from ValueBag */
 final readonly class DatabaseFieldCatalogue implements FieldCatalogue
 {
     /** @param array<string, bool> $drivers */
@@ -50,16 +51,16 @@ final readonly class DatabaseFieldCatalogue implements FieldCatalogue
         /** @var list<AttributeDefinition> $definitions */
         $definitions = array_values($latest);
         $definitions = AttributeDefinition::canonicalList($definitions);
-        $hash = AttributeDefinition::schemaHash($entity, $definitions);
+        $hash = AttributeDefinition::schemaHash(entity: $entity, definitions: $definitions);
 
         return new FieldSnapshot(
             entity: $entity,
             schemaVersion: $hash,
             schemaHash: $hash,
-            activeFields: Validation::validatedMapList(array_map(
+            activeFields: Validation::validatedMapList(values: array_map(
                 static fn (AttributeDefinition $definition): array => $definition->snapshotRow(),
                 $definitions,
-            ), 'active fields'),
+            ), name: 'active fields'),
             driverCapabilities: $this->drivers,
         );
     }
@@ -126,7 +127,7 @@ final readonly class DatabaseFieldCatalogue implements FieldCatalogue
     private function hydrate(stdClass $row): AttributeDefinition
     {
         try {
-            $index = $this->decode($row->index_policy ?? null, 'index policy');
+            $index = $this->decode(value: $row->index_policy ?? null, name: 'index policy');
 
             if (is_array($index)) {
                 $index = $index['kind'] ?? null;
@@ -141,11 +142,11 @@ final readonly class DatabaseFieldCatalogue implements FieldCatalogue
                 lifecycle: AttributeLifecycle::from(Value::text($row->lifecycle ?? '')),
                 required: (bool) ($row->required ?? false),
                 searchable: (bool) ($row->searchable ?? false),
-                constraints: $this->map($row->constraints ?? null, 'constraints'),
-                readKeys: $this->list($row->read_keys ?? null, 'read keys'),
-                writeKeys: $this->list($row->write_keys ?? null, 'write keys'),
+                constraints: $this->map(value: $row->constraints ?? null, name: 'constraints'),
+                readKeys: $this->list(value: $row->read_keys ?? null, name: 'read keys'),
+                writeKeys: $this->list(value: $row->write_keys ?? null, name: 'write keys'),
                 index: IndexPolicy::from(is_string($index) ? $index : ''),
-                meta: $this->map($row->meta ?? null, 'meta'),
+                meta: $this->map(value: $row->meta ?? null, name: 'meta'),
             );
         } catch (JsonException|InvalidArgumentException|ValueError $exception) {
             throw new RuntimeException('Stored attribute definition is malformed.', previous: $exception);
@@ -163,13 +164,13 @@ final readonly class DatabaseFieldCatalogue implements FieldCatalogue
     /** @return JsonMap */
     private function map(mixed $value, string $name): array
     {
-        $decoded = $this->decode($value, $name);
+        $decoded = $this->decode(value: $value, name: $name);
 
         if (! is_array($decoded) || array_is_list($decoded) && $decoded !== []) {
             throw new RuntimeException("Stored attribute {$name} must be a JSON object.");
         }
 
-        $decoded = Validation::validatedMap($decoded, $name);
+        $decoded = Validation::validatedMap(value: $decoded, name: $name);
 
         return $decoded;
     }
@@ -177,7 +178,7 @@ final readonly class DatabaseFieldCatalogue implements FieldCatalogue
     /** @return list<string> */
     private function list(mixed $value, string $name): array
     {
-        $decoded = $this->decode($value, $name);
+        $decoded = $this->decode(value: $value, name: $name);
 
         if (! is_array($decoded) || ! array_is_list($decoded)) {
             throw new RuntimeException("Stored attribute {$name} must be a JSON list.");

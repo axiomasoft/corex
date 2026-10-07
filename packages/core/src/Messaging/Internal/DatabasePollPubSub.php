@@ -10,6 +10,7 @@ use CoreX\Messaging\Contracts\PubSub;
 use CoreX\Messaging\Contracts\WorkerRuntime;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Support\Sleep;
 use Override;
 use Psr\Clock\ClockInterface;
 
@@ -40,15 +41,15 @@ use Psr\Clock\ClockInterface;
  *
  * @internal spec: B-10 §6.1, D44, P1.24, Implementation Rules, pre-mortem C7
  */
-final class DatabasePollPubSub implements PubSub
+final readonly class DatabasePollPubSub implements PubSub
 {
     public function __construct(
-        private readonly ConnectionResolverInterface $connections,
-        private readonly CoreOptions $options,
-        private readonly ClockInterface $clock,
-        private readonly WorkerRuntime $runtime,
-        private readonly ?string $connection = null,
-        private readonly ?int $pollIntervalMicroseconds = null,
+        private ConnectionResolverInterface $connections,
+        private CoreOptions $options,
+        private ClockInterface $clock,
+        private WorkerRuntime $runtime,
+        private ?string $connection = null,
+        private ?int $pollIntervalMicroseconds = null,
     ) {}
 
     #[Override]
@@ -90,13 +91,13 @@ final class DatabasePollPubSub implements PubSub
         string $subscriber = 'default',
         bool $replayBacklog = false,
     ): void {
-        SubscribeGuard::assert($this->runtime, $this->options->pubsubOctaneWorkerOptIn, self::class);
+        SubscribeGuard::assert(runtime: $this->runtime, octaneWorkerOptIn: $this->options->pubsubOctaneWorkerOptIn, driverClass: self::class);
 
         $connection = $this->connections->connection($this->connection);
         $messagesTable = 'sys_pubsub_messages';
         $cursorsTable = 'sys_pubsub_cursors';
 
-        $cursor = $this->loadOrBootstrapCursor($connection, $cursorsTable, $messagesTable, $channel, $subscriber, $replayBacklog);
+        $cursor = $this->loadOrBootstrapCursor(connection: $connection, cursorsTable: $cursorsTable, messagesTable: $messagesTable, channel: $channel, subscriber: $subscriber, replayBacklog: $replayBacklog);
         $polls = 0;
 
         while ($maxPolls === null || $polls < $maxPolls) {
@@ -113,13 +114,13 @@ final class DatabasePollPubSub implements PubSub
                 $payload = json_decode($row->payload, true, flags: JSON_THROW_ON_ERROR);
                 $handler($payload);
 
-                $this->persistCursor($connection, $cursorsTable, $channel, $subscriber, $cursor);
+                $this->persistCursor(connection: $connection, cursorsTable: $cursorsTable, channel: $channel, subscriber: $subscriber, position: $cursor);
             }
 
             $polls++;
 
             if ($maxPolls === null || $polls < $maxPolls) {
-                usleep($this->pollIntervalMicroseconds ?? $this->options->pubsubPollIntervalMicroseconds);
+                Sleep::usleep($this->pollIntervalMicroseconds ?? $this->options->pubsubPollIntervalMicroseconds);
             }
         }
     }
@@ -147,7 +148,7 @@ final class DatabasePollPubSub implements PubSub
         assert(is_int($maximum) || is_numeric($maximum));
         $start = (int) $maximum;
 
-        $this->persistCursor($connection, $cursorsTable, $channel, $subscriber, $start);
+        $this->persistCursor(connection: $connection, cursorsTable: $cursorsTable, channel: $channel, subscriber: $subscriber, position: $start);
 
         return $start;
     }

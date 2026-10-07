@@ -66,7 +66,7 @@ final class SessionConnectionBootstrapper implements TenantBootstrapper
         $suffix = hash('sha256', $context->account->id);
 
         if ($driver === 'database') {
-            $this->config->set('session.connection', 'tenant');
+            $this->config->set(key: 'session.connection', value: 'tenant');
         } elseif ($driver === 'file') {
             $root = $this->original['files'] ?? null;
 
@@ -81,7 +81,7 @@ final class SessionConnectionBootstrapper implements TenantBootstrapper
                 throw new InvalidConfiguration(['corex-tenancy.session.files: directory is not writable']);
             }
 
-            $this->config->set('session.files', $path);
+            $this->config->set(key: 'session.files', value: $path);
         } else {
             $name = $this->original['store'] ?? null;
 
@@ -90,12 +90,12 @@ final class SessionConnectionBootstrapper implements TenantBootstrapper
             }
 
             $this->cacheOriginal = (array) $this->config->get("cache.stores.{$name}");
-            $existing = $this->cacheOriginal['prefix'] ?? $this->config->get('cache.prefix', '');
+            $existing = $this->cacheOriginal['prefix'] ?? $this->config->get(key: 'cache.prefix', default: '');
             $prefix = 'corex-session:'.$suffix.':'.(is_string($existing) ? $existing : '');
-            $this->config->set("cache.stores.{$name}.prefix", $prefix);
+            $this->config->set(key: "cache.stores.{$name}.prefix", value: $prefix);
 
             if ($driver === 'redis') {
-                $this->config->set('session.prefix', $prefix); // Laravel otherwise overrides the cache prefix
+                $this->config->set(key: 'session.prefix', value: $prefix); // Laravel otherwise overrides the cache prefix
             }
 
             $this->cache->forgetDriver($name);
@@ -117,25 +117,25 @@ final class SessionConnectionBootstrapper implements TenantBootstrapper
             return;
         }
 
-        $this->config->set('session', $this->original);
+        $this->config->set(key: 'session', value: $this->original);
 
         if ($this->cacheOriginal !== null) {
             $name = $this->original['store'];
             \assert(\is_string($name));
-            $this->config->set("cache.stores.{$name}", $this->cacheOriginal);
+            $this->config->set(key: "cache.stores.{$name}", value: $this->cacheOriginal);
             $this->cache->forgetDriver($name);
         }
 
         // The connection bootstrapper reverts later, so a null connection must resolve explicitly to central here.
         if (($this->original['driver'] ?? null) === 'database') {
-            $this->config->set('session.connection', $this->original['connection'] ?? $this->centralConnection);
+            $this->config->set(key: 'session.connection', value: $this->original['connection'] ?? $this->centralConnection);
         }
 
         foreach ($this->createdStores() as $name => $store) {
             $store->setHandler($this->handlers[$name] ?? $this->freshHandler($name));
         }
 
-        $this->config->set('session', $this->original);
+        $this->config->set(key: 'session', value: $this->original);
         $this->original = null;
         $this->handlers = [];
         $this->cacheOriginal = null;
@@ -153,7 +153,7 @@ final class SessionConnectionBootstrapper implements TenantBootstrapper
     private function freshHandler(string $driver): SessionHandlerInterface
     {
         /** @var Store $store */
-        $store = (new SessionManager($this->container))->driver($driver);
+        $store = new SessionManager($this->container)->driver($driver);
 
         return $store->getHandler();
     }

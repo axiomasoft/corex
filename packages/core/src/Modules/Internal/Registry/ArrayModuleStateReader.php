@@ -14,14 +14,14 @@ use CoreX\Modules\Contracts\ModuleStateReader;
  *
  * @internal spec: P1.5, P1.6
  */
-final class ArrayModuleStateReader implements ModuleStateReader
+final readonly class ArrayModuleStateReader implements ModuleStateReader
 {
     /**
      * @param  array<string, array<string, array{state: string, edition: string}>>  $statesByAccount
      *                                                                                                keyed by account id, then module composer name.
      */
     public function __construct(
-        private readonly array $statesByAccount = [],
+        private array $statesByAccount = [],
     ) {}
 
     public function enabledFor(TenantContext $ctx): array

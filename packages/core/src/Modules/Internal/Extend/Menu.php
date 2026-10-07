@@ -14,10 +14,6 @@ use CoreX\Modules\Contracts\Extender;
  */
 final class Menu implements Extender
 {
-    public string $panel;
-
-    public string $handle;
-
     public bool $isGroup = false;
 
     public ?string $label = null;
@@ -33,24 +29,11 @@ final class Menu implements Extender
     /** @var class-string|null */
     public ?string $badgeResolverClass = null;
 
-    private function __construct(string $panel, string $handle)
-    {
-        $this->panel = $panel;
-        $this->handle = $handle;
-    }
+    private function __construct(public string $panel, public string $handle) {}
 
     public static function item(string $panel, string $handle): self
     {
-        return new self($panel, $handle);
-    }
-
-    public static function group(string $panel, string $handle, string $label): self
-    {
-        $menu = new self($panel, $handle);
-        $menu->isGroup = true;
-        $menu->label = $label;
-
-        return $menu;
+        return new self(panel: $panel, handle: $handle);
     }
 
     public function label(string $label): self
@@ -67,13 +50,6 @@ final class Menu implements Extender
         return $this;
     }
 
-    public function route(string $routeName): self
-    {
-        $this->routeName = $routeName;
-
-        return $this;
-    }
-
     public function after(string $siblingHandle): self
     {
         $this->afterHandle = $siblingHandle;
@@ -84,14 +60,6 @@ final class Menu implements Extender
     public function permission(string $permission): self
     {
         $this->permission = $permission;
-
-        return $this;
-    }
-
-    /** @param  class-string  $badgeResolverClass */
-    public function badge(string $badgeResolverClass): self
-    {
-        $this->badgeResolverClass = $badgeResolverClass;
 
         return $this;
     }

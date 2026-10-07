@@ -110,7 +110,7 @@ final class ContractSnapshotTest extends TestCase
             $declarations = array_reverse($declarations);
         }
 
-        return app(RegistryCompiler::class)->compile([
+        return resolve(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends($declarations),
         ], installedPackages: [], installedVersions: [
             'axiomasoft/corex' => new InstalledPackageVersion('axiomasoft/corex', '1.0.0', 'p13-fixture'),

@@ -8,9 +8,9 @@ use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Context\Internal\SingleAccountResolver;
 
 it('resolves a boxed TenantContext via SingleAccountResolver', function (): void {
-    $context = app(TenantContextResolver::class)->current();
+    $context = resolve(TenantContextResolver::class)->current();
 
-    expect(app(TenantContextResolver::class))->toBeInstanceOf(SingleAccountResolver::class)
+    expect(resolve(TenantContextResolver::class))->toBeInstanceOf(SingleAccountResolver::class)
         ->and($context->isBoxed())->toBeTrue()
         ->and($context->workspace)->toBeNull()
         ->and($context->account)->toBeInstanceOf(AccountRef::class);

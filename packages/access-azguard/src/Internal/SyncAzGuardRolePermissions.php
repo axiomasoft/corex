@@ -40,7 +40,7 @@ final readonly class SyncAzGuardRolePermissions
             $azguardRole = (new AzGuardRoleModel)->setConnection($connection->getName())
                 ->newQuery()->firstOrCreate(['name' => $role->slug]);
 
-            $this->links->upsert($role->id, $azguardRole->id);
+            $this->links->upsert(roleId: $role->id, azguardRoleId: $azguardRole->id);
 
             $permissions = (new RolePermission)->setConnection($connection->getName());
             $permissions->newQuery()->where('role_id', $azguardRole->id)

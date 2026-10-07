@@ -29,7 +29,7 @@ final class ValidateWakeupStamps extends Command
 
         $rows = $connection->table('sys_wakeup_requests')
             ->whereIn('status', ['pending', 'running'])
-            ->orderBy('fire_at')
+            ->oldest('fire_at')
             ->orderBy('id')
             ->limit($limit + 1)
             ->get(['kind', 'request_key', 'status', 'payload']);

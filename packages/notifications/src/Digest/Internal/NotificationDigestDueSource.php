@@ -15,12 +15,12 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\ConnectionInterface;
 
-final class NotificationDigestDueSource implements DueWakeupSource
+final readonly class NotificationDigestDueSource implements DueWakeupSource
 {
     public function __construct(
-        private readonly ConnectionInterface $connection,
-        private readonly DigestBuilder $digests,
-        private readonly DigestWakeupHandler $handler,
+        private ConnectionInterface $connection,
+        private DigestBuilder $digests,
+        private DigestWakeupHandler $handler,
     ) {}
 
     public function nextDue(TenantContext $context): ?DateTimeImmutable
@@ -42,7 +42,7 @@ final class NotificationDigestDueSource implements DueWakeupSource
 
         foreach ($runs as $run) {
             $window = new DigestWindow(start: $this->date($run->period_start), end: $this->date($run->period_end), period: Value::text($run->period));
-            $digest = $this->digests->build(new NotificationContext(tenant: $context, actorKind: Value::text($run->recipient_kind), actorId: Value::nullableText($run->recipient_id)), $window);
+            $digest = $this->digests->build(context: new NotificationContext(tenant: $context, actorKind: Value::text($run->recipient_kind), actorId: Value::nullableText($run->recipient_id)), window: $window);
 
             if ($digest === null) {
                 continue;

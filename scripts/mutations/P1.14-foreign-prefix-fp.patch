@@ -1,8 +1,6 @@
-diff --git a/packages/core/src/Modules/PHPStan/Rules/NoForeignPrefixSqlRule.php b/packages/core/src/Modules/PHPStan/Rules/NoForeignPrefixSqlRule.php
-index f587bab..330dbce 100644
 --- a/packages/core/src/Modules/PHPStan/Rules/NoForeignPrefixSqlRule.php
 +++ b/packages/core/src/Modules/PHPStan/Rules/NoForeignPrefixSqlRule.php
-@@ -7,9 +7,6 @@ namespace CoreX\Modules\PHPStan\Rules;
+@@ -9,9 +9,6 @@
  use CoreX\Modules\PHPStan\Rules\Support\DatabaseCall;
  use PhpParser\Node;
  use PhpParser\Node\Expr\CallLike;
@@ -12,26 +10,26 @@ index f587bab..330dbce 100644
  use PHPStan\Analyser\Scope;
  use PHPStan\Rules\IdentifierRuleError;
  use PHPStan\Rules\Rule;
-@@ -31,12 +28,6 @@ final class NoForeignPrefixSqlRule implements Rule
+@@ -33,12 +30,6 @@
+ {
      /** Префиксы ядра — их не может трогать ни один модуль. */
-     private const CORE_PREFIXES = ['sys', 'mod'];
- 
+     private const array CORE_PREFIXES = ['sys', 'mod'];
+-
 -    /**
 -     * Методы, чей первый строковый аргумент — ИМЯ ТАБЛИЦЫ целиком (не SQL-текст):
 -     * `DB::table()`/`Schema::*`. Матчится по полному совпадению строки, не regex-сканом.
 -     */
--    private const TABLE_NAME_METHODS = ['table', 'from', 'create', 'drop', 'dropifexists', 'hastable', 'rename'];
--
+-    private const array TABLE_NAME_METHODS = ['table', 'from', 'create', 'drop', 'dropifexists', 'hastable', 'rename'];
+
      /**
       * @param  array<string, string>  $modulePrefixes  PSR-4-неймспейс модуля => tablePrefix
-      */
-@@ -61,63 +52,36 @@ final class NoForeignPrefixSqlRule implements Rule
- 
+@@ -64,102 +55,39 @@
+
          $known = array_values(array_unique([...self::CORE_PREFIXES, ...array_values($this->modulePrefixes)]));
          $errors = [];
 -        $tables = $this->isTableNameCall($node)
--            ? $this->foreignTableLiterals($node, $scope, $ownPrefix, $known)
--            : $this->foreignTablesInSql($node, $scope, $ownPrefix, $known);
+-            ? $this->foreignTableLiterals(node: $node, scope: $scope, ownPrefix: $ownPrefix, knownPrefixes: $known)
+-            : $this->foreignTablesInSql(node: $node, scope: $scope, ownPrefix: $ownPrefix, knownPrefixes: $known);
 -
 -        foreach ($tables as $table) {
 -            $errors[] = RuleErrorBuilder::message(sprintf(
@@ -41,24 +39,7 @@ index f587bab..330dbce 100644
 -            ))
 -                ->identifier('corexModules.foreignPrefixSql')
 -                ->build();
--        }
--
--        return $errors;
--    }
--
--    /**
--     * `DB::table('x')`/`Schema::create('x', ...)` и т.п. — первый строковый аргумент
--     * ЦЕЛИКОМ является именем таблицы, сравниваем без regex-скана по позициям.
--     */
--    private function isTableNameCall(CallLike $node): bool
--    {
--        $name = null;
- 
--        if ($node instanceof StaticCall && $node->name instanceof Identifier) {
--            $name = $node->name->toString();
--        } elseif ($node instanceof MethodCall && $node->name instanceof Identifier) {
--            $name = $node->name->toString();
-+        foreach (DatabaseCall::constantStringArguments($node, $scope) as $sql) {
++        foreach (DatabaseCall::constantStringArguments(node: $node, scope: $scope) as $sql) {
 +            foreach ($this->foreignTables($sql, $ownPrefix, $known) as $table) {
 +                $errors[] = RuleErrorBuilder::message(sprintf(
 +                    'Direct DB access to table "%s" of a foreign prefix (module owns "%s_") is forbidden (B-10 §7.4 п.9) — go through the owner\'s contract.',
@@ -69,12 +50,28 @@ index f587bab..330dbce 100644
 +                    ->build();
 +            }
          }
- 
--        return $name !== null && in_array(strtolower($name), self::TABLE_NAME_METHODS, true);
-+        return $errors;
+
+         return $errors;
      }
- 
+
      /**
+-     * `DB::table('x')`/`Schema::create('x', ...)` и т.п. — первый строковый аргумент
+-     * ЦЕЛИКОМ является именем таблицы, сравниваем без regex-скана по позициям.
+-     */
+-    private function isTableNameCall(CallLike $node): bool
+-    {
+-        $name = null;
+-
+-        if ($node instanceof StaticCall && $node->name instanceof Identifier) {
+-            $name = $node->name->toString();
+-        } elseif ($node instanceof MethodCall && $node->name instanceof Identifier) {
+-            $name = $node->name->toString();
+-        }
+-
+-        return $name !== null && in_array(strtolower($name), self::TABLE_NAME_METHODS, true);
+-    }
+-
+-    /**
       * @param  list<string>  $knownPrefixes
       * @return list<string>
       */
@@ -87,10 +84,10 @@ index f587bab..330dbce 100644
 +        if (preg_match_all('/\b([a-z][a-z0-9]{0,2})_[a-z0-9_]+\b/i', $sql, $matches, PREG_SET_ORDER) === false) {
              return [];
          }
- 
+
 -        // Только первый аргумент — второй/третий у Schema::rename()/create() не имена таблиц.
          $tables = [];
- 
+
 -        foreach ($scope->getType($args[0]->value)->getConstantStrings() as $constantString) {
 -            $table = $constantString->getValue();
 -
@@ -101,13 +98,15 @@ index f587bab..330dbce 100644
 -            $prefix = strtolower($m[1]);
 +        foreach ($matches as [$table, $prefix]) {
 +            $prefix = strtolower($prefix);
- 
+
              if ($prefix !== $ownPrefix && in_array($prefix, $knownPrefixes, true)) {
                  $tables[] = $table;
-@@ -127,41 +91,6 @@ final class NoForeignPrefixSqlRule implements Rule
-         return array_values(array_unique($tables));
-     }
- 
+-            }
+-        }
+-
+-        return array_values(array_unique($tables));
+-    }
+-
 -    /**
 -     * Raw-SQL методы (`DB::select`/`DB::statement`/…): чужой префикс детектится ТОЛЬКО
 -     * на позиции имени таблицы — токен, идущий сразу за `FROM`/`JOIN`/`INTO`/`UPDATE`/`TABLE`.
@@ -120,7 +119,7 @@ index f587bab..330dbce 100644
 -    {
 -        $tables = [];
 -
--        foreach (DatabaseCall::constantStringArguments($node, $scope) as $sql) {
+-        foreach (DatabaseCall::constantStringArguments(node: $node, scope: $scope) as $sql) {
 -            if (preg_match_all(
 -                '/\b(?:FROM|JOIN|INTO|UPDATE|TABLE)\s+([a-z][a-z0-9]{0,2})_[a-z0-9_]+\b/i',
 -                $sql,
@@ -137,12 +136,7 @@ index f587bab..330dbce 100644
 -                if ($prefix !== $ownPrefix && in_array($prefix, $knownPrefixes, true)) {
 -                    $tables[] = $table;
 -                }
--            }
--        }
--
--        return array_values(array_unique($tables));
--    }
--
-     private function ownPrefix(Scope $scope): ?string
-     {
-         $namespace = $scope->getClassReflection()?->getName() ?? $scope->getNamespace();
+             }
+         }
+
+         return array_values(array_unique($tables));

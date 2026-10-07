@@ -12,10 +12,10 @@ use CoreX\Intl\Translation\Data\TranslationResult;
 use Illuminate\Contracts\Translation\Translator;
 use Override;
 
-final class LaravelTranslationReader implements TranslationReader
+final readonly class LaravelTranslationReader implements TranslationReader
 {
     public function __construct(
-        private readonly Translator $translator,
+        private Translator $translator,
     ) {}
 
     #[Override]

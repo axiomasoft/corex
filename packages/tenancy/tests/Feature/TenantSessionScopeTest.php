@@ -94,9 +94,9 @@ function makeAccountTSS(array $overrides = []): Account
  *  axiomasoft/corex's `sys_departments` to already exist on the same (now-switched) connection. */
 function migrateTenantSessionsTSS(): void
 {
-    app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex:tenant'], 'tenant');
+    resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex:tenant'], 'tenant');
 
-    app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-tenancy:tenant'], 'tenant');
+    resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-tenancy:tenant'], 'tenant');
 }
 
 /** Runs the middleware with the given session and returns the HTTP status it ended with. */
@@ -106,7 +106,7 @@ function scopeStatusTSS(Store $session): int
     $request->setLaravelSession($session);
 
     try {
-        $response = app(ScopeSessionToTenant::class)->handle($request, fn (Request $r) => new Response('ok'));
+        $response = resolve(ScopeSessionToTenant::class)->handle($request, fn (Request $r) => new Response('ok'));
     } catch (HttpException $e) {
         return $e->getStatusCode();
     }
@@ -118,7 +118,7 @@ it('а: sessions создаётся тенантской миграцией; у�
     $account = makeAccountTSS();
 
     /** @var Store $driver */
-    $driver = app('session')->driver('database');
+    $driver = resolve('session')->driver('database');
     $central = $driver->getHandler();   // built BEFORE the account context existed
 
     initTenantContext($account);
@@ -148,7 +148,7 @@ it('б: cookie-сессия тенанта A на домене тенанта B 
     $accountA = makeAccountTSS();
     $accountB = makeAccountTSS();
 
-    $session = new Store('tenant_scope_probe', new FileSessionHandler(app('files'), config('session.files'), 120));
+    $session = new Store('tenant_scope_probe', new FileSessionHandler(resolve('files'), config('session.files'), 120));
     $session->start();
 
     initTenantContext($accountA);
@@ -166,7 +166,7 @@ it('б: cookie-сессия тенанта A на домене тенанта B 
 
 it('г: первая привязка сбрасывает чужие атрибуты (central/auth) и ротирует токен', function (): void {
     $account = makeAccountTSS();
-    $session = new Store('tenant_scope_probe', new FileSessionHandler(app('files'), config('session.files'), 120));
+    $session = new Store('tenant_scope_probe', new FileSessionHandler(resolve('files'), config('session.files'), 120));
     $session->start();
     $session->put('login_web_central', 'central-user');
     $session->regenerateToken();
@@ -182,7 +182,7 @@ it('г: первая привязка сбрасывает чужие атриб
 
 it('д: сессия того же аккаунта сохраняет вход', function (): void {
     $account = makeAccountTSS();
-    $session = new Store('tenant_scope_probe', new FileSessionHandler(app('files'), config('session.files'), 120));
+    $session = new Store('tenant_scope_probe', new FileSessionHandler(resolve('files'), config('session.files'), 120));
     $session->start();
 
     initTenantContext($account);
@@ -194,17 +194,17 @@ it('д: сессия того же аккаунта сохраняет вход'
 });
 
 it('е: без контекста аккаунта middleware отказывает типизированной ошибкой', function (): void {
-    $session = new Store('tenant_scope_probe', new FileSessionHandler(app('files'), config('session.files'), 120));
+    $session = new Store('tenant_scope_probe', new FileSessionHandler(resolve('files'), config('session.files'), 120));
 
     expect(fn () => scopeStatusTSS($session))->toThrow(TenantContextUnavailable::class);
-    expect(app(TenancyManager::class)->initialized())->toBeFalse();
+    expect(resolve(TenancyManager::class)->initialized())->toBeFalse();
 });
 
 it('в: host_identification.enabled=false (boxed) → middleware не зарегистрирована, приложение поднимается без root-БД', function (): void {
     // Our contribution to the tenant group and the aliases this package owns outright stay
     // absent under the flag.
     expect(config('corex-tenancy.host_identification.enabled'))->toBeFalse()
-        ->and(app('router')->getMiddlewareGroups()['tenant'] ?? [])->not->toContain(ResolveTenantFromHost::class)
-        ->and(app('router')->getMiddleware())->not->toHaveKey('tenancy.host')
-        ->and(app('router')->getMiddleware())->not->toHaveKey('tenancy.status');
+        ->and(resolve('router')->getMiddlewareGroups()['tenant'] ?? [])->not->toContain(ResolveTenantFromHost::class)
+        ->and(resolve('router')->getMiddleware())->not->toHaveKey('tenancy.host')
+        ->and(resolve('router')->getMiddleware())->not->toHaveKey('tenancy.status');
 });

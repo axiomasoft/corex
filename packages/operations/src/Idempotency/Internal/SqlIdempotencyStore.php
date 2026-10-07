@@ -52,8 +52,8 @@ final readonly class SqlIdempotencyStore implements IdempotencyStore
         $this->assertScope($scope);
         $this->assertTransaction();
         $this->assertKey($key);
-        $this->assertDigest($requestFingerprint, 'request fingerprint');
-        $this->assertDigest($contractHash, 'contract hash');
+        $this->assertDigest(value: $requestFingerprint, label: 'request fingerprint');
+        $this->assertDigest(value: $contractHash, label: 'contract hash');
 
         $now = $this->clock->now();
         $scopeHash = hash('sha256', JsonCanonical::encode($scope->toArray()));
@@ -102,7 +102,7 @@ final readonly class SqlIdempotencyStore implements IdempotencyStore
             throw new RuntimeException('Idempotency row disappeared during admission.');
         }
 
-        return $this->decision($scope, $row, $requestFingerprint, $contractHash);
+        return $this->decision(scope: $scope, row: $row, requestFingerprint: $requestFingerprint, contractHash: $contractHash);
     }
 
     #[Override]
@@ -162,13 +162,13 @@ final readonly class SqlIdempotencyStore implements IdempotencyStore
     #[Override]
     public function complete(IdempotencyAttempt $attempt, string $outcomeJson): void
     {
-        $this->terminal($attempt, 'completed', $outcomeJson);
+        $this->terminal(attempt: $attempt, state: 'completed', outcomeJson: $outcomeJson);
     }
 
     #[Override]
     public function fail(IdempotencyAttempt $attempt, string $outcomeJson): void
     {
-        $this->terminal($attempt, 'failed', $outcomeJson);
+        $this->terminal(attempt: $attempt, state: 'failed', outcomeJson: $outcomeJson);
     }
 
     #[Override]
@@ -225,10 +225,10 @@ final readonly class SqlIdempotencyStore implements IdempotencyStore
         string $requestFingerprint,
         string $contractHash,
     ): IdempotencyAttempt {
-        $state = DatabaseValue::text(DatabaseValue::field($row, 'state'));
+        $state = DatabaseValue::text(DatabaseValue::field(row: $row, name: 'state'));
         $disposition = match (true) {
-            ! hash_equals(DatabaseValue::text(DatabaseValue::field($row, 'request_fingerprint')), $requestFingerprint) => IdempotencyAttempt::Conflict,
-            ! hash_equals(DatabaseValue::text(DatabaseValue::field($row, 'contract_hash')), $contractHash) => IdempotencyAttempt::ContractMismatch,
+            ! hash_equals(DatabaseValue::text(DatabaseValue::field(row: $row, name: 'request_fingerprint')), $requestFingerprint) => IdempotencyAttempt::Conflict,
+            ! hash_equals(DatabaseValue::text(DatabaseValue::field(row: $row, name: 'contract_hash')), $contractHash) => IdempotencyAttempt::ContractMismatch,
             in_array($state, ['completed', 'failed'], true) => IdempotencyAttempt::Replay,
             $state === 'started' => IdempotencyAttempt::InProgress,
             default => throw new RuntimeException('Idempotency row has an unknown state.'),
@@ -237,15 +237,15 @@ final readonly class SqlIdempotencyStore implements IdempotencyStore
         return new IdempotencyAttempt(
             disposition: $disposition,
             scope: $scope,
-            scopeHash: DatabaseValue::text(DatabaseValue::field($row, 'scope_hash')),
-            keyHash: DatabaseValue::text(DatabaseValue::field($row, 'key_hash')),
-            requestFingerprint: DatabaseValue::text(DatabaseValue::field($row, 'request_fingerprint')),
-            contractHash: DatabaseValue::text(DatabaseValue::field($row, 'contract_hash')),
+            scopeHash: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'scope_hash')),
+            keyHash: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'key_hash')),
+            requestFingerprint: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'request_fingerprint')),
+            contractHash: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'contract_hash')),
             state: $state,
-            attempt: DatabaseValue::integer(DatabaseValue::field($row, 'attempt')),
-            leaseToken: DatabaseValue::field($row, 'lease_token') === null ? null : DatabaseValue::text(DatabaseValue::field($row, 'lease_token')),
-            leaseUntil: $this->date(DatabaseValue::field($row, 'lease_until')),
-            outcomeJson: DatabaseValue::field($row, 'outcome_json') === null ? null : DatabaseValue::text(DatabaseValue::field($row, 'outcome_json')),
+            attempt: DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'attempt')),
+            leaseToken: DatabaseValue::field(row: $row, name: 'lease_token') === null ? null : DatabaseValue::text(DatabaseValue::field(row: $row, name: 'lease_token')),
+            leaseUntil: $this->date(DatabaseValue::field(row: $row, name: 'lease_until')),
+            outcomeJson: DatabaseValue::field(row: $row, name: 'outcome_json') === null ? null : DatabaseValue::text(DatabaseValue::field(row: $row, name: 'outcome_json')),
         );
     }
 

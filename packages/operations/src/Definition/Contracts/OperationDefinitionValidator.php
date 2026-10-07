@@ -19,7 +19,7 @@ final class OperationDefinitionValidator
 
     public static function validateRoutePair(Api $first, Api $second): void
     {
-        ApiOperationValidator::validateRoutePair($first, $second);
+        ApiOperationValidator::validateRoutePair(first: $first, second: $second);
     }
 
     public static function assertJsonValue(mixed $value): void

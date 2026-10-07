@@ -13,9 +13,9 @@ use JsonException;
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class JsonCanonical
 {
-    public const SAFE_INTEGER_MAX = 9007199254740991;
+    public const int SAFE_INTEGER_MAX = 9007199254740991;
 
-    public const SAFE_INTEGER_MIN = -9007199254740991;
+    public const int SAFE_INTEGER_MIN = -9007199254740991;
 
     public static function assertWellFormed(string $json): void
     {
@@ -76,8 +76,8 @@ final class JsonCanonical
     private static function rejectDuplicateKeys(string $json): void
     {
         $index = 0;
-        self::parseValue($json, $index);
-        self::skipWhitespace($json, $index);
+        self::parseValue(json: $json, index: $index);
+        self::skipWhitespace(json: $json, index: $index);
 
         if ($index !== strlen($json)) {
             throw new InvalidArgumentException('Trailing JSON content rejected.');
@@ -86,21 +86,21 @@ final class JsonCanonical
 
     private static function parseValue(string $json, int &$index): void
     {
-        self::skipWhitespace($json, $index);
+        self::skipWhitespace(json: $json, index: $index);
         $char = $json[$index] ?? '';
 
         match ($char) {
-            '{' => self::parseObject($json, $index),
-            '[' => self::parseArray($json, $index),
-            '"' => self::parseString($json, $index),
-            default => self::parsePrimitive($json, $index),
+            '{' => self::parseObject(json: $json, index: $index),
+            '[' => self::parseArray(json: $json, index: $index),
+            '"' => self::parseString(json: $json, index: $index),
+            default => self::parsePrimitive(json: $json, index: $index),
         };
     }
 
     private static function parseObject(string $json, int &$index): void
     {
         $index++;
-        self::skipWhitespace($json, $index);
+        self::skipWhitespace(json: $json, index: $index);
 
         if (($json[$index] ?? '') === '}') {
             $index++;
@@ -111,23 +111,23 @@ final class JsonCanonical
         $keys = [];
 
         while (true) {
-            self::skipWhitespace($json, $index);
-            $key = self::parseString($json, $index);
+            self::skipWhitespace(json: $json, index: $index);
+            $key = self::parseString(json: $json, index: $index);
 
             if (isset($keys[$key])) {
                 throw new InvalidArgumentException('Duplicate JSON object key: '.$key);
             }
 
             $keys[$key] = true;
-            self::skipWhitespace($json, $index);
+            self::skipWhitespace(json: $json, index: $index);
 
             if (($json[$index] ?? '') !== ':') {
                 throw new InvalidArgumentException('Malformed JSON object.');
             }
 
             $index++;
-            self::parseValue($json, $index);
-            self::skipWhitespace($json, $index);
+            self::parseValue(json: $json, index: $index);
+            self::skipWhitespace(json: $json, index: $index);
 
             if (($json[$index] ?? '') === ',') {
                 $index++;
@@ -148,7 +148,7 @@ final class JsonCanonical
     private static function parseArray(string $json, int &$index): void
     {
         $index++;
-        self::skipWhitespace($json, $index);
+        self::skipWhitespace(json: $json, index: $index);
 
         if (($json[$index] ?? '') === ']') {
             $index++;
@@ -157,8 +157,8 @@ final class JsonCanonical
         }
 
         while (true) {
-            self::parseValue($json, $index);
-            self::skipWhitespace($json, $index);
+            self::parseValue(json: $json, index: $index);
+            self::skipWhitespace(json: $json, index: $index);
 
             if (($json[$index] ?? '') === ',') {
                 $index++;
@@ -205,7 +205,7 @@ final class JsonCanonical
                     'n' => "\n",
                     'r' => "\r",
                     't' => "\t",
-                    'u' => self::parseUnicodeEscape($json, $index),
+                    'u' => self::parseUnicodeEscape(json: $json, index: $index),
                     default => throw new InvalidArgumentException('Invalid JSON escape.'),
                 };
                 $index++;

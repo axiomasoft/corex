@@ -204,6 +204,6 @@ final class CompilationException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::CompilationException, ErrorCategory::Internal, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::CompilationException, category: ErrorCategory::Internal, retryable: false);
     }
 }

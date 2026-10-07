@@ -19,8 +19,8 @@ use Firebase\JWT\JWT;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
@@ -65,7 +65,7 @@ it('isolates impersonation state across requests in one worker container', funct
                 'corex.impersonation.reason' => 'support ticket #1',
             ]);
         }
-        expect(app(ImpersonationService::class)->active())->toBe($impersonated ? 'grant-test' : null);
+        expect(resolve(ImpersonationService::class)->active())->toBe($impersonated ? 'grant-test' : null);
         $saving = fn () => event('eloquent.saving: '.User::class, [new User]);
 
         if ($impersonated) {
@@ -90,7 +90,7 @@ beforeEach(function (): void {
 
     config(['queue.default' => 'sync']);
 
-    app('router')->prependMiddlewareToGroup('tenant', StartSession::class);
+    resolve('router')->prependMiddlewareToGroup('tenant', StartSession::class);
 });
 
 afterEach(function (): void {
@@ -102,7 +102,7 @@ afterEach(function (): void {
         DB::statement('DROP DATABASE IF EXISTS '.$db);
     }
     $GLOBALS['__im_test_dbs'] = [];
-    Carbon::setTestNow();
+    Date::setTestNow();
 });
 
 function trackDbIM(string $db): void
@@ -248,10 +248,10 @@ function initAccountWithTenantIM(): Account
 
     $ref = new AccountRef(id: $account->id, slug: (string) $account->slug, status: $account->status, features: [], limits: []);
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->runFor($ref, null, function (): void {
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex:tenant'], 'tenant');
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-tenancy:tenant'], 'tenant');
+        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex:tenant'], 'tenant');
+        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-tenancy:tenant'], 'tenant');
     });
 
     return $account;
@@ -262,7 +262,7 @@ function seedTenantUserIM(Account $account, string $id, array $overrides = []): 
 {
     $ref = new AccountRef(id: $account->id, slug: (string) $account->slug, status: $account->status, features: [], limits: []);
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->runFor($ref, null, function () use ($id, $overrides): void {
         DB::table('users')->insert(array_merge([
             'id' => $id,
@@ -603,7 +603,7 @@ it('л/м/о/п/с/т/у: валидный грант — target≠sub, root_acc
     // (т) IdentitySyncer was never invoked — no tenant `users` row for staff.
     $ref = new AccountRef(id: $account->id, slug: (string) $account->slug, status: $account->status, features: [], limits: []);
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $staffRow = $manager->runFor($ref, null, fn (): ?object => DB::table('users')->where('id', $staffId)->first());
     expect($staffRow)->toBeNull();
 });
@@ -668,7 +668,7 @@ it('э: stop() гасит сессию, пишет impersonation.ended и изл
     callbackIM($state, $nonce)->assertRedirect();
     expect(auth('web')->check())->toBeTrue();
 
-    app(ImpersonationService::class)->stop();
+    resolve(ImpersonationService::class)->stop();
 
     expect(auth('web')->check())->toBeFalse();
 
@@ -695,7 +695,7 @@ it('ю: TTL истёк → следующий запрос 401, сессия з�
 
     callbackIM($state, $nonce)->assertRedirect();
 
-    Carbon::setTestNow(now()->addMinutes(2));
+    Date::setTestNow(now()->addMinutes(2));
 
     test()->get('/auth/login')->assertStatus(401);
     expect(auth('web')->check())->toBeFalse();
@@ -750,7 +750,7 @@ it('rejects a nested start before the second grant is consumed', function (): vo
     seedTenantUserIM($account, $targetId, ['email' => 'nested@example.test']);
     $first = makeGrantIM($staffId, $account->id, ['target_user_id' => $targetId]);
     $second = makeGrantIM($staffId, $account->id, ['target_user_id' => $targetId]);
-    $service = app(ImpersonationService::class);
+    $service = resolve(ImpersonationService::class);
 
     $service->start($first, $staffId);
 
@@ -774,7 +774,7 @@ it('backfills a legacy session from the claimed grant reason', function (): void
         'corex.impersonation.expires_at' => now()->addHour()->toIso8601String(),
     ]);
 
-    $state = app(ImpersonationService::class)->state();
+    $state = resolve(ImpersonationService::class)->state();
 
     expect($state?->reason)->toBe('support ticket #1')
         ->and(session('corex.impersonation.reason'))->toBe('support ticket #1');
@@ -794,6 +794,6 @@ it('closes a legacy session whose claimed grant has no reason', function (): voi
         'corex.impersonation.expires_at' => now()->addHour()->toIso8601String(),
     ]);
 
-    expect(app(ImpersonationService::class)->state())->toBeNull()
+    expect(resolve(ImpersonationService::class)->state())->toBeNull()
         ->and(session('corex.impersonation.grant_id'))->toBeNull();
 });

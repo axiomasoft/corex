@@ -31,21 +31,21 @@ use Illuminate\Session\Store;
  * account's login (nested contexts and jobs do not pass through here).
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class ResolveTenantFromHost
+final readonly class ResolveTenantFromHost
 {
     public function __construct(
-        private readonly TenancyManager $manager,
-        private readonly HostAccountResolver $hosts,
-        private readonly AccountRead $accounts,
-        private readonly Container $container,
-        private readonly string $centralConnection,
+        private TenancyManager $manager,
+        private HostAccountResolver $hosts,
+        private AccountRead $accounts,
+        private Container $container,
+        private string $centralConnection,
     ) {}
 
     /** @return Response|mixed */
     public function handle(Request $request, Closure $next): mixed
     {
         $host = $request->getHost();
-        $account = $this->accounts->find($this->hosts->resolve($host), $this->centralConnection)
+        $account = $this->accounts->find(accountId: $this->hosts->resolve($host), connectionName: $this->centralConnection)
             ?? throw TenantCouldNotBeIdentifiedByHostException::forHost($host);
 
         $this->dropResidentState();

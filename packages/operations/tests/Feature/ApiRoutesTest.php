@@ -49,7 +49,7 @@ final class ApiRoutesTest extends TestCase
         $this->app['config']->set('app.key', 'api-routes-idempotency-secret');
         Schema::dropIfExists('sys_api_idempotency');
 
-        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
         $schema = ['type' => 'object'];
         $sync = Api::operation('notes.create', 'POST', '/notes', RouteNoteHandler::class, 'notes.write', $schema, $schema)
             ->asCommand()->idempotency('required')->effect('tenant_transactional')->capability('notes.write.v1');
@@ -57,7 +57,7 @@ final class ApiRoutesTest extends TestCase
             ->asAsyncCommand()->idempotency('required')->effect('tenant_transactional');
         $old = Api::operation('notes.legacy', 'GET', '/notes/legacy', RouteNoteHandler::class, 'notes.read', $schema, $schema)
             ->deprecated('notes.legacy', '2026-09-01', '2026-12-01', 'notes.create', 'https://example.test/migrate');
-        $registry = app(RegistryCompiler::class)->compile([
+        $registry = resolve(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$sync, $async, $old]),
         ], installedPackages: []);
         $this->modules = new ModuleFixture($registry);

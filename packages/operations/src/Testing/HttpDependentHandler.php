@@ -11,9 +11,9 @@ use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Invocation\Contracts\RequestContextProvider;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class HttpDependentHandler implements OperationHandler
+final readonly class HttpDependentHandler implements OperationHandler
 {
-    public function __construct(private readonly RequestContextProvider $contexts) {}
+    public function __construct(private RequestContextProvider $contexts) {}
 
     public function handle(RequestContext $context, array $input, array $parameters): array
     {

@@ -38,25 +38,25 @@ function allowMediaConversions(): void
 
 it('does not advertise a conversion when no matching driver is installed', function (): void {
     allowMediaConversions();
-    $file = app(MediaLibrary::class)->store(
+    $file = resolve(MediaLibrary::class)->store(
         conversionContext(),
         new UploadInput('unsupported-profile', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.txt', 'bytes')), 'attachment'),
     );
 
-    expect(app(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'missing-profile'))->toBeNull()
+    expect(resolve(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'missing-profile'))->toBeNull()
         ->and(DB::table('med_conversions')->count())->toBe(0);
 });
 
 it('keeps malformed source conversions pending for durable retry instead of publishing output', function (): void {
     allowMediaConversions();
-    $file = app(MediaLibrary::class)->store(
+    $file = resolve(MediaLibrary::class)->store(
         conversionContext(),
         new UploadInput('malformed-conversion', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.jpg', 'not an image')), 'attachment'),
     );
 
-    app(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail');
+    resolve(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail');
 
-    expect(fn (): mixed => (new ConvertMedia($file->id, 'thumbnail'))->handle(app(ConversionCoordinator::class)))
+    expect(fn (): mixed => new ConvertMedia($file->id, 'thumbnail')->handle(resolve(ConversionCoordinator::class)))
         ->toThrow(MediaOperationConflict::class);
 
     expect(DB::table('med_conversions')->where('file_id', $file->id)->value('state'))->toBe('pending')
@@ -66,9 +66,9 @@ it('keeps malformed source conversions pending for durable retry instead of publ
 it('rejects output facts that exceed the immutable conversion profile', function (): void {
     allowMediaConversions();
     $profile = new ConversionProfile('bounded', 'v1', 1, 1, 1, 1);
-    $driver = new class($profile) implements ConversionDriver
+    $driver = new readonly class($profile) implements ConversionDriver
     {
-        public function __construct(private readonly ConversionProfile $profile) {}
+        public function __construct(private ConversionProfile $profile) {}
 
         public function profile(): ConversionProfile
         {
@@ -81,7 +81,7 @@ it('rejects output facts that exceed the immutable conversion profile', function
         }
     };
 
-    $file = app(MediaLibrary::class)->store(
+    $file = resolve(MediaLibrary::class)->store(
         conversionContext(),
         new UploadInput('bounded-conversion', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.txt', 'bytes')), 'attachment'),
     );
@@ -96,9 +96,9 @@ it('rejects output facts that exceed the immutable conversion profile', function
         'created_at' => now(),
         'updated_at' => now(),
     ]);
-    $operations = app(MediaOperationStore::class);
+    $operations = resolve(MediaOperationStore::class);
     $operations->enqueueConversion($file->id, 'bounded', $digest, 1);
-    $coordinator = new ConversionCoordinator(app('db')->connection(), app(TenantStorage::class), $profiles, $operations, app(MediaOptions::class), app(ClockInterface::class));
+    $coordinator = new ConversionCoordinator(resolve('db')->connection(), resolve(TenantStorage::class), $profiles, $operations, resolve(MediaOptions::class), resolve(ClockInterface::class));
 
     expect(fn (): mixed => $coordinator->process($file->id, 'bounded'))->toThrow(MediaOperationConflict::class);
 

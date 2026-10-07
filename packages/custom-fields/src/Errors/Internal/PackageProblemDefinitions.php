@@ -14,10 +14,10 @@ final class PackageProblemDefinitions implements ProblemDefinitionProvider
 {
     public function definitions(): iterable
     {
-        yield new ProblemDefinition(CustomFieldsErrorCode::AttributeSchemaConflict, 'urn:corex:problem:custom-fields.attribute_schema_conflict', 409, 'Attribute schema conflict.', true, ErrorCategory::Conflict, ['reason']);
-        yield new ProblemDefinition(CustomFieldsErrorCode::AttributeSchemaRetryExhausted, 'urn:corex:problem:custom-fields.attribute_schema_retry_exhausted', 409, 'Attribute schema retry exhausted.', false, ErrorCategory::Conflict, ['reason']);
-        yield new ProblemDefinition(CustomFieldsErrorCode::AttributesAccessDenied, 'urn:corex:problem:custom-fields.attributes_access_denied', 403, 'Attributes access denied.', false, ErrorCategory::Authorization, ['reason']);
-        yield new ProblemDefinition(CustomFieldsErrorCode::AttributesEngineUnavailable, 'urn:corex:problem:custom-fields.attributes_engine_unavailable', 503, 'Attributes engine unavailable.', false, ErrorCategory::Unavailable, ['reason']);
-        yield new ProblemDefinition(CustomFieldsErrorCode::InvalidAttributeTables, 'urn:corex:problem:custom-fields.invalid_attribute_tables', 500, 'Invalid attribute tables.', false, ErrorCategory::Internal, []);
+        yield new ProblemDefinition(code: CustomFieldsErrorCode::AttributeSchemaConflict, type: 'urn:corex:problem:custom-fields.attribute_schema_conflict', defaultStatus: 409, title: 'Attribute schema conflict.', retryable: true, category: ErrorCategory::Conflict, detailKeys: ['reason']);
+        yield new ProblemDefinition(code: CustomFieldsErrorCode::AttributeSchemaRetryExhausted, type: 'urn:corex:problem:custom-fields.attribute_schema_retry_exhausted', defaultStatus: 409, title: 'Attribute schema retry exhausted.', retryable: false, category: ErrorCategory::Conflict, detailKeys: ['reason']);
+        yield new ProblemDefinition(code: CustomFieldsErrorCode::AttributesAccessDenied, type: 'urn:corex:problem:custom-fields.attributes_access_denied', defaultStatus: 403, title: 'Attributes access denied.', retryable: false, category: ErrorCategory::Authorization, detailKeys: ['reason']);
+        yield new ProblemDefinition(code: CustomFieldsErrorCode::AttributesEngineUnavailable, type: 'urn:corex:problem:custom-fields.attributes_engine_unavailable', defaultStatus: 503, title: 'Attributes engine unavailable.', retryable: false, category: ErrorCategory::Unavailable, detailKeys: ['reason']);
+        yield new ProblemDefinition(code: CustomFieldsErrorCode::InvalidAttributeTables, type: 'urn:corex:problem:custom-fields.invalid_attribute_tables', defaultStatus: 500, title: 'Invalid attribute tables.', retryable: false, category: ErrorCategory::Internal, detailKeys: []);
     }
 }

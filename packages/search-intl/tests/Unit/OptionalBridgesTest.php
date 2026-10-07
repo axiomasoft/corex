@@ -53,7 +53,7 @@ final class OptionalBridgesTest extends TestCase
             'corex-search-intl' => ['enabled' => false],
         ]));
 
-        (new SearchIntlServiceProvider($app))->register();
+        new SearchIntlServiceProvider($app)->register();
 
         expect($app->bound(SavedViewLabelReader::class))->toBeFalse()
             ->and($app->bound(LocalizedFieldProjector::class))->toBeFalse();
@@ -125,14 +125,12 @@ final class OptionalBridgesTest extends TestCase
             resultColumns: ['id', 'title'],
         );
         $hydrator = SearchFixtures::policyHydrator(
-            static function () use ($schema): CurrentSearchRecord {
-                return new CurrentSearchRecord(
-                    record: new RecordRef(entity: 'equipment', id: 'eq1'),
-                    schemaHash: $schema->schemaHash,
-                    revision: str_repeat('e', 64),
-                    fields: ['id' => 'eq1', 'title' => 'Late translation'],
-                );
-            },
+            static fn (): CurrentSearchRecord => new CurrentSearchRecord(
+                record: new RecordRef(entity: 'equipment', id: 'eq1'),
+                schemaHash: $schema->schemaHash,
+                revision: str_repeat('e', 64),
+                fields: ['id' => 'eq1', 'title' => 'Late translation'],
+            ),
             new CallableDataScopeAuthorizer(
                 static fn (DataScope $_scope, string $entity, string $subjectId): bool => $subjectId === 'eq1',
             ),

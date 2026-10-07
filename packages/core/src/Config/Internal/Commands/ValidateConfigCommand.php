@@ -155,7 +155,7 @@ final class ValidateConfigCommand extends Command
     {
         $production = $this->option('production') === true || $this->laravel->environment('production');
 
-        foreach (RuntimeConfigGate::violations($this->laravel, $production) as $violation) {
+        foreach (RuntimeConfigGate::violations(app: $this->laravel, production: $production) as $violation) {
             $this->errors[] = $violation;
         }
 

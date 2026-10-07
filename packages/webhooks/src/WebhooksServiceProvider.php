@@ -28,7 +28,7 @@ final class WebhooksServiceProvider extends ServiceProvider
     {
         $this->app->tag([WebhooksSchemaSets::class], SchemaSetProvider::class);
 
-        ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
+        ProblemDefinitions::register(app: $this->app, composerManifest: __DIR__.'/../composer.json', provider: PackageProblemDefinitions::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-webhooks.php', 'corex-webhooks');
         (new WebhookBindingsRegistrar)->register($this->app);

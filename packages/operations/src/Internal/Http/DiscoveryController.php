@@ -11,12 +11,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /** @internal HTTP projection of the compiled API profile. */
-final class DiscoveryController
+final readonly class DiscoveryController
 {
     public function __construct(
-        private readonly ApiOptions $options,
-        private readonly CapabilityResolver $capabilities,
-        private readonly OpenApiDocumentGenerator $openApi,
+        private ApiOptions $options,
+        private CapabilityResolver $capabilities,
+        private OpenApiDocumentGenerator $openApi,
     ) {}
 
     public function root(): JsonResponse

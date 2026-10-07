@@ -38,7 +38,7 @@ final readonly class StoredOperationOutcome
     /** Immutable JSON value. */
     public static function success(JsonDocument $data): self
     {
-        return new self('success', JsonDocuments::nullable($data), null, null, null, JsonDocuments::capture([]), null, false, null);
+        return new self(kind: 'success', data: JsonDocuments::nullable($data), errorCode: null, errorStatus: null, errorMessage: null, errorDetails: JsonDocuments::capture([]), errorCategory: null, errorRetryable: false, errorPath: null);
     }
 
     public static function failure(ApiError $error): self
@@ -103,10 +103,10 @@ final readonly class StoredOperationOutcome
 
         try {
             $identity = $problems->fromWire($code)->code;
-            $occurrence = new ApiError($identity, $status, $message, JsonDocuments::capture($details), ErrorCategory::from($category), $retryable, $path);
-            $problems->assertOccurrence($occurrence->errorDescriptor(), $status);
+            $occurrence = new ApiError(errorCode: $identity, status: $status, message: $message, details: JsonDocuments::capture($details), category: ErrorCategory::from($category), retryable: $retryable, path: $path);
+            $problems->assertOccurrence(descriptor: $occurrence->errorDescriptor(), status: $status);
         } catch (ProblemRegistryException|InvalidArgumentException|ValueError) {
-            return self::failure(new ApiError(CoreErrorCode::InternalError, 500, 'Operation could not be completed.', category: ErrorCategory::Internal));
+            return self::failure(new ApiError(errorCode: CoreErrorCode::InternalError, status: 500, message: 'Operation could not be completed.', category: ErrorCategory::Internal));
         }
 
         return new self(

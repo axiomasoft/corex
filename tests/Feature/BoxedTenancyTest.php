@@ -15,7 +15,7 @@ use CoreX\Context\Internal\NullTenancyManager;
  * `grep -r 'use Stancl' packages/core` in the item's Validation).
  */
 it('boxed TenancyManager is the null-manager: constant context, initialized() true, initialize()/setWorkspace()/end() are no-ops (AC-28 г)', function (): void {
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
 
     expect($manager)->toBeInstanceOf(NullTenancyManager::class)
         ->and($manager->initialized())->toBeTrue();
@@ -36,7 +36,7 @@ it('boxed TenancyManager is the null-manager: constant context, initialized() tr
 });
 
 it('runFor() on the boxed manager just runs the closure (no context switch)', function (): void {
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
 
     $result = $manager->runFor(
         new AccountRef(id: 'x', slug: 'x', status: 'active', features: [], limits: []),

@@ -11,9 +11,9 @@ use CoreX\Intl\Territory\Data\AddressQuery;
 use CoreX\Intl\Territory\Data\SuggestionLimits;
 use CoreX\Intl\Territory\Data\SuggestionResult;
 
-final class AddressSuggestGuard
+final readonly class AddressSuggestGuard
 {
-    public function __construct(private readonly Bcp47Validator $locales) {}
+    public function __construct(private Bcp47Validator $locales) {}
 
     public function validateQuery(AddressQuery $query): ?SuggestionResult
     {

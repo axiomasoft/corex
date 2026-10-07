@@ -7,16 +7,17 @@ namespace CoreX\Tools\Internal;
 use CoreX\Modules\Data\Api;
 use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Operations\Definition\Contracts\OperationDefinitionValidator;
+use CoreX\Operations\Definition\Contracts\OperationHandler;
 use JsonException;
 
 /** @internal Validates compiled tool declarations without depending on tool runtime. */
 final class ApiToolValidator
 {
-    private const OPERATION_HANDLER = 'CoreX\\Operations\\Definition\\Contracts\\OperationHandler';
+    private const string OPERATION_HANDLER = OperationHandler::class;
 
-    private const SIDE_EFFECTS = ['read', 'draft', 'write', 'irreversible'];
+    private const array SIDE_EFFECTS = ['read', 'draft', 'write', 'irreversible'];
 
-    private const IDEMPOTENCY = ['read-only', 'domain-key', 'provider-key'];
+    private const array IDEMPOTENCY = ['read-only', 'domain-key', 'provider-key'];
 
     public static function validate(Api $api): void
     {
@@ -86,9 +87,7 @@ final class ApiToolValidator
             throw new CompilationException('Unresolved operation reference for tool: '.$tool->toolCode);
         }
 
-        if ($tool->handler === null) {
-            $tool->handler = $operation->handler;
-        }
+        $tool->handler ??= $operation->handler;
 
         if ($tool->ability === '') {
             $tool->ability = $operation->ability;

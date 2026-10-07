@@ -74,7 +74,7 @@ it('rejects unknown metadata and tracestate without traceparent', function (arra
 })->with([[['x-tenant' => 'a']], [['tracestate' => 'vendor=value']], [['traceparent' => null]]])->throws(InvalidMessage::class);
 
 it('rejects undeclared contracts', function (): void {
-    (new JsonCloudEventCodec(new ArrayMessageContractRegistry([])))->encode(cloudEventMessage());
+    new JsonCloudEventCodec(new ArrayMessageContractRegistry([]))->encode(cloudEventMessage());
 })->throws(UnknownMessageContract::class);
 
 it('accepts URI references in source', function (string $source): void {

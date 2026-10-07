@@ -18,7 +18,7 @@ final class UploadedFileSource
     {
         $path = $file->getRealPath();
         $size = (int) $file->getSize();
-        $limit = app(MediaOptions::class)->maxUploadBytes;
+        $limit = resolve(MediaOptions::class)->maxUploadBytes;
         $bytes = $path !== false && $file->isValid() && $size > 0 && $size <= $limit
             ? file_get_contents($path, length: $limit + 1)
             : false;

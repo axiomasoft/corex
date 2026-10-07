@@ -49,10 +49,10 @@ function wakeup_bridge_register(): void
 
 function wakeup_bridge_register_bindings(): void
 {
-    (new WakeupServiceProvider(app()))->register();
+    new WakeupServiceProvider(app())->register();
 }
 
 function wakeup_bridge_sweep(object $context, int $limit): object
 {
-    return app(DueWakeupSweeper::class)->sweep($context, $limit);
+    return resolve(DueWakeupSweeper::class)->sweep($context, $limit);
 }

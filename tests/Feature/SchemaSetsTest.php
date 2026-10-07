@@ -94,7 +94,7 @@ it('preflights all selected drivers before creating the migration journal', func
     $before = Schema::hasTable('migrations');
 
     try {
-        app(SchemaMigrator::class)->migrate(SchemaScope::Tenant, includeModules: true);
+        resolve(SchemaMigrator::class)->migrate(SchemaScope::Tenant, includeModules: true);
         test()->fail('Unsupported driver was accepted.');
     } catch (SchemaSetException $error) {
         expect($error->getMessage())->toContain('unsupported_driver')
@@ -111,7 +111,7 @@ it('migrates and reports pending applied and unknown journal entries', function 
     $this->artisan('corex:schema:migrate')->expectsOutput('Nothing to migrate.')->assertSuccessful();
     $this->artisan('corex:schema:status')->assertSuccessful();
     DB::table('migrations')->insert(['migration' => '2026_10_01_980020_missing', 'batch' => 2]);
-    expect(app(SchemaMigrator::class)->status(SchemaScope::Tenant)[0]->unknown)->toBe(['2026_10_01_980020_missing']);
+    expect(resolve(SchemaMigrator::class)->status(SchemaScope::Tenant)[0]->unknown)->toBe(['2026_10_01_980020_missing']);
     $this->artisan('corex:schema:status')->assertExitCode(1);
     DB::table('migrations')->where('migration', '2026_10_01_980020_missing')->delete();
     DB::table('migrations')->where('migration', '2026_10_01_980010_create_schema_platform')->delete();
@@ -140,7 +140,7 @@ it('runs dedicated sets on their own connection and restores the ambient connect
 it('rejects dedicated connection overrides through all entry points', function (): void {
     config(['database.connections.schema_second' => ['driver' => 'sqlite', 'database' => ':memory:', 'prefix' => '']]);
     schemaRegistry(schemaFixture('dedicated', SchemaScope::Dedicated, connection: 'schema_second'));
-    $migrator = app(SchemaMigrator::class);
+    $migrator = resolve(SchemaMigrator::class);
     foreach ([fn () => $migrator->migrate(SchemaScope::Dedicated, 'testbench'), fn () => $migrator->migrateSets(['fixture/dedicated:tenant'], 'testbench'), fn () => $migrator->status(SchemaScope::Dedicated, 'testbench')] as $call) {
         try {
             $call();
@@ -153,8 +153,8 @@ it('rejects dedicated connection overrides through all entry points', function (
 
 it('refuses mixed scopes and unknown sets before running migrations', function (): void {
     schemaRegistry(schemaFixture(), schemaFixture('dedicated', SchemaScope::Central));
-    expect(fn () => app(SchemaMigrator::class)->migrateSets(['fixture/platform:tenant', 'fixture/dedicated:tenant']))->toThrow(InvalidArgumentException::class)
-        ->and(fn () => app(SchemaMigrator::class)->migrateSets(['missing/set:tenant']))->toThrow(SchemaSetException::class, 'unknown_set')
+    expect(fn () => resolve(SchemaMigrator::class)->migrateSets(['fixture/platform:tenant', 'fixture/dedicated:tenant']))->toThrow(InvalidArgumentException::class)
+        ->and(fn () => resolve(SchemaMigrator::class)->migrateSets(['missing/set:tenant']))->toThrow(SchemaSetException::class, 'unknown_set')
         ->and(Schema::hasTable('schema_platform'))->toBeFalse();
 });
 
@@ -173,7 +173,7 @@ it('does not report another registered set migration as unknown', function (): v
     $second = schemaFixture('module');
     schemaRegistry($first, $second);
     $this->migrateSchemaScope(includeModules: true);
-    foreach (app(SchemaMigrator::class)->status(SchemaScope::Tenant) as $status) {
+    foreach (resolve(SchemaMigrator::class)->status(SchemaScope::Tenant) as $status) {
         expect($status->unknown)->toBe([])->and($status->pending)->toBe([]);
     }
 });
@@ -183,7 +183,7 @@ it('compiles the actual declarations of every schema-owning package', function (
     $schema = ApiSchemaRegistrar::fromSchema([
         'budget' => ['connection' => 'schema_budget', 'driver' => 'sqlite', 'database' => ':memory:'],
         'tenant' => ['connection' => 'testbench', 'driver' => 'sqlite', 'database' => ':memory:'],
-    ], app('db'));
+    ], resolve('db'));
     $sets = new TaggedSchemaSets([
         new CoreSchemaSets,
         new TenancySchemaSets,
@@ -212,7 +212,7 @@ it('checks all dedicated connections before running the first set', function ():
     config(['database.connections.schema_second' => ['driver' => 'sqlite', 'database' => ':memory:', 'prefix' => '']]);
     schemaRegistry(schemaFixture('dedicated', SchemaScope::Dedicated, connection: 'schema_second'),
         new SchemaSet('fixture/bad', 'budget', SchemaScope::Dedicated, schemaFixture('module')->path, 1, connection: 'testbench'));
-    expect(fn () => app(SchemaMigrator::class)->migrate(SchemaScope::Dedicated))->toThrow(SchemaSetException::class, 'unsupported_driver')
+    expect(fn () => resolve(SchemaMigrator::class)->migrate(SchemaScope::Dedicated))->toThrow(SchemaSetException::class, 'unsupported_driver')
         ->and(Schema::connection('schema_second')->hasTable('schema_dedicated'))->toBeFalse()
         ->and(Schema::connection('schema_second')->hasTable('migrations'))->toBeFalse();
 });

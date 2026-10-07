@@ -16,14 +16,14 @@ use CoreX\Notifications\Inbox\Data\NotificationContext;
 use CoreX\Notifications\Inbox\Data\NotificationSubject;
 use Throwable;
 
-final class DeliveryCoordinator implements DeliveryExecution
+final readonly class DeliveryCoordinator implements DeliveryExecution
 {
     public function __construct(
-        private readonly DeliveryStore $deliveries,
-        private readonly ChannelDrivers $drivers,
-        private readonly RecipientResolver $recipients,
-        private readonly NotificationPolicy $policy,
-        private readonly TenantContextResolver $tenants,
+        private DeliveryStore $deliveries,
+        private ChannelDrivers $drivers,
+        private RecipientResolver $recipients,
+        private NotificationPolicy $policy,
+        private TenantContextResolver $tenants,
     ) {}
 
     public function deliver(string $deliveryId): void
@@ -37,7 +37,7 @@ final class DeliveryCoordinator implements DeliveryExecution
         $recipient = JsonDocuments::map($claim->message)['recipient'] ?? null;
 
         if (! is_array($recipient) || ! isset($recipient['kind'], $recipient['id']) || ! is_string($recipient['kind']) || ! is_string($recipient['id'])) {
-            $this->deliveries->skip($claim, 'invalid-recipient');
+            $this->deliveries->skip(claim: $claim, reason: 'invalid-recipient');
 
             return;
         }
@@ -45,8 +45,8 @@ final class DeliveryCoordinator implements DeliveryExecution
         $context = new NotificationContext(tenant: $this->tenants->current(), actorKind: 'system', actorId: null);
         $subject = new NotificationSubject(notificationId: $claim->notificationId, recipient: new RecipientReference(kind: $recipient['kind'], id: $recipient['id']), related: null);
 
-        if (! $this->policy->allows($context, NotificationAction::Notify, $subject)) {
-            $this->deliveries->skip($claim, 'policy-denied');
+        if (! $this->policy->allows(context: $context, action: NotificationAction::Notify, subject: $subject)) {
+            $this->deliveries->skip(claim: $claim, reason: 'policy-denied');
 
             return;
         }
@@ -54,21 +54,21 @@ final class DeliveryCoordinator implements DeliveryExecution
         $driver = $this->drivers->find($claim->channel);
 
         if ($driver === null) {
-            $this->deliveries->skip($claim, 'provider-unconfigured');
+            $this->deliveries->skip(claim: $claim, reason: 'provider-unconfigured');
 
             return;
         }
 
-        $target = $this->recipients->resolve($context, $subject->recipient, $claim->channel);
+        $target = $this->recipients->resolve(context: $context, recipient: $subject->recipient, channel: $claim->channel);
 
         if ($target === null) {
-            $this->deliveries->skip($claim, 'recipient-unavailable');
+            $this->deliveries->skip(claim: $claim, reason: 'recipient-unavailable');
 
             return;
         }
 
         try {
-            $this->deliveries->complete($claim, $driver->send(new DeliveryInput(
+            $this->deliveries->complete(claim: $claim, outcome: $driver->send(new DeliveryInput(
                 deliveryKey: $claim->deliveryKey,
                 attemptEpoch: $claim->epoch,
                 target: $target,
@@ -80,7 +80,7 @@ final class DeliveryCoordinator implements DeliveryExecution
                 driverVersion: $claim->driverVersion,
             )));
         } catch (Throwable $exception) {
-            $this->deliveries->markUnknown($claim, 'worker-exception');
+            $this->deliveries->markUnknown(claim: $claim, reason: 'worker-exception');
 
             throw $exception;
         }

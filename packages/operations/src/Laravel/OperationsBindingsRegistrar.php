@@ -61,10 +61,10 @@ final class OperationsBindingsRegistrar implements PackageRegistrar
         $app->bindIf(OperationFieldAuthorizer::class, DeclaredFieldAuthorizer::class);
         $app->bindIf(OperationInvoker::class, DefaultOperationInvoker::class);
         $app->bindIf(ReplayAuthorizer::class, static fn (Application $app): ReplayAuthorizer => new DefaultReplayAuthorizer(
-            $app->make(ModuleRegistry::class),
-            $app->make(ClientScopeAuthorizer::class),
-            $app->make(OperationAuthorizer::class),
-            $app->make(OperationFieldAuthorizer::class),
+            modules: $app->make(ModuleRegistry::class),
+            clientScopes: $app->make(ClientScopeAuthorizer::class),
+            authorizer: $app->make(OperationAuthorizer::class),
+            fields: $app->make(OperationFieldAuthorizer::class),
         ));
         $app->bindIf(ResponseSerializer::class, HttpResponseSerializer::class);
         $app->bindIf(SchemaContributor::class, DeclaredSchemaContributor::class);

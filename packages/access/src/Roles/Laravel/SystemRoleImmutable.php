@@ -31,7 +31,7 @@ trait SystemRoleImmutable
      */
     public static function withSystemMutationAllowed(callable $callback): mixed
     {
-        return self::systemMutationScope()->allow(self::class, Closure::fromCallable($callback));
+        return self::systemMutationScope()->allow(model: self::class, callback: Closure::fromCallable($callback));
     }
 
     protected static function bootSystemRoleImmutable(): void

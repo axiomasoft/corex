@@ -1,0 +1,25 @@
+{
+  "classification": "source",
+  "commands": [
+    {
+      "exit": 0,
+      "output": "validate.json",
+      "role": "validate",
+      "sha256": "ca011fb5781e9d231923fe5b72bae8b733bdb1b05f3d56711f26f9ce55832a5f"
+    },
+    {
+      "exit": 0,
+      "output": "audit.json",
+      "role": "audit",
+      "sha256": "39d61f643c3b7abaf421a83376eddfc7f8a65b7888687c211c9b763613a91b12"
+    }
+  ],
+  "effective_manifest_sha256": "57d1959a255245b38b5fe4cdfca3e17e4df898a70e3b98f398b57d8ed8aec46d",
+  "lock_kind": "source",
+  "lock_sha256": "0001dffca00f720657ea5b704d9e02d7f10f78e0366023f86eedcaeab5a27d7d",
+  "manifest": "packages/panels/composer.json",
+  "manifest_sha256": "57d1959a255245b38b5fe4cdfca3e17e4df898a70e3b98f398b57d8ed8aec46d",
+  "name": "axiomasoft/corex-panels",
+  "source_lock_sha256": "0001dffca00f720657ea5b704d9e02d7f10f78e0366023f86eedcaeab5a27d7d",
+  "status": "GREEN"
+}

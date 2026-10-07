@@ -17,12 +17,12 @@ use Illuminate\Http\Request;
 use Override;
 
 /** @internal Reads trusted state afresh; holds no per-account or per-principal cache. */
-final class TrustedContextResolver implements ContextResolver
+final readonly class TrustedContextResolver implements ContextResolver
 {
     public function __construct(
-        private readonly TenantContextResolver $tenants,
-        private readonly TenancyManager $manager,
-        private readonly bool $requirePhysicalTenancy = true,
+        private TenantContextResolver $tenants,
+        private TenancyManager $manager,
+        private bool $requirePhysicalTenancy = true,
     ) {}
 
     #[Override]
@@ -31,18 +31,18 @@ final class TrustedContextResolver implements ContextResolver
         try {
             $tenant = $this->tenants->current();
         } catch (CentralContextException) {
-            throw new ApiError(OperationsErrorCode::ContextRequired, 403, 'An initialized account context is required.');
+            throw new ApiError(errorCode: OperationsErrorCode::ContextRequired, status: 403, message: 'An initialized account context is required.');
         }
 
         if ($this->requirePhysicalTenancy && ($tenant->isBoxed() || ! $this->manager->initialized()
             || ($this->manager->context() <=> $tenant) !== 0)) {
-            throw new ApiError(OperationsErrorCode::ContextRequired, 403, 'An initialized physical account context is required.');
+            throw new ApiError(errorCode: OperationsErrorCode::ContextRequired, status: 403, message: 'An initialized physical account context is required.');
         }
 
         if ($tenant->account->status !== 'active') {
-            throw new ApiError(OperationsErrorCode::AccountUnavailable, 403, 'Account is unavailable.');
+            throw new ApiError(errorCode: OperationsErrorCode::AccountUnavailable, status: 403, message: 'Account is unavailable.');
         }
 
-        return new ResolvedContext($tenant, $principal, $metadata);
+        return new ResolvedContext(tenantContext: $tenant, authenticatedPrincipal: $principal, requestMetadata: $metadata);
     }
 }

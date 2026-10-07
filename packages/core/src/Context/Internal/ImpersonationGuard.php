@@ -18,10 +18,10 @@ use CoreX\Context\Exceptions\ImpersonationRestrictedException;
  *
  * @internal spec: B-11 §5.9 п.3, D141
  */
-final class ImpersonationGuard implements \CoreX\Context\Contracts\ImpersonationGuard
+final readonly class ImpersonationGuard implements \CoreX\Context\Contracts\ImpersonationGuard
 {
     public function __construct(
-        private readonly ImpersonationService $impersonation,
+        private ImpersonationService $impersonation,
     ) {}
 
     public function assertAllowed(ImpersonationRestrictedAction $action): void

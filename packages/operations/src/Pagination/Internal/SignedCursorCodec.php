@@ -19,13 +19,13 @@ use Psr\Clock\ClockInterface;
 /** `api-cursor/1`: `v1.<base64url(canonical-json)>.<base64url(hmac-sha256)>`. */
 final readonly class SignedCursorCodec implements CursorCodec
 {
-    private const FORMAT_VERSION = 1;
+    private const int FORMAT_VERSION = 1;
 
-    private const MAX_WIRE_BYTES = 4096;
+    private const int MAX_WIRE_BYTES = 4096;
 
-    private const MAX_PAYLOAD_BYTES = 2048;
+    private const int MAX_PAYLOAD_BYTES = 2048;
 
-    private const MAX_JSON_DEPTH = 8;
+    private const int MAX_JSON_DEPTH = 8;
 
     public function __construct(
         private ClockInterface $clock,
@@ -51,10 +51,10 @@ final readonly class SignedCursorCodec implements CursorCodec
         $ordering = $registry->find($orderingId);
 
         if ($ordering === null) {
-            throw new ApiError(OperationsErrorCode::OrderingVersionUnsupported, 400, 'Ordering version is not supported.');
+            throw new ApiError(errorCode: OperationsErrorCode::OrderingVersionUnsupported, status: 400, message: 'Ordering version is not supported.');
         }
 
-        $this->assertValues($values, $ordering['types']);
+        $this->assertValues(values: $values, types: $ordering['types']);
         $keyId = $this->keyring->currentKeyId();
         $secret = $this->keyring->verifyingSecret($keyId);
 
@@ -68,7 +68,7 @@ final readonly class SignedCursorCodec implements CursorCodec
             ordering: $orderingId,
             direction: $ordering['direction'],
             values: $values,
-            scopeHash: $this->scopeHash($accountId, $workspaceId, $apiMajor, $operationId, $filters, $fields),
+            scopeHash: $this->scopeHash(accountId: $accountId, workspaceId: $workspaceId, apiMajor: $apiMajor, operationId: $operationId, filters: $filters, fields: $fields),
             issuedAt: $issuedAt,
             expiresAt: $issuedAt + $this->keyring->ttlSeconds(),
             keyId: $keyId,
@@ -98,7 +98,7 @@ final readonly class SignedCursorCodec implements CursorCodec
         $ordering = $registry->find($payload->ordering);
 
         if ($ordering === null) {
-            throw new ApiError(OperationsErrorCode::OrderingVersionUnsupported, 400, 'Ordering version is not supported.');
+            throw new ApiError(errorCode: OperationsErrorCode::OrderingVersionUnsupported, status: 400, message: 'Ordering version is not supported.');
         }
 
         if ($payload->formatVersion !== self::FORMAT_VERSION
@@ -108,7 +108,7 @@ final readonly class SignedCursorCodec implements CursorCodec
         }
 
         try {
-            $this->assertValues($payload->values, $ordering['types']);
+            $this->assertValues(values: $payload->values, types: $ordering['types']);
         } catch (InvalidArgumentException) {
             $this->invalid();
         }
@@ -119,7 +119,7 @@ final readonly class SignedCursorCodec implements CursorCodec
             $this->invalid();
         }
 
-        $expectedHash = $this->scopeHash($accountId, $workspaceId, $apiMajor, $operationId, $filters, $fields);
+        $expectedHash = $this->scopeHash(accountId: $accountId, workspaceId: $workspaceId, apiMajor: $apiMajor, operationId: $operationId, filters: $filters, fields: $fields);
 
         if (! hash_equals($expectedHash, $payload->scopeHash)) {
             $this->invalid();
@@ -318,9 +318,8 @@ final readonly class SignedCursorCodec implements CursorCodec
         return $decoded === false ? null : $decoded;
     }
 
-    /** @return never */
-    private function invalid(): void
+    private function invalid(): never
     {
-        throw new ApiError(OperationsErrorCode::CursorInvalid, 400, 'Cursor is invalid.');
+        throw new ApiError(errorCode: OperationsErrorCode::CursorInvalid, status: 400, message: 'Cursor is invalid.');
     }
 }

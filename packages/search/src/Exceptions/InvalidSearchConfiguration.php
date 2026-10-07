@@ -43,6 +43,6 @@ final class InvalidSearchConfiguration extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(SearchErrorCode::InvalidSearchConfiguration, ErrorCategory::Internal, retryable: false);
+        return new ErrorDescriptor(code: SearchErrorCode::InvalidSearchConfiguration, category: ErrorCategory::Internal, retryable: false);
     }
 }

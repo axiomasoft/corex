@@ -46,7 +46,7 @@ final class BulkStoreTest extends TestCase
         $this->selectSchema('api_budget_stub', 'api_tenant');
         $this->connection = DB::connection('api_tenant');
 
-        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
         $this->contexts = $this->contexts();
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-25T10:00:00.000000+00:00'));
         $this->store = $this->store($this->connection, $this->clock);
@@ -235,7 +235,7 @@ final class BulkStoreTest extends TestCase
         try {
             $this->selectSchema('api_budget_stub', 'api_pg_tenant');
 
-            $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+            $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
             $scope = $this->scope(DB::connection('api_pg_tenant'));
             $submissions = $this->forkPostgresSubmissions($scope);
 

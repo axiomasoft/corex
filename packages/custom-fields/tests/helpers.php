@@ -24,7 +24,7 @@ function jsonbScope(string $connectionIdentity = 'pgsql:corex_test', ?string $re
 
 function fixedTenantContextRestorer(TenantContext $context): TenantContextRestorer
 {
-    return new class($context) implements TenantContextRestorer
+    return new readonly class($context) implements TenantContextRestorer
     {
         public function __construct(private TenantContext $context) {}
 
@@ -48,7 +48,7 @@ function schemaCatalogue(string $entity, string $schemaHash): FieldCatalogue
 {
     $snapshot = new FieldSnapshot($entity, $schemaHash, $schemaHash, [], []);
 
-    return new class($snapshot) implements FieldCatalogue
+    return new readonly class($snapshot) implements FieldCatalogue
     {
         public function __construct(private FieldSnapshot $snapshot) {}
 

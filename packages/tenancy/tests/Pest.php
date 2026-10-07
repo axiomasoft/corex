@@ -17,14 +17,14 @@ uses()->group('pg')->in('Pg');
 function initTenantContext(Account|string $account): void
 {
     $id = is_string($account) ? $account : (string) $account->id;
-    $ref = app(AccountRead::class)->find($id, (string) config('corex-tenancy.central_connection', 'pgsql'))
+    $ref = resolve(AccountRead::class)->find($id, (string) config('corex-tenancy.central_connection', 'pgsql'))
         ?? throw new RuntimeException("Account [{$id}] is not in the central database.");
 
-    app(DatabaseTenancyManager::class)->initialize($ref);
+    resolve(DatabaseTenancyManager::class)->initialize($ref);
 }
 
 /** Always the real engine, even while a test swapped the `TenancyManager` binding for a stub. */
 function endTenantContext(): void
 {
-    app(DatabaseTenancyManager::class)->end();
+    resolve(DatabaseTenancyManager::class)->end();
 }

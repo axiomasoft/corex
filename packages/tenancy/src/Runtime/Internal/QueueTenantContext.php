@@ -55,7 +55,7 @@ final class QueueTenantContext
             throw TenantContextUnavailable::invalidPayload();
         }
 
-        $ref = $this->accounts->find($payload['account'], $this->centralConnection)
+        $ref = $this->accounts->find(accountId: $payload['account'], connectionName: $this->centralConnection)
             ?? throw TenantContextUnavailable::missingAccount($payload['account']);
         $this->manager->initialize($ref);
 

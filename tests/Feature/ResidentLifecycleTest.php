@@ -23,9 +23,9 @@ const RESIDENT_TENANT_B = '0198a000-0000-7000-8000-00000000000b';
  */
 function residentEnterTenant(Application $app, string $accountId): void
 {
-    $app->instance(TenantContextResolver::class, new class($accountId) implements TenantContextResolver
+    $app->instance(TenantContextResolver::class, new readonly class($accountId) implements TenantContextResolver
     {
-        public function __construct(private readonly string $accountId) {}
+        public function __construct(private string $accountId) {}
 
         public function current(): TenantContext
         {

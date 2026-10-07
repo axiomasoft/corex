@@ -1,0 +1,25 @@
+{
+  "classification": "source",
+  "commands": [
+    {
+      "exit": 0,
+      "output": "validate.json",
+      "role": "validate",
+      "sha256": "51d62ccb547fbf3164373a00f856217f1245d70c1a5cd6e5bf51421e51eb20e1"
+    },
+    {
+      "exit": 0,
+      "output": "audit.json",
+      "role": "audit",
+      "sha256": "b4351a76fd8386031835581296203bbee932dd2639bb503af159e91473d179d6"
+    }
+  ],
+  "effective_manifest_sha256": "404635fae6ad6877a52e96adc38ff4c11e87753694ad41df5fe49a75a387fb79",
+  "lock_kind": "source",
+  "lock_sha256": "a3af9760d23a110f0bd7a8d2968b79c71e8261d75256f060a06872ef5ab350d1",
+  "manifest": "packages/recurrence/composer.json",
+  "manifest_sha256": "404635fae6ad6877a52e96adc38ff4c11e87753694ad41df5fe49a75a387fb79",
+  "name": "axiomasoft/corex-recurrence",
+  "source_lock_sha256": "a3af9760d23a110f0bd7a8d2968b79c71e8261d75256f060a06872ef5ab350d1",
+  "status": "GREEN"
+}

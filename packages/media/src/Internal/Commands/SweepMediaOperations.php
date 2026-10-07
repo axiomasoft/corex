@@ -31,7 +31,7 @@ final class SweepMediaOperations extends Command
         }
         $conversionRequests = $operations->dueConversionRequests(limit: $limit);
         foreach ($conversionRequests as $request) {
-            ConvertMedia::dispatch($request->fileId, $request->profileKey);
+            ConvertMedia::dispatch(fileId: $request->fileId, profileKey: $request->profileKey);
         }
         $this->info('Dispatched '.(count($fileIds) + count($conversionRequests)).' media operation(s).');
 

@@ -22,11 +22,11 @@ use InvalidArgumentException;
  * @implements CastsAttributes<Money|null, mixed>
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class MoneyCast implements CastsAttributes
+final readonly class MoneyCast implements CastsAttributes
 {
     public function __construct(
-        private readonly string $amountColumn = 'amount_minor',
-        private readonly string $currencyColumn = 'currency',
+        private string $amountColumn = 'amount_minor',
+        private string $currencyColumn = 'currency',
     ) {}
 
     /** @param array<string, mixed> $attributes */

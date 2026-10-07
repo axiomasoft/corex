@@ -40,6 +40,6 @@ final readonly class ActiveEntityFilter implements EntityActivity
 
         $module = $this->entities->get($entityKey)->module;
 
-        return $this->modules->isActive($module, $this->tenantContext->current());
+        return $this->modules->isActive(name: $module, ctx: $this->tenantContext->current());
     }
 }

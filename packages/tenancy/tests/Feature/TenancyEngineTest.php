@@ -259,12 +259,12 @@ it('a failing callback plus a failing restoration keeps both causes, for a centr
 })->with([false, true]);
 
 it('boots on the real container: eager bootstrapper graph is acyclic and never reaches the manager', function (): void {
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
 
     expect($manager)->toBeInstanceOf(DatabaseTenancyManager::class);
 
-    foreach (app(TenancyOptions::class)->bootstrappers as $class) {
-        $constructor = (new ReflectionClass($class))->getConstructor();
+    foreach (resolve(TenancyOptions::class)->bootstrappers as $class) {
+        $constructor = new ReflectionClass($class)->getConstructor();
         $types = array_map(
             static fn (ReflectionParameter $p): string => (string) $p->getType(),
             $constructor?->getParameters() ?? [],
@@ -277,10 +277,10 @@ it('boots on the real container: eager bootstrapper graph is acyclic and never r
 });
 
 it('binds the PSR logger into the engine (provider boot)', function (): void {
-    $manager = app(TenancyManager::class);
-    $logger = (new ReflectionProperty($manager, 'logger'))->getValue($manager);
+    $manager = resolve(TenancyManager::class);
+    $logger = new ReflectionProperty($manager, 'logger')->getValue($manager);
 
-    expect($logger)->toBe(app(LoggerInterface::class));
+    expect($logger)->toBe(resolve(LoggerInterface::class));
 });
 
 it('refuses an unsafe facility configuration before the first switch', function (Closure $configure, string $violation): void {
@@ -289,7 +289,7 @@ it('refuses an unsafe facility configuration before the first switch', function 
     app()->forgetInstance(DatabaseTenancyManager::class);
 
     try {
-        app(TenancyManager::class);
+        resolve(TenancyManager::class);
         $this->fail('The unsafe configuration was accepted.');
     } catch (InvalidConfiguration $exception) {
         expect(implode("\n", $exception->violations))->toContain($violation);
@@ -339,7 +339,7 @@ it('accepts the supported tenant cache drivers', function (string $driver, array
     app()->forgetInstance(TenancyOptions::class);
     app()->forgetInstance(DatabaseTenancyManager::class);
 
-    expect(app(TenancyManager::class))->toBeInstanceOf(DatabaseTenancyManager::class);
+    expect(resolve(TenancyManager::class))->toBeInstanceOf(DatabaseTenancyManager::class);
 })->with([
     'redis' => ['redis', ['connection' => 'cache']],
     'memcached' => ['memcached', ['servers' => [['host' => '127.0.0.1', 'port' => 11211, 'weight' => 100]]]],

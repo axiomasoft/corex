@@ -15,11 +15,11 @@ final readonly class AttributeId
      * Fixed CoreX namespace for the UUIDv5 compatibility bridge.
      * Name material is `entity` + NUL + `key`.
      */
-    public const LEGACY_NAMESPACE = 'c0e1a000-a77e-4000-8000-000000000001';
+    public const string LEGACY_NAMESPACE = 'c0e1a000-a77e-4000-8000-000000000001';
 
     public function __construct(public string $value)
     {
-        if (! self::isVersion($value, 7) && ! self::isVersion($value, 5)) {
+        if (! self::isVersion(value: $value, version: 7) && ! self::isVersion(value: $value, version: 5)) {
             throw new InvalidArgumentException('Attribute id must be UUIDv7 or a legacy UUIDv5 bridge.');
         }
     }
@@ -31,7 +31,7 @@ final readonly class AttributeId
 
     public static function v7(string $value): self
     {
-        if (! self::isVersion($value, 7)) {
+        if (! self::isVersion(value: $value, version: 7)) {
             throw new InvalidArgumentException('New attribute ids must be UUIDv7.');
         }
 
@@ -45,12 +45,12 @@ final readonly class AttributeId
 
     public function isV7(): bool
     {
-        return self::isVersion($this->value, 7);
+        return self::isVersion(value: $this->value, version: 7);
     }
 
     public function isLegacy(): bool
     {
-        return self::isVersion($this->value, 5);
+        return self::isVersion(value: $this->value, version: 5);
     }
 
     private static function uuid5(string $name): string

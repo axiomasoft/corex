@@ -23,13 +23,13 @@ use Stringable;
  *
  * @internal spec: B-10 §3.1, P2, D137/D139
  */
-final class CurrentActor
+final readonly class CurrentActor
 {
     /** @param  Closure(): ?Request  $request  the request of the running cycle, null in console or without a request. */
     public function __construct(
-        private readonly AuthFactory $auth,
-        private readonly ImpersonationService $impersonation,
-        private readonly Closure $request,
+        private AuthFactory $auth,
+        private ImpersonationService $impersonation,
+        private Closure $request,
     ) {}
 
     public function type(): ActorType

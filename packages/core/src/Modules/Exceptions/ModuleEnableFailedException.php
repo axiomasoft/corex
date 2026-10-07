@@ -34,6 +34,6 @@ final class ModuleEnableFailedException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::ModuleEnableFailedException, ErrorCategory::Internal, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::ModuleEnableFailedException, category: ErrorCategory::Internal, retryable: false);
     }
 }

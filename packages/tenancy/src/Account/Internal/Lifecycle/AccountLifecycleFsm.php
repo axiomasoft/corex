@@ -38,7 +38,7 @@ final class AccountLifecycleFsm
 
     public function assertTransition(string $from, string $to): void
     {
-        if (! $this->allows($from, $to)) {
+        if (! $this->allows(from: $from, to: $to)) {
             throw new RuntimeException("Invalid account lifecycle transition: [{$from}] → [{$to}].");
         }
     }

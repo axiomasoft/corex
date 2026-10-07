@@ -317,13 +317,7 @@ function declaredSymbols(string $file): array
 /** @param  list<string>  $prefixes */
 function covered(string $symbol, array $prefixes): bool
 {
-    foreach ($prefixes as $prefix) {
-        if ($symbol === $prefix || str_starts_with($symbol, $prefix.'\\')) {
-            return true;
-        }
-    }
-
-    return false;
+    return array_any($prefixes, fn ($prefix) => $symbol === $prefix || str_starts_with($symbol, $prefix.'\\'));
 }
 
 /** @return list<string> */

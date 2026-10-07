@@ -84,13 +84,20 @@ it('admits schema-free security packages while retaining every source and migrat
         $ceilings = ['phpstan' => array_fill_keys(['root', ...$packages], 0)];
         $files->put($fixture.'/scripts/quality-ceilings.json', json_encode($ceilings, JSON_THROW_ON_ERROR));
         $files->put($fixture.'/scripts/schema-sets.json', json_encode(['sets' => []], JSON_THROW_ON_ERROR));
-        $run = static function () use ($root, $fixture): Process {
-            $process = new Process([PHP_BINARY, $root.'/scripts/quality/release-quality.php', '--stage=security', '--root='.$fixture]);
+        $run = static function (string $stage = 'security') use ($root, $fixture): Process {
+            $process = new Process([PHP_BINARY, $root.'/scripts/quality/release-quality.php', '--stage='.$stage, '--root='.$fixture]);
             $process->run();
 
             return $process;
         };
         expect($run()->getExitCode())->toBe(0);
+        $files->put($fixture.'/packages/tools/src/value.php', '<?php namespace CoreX\\QualityFixture; final class Value {}');
+        expect($run('all')->getExitCode())->toBe(0);
+        $files->put($fixture.'/packages/tools/src/value.php', '<?php namespace CoreX\\QualityFixture; class Value {}');
+        $red = $run('all');
+        expect($red->getExitCode())->toBe(1)
+            ->and($red->getErrorOutput())->toContain('value.php:1: final: CoreX\\QualityFixture\\Value');
+        $files->put($fixture.'/packages/tools/src/value.php', '<?php namespace CoreX\\QualityFixture; final class Value {}');
         $path = $fixture.'/packages/tools/phpstan.neon';
         $config = $files->get($path);
         $files->put($path, str_replace('        - src', '        - .', $config));
@@ -108,6 +115,139 @@ it('admits schema-free security packages while retaining every source and migrat
         $files->put($path, $config);
         expect($run()->getExitCode())->toBe(1)
             ->and($run()->getErrorOutput())->toContain('tools: uncovered SchemaSet database/migrations/tenant');
+    } finally {
+        $files->deleteDirectory($fixture);
+    }
+});
+
+it('enforces final classes, immutable value DTOs and declaration-resolved named calls on temporary production sources', function (): void {
+    $root = dirname(__DIR__, 2);
+    $fixture = sys_get_temp_dir().'/corex-source-quality-'.bin2hex(random_bytes(8));
+    $files = new Filesystem;
+    $source = <<<'SOURCE'
+<?php
+namespace CoreX\QualityFixture;
+use CoreX\Attributes\Spi as Extension;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\ServiceProvider;
+#[Extension(kind: 'extend')]
+abstract class ExtensionBase { public function inherited(string $first, int $second): void {} }
+#[Extension(kind: 'extend')]
+class ExtensionConcrete extends ExtensionBase {}
+final class Record extends Model { public string $mutable = ''; }
+final class Provider extends ServiceProvider { public string $mutable = ''; }
+function target_function(string $first, int $second): void {}
+final class Calls {
+    public function __construct(private ExtensionBase $extension) {}
+    public static function target(string $first, int $second): self { return new self(new ExtensionConcrete()); }
+    public static function variadic(string $first, mixed ...$rest): void {}
+    public function named(ExtensionBase $parameter, mixed $unknown): void {
+        self::target(first: 'a', second: 2);
+        target_function(first: 'a', second: 2);
+        new \CoreX\QualityFixture\Data\Pair(first: 'a', second: 2);
+        $this->extension->inherited(first: 'a', second: 2);
+        $parameter->inherited(first: 'a', second: 2);
+        $known = new ExtensionConcrete();
+        $known->inherited(first: 'a', second: 2);
+        $known = $unknown;
+        $known->inherited('unknown', 2);
+        $unknown->target('unknown', 2);
+        $method = 'target';
+        self::$method('dynamic', 2);
+        static::target('late-bound', 2);
+        self::variadic('variadic', 2);
+        self::target(...['unpacked', 2]);
+        \External\Calls::target('external', 2);
+        $loop = new ExtensionConcrete();
+        foreach ([$unknown] as $loop) { $loop->inherited('unknown iteration value', 2); }
+        $branch = new ExtensionConcrete();
+        if ($unknown) { $branch = $unknown; }
+        $branch->inherited('unknown merged branch', 2);
+        $shortCircuit = new ExtensionConcrete();
+        $unknown && ($shortCircuit = $unknown);
+        $shortCircuit->inherited('unknown conditional write', 2);
+        $captured = new ExtensionConcrete();
+        $callback = function () use (&$captured, $unknown): void { $captured = $unknown; };
+        $captured->inherited('unknown reference capture', 2);
+    }
+}
+namespace CoreX\QualityFixture\Data;
+final readonly class Pair { public function __construct(public string $first, public int $second) {} }
+SOURCE;
+    $run = static function () use ($root, $fixture): Process {
+        $process = new Process([PHP_BINARY, $root.'/scripts/quality/source-quality.php', '--root='.$fixture, '--json']);
+        $process->run();
+
+        return $process;
+    };
+
+    try {
+        $files->makeDirectory($fixture.'/packages/example/src', 0755, true);
+        $path = $fixture.'/packages/example/src/fixture.php';
+        $files->put($path, $source);
+        $green = $run();
+        expect($green->getExitCode())->toBe(0, $green->getErrorOutput());
+        $report = json_decode($green->getOutput(), true, flags: JSON_THROW_ON_ERROR);
+        expect($report['files'])->toBe(1)
+            ->and($report['violations'])->toBe([])
+            ->and($report['file_hashes']['packages/example/src/fixture.php'])->toBe(hash('sha256', $source));
+
+        $files->put($path, str_replace('final class Calls', 'class Calls', $source));
+        $red = $run();
+        expect($red->getExitCode())->toBe(1)
+            ->and($red->getOutput())->toContain('"rule": "final"', 'CoreX\\\\QualityFixture\\\\Calls');
+        $files->put($path, str_replace('final readonly class Pair', 'final class Pair', $source));
+        $red = $run();
+        expect($red->getExitCode())->toBe(1)
+            ->and($red->getOutput())->toContain('"rule": "readonly"', 'immutable value DTO');
+
+        foreach (['Record', 'Provider'] as $frameworkClass) {
+            $files->put($path, str_replace('final class '.$frameworkClass, 'final readonly class '.$frameworkClass, $source));
+            $red = $run();
+            expect($red->getExitCode())->toBe(1)
+                ->and($red->getOutput())->toContain('"rule": "readonly-framework"');
+        }
+
+        foreach ([
+            "self::target(first: 'a', second: 2);" => "self::target('a', 2);",
+            "target_function(first: 'a', second: 2);" => "target_function('a', 2);",
+            "new \\CoreX\\QualityFixture\\Data\\Pair(first: 'a', second: 2);" => "new \\CoreX\\QualityFixture\\Data\\Pair('a', 2);",
+            "\$this->extension->inherited(first: 'a', second: 2);" => "\$this->extension->inherited('a', 2);",
+            "\$parameter->inherited(first: 'a', second: 2);" => "\$parameter->inherited('a', 2);",
+            "\$known->inherited(first: 'a', second: 2);" => "\$known->inherited('a', 2);",
+        ] as $named => $positional) {
+            $violating = str_replace($named, $positional, $source);
+            $files->put($path, $violating);
+            $red = $run();
+            $report = json_decode($red->getOutput(), true, flags: JSON_THROW_ON_ERROR);
+            expect($red->getExitCode())->toBe(1)
+                ->and($report['violations'])->toHaveCount(1)
+                ->and($report['violations'][0]['rule'])->toBe('named')
+                ->and(array_column($report['named_insertions'], 'text'))->toBe(['first: ', 'second: ']);
+            // The report's offsets are usable edits against its hashed source, not guessed names.
+            foreach (array_reverse($report['named_insertions']) as $insertion) {
+                $violating = substr_replace($violating, $insertion['text'], $insertion['offset'], 0);
+            }
+            $files->put($path, $violating);
+            expect($run()->getExitCode())->toBe(0);
+        }
+        $files->put($path, str_replace('class ExtensionConcrete extends ExtensionBase {}', 'class ExtensionConcrete extends ExtensionBase { public function inherited(string $renamed, int $second): void {} }', $source));
+        $red = $run();
+        expect($red->getExitCode())->toBe(1)
+            ->and($red->getOutput())->toContain('"rule": "signature"', 'inconsistent controlled override parameter names');
+
+        $files->put($path, $source."\nfinal class Broken { public function invalid( }");
+        $red = $run();
+        expect($red->getExitCode())->toBe(1)
+            ->and($red->getErrorOutput())->toContain('Cannot parse packages/example/src/fixture.php');
+        $files->delete($path);
+        $red = $run();
+        expect($red->getExitCode())->toBe(1)
+            ->and($red->getErrorOutput())->toContain('No maintained production PHP files');
+        $files->deleteDirectory($fixture.'/packages');
+        $red = $run();
+        expect($red->getExitCode())->toBe(1)
+            ->and($red->getErrorOutput())->toContain('No maintained production source roots');
     } finally {
         $files->deleteDirectory($fixture);
     }

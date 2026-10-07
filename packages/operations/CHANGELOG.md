@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — PHP 8.4 modernization (P09.4)
+
+- Modernize maintained PHP for PHP 8.4 with final concrete classes, immutable value state and controlled named calls; preserve current public native parameter names and extension behavior.
+- Refresh the PHP API metadata for equivalent readonly/type/promotion declarations (D130).
+
 ## Unreleased — baseline v1
 
 - Correct JSON decoder and schema budget PHPDoc to preserve numeric object member names and recursive schema lists; native signatures and accepted JSON values remain unchanged (PLAN3.D128).

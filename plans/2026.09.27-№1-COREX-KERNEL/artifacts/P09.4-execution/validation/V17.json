@@ -1,0 +1,32 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:check-evidence:v1",
+  "evidence_id": "PLAN3.P09.4.V17.2026-10-07T09:01:19.815358+00:00",
+  "check_id": "V17",
+  "subject": "PLAN3.P09.4",
+  "procedure": {
+    "cmd": "bash scripts/mutation-check.sh --all",
+    "cwd": "/home/vostrikov/projects/packages/corex"
+  },
+  "candidate": {
+    "head": "9cff6888700e794ce6b310a7ece96a89544a9c7e",
+    "dirty_digest": "9024287c7d4aad0687b28d47f5739065a1b86467a2129e120b571938cd66981d"
+  },
+  "started_at": "2026-10-07T09:01:19.815358+00:00",
+  "finished_at": "2026-10-07T09:01:33.315778+00:00",
+  "producer": {
+    "kind": "executor",
+    "actor": {
+      "provider": "codex",
+      "model": "gpt-6.4-sol",
+      "effort": "xhigh"
+    }
+  },
+  "exit": 0,
+  "log": {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V17.log",
+    "sha256": "a336a5640578cfc018d396e9305123246814b280a57c8e4e71a597a316058b94"
+  },
+  "environment": {
+    "platform": "Linux; PHP8.4.26 wrapper on PATH; PGSQL_PORT=5434 test-only PostgreSQL16"
+  }
+}

@@ -531,13 +531,7 @@ function cohortPublicApiMaps(string $repoRoot): array
 /** @param  array<string, list<string>>  $maps */
 function coveredByAnyPublicApi(string $fqcn, array $maps): bool
 {
-    foreach ($maps as $prefixes) {
-        if (coveredByPublicApi($fqcn, $prefixes)) {
-            return true;
-        }
-    }
-
-    return false;
+    return array_any($maps, fn ($prefixes) => coveredByPublicApi($fqcn, $prefixes));
 }
 
 /**

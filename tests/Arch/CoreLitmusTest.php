@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Tests\Support\SourceScanner;
+use Illuminate\Foundation\Application;
 
 // P6.3 — Foundation litmus (A29, D34). The file list is an explicit constant
 // of the live Foundation map, not "every file except another zone".
@@ -388,7 +389,7 @@ function litmusImportForbidden(string $import): bool
         || str_starts_with($import, 'Illuminate\\Database\\Eloquent\\')
         || $import === 'Illuminate\\Http'
         || str_starts_with($import, 'Illuminate\\Http\\')
-        || $import === 'Illuminate\\Foundation\\Application'
+        || $import === Application::class
         || str_starts_with($import, 'Illuminate\\Foundation\\Application\\');
 }
 

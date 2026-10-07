@@ -85,7 +85,7 @@ it('cloud initialize()/end() switches connection+session and context() reflects 
     $ref = new AccountRef(id: $account->id, slug: (string) $account->slug, status: $account->status, features: [], limits: []);
 
     /** @var DatabaseTenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
 
     expect($manager->initialized())->toBeFalse()
         ->and($manager->context())->toBeNull();
@@ -138,7 +138,7 @@ it('runFor() initializes, runs the closure, and always ends — nesting restores
     $refB = new AccountRef(id: $accountB->id, slug: (string) $accountB->slug, status: $accountB->status, features: [], limits: []);
 
     /** @var DatabaseTenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
 
     $workspace = new WorkspaceRef(id: (string) Str::uuid(), slug: 'outer', type: 'department', path: '/outer', parentId: null);
     $manager->runFor($refA, $workspace, function () use ($manager, $refA, $refB, $workspace): void {
@@ -168,7 +168,7 @@ it('a callback that throws inside runFor() still ends tenancy (unconditional rev
     $ref = new AccountRef(id: $account->id, slug: (string) $account->slug, status: $account->status, features: [], limits: []);
 
     /** @var DatabaseTenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
 
     expect(fn () => $manager->runFor($ref, null, function (): void {
         throw new RuntimeException('boom');
@@ -179,14 +179,14 @@ it('a callback that throws inside runFor() still ends tenancy (unconditional rev
 
 it('TenancyManagerContextResolver::current() throws CentralContextException outside any tenant (AC-28 в)', function (): void {
     /** @var TenantContextResolver $resolver */
-    $resolver = app(TenantContextResolver::class);
+    $resolver = resolve(TenantContextResolver::class);
 
     expect(fn () => $resolver->current())->toThrow(CentralContextException::class);
 
     $account = makeAccountTM(makeClusterRowTM());
     $ref = new AccountRef(id: $account->id, slug: (string) $account->slug, status: $account->status, features: [], limits: []);
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->initialize($ref);
 
     expect($resolver->current()->account->id)->toBe($account->id);
@@ -195,5 +195,5 @@ it('TenancyManagerContextResolver::current() throws CentralContextException outs
 });
 
 it('is wired via the TenancyManager contract binding, not a hardcoded concrete (D10)', function (): void {
-    expect(app(TenancyManager::class))->toBeInstanceOf(DatabaseTenancyManager::class);
+    expect(resolve(TenancyManager::class))->toBeInstanceOf(DatabaseTenancyManager::class);
 });

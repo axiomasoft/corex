@@ -9,9 +9,9 @@ use Flex\Crm\Context\Data\Actor;
 use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
 use Illuminate\Foundation\Events\Dispatchable;
 
-final class ContactCompanyAssociated implements ShouldDispatchAfterCommit
+final readonly class ContactCompanyAssociated implements ShouldDispatchAfterCommit
 {
     use Dispatchable;
 
-    public function __construct(public readonly ContactCompany $association, public readonly Actor $actor) {}
+    public function __construct(public ContactCompany $association, public Actor $actor) {}
 }

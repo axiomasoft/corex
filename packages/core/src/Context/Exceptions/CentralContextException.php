@@ -29,6 +29,6 @@ final class CentralContextException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::CentralContextException, ErrorCategory::Authorization, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::CentralContextException, category: ErrorCategory::Authorization, retryable: false);
     }
 }

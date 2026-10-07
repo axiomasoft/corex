@@ -29,7 +29,7 @@ final class SchemaGate
 
     /** @param SchemaManifest $manifest
      * @param array<string, string> $allowlist */
-    public function __construct(private string $root, private array $manifest, private array $allowlist)
+    public function __construct(private readonly string $root, private array $manifest, private array $allowlist)
     {
         $path = $root.'/docs/architecture/table-ownership.md';
 
@@ -948,7 +948,7 @@ final class SchemaGate
             }
             /** @var array<string, string> $allowlist */
             $allowlist = json_decode((string) file_get_contents($root.'/scripts/schema-gate-allowlist.json'), true, flags: JSON_THROW_ON_ERROR);
-            $hits = (new SchemaGate($root, $manifest, $allowlist))->run();
+            $hits = new SchemaGate($root, $manifest, $allowlist)->run();
             foreach ($hits as $hit) {
                 fwrite(STDERR, "{$hit['code']} {$hit['file']}:{$hit['line']} {$hit['message']}\n");
             }
@@ -967,6 +967,6 @@ final class SchemaGate
     }
 }
 
-if (isset($_SERVER['SCRIPT_FILENAME']) && is_string($_SERVER['SCRIPT_FILENAME']) && realpath($_SERVER['SCRIPT_FILENAME']) === __FILE__) {
+if (debug_backtrace() === []) {
     exit(SchemaGate::main(array_slice($argv, 1)));
 }

@@ -44,7 +44,7 @@ it('discovers CRM composer metadata and manages its schema through the standard 
     $this->artisan('corex:modules:compile')->assertSuccessful();
     $this->app->forgetInstance(ModuleRegistry::class);
     $this->app->forgetInstance(ModuleLifecycle::class);
-    $lifecycle = app(ModuleLifecycle::class);
+    $lifecycle = resolve(ModuleLifecycle::class);
     $lifecycle->enable('flex/crm');
     foreach (['crm_sources', 'crm_companies', 'crm_contacts', 'crm_contact_company', 'crm_pipelines', 'crm_stages', 'crm_deals', 'crm_leads', 'crm_activities'] as $table) {
         expect(Schema::hasTable($table))->toBeTrue();

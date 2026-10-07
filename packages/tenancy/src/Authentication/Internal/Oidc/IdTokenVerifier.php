@@ -19,17 +19,17 @@ use Throwable;
  *
  * @internal
  */
-final class IdTokenVerifier
+final readonly class IdTokenVerifier
 {
     /**
      * @param  list<string>  $allowedAlgs
      */
     public function __construct(
-        private readonly JwksKeySet $jwks,
-        private readonly string $issuer,
-        private readonly string $clientId,
-        private readonly array $allowedAlgs,
-        private readonly int $leewaySeconds,
+        private JwksKeySet $jwks,
+        private string $issuer,
+        private string $clientId,
+        private array $allowedAlgs,
+        private int $leewaySeconds,
     ) {}
 
     /**
@@ -51,7 +51,7 @@ final class IdTokenVerifier
             throw OidcAuthenticationException::invalidHeader('kid');
         }
 
-        $keys = $this->jwks->keysForVerification($jwksUri, $kid);
+        $keys = $this->jwks->keysForVerification(jwksUri: $jwksUri, kid: $kid);
 
         $previousLeeway = JWT::$leeway;
         JWT::$leeway = $this->leewaySeconds;
@@ -105,7 +105,7 @@ final class IdTokenVerifier
         $decoded = json_decode($this->base64UrlDecode($segments[0]), true);
 
         return is_array($decoded)
-            ? array_filter($decoded, static fn (int|string $key): bool => is_string($key), ARRAY_FILTER_USE_KEY)
+            ? array_filter($decoded, is_string(...), ARRAY_FILTER_USE_KEY)
             : [];
     }
 

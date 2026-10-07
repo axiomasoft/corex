@@ -34,7 +34,7 @@ final class ImpersonatedModelWriteGuard
      *
      * @var list<class-string>
      */
-    private const EXEMPT = [
+    private const array EXEMPT = [
         ImpersonationGrant::class,
     ];
 

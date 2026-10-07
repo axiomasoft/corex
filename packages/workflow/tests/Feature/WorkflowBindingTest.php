@@ -18,7 +18,7 @@ uses(TestCase::class);
 
 function triggerRequest(string $key, array $snapshot = ['status' => 'new']): TriggerRequest
 {
-    $context = app(TenantContextResolver::class)->current();
+    $context = resolve(TenantContextResolver::class)->current();
 
     return new TriggerRequest(
         context: $context,
@@ -35,7 +35,7 @@ function triggerRequest(string $key, array $snapshot = ['status' => 'new']): Tri
 }
 
 it('captures an immutable intent and replays the same request key', function (): void {
-    $binding = app(WorkflowBinding::class);
+    $binding = resolve(WorkflowBinding::class);
 
     expect($binding->capture(triggerRequest('workflow:test:1'))->status)->toBe('created')
         ->and($binding->capture(triggerRequest('workflow:test:1'))->status)->toBe('existing')
@@ -43,7 +43,7 @@ it('captures an immutable intent and replays the same request key', function ():
 });
 
 it('rejects a changed immutable payload for the same request key', function (): void {
-    $binding = app(WorkflowBinding::class);
+    $binding = resolve(WorkflowBinding::class);
 
     $binding->capture(triggerRequest('workflow:test:conflict'));
 
@@ -51,23 +51,23 @@ it('rejects a changed immutable payload for the same request key', function (): 
 });
 
 it('delegates signal and transition operations to the configured engine adapter', function (): void {
-    $binding = app(WorkflowBinding::class);
-    $context = app(TenantContextResolver::class)->current();
+    $binding = resolve(WorkflowBinding::class);
+    $context = resolve(TenantContextResolver::class)->current();
 
     expect($binding->signal(new SignalRequest($context, 'approved', 'ticket:1', JsonDocuments::capture([]), 'workflow:signal:1', new DateTimeImmutable('+1 hour')))->status)->toBe('buffered')
         ->and($binding->fire(new TransitionRequest($context, 'ticket:1', 'approve', 'user:1', JsonDocuments::capture([]), 'workflow:transition:1'))->status)->toBe('completed');
 });
 
 it('does not send expired signals to the engine adapter', function (): void {
-    $binding = app(WorkflowBinding::class);
-    $context = app(TenantContextResolver::class)->current();
+    $binding = resolve(WorkflowBinding::class);
+    $context = resolve(TenantContextResolver::class)->current();
 
     expect($binding->signal(new SignalRequest($context, 'approved', 'ticket:1', JsonDocuments::capture([]), 'workflow:signal:expired', new DateTimeImmutable('-1 second')))->status)->toBe('expired');
 });
 
 it('rejects empty definition and version refs before insert', function (string $definitionRef, string $versionRef): void {
-    $binding = app(WorkflowBinding::class);
-    $context = app(TenantContextResolver::class)->current();
+    $binding = resolve(WorkflowBinding::class);
+    $context = resolve(TenantContextResolver::class)->current();
 
     $binding->capture(new TriggerRequest(
         context: $context,
@@ -87,7 +87,7 @@ it('rejects empty definition and version refs before insert', function (string $
 ])->throws(InvalidArgumentException::class);
 
 it('stores the stamp inside the payload and excludes the fingerprint from the hash', function (): void {
-    $binding = app(WorkflowBinding::class);
+    $binding = resolve(WorkflowBinding::class);
 
     expect($binding->capture(triggerRequest('workflow:stamp:hash'))->status)->toBe('created');
 
@@ -111,7 +111,7 @@ it('stores the stamp inside the payload and excludes the fingerprint from the ha
 });
 
 it('conflicts when the pinned version does not match the stored identity', function (): void {
-    $binding = app(WorkflowBinding::class);
+    $binding = resolve(WorkflowBinding::class);
     $binding->capture(triggerRequest('workflow:stamp:version'));
     $changed = triggerRequest('workflow:stamp:version');
     $changed = new TriggerRequest(
@@ -131,7 +131,7 @@ it('conflicts when the pinned version does not match the stored identity', funct
 });
 
 it('admits a legacy non-empty ref with the original hash and does not rewrite it', function (): void {
-    $context = app(TenantContextResolver::class)->current();
+    $context = resolve(TenantContextResolver::class)->current();
     $business = [
         'event_id' => 'event:1',
         'event_name' => 'created',
@@ -161,7 +161,7 @@ it('admits a legacy non-empty ref with the original hash and does not rewrite it
         'updated_at' => now(),
     ]);
 
-    $binding = app(WorkflowBinding::class);
+    $binding = resolve(WorkflowBinding::class);
 
     expect($binding->capture(triggerRequest('workflow:legacy:1'))->status)->toBe('existing')
         ->and($this->app['db']->table('sys_workflow_intents')->where('request_key', 'workflow:legacy:1')->value('payload'))->toBe($encoded)
@@ -209,7 +209,7 @@ it('treats an unrelated registry fingerprint change as the same work', function 
         }
     };
     $this->app->instance(ModuleRegistry::class, $registry);
-    $binding = app(WorkflowBinding::class);
+    $binding = resolve(WorkflowBinding::class);
 
     expect($binding->capture(triggerRequest('workflow:stamp:drift'))->status)->toBe('created');
 

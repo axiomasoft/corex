@@ -25,14 +25,14 @@ use SplFileInfo;
  *
  * @internal
  */
-final class ContextTenantStorage implements TenantStorage
+final readonly class ContextTenantStorage implements TenantStorage
 {
     public function __construct(
-        private readonly TenantContextResolver $contexts,
-        private readonly FilesystemManager $filesystems,
-        private readonly string $durableDriver,
-        private readonly string $durableRoot,
-        private readonly string $ephemeralRoot,
+        private TenantContextResolver $contexts,
+        private FilesystemManager $filesystems,
+        private string $durableDriver,
+        private string $durableRoot,
+        private string $ephemeralRoot,
     ) {}
 
     public function disk(): Filesystem

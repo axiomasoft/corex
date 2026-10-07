@@ -43,17 +43,13 @@ final class LifecycleRegistrar implements PackageRegistrar
         // class-string autowires $connection = null and silently reads the ambient
         // default, so with a configured module DB the enabled set comes back empty
         // and every module reads inactive (a defect a targeted audit caught).
-        $app->singleton(ModuleStateReader::class, static function (Application $app): DatabaseModuleStateReader {
-            return new DatabaseModuleStateReader($app->make(ConnectionResolverInterface::class), $app->make(ModulesOptions::class)->connection);
-        });
+        $app->singleton(ModuleStateReader::class, static fn (Application $app): DatabaseModuleStateReader => new DatabaseModuleStateReader(connections: $app->make(ConnectionResolverInterface::class), connection: $app->make(ModulesOptions::class)->connection));
 
         // RecordsRegistrar and the lifecycle read/write the module connection
         // (ModulesOptions->connection, null = app default) — the same
         // seam the epoch and state reader use, so auto-claims land in the module
         // DB, not the ambient default.
-        $app->singleton(RecordsRegistrar::class, static function (Application $app): DatabaseRecordsRegistrar {
-            return new DatabaseRecordsRegistrar($app->make(ConnectionResolverInterface::class), $app->make(ClockInterface::class), $app->make(ModulesOptions::class)->connection);
-        });
+        $app->singleton(RecordsRegistrar::class, static fn (Application $app): DatabaseRecordsRegistrar => new DatabaseRecordsRegistrar(connections: $app->make(ConnectionResolverInterface::class), clock: $app->make(ClockInterface::class), connection: $app->make(ModulesOptions::class)->connection));
 
         // Keep the assembled wiring overridable for isolated lifecycle tests.
         $app->singleton('corex.modules.wiring', fn (): array => $this->moduleWiring($app->make(SchemaSets::class)));

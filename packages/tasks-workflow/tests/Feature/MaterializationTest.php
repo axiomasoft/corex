@@ -60,7 +60,7 @@ beforeEach(function (): void {
 function matScope(object $test): DataScope
 {
     return DataScope::fromTenantContext(
-        context: app(TenantContextResolver::class)->current(),
+        context: resolve(TenantContextResolver::class)->current(),
         connectionIdentity: ScopeConnectionGuard::identity(DB::connection()),
         actorId: $test->userId,
         restoreEpoch: $test->restoreEpoch,
@@ -82,7 +82,7 @@ it('MAT-01 deduplicates the same occurrence key through SQL uniqueness', functio
     $set = SeriesSeeder::dailySet('series-mat-01', 'rev-1', 3);
     $series = SeriesSeeder::seed('series-mat-01', $set, $this->template, $this->restoreEpoch);
     $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-10', pageLimit: 10);
-    $materializer = app(TaskRecurrenceCommand::class);
+    $materializer = resolve(TaskRecurrenceCommand::class);
 
     $first = $materializer->materialize(matScope($this), $series, $window, matToken($this, $series, $window, 'mat-01-a'));
     $second = $materializer->materialize(matScope($this), $series, $window, matToken($this, $series, $window, 'mat-01-b'));
@@ -101,7 +101,7 @@ it('MAT-02 replays the same operation key with the stored receipt', function ():
     $series = SeriesSeeder::seed('series-mat-02', $set, $this->template, $this->restoreEpoch);
     $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05');
     $token = matToken($this, $series, $window, 'mat-02-op');
-    $materializer = app(TaskRecurrenceCommand::class);
+    $materializer = resolve(TaskRecurrenceCommand::class);
 
     $first = $materializer->materialize(matScope($this), $series, $window, $token);
     $replay = $materializer->materialize(matScope($this), $series, $window, $token);
@@ -115,7 +115,7 @@ it('MAT-03 stops at a partial budget without advancing beyond the contiguous pre
     $set = SeriesSeeder::dailySet('series-mat-03', 'rev-1', 10);
     $series = SeriesSeeder::seed('series-mat-03', $set, $this->template, $this->restoreEpoch);
     $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-30', pageLimit: 2, maxSeconds: 5);
-    $receipt = app(TaskRecurrenceCommand::class)->materialize(
+    $receipt = resolve(TaskRecurrenceCommand::class)->materialize(
         matScope($this),
         $series,
         $window,
@@ -131,10 +131,10 @@ it('MAT-04 refuses materialization after retirement while keeping committed task
     $set = SeriesSeeder::dailySet('series-mat-04', 'rev-1', 2);
     $series = SeriesSeeder::seed('series-mat-04', $set, $this->template, $this->restoreEpoch);
     $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05');
-    app(TaskRecurrenceCommand::class)->materialize(matScope($this), $series, $window, matToken($this, $series, $window, 'mat-04-a'));
+    resolve(TaskRecurrenceCommand::class)->materialize(matScope($this), $series, $window, matToken($this, $series, $window, 'mat-04-a'));
 
     DB::table('corex_task_series_state')->where('series_key', 'series-mat-04')->update(['retired' => true]);
-    $receipt = app(TaskRecurrenceCommand::class)->materialize(matScope($this), $series, $window, matToken($this, $series, $window, 'mat-04-b'));
+    $receipt = resolve(TaskRecurrenceCommand::class)->materialize(matScope($this), $series, $window, matToken($this, $series, $window, 'mat-04-b'));
 
     expect($receipt->retired)->toBeTrue()
         ->and(Task::query()->count())->toBe(2);
@@ -152,7 +152,7 @@ it('MAT-05 keeps the original occurrence key across moved overrides and revision
     );
     $series = SeriesSeeder::seed('series-mat-05', $set, $this->template, $this->restoreEpoch);
     $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-10');
-    app(TaskRecurrenceCommand::class)->materialize(matScope($this), $series, $window, matToken($this, $series, $window, 'mat-05-a'));
+    resolve(TaskRecurrenceCommand::class)->materialize(matScope($this), $series, $window, matToken($this, $series, $window, 'mat-05-a'));
 
     $occurrence = DB::table('corex_task_occurrences')->where('occurrence_key', '!=', '')->first();
     expect($occurrence)->not->toBeNull();
@@ -170,7 +170,7 @@ it('MAT-05 keeps the original occurrence key across moved overrides and revision
     ]);
 
     $newSeries = new SeriesReference('series-mat-05', 'rev-2', $newSet->definitionHash);
-    app(TaskRecurrenceCommand::class)->materialize(matScope($this), $newSeries, $window, matToken($this, $newSeries, $window, 'mat-05-b'));
+    resolve(TaskRecurrenceCommand::class)->materialize(matScope($this), $newSeries, $window, matToken($this, $newSeries, $window, 'mat-05-b'));
 
     expect(DB::table('corex_task_occurrences')->where('immutable_revision', 'rev-1')->count())->toBe(3)
         ->and(DB::table('corex_task_occurrences')->where('immutable_revision', 'rev-2')->count())->toBeGreaterThan(0);
@@ -181,13 +181,13 @@ it('MAT-08 denies stale restore epochs and re-checks access before writes', func
     $series = SeriesSeeder::seed('series-mat-08', $set, $this->template, $this->restoreEpoch);
     $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05');
     $staleScope = DataScope::fromTenantContext(
-        context: app(TenantContextResolver::class)->current(),
+        context: resolve(TenantContextResolver::class)->current(),
         connectionIdentity: ScopeConnectionGuard::identity(DB::connection()),
         actorId: $this->userId,
         restoreEpoch: str_repeat('b', 64),
     );
 
-    expect(fn () => app(TaskRecurrenceCommand::class)->materialize(
+    expect(fn () => resolve(TaskRecurrenceCommand::class)->materialize(
         $staleScope,
         $series,
         $window,
@@ -200,7 +200,7 @@ it('MAT-08 denies stale restore epochs and re-checks access before writes', func
     $this->app->forgetInstance(TaskRecurrenceCommand::class);
     $this->app->forgetScopedInstances();
 
-    expect(fn () => app(TaskRecurrenceCommand::class)->materialize(
+    expect(fn () => resolve(TaskRecurrenceCommand::class)->materialize(
         matScope($this),
         $series,
         $window,
@@ -213,7 +213,7 @@ it('MAT-09 keeps boxed sqlite materialization off root credentials and queue ass
     $set = SeriesSeeder::dailySet('series-mat-09', 'rev-1', 1);
     $series = SeriesSeeder::seed('series-mat-09', $set, $this->template, $this->restoreEpoch);
     $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05');
-    $receipt = app(TaskRecurrenceCommand::class)->materialize(
+    $receipt = resolve(TaskRecurrenceCommand::class)->materialize(
         matScope($this),
         $series,
         $window,
@@ -255,9 +255,9 @@ it('MAT-11 materializes a valid stamped wakeup and stays idempotent on duplicate
     $set = SeriesSeeder::dailySet('series-mat-11', 'rev-1', 2);
     $series = SeriesSeeder::seed('series-mat-11', $set, $this->template, $this->restoreEpoch);
     $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05');
-    $handler = app(MaterializationWakeupHandler::class);
+    $handler = resolve(MaterializationWakeupHandler::class);
     $delivery = wakeupDelivery(
-        context: app(TenantContextResolver::class)->current(),
+        context: resolve(TenantContextResolver::class)->current(),
         payload: MaterializationHasher::wakeupPayload(series: $series, window: $window),
         requestKey: 'wakeup-mat-11',
     );
@@ -273,8 +273,8 @@ it('MAT-12 fails incomplete or tampered wakeup payloads without writing', functi
     $set = SeriesSeeder::dailySet('series-mat-12', 'rev-1', 1);
     $series = SeriesSeeder::seed('series-mat-12', $set, $this->template, $this->restoreEpoch);
     $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05');
-    $handler = app(MaterializationWakeupHandler::class);
-    $context = app(TenantContextResolver::class)->current();
+    $handler = resolve(MaterializationWakeupHandler::class);
+    $context = resolve(TenantContextResolver::class)->current();
     $complete = MaterializationHasher::wakeupPayload(series: $series, window: $window);
 
     expect(fn () => $handler->handle(wakeupDelivery(

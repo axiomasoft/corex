@@ -99,11 +99,11 @@ function accountRefIS(Account $account): AccountRef
 function migrateUsersTableIS(AccountRef $ref): void
 {
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
 
     $manager->runFor($ref, null, function (): void {
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex:tenant'], 'tenant');
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-tenancy:tenant'], 'tenant');
+        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex:tenant'], 'tenant');
+        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-tenancy:tenant'], 'tenant');
     });
 }
 
@@ -113,12 +113,12 @@ it('rehashes only an active owned users row with its expected hash', function ()
     migrateUsersTableIS($ref);
     $identityId = makeIdentityIS();
     makeMembershipIS($identityId, $account->id);
-    app(IdentitySyncer::class)->syncToAccount($identityId, $account->id);
+    resolve(IdentitySyncer::class)->syncToAccount($identityId, $account->id);
 
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->runFor($ref, null, function () use ($identityId): void {
-        $writer = app(IdentityPasswordRehasher::class);
+        $writer = resolve(IdentityPasswordRehasher::class);
         $columns = ['id' => 'id', 'email' => 'email', 'password' => 'password_hash', 'active' => 'is_active', 'deleted_at' => 'deleted_at'];
         DB::table('users')->where('id', $identityId)->update(['password_hash' => 'old']);
 
@@ -142,11 +142,11 @@ it('syncToAccount() creates a denormalized users row keyed by the identity id (A
     $identityId = makeIdentityIS(['email' => 'a@example.test', 'name' => 'Ada', 'phone' => '+7000', 'locale' => 'en']);
     makeMembershipIS($identityId, $account->id);
 
-    app(IdentitySyncer::class)->syncToAccount($identityId, $account->id);
+    resolve(IdentitySyncer::class)->syncToAccount($identityId, $account->id);
 
     $ref = accountRefIS($account);
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $row = $manager->runFor($ref, null, fn (): ?object => DB::table('users')->where('id', $identityId)->first());
 
     expect($row)->not->toBeNull()
@@ -168,13 +168,13 @@ it('syncToAccount() is idempotent — a second sync upserts, does not duplicate'
     $identityId = makeIdentityIS();
     makeMembershipIS($identityId, $account->id);
 
-    $syncer = app(IdentitySyncer::class);
+    $syncer = resolve(IdentitySyncer::class);
     $syncer->syncToAccount($identityId, $account->id);
     $syncer->syncToAccount($identityId, $account->id);
 
     $ref = accountRefIS($account);
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $count = $manager->runFor($ref, null, fn (): int => DB::table('users')->where('id', $identityId)->count());
 
     expect($count)->toBe(1);
@@ -189,12 +189,12 @@ it('keeps distinct UUID identities separate when their phone values match', func
     makeMembershipIS($firstIdentityId, $account->id);
     makeMembershipIS($secondIdentityId, $account->id);
 
-    $syncer = app(IdentitySyncer::class);
+    $syncer = resolve(IdentitySyncer::class);
     $syncer->syncToAccount($firstIdentityId, $account->id);
     $syncer->syncToAccount($secondIdentityId, $account->id);
 
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $rows = $manager->runFor(accountRefIS($account), null, fn (): array => DB::table('users')
         ->whereIn('id', [$firstIdentityId, $secondIdentityId])
         ->orderBy('id')
@@ -221,7 +221,7 @@ it('fanOut() reaches every account membership (AC-16 в)', function (): void {
     makeMembershipIS($identityId, $accountA->id);
     makeMembershipIS($identityId, $accountB->id);
 
-    app(IdentitySyncer::class)->fanOut($identityId);
+    resolve(IdentitySyncer::class)->fanOut($identityId);
 
     $statuses = DB::table('root_identity_accounts')->where('identity_id', $identityId)->pluck('sync_status', 'account_id');
     expect($statuses[$accountA->id])->toBe('synced')
@@ -245,7 +245,7 @@ it('a failure syncing one account does not block another (AC-16 г)', function (
     makeMembershipIS($identityId, $accountA->id);
     makeMembershipIS($identityId, $accountB->id);
 
-    app(IdentitySyncer::class)->fanOut($identityId);
+    resolve(IdentitySyncer::class)->fanOut($identityId);
 
     $statuses = DB::table('root_identity_accounts')->where('identity_id', $identityId)->pluck('sync_status', 'account_id')->values()->all();
     expect($statuses)->toContain('synced')
@@ -259,7 +259,7 @@ it('removing the membership row deactivates a projection without changing the pr
     $identityId = makeIdentityIS();
     makeMembershipIS($identityId, $account->id);
 
-    $syncer = app(IdentitySyncer::class);
+    $syncer = resolve(IdentitySyncer::class);
     $syncer->syncToAccount($identityId, $account->id);
 
     DB::table('root_identity_accounts')->where('identity_id', $identityId)->where('account_id', $account->id)->delete();
@@ -268,7 +268,7 @@ it('removing the membership row deactivates a projection without changing the pr
 
     $ref = accountRefIS($account);
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $row = $manager->runFor($ref, null, fn (): ?object => DB::table('users')->where('id', $identityId)->first());
 
     expect($row)->not->toBeNull()
@@ -282,12 +282,12 @@ it('treats a non-active membership as inactive without overwriting a fresh profi
     $identityId = makeIdentityIS(['name' => 'Original']);
     makeMembershipIS($identityId, $account->id);
 
-    $syncer = app(IdentitySyncer::class);
+    $syncer = resolve(IdentitySyncer::class);
     $syncer->syncToAccount($identityId, $account->id);
 
     $ref = accountRefIS($account);
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->runFor($ref, null, function () use ($identityId): void {
         DB::table('users')->where('id', $identityId)->update([
             'name' => 'Locally newer',
@@ -314,12 +314,12 @@ it('reactivates the same UUID after an active regrant without touching a fresh p
     $identityId = makeIdentityIS(['name' => 'Original']);
     makeMembershipIS($identityId, $account->id, ['status' => 'blocked']);
 
-    $syncer = app(IdentitySyncer::class);
+    $syncer = resolve(IdentitySyncer::class);
     $syncer->syncToAccount($identityId, $account->id);
 
     $ref = accountRefIS($account);
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->runFor($ref, null, function () use ($identityId): void {
         DB::table('users')->where('id', $identityId)->update([
             'name' => 'Locally newer',
@@ -349,7 +349,7 @@ it('emits UserSynced on a real sync', function (): void {
     $identityId = makeIdentityIS();
     makeMembershipIS($identityId, $account->id);
 
-    app(IdentitySyncer::class)->syncToAccount($identityId, $account->id);
+    resolve(IdentitySyncer::class)->syncToAccount($identityId, $account->id);
 
     Event::assertDispatched(UserSynced::class, fn (UserSynced $event): bool => $event->identityId === $identityId && $event->accountId === $account->id);
 });
@@ -361,12 +361,12 @@ it('the version-guard skips a stale write once the projection is already newer (
     $identityId = makeIdentityIS(['name' => 'First']);
     makeMembershipIS($identityId, $account->id);
 
-    $syncer = app(IdentitySyncer::class);
+    $syncer = resolve(IdentitySyncer::class);
     $syncer->syncToAccount($identityId, $account->id);
 
     $ref = accountRefIS($account);
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
 
     // Simulate the projection already having a newer source version than the
     // (unchanged) source identity's updated_at — a second sync must no-op.
@@ -385,7 +385,7 @@ it('preserves source ordering independently of delivery time', function (bool $d
     migrateUsersTableIS(accountRefIS($account));
     $identity = makeIdentityIS(['name' => 'v1', 'updated_at' => '2026-09-01 10:00:00.123456+00']);
     makeMembershipIS($identity, $account->id);
-    $syncer = app(IdentitySyncer::class);
+    $syncer = resolve(IdentitySyncer::class);
     config(['database.connections.identity_writer_test' => config('database.connections.pgsql')]);
     $writer = DB::connection('identity_writer_test');
     $injected = false;
@@ -405,7 +405,7 @@ it('preserves source ordering independently of delivery time', function (bool $d
     if (! $deliverNewerFirst) {
         $syncer->syncToAccount($identity, $account->id);
     }
-    $row = app(TenancyManager::class)->runFor(accountRefIS($account), null, fn () => DB::table('users')->where('id', $identity)->first());
+    $row = resolve(TenancyManager::class)->runFor(accountRefIS($account), null, fn () => DB::table('users')->where('id', $identity)->first());
     expect($injected)->toBeTrue()->and($row->name)->toBe('v2')
         ->and($row->identity_source_updated_at)->toContain('10:00:00.654321');
     DB::purge('identity_writer_test');
@@ -422,7 +422,7 @@ it('corex:tenancy:reconcile-identities re-syncs failed and stale rows (AC-16 з)
 
     $ref = accountRefIS($account);
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $row = $manager->runFor($ref, null, fn (): ?object => DB::table('users')->where('id', $identityId)->first());
 
     expect($row)->not->toBeNull();

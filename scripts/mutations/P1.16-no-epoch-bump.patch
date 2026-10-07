@@ -1,13 +1,13 @@
 --- a/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 +++ b/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
-@@ -245,10 +245,6 @@
+@@ -246,10 +246,6 @@
                  'updated_at' => $this->timestamp(),
              ]);
  
--            $this->log($module, 'disable', ModuleState::Enabled->value, ModuleState::Disabled->value, 'success', [
+-            $this->log(module: $module, operation: 'disable', from: ModuleState::Enabled->value, to: ModuleState::Disabled->value, status: 'success', details: [
 -                'reason' => $reason->value,
 -            ]);
 -
-             $this->db()->afterCommit(fn () => $this->events->dispatch(new ModuleDisabled($module, $reason)));
+             $this->db()->afterCommit(fn () => $this->events->dispatch(new ModuleDisabled(module: $module, reason: $reason)));
          });
      }

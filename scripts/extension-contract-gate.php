@@ -99,7 +99,7 @@ $fingerprints = [];
 foreach ((($entries = glob($root.'/tests/fixtures/extension-contract/*.json')) === false ? [] : $entries) as $path) {
     $fixtureData = json_decode((string) file_get_contents($path), true, flags: JSON_THROW_ON_ERROR);
     assert(is_array($fixtureData));
-    $loader = (new ReflectionFunction('extensionContractFixture'))->getClosure();
+    $loader = new ReflectionFunction('extensionContractFixture')->getClosure();
     $tuple = $loader($path);
     assert(is_array($tuple) && is_array($tuple[0]) && is_array($tuple[1]));
     $manifests = [];

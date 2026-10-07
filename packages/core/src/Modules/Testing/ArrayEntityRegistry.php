@@ -19,9 +19,9 @@ use CoreX\Modules\Internal\InMemoryEntityRegistry;
  * once RegistryCompiler exists.
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class ArrayEntityRegistry implements EntityRegistry
+final readonly class ArrayEntityRegistry implements EntityRegistry
 {
-    private readonly InMemoryEntityRegistry $registry;
+    private InMemoryEntityRegistry $registry;
 
     /**
      * @param  Closure(string, TenantContext):bool|null  $moduleActive  Real active-module
@@ -30,9 +30,9 @@ final class ArrayEntityRegistry implements EntityRegistry
      *                                                                  tenant ctx — activity is per-account.
      * @param  Closure(TenantContext):list<string>|null  $activeModules  One active-module snapshot per list operation.
      */
-    public function __construct(?Closure $moduleActive = null, private readonly ?Closure $activeModules = null)
+    public function __construct(?Closure $moduleActive = null, private ?Closure $activeModules = null)
     {
-        $this->registry = new InMemoryEntityRegistry($moduleActive, $activeModules);
+        $this->registry = new InMemoryEntityRegistry(moduleActive: $moduleActive, activeModules: $activeModules);
     }
 
     public function register(EntityDefinition $definition): void
@@ -62,7 +62,7 @@ final class ArrayEntityRegistry implements EntityRegistry
 
     public function byCapability(Capability $cap, ?TenantContext $ctx = null): array
     {
-        return $this->registry->byCapability($cap, $ctx);
+        return $this->registry->byCapability(cap: $cap, ctx: $ctx);
     }
 
     public function forModel(string $modelClass): ?EntityDefinition

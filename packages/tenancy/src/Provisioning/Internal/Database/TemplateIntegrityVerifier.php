@@ -19,15 +19,15 @@ use Illuminate\Database\Eloquent\Model;
 use stdClass;
 
 /** @internal */
-final class TemplateIntegrityVerifier implements TemplateIntegrityChecks, TemplateIntegrityVerifierContract
+final readonly class TemplateIntegrityVerifier implements TemplateIntegrityChecks, TemplateIntegrityVerifierContract
 {
     public function __construct(
-        private readonly string $centralConnection,
-        private readonly SchemaCatalogueSerializer $serializer,
-        private readonly TemplateIntegrityLock $lock,
-        private readonly TenancyOptions $options,
-        private readonly ConnectionResolverInterface $connections,
-        private readonly ConnectionFactory $connectionFactory,
+        private string $centralConnection,
+        private SchemaCatalogueSerializer $serializer,
+        private TemplateIntegrityLock $lock,
+        private TenancyOptions $options,
+        private ConnectionResolverInterface $connections,
+        private ConnectionFactory $connectionFactory,
     ) {}
 
     public function qualify(ClaimRequest $request): QualifiedTemplate
@@ -44,7 +44,7 @@ final class TemplateIntegrityVerifier implements TemplateIntegrityChecks, Templa
 
     public function verifyCurrent(int $version, ?string $clusterId = null): void
     {
-        $this->assertCurrent($version, $clusterId);
+        $this->assertCurrent(version: $version, clusterId: $clusterId);
     }
 
     public function verifyAccount(TemplateAccountView $account): void
@@ -100,7 +100,7 @@ final class TemplateIntegrityVerifier implements TemplateIntegrityChecks, Templa
                 throw new TemplateIntegrityException('The requested template has no trusted schema hash.');
             }
 
-            $this->lock->acquire($connection, DatabaseValue::text($template->id));
+            $this->lock->acquire(connection: $connection, templateId: DatabaseValue::text($template->id));
 
             if ($clusterId !== null && ! $connection->table('root_clusters')
                 ->where('id', $clusterId)->where('status', 'active')->where('template_version', $template->version)->exists()) {

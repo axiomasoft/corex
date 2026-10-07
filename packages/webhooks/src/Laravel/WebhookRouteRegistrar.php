@@ -32,14 +32,14 @@ final readonly class WebhookRouteRegistrar
         $offset = str_starts_with($path, $marker) ? 0 : strpos($path, '/'.$marker);
 
         if ($offset === false) {
-            throw new ApiError(OperationsErrorCode::OperationNotFound, 404, 'Operation not found.');
+            throw new ApiError(errorCode: OperationsErrorCode::OperationNotFound, status: 404, message: 'Operation not found.');
         }
 
         $relative = substr($path, $offset + strlen($marker) + ($offset === 0 ? 0 : 1));
-        [$operation] = $operations->match('v1', $request->method(), '/'.$relative);
+        [$operation] = $operations->match(version: 'v1', method: $request->method(), path: '/'.$relative);
         self::assertOperationContract($operation);
 
-        return $dispatcher->dispatch($request, 'v1', $relative);
+        return $dispatcher->dispatch(request: $request, version: 'v1', path: $relative);
     }
 
     public static function assertOperationContract(Operation $operation): void
@@ -53,7 +53,7 @@ final readonly class WebhookRouteRegistrar
             || $operation->requiredScopes !== [$scope]
             || $operation->idempotency !== $idempotency
             || $operation->effectMode !== $effect) {
-            throw new ApiError(CoreErrorCode::InternalError, 500, 'Webhook operation contract is unavailable.');
+            throw new ApiError(errorCode: CoreErrorCode::InternalError, status: 500, message: 'Webhook operation contract is unavailable.');
         }
     }
 }

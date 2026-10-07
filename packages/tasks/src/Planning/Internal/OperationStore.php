@@ -14,11 +14,11 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
 
 /** @internal Durable planning operation receipts. */
-final class OperationStore
+final readonly class OperationStore
 {
     public function __construct(
-        private readonly Connection $connection,
-        private readonly TaskOperationReceipts $receipts,
+        private Connection $connection,
+        private TaskOperationReceipts $receipts,
     ) {}
 
     /**
@@ -42,7 +42,7 @@ final class OperationStore
             return null;
         }
 
-        $existing = $this->receipts->find($this->connection, $token->requestKey);
+        $existing = $this->receipts->find(connection: $this->connection, requestKey: $token->requestKey);
 
         if ($existing === null) {
             return null;
@@ -73,7 +73,7 @@ final class OperationStore
                 resultRef: $resultRef,
             );
         } catch (QueryException $exception) {
-            $existing = $this->receipts->find($this->connection, $token->requestKey);
+            $existing = $this->receipts->find(connection: $this->connection, requestKey: $token->requestKey);
 
             if ($existing === null) {
                 throw $exception;

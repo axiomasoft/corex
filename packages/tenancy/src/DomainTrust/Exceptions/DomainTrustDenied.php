@@ -15,6 +15,6 @@ final class DomainTrustDenied extends CodedException
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TenancyErrorCode::DomainTrustDenied, ErrorCategory::Authorization, retryable: false);
+        return new ErrorDescriptor(code: TenancyErrorCode::DomainTrustDenied, category: ErrorCategory::Authorization, retryable: false);
     }
 }

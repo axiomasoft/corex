@@ -20,11 +20,11 @@ final readonly class MembershipSnapshot
         string $accountId,
         string $product,
         ?string $membershipId,
-        MembershipState $state,
+        public MembershipState $state,
         string $revision,
         string $revokeGeneration,
-        DateTimeImmutable $readStartedAt,
-        DateTimeImmutable $observedAt,
+        public DateTimeImmutable $readStartedAt,
+        public DateTimeImmutable $observedAt,
     ) {
         $this->profileVersion = CentralValue::profile(value: $profileVersion);
         $this->requestId = CentralValue::uuid(value: $requestId, field: 'request_id');
@@ -32,11 +32,8 @@ final readonly class MembershipSnapshot
         $this->accountId = CentralValue::uuid(value: $accountId, field: 'account_id');
         $this->product = CentralValue::product(value: $product);
         $this->membershipId = $membershipId === null ? null : CentralValue::uuid(value: $membershipId, field: 'membership_id');
-        $this->state = $state;
         $this->revision = CentralValue::counter(value: $revision);
         $this->revokeGeneration = CentralValue::counter(value: $revokeGeneration);
-        $this->readStartedAt = $readStartedAt;
-        $this->observedAt = $observedAt;
 
         if ($this->state === MembershipState::Active && $this->membershipId === null || $this->observedAt < $this->readStartedAt) {
             throw new CentralProtocolViolation('Invalid membership authority snapshot.');
@@ -55,13 +52,7 @@ final readonly class MembershipSnapshot
 
     public ?string $membershipId;
 
-    public MembershipState $state;
-
     public string $revision;
 
     public string $revokeGeneration;
-
-    public DateTimeImmutable $readStartedAt;
-
-    public DateTimeImmutable $observedAt;
 }

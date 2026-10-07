@@ -11,11 +11,11 @@ use CoreX\Tools\Contracts\ToolRequestContext;
 use Illuminate\Contracts\Container\Container;
 
 /** Module wrapper that adapts headless ToolRequestContext for HTTP-dependent Actions. */
-final class HeadlessWrappedHandler implements OperationHandler
+final readonly class HeadlessWrappedHandler implements OperationHandler
 {
     public function __construct(
-        private readonly HttpDependentHandler $inner,
-        private readonly Container $container,
+        private HttpDependentHandler $inner,
+        private Container $container,
     ) {}
 
     public function handle(RequestContext $context, array $input, array $parameters): array

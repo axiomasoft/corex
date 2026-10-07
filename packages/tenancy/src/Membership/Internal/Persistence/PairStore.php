@@ -75,13 +75,13 @@ final readonly class PairStore
         $this->assertSnapshotDigest($snapshotDigest);
 
         return $this->connection->transaction(function () use ($key, $operationId, $revision, $revokeGeneration, $snapshotDigest): PairState {
-            $current = $this->assertCurrentOperation($key, $operationId);
+            $current = $this->assertCurrentOperation(key: $key, operationId: $operationId);
 
-            if (self::compare($revision, $current->revision) < 0 || self::compare($revokeGeneration, $current->revokeGeneration) < 0) {
+            if (self::compare(left: $revision, right: $current->revision) < 0 || self::compare(left: $revokeGeneration, right: $current->revokeGeneration) < 0) {
                 throw new PairStoreViolation('Revision or revoke generation regression is denied.');
             }
 
-            if (self::compare($revision, $current->revision) === 0
+            if (self::compare(left: $revision, right: $current->revision) === 0
                 && $current->snapshotDigest !== null
                 && (! hash_equals($current->snapshotDigest, (string) $snapshotDigest)
                     || $current->revokeGeneration !== $revokeGeneration)) {
@@ -146,7 +146,7 @@ final readonly class PairStore
         Value::uuid($operationId);
 
         return $this->connection->transaction(function () use ($key, $operationId): PairState {
-            $current = $this->assertCurrentOperation($key, $operationId);
+            $current = $this->assertCurrentOperation(key: $key, operationId: $operationId);
 
             if ($current->appliedOperationId !== $operationId) {
                 throw new PairStoreViolation('Regrant is denied until the current authority snapshot is applied.');
@@ -200,10 +200,10 @@ final readonly class PairStore
             $this->ensureExists($key);
             $current = $this->lockedState($key);
 
-            if (self::compare($witness->revision, $current->revision) < 0
-                || self::compare($witness->revokeGeneration, $current->revokeGeneration) < 0
-                || self::compare($witness->localEpoch, $current->localEpoch) < 0
-                || self::compare($witness->operationFence, $current->operationFence) < 0) {
+            if (self::compare(left: $witness->revision, right: $current->revision) < 0
+                || self::compare(left: $witness->revokeGeneration, right: $current->revokeGeneration) < 0
+                || self::compare(left: $witness->localEpoch, right: $current->localEpoch) < 0
+                || self::compare(left: $witness->operationFence, right: $current->operationFence) < 0) {
                 throw new PairStoreViolation('Restore witness is behind durable pair state.');
             }
 

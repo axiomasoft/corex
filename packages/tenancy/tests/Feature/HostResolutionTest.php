@@ -123,7 +123,7 @@ function makeAccountWithDomainHR(?string $host, array $accountOverrides = [], ar
 
 function resolverHR(): HostAccountResolver
 {
-    return app(HostAccountResolver::class);
+    return resolve(HostAccountResolver::class);
 }
 
 function readerResolverHR(): HostAccountResolver
@@ -132,7 +132,7 @@ function readerResolverHR(): HostAccountResolver
         'central_connection' => 'host_reader',
     ]));
 
-    return new HostAccountResolver(app('db'), app(CacheFactory::class), $options);
+    return new HostAccountResolver(resolve('db'), resolve(CacheFactory::class), $options);
 }
 
 it('fences a host refilled by another connection before the writer commits', function (string $change): void {
@@ -165,7 +165,7 @@ it('rejects a lookup whose cache publication arrives after revocation commits', 
     $domain->update(['verified_at' => null]);
 
     $committed = false;
-    app('events')->listen(WritingKey::class, function (WritingKey $event) use (&$committed): void {
+    resolve('events')->listen(WritingKey::class, function (WritingKey $event) use (&$committed): void {
         if (! $committed && $event->key === HostAccountResolver::key('late.example.test')) {
             $committed = true;
             DB::connection('pgsql')->commit();
@@ -207,7 +207,7 @@ it('rejects late stale entries even if their generation was evicted', function (
     [$account, $domain] = makeAccountWithDomainHR('evicted.example.test');
     $reader = readerResolverHR();
     expect($reader->resolve('evicted.example.test'))->toBe($account->id);
-    $store = app(CacheFactory::class)->store('host_file');
+    $store = resolve(CacheFactory::class)->store('host_file');
     $oldEntry = $store->get(HostAccountResolver::key('evicted.example.test'));
     $domain->update(['verified_at' => null]);
     $store->put(HostAccountResolver::key('evicted.example.test'), $oldEntry, 300);
@@ -221,10 +221,10 @@ it('rejects late stale entries even if their generation was evicted', function (
 function accountSeenByHostMiddlewareHR(string $host, array $server = []): ?string
 {
     $seen = null;
-    app(ResolveTenantFromHost::class)->handle(
+    resolve(ResolveTenantFromHost::class)->handle(
         Request::create('http://'.$host.'/', 'GET', server: $server),
         function (Request $request) use (&$seen): Response {
-            $seen = app(TenancyManager::class)->context()?->account->id;
+            $seen = resolve(TenancyManager::class)->context()?->account->id;
 
             return new Response('ok');
         },
@@ -273,7 +273,7 @@ it('д: валидный host → внутри запроса контекст a
     [$account] = makeAccountWithDomainHR('acme.example.test');
 
     expect(accountSeenByHostMiddlewareHR('acme.example.test'))->toBe($account->id)
-        ->and(app(TenancyManager::class)->initialized())->toBeFalse()
+        ->and(resolve(TenancyManager::class)->initialized())->toBeFalse()
         ->and(DB::getDefaultConnection())->toBe('pgsql');
 });
 

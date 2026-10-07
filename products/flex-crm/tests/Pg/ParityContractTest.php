@@ -91,29 +91,29 @@ it('matches approved PostgreSQL fields lengths defaults indexes and foreign keys
 it('roundtrips all approved company and contact values and search', function (): void {
     $ctx = $this->crmContext->current();
     $source = Source::create(['workspace_id' => $ctx->tenant->workspace->id, 'code' => 'web', 'name' => ['ru' => 'Сайт']]);
-    $company = app(CreateCompany::class)->handle(new CompanyData(name: ' Компания ', legalName: 'ООО Компания', domain: 'example.test', inn: '123456789012', kpp: '123456789', ogrn: '123456789012345', phones: [['value' => '+1 (650) 253-0000', 'type' => 'work', 'is_primary' => true]], emails: [['value' => 'USER@example.test']], address: ['city' => 'Москва'], bankDetails: ['bik' => '044525225'], sourceId: $source->id, ownerId: $ctx->principalId))->fresh();
-    $contact = app(CreateContact::class)->handle(new ContactData(nameFirst: '  Иван  ', nameLast: 'Иванов', nameMiddle: 'Иванович', jobTitle: str_repeat('a', 190), birthday: '2000-02-29', phones: [['value' => '+16502530000']], emails: [['value' => 'C@example.test']], sourceId: $source->id, ownerId: $ctx->principalId))->fresh();
+    $company = resolve(CreateCompany::class)->handle(new CompanyData(name: ' Компания ', legalName: 'ООО Компания', domain: 'example.test', inn: '123456789012', kpp: '123456789', ogrn: '123456789012345', phones: [['value' => '+1 (650) 253-0000', 'type' => 'work', 'is_primary' => true]], emails: [['value' => 'USER@example.test']], address: ['city' => 'Москва'], bankDetails: ['bik' => '044525225'], sourceId: $source->id, ownerId: $ctx->principalId))->fresh();
+    $contact = resolve(CreateContact::class)->handle(new ContactData(nameFirst: '  Иван  ', nameLast: 'Иванов', nameMiddle: 'Иванович', jobTitle: str_repeat('a', 190), birthday: '2000-02-29', phones: [['value' => '+16502530000']], emails: [['value' => 'C@example.test']], sourceId: $source->id, ownerId: $ctx->principalId))->fresh();
     expect($company->name)->toBe('Компания')->and($company->inn)->toBe('123456789012')->and($company->kpp)->toBe('123456789')->and($company->ogrn)->toBe('123456789012345')
         ->and($company->domain)->toBe('example.test')->and($company->phones[0]['norm'])->toBe('+16502530000')->and($company->address)->toBe(['city' => 'Москва'])
         ->and($company->bank_details)->toBe(['bik' => '044525225'])->and($company->owner_id)->toBe($ctx->principalId)->and($company->source_id)->toBe($source->id)
         ->and($contact->display_name)->toBe('Иванов Иван Иванович')->and($contact->birthday->format('Y-m-d'))->toBe('2000-02-29')
         ->and($contact->created_by)->toEqual($ctx->actor->toArray())->and($company->id[14])->toBe('7');
     expect(DB::selectOne('SELECT search @@ plainto_tsquery(\'russian\', ?) AS found FROM crm_companies WHERE id=?', ['Компания', $company->id])->found)->toBeTrue();
-    $duplicate = app(CreateCompany::class)->handle(new CompanyData(name: 'Duplicate', inn: '123456789012'));
+    $duplicate = resolve(CreateCompany::class)->handle(new CompanyData(name: 'Duplicate', inn: '123456789012'));
     expect($duplicate->fresh()->phones)->toBe([])->and($duplicate->emails)->toBe([]);
 });
 
 it('uses deterministic channel fallback and nullable whitespace components', function (): void {
-    $contact = app(CreateContact::class)->handle(new ContactData(nameFirst: ' ', nameMiddle: ' ', emails: [['value' => 'b@example.test'], ['value' => 'A@example.test', 'is_primary' => true]]));
+    $contact = resolve(CreateContact::class)->handle(new ContactData(nameFirst: ' ', nameMiddle: ' ', emails: [['value' => 'b@example.test'], ['value' => 'A@example.test', 'is_primary' => true]]));
     expect($contact->name_first)->toBeNull()->and($contact->display_name)->toBe('a@example.test');
-    $phone = app(CreateContact::class)->handle(new ContactData(phones: [['value' => '+1 650 253 0000']]));
+    $phone = resolve(CreateContact::class)->handle(new ContactData(phones: [['value' => '+1 650 253 0000']]));
     expect($phone->display_name)->toBe('+16502530000');
-    $long = app(CreateContact::class)->handle(new ContactData(nameFirst: str_repeat('a', 120), nameLast: str_repeat('b', 120), nameMiddle: str_repeat('c', 120)));
+    $long = resolve(CreateContact::class)->handle(new ContactData(nameFirst: str_repeat('a', 120), nameLast: str_repeat('b', 120), nameMiddle: str_repeat('c', 120)));
     expect(mb_strlen($long->display_name))->toBe(255);
 });
 
 it('rejects malformed channels without storing a contact', function (array $channels, bool $phone): void {
-    expect(fn () => app(CreateContact::class)->handle(new ContactData(nameFirst: 'Valid', phones: $phone ? $channels : [], emails: $phone ? [] : $channels)))->toThrow(ValidationException::class);
+    expect(fn () => resolve(CreateContact::class)->handle(new ContactData(nameFirst: 'Valid', phones: $phone ? $channels : [], emails: $phone ? [] : $channels)))->toThrow(ValidationException::class);
     expect(DB::table('crm_contacts')->count())->toBe(0);
 })->with([
     [[['value' => '']], false], [[['value' => 'invalid']], false], [[['value' => 'a@example.test'], ['value' => 'A@example.test']], false],
@@ -124,27 +124,27 @@ it('rejects malformed channels without storing a contact', function (array $chan
 ]);
 
 it('rejects invalid dates and field widths', function (): void {
-    expect(fn () => app(CreateContact::class)->handle(new ContactData(nameFirst: 'Valid', birthday: '2023-02-29')))->toThrow(ValidationException::class);
-    expect(fn () => app(CreateCompany::class)->handle(new CompanyData(name: 'Valid', inn: str_repeat('1', 13))))->toThrow(ValidationException::class);
-    expect(fn () => app(CreateContact::class)->handle(new ContactData(nameFirst: str_repeat('a', 121))))->toThrow(ValidationException::class);
+    expect(fn () => resolve(CreateContact::class)->handle(new ContactData(nameFirst: 'Valid', birthday: '2023-02-29')))->toThrow(ValidationException::class);
+    expect(fn () => resolve(CreateCompany::class)->handle(new CompanyData(name: 'Valid', inn: str_repeat('1', 13))))->toThrow(ValidationException::class);
+    expect(fn () => resolve(CreateContact::class)->handle(new ContactData(nameFirst: str_repeat('a', 121))))->toThrow(ValidationException::class);
 });
 
 it('fails closed for missing context and revoked membership on reads and writes', function (): void {
-    $company = app(CreateCompany::class)->handle(new CompanyData(name: 'Visible'));
+    $company = resolve(CreateCompany::class)->handle(new CompanyData(name: 'Visible'));
     $ctx = $this->crmContext->current();
     DB::table('wsp_workspace_members')->where('user_id', $ctx->principalId)->update(['status' => 'revoked']);
     expect(fn () => Company::find($company->id))->toThrow(AuthorizationException::class);
-    expect(fn () => app(CreateCompany::class)->handle(new CompanyData(name: 'Denied')))->toThrow(AuthorizationException::class);
+    expect(fn () => resolve(CreateCompany::class)->handle(new CompanyData(name: 'Denied')))->toThrow(AuthorizationException::class);
     $this->crmContext->context = null;
     expect(fn () => Company::count())->toThrow(AuthorizationException::class);
 });
 
 it('separates NULL account data current workspace and foreign workspaces', function (): void {
     $ctx = $this->crmContext->current();
-    $local = app(CreateCompany::class)->handle(new CompanyData(name: 'Local'));
-    expect(fn () => app(CreateCompany::class)->handle(new CompanyData(name: 'Denied NULL', accountLevel: true)))->toThrow(AuthorizationException::class);
+    $local = resolve(CreateCompany::class)->handle(new CompanyData(name: 'Local'));
+    expect(fn () => resolve(CreateCompany::class)->handle(new CompanyData(name: 'Denied NULL', accountLevel: true)))->toThrow(AuthorizationException::class);
     $this->crmContext->context = new ExecutionContext(tenant: $ctx->tenant, connectionName: 'pgsql', actor: $ctx->actor, principalId: $ctx->principalId, allowAccountLevel: true);
-    $global = app(CreateCompany::class)->handle(new CompanyData(name: 'Global', accountLevel: true));
+    $global = resolve(CreateCompany::class)->handle(new CompanyData(name: 'Global', accountLevel: true));
     $this->crmContext->context = $ctx;
     expect(Company::pluck('id')->all())->toBe([$local->id]);
     $ws = (string) Str::uuid7();
@@ -153,36 +153,36 @@ it('separates NULL account data current workspace and foreign workspaces', funct
     $otherTenant = new TenantContext($ctx->tenant->account, new WorkspaceRef(id: $ws, slug: 'other', type: 'main', path: '', parentId: null));
     $this->crmContext->context = new ExecutionContext(tenant: $otherTenant, connectionName: 'pgsql', actor: $ctx->actor, principalId: $ctx->principalId);
     expect(Company::count())->toBe(0);
-    expect(fn () => app(AssociateContactCompany::class)->handle(contactId: (string) Str::uuid7(), companyId: $local->id))->toThrow(ModelNotFoundException::class);
+    expect(fn () => resolve(AssociateContactCompany::class)->handle(contactId: (string) Str::uuid7(), companyId: $local->id))->toThrow(ModelNotFoundException::class);
     $this->crmContext->context = new ExecutionContext(tenant: new TenantContext($ctx->tenant->account), connectionName: 'pgsql', actor: $ctx->actor, principalId: $ctx->principalId, allowAccountLevel: true);
     expect(Company::pluck('id')->all())->toBe([$global->id]);
-    expect(fn () => app(CreateCompany::class)->handle(new CompanyData(name: 'Missing workspace')))->toThrow(AuthorizationException::class);
+    expect(fn () => resolve(CreateCompany::class)->handle(new CompanyData(name: 'Missing workspace')))->toThrow(AuthorizationException::class);
 });
 
 it('rejects associations between NULL and workspace even with account capability', function (): void {
     $ctx = $this->crmContext->current();
     $this->crmContext->context = new ExecutionContext(tenant: $ctx->tenant, connectionName: 'pgsql', actor: $ctx->actor, principalId: $ctx->principalId, allowAccountLevel: true);
-    $company = app(CreateCompany::class)->handle(new CompanyData(name: 'Global', accountLevel: true));
-    $contact = app(CreateContact::class)->handle(new ContactData(nameFirst: 'Local'));
-    expect(fn () => app(AssociateContactCompany::class)->handle(contactId: $contact->id, companyId: $company->id))->toThrow(AuthorizationException::class);
+    $company = resolve(CreateCompany::class)->handle(new CompanyData(name: 'Global', accountLevel: true));
+    $contact = resolve(CreateContact::class)->handle(new ContactData(nameFirst: 'Local'));
+    expect(fn () => resolve(AssociateContactCompany::class)->handle(contactId: $contact->id, companyId: $company->id))->toThrow(AuthorizationException::class);
 });
 
 it('rejects foreign or inactive source and owner references', function (): void {
-    expect(fn () => app(CreateCompany::class)->handle(new CompanyData(name: 'Foreign', ownerId: (string) Str::uuid7())))->toThrow(AuthorizationException::class);
-    expect(fn () => app(CreateContact::class)->handle(new ContactData(nameFirst: 'Foreign', sourceId: (string) Str::uuid7())))->toThrow(AuthorizationException::class);
+    expect(fn () => resolve(CreateCompany::class)->handle(new CompanyData(name: 'Foreign', ownerId: (string) Str::uuid7())))->toThrow(AuthorizationException::class);
+    expect(fn () => resolve(CreateContact::class)->handle(new ContactData(nameFirst: 'Foreign', sourceId: (string) Str::uuid7())))->toThrow(AuthorizationException::class);
     $owner = (string) Str::uuid7();
     DB::table('users')->insert(['id' => $owner, 'name' => 'No membership']);
-    expect(fn () => app(CreateCompany::class)->handle(new CompanyData(name: 'Foreign', ownerId: $owner)))->toThrow(AuthorizationException::class);
+    expect(fn () => resolve(CreateCompany::class)->handle(new CompanyData(name: 'Foreign', ownerId: $owner)))->toThrow(AuthorizationException::class);
     $ws = (string) Str::uuid7();
     DB::table('wsp_workspaces')->insert(['id' => $ws, 'slug' => 'foreign']);
     $source = Source::create(['workspace_id' => $ws, 'code' => 'foreign', 'name' => ['ru' => 'Foreign']]);
-    expect(fn () => app(CreateCompany::class)->handle(new CompanyData(name: 'Foreign', sourceId: $source->id)))->toThrow(AuthorizationException::class);
+    expect(fn () => resolve(CreateCompany::class)->handle(new CompanyData(name: 'Foreign', sourceId: $source->id)))->toThrow(AuthorizationException::class);
 });
 
 it('rejects forged actors and mismatched account connections', function (): void {
     $ctx = $this->crmContext->current();
     $this->crmContext->context = new ExecutionContext(tenant: $ctx->tenant, connectionName: 'pgsql', actor: new Actor(source: 'user', id: (string) Str::uuid7(), name: 'Forged'), principalId: $ctx->principalId);
-    expect(fn () => app(CreateCompany::class)->handle(new CompanyData(name: 'Forgery')))->toThrow(AuthorizationException::class);
+    expect(fn () => resolve(CreateCompany::class)->handle(new CompanyData(name: 'Forgery')))->toThrow(AuthorizationException::class);
     $this->crmContext->context = $ctx;
     $resolver = Mockery::mock(AccountConnectionResolver::class);
     $resolver->shouldReceive('resolve')->andReturn(new DatabaseConnectionConfig(driver: 'pgsql', host: '127.0.0.1', port: 5434, database: 'foreign_account_test', username: 'corex'));
@@ -195,7 +195,7 @@ it('stores each admitted B13 actor kind through a trusted run-as context', funct
     $ctx = $this->crmContext->current();
     $actor = new Actor(source: $source, id: $source === 'user' ? (string) $ctx->principalId : 'verified-'.$source, name: 'Verified '.$source);
     $this->crmContext->context = new ExecutionContext(tenant: $ctx->tenant, connectionName: 'pgsql', actor: $actor, principalId: $ctx->principalId);
-    $company = app(CreateCompany::class)->handle(new CompanyData(name: 'Actor'));
+    $company = resolve(CreateCompany::class)->handle(new CompanyData(name: 'Actor'));
     expect($company->fresh()->created_by)->toEqual($actor->toArray());
 })->with(['user', 'agent', 'api', 'workflow', 'import', 'system']);
 
@@ -207,9 +207,9 @@ it('dispatches mutation events only after the successful outer commit', function
         });
     }
     $create = function () use (&$events): void {
-        $company = app(CreateCompany::class)->handle(new CompanyData(name: 'Commit'));
-        $contact = app(CreateContact::class)->handle(new ContactData(nameFirst: 'Commit'));
-        app(AssociateContactCompany::class)->handle(contactId: $contact->id, companyId: $company->id);
+        $company = resolve(CreateCompany::class)->handle(new CompanyData(name: 'Commit'));
+        $contact = resolve(CreateContact::class)->handle(new ContactData(nameFirst: 'Commit'));
+        resolve(AssociateContactCompany::class)->handle(contactId: $contact->id, companyId: $company->id);
         expect($events)->toBe([]);
     };
     expect(fn () => DB::transaction(function () use ($create): void {
@@ -226,16 +226,16 @@ it('keeps committed data when a synchronous after-commit listener fails', functi
     Event::listen(CompanyCreated::class, static function (): void {
         throw new RuntimeException('listener');
     });
-    expect(fn () => app(CreateCompany::class)->handle(new CompanyData(name: 'Committed')))->toThrow(RuntimeException::class, 'listener');
+    expect(fn () => resolve(CreateCompany::class)->handle(new CompanyData(name: 'Committed')))->toThrow(RuntimeException::class, 'listener');
     expect(DB::table('crm_companies')->where('name', 'Committed')->count())->toBe(1);
 });
 
 it('preserves pivot on soft delete and applies hard delete SET NULL and CASCADE', function (): void {
     $ctx = $this->crmContext->current();
     $source = Source::create(['code' => 'account', 'name' => ['ru' => 'Account']]);
-    $company = app(CreateCompany::class)->handle(new CompanyData(name: 'Company', sourceId: $source->id, ownerId: $ctx->principalId));
-    $contact = app(CreateContact::class)->handle(new ContactData(nameFirst: 'Contact', sourceId: $source->id, ownerId: $ctx->principalId));
-    app(AssociateContactCompany::class)->handle(contactId: $contact->id, companyId: $company->id);
+    $company = resolve(CreateCompany::class)->handle(new CompanyData(name: 'Company', sourceId: $source->id, ownerId: $ctx->principalId));
+    $contact = resolve(CreateContact::class)->handle(new ContactData(nameFirst: 'Contact', sourceId: $source->id, ownerId: $ctx->principalId));
+    resolve(AssociateContactCompany::class)->handle(contactId: $contact->id, companyId: $company->id);
     $company->delete();
     expect(DB::table('crm_contact_company')->count())->toBe(1)->and($contact->companies()->count())->toBe(0);
     DB::table('crm_sources')->where('id', $source->id)->delete();
@@ -249,10 +249,10 @@ it('preserves pivot on soft delete and applies hard delete SET NULL and CASCADE'
 });
 
 it('enforces pair and primary constraints for direct database writers', function (): void {
-    $company = app(CreateCompany::class)->handle(new CompanyData(name: 'One'));
-    $other = app(CreateCompany::class)->handle(new CompanyData(name: 'Two'));
-    $contact = app(CreateContact::class)->handle(new ContactData(nameFirst: 'Contact'));
-    $action = app(AssociateContactCompany::class);
+    $company = resolve(CreateCompany::class)->handle(new CompanyData(name: 'One'));
+    $other = resolve(CreateCompany::class)->handle(new CompanyData(name: 'Two'));
+    $contact = resolve(CreateContact::class)->handle(new ContactData(nameFirst: 'Contact'));
+    $action = resolve(AssociateContactCompany::class);
     $action->handle(contactId: $contact->id, companyId: $company->id, isPrimary: true);
     expect(fn () => $action->handle(contactId: $contact->id, companyId: $company->id))->toThrow(ValidationException::class);
     expect(fn () => $action->handle(contactId: $contact->id, companyId: $other->id, isPrimary: true))->toThrow(ValidationException::class);
@@ -267,9 +267,9 @@ it('enforces pair and primary constraints for direct database writers', function
 });
 
 it('serializes competing primary actions and rejects the loser after commit', function (): void {
-    $company = app(CreateCompany::class)->handle(new CompanyData(name: 'Winner'));
-    $other = app(CreateCompany::class)->handle(new CompanyData(name: 'Loser'));
-    $contact = app(CreateContact::class)->handle(new ContactData(nameFirst: 'Contact'));
+    $company = resolve(CreateCompany::class)->handle(new CompanyData(name: 'Winner'));
+    $other = resolve(CreateCompany::class)->handle(new CompanyData(name: 'Loser'));
+    $contact = resolve(CreateContact::class)->handle(new ContactData(nameFirst: 'Contact'));
     $ctx = $this->crmContext->current();
     config(['database.connections.primary_race' => config('database.connections.pgsql')]);
     DB::connection('primary_race')->beginTransaction();
@@ -285,7 +285,7 @@ it('serializes competing primary actions and rejects the loser after commit', fu
         $fixture->context = $race;
 
         try {
-            app(AssociateContactCompany::class)->handle(contactId: $contact->id, companyId: $other->id, isPrimary: true);
+            resolve(AssociateContactCompany::class)->handle(contactId: $contact->id, companyId: $other->id, isPrimary: true);
             test()->fail('Competing primary action did not block.');
         } catch (QueryException $exception) {
             expect($exception->errorInfo[0])->toBe('55P03');
@@ -295,9 +295,9 @@ it('serializes competing primary actions and rejects the loser after commit', fu
     });
 
     try {
-        app(AssociateContactCompany::class)->handle(contactId: $contact->id, companyId: $company->id, isPrimary: true);
+        resolve(AssociateContactCompany::class)->handle(contactId: $contact->id, companyId: $company->id, isPrimary: true);
         $fixture->context = $race;
-        expect(fn () => app(AssociateContactCompany::class)->handle(contactId: $contact->id, companyId: $other->id, isPrimary: true))->toThrow(ValidationException::class);
+        expect(fn () => resolve(AssociateContactCompany::class)->handle(contactId: $contact->id, companyId: $other->id, isPrimary: true))->toThrow(ValidationException::class);
         expect($observed)->toBeTrue()->and(DB::table('crm_contact_company')->where('is_primary', true)->count())->toBe(1);
     } finally {
         $fixture->context = $ctx;

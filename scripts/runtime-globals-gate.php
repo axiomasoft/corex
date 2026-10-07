@@ -77,7 +77,7 @@ fwrite(STDOUT, 'runtime-globals-gate: '.implode(', ', array_map(
     RULES,
 ))." outside baseline\n");
 
-$baselineFindings = array_sum(array_map(static fn (array $rules): int => array_sum($rules), $baseline));
+$baselineFindings = array_sum(array_map(array_sum(...), $baseline));
 fwrite(STDOUT, sprintf(
     "runtime-globals-gate: baseline files=%d findings=%d (prefix %s)\n",
     count($baseline),
@@ -226,13 +226,7 @@ function loadBaseline(string $path, array $prefixes): array
  */
 function startsWithAny(string $path, array $prefixes): bool
 {
-    foreach ($prefixes as $prefix) {
-        if (str_starts_with($path, $prefix)) {
-            return true;
-        }
-    }
-
-    return false;
+    return array_any($prefixes, fn ($prefix) => str_starts_with($path, $prefix));
 }
 
 /**
@@ -744,7 +738,7 @@ function staticClockCall(array $tokens, int $index, string $name): ?string
 {
     $leaf = substr($name, (int) strrpos('\\'.$name, '\\'));
 
-    if (! in_array(strtolower($leaf), array_map('strtolower', CARBON_CLASSES), true)) {
+    if (! in_array(strtolower($leaf), array_map(strtolower(...), CARBON_CLASSES), true)) {
         return null;
     }
 
@@ -805,7 +799,7 @@ function newExpressionFindings(array $tokens, int $newIndex, int $line, array $c
     $name = resolveClassName($tokens[$next][1], $classImports);
     $leaf = leafName($name);
 
-    if (! in_array(strtolower($leaf), array_map('strtolower', CLOCK_CLASSES), true)) {
+    if (! in_array(strtolower($leaf), array_map(strtolower(...), CLOCK_CLASSES), true)) {
         return [];
     }
 

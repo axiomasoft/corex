@@ -30,8 +30,6 @@ use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Data\WebhookTopic;
-use CoreX\Webhooks\Internal\PermitPublicEgressPolicy;
-use CoreX\Webhooks\Internal\SqlWebhookSubscriptionStore;
 use CoreX\Webhooks\Internal\WebhookManagement;
 use CoreX\Webhooks\Internal\WebhookTopicCatalogue;
 use CoreX\Webhooks\Laravel\WebhookRouteRegistrar;
@@ -64,16 +62,14 @@ final class WebhookManagementTest extends TestCase
         $this->selectSchema();
         $this->connection = DB::connection('api_tenant');
 
-        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-26T15:00:00.000000+00:00'));
         $this->contexts = new ContextFixture;
         $this->contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
         $restorer = new GuardedTenantContextRestorer($this->contexts);
-        $catalogue = $this->catalogue();
         $this->management = new WebhookManagement(
             connection: $this->connection,
             contexts: $restorer,
-            subscriptions: new SqlWebhookSubscriptionStore($this->connection, $restorer, $catalogue, $this->clock, new PermitPublicEgressPolicy),
             cursors: new SignedCursorCodec($this->clock, $this->keyring()),
         );
     }
@@ -172,7 +168,7 @@ final class WebhookManagementTest extends TestCase
             server: ['CONTENT_TYPE' => 'application/json', 'HTTP_IDEMPOTENCY_KEY' => 'replay-key'],
             content: '{}',
         );
-        $dispatcher = (new ReflectionClass(OperationDispatcher::class))->newInstanceWithoutConstructor();
+        $dispatcher = new ReflectionClass(OperationDispatcher::class)->newInstanceWithoutConstructor();
         $extract = new ReflectionMethod(OperationDispatcher::class, 'idempotencyKey');
 
         self::assertSame('replay-key', $extract->invoke($dispatcher, $request));

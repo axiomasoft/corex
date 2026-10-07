@@ -45,7 +45,7 @@ final readonly class AssociateContactCompany
             if (! $link->save()) {
                 throw ValidationException::withMessages(['association' => 'CRM association was vetoed by an observer.']);
             }
-            ContactCompanyAssociated::dispatch($link, $ctx->actor);
+            event(new ContactCompanyAssociated($link, $ctx->actor));
 
             return $link;
         });

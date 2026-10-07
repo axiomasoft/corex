@@ -1,0 +1,25 @@
+{
+  "classification": "source",
+  "commands": [
+    {
+      "exit": 0,
+      "output": "validate.json",
+      "role": "validate",
+      "sha256": "021081b07c0098666d3ada90f5006ff7c6b062b97a47579931cb28de463e814c"
+    },
+    {
+      "exit": 0,
+      "output": "audit.json",
+      "role": "audit",
+      "sha256": "10b2bf745a4cee69fe88a230184255bf3162904e6db78a82c652676a67b1b0e8"
+    }
+  ],
+  "effective_manifest_sha256": "01b7212940c87e59fe63ebff450b116b71e984b8df5a99e568202596d4908874",
+  "lock_kind": "source",
+  "lock_sha256": "f4af5297e4ecf653f534920d80eb9ae22b6ae61e529b2d1d03652aa273e10d40",
+  "manifest": "packages/custom-fields/composer.json",
+  "manifest_sha256": "01b7212940c87e59fe63ebff450b116b71e984b8df5a99e568202596d4908874",
+  "name": "axiomasoft/corex-custom-fields",
+  "source_lock_sha256": "f4af5297e4ecf653f534920d80eb9ae22b6ae61e529b2d1d03652aa273e10d40",
+  "status": "GREEN"
+}

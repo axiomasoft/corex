@@ -20,7 +20,7 @@ final class FeaturesRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
-        $app->singleton(FeatureFlags::class, static fn (Application $app): FeatureFlags => ConfiguredImplementation::resolve($app, FeatureFlags::class, $app->make(CoreOptions::class)->featureFlags));
+        $app->singleton(FeatureFlags::class, static fn (Application $app): FeatureFlags => ConfiguredImplementation::resolve(app: $app, contract: FeatureFlags::class, implementation: $app->make(CoreOptions::class)->featureFlags));
     }
 
     #[Override]

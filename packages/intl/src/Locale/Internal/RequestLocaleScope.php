@@ -40,9 +40,4 @@ final class RequestLocaleScope
     {
         array_pop($this->stack);
     }
-
-    public function clear(): void
-    {
-        $this->stack = [];
-    }
 }

@@ -16,6 +16,7 @@ use CoreX\Modules\Internal\Events\ManifestListeners;
 use CoreX\Modules\Internal\Registry\CompiledModuleRegistry;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Modules\Testing\ArrayEntityRegistry;
+use Illuminate\Support\Facades\Request;
 
 final class RemediationManifestListener
 {
@@ -42,7 +43,7 @@ it('resolves module activity once per entity-list operation without caching acro
             capabilities: [], fields: [], titleAttribute: null,
         ));
     }
-    $context = app(TenantContextResolver::class)->current();
+    $context = resolve(TenantContextResolver::class)->current();
     expect($registry->all($context))->toHaveCount(10)->and($calls)->toBe(1);
     $active = [];
     expect($registry->all($context))->toBeEmpty()->and($calls)->toBe(2);
@@ -67,7 +68,7 @@ it('dispatches compiled manifest listeners once only while their owning module i
     $registry->shouldReceive('isActive')->andReturnUsing(function () use (&$active): bool {
         return $active;
     });
-    $listeners = new ManifestListeners(app('events'), $registry, app(TenantContextResolver::class));
+    $listeners = new ManifestListeners(resolve('events'), $registry, resolve(TenantContextResolver::class));
     $listeners->register($compiled);
     $listeners->register($compiled);
     event(new stdClass);
@@ -81,7 +82,7 @@ it('dispatches compiled manifest listeners once only while their owning module i
 });
 
 it('can compile a missing production registry while ordinary console boot still fails', function (): void {
-    $previousArgv = $_SERVER['argv'];
+    $previousArgv = Request::server('argv');
     $this->app->detectEnvironment(static fn (): string => 'production');
     $this->app->useBootstrapPath(database_path('bootstrap'));
 
@@ -94,9 +95,9 @@ it('can compile a missing production registry while ordinary console boot still 
         $path = base_path(CompiledModuleRegistry::CACHE_PATH);
         expect(is_file($path))->toBeTrue();
         unlink($path);
-        app(ModuleRegistry::class)->flush();
+        resolve(ModuleRegistry::class)->flush();
         $_SERVER['argv'] = ['artisan', 'list'];
-        expect(fn () => (new ModulesServiceProvider($this->app))->boot())->toThrow(RuntimeException::class);
+        expect(fn () => new ModulesServiceProvider($this->app)->boot())->toThrow(RuntimeException::class);
     } finally {
         $_SERVER['argv'] = $previousArgv;
         $this->app->detectEnvironment(static fn (): string => 'testing');

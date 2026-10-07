@@ -81,7 +81,7 @@ it('captures source pages inside a repeatable-read transaction', function (): vo
     $manifestId = '88888888-8888-4888-8888-888888888888';
     $observed = (object) ['isolation' => null];
     exportInsertJob($jobId, $hash);
-    $source = new class(exportRecord($hash), $observed) implements ExportSource
+    $source = new readonly class(exportRecord($hash), $observed) implements ExportSource
     {
         public function __construct(private CanonicalRecord $record, private object $observed) {}
 
@@ -127,7 +127,7 @@ function exportRecord(string $hash): CanonicalRecord
 
 function exportRunner(CanonicalRecord $record, ?ExportSource $source = null, bool $allowed = true): DatabaseExportRunner
 {
-    $source ??= new class($record) implements ExportSource
+    $source ??= new readonly class($record) implements ExportSource
     {
         public function __construct(private CanonicalRecord $record) {}
 
@@ -136,7 +136,7 @@ function exportRunner(CanonicalRecord $record, ?ExportSource $source = null, boo
             return new ExportPage([$this->record], null, true);
         }
     };
-    $storage = new class implements TenantStorage
+    $storage = new readonly class implements TenantStorage
     {
         private Filesystem $disk;
 

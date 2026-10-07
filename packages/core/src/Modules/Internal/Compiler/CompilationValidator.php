@@ -86,7 +86,7 @@ final class CompilationValidator
             $owner = $ownerByPrefix[$manifest->tablePrefix] ?? null;
 
             if ($owner !== null) {
-                throw CompilationException::duplicateTablePrefix($manifest->tablePrefix, $owner, $manifest->composerName);
+                throw CompilationException::duplicateTablePrefix(prefix: $manifest->tablePrefix, firstModule: $owner, secondModule: $manifest->composerName);
             }
 
             $ownerByPrefix[$manifest->tablePrefix] = $manifest->composerName;
@@ -111,7 +111,7 @@ final class CompilationValidator
                 }
 
                 if (! in_array($dep->package, $installed, true)) {
-                    throw CompilationException::unmetRequirement($manifest->composerName, $dep->package);
+                    throw CompilationException::unmetRequirement(composerName: $manifest->composerName, missingDependency: $dep->package);
                 }
             }
         }
@@ -123,7 +123,7 @@ final class CompilationValidator
         foreach ($manifests as $manifest) {
             foreach ($manifest->extenders as $extender) {
                 if (! $this->isKnownExtender($extender)) {
-                    throw CompilationException::unknownExtender($manifest->composerName, $extender::class);
+                    throw CompilationException::unknownExtender(composerName: $manifest->composerName, class: $extender::class);
                 }
             }
         }
@@ -132,7 +132,7 @@ final class CompilationValidator
     public function validateEntityHandleKnown(string $declaringComposerName, string $entityHandle, bool $known): void
     {
         if (! $known) {
-            throw CompilationException::unknownEntityHandle($declaringComposerName, $entityHandle);
+            throw CompilationException::unknownEntityHandle(composerName: $declaringComposerName, entityHandle: $entityHandle);
         }
     }
 
@@ -163,10 +163,10 @@ final class CompilationValidator
 
             if ($previous !== null) {
                 throw CompilationException::duplicateIdentity(
-                    $record->point,
-                    $record->id,
-                    $previous->owner,
-                    $record->owner,
+                    point: $record->point,
+                    id: $record->id,
+                    firstOwner: $previous->owner,
+                    secondOwner: $record->owner,
                 );
             }
 
@@ -204,26 +204,26 @@ final class CompilationValidator
 
                 if ($target === null) {
                     throw CompilationException::replacementTargetMissing(
-                        $replacement->point,
-                        $replacement->targetId,
-                        $manifest->composerName,
+                        point: $replacement->point,
+                        targetId: $replacement->targetId,
+                        owner: $manifest->composerName,
                     );
                 }
 
                 if ($incoming === null) {
                     throw CompilationException::replacementMissing(
-                        $replacement->point,
-                        $replacement->replacementId,
-                        $manifest->composerName,
+                        point: $replacement->point,
+                        replacementId: $replacement->replacementId,
+                        owner: $manifest->composerName,
                     );
                 }
 
                 if ($incoming->owner !== $manifest->composerName) {
                     throw CompilationException::replacementForeignOwner(
-                        $replacement->point,
-                        $replacement->replacementId,
-                        $manifest->composerName,
-                        $incoming->owner,
+                        point: $replacement->point,
+                        replacementId: $replacement->replacementId,
+                        owner: $manifest->composerName,
+                        actualOwner: $incoming->owner,
                     );
                 }
 
@@ -231,10 +231,10 @@ final class CompilationValidator
 
                 if ($claimed !== null) {
                     throw CompilationException::replacementDuplicateIncoming(
-                        $replacement->point,
-                        $replacement->targetId,
-                        $claimed,
-                        $manifest->composerName,
+                        point: $replacement->point,
+                        targetId: $replacement->targetId,
+                        firstOwner: $claimed,
+                        secondOwner: $manifest->composerName,
                     );
                 }
 
@@ -249,7 +249,7 @@ final class CompilationValidator
             }
         }
 
-        $this->assertAcyclic($graph, $byKey);
+        $this->assertAcyclic(graph: $graph, nodes: $byKey);
 
         $effective = array_values(array_filter(
             $records,
@@ -285,7 +285,7 @@ final class CompilationValidator
             $afterId = $panel.':'.$record->after;
 
             if (! isset($menus[$afterId])) {
-                throw CompilationException::menuAfterMissing($record->id, $record->after, $record->owner);
+                throw CompilationException::menuAfterMissing(id: $record->id, after: $record->after, owner: $record->owner);
             }
         }
 
@@ -301,7 +301,7 @@ final class CompilationValidator
             $graph[$record->id][] = $panel.':'.$record->after;
         }
 
-        $this->assertAcyclic($graph, $menus, menu: true);
+        $this->assertAcyclic(graph: $graph, nodes: $menus, menu: true);
     }
 
     /**
@@ -323,7 +323,7 @@ final class CompilationValidator
 
                 $point = $nodes[$node]->point ?? 'unknown';
 
-                throw CompilationException::replacementCycle($point, $cycle);
+                throw CompilationException::replacementCycle(point: $point, path: $cycle);
             }
 
             if (isset($visited[$node])) {
@@ -344,12 +344,6 @@ final class CompilationValidator
 
     private function isKnownExtender(Extender $extender): bool
     {
-        foreach (PipelineStages::ORDER as $class) {
-            if ($extender instanceof $class) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any(PipelineStages::ORDER, fn ($class) => $extender instanceof $class);
     }
 }

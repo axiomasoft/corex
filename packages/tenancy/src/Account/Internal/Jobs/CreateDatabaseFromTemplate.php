@@ -34,7 +34,7 @@ final class CreateDatabaseFromTemplate implements ShouldQueue
         TenancyOptions $options,
         TemplateDatabaseCloner $manager,
     ): bool {
-        $snapshot = AccountTemplateSnapshot::capture($this->account, $options->centralConnection);
+        $snapshot = AccountTemplateSnapshot::capture(account: $this->account, centralConnection: $options->centralConnection);
 
         $templateIntegrityVerifier->verifyCurrent(
             version: $snapshot->templateVersion,

@@ -1,7 +1,6 @@
-diff --git a/packages/core/src/Messaging/Internal/DatabasePollPubSub.php b/packages/core/src/Messaging/Internal/DatabasePollPubSub.php
 --- a/packages/core/src/Messaging/Internal/DatabasePollPubSub.php
 +++ b/packages/core/src/Messaging/Internal/DatabasePollPubSub.php
-@@ -132,24 +132,7 @@
+@@ -133,24 +133,7 @@
          string $subscriber,
          bool $replayBacklog,
      ): int {
@@ -20,7 +19,7 @@ diff --git a/packages/core/src/Messaging/Internal/DatabasePollPubSub.php b/packa
 -        assert(is_int($maximum) || is_numeric($maximum));
 -        $start = (int) $maximum;
 -
--        $this->persistCursor($connection, $cursorsTable, $channel, $subscriber, $start);
+-        $this->persistCursor(connection: $connection, cursorsTable: $cursorsTable, channel: $channel, subscriber: $subscriber, position: $start);
 -
 -        return $start;
 +        return 0;

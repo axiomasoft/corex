@@ -20,7 +20,7 @@ function p106Catalogue(array $fields, ?string $hash = null): FieldCatalogue
     $hash ??= str_repeat('a', 64);
     $snapshot = new FieldSnapshot('contact', 'attributes/2', $hash, $fields, []);
 
-    return new class($snapshot) implements FieldCatalogue
+    return new readonly class($snapshot) implements FieldCatalogue
     {
         public function __construct(private FieldSnapshot $snapshot) {}
 
@@ -49,7 +49,7 @@ function p106Field(array $overrides = []): array
 
 function p106Guard(FieldCatalogue $catalogue, ArrayObject $calls, ?string $deniedAction = null): AttributeWriteGuard
 {
-    $authorizer = new class($calls, $deniedAction) implements DataScopeAuthorizer
+    $authorizer = new readonly class($calls, $deniedAction) implements DataScopeAuthorizer
     {
         public function __construct(
             private ArrayObject $calls,

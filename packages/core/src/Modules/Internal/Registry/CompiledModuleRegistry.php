@@ -146,9 +146,9 @@ final class CompiledModuleRegistry implements ModuleRegistry
         $version = ($this->versionResolver)($ctx);
 
         return $this->cache->rememberEnabled(
-            $ctx->account->id,
-            $version,
-            fn (): array => $this->stateReader->enabledFor($ctx),
+            accountId: $ctx->account->id,
+            version: $version,
+            resolver: fn (): array => $this->stateReader->enabledFor($ctx),
         );
     }
 

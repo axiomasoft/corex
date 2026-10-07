@@ -21,13 +21,13 @@ use Illuminate\Support\Str;
 use Override;
 use Psr\Clock\ClockInterface;
 
-final class SqlRateImporter implements RateImporter
+final readonly class SqlRateImporter implements RateImporter
 {
     public function __construct(
-        private readonly Connection $connection,
-        private readonly DataScopeAuthorizer $authorizer,
-        private readonly ClockInterface $clock,
-        private readonly int $batchLimit = 1000,
+        private Connection $connection,
+        private DataScopeAuthorizer $authorizer,
+        private ClockInterface $clock,
+        private int $batchLimit = 1000,
     ) {}
 
     #[Override]

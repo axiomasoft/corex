@@ -21,6 +21,6 @@ final class PlanningConflict extends DomainException implements DescribesError
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TasksErrorCode::PlanningConflict, ErrorCategory::Conflict, retryable: false);
+        return new ErrorDescriptor(code: TasksErrorCode::PlanningConflict, category: ErrorCategory::Conflict, retryable: false);
     }
 }

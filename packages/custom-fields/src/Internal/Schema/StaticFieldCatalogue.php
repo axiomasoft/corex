@@ -39,7 +39,7 @@ final readonly class StaticFieldCatalogue implements FieldCatalogue
 
         if ($this->appended instanceof FieldCatalogue) {
             try {
-                $extra = $this->appended->snapshot($scope, $entity)->activeFields;
+                $extra = $this->appended->snapshot(scope: $scope, entity: $entity)->activeFields;
             } catch (RuntimeException) {
                 $extra = [];
             }
@@ -50,7 +50,7 @@ final readonly class StaticFieldCatalogue implements FieldCatalogue
         $payload = json_encode($fields, JSON_THROW_ON_ERROR);
         $hash = hash('sha256', $entity."\n".$payload);
 
-        $fields = Validation::validatedMapList($fields, 'active fields');
+        $fields = Validation::validatedMapList(values: $fields, name: 'active fields');
 
         return new FieldSnapshot(
             entity: $entity,

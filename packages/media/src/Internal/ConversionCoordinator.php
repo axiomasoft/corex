@@ -14,15 +14,15 @@ use Illuminate\Database\ConnectionInterface;
 use Psr\Clock\ClockInterface;
 use Throwable;
 
-final class ConversionCoordinator
+final readonly class ConversionCoordinator
 {
     public function __construct(
-        private readonly ConnectionInterface $connection,
-        private readonly TenantStorage $storage,
-        private readonly ConversionProfiles $profiles,
-        private readonly MediaOperationStore $operations,
-        private readonly MediaOptions $options,
-        private readonly ClockInterface $clock,
+        private ConnectionInterface $connection,
+        private TenantStorage $storage,
+        private ConversionProfiles $profiles,
+        private MediaOperationStore $operations,
+        private MediaOptions $options,
+        private ClockInterface $clock,
     ) {}
 
     public function request(string $fileId, string $profileKey): ?MediaConversionRef
@@ -74,7 +74,7 @@ final class ConversionCoordinator
         if ($driver === null) {
             return;
         }
-        $claim = $this->operations->claimConversion($fileId, $profileKey);
+        $claim = $this->operations->claimConversion(fileId: $fileId, profileKey: $profileKey);
 
         if ($claim === null) {
             return;
@@ -97,8 +97,8 @@ final class ConversionCoordinator
                 throw new MediaOperationConflict('The conversion source exceeds byte limits.');
             }
 
-            $output = $driver->convert(new ConversionInput($sourceBytes, $claim->sourceMimeType, $driver->profile()));
-            $this->assertOutputIsBounded($output, $driver->profile());
+            $output = $driver->convert(new ConversionInput(sourceBytes: $sourceBytes, sourceMimeType: $claim->sourceMimeType, profile: $driver->profile()));
+            $this->assertOutputIsBounded(output: $output, profile: $driver->profile());
             $stream = fopen('php://temp', 'w+b');
 
             if ($stream === false) {
@@ -116,7 +116,7 @@ final class ConversionCoordinator
                 fclose($stream);
             }
 
-            if (! $this->operations->completeConversion($claim, $output->mimeType, strlen($output->bytes), $output->width, $output->height)) {
+            if (! $this->operations->completeConversion(claim: $claim, mimeType: $output->mimeType, sizeBytes: strlen($output->bytes), width: $output->width, height: $output->height)) {
                 $this->storage->disk()->delete($claim->attemptObjectKey);
             }
         } catch (Throwable $exception) {
@@ -128,7 +128,7 @@ final class ConversionCoordinator
 
     private function reference(object $conversion): MediaConversionRef
     {
-        return new MediaConversionRef(Value::integer(Value::field($conversion, 'id')), Value::text(Value::field($conversion, 'file_id')), Value::text(Value::field($conversion, 'profile_key')), Value::text(Value::field($conversion, 'mime_type')), Value::integer(Value::field($conversion, 'size_bytes')), Value::integer(Value::field($conversion, 'width')), Value::integer(Value::field($conversion, 'height')));
+        return new MediaConversionRef(id: Value::integer(Value::field(row: $conversion, name: 'id')), fileId: Value::text(Value::field(row: $conversion, name: 'file_id')), profile: Value::text(Value::field(row: $conversion, name: 'profile_key')), mimeType: Value::text(Value::field(row: $conversion, name: 'mime_type')), sizeBytes: Value::integer(Value::field(row: $conversion, name: 'size_bytes')), width: Value::integer(Value::field(row: $conversion, name: 'width')), height: Value::integer(Value::field(row: $conversion, name: 'height')));
     }
 
     private function assertOutputIsBounded(ConversionOutput $output, ConversionProfile $profile): void

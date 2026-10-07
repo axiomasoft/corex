@@ -53,8 +53,8 @@ function allowMedia(): void
 
 it('stores, reads, replays, attaches, and detaches private media', function (): void {
     allowMedia();
-    $library = app(MediaLibrary::class);
-    $relations = app(RelationLookup::class);
+    $library = resolve(MediaLibrary::class);
+    $relations = resolve(RelationLookup::class);
 
     $stored = $library->store(mediaContext(), upload('request-1', 'owned bytes'));
     $replayed = $library->store(mediaContext(), upload('request-1', 'owned bytes'));
@@ -80,13 +80,13 @@ it('denies all operations until a consumer policy explicitly allows them', funct
     app()->instance(MediaPolicy::class, new DenyMediaPolicy);
     app()->forgetScopedInstances();
 
-    expect(fn (): mixed => app(MediaLibrary::class)->store(mediaContext(), upload('request-denied', 'nope')))
+    expect(fn (): mixed => resolve(MediaLibrary::class)->store(mediaContext(), upload('request-denied', 'nope')))
         ->toThrow(MediaAccessDenied::class);
 });
 
 it('rejects a replay key with a different content digest', function (): void {
     allowMedia();
-    $library = app(MediaLibrary::class);
+    $library = resolve(MediaLibrary::class);
     $library->store(mediaContext(), upload('request-conflict', 'first'));
 
     expect(fn (): mixed => $library->store(mediaContext(), upload('request-conflict', 'second')))
@@ -95,8 +95,8 @@ it('rejects a replay key with a different content digest', function (): void {
 
 it('refuses deletion while an authoritative relation exists and purges after detach', function (): void {
     allowMedia();
-    $library = app(MediaLibrary::class);
-    $relations = app(RelationLookup::class);
+    $library = resolve(MediaLibrary::class);
+    $relations = resolve(RelationLookup::class);
     $stored = $library->store(mediaContext(), upload('request-delete', 'erase me'));
     $attachment = new AttachmentInput($stored->id, 'crm:contact', 'contact-2', 'avatar');
     $relations->attach(mediaContext(), $attachment);
@@ -108,8 +108,8 @@ it('refuses deletion while an authoritative relation exists and purges after det
 
     expect($deleted->deleted)->toBeTrue()->and($deleted->purgePending)->toBeTrue();
 
-    (new PurgeMedia($stored->id))->handle(app(MediaOperationStore::class), app(TenantStorage::class));
+    new PurgeMedia($stored->id)->handle(resolve(MediaOperationStore::class), resolve(TenantStorage::class));
 
     expect(DB::table('med_files')->where('id', $stored->id)->value('state'))->toBe('deleted')
-        ->and(app(TenantStorage::class)->disk()->exists("media/originals/{$stored->id}"))->toBeFalse();
+        ->and(resolve(TenantStorage::class)->disk()->exists("media/originals/{$stored->id}"))->toBeFalse();
 });

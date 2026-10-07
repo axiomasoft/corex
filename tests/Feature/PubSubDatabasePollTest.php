@@ -123,9 +123,9 @@ it('(г) D44: a rolling restart of the SAME subscriber resumes from its persiste
 
 it('(д) corex:messaging:prune-pubsub truncates rows older than the threshold, leaving fresh rows intact', function (): void {
     foreach (['stale' => now()->subDays(60), 'fresh' => now()] as $module => $createdAt) {
-        $clock = new class($createdAt->toDateTimeImmutable()) implements ClockInterface
+        $clock = new readonly class($createdAt->toDateTimeImmutable()) implements ClockInterface
         {
-            public function __construct(private readonly DateTimeImmutable $instant) {}
+            public function __construct(private DateTimeImmutable $instant) {}
 
             public function now(): DateTimeImmutable
             {

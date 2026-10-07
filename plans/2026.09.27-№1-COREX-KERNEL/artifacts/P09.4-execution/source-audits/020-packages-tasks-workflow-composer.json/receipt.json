@@ -1,0 +1,25 @@
+{
+  "classification": "source",
+  "commands": [
+    {
+      "exit": 0,
+      "output": "validate.json",
+      "role": "validate",
+      "sha256": "fa050280c80ebe43ccd3db22f757f9b650ff79496a3a952b4f203c266671f988"
+    },
+    {
+      "exit": 0,
+      "output": "audit.json",
+      "role": "audit",
+      "sha256": "270d8ca303d0349a1c403fdf5789c1c9484251bb5dffccd8cf6fcbfa5b89826a"
+    }
+  ],
+  "effective_manifest_sha256": "dcea421ce750876ef3e7ca33cd75497a88554d0c4139a47a2eb22ee90a82cdb4",
+  "lock_kind": "source",
+  "lock_sha256": "023804fb1b774cc7b9d6772a3e27deb22f0ad56442aa0385950bf7dea4c9bc2c",
+  "manifest": "packages/tasks-workflow/composer.json",
+  "manifest_sha256": "dcea421ce750876ef3e7ca33cd75497a88554d0c4139a47a2eb22ee90a82cdb4",
+  "name": "axiomasoft/corex-tasks-workflow",
+  "source_lock_sha256": "023804fb1b774cc7b9d6772a3e27deb22f0ad56442aa0385950bf7dea4c9bc2c",
+  "status": "GREEN"
+}

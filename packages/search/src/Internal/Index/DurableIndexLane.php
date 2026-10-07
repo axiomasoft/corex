@@ -101,7 +101,7 @@ final readonly class DurableIndexLane
         $this->connection->transaction(function () use ($claim, $taskId, $requestHash): void {
             $lane = $this->lockedLane($claim);
 
-            if ($lane === null || Value::field($lane, 'state') !== 'claimed') {
+            if ($lane === null || Value::field(row: $lane, name: 'state') !== 'claimed') {
                 throw new InvalidArgumentException('Index claim is no longer current.');
             }
 
@@ -122,7 +122,7 @@ final readonly class DurableIndexLane
         $this->connection->transaction(function () use ($claim, $outcome): void {
             $lane = $this->lockedLane($claim);
 
-            if ($lane === null || Value::field($lane, 'state') !== 'submitted') {
+            if ($lane === null || Value::field(row: $lane, name: 'state') !== 'submitted') {
                 throw new InvalidArgumentException('Index submission is no longer current.');
             }
 
@@ -146,7 +146,7 @@ final readonly class DurableIndexLane
                 $this->connection->table('corex_search_dirty')->whereIn('sequence', $sequences)->update(['completed_at' => $this->clock->now()]);
                 $this->connection->table('corex_search_lanes')->where('lane_key', $claim->laneKey)->update([
                     'state' => 'ready', 'active_task' => null, 'request_hash' => null,
-                    'committed_revision' => max(Value::integer(Value::field($lane, 'committed_revision')), $maxRevision), 'updated_at' => $this->clock->now(),
+                    'committed_revision' => max(Value::integer(Value::field(row: $lane, name: 'committed_revision')), $maxRevision), 'updated_at' => $this->clock->now(),
                 ]);
 
                 return;

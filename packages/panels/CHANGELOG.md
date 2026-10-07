@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — PHP 8.4 modernization (P09.4)
+
+- Modernize maintained PHP for PHP 8.4 with final concrete classes, immutable value state and controlled named calls; preserve current public native parameter names and extension behavior.
+
 ## Unreleased — tenant baseline v1
 
 - Split saved-view scope and view tables into baseline files with explicit object names and bigint positions. The module schema set supports PostgreSQL and SQLite; repository tests use the shipped schema.

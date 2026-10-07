@@ -213,13 +213,7 @@ function isForbiddenShortName(string $shortName): bool
         return true;
     }
 
-    foreach (FORBIDDEN_SUFFIXES as $suffix) {
-        if (str_ends_with($shortName, $suffix) && strlen($shortName) > strlen($suffix)) {
-            return true;
-        }
-    }
-
-    return false;
+    return array_any(FORBIDDEN_SUFFIXES, fn ($suffix) => str_ends_with($shortName, $suffix) && strlen($shortName) > strlen($suffix));
 }
 
 /**

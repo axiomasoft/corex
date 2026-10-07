@@ -31,6 +31,6 @@ final class UnsupportedScopeException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::UnsupportedScopeException, ErrorCategory::Unsupported, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::UnsupportedScopeException, category: ErrorCategory::Unsupported, retryable: false);
     }
 }

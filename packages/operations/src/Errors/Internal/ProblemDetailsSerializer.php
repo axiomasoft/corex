@@ -10,9 +10,9 @@ use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use Illuminate\Http\JsonResponse;
 
 /** @internal RFC 9457 projection of one mapped ApiError. */
-final class ProblemDetailsSerializer
+final readonly class ProblemDetailsSerializer
 {
-    public function __construct(private readonly ProblemRegistry $problems) {}
+    public function __construct(private ProblemRegistry $problems) {}
 
     public function error(ApiError $error, InvocationMetadata $metadata): JsonResponse
     {
@@ -36,7 +36,7 @@ final class ProblemDetailsSerializer
             $body['path'] = $descriptor->path;
         }
 
-        $response = new JsonResponse(data: $body, status: $error->status, headers: ErrorWire::headers($metadata, $error));
+        $response = new JsonResponse(data: $body, status: $error->status, headers: ErrorWire::headers(metadata: $metadata, error: $error));
         $response->headers->set('Content-Type', 'application/problem+json');
 
         return $response;

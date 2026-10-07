@@ -16,6 +16,6 @@ final class NotificationAccessDenied extends CodedException
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(NotificationsErrorCode::NotificationAccessDenied, ErrorCategory::Authorization, retryable: false);
+        return new ErrorDescriptor(code: NotificationsErrorCode::NotificationAccessDenied, category: ErrorCategory::Authorization, retryable: false);
     }
 }

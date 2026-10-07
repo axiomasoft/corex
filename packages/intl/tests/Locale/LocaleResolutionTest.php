@@ -26,8 +26,8 @@ use CoreX\Intl\Translation\Contracts\TranslationReader;
 use CoreX\Intl\Translation\Data\LocalizedText;
 
 it('LOC-01 validates supported allowlist and rejects invalid tags', function (): void {
-    $policy = app(LocalePolicy::class);
-    $validator = app(Bcp47Validator::class);
+    $policy = resolve(LocalePolicy::class);
+    $validator = resolve(Bcp47Validator::class);
 
     expect($policy->supportedTags)->not->toBeEmpty()
         ->and($validator->validate('en-US'))->toBe('en-US')
@@ -36,8 +36,8 @@ it('LOC-01 validates supported allowlist and rejects invalid tags', function ():
 });
 
 it('LOC-02 resolves user settings app and fallback chain explicitly', function (): void {
-    $resolver = app(LocaleResolver::class);
-    $policy = app(LocalePolicy::class);
+    $resolver = resolve(LocaleResolver::class);
+    $policy = resolve(LocalePolicy::class);
 
     $user = $resolver->resolve(
         inputs: new LocaleInputs(projectedUserTag: 'ru-RU', accountSettingsTag: 'en', requestContextKey: 'req-1'),
@@ -68,9 +68,9 @@ it('LOC-02 resolves user settings app and fallback chain explicitly', function (
 });
 
 it('LOC-03 restores request locale scope without global leakage', function (): void {
-    $scope = app(RequestLocaleScope::class);
-    $resolver = app(LocaleResolver::class);
-    $policy = app(LocalePolicy::class);
+    $scope = resolve(RequestLocaleScope::class);
+    $resolver = resolve(LocaleResolver::class);
+    $policy = resolve(LocalePolicy::class);
 
     $a = $resolver->resolve(
         inputs: new LocaleInputs(projectedUserTag: 'ru', accountSettingsTag: null, requestContextKey: 'a'),
@@ -104,9 +104,9 @@ it('LOC-04 builds deterministic policy hash without remote calls', function (): 
 });
 
 it('LOC-05 reads translations with explicit fallback order', function (): void {
-    $reader = app(TranslationReader::class);
-    $resolver = app(LocaleResolver::class);
-    $policy = app(LocalePolicy::class);
+    $reader = resolve(TranslationReader::class);
+    $resolver = resolve(LocaleResolver::class);
+    $policy = resolve(LocalePolicy::class);
 
     $locale = $resolver->resolve(
         inputs: new LocaleInputs(projectedUserTag: 'ru', accountSettingsTag: null, requestContextKey: 't'),
@@ -139,10 +139,10 @@ it('LOC-05 reads translations with explicit fallback order', function (): void {
 });
 
 it('LOC-06 rejects undeclared localized field without schema hash', function (): void {
-    $reader = app(TranslationReader::class);
-    $locale = app(LocaleResolver::class)->resolve(
+    $reader = resolve(TranslationReader::class);
+    $locale = resolve(LocaleResolver::class)->resolve(
         inputs: new LocaleInputs(projectedUserTag: 'en', accountSettingsTag: null, requestContextKey: 'f'),
-        policy: app(LocalePolicy::class),
+        policy: resolve(LocalePolicy::class),
     );
 
     expect(fn () => $reader->read(
@@ -152,11 +152,11 @@ it('LOC-06 rejects undeclared localized field without schema hash', function ():
 });
 
 it('LOC-07 uses existing translator adapter without new storage', function (): void {
-    app('translator')->addLines(['intl.test.label' => 'Label'], 'en');
-    $reader = app(TranslationReader::class);
-    $locale = app(LocaleResolver::class)->resolve(
+    resolve('translator')->addLines(['intl.test.label' => 'Label'], 'en');
+    $reader = resolve(TranslationReader::class);
+    $locale = resolve(LocaleResolver::class)->resolve(
         inputs: new LocaleInputs(projectedUserTag: 'en', accountSettingsTag: null, requestContextKey: 'ui'),
-        policy: app(LocalePolicy::class),
+        policy: resolve(LocalePolicy::class),
     );
 
     $result = $reader->read(
@@ -172,10 +172,10 @@ it('LOC-08 boots with plain formatting fallback when ICU path unavailable', func
     config(['corex-intl.formatting.icu_enabled' => false]);
     $this->app->forgetScopedInstances();
 
-    $formatter = app(MoneyFormatter::class);
-    $locale = app(LocaleResolver::class)->resolve(
+    $formatter = resolve(MoneyFormatter::class);
+    $locale = resolve(LocaleResolver::class)->resolve(
         inputs: new LocaleInputs(projectedUserTag: 'en', accountSettingsTag: null, requestContextKey: 'fmt'),
-        policy: app(LocalePolicy::class),
+        policy: resolve(LocalePolicy::class),
     );
 
     $formatted = $formatter->format(
@@ -189,8 +189,8 @@ it('LOC-08 boots with plain formatting fallback when ICU path unavailable', func
 });
 
 it('LOC-09 reads localized reference metadata from two providers deterministically', function (): void {
-    $normalizer = app(FixtureReferenceNormalizer::class);
-    $cursors = app(ReferenceCursorCodec::class);
+    $normalizer = resolve(FixtureReferenceNormalizer::class);
+    $cursors = resolve(ReferenceCursorCodec::class);
 
     $boxes = new BoxesReferenceProvider(
         fixturePath: __DIR__.'/../fixtures/reference/boxes.json',

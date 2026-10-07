@@ -48,7 +48,7 @@ beforeEach(function (): void {
     $this->app->instance(FeatureFlags::class, new DatabaseFeatureFlags('pgsql'));
     $this->lifecycle = new DatabaseModuleLifecycle(
         registry: $registry, discovery: $discovery, records: app()->make(DatabaseRecordsRegistrar::class, ['connection' => 'pgsql']),
-        container: app(), tenantContextResolver: app(TenantContextResolver::class), connections: app(ConnectionResolverInterface::class), events: app(Dispatcher::class), clock: app(ClockInterface::class),
+        container: app(), tenantContextResolver: resolve(TenantContextResolver::class), connections: resolve(ConnectionResolverInterface::class), events: resolve(Dispatcher::class), clock: resolve(ClockInterface::class),
         migrationPaths: [
             'corex/stub-base' => __DIR__.'/../../../../../tests/Stubs/Lifecycle/migrations/base',
             'corex/stub-failing' => __DIR__.'/../../../../../tests/Stubs/Lifecycle/migrations/failing',
@@ -70,9 +70,9 @@ it('serializes different module transitions on the dependency graph lock', funct
     DB::connection('module_race')->beginTransaction();
     DB::connection('module_race')->statement("SET LOCAL lock_timeout = '50ms'");
     $other = new DatabaseModuleLifecycle(
-        registry: app(ModuleRegistry::class), discovery: new ModuleDiscovery(fallbackModules: [StubFeatureFlagModule::class]),
+        registry: resolve(ModuleRegistry::class), discovery: new ModuleDiscovery(fallbackModules: [StubFeatureFlagModule::class]),
         records: app()->make(DatabaseRecordsRegistrar::class, ['connection' => 'module_race']), container: app(),
-        tenantContextResolver: app(TenantContextResolver::class), connections: app(ConnectionResolverInterface::class), events: app(Dispatcher::class), clock: app(ClockInterface::class), connection: 'module_race',
+        tenantContextResolver: resolve(TenantContextResolver::class), connections: resolve(ConnectionResolverInterface::class), events: resolve(Dispatcher::class), clock: resolve(ClockInterface::class), connection: 'module_race',
     );
     $observed = false;
     DB::listen(function ($query) use (&$observed, $other): void {
@@ -107,11 +107,11 @@ it('preserves application migration listeners on success and failure', function 
     $started = $ended = 0;
     LifecycleStringMigrationListener::$calls = 0;
     $listener = LifecycleStringMigrationListener::class.'@onStarted';
-    app('events')->listen(MigrationStarted::class, $listener);
-    app('events')->listen(MigrationStarted::class, function () use (&$started): void {
+    resolve('events')->listen(MigrationStarted::class, $listener);
+    resolve('events')->listen(MigrationStarted::class, function () use (&$started): void {
         $started++;
     });
-    app('events')->listen(MigrationEnded::class, function () use (&$ended): void {
+    resolve('events')->listen(MigrationEnded::class, function () use (&$ended): void {
         $ended++;
     });
     $this->lifecycle->enable('corex/stub-base');
@@ -119,11 +119,11 @@ it('preserves application migration listeners on success and failure', function 
     expect(fn () => $this->lifecycle->enable('corex/stub-failing'))->toThrow(ModuleEnableFailedException::class);
     $before = [$started, $ended];
     $migration = new class extends Migration {};
-    app('events')->dispatch(new MigrationStarted($migration, 'up'));
-    app('events')->dispatch(new MigrationEnded($migration, 'up'));
+    resolve('events')->dispatch(new MigrationStarted($migration, 'up'));
+    resolve('events')->dispatch(new MigrationEnded($migration, 'up'));
     expect([$started, $ended])->toBe([$before[0] + 1, $before[1] + 1]);
     expect(LifecycleStringMigrationListener::$calls)->toBe($started)
-        ->and(app('events')->getRawListeners()[MigrationStarted::class])->toContain($listener);
+        ->and(resolve('events')->getRawListeners()[MigrationStarted::class])->toContain($listener);
 });
 
 it('makes flags visible to ModuleEnabled and rolls back a failed definition', function (): void {
@@ -136,7 +136,7 @@ it('makes flags visible to ModuleEnabled and rolls back a failed definition', fu
     // Lifecycle is pinned to PG; ambient SQLite has no feature store.
     config(['database.default' => 'testbench']);
     $seen = false;
-    app('events')->listen(ModuleEnabled::class, function () use (&$seen): void {
+    resolve('events')->listen(ModuleEnabled::class, function () use (&$seen): void {
         $seen = DB::connection('pgsql')->table('sys_feature_flags')->where('key', 'sff.beta_mode')->exists();
     });
     $this->lifecycle->enable('corex/stub-feature-flag');
@@ -146,12 +146,12 @@ it('makes flags visible to ModuleEnabled and rolls back a failed definition', fu
     $this->lifecycle->disable('corex/stub-feature-flag', DisableReason::Manual);
     $this->lifecycle->enable('corex/stub-feature-flag');
     expect(DB::table('sys_feature_flags')->where('key', 'sff.beta_mode')->count())->toBe(1);
-    expect(app(FeatureFlags::class)->active('sff.beta_mode'))->toBeTrue();
+    expect(resolve(FeatureFlags::class)->active('sff.beta_mode'))->toBeTrue();
 });
 
 it('rolls back feature definitions and enable notifications with an outer transaction', function (): void {
     $notified = false;
-    app('events')->listen(ModuleEnabled::class, function () use (&$notified): void {
+    resolve('events')->listen(ModuleEnabled::class, function () use (&$notified): void {
         $notified = true;
     });
     DB::beginTransaction();
@@ -165,8 +165,8 @@ it('rolls back feature definitions and enable notifications with an outer transa
 it('uses the current physical default when lifecycle connection is unpinned', function (): void {
     app()->instance(FeatureFlags::class, new DatabaseFeatureFlags);
     $lifecycle = new DatabaseModuleLifecycle(
-        registry: app(ModuleRegistry::class), discovery: new ModuleDiscovery(fallbackModules: [StubFeatureFlagModule::class]),
-        records: app(DatabaseRecordsRegistrar::class), container: app(), tenantContextResolver: app(TenantContextResolver::class), connections: app(ConnectionResolverInterface::class), events: app(Dispatcher::class), clock: app(ClockInterface::class),
+        registry: resolve(ModuleRegistry::class), discovery: new ModuleDiscovery(fallbackModules: [StubFeatureFlagModule::class]),
+        records: resolve(DatabaseRecordsRegistrar::class), container: app(), tenantContextResolver: resolve(TenantContextResolver::class), connections: resolve(ConnectionResolverInterface::class), events: resolve(Dispatcher::class), clock: resolve(ClockInterface::class),
     );
     $lifecycle->enable('corex/stub-feature-flag');
     expect(DB::table('sys_feature_flags')->where('key', 'sff.beta_mode')->exists())->toBeTrue()

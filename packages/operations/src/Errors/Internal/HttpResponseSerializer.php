@@ -11,17 +11,17 @@ use Illuminate\Http\JsonResponse;
 use Override;
 
 /** @internal HTTP projection. The invoker stays transport-neutral. */
-final class HttpResponseSerializer implements ResponseSerializer
+final readonly class HttpResponseSerializer implements ResponseSerializer
 {
     public function __construct(
-        private readonly EnvelopeSerializer $envelope,
-        private readonly ProblemDetailsSerializer $problems,
+        private EnvelopeSerializer $envelope,
+        private ProblemDetailsSerializer $problems,
     ) {}
 
     #[Override]
     public function success(array $data, int $status, InvocationMetadata $metadata): JsonResponse
     {
-        return $this->envelope->success($data, $status, $metadata);
+        return $this->envelope->success(data: $data, status: $status, metadata: $metadata);
     }
 
     #[Override]

@@ -16,9 +16,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 final class WebhookSignatureTest extends TestCase
 {
-    private const SECRET = 'whsec_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8=';
+    private const string SECRET = 'whsec_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8=';
 
-    private const TIMESTAMP = 1_700_000_000;
+    private const int TIMESTAMP = 1_700_000_000;
 
     public function test_independent_known_hmac_bytes_and_exact_headers(): void
     {

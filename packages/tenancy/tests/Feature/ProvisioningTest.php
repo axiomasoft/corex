@@ -33,7 +33,7 @@ beforeEach(function (): void {
 
     $probe = connectTo(TEMPLATE_DB);
     $fixtureSql = file_get_contents(__DIR__.'/../Stubs/tpl_tenant_v1/schema.sql');
-    foreach (array_filter(array_map('trim', explode(';', (string) $fixtureSql))) as $statement) {
+    foreach (array_filter(array_map(trim(...), explode(';', (string) $fixtureSql))) as $statement) {
         $probe->statement($statement);
     }
     DB::disconnect('probe_'.TEMPLATE_DB);
@@ -167,10 +167,10 @@ it('provisions a database by cloning the golden template via STRATEGY WAL_LOG, w
     $targetDb = DB::table('root_accounts')->where('id', $accountId)->value('db_name');
     trackDatabase($targetDb);
 
-    (new DatabaseTenantProvisioner(
+    new DatabaseTenantProvisioner(
         centralConnection: 'pgsql',
-        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
-    ))->provision(new ProvisionParams(
+        templateIntegrityVerifier: resolve(TemplateIntegrityVerifier::class),
+    )->provision(new ProvisionParams(
         accountId: $accountId,
         clusterId: $clusterId,
         templateVersion: 1,
@@ -209,7 +209,7 @@ it('re-provisioning an already-created database is idempotent (replayable pipeli
 
     $provisioner = new DatabaseTenantProvisioner(
         centralConnection: 'pgsql',
-        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
+        templateIntegrityVerifier: resolve(TemplateIntegrityVerifier::class),
     );
     $provisioner->provision($params);
     $provisioner->provision($params);
@@ -232,10 +232,10 @@ it('refuses to clone a template that is not ready (template-parity gate, D24)', 
 
     $accountId = makeAccountRow($clusterId, ['template_version' => 2]);
 
-    expect(fn () => (new DatabaseTenantProvisioner(
+    expect(fn () => new DatabaseTenantProvisioner(
         centralConnection: 'pgsql',
-        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
-    ))->provision(new ProvisionParams(
+        templateIntegrityVerifier: resolve(TemplateIntegrityVerifier::class),
+    )->provision(new ProvisionParams(
         accountId: $accountId,
         clusterId: $clusterId,
         templateVersion: 2,
@@ -259,10 +259,10 @@ it('rejects an untrusted template before changing provisioning parameters or dis
     ]);
     $targetDb = DB::table('root_accounts')->where('id', $accountId)->value('db_name');
 
-    expect(fn () => (new DatabaseTenantProvisioner(
+    expect(fn () => new DatabaseTenantProvisioner(
         centralConnection: 'pgsql',
-        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
-    ))->provision(new ProvisionParams(
+        templateIntegrityVerifier: resolve(TemplateIntegrityVerifier::class),
+    )->provision(new ProvisionParams(
         accountId: $accountId,
         clusterId: $clusterId,
         templateVersion: 1,
@@ -290,10 +290,10 @@ it('fixes embedding_model/dim and other provisioning params onto the account row
     ]);
     trackDatabase(DB::table('root_accounts')->where('id', $accountId)->value('db_name'));
 
-    (new DatabaseTenantProvisioner(
+    new DatabaseTenantProvisioner(
         centralConnection: 'pgsql',
-        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
-    ))->provision(new ProvisionParams(
+        templateIntegrityVerifier: resolve(TemplateIntegrityVerifier::class),
+    )->provision(new ProvisionParams(
         accountId: $accountId,
         clusterId: $clusterId,
         templateVersion: 1,
@@ -316,7 +316,7 @@ it('resolves the tenant connection from root_clusters+db_name and follows cluste
     $clusterB = makeClusterRow(['pgbouncer_host' => 'pgbouncer-b.local']);
     $accountId = makeAccountRow($clusterA);
 
-    $resolver = new ClusterAccountConnectionResolver(connections: app(ConnectionResolverInterface::class), centralConnection: 'pgsql');
+    $resolver = new ClusterAccountConnectionResolver(connections: resolve(ConnectionResolverInterface::class), centralConnection: 'pgsql');
     $accountRef = new AccountRef(
         id: $accountId,
         slug: 'irrelevant',

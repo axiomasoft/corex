@@ -11,11 +11,11 @@ use CoreX\Operations\OpenApi\Contracts\OpenApiDocuments;
 use InvalidArgumentException;
 
 /** Build-time installed-code projection; not a public endpoint or a grant of access. */
-final class OpenApiDocumentGenerator implements OpenApiDocuments
+final readonly class OpenApiDocumentGenerator implements OpenApiDocuments
 {
     public function __construct(
-        private readonly OperationRegistry $operations,
-        private readonly SchemaContributor $schemas,
+        private OperationRegistry $operations,
+        private SchemaContributor $schemas,
     ) {}
 
     /**

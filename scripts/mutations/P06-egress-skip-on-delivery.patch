@@ -4,8 +4,8 @@
  
          $deliveryScope = $this->scopeCodec->decode($delivery->scope);
  
--        if (! $this->egress->allows($deliveryScope, $destination)) {
--            return $this->finish($scope, $delivery, new WebhookHttpResult(
+-        if (! $this->egress->allows(scope: $deliveryScope, destination: $destination)) {
+-            return $this->finish(scope: $scope, delivery: $delivery, result: new WebhookHttpResult(
 -                status: null,
 -                retryAfter: null,
 -                errorCode: WebhookFailureReason::EgressDenied,

@@ -41,7 +41,7 @@ final class IdentitiesReconcileCommand extends Command
             ->get();
 
         foreach ($rows as $row) {
-            $syncer->syncToAccount(DatabaseValue::text($row->identity_id), DatabaseValue::text($row->account_id));
+            $syncer->syncToAccount(identityId: DatabaseValue::text($row->identity_id), accountId: DatabaseValue::text($row->account_id));
         }
 
         $this->components->info(sprintf('Reconciled %d identity/account pair(s).', $rows->count()));

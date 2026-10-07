@@ -9,7 +9,7 @@ use CoreX\Modules\Data\EntityDefinition;
 use CoreX\Modules\Testing\ArrayEntityRegistry;
 
 beforeEach(function (): void {
-    app(ArrayEntityRegistry::class)->register(new EntityDefinition(
+    resolve(ArrayEntityRegistry::class)->register(new EntityDefinition(
         handle: 'project',
         model: Project::class,
         table: 'projects',
@@ -20,7 +20,7 @@ beforeEach(function (): void {
         fields: [],
         titleAttribute: 'name',
     ));
-    $this->guard = app(ContextGuard::class);
+    $this->guard = resolve(ContextGuard::class);
 });
 
 it('returns false when the context entity does not exist', function (): void {

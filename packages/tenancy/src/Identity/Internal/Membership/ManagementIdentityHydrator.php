@@ -32,7 +32,7 @@ final readonly class ManagementIdentityHydrator
         $account = $root->table('root_accounts')->where('id', $accountId)->first();
 
         if ($account === null) {
-            $this->bookkeep($identityId, $accountId, 'failed');
+            $this->bookkeep(identityId: $identityId, accountId: $accountId, status: 'failed');
 
             return;
         }
@@ -95,12 +95,12 @@ final readonly class ManagementIdentityHydrator
                 });
             });
         } catch (Throwable) {
-            $this->bookkeep($identityId, $accountId, 'failed');
+            $this->bookkeep(identityId: $identityId, accountId: $accountId, status: 'failed');
 
             return;
         }
 
-        $this->bookkeep($identityId, $accountId, $identity === null ? 'failed' : 'synced');
+        $this->bookkeep(identityId: $identityId, accountId: $accountId, status: $identity === null ? 'failed' : 'synced');
     }
 
     public function fanOut(string $identityId): void
@@ -114,7 +114,7 @@ final readonly class ManagementIdentityHydrator
             try {
                 $this->hydrate(identityId: $identityId, accountId: DatabaseValue::text($id));
             } catch (Throwable) {
-                $this->bookkeep($identityId, DatabaseValue::text($id), 'failed');
+                $this->bookkeep(identityId: $identityId, accountId: DatabaseValue::text($id), status: 'failed');
             }
         }
     }

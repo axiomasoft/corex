@@ -33,9 +33,9 @@ final class AccessIntegrationRegistrar implements PackageRegistrar
         $this->registerIdentityProvider($app);
 
         WorkspaceScopeWiring::wire(
-            $app->make(EntityRegistry::class),
-            $app->make(AuthOptions::class)->workspaceScopeClass,
-            static fn (string $class): Scope => self::workspaceScope($app, $class),
+            registry: $app->make(EntityRegistry::class),
+            scopeClass: $app->make(AuthOptions::class)->workspaceScopeClass,
+            make: static fn (string $class): Scope => self::workspaceScope(app: $app, class: $class),
         );
 
         Event::listen(ModuleEnabled::class, PermissionsMerger::class);

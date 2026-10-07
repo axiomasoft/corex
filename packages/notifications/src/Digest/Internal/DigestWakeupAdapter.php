@@ -9,10 +9,10 @@ use CoreX\Scheduling\Contracts\DueWakeupHandler;
 use CoreX\Scheduling\Data\WakeupDelivery;
 use RuntimeException;
 
-final class DigestWakeupAdapter implements DueWakeupHandler
+final readonly class DigestWakeupAdapter implements DueWakeupHandler
 {
     /** @param Closure(DigestTick):void $handle */
-    public function __construct(private readonly Closure $handle) {}
+    public function __construct(private Closure $handle) {}
 
     public function handle(WakeupDelivery $delivery): void
     {

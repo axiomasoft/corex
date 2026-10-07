@@ -6,9 +6,10 @@ namespace CoreX\Tenancy\DomainTrust\Data;
 
 use CoreX\Attributes\Api;
 use InvalidArgumentException;
+use Stringable;
 
 #[Api(since: '1.0')]
-final readonly class NormalizedHost
+final readonly class NormalizedHost implements Stringable
 {
     public string $value;
 

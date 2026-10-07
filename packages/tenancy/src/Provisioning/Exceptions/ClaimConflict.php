@@ -15,6 +15,6 @@ final class ClaimConflict extends CodedException
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TenancyErrorCode::ClaimConflict, ErrorCategory::Conflict, retryable: false);
+        return new ErrorDescriptor(code: TenancyErrorCode::ClaimConflict, category: ErrorCategory::Conflict, retryable: false);
     }
 }

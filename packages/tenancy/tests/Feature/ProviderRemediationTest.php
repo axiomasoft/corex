@@ -5,7 +5,7 @@ use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Database\Enums\SchemaScope;
 
 it('registers control plane and tenant schema on distinct scopes', function (): void {
-    $sets = app(SchemaSets::class);
+    $sets = resolve(SchemaSets::class);
     expect($sets->get('axiomasoft/corex-tenancy:root')->scope)->toBe(SchemaScope::Central)
         ->and($sets->get('axiomasoft/corex-tenancy:tenant')->scope)->toBe(SchemaScope::Tenant)
         ->and(glob(database_path('migrations/*.php')))->toBe([]);

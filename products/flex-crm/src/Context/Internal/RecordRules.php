@@ -18,15 +18,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\ValidationException;
 
 /** @internal Saving observer: invariant enforcement for direct Eloquent writes. */
-final class RecordRules
+final readonly class RecordRules
 {
     public function __construct(
-        private readonly CrmOptions $options,
+        private CrmOptions $options,
     ) {}
 
     public function saving(Company|Contact|Lead|Deal|Activity $record): void
     {
-        $guard = app(ContextGuard::class);
+        $guard = resolve(ContextGuard::class);
         $ctx = $guard->current(lock: $record->getConnection()->transactionLevel() > 0);
 
         if ($record->getConnection()->getName() !== $ctx->connectionName) {

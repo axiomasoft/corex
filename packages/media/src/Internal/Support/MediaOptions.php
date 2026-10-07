@@ -29,18 +29,18 @@ final readonly class MediaOptions
     {
         $violations = new ConfigurationValidator;
 
-        $maxUploadBytes = self::positiveInt($violations, 'max_upload_bytes', $config['max_upload_bytes'] ?? 10 * 1024 * 1024);
-        $maxImagePixels = self::positiveInt($violations, 'max_image_pixels', $config['max_image_pixels'] ?? 20_000_000);
-        $purposes = self::nonEmptyStringList($violations, 'purposes', $config['purposes'] ?? ['attachment']);
+        $maxUploadBytes = self::positiveInt(violations: $violations, path: 'max_upload_bytes', value: $config['max_upload_bytes'] ?? 10 * 1024 * 1024);
+        $maxImagePixels = self::positiveInt(violations: $violations, path: 'max_image_pixels', value: $config['max_image_pixels'] ?? 20_000_000);
+        $purposes = self::nonEmptyStringList(violations: $violations, path: 'purposes', value: $config['purposes'] ?? ['attachment']);
         $allowedMimeTypes = self::nonEmptyStringList(
-            $violations,
-            'allowed_mime_types',
-            $config['allowed_mime_types'] ?? [],
+            violations: $violations,
+            path: 'allowed_mime_types',
+            value: $config['allowed_mime_types'] ?? [],
         );
         $conversionDriverTag = self::nonEmpty(
-            $violations,
-            'conversion_driver_tag',
-            $config['conversion_driver_tag'] ?? 'corex.media.conversion-drivers',
+            violations: $violations,
+            path: 'conversion_driver_tag',
+            value: $config['conversion_driver_tag'] ?? 'corex.media.conversion-drivers',
         );
         $conversion = is_array($config['conversion'] ?? null) ? $config['conversion'] : [];
 
@@ -62,7 +62,7 @@ final readonly class MediaOptions
             return $value;
         }
 
-        $violations->add($path, 'must be a non-empty string');
+        $violations->add(path: $path, message: 'must be a non-empty string');
 
         return 'invalid';
     }
@@ -73,7 +73,7 @@ final readonly class MediaOptions
             return $value;
         }
 
-        $violations->add($path, 'must be a positive integer');
+        $violations->add(path: $path, message: 'must be a positive integer');
 
         return 1;
     }
@@ -84,7 +84,7 @@ final readonly class MediaOptions
     private static function nonEmptyStringList(ConfigurationValidator $violations, string $path, mixed $value): array
     {
         if (! is_array($value)) {
-            $violations->add($path, 'must be a non-empty list of strings');
+            $violations->add(path: $path, message: 'must be a non-empty list of strings');
 
             return [];
         }
@@ -98,11 +98,11 @@ final readonly class MediaOptions
                 continue;
             }
 
-            $violations->add($path.'.'.$index, 'must be a non-empty string');
+            $violations->add(path: $path.'.'.$index, message: 'must be a non-empty string');
         }
 
         if ($resolved === []) {
-            $violations->add($path, 'must not be empty');
+            $violations->add(path: $path, message: 'must not be empty');
         }
 
         return $resolved;

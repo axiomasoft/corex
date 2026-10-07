@@ -22,7 +22,7 @@ final class RecordingPublisher implements DurableMessagePublisher
 
     public function __construct(
         public string $mode = self::MODE_SUCCEED,
-        private ?Throwable $failure = null,
+        private readonly ?Throwable $failure = null,
     ) {}
 
     public function publish(MessageEnvelope $message): void

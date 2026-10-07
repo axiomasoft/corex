@@ -15,7 +15,7 @@ final readonly class AvailableAccounts
     /** @param list<AccountListEntry> $accounts */
     public function __construct(public string $identityId, public string $product, public string $membershipVersion, public array $accounts, public DateTimeImmutable $observedAt)
     {
-        self::validateInput($identityId, $product, $membershipVersion, $accounts, $observedAt);
+        self::validateInput(identityId: $identityId, product: $product, membershipVersion: $membershipVersion, accounts: $accounts, observedAt: $observedAt);
     }
 
     public function isFor(AccountsQuery $query): bool

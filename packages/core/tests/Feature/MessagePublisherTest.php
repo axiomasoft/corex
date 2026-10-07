@@ -66,7 +66,7 @@ it('admits a durable publisher binding and marks a leased row published', functi
     messagePublisherBindDurable($publisher);
 
     $envelope = messagingSampleEnvelope(['messageId' => '01932f5a-0000-7000-8000-000000000010']);
-    $now = app(ClockInterface::class)->now();
+    $now = resolve(ClockInterface::class)->now();
     DB::table('sys_outbox_messages')->insert([
         'id' => $envelope->messageId,
         'name' => $envelope->name,
@@ -105,7 +105,7 @@ it('refuses a null-transport publisher before markPublished', function (): void 
         public function publish(MessageEnvelope $message): void {}
     });
 
-    $now = app(ClockInterface::class)->now();
+    $now = resolve(ClockInterface::class)->now();
     DB::table('sys_outbox_messages')->insert([
         'id' => '01932f5a-0000-7000-8000-000000000011',
         'name' => 'membership.expired',
@@ -139,7 +139,7 @@ it('refuses a redis-publish publisher before markPublished', function (): void {
         public function publish(MessageEnvelope $message): void {}
     });
 
-    $now = app(ClockInterface::class)->now();
+    $now = resolve(ClockInterface::class)->now();
     DB::table('sys_outbox_messages')->insert([
         'id' => '01932f5a-0000-7000-8000-000000000012',
         'name' => 'membership.expired',

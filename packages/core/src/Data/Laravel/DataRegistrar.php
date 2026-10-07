@@ -22,7 +22,7 @@ final class DataRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
-        $app->singleton(DataScopeAuthorizer::class, static fn (Application $app): DataScopeAuthorizer => ConfiguredImplementation::resolve($app, DataScopeAuthorizer::class, $app->make(CoreOptions::class)->dataScopeAuthorizer));
+        $app->singleton(DataScopeAuthorizer::class, static fn (Application $app): DataScopeAuthorizer => ConfiguredImplementation::resolve(app: $app, contract: DataScopeAuthorizer::class, implementation: $app->make(CoreOptions::class)->dataScopeAuthorizer));
         $app->singleton(DataScopeCodec::class, ArrayDataScopeCodec::class);
     }
 

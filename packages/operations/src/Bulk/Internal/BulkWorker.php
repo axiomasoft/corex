@@ -27,7 +27,7 @@ final readonly class BulkWorker
      */
     public function workOnce(DataScope $scope, ?callable $observer = null): ?BulkOperation
     {
-        $claimed = $this->store->claim($scope, $this->worker);
+        $claimed = $this->store->claim(scope: $scope, worker: $this->worker);
 
         if ($claimed === null) {
             return null;
@@ -37,26 +37,26 @@ final readonly class BulkWorker
             return $claimed;
         }
 
-        $this->observe($observer, 'started', $claimed, []);
+        $this->observe(observer: $observer, phase: 'started', operation: $claimed, metrics: []);
 
         try {
             $advanced = $this->executor->advance($claimed);
         } catch (TransferStampDrift) {
-            $advanced = $this->failed($claimed, 'contract_drift');
+            $advanced = $this->failed(operation: $claimed, code: 'contract_drift');
         } catch (Throwable $exception) {
-            $this->observe($observer, 'failed', $claimed, ['safe' => 1]);
+            $this->observe(observer: $observer, phase: 'failed', operation: $claimed, metrics: ['safe' => 1]);
 
             throw $exception;
         }
 
-        $saved = $this->store->save($advanced, $this->worker, $claimed->revision);
+        $saved = $this->store->save(operation: $advanced, leaseOwner: $this->worker, revision: $claimed->revision);
 
         if (! $saved) {
             return $claimed;
         }
 
         $phase = $advanced->status === BulkOperationStatus::Failed ? 'failed' : 'completed';
-        $this->observe($observer, $phase, $advanced, $this->metrics($advanced));
+        $this->observe(observer: $observer, phase: $phase, operation: $advanced, metrics: $this->metrics($advanced));
 
         return $advanced;
     }

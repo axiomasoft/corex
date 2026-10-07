@@ -60,7 +60,7 @@ final class ToolErrorTaxonomyTest extends TestCase
         parent::setUp();
         CountingHandler::$calls = 0;
         $schema = ['type' => 'object', 'additionalProperties' => true];
-        $compiled = app(RegistryCompiler::class)->compile([
+        $compiled = resolve(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
                 Api::tool('notes.read', CountingHandler::class, 'notes.read', $schema, $schema, 'read', 'read-only')->titled('Read', 'Read'),
                 Api::operation('notes.read', 'POST', '/notes', CountingHandler::class, 'notes.read', $schema, $schema),
@@ -83,7 +83,7 @@ final class ToolErrorTaxonomyTest extends TestCase
 
     public function test_all_thirteen_codes_resolve_with_safe_metadata(): void
     {
-        $registry = app(ProblemRegistry::class);
+        $registry = resolve(ProblemRegistry::class);
         self::assertCount(13, ToolsErrorCode::cases());
         foreach (ToolsErrorCode::cases() as $code) {
             $definition = $registry->fromWire($code->value);
@@ -120,7 +120,7 @@ final class ToolErrorTaxonomyTest extends TestCase
         {
             private int $admissions = 0;
 
-            public function __construct(private string $failure, private bool $output) {}
+            public function __construct(private readonly string $failure, private readonly bool $output) {}
 
             public function admit(JsonObject $schema, string $profile): SchemaHandle
             {
@@ -142,7 +142,7 @@ final class ToolErrorTaxonomyTest extends TestCase
                 return new SchemaValidation(valid: true, errors: []);
             }
         });
-        $result = app(ToolInvoker::class)->invoke($this->context, $this->makeToolCall());
+        $result = resolve(ToolInvoker::class)->invoke($this->context, $this->makeToolCall());
         $this->assertToolError($expected, $result->errorCode);
         self::assertSame(ToolOutcome::NotExecuted, $result->outcome);
         self::assertSame($output ? 1 : 0, CountingHandler::$calls);
@@ -167,7 +167,7 @@ final class ToolErrorTaxonomyTest extends TestCase
         if ($branch === 'undeclared') {
             $call = new ToolCall(code: 'missing.tool', toolVersion: 'v1', expectedContractHash: $call->expectedContractHash, arguments: $call->arguments, requestId: 'missing');
         }
-        $result = app(ToolInvoker::class)->invoke($this->context, $call);
+        $result = resolve(ToolInvoker::class)->invoke($this->context, $call);
         $this->assertToolError(ToolsErrorCode::ToolUnavailable, $result->errorCode);
         self::assertSame(ToolOutcome::NotExecuted, $result->outcome);
         self::assertSame(0, CountingHandler::$calls);
@@ -188,10 +188,10 @@ final class ToolErrorTaxonomyTest extends TestCase
             ? new TooManyRequestsHttpException
             : new ApiError(OperationsErrorCode::Forbidden, 403, 'Forbidden.'));
         $this->app->instance(OperationInvoker::class, $operations);
-        $result = app(ToolInvoker::class)->invoke($this->context, $this->makeToolCall('notes.exposed'));
+        $result = resolve(ToolInvoker::class)->invoke($this->context, $this->makeToolCall('notes.exposed'));
         $expected = $rateLimited ? ToolsErrorCode::RateLimited->value : OperationsErrorCode::Forbidden->value;
         self::assertSame($expected, $result->errorCode);
-        self::assertSame($expected, app(ProblemRegistry::class)->fromWire($result->errorCode)->code->value());
+        self::assertSame($expected, resolve(ProblemRegistry::class)->fromWire($result->errorCode)->code->value());
         self::assertSame(ToolOutcome::NotExecuted, $result->outcome);
     }
 
@@ -199,7 +199,7 @@ final class ToolErrorTaxonomyTest extends TestCase
     {
         $schema = ['type' => 'object'];
         $declaration = Api::tool('notes.write', CountingHandler::class, 'notes.write', $schema, $schema, 'write', 'provider-key')->titled('Write', 'Write');
-        $compiled = app(RegistryCompiler::class)->compile([ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$declaration])], installedPackages: []);
+        $compiled = resolve(RegistryCompiler::class)->compile([ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$declaration])], installedPackages: []);
         $descriptor = ToolDescriptorFactory::fromDeclaration($compiled->api[0]);
         $call = new ToolCall(code: 'notes.write', toolVersion: 'v1', expectedContractHash: $descriptor->contractHash, arguments: JsonObjectFactory::fromArray(['name' => 'alpha']), requestId: 'guard-taxonomy', operationKey: 'guard-key');
         $called = false;
@@ -218,7 +218,7 @@ final class ToolErrorTaxonomyTest extends TestCase
     {
         $schema = ['type' => 'object'];
         $declaration = Api::tool('notes.provider', CountingHandler::class, 'notes.write', $schema, $schema, 'write', 'provider-key')->titled('Provider', 'Provider');
-        $compiled = app(RegistryCompiler::class)->compile([ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$declaration])], installedPackages: []);
+        $compiled = resolve(RegistryCompiler::class)->compile([ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$declaration])], installedPackages: []);
         $descriptor = ToolDescriptorFactory::fromDeclaration($compiled->api[0]);
         $call = new ToolCall(code: 'notes.provider', toolVersion: 'v1', expectedContractHash: $descriptor->contractHash, arguments: JsonObjectFactory::fromArray(['name' => 'alpha']), requestId: 'provider-taxonomy', operationKey: 'provider-key');
         $guard = new ToolGuardFixture;
@@ -236,7 +236,7 @@ final class ToolErrorTaxonomyTest extends TestCase
         $guard = $this->createMock(ToolExecutionGuard::class);
         $guard->expects(self::once())->method('execute')->willReturn(new ToolResult(outcome: ToolOutcome::Committed, structuredData: null, errorCode: null, operationKey: 'tax-key', replayed: false));
         $this->app->instance(ToolExecutionGuard::class, $guard);
-        $result = app(ToolInvoker::class)->invoke($this->context, $this->makeToolCall());
+        $result = resolve(ToolInvoker::class)->invoke($this->context, $this->makeToolCall());
         $this->assertToolError(ToolsErrorCode::InternalError, $result->errorCode);
         self::assertSame(ToolOutcome::NotExecuted, $result->outcome);
         self::assertSame(0, CountingHandler::$calls);

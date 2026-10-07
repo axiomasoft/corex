@@ -322,7 +322,7 @@ final class RRuleRecurrenceExpander implements RecurrenceExpander
         }
 
         if ($valueType === 'UTC') {
-            return (new DateTimeImmutable($value))
+            return new DateTimeImmutable($value)
                 ->setTimezone(new DateTimeZone('UTC'))
                 ->format('Ymd\\THis');
         }

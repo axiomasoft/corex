@@ -27,19 +27,19 @@ use Illuminate\Support\Str;
 use JsonException;
 use Psr\Clock\ClockInterface;
 
-final class SqlNotificationCenter implements NotificationCenter
+final readonly class SqlNotificationCenter implements NotificationCenter
 {
     public function __construct(
-        private readonly ConnectionInterface $connection,
-        private readonly NotificationPolicy $policy,
-        private readonly ClockInterface $clock,
+        private ConnectionInterface $connection,
+        private NotificationPolicy $policy,
+        private ClockInterface $clock,
     ) {}
 
     public function notify(NotificationContext $context, NotificationInput $input): NotificationRef
     {
         $subject = new NotificationSubject(notificationId: null, recipient: $input->recipient, related: $input->related);
 
-        if (! $this->policy->allows($context, NotificationAction::Notify, $subject)) {
+        if (! $this->policy->allows(context: $context, action: NotificationAction::Notify, subject: $subject)) {
             throw new NotificationAccessDenied('Notification delivery is denied.');
         }
 
@@ -64,7 +64,7 @@ final class SqlNotificationCenter implements NotificationCenter
                     return $this->reference($existing);
                 }
 
-                if (! $this->policy->allows($context, NotificationAction::Notify, $subject)) {
+                if (! $this->policy->allows(context: $context, action: NotificationAction::Notify, subject: $subject)) {
                     throw new NotificationAccessDenied('Notification delivery is denied.');
                 }
 
@@ -155,7 +155,7 @@ final class SqlNotificationCenter implements NotificationCenter
 
             $subject = $this->subject($notification);
 
-            if (! $this->policy->allows($context, NotificationAction::Cancel, $subject)) {
+            if (! $this->policy->allows(context: $context, action: NotificationAction::Cancel, subject: $subject)) {
                 throw new NotificationAccessDenied('Notification cancellation is denied.');
             }
 
@@ -187,7 +187,7 @@ final class SqlNotificationCenter implements NotificationCenter
                 throw new NotificationAccessDenied('Notification is unavailable.');
             }
 
-            if (! $this->policy->allows($context, NotificationAction::Read, $this->subject($notification))) {
+            if (! $this->policy->allows(context: $context, action: NotificationAction::Read, subject: $this->subject($notification))) {
                 throw new NotificationAccessDenied('Notification read is denied.');
             }
 
@@ -215,7 +215,7 @@ final class SqlNotificationCenter implements NotificationCenter
 
         $result = [];
         foreach ($rows as $row) {
-            if ($this->policy->allows($context, NotificationAction::Read, $this->subject($row))) {
+            if ($this->policy->allows(context: $context, action: NotificationAction::Read, subject: $this->subject($row))) {
                 $result[] = $this->reference($row);
             }
         }
@@ -247,22 +247,22 @@ final class SqlNotificationCenter implements NotificationCenter
     private function subject(object $notification): NotificationSubject
     {
         return new NotificationSubject(
-            notificationId: Value::nullableText(Value::field($notification, 'id')),
-            recipient: new RecipientReference(kind: Value::text(Value::field($notification, 'recipient_kind')), id: Value::text(Value::field($notification, 'recipient_id'))),
-            related: $this->related(Value::field($notification, 'related')),
+            notificationId: Value::nullableText(Value::field(row: $notification, name: 'id')),
+            recipient: new RecipientReference(kind: Value::text(Value::field(row: $notification, name: 'recipient_kind')), id: Value::text(Value::field(row: $notification, name: 'recipient_id'))),
+            related: $this->related(Value::field(row: $notification, name: 'related')),
         );
     }
 
     private function reference(object $notification): NotificationRef
     {
         return new NotificationRef(
-            id: Value::text(Value::field($notification, 'id')),
-            recipient: new RecipientReference(kind: Value::text(Value::field($notification, 'recipient_kind')), id: Value::text(Value::field($notification, 'recipient_id'))),
-            eventType: Value::text(Value::field($notification, 'event_type')),
-            revision: Value::text(Value::field($notification, 'revision')),
-            readAt: $this->date(Value::field($notification, 'read_at')),
-            cancelledAt: $this->date(Value::field($notification, 'cancelled_at')),
-            related: $this->related(Value::field($notification, 'related')),
+            id: Value::text(Value::field(row: $notification, name: 'id')),
+            recipient: new RecipientReference(kind: Value::text(Value::field(row: $notification, name: 'recipient_kind')), id: Value::text(Value::field(row: $notification, name: 'recipient_id'))),
+            eventType: Value::text(Value::field(row: $notification, name: 'event_type')),
+            revision: Value::text(Value::field(row: $notification, name: 'revision')),
+            readAt: $this->date(Value::field(row: $notification, name: 'read_at')),
+            cancelledAt: $this->date(Value::field(row: $notification, name: 'cancelled_at')),
+            related: $this->related(Value::field(row: $notification, name: 'related')),
         );
     }
 
@@ -347,7 +347,7 @@ final class SqlNotificationCenter implements NotificationCenter
             return $this->canonicalMap($value);
         }
 
-        return array_map(fn (mixed $item): null|bool|int|string|array => $this->canonicalValue($item), $value);
+        return array_map($this->canonicalValue(...), $value);
     }
 
     /** @param array<string, mixed>|null $value */

@@ -10,7 +10,7 @@ use Illuminate\Routing\Router;
 
 it('does not register unfinished membership runtime consumers', function (): void {
     /** @var Router $router */
-    $router = app(Router::class);
+    $router = resolve(Router::class);
 
     expect(app()->bound(ApplyMembershipProjection::class))->toBeFalse()
         ->and(app()->bound(ReferenceMembershipProjection::class))->toBeFalse()

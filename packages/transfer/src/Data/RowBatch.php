@@ -7,14 +7,14 @@ namespace CoreX\Transfer\Data;
 use CoreX\Attributes\Api;
 use InvalidArgumentException;
 
-/** @phpstan-import-type JsonMap from \CoreX\Transfer\Data\SourceRow */
+/** @phpstan-import-type JsonMap from SourceRow */
 #[Api(since: '1.0')]
 final readonly class RowBatch
 {
     /** @param list<SourceRow> $rows */
     public function __construct(public array $rows, public SourceCursor $next, public bool $remaining)
     {
-        self::validateInput($rows, $next, $remaining);
+        self::validateInput(rows: $rows, next: $next, remaining: $remaining);
     }
 
     /** Runtime validation also rejects values from untyped integration callers.

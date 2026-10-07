@@ -65,14 +65,14 @@ function panelsModules(array &$active): ModuleRegistry
 
 function panelProvider(string $key, ?string $requiredCapability, Closure $policy, array $supportedActions = ['open']): PanelProvider
 {
-    return new class($key, $requiredCapability, $policy, $supportedActions) implements PanelProvider
+    return new readonly class($key, $requiredCapability, $policy, $supportedActions) implements PanelProvider
     {
         /** @param list<string> $supportedActions */
         public function __construct(
-            private readonly string $key,
-            private readonly ?string $requiredCapability,
-            private readonly Closure $policy,
-            private readonly array $supportedActions,
+            private string $key,
+            private ?string $requiredCapability,
+            private Closure $policy,
+            private array $supportedActions,
         ) {}
 
         public function descriptor(): PanelDescriptor
@@ -148,7 +148,7 @@ it('PAN-03: hides absent or disabled providers without evaluating their policy a
     };
     $catalogue = new ModulePanelCatalogue([panelProvider('example.audit', 'auditable', $policy)], panelsRegistry(['example.note' => $note], $active), panelsModules($modules));
 
-    expect((new ModulePanelCatalogue([], panelsRegistry(['example.note' => $note], $active), panelsModules($modules)))->forEntity(panelContext(), new EntityReference('example.note', 'n-1')))->toBe([])
+    expect(new ModulePanelCatalogue([], panelsRegistry(['example.note' => $note], $active), panelsModules($modules))->forEntity(panelContext(), new EntityReference('example.note', 'n-1')))->toBe([])
         ->and($catalogue->forEntity(panelContext(), new EntityReference('example.note', 'n-1')))->toBe([])
         ->and($policyCalls)->toBe(0);
 });
@@ -240,7 +240,7 @@ it('registers the tagged catalogue and exposes the package module manifest', fun
     $this->app->instance(ModuleRegistry::class, panelsModules($modules));
     $this->app->instance('panel.provider.audit', panelProvider('example.audit', 'auditable', static fn (): PanelAccess => new PanelAccess(true, ['open'], null)));
     $this->app->tag(['panel.provider.audit'], 'corex.panels.providers');
-    (new PanelsServiceProvider($this->app))->register();
+    new PanelsServiceProvider($this->app)->register();
 
     expect($this->app->make(PanelCatalogue::class))
         ->toBeInstanceOf(ModulePanelCatalogue::class)

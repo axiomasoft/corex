@@ -60,12 +60,12 @@ final class DefaultAccessChecker implements AccessChecker
 
         $roleIds = $this->activeRoleIds($p);
 
-        if ($roleIds !== [] && $this->matrixQuery($roleIds, $entityKey, $action)
+        if ($roleIds !== [] && $this->matrixQuery(roleIds: $roleIds, entityKey: $entityKey, action: $action)
             ->where('scope', '<>', Scope::None->value)->exists()) {
             return true;
         }
 
-        return $this->directGrants->hasActive($p, "{$this->panel()}.{$entityKey}.{$action}");
+        return $this->directGrants->hasActive(p: $p, key: "{$this->panel()}.{$entityKey}.{$action}");
     }
 
     #[Override]
@@ -81,18 +81,18 @@ final class DefaultAccessChecker implements AccessChecker
             return Scope::None;
         }
 
-        $memoKey = $this->memoKey($p, $entityKey, $action, $ctx, $roleIds);
+        $memoKey = $this->memoKey(p: $p, entityKey: $entityKey, action: $action, ctx: $ctx, roleIds: $roleIds);
 
         if (array_key_exists($memoKey, $this->scopeMemo)) {
             return $this->scopeMemo[$memoKey];
         }
 
         $effective = $this->maxOf(
-            $this->matrixQuery($roleIds, $entityKey, $action)->whereNull('context_type')->pluck('scope'),
+            $this->matrixQuery(roleIds: $roleIds, entityKey: $entityKey, action: $action)->whereNull('context_type')->pluck('scope'),
         );
 
         if ($ctx instanceof RecordContext) {
-            $contextRows = $this->matrixQuery($roleIds, $entityKey, $action)
+            $contextRows = $this->matrixQuery(roleIds: $roleIds, entityKey: $entityKey, action: $action)
                 ->where('context_type', $ctx->type)
                 ->where('context_id', $ctx->id)
                 ->pluck('scope');
@@ -102,7 +102,7 @@ final class DefaultAccessChecker implements AccessChecker
             }
         }
 
-        if ($this->degradesToNone($p->principalType(), $effective)) {
+        if ($this->degradesToNone(type: $p->principalType(), scope: $effective)) {
             $effective = Scope::None;
         }
 
@@ -124,15 +124,15 @@ final class DefaultAccessChecker implements AccessChecker
 
         $key = "{$this->panel()}.{$entity->handle}.{$action}";
 
-        if ($this->directGrants->hasActive($p, $key)) {
+        if ($this->directGrants->hasActive(p: $p, key: $key)) {
             return true;
         }
 
-        return $this->allowed($p, $entity->handle, $action)
+        return $this->allowed(p: $p, entityKey: $entity->handle, action: $action)
             && $this->scopePredicate->matches(
-                (new ScopeAvailability($this->entities, $this->connections))->normalize($entity->handle, $this->scopeFor($p, $entity->handle, $action)),
-                $record,
-                $p,
+                scope: new ScopeAvailability(entities: $this->entities, connections: $this->connections)->normalize(entityKey: $entity->handle, scope: $this->scopeFor(p: $p, entityKey: $entity->handle, action: $action)),
+                record: $record,
+                p: $p,
             );
     }
 

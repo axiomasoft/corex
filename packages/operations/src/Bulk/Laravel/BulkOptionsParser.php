@@ -17,24 +17,24 @@ final class BulkOptionsParser
     public static function fromArray(array $config): BulkOptions
     {
         $violations = new ConfigurationValidator;
-        $enabled = self::bool($violations, 'enabled', $config['enabled'] ?? true);
-        $worker = self::worker($violations, $config['worker'] ?? 'api-bulk');
-        $lease = self::positiveInt($violations, 'lease_seconds', $config['lease_seconds'] ?? 30);
-        $retry = self::positiveInt($violations, 'retry_seconds', $config['retry_seconds'] ?? 5);
-        $resultRetention = self::positiveInt($violations, 'result_retention_seconds', $config['result_retention_seconds'] ?? 86_400);
-        $metadataRetention = self::positiveInt($violations, 'metadata_retention_seconds', $config['metadata_retention_seconds'] ?? 2_592_000);
-        $idempotencyRetention = self::positiveInt($violations, 'idempotency_retention_seconds', $config['idempotency_retention_seconds'] ?? 86_400);
+        $enabled = self::bool(violations: $violations, path: 'enabled', value: $config['enabled'] ?? true);
+        $worker = self::worker(violations: $violations, value: $config['worker'] ?? 'api-bulk');
+        $lease = self::positiveInt(violations: $violations, path: 'lease_seconds', value: $config['lease_seconds'] ?? 30);
+        $retry = self::positiveInt(violations: $violations, path: 'retry_seconds', value: $config['retry_seconds'] ?? 5);
+        $resultRetention = self::positiveInt(violations: $violations, path: 'result_retention_seconds', value: $config['result_retention_seconds'] ?? 86_400);
+        $metadataRetention = self::positiveInt(violations: $violations, path: 'metadata_retention_seconds', value: $config['metadata_retention_seconds'] ?? 2_592_000);
+        $idempotencyRetention = self::positiveInt(violations: $violations, path: 'idempotency_retention_seconds', value: $config['idempotency_retention_seconds'] ?? 86_400);
 
         if ($resultRetention > $metadataRetention) {
-            $violations->add('result_retention_seconds', 'must not exceed metadata_retention_seconds');
+            $violations->add(path: 'result_retention_seconds', message: 'must not exceed metadata_retention_seconds');
         }
 
         if ($resultRetention > $idempotencyRetention) {
-            $violations->add('result_retention_seconds', 'must not exceed idempotency_retention_seconds');
+            $violations->add(path: 'result_retention_seconds', message: 'must not exceed idempotency_retention_seconds');
         }
 
         if ($metadataRetention < $idempotencyRetention) {
-            $violations->add('metadata_retention_seconds', 'must cover idempotency_retention_seconds');
+            $violations->add(path: 'metadata_retention_seconds', message: 'must cover idempotency_retention_seconds');
         }
 
         $violations->failIfAny();
@@ -56,7 +56,7 @@ final class BulkOptionsParser
             return $value;
         }
 
-        $violations->add($path, 'must be a boolean');
+        $violations->add(path: $path, message: 'must be a boolean');
 
         return false;
     }
@@ -67,7 +67,7 @@ final class BulkOptionsParser
             return $value;
         }
 
-        $violations->add('worker', 'must be a safe identifier of at most 64 bytes');
+        $violations->add(path: 'worker', message: 'must be a safe identifier of at most 64 bytes');
 
         return 'invalid';
     }
@@ -78,7 +78,7 @@ final class BulkOptionsParser
             return $value;
         }
 
-        $violations->add($path, 'must be a positive integer');
+        $violations->add(path: $path, message: 'must be a positive integer');
 
         return 1;
     }

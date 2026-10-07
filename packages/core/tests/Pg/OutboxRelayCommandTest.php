@@ -62,7 +62,7 @@ it('defers the second message when the publisher throws', function (): void {
         ->expectsOutputToContain('deferred 1')
         ->assertSuccessful();
 
-    $now = app(ClockInterface::class)->now();
+    $now = resolve(ClockInterface::class)->now();
     $second = DB::connection('pgsql')->table('sys_outbox_messages')
         ->where('id', '01932f5a-0000-7000-8000-000000000032')
         ->first();

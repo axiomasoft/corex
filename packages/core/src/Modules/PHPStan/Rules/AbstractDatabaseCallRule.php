@@ -44,7 +44,7 @@ abstract class AbstractDatabaseCallRule implements Rule
 
         $errors = [];
 
-        foreach (DatabaseCall::constantStringArguments($node, $scope) as $sql) {
+        foreach (DatabaseCall::constantStringArguments(node: $node, scope: $scope) as $sql) {
             if (! $this->isViolation($sql)) {
                 continue;
             }

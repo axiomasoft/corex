@@ -28,7 +28,7 @@ use CoreX\Modules\Internal\Extend\Workflow;
 final class PipelineStages
 {
     /** @var list<class-string> */
-    public const ORDER = [
+    public const array ORDER = [
         Entity::class,
         EntityField::class,
         Permissions::class,

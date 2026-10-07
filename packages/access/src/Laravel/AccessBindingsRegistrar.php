@@ -9,7 +9,6 @@ use CoreX\Access\Access\Internal\DefaultScopeResolver;
 use CoreX\Access\Access\Internal\ScopeAvailability;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Contracts\RoleMatrixCompiler;
-use CoreX\Access\Extend\Internal\PermissionsMerger;
 use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
 use CoreX\Access\Matrix\Laravel\MatrixPortBindings;
 use CoreX\Access\Roles\Internal\SystemRoleMutationScope;

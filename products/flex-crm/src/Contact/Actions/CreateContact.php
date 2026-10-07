@@ -36,7 +36,7 @@ final readonly class CreateContact
             if (! $contact->save()) {
                 throw ValidationException::withMessages(['contact' => 'CRM creation was vetoed by an observer.']);
             }
-            ContactCreated::dispatch($contact, $ctx->actor);
+            event(new ContactCreated($contact, $ctx->actor));
 
             return $contact;
         });

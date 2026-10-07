@@ -1,0 +1,5997 @@
+{
+  "Laravel/config/config.php": {
+    "input_sha256": "5b225860e911e9b3f6688ce9dd8e220be213e5cd95f8fe36f585cce30d4b1fb2",
+    "output_sha256": "86fd0421b9bb5fd28f3cc8971ed97c347127ebd354708b36cd22bbb8677b0bd2",
+    "edits": [
+      {
+        "offset": 217,
+        "delete": "",
+        "insert": "\nuse Rector\\Config\\RectorConfig;\n"
+      },
+      {
+        "offset": 31,
+        "delete": ";\nuse Rector\\Config\\RectorConfig",
+        "insert": ""
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/config/sets/laravel-code-quality.php": {
+    "input_sha256": "11b1b532f28f9608eb49d0188195fc8532f7e9cb05fdf9582d5ef92eb060a5a4",
+    "output_sha256": "409b439032b5ee5988e4028654a2db288e65b69ef036b97c01ca036eaa29d2cf",
+    "edits": [
+      {
+        "offset": 2422,
+        "delete": " ",
+        "insert": ""
+      },
+      {
+        "offset": 2420,
+        "delete": " ",
+        "insert": ""
+      },
+      {
+        "offset": 2327,
+        "delete": "",
+        "insert": "use Rector\\Config\\RectorConfig;\n\n"
+      },
+      {
+        "offset": 31,
+        "delete": ";\nuse Rector\\Config\\RectorConfig",
+        "insert": ""
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/config/sets/laravel-collection.php": {
+    "input_sha256": "2c5aaebb03a1051afd5693e8894c75a627a3005262cef12068eaf31911435d30",
+    "output_sha256": "24636e573e5cf50b7dd411904f33e125d5f22719ec7c790c456e07bfbb8cfac7",
+    "edits": [
+      {
+        "offset": 530,
+        "delete": " ",
+        "insert": ""
+      },
+      {
+        "offset": 528,
+        "delete": " ",
+        "insert": ""
+      },
+      {
+        "offset": 435,
+        "delete": "",
+        "insert": "use Rector\\Config\\RectorConfig;\n\n"
+      },
+      {
+        "offset": 31,
+        "delete": ";\nuse Rector\\Config\\RectorConfig",
+        "insert": ""
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/config/sets/laravel-type-declarations.php": {
+    "input_sha256": "b2895ad4795036bb8be6d17c1ca1fd4f1a624d6bd811647f15c679976d1db4f9",
+    "output_sha256": "ebf57e08fd2609cf9073056f568146bd18c95c8630cc49c94b5f1c9a54dd8699",
+    "edits": [
+      {
+        "offset": 800,
+        "delete": " ",
+        "insert": ""
+      },
+      {
+        "offset": 798,
+        "delete": " ",
+        "insert": ""
+      },
+      {
+        "offset": 705,
+        "delete": "",
+        "insert": "use Rector\\Config\\RectorConfig;\n\n"
+      },
+      {
+        "offset": 31,
+        "delete": ";\nuse Rector\\Config\\RectorConfig",
+        "insert": ""
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/AbstractRector.php": {
+    "input_sha256": "ae3ab392ad8f5413c55e391611cca4045d4e4fbaafd1d9f2f04b207009fa7000",
+    "output_sha256": "cfb1d0887506078e2cf58753e1dc1d83eda31348b3fec10cd393f1873d03ffd6",
+    "edits": [
+      {
+        "offset": 188,
+        "delete": "\n",
+        "insert": ""
+      },
+      {
+        "offset": 186,
+        "delete": "\n",
+        "insert": " "
+      },
+      {
+        "offset": 130,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/NodeAnalyzer/QueryBuilderAnalyzer.php": {
+    "input_sha256": "0ca00300f2054ef15c2a6af561423e47562b6b8bc1ea8491f983cf40054d8bcc",
+    "output_sha256": "72dde5b9d2f24629542afdce8bc621ee759cdf7d4427e075d6391c3a38eaf8c6",
+    "edits": [
+      {
+        "offset": 4139,
+        "delete": "",
+        "insert": " === 1 && $classNames[0]"
+      },
+      {
+        "offset": 4137,
+        "delete": "(",
+        "insert": "s"
+      },
+      {
+        "offset": 4119,
+        "delete": "type->getC",
+        "insert": "c"
+      },
+      {
+        "offset": 4118,
+        "delete": "",
+        "insert": "count("
+      },
+      {
+        "offset": 4094,
+        "delete": "Found */",
+        "insert": "ObjectClassNames();\n"
+      },
+      {
+        "offset": 4087,
+        "delete": "hod.no",
+        "insert": "ype->ge"
+      },
+      {
+        "offset": 4086,
+        "delete": "",
+        "insert": "s = $"
+      },
+      {
+        "offset": 4075,
+        "delete": "n-ignore ",
+        "insert": ""
+      },
+      {
+        "offset": 4073,
+        "delete": "t",
+        "insert": "sN"
+      },
+      {
+        "offset": 4064,
+        "delete": "/** @php",
+        "insert": "$cla"
+      },
+      {
+        "offset": 4056,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3959,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3771,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3422,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3347,
+        "delete": "        /** @phpstan-ignore return.type */",
+        "insert": ""
+      },
+      {
+        "offset": 3246,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2713,
+        "delete": "\n     *\n     * @return ObjectType|null",
+        "insert": ""
+      },
+      {
+        "offset": 2625,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2587,
+        "delete": "s",
+        "insert": "[0]"
+      },
+      {
+        "offset": 2583,
+        "delete": "Cla",
+        "insert": ""
+      },
+      {
+        "offset": 2572,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2556,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2501,
+        "delete": "ClassReflection",
+        "insert": "1"
+      },
+      {
+        "offset": 2490,
+        "delete": "instanceof",
+        "insert": "!=="
+      },
+      {
+        "offset": 2488,
+        "delete": "s",
+        "insert": ")"
+      },
+      {
+        "offset": 2484,
+        "delete": "Cla",
+        "insert": ""
+      },
+      {
+        "offset": 2472,
+        "delete": "!",
+        "insert": "count("
+      },
+      {
+        "offset": 2397,
+        "delete": "        /** @phpstan-ignore phpstanApi.instanceofAssumption */",
+        "insert": ""
+      },
+      {
+        "offset": 2393,
+        "delete": "",
+        "insert": "s"
+      },
+      {
+        "offset": 2378,
+        "delete": "",
+        "insert": "Object"
+      },
+      {
+        "offset": 2355,
+        "delete": "Clas",
+        "insert": ""
+      },
+      {
+        "offset": 2297,
+        "delete": "/** @phpstan-ignore method.notFound */\n        ",
+        "insert": ""
+      },
+      {
+        "offset": 2209,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2072,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2059,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1868,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1631,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1534,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1434,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1342,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1097,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1088,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 1051,
+        "delete": "'Illuminate\\Database\\Eloquent\\",
+        "insert": ""
+      },
+      {
+        "offset": 945,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 936,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 892,
+        "delete": "'",
+        "insert": "\\"
+      },
+      {
+        "offset": 795,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 654,
+        "delete": "    }",
+        "insert": ""
+      },
+      {
+        "offset": 653,
+        "delete": "",
+        "insert": "}"
+      },
+      {
+        "offset": 647,
+        "delete": "\n   ",
+        "insert": ""
+      },
+      {
+        "offset": 484,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 265,
+        "delete": "Reflection\\ClassReflection;\nuse PHPStan\\",
+        "insert": ""
+      },
+      {
+        "offset": 5,
+        "delete": "",
+        "insert": "\n\ndeclare(strict_types=1);"
+      }
+    ]
+  },
+  "Laravel/src/NodeAnalyzer/ScopeAnalyzer.php": {
+    "input_sha256": "771050aecc29da89ea60f7ff4da43c3e070167d2b68d530c4949b73a3f704f15",
+    "output_sha256": "7d8e99a6e722bc41b9f5497922403bc2a4638a0943eb48a40ebd812b5e1f79e4",
+    "edits": [
+      {
+        "offset": 1698,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1622,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1412,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1140,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1073,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 989,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 976,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 919,
+        "delete": "(string) ",
+        "insert": ""
+      },
+      {
+        "offset": 688,
+        "delete": "    }",
+        "insert": ""
+      },
+      {
+        "offset": 687,
+        "delete": "",
+        "insert": "}"
+      },
+      {
+        "offset": 681,
+        "delete": "\n   ",
+        "insert": ""
+      },
+      {
+        "offset": 509,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 507,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 470,
+        "delete": "'Illuminate\\Database\\Eloquent\\",
+        "insert": ""
+      },
+      {
+        "offset": 425,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 423,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 377,
+        "delete": "'Illuminate\\Database\\Eloquent\\Attributes\\",
+        "insert": ""
+      },
+      {
+        "offset": 297,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 86,
+        "delete": "",
+        "insert": "\nuse Illuminate\\Database\\Eloquent\\Attributes\\Scope;\nuse Illuminate\\Database\\Eloquent\\Builder;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/NodeFactory/AppAssignFactory.php": {
+    "input_sha256": "9096e3671dee90c1efbe32793e63beec2e45163965b7e5f3424833049ae91e4a",
+    "output_sha256": "349daaca34837ce8b0fc8a277011fe4171b662f9a4bd6f2735f589458c355c19",
+    "edits": [
+      {
+        "offset": 1488,
+        "delete": " ",
+        "insert": ""
+      },
+      {
+        "offset": 1486,
+        "delete": " ",
+        "insert": ""
+      },
+      {
+        "offset": 1053,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1020,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 608,
+        "delete": "    }",
+        "insert": ""
+      },
+      {
+        "offset": 607,
+        "delete": "",
+        "insert": "}"
+      },
+      {
+        "offset": 601,
+        "delete": "\n   ",
+        "insert": ""
+      },
+      {
+        "offset": 407,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\ValueObject\\ServiceNameTypeAndVariableName;",
+        "insert": ""
+      },
+      {
+        "offset": 85,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\ValueObject\\ServiceNameTypeAndVariableName;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/NodeVisitor/ArrayDimFetchContextNodeVisitor.php": {
+    "input_sha256": "76476dcddf02c1ebacbe6c7ec3e261134e23b18ce4b82ea1fb2b6615e886c3fd",
+    "output_sha256": "4cb3e2572adce9ee597d76844908e586f7fe2e2c7ad5424e921ed5e7f5808247",
+    "edits": [
+      {
+        "offset": 3231,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3085,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2889,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2827,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2748,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2722,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2685,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2635,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2302,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2244,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2064,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1912,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1899,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1864,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1797,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1426,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1268,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1201,
+        "delete": "    }",
+        "insert": ""
+      },
+      {
+        "offset": 1200,
+        "delete": "",
+        "insert": "}"
+      },
+      {
+        "offset": 1194,
+        "delete": "\n   ",
+        "insert": ""
+      },
+      {
+        "offset": 1110,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1016,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 898,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 820,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 583,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/NodeVisitor/RandomEnumContextNodeVisitor.php": {
+    "input_sha256": "b06f6ed496cdfc61874ec695df09d267fac91e25af0f864748014efd434dc795",
+    "output_sha256": "fa4c7d33bfa303dbebe3664ced443807a2eba3bf2842c83c61cc35e99524b3e6",
+    "edits": [
+      {
+        "offset": 1515,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1456,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1292,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1254,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 838,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 773,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 706,
+        "delete": "    }",
+        "insert": ""
+      },
+      {
+        "offset": 705,
+        "delete": "",
+        "insert": "}"
+      },
+      {
+        "offset": 699,
+        "delete": "\n   ",
+        "insert": ""
+      },
+      {
+        "offset": 615,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 437,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/ArrayDimFetch/EnvVariableToEnvHelperRector.php": {
+    "input_sha256": "528d6a2bd6093596b9db12333981a2aee022e661dd6dc5c9d51af74423fa2a4f",
+    "output_sha256": "3e6aadb4d9b2b5098e4f5c8847b6603fb86dab6c9552d55ed672bbc9531f97f7",
+    "edits": [
+      {
+        "offset": 905,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 882,
+        "delete": "'Illuminate\\Support\\",
+        "insert": ""
+      },
+      {
+        "offset": 830,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 760,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 688,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 675,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 562,
+        "delete": "",
+        "insert": "\n        if (! $node instanceof ArrayDimFetch) {\n            return null;\n        }\n"
+      },
+      {
+        "offset": 451,
+        "delete": "    /**\n     * @param  ArrayDimFetch  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 235,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 68,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse Illuminate\\Support\\Env;"
+      },
+      {
+        "offset": 5,
+        "delete": "",
+        "insert": "\n\ndeclare(strict_types=1);"
+      }
+    ]
+  },
+  "Laravel/src/Rector/ArrayDimFetch/RequestVariablesToRequestFacadeRector.php": {
+    "input_sha256": "6fed822f049829f804142f44be57928c1911baae4b0c42dcaf1a9214dadb2794",
+    "output_sha256": "4de2465ce95c1e20f31456a65afb0a0cbaa8d28b24586f95832a3ada66fb2e66",
+    "edits": [
+      {
+        "offset": 5324,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 5289,
+        "delete": "'Illuminate\\Support\\Facades\\",
+        "insert": ""
+      },
+      {
+        "offset": 5237,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 5170,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4914,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4854,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 4819,
+        "delete": "'Illuminate\\Support\\Facades\\",
+        "insert": ""
+      },
+      {
+        "offset": 4749,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4719,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 4684,
+        "delete": "'Illuminate\\Support\\Facades\\",
+        "insert": ""
+      },
+      {
+        "offset": 4593,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4424,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 4411,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4297,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 4284,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4217,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4092,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 4079,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4011,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 3998,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3807,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3546,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3520,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3427,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3349,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3048,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2949,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2805,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2694,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2677,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2547,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2482,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2314,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2198,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2163,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2072,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 2037,
+        "delete": "'Illuminate\\Support\\Facades\\",
+        "insert": ""
+      },
+      {
+        "offset": 1909,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1761,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1702,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1490,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1186,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 992,
+        "delete": "",
+        "insert": "\n        if (! ($node instanceof ArrayDimFetch || $node instanceof Variable || $node instanceof Isset_)) {\n            return null;\n        }\n"
+      },
+      {
+        "offset": 848,
+        "delete": "    /**\n     * @param  ArrayDimFetch|Variable|Isset_  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 435,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse CoreX\\Tooling\\Rector\\Laravel\\NodeVisitor\\ArrayDimFetchContextNodeVisitor;\nuse CoreX\\Tooling\\Rector\\Laravel\\ValueObject\\ReplaceRequestKeyAndMethodValue;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 68,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse CoreX\\Tooling\\Rector\\Laravel\\NodeVisitor\\ArrayDimFetchContextNodeVisitor;\nuse CoreX\\Tooling\\Rector\\Laravel\\ValueObject\\ReplaceRequestKeyAndMethodValue;\nuse Illuminate\\Support\\Facades\\Request;"
+      },
+      {
+        "offset": 5,
+        "delete": "",
+        "insert": "\n\ndeclare(strict_types=1);"
+      }
+    ]
+  },
+  "Laravel/src/Rector/ArrayDimFetch/ServerVariableToRequestFacadeRector.php": {
+    "input_sha256": "e4bf9969411e4e4758298e08c0a5bbd8d15abaaf1eb0674b5d8cd9a35490dbc6",
+    "output_sha256": "56a99594d64e05b14b44b1182bc50a8dc28c814671b049c85fe913cfa74637d6",
+    "edits": [
+      {
+        "offset": 1017,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 982,
+        "delete": "'Illuminate\\Support\\Facades\\",
+        "insert": ""
+      },
+      {
+        "offset": 930,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 791,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 727,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 714,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 639,
+        "delete": "",
+        "insert": " $node instanceof ArrayDimFetch) {\n            return null;\n        }\n\n        if (! "
+      },
+      {
+        "offset": 638,
+        "delete": "",
+        "insert": "$this->shouldPreserveFile()) {\n            return null;\n        }\n\n        if ("
+      },
+      {
+        "offset": 514,
+        "delete": "    /**\n     * @param  ArrayDimFetch  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 420,
+        "delete": "",
+        "insert": "\n    public const string PRESERVE_PATHS = 'preserve_paths';\n\n    /** @var list<string> */\n    private array $preservePaths = [];\n\n    /** @param array<mixed> $configuration */\n    public function configure(array $configuration): void\n    {\n        if (array_diff(array_keys($configuration), [self::PRESERVE_PATHS]) !== []) {\n            throw new InvalidArgumentException('Unknown Laravel preservation option');\n        }\n        $paths = $configuration[self::PRESERVE_PATHS] ?? [];\n\n        if (! is_array($paths) || ! array_is_list($paths)) {\n            throw new InvalidArgumentException('Preserve paths must be a list of existing absolute paths');\n        }\n        $preservePaths = [];\n        foreach ($paths as $path) {\n            if (! is_string($path) || ! str_starts_with($path, DIRECTORY_SEPARATOR)) {\n                throw new InvalidArgumentException('Preserve paths must be existing absolute paths');\n            }\n            $resolved = realpath($path);\n\n            if ($resolved === false || $resolved === DIRECTORY_SEPARATOR) {\n                throw new InvalidArgumentException('Preserve path does not resolve to a bounded source path');\n            }\n            $preservePaths[] = $resolved;\n        }\n        $this->preservePaths = $preservePaths;\n    }\n\n    private function shouldPreserveFile(): bool\n    {\n        if ($this->preservePaths === []) {\n            return false;\n        }\n        $filePath = $this->getFile()->getFilePath();\n\n        return array_any($this->preservePaths, fn ($path) => $filePath === $path || str_starts_with($filePath, $path.DIRECTORY_SEPARATOR));\n    }\n"
+      },
+      {
+        "offset": 418,
+        "delete": "",
+        "insert": " implements ConfigurableRectorInterface"
+      },
+      {
+        "offset": 340,
+        "delete": "/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 331,
+        "delete": "Visitor",
+        "insert": ""
+      },
+      {
+        "offset": 325,
+        "delete": "xtNod",
+        "insert": "rfac"
+      },
+      {
+        "offset": 260,
+        "delete": ";\nuse CoreX\\Tooling\\Rector\\Laravel\\NodeVisitor\\ArrayDimFetchCo",
+        "insert": "I"
+      },
+      {
+        "offset": 244,
+        "delete": "l\\Abstract",
+        "insert": ""
+      },
+      {
+        "offset": 242,
+        "delete": "v",
+        "insert": "bl"
+      },
+      {
+        "offset": 238,
+        "delete": "La",
+        "insert": "Configu"
+      },
+      {
+        "offset": 220,
+        "delete": "eX\\Tooling",
+        "insert": "act"
+      },
+      {
+        "offset": 219,
+        "delete": "",
+        "insert": "nt"
+      },
+      {
+        "offset": 217,
+        "delete": "",
+        "insert": "Rector\\"
+      },
+      {
+        "offset": 68,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse CoreX\\Tooling\\Rector\\Laravel\\NodeVisitor\\ArrayDimFetchContextNodeVisitor;\nuse Illuminate\\Support\\Facades\\Request;\nuse InvalidArgumentException;"
+      },
+      {
+        "offset": 5,
+        "delete": "",
+        "insert": "\n\ndeclare(strict_types=1);"
+      }
+    ]
+  },
+  "Laravel/src/Rector/ArrayDimFetch/SessionVariableToSessionFacadeRector.php": {
+    "input_sha256": "4e9e9c1086f153a9f5fc4692fd4cabe5b9657a1d269a0c53c1bd38ec369713de",
+    "output_sha256": "3f546217231b3f20a84a131740b01112d827a2ff58f2e07dbf840bead516c835",
+    "edits": [
+      {
+        "offset": 4788,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 4753,
+        "delete": "'Illuminate\\Support\\Facades\\",
+        "insert": ""
+      },
+      {
+        "offset": 4701,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4626,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 4613,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4402,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4361,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 4326,
+        "delete": "'Illuminate\\Support\\Facades\\",
+        "insert": ""
+      },
+      {
+        "offset": 4274,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4210,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 4197,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4122,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 4109,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4041,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 4028,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3853,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3815,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 3780,
+        "delete": "'Illuminate\\Support\\Facades\\",
+        "insert": ""
+      },
+      {
+        "offset": 3728,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3664,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 3651,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3576,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 3563,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3495,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 3482,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3307,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3278,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 3243,
+        "delete": "'Illuminate\\Support\\Facades\\",
+        "insert": ""
+      },
+      {
+        "offset": 3191,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3113,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2660,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2570,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2503,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 2468,
+        "delete": "'Illuminate\\Support\\Facades\\",
+        "insert": ""
+      },
+      {
+        "offset": 2416,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2347,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2334,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2254,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2215,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2202,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2097,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2049,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 2014,
+        "delete": "'Illuminate\\Support\\Facades\\",
+        "insert": ""
+      },
+      {
+        "offset": 1962,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1888,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1875,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1790,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1691,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1642,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1540,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1503,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1391,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1303,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1207,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1106,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 999,
+        "delete": "",
+        "insert": "\n        if (! ($node instanceof Isset_ || $node instanceof Unset_ || $node instanceof ArrayDimFetch || $node instanceof Assign || $node instanceof FuncCall || $node instanceof Variable)) {\n            return null;\n        }\n"
+      },
+      {
+        "offset": 834,
+        "delete": "    /**\n     * @param  ArrayDimFetch|Assign|FuncCall|Isset_|Unset_|Variable  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 662,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 413,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 68,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse Illuminate\\Support\\Facades\\Session;"
+      },
+      {
+        "offset": 5,
+        "delete": "",
+        "insert": "\n\ndeclare(strict_types=1);"
+      }
+    ]
+  },
+  "Laravel/src/Rector/Assign/CallOnAppArrayAccessToStandaloneAssignRector.php": {
+    "input_sha256": "07e2e7ff28a56b263bd124a8b8c6b359b748571fdbf332026b9b419f8dd389bf",
+    "output_sha256": "615532a303975a08b1322a36224eb7bdf68cc662cc51a9678c138e8ea9dd387d",
+    "edits": [
+      {
+        "offset": 2951,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2910,
+        "delete": "()",
+        "insert": ""
+      },
+      {
+        "offset": 2713,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2250,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2067,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2054,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1961,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 1917,
+        "delete": "'Illuminate\\Contracts\\Foundation\\",
+        "insert": ""
+      },
+      {
+        "offset": 1861,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1848,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1725,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1712,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1593,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1580,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1512,
+        "delete": "",
+        "insert": " $node instanceof Expression) {\n            return null;\n        }\n\n        if (! "
+      },
+      {
+        "offset": 1365,
+        "delete": "\n     * @param  Expression  $node\n",
+        "insert": ""
+      },
+      {
+        "offset": 1358,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1210,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1180,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 1150,
+        "delete": "'Illuminate\\Validation\\",
+        "insert": ""
+      },
+      {
+        "offset": 861,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 465,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse CoreX\\Tooling\\Rector\\Laravel\\NodeFactory\\AppAssignFactory;\nuse CoreX\\Tooling\\Rector\\Laravel\\ValueObject\\ServiceNameTypeAndVariableName;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 87,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse CoreX\\Tooling\\Rector\\Laravel\\NodeFactory\\AppAssignFactory;\nuse CoreX\\Tooling\\Rector\\Laravel\\ValueObject\\ServiceNameTypeAndVariableName;\nuse Illuminate\\Contracts\\Foundation\\Application;\nuse Illuminate\\Validation\\Factory;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/BooleanNot/AvoidNegatedCollectionContainsOrDoesntContainRector.php": {
+    "input_sha256": "d52eec25c34dd3cc088f9fd8b257939cc66d2ad2f9d32b14bc353c2684f1e6a9",
+    "output_sha256": "f9f2b742823db5c7cc63228215c3bdf03d4c443dc600b9ed012dc915057e4ce5",
+    "edits": [
+      {
+        "offset": 1343,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1048,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 978,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 948,
+        "delete": "'Illuminate\\Support\\",
+        "insert": ""
+      },
+      {
+        "offset": 901,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 888,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 822,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 809,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 692,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 648,
+        "delete": "",
+        "insert": "if (! $node instanceof BooleanNot) {\n            return null;\n        }\n\n        "
+      },
+      {
+        "offset": 537,
+        "delete": "    /**\n     * @param  BooleanNot  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 244,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 91,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse Illuminate\\Support\\Enumerable;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/ClassMethod/AbstractAddGenericReturnTypeToRelationsRector.php": {
+    "input_sha256": "2cfbcad1f0232f8165a936903df04138cf14a4845b64c6bf816e3a060eb78820",
+    "output_sha256": "e2b8a7e241d2c8beb62e7de27cf9f19b8e408b5c94fc199b03d6a54a344410ac",
+    "edits": [
+      {
+        "offset": 13320,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 13293,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 13247,
+        "delete": "'\\Illuminate\\Database\\Eloquent\\Relations\\",
+        "insert": ""
+      },
+      {
+        "offset": 13173,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 13120,
+        "delete": "'Illuminate\\Database\\Eloquent\\Relations\\",
+        "insert": ""
+      },
+      {
+        "offset": 13028,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 12774,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 12631,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 12618,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 12357,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 12288,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 12215,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 12202,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 12006,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 11889,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 11857,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 11841,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 11724,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 11711,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 11486,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 11364,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 11275,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 11261,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 11216,
+        "delete": "'Illuminate\\Database\\Eloquent\\Relations\\",
+        "insert": ""
+      },
+      {
+        "offset": 10827,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 10548,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 10425,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 10356,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 10305,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 10236,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 10185,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 10088,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 10075,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 10017,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 9849,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 9778,
+        "delete": "",
+        "insert": "\n        }\n"
+      },
+      {
+        "offset": 9774,
+        "delete": "s(",
+        "insert": "Node, $node"
+      },
+      {
+        "offset": 9769,
+        "delete": "t",
+        "insert": "neric"
+      },
+      {
+        "offset": 9765,
+        "delete": "->",
+        "insert": "($"
+      },
+      {
+        "offset": 9754,
+        "delete": "",
+        "insert": "Types[] = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeTo"
+      },
+      {
+        "offset": 9747,
+        "delete": "",
+        "insert": "[];\n        foreach ($mappedTypeNode->genericTypes as $genericTypeNode) {\n            "
+      },
+      {
+        "offset": 9683,
+        "delete": "",
+        "insert": "eNod"
+      },
+      {
+        "offset": 9674,
+        "delete": "Object",
+        "insert": ""
+      },
+      {
+        "offset": 9654,
+        "delete": "",
+        "insert": "e);\n\n        if (! $mappedTypeNod"
+      },
+      {
+        "offset": 9636,
+        "delete": "!",
+        "insert": ""
+      },
+      {
+        "offset": 9633,
+        "delete": "f ",
+        "insert": "s->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode"
+      },
+      {
+        "offset": 9632,
+        "delete": "",
+        "insert": "$mappedTypeNode = $th"
+      },
+      {
+        "offset": 9619,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 9568,
+        "delete": "'Illuminate\\Database\\Eloquent\\Relations\\",
+        "insert": ""
+      },
+      {
+        "offset": 9493,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 9440,
+        "delete": "'Illuminate\\Database\\Eloquent\\Relations\\",
+        "insert": ""
+      },
+      {
+        "offset": 9017,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 8893,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 8779,
+        "delete": "()",
+        "insert": "s[0]"
+      },
+      {
+        "offset": 8754,
+        "delete": "PHPStanType->ge",
+        "insert": ""
+      },
+      {
+        "offset": 8753,
+        "delete": "",
+        "insert": "bje"
+      },
+      {
+        "offset": 8748,
+        "delete": "phpD",
+        "insert": ""
+      },
+      {
+        "offset": 8680,
+        "delete": "",
+        "insert": "s) === 1"
+      },
+      {
+        "offset": 8676,
+        "delete": "Typ",
+        "insert": "ClassNam"
+      },
+      {
+        "offset": 8670,
+        "delete": "O",
+        "insert": "TypeNode && count($o"
+      },
+      {
+        "offset": 8650,
+        "delete": "",
+        "insert": "e);\n        $objectClassNames = $phpDocPHPStanType->getObjectClassNames();\n\n        if ($mappedTypeNod"
+      },
+      {
+        "offset": 8630,
+        "delete": "f ",
+        "insert": "s->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode"
+      },
+      {
+        "offset": 8629,
+        "delete": "",
+        "insert": "$mappedTypeNode = $th"
+      },
+      {
+        "offset": 8273,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 8231,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 8156,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 7947,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 7790,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 7777,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 7709,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 7457,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 7407,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 7239,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 7226,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 6896,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 6863,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 6779,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 6679,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 6593,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 6274,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 6261,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 6104,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 6091,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 6036,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 5860,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 5818,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 5743,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 5489,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 5317,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 5099,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 5072,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4697,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4057,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3792,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3625,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 3612,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3402,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 3100,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2977,
+        "delete": "tion'",
+        "insert": "ss"
+      },
+      {
+        "offset": 2971,
+        "delete": "s\\Re",
+        "insert": "::c"
+      },
+      {
+        "offset": 2933,
+        "delete": "'Illuminate\\Database\\Eloquent\\",
+        "insert": ""
+      },
+      {
+        "offset": 2879,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2866,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2785,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2640,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2501,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2390,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2323,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2169,
+        "delete": "    }",
+        "insert": ""
+      },
+      {
+        "offset": 2168,
+        "delete": "",
+        "insert": "}"
+      },
+      {
+        "offset": 2162,
+        "delete": "\n   ",
+        "insert": ""
+      },
+      {
+        "offset": 1812,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1646,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1506,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1066,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;",
+        "insert": ""
+      },
+      {
+        "offset": 520,
+        "delete": ";\nuse PHPStan\\Type\\Generic\\GenericObjectType",
+        "insert": ""
+      },
+      {
+        "offset": 92,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany;\nuse Illuminate\\Database\\Eloquent\\Relations\\MorphToMany;\nuse Illuminate\\Database\\Eloquent\\Relations\\Pivot;\nuse Illuminate\\Database\\Eloquent\\Relations\\Relation;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/ClassMethod/AddGenericBuilderToScopesRector.php": {
+    "input_sha256": "c3e7c2b8682cefb8f7b82ab073b1f5ec0321a5c2e22b4568a5e4cac6d93b97f4",
+    "output_sha256": "6afc7a14a7cce4d948aaa810719d11812b65944ce79b901b68beb29695ead633",
+    "edits": [
+      {
+        "offset": 6868,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 6852,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 6725,
+        "delete": "()",
+        "insert": "s[0]"
+      },
+      {
+        "offset": 6700,
+        "delete": "PHPStanType->ge",
+        "insert": ""
+      },
+      {
+        "offset": 6699,
+        "delete": "",
+        "insert": "bje"
+      },
+      {
+        "offset": 6694,
+        "delete": "phpD",
+        "insert": ""
+      },
+      {
+        "offset": 6626,
+        "delete": "",
+        "insert": "s) === 1"
+      },
+      {
+        "offset": 6622,
+        "delete": "Typ",
+        "insert": "ClassNam"
+      },
+      {
+        "offset": 6616,
+        "delete": "O",
+        "insert": "TypeNode && count($o"
+      },
+      {
+        "offset": 6596,
+        "delete": "",
+        "insert": "e);\n        $objectClassNames = $phpDocPHPStanType->getObjectClassNames();\n\n        if ($mappedTypeNod"
+      },
+      {
+        "offset": 6576,
+        "delete": "f ",
+        "insert": "s->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode"
+      },
+      {
+        "offset": 6575,
+        "delete": "",
+        "insert": "$mappedTypeNode = $th"
+      },
+      {
+        "offset": 6288,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 6275,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 6065,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 6041,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 6004,
+        "delete": "'Illuminate\\Database\\Eloquent\\",
+        "insert": ""
+      },
+      {
+        "offset": 5932,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 5706,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 5614,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 5407,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 5332,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 5203,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 5086,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 5070,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4953,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 4940,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4715,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4689,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4458,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4424,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4160,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3973,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 3936,
+        "delete": "'Illuminate\\Database\\Eloquent\\",
+        "insert": ""
+      },
+      {
+        "offset": 3882,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 3869,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3796,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 3783,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3591,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3564,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3539,
+        "delete": " ",
+        "insert": ""
+      },
+      {
+        "offset": 3537,
+        "delete": " ",
+        "insert": ""
+      },
+      {
+        "offset": 3415,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3156,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2872,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2845,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2720,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2707,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2373,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2197,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2184,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2051,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1971,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1958,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1871,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1759,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1692,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1538,
+        "delete": "    }",
+        "insert": ""
+      },
+      {
+        "offset": 1537,
+        "delete": "",
+        "insert": "}"
+      },
+      {
+        "offset": 1531,
+        "delete": "\n   ",
+        "insert": ""
+      },
+      {
+        "offset": 1001,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse CoreX\\Tooling\\Rector\\Laravel\\NodeAnalyzer\\ScopeAnalyzer;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 563,
+        "delete": "Generic\\GenericObjectType;\nuse PHPStan\\Type\\",
+        "insert": ""
+      },
+      {
+        "offset": 92,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse CoreX\\Tooling\\Rector\\Laravel\\NodeAnalyzer\\ScopeAnalyzer;\nuse Illuminate\\Database\\Eloquent\\Builder;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/ClassMethod/AddGenericReturnTypeToRelationsRector.php": {
+    "input_sha256": "6221bd882d1de0a61ce1badfa55009ce7cd92fc3263218716c593f5cae8f2649",
+    "output_sha256": "c163a1d710a35c1469828cb4bbc25f3a4c97f68b0d4cc63f899e7224a58decf1",
+    "edits": [
+      {
+        "offset": 695,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 611,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 296,
+        "delete": "\n *",
+        "insert": ""
+      },
+      {
+        "offset": 157,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/ClassMethod/AddLegacyGenericReturnTypeToRelationsRector.php": {
+    "input_sha256": "d28bf925e893ae015c69af538038b124fd08a2be2bf95f07104b284aee52b2ba",
+    "output_sha256": "87a2847d40d15ed0ca109cca81802a8ba7a489d60cff620b8bfd3231fcfece75",
+    "edits": [
+      {
+        "offset": 679,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 594,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 273,
+        "delete": "\n *",
+        "insert": ""
+      },
+      {
+        "offset": 158,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/ClassMethod/AddNewGenericReturnTypeToRelationsRector.php": {
+    "input_sha256": "ba4a569dc002a504531bea9221ff08320e78841a0550d71dfaab31f2b6f788db",
+    "output_sha256": "3aea7b67507b1fbf238639b55e2651b5817f2cc25bc23c5d003ad2342aad0765",
+    "edits": [
+      {
+        "offset": 731,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 647,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 322,
+        "delete": "\n *",
+        "insert": ""
+      },
+      {
+        "offset": 157,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/ClassMethod/MakeModelAttributesAndScopesProtectedRector.php": {
+    "input_sha256": "b3f867006552646da680ea0d201ec3632ec54b308c38a7bee7ab12cc3784023f",
+    "output_sha256": "bc5d31b8a948b219a93a96b93d27a5c7dfdbf81b0566e71690ed47b85c7b2849",
+    "edits": [
+      {
+        "offset": 2523,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 2478,
+        "delete": "'Illuminate\\Database\\Eloquent\\Casts\\",
+        "insert": ""
+      },
+      {
+        "offset": 2402,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2322,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2309,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2209,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2085,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2020,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1988,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1972,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1681,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1565,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1552,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1407,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1364,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1351,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1156,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1129,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 981,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 945,
+        "delete": "",
+        "insert": "if (! $node instanceof ClassMethod) {\n            return null;\n        }\n        "
+      },
+      {
+        "offset": 851,
+        "delete": "* @param  ClassMethod  $node ",
+        "insert": ""
+      },
+      {
+        "offset": 845,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 691,
+        "delete": "    }",
+        "insert": ""
+      },
+      {
+        "offset": 690,
+        "delete": "",
+        "insert": "}"
+      },
+      {
+        "offset": 684,
+        "delete": "\n   ",
+        "insert": ""
+      },
+      {
+        "offset": 344,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse CoreX\\Tooling\\Rector\\Laravel\\NodeAnalyzer\\ScopeAnalyzer;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 92,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse CoreX\\Tooling\\Rector\\Laravel\\NodeAnalyzer\\ScopeAnalyzer;\nuse Illuminate\\Database\\Eloquent\\Casts\\Attribute;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/Class_/AnonymousMigrationsRector.php": {
+    "input_sha256": "13dbeb86d9461f1dce3cf537e945b19e552cfe43378c620cd70c78bc17f605fa",
+    "output_sha256": "5dffd50e9b527729edcbd65108e70994a773999d58a8f79134866947dc86c20a",
+    "edits": [
+      {
+        "offset": 1183,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1058,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 988,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 937,
+        "delete": "\\Migration'",
+        "insert": "s"
+      },
+      {
+        "offset": 936,
+        "delete": "",
+        "insert": "::cla"
+      },
+      {
+        "offset": 906,
+        "delete": "'Illuminate\\Database\\",
+        "insert": ""
+      },
+      {
+        "offset": 864,
+        "delete": "",
+        "insert": " $node instanceof Class_) {\n            return null;\n        }\n\n        if (! "
+      },
+      {
+        "offset": 752,
+        "delete": "    /**\n     * @param  Class_  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 603,
+        "delete": "    }",
+        "insert": ""
+      },
+      {
+        "offset": 602,
+        "delete": "",
+        "insert": "}"
+      },
+      {
+        "offset": 596,
+        "delete": "\n   ",
+        "insert": ""
+      },
+      {
+        "offset": 447,
+        "delete": "\n *",
+        "insert": ""
+      },
+      {
+        "offset": 271,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;",
+        "insert": ""
+      },
+      {
+        "offset": 87,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse Illuminate\\Database\\Migrations\\Migration;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/Coalesce/ApplyDefaultInsteadOfNullCoalesceRector.php": {
+    "input_sha256": "d9731d9e6a5c893fb77c561cc3452ed99dcc9e846230394407e2d1bfc76d0bb2",
+    "output_sha256": "83be68920ab26ce2df784eebdc548585242ab3d95fb0c46c78fc47bb09a24aea",
+    "edits": [
+      {
+        "offset": 3029,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3003,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2949,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2671,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2622,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2605,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2526,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2325,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2092,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1769,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1654,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1583,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1545,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1509,
+        "delete": "",
+        "insert": " $node instanceof Coalesce) {\n            return null;\n        }\n\n        if (! "
+      },
+      {
+        "offset": 1365,
+        "delete": "    /**\n     * @param  Coalesce  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 1276,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1265,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 1242,
+        "delete": "'Illuminate\\Support\\",
+        "insert": ""
+      },
+      {
+        "offset": 867,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 757,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 532,
+        "delete": "/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 378,
+        "delete": "CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse CoreX\\Tooling\\Rector\\Laravel\\ValueObject\\ApplyDefaultInsteadOfNullCoalesce;\nuse ",
+        "insert": ""
+      },
+      {
+        "offset": 63,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse CoreX\\Tooling\\Rector\\Laravel\\ValueObject\\ApplyDefaultInsteadOfNullCoalesce;\nuse Illuminate\\Support\\Env;"
+      },
+      {
+        "offset": 5,
+        "delete": "",
+        "insert": "\n\ndeclare(strict_types=1);"
+      }
+    ]
+  },
+  "Laravel/src/Rector/Expr/AppEnvironmentComparisonToParameterRector.php": {
+    "input_sha256": "d13095793cca7190ebba593401d2588931a4d624942aa14e12f0cb51ae0cd8aa",
+    "output_sha256": "3da766722b74e80c0bf2fedc4411c6d3ea7100ff914cf17d9925672825d3c767",
+    "edits": [
+      {
+        "offset": 4119,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4078,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 4044,
+        "delete": "'",
+        "insert": "\\"
+      },
+      {
+        "offset": 3991,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 3835,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3666,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 3635,
+        "delete": "'Illuminate\\Support\\Facades\\",
+        "insert": ""
+      },
+      {
+        "offset": 3530,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 3486,
+        "delete": "'Illuminate\\Contracts\\Foundation\\",
+        "insert": ""
+      },
+      {
+        "offset": 3366,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3236,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3156,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 3143,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3076,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 3044,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2906,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2858,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2812,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2452,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2392,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2303,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2272,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2243,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2230,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2033,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1880,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1847,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1715,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1535,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1400,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1308,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1271,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1062,
+        "delete": "",
+        "insert": "\n        if (! ($node instanceof FuncCall || $node instanceof Identical || $node instanceof Equal || $node instanceof NotIdentical || $node instanceof NotEqual)) {\n            return null;\n        }\n"
+      },
+      {
+        "offset": 944,
+        "delete": "* @param FuncCall|Identical|Equal|NotIdentical|NotEqual $node ",
+        "insert": ""
+      },
+      {
+        "offset": 938,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 600,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 85,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse Illuminate\\Contracts\\Foundation\\Application;\nuse Illuminate\\Support\\Facades\\App;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/Expr/SubStrToStartsWithOrEndsWithStaticMethodCallRector/SubStrToStartsWithOrEndsWithStaticMethodCallRector.php": {
+    "input_sha256": "636cb716fed19a1a3c3dda5f7909b418819fd92dca9d4c607b23b89bb489d50e",
+    "output_sha256": "cf5fd2a54411bbb228b9e2d57822d33ebecca277bf722165783aef83b482411c",
+    "edits": [
+      {
+        "offset": 2319,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2243,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2083,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2011,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 1988,
+        "delete": "'Illuminate\\Support\\",
+        "insert": ""
+      },
+      {
+        "offset": 1936,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1865,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1689,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1628,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1615,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1379,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1331,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1138,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1125,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1040,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 850,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 819,
+        "delete": "",
+        "insert": " $node instanceof Expr) {\n            return null;\n        }\n\n        if (! "
+      },
+      {
+        "offset": 703,
+        "delete": "    /**\n     * @param  Expr  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 613,
+        "delete": "    }",
+        "insert": ""
+      },
+      {
+        "offset": 612,
+        "delete": "",
+        "insert": "}"
+      },
+      {
+        "offset": 606,
+        "delete": "\n   ",
+        "insert": ""
+      },
+      {
+        "offset": 383,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 136,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse Illuminate\\Support\\Str;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/FuncCall/AppToResolveRector.php": {
+    "input_sha256": "720c9f937aa798b25f6b3f2cf7c376053c8c41acaa8fc214f71b3e7cde6c5a5a",
+    "output_sha256": "a692c446289f7172e0afa6b4c13f5c1a5296e64abe4c3e7ab349516dce362e2a",
+    "edits": [
+      {
+        "offset": 790,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 646,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 578,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 462,
+        "delete": "",
+        "insert": " $node instanceof FuncCall) {\n            return null;\n        }\n\n        if (! "
+      },
+      {
+        "offset": 344,
+        "delete": "    /**\n     * @param  FuncCall  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 143,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 63,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;"
+      },
+      {
+        "offset": 5,
+        "delete": "",
+        "insert": "\n\ndeclare(strict_types=1);"
+      }
+    ]
+  },
+  "Laravel/src/Rector/FuncCall/NotFilledBlankFuncCallToBlankFilledFuncCallRector.php": {
+    "input_sha256": "7f042dcab8e8d1a276e3e7c077fcc9253f21fd423cf9af358e9872e07bef662f",
+    "output_sha256": "0e60a094e3f7f7f9a775be2041440afd116419ee7a3ab4c986bdea8a3bf20810",
+    "edits": [
+      {
+        "offset": 827,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 664,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 617,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 604,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 534,
+        "delete": "",
+        "insert": " $node instanceof BooleanNot) {\n            return null;\n        }\n\n        if (! "
+      },
+      {
+        "offset": 414,
+        "delete": "    /**\n     * @param  BooleanNot  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 180,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 89,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/FuncCall/NowFuncWithStartOfDayMethodCallToTodayFuncRector.php": {
+    "input_sha256": "4baf762edd0b25b073ad90090c05b7a3a80270ca42b235e765ea0dbacbfd3094",
+    "output_sha256": "7472b958a1372d93d71ede8f6b7b6eab243643b246ba42c80110c6d1b16db975",
+    "edits": [
+      {
+        "offset": 778,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 707,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 694,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 625,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 612,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 533,
+        "delete": "",
+        "insert": " $node instanceof MethodCall) {\n            return null;\n        }\n\n        if (! "
+      },
+      {
+        "offset": 413,
+        "delete": "    /**\n     * @param  MethodCall  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 180,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 89,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/FuncCall/RemoveRedundantValueCallsRector.php": {
+    "input_sha256": "9acd0dab5beed17cdd8bd88683912727f4a5d99908dbab50dc5f9c1545352cba",
+    "output_sha256": "1c78560f2c0d009774579920d40a067ec0f2fc4c6270f800aefc22a5f897ca5f",
+    "edits": [
+      {
+        "offset": 972,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 907,
+        "delete": "()",
+        "insert": ""
+      },
+      {
+        "offset": 814,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 746,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 638,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 625,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 559,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 546,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 482,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 415,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 201,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 63,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;"
+      },
+      {
+        "offset": 5,
+        "delete": "",
+        "insert": "\n\ndeclare(strict_types=1);"
+      }
+    ]
+  },
+  "Laravel/src/Rector/FuncCall/RemoveRedundantWithCallsRector.php": {
+    "input_sha256": "8278ab65ea6235553f4bb86ebf4443c9f1377cdbbf826a8a5d597b636ad5ebeb",
+    "output_sha256": "72c221fa0e3605e2b6a527ea5458a82adb1992cc774eb339485f06696c38d77f",
+    "edits": [
+      {
+        "offset": 996,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 873,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 772,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 686,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 579,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 566,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 500,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 487,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 423,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 356,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 143,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 63,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;"
+      },
+      {
+        "offset": 5,
+        "delete": "",
+        "insert": "\n\ndeclare(strict_types=1);"
+      }
+    ]
+  },
+  "Laravel/src/Rector/FuncCall/SleepFuncToSleepStaticCallRector.php": {
+    "input_sha256": "bc198ab3c2bdda70095c00853449645484a58dbf06970cc12ed08ab638f6908a",
+    "output_sha256": "2407722d2f9830871f85d2c72f76083f19582c5d92caee3a8dfe1eadbf67a374",
+    "edits": [
+      {
+        "offset": 921,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 889,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 864,
+        "delete": "'Illuminate\\Support\\",
+        "insert": ""
+      },
+      {
+        "offset": 642,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 596,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 583,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 513,
+        "delete": "",
+        "insert": " $node instanceof Expression) {\n            return null;\n        }\n\n        if (! "
+      },
+      {
+        "offset": 397,
+        "delete": "    /**\n     * @param  Expression  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 180,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 89,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse Illuminate\\Support\\Sleep;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/FuncCall/ThrowIfAndThrowUnlessExceptionsToUseClassStringRector.php": {
+    "input_sha256": "75b210d65c2dbe1166e24196cd1f3a53811e838b7e243ca5ec88145811aec6e6",
+    "output_sha256": "3705d8a21c264759c8e397053b3c74aa9ca32d5965282d0845120ff1477f26b1",
+    "edits": [
+      {
+        "offset": 1208,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 962,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 949,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 848,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 835,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 723,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 682,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 592,
+        "delete": "",
+        "insert": " $node instanceof FuncCall) {\n            return null;\n        }\n\n        if (! "
+      },
+      {
+        "offset": 474,
+        "delete": "    /**\n     * @param  FuncCall  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 238,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 63,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;"
+      },
+      {
+        "offset": 5,
+        "delete": "",
+        "insert": "\n\ndeclare(strict_types=1);"
+      }
+    ]
+  },
+  "Laravel/src/Rector/FuncCall/TypeHintTappableCallRector.php": {
+    "input_sha256": "f4ffdea3bf0e38dfa18c2e296842e2cef24095a43016844b0cd277bfc5a0c561",
+    "output_sha256": "0918969bc0bbabfa94c8f7d375283e4915ab59c5f0bcd9629d8c9052a25c0500",
+    "edits": [
+      {
+        "offset": 2774,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2741,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2583,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2441,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2428,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2355,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2259,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1956,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1775,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1630,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1603,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1435,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1305,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1261,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1127,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1047,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 976,
+        "delete": "",
+        "insert": " ($node instanceof MethodCall || $node instanceof FuncCall)) {\n            return null;\n        }\n\n        if (! "
+      },
+      {
+        "offset": 851,
+        "delete": "    /**\n     * @param  MethodCall|FuncCall  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 738,
+        "delete": "    }",
+        "insert": ""
+      },
+      {
+        "offset": 737,
+        "delete": "",
+        "insert": "}"
+      },
+      {
+        "offset": 731,
+        "delete": "\n   ",
+        "insert": ""
+      },
+      {
+        "offset": 597,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 595,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 560,
+        "delete": "'Illuminate\\Support\\Traits\\",
+        "insert": ""
+      },
+      {
+        "offset": 397,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 63,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse Illuminate\\Support\\Traits\\Tappable;"
+      },
+      {
+        "offset": 5,
+        "delete": "",
+        "insert": "\n\ndeclare(strict_types=1);"
+      }
+    ]
+  },
+  "Laravel/src/Rector/MethodCall/AvoidNegatedCollectionFilterOrRejectRector.php": {
+    "input_sha256": "9a4427ef0edce82b334a2fb21c40816553fdcad47a4b0e253f53b61637568760",
+    "output_sha256": "859a3da8d8e66cab4ad6f952053e4016634749d6883abb29e44b59581048ce64",
+    "edits": [
+      {
+        "offset": 1938,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1402,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1389,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1281,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1268,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1141,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1007,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 994,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 952,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 922,
+        "delete": "'Illuminate\\Support\\",
+        "insert": ""
+      },
+      {
+        "offset": 869,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 766,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 714,
+        "delete": "",
+        "insert": "if (! $node instanceof MethodCall) {\n            return null;\n        }\n\n        "
+      },
+      {
+        "offset": 603,
+        "delete": "    /**\n     * @param  MethodCall  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 319,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 91,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse Illuminate\\Support\\Enumerable;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/MethodCall/ConvertEnumerableToArrayToAllRector.php": {
+    "input_sha256": "50ec11f460eb979297fd4c4919c914e08590d4d28db00a6658fa0e82133812df",
+    "output_sha256": "2ea9fd5326a959d90d99fd35cfe99ff443120cd2fe04670f8bdb36a98d11e459",
+    "edits": [
+      {
+        "offset": 1550,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1430,
+        "delete": "')",
+        "insert": "::class"
+      },
+      {
+        "offset": 1391,
+        "delete": "'Illuminate\\Contracts\\Support\\",
+        "insert": ""
+      },
+      {
+        "offset": 1375,
+        "delete": "(",
+        "insert": " "
+      },
+      {
+        "offset": 1361,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1348,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 1318,
+        "delete": "'Illuminate\\Support\\",
+        "insert": ""
+      },
+      {
+        "offset": 1262,
+        "delete": "",
+        "insert": ","
+      },
+      {
+        "offset": 923,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 893,
+        "delete": "'Illuminate\\Support\\",
+        "insert": ""
+      },
+      {
+        "offset": 846,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 833,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 757,
+        "delete": "",
+        "insert": " ($node instanceof MethodCall || $node instanceof NullsafeMethodCall)) {\n            return null;\n        }\n\n        if (! "
+      },
+      {
+        "offset": 622,
+        "delete": "    /**\n     * @param  MethodCall|NullsafeMethodCall  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 318,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 91,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse Illuminate\\Contracts\\Support\\Arrayable;\nuse Illuminate\\Support\\Enumerable;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/MethodCall/EloquentOrderByToLatestOrOldestRector.php": {
+    "input_sha256": "8d531ebcc0f75645550263b910edadf8fc808538ebf8f336851918417dcaba82",
+    "output_sha256": "5672b0794521dede834ce7b4a4ac9de53aa03cb7b276a11c180d13d2ec84d6ec",
+    "edits": [
+      {
+        "offset": 3622,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3135,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3108,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2826,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2597,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2319,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2078,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1740,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1657,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1598,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1585,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1403,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1390,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1320,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1144,
+        "delete": "",
+        "insert": " $node instanceof MethodCall) {\n            return null;\n        }\n\n        if (! "
+      },
+      {
+        "offset": 1046,
+        "delete": "* @param  MethodCall  $node ",
+        "insert": ""
+      },
+      {
+        "offset": 1040,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 944,
+        "delete": "    }",
+        "insert": ""
+      },
+      {
+        "offset": 943,
+        "delete": "",
+        "insert": "}"
+      },
+      {
+        "offset": 937,
+        "delete": "\n   ",
+        "insert": ""
+      },
+      {
+        "offset": 797,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 696,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 511,
+        "delete": "/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 369,
+        "delete": "CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse CoreX\\Tooling\\Rector\\Laravel\\NodeAnalyzer\\QueryBuilderAnalyzer;\nuse ",
+        "insert": ""
+      },
+      {
+        "offset": 91,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse CoreX\\Tooling\\Rector\\Laravel\\NodeAnalyzer\\QueryBuilderAnalyzer;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/MethodCall/EloquentWhereRelationTypeHintingParameterRector.php": {
+    "input_sha256": "314ba05c1f2a11fd65d3bcb047782190e6027ee369b5bf752d200c1d2d9dc404",
+    "output_sha256": "752736e8eac3863df89f478019fe4e74e6df5ee7848da05db84393775cf12c18",
+    "edits": [
+      {
+        "offset": 2529,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2446,
+        "delete": " {\n                return true;\n            }\n        }\n        return false",
+        "insert": ""
+      },
+      {
+        "offset": 2371,
+        "delete": "           if (",
+        "insert": ""
+      },
+      {
+        "offset": 2368,
+        "delete": "{\n",
+        "insert": "=>"
+      },
+      {
+        "offset": 2359,
+        "delete": "",
+        "insert": "("
+      },
+      {
+        "offset": 2356,
+        "delete": "as",
+        "insert": "fn"
+      },
+      {
+        "offset": 2355,
+        "delete": "",
+        "insert": ","
+      },
+      {
+        "offset": 2338,
+        "delete": "ch ",
+        "insert": "rray_any"
+      },
+      {
+        "offset": 2337,
+        "delete": "",
+        "insert": "turn "
+      },
+      {
+        "offset": 2333,
+        "delete": "fo",
+        "insert": ""
+      },
+      {
+        "offset": 2230,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2202,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2199,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 2155,
+        "delete": "'Illuminate\\Contracts\\Database\\Query\\",
+        "insert": ""
+      },
+      {
+        "offset": 2033,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1921,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1908,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1668,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1509,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1378,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1254,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1228,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1083,
+        "delete": "",
+        "insert": "\n        if (! ($node instanceof MethodCall || $node instanceof StaticCall)) {\n            return null;\n        }\n"
+      },
+      {
+        "offset": 970,
+        "delete": "    /**\n     * @param  MethodCall|StaticCall  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 855,
+        "delete": "    }",
+        "insert": ""
+      },
+      {
+        "offset": 854,
+        "delete": "",
+        "insert": "}"
+      },
+      {
+        "offset": 848,
+        "delete": "\n   ",
+        "insert": ""
+      },
+      {
+        "offset": 756,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 321,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse CoreX\\Tooling\\Rector\\Laravel\\NodeAnalyzer\\QueryBuilderAnalyzer;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 91,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse CoreX\\Tooling\\Rector\\Laravel\\NodeAnalyzer\\QueryBuilderAnalyzer;\nuse Illuminate\\Contracts\\Database\\Query\\Builder;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/MethodCall/EloquentWhereTypeHintClosureParameterRector.php": {
+    "input_sha256": "50c9c349d28df84dac7613b5b74f362e7d855cf434fb84d9f2b17372d1bdc6eb",
+    "output_sha256": "4cb56a7ab14ff2e2425702c073ab9a08648e5424dd0e70deab9108cbba91df7e",
+    "edits": [
+      {
+        "offset": 2138,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2111,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2058,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 2014,
+        "delete": "'",
+        "insert": "\\"
+      },
+      {
+        "offset": 2010,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 1963,
+        "delete": "'Illuminate\\Contracts\\Database\\Eloquent\\",
+        "insert": ""
+      },
+      {
+        "offset": 1699,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1587,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1574,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1389,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1246,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1162,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1046,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1020,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 883,
+        "delete": "",
+        "insert": "\n        if (! ($node instanceof MethodCall || $node instanceof StaticCall)) {\n            return null;\n        }\n"
+      },
+      {
+        "offset": 770,
+        "delete": "    /**\n     * @param  MethodCall|StaticCall  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 655,
+        "delete": "    }",
+        "insert": ""
+      },
+      {
+        "offset": 654,
+        "delete": "",
+        "insert": "}"
+      },
+      {
+        "offset": 648,
+        "delete": "\n   ",
+        "insert": ""
+      },
+      {
+        "offset": 350,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse CoreX\\Tooling\\Rector\\Laravel\\NodeAnalyzer\\QueryBuilderAnalyzer;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 91,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse CoreX\\Tooling\\Rector\\Laravel\\NodeAnalyzer\\QueryBuilderAnalyzer;\nuse Illuminate\\Contracts\\Database\\Eloquent\\Builder;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/MethodCall/RedirectBackToBackHelperRector.php": {
+    "input_sha256": "1386cd33cf7d70217855a21f1b3a7f8ff3f948deb1a16cb8b49931184b6c2eda",
+    "output_sha256": "9eda3b0d047fae40e84645ae9850af9d7b1bf1f2e740be05961a234482f1f71e",
+    "edits": [
+      {
+        "offset": 1724,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1645,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1632,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1591,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 1555,
+        "delete": "'Illuminate\\Support\\Facades\\",
+        "insert": ""
+      },
+      {
+        "offset": 1521,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1420,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1382,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1186,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1173,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1087,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1013,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1000,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 921,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 820,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 760,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 647,
+        "delete": "",
+        "insert": "\n        if (! ($node instanceof MethodCall || $node instanceof StaticCall)) {\n            return null;\n        }\n"
+      },
+      {
+        "offset": 534,
+        "delete": "    /**\n     * @param  MethodCall|StaticCall  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 243,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 91,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse Illuminate\\Support\\Facades\\Redirect;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/MethodCall/RedirectRouteToToRouteHelperRector.php": {
+    "input_sha256": "61841070a343d7a24989570e88925e62c5e83123d8a968bc957e39efbcdc6f0f",
+    "output_sha256": "51c3cbcc742f5b981fe6fce488b83634b09ec663794463fb24ec71cb4d8946b7",
+    "edits": [
+      {
+        "offset": 1734,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1654,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1641,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1600,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 1564,
+        "delete": "'Illuminate\\Support\\Facades\\",
+        "insert": ""
+      },
+      {
+        "offset": 1530,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1429,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1391,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1191,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1178,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1092,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1018,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1005,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 925,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 824,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 764,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 651,
+        "delete": "",
+        "insert": "\n        if (! ($node instanceof MethodCall || $node instanceof StaticCall)) {\n            return null;\n        }\n"
+      },
+      {
+        "offset": 538,
+        "delete": "    /**\n     * @param  MethodCall|StaticCall  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 243,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 91,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse Illuminate\\Support\\Facades\\Redirect;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/MethodCall/ReverseConditionableMethodCallRector.php": {
+    "input_sha256": "59732c51b9e5e4ce1dac251181f3fb94875508149ff9418db67f62024530266f",
+    "output_sha256": "e03d811d529ba1d90dee84e40477a04dd738d0c3bd92acf54226fa0b3ab3d88f",
+    "edits": [
+      {
+        "offset": 1429,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1393,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1161,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1090,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1077,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 966,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 887,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 801,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 788,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 675,
+        "delete": "",
+        "insert": " $node instanceof MethodCall) {\n            return null;\n        }\n\n        if (! "
+      },
+      {
+        "offset": 553,
+        "delete": "    /**\n     * @param  MethodCall  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 462,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 460,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 420,
+        "delete": "'Illuminate\\Support\\Traits\\",
+        "insert": ""
+      },
+      {
+        "offset": 242,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 65,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse Illuminate\\Support\\Traits\\Conditionable;"
+      },
+      {
+        "offset": 5,
+        "delete": "",
+        "insert": "\n\ndeclare(strict_types=1);"
+      }
+    ]
+  },
+  "Laravel/src/Rector/MethodCall/UnaliasCollectionMethodsRector.php": {
+    "input_sha256": "4087d57d795ae38f9838e7e967c602f49216e30bdc90290b530be55981b8ab96",
+    "output_sha256": "92199a1b48b4c6ed57b76ca5f8c141bc2d55e80aa1321082f699566fa8d99e75",
+    "edits": [
+      {
+        "offset": 1370,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 889,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 813,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 783,
+        "delete": "'Illuminate\\Support\\",
+        "insert": ""
+      },
+      {
+        "offset": 730,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 635,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 591,
+        "delete": "",
+        "insert": "if (! $node instanceof MethodCall) {\n            return null;\n        }\n\n        "
+      },
+      {
+        "offset": 480,
+        "delete": "    /**\n     * @param  MethodCall  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 208,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 91,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse Illuminate\\Support\\Enumerable;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/MethodCall/ValidationRuleArrayStringValueToArrayRector.php": {
+    "input_sha256": "157a36cb07e9e03f0991abec7c7606ae6ed0c009a9f2d4702e3127207956c015",
+    "output_sha256": "36f2386d1f377a2ee40eba18bbccdb74f347513341e580c6be2a8befdeb05fd2",
+    "edits": [
+      {
+        "offset": 6239,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 6170,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 6115,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 6064,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 5920,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 5837,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 5816,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 5737,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 5716,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 5642,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 5329,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 5180,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 5141,
+        "delete": "'Illuminate\\Foundation\\Http\\",
+        "insert": ""
+      },
+      {
+        "offset": 5094,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 4999,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4910,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4840,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 4827,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4643,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 4630,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4555,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4436,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 4337,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4254,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 4184,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 4171,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3998,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 3985,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3909,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3868,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 3831,
+        "delete": "'Illuminate\\Support\\Facades\\",
+        "insert": ""
+      },
+      {
+        "offset": 3782,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 3737,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3696,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 3666,
+        "delete": "'Illuminate\\Validation\\",
+        "insert": ""
+      },
+      {
+        "offset": 3619,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 3575,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3502,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 3391,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3310,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 3272,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3181,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2887,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2167,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2096,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2051,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1893,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1863,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1398,
+        "delete": "$item instanceof ArrayItem && ",
+        "insert": ""
+      },
+      {
+        "offset": 1241,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1193,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1042,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 936,
+        "delete": "",
+        "insert": "\n        if (! ($node instanceof MethodCall || $node instanceof StaticCall || $node instanceof ClassLike)) {\n            return null;\n        }\n"
+      },
+      {
+        "offset": 782,
+        "delete": "    /**\n     * @param  MethodCall|StaticCall|ClassLike  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 517,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 65,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse Illuminate\\Foundation\\Http\\FormRequest;\nuse Illuminate\\Support\\Facades\\Validator;\nuse Illuminate\\Validation\\Factory;"
+      },
+      {
+        "offset": 5,
+        "delete": "",
+        "insert": "\n\ndeclare(strict_types=1);"
+      }
+    ]
+  },
+  "Laravel/src/Rector/PropertyFetch/OptionalToNullsafeOperatorRector.php": {
+    "input_sha256": "2c2fc3617be9d9b48fdc1242e49e30d61e9edf2ffb59a6c3eed6766c620a43af",
+    "output_sha256": "01fa2108b698c27775da38d82f9f332b864db8c590e7071cfaeac3b32082c990",
+    "edits": [
+      {
+        "offset": 3652,
+        "delete": " {\n                return true;\n            }\n        }\n        return false",
+        "insert": ""
+      },
+      {
+        "offset": 3614,
+        "delete": "           if (",
+        "insert": ""
+      },
+      {
+        "offset": 3611,
+        "delete": "{\n",
+        "insert": "=>"
+      },
+      {
+        "offset": 3604,
+        "delete": "",
+        "insert": "("
+      },
+      {
+        "offset": 3601,
+        "delete": "as",
+        "insert": "fn"
+      },
+      {
+        "offset": 3600,
+        "delete": "",
+        "insert": ","
+      },
+      {
+        "offset": 3574,
+        "delete": "ch ",
+        "insert": "rray_any"
+      },
+      {
+        "offset": 3573,
+        "delete": "",
+        "insert": "turn "
+      },
+      {
+        "offset": 3569,
+        "delete": "fo",
+        "insert": ""
+      },
+      {
+        "offset": 3496,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 3434,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 3287,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2943,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2798,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2710,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2577,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2414,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2203,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2139,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2126,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1960,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1879,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1866,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1797,
+        "delete": "",
+        "insert": " ($node instanceof PropertyFetch || $node instanceof MethodCall)) {\n            return null;\n        }\n\n        if (! "
+      },
+      {
+        "offset": 1667,
+        "delete": "    /**\n     * @param  MethodCall|PropertyFetch  $node\n     */",
+        "insert": ""
+      },
+      {
+        "offset": 1492,
+        "delete": "    }",
+        "insert": ""
+      },
+      {
+        "offset": 1491,
+        "delete": "",
+        "insert": "}"
+      },
+      {
+        "offset": 1485,
+        "delete": "\n   ",
+        "insert": ""
+      },
+      {
+        "offset": 1406,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1330,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1158,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 956,
+        "delete": "\n *",
+        "insert": ""
+      },
+      {
+        "offset": 774,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 701,
+        "delete": "CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse ",
+        "insert": ""
+      },
+      {
+        "offset": 94,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/Rector/StaticCall/CarbonToDateFacadeRector.php": {
+    "input_sha256": "30ede31e2a12ffdd19e2dda58ead03fba5b358a3dcb0325e14bdd748bb7e4033",
+    "output_sha256": "3f804e6de8d8c62d84376ca83bb4a015a4b8354707a5bc3a5daedff0ef334d9f",
+    "edits": [
+      {
+        "offset": 1019,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 993,
+        "delete": "'",
+        "insert": "\\"
+      },
+      {
+        "offset": 940,
+        "delete": "rbon'",
+        "insert": "ss"
+      },
+      {
+        "offset": 937,
+        "delete": "\\C",
+        "insert": "::cl"
+      },
+      {
+        "offset": 930,
+        "delete": "'",
+        "insert": ""
+      },
+      {
+        "offset": 818,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 758,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 726,
+        "delete": "'Illuminate\\Support\\Facades\\",
+        "insert": ""
+      },
+      {
+        "offset": 677,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 609,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 596,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 530,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 457,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 191,
+        "delete": "use CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\n/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 65,
+        "delete": "",
+        "insert": "\nuse Carbon\\Carbon;\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse Illuminate\\Support\\Facades\\Date;"
+      },
+      {
+        "offset": 5,
+        "delete": "",
+        "insert": "\n\ndeclare(strict_types=1);"
+      }
+    ]
+  },
+  "Laravel/src/Rector/StaticCall/DispatchToHelperFunctionsRector.php": {
+    "input_sha256": "37c2dca1ebf52972ee1f5d32c91d87544eda5cc7b64f5c4611187959b1596261",
+    "output_sha256": "7d2b3f94d16b948217a5e1106164fa7e481c2be6918e1795c8a8892f119cd73f",
+    "edits": [
+      {
+        "offset": 3089,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2939,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 2926,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2787,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2763,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 2721,
+        "delete": "'",
+        "insert": "\\"
+      },
+      {
+        "offset": 2697,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2542,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2518,
+        "delete": "'",
+        "insert": "::class"
+      },
+      {
+        "offset": 2479,
+        "delete": "'Illuminate\\Foundation\\Bus\\",
+        "insert": ""
+      },
+      {
+        "offset": 2455,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2302,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2276,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2130,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 2050,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1929,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1916,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1775,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1749,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1610,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1532,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1317,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1236,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1223,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 1101,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 1088,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 976,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 933,
+        "delete": "",
+        "insert": " "
+      },
+      {
+        "offset": 920,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 839,
+        "delete": "",
+        "insert": "\n        if ($this->shouldPreserveFile()) {\n            return null;\n        }\n\n        if (! $node instanceof StaticCall) {\n            return null;\n        }\n"
+      },
+      {
+        "offset": 757,
+        "delete": "* @param StaticCall $node ",
+        "insert": ""
+      },
+      {
+        "offset": 751,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 598,
+        "delete": "    }",
+        "insert": ""
+      },
+      {
+        "offset": 597,
+        "delete": "",
+        "insert": "}"
+      },
+      {
+        "offset": 591,
+        "delete": "\n   ",
+        "insert": ""
+      },
+      {
+        "offset": 502,
+        "delete": "",
+        "insert": "\n    public const string PRESERVE_PATHS = 'preserve_paths';\n\n    /** @var list<string> */\n    private array $preservePaths = [];\n\n    /** @param array<mixed> $configuration */\n    public function configure(array $configuration): void\n    {\n        if (array_diff(array_keys($configuration), [self::PRESERVE_PATHS]) !== []) {\n            throw new InvalidArgumentException('Unknown Laravel preservation option');\n        }\n        $paths = $configuration[self::PRESERVE_PATHS] ?? [];\n\n        if (! is_array($paths) || ! array_is_list($paths)) {\n            throw new InvalidArgumentException('Preserve paths must be a list of existing absolute paths');\n        }\n        $preservePaths = [];\n        foreach ($paths as $path) {\n            if (! is_string($path) || ! str_starts_with($path, DIRECTORY_SEPARATOR)) {\n                throw new InvalidArgumentException('Preserve paths must be existing absolute paths');\n            }\n            $resolved = realpath($path);\n\n            if ($resolved === false || $resolved === DIRECTORY_SEPARATOR) {\n                throw new InvalidArgumentException('Preserve path does not resolve to a bounded source path');\n            }\n            $preservePaths[] = $resolved;\n        }\n        $this->preservePaths = $preservePaths;\n    }\n\n    private function shouldPreserveFile(): bool\n    {\n        if ($this->preservePaths === []) {\n            return false;\n        }\n        $filePath = $this->getFile()->getFilePath();\n\n        return array_any($this->preservePaths, fn ($path) => $filePath === $path || str_starts_with($filePath, $path.DIRECTORY_SEPARATOR));\n    }\n"
+      },
+      {
+        "offset": 500,
+        "delete": "",
+        "insert": " implements ConfigurableRectorInterface"
+      },
+      {
+        "offset": 426,
+        "delete": "/**\n */",
+        "insert": ""
+      },
+      {
+        "offset": 424,
+        "delete": "",
+        "insert": "Interface"
+      },
+      {
+        "offset": 408,
+        "delete": "l\\Abstract",
+        "insert": ""
+      },
+      {
+        "offset": 406,
+        "delete": "v",
+        "insert": "bl"
+      },
+      {
+        "offset": 402,
+        "delete": "La",
+        "insert": "Configu"
+      },
+      {
+        "offset": 384,
+        "delete": "eX\\Tooling",
+        "insert": "act"
+      },
+      {
+        "offset": 383,
+        "delete": "",
+        "insert": "nt"
+      },
+      {
+        "offset": 381,
+        "delete": "",
+        "insert": "Rector\\"
+      },
+      {
+        "offset": 65,
+        "delete": "",
+        "insert": "\nuse CoreX\\Tooling\\Rector\\Laravel\\AbstractRector;\nuse Illuminate\\Foundation\\Bus\\Dispatchable;\nuse InvalidArgumentException;"
+      },
+      {
+        "offset": 5,
+        "delete": "",
+        "insert": "\n\ndeclare(strict_types=1);"
+      }
+    ]
+  },
+  "Laravel/src/ValueObject/ApplyDefaultInsteadOfNullCoalesce.php": {
+    "input_sha256": "82826617be02d8c0d358d8f7bd72b5d706fb4f3797bae28dd19884179f127c0a",
+    "output_sha256": "0fabdec614875468823712d1cdb46fa40988d0aa6f80059fc14dd377ebf78d83",
+    "edits": [
+      {
+        "offset": 503,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 414,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 313,
+        "delete": "    }",
+        "insert": ""
+      },
+      {
+        "offset": 312,
+        "delete": "",
+        "insert": "}"
+      },
+      {
+        "offset": 306,
+        "delete": "\n   ",
+        "insert": ""
+      },
+      {
+        "offset": 114,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/ValueObject/ReplaceRequestKeyAndMethodValue.php": {
+    "input_sha256": "3aef8874c67d951f3ae8f7f81d537cde48d88c1fd7acf7b9c146214481e62014",
+    "output_sha256": "56ac8546e765380ca6c372b9d5bcc56e7bd062b15702829c2d190d9a780cee36",
+    "edits": [
+      {
+        "offset": 402,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 327,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 114,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  },
+  "Laravel/src/ValueObject/ServiceNameTypeAndVariableName.php": {
+    "input_sha256": "aa3ae47ae6b51c0399521b3b83524dab7367dc989f6acfe8be627691c065a517",
+    "output_sha256": "5f1c5e15ea6275820738ff98c0ca299379aaa65f64351faec7f2f4224db6202e",
+    "edits": [
+      {
+        "offset": 434,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 357,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 259,
+        "delete": "    }",
+        "insert": ""
+      },
+      {
+        "offset": 258,
+        "delete": "",
+        "insert": "}"
+      },
+      {
+        "offset": 252,
+        "delete": "\n   ",
+        "insert": ""
+      },
+      {
+        "offset": 32,
+        "delete": "",
+        "insert": "\n"
+      },
+      {
+        "offset": 14,
+        "delete": " ",
+        "insert": ""
+      }
+    ]
+  }
+}

@@ -57,7 +57,7 @@ final class CoreServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
-        ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
+        ProblemDefinitions::register(app: $this->app, composerManifest: __DIR__.'/../composer.json', provider: PackageProblemDefinitions::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex.php', 'corex');
 

@@ -21,6 +21,6 @@ final class TasksModuleDisabled extends DomainException implements DescribesErro
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TasksErrorCode::TasksModuleDisabled, ErrorCategory::Unavailable, retryable: false);
+        return new ErrorDescriptor(code: TasksErrorCode::TasksModuleDisabled, category: ErrorCategory::Unavailable, retryable: false);
     }
 }

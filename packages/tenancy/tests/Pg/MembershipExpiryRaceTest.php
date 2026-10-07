@@ -19,7 +19,7 @@ it('makes PostgreSQL expiry win over a delayed fixture commit', function (): voi
 
     try {
         $store->admit(key: $key, operationId: $operation);
-        (new ExpiryScheduler(pairs: $store))->expire(key: $key, barrierId: '55555555-5555-4555-8555-555555555555');
+        new ExpiryScheduler(pairs: $store)->expire(key: $key, barrierId: '55555555-5555-4555-8555-555555555555');
 
         expect($store->commit(key: $key, operationId: $operation))->toBeFalse();
     } finally {

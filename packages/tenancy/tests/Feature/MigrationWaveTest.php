@@ -39,7 +39,7 @@ beforeEach(function (): void {
 
     $probe = mwConnectTo(MW_TEMPLATE_DB);
     $fixtureSql = file_get_contents(__DIR__.'/../Stubs/tpl_tenant_v1/schema.sql');
-    foreach (array_filter(array_map('trim', explode(';', (string) $fixtureSql))) as $statement) {
+    foreach (array_filter(array_map(trim(...), explode(';', (string) $fixtureSql))) as $statement) {
         $probe->statement($statement);
     }
     DB::disconnect('probe_'.MW_TEMPLATE_DB);
@@ -122,17 +122,17 @@ function makeMwAccounts(int $count, ?string $clusterId = null): array
     $clusterId ??= makeMwClusterRow();
     makeMwTemplateRow();
 
-    $templateIntegrityVerifier = app(TemplateIntegrityVerifier::class);
+    $templateIntegrityVerifier = resolve(TemplateIntegrityVerifier::class);
 
-    return (new PendingPool(
-        connections: app(ConnectionResolverInterface::class),
+    return new PendingPool(
+        connections: resolve(ConnectionResolverInterface::class),
         centralConnection: 'pgsql',
         provisioner: new DatabaseTenantProvisioner(
             centralConnection: 'pgsql',
             templateIntegrityVerifier: $templateIntegrityVerifier,
         ),
         templateIntegrityVerifier: $templateIntegrityVerifier,
-    ))->createPending($count, $clusterId);
+    )->createPending($count, $clusterId);
 }
 
 function makeMwBatch(int $toVersion = 1, string $wave = 'internal'): string
@@ -154,10 +154,10 @@ it('AC-11: a failing account does not abort the batch; a second failure escalate
     $batchId = makeMwBatch();
 
     $orchestrator = new MigrationWaveOrchestrator(
-        schema: app(SchemaMigrator::class),
+        schema: resolve(SchemaMigrator::class),
         centralConnection: 'pgsql',
-        tenancy: app(TenancyManager::class),
-        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
+        tenancy: resolve(TenancyManager::class),
+        templateIntegrityVerifier: resolve(TemplateIntegrityVerifier::class),
         migrationRunner: function (AccountRef $account) use ($badId): void {
             if ($account->id === $badId) {
                 throw new RuntimeException('simulated migration failure');
@@ -205,10 +205,10 @@ it('AC-12: the migration run issues pg_advisory_xact_lock(hashtext(\'fld_ddl\'))
     // covered by the AC-11 test) — irrelevant to AC-12, which only asserts
     // the lock CALL itself was issued.
     $orchestrator = new MigrationWaveOrchestrator(
-        schema: app(SchemaMigrator::class),
+        schema: resolve(SchemaMigrator::class),
         centralConnection: 'pgsql',
-        tenancy: app(TenancyManager::class),
-        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
+        tenancy: resolve(TenancyManager::class),
+        templateIntegrityVerifier: resolve(TemplateIntegrityVerifier::class),
     );
     $orchestrator->runBatch($batchId);
 
@@ -222,10 +222,10 @@ it('creates root_account_schema_state rows (current_version=0) for accounts miss
     expect(AccountSchemaState::query()->where('account_id', $accountId)->exists())->toBeFalse();
 
     $orchestrator = new MigrationWaveOrchestrator(
-        schema: app(SchemaMigrator::class),
+        schema: resolve(SchemaMigrator::class),
         centralConnection: 'pgsql',
-        tenancy: app(TenancyManager::class),
-        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
+        tenancy: resolve(TenancyManager::class),
+        templateIntegrityVerifier: resolve(TemplateIntegrityVerifier::class),
         migrationRunner: function (): void {
             //
         },
@@ -244,10 +244,10 @@ it('corex:tenancy:migrate requires --batch and does not hard-fail the command on
     $batchId = makeMwBatch();
 
     app()->instance(MigrationWaveOrchestrator::class, new MigrationWaveOrchestrator(
-        schema: app(SchemaMigrator::class),
+        schema: resolve(SchemaMigrator::class),
         centralConnection: 'pgsql',
-        tenancy: app(TenancyManager::class),
-        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
+        tenancy: resolve(TenancyManager::class),
+        templateIntegrityVerifier: resolve(TemplateIntegrityVerifier::class),
         migrationRunner: function (AccountRef $account) use ($badId): void {
             if ($account->id === $badId) {
                 throw new RuntimeException('simulated migration failure');
@@ -267,8 +267,8 @@ it('runs registered platform tenant schema sets on the account connection', func
     $schema = Mockery::mock(SchemaMigrator::class);
     $schema->shouldReceive('migrate')->once()->with(SchemaScope::Tenant, 'tenant')->andReturn([]);
     $orchestrator = new MigrationWaveOrchestrator(
-        centralConnection: 'pgsql', tenancy: app(TenancyManager::class),
-        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class), schema: $schema,
+        centralConnection: 'pgsql', tenancy: resolve(TenancyManager::class),
+        templateIntegrityVerifier: resolve(TemplateIntegrityVerifier::class), schema: $schema,
     );
     $orchestrator->runBatch($batchId);
     expect(DB::table('root_account_schema_state')->where('batch_id', $batchId)->value('status'))->toBe('ok');

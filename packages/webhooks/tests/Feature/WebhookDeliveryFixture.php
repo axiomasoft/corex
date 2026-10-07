@@ -51,7 +51,7 @@ trait WebhookDeliveryFixture
         $this->selectSchema();
         $this->connection = DB::connection('api_tenant');
 
-        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
         $this->connection->getSchemaBuilder()->create('sys_inbox_messages', function (Blueprint $table): void {
             $table->string('consumer', 120);
             $table->string('message_id', 64);
@@ -137,7 +137,7 @@ trait WebhookDeliveryFixture
             'topic_version' => 1,
             'major' => 'v1',
             'endpoint_snapshot' => 'https://hooks.example/receiver',
-            'scope' => JsonCanonical::encode(app(DataScopeCodec::class)->encode($this->scope)),
+            'scope' => JsonCanonical::encode(resolve(DataScopeCodec::class)->encode($this->scope)),
             'body' => $body,
             'body_hash' => hash('sha256', $body),
             'status' => 'pending',

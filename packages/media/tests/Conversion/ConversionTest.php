@@ -51,22 +51,22 @@ it('creates one bounded GD thumbnail for a file/profile/version', function (): v
     app()->forgetScopedInstances();
 
     $bytes = thumbnailBytes();
-    $file = app(MediaLibrary::class)->store(
+    $file = resolve(MediaLibrary::class)->store(
         conversionContext(),
         new UploadInput('conversion-request', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.jpg', $bytes)), 'attachment'),
     );
 
-    expect(app(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail'))->toBeNull();
+    expect(resolve(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail'))->toBeNull();
 
-    (new ConvertMedia($file->id, 'thumbnail'))->handle(app(ConversionCoordinator::class));
-    $conversion = app(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail');
+    new ConvertMedia($file->id, 'thumbnail')->handle(resolve(ConversionCoordinator::class));
+    $conversion = resolve(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail');
     $stored = DB::table('med_conversions')->where('file_id', $file->id)->first();
 
     expect($conversion)->not->toBeNull()
         ->and($conversion->width)->toBe(100)
         ->and($conversion->height)->toBe(50)
         ->and($stored->state)->toBe('ready')
-        ->and(getimagesizefromstring(app('filesystem')->disk('media')->get($stored->object_key))[0])->toBe(100);
+        ->and(getimagesizefromstring(resolve('filesystem')->disk('media')->get($stored->object_key))[0])->toBe(100);
 });
 
 it('purges a published conversion together with its deleting original', function (): void {
@@ -79,17 +79,17 @@ it('purges a published conversion together with its deleting original', function
     });
     app()->forgetScopedInstances();
 
-    $file = app(MediaLibrary::class)->store(
+    $file = resolve(MediaLibrary::class)->store(
         conversionContext(),
         new UploadInput('conversion-purge-request', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.jpg', thumbnailBytes())), 'attachment'),
     );
-    app(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail');
-    (new ConvertMedia($file->id, 'thumbnail'))->handle(app(ConversionCoordinator::class));
+    resolve(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail');
+    new ConvertMedia($file->id, 'thumbnail')->handle(resolve(ConversionCoordinator::class));
     $outputKey = DB::table('med_conversions')->where('file_id', $file->id)->value('object_key');
 
-    app(MediaLibrary::class)->delete(conversionContext(), $file->id);
-    (new PurgeMedia($file->id))->handle(app(MediaOperationStore::class), app(TenantStorage::class));
+    resolve(MediaLibrary::class)->delete(conversionContext(), $file->id);
+    new PurgeMedia($file->id)->handle(resolve(MediaOperationStore::class), resolve(TenantStorage::class));
 
     expect($outputKey)->toBeString()
-        ->and(app(TenantStorage::class)->disk()->exists($outputKey))->toBeFalse();
+        ->and(resolve(TenantStorage::class)->disk()->exists($outputKey))->toBeFalse();
 });

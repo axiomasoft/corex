@@ -69,7 +69,7 @@ final readonly class DualImpersonationAuditSink implements ImpersonationAuditSin
         });
 
         if ($tenant !== null) {
-            $this->writer->record(new AuditEntry(
+            $this->writer->record(entry: new AuditEntry(
                 action: $event->event,
                 actorType: ActorType::Support,
                 actorId: $event->staffIdentityId,
@@ -78,7 +78,7 @@ final readonly class DualImpersonationAuditSink implements ImpersonationAuditSin
                 context: new JsonDocument(json_encode($payload, JSON_THROW_ON_ERROR)),
                 occurredAt: $event->occurredAt,
                 workspaceId: $context->workspace?->id,
-            ), 'tenant');
+            ), connectionName: 'tenant');
         }
     }
 }

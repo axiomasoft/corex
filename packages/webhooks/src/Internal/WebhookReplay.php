@@ -58,10 +58,10 @@ final readonly class WebhookReplay
             $row = $this->scopedDeliveries($scope)->where('id', $deliveryId)->lockForUpdate()->first();
 
             if ($row === null) {
-                throw new ApiError(OperationsErrorCode::ResourceNotFound, 404, 'Webhook delivery does not exist.', category: ErrorCategory::NotFound);
+                throw new ApiError(errorCode: OperationsErrorCode::ResourceNotFound, status: 404, message: 'Webhook delivery does not exist.', category: ErrorCategory::NotFound);
             }
 
-            return $this->replayLocked($scope, $row, $explicit, $auditReason);
+            return $this->replayLocked(scope: $scope, row: $row, explicit: $explicit, auditReason: $auditReason);
         }, $this->transactionAttempts());
     }
 
@@ -81,7 +81,7 @@ final readonly class WebhookReplay
         string $auditReason,
     ): array {
         $this->assertScope($scope);
-        $this->assertRange($clientId, $subscriptionId, $from, $to, $max, $auditReason);
+        $this->assertRange(clientId: $clientId, subscriptionId: $subscriptionId, from: $from, to: $to, max: $max, auditReason: $auditReason);
         $filters = [
             'client_id' => $clientId,
             'from' => $from->format('Y-m-d\TH:i:s.uP'),
@@ -95,15 +95,15 @@ final readonly class WebhookReplay
 
         if ($cursor !== null) {
             $position = $this->cursors->decode(
-                $cursor,
-                $registry,
-                $scope->accountId,
-                $scope->workspaceId,
-                'v1',
-                'webhook-deliveries.range-replay',
-                $filters,
-                self::RangeFields,
-                self::RangeOrdering,
+                cursor: $cursor,
+                registry: $registry,
+                accountId: $scope->accountId,
+                workspaceId: $scope->workspaceId,
+                apiMajor: 'v1',
+                operationId: 'webhook-deliveries.range-replay',
+                filters: $filters,
+                fields: self::RangeFields,
+                orderingId: self::RangeOrdering,
             );
             [$encodedUpper, $afterCreated, $afterId] = $position->values;
             $upper = new DateTimeImmutable((string) $encodedUpper);
@@ -124,7 +124,7 @@ final readonly class WebhookReplay
             });
         }
 
-        $rows = $query->orderBy('created_at')->orderBy('id')->limit($max + 1)->get();
+        $rows = $query->oldest()->orderBy('id')->limit($max + 1)->get();
         $hasMore = $rows->count() > $max;
         $page = $rows->take($max)->values();
         $selected = [];
@@ -133,11 +133,11 @@ final readonly class WebhookReplay
         $conflicts = 0;
 
         foreach ($page as $row) {
-            $id = DatabaseValue::text(DatabaseValue::field($row, 'id'));
+            $id = DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id'));
             $selected[] = $id;
 
             try {
-                $this->one($scope, $id, true, $auditReason);
+                $this->one(scope: $scope, deliveryId: $id, explicit: true, auditReason: $auditReason);
                 $requeued++;
             } catch (ApiError $error) {
                 if ($error->errorDescriptor()->category === ErrorCategory::Conflict) {
@@ -162,8 +162,8 @@ final readonly class WebhookReplay
             orderingId: self::RangeOrdering,
             values: [
                 $upper->format('Y-m-d\TH:i:s.uP'),
-                $this->instant(DatabaseValue::field($last, 'created_at'))->format('Y-m-d\TH:i:s.uP'),
-                DatabaseValue::text(DatabaseValue::field($last, 'id')),
+                $this->instant(DatabaseValue::field(row: $last, name: 'created_at'))->format('Y-m-d\TH:i:s.uP'),
+                DatabaseValue::text(DatabaseValue::field(row: $last, name: 'id')),
             ],
         );
 
@@ -174,65 +174,65 @@ final readonly class WebhookReplay
     private function replayLocked(DataScope $scope, object $row, bool $explicit, ?string $auditReason): array
     {
         $now = $this->clock->now();
-        $status = DatabaseValue::text(DatabaseValue::field($row, 'status'));
+        $status = DatabaseValue::text(DatabaseValue::field(row: $row, name: 'status'));
 
-        if ($status === 'sending' && DatabaseValue::field($row, 'lease_until') !== null && $this->instant(DatabaseValue::field($row, 'lease_until')) > $now) {
-            throw new ApiError(OperationsErrorCode::Conflict, 409, 'Webhook delivery has an active lease.', category: ErrorCategory::Conflict);
+        if ($status === 'sending' && DatabaseValue::field(row: $row, name: 'lease_until') !== null && $this->instant(DatabaseValue::field(row: $row, name: 'lease_until')) > $now) {
+            throw new ApiError(errorCode: OperationsErrorCode::Conflict, status: 409, message: 'Webhook delivery has an active lease.', category: ErrorCategory::Conflict);
         }
 
         if (! in_array($status, ['dead', 'succeeded'], true)) {
-            throw new ApiError(OperationsErrorCode::Conflict, 409, 'Only a terminal webhook delivery can be replayed.', category: ErrorCategory::Conflict);
+            throw new ApiError(errorCode: OperationsErrorCode::Conflict, status: 409, message: 'Only a terminal webhook delivery can be replayed.', category: ErrorCategory::Conflict);
         }
 
-        if (DatabaseValue::integer(DatabaseValue::field($row, 'replay_count')) >= 3) {
-            throw new ApiError(OperationsErrorCode::Conflict, 409, 'Webhook replay cycle limit is three.', category: ErrorCategory::Conflict);
+        if (DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'replay_count')) >= 3) {
+            throw new ApiError(errorCode: OperationsErrorCode::Conflict, status: 409, message: 'Webhook replay cycle limit is three.', category: ErrorCategory::Conflict);
         }
 
-        if ($this->instant(DatabaseValue::field($row, 'expires_at')) <= $now
-            || $this->instant(DatabaseValue::field($row, 'created_at'))->modify('+7 days') <= $now) {
-            throw new ApiError(WebhooksErrorCode::WebhookReplayExpired, 410, 'Webhook replay body has expired.', category: ErrorCategory::Conflict);
+        if ($this->instant(DatabaseValue::field(row: $row, name: 'expires_at')) <= $now
+            || $this->instant(DatabaseValue::field(row: $row, name: 'created_at'))->modify('+7 days') <= $now) {
+            throw new ApiError(errorCode: WebhooksErrorCode::WebhookReplayExpired, status: 410, message: 'Webhook replay body has expired.', category: ErrorCategory::Conflict);
         }
 
         if ($status === 'succeeded' && (! $explicit || ! $this->validReason($auditReason))) {
-            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Succeeded replay requires explicit confirmation and an audit reason.', category: ErrorCategory::Validation);
+            throw new ApiError(errorCode: OperationsErrorCode::ValidationFailed, status: 422, message: 'Succeeded replay requires explicit confirmation and an audit reason.', category: ErrorCategory::Validation);
         }
 
         if ($auditReason !== null && ! $this->validReason($auditReason)) {
-            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Webhook replay audit reason is invalid.', category: ErrorCategory::Validation);
+            throw new ApiError(errorCode: OperationsErrorCode::ValidationFailed, status: 422, message: 'Webhook replay audit reason is invalid.', category: ErrorCategory::Validation);
         }
 
         $subscription = $this->connection->table('sys_api_webhook_subscriptions')
-            ->where('id', DatabaseValue::text(DatabaseValue::field($row, 'subscription_id')))
+            ->where('id', DatabaseValue::text(DatabaseValue::field(row: $row, name: 'subscription_id')))
             ->first();
 
         if ($subscription === null
             || DatabaseValue::text($subscription->status) !== 'active'
-            || DatabaseValue::integer($subscription->revision) !== DatabaseValue::integer(DatabaseValue::field($row, 'subscription_revision'))
-            || ! hash_equals(DatabaseValue::text($subscription->endpoint_url), DatabaseValue::text(DatabaseValue::field($row, 'endpoint_snapshot')))
-            || ! hash_equals(DatabaseValue::text($subscription->topic), DatabaseValue::text(DatabaseValue::field($row, 'topic')))
-            || DatabaseValue::integer($subscription->topic_version) !== DatabaseValue::integer(DatabaseValue::field($row, 'topic_version'))
-            || ! hash_equals(DatabaseValue::text($subscription->major), DatabaseValue::text(DatabaseValue::field($row, 'major')))) {
-            throw new ApiError(WebhooksErrorCode::WebhookEndpointChanged, 409, 'Webhook destination is no longer current.', category: ErrorCategory::Conflict);
+            || DatabaseValue::integer($subscription->revision) !== DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'subscription_revision'))
+            || ! hash_equals(DatabaseValue::text($subscription->endpoint_url), DatabaseValue::text(DatabaseValue::field(row: $row, name: 'endpoint_snapshot')))
+            || ! hash_equals(DatabaseValue::text($subscription->topic), DatabaseValue::text(DatabaseValue::field(row: $row, name: 'topic')))
+            || DatabaseValue::integer($subscription->topic_version) !== DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'topic_version'))
+            || ! hash_equals(DatabaseValue::text($subscription->major), DatabaseValue::text(DatabaseValue::field(row: $row, name: 'major')))) {
+            throw new ApiError(errorCode: WebhooksErrorCode::WebhookEndpointChanged, status: 409, message: 'Webhook destination is no longer current.', category: ErrorCategory::Conflict);
         }
 
         try {
-            $topic = $this->topics->get(DatabaseValue::text(DatabaseValue::field($row, 'topic')), DatabaseValue::integer(DatabaseValue::field($row, 'topic_version')));
+            $topic = $this->topics->get(name: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'topic')), version: DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'topic_version')));
 
-            if (! hash_equals($topic->major, DatabaseValue::text(DatabaseValue::field($row, 'major')))) {
-                throw new ApiError(OperationsErrorCode::Conflict, 409, 'Webhook topic is no longer available.', category: ErrorCategory::Conflict);
+            if (! hash_equals($topic->major, DatabaseValue::text(DatabaseValue::field(row: $row, name: 'major')))) {
+                throw new ApiError(errorCode: OperationsErrorCode::Conflict, status: 409, message: 'Webhook topic is no longer available.', category: ErrorCategory::Conflict);
             }
         } catch (ApiError) {
-            throw new ApiError(OperationsErrorCode::Conflict, 409, 'Webhook topic is no longer available.', category: ErrorCategory::Conflict);
+            throw new ApiError(errorCode: OperationsErrorCode::Conflict, status: 409, message: 'Webhook topic is no longer available.', category: ErrorCategory::Conflict);
         }
 
         $changed = $this->connection->table('sys_api_webhook_deliveries')
-            ->where('id', DatabaseValue::text(DatabaseValue::field($row, 'id')))
+            ->where('id', DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id')))
             ->where('status', $status)
-            ->where('replay_count', DatabaseValue::integer(DatabaseValue::field($row, 'replay_count')))
+            ->where('replay_count', DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'replay_count')))
             ->whereNull('lease_owner')
             ->update([
                 'status' => 'pending',
-                'replay_count' => DatabaseValue::integer(DatabaseValue::field($row, 'replay_count')) + 1,
+                'replay_count' => DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'replay_count')) + 1,
                 'lease_owner' => null,
                 'lease_until' => null,
                 'next_attempt_at' => $now,
@@ -241,12 +241,12 @@ final readonly class WebhookReplay
             ]);
 
         if ($changed !== 1) {
-            throw new ApiError(OperationsErrorCode::Conflict, 409, 'Webhook replay lost its compare-and-swap fence.', category: ErrorCategory::Conflict);
+            throw new ApiError(errorCode: OperationsErrorCode::Conflict, status: 409, message: 'Webhook replay lost its compare-and-swap fence.', category: ErrorCategory::Conflict);
         }
 
         $context = [
             'previous_status' => $status,
-            'replay_count' => DatabaseValue::integer(DatabaseValue::field($row, 'replay_count')) + 1,
+            'replay_count' => DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'replay_count')) + 1,
         ];
 
         if ($auditReason !== null) {
@@ -259,19 +259,19 @@ final readonly class WebhookReplay
             actorType: ActorType::ApiKey,
             actorId: $scope->actorId,
             entityType: 'webhook_delivery',
-            entityId: DatabaseValue::text(DatabaseValue::field($row, 'id')),
+            entityId: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id')),
             context: JsonDocuments::capture($context),
             occurredAt: $now,
             workspaceId: $scope->workspaceId,
         ));
 
         return [
-            'attempt' => DatabaseValue::integer(DatabaseValue::field($row, 'attempt')),
-            'body_hash' => DatabaseValue::text(DatabaseValue::field($row, 'body_hash')),
-            'id' => DatabaseValue::text(DatabaseValue::field($row, 'id')),
-            'replay_count' => DatabaseValue::integer(DatabaseValue::field($row, 'replay_count')) + 1,
+            'attempt' => DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'attempt')),
+            'body_hash' => DatabaseValue::text(DatabaseValue::field(row: $row, name: 'body_hash')),
+            'id' => DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id')),
+            'replay_count' => DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'replay_count')) + 1,
             'status' => 'pending',
-            'subscription_id' => DatabaseValue::text(DatabaseValue::field($row, 'subscription_id')),
+            'subscription_id' => DatabaseValue::text(DatabaseValue::field(row: $row, name: 'subscription_id')),
         ];
     }
 
@@ -288,7 +288,7 @@ final readonly class WebhookReplay
         if ($clientId === '' || strlen($clientId) > 128 || $subscriptionId === '' || strlen($subscriptionId) > 64
             || $from->getOffset() !== 0 || $to->getOffset() !== 0 || $seconds <= 0 || $seconds > 86_400
             || $max < 1 || $max > 100 || ! $this->validReason($auditReason)) {
-            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Webhook replay range is invalid.', category: ErrorCategory::Validation);
+            throw new ApiError(errorCode: OperationsErrorCode::ValidationFailed, status: 422, message: 'Webhook replay range is invalid.', category: ErrorCategory::Validation);
         }
     }
 
@@ -306,7 +306,7 @@ final readonly class WebhookReplay
             : $this->connection->getDriverName().':'.$this->connection->getDatabaseName();
 
         if (! hash_equals($scope->connectionIdentity, $actual) || ! hash_equals($scope->accountId, $context->account->id)) {
-            throw ScopeContextMismatch::connection($scope->connectionIdentity, $actual);
+            throw ScopeContextMismatch::connection(expected: $scope->connectionIdentity, actual: $actual);
         }
     }
 

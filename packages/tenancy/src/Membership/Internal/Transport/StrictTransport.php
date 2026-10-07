@@ -75,8 +75,8 @@ final class StrictTransport implements CentralApiClient
         $key = $query->accountId.':'.$query->identityId.':'.$query->product;
         $previous = $this->snapshots[$key] ?? null;
 
-        if ($previous !== null && (self::compare($snapshot->revision, $previous->revision) < 0
-            || self::compare($snapshot->revokeGeneration, $previous->revokeGeneration) < 0
+        if ($previous !== null && (self::compare(left: $snapshot->revision, right: $previous->revision) < 0
+            || self::compare(left: $snapshot->revokeGeneration, right: $previous->revokeGeneration) < 0
             || $snapshot->revision === $previous->revision && ($snapshot->state !== $previous->state
                 || $snapshot->membershipId !== $previous->membershipId || $snapshot->revokeGeneration !== $previous->revokeGeneration))) {
             throw new CentralProtocolViolation('Regressed or conflicting snapshot history.');
@@ -229,7 +229,7 @@ final class StrictTransport implements CentralApiClient
         }
 
         try {
-            $observedAt = (new DateTimeImmutable($payload['observed_at']))->setTimezone(new DateTimeZone('+00:00'));
+            $observedAt = new DateTimeImmutable($payload['observed_at'])->setTimezone(new DateTimeZone('+00:00'));
             $accounts = array_map(function (mixed $account): AccountListEntry {
                 if (! is_object($account)) {
                     throw new CentralProtocolViolation('Invalid accounts response entry.');
@@ -263,8 +263,6 @@ final class StrictTransport implements CentralApiClient
                 accounts: array_values($accounts),
                 observedAt: $observedAt,
             );
-        } catch (CentralProtocolViolation) {
-            throw new CentralProtocolViolation('Invalid accounts response payload.');
         } catch (Throwable) {
             throw new CentralProtocolViolation('Invalid accounts response payload.');
         }

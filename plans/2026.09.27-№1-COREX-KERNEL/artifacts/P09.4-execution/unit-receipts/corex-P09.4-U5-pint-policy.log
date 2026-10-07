@@ -1,0 +1,1 @@
+{"tool":"pint","result":"fixed","files":[{"path":"tests\/Tooling\/Rector\/PolicyRegressionTest.php","fixers":["php_unit_method_casing"]}]}

@@ -16,14 +16,14 @@ use CoreX\Modules\Exceptions\InvalidManifestException;
  *
  * @internal spec: B-10 §3.2/§5.2
  */
-final class ModuleDiscovery implements \CoreX\Modules\Contracts\ModuleDiscovery
+final readonly class ModuleDiscovery implements \CoreX\Modules\Contracts\ModuleDiscovery
 {
     /**
      * @param  list<class-string<ModuleDefinition>>  $fallbackModules  injectable seam for tests/testbench.
      */
     public function __construct(
-        private readonly array $fallbackModules = [],
-        private readonly ?string $installedJsonPath = null,
+        private array $fallbackModules = [],
+        private ?string $installedJsonPath = null,
     ) {}
 
     /** @return list<ModuleManifest> */

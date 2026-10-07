@@ -26,14 +26,14 @@ use Illuminate\Validation\ValidationException;
  * given pipeline). Composite use-case: composes the create-* Actions inside one
  * transaction rather than via an orchestration service.
  */
-final class ConvertLead
+final readonly class ConvertLead
 {
     public function __construct(
-        private readonly CreateContact $createContact,
-        private readonly CreateCompany $createCompany,
-        private readonly CreateDeal $createDeal,
-        private readonly AssociateContactCompany $associate,
-        private readonly ContextGuard $guard,
+        private CreateContact $createContact,
+        private CreateCompany $createCompany,
+        private CreateDeal $createDeal,
+        private AssociateContactCompany $associate,
+        private ContextGuard $guard,
     ) {}
 
     public function handle(Lead $lead, ?Pipeline $pipeline = null, bool $withCompany = false): Contact
@@ -101,7 +101,7 @@ final class ConvertLead
                 throw ValidationException::withMessages(['lead' => 'Lead conversion was vetoed.']);
             }
 
-            LeadConverted::dispatch($lead, $contact);
+            event(new LeadConverted($lead, $contact));
 
             return $contact;
         }));

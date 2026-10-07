@@ -23,29 +23,7 @@ final readonly class DefaultSettingDefinition
 
     public static function make(string $key, mixed $default = null): self
     {
-        return new self($key, $default);
-    }
-
-    public function workspaceScoped(): self
-    {
-        return new self(
-            key: $this->key,
-            default: $this->default,
-            workspaceScoped: true,
-            userScoped: $this->userScoped,
-            sensitive: $this->sensitive,
-        );
-    }
-
-    public function userScoped(): self
-    {
-        return new self(
-            key: $this->key,
-            default: $this->default,
-            workspaceScoped: $this->workspaceScoped,
-            userScoped: true,
-            sensitive: $this->sensitive,
-        );
+        return new self(key: $key, default: $default);
     }
 
     public function sensitive(): self

@@ -15,11 +15,11 @@ use InvalidArgumentException;
  */
 final class WorkflowDefinitionStamp
 {
-    public const SCHEMA = 'workflow-definition/1';
+    public const string SCHEMA = 'workflow-definition/1';
 
-    public const POINT = 'workflow.trigger';
+    public const string POINT = 'workflow.trigger';
 
-    public const MODULE_FREE = 'module-free';
+    public const string MODULE_FREE = 'module-free';
 
     public static function assertStableRef(string $field, string $value): void
     {
@@ -30,11 +30,11 @@ final class WorkflowDefinitionStamp
 
     public static function fromRequest(TriggerRequest $request, ?string $registryFingerprint): ExtensionStamp
     {
-        self::assertStableRef('definitionRef', $request->definitionRef);
-        self::assertStableRef('versionRef', $request->versionRef);
-        self::assertStableRef('module', $request->module);
-        self::assertStableRef('entityHandle', $request->entityHandle);
-        self::assertStableRef('eventName', $request->eventName);
+        self::assertStableRef(field: 'definitionRef', value: $request->definitionRef);
+        self::assertStableRef(field: 'versionRef', value: $request->versionRef);
+        self::assertStableRef(field: 'module', value: $request->module);
+        self::assertStableRef(field: 'entityHandle', value: $request->entityHandle);
+        self::assertStableRef(field: 'eventName', value: $request->eventName);
 
         return new ExtensionStamp(
             point: self::POINT,

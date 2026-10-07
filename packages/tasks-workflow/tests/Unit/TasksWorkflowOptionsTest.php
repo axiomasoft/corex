@@ -36,8 +36,8 @@ it('lists legacy unstamped materialization wakeups as a dangerous mode that prod
     $path = 'corex-tasks-workflow.wakeup.accept_legacy_unstamped';
 
     expect($options->dangerousModes())->toBe([$path])
-        ->and((new DangerousModesCheck($options, CoreOptionsParser::fromArray([])))->violations(true))
+        ->and(new DangerousModesCheck($options, CoreOptionsParser::fromArray([]))->violations(true))
         ->toBe([$path.': dangerous mode is not acknowledged for production'])
-        ->and((new DangerousModesCheck($options, CoreOptionsParser::fromArray(['acknowledged_dangerous_modes' => [$path]])))->violations(true))
+        ->and(new DangerousModesCheck($options, CoreOptionsParser::fromArray(['acknowledged_dangerous_modes' => [$path]]))->violations(true))
         ->toBe([]);
 });

@@ -30,7 +30,7 @@ final class PgTestSupport
         $hash = str_repeat('a', 64);
         $snapshot = new FieldSnapshot($entity, $hash, $hash, $fields, []);
 
-        return new class($snapshot) implements FieldCatalogue
+        return new readonly class($snapshot) implements FieldCatalogue
         {
             public function __construct(private FieldSnapshot $snapshot) {}
 

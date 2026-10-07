@@ -14,7 +14,7 @@ final readonly class CurrentSearchRecord
     /** @param array<string, scalar|null> $fields */
     public function __construct(public RecordRef $record, public string $schemaHash, public string $revision, public array $fields)
     {
-        self::validateInput($record, $schemaHash, $revision, $fields);
+        self::validateInput(record: $record, schemaHash: $schemaHash, revision: $revision, fields: $fields);
     }
 
     /** Runtime validation also rejects values from untyped integration callers.

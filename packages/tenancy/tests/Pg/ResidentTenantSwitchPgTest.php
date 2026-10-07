@@ -61,7 +61,7 @@ function residentSwitchTenantConnection(string $database): Connection
     $configuration = DB::connection('pgsql')->getConfig();
     $configuration['database'] = $database;
 
-    return (new ConnectionFactory(app()))->make($configuration, $database);
+    return new ConnectionFactory(app())->make($configuration, $database);
 }
 
 beforeEach(function (): void {
@@ -92,7 +92,7 @@ beforeEach(function (): void {
 
     // Kernel tables inside each tenant database: run the same migration files in that tenant's context.
     foreach ($this->accounts as $account) {
-        app(TenancyManager::class)->runFor($account, null, function (): void {
+        resolve(TenancyManager::class)->runFor($account, null, function (): void {
             $this->migrateSchemaSets(['axiomasoft/corex:tenant'], 'tenant');
         });
     }
@@ -109,7 +109,7 @@ beforeEach(function (): void {
 });
 
 afterEach(function (): void {
-    app(TenancyManager::class)->end();
+    resolve(TenancyManager::class)->end();
     DB::purge('tenant');
 
     foreach ($this->databases as $database) {
@@ -118,10 +118,10 @@ afterEach(function (): void {
 });
 
 it('writes after a lifecycle boundary into the database of the tenant that is current then', function (): void {
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
 
     $manager->initialize($this->accounts['alpha']);
-    $outboxForAlpha = app(Outbox::class);
+    $outboxForAlpha = resolve(Outbox::class);
     DB::transaction(static fn () => $outboxForAlpha->append(residentSwitchMessage('A')));
     $manager->end();
 
@@ -129,7 +129,7 @@ it('writes after a lifecycle boundary into the database of the tenant that is cu
     app()->forgetScopedInstances();
 
     $manager->initialize($this->accounts['beta']);
-    $outboxForBeta = app(Outbox::class);
+    $outboxForBeta = resolve(Outbox::class);
     DB::transaction(static fn () => $outboxForBeta->append(residentSwitchMessage('B')));
     $manager->end();
 

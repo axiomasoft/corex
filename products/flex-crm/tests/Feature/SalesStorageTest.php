@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Validation\ValidationException;
 
 it('persists canonical lead fields with trusted provenance', function (): void {
-    $lead = app(CreateLead::class)->handle(title: 'Inbound inquiry', contactName: 'Jane Doe');
+    $lead = resolve(CreateLead::class)->handle(title: 'Inbound inquiry', contactName: 'Jane Doe');
     expect($lead->fresh()->title)->toBe('Inbound inquiry')
         ->and($lead->status)->toBe(LeadStatus::Open)
         ->and($lead->created_by)->toBe($this->crmContext->current()->actor->toArray())
@@ -23,14 +23,14 @@ it('persists canonical lead fields with trusted provenance', function (): void {
 });
 
 it('refuses conversion without explicit human identity and preserves the lead', function (): void {
-    $lead = app(CreateLead::class)->handle(title: 'A deal title is not a human name');
-    expect(fn () => app(ConvertLead::class)->handle($lead))->toThrow(ValidationException::class);
+    $lead = resolve(CreateLead::class)->handle(title: 'A deal title is not a human name');
+    expect(fn () => resolve(ConvertLead::class)->handle($lead))->toThrow(ValidationException::class);
     expect($lead->fresh()->status)->toBe(LeadStatus::Open)->and(DB::table('crm_contacts')->count())->toBe(0);
 });
 
 it('stores activity kinds and canonical target associations', function (): void {
-    $lead = app(CreateLead::class)->handle(title: 'Inquiry', contactName: 'Jane');
-    $activity = app(LogActivity::class)->handle(subject: $lead, type: ActivityType::Call, summary: 'Intro call');
+    $lead = resolve(CreateLead::class)->handle(title: 'Inquiry', contactName: 'Jane');
+    $activity = resolve(LogActivity::class)->handle(subject: $lead, type: ActivityType::Call, summary: 'Intro call');
     expect($activity->fresh()->kind)->toBe(ActivityType::Call)
         ->and($activity->subject)->toBe('Intro call')
         ->and($lead->activities()->sole()->id)->toBe($activity->id)
@@ -47,16 +47,16 @@ it('does not represent legacy statuses or note and task as activities', function
 it('rejects creation veto without persisted rows or success events', function (): void {
     Event::fake([LeadCreated::class]);
     Lead::saving(fn (): bool => false);
-    expect(fn () => app(CreateLead::class)->handle(title: 'Vetoed'))->toThrow(ValidationException::class);
+    expect(fn () => resolve(CreateLead::class)->handle(title: 'Vetoed'))->toThrow(ValidationException::class);
     expect(DB::table('crm_leads')->count())->toBe(0);
     Event::assertNotDispatched(LeadCreated::class);
 });
 
 it('rolls back the entire conversion when the final lead update is vetoed', function (): void {
-    $lead = app(CreateLead::class)->handle(title: 'Inquiry', contactName: 'Jane');
+    $lead = resolve(CreateLead::class)->handle(title: 'Inquiry', contactName: 'Jane');
     Event::fake([LeadConverted::class]);
     Lead::updating(fn (): bool => false);
-    expect(fn () => app(ConvertLead::class)->handle($lead))->toThrow(ValidationException::class);
+    expect(fn () => resolve(ConvertLead::class)->handle($lead))->toThrow(ValidationException::class);
     expect($lead->fresh()->status)->toBe(LeadStatus::Open)
         ->and(DB::table('crm_contacts')->count())->toBe(0);
     Event::assertNotDispatched(LeadConverted::class);

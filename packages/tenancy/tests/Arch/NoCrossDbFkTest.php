@@ -332,6 +332,6 @@ test('the central and tenant runners use disjoint registered schema scopes', fun
     expect($byName)->toBe(['root' => 'central', 'tenant' => 'tenant'])
         ->and(preg_match('/\$this->loadMigrationsFrom\s*\(/', $provider))->toBe(0);
     $orchestrator = (string) file_get_contents($packageRoot.'/src/Account/Laravel/MigrationWaveOrchestrator.php');
-    expect($orchestrator)->toContain("\$this->schema->migrate(SchemaScope::Tenant, 'tenant')")
+    expect($orchestrator)->toContain("\$this->schema->migrate(scope: SchemaScope::Tenant, connection: 'tenant')")
         ->not->toContain('database/migrations/root');
 });

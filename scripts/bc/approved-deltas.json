@@ -669,6 +669,10 @@
                 {
                     "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D112.json",
                     "sha256": "467ee8023742d7217f058ddaffa49deacead9402e3a5380b55c0c54c68c35244"
+                },
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D130.json",
+                    "sha256": "5c6cb46a7556adb58e31786f9699f567c1273d1dc7d00bd737e347cca95e8048"
                 }
             ],
             "changes": [
@@ -896,6 +900,11 @@
                     "path": null,
                     "modificationType": "removed",
                     "description_sha256": "69b896104df82134a8d4d81ce297bff1d8de017c00c82c164191e7e25a568b33"
+                },
+                {
+                    "path": "/packages/core/src/Observability/Internal/OpenTelemetryBridge.php",
+                    "modificationType": "removed",
+                    "description_sha256": "f49ac4234243098f4ef9161e5401af921872d8eac1808fc107f0da709271cb09"
                 }
             ]
         }

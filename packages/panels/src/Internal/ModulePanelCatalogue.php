@@ -48,14 +48,14 @@ final class ModulePanelCatalogue implements PanelCatalogue
 
     public function forEntity(PanelContext $context, EntityReference $entity): array
     {
-        $definition = $this->activeEntity($context, $entity);
+        $definition = $this->activeEntity(context: $context, entity: $entity);
 
         if ($definition === null) {
             return [];
         }
 
         return array_values(array_filter(array_map(
-            fn (PanelDescriptor $descriptor): ?PanelDescriptor => $this->visibleDescriptor($descriptor, $context, $definition->capabilities),
+            fn (PanelDescriptor $descriptor): ?PanelDescriptor => $this->visibleDescriptor(descriptor: $descriptor, context: $context, capabilities: $definition->capabilities),
             $this->descriptors,
         )));
     }
@@ -66,14 +66,14 @@ final class ModulePanelCatalogue implements PanelCatalogue
 
         $descriptor = $this->descriptors[$panel->providerKey] ?? null;
 
-        if ($provider === null || $descriptor === null || ! $this->providerActive($descriptor, $context)) {
+        if ($provider === null || $descriptor === null || ! $this->providerActive(descriptor: $descriptor, context: $context)) {
             return PanelAccess::deny('provider_unavailable');
         }
 
         if ($panel->parent !== null) {
-            $parent = $this->activeEntity($context, $panel->parent);
+            $parent = $this->activeEntity(context: $context, entity: $panel->parent);
 
-            if ($parent === null || ! $this->supports($descriptor, $parent->capabilities)) {
+            if ($parent === null || ! $this->supports(descriptor: $descriptor, capabilities: $parent->capabilities)) {
                 return PanelAccess::deny('entity_unavailable');
             }
         }
@@ -96,16 +96,16 @@ final class ModulePanelCatalogue implements PanelCatalogue
     /** @param list<Capability> $capabilities */
     private function visibleDescriptor(PanelDescriptor $descriptor, PanelContext $context, array $capabilities): ?PanelDescriptor
     {
-        if (! $this->providerActive($descriptor, $context)) {
+        if (! $this->providerActive(descriptor: $descriptor, context: $context)) {
             return null;
         }
 
-        return $this->supports($descriptor, $capabilities) ? $descriptor : null;
+        return $this->supports(descriptor: $descriptor, capabilities: $capabilities) ? $descriptor : null;
     }
 
     private function providerActive(PanelDescriptor $descriptor, PanelContext $context): bool
     {
-        return $this->modules->isActive($descriptor->owningModule, $context->tenant);
+        return $this->modules->isActive(name: $descriptor->owningModule, ctx: $context->tenant);
     }
 
     /** @param list<Capability> $capabilities */

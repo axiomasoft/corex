@@ -30,7 +30,7 @@ $measure = static function (string $file, string $pattern): int {
     }
     preg_match_all($pattern, (string) file_get_contents($file), $m);
 
-    $sum = array_sum(array_map('intval', $m[1] ?? []));
+    $sum = array_sum(array_map(intval(...), $m[1] ?? []));
 
     return $sum !== 0 ? $sum : count($m[0] ?? []);
 };

@@ -1,0 +1,25 @@
+{
+  "classification": "source",
+  "commands": [
+    {
+      "exit": 0,
+      "output": "validate.json",
+      "role": "validate",
+      "sha256": "066abc64f135f67aea1a97b0b28e57b542731507a0a46bb7a7ee34d477d034d3"
+    },
+    {
+      "exit": 0,
+      "output": "audit.json",
+      "role": "audit",
+      "sha256": "3d507657c7b805f346c08d43802debe1a814b902019eb4013515944bf45060f1"
+    }
+  ],
+  "effective_manifest_sha256": "d074ed2860c01d94ea980ee27ac00def93dff1b68cb800e3a88b9bc0e32a39a8",
+  "lock_kind": "source",
+  "lock_sha256": "23605eeed6baa959a55c6504018a901349068040b5643b36603a54ae965f65e8",
+  "manifest": "packages/workflow/composer.json",
+  "manifest_sha256": "d074ed2860c01d94ea980ee27ac00def93dff1b68cb800e3a88b9bc0e32a39a8",
+  "name": "axiomasoft/corex-workflow",
+  "source_lock_sha256": "23605eeed6baa959a55c6504018a901349068040b5643b36603a54ae965f65e8",
+  "status": "GREEN"
+}

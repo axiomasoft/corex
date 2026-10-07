@@ -10,6 +10,7 @@ use CoreX\Tasks\Sprint\Laravel\SprintRelations;
 use CoreX\Tasks\Task\Laravel\StageRelations;
 use CoreX\Tasks\Task\Laravel\TaskRelations;
 use DateTimeInterface;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -30,19 +31,19 @@ final class Project extends BaseModel
     /** @var array<string, mixed> */
     protected $attributes = ['status' => 'active', 'settings' => '{}'];
 
-    /** @return HasMany<covariant \Illuminate\Database\Eloquent\Model, $this> */
+    /** @return HasMany<covariant Model, $this> */
     public function stages(): HasMany
     {
         return StageRelations::hasMany($this);
     }
 
-    /** @return HasMany<covariant \Illuminate\Database\Eloquent\Model, $this> */
+    /** @return HasMany<covariant Model, $this> */
     public function sprints(): HasMany
     {
         return SprintRelations::hasMany($this);
     }
 
-    /** @return HasMany<covariant \Illuminate\Database\Eloquent\Model, $this> */
+    /** @return HasMany<covariant Model, $this> */
     public function tasks(): HasMany
     {
         return TaskRelations::hasMany($this);

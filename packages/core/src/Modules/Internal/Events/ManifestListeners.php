@@ -40,7 +40,7 @@ final class ManifestListeners
                             return null;
                         }
 
-                        if (! $this->modules->isActive($module, $context)
+                        if (! $this->modules->isActive(name: $module, ctx: $context)
                             || ! in_array($listener, $this->modules->compiled()->listeners[$module][$event] ?? [], true)) {
                             return null;
                         }

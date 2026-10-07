@@ -49,7 +49,7 @@ final class ToolSectionCompiler implements ManifestSectionCompiler
                     throw new CompilationException('Unresolved operation reference for tool: '.$api->toolCode);
                 }
 
-                ApiToolValidator::validateExposedOperationReference($api, $operation, $module);
+                ApiToolValidator::validateExposedOperationReference(tool: $api, operation: $operation, declaringModule: $module);
             }
 
             $tuple = $api->declaringModule.':'.$api->toolCode.':'.$api->toolVersion;

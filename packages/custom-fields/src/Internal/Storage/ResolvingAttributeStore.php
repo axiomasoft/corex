@@ -22,12 +22,12 @@ final readonly class ResolvingAttributeStore implements AttributeStore
 
     public function read(DataScope $scope, RecordRef $record, FieldSelection $fields): ValueBag
     {
-        return $this->resolver->forEntity($record->entity)->read($scope, $record, $fields);
+        return $this->resolver->forEntity($record->entity)->read(scope: $scope, record: $record, fields: $fields);
     }
 
     public function write(DataScope $scope, RecordRef $record, ValuePatch $patch, WriteToken $token): AttributeWriteResult
     {
-        return $this->resolver->forEntity($record->entity)->write($scope, $record, $patch, $token);
+        return $this->resolver->forEntity($record->entity)->write(scope: $scope, record: $record, patch: $patch, token: $token);
     }
 
     public function loadMany(DataScope $scope, RecordSelection $records, FieldSelection $fields): ValueBatch

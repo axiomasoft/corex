@@ -36,7 +36,7 @@ it('projects active compiled entity fields without creating another registry', f
     );
 
     $catalogue = new ModuleFieldCatalogue(
-        entities: new class($entity) implements EntityRegistry
+        entities: new readonly class($entity) implements EntityRegistry
         {
             public function __construct(private EntityDefinition $entity) {}
 
@@ -65,7 +65,7 @@ it('projects active compiled entity fields without creating another registry', f
                 return null;
             }
         },
-        modules: new class($compiled) implements ModuleRegistry
+        modules: new readonly class($compiled) implements ModuleRegistry
         {
             public function __construct(private CompiledRegistry $compiled) {}
 

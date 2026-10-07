@@ -37,11 +37,11 @@ final readonly class WebhookFanout
     public function accept(MessageEnvelope $message): void
     {
         $this->connection->transaction(function () use ($message): void {
-            if (! $this->inbox->claim(self::Consumer, $message->messageId, $message->name)) {
+            if (! $this->inbox->claim(consumer: self::Consumer, messageId: $message->messageId, name: $message->name)) {
                 return;
             }
 
-            $topic = $this->catalogue->get($message->name, $message->contractVersion);
+            $topic = $this->catalogue->get(name: $message->name, version: $message->contractVersion);
             $projector = $this->projectors[$topic->projectorService] ?? null;
 
             if (! $projector instanceof WebhookPayloadProjector) {
@@ -60,21 +60,21 @@ final readonly class WebhookFanout
             }
 
             $projected = $projector->project($message, $topic);
-            $encoded = $this->codec->encodeExternal($message, $projected);
+            $encoded = $this->codec->encodeExternal(message: $message, data: $projected);
             $oversize = strlen($encoded) > self::BodyLimit;
-            $body = $oversize ? $this->codec->encodeExternal($message, ['error' => WebhookFailureReason::PayloadTooLarge->value]) : $encoded;
+            $body = $oversize ? $this->codec->encodeExternal(message: $message, data: ['error' => WebhookFailureReason::PayloadTooLarge->value]) : $encoded;
             $now = $this->clock->now();
 
             foreach ($rows as $row) {
                 $this->connection->table('sys_api_webhook_deliveries')->insertOrIgnore([
-                    'id' => substr(hash('sha256', DatabaseValue::text(DatabaseValue::field($row, 'id')).'|'.$message->messageId), 0, 32),
-                    'subscription_id' => DatabaseValue::field($row, 'id'),
-                    'subscription_revision' => DatabaseValue::field($row, 'revision'),
+                    'id' => substr(hash('sha256', DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id')).'|'.$message->messageId), 0, 32),
+                    'subscription_id' => DatabaseValue::field(row: $row, name: 'id'),
+                    'subscription_revision' => DatabaseValue::field(row: $row, name: 'revision'),
                     'event_id' => $message->messageId,
                     'topic' => $topic->name,
                     'topic_version' => $topic->version,
                     'major' => $topic->major,
-                    'endpoint_snapshot' => DatabaseValue::field($row, 'endpoint_url'),
+                    'endpoint_snapshot' => DatabaseValue::field(row: $row, name: 'endpoint_url'),
                     'scope' => JsonCanonical::encode($message->scope),
                     'body' => $body,
                     'body_hash' => hash('sha256', $body),

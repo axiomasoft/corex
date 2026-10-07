@@ -965,8 +965,8 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
 
-      - name: Install dependencies
-        run: php scripts/ci-composer-update.php
+      - name: Install reviewed tooling dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit
         run: composer audit --locked
@@ -989,6 +989,18 @@ jobs:
       - name: Zero PHPStan debt across all packages and consumers
         run: php scripts/quality/release-quality.php --stage=all
 
+      - name: Unused public entrypoints
+        run: php scripts/quality/unused-public.php --check
+
+      - name: Quality gate negative controls and native Rector provenance
+        run: vendor/bin/pest tests/Arch/UnusedPublicGateTest.php tests/Arch/QualityReleaseGateTest.php tests/Arch/MigrationToolingGuardTest.php tests/Arch/RectorLaravelSubsetTest.php
+
+      - name: Composer source audit controls
+        run: python3 -m unittest discover -s scripts/distribution/tests -p test_audit_roots.py
+
+      - name: Audit every maintained Composer source root
+        run: python3 scripts/distribution/audit-roots.py --scope source --evidence-dir build/quality/audits
+
       # Второй, самостоятельный прогон (P1.28/D48): 9 правил corex/modules-lint
       # на tests/ через phpstan-tests-lint.neon (без larastan — иначе Pest-идиома
       # даёт 60 несвязанных property.notFound). Строго ПОСЛЕ основного analyse.
@@ -997,6 +1009,9 @@ jobs:
 
       - name: Pint
         run: composer lint:check
+
+      - name: Rector
+        run: composer refactor:check
 
   mutation-check:
     permissions:

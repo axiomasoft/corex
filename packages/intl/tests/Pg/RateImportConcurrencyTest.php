@@ -47,7 +47,7 @@ it('FX-04 imports concurrent rate batches into one immutable row set', function 
         sourceManifest: JsonDocuments::capture(['source' => 'manual']),
     );
 
-    $importer = app(RateImporter::class);
+    $importer = resolve(RateImporter::class);
     $tokenA = new WriteToken(operationKey: hash('sha256', 'pg-a'), payloadHash: hash('sha256', 'payload-a'), expectedRecordVersion: 'rev-1');
     $tokenB = new WriteToken(operationKey: hash('sha256', 'pg-b'), payloadHash: hash('sha256', 'payload-b'), expectedRecordVersion: 'rev-1');
 

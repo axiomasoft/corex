@@ -53,8 +53,8 @@ final readonly class ScopePredicate
         return match ($scope) {
             Scope::None => $this->applyNone($q),
             Scope::Own => $q->where($q->getModel()->qualifyColumn('owner_id'), $p->principalId()),
-            Scope::Dept => $this->applyDepartment($q, $p, tree: false),
-            Scope::DeptTree => $this->applyDepartment($q, $p, tree: true),
+            Scope::Dept => $this->applyDepartment(q: $q, p: $p, tree: false),
+            Scope::DeptTree => $this->applyDepartment(q: $q, p: $p, tree: true),
             Scope::Workspace => $this->applyWorkspace($q),
             Scope::Account => $this->applyAccount($q),
         };
@@ -67,8 +67,8 @@ final readonly class ScopePredicate
             Scope::Account => true,
             Scope::Workspace => $this->matchesWorkspace($record),
             Scope::Own => data_get($record, 'owner_id') === $p->principalId(),
-            Scope::Dept => $this->matchesDepartment($record, $p, tree: false),
-            Scope::DeptTree => $this->matchesDepartment($record, $p, tree: true),
+            Scope::Dept => $this->matchesDepartment(record: $record, p: $p, tree: false),
+            Scope::DeptTree => $this->matchesDepartment(record: $record, p: $p, tree: true),
         };
     }
 
@@ -169,7 +169,7 @@ final readonly class ScopePredicate
             return false;
         }
 
-        return DepartmentQueries::contains($ownerDeptId, $principalPath);
+        return DepartmentQueries::contains(id: $ownerDeptId, path: $principalPath);
     }
 
     // ─── workspace — Builder + record ──────────────────────────────────────

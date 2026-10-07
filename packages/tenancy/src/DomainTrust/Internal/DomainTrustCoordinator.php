@@ -17,16 +17,16 @@ use CoreX\Tenancy\DomainTrust\Exceptions\DomainTrustDenied;
 use DateInterval;
 use Psr\Clock\ClockInterface;
 
-final class DomainTrustCoordinator
+final readonly class DomainTrustCoordinator
 {
     public function __construct(
-        private readonly DomainTrustPolicy $policy,
-        private readonly DomainChallengeStore $challengeStore,
-        private readonly DomainOwnershipProofVerifier $proofVerifier,
-        private readonly DomainTrustAuthorizer $authorizer,
-        private readonly DomainTrustStateWriter $stateWriter,
-        private readonly ClockInterface $clock,
-        private readonly int $challengeTtlSeconds,
+        private DomainTrustPolicy $policy,
+        private DomainChallengeStore $challengeStore,
+        private DomainOwnershipProofVerifier $proofVerifier,
+        private DomainTrustAuthorizer $authorizer,
+        private DomainTrustStateWriter $stateWriter,
+        private ClockInterface $clock,
+        private int $challengeTtlSeconds,
     ) {}
 
     public function issue(DomainTrustActor $actor, string $accountId, string $host): IssuedDomainChallenge

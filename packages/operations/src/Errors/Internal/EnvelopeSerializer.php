@@ -13,7 +13,7 @@ final class EnvelopeSerializer
     /** @param array<array-key, mixed> $data */
     public function success(array $data, int $status, InvocationMetadata $metadata): JsonResponse
     {
-        return $this->respond(['data' => $data, 'meta' => ErrorWire::meta($metadata)], $status, ErrorWire::headers($metadata));
+        return $this->respond(body: ['data' => $data, 'meta' => ErrorWire::meta($metadata)], status: $status, headers: ErrorWire::headers($metadata));
     }
 
     /**

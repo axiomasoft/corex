@@ -15,6 +15,6 @@ final class CredentialIssuanceDenied extends CodedException
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TenancyErrorCode::CredentialIssuanceDenied, ErrorCategory::Authorization, retryable: false);
+        return new ErrorDescriptor(code: TenancyErrorCode::CredentialIssuanceDenied, category: ErrorCategory::Authorization, retryable: false);
     }
 }

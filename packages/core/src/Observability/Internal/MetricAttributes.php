@@ -13,7 +13,7 @@ use InvalidArgumentException;
 final readonly class MetricAttributes
 {
     /** @var list<string> */
-    public const ALLOWED = [
+    public const array ALLOWED = [
         'package',
         'operation',
         'outcome',
@@ -22,7 +22,7 @@ final readonly class MetricAttributes
     ];
 
     /** @var list<string> */
-    public const RETRY_BUCKETS = ['0', '1', '2-3', '4+'];
+    public const array RETRY_BUCKETS = ['0', '1', '2-3', '4+'];
 
     /** @var array<string, string> */
     private array $values;

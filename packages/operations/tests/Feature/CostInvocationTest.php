@@ -78,7 +78,7 @@ final class CostInvocationTest extends TestCase
         $this->tenants->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
         $this->principal = new IdentityFixture;
         Schema::dropIfExists('sys_api_idempotency');
-        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
     }
 
     protected function tearDown(): void
@@ -110,8 +110,8 @@ final class CostInvocationTest extends TestCase
             modules: $modules,
             authorizer: $this->operationAuthorizer(),
             replayAuthorizer: new AllowReplayAuthorizer,
-            errors: app(ErrorMapper::class),
-            problems: app(ProblemRegistry::class),
+            errors: resolve(ErrorMapper::class),
+            problems: resolve(ProblemRegistry::class),
             budget: $admission,
         );
         $invocation = $this->invocation($this->operation(idempotency: IdempotencyRequirement::Required), 'shared-key');
@@ -167,7 +167,7 @@ final class CostInvocationTest extends TestCase
             $invoker->invoke($this->invocation($this->operation()));
             self::fail('A missing budget authority must fail closed.');
         } catch (BudgetStoreUnavailable $error) {
-            $mapped = (app(ErrorMapper::class))->map($error, reportUnexpected: false);
+            $mapped = (resolve(ErrorMapper::class))->map($error, reportUnexpected: false);
             self::assertSame('operations.budget_store_unavailable', $mapped->errorCode);
             self::assertSame(500, $mapped->status);
         }
@@ -189,7 +189,7 @@ final class CostInvocationTest extends TestCase
     public function test_http_rate_limit_keeps_retry_after_and_store_failure_has_no_retry_header(): void
     {
         $schema = $this->schema();
-        $registry = app(RegistryCompiler::class)->compile([
+        $registry = resolve(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
                 Api::operation('notes.read', 'GET', '/notes', CostInvocationHandler::class, 'notes.read', $schema, $schema),
             ]),
@@ -292,7 +292,7 @@ final class CostInvocationTest extends TestCase
 
     private function modules(): ModuleFixture
     {
-        return new ModuleFixture(app(RegistryCompiler::class)->compile([], installedPackages: []));
+        return new ModuleFixture(resolve(RegistryCompiler::class)->compile([], installedPackages: []));
     }
 
     private function operationAuthorizer(): OperationAuthorizer

@@ -12,14 +12,14 @@ use Illuminate\Http\File;
 use Illuminate\Http\UploadedFile;
 use RuntimeException;
 
-final class ScopedFilesystem implements Filesystem
+final readonly class ScopedFilesystem implements Filesystem
 {
     public function __construct(
-        private readonly Filesystem $filesystem,
-        private readonly TenantContextResolver $contexts,
-        private readonly string $accountId,
-        private readonly string $root,
-        private readonly bool $localPaths = true,
+        private Filesystem $filesystem,
+        private TenantContextResolver $contexts,
+        private string $accountId,
+        private string $root,
+        private bool $localPaths = true,
     ) {}
 
     public function path($path)
@@ -33,35 +33,35 @@ final class ScopedFilesystem implements Filesystem
 
         $arguments = [$path];
 
-        return $this->call('path', $arguments, fn () => $this->filesystem->path(...$arguments));
+        return $this->call(method: 'path', arguments: $arguments, operation: fn () => $this->filesystem->path(...$arguments));
     }
 
     public function exists($path)
     {
         $arguments = [$this->safePath($path)];
 
-        return $this->call('exists', $arguments, fn () => $this->filesystem->exists(...$arguments));
+        return $this->call(method: 'exists', arguments: $arguments, operation: fn () => $this->filesystem->exists(...$arguments));
     }
 
     public function get($path)
     {
         $arguments = [$this->safePath($path)];
 
-        return $this->call('get', $arguments, fn () => $this->filesystem->get(...$arguments));
+        return $this->call(method: 'get', arguments: $arguments, operation: fn () => $this->filesystem->get(...$arguments));
     }
 
     public function readStream($path)
     {
         $arguments = [$this->safePath($path)];
 
-        return $this->call('readStream', $arguments, fn () => $this->filesystem->readStream(...$arguments));
+        return $this->call(method: 'readStream', arguments: $arguments, operation: fn () => $this->filesystem->readStream(...$arguments));
     }
 
     public function put($path, $contents, $options = [])
     {
         $arguments = [$this->safePath($path), $contents, $options];
 
-        return $this->call('put', $arguments, fn () => $this->filesystem->put(...$arguments));
+        return $this->call(method: 'put', arguments: $arguments, operation: fn () => $this->filesystem->put(...$arguments));
     }
 
     /**
@@ -75,7 +75,7 @@ final class ScopedFilesystem implements Filesystem
 
         $arguments = [$this->safePath($path), $file, $options];
 
-        return $this->call('putFile', $arguments, fn () => $this->filesystem->putFile(...$arguments));
+        return $this->call(method: 'putFile', arguments: $arguments, operation: fn () => $this->filesystem->putFile(...$arguments));
     }
 
     /**
@@ -90,7 +90,7 @@ final class ScopedFilesystem implements Filesystem
 
         $arguments = [$this->safePath($path), $file, $this->safePath($name), $options];
 
-        return $this->call('putFileAs', $arguments, fn () => $this->filesystem->putFileAs(...$arguments));
+        return $this->call(method: 'putFileAs', arguments: $arguments, operation: fn () => $this->filesystem->putFileAs(...$arguments));
     }
 
     /** @param array<mixed> $options */
@@ -98,35 +98,35 @@ final class ScopedFilesystem implements Filesystem
     {
         $arguments = [$this->safePath($path), $resource, $options];
 
-        return $this->call('writeStream', $arguments, fn () => $this->filesystem->writeStream(...$arguments));
+        return $this->call(method: 'writeStream', arguments: $arguments, operation: fn () => $this->filesystem->writeStream(...$arguments));
     }
 
     public function getVisibility($path)
     {
         $arguments = [$this->safePath($path)];
 
-        return $this->call('getVisibility', $arguments, fn () => $this->filesystem->getVisibility(...$arguments));
+        return $this->call(method: 'getVisibility', arguments: $arguments, operation: fn () => $this->filesystem->getVisibility(...$arguments));
     }
 
     public function setVisibility($path, $visibility)
     {
         $arguments = [$this->safePath($path), $visibility];
 
-        return $this->call('setVisibility', $arguments, fn () => $this->filesystem->setVisibility(...$arguments));
+        return $this->call(method: 'setVisibility', arguments: $arguments, operation: fn () => $this->filesystem->setVisibility(...$arguments));
     }
 
     public function prepend($path, $data)
     {
         $arguments = [$this->safePath($path), $data];
 
-        return $this->call('prepend', $arguments, fn () => $this->filesystem->prepend(...$arguments));
+        return $this->call(method: 'prepend', arguments: $arguments, operation: fn () => $this->filesystem->prepend(...$arguments));
     }
 
     public function append($path, $data)
     {
         $arguments = [$this->safePath($path), $data];
 
-        return $this->call('append', $arguments, fn () => $this->filesystem->append(...$arguments));
+        return $this->call(method: 'append', arguments: $arguments, operation: fn () => $this->filesystem->append(...$arguments));
     }
 
     /** @param string|array<mixed> $paths */
@@ -134,77 +134,77 @@ final class ScopedFilesystem implements Filesystem
     {
         $arguments = [is_array($paths) ? array_map($this->safePath(...), $paths) : $this->safePath($paths)];
 
-        return $this->call('delete', $arguments, fn () => $this->filesystem->delete(...$arguments));
+        return $this->call(method: 'delete', arguments: $arguments, operation: fn () => $this->filesystem->delete(...$arguments));
     }
 
     public function copy($from, $to)
     {
         $arguments = [$this->safePath($from), $this->safePath($to)];
 
-        return $this->call('copy', $arguments, fn () => $this->filesystem->copy(...$arguments));
+        return $this->call(method: 'copy', arguments: $arguments, operation: fn () => $this->filesystem->copy(...$arguments));
     }
 
     public function move($from, $to)
     {
         $arguments = [$this->safePath($from), $this->safePath($to)];
 
-        return $this->call('move', $arguments, fn () => $this->filesystem->move(...$arguments));
+        return $this->call(method: 'move', arguments: $arguments, operation: fn () => $this->filesystem->move(...$arguments));
     }
 
     public function size($path)
     {
         $arguments = [$this->safePath($path)];
 
-        return $this->call('size', $arguments, fn () => $this->filesystem->size(...$arguments));
+        return $this->call(method: 'size', arguments: $arguments, operation: fn () => $this->filesystem->size(...$arguments));
     }
 
     public function lastModified($path)
     {
         $arguments = [$this->safePath($path)];
 
-        return $this->call('lastModified', $arguments, fn () => $this->filesystem->lastModified(...$arguments));
+        return $this->call(method: 'lastModified', arguments: $arguments, operation: fn () => $this->filesystem->lastModified(...$arguments));
     }
 
     public function files($directory = null, $recursive = false)
     {
         $arguments = [$directory === null ? null : $this->safePath($directory), $recursive];
 
-        return $this->call('files', $arguments, fn () => $this->filesystem->files(...$arguments));
+        return $this->call(method: 'files', arguments: $arguments, operation: fn () => $this->filesystem->files(...$arguments));
     }
 
     public function allFiles($directory = null)
     {
         $arguments = [$directory === null ? null : $this->safePath($directory)];
 
-        return $this->call('allFiles', $arguments, fn () => $this->filesystem->allFiles(...$arguments));
+        return $this->call(method: 'allFiles', arguments: $arguments, operation: fn () => $this->filesystem->allFiles(...$arguments));
     }
 
     public function directories($directory = null, $recursive = false)
     {
         $arguments = [$directory === null ? null : $this->safePath($directory), $recursive];
 
-        return $this->call('directories', $arguments, fn () => $this->filesystem->directories(...$arguments));
+        return $this->call(method: 'directories', arguments: $arguments, operation: fn () => $this->filesystem->directories(...$arguments));
     }
 
     public function allDirectories($directory = null)
     {
         $arguments = [$directory === null ? null : $this->safePath($directory)];
 
-        return $this->call('allDirectories', $arguments, fn () => $this->filesystem->allDirectories(...$arguments));
+        return $this->call(method: 'allDirectories', arguments: $arguments, operation: fn () => $this->filesystem->allDirectories(...$arguments));
     }
 
     public function makeDirectory($path)
     {
         $arguments = [$this->safePath($path)];
 
-        return $this->call('makeDirectory', $arguments, fn () => $this->filesystem->makeDirectory(...$arguments));
+        return $this->call(method: 'makeDirectory', arguments: $arguments, operation: fn () => $this->filesystem->makeDirectory(...$arguments));
     }
 
     public function deleteDirectory($directory)
     {
         $arguments = [$this->safePath($directory)];
 
-        return $this->call('deleteDirectory', $arguments, fn () => $this->filesystem->deleteDirectory(...$arguments));
+        return $this->call(method: 'deleteDirectory', arguments: $arguments, operation: fn () => $this->filesystem->deleteDirectory(...$arguments));
     }
 
     public function url(string $path): string

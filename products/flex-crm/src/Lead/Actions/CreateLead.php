@@ -10,9 +10,9 @@ use Flex\Crm\Lead\Events\LeadCreated;
 use Flex\Crm\Lead\Models\Lead;
 use Illuminate\Validation\ValidationException;
 
-final class CreateLead
+final readonly class CreateLead
 {
-    public function __construct(private readonly ContextGuard $guard) {}
+    public function __construct(private ContextGuard $guard) {}
 
     public function handle(
         string $title,
@@ -43,7 +43,7 @@ final class CreateLead
                 throw ValidationException::withMessages(['lead' => 'Lead creation was vetoed.']);
             }
 
-            LeadCreated::dispatch($lead);
+            event(new LeadCreated($lead));
 
             return $lead;
         });

@@ -21,10 +21,10 @@ use PHPStan\Analyser\Scope;
 final class DatabaseCall
 {
     /** Фасады, любой вызов которых считается обращением к БД. */
-    private const FACADES = ['db', 'schema'];
+    private const array FACADES = ['db', 'schema'];
 
     /** Методы, чей строковый аргумент считается SQL (на любом получателе). */
-    private const SQL_METHODS = [
+    private const array SQL_METHODS = [
         'statement', 'unprepared', 'raw', 'select', 'selectone', 'selectresultsets',
         'scalar', 'cursor', 'exec', 'query', 'prepare', 'insert', 'update', 'delete',
     ];

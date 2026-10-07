@@ -15,9 +15,4 @@ final class TranslationRevision
 
         return hash('sha256', $schemaHash.'|'.json_encode($map, JSON_THROW_ON_ERROR));
     }
-
-    public function nextRevision(string $currentRevision, int $sequence): int
-    {
-        return max(1, $sequence, hexdec(substr($currentRevision, 0, 8)) % 1000000);
-    }
 }

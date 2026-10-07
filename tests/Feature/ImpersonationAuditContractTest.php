@@ -26,7 +26,7 @@ test('P12 stamps a direct AuditLogger call with authoritative impersonation prov
     app()->instance(ImpersonationService::class, new P12FixedImpersonationService($state));
     app()->instance(AuditLogger::class, app()->make(QueuedAuditLogger::class, ['tenantContext' => new P12FixedTenantContextResolver('workspace-p12')]));
 
-    app(AuditLogger::class)->record(new AuditEntry(
+    resolve(AuditLogger::class)->record(new AuditEntry(
         action: 'direct-contract-proof',
         actorType: ActorType::User,
         actorId: 'spoofed-user',
@@ -93,9 +93,9 @@ function p12ImpersonationAuditViolations(): array
         : [];
 }
 
-final class P12FixedImpersonationService implements ImpersonationService
+final readonly class P12FixedImpersonationService implements ImpersonationService
 {
-    public function __construct(private readonly ImpersonationState $fixed) {}
+    public function __construct(private ImpersonationState $fixed) {}
 
     public function start(string $grantId, string $staffIdentityId): void {}
 
@@ -112,9 +112,9 @@ final class P12FixedImpersonationService implements ImpersonationService
     }
 }
 
-final class P12FixedTenantContextResolver implements TenantContextResolver
+final readonly class P12FixedTenantContextResolver implements TenantContextResolver
 {
-    public function __construct(private readonly string $workspaceId) {}
+    public function __construct(private string $workspaceId) {}
 
     public function current(): TenantContext
     {

@@ -26,21 +26,21 @@ final readonly class WakeupOptions
         $leaseSeconds = $config['lease_seconds'] ?? 60;
 
         if (! is_int($leaseSeconds) || $leaseSeconds < 1) {
-            $violations->add('lease_seconds', 'must be a positive integer');
+            $violations->add(path: 'lease_seconds', message: 'must be a positive integer');
             $leaseSeconds = 60;
         }
 
         $maxAttempts = $config['max_attempts'] ?? 5;
 
         if (! is_int($maxAttempts) || $maxAttempts < 1) {
-            $violations->add('max_attempts', 'must be a positive integer');
+            $violations->add(path: 'max_attempts', message: 'must be a positive integer');
             $maxAttempts = 5;
         }
 
         $configured = $config['handlers'] ?? [];
 
         if (! is_array($configured)) {
-            $violations->add('handlers', 'must be a map of handler definitions keyed by kind');
+            $violations->add(path: 'handlers', message: 'must be a map of handler definitions keyed by kind');
             $configured = [];
         }
 
@@ -53,7 +53,7 @@ final readonly class WakeupOptions
                 || ! is_string($definition['handler'] ?? null)
                 || ! is_string($definition['version'] ?? null)
                 || (isset($definition['accept_legacy_unstamped']) && ! is_bool($definition['accept_legacy_unstamped']))) {
-                $violations->add($path, 'requires handler, version and an optional boolean accept_legacy_unstamped');
+                $violations->add(path: $path, message: 'requires handler, version and an optional boolean accept_legacy_unstamped');
 
                 continue;
             }
@@ -66,13 +66,13 @@ final readonly class WakeupOptions
                     acceptLegacyUnstamped: $definition['accept_legacy_unstamped'] ?? false,
                 );
             } catch (InvalidArgumentException $exception) {
-                $violations->add($path, $exception->getMessage());
+                $violations->add(path: $path, message: $exception->getMessage());
             }
         }
 
         $violations->failIfAny();
 
-        return new self($leaseSeconds, $maxAttempts, $handlers);
+        return new self(leaseSeconds: $leaseSeconds, maxAttempts: $maxAttempts, handlers: $handlers);
     }
 
     /** @return list<string> config paths of enabled dangerous modes */

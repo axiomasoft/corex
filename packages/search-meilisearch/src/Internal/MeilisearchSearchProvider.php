@@ -14,7 +14,7 @@ use CoreX\Search\Data\SearchQuery;
 use InvalidArgumentException;
 use Meilisearch\Client;
 
-final class MeilisearchSearchProvider implements SearchProvider
+final readonly class MeilisearchSearchProvider implements SearchProvider
 {
     public function __construct(
         private Client $client,

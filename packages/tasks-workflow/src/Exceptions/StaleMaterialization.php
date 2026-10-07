@@ -30,6 +30,6 @@ final class StaleMaterialization extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TasksWorkflowErrorCode::StaleMaterialization, ErrorCategory::Conflict, retryable: false);
+        return new ErrorDescriptor(code: TasksWorkflowErrorCode::StaleMaterialization, category: ErrorCategory::Conflict, retryable: false);
     }
 }

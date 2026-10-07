@@ -14,6 +14,7 @@ use Symfony\Component\Yaml\Yaml;
 use Throwable;
 
 require_once dirname(__DIR__, 2).'/vendor/autoload.php';
+require_once __DIR__.'/source-quality.php';
 
 /** @return array<string, mixed> */
 function document(string $path): array
@@ -217,6 +218,10 @@ function check(string $root, string $stage): array
                 }
             }
         }
+    }
+
+    if ($stage === 'all') {
+        $violations = [...$violations, ...sourceQuality($root)];
     }
 
     return $violations;

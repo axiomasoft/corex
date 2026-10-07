@@ -41,8 +41,8 @@ final readonly class AttributeValuesChanged
             throw new InvalidArgumentException('Attribute mutation schema hash must be a lowercase SHA-256 digest.');
         }
 
-        $this->changedAttributeIds = self::canonical($changedAttributeIds, 'attribute ids');
-        $this->changedKeys = self::canonical($changedKeys, 'attribute keys');
+        $this->changedAttributeIds = self::canonical(values: $changedAttributeIds, name: 'attribute ids');
+        $this->changedKeys = self::canonical(values: $changedKeys, name: 'attribute keys');
     }
 
     /**

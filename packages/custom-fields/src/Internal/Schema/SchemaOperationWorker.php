@@ -31,12 +31,12 @@ final readonly class SchemaOperationWorker
 
     public function run(DataScope $scope, OperationRef $operation): void
     {
-        (new ScopeConnectionGuard($this->connection))->assertMatches($scope);
+        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
         $row = $this->claim(scope: $scope, operation: $operation);
 
         try {
-            $definition = json_decode(Value::text(Value::field($row, 'definition')), true, 16, JSON_THROW_ON_ERROR);
-            $this->apply(entity: Value::text(Value::field($row, 'entity')), definition: Value::map($definition));
+            $definition = json_decode(Value::text(Value::field(row: $row, name: 'definition')), true, 16, JSON_THROW_ON_ERROR);
+            $this->apply(entity: Value::text(Value::field(row: $row, name: 'entity')), definition: Value::map($definition));
 
             $this->connection->table($this->tables->schemaOperations)->where('id', $operation->id)->update([
                 'status' => 'verified',

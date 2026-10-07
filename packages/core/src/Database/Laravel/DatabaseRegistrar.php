@@ -26,7 +26,7 @@ final class DatabaseRegistrar implements PackageRegistrar
     {
         $app->tag([CoreSchemaSets::class], SchemaSetProvider::class);
         $app->singleton(SchemaSets::class, static fn (Application $app): SchemaSets => self::schemaSets($app));
-        $app->singleton(SchemaMigrator::class, static fn (Application $app): SchemaMigrator => new LaravelSchemaMigrator($app->make(SchemaSets::class), $app->make('migrator'), $app->make('db')));
+        $app->singleton(SchemaMigrator::class, static fn (Application $app): SchemaMigrator => new LaravelSchemaMigrator(sets: $app->make(SchemaSets::class), migrator: $app->make('migrator'), db: $app->make('db')));
     }
 
     public function boot(Application $app): void

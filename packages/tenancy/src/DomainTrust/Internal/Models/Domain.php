@@ -46,11 +46,11 @@ final class Domain extends Model
     }
 
     /**
-     * @return BelongsTo<covariant \Illuminate\Database\Eloquent\Model, $this>
+     * @return BelongsTo<covariant Model, $this>
      */
     public function account(): BelongsTo
     {
-        return AccountRelations::belongsTo($this, 'account_id', null, 'account');
+        return AccountRelations::belongsTo(model: $this, foreignKey: 'account_id', ownerKey: null, relation: 'account');
     }
 
     #[Override]

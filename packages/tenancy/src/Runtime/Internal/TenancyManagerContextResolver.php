@@ -15,10 +15,10 @@ use CoreX\Context\Exceptions\CentralContextException;
  * whatever context `DatabaseTenancyManager::initialize()` last set, throwing
  * when called outside any initialized tenant.
  */
-final class TenancyManagerContextResolver implements TenantContextResolver
+final readonly class TenancyManagerContextResolver implements TenantContextResolver
 {
     public function __construct(
-        private readonly TenancyManager $manager,
+        private TenancyManager $manager,
     ) {}
 
     public function current(): TenantContext

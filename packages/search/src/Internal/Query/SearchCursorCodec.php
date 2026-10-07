@@ -14,9 +14,9 @@ use RuntimeException;
 
 final readonly class SearchCursorCodec
 {
-    private const Cipher = 'aes-256-gcm';
+    private const string Cipher = 'aes-256-gcm';
 
-    private const Provider = 'postgres-v1';
+    private const string Provider = 'postgres-v1';
 
     public function __construct(private string $secret)
     {

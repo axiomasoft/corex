@@ -21,10 +21,10 @@ final class Timer extends Model
     /** @var list<string> */
     protected $fillable = ['user_id', 'task_id', 'started_at'];
 
-    /** @return BelongsTo<covariant \Illuminate\Database\Eloquent\Model, $this> */
+    /** @return BelongsTo<covariant Model, $this> */
     public function task(): BelongsTo
     {
-        return TaskRelations::belongsTo($this, 'task_id', null, 'task');
+        return TaskRelations::belongsTo(model: $this, foreignKey: 'task_id', ownerKey: null, relation: 'task');
     }
 
     /** @return array<string, string> */

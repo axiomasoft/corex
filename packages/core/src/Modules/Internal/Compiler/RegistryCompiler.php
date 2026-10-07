@@ -38,17 +38,17 @@ use Illuminate\Support\Str;
  *
  * @internal spec: B-10 §4.2/§5.2, P1.5
  */
-final class RegistryCompiler implements ModuleCompilation
+final readonly class RegistryCompiler implements ModuleCompilation
 {
     /** @var list<ManifestSectionCompiler> */
-    private readonly array $sections;
+    private array $sections;
 
     /** @param iterable<ManifestSectionCompiler> $sections */
     public function __construct(
-        private readonly CompilationValidator $validator = new CompilationValidator,
-        private readonly FieldCastRegistry $casts = new FieldCastMap,
+        private CompilationValidator $validator = new CompilationValidator,
+        private FieldCastRegistry $casts = new FieldCastMap,
         iterable $sections = [],
-        private readonly ?string $installedJsonPath = null,
+        private ?string $installedJsonPath = null,
     ) {
         $collected = [];
         foreach ($sections as $section) {
@@ -79,19 +79,19 @@ final class RegistryCompiler implements ModuleCompilation
         $this->validator->validateRequiredFields($manifests);
         $this->validator->validateExtenderSet($manifests);
         $this->validator->validateTablePrefixes($manifests);
-        $this->validator->validateRequires($manifests, $installedPackages ?? InstalledPackages::discover($this->installedJsonPath));
+        $this->validator->validateRequires(manifests: $manifests, installedPackages: $installedPackages ?? InstalledPackages::discover($this->installedJsonPath));
         $this->validator->validateComponents($manifests);
         $this->validator->validateDependencyGraph($manifests);
 
         usort($manifests, static fn (ModuleManifest $left, ModuleManifest $right): int => $left->composerName <=> $right->composerName);
 
         $versions = $installedVersions ?? InstalledPackages::discoverVersions($this->installedJsonPath);
-        $normalized = $this->normalize($manifests, $versions);
+        $normalized = $this->normalize(manifests: $manifests, versions: $versions);
         $this->validator->validateNormalizedIdentities($normalized);
-        $applied = $this->validator->applyReplacements($normalized, $manifests);
+        $applied = $this->validator->applyReplacements(records: $normalized, manifests: $manifests);
         $this->validator->validateMenuOrder($applied['effective']);
         $effective = $this->order($applied['effective']);
-        $removed = $this->removedKeys($normalized, $effective);
+        $removed = $this->removedKeys(all: $normalized, effective: $effective);
 
         $entities = [];
         $entityFields = [];
@@ -109,7 +109,7 @@ final class RegistryCompiler implements ModuleCompilation
 
             match ($stage) {
                 Entity::class => $entities = $this->applyEntityExtenders($manifests),
-                EntityField::class => $entityFields = $this->applyEntityFieldExtenders($manifests, $entities),
+                EntityField::class => $entityFields = $this->applyEntityFieldExtenders(manifests: $manifests, entities: $entities),
                 Permissions::class => $permissions = $this->collectPermissions($manifests),
                 Api::class => $api = $this->collectApi($manifests),
                 Filament::class => $filament = $this->collectFilament($manifests),
@@ -121,7 +121,7 @@ final class RegistryCompiler implements ModuleCompilation
 
         $compiler = $this->compilerIdentity($versions);
         $modules = array_map(
-            fn (ModuleManifest $manifest): array => $this->packageVersion($versions, $manifest->composerName)->canonical(),
+            fn (ModuleManifest $manifest): array => $this->packageVersion(versions: $versions, name: $manifest->composerName)->canonical(),
             $manifests,
         );
         $extensions = array_map(static fn (NormalizedExtension $record): array => $record->canonical(), $effective);
@@ -133,19 +133,19 @@ final class RegistryCompiler implements ModuleCompilation
         );
 
         return new CompiledRegistry(
-            entities: $this->filterEntities($entities, $removed),
-            entityFields: $this->detachEntityFields($this->filterEntityFields($entityFields, $removed)),
-            permissions: $this->detachExtenders(Permissions::class, $this->filterPermissions($permissions, $removed)),
-            api: $this->detachExtenders(Api::class, $this->filterApi($api, $removed)),
-            filament: $this->detachExtenders(Filament::class, $this->filterFilament($filament, $manifests, $removed)),
-            menu: $this->detachExtenders(Menu::class, $this->orderedMenus($this->filterMenus($menu, $removed), $effective)),
-            routes: $this->detachExtenders(Routes::class, $this->filterRoutes($routes, $manifests, $removed)),
-            workflow: $this->detachExtenders(Workflow::class, $this->filterWorkflow($workflow, $manifests, $removed)),
-            settings: $this->filterSettings($this->collectSettings($manifests), $removed),
-            featureFlags: $this->filterFeatureFlags($this->collectFeatureFlags($manifests), $removed),
-            listeners: $this->filterListeners(array_column(array_map(static fn (ModuleManifest $manifest): array => [
+            entities: $this->filterEntities(entities: $entities, removed: $removed),
+            entityFields: $this->detachEntityFields($this->filterEntityFields(fields: $entityFields, removed: $removed)),
+            permissions: $this->detachExtenders(class: Permissions::class, items: $this->filterPermissions(permissions: $permissions, removed: $removed)),
+            api: $this->detachExtenders(class: Api::class, items: $this->filterApi(api: $api, removed: $removed)),
+            filament: $this->detachExtenders(class: Filament::class, items: $this->filterFilament(filament: $filament, manifests: $manifests, removed: $removed)),
+            menu: $this->detachExtenders(class: Menu::class, items: $this->orderedMenus(menu: $this->filterMenus(menu: $menu, removed: $removed), effective: $effective)),
+            routes: $this->detachExtenders(class: Routes::class, items: $this->filterRoutes(routes: $routes, manifests: $manifests, removed: $removed)),
+            workflow: $this->detachExtenders(class: Workflow::class, items: $this->filterWorkflow(workflow: $workflow, manifests: $manifests, removed: $removed)),
+            settings: $this->filterSettings(settings: $this->collectSettings($manifests), removed: $removed),
+            featureFlags: $this->filterFeatureFlags(flags: $this->collectFeatureFlags($manifests), removed: $removed),
+            listeners: $this->filterListeners(listeners: array_column(array_map(static fn (ModuleManifest $manifest): array => [
                 'module' => $manifest->composerName, 'listeners' => $manifest->listeners,
-            ], $manifests), 'listeners', 'module'), $removed),
+            ], $manifests), 'listeners', 'module'), removed: $removed),
             compiler: $compiler,
             modules: $modules,
             extensions: $extensions,
@@ -177,7 +177,7 @@ final class RegistryCompiler implements ModuleCompilation
             $namespace = $manifest->tablePrefix ?? throw CompilationException::tablePrefixInvariantBypassed($manifest->composerName);
 
             foreach ($manifest->settings as $default) {
-                $settings[] = new CompiledSettingDefault($namespace, $default);
+                $settings[] = new CompiledSettingDefault(namespace: $namespace, definition: $default);
             }
         }
 
@@ -215,13 +215,13 @@ final class RegistryCompiler implements ModuleCompilation
                     continue;
                 }
 
-                $definition = $this->compileEntity($manifest, $extender);
+                $definition = $this->compileEntity(manifest: $manifest, extender: $extender);
 
                 if (isset($entities[$definition->handle])) {
                     throw CompilationException::duplicateEntityHandle(
-                        $definition->handle,
-                        $entities[$definition->handle]->module,
-                        $manifest->composerName,
+                        handle: $definition->handle,
+                        firstModule: $entities[$definition->handle]->module,
+                        secondModule: $manifest->composerName,
                     );
                 }
 
@@ -248,7 +248,7 @@ final class RegistryCompiler implements ModuleCompilation
         $table = $extender->table ?? $modulePrefix.'_'.Str::snake(Str::plural(class_basename($extender->model)));
 
         if (! str_starts_with($table, $modulePrefix.'_')) {
-            throw CompilationException::tablePrefixMismatch($manifest->composerName, $table, $modulePrefix);
+            throw CompilationException::tablePrefixMismatch(composerName: $manifest->composerName, table: $table, expectedPrefix: $modulePrefix);
         }
 
         $labelSingular = $extender->labelSingular ?? Str::headline(class_basename($extender->model));
@@ -357,7 +357,7 @@ final class RegistryCompiler implements ModuleCompilation
                 }
 
                 $target = $entities[$extender->entityHandle] ?? null;
-                $this->validator->validateEntityHandleKnown($manifest->composerName, $extender->entityHandle, $target !== null);
+                $this->validator->validateEntityHandleKnown(declaringComposerName: $manifest->composerName, entityHandle: $extender->entityHandle, known: $target !== null);
 
                 /** @var EntityDefinition $target */
                 $compiled[] = new CompiledEntityField(
@@ -405,7 +405,7 @@ final class RegistryCompiler implements ModuleCompilation
      */
     private function collectPermissions(array $manifests): array
     {
-        return $this->collect($manifests, Permissions::class);
+        return $this->collect(manifests: $manifests, extenderClass: Permissions::class);
     }
 
     /**
@@ -461,7 +461,7 @@ final class RegistryCompiler implements ModuleCompilation
      */
     private function collectFilament(array $manifests): array
     {
-        return $this->collect($manifests, Filament::class);
+        return $this->collect(manifests: $manifests, extenderClass: Filament::class);
     }
 
     /**
@@ -470,7 +470,7 @@ final class RegistryCompiler implements ModuleCompilation
      */
     private function collectMenu(array $manifests): array
     {
-        return $this->collect($manifests, Menu::class);
+        return $this->collect(manifests: $manifests, extenderClass: Menu::class);
     }
 
     /**
@@ -479,7 +479,7 @@ final class RegistryCompiler implements ModuleCompilation
      */
     private function collectRoutes(array $manifests): array
     {
-        return $this->collect($manifests, Routes::class);
+        return $this->collect(manifests: $manifests, extenderClass: Routes::class);
     }
 
     /**
@@ -488,7 +488,7 @@ final class RegistryCompiler implements ModuleCompilation
      */
     private function collectWorkflow(array $manifests): array
     {
-        return $this->collect($manifests, Workflow::class);
+        return $this->collect(manifests: $manifests, extenderClass: Workflow::class);
     }
 
     /**
@@ -501,10 +501,10 @@ final class RegistryCompiler implements ModuleCompilation
         $records = [];
 
         foreach ($manifests as $manifest) {
-            $ownerVersion = $this->packageVersion($versions, $manifest->composerName)->version;
+            $ownerVersion = $this->packageVersion(versions: $versions, name: $manifest->composerName)->version;
 
             foreach ($manifest->extenders as $extender) {
-                array_push($records, ...$this->normalizeExtender($manifest, $extender, $ownerVersion));
+                array_push($records, ...$this->normalizeExtender(manifest: $manifest, extender: $extender, ownerVersion: $ownerVersion));
             }
 
             $namespace = $manifest->tablePrefix ?? throw CompilationException::tablePrefixInvariantBypassed($manifest->composerName);
@@ -561,7 +561,7 @@ final class RegistryCompiler implements ModuleCompilation
     private function normalizeExtender(ModuleManifest $manifest, mixed $extender, string $ownerVersion): array
     {
         if ($extender instanceof Entity) {
-            $handle = $this->resolvedEntityHandle($manifest, $extender);
+            $handle = $this->resolvedEntityHandle(manifest: $manifest, extender: $extender);
             $fields = $extender->fieldDefinitions ?? $this->introspectCasts($extender->model);
             $records = [
                 new NormalizedExtension(
@@ -611,7 +611,7 @@ final class RegistryCompiler implements ModuleCompilation
         }
 
         if ($extender instanceof Api) {
-            return $this->normalizeApi($manifest, $extender, $ownerVersion);
+            return $this->normalizeApi(manifest: $manifest, api: $extender, ownerVersion: $ownerVersion);
         }
 
         if ($extender instanceof Filament) {
@@ -695,7 +695,7 @@ final class RegistryCompiler implements ModuleCompilation
     private function normalizeApi(ModuleManifest $manifest, Api $api, string $ownerVersion): array
     {
         if (! in_array($api->mode, ['entity', 'extendResource'], true)) {
-            return $this->sectionFor($api->mode)->normalize($manifest, $api, $ownerVersion);
+            return $this->sectionFor($api->mode)->normalize(manifest: $manifest, api: $api, ownerVersion: $ownerVersion);
         }
 
         return [
@@ -900,7 +900,7 @@ final class RegistryCompiler implements ModuleCompilation
      */
     private function filterFilament(array $filament, array $manifests, array $removed): array
     {
-        $owners = $this->extenderOwners($manifests, Filament::class);
+        $owners = $this->extenderOwners(manifests: $manifests, class: Filament::class);
 
         return array_values(array_filter($filament, function (Filament $item) use ($removed, $owners): bool {
             $owner = $owners[spl_object_id($item)] ?? '';
@@ -963,7 +963,7 @@ final class RegistryCompiler implements ModuleCompilation
      */
     private function filterRoutes(array $routes, array $manifests, array $removed): array
     {
-        $owners = $this->extenderOwners($manifests, Routes::class);
+        $owners = $this->extenderOwners(manifests: $manifests, class: Routes::class);
 
         return array_values(array_filter($routes, function (Routes $item) use ($removed, $owners): bool {
             $owner = $owners[spl_object_id($item)] ?? '';
@@ -981,7 +981,7 @@ final class RegistryCompiler implements ModuleCompilation
      */
     private function filterWorkflow(array $workflow, array $manifests, array $removed): array
     {
-        $owners = $this->extenderOwners($manifests, Workflow::class);
+        $owners = $this->extenderOwners(manifests: $manifests, class: Workflow::class);
 
         return array_values(array_filter($workflow, function (Workflow $item) use ($removed, $owners): bool {
             $owner = $owners[spl_object_id($item)] ?? '';
@@ -1061,7 +1061,7 @@ final class RegistryCompiler implements ModuleCompilation
     {
         return array_map(
             static fn (CompiledEntityField $field): CompiledEntityField => new CompiledEntityField(
-                extender: CompiledRegistry::extenderFromArray(EntityField::class, CompiledRegistry::extenderToArray($field->extender)),
+                extender: CompiledRegistry::extenderFromArray(class: EntityField::class, data: CompiledRegistry::extenderToArray($field->extender)),
                 declaringModule: $field->declaringModule,
                 sleeping: $field->sleeping,
             ),
@@ -1079,7 +1079,7 @@ final class RegistryCompiler implements ModuleCompilation
     private function detachExtenders(string $class, array $items): array
     {
         return array_map(
-            static fn (mixed $item): mixed => CompiledRegistry::extenderFromArray($class, CompiledRegistry::extenderToArray($item)),
+            static fn (mixed $item): mixed => CompiledRegistry::extenderFromArray(class: $class, data: CompiledRegistry::extenderToArray($item)),
             $items,
         );
     }
@@ -1120,7 +1120,7 @@ final class RegistryCompiler implements ModuleCompilation
      */
     private function compilerIdentity(array $versions): array
     {
-        $compiler = $this->packageVersion($versions, 'axiomasoft/corex');
+        $compiler = $this->packageVersion(versions: $versions, name: 'axiomasoft/corex');
 
         return [
             'package' => $compiler->name,

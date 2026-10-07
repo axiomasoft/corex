@@ -623,7 +623,7 @@
             "uses": [],
             "doc": {
                 "@phpstan-import-type": [
-                    "JsonMap from \\CoreX\\Transfer\\Data\\SourceRow"
+                    "JsonMap from SourceRow"
                 ]
             },
             "methods": {
@@ -1509,7 +1509,7 @@
             "uses": [],
             "doc": {
                 "@phpstan-import-type": [
-                    "JsonMap from \\CoreX\\Transfer\\Data\\SourceRow"
+                    "JsonMap from SourceRow"
                 ]
             },
             "methods": {
@@ -1639,7 +1639,7 @@
             "uses": [],
             "doc": {
                 "@phpstan-import-type": [
-                    "JsonMap from \\CoreX\\Transfer\\Data\\SourceRow"
+                    "JsonMap from SourceRow"
                 ]
             },
             "methods": {
@@ -2628,7 +2628,7 @@
             "uses": [],
             "doc": {
                 "@phpstan-import-type": [
-                    "JsonMap from \\CoreX\\Transfer\\Data\\SourceRow"
+                    "JsonMap from SourceRow"
                 ]
             },
             "methods": {

@@ -14,8 +14,8 @@ final class PackageProblemDefinitions implements ProblemDefinitionProvider
 {
     public function definitions(): iterable
     {
-        yield new ProblemDefinition(TasksErrorCode::InvalidPlanningDraft, 'urn:corex:problem:tasks.invalid_planning_draft', 422, 'Invalid planning draft.', false, ErrorCategory::Validation, []);
-        yield new ProblemDefinition(TasksErrorCode::PlanningConflict, 'urn:corex:problem:tasks.planning_conflict', 409, 'Planning conflict.', false, ErrorCategory::Conflict, []);
-        yield new ProblemDefinition(TasksErrorCode::TasksModuleDisabled, 'urn:corex:problem:tasks.tasks_module_disabled', 503, 'Tasks module disabled.', false, ErrorCategory::Unavailable, []);
+        yield new ProblemDefinition(code: TasksErrorCode::InvalidPlanningDraft, type: 'urn:corex:problem:tasks.invalid_planning_draft', defaultStatus: 422, title: 'Invalid planning draft.', retryable: false, category: ErrorCategory::Validation, detailKeys: []);
+        yield new ProblemDefinition(code: TasksErrorCode::PlanningConflict, type: 'urn:corex:problem:tasks.planning_conflict', defaultStatus: 409, title: 'Planning conflict.', retryable: false, category: ErrorCategory::Conflict, detailKeys: []);
+        yield new ProblemDefinition(code: TasksErrorCode::TasksModuleDisabled, type: 'urn:corex:problem:tasks.tasks_module_disabled', defaultStatus: 503, title: 'Tasks module disabled.', retryable: false, category: ErrorCategory::Unavailable, detailKeys: []);
     }
 }

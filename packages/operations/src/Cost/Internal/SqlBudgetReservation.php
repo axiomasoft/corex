@@ -21,7 +21,7 @@ final readonly class SqlBudgetReservation implements BudgetReservation
     #[Override]
     public function settle(ActualCost $cost): void
     {
-        $this->budget->settle($this->id, $cost);
+        $this->budget->settle(id: $this->id, cost: $cost);
     }
 
     #[Override]

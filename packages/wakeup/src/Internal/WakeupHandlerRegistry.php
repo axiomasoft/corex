@@ -13,11 +13,11 @@ use RuntimeException;
 
 final readonly class WakeupHandlerRegistry
 {
-    public const Schema = 'wakeup-payload/2';
+    public const string Schema = 'wakeup-payload/2';
 
-    public const Point = 'wakeup.handler';
+    public const string Point = 'wakeup.handler';
 
-    public const ModuleFree = 'module-free';
+    public const string ModuleFree = 'module-free';
 
     /**
      * @param  array<string, WakeupHandlerDefinition>  $definitions

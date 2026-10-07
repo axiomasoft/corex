@@ -11,10 +11,10 @@ use CoreX\Intl\Currency\Exceptions\InvalidRateException;
 use Override;
 use Throwable;
 
-final class BrickCurrencyMetadata implements CurrencyMetadata
+final readonly class BrickCurrencyMetadata implements CurrencyMetadata
 {
     public function __construct(
-        private readonly string $metadataVersion,
+        private string $metadataVersion,
     ) {}
 
     #[Override]

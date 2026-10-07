@@ -14,7 +14,7 @@ final class PackageProblemDefinitions implements ProblemDefinitionProvider
 {
     public function definitions(): iterable
     {
-        yield new ProblemDefinition(NotificationsErrorCode::NotificationAccessDenied, 'urn:corex:problem:notifications.notification_access_denied', 403, 'Notification access denied.', false, ErrorCategory::Authorization, []);
-        yield new ProblemDefinition(NotificationsErrorCode::NotificationOperationConflict, 'urn:corex:problem:notifications.notification_operation_conflict', 409, 'Notification operation conflict.', false, ErrorCategory::Conflict, []);
+        yield new ProblemDefinition(code: NotificationsErrorCode::NotificationAccessDenied, type: 'urn:corex:problem:notifications.notification_access_denied', defaultStatus: 403, title: 'Notification access denied.', retryable: false, category: ErrorCategory::Authorization, detailKeys: []);
+        yield new ProblemDefinition(code: NotificationsErrorCode::NotificationOperationConflict, type: 'urn:corex:problem:notifications.notification_operation_conflict', defaultStatus: 409, title: 'Notification operation conflict.', retryable: false, category: ErrorCategory::Conflict, detailKeys: []);
     }
 }

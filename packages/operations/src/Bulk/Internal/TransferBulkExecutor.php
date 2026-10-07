@@ -51,20 +51,20 @@ final readonly class TransferBulkExecutor
         $this->assertAvailable();
         $factory = $this->factory ?? throw new TransferCapabilityUnavailable;
         $session = $factory->create($operation);
-        $this->assertStamp($operation, $session->token->restoreEpoch, $session->token->schemaHash, $session->token->mappingHash);
+        $this->assertStamp(operation: $operation, restoreEpoch: $session->token->restoreEpoch, schemaHash: $session->token->schemaHash, mappingHash: $session->token->mappingHash);
 
         if ($session->cancellation->isCancelled()) {
             $status = $operation->status === BulkOperationStatus::Cancelling
                 ? BulkOperationStatus::Cancelled
                 : BulkOperationStatus::Cancelling;
 
-            return $this->with($operation, $status, JsonDocuments::map($operation->checkpoint), [
+            return $this->with(operation: $operation, status: $status, checkpoint: JsonDocuments::map($operation->checkpoint), progress: [
                 'phase' => $status->value,
             ], error: ['code' => 'cancelled']);
         }
 
         if ($session->runner instanceof ExportRunner) {
-            return $this->export($operation, $session->runner, $session);
+            return $this->export(operation: $operation, runner: $session->runner, session: $session);
         }
 
         $receipt = $session->runner->step(
@@ -73,7 +73,7 @@ final readonly class TransferBulkExecutor
             $session->token,
         );
 
-        return $this->fromReceipt($operation, $receipt, $session->transfer->id);
+        return $this->fromReceipt(operation: $operation, receipt: $receipt, transferId: $session->transfer->id);
     }
 
     private function assertAvailable(): void
@@ -128,14 +128,14 @@ final readonly class TransferBulkExecutor
             throw new TransferStampDrift;
         }
 
-        $sealedManifest = $runner->seal($this->scopeOf($operation), $operation->definition->id, $manifest, $cursor);
-        $runner->emit($this->scopeOf($operation), $sealedManifest, $cursor);
+        $sealedManifest = $runner->seal(scope: $this->scopeOf($operation), jobId: $operation->definition->id, draft: $manifest, after: $cursor);
+        $runner->emit(scope: $this->scopeOf($operation), manifest: $sealedManifest, cursor: $cursor);
 
-        return $this->with($operation, BulkOperationStatus::Completed, [
+        return $this->with(operation: $operation, status: BulkOperationStatus::Completed, checkpoint: [
             'attempt_id' => $sealedManifest->id,
             'sealed' => true,
             'sequence' => JsonDocuments::map($operation->checkpoint)['sequence'] ?? '0',
-        ], [
+        ], progress: [
             'phase' => 'completed',
             'attempt_id' => $sealedManifest->id,
         ], transferRef: ['id' => $session->transfer->id], resultRef: [
@@ -172,14 +172,14 @@ final readonly class TransferBulkExecutor
             : $operation->nextAttemptAt;
 
         return $this->with(
-            $operation,
-            $status,
-            $checkpoint,
-            $progress,
-            $error,
-            ['id' => $transferId],
-            $status === BulkOperationStatus::Completed ? ['id' => $transferId, 'media_type' => 'application/json'] : null,
-            $next,
+            operation: $operation,
+            status: $status,
+            checkpoint: $checkpoint,
+            progress: $progress,
+            error: $error,
+            transferRef: ['id' => $transferId],
+            resultRef: $status === BulkOperationStatus::Completed ? ['id' => $transferId, 'media_type' => 'application/json'] : null,
+            nextAttemptAt: $next,
         );
     }
 

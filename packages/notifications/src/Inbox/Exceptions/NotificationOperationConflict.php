@@ -16,6 +16,6 @@ final class NotificationOperationConflict extends CodedException
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(NotificationsErrorCode::NotificationOperationConflict, ErrorCategory::Conflict, retryable: false);
+        return new ErrorDescriptor(code: NotificationsErrorCode::NotificationOperationConflict, category: ErrorCategory::Conflict, retryable: false);
     }
 }

@@ -122,7 +122,7 @@ final readonly class ReferenceMembershipProjection
     /** @param Closure(): void $pull */
     public function refresh(string $eventId, string $owner, int $now, Closure $pull): bool
     {
-        return (new RefreshCoordinator(inbox: $this->inbox, refresh: $pull))->refresh(
+        return new RefreshCoordinator(inbox: $this->inbox, refresh: $pull)->refresh(
             eventId: $eventId,
             owner: $owner,
             now: $now,

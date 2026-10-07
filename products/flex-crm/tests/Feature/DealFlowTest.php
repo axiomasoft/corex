@@ -24,7 +24,7 @@ beforeEach(function (): void {
 it('creates a deal at the first stage with money', function (): void {
     Event::fake([DealCreated::class]);
 
-    $deal = app(CreateDeal::class)->handle($this->pipeline, 'Acme', Money::of(1500, 'USD'));
+    $deal = resolve(CreateDeal::class)->handle($this->pipeline, 'Acme', Money::of(1500, 'USD'));
 
     expect($deal->stage_id)->toBe($this->newStage->id)
         ->and($deal->status)->toBe(DealStatus::Open)
@@ -41,8 +41,8 @@ it('creates a deal at the first stage with money', function (): void {
 it('moves a deal to a won stage and marks it won', function (): void {
     Event::fake([DealMovedToStage::class]);
 
-    $deal = app(CreateDeal::class)->handle($this->pipeline, 'Acme');
-    $moved = app(MoveDealToStage::class)->handle($deal, $this->wonStage);
+    $deal = resolve(CreateDeal::class)->handle($this->pipeline, 'Acme');
+    $moved = resolve(MoveDealToStage::class)->handle($deal, $this->wonStage);
 
     expect($moved->stage_id)->toBe($this->wonStage->id)
         ->and($moved->status)->toBe(DealStatus::Won);
@@ -53,21 +53,21 @@ it('moves a deal to a won stage and marks it won', function (): void {
 it('refuses to create a deal in a pipeline without stages', function (): void {
     $empty = Pipeline::create(['entity_type' => 'crm.deal', 'code' => 'empty', 'name' => ['en' => 'Empty']]);
 
-    app(CreateDeal::class)->handle($empty, 'orphan');
+    resolve(CreateDeal::class)->handle($empty, 'orphan');
 })->throws(RuntimeException::class);
 
 it('rejects a stage from another pipeline without changing the deal or emitting an event', function (): void {
-    $deal = app(CreateDeal::class)->handle($this->pipeline, 'Unchanged');
+    $deal = resolve(CreateDeal::class)->handle($this->pipeline, 'Unchanged');
     $other = Pipeline::create(['entity_type' => 'crm.deal', 'code' => 'other', 'name' => ['en' => 'Other']]);
     $stage = Stage::create(['pipeline_id' => $other->id, 'code' => 'other', 'name' => ['en' => 'Other stage'], 'position' => 0]);
     Event::fake([DealMovedToStage::class]);
-    expect(fn () => app(MoveDealToStage::class)->handle($deal, $stage))->toThrow(ValidationException::class);
+    expect(fn () => resolve(MoveDealToStage::class)->handle($deal, $stage))->toThrow(ValidationException::class);
     expect($deal->fresh()->stage_id)->toBe($this->newStage->id);
     Event::assertNotDispatched(DealMovedToStage::class);
 });
 
 it('clears optional amount without clearing mandatory currency', function (): void {
-    $deal = app(CreateDeal::class)->handle($this->pipeline, 'Optional amount', Money::ofMinor(125, 'USD'));
+    $deal = resolve(CreateDeal::class)->handle($this->pipeline, 'Optional amount', Money::ofMinor(125, 'USD'));
     $deal->amount = null;
     $deal->save();
     expect($deal->fresh()->amount)->toBeNull()
@@ -75,10 +75,10 @@ it('clears optional amount without clearing mandatory currency', function (): vo
 });
 
 it('rolls back a vetoed stage update without a success event', function (): void {
-    $deal = app(CreateDeal::class)->handle($this->pipeline, 'Veto');
+    $deal = resolve(CreateDeal::class)->handle($this->pipeline, 'Veto');
     Event::fake([DealMovedToStage::class]);
     Deal::updating(fn (): bool => false);
-    expect(fn () => app(MoveDealToStage::class)->handle($deal, $this->wonStage))->toThrow(ValidationException::class);
+    expect(fn () => resolve(MoveDealToStage::class)->handle($deal, $this->wonStage))->toThrow(ValidationException::class);
     expect($deal->fresh()->stage_id)->toBe($this->newStage->id);
     Event::assertNotDispatched(DealMovedToStage::class);
 });

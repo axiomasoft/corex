@@ -14,6 +14,6 @@ final class PackageProblemDefinitions implements ProblemDefinitionProvider
 {
     public function definitions(): iterable
     {
-        yield new ProblemDefinition(AccessErrorCode::ScopeCapabilityMismatch, 'urn:corex:problem:access.scope_capability_mismatch', 422, 'Scope capability mismatch.', false, ErrorCategory::Unsupported, []);
+        yield new ProblemDefinition(code: AccessErrorCode::ScopeCapabilityMismatch, type: 'urn:corex:problem:access.scope_capability_mismatch', defaultStatus: 422, title: 'Scope capability mismatch.', retryable: false, category: ErrorCategory::Unsupported, detailKeys: []);
     }
 }

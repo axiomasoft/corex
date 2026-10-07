@@ -21,31 +21,31 @@ final class SchemaSetException extends CodedException
 
     public static function invalidSet(string $id): self
     {
-        return new self("invalid_set: Invalid schema set [$id].", CoreErrorCode::SchemaInvalidSet);
+        return new self(message: "invalid_set: Invalid schema set [$id].", errorCode: CoreErrorCode::SchemaInvalidSet);
     }
 
     public static function duplicateSet(string $id): self
     {
-        return new self("duplicate_set: Schema set [$id] is declared twice.", CoreErrorCode::SchemaDuplicateSet);
+        return new self(message: "duplicate_set: Schema set [$id] is declared twice.", errorCode: CoreErrorCode::SchemaDuplicateSet);
     }
 
     public static function duplicateMigration(string $name, string $first, string $second): self
     {
-        return new self("duplicate_migration: Migration [$name] belongs to [$first] and [$second].", CoreErrorCode::SchemaDuplicateMigration);
+        return new self(message: "duplicate_migration: Migration [$name] belongs to [$first] and [$second].", errorCode: CoreErrorCode::SchemaDuplicateMigration);
     }
 
     public static function unknownSet(string $id): self
     {
-        return new self("unknown_set: Schema set [$id] is unavailable.", CoreErrorCode::SchemaUnknownSet);
+        return new self(message: "unknown_set: Schema set [$id] is unavailable.", errorCode: CoreErrorCode::SchemaUnknownSet);
     }
 
     public static function unsupportedDriver(string $id, string $driver): self
     {
-        return new self("unsupported_driver: Schema set [$id] does not support [$driver].", CoreErrorCode::SchemaUnsupportedDriver);
+        return new self(message: "unsupported_driver: Schema set [$id] does not support [$driver].", errorCode: CoreErrorCode::SchemaUnsupportedDriver);
     }
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor($this->errorCode, ErrorCategory::Internal, retryable: false);
+        return new ErrorDescriptor(code: $this->errorCode, category: ErrorCategory::Internal, retryable: false);
     }
 }

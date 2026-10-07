@@ -13,9 +13,9 @@ use CoreX\Wakeup\Internal\WakeupHandlerRegistry;
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class WakeupFixtures
 {
-    public const SCHEMA = WakeupHandlerRegistry::Schema;
+    public const string SCHEMA = WakeupHandlerRegistry::Schema;
 
-    public const POINT = WakeupHandlerRegistry::Point;
+    public const string POINT = WakeupHandlerRegistry::Point;
 
     public static function registryClass(): string
     {

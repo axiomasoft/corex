@@ -23,7 +23,7 @@ final class SweepWakeups extends Command
 
             return self::INVALID;
         }
-        $result = $sweeper->sweep($contexts->current(), $limit);
+        $result = $sweeper->sweep(context: $contexts->current(), limit: $limit);
         $this->info("Claimed {$result->claimed}; completed {$result->completed}.");
 
         return self::SUCCESS;

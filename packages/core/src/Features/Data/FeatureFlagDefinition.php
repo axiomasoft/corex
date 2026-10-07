@@ -22,7 +22,7 @@ final readonly class FeatureFlagDefinition
 
     public static function make(string $key, bool $default = false): self
     {
-        return new self($key, $default);
+        return new self(key: $key, default: $default);
     }
 
     public function module(string $module): self

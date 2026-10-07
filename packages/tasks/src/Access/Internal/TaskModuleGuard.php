@@ -11,18 +11,18 @@ use CoreX\Tasks\Access\Contracts\TaskModuleContext;
 use CoreX\Tasks\Access\Exceptions\TasksModuleDisabled;
 use CoreX\Tasks\TasksModule;
 
-final class TaskModuleGuard implements TaskModuleContext
+final readonly class TaskModuleGuard implements TaskModuleContext
 {
     public function __construct(
-        private readonly ModuleRegistry $modules,
-        private readonly TenantContextResolver $tenantContextResolver,
+        private ModuleRegistry $modules,
+        private TenantContextResolver $tenantContextResolver,
     ) {}
 
     public function context(): TenantContext
     {
         $context = $this->tenantContextResolver->current();
 
-        if (! $this->modules->isActive(TasksModule::NAME, $context)) {
+        if (! $this->modules->isActive(name: TasksModule::NAME, ctx: $context)) {
             throw TasksModuleDisabled::forCurrentAccount();
         }
 

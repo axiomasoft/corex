@@ -28,12 +28,12 @@ use Illuminate\Http\Response;
  * in the account.
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class ResolveWorkspace
+final readonly class ResolveWorkspace
 {
     public function __construct(
-        private readonly TenancyManager $manager,
-        private readonly WorkspaceResolver $resolver,
-        private readonly ?TenancyOptions $options = null,
+        private TenancyManager $manager,
+        private WorkspaceResolver $resolver,
+        private ?TenancyOptions $options = null,
     ) {}
 
     /** @return Response|mixed */
@@ -71,7 +71,7 @@ final class ResolveWorkspace
     /** Marker's FIRST occurrence in `$request->segments()`; no marker → default (null). */
     private function extractSlug(Request $request): ?string
     {
-        $configured = ($this->options ?? app(TenancyOptions::class))->workspacePathSegment;
+        $configured = ($this->options ?? resolve(TenancyOptions::class))->workspacePathSegment;
         $marker = $configured ?? 'w';
 
         $segments = array_values($request->segments());

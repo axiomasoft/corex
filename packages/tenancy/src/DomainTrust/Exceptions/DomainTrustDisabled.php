@@ -15,6 +15,6 @@ final class DomainTrustDisabled extends CodedException
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TenancyErrorCode::DomainTrustDisabled, ErrorCategory::Unavailable, retryable: false);
+        return new ErrorDescriptor(code: TenancyErrorCode::DomainTrustDisabled, category: ErrorCategory::Unavailable, retryable: false);
     }
 }

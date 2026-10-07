@@ -62,7 +62,7 @@ it('keeps staged uploads private and schedules their purge when storage write fa
     app()->instance(TenantStorage::class, $storage);
     app()->forgetScopedInstances();
 
-    expect(fn (): mixed => app(MediaLibrary::class)->store(mediaEdgeContext(), edgeUpload('failed-write', 'partial bytes')))
+    expect(fn (): mixed => resolve(MediaLibrary::class)->store(mediaEdgeContext(), edgeUpload('failed-write', 'partial bytes')))
         ->toThrow(MediaOperationConflict::class);
 
     expect(DB::table('med_files')->where('request_key', 'failed-write')->value('state'))->toBe('deleting')
@@ -71,8 +71,8 @@ it('keeps staged uploads private and schedules their purge when storage write fa
 
 it('keeps attachment operations idempotent and rejects unavailable files', function (): void {
     allowMediaEdges();
-    $library = app(MediaLibrary::class);
-    $relations = app(RelationLookup::class);
+    $library = resolve(MediaLibrary::class);
+    $relations = resolve(RelationLookup::class);
     $file = $library->store(mediaEdgeContext(), edgeUpload('relation-idempotent', 'bytes'));
     $attachment = new AttachmentInput($file->id, 'crm:contact', 'contact-edge', 'avatar');
 
@@ -88,7 +88,7 @@ it('keeps attachment operations idempotent and rejects unavailable files', funct
 
 it('marks a failed purge unknown instead of publishing a false delete', function (): void {
     allowMediaEdges();
-    $library = app(MediaLibrary::class);
+    $library = resolve(MediaLibrary::class);
     $file = $library->store(mediaEdgeContext(), edgeUpload('purge-unknown', 'bytes'));
     $library->delete(mediaEdgeContext(), $file->id);
 
@@ -97,7 +97,7 @@ it('marks a failed purge unknown instead of publishing a false delete', function
     $storage = Mockery::mock(TenantStorage::class);
     $storage->shouldReceive('disk')->andReturn($disk);
 
-    expect(fn (): mixed => (new PurgeMedia($file->id))->handle(app(MediaOperationStore::class), $storage))
+    expect(fn (): mixed => new PurgeMedia($file->id)->handle(resolve(MediaOperationStore::class), $storage))
         ->toThrow(MediaOperationConflict::class);
 
     expect(DB::table('med_files')->where('id', $file->id)->value('state'))->toBe('deleting')
@@ -117,7 +117,7 @@ it('rejects malformed trusted media inputs before creating storage keys', functi
 
 it('rejects an unregistered purpose and a server-detected executable MIME type', function (): void {
     allowMediaEdges();
-    $library = app(MediaLibrary::class);
+    $library = resolve(MediaLibrary::class);
 
     expect(fn (): mixed => $library->store(
         mediaEdgeContext(),
@@ -148,13 +148,13 @@ it('rechecks policy before publishing uploaded bytes and when an authorized hand
         }
     };
     $library = new SqlMediaLibrary(
-        app('db')->connection(),
-        app(TenantStorage::class),
+        resolve('db')->connection(),
+        resolve(TenantStorage::class),
         $policy,
-        app(MediaOperationStore::class),
-        app(ConversionCoordinator::class),
-        app(MediaOptions::class),
-        app(ClockInterface::class),
+        resolve(MediaOperationStore::class),
+        resolve(ConversionCoordinator::class),
+        resolve(MediaOptions::class),
+        resolve(ClockInterface::class),
     );
 
     $file = $library->store(mediaEdgeContext(), edgeUpload('read-recheck', 'bytes'));
@@ -178,7 +178,7 @@ it('publishes media as a standalone CoreX module', function (): void {
 
 it('reports an unavailable storage stream instead of returning a non-resource from a ready media reference', function (): void {
     allowMediaEdges();
-    $library = app(MediaLibrary::class);
+    $library = resolve(MediaLibrary::class);
     $file = $library->store(mediaEdgeContext(), edgeUpload('unavailable-stream', 'ready bytes'));
     $disk = Mockery::mock(Filesystem::class);
     $disk->shouldReceive('readStream')->once()->andReturnNull();
@@ -186,7 +186,7 @@ it('reports an unavailable storage stream instead of returning a non-resource fr
     $storage->shouldReceive('disk')->andReturn($disk);
     app()->instance(TenantStorage::class, $storage);
     app()->forgetScopedInstances();
-    $read = app(MediaLibrary::class)->read(mediaEdgeContext(), $file->id);
+    $read = resolve(MediaLibrary::class)->read(mediaEdgeContext(), $file->id);
 
     expect(fn (): mixed => ($read->openStream)())->toThrow(MediaOperationConflict::class, 'Media stream is unavailable.');
 });

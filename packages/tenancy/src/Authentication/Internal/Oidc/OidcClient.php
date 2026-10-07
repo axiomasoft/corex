@@ -20,7 +20,7 @@ use SensitiveParameter;
  *
  * @internal
  */
-final class OidcClient
+final readonly class OidcClient
 {
     public const string SESSION_STATE_KEY = 'corex_tenancy_oidc.state';
 
@@ -29,12 +29,12 @@ final class OidcClient
     public const string SESSION_CODE_VERIFIER_KEY = 'corex_tenancy_oidc.code_verifier';
 
     public function __construct(
-        private readonly HttpFactory $http,
-        private readonly OidcDiscovery $discovery,
-        private readonly string $clientId,
+        private HttpFactory $http,
+        private OidcDiscovery $discovery,
+        private string $clientId,
         #[SensitiveParameter]
-        private readonly ?string $clientSecret,
-        private readonly string $redirectUri,
+        private ?string $clientSecret,
+        private string $redirectUri,
     ) {}
 
     public function authorizationUrl(Request $request): string

@@ -1,0 +1,16 @@
+{
+  "captured_at": "2026-10-07T08:01:21.436Z",
+  "tool": "mcp__perplexity__search_advanced",
+  "query": "As of 2026-10-07, evaluate the best maintainable architecture for a PHP 8.4/8.5 Laravel 12/13 monorepo using Rector 2.6.7 and driftingly/rector-laravel 2.6.2. Composer audit --locked fails solely because its required symplify/rule-doc-generator-contracts ^11.2 (11.2.0) is abandoned with no declared replacement; no security vulnerabilities. Root must enable Laravel quality/collection/type sets and retain strict Composer audit including every installable root. Investigate official Rector-Laravel upstream newer commits/branches, alternatives, actual contracts code and use, Rector's prefixed bundled contracts/native replacements, and whether a minimal maintained private fork or exact bounded exception is justified. No broad audit ignore, dishonest composer replace, vendored fake package or hiding tooling outside audited roots. Recommend a concrete solution with exact dependency changes, compatibility and maintenance risks. Cite official GitHub, Packagist and Composer sources with URLs and current metadata; distinguish verified facts from advice.",
+  "sources": [
+    "web"
+  ],
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "No answer found. Perplexity may have changed its structure."
+      }
+    ]
+  }
+}

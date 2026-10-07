@@ -15,6 +15,6 @@ final class UnsupportedEnvironmentException extends CodedException
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(RecurrenceErrorCode::UnsupportedEnvironmentException, ErrorCategory::Unsupported, retryable: false);
+        return new ErrorDescriptor(code: RecurrenceErrorCode::UnsupportedEnvironmentException, category: ErrorCategory::Unsupported, retryable: false);
     }
 }

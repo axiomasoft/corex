@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Testing\CoreXTestCase;
 use CoreX\Tests\Support\SourceScanner;
 
 // P16.10 — D33/D94 closed. CoreX\Testing is dev-autoload only.
@@ -41,7 +42,7 @@ test('package tests do not import another package Testing namespace', function (
 test('R-T1 planting in ActorType names the file', function (): void {
     $line = rt1Plant(
         'packages/core/src/Audit/Enums/ActorType.php',
-        'CoreX\\Testing\\CoreXTestCase',
+        CoreXTestCase::class,
     );
 
     expect($line)->toContain('R-T1')

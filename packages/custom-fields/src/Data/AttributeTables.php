@@ -11,7 +11,7 @@ use CoreX\CustomFields\Internal\Value;
 #[Api(since: '1.0')]
 final readonly class AttributeTables
 {
-    private const IDENTIFIER = '/^[a-z][a-z0-9_]*$/';
+    private const string IDENTIFIER = '/^[a-z][a-z0-9_]*$/';
 
     public function __construct(
         public string $documents,

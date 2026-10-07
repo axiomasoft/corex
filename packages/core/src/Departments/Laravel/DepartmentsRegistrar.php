@@ -20,7 +20,7 @@ final class DepartmentsRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
-        $app->singleton(DepartmentRepository::class, static fn (Application $app): DepartmentRepository => ConfiguredImplementation::resolve($app, DepartmentRepository::class, $app->make(CoreOptions::class)->departmentRepository));
+        $app->singleton(DepartmentRepository::class, static fn (Application $app): DepartmentRepository => ConfiguredImplementation::resolve(app: $app, contract: DepartmentRepository::class, implementation: $app->make(CoreOptions::class)->departmentRepository));
     }
 
     #[Override]

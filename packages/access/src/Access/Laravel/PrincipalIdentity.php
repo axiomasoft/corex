@@ -16,17 +16,17 @@ use Override;
  * class is the principal type and the auth identifier is its UUID.
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class PrincipalIdentity implements Authenticatable, Principal
+final readonly class PrincipalIdentity implements Authenticatable, Principal
 {
     public function __construct(
-        private readonly PrincipalType $type,
-        private readonly string $id,
-        private readonly ?string $passwordHash = null,
+        private PrincipalType $type,
+        private string $id,
+        private ?string $passwordHash = null,
     ) {}
 
     public static function fromPrincipal(Principal $principal): self
     {
-        return new self($principal->principalType(), $principal->principalId());
+        return new self(type: $principal->principalType(), id: $principal->principalId());
     }
 
     #[Override]

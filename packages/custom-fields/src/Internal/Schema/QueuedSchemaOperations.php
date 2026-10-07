@@ -33,14 +33,14 @@ final readonly class QueuedSchemaOperations implements SchemaOperations
 
     public function request(DataScope $scope, SchemaChange $change, SchemaOperationId $key): SchemaReceipt
     {
-        (new ScopeConnectionGuard($this->connection))->assertMatches($scope);
+        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
 
         if (! $this->authorizer->authorize(scope: $scope, entity: $change->entity, subjectId: '', fields: [], action: 'schema')->allowed
             || ! $this->authorizer->authorize(scope: $scope, entity: $change->entity, subjectId: '', fields: [$change->approvalDigest], action: 'schema-approve')->allowed) {
             throw new ScopeDenied('The current scope denies this schema operation.');
         }
 
-        if ($this->catalogue->snapshot($scope, $change->entity)->schemaHash !== $change->expectedSchemaHash) {
+        if ($this->catalogue->snapshot(scope: $scope, entity: $change->entity)->schemaHash !== $change->expectedSchemaHash) {
             throw SchemaOperationConflict::staleSnapshot();
         }
 
@@ -53,7 +53,7 @@ final readonly class QueuedSchemaOperations implements SchemaOperations
                     throw new KeyConflict('A schema operation key is already bound to different data.');
                 }
 
-                return new SchemaReceipt(new OperationRef(Value::text($existing->id)), Value::text($existing->status), Value::text($existing->schema_hash), Value::nullableText($existing->error_code));
+                return new SchemaReceipt(operation: new OperationRef(Value::text($existing->id)), status: Value::text($existing->status), schemaHash: Value::text($existing->schema_hash), errorCode: Value::nullableText($existing->error_code));
             }
 
             $id = hash('sha256', $key->key."\n".$key->payloadHash);
@@ -65,31 +65,31 @@ final readonly class QueuedSchemaOperations implements SchemaOperations
                 'status' => 'pending', 'error_code' => null,
             ]);
 
-            return new SchemaReceipt(new OperationRef($id), 'pending', $change->expectedSchemaHash, null);
+            return new SchemaReceipt(operation: new OperationRef($id), status: 'pending', schemaHash: $change->expectedSchemaHash, errorCode: null);
         });
     }
 
     public function inspect(DataScope $scope, OperationRef $operation): SchemaReceipt
     {
-        (new ScopeConnectionGuard($this->connection))->assertMatches($scope);
+        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
         $row = $this->connection->table($this->tables->schemaOperations)->where('id', $operation->id)->first();
 
         if ($row === null || $row->restore_epoch !== $scope->restoreEpoch || ! $this->authorizer->authorize(scope: $scope, entity: Value::text($row->entity), subjectId: '', fields: [], action: 'schema')->allowed) {
             throw new ScopeDenied('The current scope cannot inspect this schema operation.');
         }
 
-        return new SchemaReceipt($operation, Value::text($row->status), Value::text($row->schema_hash), Value::nullableText($row->error_code));
+        return new SchemaReceipt(operation: $operation, status: Value::text($row->status), schemaHash: Value::text($row->schema_hash), errorCode: Value::nullableText($row->error_code));
     }
 
     public function verify(DataScope $scope, string $entity): DriftReport
     {
-        (new ScopeConnectionGuard($this->connection))->assertMatches($scope);
+        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
 
         if (! $this->authorizer->authorize(scope: $scope, entity: $entity, subjectId: '', fields: [], action: 'schema')->allowed) {
             throw new ScopeDenied('The current scope cannot verify this schema.');
         }
 
-        $rows = $this->connection->table($this->tables->schemaOperations)->where('entity', $entity)->orderBy('created_at')->get();
+        $rows = $this->connection->table($this->tables->schemaOperations)->where('entity', $entity)->oldest()->get();
         $drift = [];
         $managed = [];
         foreach ($rows as $row) {
@@ -128,9 +128,9 @@ final readonly class QueuedSchemaOperations implements SchemaOperations
             }
         }
 
-        $schemaHash = $this->catalogue->snapshot($scope, $entity)->schemaHash;
+        $schemaHash = $this->catalogue->snapshot(scope: $scope, entity: $entity)->schemaHash;
 
-        $drift = Validation::validatedMapList($drift, 'schema drift');
+        $drift = Validation::validatedMapList(values: $drift, name: 'schema drift');
 
         return new DriftReport(entity: $entity, schemaHash: $schemaHash, drift: $drift, status: $drift === [] ? 'clean' : 'drifted');
     }

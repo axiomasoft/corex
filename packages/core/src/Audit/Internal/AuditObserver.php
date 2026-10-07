@@ -25,7 +25,7 @@ use Stringable;
  *
  * @internal spec: B-10 §4.4, D22
  */
-final class AuditObserver
+final readonly class AuditObserver
 {
     /**
      * Attribute names never entering the diff, independent of the model's
@@ -41,37 +41,37 @@ final class AuditObserver
      *
      * @internal spec: D63, P1.21
      */
-    private const ALWAYS_EXCLUDED = ['password', 'remember_token'];
+    private const array ALWAYS_EXCLUDED = ['password', 'remember_token'];
 
     public function __construct(
-        private readonly CoreOptions $options,
-        private readonly AuditLogger $logger,
-        private readonly CurrentActor $actor,
+        private CoreOptions $options,
+        private AuditLogger $logger,
+        private CurrentActor $actor,
     ) {}
 
     public function created(Model $model): void
     {
-        $this->record($model, 'created');
+        $this->record(model: $model, action: 'created');
     }
 
     public function updated(Model $model): void
     {
-        $this->record($model, 'updated');
+        $this->record(model: $model, action: 'updated');
     }
 
     public function deleted(Model $model): void
     {
-        $this->record($model, 'deleted');
+        $this->record(model: $model, action: 'deleted');
     }
 
     public function restored(Model $model): void
     {
-        $this->record($model, 'restored');
+        $this->record(model: $model, action: 'restored');
     }
 
     public function forceDeleted(Model $model): void
     {
-        $this->record($model, 'forceDeleted');
+        $this->record(model: $model, action: 'forceDeleted');
     }
 
     public function record(Model $model, string $action): void

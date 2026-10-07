@@ -1,0 +1,90 @@
+{
+    "name": "axiomasoft/corex-access",
+    "description": "CoreX native authorization, tenant-boundary access checks, role matrices and direct grants.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "authorization",
+        "multi-tenancy",
+        "rbac"
+    ],
+    "authors": [
+        {
+            "name": "Dmitry Vostrikov",
+            "email": "dv.vostrikov@gmail.com"
+        }
+    ],
+    "require": {
+        "ext-mbstring": "*",
+        "php": "^8.4",
+        "axiomasoft/corex": "^1.0@dev",
+        "illuminate/auth": "^12.0|^13.0",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "psr/clock": "^1.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.12",
+        "laravel/pint": "^1.32",
+        "mockery/mockery": "^1.6",
+        "orchestra/testbench": "^10.12|^11.3",
+        "orchestra/testbench-core": "^10.12|^11.3",
+        "pestphp/pest": "^5.2",
+        "symfony/process": "^7.2|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "CoreX\\Access\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CoreX\\Access\\Tests\\": "tests/",
+            "CoreX\\Access\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "extra": {
+        "corex": {
+            "schema-version": 1,
+            "package-type": "capability",
+            "stability": "stable"
+        },
+        "laravel": {
+            "providers": [
+                "CoreX\\Access\\CoreAuthServiceProvider"
+            ]
+        },
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../core"
+        },
+        {
+            "type": "path",
+            "url": "../tenancy"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "scripts": {
+        "test": "pest --exclude-group=pg",
+        "test:pg": "pest --group=pg",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/access/phpstan.neon --memory-limit=2G --no-progress",
+        "lint": "pint",
+        "lint:check": "pint --test"
+    },
+    "suggest": {
+        "axiomasoft/corex-tenancy": "Optional workspace scope; the configured class is loaded only when installed."
+    }
+}

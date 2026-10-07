@@ -53,10 +53,10 @@ final class AccountSchemaState extends Model
     }
 
     /**
-     * @return BelongsTo<covariant \Illuminate\Database\Eloquent\Model, $this>
+     * @return BelongsTo<covariant Model, $this>
      */
     public function batch(): BelongsTo
     {
-        return MigrationBatchRelations::belongsTo($this, 'batch_id', null, 'batch');
+        return MigrationBatchRelations::belongsTo(model: $this, foreignKey: 'batch_id', ownerKey: null, relation: 'batch');
     }
 }

@@ -14,7 +14,7 @@ final readonly class WebhookSubscription
     /** @param  list<string>  $keyRefs */
     public function __construct(public string $id, public int $revision, public string $major, public string $topic, public int $topicVersion, public string $endpointUrl, public string $status, public string $maxPiiClass, public array $keyRefs, public DateTimeImmutable $createdAt, public DateTimeImmutable $updatedAt)
     {
-        self::validateInput($id, $revision, $major, $topic, $topicVersion, $endpointUrl, $status, $maxPiiClass, $keyRefs, $createdAt, $updatedAt);
+        self::validateInput(id: $id, revision: $revision, major: $major, topic: $topic, topicVersion: $topicVersion, endpointUrl: $endpointUrl, status: $status, maxPiiClass: $maxPiiClass, keyRefs: $keyRefs, createdAt: $createdAt, updatedAt: $updatedAt);
     }
 
     /** Runtime validation also rejects values from untyped integration callers.

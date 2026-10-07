@@ -18,12 +18,12 @@ use Illuminate\Container\Container;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 
-final class MaterializationWakeupHandler implements DueWakeupHandler
+final readonly class MaterializationWakeupHandler implements DueWakeupHandler
 {
     public function __construct(
-        private readonly Container $container,
-        private readonly TenantContextResolver $contexts,
-        private readonly ConnectionResolverInterface $connections,
+        private Container $container,
+        private TenantContextResolver $contexts,
+        private ConnectionResolverInterface $connections,
     ) {}
 
     public function handle(WakeupDelivery $delivery): void
@@ -62,7 +62,7 @@ final class MaterializationWakeupHandler implements DueWakeupHandler
                 window: $window,
                 token: new WriteToken(
                     operationKey: 'wakeup:'.$delivery->request->requestKey,
-                    payloadHash: MaterializationHasher::payload($scope, $series, $window),
+                    payloadHash: MaterializationHasher::payload(scope: $scope, series: $series, window: $window),
                     expectedRecordVersion: $series->immutableRevision,
                 ),
             );

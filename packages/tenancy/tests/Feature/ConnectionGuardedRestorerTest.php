@@ -51,14 +51,14 @@ function guardedRestorer(callable $current, ?DatabaseManager $database = null): 
 
     return new ConnectionGuardedTenantContextRestorer(
         semantic: new GuardedTenantContextRestorer($resolver),
-        database: $database ?? app(DatabaseManager::class),
+        database: $database ?? resolve(DatabaseManager::class),
     );
 }
 
 it('rejects a mismatched account before reading the connection', function (): void {
     $active = new TenantContext(restorerAccount('account-a'), new WorkspaceRef('ws-1', 'ws', 'company', 'ws-1', null));
     $foreign = new TenantContext(restorerAccount('account-missing'), $active->workspace);
-    $database = new class(app(), app(ConnectionFactory::class)) extends DatabaseManager
+    $database = new class(app(), resolve(ConnectionFactory::class)) extends DatabaseManager
     {
         public int $reads = 0;
 

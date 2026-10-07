@@ -25,6 +25,7 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Sleep;
 use PHPUnit\Framework\Attributes\Group;
 use RuntimeException;
 use Throwable;
@@ -305,7 +306,7 @@ final class IdempotencyStoreTest extends TestCase
                         );
 
                         if ($attempt->ownsLease()) {
-                            usleep(200_000);
+                            Sleep::usleep(200_000);
                         }
 
                         return $attempt;

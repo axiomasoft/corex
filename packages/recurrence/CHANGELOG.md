@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — PHP 8.4 modernization (P09.4)
+
+- Modernize maintained PHP for PHP 8.4 with final concrete classes, immutable value state and controlled named calls; preserve current public native parameter names and extension behavior.
+- Remove verified unused Internal helpers: `CanonicalHasher::pageDigest`.
+
 ## Unreleased — kernel package and API migration
 
 - Breaking (PLAN3.P02–P04, pre-1.0): RecurrenceExpander exposes RecurrenceSet, windows, limits, cursors and occurrence pages; recurrence implementation remains Internal and cursor failures have package-owned error identities.

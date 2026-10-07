@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal\Support;
 
+use CoreX\CustomFields\Data\ValueBag;
 use InvalidArgumentException;
 use JsonException;
 
-/** @phpstan-import-type JsonMap from \CoreX\CustomFields\Data\ValueBag */
+/** @phpstan-import-type JsonMap from ValueBag */
 final class Validation
 {
     public static function entity(string $entity): void
@@ -34,13 +35,13 @@ final class Validation
     /** @param array<array-key, mixed> $value */
     public static function jsonMap(array $value, string $name): void
     {
-        self::assertMap($value, $name);
+        self::assertMap(value: $value, name: $name);
     }
 
     /** @param array<array-key, mixed> $values */
     public static function jsonMapList(array $values, string $name): void
     {
-        self::assertMapList($values, $name);
+        self::assertMapList(values: $values, name: $name);
     }
 
     /** @param array<array-key, mixed> $value
@@ -48,7 +49,7 @@ final class Validation
      */
     public static function validatedMap(array $value, string $name): array
     {
-        self::assertMap($value, $name);
+        self::assertMap(value: $value, name: $name);
 
         return $value;
     }
@@ -58,7 +59,7 @@ final class Validation
      */
     public static function validatedMapList(array $values, string $name): array
     {
-        self::assertMapList($values, $name);
+        self::assertMapList(values: $values, name: $name);
 
         return $values;
     }

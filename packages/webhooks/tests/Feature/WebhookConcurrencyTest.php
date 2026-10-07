@@ -47,7 +47,7 @@ final class WebhookConcurrencyTest extends TestCase
         try {
             $this->selectSchema($database);
 
-            $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+            $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
             $connection = DB::connection('api_pg_tenant');
             $clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
             $scope = $this->scope($connection);

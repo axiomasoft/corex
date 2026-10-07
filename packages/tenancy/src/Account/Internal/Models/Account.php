@@ -60,10 +60,10 @@ final class Account extends Model
     }
 
     /**
-     * @return HasMany<covariant \Illuminate\Database\Eloquent\Model, $this>
+     * @return HasMany<covariant Model, $this>
      */
     public function domains(): HasMany
     {
-        return DomainRelations::hasMany($this, 'account_id');
+        return DomainRelations::hasMany(model: $this, foreignKey: 'account_id');
     }
 }

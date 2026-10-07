@@ -20,6 +20,6 @@ final class InvalidRegistryPoint extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::InvalidRegistryPoint, ErrorCategory::Validation, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::InvalidRegistryPoint, category: ErrorCategory::Validation, retryable: false);
     }
 }

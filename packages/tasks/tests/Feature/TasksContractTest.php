@@ -72,7 +72,7 @@ beforeEach(function (): void {
 it('creates a UUIDv7 task and portable target references through the public command', function (): void {
     $targetId = (string) Str::uuid7();
 
-    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(
+    $reference = resolve(CreateTaskCommand::class)->handle(new TaskDraft(
         workspaceId: $this->workspaceId,
         title: '  Подготовить предложение  ',
         actor: $this->actor,
@@ -97,7 +97,7 @@ it('creates a UUIDv7 task and portable target references through the public comm
 it('participates in an outer tenant transaction', function (): void {
     DB::beginTransaction();
 
-    app(CreateTaskCommand::class)->handle(new TaskDraft(
+    resolve(CreateTaskCommand::class)->handle(new TaskDraft(
         workspaceId: $this->workspaceId,
         title: 'Transactional task',
         actor: $this->actor,
@@ -122,7 +122,7 @@ it('rejects a stage from another project without a partial write', function (): 
         'name' => ['ru' => 'Чужая'],
     ]);
 
-    expect(fn () => app(CreateTaskCommand::class)->handle(new TaskDraft(
+    expect(fn () => resolve(CreateTaskCommand::class)->handle(new TaskDraft(
         workspaceId: $this->workspaceId,
         title: 'Invalid task',
         actor: $this->actor,
@@ -134,7 +134,7 @@ it('rejects a stage from another project without a partial write', function (): 
 });
 
 it('rejects a workspace outside the narrowed tenant context', function (): void {
-    $current = app(TenantContextResolver::class)->current();
+    $current = resolve(TenantContextResolver::class)->current();
     $resolver = Mockery::mock(TenantContextResolver::class);
     $resolver->shouldReceive('current')->once()->andReturn(new TenantContext(
         account: $current->account,
@@ -148,7 +148,7 @@ it('rejects a workspace outside the narrowed tenant context', function (): void 
     ));
     app()->instance(TenantContextResolver::class, $resolver);
 
-    expect(fn () => app(CreateTaskCommand::class)->handle(new TaskDraft(
+    expect(fn () => resolve(CreateTaskCommand::class)->handle(new TaskDraft(
         workspaceId: $this->workspaceId,
         title: 'Wrong workspace',
         actor: $this->actor,
@@ -158,7 +158,7 @@ it('rejects a workspace outside the narrowed tenant context', function (): void 
 });
 
 it('cannot move a task id that is absent from the current account database', function (): void {
-    expect(fn () => app(MoveTaskToStageCommand::class)->handle(new MoveTaskToStageData(
+    expect(fn () => resolve(MoveTaskToStageCommand::class)->handle(new MoveTaskToStageData(
         taskId: (string) Str::uuid7(),
         stageId: (string) $this->done->getKey(),
         actor: $this->actor,
@@ -166,14 +166,14 @@ it('cannot move a task id that is absent from the current account database', fun
 });
 
 it('cannot move a task from another narrowed workspace', function (): void {
-    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(
+    $reference = resolve(CreateTaskCommand::class)->handle(new TaskDraft(
         workspaceId: $this->workspaceId,
         title: 'Keep isolated',
         actor: $this->actor,
         projectId: (string) $this->project->getKey(),
         stageId: (string) $this->todo->getKey(),
     ));
-    $current = app(TenantContextResolver::class)->current();
+    $current = resolve(TenantContextResolver::class)->current();
     $resolver = Mockery::mock(TenantContextResolver::class);
     $resolver->shouldReceive('current')->once()->andReturn(new TenantContext(
         account: $current->account,
@@ -187,7 +187,7 @@ it('cannot move a task from another narrowed workspace', function (): void {
     ));
     app()->instance(TenantContextResolver::class, $resolver);
 
-    expect(fn () => app(MoveTaskToStageCommand::class)->handle(new MoveTaskToStageData(
+    expect(fn () => resolve(MoveTaskToStageCommand::class)->handle(new MoveTaskToStageData(
         taskId: $reference->id,
         stageId: (string) $this->done->getKey(),
         actor: $this->actor,
@@ -197,7 +197,7 @@ it('cannot move a task from another narrowed workspace', function (): void {
 });
 
 it('moves only within the task project and applies the stage status', function (): void {
-    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(
+    $reference = resolve(CreateTaskCommand::class)->handle(new TaskDraft(
         workspaceId: $this->workspaceId,
         title: 'Move me',
         actor: $this->actor,
@@ -205,7 +205,7 @@ it('moves only within the task project and applies the stage status', function (
         stageId: (string) $this->todo->getKey(),
     ));
 
-    app(MoveTaskToStageCommand::class)->handle(new MoveTaskToStageData(
+    resolve(MoveTaskToStageCommand::class)->handle(new MoveTaskToStageData(
         taskId: $reference->id,
         stageId: (string) $this->done->getKey(),
         actor: $this->actor,
@@ -219,44 +219,44 @@ it('moves only within the task project and applies the stage status', function (
 });
 
 it('enforces completion authorization when moving to a Done stage', function (): void {
-    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(workspaceId: $this->workspaceId, title: 'Protected', actor: $this->actor, projectId: $this->project->id, stageId: $this->todo->id));
+    $reference = resolve(CreateTaskCommand::class)->handle(new TaskDraft(workspaceId: $this->workspaceId, title: 'Protected', actor: $this->actor, projectId: $this->project->id, stageId: $this->todo->id));
     $access = Mockery::mock(TaskMutationAccess::class);
     $access->shouldReceive('authorizeComplete')->once()->andThrow(new AuthorizationException('completion denied'));
     app()->instance(TaskMutationAccess::class, $access);
-    expect(fn () => app(MoveTaskToStageCommand::class)->handle(new MoveTaskToStageData(taskId: $reference->id, stageId: $this->done->id, actor: $this->actor)))
+    expect(fn () => resolve(MoveTaskToStageCommand::class)->handle(new MoveTaskToStageData(taskId: $reference->id, stageId: $this->done->id, actor: $this->actor)))
         ->toThrow(AuthorizationException::class, 'completion denied');
     expect(Task::query()->findOrFail($reference->id)->stage_id)->toBe($this->todo->id);
 });
 
 it('completes once through move and preserves the completion time on retry', function (): void {
     Event::fake([TaskCompleted::class, TaskMovedToStage::class]);
-    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(workspaceId: $this->workspaceId, title: 'Once', actor: $this->actor, projectId: $this->project->id, stageId: $this->todo->id));
+    $reference = resolve(CreateTaskCommand::class)->handle(new TaskDraft(workspaceId: $this->workspaceId, title: 'Once', actor: $this->actor, projectId: $this->project->id, stageId: $this->todo->id));
     $move = new MoveTaskToStageData(taskId: $reference->id, stageId: $this->done->id, actor: $this->actor);
-    app(MoveTaskToStageCommand::class)->handle($move);
+    resolve(MoveTaskToStageCommand::class)->handle($move);
     $completed = Task::query()->findOrFail($reference->id)->completed_at;
     $this->travel(1)->minutes();
-    app(MoveTaskToStageCommand::class)->handle($move);
+    resolve(MoveTaskToStageCommand::class)->handle($move);
     expect(Task::query()->findOrFail($reference->id)->completed_at->equalTo($completed))->toBeTrue();
     Event::assertDispatchedTimes(TaskCompleted::class, 1);
     Event::assertDispatchedTimes(TaskMovedToStage::class, 1);
 });
 
 it('cannot complete a cancelled task by moving it', function (): void {
-    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(workspaceId: $this->workspaceId, title: 'Cancelled', actor: $this->actor, projectId: $this->project->id, stageId: $this->todo->id));
+    $reference = resolve(CreateTaskCommand::class)->handle(new TaskDraft(workspaceId: $this->workspaceId, title: 'Cancelled', actor: $this->actor, projectId: $this->project->id, stageId: $this->todo->id));
     Task::query()->whereKey($reference->id)->update(['status' => TaskStatus::Cancelled]);
-    expect(fn () => app(MoveTaskToStageCommand::class)->handle(new MoveTaskToStageData(taskId: $reference->id, stageId: $this->done->id, actor: $this->actor)))
+    expect(fn () => resolve(MoveTaskToStageCommand::class)->handle(new MoveTaskToStageData(taskId: $reference->id, stageId: $this->done->id, actor: $this->actor)))
         ->toThrow(ValidationException::class);
 });
 
 it('updates editable task fields through the public command', function (): void {
     Event::fake([TaskUpdated::class]);
-    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(
+    $reference = resolve(CreateTaskCommand::class)->handle(new TaskDraft(
         workspaceId: $this->workspaceId,
         title: 'Initial title',
         actor: $this->actor,
     ));
 
-    app(UpdateTaskCommand::class)->handle(new UpdateTaskData(
+    resolve(UpdateTaskCommand::class)->handle(new UpdateTaskData(
         taskId: $reference->id,
         actor: $this->actor,
         provided: ['title', 'priority', 'assignee_id', 'estimate_minutes'],
@@ -281,7 +281,7 @@ it('changes a task project through the public command and resets project-bound f
         'name' => 'Other project',
         'created_by' => $this->actor->toArray(),
     ]);
-    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(
+    $reference = resolve(CreateTaskCommand::class)->handle(new TaskDraft(
         workspaceId: $this->workspaceId,
         title: 'Move between projects',
         actor: $this->actor,
@@ -289,7 +289,7 @@ it('changes a task project through the public command and resets project-bound f
         stageId: (string) $this->todo->getKey(),
     ));
 
-    app(UpdateTaskCommand::class)->handle(new UpdateTaskData(
+    resolve(UpdateTaskCommand::class)->handle(new UpdateTaskData(
         taskId: $reference->id,
         actor: $this->actor,
         provided: ['project_id'],
@@ -309,13 +309,13 @@ it('rejects a project outside the task workspace during update', function (): vo
         'name' => 'Foreign project',
         'created_by' => $this->actor->toArray(),
     ]);
-    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(
+    $reference = resolve(CreateTaskCommand::class)->handle(new TaskDraft(
         workspaceId: $this->workspaceId,
         title: 'Keep project isolated',
         actor: $this->actor,
     ));
 
-    expect(fn () => app(UpdateTaskCommand::class)->handle(new UpdateTaskData(
+    expect(fn () => resolve(UpdateTaskCommand::class)->handle(new UpdateTaskData(
         taskId: $reference->id,
         actor: $this->actor,
         provided: ['project_id'],
@@ -326,19 +326,17 @@ it('rejects a project outside the task workspace during update', function (): vo
 });
 
 it('authorizes mutations against the task inside its locking transaction', function (): void {
-    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(
+    $reference = resolve(CreateTaskCommand::class)->handle(new TaskDraft(
         workspaceId: $this->workspaceId,
         title: 'Authorize locked task',
         actor: $this->actor,
         assigneeId: $this->userId,
     ));
     $mutationAccess = Mockery::mock(TaskMutationAccess::class);
-    $assertLockedTask = function (mixed $data, TenantContext $context, TaskView $task) use ($reference): bool {
-        return $data->taskId === $reference->id
-            && $context->account->status === 'active'
-            && $task->id === $reference->id
-            && DB::connection()->transactionLevel() > 0;
-    };
+    $assertLockedTask = (fn (mixed $data, TenantContext $context, TaskView $task): bool => $data->taskId === $reference->id
+        && $context->account->status === 'active'
+        && $task->id === $reference->id
+        && DB::connection()->transactionLevel() > 0);
 
     $mutationAccess->shouldReceive('authorizeUpdate')
         ->once()
@@ -350,13 +348,13 @@ it('authorizes mutations against the task inside its locking transaction', funct
         ->andReturnNull();
     app()->instance(TaskMutationAccess::class, $mutationAccess);
 
-    app(UpdateTaskCommand::class)->handle(new UpdateTaskData(
+    resolve(UpdateTaskCommand::class)->handle(new UpdateTaskData(
         taskId: $reference->id,
         actor: $this->actor,
         provided: ['title'],
         title: 'Authorization stayed atomic',
     ));
-    app(CompleteTaskCommand::class)->handle(new CompleteTaskData(
+    resolve(CompleteTaskCommand::class)->handle(new CompleteTaskData(
         taskId: $reference->id,
         actor: $this->actor,
     ));
@@ -365,7 +363,7 @@ it('authorizes mutations against the task inside its locking transaction', funct
 });
 
 it('rolls an update back with its outer tenant transaction', function (): void {
-    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(
+    $reference = resolve(CreateTaskCommand::class)->handle(new TaskDraft(
         workspaceId: $this->workspaceId,
         title: 'Before rollback',
         actor: $this->actor,
@@ -373,7 +371,7 @@ it('rolls an update back with its outer tenant transaction', function (): void {
 
     DB::beginTransaction();
 
-    app(UpdateTaskCommand::class)->handle(new UpdateTaskData(
+    resolve(UpdateTaskCommand::class)->handle(new UpdateTaskData(
         taskId: $reference->id,
         actor: $this->actor,
         provided: ['title'],
@@ -389,7 +387,7 @@ it('rolls an update back with its outer tenant transaction', function (): void {
 
 it('completes a task atomically and does not emit a duplicate event', function (): void {
     Event::fake([TaskCompleted::class]);
-    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(
+    $reference = resolve(CreateTaskCommand::class)->handle(new TaskDraft(
         workspaceId: $this->workspaceId,
         title: 'Complete me',
         actor: $this->actor,
@@ -399,8 +397,8 @@ it('completes a task atomically and does not emit a duplicate event', function (
         actor: $this->actor,
     );
 
-    app(CompleteTaskCommand::class)->handle($data);
-    app(CompleteTaskCommand::class)->handle($data);
+    resolve(CompleteTaskCommand::class)->handle($data);
+    resolve(CompleteTaskCommand::class)->handle($data);
 
     $task = Task::query()->findOrFail($reference->id);
 
@@ -410,14 +408,14 @@ it('completes a task atomically and does not emit a duplicate event', function (
 });
 
 it('does not complete a cancelled task', function (): void {
-    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft(
+    $reference = resolve(CreateTaskCommand::class)->handle(new TaskDraft(
         workspaceId: $this->workspaceId,
         title: 'Cancelled task',
         actor: $this->actor,
     ));
     Task::query()->whereKey($reference->id)->update(['status' => TaskStatus::Cancelled]);
 
-    expect(fn () => app(CompleteTaskCommand::class)->handle(new CompleteTaskData(
+    expect(fn () => resolve(CompleteTaskCommand::class)->handle(new CompleteTaskData(
         taskId: $reference->id,
         actor: $this->actor,
     )))->toThrow(ValidationException::class);
@@ -431,7 +429,7 @@ it('denies commands when the module is inactive', function (): void {
     });
     app()->instance(ModuleRegistry::class, $modules);
 
-    expect(fn () => app(CreateTaskCommand::class)->handle(new TaskDraft(
+    expect(fn () => resolve(CreateTaskCommand::class)->handle(new TaskDraft(
         workspaceId: $this->workspaceId,
         title: 'Disabled',
         actor: $this->actor,
@@ -441,23 +439,23 @@ it('denies commands when the module is inactive', function (): void {
 it('ships a deny-by-default host authorization seam', function (): void {
     app()->forgetInstance(TaskAccess::class);
 
-    expect(fn () => app(TaskAccess::class)->authorizeCreate(
+    expect(fn () => resolve(TaskAccess::class)->authorizeCreate(
         draft: new TaskDraft(
             workspaceId: $this->workspaceId,
             title: 'Denied',
             actor: $this->actor,
         ),
-        context: app(TenantContextResolver::class)->current(),
+        context: resolve(TenantContextResolver::class)->current(),
     ))->toThrow(AuthorizationException::class);
 
     app()->forgetInstance(TaskMutationAccess::class);
 
-    expect(fn () => app(TaskMutationAccess::class)->authorizeComplete(
+    expect(fn () => resolve(TaskMutationAccess::class)->authorizeComplete(
         data: new CompleteTaskData(
             taskId: (string) Str::uuid7(),
             actor: $this->actor,
         ),
-        context: app(TenantContextResolver::class)->current(),
+        context: resolve(TenantContextResolver::class)->current(),
         task: new TaskView(
             id: (string) Str::uuid7(), workspaceId: null, projectId: null, stageId: null,
             title: 'Denied', status: TaskStatus::Open, authorId: null, assigneeId: null,
@@ -486,7 +484,7 @@ it('rejects invalid task drafts atomically', function (array $changes, string $f
     $values = array_replace(['workspaceId' => $this->workspaceId, 'title' => 'Valid', 'actor' => $this->actor], $changes);
 
     try {
-        app(CreateTaskCommand::class)->handle(new TaskDraft(...$values));
+        resolve(CreateTaskCommand::class)->handle(new TaskDraft(...$values));
         test()->fail('Invalid draft was accepted.');
     } catch (ValidationException $exception) {
         expect($exception->errors())->toHaveKey($field);
@@ -507,11 +505,11 @@ it('rejects invalid task drafts atomically', function (array $changes, string $f
 ]);
 
 it('rejects invalid updates without changing the persisted task', function (array $changes, string $field): void {
-    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft($this->workspaceId, 'Original', $this->actor));
+    $reference = resolve(CreateTaskCommand::class)->handle(new TaskDraft($this->workspaceId, 'Original', $this->actor));
     $values = array_replace(['taskId' => $reference->id, 'actor' => $this->actor, 'provided' => []], $changes);
 
     try {
-        app(UpdateTaskCommand::class)->handle(new UpdateTaskData(...$values));
+        resolve(UpdateTaskCommand::class)->handle(new UpdateTaskData(...$values));
         test()->fail('Invalid update was accepted.');
     } catch (ValidationException $exception) {
         expect($exception->errors())->toHaveKey($field);
@@ -530,15 +528,15 @@ it('rejects invalid updates without changing the persisted task', function (arra
 ]);
 
 it('updates dates description and nullable fields and emits no event for a no-op', function (): void {
-    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft($this->workspaceId, 'Original', $this->actor));
+    $reference = resolve(CreateTaskCommand::class)->handle(new TaskDraft($this->workspaceId, 'Original', $this->actor));
     $starts = new DateTimeImmutable('2026-10-01T12:00:00Z');
     $due = new DateTimeImmutable('2026-10-02T12:00:00Z');
-    app(UpdateTaskCommand::class)->handle(new UpdateTaskData($reference->id, $this->actor,
+    resolve(UpdateTaskCommand::class)->handle(new UpdateTaskData($reference->id, $this->actor,
         ['description', 'starts_at', 'due_at'], description: 'Details', startsAt: $starts, dueAt: $due));
     Event::fake([TaskUpdated::class]);
-    app(UpdateTaskCommand::class)->handle(new UpdateTaskData($reference->id, $this->actor, ['title'], title: 'Original'));
+    resolve(UpdateTaskCommand::class)->handle(new UpdateTaskData($reference->id, $this->actor, ['title'], title: 'Original'));
     Event::assertNotDispatched(TaskUpdated::class);
-    app(UpdateTaskCommand::class)->handle(new UpdateTaskData($reference->id, $this->actor, ['assignee_id', 'project_id']));
+    resolve(UpdateTaskCommand::class)->handle(new UpdateTaskData($reference->id, $this->actor, ['assignee_id', 'project_id']));
     $task = Task::query()->findOrFail($reference->id);
     expect($task->description)->toBe('Details')->and($task->starts_at->format('c'))->toBe($starts->format('c'))
         ->and($task->due_at->format('c'))->toBe($due->format('c'))->and($task->project_id)->toBeNull();
@@ -548,9 +546,9 @@ it('resolves task project stage parent and child relationships on the current te
     $sprint = Sprint::query()->create([
         'project_id' => $this->project->getKey(), 'name' => 'Sprint', 'starts_on' => '2026-10-01', 'ends_on' => '2026-10-14',
     ]);
-    $parent = app(CreateTaskCommand::class)->handle(new TaskDraft($this->workspaceId, 'Parent', $this->actor,
+    $parent = resolve(CreateTaskCommand::class)->handle(new TaskDraft($this->workspaceId, 'Parent', $this->actor,
         projectId: (string) $this->project->getKey(), sprintId: (string) $sprint->getKey(), stageId: (string) $this->todo->getKey()));
-    $child = app(CreateTaskCommand::class)->handle(new TaskDraft($this->workspaceId, 'Child', $this->actor, parentId: $parent->id));
+    $child = resolve(CreateTaskCommand::class)->handle(new TaskDraft($this->workspaceId, 'Child', $this->actor, parentId: $parent->id));
     $task = Task::query()->findOrFail($parent->id);
     expect($task->project->getKey())->toBe($this->project->getKey())->and($task->sprint->getKey())->toBe($sprint->getKey())
         ->and($task->stage->getKey())->toBe($this->todo->getKey())->and($task->children->first()->getKey())->toBe($child->id)
@@ -559,7 +557,7 @@ it('resolves task project stage parent and child relationships on the current te
         ->and($sprint->tasks->first()->getKey())->toBe($parent->id)->and($this->todo->project->getKey())->toBe($this->project->getKey())
         ->and($this->todo->tasks->first()->getKey())->toBe($parent->id)->and(Task::query()->findOrFail($child->id)->parent->getKey())->toBe($parent->id)
         ->and($task->watchers)->toHaveCount(0)->and($task->timeLogs)->toHaveCount(0);
-    expect(fn () => app(CreateTaskCommand::class)->handle(new TaskDraft($this->workspaceId, 'Grandchild', $this->actor, parentId: $child->id)))
+    expect(fn () => resolve(CreateTaskCommand::class)->handle(new TaskDraft($this->workspaceId, 'Grandchild', $this->actor, parentId: $child->id)))
         ->toThrow(ValidationException::class);
     expect(Task::query()->count())->toBe(2);
 });

@@ -8,7 +8,7 @@ use CoreX\Attributes\Api;
 use CoreX\CustomFields\Internal\Support\Validation;
 use InvalidArgumentException;
 
-/** @phpstan-import-type JsonMap from \CoreX\CustomFields\Data\ValueBag */
+/** @phpstan-import-type JsonMap from ValueBag */
 #[Api(since: '1.0')]
 final readonly class AttributeDefinition
 {
@@ -82,9 +82,7 @@ final readonly class AttributeDefinition
             $byId[$id] = $definition;
         }
 
-        usort($definitions, static function (self $left, self $right): int {
-            return [$left->id->value, $left->revision] <=> [$right->id->value, $right->revision];
-        });
+        usort($definitions, static fn (self $left, self $right): int => [$left->id->value, $left->revision] <=> [$right->id->value, $right->revision]);
 
         return $definitions;
     }
@@ -94,8 +92,8 @@ final readonly class AttributeDefinition
     {
         $constraints = self::sortMap($this->constraints);
         $meta = self::sortMap($this->meta);
-        $constraints = Validation::validatedMap($constraints, 'constraints');
-        $meta = Validation::validatedMap($meta, 'meta');
+        $constraints = Validation::validatedMap(value: $constraints, name: 'constraints');
+        $meta = Validation::validatedMap(value: $meta, name: 'meta');
 
         return [
             'constraints' => $constraints,

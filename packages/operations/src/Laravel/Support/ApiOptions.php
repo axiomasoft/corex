@@ -48,8 +48,8 @@ final readonly class ApiOptions
         $routes = self::array($config['routes'] ?? []);
         $idempotency = self::array($config['idempotency'] ?? []);
         $cursor = self::array($config['cursor'] ?? []);
-        $versions = self::versions($violations, $config['versions'] ?? null);
-        $defaultMajor = self::nonEmpty($violations, 'default_major', $config['default_major'] ?? 'v1');
+        $versions = self::versions(violations: $violations, value: $config['versions'] ?? null);
+        $defaultMajor = self::nonEmpty(violations: $violations, path: 'default_major', value: $config['default_major'] ?? 'v1');
         $declared = array_map(static fn (ApiVersion $version): string => $version->major, $versions);
         $default = null;
 
@@ -60,38 +60,38 @@ final readonly class ApiOptions
         }
 
         if (! in_array($defaultMajor, $declared, true) || ! $default instanceof ApiVersion || $default->status !== ApiVersionStatus::Stable) {
-            $violations->add('default_major', 'must name a declared stable major');
+            $violations->add(path: 'default_major', message: 'must name a declared stable major');
         }
 
-        $discovery = self::nonEmpty($violations, 'discovery', $config['discovery'] ?? 'public');
+        $discovery = self::nonEmpty(violations: $violations, path: 'discovery', value: $config['discovery'] ?? 'public');
 
         if (! in_array($discovery, ['public', 'authenticated'], true)) {
-            $violations->add('discovery', 'must be public or authenticated');
+            $violations->add(path: 'discovery', message: 'must be public or authenticated');
         }
 
-        $keyId = self::nonEmpty($violations, 'cursor.current_key_id', $cursor['current_key_id'] ?? 'primary');
-        $keyring = self::keyring($violations, $cursor['keyring'] ?? [$keyId => '']);
+        $keyId = self::nonEmpty(violations: $violations, path: 'cursor.current_key_id', value: $cursor['current_key_id'] ?? 'primary');
+        $keyring = self::keyring(violations: $violations, value: $cursor['keyring'] ?? [$keyId => '']);
 
         if (! array_key_exists($keyId, $keyring)) {
-            $violations->add('cursor.keyring', 'must contain current_key_id');
+            $violations->add(path: 'cursor.keyring', message: 'must contain current_key_id');
         }
 
         try {
             $capabilities = self::capabilities($config['capabilities'] ?? []);
         } catch (InvalidArgumentException $exception) {
-            $violations->add('capabilities', $exception->getMessage());
+            $violations->add(path: 'capabilities', message: $exception->getMessage());
             $capabilities = [];
         }
 
-        $requirePhysicalTenancy = self::bool($violations, 'require_physical_tenancy', $config['require_physical_tenancy'] ?? true);
-        $routesEnabled = self::bool($violations, 'routes.enabled', $routes['enabled'] ?? true);
-        $routePrefix = self::nonEmpty($violations, 'routes.prefix', $routes['prefix'] ?? 'api');
-        $routeMiddleware = self::middleware($violations, $routes['middleware'] ?? []);
-        $product = self::nonEmpty($violations, 'product', $config['product'] ?? 'corex');
-        $build = self::nonEmpty($violations, 'build', $config['build'] ?? 'dev');
-        $retention = self::positiveInt($violations, 'idempotency.retention_seconds', $idempotency['retention_seconds'] ?? 86400);
-        $lease = self::positiveInt($violations, 'idempotency.lease_seconds', $idempotency['lease_seconds'] ?? 30);
-        $cursorTtl = self::positiveInt($violations, 'cursor.ttl_seconds', $cursor['ttl_seconds'] ?? 3600);
+        $requirePhysicalTenancy = self::bool(violations: $violations, path: 'require_physical_tenancy', value: $config['require_physical_tenancy'] ?? true);
+        $routesEnabled = self::bool(violations: $violations, path: 'routes.enabled', value: $routes['enabled'] ?? true);
+        $routePrefix = self::nonEmpty(violations: $violations, path: 'routes.prefix', value: $routes['prefix'] ?? 'api');
+        $routeMiddleware = self::middleware(violations: $violations, value: $routes['middleware'] ?? []);
+        $product = self::nonEmpty(violations: $violations, path: 'product', value: $config['product'] ?? 'corex');
+        $build = self::nonEmpty(violations: $violations, path: 'build', value: $config['build'] ?? 'dev');
+        $retention = self::positiveInt(violations: $violations, path: 'idempotency.retention_seconds', value: $idempotency['retention_seconds'] ?? 86400);
+        $lease = self::positiveInt(violations: $violations, path: 'idempotency.lease_seconds', value: $idempotency['lease_seconds'] ?? 30);
+        $cursorTtl = self::positiveInt(violations: $violations, path: 'cursor.ttl_seconds', value: $cursor['ttl_seconds'] ?? 3600);
 
         $violations->failIfAny();
 
@@ -162,11 +162,11 @@ final readonly class ApiOptions
     private static function versions(ConfigurationValidator $violations, mixed $value): array
     {
         if ($value === null) {
-            return [new ApiVersion('v1', ApiVersionStatus::Stable, null)];
+            return [new ApiVersion(major: 'v1', status: ApiVersionStatus::Stable, supportedThrough: null)];
         }
 
         if (! is_array($value) || $value === []) {
-            $violations->add('versions', 'must be a non-empty list');
+            $violations->add(path: 'versions', message: 'must be a non-empty list');
 
             return [];
         }
@@ -176,7 +176,7 @@ final readonly class ApiOptions
 
         foreach ($value as $index => $row) {
             if (! is_array($row)) {
-                $violations->add('versions.'.$index, 'must be an object');
+                $violations->add(path: 'versions.'.$index, message: 'must be an object');
 
                 continue;
             }
@@ -186,27 +186,27 @@ final readonly class ApiOptions
             $supported = $row['supported_through'] ?? null;
 
             if ($status === null) {
-                $violations->add('versions.'.$index.'.status', 'must be stable, deprecated, or retired');
+                $violations->add(path: 'versions.'.$index.'.status', message: 'must be stable, deprecated, or retired');
 
                 continue;
             }
 
             if (! is_string($supported) && $supported !== null) {
-                $violations->add('versions.'.$index.'.supported_through', 'must be a release line or null');
+                $violations->add(path: 'versions.'.$index.'.supported_through', message: 'must be a release line or null');
 
                 continue;
             }
 
             try {
-                $version = new ApiVersion($major, $status, $supported);
+                $version = new ApiVersion(major: $major, status: $status, supportedThrough: $supported);
             } catch (InvalidArgumentException $exception) {
-                $violations->add('versions.'.$index, $exception->getMessage());
+                $violations->add(path: 'versions.'.$index, message: $exception->getMessage());
 
                 continue;
             }
 
             if (isset($seen[$version->major])) {
-                $violations->add('versions.'.$index.'.major', 'must be unique');
+                $violations->add(path: 'versions.'.$index.'.major', message: 'must be unique');
 
                 continue;
             }
@@ -277,7 +277,7 @@ final readonly class ApiOptions
     private static function keyring(ConfigurationValidator $violations, mixed $value): array
     {
         if (! is_array($value)) {
-            $violations->add('cursor.keyring', 'must be a map of SecretRef values');
+            $violations->add(path: 'cursor.keyring', message: 'must be a map of SecretRef values');
 
             return [];
         }
@@ -286,7 +286,7 @@ final readonly class ApiOptions
 
         foreach ($value as $id => $secret) {
             if (! is_string($id) || $id === '') {
-                $violations->add('cursor.keyring', 'keys must be non-empty strings');
+                $violations->add(path: 'cursor.keyring', message: 'keys must be non-empty strings');
 
                 continue;
             }
@@ -303,7 +303,7 @@ final readonly class ApiOptions
                 continue;
             }
 
-            $violations->add('cursor.keyring.'.$id, 'must be a SecretRef');
+            $violations->add(path: 'cursor.keyring.'.$id, message: 'must be a SecretRef');
         }
 
         ksort($keyring);
@@ -315,7 +315,7 @@ final readonly class ApiOptions
     private static function middleware(ConfigurationValidator $violations, mixed $value): array
     {
         if (! is_array($value)) {
-            $violations->add('routes.middleware', 'must be a list of strings');
+            $violations->add(path: 'routes.middleware', message: 'must be a list of strings');
 
             return [];
         }
@@ -324,7 +324,7 @@ final readonly class ApiOptions
 
         foreach ($value as $entry) {
             if (! is_string($entry) || $entry === '') {
-                $violations->add('routes.middleware', 'must be a list of non-empty strings');
+                $violations->add(path: 'routes.middleware', message: 'must be a list of non-empty strings');
 
                 return [];
             }
@@ -341,7 +341,7 @@ final readonly class ApiOptions
             return $value;
         }
 
-        $violations->add($path, 'must be a boolean');
+        $violations->add(path: $path, message: 'must be a boolean');
 
         return false;
     }
@@ -352,7 +352,7 @@ final readonly class ApiOptions
             return $value;
         }
 
-        $violations->add($path, 'must be a non-empty string');
+        $violations->add(path: $path, message: 'must be a non-empty string');
 
         return 'invalid';
     }
@@ -363,7 +363,7 @@ final readonly class ApiOptions
             return $value;
         }
 
-        $violations->add($path, 'must be a positive integer');
+        $violations->add(path: $path, message: 'must be a positive integer');
 
         return 1;
     }

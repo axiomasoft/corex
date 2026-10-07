@@ -37,45 +37,45 @@ use Override;
  *
  * @internal spec: B-10 §3.1, P1.7 (Scope Excluded), D38, P1.6, D12
  */
-final class DatabaseSettingsRepository implements SettingsRepository
+final readonly class DatabaseSettingsRepository implements SettingsRepository
 {
-    private const MAX_VALUE_BYTES = 65536;
+    private const int MAX_VALUE_BYTES = 65536;
 
     public function __construct(
-        private readonly SettingDefaultsProvider $defaults,
-        private readonly ConnectionResolverInterface $connections,
-        private readonly Dispatcher $events,
-        private readonly StringEncrypter $encrypter,
-        private readonly ?string $connection = null,
+        private SettingDefaultsProvider $defaults,
+        private ConnectionResolverInterface $connections,
+        private Dispatcher $events,
+        private StringEncrypter $encrypter,
+        private ?string $connection = null,
     ) {}
 
     #[Override]
     public function get(string $namespace, string $key, ?SettingsScope $scope = null, ?JsonDocument $default = null): JsonDocument
     {
         foreach ($this->cascade($scope) as [$scopeType, $scopeId]) {
-            $row = $this->find($namespace, $key, $scopeType, $scopeId);
+            $row = $this->find(namespace: $namespace, key: $key, scopeType: $scopeType, scopeId: $scopeId);
 
             if ($row instanceof Setting) {
                 return $this->decode($row);
             }
         }
 
-        return JsonDocuments::capture($this->defaults->defaultFor($namespace, $key) ?? $default);
+        return JsonDocuments::capture($this->defaults->defaultFor(namespace: $namespace, key: $key) ?? $default);
     }
 
     #[Override]
     public function set(string $namespace, string $key, JsonDocument $value, ?SettingsScope $scope = null): void
     {
         [$scopeType, $scopeId] = $this->level($scope);
-        $sensitive = $this->defaults->isSensitive($namespace, $key);
+        $sensitive = $this->defaults->isSensitive(namespace: $namespace, key: $key);
 
         $encoded = json_encode(JsonDocuments::decode($value), JSON_THROW_ON_ERROR);
 
         if (strlen($encoded) > self::MAX_VALUE_BYTES) {
-            throw new SettingValueTooLargeException($namespace, $key, strlen($encoded), self::MAX_VALUE_BYTES);
+            throw new SettingValueTooLargeException(namespace: $namespace, key: $key, bytes: strlen($encoded), limit: self::MAX_VALUE_BYTES);
         }
 
-        $old = $this->find($namespace, $key, $scopeType, $scopeId);
+        $old = $this->find(namespace: $namespace, key: $key, scopeType: $scopeType, scopeId: $scopeId);
         $oldValue = $old instanceof Setting ? $this->decode($old) : null;
         $changed = ! $old instanceof Setting || ($oldValue === null || JsonDocuments::decode($oldValue) !== JsonDocuments::decode($value));
 

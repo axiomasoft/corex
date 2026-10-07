@@ -50,6 +50,6 @@ final class TenantContextUnavailable extends RuntimeException implements Describ
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TenancyErrorCode::ContextUnavailable, ErrorCategory::Unavailable, retryable: false);
+        return new ErrorDescriptor(code: TenancyErrorCode::ContextUnavailable, category: ErrorCategory::Unavailable, retryable: false);
     }
 }

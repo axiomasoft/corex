@@ -19,7 +19,7 @@ final class RoleMatrixData
     {
         $role = Role::query()->findOrFail($roleId);
 
-        return new RoleView($role->id, $role->slug, $role->assignable_to);
+        return new RoleView(id: $role->id, slug: $role->slug, assignableTo: $role->assignable_to);
     }
 
     /** @return list<RoleMatrixEntry> */
@@ -28,7 +28,7 @@ final class RoleMatrixData
         return array_values(RoleMatrixRow::query()
             ->when($roleId !== null, static fn ($query) => $query->where('role_id', $roleId))
             ->get(['entity_key', 'action', 'scope'])
-            ->map(static fn (RoleMatrixRow $row): RoleMatrixEntry => new RoleMatrixEntry($row->entity_key, $row->action, $row->scope))
+            ->map(static fn (RoleMatrixRow $row): RoleMatrixEntry => new RoleMatrixEntry(entityKey: $row->entity_key, action: $row->action, scope: $row->scope))
             ->all());
     }
 

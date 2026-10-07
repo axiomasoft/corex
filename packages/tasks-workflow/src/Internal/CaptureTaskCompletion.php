@@ -15,16 +15,16 @@ use CoreX\Workflow\Contracts\WorkflowBinding;
 use CoreX\Workflow\Data\TriggerRequest;
 use Illuminate\Database\Connection;
 
-final class CaptureTaskCompletion implements TaskCompletionCapture
+final readonly class CaptureTaskCompletion implements TaskCompletionCapture
 {
     public function __construct(
-        private readonly Connection $connection,
-        private readonly bool $enabled,
-        private readonly string $definitionRef,
-        private readonly string $versionRef,
-        private readonly TaskOperationReceipts $receipts,
-        private readonly TenantContextResolver $contexts,
-        private readonly ?WorkflowBinding $workflow = null,
+        private Connection $connection,
+        private bool $enabled,
+        private string $definitionRef,
+        private string $versionRef,
+        private TaskOperationReceipts $receipts,
+        private TenantContextResolver $contexts,
+        private ?WorkflowBinding $workflow = null,
     ) {}
 
     public function capture(TaskCompletionCandidate $candidate): void
@@ -49,7 +49,7 @@ final class CaptureTaskCompletion implements TaskCompletionCapture
         ];
         $payloadHash = hash('sha256', 'completionCapture/1'."\0".$requestKey."\0".json_encode($payload, JSON_THROW_ON_ERROR));
 
-        $existing = $this->receipts->find($this->connection, $requestKey);
+        $existing = $this->receipts->find(connection: $this->connection, requestKey: $requestKey);
 
         if ($existing !== null) {
             return;

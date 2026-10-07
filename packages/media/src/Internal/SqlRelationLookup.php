@@ -15,13 +15,13 @@ use CoreX\Media\Data\MediaSubject;
 use Illuminate\Database\ConnectionInterface;
 use Psr\Clock\ClockInterface;
 
-final class SqlRelationLookup implements RelationLookup
+final readonly class SqlRelationLookup implements RelationLookup
 {
-    public function __construct(private readonly ConnectionInterface $connection, private readonly MediaPolicy $policy, private readonly ClockInterface $clock) {}
+    public function __construct(private ConnectionInterface $connection, private MediaPolicy $policy, private ClockInterface $clock) {}
 
     public function attach(MediaContext $context, AttachmentInput $input): void
     {
-        if (! $this->policy->allows($context, MediaAction::Attach, new MediaSubject(attachment: $input))) {
+        if (! $this->policy->allows(context: $context, action: MediaAction::Attach, subject: new MediaSubject(attachment: $input))) {
             throw new MediaAccessDenied('Media attachment is denied.');
         }
 
@@ -32,7 +32,7 @@ final class SqlRelationLookup implements RelationLookup
                 throw new MediaOperationConflict('Media file is unavailable.');
             }
 
-            if (! $this->policy->allows($context, MediaAction::Attach, new MediaSubject(new MediaFileRef(Value::text($file->id), Value::text($file->kind), Value::text($file->mime_type), Value::integer($file->size_bytes), Value::text($file->sha256), $file->state), $input))) {
+            if (! $this->policy->allows(context: $context, action: MediaAction::Attach, subject: new MediaSubject(file: new MediaFileRef(id: Value::text($file->id), kind: Value::text($file->kind), mimeType: Value::text($file->mime_type), sizeBytes: Value::integer($file->size_bytes), sha256: Value::text($file->sha256), state: $file->state), attachment: $input))) {
                 throw new MediaAccessDenied('Media attachment is denied.');
             }
 
@@ -45,7 +45,7 @@ final class SqlRelationLookup implements RelationLookup
 
     public function detach(MediaContext $context, AttachmentInput $input): void
     {
-        if (! $this->policy->allows($context, MediaAction::Detach, new MediaSubject(attachment: $input))) {
+        if (! $this->policy->allows(context: $context, action: MediaAction::Detach, subject: new MediaSubject(attachment: $input))) {
             throw new MediaAccessDenied('Media detachment is denied.');
         }
 
@@ -56,7 +56,7 @@ final class SqlRelationLookup implements RelationLookup
                 throw new MediaOperationConflict('Media file is unavailable.');
             }
 
-            if (! $this->policy->allows($context, MediaAction::Detach, new MediaSubject(new MediaFileRef(Value::text($file->id), Value::text($file->kind), Value::text($file->mime_type), Value::integer($file->size_bytes), Value::text($file->sha256), Value::text($file->state)), $input))) {
+            if (! $this->policy->allows(context: $context, action: MediaAction::Detach, subject: new MediaSubject(file: new MediaFileRef(id: Value::text($file->id), kind: Value::text($file->kind), mimeType: Value::text($file->mime_type), sizeBytes: Value::integer($file->size_bytes), sha256: Value::text($file->sha256), state: Value::text($file->state)), attachment: $input))) {
                 throw new MediaAccessDenied('Media detachment is denied.');
             }
             $this->connection->table('med_relations')->where([
@@ -77,11 +77,11 @@ final class SqlRelationLookup implements RelationLookup
 
         $file = $this->connection->table('med_files')->where('id', $fileId)->first();
 
-        if ($file === null || ! $this->policy->allows($context, MediaAction::Read, new MediaSubject(new MediaFileRef(Value::text($file->id), Value::text($file->kind), Value::text($file->mime_type), Value::integer($file->size_bytes), Value::text($file->sha256), Value::text($file->state))))) {
+        if ($file === null || ! $this->policy->allows(context: $context, action: MediaAction::Read, subject: new MediaSubject(new MediaFileRef(id: Value::text($file->id), kind: Value::text($file->kind), mimeType: Value::text($file->mime_type), sizeBytes: Value::integer($file->size_bytes), sha256: Value::text($file->sha256), state: Value::text($file->state))))) {
             throw new MediaAccessDenied('Media usage lookup is denied.');
         }
 
         return array_values($this->connection->table('med_relations')->where('file_id', $fileId)->limit($limit)->get()
-            ->map(static fn (object $row): AttachmentRef => new AttachmentRef(Value::text($row->file_id), Value::text($row->entity_handle), Value::text($row->entity_id), Value::text($row->slot)))->all());
+            ->map(static fn (object $row): AttachmentRef => new AttachmentRef(fileId: Value::text($row->file_id), entityHandle: Value::text($row->entity_handle), entityId: Value::text($row->entity_id), slot: Value::text($row->slot)))->all());
     }
 }

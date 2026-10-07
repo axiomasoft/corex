@@ -26,7 +26,7 @@ final class MeilisearchServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
-        ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
+        ProblemDefinitions::register(app: $this->app, composerManifest: __DIR__.'/../composer.json', provider: PackageProblemDefinitions::class);
 
         if (! $this->app->bound(SearchDriverRegistry::class)) {
             $this->app->register(SearchServiceProvider::class);

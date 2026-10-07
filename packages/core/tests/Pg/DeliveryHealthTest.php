@@ -9,7 +9,7 @@ use Psr\Clock\ClockInterface;
 
 function deliveryHealthInsertRow(array $overrides = []): void
 {
-    $now = app(ClockInterface::class)->now();
+    $now = resolve(ClockInterface::class)->now();
 
     DB::connection('pgsql')->table('sys_outbox_messages')->insert([
         'id' => $overrides['id'] ?? '01932f5a-0000-7000-8000-000000000099',
@@ -46,7 +46,7 @@ beforeEach(function (): void {
 it('returns null oldest age and zero counters on an empty table', function (): void {
     outboxRelayClock(new DateTimeImmutable('2026-06-15T12:00:00+00:00'));
 
-    $health = app(SqlDeliveryHealth::class)->read();
+    $health = resolve(SqlDeliveryHealth::class)->read();
 
     expect($health->oldestPendingSeconds)->toBeNull()
         ->and($health->oldestPendingSecondsByContract)->toBe([])
@@ -71,7 +71,7 @@ it('reports per-contract ages and the maximum as oldest pending', function (): v
         'occurred_at' => $now->sub(new DateInterval('PT30M')),
     ]);
 
-    $health = app(SqlDeliveryHealth::class)->read();
+    $health = resolve(SqlDeliveryHealth::class)->read();
 
     expect($health->oldestPendingSeconds)->toBe(7200)
         ->and($health->oldestPendingSecondsByContract)->toBe([
@@ -91,7 +91,7 @@ it('excludes pending rows with future available_at from age', function (): void 
         'available_at' => $now->add(new DateInterval('PT1H')),
     ]);
 
-    $health = app(SqlDeliveryHealth::class)->read();
+    $health = resolve(SqlDeliveryHealth::class)->read();
 
     expect($health->oldestPendingSeconds)->toBeNull()
         ->and($health->pendingCount)->toBe(1);
@@ -108,7 +108,7 @@ it('counts published rows only in status totals not in pending age', function ()
         'occurred_at' => $now->sub(new DateInterval('P1D')),
     ]);
 
-    $health = app(SqlDeliveryHealth::class)->read();
+    $health = resolve(SqlDeliveryHealth::class)->read();
 
     expect($health->oldestPendingSeconds)->toBeNull()
         ->and($health->pendingCount)->toBe(0)
@@ -137,7 +137,7 @@ it('computes maxAttempts only from pending and publishing rows', function (): vo
         'dead_at' => $now,
     ]);
 
-    $health = app(SqlDeliveryHealth::class)->read();
+    $health = resolve(SqlDeliveryHealth::class)->read();
 
     expect($health->maxAttempts)->toBe(5)
         ->and($health->deadCount)->toBe(1);

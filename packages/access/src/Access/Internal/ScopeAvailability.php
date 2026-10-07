@@ -53,7 +53,7 @@ final class ScopeAvailability
             return $this->memo[$memoKey];
         }
 
-        return $this->memo[$memoKey] = $this->resolve($entityKey, $scope, $requirement);
+        return $this->memo[$memoKey] = $this->resolve(entityKey: $entityKey, scope: $scope, requirement: $requirement);
     }
 
     /** @return array{capability: Capability, column: string}|null */
@@ -86,7 +86,7 @@ final class ScopeAvailability
             return Scope::Account;
         }
 
-        throw ScopeCapabilityMismatch::forScope($entityKey, $scope->value, $requirement['capability']->value, $requirement['column']);
+        throw ScopeCapabilityMismatch::forScope(entityKey: $entityKey, scope: $scope->value, missingCapability: $requirement['capability']->value, column: $requirement['column']);
     }
 
     private function schema(): SchemaBuilder

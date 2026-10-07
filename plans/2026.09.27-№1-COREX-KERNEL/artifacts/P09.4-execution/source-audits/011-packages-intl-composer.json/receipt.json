@@ -1,0 +1,25 @@
+{
+  "classification": "source",
+  "commands": [
+    {
+      "exit": 0,
+      "output": "validate.json",
+      "role": "validate",
+      "sha256": "478f83877ba997c70e76dd964d4b6b349f74b74a24cb1c50a1565b169c2f82ea"
+    },
+    {
+      "exit": 0,
+      "output": "audit.json",
+      "role": "audit",
+      "sha256": "489d694dfe7ddfa28a4043c0a69d499e40abc83c072d729d89294e94d1ccea10"
+    }
+  ],
+  "effective_manifest_sha256": "ad63ec52e2534c43245791d3f91703d1609380f6eddcd101a5403120877897b6",
+  "lock_kind": "source",
+  "lock_sha256": "21184c77cbf178409f7f585d82e5aaacee9d309041f80695766ea0b5ade66ea8",
+  "manifest": "packages/intl/composer.json",
+  "manifest_sha256": "ad63ec52e2534c43245791d3f91703d1609380f6eddcd101a5403120877897b6",
+  "name": "axiomasoft/corex-intl",
+  "source_lock_sha256": "21184c77cbf178409f7f585d82e5aaacee9d309041f80695766ea0b5ade66ea8",
+  "status": "GREEN"
+}

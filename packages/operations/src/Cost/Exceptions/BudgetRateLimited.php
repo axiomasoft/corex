@@ -17,6 +17,6 @@ final class BudgetRateLimited extends TooManyRequestsHttpException implements De
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(OperationsErrorCode::BudgetRateLimited, ErrorCategory::RateLimit, retryable: false);
+        return new ErrorDescriptor(code: OperationsErrorCode::BudgetRateLimited, category: ErrorCategory::RateLimit, retryable: false);
     }
 }

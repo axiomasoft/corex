@@ -16,12 +16,12 @@ use Psr\Clock\ClockInterface;
  *
  * @internal spec: D12
  */
-final class DatabaseRecordsRegistrar implements RecordsRegistrar
+final readonly class DatabaseRecordsRegistrar implements RecordsRegistrar
 {
     public function __construct(
-        private readonly ConnectionResolverInterface $connections,
-        private readonly ClockInterface $clock,
-        private readonly ?string $connection = null,
+        private ConnectionResolverInterface $connections,
+        private ClockInterface $clock,
+        private ?string $connection = null,
     ) {}
 
     /** @param  array<string, mixed>  $meta */

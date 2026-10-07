@@ -5,10 +5,41 @@ declare(strict_types=1);
 namespace CoreX\Attributes\Tooling;
 
 use Composer\Autoload\ClassLoader;
+use CoreX\Attributes\Api;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
 use FilesystemIterator;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+use Illuminate\Support\LazyCollection;
 use PhpParser\Error;
 use PhpParser\Modifiers;
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\IntersectionType;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Enum_;
+use PhpParser\Node\Stmt\EnumCase;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\GroupUse;
+use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Trait_;
+use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\UnionType;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
@@ -16,6 +47,7 @@ use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard;
 use PHPStan\PhpDocParser\Ast as Doc;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
@@ -34,23 +66,23 @@ use Throwable;
 /** @internal Parses production source without executing or booting the inspected packages. */
 final class SurfaceScanner
 {
-    private const string API = 'CoreX\\Attributes\\Api';
+    private const string API = Api::class;
 
-    private const string SPI = 'CoreX\\Attributes\\Spi';
+    private const string SPI = Spi::class;
 
-    private const string KIND = 'CoreX\\Attributes\\SpiKind';
+    private const string KIND = SpiKind::class;
 
     private const array BUILTINS = ['int', 'integer', 'float', 'double', 'string', 'bool', 'boolean', 'true', 'false', 'null', 'void', 'never', 'mixed', 'object', 'array', 'list', 'iterable', 'callable', 'resource', 'scalar', 'numeric', 'numeric-string', 'non-empty-string', 'literal-string', 'lowercase-string', 'uppercase-string', 'class-string', 'interface-string', 'trait-string', 'callable-string', 'array-key', 'positive-int', 'negative-int', 'non-negative-int', 'non-positive-int', 'non-zero-int', 'non-empty-array', 'non-empty-list', 'key-of', 'value-of', 'int-mask', 'int-mask-of', 'min', 'max'];
 
-    private Parser $parser;
+    private readonly Parser $parser;
 
-    private Standard $printer;
+    private readonly Standard $printer;
 
-    private Lexer $lexer;
+    private readonly Lexer $lexer;
 
-    private PhpDocParser $docParser;
+    private readonly PhpDocParser $docParser;
 
-    private TypeParser $typeParser;
+    private readonly TypeParser $typeParser;
 
     /** @var array<string, SourceType> */
     private array $types = [];
@@ -79,7 +111,7 @@ final class SurfaceScanner
     /** @var array<string, bool> */
     private array $resolving = [];
 
-    /** @var array<string, array<string, Doc\Type\TypeNode>> */
+    /** @var array<string, array<string, TypeNode>> */
     private array $aliases = [];
 
     /** @var array<string, bool> */
@@ -148,7 +180,7 @@ final class SurfaceScanner
                 }
             }
             // Configuration is parsed as source too: class-string edges never require execution.
-            foreach ($this->files($directory.'/config', optional: true) as $file) {
+            foreach ($this->files(path: $directory.'/config', optional: true) as $file) {
                 $paths[$file] = true;
             }
             ksort($paths);
@@ -159,7 +191,7 @@ final class SurfaceScanner
                 if ($realFile === false || $realDirectory === false || ! str_starts_with($realFile, $realDirectory.'/')) {
                     throw new RuntimeException('Production source escapes its Composer owner');
                 }
-                $this->parseFile($file, substr($file, strlen($root) + 1), $owner, $product);
+                $this->parseFile(absolute: $file, relative: substr($file, strlen($root) + 1), owner: $owner, product: $product);
             }
         }
         ksort($this->types);
@@ -175,7 +207,7 @@ final class SurfaceScanner
             $layer = $this->metadata[$type->name]['layer'];
 
             if ($layer === 'api' || ($layer === 'spi-call' && str_contains($type->name, '\\Events\\'))) {
-                $this->walkPayload($type, $type->name, [], $type->name);
+                $this->walkPayload(origin: $type, name: $type->name, visited: [], path: $type->name);
             }
         }
         $this->validateReferences($root);
@@ -211,7 +243,7 @@ final class SurfaceScanner
             $unique[json_encode($diagnostic->toArray(), JSON_THROW_ON_ERROR)] = $diagnostic;
         }
 
-        return new SurfaceReport($output, $owners, array_values($unique), $this->packagePaths);
+        return new SurfaceReport(manifests: $output, owners: $owners, diagnostics: array_values($unique), packagePaths: $this->packagePaths);
     }
 
     private function reset(): void
@@ -270,19 +302,19 @@ final class SurfaceScanner
 
         try {
             $nodes = $this->parser->parse($this->read($absolute)) ?? [];
-            $nodes = (new NodeTraverser(new NameResolver))->traverse($nodes);
+            $nodes = new NodeTraverser(new NameResolver)->traverse($nodes);
         } catch (Error $e) {
             throw new RuntimeException($relative.': '.$e->getMessage(), previous: $e);
         }
-        $this->collect($nodes, $relative, $owner, $product, '');
+        $this->collect(nodes: $nodes, file: $relative, owner: $owner, product: $product, namespace: '');
 
         if ($owner !== '@vendor') {
-            foreach ((new NodeFinder)->findInstanceOf($nodes, Node\Name::class) as $node) {
-                if ($node instanceof Node\Name\FullyQualified) {
+            foreach ((new NodeFinder)->findInstanceOf($nodes, Name::class) as $node) {
+                if ($node instanceof FullyQualified) {
                     $this->references[] = ['file' => $relative, 'owner' => $owner, 'name' => $node->toString(), 'line' => $node->getStartLine()];
                 }
             }
-            foreach ((new NodeFinder)->findInstanceOf($nodes, Node\Scalar\String_::class) as $node) {
+            foreach ((new NodeFinder)->findInstanceOf($nodes, String_::class) as $node) {
                 if (str_contains($node->value, '\\')) {
                     $this->references[] = ['file' => $relative, 'owner' => $owner, 'name' => ltrim($node->value, '\\'), 'line' => $node->getStartLine()];
                 }
@@ -297,10 +329,10 @@ final class SurfaceScanner
     private function collect(array $nodes, string $file, string $owner, bool $product, string $namespace, array $imports = []): void
     {
         foreach ($nodes as $node) {
-            if ($node instanceof Node\Stmt\Use_ || $node instanceof Node\Stmt\GroupUse) {
+            if ($node instanceof Use_ || $node instanceof GroupUse) {
                 foreach ($node->uses as $use) {
-                    if (($use->type !== 0 ? $use->type : $node->type) === Node\Stmt\Use_::TYPE_NORMAL) {
-                        $name = ($node instanceof Node\Stmt\GroupUse ? $node->prefix.'\\' : '').$use->name;
+                    if (($use->type !== 0 ? $use->type : $node->type) === Use_::TYPE_NORMAL) {
+                        $name = ($node instanceof GroupUse ? $node->prefix.'\\' : '').$use->name;
                         $imports[strtolower($use->getAlias()->toString())] = $name;
 
                         if ($owner !== '@vendor') {
@@ -311,23 +343,23 @@ final class SurfaceScanner
             }
         }
         foreach ($nodes as $node) {
-            if ($node instanceof Node\Stmt\Namespace_) {
-                $this->collect($node->stmts, $file, $owner, $product, $node->name?->toString() ?? '');
-            } elseif ($node instanceof Node\Stmt\ClassLike && $node->name !== null) {
+            if ($node instanceof Namespace_) {
+                $this->collect(nodes: $node->stmts, file: $file, owner: $owner, product: $product, namespace: $node->name?->toString() ?? '');
+            } elseif ($node instanceof ClassLike && $node->name !== null) {
                 $name = $node->namespacedName?->toString() ?? $node->name->toString();
 
                 if (isset($this->names[strtolower($name)])) {
                     throw new RuntimeException("Duplicate FQCN owner: {$name} ({$file})");
                 }
                 $this->names[strtolower($name)] = $name;
-                $this->types[$name] = new SourceType($name, $owner, $file, $product, $node, $namespace, $imports);
-                $this->collect($node->stmts, $file, $owner, $product, $namespace, $imports);
-            } elseif ($node instanceof Node\Stmt\Function_ && ! $product && ! str_contains('\\'.$namespace.'\\', '\\Internal\\')) {
-                $this->diagnostics[] = new SurfaceDiagnostic('API-FUNCTION', $file, $node->getStartLine(), $namespace.'\\'.$node->name, 'declaration', 'Public functions cannot carry class metadata');
-                $this->collect($node->stmts, $file, $owner, $product, $namespace, $imports);
+                $this->types[$name] = new SourceType(name: $name, owner: $owner, file: $file, product: $product, node: $node, namespace: $namespace, imports: $imports);
+                $this->collect(nodes: $node->stmts, file: $file, owner: $owner, product: $product, namespace: $namespace, imports: $imports);
+            } elseif ($node instanceof Function_ && ! $product && ! str_contains('\\'.$namespace.'\\', '\\Internal\\')) {
+                $this->diagnostics[] = new SurfaceDiagnostic(code: 'API-FUNCTION', file: $file, line: $node->getStartLine(), symbol: $namespace.'\\'.$node->name, path: 'declaration', message: 'Public functions cannot carry class metadata');
+                $this->collect(nodes: $node->stmts, file: $file, owner: $owner, product: $product, namespace: $namespace, imports: $imports);
             } elseif (property_exists($node, 'stmts') && is_array($node->stmts)) {
                 // Conditional named declarations still belong to the production surface.
-                $this->collect(array_filter($node->stmts, static fn (mixed $child): bool => $child instanceof Node), $file, $owner, $product, $namespace, $imports);
+                $this->collect(nodes: array_filter($node->stmts, static fn (mixed $child): bool => $child instanceof Node), file: $file, owner: $owner, product: $product, namespace: $namespace, imports: $imports);
             }
         }
     }
@@ -347,18 +379,18 @@ final class SurfaceScanner
 
         if ($found === []) {
             if (! $internal && ! $type->product && $type->owner !== '@vendor') {
-                $this->error($type, 'API-UNCLASSIFIED', 'declaration', 'Missing Api/Spi annotation');
+                $this->error(type: $type, code: 'API-UNCLASSIFIED', path: 'declaration', message: 'Missing Api/Spi annotation');
             }
 
             return ['layer' => $internal ? 'internal' : ($type->product ? 'consumer' : 'unclassified'), 'since' => null];
         }
 
         if (count($found) !== 1) {
-            $this->error($type, 'API-METADATA', 'declaration', 'Exactly one Api or Spi annotation required');
+            $this->error(type: $type, code: 'API-METADATA', path: 'declaration', message: 'Exactly one Api or Spi annotation required');
         }
 
         if ($internal || str_contains($type->node->getDocComment()?->getText() ?? '', '@internal')) {
-            $this->error($type, 'API-INTERNAL-ANNOTATION', 'declaration', 'Internal declaration cannot be Api/Spi');
+            $this->error(type: $type, code: 'API-INTERNAL-ANNOTATION', path: 'declaration', message: 'Internal declaration cannot be Api/Spi');
         }
         $attribute = $found[0];
         $spi = strtolower($attribute->name->toString()) === strtolower(self::SPI);
@@ -368,22 +400,22 @@ final class SurfaceScanner
             $key = $arg->name?->toString() ?? ($positions[$i] ?? 'invalid');
 
             if (! in_array($key, $positions, true) || isset($args[$key]) || $arg->unpack) {
-                $this->error($type, 'API-METADATA', 'attribute', 'Unknown, duplicate or unpacked argument');
+                $this->error(type: $type, code: 'API-METADATA', path: 'attribute', message: 'Unknown, duplicate or unpacked argument');
             }
             $args[$key] = $arg->value;
         }
-        $since = isset($args['since']) && $args['since'] instanceof Node\Scalar\String_ ? $args['since']->value : (isset($args['since']) ? '' : '1.0');
+        $since = isset($args['since']) && $args['since'] instanceof String_ ? $args['since']->value : (isset($args['since']) ? '' : '1.0');
 
         if ($since !== '1.0' && preg_match('/^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/D', $since) !== 1) {
-            $this->error($type, 'API-METADATA', 'since', 'Expected numeric version');
+            $this->error(type: $type, code: 'API-METADATA', path: 'since', message: 'Expected numeric version');
         }
         $layer = 'api';
 
         if ($spi) {
             $kind = $args['kind'] ?? null;
 
-            if (! $kind instanceof Node\Expr\ClassConstFetch || ! $kind->class instanceof Node\Name || strtolower($kind->class->toString()) !== strtolower(self::KIND) || ! $kind->name instanceof Node\Identifier || ! in_array($kind->name->toString(), ['Implement', 'Call'], true)) {
-                $this->error($type, 'API-METADATA', 'kind', 'Expected SpiKind::Implement or SpiKind::Call');
+            if (! $kind instanceof ClassConstFetch || ! $kind->class instanceof Name || strtolower($kind->class->toString()) !== strtolower(self::KIND) || ! $kind->name instanceof Identifier || ! in_array($kind->name->toString(), ['Implement', 'Call'], true)) {
+                $this->error(type: $type, code: 'API-METADATA', path: 'kind', message: 'Expected SpiKind::Implement or SpiKind::Call');
                 $layer = 'invalid';
             } else {
                 $layer = 'spi-'.strtolower($kind->name->toString());
@@ -395,7 +427,7 @@ final class SurfaceScanner
 
     private function error(SourceType $type, string $code, string $path, string $message, ?int $line = null): void
     {
-        $this->diagnostics[] = new SurfaceDiagnostic($code, $type->file, $line ?? $type->node->getStartLine(), $type->name, $path, $message);
+        $this->diagnostics[] = new SurfaceDiagnostic(code: $code, file: $type->file, line: $line ?? $type->node->getStartLine(), symbol: $type->name, path: $path, message: $message);
     }
 
     private function lookup(string $name): ?SourceType
@@ -415,7 +447,7 @@ final class SurfaceScanner
 
             // The inspected tree is authoritative; the host autoloader may only supply vendor dependencies.
             if ($file !== false && str_contains($file, '/vendor/') && ! str_contains($file, '/vendor/axiomasoft/')) {
-                $this->parseFile($file, '@vendor/'.$name, '@vendor', false);
+                $this->parseFile(absolute: $file, relative: '@vendor/'.$name, owner: '@vendor', product: false);
 
                 break;
             }
@@ -426,7 +458,7 @@ final class SurfaceScanner
                 $source = 'phar://'.$vendor.'/phpstan/phpstan/phpstan.phar/src/'.str_replace('\\', '/', substr($name, 8)).'.php';
 
                 if (is_file($source)) {
-                    $this->parseFile($source, '@vendor/'.$name, '@vendor', false);
+                    $this->parseFile(absolute: $source, relative: '@vendor/'.$name, owner: '@vendor', product: false);
 
                     break;
                 }
@@ -442,12 +474,12 @@ final class SurfaceScanner
         $node = $type->node;
         $parents = [];
 
-        if ($node instanceof Node\Stmt\Class_ && $node->extends !== null) {
+        if ($node instanceof Class_ && $node->extends !== null) {
             $parents[] = $node->extends->toString();
         }
 
-        if ($node instanceof Node\Stmt\Interface_) {
-            $parents = array_map(static fn (Node\Name $name): string => $name->toString(), $node->extends);
+        if ($node instanceof Interface_) {
+            $parents = array_map(static fn (Name $name): string => $name->toString(), $node->extends);
         }
         foreach ($node->getTraitUses() as $use) {
             foreach ($use->traits as $trait) {
@@ -462,7 +494,7 @@ final class SurfaceScanner
     private function directExtends(SourceType $type): array
     {
         $node = $type->node;
-        $extends = $node instanceof Node\Stmt\Interface_ ? array_map(static fn (Node\Name $name): string => $name->toString(), $node->extends) : ($node instanceof Node\Stmt\Class_ && $node->extends !== null ? [$node->extends->toString()] : []);
+        $extends = $node instanceof Interface_ ? array_map(static fn (Name $name): string => $name->toString(), $node->extends) : ($node instanceof Class_ && $node->extends !== null ? [$node->extends->toString()] : []);
         sort($extends);
 
         return $extends;
@@ -498,7 +530,7 @@ final class SurfaceScanner
         }
 
         if (isset($this->resolving[$name])) {
-            $this->error($type, 'API-INHERITANCE', 'extends', 'Cyclic inheritance');
+            $this->error(type: $type, code: 'API-INHERITANCE', path: 'extends', message: 'Cyclic inheritance');
 
             return [];
         }
@@ -517,7 +549,7 @@ final class SurfaceScanner
             $inherited = $this->record($parent);
 
             if ($inherited === []) {
-                $this->error($type, 'API-UNRESOLVED-TYPE', 'extends', $parent);
+                $this->error(type: $type, code: 'API-UNRESOLVED-TYPE', path: 'extends', message: $parent);
             }
             foreach (array_keys($members) as $category) {
                 if (isset($inherited[$category]) && is_array($inherited[$category])) {
@@ -528,40 +560,40 @@ final class SurfaceScanner
                 $this->payloads[$name][] = ['target' => $reference['target'], 'path' => 'inherited('.$parent.').'.$reference['path'], 'line' => $node->getStartLine()];
             }
         }
-        $doc = $this->doc($type, $node, 'class');
+        $doc = $this->doc(type: $type, node: $node, path: 'class');
         foreach ($node->getTraitUses() as $use) {
             if ($use->adaptations !== []) {
-                $this->error($type, 'API-INHERITANCE', 'traits', 'Trait adaptations require explicit resolution');
+                $this->error(type: $type, code: 'API-INHERITANCE', path: 'traits', message: 'Trait adaptations require explicit resolution');
             }
         }
         foreach ($node->stmts as $member) {
             // Constructor visibility does not determine promoted-property visibility.
-            if ($member instanceof Node\Stmt\ClassMethod && $member->isPrivate() && $member->name->toString() === '__construct') {
-                $constructorDoc = $this->doc($type, $member, 'methods.__construct');
+            if ($member instanceof ClassMethod && $member->isPrivate() && $member->name->toString() === '__construct') {
+                $constructorDoc = $this->doc(type: $type, node: $member, path: 'methods.__construct');
                 foreach ($member->params as $param) {
                     if ($param->flags === 0 || ($param->flags & Modifiers::PRIVATE) !== 0) {
                         continue;
                     }
-                    $propertyName = $param->var instanceof Node\Expr\Variable && is_string($param->var->name) ? $param->var->name : '?';
+                    $propertyName = $param->var instanceof Variable && is_string($param->var->name) ? $param->var->name : '?';
                     $path = 'properties.'.$propertyName;
-                    $members['properties'][$propertyName] = ['flags' => $param->flags, 'type' => $this->native($type, $param->type, $path), 'readonly' => ($param->flags & Modifiers::READONLY) !== 0 || ($node instanceof Node\Stmt\Class_ && $node->isReadonly()), 'visibility' => ($param->flags & Modifiers::PROTECTED) !== 0 ? 'protected' : 'public', 'static' => false, 'default' => null, 'doc' => array_replace($constructorDoc, $this->doc($type, $param, $path)), 'hooks' => []];
+                    $members['properties'][$propertyName] = ['flags' => $param->flags, 'type' => $this->native(type: $type, node: $param->type, path: $path), 'readonly' => ($param->flags & Modifiers::READONLY) !== 0 || ($node instanceof Class_ && $node->isReadonly()), 'visibility' => ($param->flags & Modifiers::PROTECTED) !== 0 ? 'protected' : 'public', 'static' => false, 'default' => null, 'doc' => array_replace($constructorDoc, $this->doc(type: $type, node: $param, path: $path)), 'hooks' => []];
                 }
             }
 
-            if ($member instanceof Node\Stmt\ClassMethod && ! $member->isPrivate()) {
+            if ($member instanceof ClassMethod && ! $member->isPrivate()) {
                 $path = 'methods.'.$member->name;
-                $methodDoc = $this->doc($type, $member, $path);
+                $methodDoc = $this->doc(type: $type, node: $member, path: $path);
                 $parameters = [];
                 foreach ($member->params as $param) {
                     foreach ($param->attrGroups as $group) {
                         foreach ($group->attrs as $attribute) {
                             if (in_array(strtolower($attribute->name->toString()), [strtolower(self::API), strtolower(self::SPI)], true)) {
-                                $this->error($type, 'API-METADATA', $path.'.parameter', 'Api/Spi must target the type', $param->getStartLine());
+                                $this->error(type: $type, code: 'API-METADATA', path: $path.'.parameter', message: 'Api/Spi must target the type', line: $param->getStartLine());
                             }
                         }
                     }
-                    $paramName = $param->var instanceof Node\Expr\Variable && is_string($param->var->name) ? $param->var->name : '?';
-                    $promotedDoc = $param->flags !== 0 ? $this->doc($type, $param, 'properties.'.$paramName) : [];
+                    $paramName = $param->var instanceof Variable && is_string($param->var->name) ? $param->var->name : '?';
+                    $promotedDoc = $param->flags !== 0 ? $this->doc(type: $type, node: $param, path: 'properties.'.$paramName) : [];
 
                     if ($meta['layer'] === 'api') {
                         $parameterDocs = [];
@@ -573,39 +605,39 @@ final class SurfaceScanner
                             }
                         }
                         $parameterDocs = array_merge($parameterDocs, $promotedDoc['@var'] ?? []);
-                        $this->ambiguousNative($type, $param->type, $parameterDocs, $path.'.parameters.'.$paramName);
+                        $this->ambiguousNative(type: $type, node: $param->type, docs: $parameterDocs, path: $path.'.parameters.'.$paramName);
                     }
-                    $parameters[] = ['name' => $paramName, 'type' => $this->native($type, $param->type, $path.'.parameters.'.$paramName), 'by_reference' => $param->byRef, 'variadic' => $param->variadic, 'optional' => $param->default !== null || $param->variadic, 'default' => $this->expression($param->default), 'flags' => $param->flags];
+                    $parameters[] = ['name' => $paramName, 'type' => $this->native(type: $type, node: $param->type, path: $path.'.parameters.'.$paramName), 'by_reference' => $param->byRef, 'variadic' => $param->variadic, 'optional' => $param->default !== null || $param->variadic, 'default' => $this->expression($param->default), 'flags' => $param->flags];
 
                     if ($param->flags !== 0 && ($param->flags & Modifiers::PRIVATE) === 0) {
-                        $members['properties'][$paramName] = ['flags' => $param->flags, 'type' => $this->native($type, $param->type, 'properties.'.$paramName), 'readonly' => ($param->flags & Modifiers::READONLY) !== 0 || ($node instanceof Node\Stmt\Class_ && $node->isReadonly()), 'visibility' => ($param->flags & Modifiers::PROTECTED) !== 0 ? 'protected' : 'public', 'static' => false, 'default' => null, 'doc' => array_replace($methodDoc, $promotedDoc), 'hooks' => []];
+                        $members['properties'][$paramName] = ['flags' => $param->flags, 'type' => $this->native(type: $type, node: $param->type, path: 'properties.'.$paramName), 'readonly' => ($param->flags & Modifiers::READONLY) !== 0 || ($node instanceof Class_ && $node->isReadonly()), 'visibility' => ($param->flags & Modifiers::PROTECTED) !== 0 ? 'protected' : 'public', 'static' => false, 'default' => null, 'doc' => array_replace($methodDoc, $promotedDoc), 'hooks' => []];
                     }
                 }
 
                 if ($meta['layer'] === 'api' && ! in_array($member->name->toString(), ['__construct', '__destruct'], true)) {
-                    $this->ambiguousNative($type, $member->returnType, array_merge($methodDoc['@return'] ?? [], $methodDoc['@phpstan-return'] ?? [], $methodDoc['@psalm-return'] ?? []), $path.'.return');
+                    $this->ambiguousNative(type: $type, node: $member->returnType, docs: array_merge($methodDoc['@return'] ?? [], $methodDoc['@phpstan-return'] ?? [], $methodDoc['@psalm-return'] ?? []), path: $path.'.return');
                 }
-                $members['methods'][$member->name->toString()] = ['visibility' => $member->isProtected() ? 'protected' : 'public', 'static' => $member->isStatic(), 'final' => $member->isFinal(), 'abstract' => $member->isAbstract() || $node instanceof Node\Stmt\Interface_, 'by_reference' => $member->byRef, 'parameters' => $parameters, 'return' => $this->native($type, $member->returnType, $path.'.return'), 'doc' => $methodDoc];
-            } elseif ($member instanceof Node\Stmt\Property && ! $member->isPrivate()) {
+                $members['methods'][$member->name->toString()] = ['visibility' => $member->isProtected() ? 'protected' : 'public', 'static' => $member->isStatic(), 'final' => $member->isFinal(), 'abstract' => $member->isAbstract() || $node instanceof Interface_, 'by_reference' => $member->byRef, 'parameters' => $parameters, 'return' => $this->native(type: $type, node: $member->returnType, path: $path.'.return'), 'doc' => $methodDoc];
+            } elseif ($member instanceof Property && ! $member->isPrivate()) {
                 foreach ($member->props as $property) {
                     $path = 'properties.'.$property->name;
                     $hooks = [];
                     foreach ($member->hooks as $hook) {
-                        $hooks[$hook->name->toString()] = ['flags' => $hook->flags, 'by_reference' => $hook->byRef, 'parameters' => array_map(fn (Node\Param $p): array => ['type' => $this->native($type, $p->type, $path.'.hook'), 'name' => $p->var instanceof Node\Expr\Variable && is_string($p->var->name) ? $p->var->name : '?'], $hook->params)];
+                        $hooks[$hook->name->toString()] = ['flags' => $hook->flags, 'by_reference' => $hook->byRef, 'parameters' => array_map(fn (Param $p): array => ['type' => $this->native(type: $type, node: $p->type, path: $path.'.hook'), 'name' => $p->var instanceof Variable && is_string($p->var->name) ? $p->var->name : '?'], $hook->params)];
                     }
-                    $members['properties'][$property->name->toString()] = ['flags' => $member->flags, 'type' => $this->native($type, $member->type, $path), 'readonly' => $member->isReadonly() || ($node instanceof Node\Stmt\Class_ && $node->isReadonly()), 'visibility' => $member->isProtected() ? 'protected' : 'public', 'static' => $member->isStatic(), 'default' => $this->expression($property->default), 'doc' => $this->doc($type, $member, $path), 'hooks' => $hooks];
+                    $members['properties'][$property->name->toString()] = ['flags' => $member->flags, 'type' => $this->native(type: $type, node: $member->type, path: $path), 'readonly' => $member->isReadonly() || ($node instanceof Class_ && $node->isReadonly()), 'visibility' => $member->isProtected() ? 'protected' : 'public', 'static' => $member->isStatic(), 'default' => $this->expression($property->default), 'doc' => $this->doc(type: $type, node: $member, path: $path), 'hooks' => $hooks];
                 }
-            } elseif ($member instanceof Node\Stmt\ClassConst && ! $member->isPrivate()) {
+            } elseif ($member instanceof ClassConst && ! $member->isPrivate()) {
                 foreach ($member->consts as $constant) {
-                    $members['constants'][$constant->name->toString()] = ['type' => $this->native($type, $member->type, 'constants.'.$constant->name), 'value' => $this->expression($constant->value), 'visibility' => $member->isProtected() ? 'protected' : 'public', 'final' => $member->isFinal(), 'doc' => $this->doc($type, $member, 'constants.'.$constant->name)];
+                    $members['constants'][$constant->name->toString()] = ['type' => $this->native(type: $type, node: $member->type, path: 'constants.'.$constant->name), 'value' => $this->expression($constant->value), 'visibility' => $member->isProtected() ? 'protected' : 'public', 'final' => $member->isFinal(), 'doc' => $this->doc(type: $type, node: $member, path: 'constants.'.$constant->name)];
                 }
             }
 
-            if ($member instanceof Node\Stmt\ClassMethod || $member instanceof Node\Stmt\Property || $member instanceof Node\Stmt\ClassConst || $member instanceof Node\Stmt\EnumCase) {
+            if ($member instanceof ClassMethod || $member instanceof Property || $member instanceof ClassConst || $member instanceof EnumCase) {
                 foreach ($member->attrGroups as $group) {
                     foreach ($group->attrs as $attribute) {
                         if (in_array(strtolower($attribute->name->toString()), [strtolower(self::API), strtolower(self::SPI)], true)) {
-                            $this->error($type, 'API-METADATA', 'member', 'Api/Spi must target the type', $member->getStartLine());
+                            $this->error(type: $type, code: 'API-METADATA', path: 'member', message: 'Api/Spi must target the type', line: $member->getStartLine());
                         }
                     }
                 }
@@ -617,19 +649,19 @@ final class SurfaceScanner
         unset($list);
         $cases = [];
 
-        if ($node instanceof Node\Stmt\Enum_) {
+        if ($node instanceof Enum_) {
             foreach ($node->stmts as $case) {
-                if ($case instanceof Node\Stmt\EnumCase) {
+                if ($case instanceof EnumCase) {
                     $cases[$case->name->toString()] = $this->expression($case->expr);
                 }
             }
         }
         ksort($cases);
-        $implements = ($node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Enum_) ? array_map(static fn (Node\Name $n): string => $n->toString(), $node->implements) : [];
+        $implements = ($node instanceof Class_ || $node instanceof Enum_) ? array_map(static fn (Name $n): string => $n->toString(), $node->implements) : [];
         sort($implements);
         $result = ['kind' => match (true) {
-            $node instanceof Node\Stmt\Interface_ => 'interface', $node instanceof Node\Stmt\Trait_ => 'trait', $node instanceof Node\Stmt\Enum_ => 'enum', default => 'class',
-        }, ...$meta, 'final' => $node instanceof Node\Stmt\Class_ && $node->isFinal(), 'readonly' => $node instanceof Node\Stmt\Class_ && $node->isReadonly(), 'abstract' => $node instanceof Node\Stmt\Class_ && $node->isAbstract(), 'extends' => $this->directExtends($type), 'implements' => $implements, 'uses' => $this->directTraits($type), 'doc' => $doc, ...$members, 'enum_backing' => $node instanceof Node\Stmt\Enum_ ? $node->scalarType?->toString() : null, 'enum_cases' => $cases];
+            $node instanceof Interface_ => 'interface', $node instanceof Trait_ => 'trait', $node instanceof Enum_ => 'enum', default => 'class',
+        }, ...$meta, 'final' => $node instanceof Class_ && $node->isFinal(), 'readonly' => $node instanceof Class_ && $node->isReadonly(), 'abstract' => $node instanceof Class_ && $node->isAbstract(), 'extends' => $this->directExtends($type), 'implements' => $implements, 'uses' => $this->directTraits($type), 'doc' => $doc, ...$members, 'enum_backing' => $node instanceof Enum_ ? $node->scalarType?->toString() : null, 'enum_cases' => $cases];
         unset($this->resolving[$name]);
 
         return $this->records[$name] = $result;
@@ -674,63 +706,63 @@ final class SurfaceScanner
     }
 
     /** @param list<string> $docs */
-    private function ambiguousNative(SourceType $type, Node\Identifier|Node\Name|Node\ComplexType|null $node, array $docs, string $path): void
+    private function ambiguousNative(SourceType $type, Identifier|Name|ComplexType|null $node, array $docs, string $path): void
     {
-        if ($node instanceof Node\NullableType) {
-            $this->ambiguousNative($type, $node->type, $docs, $path);
+        if ($node instanceof NullableType) {
+            $this->ambiguousNative(type: $type, node: $node->type, docs: $docs, path: $path);
 
             return;
         }
 
-        if ($node instanceof Node\UnionType || $node instanceof Node\IntersectionType) {
+        if ($node instanceof UnionType || $node instanceof IntersectionType) {
             foreach ($node->types as $part) {
-                $this->ambiguousNative($type, $part, $docs, $path);
+                $this->ambiguousNative(type: $type, node: $part, docs: $docs, path: $path);
             }
 
             return;
         }
 
-        if ($node !== null && (! $node instanceof Node\Identifier || ! in_array($node->toString(), ['mixed', 'object', 'array', 'iterable'], true))) {
+        if ($node !== null && (! $node instanceof Identifier || ! in_array($node->toString(), ['mixed', 'object', 'array', 'iterable'], true))) {
             return;
         }
 
         if ($docs === [] || preg_match('/^(?:mixed|object|array|iterable|list|non-empty-list|non-empty-array)(?:\\s|$)/', implode(' ', $docs)) === 1) {
-            $this->error($type, 'API-UNTYPED-PAYLOAD', $path, 'Ambiguous native payload requires a concrete PHPDoc type or bounded template');
+            $this->error(type: $type, code: 'API-UNTYPED-PAYLOAD', path: $path, message: 'Ambiguous native payload requires a concrete PHPDoc type or bounded template');
         }
     }
 
-    private function expression(?Node\Expr $node): ?string
+    private function expression(?Expr $node): ?string
     {
         return $node === null ? null : $this->printer->prettyPrintExpr($node);
     }
 
-    private function native(SourceType $type, Node\Identifier|Node\Name|Node\ComplexType|null $node, string $path): ?string
+    private function native(SourceType $type, Identifier|Name|ComplexType|null $node, string $path): ?string
     {
         if ($node === null) {
             return null;
         }
 
-        if ($node instanceof Node\NullableType) {
-            return '?'.$this->native($type, $node->type, $path.'.nullable');
+        if ($node instanceof NullableType) {
+            return '?'.$this->native(type: $type, node: $node->type, path: $path.'.nullable');
         }
 
-        if ($node instanceof Node\UnionType || $node instanceof Node\IntersectionType) {
-            return '('.implode($node instanceof Node\UnionType ? '|' : '&', array_map(fn ($n): ?string => $this->native($type, $n, $path.'.type'), $node->types)).')';
+        if ($node instanceof UnionType || $node instanceof IntersectionType) {
+            return '('.implode($node instanceof UnionType ? '|' : '&', array_map(fn ($n): ?string => $this->native(type: $type, node: $n, path: $path.'.type'), $node->types)).')';
         }
 
-        if (! $node instanceof Node\Name && ! $node instanceof Node\Identifier) {
-            $this->error($type, 'API-UNRESOLVED-TYPE', $path, 'Unsupported native type');
+        if (! $node instanceof Name && ! $node instanceof Identifier) {
+            $this->error(type: $type, code: 'API-UNRESOLVED-TYPE', path: $path, message: 'Unsupported native type');
 
             return null;
         }
         $name = $node->toString();
 
-        if ($node instanceof Node\Name) {
-            $name = $node instanceof Node\Name\FullyQualified ? $name : $type->resolve($name);
+        if ($node instanceof Name) {
+            $name = $node instanceof FullyQualified ? $name : $type->resolve($name);
             $this->payloads[$type->name][] = ['target' => $name, 'path' => $path, 'line' => $node->getStartLine()];
         }
 
-        return $node instanceof Node\Name && in_array($node->toString(), ['self', 'static', 'parent'], true) ? $node->toString().'('.$name.')' : $name;
+        return $node instanceof Name && in_array($node->toString(), ['self', 'static', 'parent'], true) ? $node->toString().'('.$name.')' : $name;
     }
 
     /** @return array<string, list<string>> */
@@ -753,18 +785,18 @@ final class SurfaceScanner
 
                 if ($source !== null && $source->name !== $type->name && ! isset($this->resolving['alias:'.$source->name])) {
                     $this->resolving['alias:'.$source->name] = true;
-                    $this->doc($source, $source->node, 'class');
+                    $this->doc(type: $source, node: $source->node, path: 'class');
                     unset($this->resolving['alias:'.$source->name]);
                 }
                 $alias = $source !== null ? ($this->aliases[$source->name][$tag->value->importedAlias] ?? null) : null;
 
                 if ($alias === null) {
-                    $this->error($type, 'API-UNRESOLVED-TYPE', $path.'.alias', 'Unresolved imported type alias');
+                    $this->error(type: $type, code: 'API-UNRESOLVED-TYPE', path: $path.'.alias', message: 'Unresolved imported type alias');
                 } else {
-                    $alias = (new Doc\NodeTraverser([new Doc\NodeVisitor\CloningVisitor]))->traverse([$alias])[0];
+                    $alias = new Doc\NodeTraverser([new Doc\NodeVisitor\CloningVisitor])->traverse([$alias])[0];
 
-                    if ($alias instanceof Doc\Type\TypeNode) {
-                        $this->walkDoc($source, $alias, 'class.alias', $this->aliases[$source->name] ?? [], [], $source->node->getStartLine());
+                    if ($alias instanceof TypeNode) {
+                        $this->walkDoc(type: $source, node: $alias, path: 'class.alias', aliases: $this->aliases[$source->name] ?? [], visiting: [], line: $source->node->getStartLine());
                         // Expansion can replace a leaf alias with a union or a generic tree.
                         // Reparse its normalized form so a later import never mistakes that tree for a class name.
                         $aliases[$tag->value->importedAs ?? $tag->value->importedAlias] = $this->typeParser->parse(new TokenIterator($this->lexer->tokenize((string) $alias)));
@@ -773,13 +805,13 @@ final class SurfaceScanner
             }
         }
 
-        if ($node instanceof Node\Stmt\ClassLike) {
+        if ($node instanceof ClassLike) {
             $this->aliases[$type->name] = $aliases;
         }
         $out = [];
         foreach ($parsed->getTags() as $tag) {
             if ($tag->value instanceof Doc\PhpDoc\InvalidTagValueNode) {
-                $this->error($type, 'API-UNRESOLVED-TYPE', $path.'.'.$tag->name, 'Malformed PHPDoc', $node->getStartLine());
+                $this->error(type: $type, code: 'API-UNRESOLVED-TYPE', path: $path.'.'.$tag->name, message: 'Malformed PHPDoc', line: $node->getStartLine());
 
                 continue;
             }
@@ -791,13 +823,13 @@ final class SurfaceScanner
 
                 // Prose-only tags are irrelevant; unknown tags promising types fail closed.
                 if (preg_match('/(?:param|return|var|throws|method|property|type|template|extends|implements|use)/', $tag->name) === 1) {
-                    $this->error($type, 'API-UNRESOLVED-TYPE', $path.'.'.$tag->name, 'Unsupported type tag');
+                    $this->error(type: $type, code: 'API-UNRESOLVED-TYPE', path: $path.'.'.$tag->name, message: 'Unsupported type tag');
                 }
 
                 continue;
             }
-            $value = (new Doc\NodeTraverser([new Doc\NodeVisitor\CloningVisitor]))->traverse([$tag->value])[0];
-            $this->walkDoc($type, $value, $path.'.'.$tag->name, $aliases, [], $node->getStartLine());
+            $value = new Doc\NodeTraverser([new Doc\NodeVisitor\CloningVisitor])->traverse([$tag->value])[0];
+            $this->walkDoc(type: $type, node: $value, path: $path.'.'.$tag->name, aliases: $aliases, visiting: [], line: $node->getStartLine());
 
             if (property_exists($value, 'description')) {
                 $value->description = '';
@@ -815,7 +847,8 @@ final class SurfaceScanner
         return $out;
     }
 
-    /** @param array<string, Doc\Type\TypeNode> $aliases
+    /**
+     * @param  array<string, TypeNode>  $aliases
      * @param  list<string>  $visiting
      */
     private function walkDoc(SourceType $type, Doc\Node $node, string $path, array $aliases, array $visiting, int $line, bool $genericBase = false): void
@@ -823,15 +856,15 @@ final class SurfaceScanner
         if ($node instanceof Doc\Type\IdentifierTypeNode) {
             if (isset($aliases[$node->name])) {
                 if (in_array($node->name, $visiting, true)) {
-                    $this->error($type, 'API-UNRESOLVED-TYPE', $path, 'Cyclic type alias '.$node->name, $line);
+                    $this->error(type: $type, code: 'API-UNRESOLVED-TYPE', path: $path, message: 'Cyclic type alias '.$node->name, line: $line);
 
                     return;
                 }
-                $alias = (new Doc\NodeTraverser([new Doc\NodeVisitor\CloningVisitor]))->traverse([$aliases[$node->name]])[0];
-                $this->walkDoc($type, $alias, $path.'.alias('.$node->name.')', $aliases, [...$visiting, $node->name], $line);
+                $alias = new Doc\NodeTraverser([new Doc\NodeVisitor\CloningVisitor])->traverse([$aliases[$node->name]])[0];
+                $this->walkDoc(type: $type, node: $alias, path: $path.'.alias('.$node->name.')', aliases: $aliases, visiting: [...$visiting, $node->name], line: $line);
                 $node->name = (string) $alias;
             } elseif (($this->metadata[$type->name]['layer'] ?? '') === 'api' && (in_array($node->name, ['mixed', 'object'], true) || (! $genericBase && in_array($node->name, ['array', 'iterable', 'list', 'non-empty-list', 'non-empty-array'], true)))) {
-                $this->error($type, 'API-UNTYPED-PAYLOAD', $path, 'Ambiguous nested payload '.$node->name, $line);
+                $this->error(type: $type, code: 'API-UNTYPED-PAYLOAD', path: $path, message: 'Ambiguous nested payload '.$node->name, line: $line);
             } elseif (! in_array(strtolower($node->name), self::BUILTINS, true)) {
                 $resolved = $type->resolve($node->name);
                 $node->name = '\\'.$resolved;
@@ -848,7 +881,7 @@ final class SurfaceScanner
         }
 
         if ($node instanceof Doc\Type\InvalidTypeNode) {
-            $this->error($type, 'API-UNRESOLVED-TYPE', $path, 'Invalid PHPDoc type', $line);
+            $this->error(type: $type, code: 'API-UNRESOLVED-TYPE', path: $path, message: 'Invalid PHPDoc type', line: $line);
 
             return;
         }
@@ -859,11 +892,11 @@ final class SurfaceScanner
             }
 
             if ($value instanceof Doc\Node) {
-                $this->walkDoc($type, $value, $path.'.'.$key, $aliases, $visiting, $line, $node instanceof Doc\Type\GenericTypeNode && $key === 'type');
+                $this->walkDoc(type: $type, node: $value, path: $path.'.'.$key, aliases: $aliases, visiting: $visiting, line: $line, genericBase: $node instanceof Doc\Type\GenericTypeNode && $key === 'type');
             } elseif (is_array($value)) {
                 foreach ($value as $i => $child) {
                     if ($child instanceof Doc\Node) {
-                        $this->walkDoc($type, $child, $path.'.'.$key.'.'.$i, $aliases, $visiting, $line);
+                        $this->walkDoc(type: $type, node: $child, path: $path.'.'.$key.'.'.$i, aliases: $aliases, visiting: $visiting, line: $line);
                     }
                 }
             }
@@ -877,31 +910,31 @@ final class SurfaceScanner
         $marked = in_array($meta['layer'], ['api', 'spi-implement', 'spi-call'], true);
         $propertyRecords = $this->records[$type->name]['properties'] ?? [];
         $publicData = is_array($propertyRecords) && array_any($propertyRecords, static fn (mixed $property): bool => is_array($property) && ($property['visibility'] ?? '') === 'public');
-        $data = $meta['layer'] === 'api' && ! $this->isThrowable($type->name, []) && ($publicData || str_contains($type->name, '\\Data\\'));
+        $data = $meta['layer'] === 'api' && ! $this->isThrowable(name: $type->name, visited: []) && ($publicData || str_contains($type->name, '\\Data\\'));
         $event = $meta['layer'] === 'spi-call' && str_contains($type->name, '\\Events\\');
 
-        if (($data || $event) && $node instanceof Node\Stmt\Class_ && (! $node->isReadonly() || ! $node->isFinal())) {
-            $this->error($type, 'API-MUTABLE-DATA', 'declaration', 'Data and event payloads must be final readonly');
+        if (($data || $event) && $node instanceof Class_ && (! $node->isReadonly() || ! $node->isFinal())) {
+            $this->error(type: $type, code: 'API-MUTABLE-DATA', path: 'declaration', message: 'Data and event payloads must be final readonly');
         }
         foreach ($this->payloads[$type->name] ?? [] as $reference) {
-            if (! $this->visibleReference($type->name, $reference['path'], $meta['layer'] === 'spi-implement')) {
+            if (! $this->visibleReference(name: $type->name, path: $reference['path'], protected: $meta['layer'] === 'spi-implement')) {
                 continue;
             }
             $target = $this->lookup($reference['target']);
 
             if ($target === null && ! $this->isNativeType($reference['target'])) {
-                $this->error($type, 'API-UNRESOLVED-TYPE', $reference['path'], $reference['target'], $reference['line']);
+                $this->error(type: $type, code: 'API-UNRESOLVED-TYPE', path: $reference['path'], message: $reference['target'], line: $reference['line']);
             } elseif ($target !== null && $target->owner !== $type->owner && str_contains($target->name, '\\Internal\\') && $marked) {
-                $this->error($type, 'API-INTERNAL-TYPE', $reference['path'], $target->name, $reference['line']);
+                $this->error(type: $type, code: 'API-INTERNAL-TYPE', path: $reference['path'], message: $target->name, line: $reference['line']);
             }
 
             if ($target !== null && $target->owner !== $type->owner && $target->owner !== '@vendor' && ($this->metadata[$target->name]['layer'] ?? '') === 'unclassified') {
-                $this->error($type, 'API-IMPORT', $reference['path'], $target->name, $reference['line']);
+                $this->error(type: $type, code: 'API-IMPORT', path: $reference['path'], message: $target->name, line: $reference['line']);
             }
         }
         $bases = $this->parents($type);
 
-        if ($node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Enum_) {
+        if ($node instanceof Class_ || $node instanceof Enum_) {
             foreach ($node->implements as $interface) {
                 $bases[] = $interface->toString();
             }
@@ -910,14 +943,14 @@ final class SurfaceScanner
             $target = $this->lookup($base);
 
             if ($target !== null && $target->owner !== $type->owner && ($this->metadata[$target->name]['layer'] ?? '') === 'api') {
-                $this->error($type, 'API-IMPLEMENT', 'extends/implements', $base);
+                $this->error(type: $type, code: 'API-IMPLEMENT', path: 'extends/implements', message: $base);
             }
         }
 
         if (str_starts_with($meta['layer'], 'spi-') && ! $event) {
             foreach ($this->payloads[$type->name] ?? [] as $reference) {
-                if ($this->isModelOrCollection($reference['target'], []) && (! str_contains($type->name, '\\Laravel\\') || ! str_contains($node->getDocComment()?->getText() ?? '', '@corex-model-extension'))) {
-                    $this->error($type, 'API-MODEL-SPI', $reference['path'], 'Model extension requires Laravel placement and @corex-model-extension', $reference['line']);
+                if ($this->isModelOrCollection(name: $reference['target'], visited: []) && (! str_contains($type->name, '\\Laravel\\') || ! str_contains($node->getDocComment()?->getText() ?? '', '@corex-model-extension'))) {
+                    $this->error(type: $type, code: 'API-MODEL-SPI', path: $reference['path'], message: 'Model extension requires Laravel placement and @corex-model-extension', line: $reference['line']);
                 }
             }
         }
@@ -932,11 +965,11 @@ final class SurfaceScanner
                 $docs = json_encode($property['doc'] ?? [], JSON_THROW_ON_ERROR);
 
                 if ($native === null || (is_string($native) && preg_match('/(?:^|[?(&|])(?:mixed|object)(?:$|[)|&])/', $native) === 1) || (is_string($native) && str_contains($native, 'array') && preg_match('/(?:array\s*[<{]|list\s*<)/', $docs) !== 1)) {
-                    $this->error($type, 'API-UNTYPED-PAYLOAD', 'properties.'.$name, 'Payload needs a concrete scalar/list/shape/value type');
+                    $this->error(type: $type, code: 'API-UNTYPED-PAYLOAD', path: 'properties.'.$name, message: 'Payload needs a concrete scalar/list/shape/value type');
                 }
 
                 if (($property['static'] ?? false) === true || ($property['readonly'] ?? false) !== true) {
-                    $this->error($type, 'API-MUTABLE-DATA', 'properties.'.$name, 'Mutable payload field');
+                    $this->error(type: $type, code: 'API-MUTABLE-DATA', path: 'properties.'.$name, message: 'Mutable payload field');
                 }
             }
         }
@@ -983,31 +1016,31 @@ final class SurfaceScanner
 
             if ($native === null || (is_string($native) && preg_match('/(?:^|[?(&|])(?:mixed|object)(?:$|[)|&])/', $native) === 1)
                 || (is_string($native) && str_contains($native, 'array') && ($docs === [] || preg_match('/(?<![a-zA-Z0-9_\\\\])(?:mixed|object)(?![a-zA-Z0-9_])/', $description) === 1))) {
-                $this->error($origin, 'API-UNTYPED-PAYLOAD', $path.' → properties.'.$field, 'Reachable payload field requires a closed value type');
+                $this->error(type: $origin, code: 'API-UNTYPED-PAYLOAD', path: $path.' → properties.'.$field, message: 'Reachable payload field requires a closed value type');
             }
         }
         foreach ($this->payloads[$name] ?? [] as $reference) {
-            if (! $this->visibleReference($name, $reference['path'], false)) {
+            if (! $this->visibleReference(name: $name, path: $reference['path'], protected: false)) {
                 continue;
             }
             $targetName = $reference['target'];
 
-            if ((str_contains($reference['path'], '@throws') && $this->isThrowable($targetName, [])) || (str_starts_with($reference['path'], 'inherited(') && $this->isThrowable($name, []))) {
+            if ((str_contains($reference['path'], '@throws') && $this->isThrowable(name: $targetName, visited: [])) || (str_starts_with($reference['path'], 'inherited(') && $this->isThrowable(name: $name, visited: []))) {
                 continue;
             }
             $target = $this->lookup($targetName);
             $next = $path.' → '.$reference['path'].' → '.$targetName;
 
             if (str_contains($targetName, '\\Internal\\')) {
-                $this->error($origin, 'API-INTERNAL-TYPE', $next, $targetName, $reference['line']);
+                $this->error(type: $origin, code: 'API-INTERNAL-TYPE', path: $next, message: $targetName, line: $reference['line']);
             }
 
-            if (in_array($targetName, ['stdClass', 'DateTime', 'DateTimeInterface'], true) || ($target !== null && $target->owner === '@vendor' && ! $target->node instanceof Node\Stmt\Enum_ && ! str_contains($reference['path'], '@throws')) || $this->isModelOrCollection($targetName, []) || ($target !== null && $target->node instanceof Node\Stmt\Class_ && ! $this->isThrowable($targetName, []) && $target->node->getProperties() !== [] && (! $target->node->isFinal() || ! $target->node->isReadonly()))) {
-                $this->error($origin, 'API-PAYLOAD', $next, 'Model, collection or mutable object payload: '.$targetName, $reference['line']);
+            if (in_array($targetName, ['stdClass', 'DateTime', 'DateTimeInterface'], true) || ($target !== null && $target->owner === '@vendor' && ! $target->node instanceof Enum_ && ! str_contains($reference['path'], '@throws')) || $this->isModelOrCollection(name: $targetName, visited: []) || ($target !== null && $target->node instanceof Class_ && ! $this->isThrowable(name: $targetName, visited: []) && $target->node->getProperties() !== [] && (! $target->node->isFinal() || ! $target->node->isReadonly()))) {
+                $this->error(type: $origin, code: 'API-PAYLOAD', path: $next, message: 'Model, collection or mutable object payload: '.$targetName, line: $reference['line']);
             }
 
             if ($target !== null && $target->owner !== '@vendor') {
-                $this->walkPayload($origin, $target->name, $visited, $next);
+                $this->walkPayload(origin: $origin, name: $target->name, visited: $visited, path: $next);
             }
         }
     }
@@ -1015,7 +1048,7 @@ final class SurfaceScanner
     private function isNativeType(string $name): bool
     {
         return (class_exists($name, false) || interface_exists($name, false))
-            && (new ReflectionClass($name))->isInternal();
+            && new ReflectionClass($name)->isInternal();
     }
 
     /** @param list<string> $visited */
@@ -1033,19 +1066,14 @@ final class SurfaceScanner
         if ($type === null) {
             return false;
         }
-        foreach ($this->parents($type) as $parent) {
-            if ($this->isThrowable($parent, [...$visited, $name])) {
-                return true;
-            }
-        }
 
-        return false;
+        return array_any($this->parents($type), fn ($parent) => $this->isThrowable(name: $parent, visited: [...$visited, $name]));
     }
 
     /** @param list<string> $visited */
     private function isModelOrCollection(string $name, array $visited): bool
     {
-        if (in_array($name, ['Illuminate\\Database\\Eloquent\\Model', 'Illuminate\\Support\\Collection', 'Illuminate\\Support\\LazyCollection', 'Illuminate\\Database\\Eloquent\\Collection'], true)) {
+        if (in_array($name, [Model::class, Collection::class, LazyCollection::class, \Illuminate\Database\Eloquent\Collection::class], true)) {
             return true;
         }
 
@@ -1057,13 +1085,8 @@ final class SurfaceScanner
         if ($type === null) {
             return false;
         }
-        foreach ($this->parents($type) as $parent) {
-            if ($this->isModelOrCollection($parent, [...$visited, $name])) {
-                return true;
-            }
-        }
 
-        return false;
+        return array_any($this->parents($type), fn ($parent) => $this->isModelOrCollection(name: $parent, visited: [...$visited, $name]));
     }
 
     private function validateReferences(string $root): void
@@ -1109,7 +1132,7 @@ final class SurfaceScanner
             }
 
             if (($internal && ! $allowed) || ($this->metadata[$target->name]['layer'] ?? '') === 'unclassified') {
-                $this->diagnostics[] = new SurfaceDiagnostic($internal ? 'API-INTERNAL-TYPE' : 'API-IMPORT', $reference['file'], $reference['line'], $target->name, 'reference', 'Cross-owner reference from '.$reference['owner']);
+                $this->diagnostics[] = new SurfaceDiagnostic(code: $internal ? 'API-INTERNAL-TYPE' : 'API-IMPORT', file: $reference['file'], line: $reference['line'], symbol: $target->name, path: 'reference', message: 'Cross-owner reference from '.$reference['owner']);
             }
         }
     }

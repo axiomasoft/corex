@@ -77,7 +77,7 @@ final class IdempotentInvocationTest extends TestCase
         Schema::dropIfExists('sys_api_idempotency');
         Schema::dropIfExists('idempotent_effects');
 
-        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
         Schema::create('idempotent_effects', static function (Blueprint $table): void {
             $table->id();
             $table->string('value');
@@ -89,7 +89,7 @@ final class IdempotentInvocationTest extends TestCase
         $this->inner = new EffectInvokerFixture($this->connection);
         $this->authorizer = new ReplayAuthorizerFixture;
         $this->operationAuthorizer = new OperationAuthorizerFixture;
-        $this->modules = new ModuleFixture(app(RegistryCompiler::class)->compile([], installedPackages: []));
+        $this->modules = new ModuleFixture(resolve(RegistryCompiler::class)->compile([], installedPackages: []));
     }
 
     protected function tearDown(): void
@@ -219,8 +219,8 @@ final class IdempotentInvocationTest extends TestCase
             modules: $this->modules,
             authorizer: $this->operationAuthorizer,
             replayAuthorizer: $this->authorizer,
-            errors: app(ErrorMapper::class),
-            problems: app(ProblemRegistry::class),
+            errors: resolve(ErrorMapper::class),
+            problems: resolve(ProblemRegistry::class),
         );
     }
 

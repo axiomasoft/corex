@@ -26,6 +26,6 @@ final class InvalidScopePayload extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::InvalidScopePayload, ErrorCategory::Validation, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::InvalidScopePayload, category: ErrorCategory::Validation, retryable: false);
     }
 }

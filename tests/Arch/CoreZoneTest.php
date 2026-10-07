@@ -2,6 +2,23 @@
 
 declare(strict_types=1);
 
+use CoreX\Audit\Internal\AuditLog;
+use CoreX\Audit\Internal\AuditObserver;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Database\Contracts\SchemaSets;
+use CoreX\Database\Enums\SchemaLifecycle;
+use CoreX\Database\Enums\SchemaScope;
+use CoreX\Database\Exceptions\SchemaSetException;
+use CoreX\Messaging\Events\DomainEvent;
+use CoreX\Messaging\Internal\DomainEventDefaults;
+use CoreX\Observability\Contracts\TracePropagation;
+use CoreX\Observability\Data\OperationContext;
+use CoreX\Panels\SavedViews\Internal\SqlSavedViewRepository;
+use CoreX\Settings\Data\SettingsScope;
+use CoreX\Settings\Enums\SettingScope;
 use CoreX\Tests\Support\SourceScanner;
 
 // P6.2 — zone arch gate (D32/D101). Matrix is copied from the design, not read at runtime.
@@ -67,65 +84,65 @@ const CORE_ZONE_E_BASEMODEL = 'packages/core/src/Database/Laravel/BaseModel.php'
  */
 const CORE_ZONE_EXACT_IMPORTS = [
     'packages/core/src/Modules/Laravel/LifecycleRegistrar.php' => [
-        'CoreX\\Database\\Contracts\\SchemaSets',
-        'CoreX\\Database\\Enums\\SchemaLifecycle',
-        'CoreX\\Database\\Enums\\SchemaScope',
-        'CoreX\\Database\\Exceptions\\SchemaSetException',
+        SchemaSets::class,
+        SchemaLifecycle::class,
+        SchemaScope::class,
+        SchemaSetException::class,
     ],
-    'packages/core/src/Context/Internal/ImpersonationGuard.php' => ['CoreX\\Audit\\Internal\\AuditLog'],
+    'packages/core/src/Context/Internal/ImpersonationGuard.php' => [AuditLog::class],
     'packages/core/src/Data/Data/DataScope.php' => [
-        'CoreX\\Context\\Data\\TenantContext',
+        TenantContext::class,
     ],
     'packages/core/src/Messaging/Events/DomainEvent.php' => [
-        'CoreX\\Context\\Data\\TenantContext',
-        'CoreX\\Messaging\\Internal\\DomainEventDefaults',
+        TenantContext::class,
+        DomainEventDefaults::class,
     ],
     'packages/core/src/Messaging/Internal/DomainEventDefaults.php' => [
-        'CoreX\\Context\\Data\\TenantContext',
-        'CoreX\\Context\\Contracts\\TenantContextResolver',
+        TenantContext::class,
+        TenantContextResolver::class,
     ],
     'packages/core/src/Features/Events/FeatureFlagToggled.php' => [
-        'CoreX\Settings\Data\SettingsScope',
+        SettingsScope::class,
 
-        'CoreX\\Messaging\\Events\\DomainEvent',
+        DomainEvent::class,
     ],
     'packages/core/src/Features/Internal/DatabaseFeatureFlags.php' => [
-        'CoreX\Settings\Data\SettingsScope',
-        'CoreX\\Settings\\Enums\\SettingScope',
+        SettingsScope::class,
+        SettingScope::class,
     ],
     'packages/core/src/Context/Internal/GuardedTenantContextRestorer.php' => [
-        'CoreX\\Context\\Data\\TenantContext',
+        TenantContext::class,
     ],
     'packages/core/src/Context/Internal/NullTenancyManager.php' => [
-        'CoreX\\Context\\Data\\AccountRef',
-        'CoreX\\Context\\Data\\TenantContext',
-        'CoreX\\Context\\Data\\WorkspaceRef',
+        AccountRef::class,
+        TenantContext::class,
+        WorkspaceRef::class,
     ],
     'packages/core/src/Context/Internal/SingleAccountResolver.php' => [
-        'CoreX\\Context\\Data\\AccountRef',
-        'CoreX\\Context\\Data\\TenantContext',
+        AccountRef::class,
+        TenantContext::class,
     ],
     'packages/core/src/Departments/Events/DepartmentMoved.php' => [
-        'CoreX\\Messaging\\Events\\DomainEvent',
+        DomainEvent::class,
     ],
     'packages/core/src/Features/Contracts/FeatureFlags.php' => [
-        'CoreX\Settings\Data\SettingsScope',
+        SettingsScope::class,
     ],
     'packages/core/src/Settings/Events/SettingChanged.php' => [
-        'CoreX\\Messaging\\Events\\DomainEvent',
+        DomainEvent::class,
     ],
     'packages/core/src/Messaging/Contracts/TraceContextBridge.php' => [
-        'CoreX\Observability\Data\OperationContext',
+        OperationContext::class,
     ],
     'packages/core/src/Messaging/Internal/NullTraceContextBridge.php' => [
-        'CoreX\Observability\Data\OperationContext',
+        OperationContext::class,
     ],
     'packages/core/src/Messaging/Internal/OpenTelemetryTraceContextBridge.php' => [
-        'CoreX\\Observability\\Contracts\\TracePropagation',
-        'CoreX\Observability\Data\OperationContext',
+        TracePropagation::class,
+        OperationContext::class,
     ],
     'packages/core/src/Modules/Internal/Audit/AuditCapabilityWiring.php' => [
-        'CoreX\\Audit\\Internal\\AuditObserver',
+        AuditObserver::class,
     ],
 ];
 
@@ -394,7 +411,7 @@ test('foreign files do not import zone Internal (R-Z2)', function (): void {
 test('R-Z1 planting in Foundation RecordRef names the file and symbol', function (): void {
     $line = coreZonePlant(
         'packages/core/src/Data/Data/RecordRef.php',
-        'CoreX\\Panels\\SavedViews\\Internal\\SqlSavedViewRepository',
+        SqlSavedViewRepository::class,
         rz1Offenders(...),
     );
 
@@ -406,7 +423,7 @@ test('R-Z1 planting in Foundation RecordRef names the file and symbol', function
 test('R-Z1 planting in TenancyContracts AccountRef names the file and symbol', function (): void {
     $line = coreZonePlant(
         'packages/core/src/Context/Data/AccountRef.php',
-        'CoreX\\Panels\\SavedViews\\Internal\\SqlSavedViewRepository',
+        SqlSavedViewRepository::class,
         rz1Offenders(...),
     );
 
@@ -418,7 +435,7 @@ test('R-Z1 planting in TenancyContracts AccountRef names the file and symbol', f
 test('R-Z2 planting in ActorType names the file and symbol', function (): void {
     $line = coreZonePlant(
         'packages/core/src/Audit/Enums/ActorType.php',
-        'CoreX\\Panels\\SavedViews\\Internal\\SqlSavedViewRepository',
+        SqlSavedViewRepository::class,
         rz2Offenders(...),
     );
 

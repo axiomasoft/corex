@@ -77,7 +77,7 @@ function introIntrospection(
 ): ReadRegistryIntrospection {
     return new ReadRegistryIntrospection(
         registry: $registry,
-        activationGate: $gate ?? app(ModuleActivationGate::class),
+        activationGate: $gate ?? resolve(ModuleActivationGate::class),
         cachePath: $path,
         failIfMissing: $failIfMissing,
     );
@@ -100,7 +100,7 @@ function introCompileFixture(string $path): CompiledModuleRegistry
             Api::entity('dem.widget'),
         ]);
 
-    $compiled = app(RegistryCompiler::class)->compile([$manifest], installedPackages: ['example/demo']);
+    $compiled = resolve(RegistryCompiler::class)->compile([$manifest], installedPackages: ['example/demo']);
     $module = CompiledModule::fromManifest($manifest);
     CompiledModuleRegistry::writeAtomic($path, [$module], $compiled);
 
@@ -275,5 +275,5 @@ it('resolves RegistryIntrospection from the container', function (): void {
         ]),
     ));
 
-    expect(app(RegistryIntrospection::class))->toBeInstanceOf(ReadRegistryIntrospection::class);
+    expect(resolve(RegistryIntrospection::class))->toBeInstanceOf(ReadRegistryIntrospection::class);
 });

@@ -24,15 +24,15 @@ use Illuminate\Contracts\Container\Container;
 use LogicException;
 
 /** Transport-neutral activation, authorization and exactly-once handler call. */
-final class DefaultOperationInvoker implements OperationInvoker
+final readonly class DefaultOperationInvoker implements OperationInvoker
 {
     public function __construct(
-        private readonly ModuleRegistry $modules,
-        private readonly ClientScopeAuthorizer $clientScopes,
-        private readonly OperationAuthorizer $authorizer,
-        private readonly OperationFieldAuthorizer $fields,
-        private readonly Container $container,
-        private readonly ?BudgetAdmission $budget = null,
+        private ModuleRegistry $modules,
+        private ClientScopeAuthorizer $clientScopes,
+        private OperationAuthorizer $authorizer,
+        private OperationFieldAuthorizer $fields,
+        private Container $container,
+        private ?BudgetAdmission $budget = null,
     ) {}
 
     public function invoke(OperationInvocation $invocation): OperationResult
@@ -40,19 +40,19 @@ final class DefaultOperationInvoker implements OperationInvoker
         $operation = $invocation->operation;
 
         if (! $operation->executionSupported) {
-            throw new ApiError(OperationsErrorCode::OperationUnsupported, 404, 'Operation is not executable.');
+            throw new ApiError(errorCode: OperationsErrorCode::OperationUnsupported, status: 404, message: 'Operation is not executable.');
         }
 
-        if (! $this->modules->isActive($operation->module, $invocation->context->tenant())) {
-            throw new ApiError(OperationsErrorCode::ModuleUnavailable, 404, 'Operation not found.');
+        if (! $this->modules->isActive(name: $operation->module, ctx: $invocation->context->tenant())) {
+            throw new ApiError(errorCode: OperationsErrorCode::ModuleUnavailable, status: 404, message: 'Operation not found.');
         }
 
-        if (! $this->clientScopes->allows($operation, $invocation->context)) {
-            throw new ApiError(OperationsErrorCode::ScopeRequired, 403, 'The client lacks a required operation scope.');
+        if (! $this->clientScopes->allows(operation: $operation, context: $invocation->context)) {
+            throw new ApiError(errorCode: OperationsErrorCode::ScopeRequired, status: 403, message: 'The client lacks a required operation scope.');
         }
 
-        if (! $this->authorizer->allows($operation, $invocation->context)) {
-            throw new ApiError(OperationsErrorCode::AccessDenied, 403, 'Operation is not permitted.');
+        if (! $this->authorizer->allows(operation: $operation, context: $invocation->context)) {
+            throw new ApiError(errorCode: OperationsErrorCode::AccessDenied, status: 403, message: 'Operation is not permitted.');
         }
 
         $forbiddenWrite = DeclaredFieldAuthorizer::firstForbiddenWrite(
@@ -79,7 +79,7 @@ final class DefaultOperationInvoker implements OperationInvoker
                 $handler = $this->container->make($invocation->operation->handler);
 
                 if (! $handler instanceof OperationHandler) {
-                    throw new ApiError(CoreErrorCode::InternalError, 500, 'Operation could not be completed.');
+                    throw new ApiError(errorCode: CoreErrorCode::InternalError, status: 500, message: 'Operation could not be completed.');
                 }
 
                 $admitHandler();
@@ -98,7 +98,7 @@ final class DefaultOperationInvoker implements OperationInvoker
 
             $result = $this->budget === null
                 ? $this->admitOnce(static fn (): OperationResult => $effect(static function (): void {}))
-                : $this->budget->invoke($invocation, $effect);
+                : $this->budget->invoke(invocation: $invocation, effect: $effect);
         } finally {
             $this->restore($previous);
         }

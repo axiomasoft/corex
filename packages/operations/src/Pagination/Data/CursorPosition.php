@@ -38,7 +38,7 @@ final readonly class CursorPosition
         }
 
         foreach ($this->values as $index => $boundary) {
-            $comparison = self::compare($candidate[$index], $boundary, $this->types[$index]);
+            $comparison = self::compare(candidate: $candidate[$index], boundary: $boundary, type: $this->types[$index]);
 
             if ($comparison === 0) {
                 continue;

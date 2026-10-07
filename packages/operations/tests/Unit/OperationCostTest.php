@@ -25,25 +25,15 @@ $project = static function (Api $api): Operation {
     return OperationFactory::fromDeclaration($api, 'fingerprint');
 };
 
-$input = static function (
-    int $pageRows = 0,
-    int $selectedFields = 0,
-    int $relationNodes = 0,
-    int $attributeFilters = 0,
-    bool $highlight = false,
-    int $exportRows = 0,
-    int $sideEffects = 0,
-): CostInput {
-    return new CostInput(
-        pageRows: $pageRows,
-        selectedFields: $selectedFields,
-        relationNodes: $relationNodes,
-        attributeFilters: $attributeFilters,
-        highlight: $highlight,
-        exportRows: $exportRows,
-        sideEffects: $sideEffects,
-    );
-};
+$input = (static fn (int $pageRows = 0, int $selectedFields = 0, int $relationNodes = 0, int $attributeFilters = 0, bool $highlight = false, int $exportRows = 0, int $sideEffects = 0): CostInput => new CostInput(
+    pageRows: $pageRows,
+    selectedFields: $selectedFields,
+    relationNodes: $relationNodes,
+    attributeFilters: $attributeFilters,
+    highlight: $highlight,
+    exportRows: $exportRows,
+    sideEffects: $sideEffects,
+));
 
 it('estimates table-driven weights, page, export, field, relation, filter, highlight and side-effect cases', function () use ($schema, $project, $input): void {
     $estimator = new DeclaredCostEstimator;

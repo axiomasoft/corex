@@ -16,6 +16,6 @@ final class BudgetStoreUnavailable extends CodedException
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(OperationsErrorCode::BudgetStoreUnavailable, ErrorCategory::Internal, retryable: false);
+        return new ErrorDescriptor(code: OperationsErrorCode::BudgetStoreUnavailable, category: ErrorCategory::Internal, retryable: false);
     }
 }

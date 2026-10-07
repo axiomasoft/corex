@@ -27,7 +27,7 @@ beforeEach(function (): void {
     $this->migrateAutSchema();
     $this->migrateFixtures();
 
-    app(ArrayEntityRegistry::class)->register(new EntityDefinition(
+    resolve(ArrayEntityRegistry::class)->register(new EntityDefinition(
         handle: 'crm.deal', model: Deal::class, table: 'deals', module: 'corex/access-tests',
         labelSingular: 'Deal', labelPlural: 'Deals',
         capabilities: [Capability::Ownable, Capability::WorkspaceScoped], fields: [], titleAttribute: null,
@@ -51,23 +51,23 @@ it('honours an active native direct grant on capability, record and builder path
     $principal = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
     $record = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => (string) Str::uuid7()]);
     nativeGrant($principal);
-    $checker = app(AccessChecker::class);
+    $checker = resolve(AccessChecker::class);
 
     expect($checker->allowed($principal, 'crm.deal', 'read'))->toBeTrue()
         ->and($checker->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::None)
         ->and($checker->canOnRecord($principal, 'read', $record))->toBeTrue()
-        ->and(app(ScopeResolver::class)->apply(Deal::query(), $principal, 'crm.deal', 'read')->pluck('id')->all())->toBe([$record->id]);
+        ->and(resolve(ScopeResolver::class)->apply(Deal::query(), $principal, 'crm.deal', 'read')->pluck('id')->all())->toBe([$record->id]);
 });
 
 it('denies expired and revoked native direct grants', function (string $expiresAt, string $revokedAt): void {
     $principal = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
     $record = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => $principal->principalId()]);
     nativeGrant($principal, $expiresAt ?: null, $revokedAt ?: null);
-    $checker = app(AccessChecker::class);
+    $checker = resolve(AccessChecker::class);
 
     expect($checker->allowed($principal, 'crm.deal', 'read'))->toBeFalse()
         ->and($checker->canOnRecord($principal, 'read', $record))->toBeFalse()
-        ->and(app(ScopeResolver::class)->apply(Deal::query(), $principal, 'crm.deal', 'read')->pluck('id')->all())->toBeEmpty();
+        ->and(resolve(ScopeResolver::class)->apply(Deal::query(), $principal, 'crm.deal', 'read')->pluck('id')->all())->toBeEmpty();
 })->with([
     'expired' => [now()->subMinute()->toDateTimeString(), ''],
     'revoked' => ['', now()->subMinute()->toDateTimeString()],
@@ -86,7 +86,7 @@ it('denies all four access paths for an inactive entity even with a matrix row a
     RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principal->principalId()]);
     $record = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => $principal->principalId()]);
     nativeGrant($principal, entityKey: $entityKey);
-    $checker = app(AccessChecker::class);
+    $checker = resolve(AccessChecker::class);
 
     $recordForCheck = $registered ? $record : new class extends Model {};
 
@@ -94,7 +94,7 @@ it('denies all four access paths for an inactive entity even with a matrix row a
         ->and($checker->allowed($principal, $entityKey, 'read'))->toBeFalse()
         ->and($checker->scopeFor($principal, $entityKey, 'read'))->toBe(Scope::None)
         ->and($checker->canOnRecord($principal, 'read', $recordForCheck))->toBeFalse()
-        ->and(app(ScopeResolver::class)->apply(Deal::query(), $principal, $entityKey, 'read')->pluck('id')->all())->toBeEmpty();
+        ->and(resolve(ScopeResolver::class)->apply(Deal::query(), $principal, $entityKey, 'read')->pluck('id')->all())->toBeEmpty();
 })->with([
     'registered entity with disabled module' => [true],
     'unknown entity key' => [false],

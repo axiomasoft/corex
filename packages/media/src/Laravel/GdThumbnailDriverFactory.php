@@ -23,10 +23,10 @@ final class GdThumbnailDriverFactory
         return new GdThumbnailDriver(new ConversionProfile(
             key: 'thumbnail',
             version: 'gd-v1',
-            maxWidth: self::limit($thumbnail, 'max_width', 4096),
-            maxHeight: self::limit($thumbnail, 'max_height', 4096),
-            maxPixels: self::limit($thumbnail, 'max_pixels', 20_000_000),
-            maxOutputBytes: self::limit($thumbnail, 'max_output_bytes', 10 * 1024 * 1024),
+            maxWidth: self::limit(thumbnail: $thumbnail, key: 'max_width', default: 4096),
+            maxHeight: self::limit(thumbnail: $thumbnail, key: 'max_height', default: 4096),
+            maxPixels: self::limit(thumbnail: $thumbnail, key: 'max_pixels', default: 20_000_000),
+            maxOutputBytes: self::limit(thumbnail: $thumbnail, key: 'max_output_bytes', default: 10 * 1024 * 1024),
         ));
     }
 

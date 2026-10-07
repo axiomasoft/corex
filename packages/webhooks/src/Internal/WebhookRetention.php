@@ -76,7 +76,7 @@ final readonly class WebhookRetention
         $bodyCutoff = $now->sub(new DateInterval('PT'.$this->bodyRetentionSeconds.'S'));
         $historyCutoff = $now->sub(new DateInterval('PT'.$this->historyRetentionSeconds.'S'));
 
-        $bodyIds = $this->terminal($scope, $now)
+        $bodyIds = $this->terminal(scope: $scope, now: $now)
             ->where('body', '!=', '')
             ->where(function (Builder $query) use ($bodyCutoff, $now): void {
                 $query->where('expires_at', '<=', $now)
@@ -93,7 +93,7 @@ final readonly class WebhookRetention
                 'expires_at' => $now,
             ]);
 
-        $historyIds = $this->terminal($scope, $now)
+        $historyIds = $this->terminal(scope: $scope, now: $now)
             ->where('created_at', '<=', $historyCutoff)
             ->orderBy('id')
             ->limit($limit)
@@ -148,7 +148,7 @@ final readonly class WebhookRetention
             return 0;
         }
 
-        return (new InboxRetention(connection: $this->connection, table: $this->inboxTable))
+        return new InboxRetention(connection: $this->connection, table: $this->inboxTable)
             ->forget(consumer: self::Consumer, messageIds: array_map(
                 static fn (mixed $id): string => is_string($id) ? $id : throw new UnexpectedValueException('Inbox message ID must be a string.'),
                 array_values($ids),

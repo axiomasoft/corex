@@ -29,6 +29,6 @@ final class SettingValueTooLargeException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::SettingValueTooLargeException, ErrorCategory::Validation, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::SettingValueTooLargeException, category: ErrorCategory::Validation, retryable: false);
     }
 }

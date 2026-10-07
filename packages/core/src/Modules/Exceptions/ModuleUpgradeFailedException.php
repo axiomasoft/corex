@@ -36,6 +36,6 @@ final class ModuleUpgradeFailedException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(CoreErrorCode::ModuleUpgradeFailedException, ErrorCategory::Internal, retryable: false);
+        return new ErrorDescriptor(code: CoreErrorCode::ModuleUpgradeFailedException, category: ErrorCategory::Internal, retryable: false);
     }
 }

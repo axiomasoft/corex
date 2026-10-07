@@ -61,7 +61,7 @@ it('migrates and rolls back the three owned catalogue tables on an empty databas
 
     $this->artisan('migrate:rollback', [
         '--database' => 'pgsql',
-        '--path' => app(SchemaSets::class)->get('axiomasoft/corex-custom-fields:tenant')->path,
+        '--path' => resolve(SchemaSets::class)->get('axiomasoft/corex-custom-fields:tenant')->path,
         '--realpath' => true,
         '--step' => 3,
     ])->assertSuccessful();

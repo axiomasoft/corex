@@ -57,10 +57,10 @@ final class Invitation extends Model
         return $this->belongsTo(Workspace::class);
     }
 
-    /** @return BelongsTo<covariant \Illuminate\Database\Eloquent\Model, $this> */
+    /** @return BelongsTo<covariant Model, $this> */
     public function invitedBy(): BelongsTo
     {
-        return UserRelations::belongsTo($this, 'invited_by', null, 'invitedBy');
+        return UserRelations::belongsTo(model: $this, foreignKey: 'invited_by', ownerKey: null, relation: 'invitedBy');
     }
 
     /** @return array<string, string> */

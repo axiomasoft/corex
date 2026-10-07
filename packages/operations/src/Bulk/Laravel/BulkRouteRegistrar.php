@@ -24,26 +24,26 @@ final readonly class BulkRouteRegistrar
     public function submit(): mixed
     {
         return $this->operations()->submit(
-            $this->scope(),
-            $this->clientId(),
-            request()->header('Idempotency-Key'),
-            $this->definition(),
+            scope: $this->scope(),
+            clientId: $this->clientId(),
+            idempotencyKey: request()->header('Idempotency-Key'),
+            definition: $this->definition(),
         );
     }
 
     public function show(string $id): mixed
     {
-        return $this->operations()->show($this->scope(), $this->clientId(), $id);
+        return $this->operations()->show(scope: $this->scope(), clientId: $this->clientId(), id: $id);
     }
 
     public function cancel(string $id): mixed
     {
-        return $this->operations()->cancel($this->scope(), $this->clientId(), $id);
+        return $this->operations()->cancel(scope: $this->scope(), clientId: $this->clientId(), id: $id);
     }
 
     public function result(string $id): mixed
     {
-        return $this->operations()->result($this->scope(), $this->clientId(), $id);
+        return $this->operations()->result(scope: $this->scope(), clientId: $this->clientId(), id: $id);
     }
 
     public function failures(string $id): mixed
@@ -51,22 +51,22 @@ final readonly class BulkRouteRegistrar
         $limit = request()->integer('limit', BulkFailureLimit::DEFAULT);
 
         return $this->operations()->failurePage(
-            $this->scope(),
-            $this->clientId(),
-            $id,
-            request()->query('after'),
-            $limit,
+            scope: $this->scope(),
+            clientId: $this->clientId(),
+            id: $id,
+            afterOrdinal: request()->query('after'),
+            limit: $limit,
         );
     }
 
     private function operations(): BulkOperations
     {
-        return app(BulkOperations::class);
+        return resolve(BulkOperations::class);
     }
 
     private function scope(): DataScope
     {
-        return app(DataScope::class);
+        return resolve(DataScope::class);
     }
 
     private function clientId(): string

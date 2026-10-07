@@ -28,7 +28,7 @@ final class ProblemDefinitions
         }
 
         if ($app->resolved(ProblemRegistry::class)) {
-            throw new ProblemRegistryException(CoreErrorCode::RegistryFrozen, 'ERROR-REGISTRY-FROZEN');
+            throw new ProblemRegistryException(errorCode: CoreErrorCode::RegistryFrozen, diagnostic: 'ERROR-REGISTRY-FROZEN');
         }
         $manifest = json_decode((string) file_get_contents($composerManifest), true, flags: JSON_THROW_ON_ERROR);
         $package = is_array($manifest) ? ($manifest['name'] ?? null) : null;
@@ -41,7 +41,7 @@ final class ProblemDefinitions
             if (! is_string($prefix) || ! str_starts_with($provider, $prefix)) {
                 continue;
             }
-            $file = (new ReflectionClass($provider))->getFileName();
+            $file = new ReflectionClass($provider)->getFileName();
             foreach ((array) $paths as $path) {
                 $directory = is_string($path) ? realpath(dirname($composerManifest).'/'.$path) : false;
 
@@ -53,16 +53,16 @@ final class ProblemDefinitions
         }
 
         if (! is_string($owner) || ! is_string($package) || preg_match('/\A[a-z][a-z0-9]*(?:-[a-z0-9]+)*\z/D', $owner) !== 1 || ! $owned) {
-            throw new ProblemRegistryException(CoreErrorCode::ForeignPrefix, 'ERROR-FOREIGN-OWNER');
+            throw new ProblemRegistryException(errorCode: CoreErrorCode::ForeignPrefix, diagnostic: 'ERROR-FOREIGN-OWNER');
         }
         $app->singleton($binding, static function (Application $app) use ($owner, $provider, $package, $sourceRoots): ProblemContribution {
             $instance = $app->make($provider);
 
             if (! $instance instanceof ProblemDefinitionProvider) {
-                throw new ProblemRegistryException(CoreErrorCode::InvalidDefinition, 'ERROR-INVALID-PROVIDER');
+                throw new ProblemRegistryException(errorCode: CoreErrorCode::InvalidDefinition, diagnostic: 'ERROR-INVALID-PROVIDER');
             }
 
-            return new ProblemContribution($owner, $instance, $package, $sourceRoots);
+            return new ProblemContribution(owner: $owner, provider: $instance, package: $package, sourceRoots: $sourceRoots);
         });
         $app->tag([$binding], ProblemDefinitionProvider::class);
     }

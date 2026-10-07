@@ -39,38 +39,4 @@ final class Filament implements Extender
 
         return $filament;
     }
-
-    /** @param  list<class-string>  $pages */
-    public static function pages(array $pages, string $panel = 'app'): self
-    {
-        $filament = new self;
-        $filament->kind = 'pages';
-        $filament->classes = $pages;
-        $filament->panel = $panel;
-
-        return $filament;
-    }
-
-    /** @param  list<class-string>  $widgets */
-    public static function widgets(array $widgets, string $panel = 'app'): self
-    {
-        $filament = new self;
-        $filament->kind = 'widgets';
-        $filament->classes = $widgets;
-        $filament->panel = $panel;
-
-        return $filament;
-    }
-
-    /** @param  class-string  $tabClass */
-    public static function tab(string $entityHandle, string $tabClass, string $panel = 'app'): self
-    {
-        $filament = new self;
-        $filament->kind = 'tab';
-        $filament->entityHandle = $entityHandle;
-        $filament->classes = [$tabClass];
-        $filament->panel = $panel;
-
-        return $filament;
-    }
 }

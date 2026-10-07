@@ -81,7 +81,7 @@ it('rolls back only the failed row savepoint and continues the batch', function 
     $jobId = '55555555-5555-4555-8555-555555555555';
     $manifest = new SourceManifest('object://imports/4', $hash, 84, 'csv', '1', 'UTF-8', ',', '"', '', $hash);
     insertJob(id: $jobId, hash: $hash, mode: 'import');
-    $source = new class($manifest) implements TransferSource
+    $source = new readonly class($manifest) implements TransferSource
     {
         public function __construct(private SourceManifest $manifest) {}
 
@@ -95,7 +95,7 @@ it('rolls back only the failed row savepoint and continues the batch', function 
             return new RowBatch([new SourceRow('1', ['id' => 'one'], $source->sha256), new SourceRow('2', ['id' => 'two'], $source->sha256)], new SourceCursor('2', '84', $source->sha256), false);
         }
     };
-    $mapper = new class($hash) implements RecordMapper
+    $mapper = new readonly class($hash) implements RecordMapper
     {
         public function __construct(private string $hash) {}
 
@@ -214,7 +214,7 @@ function record(string $hash): CanonicalRecord
 
 function runner(SourceManifest $manifest, CanonicalRecord $record, ?stdClass $counter = null, string $outcome = 'applied', bool $allowed = true): SqlTransferExecutor
 {
-    $source = new class($manifest) implements TransferSource
+    $source = new readonly class($manifest) implements TransferSource
     {
         public function __construct(private SourceManifest $manifest) {}
 
@@ -228,7 +228,7 @@ function runner(SourceManifest $manifest, CanonicalRecord $record, ?stdClass $co
             return new RowBatch([new SourceRow('1', ['name' => 'Ada'], $source->sha256)], new SourceCursor('1', '42', $source->sha256), false);
         }
     };
-    $mapper = new class($record) implements RecordMapper
+    $mapper = new readonly class($record) implements RecordMapper
     {
         public function __construct(private CanonicalRecord $record) {}
 
@@ -237,7 +237,7 @@ function runner(SourceManifest $manifest, CanonicalRecord $record, ?stdClass $co
             return new MappingResult('mapped', $this->record, null);
         }
     };
-    $target = new class($counter ?? (object) ['applied' => 0], $outcome) implements TransferSink
+    $target = new readonly class($counter ?? (object) ['applied' => 0], $outcome) implements TransferSink
     {
         public function __construct(private stdClass $counter, private string $outcome) {}
 

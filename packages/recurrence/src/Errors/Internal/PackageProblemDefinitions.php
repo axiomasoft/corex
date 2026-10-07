@@ -14,7 +14,7 @@ final class PackageProblemDefinitions implements ProblemDefinitionProvider
 {
     public function definitions(): iterable
     {
-        yield new ProblemDefinition(RecurrenceErrorCode::StaleCursorException, 'urn:corex:problem:recurrence.stale_cursor_exception', 409, 'Stale cursor exception.', false, ErrorCategory::Conflict, []);
-        yield new ProblemDefinition(RecurrenceErrorCode::UnsupportedEnvironmentException, 'urn:corex:problem:recurrence.unsupported_environment_exception', 422, 'Unsupported environment exception.', false, ErrorCategory::Unsupported, []);
+        yield new ProblemDefinition(code: RecurrenceErrorCode::StaleCursorException, type: 'urn:corex:problem:recurrence.stale_cursor_exception', defaultStatus: 409, title: 'Stale cursor exception.', retryable: false, category: ErrorCategory::Conflict, detailKeys: []);
+        yield new ProblemDefinition(code: RecurrenceErrorCode::UnsupportedEnvironmentException, type: 'urn:corex:problem:recurrence.unsupported_environment_exception', defaultStatus: 422, title: 'Unsupported environment exception.', retryable: false, category: ErrorCategory::Unsupported, detailKeys: []);
     }
 }

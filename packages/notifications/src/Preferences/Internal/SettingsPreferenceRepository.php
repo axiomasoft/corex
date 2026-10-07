@@ -15,13 +15,13 @@ use CoreX\Settings\Contracts\SettingsRepository;
 use CoreX\Settings\Data\SettingsScope;
 use Illuminate\Database\ConnectionInterface;
 
-final class SettingsPreferenceRepository implements PreferenceRepository
+final readonly class SettingsPreferenceRepository implements PreferenceRepository
 {
-    private const NAMESPACE = 'corex.notifications';
+    private const string NAMESPACE = 'corex.notifications';
 
     public function __construct(
-        private readonly ConnectionInterface $connection,
-        private readonly SettingsRepository $settings,
+        private ConnectionInterface $connection,
+        private SettingsRepository $settings,
     ) {}
 
     public function get(NotificationContext $context, string $eventType): NotificationPreference
@@ -31,9 +31,9 @@ final class SettingsPreferenceRepository implements PreferenceRepository
             ->where('kind', $recipient['kind'])
             ->where('id', $recipient['id'])
             ->first();
-        $value = JsonDocuments::decode($this->settings->get(self::NAMESPACE, $eventType, $this->scope($recipient['id']), JsonDocuments::capture($this->defaultPreference())));
+        $value = JsonDocuments::decode($this->settings->get(namespace: self::NAMESPACE, key: $eventType, scope: $this->scope($recipient['id']), default: JsonDocuments::capture($this->defaultPreference())));
 
-        return $this->preference($value, Value::text($state === null ? '1' : Value::text($state->preference_revision)));
+        return $this->preference(value: $value, version: Value::text($state === null ? '1' : Value::text($state->preference_revision)));
     }
 
     public function set(NotificationContext $context, PreferenceInput $input): NotificationPreference
@@ -59,7 +59,7 @@ final class SettingsPreferenceRepository implements PreferenceRepository
 
             $next = (string) (Value::integer($version) + 1);
             $value = ['channels' => $input->channels, 'digest' => $input->digest];
-            $this->settings->set(self::NAMESPACE, $input->eventType, JsonDocuments::capture($value), $this->scope($recipient['id']));
+            $this->settings->set(namespace: self::NAMESPACE, key: $input->eventType, value: JsonDocuments::capture($value), scope: $this->scope($recipient['id']));
             $this->connection->table('ntf_recipient_state')
                 ->where('kind', $recipient['kind'])
                 ->where('id', $recipient['id'])

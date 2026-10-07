@@ -34,8 +34,8 @@ function boxesProvider(): BoxesReferenceProvider
 {
     return new BoxesReferenceProvider(
         fixturePath: __DIR__.'/../fixtures/reference/boxes.json',
-        normalizer: app(FixtureReferenceNormalizer::class),
-        cursors: app(ReferenceCursorCodec::class),
+        normalizer: resolve(FixtureReferenceNormalizer::class),
+        cursors: resolve(ReferenceCursorCodec::class),
     );
 }
 
@@ -43,8 +43,8 @@ function compactProvider(): CompactReferenceProvider
 {
     return new CompactReferenceProvider(
         fixturePath: __DIR__.'/../fixtures/reference/compact.json',
-        normalizer: app(FixtureReferenceNormalizer::class),
-        cursors: app(ReferenceCursorCodec::class),
+        normalizer: resolve(FixtureReferenceNormalizer::class),
+        cursors: resolve(ReferenceCursorCodec::class),
     );
 }
 
@@ -90,8 +90,8 @@ it('GEO-02 exposes manifest provenance and hashes', function (): void {
 });
 
 it('GEO-03 rejects malformed fixture publication and keeps active snapshot unchanged', function (): void {
-    $importer = app(DatasetImporter::class);
-    $normalizer = app(FixtureReferenceNormalizer::class);
+    $importer = resolve(DatasetImporter::class);
+    $normalizer = resolve(FixtureReferenceNormalizer::class);
     $parsed = $normalizer->parse(provider: 'broken', fixturePath: __DIR__.'/../fixtures/reference/boxes.json');
     $brokenManifest = $parsed['manifest'];
 
@@ -148,7 +148,7 @@ it('GEO-06 normalizes bounded UTF-8 queries without merging ambiguous names', fu
     ));
 
     expect(JsonDocuments::list($page->records))->toHaveCount(1)
-        ->and(fn () => app(FixtureReferenceNormalizer::class)->normalizeQuery(str_repeat('a', 201)))
+        ->and(fn () => resolve(FixtureReferenceNormalizer::class)->normalizeQuery(str_repeat('a', 201)))
         ->toThrow(SchemaMismatchException::class);
 });
 
@@ -190,7 +190,7 @@ it('GEO-10 supports exact and prefix modes on sqlite fixtures', function (): voi
 });
 
 it('GEO-04 publishes fixture dataset through SQL importer', function (): void {
-    $normalizer = app(FixtureReferenceNormalizer::class);
+    $normalizer = resolve(FixtureReferenceNormalizer::class);
     $parsed = $normalizer->parse(provider: 'boxes', fixturePath: __DIR__.'/../fixtures/reference/boxes.json');
     $candidate = new DatasetCandidate(
         manifest: $parsed['manifest'],
@@ -198,18 +198,18 @@ it('GEO-04 publishes fixture dataset through SQL importer', function (): void {
         byteLength: filesize(__DIR__.'/../fixtures/reference/boxes.json'),
     );
 
-    $receipt = app(DatasetImporter::class)->publish(
+    $receipt = resolve(DatasetImporter::class)->publish(
         scope: geoScope(),
         candidate: $candidate,
         expected: new DatasetGeneration(expectedSnapshot: null, generation: 0),
     );
 
     expect($receipt->status)->toBe('published')
-        ->and(app(GeographyProvider::class)->describe(geoScope())->snapshotId)->toBe('boxes-fixture-v1');
+        ->and(resolve(GeographyProvider::class)->describe(geoScope())->snapshotId)->toBe('boxes-fixture-v1');
 });
 
 it('GEO-05 rejects expired snapshot pins', function (): void {
-    $provider = app(GeographyProvider::class);
+    $provider = resolve(GeographyProvider::class);
 
     expect(fn () => $provider->query(geoScope(), new GeographyQuery(
         kind: 'country', countryKey: null, parentKey: null, placeKey: null, query: null, locale: 'en', snapshotId: 'missing-snapshot', mode: 'exact', limit: 10,

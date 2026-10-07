@@ -22,9 +22,9 @@ use CoreX\Modules\Internal\Settings\DefaultSettingDefinition;
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class ModuleManifest
 {
-    private const COMPOSER_NAME_PATTERN = '/^[a-z0-9]([_.-]?[a-z0-9]+)*\/[a-z0-9](([_.]|-{1,2})?[a-z0-9]+)*$/';
+    private const string COMPOSER_NAME_PATTERN = '/^[a-z0-9]([_.-]?[a-z0-9]+)*\/[a-z0-9](([_.]|-{1,2})?[a-z0-9]+)*$/';
 
-    private const TABLE_PREFIX_PATTERN = '/^[a-z]{2,3}$/';
+    private const string TABLE_PREFIX_PATTERN = '/^[a-z]{2,3}$/';
 
     public readonly string $composerName;
 
@@ -116,7 +116,7 @@ final class ModuleManifest
     public function tablePrefix(string $prefix): self
     {
         if (preg_match(self::TABLE_PREFIX_PATTERN, $prefix) !== 1) {
-            throw InvalidManifestException::invalidTablePrefix($this->composerName, $prefix);
+            throw InvalidManifestException::invalidTablePrefix(composerName: $this->composerName, prefix: $prefix);
         }
 
         $this->tablePrefix = $prefix;
@@ -216,7 +216,7 @@ final class ModuleManifest
     {
         foreach (['point' => $point, 'targetId' => $targetId, 'replacementId' => $replacementId] as $field => $value) {
             if (trim($value) === '') {
-                throw InvalidManifestException::emptyReplacement($this->composerName, $field);
+                throw InvalidManifestException::emptyReplacement(composerName: $this->composerName, field: $field);
             }
         }
 

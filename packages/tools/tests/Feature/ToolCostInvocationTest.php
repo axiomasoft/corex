@@ -89,7 +89,7 @@ final class ToolCostInvocationTest extends TestCase
         $this->tenants->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
         $this->principal = new IdentityFixture;
         Schema::dropIfExists('sys_api_idempotency');
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
     }
 
     protected function tearDown(): void
@@ -102,7 +102,7 @@ final class ToolCostInvocationTest extends TestCase
     public function test_http_and_exposed_tool_share_cost_metadata_without_scope_keys(): void
     {
         $schema = $this->schema();
-        $registry = app(RegistryCompiler::class)->compile([
+        $registry = resolve(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
                 Api::operation('notes.read', 'GET', '/notes', ToolCostInvocationCostInvocationHandler::class, 'notes.read', $schema, $schema)
                     ->cost(['base' => 2]),
@@ -200,7 +200,7 @@ final class ToolCostInvocationTest extends TestCase
             ],
         ]);
         $connection = DB::connection('api_budget_admission');
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:budget'], null);
+        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:budget'], null);
 
         return InvocationFixtures::sqlBudget(
             connection: $connection,

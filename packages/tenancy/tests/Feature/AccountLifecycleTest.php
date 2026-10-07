@@ -60,7 +60,7 @@ beforeEach(function (): void {
 
     $probe = lcConnectTo(LC_TEMPLATE_DB);
     $fixtureSql = file_get_contents(__DIR__.'/../Stubs/tpl_tenant_v1/schema.sql');
-    foreach (array_filter(array_map('trim', explode(';', (string) $fixtureSql))) as $statement) {
+    foreach (array_filter(array_map(trim(...), explode(';', (string) $fixtureSql))) as $statement) {
         $probe->statement($statement);
     }
     DB::disconnect('probe_'.LC_TEMPLATE_DB);
@@ -150,13 +150,13 @@ function makeLcIdentityRow(): string
 
 function lcLifecycle(?ImpersonationService $impersonation = null, ?TenantDatabaseLifecycle $tenantDatabaseLifecycle = null): AccountLifecycle
 {
-    $templateIntegrityVerifier = app(TemplateIntegrityVerifier::class);
+    $templateIntegrityVerifier = resolve(TemplateIntegrityVerifier::class);
 
     return new AccountLifecycle(
-        lifecycle: app(AccountLifecyclePolicy::class), connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), connectionFactory: app(ConnectionFactory::class), hostCache: app(HostResolverCacheInvalidator::class),
+        lifecycle: resolve(AccountLifecyclePolicy::class), connections: resolve(ConnectionResolverInterface::class), clock: resolve(ClockInterface::class), events: resolve(Dispatcher::class), connectionFactory: resolve(ConnectionFactory::class), hostCache: resolve(HostResolverCacheInvalidator::class),
         centralConnection: 'pgsql',
         pendingPool: new PendingPool(
-            connections: app(ConnectionResolverInterface::class),
+            connections: resolve(ConnectionResolverInterface::class),
             centralConnection: 'pgsql',
             provisioner: new DatabaseTenantProvisioner(
                 centralConnection: 'pgsql',
@@ -165,7 +165,7 @@ function lcLifecycle(?ImpersonationService $impersonation = null, ?TenantDatabas
             templateIntegrityVerifier: $templateIntegrityVerifier,
         ),
         fsm: new AccountLifecycleFsm,
-        tenantDatabaseLifecycle: $tenantDatabaseLifecycle ?? new DatabaseTenantLifecycle(connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), centralConnection: 'pgsql'),
+        tenantDatabaseLifecycle: $tenantDatabaseLifecycle ?? new DatabaseTenantLifecycle(connections: resolve(ConnectionResolverInterface::class), clock: resolve(ClockInterface::class), events: resolve(Dispatcher::class), centralConnection: 'pgsql'),
         impersonationGuard: app()->makeWith(ImpersonationGuard::class, ['impersonation' => $impersonation ?? new NullImpersonationService]),
         templateIntegrityVerifier: $templateIntegrityVerifier,
     );
@@ -176,16 +176,16 @@ function activateLcAccount(): AccountRef
 {
     $clusterId = makeLcClusterRow();
     makeLcTemplateRow();
-    $templateIntegrityVerifier = app(TemplateIntegrityVerifier::class);
-    (new PendingPool(
-        connections: app(ConnectionResolverInterface::class),
+    $templateIntegrityVerifier = resolve(TemplateIntegrityVerifier::class);
+    new PendingPool(
+        connections: resolve(ConnectionResolverInterface::class),
         centralConnection: 'pgsql',
         provisioner: new DatabaseTenantProvisioner(
             centralConnection: 'pgsql',
             templateIntegrityVerifier: $templateIntegrityVerifier,
         ),
         templateIntegrityVerifier: $templateIntegrityVerifier,
-    ))->createPending(1, $clusterId);
+    )->createPending(1, $clusterId);
 
     $ownerId = makeLcIdentityRow();
     $slug = 'acme-'.Str::random(6);
@@ -307,7 +307,7 @@ it('purge() after a ready export drops the DB, soft-deletes the account, removes
     file_put_contents($archive, 'test archive');
     $digest = hash_file('sha256', $archive);
     $database = new DatabaseTenantLifecycle(
-        connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class),
+        connections: resolve(ConnectionResolverInterface::class), clock: resolve(ClockInterface::class), events: resolve(Dispatcher::class),
         centralConnection: 'pgsql',
         writer: static fn (): array => ['storage_path' => $archive, 'size_bytes' => 12],
         verifier: static fn (string $path, int $size): bool => $path === $archive && is_file($path) && is_readable($path) && filesize($path) === $size && hash_equals($digest, (string) hash_file('sha256', $path)),
@@ -347,7 +347,7 @@ it('default export cannot become ready or authorize purge', function (): void {
 it('refuses ready and DROP when an archive is unavailable', function (): void {
     $account = activateLcAccount();
     $database = new DatabaseTenantLifecycle(
-        connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class),
+        connections: resolve(ConnectionResolverInterface::class), clock: resolve(ClockInterface::class), events: resolve(Dispatcher::class),
         centralConnection: 'pgsql',
         writer: static fn (): array => ['storage_path' => '/missing/archive.dump', 'size_bytes' => 12],
         verifier: static fn (): bool => false,
@@ -389,7 +389,7 @@ it('invalidates a warmed host cache entry only when a status transition commits'
     app()->forgetInstance(TenancyOptions::class);
     $account = activateLcAccount();
     lcLifecycle()->activate($account);
-    $resolver = app(HostAccountResolver::class);
+    $resolver = resolve(HostAccountResolver::class);
     $host = $account->slug.'.'.config('corex-tenancy.platform_domain');
     $key = HostAccountResolver::key(strtolower($host));
     expect($resolver->resolve($host))->toBe($account->id)

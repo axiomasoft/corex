@@ -14,7 +14,7 @@ use CoreX\Operations\Versioning\Data\ApiProfile;
 use InvalidArgumentException;
 
 /** @internal Installed-code v1 snapshot. It does not record tenant activation. */
-final class ContractSnapshotBuilder
+final readonly class ContractSnapshotBuilder
 {
     public const array FILES = ['errors.json', 'openapi.json', 'operations.json', 'manifest.json'];
 
@@ -44,14 +44,14 @@ final class ContractSnapshotBuilder
     ];
 
     /** @var list<ContractSnapshotSection> */
-    private readonly array $sections;
+    private array $sections;
 
     /** @param iterable<ContractSnapshotSection> $sections */
     public function __construct(
-        private readonly OperationRegistry $operations,
-        private readonly OpenApiDocumentGenerator $openApi,
-        private readonly ApiProfile $profile,
-        private readonly ProblemRegistry $problems,
+        private OperationRegistry $operations,
+        private OpenApiDocumentGenerator $openApi,
+        private ApiProfile $profile,
+        private ProblemRegistry $problems,
         iterable $sections = [],
     ) {
         $items = [];
@@ -98,7 +98,7 @@ final class ContractSnapshotBuilder
             throw new InvalidArgumentException('OpenAPI snapshot is not a document.');
         }
 
-        $openapi = $this->mergeOpenApi($normalized, $contour);
+        $openapi = $this->mergeOpenApi(document: $normalized, contour: $contour);
         $bodies = [
             'errors.json' => SnapshotJson::pretty($this->errors($errorContracts)),
             'openapi.json' => SnapshotJson::pretty($openapi),
@@ -283,7 +283,7 @@ final class ContractSnapshotBuilder
         $operations = [];
 
         foreach ($rows as $row) {
-            $operations[] = $this->contour($row[0], $row[1], $row[2], $row[3], $row[4], $row[5], $row[6], $row[7], $major, $row[8], $row[9]);
+            $operations[] = $this->contour(id: $row[0], method: $row[1], path: $row[2], mode: $row[3], idempotency: $row[4], effect: $row[5], ability: $row[6], status: $row[7], major: $major, request: $row[8], response: $row[9]);
         }
 
         return $operations;

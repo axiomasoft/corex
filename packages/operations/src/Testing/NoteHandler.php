@@ -27,9 +27,9 @@ final class NoteHandler implements OperationHandler
 
         match ($parameters['id'] ?? '') {
             'foreign' => throw new ModelNotFoundException('private table secret'),
-            'conflict' => throw new ApiError(OperationsErrorCode::Conflict, 409, 'Note already exists.'),
+            'conflict' => throw new ApiError(errorCode: OperationsErrorCode::Conflict, status: 409, message: 'Note already exists.'),
             'broken' => throw new RuntimeException('SQLSTATE secret_password private_table'),
-            'hidden' => throw (new AuthorizationException('secret hidden'))->asNotFound(),
+            'hidden' => throw new AuthorizationException('secret hidden')->asNotFound(),
             'unauthorized' => throw new AuthorizationException('secret policy'),
             'unauthenticated' => throw new AuthenticationException('secret identity'),
             'invalid' => throw ValidationException::withMessages(['title' => ['Invalid title.']]),

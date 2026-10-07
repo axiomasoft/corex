@@ -31,7 +31,7 @@ final class IntlServiceProvider extends ServiceProvider
     {
         $this->app->tag([IntlSchemaSets::class], SchemaSetProvider::class);
 
-        ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
+        ProblemDefinitions::register(app: $this->app, composerManifest: __DIR__.'/../composer.json', provider: PackageProblemDefinitions::class);
 
         $this->app->tag([IntlConfigSection::class], ConfigReportSection::class);
 
@@ -58,6 +58,6 @@ final class IntlServiceProvider extends ServiceProvider
 
     private static function registerMoneyCast(FieldCastRegistry $casts): void
     {
-        $casts->register(MoneyCast::class, 'money');
+        $casts->register(castClass: MoneyCast::class, type: 'money');
     }
 }

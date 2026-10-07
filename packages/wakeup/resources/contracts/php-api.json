@@ -212,14 +212,14 @@
             "properties": [],
             "constants": {
                 "POINT": {
-                    "type": null,
+                    "type": "string",
                     "value": "\\CoreX\\Wakeup\\Internal\\WakeupHandlerRegistry::Point",
                     "visibility": "public",
                     "final": false,
                     "doc": []
                 },
                 "SCHEMA": {
-                    "type": null,
+                    "type": "string",
                     "value": "\\CoreX\\Wakeup\\Internal\\WakeupHandlerRegistry::Schema",
                     "visibility": "public",
                     "final": false,

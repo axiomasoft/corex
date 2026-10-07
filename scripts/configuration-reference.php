@@ -329,8 +329,8 @@ function resolveOptionsField(string $key, string $file, array $classes, array &$
             return '';
         }
 
-        $properties = array_map(static fn (ReflectionProperty $property): string => $property->getName(), (new ReflectionClass($class))->getProperties(ReflectionProperty::IS_PUBLIC));
-        $short = (new ReflectionClass($class))->getShortName();
+        $properties = array_map(static fn (ReflectionProperty $property): string => $property->getName(), new ReflectionClass($class)->getProperties(ReflectionProperty::IS_PUBLIC));
+        $short = new ReflectionClass($class)->getShortName();
 
         if ($override !== null) {
             // `$(reference)`: a documented, non-runtime key (a Composer pin); `$(registrar-read)`: a key read

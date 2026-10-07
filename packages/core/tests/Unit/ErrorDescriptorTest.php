@@ -153,7 +153,7 @@ test('describes error returns the same descriptor', function (): void {
         code: descriptorTestCode('core.field_invalid'),
         category: ErrorCategory::Validation,
     );
-    $failure = new class($descriptor) implements DescribesError
+    $failure = new readonly class($descriptor) implements DescribesError
     {
         public function __construct(private ErrorDescriptor $descriptor) {}
 
@@ -168,7 +168,7 @@ test('describes error returns the same descriptor', function (): void {
 
 function descriptorTestCode(string $value): ErrorCode
 {
-    return new class($value) implements ErrorCode
+    return new readonly class($value) implements ErrorCode
     {
         public function __construct(private string $code) {}
 

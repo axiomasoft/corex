@@ -36,7 +36,7 @@ uses()->group('pg');
 it('uses identical fail-closed capability normalization for record and list checks', function (): void {
     app()->forgetInstance(ArrayEntityRegistry::class);
     app()->forgetInstance(EntityRegistry::class);
-    app(ArrayEntityRegistry::class)->register(new EntityDefinition(
+    resolve(ArrayEntityRegistry::class)->register(new EntityDefinition(
         handle: 'crm.deal', model: Deal::class, table: 'deals', module: 'corex/access-tests',
         labelSingular: 'Deal', labelPlural: 'Deals', capabilities: [], fields: [], titleAttribute: null,
     ));
@@ -46,13 +46,13 @@ it('uses identical fail-closed capability normalization for record and list chec
     $principal = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
     RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principal->principalId()]);
     $deal = new Deal(['owner_id' => $principal->principalId()]);
-    expect(fn () => app(AccessChecker::class)->canOnRecord($principal, 'read', $deal))
+    expect(fn () => resolve(AccessChecker::class)->canOnRecord($principal, 'read', $deal))
         ->toThrow(ScopeCapabilityMismatch::class);
-    expect(fn () => app(ScopeResolver::class)->apply(Deal::query(), $principal, 'crm.deal', 'read'))
+    expect(fn () => resolve(ScopeResolver::class)->apply(Deal::query(), $principal, 'crm.deal', 'read'))
         ->toThrow(ScopeCapabilityMismatch::class);
     DB::table('aut_direct_grants')->insert(['id' => (string) Str::uuid7(), 'principal_type' => 'user', 'principal_id' => $principal->principalId(), 'permission_key' => 'app.crm.deal.read']);
-    expect(app(AccessChecker::class)->canOnRecord($principal, 'read', $deal))->toBeTrue()
-        ->and(app(ScopeResolver::class)->apply(Deal::query(), $principal, 'crm.deal', 'read')->toSql())->not->toContain('owner_id');
+    expect(resolve(AccessChecker::class)->canOnRecord($principal, 'read', $deal))->toBeTrue()
+        ->and(resolve(ScopeResolver::class)->apply(Deal::query(), $principal, 'crm.deal', 'read')->toSql())->not->toContain('owner_id');
 });
 
 it('recomputes scope after replacing an assignment with an equally versioned role', function (): void {
@@ -62,7 +62,7 @@ it('recomputes scope after replacing an assignment with an equally versioned rol
     RoleMatrixRow::query()->create(['role_id' => $broad->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'account']);
     RoleMatrixRow::query()->create(['role_id' => $narrow->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'own']);
     $assignment = RoleAssignment::query()->create(['role_id' => $broad->id, 'principal_type' => 'user', 'principal_id' => $principal->principalId()]);
-    $checker = app(AccessChecker::class);
+    $checker = resolve(AccessChecker::class);
     expect($checker->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Account);
     $assignment->update(['role_id' => $narrow->id]);
     expect($checker->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Own);
@@ -79,7 +79,7 @@ it('does not reuse scope memo when a connection switch exposes identical role ID
         return $context;
     });
     app()->instance(TenancyManager::class, $manager);
-    $checker = app(AccessChecker::class);
+    $checker = resolve(AccessChecker::class);
     expect($checker->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Account);
 
     // Two independent schemas in corex_test stand in for two tenant DBs;
@@ -116,8 +116,8 @@ it('excludes deleted broad roles when a live narrow role still grants access', f
             $role->delete();
         }
     }
-    expect(app(AccessChecker::class)->allowed($principal, 'crm.deal', 'read'))->toBeTrue()
-        ->and(app(AccessChecker::class)->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Own);
+    expect(resolve(AccessChecker::class)->allowed($principal, 'crm.deal', 'read'))->toBeTrue()
+        ->and(resolve(AccessChecker::class)->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Own);
 });
 
 beforeEach(function (): void {
@@ -126,7 +126,7 @@ beforeEach(function (): void {
     $this->migrateFixtures();
     $this->migrateCoreDepartments();
 
-    app(ArrayEntityRegistry::class)->register(new EntityDefinition(
+    resolve(ArrayEntityRegistry::class)->register(new EntityDefinition(
         handle: 'crm.deal',
         model: Deal::class,
         table: 'deals',
@@ -142,17 +142,15 @@ beforeEach(function (): void {
     app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/access-tests']));
 
     $this->compileRole = function (string $roleId): void {
-        app(DatabaseRoleMatrixCompiler::class)->compile($roleId);
+        resolve(DatabaseRoleMatrixCompiler::class)->compile($roleId);
     };
 
-    $this->newRole = function (array $overrides = []): Role {
-        return Role::query()->create(array_merge([
-            'slug' => 'role-'.Str::uuid7(),
-            'name' => 'Role',
-            'is_system' => false,
-            'assignable_to' => [PrincipalType::User->value],
-        ], $overrides));
-    };
+    $this->newRole = (fn (array $overrides = []): Role => Role::query()->create(array_merge([
+        'slug' => 'role-'.Str::uuid7(),
+        'name' => 'Role',
+        'is_system' => false,
+        'assignable_to' => [PrincipalType::User->value],
+    ], $overrides)));
 
     $this->makeUser = function (?string $departmentId = null): string {
         $id = (string) Str::uuid7();
@@ -189,7 +187,7 @@ it('resolves allowed() from a native matrix row and denies scope none', function
     RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principalId]);
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-    $checker = app(AccessChecker::class);
+    $checker = resolve(AccessChecker::class);
 
     expect($checker->allowed($identity, 'crm.deal', 'read'))->toBeTrue()
         ->and($checker->allowed($identity, 'crm.deal', 'delete'))->toBeFalse()
@@ -206,7 +204,7 @@ it('resolves each of the six scope values from a single matching matrix row', fu
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
 
-    expect(app(AccessChecker::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe($scope);
+    expect(resolve(AccessChecker::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe($scope);
 })->with(fn () => Scope::cases());
 
 // B-11 §5.5 — several roles resolve to the MAX weight of their base rows.
@@ -222,7 +220,7 @@ it('resolves the max weight across multiple roles held by the same principal', f
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
 
-    expect(app(AccessChecker::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe(Scope::Workspace);
+    expect(resolve(AccessChecker::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe(Scope::Workspace);
 });
 
 // B-11 §5.5 — a context row REPLACES the base row for its own context, including narrowing it to none.
@@ -236,7 +234,7 @@ it('lets a context row override, and narrow, the base scope for its own context 
     RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principalId]);
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-    $checker = app(AccessChecker::class);
+    $checker = resolve(AccessChecker::class);
 
     expect($checker->scopeFor($identity, 'crm.deal', 'read'))->toBe(Scope::Account)
         ->and($checker->scopeFor($identity, 'crm.deal', 'read', new RecordContext('stage', $stageId)))->toBe(Scope::None)
@@ -252,7 +250,7 @@ it('grants canOnRecord for own scope only when the record belongs to the princip
     RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principalId]);
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-    $checker = app(AccessChecker::class);
+    $checker = resolve(AccessChecker::class);
 
     $ownDeal = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => $principalId]);
     $otherDeal = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => (string) Str::uuid7()]);
@@ -272,7 +270,7 @@ it('grants canOnRecord for account scope regardless of ownership', function (): 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
     $deal = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => (string) Str::uuid7()]);
 
-    expect(app(AccessChecker::class)->canOnRecord($identity, 'read', $deal))->toBeTrue();
+    expect(resolve(AccessChecker::class)->canOnRecord($identity, 'read', $deal))->toBeTrue();
 });
 
 it('matches workspace scope against the active tenancy context, and passes a workspace-less record', function (): void {
@@ -288,7 +286,7 @@ it('matches workspace scope against the active tenancy context, and passes a wor
     RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principalId]);
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-    $checker = app(AccessChecker::class);
+    $checker = resolve(AccessChecker::class);
 
     $matching = Deal::query()->create(['id' => (string) Str::uuid7(), 'workspace_id' => $workspaceId]);
     $other = Deal::query()->create(['id' => (string) Str::uuid7(), 'workspace_id' => $otherWorkspaceId]);
@@ -325,7 +323,7 @@ it('grants department scopes only for real same-department and descendant record
         'null_owner' => Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => null]),
     ];
 
-    $checker = app(AccessChecker::class);
+    $checker = resolve(AccessChecker::class);
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
     $grantedLabels = collect($records)
         ->filter(fn (Deal $record): bool => $checker->canOnRecord($identity, 'read', $record))
@@ -355,7 +353,7 @@ it('denies every department scope to non-user principals through AccessChecker',
 
     $record = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => $ownerId]);
 
-    expect(app(AccessChecker::class)->canOnRecord(new PrincipalIdentity($type, $principalId), 'read', $record))->toBeFalse();
+    expect(resolve(AccessChecker::class)->canOnRecord(new PrincipalIdentity($type, $principalId), 'read', $record))->toBeFalse();
 })->with(fn (): array => collect([PrincipalType::Agent, PrincipalType::ApiKey])->crossJoin([Scope::Dept, Scope::DeptTree])->all());
 
 it('denies department scopes through AccessChecker when department tables are absent', function (Scope $scope): void {
@@ -372,7 +370,7 @@ it('denies department scopes through AccessChecker when department tables are ab
     $record = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => $ownerId]);
     DB::statement('DROP TABLE sys_departments CASCADE');
 
-    expect(app(AccessChecker::class)->canOnRecord(new PrincipalIdentity(PrincipalType::User, $principalId), 'read', $record))->toBeFalse();
+    expect(resolve(AccessChecker::class)->canOnRecord(new PrincipalIdentity(PrincipalType::User, $principalId), 'read', $record))->toBeFalse();
 })->with([Scope::Dept, Scope::DeptTree]);
 
 // Code Guidance — canOnRecord grants via an active direct_grant even with no matching role at all.
@@ -384,7 +382,7 @@ it('grants canOnRecord via an active native direct grant with no matching role',
 
     $deal = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => (string) Str::uuid7()]);
 
-    expect(app(AccessChecker::class)->canOnRecord($identity, 'read', $deal))->toBeTrue();
+    expect(resolve(AccessChecker::class)->canOnRecord($identity, 'read', $deal))->toBeTrue();
 });
 
 // Implementation Rules — an unresolvable entity_key is fail-closed false, never "the whole scope".
@@ -392,7 +390,7 @@ it('denies canOnRecord for a record whose model is not registered in EntityRegis
     $identity = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
     $unregistered = new class extends Model {};
 
-    expect(app(AccessChecker::class)->canOnRecord($identity, 'read', $unregistered))->toBeFalse();
+    expect(resolve(AccessChecker::class)->canOnRecord($identity, 'read', $unregistered))->toBeFalse();
 });
 
 // A native role grants only capabilities present in its matrix, including system roles.
@@ -402,21 +400,21 @@ it('does not grant a system owner role with an empty matrix', function (): void 
     $principalId = (string) Str::uuid7();
     RoleAssignment::query()->create(['role_id' => $owner->id, 'principal_type' => 'user', 'principal_id' => $principalId]);
 
-    expect(app(AccessChecker::class)->allowed(new PrincipalIdentity(PrincipalType::User, $principalId), 'crm.deal', 'read'))->toBeFalse();
+    expect(resolve(AccessChecker::class)->allowed(new PrincipalIdentity(PrincipalType::User, $principalId), 'crm.deal', 'read'))->toBeFalse();
 });
 
 // D103 — a clone of `owner` is not system-flagged and does NOT inherit the wildcard.
 it('does not extend owner-wildcard capability to a non-system clone of owner', function (): void {
     Role::withSystemMutationAllowed(fn () => (new SystemRolesSeeder)->run());
     $owner = Role::query()->where('slug', 'owner')->firstOrFail();
-    $clone = (app(RoleCloner::class))->clone($owner, 'owner-custom-'.Str::uuid7());
+    $clone = (resolve(RoleCloner::class))->clone($owner, 'owner-custom-'.Str::uuid7());
 
     $principalId = (string) Str::uuid7();
     RoleAssignment::query()->create(['role_id' => $clone->id, 'principal_type' => 'user', 'principal_id' => $principalId]);
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
 
-    expect(app(AccessChecker::class)->allowed($identity, 'crm.deal', 'read'))->toBeFalse();
+    expect(resolve(AccessChecker::class)->allowed($identity, 'crm.deal', 'read'))->toBeFalse();
 });
 
 // D101 — a role assigned to one workspace grants ONLY inside that workspace at the source level.
@@ -433,7 +431,7 @@ it('grants allowed() inside the workspace the role was assigned to', function ()
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
 
-    expect(app(AccessChecker::class)->allowed($identity, 'crm.deal', 'read'))->toBeTrue();
+    expect(resolve(AccessChecker::class)->allowed($identity, 'crm.deal', 'read'))->toBeTrue();
 });
 
 it('denies allowed() outside the workspace the role was assigned to', function (): void {
@@ -450,7 +448,7 @@ it('denies allowed() outside the workspace the role was assigned to', function (
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
 
-    expect(app(AccessChecker::class)->allowed($identity, 'crm.deal', 'read'))->toBeFalse();
+    expect(resolve(AccessChecker::class)->allowed($identity, 'crm.deal', 'read'))->toBeFalse();
 });
 
 // Workspace assignment lookup is live against the active native tenancy context.
@@ -465,7 +463,7 @@ it('rechecks native workspace assignments after a workspace switch', function ()
     $principalId = (string) Str::uuid7();
     RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principalId, 'workspace_id' => $workspaceA->id]);
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-    $checker = app(AccessChecker::class);
+    $checker = resolve(AccessChecker::class);
 
     expect($checker->allowed($identity, 'crm.deal', 'read'))->toBeTrue();
     $fakeTenancy->setWorkspace($workspaceB);

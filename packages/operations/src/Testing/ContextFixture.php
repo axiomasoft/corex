@@ -41,7 +41,7 @@ final class ContextFixture implements TenancyManager, TenantContextResolver
 
     public function setWorkspace(?WorkspaceRef $workspace): void
     {
-        $this->value = new TenantContext($this->current()->account, $workspace);
+        $this->value = new TenantContext(account: $this->current()->account, workspace: $workspace);
     }
 
     public function end(): void
@@ -52,7 +52,7 @@ final class ContextFixture implements TenancyManager, TenantContextResolver
     public function runFor(AccountRef $account, ?WorkspaceRef $workspace, Closure $callback): mixed
     {
         $previous = $this->value;
-        $this->value = new TenantContext($account, $workspace);
+        $this->value = new TenantContext(account: $account, workspace: $workspace);
 
         try {
             return $callback();

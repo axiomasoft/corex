@@ -45,7 +45,7 @@ final readonly class AttributeWriteGuard
                 $decision = $this->authorizer->authorize(
                     scope: $scope,
                     entity: $record->entity,
-                    subjectId: $this->resource($scope, $record, $attributeId),
+                    subjectId: $this->resource(scope: $scope, record: $record, attributeId: $attributeId),
                     fields: [$code],
                     action: $action,
                 );
@@ -94,8 +94,8 @@ final readonly class AttributeWriteGuard
 
             if ($patch->expectedSchemaHash === null
                 && ($lifecycle !== 'active'
-                    || count($this->keys($definition, 'read_keys', $code)) !== 1
-                    || count($this->keys($definition, 'write_keys', $code)) !== 1)) {
+                    || count($this->keys(definition: $definition, name: 'read_keys', fallback: $code)) !== 1
+                    || count($this->keys(definition: $definition, name: 'write_keys', fallback: $code)) !== 1)) {
                 $this->deny('attributes.schema.precondition_required');
             }
         }
@@ -159,7 +159,7 @@ final readonly class AttributeWriteGuard
 
     private function deny(string $reasonCode): never
     {
-        $reason = new ScopeDenied(self::DENIED_MESSAGE, reasonCode: $reasonCode);
+        $reason = new ScopeDenied(message: self::DENIED_MESSAGE, reasonCode: $reasonCode);
 
         throw new InvalidAttributeValue(self::DENIED_MESSAGE, previous: $reason);
     }

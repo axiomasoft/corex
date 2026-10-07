@@ -21,8 +21,8 @@ beforeEach(function (): void {
 it('converts a lead into contact, company and deal', function (): void {
     Event::fake([LeadConverted::class]);
 
-    $lead = app(CreateLead::class)->handle(title: 'Inquiry', contactName: 'Jane Doe', email: 'jane@acme.test', companyName: 'Acme', ownerId: $this->crmContext->context->principalId);
-    $contact = app(ConvertLead::class)->handle($lead, $this->pipeline, withCompany: true);
+    $lead = resolve(CreateLead::class)->handle(title: 'Inquiry', contactName: 'Jane Doe', email: 'jane@acme.test', companyName: 'Acme', ownerId: $this->crmContext->context->principalId);
+    $contact = resolve(ConvertLead::class)->handle($lead, $this->pipeline, withCompany: true);
     $lead->refresh();
 
     expect($lead->status)->toBe(LeadStatus::Converted)
@@ -46,8 +46,8 @@ it('converts a lead into contact, company and deal', function (): void {
 });
 
 it('converts a lead without company or deal', function (): void {
-    $lead = app(CreateLead::class)->handle(title: 'No Co', contactName: 'Jane');
-    $contact = app(ConvertLead::class)->handle($lead);
+    $lead = resolve(CreateLead::class)->handle(title: 'No Co', contactName: 'Jane');
+    $contact = resolve(ConvertLead::class)->handle($lead);
     $lead->refresh();
 
     expect($lead->status)->toBe(LeadStatus::Converted)
@@ -58,10 +58,10 @@ it('converts a lead without company or deal', function (): void {
 
 it('returns the same conversion on retry even when passed a stale lead instance', function (): void {
     Event::fake([LeadConverted::class]);
-    $lead = app(CreateLead::class)->handle(title: 'Retry', contactName: 'Jane', companyName: 'Once');
+    $lead = resolve(CreateLead::class)->handle(title: 'Retry', contactName: 'Jane', companyName: 'Once');
     $stale = $lead->fresh();
-    $first = app(ConvertLead::class)->handle($lead, $this->pipeline, withCompany: true);
-    $second = app(ConvertLead::class)->handle($stale, $this->pipeline, withCompany: true);
+    $first = resolve(ConvertLead::class)->handle($lead, $this->pipeline, withCompany: true);
+    $second = resolve(ConvertLead::class)->handle($stale, $this->pipeline, withCompany: true);
     expect($second->id)->toBe($first->id)
         ->and(Contact::query()->count())->toBe(1)
         ->and(Company::query()->count())->toBe(1)

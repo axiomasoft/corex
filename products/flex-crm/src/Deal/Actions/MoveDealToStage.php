@@ -16,9 +16,9 @@ use Illuminate\Validation\ValidationException;
  * Moves a deal to a stage and derives its status from the stage's terminal
  * flags (won/lost), otherwise keeps it open.
  */
-final class MoveDealToStage
+final readonly class MoveDealToStage
 {
-    public function __construct(private readonly ContextGuard $guard) {}
+    public function __construct(private ContextGuard $guard) {}
 
     public function handle(Deal $deal, Stage $stage): Deal
     {
@@ -52,7 +52,7 @@ final class MoveDealToStage
                 throw ValidationException::withMessages(['deal' => 'Stage transition was vetoed.']);
             }
 
-            DealMovedToStage::dispatch($deal, $stage);
+            event(new DealMovedToStage($deal, $stage));
 
             return $deal;
         });

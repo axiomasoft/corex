@@ -32,7 +32,7 @@ final class PaginationRegistrar implements PackageRegistrar
             keyring: $app->make(CursorKeyring::class),
         ));
         $app->scoped(OrderingRegistry::class, static fn (Application $app): OrderingRegistry => OrderingRegistry::fromOperations(
-            (new OperationRegistry($app->make(ModuleRegistry::class)))->all($app->make(ApiOptions::class)->defaultMajor),
+            new OperationRegistry($app->make(ModuleRegistry::class))->all($app->make(ApiOptions::class)->defaultMajor),
         ));
         $app->alias(SignedCursorCodec::class, CursorCodec::class);
         $app->alias(OrderingRegistry::class, \CoreX\Operations\Pagination\Contracts\OrderingRegistry::class);

@@ -13,9 +13,9 @@ use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
 use InvalidArgumentException;
 
-final class SchemaAttributeFilter implements AttributeFilter
+final readonly class SchemaAttributeFilter implements AttributeFilter
 {
-    public function __construct(private readonly DataScopeAuthorizer $authorizer) {}
+    public function __construct(private DataScopeAuthorizer $authorizer) {}
 
     public function compile(DataScope $scope, FieldSnapshot $schema, FilterNode $filter): FilterPlan
     {
@@ -34,7 +34,7 @@ final class SchemaAttributeFilter implements AttributeFilter
         }
 
         $fields = array_fill_keys($codes, true);
-        $this->validate($filter->tree, $fields, 0);
+        $this->validate(node: $filter->tree, fields: $fields, depth: 0);
 
         return new FilterPlan(schemaHash: $schema->schemaHash, tree: $filter->tree);
     }

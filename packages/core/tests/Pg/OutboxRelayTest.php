@@ -36,7 +36,7 @@ function outboxRelayService(
 ): SqlOutboxRelay {
     return new SqlOutboxRelay(
         connection: DB::connection('pgsql'),
-        clock: app(ClockInterface::class),
+        clock: resolve(ClockInterface::class),
         leaseSeconds: $leaseSeconds,
         maxAttempts: $maxAttempts,
         backoffCapSeconds: $backoffCapSeconds,
@@ -62,7 +62,7 @@ function outboxRelayInsertRow(array $overrides = []): string
         metadata: ['trace' => 't1'],
         envelopeVersion: MessageEnvelope::ENVELOPE_VERSION,
     );
-    $now = app(ClockInterface::class)->now();
+    $now = resolve(ClockInterface::class)->now();
     $id = $envelope->messageId;
 
     DB::table('sys_outbox_messages')->insert([
@@ -103,7 +103,7 @@ beforeEach(function (): void {
 it('leases a pending row into publishing with owner, lease window, and attempt count', function (): void {
     $id = outboxRelayInsertRow();
     $relay = outboxRelayService();
-    $now = app(ClockInterface::class)->now();
+    $now = resolve(ClockInterface::class)->now();
 
     $leased = $relay->lease(leaseOwner: OUTBOX_RELAY_OWNER, batchSize: 10);
 
@@ -122,7 +122,7 @@ it('leases a pending row into publishing with owner, lease window, and attempt c
 })->group('pg');
 
 it('does not lease rows with a future available_at', function (): void {
-    $now = app(ClockInterface::class)->now();
+    $now = resolve(ClockInterface::class)->now();
     outboxRelayInsertRow(['available_at' => $now->modify('+1 hour')]);
 
     $leased = outboxRelayService()->lease(leaseOwner: OUTBOX_RELAY_OWNER, batchSize: 10);
@@ -132,7 +132,7 @@ it('does not lease rows with a future available_at', function (): void {
 })->group('pg');
 
 it('reclaims expired publishing rows, marks exhausted leases dead, and fences corrupt envelopes', function (): void {
-    $now = app(ClockInterface::class)->now();
+    $now = resolve(ClockInterface::class)->now();
     $reclaimId = outboxRelayInsertRow([
         'id' => '01932f5a-0000-7000-8000-000000000002',
         'status' => 'publishing',
@@ -223,7 +223,7 @@ function outboxRelayLeasedMessageFromRow(string $id, int $attempt): LeasedMessag
 
 function outboxRelaySeedPublishing(string $id, int $attempt): void
 {
-    $now = app(ClockInterface::class)->now();
+    $now = resolve(ClockInterface::class)->now();
     outboxRelayInsertRow(['id' => $id, 'attempts' => $attempt]);
     $updated = DB::table('sys_outbox_messages')->where('id', $id)->update([
         'status' => 'publishing',
@@ -263,7 +263,7 @@ it('applies deterministic exponential backoff on the first four publish failures
 })->group('pg');
 
 it('marks a row dead after the eighth failed attempt', function (): void {
-    $now = app(ClockInterface::class)->now();
+    $now = resolve(ClockInterface::class)->now();
     $id = outboxRelayInsertRow([
         'id' => '01932f5a-0000-7000-8000-000000000006',
         'attempts' => 7,

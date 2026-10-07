@@ -40,7 +40,7 @@ final class OperationParityTest extends TestCase
     {
         parent::setUp();
         $schema = $this->schema(['title' => ['type' => 'string'], 'id' => ['type' => 'string'], 'actor' => ['type' => 'string'], 'account' => ['type' => 'string'], 'workspace' => ['type' => ['string', 'null']]]);
-        $this->modules = new ModuleFixture(app(RegistryCompiler::class)->compile([
+        $this->modules = new ModuleFixture(resolve(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
                 Api::operation('notes.create', 'POST', '/notes', NoteHandler::class, 'notes.read', $schema, $schema, ['title' => ['required', 'string']]),
             ]),
@@ -79,7 +79,7 @@ final class OperationParityTest extends TestCase
     {
         $this->allow();
         $request = Request::create('/chosen/v1/notes/broken', 'GET', ['title' => 'Hello'], server: ['HTTP_X_REQUEST_ID' => 'request-123']);
-        $this->modules = new ModuleFixture(app(RegistryCompiler::class)->compile([
+        $this->modules = new ModuleFixture(resolve(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
                 Api::operation('notes.card', 'GET', '/notes/{id}', NoteHandler::class, 'notes.read', $this->schema(), $this->schema(), ['title' => ['required', 'string']]),
             ]),

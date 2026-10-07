@@ -70,7 +70,7 @@ beforeEach(function (): void {
 });
 
 it('refuses append outside a transaction with MSG-008', function (): void {
-    $outbox = app(Outbox::class);
+    $outbox = resolve(Outbox::class);
     $envelope = messagingSampleEnvelope();
 
     expect(fn (): mixed => $outbox->append($envelope))
@@ -79,7 +79,7 @@ it('refuses append outside a transaction with MSG-008', function (): void {
 
 it('refuses undeclared contracts inside a transaction with MSG-002', function (): void {
     outboxAppendBindRegistry();
-    $outbox = app(Outbox::class);
+    $outbox = resolve(Outbox::class);
     $envelope = messagingSampleEnvelope();
 
     DB::transaction(function () use ($outbox, $envelope): void {
@@ -89,7 +89,7 @@ it('refuses undeclared contracts inside a transaction with MSG-002', function ()
 });
 
 it('refuses payload personal data above the contract maximum with MSG-007', function (): void {
-    $outbox = app(Outbox::class);
+    $outbox = resolve(Outbox::class);
     $envelope = messagingSampleEnvelope(['piiClass' => PiiClass::Personal]);
 
     DB::transaction(function () use ($outbox, $envelope): void {
@@ -105,7 +105,7 @@ it('persists a pending row with encoded payload and clock-backed timestamps', fu
 
     $payload = new MessagePayload(['kind' => 'expired', 'count' => 2]);
     $envelope = messagingSampleEnvelope(['payload' => $payload]);
-    $outbox = app(Outbox::class);
+    $outbox = resolve(Outbox::class);
 
     DB::transaction(function () use ($outbox, $envelope): void {
         $outbox->append($envelope);
@@ -117,9 +117,9 @@ it('persists a pending row with encoded payload and clock-backed timestamps', fu
         ->and($row->status)->toBe('pending')
         ->and($row->attempts)->toBe(0)
         ->and($row->payload)->toBe($payload->encode())
-        ->and((new DateTimeImmutable((string) $row->available_at))->getTimestamp())->toBe($frozen->getTimestamp())
-        ->and((new DateTimeImmutable((string) $row->created_at))->getTimestamp())->toBe($frozen->getTimestamp())
-        ->and((new DateTimeImmutable((string) $row->updated_at))->getTimestamp())->toBe($frozen->getTimestamp());
+        ->and(new DateTimeImmutable((string) $row->available_at)->getTimestamp())->toBe($frozen->getTimestamp())
+        ->and(new DateTimeImmutable((string) $row->created_at)->getTimestamp())->toBe($frozen->getTimestamp())
+        ->and(new DateTimeImmutable((string) $row->updated_at)->getTimestamp())->toBe($frozen->getTimestamp());
 });
 
 it('injects trace carrier into persisted metadata without changing identity', function (): void {
@@ -144,7 +144,7 @@ it('injects trace carrier into persisted metadata without changing identity', fu
         'metadata' => ['trace' => 'keep'],
         'correlationId' => 'corr-keep',
     ]);
-    $outbox = app(Outbox::class);
+    $outbox = resolve(Outbox::class);
 
     DB::transaction(function () use ($outbox, $envelope): void {
         $outbox->append($envelope);
@@ -167,7 +167,7 @@ it('uses one clock instant for available_at created_at and updated_at', function
     app()->instance(ClockInterface::class, new FrozenClock($frozen));
     app()->forgetScopedInstances();
 
-    $outbox = app(Outbox::class);
+    $outbox = resolve(Outbox::class);
 
     DB::transaction(function () use ($outbox): void {
         $outbox->append(messagingSampleEnvelope(['messageId' => 'msg-clock-1']));

@@ -40,7 +40,7 @@ final class CsvCodec
             if ($byte !== "\n" || $quoted) {
                 continue;
             }
-            $rows[] = $this->parseRecord($record, $maxFields);
+            $rows[] = $this->parseRecord(record: $record, maxFields: $maxFields);
             $record = '';
         }
 
@@ -49,7 +49,7 @@ final class CsvCodec
         }
 
         if ($record !== '') {
-            $rows[] = $this->parseRecord($record, $maxFields);
+            $rows[] = $this->parseRecord(record: $record, maxFields: $maxFields);
         }
 
         return $rows;

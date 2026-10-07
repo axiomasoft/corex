@@ -20,10 +20,10 @@ use Throwable;
  * Account, workspace, actor, correlation, causation and operation ids stay in
  * the log context. They are forbidden as metric labels.
  */
-final class PsrLogOperationObserver implements OperationObserver
+final readonly class PsrLogOperationObserver implements OperationObserver
 {
     public function __construct(
-        private readonly LoggerInterface $logger,
+        private LoggerInterface $logger,
     ) {}
 
     public function started(OperationStarted $event): void

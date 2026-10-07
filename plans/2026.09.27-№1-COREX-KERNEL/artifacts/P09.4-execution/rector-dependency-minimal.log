@@ -1,0 +1,44 @@
+./composer.json has been updated
+Running composer update driftingly/rector-laravel
+Loading composer repositories with package information
+Updating dependencies
+Lock file operations: 2 installs, 14 updates, 0 removals
+  - Upgrading axiomasoft/corex (dev-main 964f918 => dev-main bba0647)
+  - Upgrading axiomasoft/corex-access-azguard (dev-main 53cea3d => dev-main cf80fde)
+  - Upgrading axiomasoft/corex-intl (dev-main 5ae7138 => dev-main 82f4d75)
+  - Upgrading axiomasoft/corex-media (dev-main b7a1de1 => dev-main 4e0b230)
+  - Upgrading axiomasoft/corex-notifications (dev-main a313286 => dev-main 4efb4de)
+  - Upgrading axiomasoft/corex-panels (dev-main dfaaa54 => dev-main 9354fd3)
+  - Upgrading axiomasoft/corex-search (dev-main c916618 => dev-main 3795f9b)
+  - Upgrading axiomasoft/corex-tasks (dev-main 66b438f => dev-main d20a8f9)
+  - Upgrading axiomasoft/corex-tasks-workflow (dev-main efaf783 => dev-main 7dfd487)
+  - Upgrading axiomasoft/corex-tenancy (dev-main 6ea86f0 => dev-main b3a8860)
+  - Upgrading axiomasoft/corex-tools (dev-main 9b988d9 => dev-main 88a2220)
+  - Upgrading axiomasoft/corex-transfer (dev-main 3e21b19 => dev-main 7607e76)
+  - Upgrading axiomasoft/corex-webhooks (dev-main fed33be => dev-main 7e8b6e9)
+  - Upgrading axiomasoft/corex-workflow (dev-main 526acd8 => dev-main 1615b72)
+  - Locking driftingly/rector-laravel (2.6.2)
+  - Locking symplify/rule-doc-generator-contracts (11.2.0)
+Writing lock file
+Installing dependencies from lock file (including require-dev)
+Package operations: 0 installs, 3 updates, 0 removals
+  - Downloading webmozart/assert (2.4.1)
+  - Downloading phpstan/phpstan (2.2.16)
+  - Downloading rector/rector (2.6.7)
+ 0/3 [>---------------------------]   0%
+ 1/3 [=========>------------------]  33%
+ 2/3 [==================>---------]  66%
+ 3/3 [============================] 100%
+  - Downgrading webmozart/assert (2.5.0 => 2.4.1): Extracting archive
+  - Downgrading phpstan/phpstan (2.3.0 => 2.2.16): Extracting archive
+  - Downgrading rector/rector (2.7.0 => 2.6.7): Extracting archive
+ 0/3 [>---------------------------]   0%
+ 1/3 [=========>------------------]  33%
+ 2/3 [==================>---------]  66%
+ 3/3 [============================] 100%
+Package symplify/rule-doc-generator-contracts is abandoned, you should avoid using it. No replacement was suggested.
+Generating autoload files
+109 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+phpstan/extension-installer: Extensions installed
+No security vulnerability advisories found.

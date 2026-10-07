@@ -99,8 +99,8 @@ function initializedAccountRW(array $overrides = []): Account
 
     initTenantContext($account);
 
-    app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex:tenant'], 'tenant');
-    app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-tenancy:tenant'], 'tenant');
+    resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex:tenant'], 'tenant');
+    resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-tenancy:tenant'], 'tenant');
 
     return $account;
 }
@@ -132,9 +132,9 @@ function makeWorkspaceRW(array $overrides = []): Workspace
 /** Swaps the `auth` container binding for a {@see Guard} stub — mirrors WorkspaceResolverTest's actingAsIdWsp(). */
 function actingAsIdRW(?string $userId): void
 {
-    $guard = new class($userId) implements Guard
+    $guard = new readonly class($userId) implements Guard
     {
-        public function __construct(private readonly ?string $id) {}
+        public function __construct(private ?string $id) {}
 
         public function check(): bool
         {
@@ -172,9 +172,9 @@ function actingAsIdRW(?string $userId): void
         }
     };
 
-    app()->instance('auth', new class($guard) implements AuthFactory
+    app()->instance('auth', new readonly class($guard) implements AuthFactory
     {
-        public function __construct(private readonly Guard $guard) {}
+        public function __construct(private Guard $guard) {}
 
         public function guard($name = null): Guard
         {
@@ -193,7 +193,7 @@ function actingAsIdRW(?string $userId): void
 
 function dispatchRW(Request $request): mixed
 {
-    return app(ResolveWorkspace::class)->handle($request, fn (Request $r): Response => new Response('ok', 200));
+    return resolve(ResolveWorkspace::class)->handle($request, fn (Request $r): Response => new Response('ok', 200));
 }
 
 /** Runs a dispatch closure, collapsing an aborted HttpException into its status code. */
@@ -219,7 +219,7 @@ it('а: тенанси НЕ инициализирована → 403, context() 
     endTenantContext();
 
     expect(statusOfRW(fn () => dispatchRW(Request::create('http://x/w/'.$workspace->slug, 'GET'))))->toBe(403)
-        ->and(app(TenancyManager::class)->context())->toBeNull();
+        ->and(resolve(TenancyManager::class)->context())->toBeNull();
 });
 
 it('б: guest (auth()->id() === null) → 403 даже при активном членстве ДРУГОГО юзера', function (): void {
@@ -276,7 +276,7 @@ it('ж: partner получает свой контекст (200), /w/{parent-slu
     actingAsIdRW($user->id);
 
     expect(statusOfRW(fn () => dispatchRW(Request::create('http://x/w/'.$partner->slug, 'GET'))))->toBe(200)
-        ->and(app(TenancyManager::class)->context()?->workspace?->id)->toBe($partner->id);
+        ->and(resolve(TenancyManager::class)->context()?->workspace?->id)->toBe($partner->id);
 
     expect(statusOfRW(fn () => dispatchRW(Request::create('http://x/w/'.$parent->slug, 'GET'))))->toBe(403);
 });
@@ -297,8 +297,8 @@ it('и: happy /w/{slug}/deals → 200, context() = резолвленный work
     actingAsIdRW($user->id);
 
     expect(statusOfRW(fn () => dispatchRW(Request::create('http://x/w/'.$workspace->slug.'/deals', 'GET'))))->toBe(200)
-        ->and(app(TenancyManager::class)->context()?->workspace?->id)->toBe($workspace->id)
-        ->and(app(TenancyManager::class)->context()?->workspace?->slug)->toBe($workspace->slug);
+        ->and(resolve(TenancyManager::class)->context()?->workspace?->id)->toBe($workspace->id)
+        ->and(resolve(TenancyManager::class)->context()?->workspace?->slug)->toBe($workspace->slug);
 });
 
 it('к: happy без маркера (/dashboard) при активном default-членстве → 200, контекст = default workspace', function (): void {
@@ -309,7 +309,7 @@ it('к: happy без маркера (/dashboard) при активном default
     actingAsIdRW($user->id);
 
     expect(statusOfRW(fn () => dispatchRW(Request::create('http://x/dashboard', 'GET'))))->toBe(200)
-        ->and(app(TenancyManager::class)->context()?->workspace?->id)->toBe($workspace->id);
+        ->and(resolve(TenancyManager::class)->context()?->workspace?->id)->toBe($workspace->id);
 });
 
 it('л: маркер глубже в пути → тот же результат; маркер дважды → выбран ПЕРВЫЙ', function (): void {
@@ -322,10 +322,10 @@ it('л: маркер глубже в пути → тот же результат
     actingAsIdRW($user->id);
 
     expect(statusOfRW(fn () => dispatchRW(Request::create('http://x/app/w/'.$workspaceA->slug.'/deals', 'GET'))))->toBe(200)
-        ->and(app(TenancyManager::class)->context()?->workspace?->id)->toBe($workspaceA->id);
+        ->and(resolve(TenancyManager::class)->context()?->workspace?->id)->toBe($workspaceA->id);
 
     expect(statusOfRW(fn () => dispatchRW(Request::create('http://x/w/'.$workspaceA->slug.'/w/'.$workspaceB->slug, 'GET'))))->toBe(200)
-        ->and(app(TenancyManager::class)->context()?->workspace?->id)->toBe($workspaceA->id);
+        ->and(resolve(TenancyManager::class)->context()?->workspace?->id)->toBe($workspaceA->id);
 });
 
 it('м: кастомный маркер path_segment=ws — /ws/{slug} резолвит, /w/{slug} трактуется как «без маркера» (default)', function (): void {
@@ -341,10 +341,10 @@ it('м: кастомный маркер path_segment=ws — /ws/{slug} резо�
     actingAsIdRW($user->id);
 
     expect(statusOfRW(fn () => dispatchRW(Request::create('http://x/ws/'.$workspace->slug, 'GET'))))->toBe(200)
-        ->and(app(TenancyManager::class)->context()?->workspace?->id)->toBe($workspace->id);
+        ->and(resolve(TenancyManager::class)->context()?->workspace?->id)->toBe($workspace->id);
 
     expect(statusOfRW(fn () => dispatchRW(Request::create('http://x/w/'.$workspace->slug, 'GET'))))->toBe(200)
-        ->and(app(TenancyManager::class)->context()?->workspace?->id)->toBe($defaultWorkspace->id);
+        ->and(resolve(TenancyManager::class)->context()?->workspace?->id)->toBe($defaultWorkspace->id);
 });
 
 it('н: post-condition — TenancyManager с no-op setWorkspace() → 403, не тихий проход', function (): void {
@@ -354,9 +354,9 @@ it('н: post-condition — TenancyManager с no-op setWorkspace() → 403, не 
     WorkspaceMember::query()->create(['workspace_id' => $workspace->id, 'user_id' => $user->id, 'status' => 'active']);
     actingAsIdRW($user->id);
 
-    $stubResolver = new class($account) implements TenantContextResolver
+    $stubResolver = new readonly class($account) implements TenantContextResolver
     {
-        public function __construct(private readonly Account $account) {}
+        public function __construct(private Account $account) {}
 
         public function current(): TenantContext
         {
@@ -397,8 +397,8 @@ it('о: под резолвленным контекстом WorkspaceScope на
 it('п: алиас corex-tenancy.workspace зарегистрирован (Router::getMiddleware()), но НЕ входит в группу tenant (AC-28)', function (): void {
     expect(config('corex-tenancy.host_identification.enabled'))->toBeFalse()
         ->and(config('corex-tenancy.oidc.enabled'))->toBeFalse()
-        ->and(app('router')->getMiddleware())->toHaveKey('tenancy.workspace')
-        ->and(app('router')->getMiddlewareGroups()['tenant'] ?? [])->not->toContain(ResolveWorkspace::class);
+        ->and(resolve('router')->getMiddleware())->toHaveKey('tenancy.workspace')
+        ->and(resolve('router')->getMiddlewareGroups()['tenant'] ?? [])->not->toContain(ResolveWorkspace::class);
 });
 
 it('р: после tenancy()->end() context() = null (workspace не переживает запрос)', function (): void {
@@ -412,5 +412,5 @@ it('р: после tenancy()->end() context() = null (workspace не переж�
 
     endTenantContext();
 
-    expect(app(TenancyManager::class)->context())->toBeNull();
+    expect(resolve(TenancyManager::class)->context())->toBeNull();
 });

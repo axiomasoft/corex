@@ -39,7 +39,7 @@ require_once __DIR__.'/schema-gate.php';
 /** @var array{packages: array<string, string>, sets: list<array{id: string, package: string, name: string, scope: string, path: string, version: int, drivers: list<string>, lifecycle: string, requires: list<string>, connection: ?string}>} $manifest */
 $manifest = json_decode((string) file_get_contents(__DIR__.'/schema-sets.json'), true, flags: JSON_THROW_ON_ERROR);
 $coveredPaths = array_column($manifest['sets'], 'path');
-foreach ((new SchemaGate($repoRoot, $manifest, []))->run() as $hit) {
+foreach (new SchemaGate($repoRoot, $manifest, [])->run() as $hit) {
     if ($hit['code'] === 'S9') {
         $violations[] = ['S9', $hit['file'].':'.$hit['line'], $hit['message']];
     }
@@ -165,7 +165,7 @@ function extractSchemaCreates(string $repoRoot, array $packageDirs, array $confi
     $creates = [];
 
     foreach ((($entries = glob($repoRoot.'/packages/*/database/migrations', GLOB_ONLYDIR)) === false ? [] : $entries) as $migDir) {
-        $pkgDir = dirname(dirname($migDir));
+        $pkgDir = dirname($migDir, 2);
         $ownerPkg = $packageDirs[$pkgDir] ?? basename($pkgDir);
 
         $files = [];
@@ -284,7 +284,7 @@ function collectCrossPackageForeignKeys(string $repoRoot, array $packageDirs, ar
     $hits = [];
 
     foreach ((($entries = glob($repoRoot.'/packages/*/database/migrations', GLOB_ONLYDIR)) === false ? [] : $entries) as $migDir) {
-        $pkgDir = dirname(dirname($migDir));
+        $pkgDir = dirname($migDir, 2);
         $migOwner = $packageDirs[$pkgDir] ?? basename($pkgDir);
 
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($migDir));

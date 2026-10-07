@@ -20,6 +20,6 @@ final class SchemaMismatchException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(IntlErrorCode::SchemaMismatchException, ErrorCategory::Conflict, retryable: false);
+        return new ErrorDescriptor(code: IntlErrorCode::SchemaMismatchException, category: ErrorCategory::Conflict, retryable: false);
     }
 }

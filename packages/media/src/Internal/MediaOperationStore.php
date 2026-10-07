@@ -14,9 +14,9 @@ use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Builder;
 use Psr\Clock\ClockInterface;
 
-final class MediaOperationStore
+final readonly class MediaOperationStore
 {
-    public function __construct(private readonly ConnectionInterface $connection, private readonly ClockInterface $clock) {}
+    public function __construct(private ConnectionInterface $connection, private ClockInterface $clock) {}
 
     public function enqueuePurge(string $fileId): void
     {
@@ -68,7 +68,7 @@ final class MediaOperationStore
             $conversionKeys = $this->connection->table('med_conversions')->where('file_id', $fileId)->whereNotNull('object_key')->pluck('object_key')->all();
             $attemptKeys = $this->connection->table('med_operations')->where('file_id', $fileId)->whereNotNull('attempt_object_key')->pluck('attempt_object_key')->all();
 
-            return new PurgeClaim(Value::integer($operation->id), Value::text($file->id), $epoch, Value::integer($file->version), Value::strings(array_values(array_unique(Value::strings([$file->object_key, ...$conversionKeys, ...$attemptKeys])))));
+            return new PurgeClaim(operationId: Value::integer($operation->id), fileId: Value::text($file->id), epoch: $epoch, fileVersion: Value::integer($file->version), objectKeys: Value::strings(array_values(array_unique(Value::strings([$file->object_key, ...$conversionKeys, ...$attemptKeys])))));
         });
     }
 
@@ -171,7 +171,7 @@ final class MediaOperationStore
                 'updated_at' => $this->clock->now(),
             ]);
 
-            return new ConversionClaim(Value::integer($operation->id), Value::integer($conversion->id), Value::text($file->id), $epoch, Value::integer($file->version), Value::text($file->object_key), Value::text($file->mime_type), $profileKey, Value::text($conversion->profile_digest), $attemptKey);
+            return new ConversionClaim(operationId: Value::integer($operation->id), conversionId: Value::integer($conversion->id), fileId: Value::text($file->id), epoch: $epoch, fileVersion: Value::integer($file->version), sourceKey: Value::text($file->object_key), sourceMimeType: Value::text($file->mime_type), profileKey: $profileKey, profileDigest: Value::text($conversion->profile_digest), attemptObjectKey: $attemptKey);
         });
     }
 
@@ -246,7 +246,7 @@ final class MediaOperationStore
             ->orderBy('id')
             ->limit($limit)
             ->get()
-            ->map(static fn (object $operation): ConversionOperationRequest => new ConversionOperationRequest(Value::text($operation->file_id), Value::text($operation->profile_key)))
+            ->map(static fn (object $operation): ConversionOperationRequest => new ConversionOperationRequest(fileId: Value::text($operation->file_id), profileKey: Value::text($operation->profile_key)))
             ->all());
     }
 

@@ -18,6 +18,6 @@ final class ResolvedContexts
 {
     public static function make(TenantContext $tenantContext, Principal $authenticatedPrincipal, InvocationMetadata $requestMetadata): RequestContext
     {
-        return new ResolvedContext($tenantContext, $authenticatedPrincipal, $requestMetadata);
+        return new ResolvedContext(tenantContext: $tenantContext, authenticatedPrincipal: $authenticatedPrincipal, requestMetadata: $requestMetadata);
     }
 }

@@ -33,16 +33,16 @@ final readonly class DefaultReplayAuthorizer implements ReplayAuthorizer
         StoredOperationOutcome $outcome,
         bool $replayed,
     ): StoredOperationOutcome {
-        if ($replayed && ! $this->modules->isActive($invocation->operation->module, $invocation->context->tenant())) {
-            throw new ApiError(OperationsErrorCode::ModuleUnavailable, 404, 'Operation not found.');
+        if ($replayed && ! $this->modules->isActive(name: $invocation->operation->module, ctx: $invocation->context->tenant())) {
+            throw new ApiError(errorCode: OperationsErrorCode::ModuleUnavailable, status: 404, message: 'Operation not found.');
         }
 
-        if ($replayed && ! $this->clientScopes->allows($invocation->operation, $invocation->context)) {
-            throw new ApiError(OperationsErrorCode::ScopeRequired, 403, 'The client lacks a required operation scope.');
+        if ($replayed && ! $this->clientScopes->allows(operation: $invocation->operation, context: $invocation->context)) {
+            throw new ApiError(errorCode: OperationsErrorCode::ScopeRequired, status: 403, message: 'The client lacks a required operation scope.');
         }
 
-        if ($replayed && ! $this->authorizer->allows($invocation->operation, $invocation->context)) {
-            throw new ApiError(OperationsErrorCode::AccessDenied, 403, 'Operation is not permitted.');
+        if ($replayed && ! $this->authorizer->allows(operation: $invocation->operation, context: $invocation->context)) {
+            throw new ApiError(errorCode: OperationsErrorCode::AccessDenied, status: 403, message: 'Operation is not permitted.');
         }
 
         if ($replayed && $outcome->kind === 'success' && JsonDocuments::optionalArray($outcome->data) !== null) {

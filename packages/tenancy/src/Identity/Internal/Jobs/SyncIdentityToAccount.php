@@ -31,6 +31,6 @@ final class SyncIdentityToAccount implements ShouldQueue
 
     public function handle(IdentitySyncer $syncer): void
     {
-        $syncer->syncToAccount($this->identityId, $this->accountId);
+        $syncer->syncToAccount(identityId: $this->identityId, accountId: $this->accountId);
     }
 }

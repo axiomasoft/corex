@@ -89,10 +89,10 @@ function membershipProjectionRef(Account $account): AccountRef
 function migrateMembershipProjectionTenant(Account $account): void
 {
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->runFor(membershipProjectionRef($account), null, function (): void {
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex:tenant'], 'tenant');
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-tenancy:tenant'], 'tenant');
+        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex:tenant'], 'tenant');
+        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-tenancy:tenant'], 'tenant');
     });
 }
 
@@ -146,7 +146,7 @@ it('deactivates and clears sessions only in the target account', function (): vo
 
     $identityId = (string) Str::uuid();
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     foreach ([$accountA, $accountB] as $account) {
         $manager->runFor(membershipProjectionRef($account), null, function () use ($identityId): void {
             DB::table('users')->insert([
@@ -166,9 +166,9 @@ it('deactivates and clears sessions only in the target account', function (): vo
         });
     }
 
-    $client = new class($identityId, $accountA->id) implements CentralApiClient
+    $client = new readonly class($identityId, $accountA->id) implements CentralApiClient
     {
-        public function __construct(private readonly string $identityId, private readonly string $accountId) {}
+        public function __construct(private string $identityId, private string $accountId) {}
 
         public function revokeMembership(RevokeMembershipRequest $request): RevokeMembershipReceipt
         {
@@ -184,9 +184,9 @@ it('deactivates and clears sessions only in the target account', function (): vo
         centralConnection: 'pgsql',
         centralApi: $client,
         tenancy: $manager,
-        accounts: app(AccountRead::class),
-        connections: app(ConnectionResolverInterface::class),
-        cache: app(CacheFactory::class),
+        accounts: resolve(AccountRead::class),
+        connections: resolve(ConnectionResolverInterface::class),
+        cache: resolve(CacheFactory::class),
     );
 
     refreshMembershipProjection(projection: $projection, identityId: $identityId, accountId: $accountA->id);
@@ -210,7 +210,7 @@ it('does not restore a deleted session when an active membership is regranted', 
 
     $identityId = (string) Str::uuid();
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->runFor(membershipProjectionRef($account), null, function () use ($identityId): void {
         DB::table('users')->insert([
             'id' => $identityId,
@@ -248,9 +248,9 @@ it('does not restore a deleted session when an active membership is regranted', 
         centralConnection: 'pgsql',
         centralApi: $client,
         tenancy: $manager,
-        accounts: app(AccountRead::class),
-        connections: app(ConnectionResolverInterface::class),
-        cache: app(CacheFactory::class),
+        accounts: resolve(AccountRead::class),
+        connections: resolve(ConnectionResolverInterface::class),
+        cache: resolve(CacheFactory::class),
     );
 
     refreshMembershipProjection(projection: $projection, identityId: $identityId, accountId: $account->id);
@@ -271,7 +271,7 @@ it('does not let a delayed grant hint re-enable a revoked membership', function 
 
     $identityId = (string) Str::uuid();
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->runFor(membershipProjectionRef($account), null, function () use ($identityId): void {
         DB::table('users')->insert([
             'id' => $identityId,
@@ -311,9 +311,9 @@ it('does not let a delayed grant hint re-enable a revoked membership', function 
         centralConnection: 'pgsql',
         centralApi: $client,
         tenancy: $manager,
-        accounts: app(AccountRead::class),
-        connections: app(ConnectionResolverInterface::class),
-        cache: app(CacheFactory::class),
+        accounts: resolve(AccountRead::class),
+        connections: resolve(ConnectionResolverInterface::class),
+        cache: resolve(CacheFactory::class),
     );
 
     refreshMembershipProjection(projection: $projection, identityId: $identityId, accountId: $account->id);
@@ -334,7 +334,7 @@ it('fails closed and clears target sessions when central authority is unavailabl
 
     $identityId = (string) Str::uuid();
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->runFor(membershipProjectionRef($account), null, function () use ($identityId): void {
         DB::table('users')->insert([
             'id' => $identityId,
@@ -368,9 +368,9 @@ it('fails closed and clears target sessions when central authority is unavailabl
         centralConnection: 'pgsql',
         centralApi: $client,
         tenancy: $manager,
-        accounts: app(AccountRead::class),
-        connections: app(ConnectionResolverInterface::class),
-        cache: app(CacheFactory::class),
+        accounts: resolve(AccountRead::class),
+        connections: resolve(ConnectionResolverInterface::class),
+        cache: resolve(CacheFactory::class),
     );
 
     refreshMembershipProjection(projection: $projection, identityId: $identityId, accountId: $account->id);
@@ -389,7 +389,7 @@ it('fails closed when the central client raises an unexpected read failure', fun
 
     $identityId = (string) Str::uuid();
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->runFor(membershipProjectionRef($account), null, function () use ($identityId): void {
         DB::table('users')->insert([
             'id' => $identityId,
@@ -423,9 +423,9 @@ it('fails closed when the central client raises an unexpected read failure', fun
         centralConnection: 'pgsql',
         centralApi: $client,
         tenancy: $manager,
-        accounts: app(AccountRead::class),
-        connections: app(ConnectionResolverInterface::class),
-        cache: app(CacheFactory::class),
+        accounts: resolve(AccountRead::class),
+        connections: resolve(ConnectionResolverInterface::class),
+        cache: resolve(CacheFactory::class),
     );
 
     refreshMembershipProjection(projection: $projection, identityId: $identityId, accountId: $account->id);
@@ -444,7 +444,7 @@ it('denies the next request and logs out an inactive local projection', function
 
     $identityId = (string) Str::uuid();
     /** @var TenancyManager $manager */
-    $manager = app(TenancyManager::class);
+    $manager = resolve(TenancyManager::class);
     $manager->runFor(membershipProjectionRef($account), null, function () use ($identityId): void {
         DB::table('users')->insert([
             'id' => $identityId,

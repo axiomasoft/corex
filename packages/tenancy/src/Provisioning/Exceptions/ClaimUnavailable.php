@@ -15,6 +15,6 @@ final class ClaimUnavailable extends CodedException
 {
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(TenancyErrorCode::ClaimUnavailable, ErrorCategory::Unavailable, retryable: true);
+        return new ErrorDescriptor(code: TenancyErrorCode::ClaimUnavailable, category: ErrorCategory::Unavailable, retryable: true);
     }
 }

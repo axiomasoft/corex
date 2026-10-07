@@ -120,10 +120,10 @@ final class ApiOperationValidator
             }
         }
 
-        self::assertUniqueStrings($api->requiredScopes, "duplicate scope on [{$api->operationId}] owned by [{$owner}]");
-        self::assertUniqueStrings($api->capabilities, "duplicate capability on [{$api->operationId}] owned by [{$owner}]");
-        self::assertFieldList($api->readFields, $api->operationId, $owner, 'read');
-        self::assertFieldList($api->writeFields, $api->operationId, $owner, 'write');
+        self::assertUniqueStrings(values: $api->requiredScopes, message: "duplicate scope on [{$api->operationId}] owned by [{$owner}]");
+        self::assertUniqueStrings(values: $api->capabilities, message: "duplicate capability on [{$api->operationId}] owned by [{$owner}]");
+        self::assertFieldList(fields: $api->readFields, operationId: $api->operationId, owner: $owner, side: 'read');
+        self::assertFieldList(fields: $api->writeFields, operationId: $api->operationId, owner: $owner, side: 'write');
 
         foreach ($api->capabilities as $capability) {
             if (preg_match('/^[a-z][a-z0-9_.-]*\.v[1-9][0-9]*$/D', $capability) !== 1) {
@@ -132,14 +132,14 @@ final class ApiOperationValidator
         }
 
         if ($api->pagination !== null) {
-            self::assertPagination($api->pagination, $api->operationId, $owner);
+            self::assertPagination(pagination: $api->pagination, operationId: $api->operationId, owner: $owner);
         }
 
         if ($api->deprecation !== null) {
-            self::assertDeprecation($api->deprecation, $api->operationId, $owner);
+            self::assertDeprecation(deprecation: $api->deprecation, operationId: $api->operationId, owner: $owner);
         }
 
-        self::validateCost($api, $owner);
+        self::validateCost(api: $api, owner: $owner);
 
         $idempotentMutation = $mode !== 'query' && in_array($idempotency, ['optional', 'required'], true);
 
@@ -153,7 +153,7 @@ final class ApiOperationValidator
     }
 
     /** @var array<string, int> */
-    private const COST_DEFAULTS = [
+    private const array COST_DEFAULTS = [
         'base' => 1,
         'row' => 0,
         'field' => 0,
@@ -240,7 +240,7 @@ final class ApiOperationValidator
             throw new CompilationException("Invalid {$side} fields on [{$operationId}] owned by [{$owner}].");
         }
 
-        self::assertUniqueStrings($fields, "duplicate {$side} field on [{$operationId}] owned by [{$owner}]");
+        self::assertUniqueStrings(values: $fields, message: "duplicate {$side} field on [{$operationId}] owned by [{$owner}]");
     }
 
     /** @param  array<mixed>  $pagination */
@@ -287,13 +287,7 @@ final class ApiOperationValidator
                 return false;
             }
 
-            foreach ($value as $item) {
-                if (! is_scalar($item)) {
-                    return false;
-                }
-            }
-
-            return true;
+            return array_all($value, fn ($item) => is_scalar($item));
         }
 
         return is_scalar($value);

@@ -13,7 +13,7 @@ final readonly class PanelAccess
     /** @param list<string> $actions */
     public function __construct(public bool $view, public array $actions, public ?string $reason)
     {
-        self::validateInput($view, $actions, $reason);
+        self::validateInput(view: $view, actions: $actions, reason: $reason);
     }
 
     public static function deny(string $reason): self

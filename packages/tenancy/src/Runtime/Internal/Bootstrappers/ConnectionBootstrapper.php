@@ -51,7 +51,7 @@ final class ConnectionBootstrapper implements TenantBootstrapper
         // Replica overlays would otherwise override the authoritative account route.
         unset($base['read'], $base['write']);
 
-        $this->config->set('database.connections.tenant', array_replace($base, [
+        $this->config->set(key: 'database.connections.tenant', value: array_replace($base, [
             'driver' => $database->driver,
             'host' => $database->host,
             'port' => $database->port,
@@ -70,7 +70,7 @@ final class ConnectionBootstrapper implements TenantBootstrapper
 
         if ($this->captured) {
             // Never leave the last account's route behind under the shared connection name.
-            $this->config->set('database.connections.tenant', $this->previousTenant);
+            $this->config->set(key: 'database.connections.tenant', value: $this->previousTenant);
         }
 
         $this->previousDefault = null;

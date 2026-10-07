@@ -14,16 +14,16 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class RequireActiveMembership
+final readonly class RequireActiveMembership
 {
     public function __construct(
-        private readonly ?TenancyOptions $options = null,
+        private ?TenancyOptions $options = null,
     ) {}
 
     /** @return Response|mixed */
     public function handle(Request $request, Closure $next): mixed
     {
-        $guard = ($this->options ?? app(TenancyOptions::class))->membershipGuard;
+        $guard = ($this->options ?? resolve(TenancyOptions::class))->membershipGuard;
         $identityId = Auth::guard($guard)->id();
 
         $user = $identityId === null ? null : User::query()->find($identityId);

@@ -34,10 +34,10 @@ it('lists legacy unstamped digest wakeups as a dangerous mode that production mu
     $path = 'corex-notifications.digest.accept_legacy_unstamped';
 
     expect($options->dangerousModes())->toBe([$path])
-        ->and((new DangerousModesCheck($options, CoreOptionsParser::fromArray([])))->violations(true))
+        ->and(new DangerousModesCheck($options, CoreOptionsParser::fromArray([]))->violations(true))
         ->toBe([$path.': dangerous mode is not acknowledged for production'])
-        ->and((new DangerousModesCheck($options, CoreOptionsParser::fromArray(['acknowledged_dangerous_modes' => [$path]])))->violations(true))
+        ->and(new DangerousModesCheck($options, CoreOptionsParser::fromArray(['acknowledged_dangerous_modes' => [$path]]))->violations(true))
         ->toBe([])
-        ->and((new DangerousModesCheck($options, CoreOptionsParser::fromArray([])))->violations(false))
+        ->and(new DangerousModesCheck($options, CoreOptionsParser::fromArray([]))->violations(false))
         ->toBe([]);
 });

@@ -14,12 +14,12 @@ final class PackageProblemDefinitions implements ProblemDefinitionProvider
 {
     public function definitions(): iterable
     {
-        yield new ProblemDefinition(IntlErrorCode::AccessDeniedException, 'urn:corex:problem:intl.access_denied_exception', 403, 'Access denied exception.', false, ErrorCategory::Authorization, []);
-        yield new ProblemDefinition(IntlErrorCode::InvalidLocaleException, 'urn:corex:problem:intl.invalid_locale_exception', 422, 'Invalid locale exception.', false, ErrorCategory::Validation, []);
-        yield new ProblemDefinition(IntlErrorCode::InvalidRateException, 'urn:corex:problem:intl.invalid_rate_exception', 422, 'Invalid rate exception.', false, ErrorCategory::Validation, []);
-        yield new ProblemDefinition(IntlErrorCode::OperationConflictException, 'urn:corex:problem:intl.operation_conflict_exception', 409, 'Operation conflict exception.', false, ErrorCategory::Conflict, []);
-        yield new ProblemDefinition(IntlErrorCode::SchemaMismatchException, 'urn:corex:problem:intl.schema_mismatch_exception', 409, 'Schema mismatch exception.', false, ErrorCategory::Conflict, []);
-        yield new ProblemDefinition(IntlErrorCode::SnapshotExpiredException, 'urn:corex:problem:intl.snapshot_expired_exception', 404, 'Snapshot expired exception.', false, ErrorCategory::NotFound, []);
-        yield new ProblemDefinition(IntlErrorCode::UnsupportedFormattingException, 'urn:corex:problem:intl.unsupported_formatting_exception', 422, 'Unsupported formatting exception.', false, ErrorCategory::Unsupported, []);
+        yield new ProblemDefinition(code: IntlErrorCode::AccessDeniedException, type: 'urn:corex:problem:intl.access_denied_exception', defaultStatus: 403, title: 'Access denied exception.', retryable: false, category: ErrorCategory::Authorization, detailKeys: []);
+        yield new ProblemDefinition(code: IntlErrorCode::InvalidLocaleException, type: 'urn:corex:problem:intl.invalid_locale_exception', defaultStatus: 422, title: 'Invalid locale exception.', retryable: false, category: ErrorCategory::Validation, detailKeys: []);
+        yield new ProblemDefinition(code: IntlErrorCode::InvalidRateException, type: 'urn:corex:problem:intl.invalid_rate_exception', defaultStatus: 422, title: 'Invalid rate exception.', retryable: false, category: ErrorCategory::Validation, detailKeys: []);
+        yield new ProblemDefinition(code: IntlErrorCode::OperationConflictException, type: 'urn:corex:problem:intl.operation_conflict_exception', defaultStatus: 409, title: 'Operation conflict exception.', retryable: false, category: ErrorCategory::Conflict, detailKeys: []);
+        yield new ProblemDefinition(code: IntlErrorCode::SchemaMismatchException, type: 'urn:corex:problem:intl.schema_mismatch_exception', defaultStatus: 409, title: 'Schema mismatch exception.', retryable: false, category: ErrorCategory::Conflict, detailKeys: []);
+        yield new ProblemDefinition(code: IntlErrorCode::SnapshotExpiredException, type: 'urn:corex:problem:intl.snapshot_expired_exception', defaultStatus: 404, title: 'Snapshot expired exception.', retryable: false, category: ErrorCategory::NotFound, detailKeys: []);
+        yield new ProblemDefinition(code: IntlErrorCode::UnsupportedFormattingException, type: 'urn:corex:problem:intl.unsupported_formatting_exception', defaultStatus: 422, title: 'Unsupported formatting exception.', retryable: false, category: ErrorCategory::Unsupported, detailKeys: []);
     }
 }

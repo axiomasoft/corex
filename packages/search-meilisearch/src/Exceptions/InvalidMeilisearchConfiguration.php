@@ -43,6 +43,6 @@ final class InvalidMeilisearchConfiguration extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(SearchMeilisearchErrorCode::InvalidMeilisearchConfiguration, ErrorCategory::Internal, retryable: false);
+        return new ErrorDescriptor(code: SearchMeilisearchErrorCode::InvalidMeilisearchConfiguration, category: ErrorCategory::Internal, retryable: false);
     }
 }

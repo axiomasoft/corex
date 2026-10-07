@@ -16,7 +16,7 @@ function catalogueSource(array $fields, string $hash = ''): FieldCatalogue
 {
     $schemaHash = $hash !== '' ? $hash : hash('sha256', json_encode($fields, JSON_THROW_ON_ERROR));
 
-    return new class($fields, $schemaHash) implements FieldCatalogue
+    return new readonly class($fields, $schemaHash) implements FieldCatalogue
     {
         public function __construct(private array $fields, private string $hash) {}
 

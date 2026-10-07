@@ -21,6 +21,6 @@ final class ScopedFilesystemFactory
         string $root,
         bool $localPaths = true,
     ): Filesystem {
-        return new ScopedFilesystem($filesystem, $contexts, $accountId, $root, $localPaths);
+        return new ScopedFilesystem(filesystem: $filesystem, contexts: $contexts, accountId: $accountId, root: $root, localPaths: $localPaths);
     }
 }

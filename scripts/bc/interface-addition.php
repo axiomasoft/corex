@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Roave\BackwardCompatibility\DetectChanges\BCBreak\InterfaceBased;
 
+use CoreX\Attributes\Api;
 use Roave\BackwardCompatibility\Change;
 use Roave\BackwardCompatibility\Changes;
 use Roave\BetterReflection\Reflection\ReflectionClass;
@@ -13,10 +14,10 @@ final class MethodAdded implements InterfaceBased
 {
     public function __invoke(ReflectionClass $fromInterface, ReflectionClass $toInterface): Changes
     {
-        if ($fromInterface->getAttributesByName('CoreX\\Attributes\\Api') !== []) {
+        if ($fromInterface->getAttributesByName(Api::class) !== []) {
             return Changes::empty();
         }
-        $old = array_fill_keys(array_map('strtolower', array_keys($fromInterface->getMethods())), true);
+        $old = array_fill_keys(array_map(strtolower(...), array_keys($fromInterface->getMethods())), true);
         $changes = [];
         foreach ($toInterface->getMethods() as $method) {
             if (! isset($old[strtolower($method->getName())])) {

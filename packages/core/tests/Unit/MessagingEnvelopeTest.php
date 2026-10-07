@@ -89,7 +89,7 @@ it('rejects payload exceeding 64KiB', function (): void {
 })->throws(InvalidMessage::class, 'exceeds 64KiB');
 
 it('canonicalizes payload keys recursively', function (): void {
-    $encoded = (new MessagePayload(['b' => 1, 'a' => ['d' => 1, 'c' => 2]]))->encode();
+    $encoded = new MessagePayload(['b' => 1, 'a' => ['d' => 1, 'c' => 2]])->encode();
 
     expect($encoded)->toBe('{"a":{"c":2,"d":1},"b":1}');
 });

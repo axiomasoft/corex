@@ -1224,13 +1224,7 @@ function allowlistGuardIsValid(array $entry, string $repoRoot): bool
         return false;
     }
 
-    foreach ($patterns as $pattern) {
-        if (! is_string($pattern) || ! str_contains($contents, $pattern)) {
-            return false;
-        }
-    }
-
-    return true;
+    return array_all($patterns, fn ($pattern) => ! (! is_string($pattern) || ! str_contains($contents, $pattern)));
 }
 
 /**

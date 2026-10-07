@@ -79,7 +79,7 @@ final class ToolCatalogueTest extends TestCase
     /** @param  list<Api>  $declarations */
     private function compile(array $declarations): CompiledRegistry
     {
-        return app(RegistryCompiler::class)->compile([
+        return resolve(RegistryCompiler::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends($declarations),
         ], installedPackages: []);
     }

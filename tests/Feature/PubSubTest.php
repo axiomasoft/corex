@@ -35,11 +35,11 @@ final class RecordingPubSub implements PubSub
 }
 
 /** Test-only WorkerRuntime double — the seam Implementation Rules requires so a negative guard test can fake "running under Octane" without installing laravel/octane (A78). */
-final class FakeWorkerRuntime implements WorkerRuntime
+final readonly class FakeWorkerRuntime implements WorkerRuntime
 {
     public function __construct(
-        private readonly bool $octane,
-        private readonly bool $console,
+        private bool $octane,
+        private bool $console,
     ) {}
 
     public function isOctane(): bool
@@ -76,10 +76,10 @@ it('(е) publish → subscribe delivers through app(PubSub::class) on the null d
     app()->forgetInstance(CoreOptions::class);
     $received = [];
 
-    app(PubSub::class)->subscribe('module.enabled', function (array $payload) use (&$received): void {
+    resolve(PubSub::class)->subscribe('module.enabled', function (array $payload) use (&$received): void {
         $received[] = $payload;
     });
-    app(PubSub::class)->publish('module.enabled', ['module' => 'crm']);
+    resolve(PubSub::class)->publish('module.enabled', ['module' => 'crm']);
 
     expect($received)->toBe([['module' => 'crm']]);
 });
@@ -90,7 +90,7 @@ it('AC-25(b)/(в) PubSubManager delegates publish() to the null driver selected 
     $spy = new RecordingPubSub;
     app()->instance(NullPubSub::class, $spy);
 
-    app(PubSub::class)->publish('module.enabled', ['module' => 'crm']);
+    resolve(PubSub::class)->publish('module.enabled', ['module' => 'crm']);
 
     expect($spy->published)->toBe([['channel' => 'module.enabled', 'payload' => ['module' => 'crm']]]);
 });
@@ -101,7 +101,7 @@ it('AC-25(b)/(в) PubSubManager delegates publish() to the redis driver selected
     $spy = new RecordingPubSub;
     app()->instance(RedisPubSub::class, $spy);
 
-    app(PubSub::class)->publish('module.enabled', ['module' => 'crm']);
+    resolve(PubSub::class)->publish('module.enabled', ['module' => 'crm']);
 
     expect($spy->published)->toBe([['channel' => 'module.enabled', 'payload' => ['module' => 'crm']]]);
 });
@@ -112,7 +112,7 @@ it('AC-25(b)/(в) PubSubManager delegates publish() to the database driver selec
     $spy = new RecordingPubSub;
     app()->instance(DatabasePollPubSub::class, $spy);
 
-    app(PubSub::class)->publish('module.enabled', ['module' => 'crm']);
+    resolve(PubSub::class)->publish('module.enabled', ['module' => 'crm']);
 
     expect($spy->published)->toBe([['channel' => 'module.enabled', 'payload' => ['module' => 'crm']]]);
 });

@@ -105,7 +105,7 @@ function cancelToken(string $hash): StepToken
 function cancelRunner(string $hash, object $calls, bool $cancelled): SqlTransferExecutor
 {
     $manifest = new SourceManifest('object://imports/cancel', $hash, 42, 'csv', '1', 'UTF-8', ',', '"', '', $hash);
-    $source = new class($manifest, $calls) implements TransferSource
+    $source = new readonly class($manifest, $calls) implements TransferSource
     {
         public function __construct(private SourceManifest $manifest, private object $calls) {}
 
@@ -122,7 +122,7 @@ function cancelRunner(string $hash, object $calls, bool $cancelled): SqlTransfer
         }
     };
     $record = new CanonicalRecord('contact', 'archive', 'doc-1', 'rev-1', null, ['name' => 'Ada'], $hash);
-    $mapper = new class($record) implements RecordMapper
+    $mapper = new readonly class($record) implements RecordMapper
     {
         public function __construct(private CanonicalRecord $record) {}
 
@@ -131,7 +131,7 @@ function cancelRunner(string $hash, object $calls, bool $cancelled): SqlTransfer
             return new MappingResult('mapped', $this->record, null);
         }
     };
-    $target = new class($calls) implements TransferSink
+    $target = new readonly class($calls) implements TransferSink
     {
         public function __construct(private object $calls) {}
 
@@ -156,7 +156,7 @@ function cancelRunner(string $hash, object $calls, bool $cancelled): SqlTransfer
             return new TargetResult('noop', new RecordRef('contact', 'local-1'), 'v1', null, null);
         }
     };
-    $signal = new class($cancelled) implements CancellationSignal
+    $signal = new readonly class($cancelled) implements CancellationSignal
     {
         public function __construct(private bool $cancelled) {}
 

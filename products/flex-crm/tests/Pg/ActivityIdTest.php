@@ -23,7 +23,7 @@ it('stores and resolves UUIDv7 activity subjects on PostgreSQL', function (): vo
     $this->migrateSchemaSets(['flex/crm:tenant'], DB::getDefaultConnection());
     $ctx = TestContext::seed('pgsql')->current();
     $subject = Company::query()->create(['name' => 'Subject', 'workspace_id' => $ctx->tenant->workspace->id]);
-    $activity = app(LogActivity::class)->handle($subject, ActivityType::Call, 'UUIDv7 ID');
+    $activity = resolve(LogActivity::class)->handle($subject, ActivityType::Call, 'UUIDv7 ID');
     expect((string) $activity->fresh()->targets()->sole()->entity->getKey())->toBe((string) $subject->getKey())
         ->and($subject->getKey()[14])->toBe('7')
         ->and($activity->getKey()[14])->toBe('7');
@@ -38,8 +38,8 @@ it('converts with canonical UUIDv7 deal associations', function (): void {
     TestContext::seed('pgsql');
     $pipeline = Pipeline::create(['entity_type' => 'crm.deal', 'code' => 'sales', 'name' => ['en' => 'Sales']]);
     Stage::create(['pipeline_id' => $pipeline->id, 'code' => 'open', 'name' => ['en' => 'Open']]);
-    $lead = app(CreateLead::class)->handle(title: 'Inquiry', contactName: 'Jane');
-    $contact = app(ConvertLead::class)->handle($lead, $pipeline);
+    $lead = resolve(CreateLead::class)->handle(title: 'Inquiry', contactName: 'Jane');
+    $contact = resolve(ConvertLead::class)->handle($lead, $pipeline);
     expect((string) $contact->deals()->sole()->getKey())->toBe((string) $lead->fresh()->converted_deal_id)
         ->and(DB::table('crm_deal_contacts')->count())->toBe(1);
 });

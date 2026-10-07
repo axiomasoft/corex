@@ -20,6 +20,6 @@ final class InvalidRateException extends CodedException
 
     public function errorDescriptor(): ErrorDescriptor
     {
-        return new ErrorDescriptor(IntlErrorCode::InvalidRateException, ErrorCategory::Validation, retryable: false);
+        return new ErrorDescriptor(code: IntlErrorCode::InvalidRateException, category: ErrorCategory::Validation, retryable: false);
     }
 }

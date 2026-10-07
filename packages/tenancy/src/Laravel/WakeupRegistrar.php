@@ -22,7 +22,7 @@ use Psr\Log\LoggerInterface;
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class WakeupRegistrar implements PackageRegistrar
 {
-    private const WAKEUP_SWEEPER = 'CoreX\\Wakeup\\Contracts\\DueWakeupSweeper';
+    private const string WAKEUP_SWEEPER = 'CoreX\\Wakeup\\Contracts\\DueWakeupSweeper';
 
     #[Override]
     public function register(Application $app): void

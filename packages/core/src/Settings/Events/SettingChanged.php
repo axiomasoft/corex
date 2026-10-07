@@ -26,7 +26,7 @@ use Override;
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class SettingChanged extends DomainEvent
 {
-    private const MASK = '••••••';
+    private const string MASK = '••••••';
 
     /** Immutable JSON value. */
     public readonly JsonDocument $old;

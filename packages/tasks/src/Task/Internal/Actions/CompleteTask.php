@@ -20,13 +20,13 @@ use Illuminate\Database\Connection;
 use Illuminate\Validation\ValidationException;
 use Psr\Clock\ClockInterface;
 
-final class CompleteTask implements CompleteTaskCommand
+final readonly class CompleteTask implements CompleteTaskCommand
 {
     public function __construct(
-        private readonly TaskModuleGuard $moduleGuard,
-        private readonly TaskMutationAccess $access,
-        private readonly ClockInterface $clock,
-        private readonly Dispatcher $events,
+        private TaskModuleGuard $moduleGuard,
+        private TaskMutationAccess $access,
+        private ClockInterface $clock,
+        private Dispatcher $events,
     ) {}
 
     public function handle(CompleteTaskData $data): TaskReference
@@ -49,14 +49,14 @@ final class CompleteTask implements CompleteTaskCommand
         $task = Task::on($connection->getName())->tap(static fn ($query) => $query->getQuery()->lockForUpdate())->find($data->taskId);
 
         if ($task === null) {
-            $this->invalid('task_id', 'Задача не найдена в текущем аккаунте.');
+            $this->invalid(field: 'task_id', message: 'Задача не найдена в текущем аккаунте.');
         }
 
         if ($context->workspace !== null && $context->workspace->id !== $task->workspace_id) {
-            $this->invalid('task_id', 'Задача не принадлежит текущему рабочему пространству.');
+            $this->invalid(field: 'task_id', message: 'Задача не принадлежит текущему рабочему пространству.');
         }
 
-        if (! (new TaskCompletion($this->access, $this->clock))->apply($task, $data, $context)) {
+        if (! new TaskCompletion(access: $this->access, clock: $this->clock)->apply(task: $task, data: $data, context: $context)) {
             return TaskReferenceFactory::fromTask($task);
         }
         $task->save();
@@ -65,8 +65,7 @@ final class CompleteTask implements CompleteTaskCommand
         return TaskReferenceFactory::fromTask($task);
     }
 
-    /** @return never */
-    private function invalid(string $field, string $message): void
+    private function invalid(string $field, string $message): never
     {
         throw ValidationException::withMessages([$field => [$message]]);
     }

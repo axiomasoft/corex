@@ -25,14 +25,14 @@ final readonly class SearchOptions
         $driver = $config['driver'] ?? 'null';
 
         if (! is_string($driver) || $driver === '') {
-            $violations->add('driver', 'must be a non-empty string');
+            $violations->add(path: 'driver', message: 'must be a non-empty string');
             $driver = 'null';
         }
 
         $secret = $config['cursor_secret'] ?? null;
 
         if ($secret !== null && ! is_string($secret)) {
-            $violations->add('cursor_secret', 'must be null or a string');
+            $violations->add(path: 'cursor_secret', message: 'must be null or a string');
             $secret = null;
         }
 
@@ -41,19 +41,19 @@ final readonly class SearchOptions
         $textSearchConfig = $postgres['text_search_config'] ?? 'simple';
 
         if (! is_string($textSearchConfig) || $textSearchConfig === '') {
-            $violations->add('postgres.text_search_config', 'must be a non-empty string');
+            $violations->add(path: 'postgres.text_search_config', message: 'must be a non-empty string');
             $textSearchConfig = 'simple';
         }
 
         $scanBudget = $postgres['scan_budget'] ?? 1000;
 
         if (! is_int($scanBudget) || $scanBudget < 1) {
-            $violations->add('postgres.scan_budget', 'must be a positive integer');
+            $violations->add(path: 'postgres.scan_budget', message: 'must be a positive integer');
             $scanBudget = 1000;
         }
 
         $violations->failIfAny();
 
-        return new self($driver, is_string($secret) && $secret !== '' ? new SecretRef($secret) : null, $textSearchConfig, $scanBudget);
+        return new self(driver: $driver, cursorSecret: is_string($secret) && $secret !== '' ? new SecretRef($secret) : null, textSearchConfig: $textSearchConfig, scanBudget: $scanBudget);
     }
 }

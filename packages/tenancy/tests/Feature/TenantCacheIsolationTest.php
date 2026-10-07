@@ -26,11 +26,11 @@ function databaseTCI(): DatabaseConnectionConfig
 
 function cacheBootstrapperTCI(string $store): CachePrefixBootstrapper
 {
-    return new CachePrefixBootstrapper(app(CacheManager::class), app(FrameworkConfig::class), [$store], 'tenant_%tenant%_', 'pgsql');
+    return new CachePrefixBootstrapper(resolve(CacheManager::class), resolve(FrameworkConfig::class), [$store], 'tenant_%tenant%_', 'pgsql');
 }
 
 it('isolates the file store per account — values and locks — and restores the exact store config', function (): void {
-    $cache = app(CacheManager::class);
+    $cache = resolve(CacheManager::class);
     $original = config('cache.stores.tenant_file');
     $bootstrapper = cacheBootstrapperTCI('tenant_file');
 
@@ -102,7 +102,7 @@ it('keeps an explicitly configured database cache connection', function (): void
 it('rolls the store config back when a later store is unsupported (first mutation captured before the throwing one)', function (): void {
     config(['cache.stores.ok' => ['driver' => 'redis', 'connection' => 'cache'], 'cache.stores.bad' => ['driver' => 'array']]);
     $before = [config('cache.stores.ok'), config('cache.stores.bad')];
-    $bootstrapper = new CachePrefixBootstrapper(app(CacheManager::class), app(FrameworkConfig::class), ['ok', 'bad'], 'tenant_%tenant%_', 'pgsql');
+    $bootstrapper = new CachePrefixBootstrapper(resolve(CacheManager::class), resolve(FrameworkConfig::class), ['ok', 'bad'], 'tenant_%tenant%_', 'pgsql');
 
     expect(fn () => $bootstrapper->bootstrap(contextTCI('A'), databaseTCI()))->toThrow(InvalidConfiguration::class);
     $bootstrapper->revert();
@@ -118,9 +118,9 @@ it('clones the dedicated redis/memcached session store with an account prefix an
         'session.connection' => 'default',
         'session.prefix' => 'orig_',
     ]);
-    $session = app(Repository::class)->get('session');
+    $session = resolve(Repository::class)->get('session');
     $store = config('cache.stores.sess');
-    $bootstrapper = new SessionConnectionBootstrapper(app('session'), app(CacheManager::class), app(), app(FrameworkConfig::class), 'pgsql', app('files'));
+    $bootstrapper = new SessionConnectionBootstrapper(resolve('session'), resolve(CacheManager::class), app(), resolve(FrameworkConfig::class), 'pgsql', resolve('files'));
 
     $bootstrapper->bootstrap(contextTCI('A'), databaseTCI());
     $prefix = 'corex-session:'.hash('sha256', 'A').':';
@@ -139,7 +139,7 @@ it('clones the dedicated redis/memcached session store with an account prefix an
 it('rejects an unsupported session driver at bootstrap and restores the session config', function (): void {
     config(['session.driver' => 'cookie']);
     $before = config('session');
-    $bootstrapper = new SessionConnectionBootstrapper(app('session'), app(CacheManager::class), app(), app(FrameworkConfig::class), 'pgsql', app('files'));
+    $bootstrapper = new SessionConnectionBootstrapper(resolve('session'), resolve(CacheManager::class), app(), resolve(FrameworkConfig::class), 'pgsql', resolve('files'));
 
     expect(fn () => $bootstrapper->bootstrap(contextTCI('A'), databaseTCI()))
         ->toThrow(InvalidConfiguration::class, 'unsupported driver');
@@ -153,13 +153,13 @@ it('refuses file sessions that cannot be written and never leaves a half-prepare
     file_put_contents($blocker, 'a file where the session root should be');
     config(['session.driver' => 'file', 'session.files' => $blocker]);
     $before = config('session');
-    $bootstrapper = new SessionConnectionBootstrapper(app('session'), app(CacheManager::class), app(), app(FrameworkConfig::class), 'pgsql', app('files'));
+    $bootstrapper = new SessionConnectionBootstrapper(resolve('session'), resolve(CacheManager::class), app(), resolve(FrameworkConfig::class), 'pgsql', resolve('files'));
 
     try {
         expect(fn () => $bootstrapper->bootstrap(contextTCI('A'), databaseTCI()))->toThrow(Exception::class);
         $bootstrapper->revert();
         expect(config('session'))->toBe($before);
     } finally {
-        app('files')->delete($blocker);
+        resolve('files')->delete($blocker);
     }
 });

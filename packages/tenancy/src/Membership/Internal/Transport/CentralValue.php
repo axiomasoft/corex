@@ -20,15 +20,6 @@ final class CentralValue
         return strtolower($value);
     }
 
-    public static function nonEmpty(string $value, string $field): string
-    {
-        if (trim($value) === '') {
-            throw new CentralProtocolViolation("{$field} must not be empty.");
-        }
-
-        return $value;
-    }
-
     public static function product(string $value): string
     {
         if (preg_match('/^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$/D', $value) !== 1) {

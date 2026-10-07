@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Roave\BackwardCompatibility\LocateSources;
 
+use CoreX\Attributes\Api;
+use CoreX\Attributes\Spi;
 use Roave\BackwardCompatibility\SourceLocator\ReplaceSourcePathOfLocatedSources;
 use Roave\BetterReflection\Identifier\Identifier;
 use Roave\BetterReflection\Identifier\IdentifierType;
@@ -16,7 +18,7 @@ use Roave\BetterReflection\SourceLocator\Type\SourceLocator;
 use RuntimeException;
 
 /** Roave comparison selection; dependency lookup retains every source declaration. */
-final class LocateSourcesViaComposerJson implements LocateSources
+final readonly class LocateSourcesViaComposerJson implements LocateSources
 {
     public function __construct(private Locator $astLocator) {}
 
@@ -53,7 +55,7 @@ final class LocateSourcesViaComposerJson implements LocateSources
             $legacy[] = $prefix;
         }
 
-        return new class($locator, $legacy) implements SourceLocator
+        return new readonly class($locator, $legacy) implements SourceLocator
         {
             /** @param list<string> $legacy */
             public function __construct(private SourceLocator $locator, private array $legacy) {}
@@ -72,17 +74,12 @@ final class LocateSourcesViaComposerJson implements LocateSources
                             return false;
                         }
 
-                        if ($symbol->getAttributesByName('CoreX\\Attributes\\Api') !== []
-                            || $symbol->getAttributesByName('CoreX\\Attributes\\Spi') !== []) {
+                        if ($symbol->getAttributesByName(Api::class) !== []
+                            || $symbol->getAttributesByName(Spi::class) !== []) {
                             return true;
                         }
-                        foreach ($this->legacy as $prefix) {
-                            if ($symbol->getName() === $prefix || str_starts_with($symbol->getName(), rtrim($prefix, '\\').'\\')) {
-                                return true;
-                            }
-                        }
 
-                        return false;
+                        return array_any($this->legacy, fn ($prefix) => $symbol->getName() === $prefix || str_starts_with($symbol->getName(), rtrim($prefix, '\\').'\\'));
                     },
                 ));
             }

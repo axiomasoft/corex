@@ -29,11 +29,11 @@ final readonly class BulkOperations
     public function submit(DataScope $scope, string $clientId, ?string $idempotencyKey, BulkOperationDefinition $definition): JsonResponse
     {
         if ($idempotencyKey === null || $idempotencyKey === '') {
-            return $this->problem(400, 'idempotency_required');
+            return $this->problem(status: 400, code: 'idempotency_required');
         }
 
         if ($definition->clientId !== $clientId || $definition->actorId !== $scope->actorId) {
-            return $this->problem(404, 'not_found');
+            return $this->problem(status: 404, code: 'not_found');
         }
 
         $operation = $this->executor->submit($definition);
@@ -43,10 +43,10 @@ final readonly class BulkOperations
 
     public function show(DataScope $scope, string $clientId, string $id): JsonResponse
     {
-        $operation = $this->visible($scope, $clientId, $id);
+        $operation = $this->visible(scope: $scope, clientId: $clientId, id: $id);
 
         if ($operation === null) {
-            return $this->problem(404, 'not_found');
+            return $this->problem(status: 404, code: 'not_found');
         }
 
         $response = response()->json([
@@ -65,11 +65,11 @@ final readonly class BulkOperations
 
     public function cancel(DataScope $scope, string $clientId, string $id): JsonResponse
     {
-        if ($this->visible($scope, $clientId, $id) === null) {
-            return $this->problem(404, 'not_found');
+        if ($this->visible(scope: $scope, clientId: $clientId, id: $id) === null) {
+            return $this->problem(status: 404, code: 'not_found');
         }
 
-        $operation = $this->store->cancel($scope, $id);
+        $operation = $this->store->cancel(scope: $scope, id: $id);
         $status = $operation->status === BulkOperationStatus::Cancelling ? 202 : 200;
 
         return response()->json([
@@ -80,29 +80,29 @@ final readonly class BulkOperations
 
     public function result(DataScope $scope, string $clientId, string $id): JsonResponse
     {
-        $operation = $this->visible($scope, $clientId, $id);
+        $operation = $this->visible(scope: $scope, clientId: $clientId, id: $id);
 
         if ($operation === null) {
-            return $this->problem(404, 'not_found');
+            return $this->problem(status: 404, code: 'not_found');
         }
 
-        $read = $this->results->read($scope, $operation, $this->clock->now());
+        $read = $this->results->read(scope: $scope, operation: $operation, now: $this->clock->now());
 
         return response()->json($read['body'], $read['status']);
     }
 
     public function failurePage(DataScope $scope, string $clientId, string $id, ?string $afterOrdinal, int $limit): JsonResponse
     {
-        $operation = $this->visible($scope, $clientId, $id);
+        $operation = $this->visible(scope: $scope, clientId: $clientId, id: $id);
 
         if ($operation === null) {
-            return $this->problem(404, 'not_found');
+            return $this->problem(status: 404, code: 'not_found');
         }
 
         try {
-            $page = $this->failures->read($scope, $operation, $afterOrdinal, $limit);
+            $page = $this->failures->read(scope: $scope, operation: $operation, afterOrdinal: $afterOrdinal, limit: $limit);
         } catch (InvalidArgumentException) {
-            return $this->problem(422, 'limit_exceeded');
+            return $this->problem(status: 422, code: 'limit_exceeded');
         }
 
         return response()->json($page);
@@ -111,7 +111,7 @@ final readonly class BulkOperations
     private function visible(DataScope $scope, string $clientId, string $id): ?BulkOperation
     {
         try {
-            $operation = $this->store->find($scope, $id);
+            $operation = $this->store->find(scope: $scope, id: $id);
         } catch (ScopeContextMismatch) {
             return null;
         }

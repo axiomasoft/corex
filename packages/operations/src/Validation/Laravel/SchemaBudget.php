@@ -83,7 +83,7 @@ final class SchemaBudget
                 }
 
                 $resources['#/$defs/'.$name] = JsonCanonical::encode($definition);
-                $resources += self::collectResources($definition, '#/$defs/'.$name);
+                $resources += self::collectResources(schema: $definition, prefix: '#/$defs/'.$name);
             }
         }
 
@@ -95,7 +95,7 @@ final class SchemaBudget
             }
 
             if (is_array($value) && $key !== '$defs') {
-                $resources += self::collectResources($value, $prefix);
+                $resources += self::collectResources(schema: $value, prefix: $prefix);
             }
         }
 
@@ -126,7 +126,7 @@ final class SchemaBudget
         $max = $depth;
 
         foreach ($value as $item) {
-            $max = max($max, self::maxDepth($item, $depth + 1));
+            $max = max($max, self::maxDepth(value: $item, depth: $depth + 1));
         }
 
         return $max;
@@ -169,7 +169,7 @@ final class SchemaBudget
         $max = $depth;
 
         foreach ($value as $item) {
-            $max = max($max, self::payloadDepth($item, $depth + 1));
+            $max = max($max, self::payloadDepth(value: $item, depth: $depth + 1));
         }
 
         return $max;

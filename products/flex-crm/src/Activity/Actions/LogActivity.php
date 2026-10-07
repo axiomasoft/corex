@@ -16,9 +16,9 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\ValidationException;
 
-final class LogActivity
+final readonly class LogActivity
 {
-    public function __construct(private readonly ContextGuard $guard) {}
+    public function __construct(private ContextGuard $guard) {}
 
     /** @param array<string, mixed>|null $metadata Legacy metadata has no canonical conversion. */
     public function handle(
@@ -57,7 +57,7 @@ final class LogActivity
             }
             $activity->getConnection()->table('crm_activity_targets')->insert(['activity_id' => $activity->id, 'entity_type' => $subject->getMorphClass(), 'entity_id' => $subject->getKey(), 'created_at' => now()]);
 
-            ActivityLogged::dispatch($activity);
+            event(new ActivityLogged($activity));
 
             return $activity;
         });

@@ -7,7 +7,7 @@ namespace CoreX\CustomFields\Data;
 use CoreX\Attributes\Api;
 use InvalidArgumentException;
 
-/** @phpstan-import-type JsonMap from \CoreX\CustomFields\Data\ValueBag */
+/** @phpstan-import-type JsonMap from ValueBag */
 #[Api(since: '1.0')]
 final readonly class ValueBatch
 {

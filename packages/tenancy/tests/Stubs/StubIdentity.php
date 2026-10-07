@@ -15,10 +15,10 @@ use Override;
  * these tests (parity/half 2 is proven by {@see StubIdentityProvider}
  * recording which id it was asked to retrieve).
  */
-final class StubIdentity implements Authenticatable
+final readonly class StubIdentity implements Authenticatable
 {
     public function __construct(
-        private readonly string $id,
+        private string $id,
     ) {}
 
     #[Override]

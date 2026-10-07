@@ -26,7 +26,7 @@ beforeEach(function (): void {
     DB::table('wsp_workspaces')->insert(['id' => $this->workspace, 'name' => 'Capture']);
     DB::table('users')->insert(['id' => $this->actorId, 'name' => 'Actor']);
     $this->actor = new ActorData(type: ActorType::User, id: $this->actorId);
-    $this->taskId = app(CreateTaskCommand::class)->handle(new TaskDraft(
+    $this->taskId = resolve(CreateTaskCommand::class)->handle(new TaskDraft(
         workspaceId: $this->workspace,
         title: 'Atomic capture',
         actor: $this->actor,
@@ -47,15 +47,15 @@ it('captures synchronously with a DTO and deduplicates the receipt on repeated c
     })->andReturn(new CaptureResult('captured'));
     app()->instance(WorkflowBinding::class, $binding);
     $data = new CompleteTaskData(taskId: $this->taskId, actor: $this->actor);
-    app(CompleteTaskCommand::class)->handle($data);
-    app(CompleteTaskCommand::class)->handle($data);
+    resolve(CompleteTaskCommand::class)->handle($data);
+    resolve(CompleteTaskCommand::class)->handle($data);
     $task = Task::query()->findOrFail($this->taskId);
     $task->title = 'Unchanged completion status';
     $task->save();
     // Re-enter Done from another status: the completion identity still has one receipt.
     $task->status = TaskStatus::Open;
     $task->save();
-    app(CompleteTaskCommand::class)->handle($data);
+    resolve(CompleteTaskCommand::class)->handle($data);
     expect(DB::table('corex_task_operations')->count())->toBe(1);
 });
 
@@ -73,7 +73,7 @@ it('rolls the task and already recorded receipt back when a later synchronous co
         }
     });
     app()->tag('test.failing-capture', 'corex.tasks.completion-captures');
-    expect(fn () => app(CompleteTaskCommand::class)->handle(new CompleteTaskData(
+    expect(fn () => resolve(CompleteTaskCommand::class)->handle(new CompleteTaskData(
         taskId: $this->taskId, actor: $this->actor,
     )))->toThrow(RuntimeException::class, 'Contributor failed');
     expect(Task::query()->findOrFail($this->taskId)->status)->toBe(TaskStatus::Open)
@@ -88,7 +88,7 @@ it('preserves normal saves when capture is disabled or the workflow binding is m
         $binding->shouldNotReceive('capture');
         app()->instance(WorkflowBinding::class, $binding);
     }
-    app(CompleteTaskCommand::class)->handle(new CompleteTaskData(taskId: $this->taskId, actor: $this->actor));
+    resolve(CompleteTaskCommand::class)->handle(new CompleteTaskData(taskId: $this->taskId, actor: $this->actor));
     expect(Task::query()->findOrFail($this->taskId)->status)->toBe(TaskStatus::Done)
         ->and(DB::table('corex_task_operations')->count())->toBe(0);
 })->with([true, false]);

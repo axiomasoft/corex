@@ -7,7 +7,7 @@ namespace CoreX\Transfer\Data;
 use CoreX\Attributes\Api;
 use InvalidArgumentException;
 
-/** @phpstan-import-type JsonMap from \CoreX\Transfer\Data\SourceRow */
+/** @phpstan-import-type JsonMap from SourceRow */
 #[Api(since: '1.0')]
 final readonly class TransferReceipt
 {
@@ -17,7 +17,7 @@ final readonly class TransferReceipt
      */
     public function __construct(public string $state, public SourceCursor $cursor, public string $checkpointSequence, public array $stats, public array $gaps, public ?string $errorCode)
     {
-        self::validateInput($state, $cursor, $checkpointSequence, $stats, $gaps, $errorCode);
+        self::validateInput(state: $state, cursor: $cursor, checkpointSequence: $checkpointSequence, stats: $stats, gaps: $gaps, errorCode: $errorCode);
     }
 
     /** Runtime validation also rejects values from untyped integration callers.

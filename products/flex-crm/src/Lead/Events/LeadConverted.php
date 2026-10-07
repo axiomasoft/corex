@@ -9,12 +9,12 @@ use Flex\Crm\Lead\Models\Lead;
 use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
 use Illuminate\Foundation\Events\Dispatchable;
 
-final class LeadConverted implements ShouldDispatchAfterCommit
+final readonly class LeadConverted implements ShouldDispatchAfterCommit
 {
     use Dispatchable;
 
     public function __construct(
-        public readonly Lead $lead,
-        public readonly Contact $contact,
+        public Lead $lead,
+        public Contact $contact,
     ) {}
 }

@@ -25,17 +25,17 @@ it('GEO-04 publishes reference dataset with CAS generation on PostgreSQL', funct
         restoreEpoch: str_repeat('e', 64),
     );
 
-    $parsed = app(FixtureReferenceNormalizer::class)->parse(provider: 'boxes', fixturePath: __DIR__.'/../fixtures/reference/boxes.json');
+    $parsed = resolve(FixtureReferenceNormalizer::class)->parse(provider: 'boxes', fixturePath: __DIR__.'/../fixtures/reference/boxes.json');
     $candidate = new DatasetCandidate(
         manifest: $parsed['manifest'],
         immutableRef: __DIR__.'/../fixtures/reference/boxes.json',
         byteLength: filesize(__DIR__.'/../fixtures/reference/boxes.json'),
     );
 
-    $receipt = app(DatasetImporter::class)->publish($scope, $candidate, new DatasetGeneration(expectedSnapshot: null, generation: 0));
+    $receipt = resolve(DatasetImporter::class)->publish($scope, $candidate, new DatasetGeneration(expectedSnapshot: null, generation: 0));
 
     expect($receipt->status)->toBe('published')
         ->and($receipt->generation)->toBe(1)
         ->and(DB::table('corex_reference_records')->count())->toBeGreaterThan(0)
-        ->and(app(GeographyProvider::class)->describe($scope)->snapshotId)->toBe('boxes-fixture-v1');
+        ->and(resolve(GeographyProvider::class)->describe($scope)->snapshotId)->toBe('boxes-fixture-v1');
 })->group('pg');

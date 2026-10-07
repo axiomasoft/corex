@@ -47,7 +47,7 @@ final class PruneApiOperations extends Command
         }
 
         $scope = $this->laravel->make(DataScope::class);
-        $bulkResult = $bulk->prune($scope, $max);
+        $bulkResult = $bulk->prune(scope: $scope, limit: $max);
         $this->components->info(sprintf(
             'API retention: bulk cleared %d removed %d; budget abandoned %d pruned %d idle buckets %d.',
             $bulkResult['cleared'],

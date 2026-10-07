@@ -22,21 +22,21 @@ use Illuminate\Support\Str;
 use Psr\Clock\ClockInterface;
 use Throwable;
 
-final class SqlMediaLibrary implements MediaLibrary
+final readonly class SqlMediaLibrary implements MediaLibrary
 {
     public function __construct(
-        private readonly ConnectionInterface $connection,
-        private readonly TenantStorage $storage,
-        private readonly MediaPolicy $policy,
-        private readonly MediaOperationStore $operations,
-        private readonly ConversionCoordinator $conversions,
-        private readonly MediaOptions $options,
-        private readonly ClockInterface $clock,
+        private ConnectionInterface $connection,
+        private TenantStorage $storage,
+        private MediaPolicy $policy,
+        private MediaOperationStore $operations,
+        private ConversionCoordinator $conversions,
+        private MediaOptions $options,
+        private ClockInterface $clock,
     ) {}
 
     public function store(MediaContext $context, UploadInput $input): MediaFileRef
     {
-        if (! $this->policy->allows($context, MediaAction::Store, new MediaSubject)) {
+        if (! $this->policy->allows(context: $context, action: MediaAction::Store, subject: new MediaSubject)) {
             throw new MediaAccessDenied('Media upload is denied.');
         }
 
@@ -158,7 +158,7 @@ final class SqlMediaLibrary implements MediaLibrary
                 return false;
             }
 
-            if (! $this->policy->allows($context, MediaAction::Store, new MediaSubject($this->reference($file)))) {
+            if (! $this->policy->allows(context: $context, action: MediaAction::Store, subject: new MediaSubject($this->reference($file)))) {
                 $this->connection->table('med_files')->where('id', $id)->update(['state' => 'deleting', 'updated_at' => $this->clock->now()]);
                 $this->operations->enqueuePurge(fileId: $id);
 
@@ -176,26 +176,26 @@ final class SqlMediaLibrary implements MediaLibrary
             throw new MediaOperationConflict('Media upload could not be published.');
         }
 
-        return new MediaFileRef($id, $input->purpose, $mime, $size, $checksum, 'ready');
+        return new MediaFileRef(id: $id, kind: $input->purpose, mimeType: $mime, sizeBytes: $size, sha256: $checksum, state: 'ready');
     }
 
     public function read(MediaContext $context, string $fileId): MediaReadRef
     {
         $file = $this->connection->table('med_files')->where('id', $fileId)->where('state', 'ready')->first();
 
-        if ($file === null || ! $this->policy->allows($context, MediaAction::Read, new MediaSubject($this->reference($file)))) {
+        if ($file === null || ! $this->policy->allows(context: $context, action: MediaAction::Read, subject: new MediaSubject($this->reference($file)))) {
             throw new MediaAccessDenied('Media read is denied.');
         }
 
         return new MediaReadRef(
-            Value::text($file->id),
-            Value::text($file->mime_type),
-            Value::integer($file->size_bytes),
-            Value::text($file->sha256),
-            function () use ($context, $file): mixed {
+            fileId: Value::text($file->id),
+            mimeType: Value::text($file->mime_type),
+            sizeBytes: Value::integer($file->size_bytes),
+            sha256: Value::text($file->sha256),
+            openStream: function () use ($context, $file): mixed {
                 $current = $this->connection->table('med_files')->where('id', $file->id)->where('state', 'ready')->first();
 
-                if ($current === null || ! $this->policy->allows($context, MediaAction::Read, new MediaSubject($this->reference($current)))) {
+                if ($current === null || ! $this->policy->allows(context: $context, action: MediaAction::Read, subject: new MediaSubject($this->reference($current)))) {
                     throw new MediaAccessDenied('Media read is denied.');
                 }
 
@@ -214,7 +214,7 @@ final class SqlMediaLibrary implements MediaLibrary
     {
         $candidate = $this->connection->table('med_files')->where('id', $fileId)->first();
 
-        if ($candidate !== null && ! $this->policy->allows($context, MediaAction::Delete, new MediaSubject($this->reference($candidate)))) {
+        if ($candidate !== null && ! $this->policy->allows(context: $context, action: MediaAction::Delete, subject: new MediaSubject($this->reference($candidate)))) {
             throw new MediaAccessDenied('Media deletion is denied.');
         }
         $file = $this->connection->transaction(function () use ($context, $fileId): ?object {
@@ -224,7 +224,7 @@ final class SqlMediaLibrary implements MediaLibrary
                 return null;
             }
 
-            if (! $this->policy->allows($context, MediaAction::Delete, new MediaSubject($this->reference($file)))) {
+            if (! $this->policy->allows(context: $context, action: MediaAction::Delete, subject: new MediaSubject($this->reference($file)))) {
                 throw new MediaAccessDenied('Media deletion is denied.');
             }
 
@@ -238,25 +238,25 @@ final class SqlMediaLibrary implements MediaLibrary
         });
 
         if ($file === null) {
-            return new DeleteResult(true, false);
+            return new DeleteResult(deleted: true, purgePending: false);
         }
 
-        return new DeleteResult(true, true);
+        return new DeleteResult(deleted: true, purgePending: true);
     }
 
     public function conversion(MediaContext $context, string $fileId, string $profile): ?MediaConversionRef
     {
         $file = $this->connection->table('med_files')->where('id', $fileId)->where('state', 'ready')->first();
 
-        if ($file === null || ! $this->policy->allows($context, MediaAction::Read, new MediaSubject($this->reference($file)))) {
+        if ($file === null || ! $this->policy->allows(context: $context, action: MediaAction::Read, subject: new MediaSubject($this->reference($file)))) {
             throw new MediaAccessDenied('Media conversion is denied.');
         }
 
-        return $this->conversions->request($fileId, $profile);
+        return $this->conversions->request(fileId: $fileId, profileKey: $profile);
     }
 
     private function reference(object $file): MediaFileRef
     {
-        return new MediaFileRef(Value::text(Value::field($file, 'id')), Value::text(Value::field($file, 'kind')), Value::text(Value::field($file, 'mime_type')), Value::integer(Value::field($file, 'size_bytes')), Value::text(Value::field($file, 'sha256')), Value::text(Value::field($file, 'state')));
+        return new MediaFileRef(id: Value::text(Value::field(row: $file, name: 'id')), kind: Value::text(Value::field(row: $file, name: 'kind')), mimeType: Value::text(Value::field(row: $file, name: 'mime_type')), sizeBytes: Value::integer(Value::field(row: $file, name: 'size_bytes')), sha256: Value::text(Value::field(row: $file, name: 'sha256')), state: Value::text(Value::field(row: $file, name: 'state')));
     }
 }
