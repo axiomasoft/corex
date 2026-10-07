@@ -50,7 +50,9 @@
         "symfony/console": "^7.2|^8.0",
         "symfony/process": "^7.2|^8.0",
         "symfony/filesystem": "^7.2|^8.0",
-        "phpunit/phpunit": "^12.0"
+        "phpunit/phpunit": "^12.0",
+        "laravel/octane": "2.21.0",
+        "monolog/monolog": "^3.10"
     },
     "suggest": {
         "open-telemetry/api": "Optional operation and messaging traces. CoreX boots without it.",
@@ -64,7 +66,8 @@
             "CoreX\\Testing\\": "tests/Support/"
         },
         "classmap": [
-            "tests/Fixtures"
+            "tests/Fixtures",
+            "tests/Release/octane-consumer/LifecycleServiceProvider.php"
         ]
     },
     "autoload": {
