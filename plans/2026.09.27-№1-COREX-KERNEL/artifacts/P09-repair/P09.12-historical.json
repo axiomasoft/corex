@@ -1,0 +1,224 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P09.12",
+  "title": "MSI security: тесты каждого package-fragment ≥95%",
+  "status": "done_with_deviations",
+  "summary": "MSI security: тесты каждого package-fragment ≥95%",
+  "why": "Bounded owner of verified P09 review defect; explicit acceptance and dependencies prevent hidden work.",
+  "scope": {
+    "include": [
+      "Сохранённые исправления test/tooling infrastructure и ordinary security contract regressions; owner-authorized cancellation of mutation acceptance for the rest of PLAN3 (D133)."
+    ],
+    "exclude": [
+      "Remote writes/publication unless exact separate external gate supplied; no unrelated P08/product behavior change.",
+      "Further mutation runs/score chasing/qualification until separately authorized after kernel stability."
+    ]
+  },
+  "depends_on": [
+    "P09.5"
+  ],
+  "decisions": [
+    "D118",
+    "D120",
+    "D17",
+    "D18",
+    "D19",
+    "D73",
+    "D103",
+    "D113",
+    "D121",
+    "D125",
+    "D133"
+  ],
+  "reads": [
+    {
+      "ref": "knowledge/research-P09-design#repository-only",
+      "why": "Действующий scope владельца и граница отменённых release работ",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#basis",
+      "why": "Canonical verified runbook",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#mutation",
+      "why": "Canonical verified runbook",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#checks",
+      "why": "Canonical verified runbook",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#grok-repair",
+      "why": "Verified G1–G6 corrections and executable runtime boundary",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/*/tests/**",
+      "change": "modify"
+    },
+    {
+      "path": "tests/**",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/mutation-equivalents.json",
+      "change": "any",
+      "note": "Created by predecessor item; then amended here."
+    },
+    {
+      "path": "scripts/quality/mutation-zero-ledger.json",
+      "change": "any",
+      "note": "Created by predecessor item; then amended here."
+    },
+    {
+      "path": "scripts/quality/tests/fixtures/**",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/mutation.py",
+      "change": "modify",
+      "note": "Repair observed package Pest bootstrap and Testbench sandbox directory loss; preserve full source/mutator/threshold policy."
+    },
+    {
+      "path": "scripts/quality/tests/test_mutation.py",
+      "change": "modify",
+      "note": "Regression controls for the observed sandbox/harness defects."
+    },
+    {
+      "path": "scripts/quality/infection-pest-adapter/src/PestAdapter.php",
+      "change": "modify",
+      "note": "Use every coverage-reported test class for each mutant; retain all methods/datasets, full initial suites, unknown mapping refusal and raw exit evidence."
+    },
+    {
+      "path": "scripts/quality/infection-pest-adapter/src/NullReturn.php",
+      "change": "create",
+      "note": "Additional return-null perturbation; preserves all default mutators and strict scoring without classifying behavior as declarations."
+    },
+    {
+      "path": "composer.json",
+      "change": "modify",
+      "note": "Root test-only installation of Tenancy existing exact native S3 adapter development pin, to run the full fragment without skips."
+    },
+    {
+      "path": "composer.lock",
+      "change": "modify",
+      "note": "Lock that test-only SDK closure; preserve existing engine/platform pins."
+    },
+    {
+      "path": "pint.json",
+      "change": "modify",
+      "note": "Exclude only four immutable historical generated P09.5 probe bootstrap artifacts; retain maintained source/test rules."
+    },
+    {
+      "path": "scripts/quality/infection-pest-adapter/src/NonNullReturn.php",
+      "change": "create",
+      "note": "Additional null perturbation of non-null typed forwarded values, covering default-profile omissions; retain all standard mutators."
+    },
+    {
+      "path": "scripts/quality/mutation-ast.php",
+      "change": "modify",
+      "note": "Classify only observed zero-file declarations with null/empty literal storage defaults or empty abstract trait composition; preserve executable expression/branch refusal and full raw source profile."
+    },
+    {
+      "path": "scripts/quality/infection-pest-adapter/src/DefaultObjectArgument.php",
+      "change": "create",
+      "note": "Additional typed object-constructor default perturbation; default ToolResult metadata evaluates JsonDocument and remains behavior, not a declaration exception."
+    },
+    {
+      "path": "scripts/quality/README.md",
+      "change": "modify",
+      "note": "Document the verified covering-method adapter, early interception and native service inputs."
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "change": "modify",
+      "note": "D133 disables all three mutation jobs."
+    },
+    {
+      "path": "docs/dev-doctrine.md",
+      "change": "modify",
+      "note": "Record D133 owner exception to mutation-only rules until plan end."
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/phases/P09/P09.*.json",
+      "change": "modify",
+      "note": "Owner cancellation amendment for remaining P09 mutation gates; preserve ordinary behavioral requirements."
+    }
+  ],
+  "rules": [
+    "Соблюдать D125, D118/D120 и технические правила D121, D17/D73/D103/D113. Release-положения прежнего дизайна исключены D125; внешние записи не разрешены.",
+    "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
+    "Поведение/API/SPI/schema не менять молча ради зелёного tooling; precise decision+CHANGELOG+API/Golden для public delta.",
+    "D133: до конца PLAN3 mutation/Infection/MSI/probes/registry/ledger replay не выполняются. Обычные behavior, coverage, analysis, BC/API/schema проверки сохраняются.",
+    "Self-check + scoped checks; repair owning item. Независимое full-review фазы отдельное P09.8 по действующим требованиям плана.",
+    "Изменение scope не запускает исполнение. При запуске проверить актуальное завершение P08 и independent corrected-design review. Release owner questions/grants не являются допуском для code-items.",
+    "D125: выполнять только repository scope; требования к rc/candidate/SBOM/27-row release DoD и публикации пропущены, не переносить их в этот item."
+  ],
+  "guidance": "Сначала применить scope D125 и knowledge/research-P09-design#repository-only. Execute only after admission, from required section. Produce real fresh raw outputs; new commands below are owned deliverables, not present-at-design assumptions. Owner steering 2026-10-07: «я думаю ты должен сделать макимум по коду и дать промт для новой сессии, чтобы дешевая модель гоняла долгие прогоны и делала фиксы». Finish code checkpoint and hand off long measurements/survivor test fixes. Remaining execution may use economy/medium; acceptance remains security95 for every package and all source/mutator scopes unchanged. Do not silently alter production behavior or counting rules; return demonstrated tooling/semantic blockers with exact repro. Handoff is not item completion and does not reset the two4h total execution budget. D133 has priority over all old mutation-related text and the previous cheaper-model prompt: no further mutation work during PLAN3; only independent ordinary scope remains.",
+  "validation": [
+    {
+      "id": "V2",
+      "cmd": "scripts/php84 composer lint:check",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "scripts/php84 composer analyse",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Сохранённые изменения и доказательства; done_with_deviations по D133, MSI95 не достигнут и не заявлен."
+  ],
+  "route": {
+    "class": "economy",
+    "effort": "medium"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed",
+    "notes": "RAG:— current source facts",
+    "captures": []
+  },
+  "result": {
+    "started_at": "2026-10-07T12:55:27Z",
+    "finished_at": "2026-10-07T16:06:01Z",
+    "executor": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "session": "01a1166d-625e-7e72-8dac-6b75526f9292"
+    },
+    "notes": "Owner-authorized scope closure, not successful mutation qualification. Last completed Composer lint:check and analyse exit0 verified from actual tool sessions. No new tests/runs for closure; CI mutation jobs disabled and future items amended. Useful ordinary regressions and confirmed test/tooling repairs retained. Previous mutation continuation prompt superseded by D133.",
+    "deviations": [
+      "D133 owner explicitly cancels all remaining mutation work during PLAN3 until kernel stability. Security95 not achieved; no current mutation GREEN, no production-kernel bug fixed by these runs. Historical score/evidence preserved; ordinary test and harness improvements retained."
+    ],
+    "checks": [
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-10-07T16:06:01Z"
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-10-07T16:06:01Z"
+      }
+    ]
+  },
+  "updated_at": "2026-10-07T16:06:01Z"
+}

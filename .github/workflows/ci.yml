@@ -1012,7 +1012,7 @@ jobs:
 
   mutation-inventory:
     # PLAN3.D133: owner deferred mutation work until kernel stability; re-enable explicitly.
-    if: ${{ false }}
+    if: false
     name: Mutation inventory and parser controls
     permissions:
       contents: read
@@ -1040,7 +1040,7 @@ jobs:
 
   mutation-fragments:
     # PLAN3.D133: mutation scores are not acceptance gates during the rest of PLAN3.
-    if: ${{ false }}
+    if: false
     name: MSI · ${{ matrix.package }} · ${{ matrix.zone }}
     needs: mutation-inventory
     permissions:
@@ -1100,7 +1100,7 @@ jobs:
 
   mutation-check:
     # PLAN3.D133 also defers the fixed sabotage registry.
-    if: ${{ false }}
+    if: false
     permissions:
       contents: read
     runs-on: ubuntu-latest
