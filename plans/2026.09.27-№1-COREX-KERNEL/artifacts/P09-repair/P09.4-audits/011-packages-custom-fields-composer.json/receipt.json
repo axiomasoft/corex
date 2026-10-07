@@ -1,0 +1,9 @@
+{
+  "classification": "source",
+  "commands": [],
+  "error": "manifest/lock content-hash mismatch: /home/vostrikov/projects/packages/corex/packages/custom-fields/composer.json",
+  "manifest": "packages/custom-fields/composer.json",
+  "manifest_sha256": "672c49c4ba8226448e87c35cc2277276a830aa9b7448b15420b4c19b714774eb",
+  "name": "axiomasoft/corex-custom-fields",
+  "status": "RED"
+}

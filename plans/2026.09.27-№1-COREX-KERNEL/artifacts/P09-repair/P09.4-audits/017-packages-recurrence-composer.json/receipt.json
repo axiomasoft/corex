@@ -1,0 +1,9 @@
+{
+  "classification": "source",
+  "commands": [],
+  "error": "manifest/lock content-hash mismatch: /home/vostrikov/projects/packages/corex/packages/recurrence/composer.json",
+  "manifest": "packages/recurrence/composer.json",
+  "manifest_sha256": "f7b3407d6137ae7198b843dca15a98f854f39fe777c852a60a8545f46651e63e",
+  "name": "axiomasoft/corex-recurrence",
+  "status": "RED"
+}

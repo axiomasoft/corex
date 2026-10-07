@@ -2,8 +2,8 @@
   "$schema": "urn:swissknifeman:task:plan:item:v1",
   "id": "P09.8",
   "title": "Review P09: качество кода и обычное CI-закрытие",
-  "status": "blocked",
-  "summary": "Независимый read-only review типизации, tooling, MSI и lifecycle tests; закрытие по обычному hosted CI D73 без квалификации релиза.",
+  "status": "done",
+  "summary": "Независимый read-only recheck подтверждённых blockers, ограниченного ремонта и затронутых инвариантов; закрытие по обычному hosted CI D73. D133 mutation work deferred; release qualification исключена D125.",
   "why": "Изменения качества должны сохранять поведение/API/SPI/schema и иметь честные измерения; итоговый review другой моделью остаётся требованием плана.",
   "scope": {
     "include": [
@@ -15,6 +15,11 @@
     ]
   },
   "depends_on": [
+    "P09.3",
+    "P09.4",
+    "P09.12",
+    "P09.13",
+    "P09.14",
     "P09.15"
   ],
   "decisions": [
@@ -58,6 +63,23 @@
     }
   ],
   "task_files": [],
+  "artifacts": [
+    {
+      "id": "p09-repair-source-before",
+      "path": "@plan/artifacts/P09-repair/product-before-review.json",
+      "role": "output"
+    },
+    {
+      "id": "p09-repair-final-ci",
+      "path": "@plan/artifacts/P09-repair/hosted/37680630750/summary.json",
+      "role": "output"
+    },
+    {
+      "id": "p09-repair-independent-review",
+      "path": "@plan/artifacts/P09-repair/independent-review-report.md",
+      "role": "output"
+    }
+  ],
   "rules": [
     "Соблюдать D125, D118/D120 и технические правила D121, D17/D73/D103/D113. Release-положения прежнего дизайна исключены D125; внешние записи не разрешены.",
     "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
@@ -111,7 +133,7 @@
     "Улучшения репозитория проверены; релизная готовность и выпуск версии не заявлены."
   ],
   "route": {
-    "class": "frontier",
+    "class": "implementation",
     "effort": "high"
   },
   "review": {
@@ -134,53 +156,50 @@
     ]
   },
   "result": {
-    "started_at": "2026-10-07T17:19:14Z",
-    "finished_at": "2026-10-07T17:51:56Z",
+    "started_at": "2026-10-07T18:39:42Z",
+    "finished_at": "2026-10-07T21:31:38Z",
     "executor": {
       "provider": "codex",
-      "model": "gpt-6-astra",
-      "effort": "high",
-      "session": "01a1175f-c10c-78c1-baff-26e5fb2fa45f"
-    },
-    "registered_by": {
-      "provider": "codex",
       "model": "gpt-6.1-sol",
-      "effort": "high"
+      "effort": "high",
+      "session": "01a117f0-0c4f-7fb3-9855-cea7eb7f538f"
     },
-    "notes": "Read-only P09.8 completed independent reviewer codex/gpt-6-astra/high FINDINGS:2 and exact-source hosted CI run37652373568 on axiomik/corex-mirror:20success10failure3D133-planned skips. Five owning cause families recorded: Transfer/Search/Meilisearch Pest harness integration; CRM94.3<95coverage; missing Meilisearch PHPUnit dev declaration; three disabled-job Zizmor obfuscation diagnostics; hosted COMPOSER_NO_AUDIT blocks source audit after all PHPStan scopes pass. Current source1bfcb032 unchanged (root2879/reviewer3119files). No local suites or mutation/release work; no product repairs. Independent report and raw source-bound hosted receipts retained. Root current model explicitly authorized by owner.",
-    "escalation": "Owner approval is required only to expand the explicit read-only P09.8 contract («Do not repair product») into owning repairs P09.3/P09.4/P09.12/P09.13/P09.14 with affected checks, bounded independent recheck and final ordinary CI on axiomik. Approval request is pending; do not reopen or repair product without that response. P09.8 and phase cannot close GREEN on current findings/failed CI.",
+    "notes": "Independent actualnative codex/gpt-6-astra/high session01a117f9-85b5-7eb1-ba90-8f4a0eda7465 GREEN on4174e3e95d5c23097df9ef293e3603186733ce56; exactordinaryCI37680630750 completed/success30success3D133skips. Productread-onlyhash/status/marker integritypassed; ordinaryscopeaccepted. D133mutationdeviation and D125release skips retained; explicitSDKskip/Corewarninglimits, no mutation orreleasequalification.",
     "checks": [
       {
         "id": "V0",
         "exit": 0,
-        "at": "2026-10-07T17:51:56Z"
+        "at": "2026-10-07T21:31:38Z"
       },
       {
         "id": "V1",
         "exit": 0,
-        "at": "2026-10-07T17:51:56Z"
+        "at": "2026-10-07T21:31:38Z"
       },
       {
         "id": "V2",
         "exit": 0,
-        "at": "2026-10-07T17:51:56Z"
+        "at": "2026-10-07T21:31:38Z"
       },
       {
         "id": "V4",
-        "exit": 1,
-        "at": "2026-10-07T17:51:56Z"
+        "exit": 0,
+        "at": "2026-10-07T21:31:38Z"
       },
       {
         "id": "V5",
-        "exit": 1,
-        "at": "2026-10-07T17:51:56Z"
+        "exit": 0,
+        "at": "2026-10-07T21:31:38Z"
       },
       {
         "id": "V6",
-        "exit": 1,
-        "at": "2026-10-07T17:51:56Z"
+        "exit": 0,
+        "at": "2026-10-07T21:31:38Z"
       }
+    ],
+    "commits": [
+      "4174e3e95d5c23097df9ef293e3603186733ce56"
     ]
   },
-  "updated_at": "2026-10-07T17:51:56Z"
+  "updated_at": "2026-10-07T21:31:38Z"
 }

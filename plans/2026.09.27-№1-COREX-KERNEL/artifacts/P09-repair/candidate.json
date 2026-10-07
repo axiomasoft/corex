@@ -1,0 +1,8 @@
+{
+  "last_repair": "P09.13 recurring PG18 APT bootstrap source isolation",
+  "mirror_main_before": "412c5bec7e0e1c4cc51bd9e5289c6880eab2ad36",
+  "observed_at": "2026-10-07T21:14:32.491508+00:00",
+  "product_manifest_sha256": "ef35e425204ff5e96e7aa3020eff1befd43e20e40943322d10125e2ff867f23a",
+  "product_sha": "4174e3e95d5c23097df9ef293e3603186733ce56",
+  "tracked_product_files": 3452
+}

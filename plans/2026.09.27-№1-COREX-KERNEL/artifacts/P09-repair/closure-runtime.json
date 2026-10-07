@@ -1,0 +1,13 @@
+{
+  "plan_status": "done",
+  "p09_closed": {
+    "at": "2026-10-07T21:31:38Z",
+    "result": "done_with_deviations",
+    "summary": "17 item(s): 9 done, 4 done_with_deviations, 4 skipped"
+  },
+  "p098_status": "done",
+  "semantic_next": "archive: task:plan-close 2026.09.27-№1-COREX-KERNEL archive",
+  "ci_product_sha": "4174e3e95d5c23097df9ef293e3603186733ce56",
+  "ci_run_id": 37680630750,
+  "post_bookkeeping_product_equality_required": true
+}

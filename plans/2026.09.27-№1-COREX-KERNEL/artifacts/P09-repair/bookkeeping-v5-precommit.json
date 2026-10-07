@@ -1,0 +1,12 @@
+{
+  "ci_product_sha": "4174e3e95d5c23097df9ef293e3603186733ce56",
+  "ci_run": 37680630750,
+  "phase_p09": "closed done_with_deviations",
+  "plan3": "done",
+  "native_review": "review:codex/gpt-6-astra GREEN",
+  "product_manifest_sha256": "ef35e425204ff5e96e7aa3020eff1befd43e20e40943322d10125e2ff867f23a",
+  "after_native_review_and_runtime_closure_all3452regular_and6symlinks_identical": true,
+  "foreign300artifact_hashes_identical": true,
+  "bookkeeping_path_scope": "only plan source/evidence; generated views and foreign stack artifacts excluded by guarded Task dry-run",
+  "post_commit_procedure": "verify CI product ancestor of final bookkeeping HEAD; diff has only plans paths; all product hashes and symlink targets identical; save actual commit proof in build/p09-repair/final-bookkeeping-proof.json"
+}

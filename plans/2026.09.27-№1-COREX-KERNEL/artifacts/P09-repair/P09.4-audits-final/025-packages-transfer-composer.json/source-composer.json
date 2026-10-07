@@ -1,0 +1,58 @@
+{
+    "name": "axiomasoft/corex-transfer",
+    "description": "Bounded import and export primitives for CoreX.",
+    "type": "corex-module",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "axiomasoft/corex": "^1.0@dev",
+        "illuminate/database": "^13.0",
+        "illuminate/support": "^13.0",
+        "psr/clock": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "CoreX\\Transfer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CoreX\\Transfer\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "corex": {
+            "schema-version": 1,
+            "package-type": "capability",
+            "stability": "stable"
+        },
+        "laravel": {
+            "providers": [
+                "CoreX\\Transfer\\TransferServiceProvider"
+            ]
+        },
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../core"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "scripts": {
+        "test": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg",
+        "test:pg": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=pg",
+        "test:coverage": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/transfer/phpstan.neon --memory-limit=2G --no-progress",
+        "lint:check": "../../vendor/bin/pint --test"
+    },
+    "require-dev": {
+        "illuminate/contracts": "^13.0",
+        "orchestra/testbench": "^11.3",
+        "orchestra/testbench-core": "^11.5"
+    }
+}

@@ -1,0 +1,9 @@
+{
+  "classification": "source",
+  "commands": [],
+  "error": "manifest/lock content-hash mismatch: /home/vostrikov/projects/packages/corex/packages/search-intl/composer.json",
+  "manifest": "packages/search-intl/composer.json",
+  "manifest_sha256": "9602756006a807536d7fd233770e6a85a18b8237b90e6b1a471252c7b27e8c6b",
+  "name": "axiomasoft/corex-search-intl",
+  "status": "RED"
+}

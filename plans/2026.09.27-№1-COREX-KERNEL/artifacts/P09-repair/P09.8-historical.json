@@ -1,0 +1,186 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P09.8",
+  "title": "Review P09: качество кода и обычное CI-закрытие",
+  "status": "blocked",
+  "summary": "Независимый read-only review типизации, tooling, MSI и lifecycle tests; закрытие по обычному hosted CI D73 без квалификации релиза.",
+  "why": "Изменения качества должны сохранять поведение/API/SPI/schema и иметь честные измерения; итоговый review другой моделью остаётся требованием плана.",
+  "scope": {
+    "include": [
+      "Specs/diff/check outputs retained code-items; independent verdict source/log integrity; обычный hosted final-commit CI D73."
+    ],
+    "exclude": [
+      "RC/candidate/SBOM/DoD27, operator packet, release qualification matrix и publication.",
+      "Незаявленные product/API/schema изменения."
+    ]
+  },
+  "depends_on": [
+    "P09.15"
+  ],
+  "decisions": [
+    "D118",
+    "D120",
+    "D17",
+    "D18",
+    "D19",
+    "D73",
+    "D103",
+    "D113",
+    "D121",
+    "D125",
+    "D133"
+  ],
+  "reads": [
+    {
+      "ref": "knowledge/research-P09-design#repository-only",
+      "why": "Действующий scope владельца и граница отменённых release работ",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#basis",
+      "why": "База/cohort",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#checks",
+      "why": "Алгоритм и runbook",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#checks",
+      "why": "Acceptance/failure/review",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design-rag#sources",
+      "why": "Version-bound tooling",
+      "required": true
+    }
+  ],
+  "task_files": [],
+  "rules": [
+    "Соблюдать D125, D118/D120 и технические правила D121, D17/D73/D103/D113. Release-положения прежнего дизайна исключены D125; внешние записи не разрешены.",
+    "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
+    "Поведение/API/SPI/schema не менять молча ради зелёного tooling; precise decision+CHANGELOG+API/Golden для public delta.",
+    "D133: до конца PLAN3 mutation/Infection/MSI/probes/registry/ledger replay не выполняются. Обычные behavior, coverage, analysis, BC/API/schema проверки сохраняются.",
+    "Self-check + scoped checks; repair owning item. Независимое full-review фазы отдельное P09.8 по действующим требованиям плана.",
+    "Изменение scope не запускает исполнение. При запуске проверить актуальное завершение P08 и independent corrected-design review. Release owner questions/grants не являются допуском для code-items.",
+    "D125: выполнять только repository scope; требования к rc/candidate/SBOM/27-row release DoD и публикации пропущены, не переносить их в этот item."
+  ],
+  "guidance": "Сначала применить scope D125 и knowledge/research-P09-design#repository-only. Read-only product. Consume existing green outputs and reproduce only suspicious evidence. Publish verdict through plan.py. Do not repair product or run a publisher. Hosted remote read is allowed; missing final CI is a concrete acceptance wait, not GREEN. D133 has priority over all old mutation-related text and the previous cheaper-model prompt: no further mutation work during PLAN3; only independent ordinary scope remains.",
+  "validation": [
+    {
+      "id": "V0",
+      "cmd": "test ! -e scripts/.plan-close-deferred",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V1",
+      "cmd": "git status --porcelain -- packages products scripts tests docs docs-public .github composer.json composer.lock",
+      "expect": "empty product worktree before and after review",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "Снять SHA256 всех product files до/после read-only review и сравнить. Reviewer model differs from P09 executors, prompt/context only specs+diff+checks.",
+      "expect": "Product hashes identical; model identity recorded",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "Сохранить независимый вердикт knowledge/artifacts-P09.8-review-verdict.json через plan.py add-document; exact review:<provider>/<model> GREEN|FINDINGS:N, source fingerprints и checks оставшихся code-items. Findings repair in owning item, затем bounded read-only recheck.",
+      "expect": "GREEN; no unresolved code/API/schema/security/check-integrity findings; release readiness not asserted",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "Read-only gh api/gh run view: обычный workflow CI на финальном commit фазы; exact SHA, completed/success, все обязательные jobs success по D73. При разном source/bookkeeping commit доказать lineage и identical product hashes. RC candidate/archive digests и release qualification matrix не требуются по D125. D133: mutation-inventory/mutation-fragments/mutation-check are intentionally disabled and skipped, not required-success jobs.",
+      "expect": "Hosted ordinary final-commit CI GREEN; missing proof keeps closure pending",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "Independently verify ordinary source lifecycle/transfer/search behavior receipts and retained code changes. D133 cancels mutation scores, equivalent/declaration replay and mutation CI gates for the rest of PLAN3.",
+      "expect": "Ordinary source behavior checks current; no claimed MSI95/90/75 or mutation qualification; no release DoD27 required",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Independent code-quality verdict; обычный hosted closing CI receipt runid/sha/jobs по D73.",
+    "Улучшения репозитория проверены; релизная готовность и выпуск версии не заявлены."
+  ],
+  "route": {
+    "class": "frontier",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "requested",
+    "reviewer": {
+      "class": "frontier",
+      "note": "Different model than P09 executors; standing plan full-review mandate, not newly imposed opt-in.",
+      "effort": "high"
+    }
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete",
+    "notes": "Primary captures+research-P09-design-rag; dependency solve VERIFY-AT-EXEC",
+    "captures": [
+      "@plan/artifacts/P09-design-rag/README.md"
+    ]
+  },
+  "result": {
+    "started_at": "2026-10-07T17:19:14Z",
+    "finished_at": "2026-10-07T17:51:56Z",
+    "executor": {
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "session": "01a1175f-c10c-78c1-baff-26e5fb2fa45f"
+    },
+    "registered_by": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    },
+    "notes": "Read-only P09.8 completed independent reviewer codex/gpt-6-astra/high FINDINGS:2 and exact-source hosted CI run37652373568 on axiomik/corex-mirror:20success10failure3D133-planned skips. Five owning cause families recorded: Transfer/Search/Meilisearch Pest harness integration; CRM94.3<95coverage; missing Meilisearch PHPUnit dev declaration; three disabled-job Zizmor obfuscation diagnostics; hosted COMPOSER_NO_AUDIT blocks source audit after all PHPStan scopes pass. Current source1bfcb032 unchanged (root2879/reviewer3119files). No local suites or mutation/release work; no product repairs. Independent report and raw source-bound hosted receipts retained. Root current model explicitly authorized by owner.",
+    "escalation": "Owner approval is required only to expand the explicit read-only P09.8 contract («Do not repair product») into owning repairs P09.3/P09.4/P09.12/P09.13/P09.14 with affected checks, bounded independent recheck and final ordinary CI on axiomik. Approval request is pending; do not reopen or repair product without that response. P09.8 and phase cannot close GREEN on current findings/failed CI.",
+    "checks": [
+      {
+        "id": "V0",
+        "exit": 0,
+        "at": "2026-10-07T17:51:56Z"
+      },
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-10-07T17:51:56Z"
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-10-07T17:51:56Z"
+      },
+      {
+        "id": "V4",
+        "exit": 1,
+        "at": "2026-10-07T17:51:56Z"
+      },
+      {
+        "id": "V5",
+        "exit": 1,
+        "at": "2026-10-07T17:51:56Z"
+      },
+      {
+        "id": "V6",
+        "exit": 1,
+        "at": "2026-10-07T17:51:56Z"
+      }
+    ]
+  },
+  "updated_at": "2026-10-07T17:51:56Z"
+}

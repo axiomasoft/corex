@@ -1,0 +1,9 @@
+{
+  "classification": "source",
+  "commands": [],
+  "error": "manifest/lock content-hash mismatch: /home/vostrikov/projects/packages/corex/packages/wakeup/composer.json",
+  "manifest": "packages/wakeup/composer.json",
+  "manifest_sha256": "f0e1f13902d3e8bd95d52d0227a36e7108111b3674e0e1cbacaea93e9f931c1b",
+  "name": "axiomasoft/corex-wakeup",
+  "status": "RED"
+}

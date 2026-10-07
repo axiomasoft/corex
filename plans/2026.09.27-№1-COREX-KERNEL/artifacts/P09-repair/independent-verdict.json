@@ -1,0 +1,37 @@
+{
+  "verdict": "review:codex/gpt-6-astra GREEN",
+  "reviewer": {
+    "route_provider": "codex",
+    "native_provider": "openai",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "session": "01a117f9-85b5-7eb1-ba90-8f4a0eda7465"
+  },
+  "repair_executor": {
+    "provider": "codex",
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "session": "01a117f0-0c4f-7fb3-9855-cea7eb7f538f"
+  },
+  "source_sha": "4174e3e95d5c23097df9ef293e3603186733ce56",
+  "hosted_run": 37680630750,
+  "findings": [],
+  "resolved": [
+    "F1 backend harness",
+    "F2 CRM coverage",
+    "F3 Rector",
+    "recurring hosted PG18 APT bootstrap"
+  ],
+  "product_hashes_identical": true,
+  "product_manifest_sha256": "ef35e425204ff5e96e7aa3020eff1befd43e20e40943322d10125e2ff867f23a",
+  "product_files": 3452,
+  "directory_symlinks": 6,
+  "product_worktree_clean_before_after": true,
+  "marker_absent": true,
+  "report_sha256": "b952db3b338baf985b6eef9eaf10dc56cf83ae1c2c886c90cff82f0b464a5180",
+  "limits": [
+    "six existing conditional Tenancy service/SDK test skips, no real SDK execution claimed",
+    "hosted Core362passed+4optional .env warning cases/1363assertions, not warning-free",
+    "D133 three mutation job skips; no mutation/MSI/release qualification"
+  ]
+}

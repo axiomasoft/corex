@@ -1,0 +1,25 @@
+{
+  "classification": "source",
+  "commands": [
+    {
+      "exit": 0,
+      "output": "validate.json",
+      "role": "validate",
+      "sha256": "9d90bb537466fb01a23cc433ca756b585c0271baa1203456c24347f1ae8400be"
+    },
+    {
+      "exit": 0,
+      "output": "audit.json",
+      "role": "audit",
+      "sha256": "738253715525c57e8df9f474a7b19010bd0afba87a606c175737310892f8be15"
+    }
+  ],
+  "effective_manifest_sha256": "159bae641f90785f0a5f7d900cffeb9fffe86bdae7755c4c0d279df69317fc55",
+  "lock_kind": "source",
+  "lock_sha256": "c42defed09c46b09ca0ea8ca721041e19139c73f06cdcb378e346e2f24328504",
+  "manifest": "packages/core/tests/Release/octane-consumer/composer.json",
+  "manifest_sha256": "159bae641f90785f0a5f7d900cffeb9fffe86bdae7755c4c0d279df69317fc55",
+  "name": "corex-tests/octane-consumer",
+  "source_lock_sha256": "c42defed09c46b09ca0ea8ca721041e19139c73f06cdcb378e346e2f24328504",
+  "status": "GREEN"
+}

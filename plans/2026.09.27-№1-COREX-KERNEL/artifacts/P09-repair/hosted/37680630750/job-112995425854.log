@@ -1,0 +1,218 @@
+﻿2026-10-07T20:16:14.1921905Z Current runner version: '2.337.0'
+2026-10-07T20:16:14.1992495Z ##[group]Runner Image Provisioner
+2026-10-07T20:16:14.1993652Z Hosted Compute Agent
+2026-10-07T20:16:14.1994581Z Version: 20260901.588
+2026-10-07T20:16:14.1995461Z Commit: f88ec8081b781fac6c440065ac7ff9e710ce3d0b
+2026-10-07T20:16:14.1997057Z Build Date: 2026-09-01T19:56:44Z
+2026-10-07T20:16:14.1998015Z Worker ID: {c174dda5-2818-4231-8f77-17abf3fef88a}
+2026-10-07T20:16:14.1998964Z Azure Region: centralus
+2026-10-07T20:16:14.1999830Z ##[endgroup]
+2026-10-07T20:16:14.2002091Z ##[group]Operating System
+2026-10-07T20:16:14.2003091Z Ubuntu
+2026-10-07T20:16:14.2003831Z 24.04.5
+2026-10-07T20:16:14.2004507Z LTS
+2026-10-07T20:16:14.2005251Z ##[endgroup]
+2026-10-07T20:16:14.2006266Z ##[group]Runner Image
+2026-10-07T20:16:14.2007240Z Image: ubuntu-24.04
+2026-10-07T20:16:14.2008024Z Version: 20260927.320.1
+2026-10-07T20:16:14.2009803Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260927.320/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-07T20:16:14.2012019Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260927.320
+2026-10-07T20:16:14.2013416Z ##[endgroup]
+2026-10-07T20:16:14.2014934Z ##[group]GITHUB_TOKEN Permissions
+2026-10-07T20:16:14.2019044Z Contents: read
+2026-10-07T20:16:14.2019934Z Metadata: read
+2026-10-07T20:16:14.2020746Z ##[endgroup]
+2026-10-07T20:16:14.2023724Z Secret source: Actions
+2026-10-07T20:16:14.2025120Z Cache mode: write
+2026-10-07T20:16:14.2026880Z Prepare workflow directory
+2026-10-07T20:16:14.3006084Z Prepare all required actions
+2026-10-07T20:16:14.3152494Z Getting action download info
+2026-10-07T20:16:14.6785082Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-07T20:16:15.3015070Z Complete job name: Anti-weakening gate
+2026-10-07T20:16:15.3721010Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-07T20:16:15.3722264Z with:
+2026-10-07T20:16:15.3722885Z   persist-credentials: false
+2026-10-07T20:16:15.3723575Z   fetch-depth: 0
+2026-10-07T20:16:15.3724161Z   repository: axiomik/corex-mirror
+2026-10-07T20:16:15.3728720Z   token: ***
+2026-10-07T20:16:15.3729350Z   ssh-strict: true
+2026-10-07T20:16:15.3729908Z   ssh-user: git
+2026-10-07T20:16:15.3730505Z   clean: true
+2026-10-07T20:16:15.3731069Z   sparse-checkout-cone-mode: true
+2026-10-07T20:16:15.3731739Z   fetch-tags: false
+2026-10-07T20:16:15.3732337Z   show-progress: true
+2026-10-07T20:16:15.3732898Z   lfs: false
+2026-10-07T20:16:15.3733445Z   submodules: false
+2026-10-07T20:16:15.3734029Z   set-safe-directory: true
+2026-10-07T20:16:15.3734673Z   allow-unsafe-pr-checkout: false
+2026-10-07T20:16:15.3735601Z env:
+2026-10-07T20:16:15.3736185Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T20:16:15.3736870Z ##[endgroup]
+2026-10-07T20:16:15.4922555Z Syncing repository: axiomik/corex-mirror
+2026-10-07T20:16:15.4927267Z ##[group]Getting Git version info
+2026-10-07T20:16:15.4928979Z Working directory is '/home/runner/work/corex-mirror/corex-mirror'
+2026-10-07T20:16:15.4931562Z [command]/usr/bin/git version
+2026-10-07T20:16:15.4987129Z git version 2.55.0
+2026-10-07T20:16:15.5035345Z ##[endgroup]
+2026-10-07T20:16:15.5077611Z Temporarily overriding HOME='/home/runner/work/_temp/1d071331-60ec-4f56-88bd-c8cf8a141f2f' before making global git config changes
+2026-10-07T20:16:15.5087088Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-07T20:16:15.5100569Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/corex-mirror/corex-mirror
+2026-10-07T20:16:15.5127124Z Deleting the contents of '/home/runner/work/corex-mirror/corex-mirror'
+2026-10-07T20:16:15.5129463Z ##[group]Determining repository object format
+2026-10-07T20:16:15.5131141Z ##[endgroup]
+2026-10-07T20:16:15.5132603Z ##[group]Initializing the repository
+2026-10-07T20:16:15.5133908Z [command]/usr/bin/git init /home/runner/work/corex-mirror/corex-mirror
+2026-10-07T20:16:15.5269355Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-07T20:16:15.5297372Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-07T20:16:15.5310193Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-07T20:16:15.5314983Z hint: call:
+2026-10-07T20:16:15.5316300Z hint:
+2026-10-07T20:16:15.5317435Z hint: 	git config --global init.defaultBranch <name>
+2026-10-07T20:16:15.5318709Z hint:
+2026-10-07T20:16:15.5328641Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-07T20:16:15.5330532Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-07T20:16:15.5331941Z hint:
+2026-10-07T20:16:15.5332844Z hint: 	git branch -m <name>
+2026-10-07T20:16:15.5333845Z hint:
+2026-10-07T20:16:15.5335098Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-07T20:16:15.5337490Z Initialized empty Git repository in /home/runner/work/corex-mirror/corex-mirror/.git/
+2026-10-07T20:16:15.5340923Z [command]/usr/bin/git remote add origin https://github.com/axiomik/corex-mirror
+2026-10-07T20:16:15.5437636Z ##[endgroup]
+2026-10-07T20:16:15.5439376Z ##[group]Disabling automatic garbage collection
+2026-10-07T20:16:15.5440891Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-07T20:16:15.5482353Z ##[endgroup]
+2026-10-07T20:16:15.5485403Z ##[group]Setting up auth
+2026-10-07T20:16:15.5487438Z Removing SSH command configuration
+2026-10-07T20:16:15.5489261Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-07T20:16:15.5537812Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-07T20:16:15.6029011Z Removing HTTP extra header
+2026-10-07T20:16:15.6048736Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-07T20:16:15.6100031Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-07T20:16:15.6283784Z Removing includeIf entries pointing to credentials config files
+2026-10-07T20:16:15.6287283Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-07T20:16:15.6329938Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-07T20:16:15.6533616Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-78d503cf-2d3a-441a-9593-61d4fba51799.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-07T20:16:15.6573321Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git.path /home/runner/work/_temp/git-credentials-78d503cf-2d3a-441a-9593-61d4fba51799.config
+2026-10-07T20:16:15.6608099Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-78d503cf-2d3a-441a-9593-61d4fba51799.config
+2026-10-07T20:16:15.6644787Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-78d503cf-2d3a-441a-9593-61d4fba51799.config
+2026-10-07T20:16:15.6682008Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-78d503cf-2d3a-441a-9593-61d4fba51799.config
+2026-10-07T20:16:15.6713184Z ##[endgroup]
+2026-10-07T20:16:15.6714649Z ##[group]Fetching the repository
+2026-10-07T20:16:15.6721266Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2026-10-07T20:16:23.5073180Z From https://github.com/axiomik/corex-mirror
+2026-10-07T20:16:23.5075100Z  * [new branch]        dependabot/composer/packages/intl/composer-b451d27a11 -> origin/dependabot/composer/packages/intl/composer-b451d27a11
+2026-10-07T20:16:23.5078553Z  * [new branch]        main       -> origin/main
+2026-10-07T20:16:23.5084823Z [command]/usr/bin/git branch --list --remote origin/main
+2026-10-07T20:16:23.5114944Z   origin/main
+2026-10-07T20:16:23.5125453Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+2026-10-07T20:16:23.5151422Z 4174e3e95d5c23097df9ef293e3603186733ce56
+2026-10-07T20:16:23.5154976Z ##[endgroup]
+2026-10-07T20:16:23.5156847Z ##[group]Determining the checkout info
+2026-10-07T20:16:23.5158241Z ##[endgroup]
+2026-10-07T20:16:23.5163020Z [command]/usr/bin/git sparse-checkout disable
+2026-10-07T20:16:23.5237341Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-07T20:16:23.5269705Z ##[group]Checking out the ref
+2026-10-07T20:16:23.5270928Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-07T20:16:24.5620804Z Updating files:  63% (9707/15236)
+2026-10-07T20:16:24.5729381Z Updating files:  64% (9752/15236)
+2026-10-07T20:16:24.5817560Z Updating files:  65% (9904/15236)
+2026-10-07T20:16:24.5869439Z Updating files:  66% (10056/15236)
+2026-10-07T20:16:24.7577618Z Updating files:  67% (10209/15236)
+2026-10-07T20:16:24.8422076Z Updating files:  68% (10361/15236)
+2026-10-07T20:16:24.8648818Z Updating files:  69% (10513/15236)
+2026-10-07T20:16:24.8726657Z Updating files:  70% (10666/15236)
+2026-10-07T20:16:24.8843613Z Updating files:  71% (10818/15236)
+2026-10-07T20:16:24.8989796Z Updating files:  72% (10970/15236)
+2026-10-07T20:16:24.9310140Z Updating files:  73% (11123/15236)
+2026-10-07T20:16:24.9397402Z Updating files:  74% (11275/15236)
+2026-10-07T20:16:24.9529856Z Updating files:  75% (11427/15236)
+2026-10-07T20:16:24.9676330Z Updating files:  76% (11580/15236)
+2026-10-07T20:16:25.1071018Z Updating files:  77% (11732/15236)
+2026-10-07T20:16:25.1073163Z Updating files:  78% (11885/15236)
+2026-10-07T20:16:25.1074037Z Updating files:  79% (12037/15236)
+2026-10-07T20:16:25.1638705Z Updating files:  80% (12189/15236)
+2026-10-07T20:16:25.1713239Z Updating files:  81% (12342/15236)
+2026-10-07T20:16:25.1797142Z Updating files:  82% (12494/15236)
+2026-10-07T20:16:25.1940163Z Updating files:  83% (12646/15236)
+2026-10-07T20:16:25.2013865Z Updating files:  84% (12799/15236)
+2026-10-07T20:16:25.2461662Z Updating files:  85% (12951/15236)
+2026-10-07T20:16:25.2574793Z Updating files:  86% (13103/15236)
+2026-10-07T20:16:25.2613601Z Updating files:  87% (13256/15236)
+2026-10-07T20:16:25.2676419Z Updating files:  88% (13408/15236)
+2026-10-07T20:16:25.2736158Z Updating files:  89% (13561/15236)
+2026-10-07T20:16:25.5449834Z Updating files:  90% (13713/15236)
+2026-10-07T20:16:25.5469189Z Updating files:  90% (13860/15236)
+2026-10-07T20:16:25.5679247Z Updating files:  91% (13865/15236)
+2026-10-07T20:16:25.5723857Z Updating files:  92% (14018/15236)
+2026-10-07T20:16:25.5827438Z Updating files:  93% (14170/15236)
+2026-10-07T20:16:25.5900877Z Updating files:  94% (14322/15236)
+2026-10-07T20:16:25.6020338Z Updating files:  95% (14475/15236)
+2026-10-07T20:16:25.6105015Z Updating files:  96% (14627/15236)
+2026-10-07T20:16:25.6182614Z Updating files:  97% (14779/15236)
+2026-10-07T20:16:25.6435324Z Updating files:  98% (14932/15236)
+2026-10-07T20:16:25.6491719Z Updating files:  99% (15084/15236)
+2026-10-07T20:16:25.6506617Z Updating files: 100% (15236/15236)
+2026-10-07T20:16:25.6515254Z Updating files: 100% (15236/15236), done.
+2026-10-07T20:16:25.9028452Z Switched to a new branch 'main'
+2026-10-07T20:16:25.9162420Z branch 'main' set up to track 'origin/main'.
+2026-10-07T20:16:25.9214653Z ##[endgroup]
+2026-10-07T20:16:25.9589273Z [command]/usr/bin/git log -1 --format=%H
+2026-10-07T20:16:25.9607506Z 4174e3e95d5c23097df9ef293e3603186733ce56
+2026-10-07T20:16:25.9618880Z ##[group]Removing auth
+2026-10-07T20:16:25.9619746Z Removing SSH command configuration
+2026-10-07T20:16:25.9620655Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-07T20:16:25.9662440Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-07T20:16:25.9898353Z Removing HTTP extra header
+2026-10-07T20:16:25.9901298Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-07T20:16:25.9945180Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-07T20:16:26.0185764Z Removing includeIf entries pointing to credentials config files
+2026-10-07T20:16:26.0189257Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-07T20:16:26.0432875Z includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git.path
+2026-10-07T20:16:26.0434614Z includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git/worktrees/*.path
+2026-10-07T20:16:26.0435773Z includeif.gitdir:/github/workspace/.git.path
+2026-10-07T20:16:26.0436474Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-07T20:16:26.0443987Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git.path
+2026-10-07T20:16:26.0474232Z /home/runner/work/_temp/git-credentials-78d503cf-2d3a-441a-9593-61d4fba51799.config
+2026-10-07T20:16:26.0498257Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-78d503cf\-2d3a\-441a\-9593\-61d4fba51799\.config
+2026-10-07T20:16:26.3042405Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git/worktrees/*.path
+2026-10-07T20:16:26.3094747Z /home/runner/work/_temp/git-credentials-78d503cf-2d3a-441a-9593-61d4fba51799.config
+2026-10-07T20:16:26.3106507Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-78d503cf\-2d3a\-441a\-9593\-61d4fba51799\.config
+2026-10-07T20:16:26.3768062Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-07T20:16:26.3799738Z /github/runner_temp/git-credentials-78d503cf-2d3a-441a-9593-61d4fba51799.config
+2026-10-07T20:16:26.3808234Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-78d503cf\-2d3a\-441a\-9593\-61d4fba51799\.config
+2026-10-07T20:16:26.4241701Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-07T20:16:26.4274457Z /github/runner_temp/git-credentials-78d503cf-2d3a-441a-9593-61d4fba51799.config
+2026-10-07T20:16:26.4277678Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-78d503cf\-2d3a\-441a\-9593\-61d4fba51799\.config
+2026-10-07T20:16:26.5459515Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-07T20:16:26.5697160Z Removing credentials config '/home/runner/work/_temp/git-credentials-78d503cf-2d3a-441a-9593-61d4fba51799.config'
+2026-10-07T20:16:26.5926392Z ##[endgroup]
+2026-10-07T20:16:26.9706510Z ##[group]Run bash scripts/anti-weakening-gate.sh
+2026-10-07T20:16:26.9707088Z [36;1mbash scripts/anti-weakening-gate.sh[0m
+2026-10-07T20:16:27.2498053Z shell: /usr/bin/bash -e {0}
+2026-10-07T20:16:27.2498679Z env:
+2026-10-07T20:16:27.2499040Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T20:16:27.2499378Z ##[endgroup]
+2026-10-07T20:16:27.5740568Z ANTI-WEAKENING GATE: база сравнения = 4174e3e95d5c23097df9ef293e3603186733ce56
+2026-10-07T20:16:40.6057261Z ANTI-WEAKENING GATE: allowance НЕАКТИВНА (sqlite -4, D79, sha=97fdc77) — база сравнения не совпадает
+2026-10-07T20:16:40.6088793Z ANTI-WEAKENING GATE: allowance НЕАКТИВНА (sqlite -5, D95, sha=1f42e01d10d21582746b31f89525f59e5ab024ff) — база сравнения не совпадает
+2026-10-07T20:16:40.6112610Z ANTI-WEAKENING GATE: allowance НЕАКТИВНА (sqlite -2, D112, sha=f6d9e41e13e39dbf7b44ce89788591ed8e742e41) — база сравнения не совпадает
+2026-10-07T20:16:40.6140629Z ANTI-WEAKENING GATE: allowance НЕАКТИВНА (pg -1, D95, sha=1f42e01d10d21582746b31f89525f59e5ab024ff) — база сравнения не совпадает
+2026-10-07T20:16:40.6167164Z ANTI-WEAKENING GATE: allowance НЕАКТИВНА (pg -8, D112, sha=f6d9e41e13e39dbf7b44ce89788591ed8e742e41) — база сравнения не совпадает
+2026-10-07T20:16:40.6169174Z ANTI-WEAKENING GATE: тесты sqlite 1387 -> 1387, pg 667 -> 667
+2026-10-07T20:16:40.6170402Z ANTI-WEAKENING GATE: OK
+2026-10-07T20:16:40.6302085Z Post job cleanup.
+2026-10-07T20:16:40.7347445Z [command]/usr/bin/git version
+2026-10-07T20:16:40.7348089Z git version 2.55.0
+2026-10-07T20:16:40.7447118Z Temporarily overriding HOME='/home/runner/work/_temp/240d817f-f603-4761-bdd7-9c1ba976b868' before making global git config changes
+2026-10-07T20:16:40.7448670Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-07T20:16:40.7449891Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/corex-mirror/corex-mirror
+2026-10-07T20:16:40.7484698Z Removing SSH command configuration
+2026-10-07T20:16:40.7506733Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-07T20:16:40.7566425Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-07T20:16:40.7958111Z Removing HTTP extra header
+2026-10-07T20:16:40.7971065Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-07T20:16:40.8042655Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-07T20:16:40.8367757Z Removing includeIf entries pointing to credentials config files
+2026-10-07T20:16:40.8368814Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-07T20:16:40.8428817Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-07T20:16:40.8951654Z Cleaning up orphan processes

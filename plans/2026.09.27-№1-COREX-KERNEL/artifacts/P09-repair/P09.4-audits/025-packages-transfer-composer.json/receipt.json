@@ -1,0 +1,9 @@
+{
+  "classification": "source",
+  "commands": [],
+  "error": "manifest/lock content-hash mismatch: /home/vostrikov/projects/packages/corex/packages/transfer/composer.json",
+  "manifest": "packages/transfer/composer.json",
+  "manifest_sha256": "7f01457b5072a3fee457c73d7f849a910fb3cbbcd456d5b725c14edc1fb7bcc0",
+  "name": "axiomasoft/corex-transfer",
+  "status": "RED"
+}

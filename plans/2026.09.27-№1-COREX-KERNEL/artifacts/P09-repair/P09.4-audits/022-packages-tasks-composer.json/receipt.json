@@ -1,0 +1,9 @@
+{
+  "classification": "source",
+  "commands": [],
+  "error": "manifest/lock content-hash mismatch: /home/vostrikov/projects/packages/corex/packages/tasks/composer.json",
+  "manifest": "packages/tasks/composer.json",
+  "manifest_sha256": "adfa0ea885b3f38ad7edf9c6b88e940950c40e07eb639a27d79c1840eb221c6d",
+  "name": "axiomasoft/corex-tasks",
+  "status": "RED"
+}

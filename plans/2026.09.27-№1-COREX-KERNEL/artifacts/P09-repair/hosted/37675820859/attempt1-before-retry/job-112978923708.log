@@ -1,0 +1,1365 @@
+﻿2026-10-07T19:38:35.2384381Z Current runner version: '2.337.0'
+2026-10-07T19:38:35.2419791Z ##[group]Runner Image Provisioner
+2026-10-07T19:38:35.2421440Z Hosted Compute Agent
+2026-10-07T19:38:35.2422253Z Version: 20261002.596
+2026-10-07T19:38:35.2423215Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-07T19:38:35.2424255Z Build Date: 2026-10-02T22:28:27Z
+2026-10-07T19:38:35.2425247Z Worker ID: {90c0aff8-f8a7-4425-a5bf-5ce40a6f03e4}
+2026-10-07T19:38:35.2426245Z Region: westus2
+2026-10-07T19:38:35.2426996Z Cloud: Azure
+2026-10-07T19:38:35.2427760Z ##[endgroup]
+2026-10-07T19:38:35.2429969Z ##[group]Operating System
+2026-10-07T19:38:35.2431098Z Ubuntu
+2026-10-07T19:38:35.2431965Z 24.04.5
+2026-10-07T19:38:35.2432660Z LTS
+2026-10-07T19:38:35.2433948Z ##[endgroup]
+2026-10-07T19:38:35.2434674Z ##[group]Runner Image
+2026-10-07T19:38:35.2435478Z Image: ubuntu-24.04
+2026-10-07T19:38:35.2436296Z Version: 20261004.327.1
+2026-10-07T19:38:35.2438000Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-07T19:38:35.2440766Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-07T19:38:35.2442163Z ##[endgroup]
+2026-10-07T19:38:35.2443814Z ##[group]GITHUB_TOKEN Permissions
+2026-10-07T19:38:35.2446821Z Contents: read
+2026-10-07T19:38:35.2447753Z Metadata: read
+2026-10-07T19:38:35.2448523Z ##[endgroup]
+2026-10-07T19:38:35.2451851Z Secret source: Actions
+2026-10-07T19:38:35.2453181Z Cache mode: write
+2026-10-07T19:38:35.2454211Z Prepare workflow directory
+2026-10-07T19:38:35.3366283Z Prepare all required actions
+2026-10-07T19:38:35.3430197Z Getting action download info
+2026-10-07T19:38:35.7274426Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-07T19:38:35.8613545Z Download action repository 'shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240' (SHA:f3e473d116dcccaddc5834248c87452386958240)
+2026-10-07T19:38:36.1750434Z Complete job name: Tools package · Laravel 13.*
+2026-10-07T19:38:36.5456545Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-07T19:38:36.5457662Z with:
+2026-10-07T19:38:36.5458199Z   persist-credentials: false
+2026-10-07T19:38:36.5458855Z   repository: axiomik/corex-mirror
+2026-10-07T19:38:36.5463157Z   token: ***
+2026-10-07T19:38:36.5463686Z   ssh-strict: true
+2026-10-07T19:38:36.5464229Z   ssh-user: git
+2026-10-07T19:38:36.5464746Z   clean: true
+2026-10-07T19:38:36.5465303Z   sparse-checkout-cone-mode: true
+2026-10-07T19:38:36.5465950Z   fetch-depth: 1
+2026-10-07T19:38:36.5466460Z   fetch-tags: false
+2026-10-07T19:38:36.5466980Z   show-progress: true
+2026-10-07T19:38:36.5467503Z   lfs: false
+2026-10-07T19:38:36.5468016Z   submodules: false
+2026-10-07T19:38:36.5468559Z   set-safe-directory: true
+2026-10-07T19:38:36.5469117Z   allow-unsafe-pr-checkout: false
+2026-10-07T19:38:36.5470207Z env:
+2026-10-07T19:38:36.5470929Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T19:38:36.5471541Z   LARAVEL_VERSION: 13.*
+2026-10-07T19:38:36.5472232Z ##[endgroup]
+2026-10-07T19:38:36.6658751Z Syncing repository: axiomik/corex-mirror
+2026-10-07T19:38:36.6662524Z ##[group]Getting Git version info
+2026-10-07T19:38:36.6664538Z Working directory is '/home/runner/work/corex-mirror/corex-mirror'
+2026-10-07T19:38:36.6667008Z [command]/usr/bin/git version
+2026-10-07T19:38:36.9161303Z git version 2.55.0
+2026-10-07T19:38:36.9202818Z ##[endgroup]
+2026-10-07T19:38:36.9211084Z Temporarily overriding HOME='/home/runner/work/_temp/ba1087e4-3087-44fe-a73e-de91349bf0fd' before making global git config changes
+2026-10-07T19:38:36.9214262Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-07T19:38:36.9216591Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/corex-mirror/corex-mirror
+2026-10-07T19:38:36.9346555Z Deleting the contents of '/home/runner/work/corex-mirror/corex-mirror'
+2026-10-07T19:38:36.9353049Z ##[group]Determining repository object format
+2026-10-07T19:38:36.9355840Z ##[endgroup]
+2026-10-07T19:38:36.9357533Z ##[group]Initializing the repository
+2026-10-07T19:38:36.9359540Z [command]/usr/bin/git init /home/runner/work/corex-mirror/corex-mirror
+2026-10-07T19:38:36.9846689Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-07T19:38:36.9851064Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-07T19:38:36.9853216Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-07T19:38:36.9854682Z hint: call:
+2026-10-07T19:38:36.9855365Z hint:
+2026-10-07T19:38:36.9856315Z hint: 	git config --global init.defaultBranch <name>
+2026-10-07T19:38:36.9857408Z hint:
+2026-10-07T19:38:36.9858266Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-07T19:38:36.9859485Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-07T19:38:36.9861737Z hint:
+2026-10-07T19:38:36.9862701Z hint: 	git branch -m <name>
+2026-10-07T19:38:36.9863793Z hint:
+2026-10-07T19:38:36.9864980Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-07T19:38:36.9867026Z Initialized empty Git repository in /home/runner/work/corex-mirror/corex-mirror/.git/
+2026-10-07T19:38:36.9875257Z [command]/usr/bin/git remote add origin https://github.com/axiomik/corex-mirror
+2026-10-07T19:38:37.0255977Z ##[endgroup]
+2026-10-07T19:38:37.0257740Z ##[group]Disabling automatic garbage collection
+2026-10-07T19:38:37.0259262Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-07T19:38:37.0361272Z ##[endgroup]
+2026-10-07T19:38:37.0368409Z ##[group]Setting up auth
+2026-10-07T19:38:37.0369909Z Removing SSH command configuration
+2026-10-07T19:38:37.0372816Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-07T19:38:37.0440780Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-07T19:38:37.2650494Z Removing HTTP extra header
+2026-10-07T19:38:37.2657029Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-07T19:38:37.2707655Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-07T19:38:37.2904151Z Removing includeIf entries pointing to credentials config files
+2026-10-07T19:38:37.2908114Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-07T19:38:37.2946118Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-07T19:38:37.3277242Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-77a73a47-ddb1-4512-ae8e-2174c00857b3.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-07T19:38:37.3355330Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git.path /home/runner/work/_temp/git-credentials-77a73a47-ddb1-4512-ae8e-2174c00857b3.config
+2026-10-07T19:38:37.3836079Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-77a73a47-ddb1-4512-ae8e-2174c00857b3.config
+2026-10-07T19:38:37.5575778Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-77a73a47-ddb1-4512-ae8e-2174c00857b3.config
+2026-10-07T19:38:37.7126644Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-77a73a47-ddb1-4512-ae8e-2174c00857b3.config
+2026-10-07T19:38:37.7641776Z ##[endgroup]
+2026-10-07T19:38:37.7642892Z ##[group]Fetching the repository
+2026-10-07T19:38:37.7649434Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +412c5bec7e0e1c4cc51bd9e5289c6880eab2ad36:refs/remotes/origin/main
+2026-10-07T19:38:45.8400513Z From https://github.com/axiomik/corex-mirror
+2026-10-07T19:38:45.8401505Z  * [new ref]         412c5bec7e0e1c4cc51bd9e5289c6880eab2ad36 -> origin/main
+2026-10-07T19:38:45.8404991Z [command]/usr/bin/git branch --list --remote origin/main
+2026-10-07T19:38:45.8441538Z   origin/main
+2026-10-07T19:38:45.8511385Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+2026-10-07T19:38:45.8533108Z 412c5bec7e0e1c4cc51bd9e5289c6880eab2ad36
+2026-10-07T19:38:45.8538856Z ##[endgroup]
+2026-10-07T19:38:45.8539850Z ##[group]Determining the checkout info
+2026-10-07T19:38:45.8541122Z ##[endgroup]
+2026-10-07T19:38:45.8541662Z [command]/usr/bin/git sparse-checkout disable
+2026-10-07T19:38:45.8568540Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-07T19:38:45.8601160Z ##[group]Checking out the ref
+2026-10-07T19:38:45.8605228Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-07T19:38:46.8801804Z Updating files:  63% (9746/15229)
+2026-10-07T19:38:46.8943626Z Updating files:  64% (9747/15229)
+2026-10-07T19:38:46.9039561Z Updating files:  65% (9899/15229)
+2026-10-07T19:38:46.9119595Z Updating files:  66% (10052/15229)
+2026-10-07T19:38:47.0452995Z Updating files:  67% (10204/15229)
+2026-10-07T19:38:47.0454587Z Updating files:  68% (10356/15229)
+2026-10-07T19:38:47.0481512Z Updating files:  69% (10509/15229)
+2026-10-07T19:38:47.0860590Z Updating files:  70% (10661/15229)
+2026-10-07T19:38:47.0967770Z Updating files:  71% (10813/15229)
+2026-10-07T19:38:47.1114387Z Updating files:  72% (10965/15229)
+2026-10-07T19:38:47.1431896Z Updating files:  73% (11118/15229)
+2026-10-07T19:38:47.1518698Z Updating files:  74% (11270/15229)
+2026-10-07T19:38:47.1645769Z Updating files:  75% (11422/15229)
+2026-10-07T19:38:47.1787486Z Updating files:  76% (11575/15229)
+2026-10-07T19:38:47.2041500Z Updating files:  77% (11727/15229)
+2026-10-07T19:38:47.2182037Z Updating files:  78% (11879/15229)
+2026-10-07T19:38:47.2654764Z Updating files:  79% (12031/15229)
+2026-10-07T19:38:47.3540918Z Updating files:  80% (12184/15229)
+2026-10-07T19:38:47.3616367Z Updating files:  81% (12336/15229)
+2026-10-07T19:38:47.3701643Z Updating files:  82% (12488/15229)
+2026-10-07T19:38:47.3851606Z Updating files:  83% (12641/15229)
+2026-10-07T19:38:47.3921883Z Updating files:  84% (12793/15229)
+2026-10-07T19:38:47.4365709Z Updating files:  85% (12945/15229)
+2026-10-07T19:38:47.4483643Z Updating files:  86% (13097/15229)
+2026-10-07T19:38:47.4521010Z Updating files:  87% (13250/15229)
+2026-10-07T19:38:47.4579809Z Updating files:  88% (13402/15229)
+2026-10-07T19:38:47.4641595Z Updating files:  89% (13554/15229)
+2026-10-07T19:38:47.5820056Z Updating files:  90% (13707/15229)
+2026-10-07T19:38:47.5950709Z Updating files:  91% (13859/15229)
+2026-10-07T19:38:47.5993372Z Updating files:  92% (14011/15229)
+2026-10-07T19:38:47.6095186Z Updating files:  93% (14163/15229)
+2026-10-07T19:38:47.6167895Z Updating files:  94% (14316/15229)
+2026-10-07T19:38:47.6286672Z Updating files:  95% (14468/15229)
+2026-10-07T19:38:47.6354125Z Updating files:  96% (14620/15229)
+2026-10-07T19:38:47.6427983Z Updating files:  97% (14773/15229)
+2026-10-07T19:38:47.6645360Z Updating files:  98% (14925/15229)
+2026-10-07T19:38:47.6678103Z Updating files:  99% (15077/15229)
+2026-10-07T19:38:47.6680128Z Updating files: 100% (15229/15229)
+2026-10-07T19:38:47.6681170Z Updating files: 100% (15229/15229), done.
+2026-10-07T19:38:48.4632073Z Switched to a new branch 'main'
+2026-10-07T19:38:48.4640603Z branch 'main' set up to track 'origin/main'.
+2026-10-07T19:38:48.4688914Z ##[endgroup]
+2026-10-07T19:38:48.7238995Z [command]/usr/bin/git log -1 --format=%H
+2026-10-07T19:38:48.7276619Z 412c5bec7e0e1c4cc51bd9e5289c6880eab2ad36
+2026-10-07T19:38:48.7291774Z ##[group]Removing auth
+2026-10-07T19:38:48.7292546Z Removing SSH command configuration
+2026-10-07T19:38:48.7310826Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-07T19:38:48.7330552Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-07T19:38:48.7631064Z Removing HTTP extra header
+2026-10-07T19:38:48.7636461Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-07T19:38:48.7682904Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-07T19:38:48.7904484Z Removing includeIf entries pointing to credentials config files
+2026-10-07T19:38:48.7907771Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-07T19:38:48.7935459Z includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git.path
+2026-10-07T19:38:48.7937189Z includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git/worktrees/*.path
+2026-10-07T19:38:48.7938269Z includeif.gitdir:/github/workspace/.git.path
+2026-10-07T19:38:48.7942077Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-07T19:38:48.7946480Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git.path
+2026-10-07T19:38:48.7968669Z /home/runner/work/_temp/git-credentials-77a73a47-ddb1-4512-ae8e-2174c00857b3.config
+2026-10-07T19:38:48.8018147Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-77a73a47\-ddb1\-4512\-ae8e\-2174c00857b3\.config
+2026-10-07T19:38:48.8085834Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git/worktrees/*.path
+2026-10-07T19:38:48.8099676Z /home/runner/work/_temp/git-credentials-77a73a47-ddb1-4512-ae8e-2174c00857b3.config
+2026-10-07T19:38:48.8103269Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-77a73a47\-ddb1\-4512\-ae8e\-2174c00857b3\.config
+2026-10-07T19:38:48.8139917Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-07T19:38:48.8159689Z /github/runner_temp/git-credentials-77a73a47-ddb1-4512-ae8e-2174c00857b3.config
+2026-10-07T19:38:48.8169018Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-77a73a47\-ddb1\-4512\-ae8e\-2174c00857b3\.config
+2026-10-07T19:38:48.8232316Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-07T19:38:48.8247164Z /github/runner_temp/git-credentials-77a73a47-ddb1-4512-ae8e-2174c00857b3.config
+2026-10-07T19:38:48.8263167Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-77a73a47\-ddb1\-4512\-ae8e\-2174c00857b3\.config
+2026-10-07T19:38:48.8323095Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-07T19:38:48.8529598Z Removing credentials config '/home/runner/work/_temp/git-credentials-77a73a47-ddb1-4512-ae8e-2174c00857b3.config'
+2026-10-07T19:38:48.8614811Z ##[endgroup]
+2026-10-07T19:38:48.8930068Z ##[group]Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240
+2026-10-07T19:38:48.8930631Z with:
+2026-10-07T19:38:48.8930902Z   php-version: 8.4
+2026-10-07T19:38:48.8931350Z   extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
+2026-10-07T19:38:48.8931833Z   coverage: xdebug
+2026-10-07T19:38:48.8932122Z   ini-file: production
+2026-10-07T19:38:48.8934380Z   github-token: ***
+2026-10-07T19:38:48.8934655Z env:
+2026-10-07T19:38:48.8934969Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T19:38:48.8935456Z   LARAVEL_VERSION: 13.*
+2026-10-07T19:38:48.8935767Z ##[endgroup]
+2026-10-07T19:38:48.9341915Z [command]/usr/bin/bash /home/runner/work/_actions/shivammathur/setup-php/f3e473d116dcccaddc5834248c87452386958240/src/scripts/run.sh
+2026-10-07T19:38:48.9717255Z 
+2026-10-07T19:38:48.9718258Z [90;1m==> [0m[37;1mSetup PHP[0m
+2026-10-07T19:39:09.9452699Z [32;1m✓ [0m[34;1mPHP [0m[90;1mInstalled PHP 8.4.26[0m
+2026-10-07T19:39:09.9453612Z 
+2026-10-07T19:39:09.9454329Z [90;1m==> [0m[37;1mSetup Extensions[0m
+2026-10-07T19:39:09.9869204Z [32;1m✓ [0m[34;1mmbstring [0m[90;1mEnabled[0m
+2026-10-07T19:39:09.9897880Z [32;1m✓ [0m[34;1mpdo [0m[90;1mEnabled[0m
+2026-10-07T19:39:09.9922219Z [32;1m✓ [0m[34;1msqlite3 [0m[90;1mEnabled[0m
+2026-10-07T19:39:09.9942968Z [32;1m✓ [0m[34;1mpdo_sqlite [0m[90;1mEnabled[0m
+2026-10-07T19:39:09.9977115Z [32;1m✓ [0m[34;1mbcmath [0m[90;1mEnabled[0m
+2026-10-07T19:39:09.9992269Z [32;1m✓ [0m[34;1mcurl [0m[90;1mEnabled[0m
+2026-10-07T19:39:10.0019943Z [32;1m✓ [0m[34;1mintl [0m[90;1mEnabled[0m
+2026-10-07T19:39:10.0047047Z [32;1m✓ [0m[34;1mzip [0m[90;1mEnabled[0m
+2026-10-07T19:39:10.0072971Z [32;1m✓ [0m[34;1mgd [0m[90;1mEnabled[0m
+2026-10-07T19:39:10.0101742Z [32;1m✓ [0m[34;1mxdebug [0m[90;1mEnabled[0m
+2026-10-07T19:39:10.0103336Z 
+2026-10-07T19:39:10.0106084Z [90;1m==> [0m[37;1mSetup Tools[0m
+2026-10-07T19:39:10.3274599Z [32;1m✓ [0m[34;1mcomposer [0m[90;1mAdded composer 2.10.3[0m
+2026-10-07T19:39:10.3301258Z 
+2026-10-07T19:39:10.3302673Z [90;1m==> [0m[37;1mSetup Coverage[0m
+2026-10-07T19:39:10.4124397Z [32;1m✓ [0m[34;1mxdebug [0m[90;1mXdebug 3.5.3 enabled as coverage driver[0m
+2026-10-07T19:39:10.4141211Z 
+2026-10-07T19:39:10.4153253Z [90;1m==> [0m[37;1mSponsor setup-php[0m
+2026-10-07T19:39:10.4154667Z [32;1m✓ [0m[34;1msetup-php [0m[90;1mhttps://setup-php.com/sponsor[0m
+2026-10-07T19:39:10.4304720Z ##[group]Run echo "Temporary constraint laravel/framework:$LARAVEL_VERSION applies during dependency installation"
+2026-10-07T19:39:10.4306326Z [36;1mecho "Temporary constraint laravel/framework:$LARAVEL_VERSION applies during dependency installation"[0m
+2026-10-07T19:39:10.4513993Z shell: /usr/bin/bash -e {0}
+2026-10-07T19:39:10.4514365Z env:
+2026-10-07T19:39:10.4514826Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T19:39:10.4515177Z   LARAVEL_VERSION: 13.*
+2026-10-07T19:39:10.4515508Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-07T19:39:10.4515859Z   COMPOSER_NO_INTERACTION: 1
+2026-10-07T19:39:10.4516180Z   COMPOSER_NO_AUDIT: 1
+2026-10-07T19:39:10.4516565Z ##[endgroup]
+2026-10-07T19:39:10.4604916Z Temporary constraint laravel/framework:13.* applies during dependency installation
+2026-10-07T19:39:10.4647291Z ##[group]Run echo "Temporary constraint illuminate/contracts:$LARAVEL_VERSION applies during dependency installation"
+2026-10-07T19:39:10.4648118Z [36;1mecho "Temporary constraint illuminate/contracts:$LARAVEL_VERSION applies during dependency installation"[0m
+2026-10-07T19:39:10.4686661Z shell: /usr/bin/bash -e {0}
+2026-10-07T19:39:10.4687032Z env:
+2026-10-07T19:39:10.4687331Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T19:39:10.4687702Z   LARAVEL_VERSION: 13.*
+2026-10-07T19:39:10.4688015Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-07T19:39:10.4688428Z   COMPOSER_NO_INTERACTION: 1
+2026-10-07T19:39:10.4688764Z   COMPOSER_NO_AUDIT: 1
+2026-10-07T19:39:10.4689067Z ##[endgroup]
+2026-10-07T19:39:10.4748214Z Temporary constraint illuminate/contracts:13.* applies during dependency installation
+2026-10-07T19:39:10.4783948Z ##[group]Run php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
+2026-10-07T19:39:10.4784638Z [36;1mphp scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"[0m
+2026-10-07T19:39:10.4818758Z shell: /usr/bin/bash -e {0}
+2026-10-07T19:39:10.4819101Z env:
+2026-10-07T19:39:10.4819481Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T19:39:10.4819821Z   LARAVEL_VERSION: 13.*
+2026-10-07T19:39:10.4820145Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-07T19:39:10.4820743Z   COMPOSER_NO_INTERACTION: 1
+2026-10-07T19:39:10.4821079Z   COMPOSER_NO_AUDIT: 1
+2026-10-07T19:39:10.4821400Z ##[endgroup]
+2026-10-07T19:39:10.5258790Z CI locked toolchain: phpstan/phpstan 2.2.16
+2026-10-07T19:39:10.5259638Z CI locked toolchain: phpstan/phpstan-strict-rules 2.0.12
+2026-10-07T19:39:10.5260989Z CI locked toolchain: larastan/larastan v3.12.2
+2026-10-07T19:39:11.2022985Z Loading composer repositories with package information
+2026-10-07T19:39:15.2612322Z Updating dependencies
+2026-10-07T19:39:15.3224590Z Lock file operations: 0 installs, 40 updates, 0 removals
+2026-10-07T19:39:15.3226942Z   - Upgrading composer/semver (3.5.0 => 3.5.1)
+2026-10-07T19:39:15.3227853Z   - Upgrading doctrine/lexer (3.0.2 => 3.0.3)
+2026-10-07T19:39:15.3228741Z   - Upgrading fidry/cpu-core-counter (1.4.0 => 1.4.1)
+2026-10-07T19:39:15.3248553Z   - Upgrading filp/whoops (2.18.5 => 2.18.6)
+2026-10-07T19:39:15.3249359Z   - Upgrading firebase/php-jwt (v7.2.0 => v7.2.1)
+2026-10-07T19:39:15.3250514Z   - Upgrading justinrainbow/json-schema (6.13.0 => 6.13.1)
+2026-10-07T19:39:15.3251345Z   - Upgrading laravel/agent-detector (v2.0.2 => v2.0.4)
+2026-10-07T19:39:15.3252130Z   - Upgrading laravel/framework (v13.33.0 => v13.35.0)
+2026-10-07T19:39:15.3252826Z   - Upgrading laravel/prompts (v0.3.24 => v0.3.25)
+2026-10-07T19:39:15.3253498Z   - Upgrading monolog/monolog (3.12.0 => 3.12.1)
+2026-10-07T19:39:15.3254172Z   - Upgrading nesbot/carbon (3.14.1 => 3.14.2)
+2026-10-07T19:39:15.3254862Z   - Upgrading orchestra/sidekick (v1.2.22 => v1.2.23)
+2026-10-07T19:39:15.3255609Z   - Upgrading pestphp/pest (v5.2.1 => v5.3.0)
+2026-10-07T19:39:15.3256308Z   - Upgrading phpdocumentor/type-resolver (2.0.0 => 2.1.0)
+2026-10-07T19:39:15.3257053Z   - Upgrading phpunit/php-code-coverage (14.3.5 => 14.4.1)
+2026-10-07T19:39:15.3257809Z   - Upgrading phpunit/php-text-template (6.0.0 => 6.0.1)
+2026-10-07T19:39:15.3258488Z   - Upgrading phpunit/phpunit (13.3.4 => 13.3.6)
+2026-10-07T19:39:15.3259245Z   - Upgrading roave/backward-compatibility-check (8.22.0 => 8.23.0)
+2026-10-07T19:39:15.3260114Z   - Upgrading sebastian/environment (9.3.2 => 9.3.3)
+2026-10-07T19:39:15.3261006Z   - Upgrading sebastian/version (7.0.0 => 7.0.1)
+2026-10-07T19:39:15.3261675Z   - Upgrading seld/phar-utils (1.2.2 => 1.2.3)
+2026-10-07T19:39:15.3262322Z   - Upgrading symfony/console (v7.4.19 => v7.4.20)
+2026-10-07T19:39:15.3263010Z   - Upgrading symfony/error-handler (v8.1.5 => v8.1.8)
+2026-10-07T19:39:15.3263727Z   - Upgrading symfony/finder (v8.1.7 => v8.1.8)
+2026-10-07T19:39:15.3264416Z   - Upgrading symfony/http-foundation (v8.1.7 => v8.1.8)
+2026-10-07T19:39:15.3265226Z   - Upgrading symfony/http-kernel (v8.1.7 => v8.1.8)
+2026-10-07T19:39:15.3266002Z   - Upgrading symfony/polyfill-intl-grapheme (v1.41.0 => v1.43.0)
+2026-10-07T19:39:15.3266814Z   - Upgrading symfony/polyfill-intl-idn (v1.42.0 => v1.43.0)
+2026-10-07T19:39:15.3267623Z   - Upgrading symfony/polyfill-intl-normalizer (v1.42.0 => v1.43.0)
+2026-10-07T19:39:15.3268417Z   - Upgrading symfony/polyfill-mbstring (v1.38.2 => v1.43.0)
+2026-10-07T19:39:15.3269209Z   - Upgrading symfony/polyfill-php80 (v1.37.0 => v1.43.0)
+2026-10-07T19:39:15.3269998Z   - Upgrading symfony/polyfill-php82 (v1.38.1 => v1.43.0)
+2026-10-07T19:39:15.3270866Z   - Upgrading symfony/polyfill-php83 (v1.41.0 => v1.43.0)
+2026-10-07T19:39:15.3271583Z   - Upgrading symfony/polyfill-php84 (v1.38.1 => v1.43.0)
+2026-10-07T19:39:15.3272300Z   - Upgrading symfony/polyfill-php85 (v1.41.0 => v1.43.0)
+2026-10-07T19:39:15.3273505Z   - Upgrading symfony/polyfill-php86 (v1.41.0 => v1.43.0)
+2026-10-07T19:39:15.3274186Z   - Upgrading symfony/polyfill-uuid (v1.37.0 => v1.43.0)
+2026-10-07T19:39:15.3274899Z   - Upgrading symfony/routing (v8.1.6 => v8.1.8)
+2026-10-07T19:39:15.3275598Z   - Upgrading symfony/uid (v8.1.5 => v8.1.8)
+2026-10-07T19:39:15.3276234Z   - Upgrading symfony/yaml (v8.1.6 => v8.1.8)
+2026-10-07T19:39:15.3313720Z Writing lock file
+2026-10-07T19:39:15.3314733Z Installing dependencies from lock file (including require-dev)
+2026-10-07T19:39:15.3403680Z Package operations: 250 installs, 0 updates, 0 removals
+2026-10-07T19:39:15.3411496Z   - Downloading pestphp/pest-plugin (v5.0.0)
+2026-10-07T19:39:15.3416009Z   - Downloading php-http/discovery (1.20.0)
+2026-10-07T19:39:15.3418448Z   - Downloading infection/extension-installer (0.1.2)
+2026-10-07T19:39:15.3420915Z   - Downloading phpstan/phpstan (2.2.16)
+2026-10-07T19:39:15.3422988Z   - Downloading composer/semver (3.5.1)
+2026-10-07T19:39:15.3425189Z   - Downloading tbachert/spi (v1.0.5)
+2026-10-07T19:39:15.3427228Z   - Downloading phpstan/extension-installer (1.4.3)
+2026-10-07T19:39:15.3429445Z   - Downloading aws/aws-crt-php (v1.2.7)
+2026-10-07T19:39:15.3431853Z   - Downloading psr/clock (1.0.0)
+2026-10-07T19:39:15.3433981Z   - Downloading voku/portable-ascii (2.1.1)
+2026-10-07T19:39:15.3436160Z   - Downloading symfony/polyfill-php80 (v1.43.0)
+2026-10-07T19:39:15.3437938Z   - Downloading symfony/polyfill-mbstring (v1.43.0)
+2026-10-07T19:39:15.3439851Z   - Downloading symfony/polyfill-ctype (v1.37.0)
+2026-10-07T19:39:15.3441303Z   - Downloading phpoption/phpoption (1.10.0)
+2026-10-07T19:39:15.3442672Z   - Downloading graham-campbell/result-type (v1.2.0)
+2026-10-07T19:39:15.3443926Z   - Downloading vlucas/phpdotenv (v5.7.0)
+2026-10-07T19:39:15.3444955Z   - Downloading symfony/css-selector (v8.1.6)
+2026-10-07T19:39:15.3446438Z   - Downloading tijsverkoyen/css-to-inline-styles (v2.4.0)
+2026-10-07T19:39:15.3447402Z   - Downloading symfony/var-dumper (v8.1.7)
+2026-10-07T19:39:15.3448554Z   - Downloading symfony/polyfill-uuid (v1.43.0)
+2026-10-07T19:39:15.3449614Z   - Downloading symfony/uid (v8.1.8)
+2026-10-07T19:39:15.3450938Z   - Downloading symfony/deprecation-contracts (v3.7.1)
+2026-10-07T19:39:15.3452060Z   - Downloading symfony/routing (v8.1.8)
+2026-10-07T19:39:15.3453019Z   - Downloading symfony/process (v8.1.7)
+2026-10-07T19:39:15.3454086Z   - Downloading symfony/polyfill-php86 (v1.43.0)
+2026-10-07T19:39:15.3455219Z   - Downloading symfony/polyfill-php85 (v1.43.0)
+2026-10-07T19:39:15.3456215Z   - Downloading symfony/polyfill-php84 (v1.43.0)
+2026-10-07T19:39:15.3457587Z   - Downloading symfony/polyfill-intl-normalizer (v1.43.0)
+2026-10-07T19:39:15.3458464Z   - Downloading symfony/polyfill-intl-idn (v1.43.0)
+2026-10-07T19:39:15.3459498Z   - Downloading symfony/mime (v8.1.7)
+2026-10-07T19:39:15.3460808Z   - Downloading psr/container (2.0.2)
+2026-10-07T19:39:15.3461920Z   - Downloading symfony/service-contracts (v3.7.3)
+2026-10-07T19:39:15.3462976Z   - Downloading psr/event-dispatcher (1.0.0)
+2026-10-07T19:39:15.3464201Z   - Downloading symfony/event-dispatcher-contracts (v3.7.1)
+2026-10-07T19:39:15.3465222Z   - Downloading symfony/event-dispatcher (v8.1.5)
+2026-10-07T19:39:15.3470613Z   - Downloading psr/log (3.0.2)
+2026-10-07T19:39:15.3471583Z   - Downloading doctrine/lexer (3.0.3)
+2026-10-07T19:39:15.3472432Z   - Downloading egulias/email-validator (4.0.4)
+2026-10-07T19:39:15.3473166Z   - Downloading symfony/mailer (v8.1.7)
+2026-10-07T19:39:15.3473932Z   - Downloading symfony/http-foundation (v8.1.8)
+2026-10-07T19:39:15.3474760Z   - Downloading symfony/error-handler (v8.1.8)
+2026-10-07T19:39:15.3475515Z   - Downloading symfony/http-kernel (v8.1.8)
+2026-10-07T19:39:15.3476229Z   - Downloading symfony/finder (v8.1.8)
+2026-10-07T19:39:15.3476994Z   - Downloading symfony/polyfill-intl-grapheme (v1.43.0)
+2026-10-07T19:39:15.3477723Z   - Downloading symfony/string (v8.1.7)
+2026-10-07T19:39:15.3478408Z   - Downloading symfony/console (v7.4.20)
+2026-10-07T19:39:15.3479764Z   - Downloading ramsey/collection (2.1.1)
+2026-10-07T19:39:15.3481632Z   - Downloading brick/math (0.14.8)
+2026-10-07T19:39:15.3482306Z   - Downloading ramsey/uuid (4.9.4)
+2026-10-07T19:39:15.3483365Z   - Downloading psr/simple-cache (3.0.0)
+2026-10-07T19:39:15.3484348Z   - Downloading psr/http-message (2.0)
+2026-10-07T19:39:15.3485687Z   - Downloading nunomaduro/termwind (v2.4.0)
+2026-10-07T19:39:15.3486916Z   - Downloading symfony/translation-contracts (v3.7.1)
+2026-10-07T19:39:15.3487975Z   - Downloading symfony/translation (v8.1.5)
+2026-10-07T19:39:15.3489057Z   - Downloading symfony/clock (v8.1.0)
+2026-10-07T19:39:15.3490734Z   - Downloading carbonphp/carbon-doctrine-types (3.2.1)
+2026-10-07T19:39:15.3491843Z   - Downloading nesbot/carbon (3.14.2)
+2026-10-07T19:39:15.3493082Z   - Downloading monolog/monolog (3.12.1)
+2026-10-07T19:39:15.3494222Z   - Downloading psr/http-factory (1.1.0)
+2026-10-07T19:39:15.3495653Z   - Downloading league/uri-interfaces (7.8.1)
+2026-10-07T19:39:15.3496733Z   - Downloading league/uri (7.8.1)
+2026-10-07T19:39:15.3497964Z   - Downloading league/mime-type-detection (1.17.0)
+2026-10-07T19:39:15.3499029Z   - Downloading league/flysystem-local (3.35.3)
+2026-10-07T19:39:15.3500087Z   - Downloading league/flysystem (3.36.0)
+2026-10-07T19:39:15.3501611Z   - Downloading nette/utils (v4.1.5)
+2026-10-07T19:39:15.3502758Z   - Downloading nette/schema (v1.3.6)
+2026-10-07T19:39:15.3504019Z   - Downloading dflydev/dot-access-data (v3.0.3)
+2026-10-07T19:39:15.3505468Z   - Downloading league/config (v1.2.0)
+2026-10-07T19:39:15.3506910Z   - Downloading league/commonmark (2.10.3)
+2026-10-07T19:39:15.3508024Z   - Downloading laravel/serializable-closure (v2.1.0)
+2026-10-07T19:39:15.3509098Z   - Downloading laravel/prompts (v0.3.25)
+2026-10-07T19:39:15.3510374Z   - Downloading guzzlehttp/uri-template (v2.0.1)
+2026-10-07T19:39:15.3511559Z   - Downloading symfony/polyfill-php82 (v1.43.0)
+2026-10-07T19:39:15.3512572Z   - Downloading guzzlehttp/psr7 (3.1.0)
+2026-10-07T19:39:15.3513685Z   - Downloading guzzlehttp/promises (3.0.2)
+2026-10-07T19:39:15.3514796Z   - Downloading psr/http-client (1.0.3)
+2026-10-07T19:39:15.3515710Z   - Downloading guzzlehttp/guzzle (8.2.0)
+2026-10-07T19:39:15.3516896Z   - Downloading fruitcake/php-cors (v1.4.0)
+2026-10-07T19:39:15.3518178Z   - Downloading dragonmantank/cron-expression (v3.6.0)
+2026-10-07T19:39:15.3519154Z   - Downloading doctrine/inflector (2.1.0)
+2026-10-07T19:39:15.3520198Z   - Downloading laravel/framework (v13.35.0)
+2026-10-07T19:39:15.3527683Z   - Syncing axioma-studio/azguard-core (0.3.0) into cache
+2026-10-07T19:39:17.1909879Z   - Downloading staabm/side-effects-detector (1.0.5)
+2026-10-07T19:39:17.1911238Z   - Downloading sebastian/version (7.0.1)
+2026-10-07T19:39:17.1912089Z   - Downloading sebastian/type (7.0.2)
+2026-10-07T19:39:17.1912829Z   - Downloading sebastian/recursion-context (8.0.1)
+2026-10-07T19:39:17.1913801Z   - Downloading sebastian/object-enumerator (8.1.0)
+2026-10-07T19:39:17.1919203Z   - Downloading sebastian/object-reflector (6.1.0)
+2026-10-07T19:39:17.1920078Z   - Downloading sebastian/global-state (9.0.1)
+2026-10-07T19:39:17.1921147Z   - Downloading sebastian/git-state (1.0.0)
+2026-10-07T19:39:17.1921908Z   - Downloading sebastian/file-filter (1.0.0)
+2026-10-07T19:39:17.1922601Z   - Downloading sebastian/exporter (8.2.1)
+2026-10-07T19:39:17.1923308Z   - Downloading sebastian/environment (9.3.3)
+2026-10-07T19:39:17.1924013Z   - Downloading sebastian/diff (9.0.1)
+2026-10-07T19:39:17.1924664Z   - Downloading sebastian/comparator (8.4.0)
+2026-10-07T19:39:17.1925428Z   - Downloading sebastian/cli-parser (5.0.1)
+2026-10-07T19:39:17.1926179Z   - Downloading phpunit/php-timer (9.0.0)
+2026-10-07T19:39:17.1926941Z   - Downloading phpunit/php-text-template (6.0.1)
+2026-10-07T19:39:17.1927749Z   - Downloading phpunit/php-invoker (7.0.0)
+2026-10-07T19:39:17.1928503Z   - Downloading phpunit/php-file-iterator (7.0.2)
+2026-10-07T19:39:17.1929295Z   - Downloading theseer/tokenizer (2.0.1)
+2026-10-07T19:39:17.1930146Z   - Downloading nikic/php-parser (v5.9.0)
+2026-10-07T19:39:17.1953758Z   - Downloading sebastian/lines-of-code (5.0.2)
+2026-10-07T19:39:17.1954778Z   - Downloading sebastian/complexity (6.0.0)
+2026-10-07T19:39:17.1956252Z   - Downloading phpunit/php-code-coverage (14.4.1)
+2026-10-07T19:39:17.1957738Z   - Downloading phar-io/version (3.2.1)
+2026-10-07T19:39:17.1958897Z   - Downloading phar-io/manifest (2.0.4)
+2026-10-07T19:39:17.1960654Z   - Downloading myclabs/deep-copy (1.14.0)
+2026-10-07T19:39:17.1961772Z   - Downloading phpunit/phpunit (13.3.6)
+2026-10-07T19:39:17.1962991Z   - Downloading pestphp/pest-plugin-profanity (v5.0.0)
+2026-10-07T19:39:17.1964152Z   - Downloading pestphp/pest-plugin-mutate (v5.0.2)
+2026-10-07T19:39:17.1965362Z   - Downloading webmozart/assert (2.5.0)
+2026-10-07T19:39:17.1966523Z   - Downloading phpstan/phpdoc-parser (2.3.6)
+2026-10-07T19:39:17.1967743Z   - Downloading phpdocumentor/reflection-common (2.2.1)
+2026-10-07T19:39:17.1968786Z   - Downloading doctrine/deprecations (1.1.6)
+2026-10-07T19:39:17.1969911Z   - Downloading phpdocumentor/type-resolver (2.1.0)
+2026-10-07T19:39:17.1976693Z   - Downloading phpdocumentor/reflection-docblock (6.0.3)
+2026-10-07T19:39:17.1978352Z   - Downloading ta-tikoma/phpunit-architecture-test (0.8.7)
+2026-10-07T19:39:17.1979528Z   - Downloading pestphp/pest-plugin-arch (v5.0.0)
+2026-10-07T19:39:17.1992652Z   - Downloading filp/whoops (2.18.6)
+2026-10-07T19:39:17.2011675Z   - Downloading nunomaduro/collision (v8.9.5)
+2026-10-07T19:39:17.2031576Z   - Downloading jean85/pretty-package-versions (2.1.1)
+2026-10-07T19:39:17.2041374Z   - Downloading fidry/cpu-core-counter (1.4.1)
+2026-10-07T19:39:17.2051068Z   - Downloading brianium/paratest (v7.25.0)
+2026-10-07T19:39:17.2052477Z   - Downloading pestphp/pest (v5.3.0)
+2026-10-07T19:39:17.2053293Z   - Downloading infection/include-interceptor (1.0.0)
+2026-10-07T19:39:17.2054126Z   - Downloading infection/abstract-testframework-adapter (0.5.1)
+2026-10-07T19:39:17.2054855Z   - Downloading brick/money (0.10.3)
+2026-10-07T19:39:17.2055499Z   - Downloading symfony/polyfill-php81 (v1.38.1)
+2026-10-07T19:39:17.2056249Z   - Downloading meilisearch/meilisearch-php (v1.16.1)
+2026-10-07T19:39:17.2056951Z   - Downloading rlanvin/php-rrule (v3.0.0)
+2026-10-07T19:39:17.2057585Z   - Downloading firebase/php-jwt (v7.2.1)
+2026-10-07T19:39:17.2058244Z   - Downloading beberlei/assert (v3.3.4)
+2026-10-07T19:39:17.2058850Z   - Downloading composer/ca-bundle (1.5.14)
+2026-10-07T19:39:17.2059457Z   - Downloading composer/pcre (3.4.0)
+2026-10-07T19:39:17.2060116Z   - Downloading composer/class-map-generator (1.8.0)
+2026-10-07T19:39:17.2061042Z   - Downloading composer/metadata-minifier (1.0.1)
+2026-10-07T19:39:17.2061697Z   - Downloading composer/spdx-licenses (1.6.0)
+2026-10-07T19:39:17.2062530Z   - Downloading giggsey/libphonenumber-for-php-lite (9.0.40)
+2026-10-07T19:39:17.2063253Z   - Downloading hamcrest/hamcrest-php (v3.0.0)
+2026-10-07T19:39:17.2063961Z   - Downloading thecodingmachine/safe (v3.4.0)
+2026-10-07T19:39:17.2064577Z   - Downloading symfony/filesystem (v8.1.6)
+2026-10-07T19:39:17.2065191Z   - Downloading sanmai/pipeline (7.12)
+2026-10-07T19:39:17.2065826Z   - Downloading sanmai/later (0.1.8)
+2026-10-07T19:39:17.2066396Z   - Downloading sanmai/duoclock (0.1.3)
+2026-10-07T19:39:17.2067092Z   - Downloading sanmai/di-container (0.2)
+2026-10-07T19:39:17.2067699Z   - Downloading ondram/ci-detector (4.2.0)
+2026-10-07T19:39:17.2068288Z   - Downloading marc-mabe/php-enum (v4.7.2)
+2026-10-07T19:39:17.2068959Z   - Downloading justinrainbow/json-schema (6.13.1)
+2026-10-07T19:39:17.2069586Z   - Downloading infection/mutator (0.4.1)
+2026-10-07T19:39:17.2070224Z   - Downloading composer/xdebug-handler (3.0.5)
+2026-10-07T19:39:17.2071062Z   - Downloading colinodell/json5 (v3.0.0)
+2026-10-07T19:39:17.2071692Z   - Downloading infection/infection (0.35.6)
+2026-10-07T19:39:17.2072369Z   - Downloading iamcal/sql-parser (v0.7)
+2026-10-07T19:39:17.2073012Z   - Downloading larastan/larastan (v3.12.2)
+2026-10-07T19:39:17.2073763Z   - Downloading symfony/psr-http-message-bridge (v8.1.0)
+2026-10-07T19:39:17.2074803Z   - Downloading laminas/laminas-diactoros (3.8.0)
+2026-10-07T19:39:17.2075496Z   - Downloading laravel/octane (v2.21.0)
+2026-10-07T19:39:17.2079300Z   - Downloading laravel/agent-detector (v2.0.4)
+2026-10-07T19:39:17.2080055Z   - Downloading laravel/pao (v1.1.5)
+2026-10-07T19:39:17.2081084Z   - Downloading laravel/pint (v1.32.1)
+2026-10-07T19:39:17.2081720Z   - Downloading mtdowling/jmespath.php (2.9.2)
+2026-10-07T19:39:17.2082348Z   - Downloading aws/aws-sdk-php (3.399.2)
+2026-10-07T19:39:17.2083051Z   - Downloading league/flysystem-aws-s3-v3 (3.35.3)
+2026-10-07T19:39:17.2084036Z   - Downloading open-telemetry/sem-conv (1.44.0)
+2026-10-07T19:39:17.2084799Z   - Downloading open-telemetry/context (1.5.0)
+2026-10-07T19:39:17.2085433Z   - Downloading open-telemetry/api (1.10.0)
+2026-10-07T19:39:17.2086049Z   - Downloading nyholm/psr7-server (1.1.0)
+2026-10-07T19:39:17.2086704Z   - Downloading open-telemetry/sdk (1.15.0)
+2026-10-07T19:39:17.2087351Z   - Downloading opis/string (2.1.0)
+2026-10-07T19:39:17.2087949Z   - Downloading opis/uri (1.1.0)
+2026-10-07T19:39:17.2088549Z   - Downloading opis/json-schema (2.6.0)
+2026-10-07T19:39:17.2089215Z   - Downloading symfony/polyfill-php83 (v1.43.0)
+2026-10-07T19:39:17.2089924Z   - Downloading orchestra/sidekick (v1.2.23)
+2026-10-07T19:39:17.2090787Z   - Downloading orchestra/canvas-core (v11.0.0)
+2026-10-07T19:39:17.2091432Z   - Downloading symfony/yaml (v8.1.8)
+2026-10-07T19:39:17.2092107Z   - Downloading orchestra/testbench-core (v11.5.0)
+2026-10-07T19:39:17.2092769Z   - Downloading orchestra/canvas (v11.1.0)
+2026-10-07T19:39:17.2093457Z   - Downloading psy/psysh (v0.12.24)
+2026-10-07T19:39:17.2094074Z   - Downloading laravel/tinker (v3.0.2)
+2026-10-07T19:39:17.2094693Z   - Downloading laravel/pail (v1.2.7)
+2026-10-07T19:39:17.2095307Z   - Downloading fakerphp/faker (v1.24.1)
+2026-10-07T19:39:17.2095919Z   - Downloading orchestra/workbench (v11.3.0)
+2026-10-07T19:39:17.2096573Z   - Downloading mockery/mockery (1.6.15)
+2026-10-07T19:39:17.2097223Z   - Downloading orchestra/testbench (v11.3.0)
+2026-10-07T19:39:17.2097900Z   - Downloading revolt/event-loop (v1.0.9)
+2026-10-07T19:39:17.2098602Z   - Downloading php-standard-library/foundation (6.3.0)
+2026-10-07T19:39:17.2099371Z   - Downloading php-standard-library/promise (6.3.0)
+2026-10-07T19:39:17.2100117Z   - Downloading php-standard-library/default (6.3.0)
+2026-10-07T19:39:17.2101639Z   - Downloading php-standard-library/locale (6.3.0)
+2026-10-07T19:39:17.2102389Z   - Downloading php-standard-library/interoperability (6.3.0)
+2026-10-07T19:39:17.2103282Z   - Downloading php-standard-library/comparison (6.3.0)
+2026-10-07T19:39:17.2104018Z   - Downloading php-standard-library/date-time (6.3.0)
+2026-10-07T19:39:17.2104753Z   - Downloading php-standard-library/async (6.3.0)
+2026-10-07T19:39:17.2105468Z   - Downloading php-standard-library/channel (6.3.0)
+2026-10-07T19:39:17.2106174Z   - Downloading php-standard-library/collection (6.3.0)
+2026-10-07T19:39:17.2106938Z   - Downloading php-standard-library/option (6.3.0)
+2026-10-07T19:39:17.2107738Z   - Downloading php-standard-library/either-or-both (6.3.0)
+2026-10-07T19:39:17.2108595Z   - Downloading php-standard-library/result (6.3.0)
+2026-10-07T19:39:17.2109292Z   - Downloading php-standard-library/io (6.3.0)
+2026-10-07T19:39:17.2110003Z   - Downloading php-standard-library/process (6.3.0)
+2026-10-07T19:39:17.2110937Z   - Downloading php-standard-library/iter (6.3.0)
+2026-10-07T19:39:17.2111669Z   - Downloading php-standard-library/range (6.3.0)
+2026-10-07T19:39:17.2112449Z   - Downloading phpstan/phpstan-strict-rules (2.0.12)
+2026-10-07T19:39:17.2113161Z   - Downloading react/promise (v3.3.0)
+2026-10-07T19:39:17.2113791Z   - Downloading rector/rector (2.6.7)
+2026-10-07T19:39:17.2114447Z   - Downloading jetbrains/phpstorm-stubs (v2026.2)
+2026-10-07T19:39:17.2115139Z   - Downloading roave/better-reflection (6.73.0)
+2026-10-07T19:39:17.2115888Z   - Downloading php-standard-library/vec (6.3.0)
+2026-10-07T19:39:17.2116567Z   - Downloading php-standard-library/type (6.3.0)
+2026-10-07T19:39:17.2117373Z   - Downloading php-standard-library/str (6.3.0)
+2026-10-07T19:39:17.2118159Z   - Downloading php-standard-library/shell (6.3.0)
+2026-10-07T19:39:17.2118862Z   - Downloading php-standard-library/regex (6.3.0)
+2026-10-07T19:39:17.2119609Z   - Downloading php-standard-library/json (6.3.0)
+2026-10-07T19:39:17.2120514Z   - Downloading php-standard-library/filesystem (6.3.0)
+2026-10-07T19:39:17.2121207Z   - Downloading php-standard-library/file (6.3.0)
+2026-10-07T19:39:17.2122032Z   - Downloading php-standard-library/env (6.3.0)
+2026-10-07T19:39:17.2122873Z   - Downloading php-standard-library/dict (6.3.0)
+2026-10-07T19:39:17.2123762Z   - Downloading ocramius/package-versions (2.12.0)
+2026-10-07T19:39:17.2124530Z   - Downloading nikolaposa/version (4.2.1)
+2026-10-07T19:39:17.2125267Z   - Downloading symfony/polyfill-php73 (v1.37.0)
+2026-10-07T19:39:17.2125922Z   - Downloading seld/signal-handler (2.0.2)
+2026-10-07T19:39:17.2126578Z   - Downloading seld/phar-utils (1.2.3)
+2026-10-07T19:39:17.2127735Z   - Downloading seld/jsonlint (1.12.1)
+2026-10-07T19:39:17.2128340Z   - Downloading composer/composer (2.10.3)
+2026-10-07T19:39:17.2128973Z   - Downloading roave/backward-compatibility-check (8.23.0)
+2026-10-07T19:39:17.2129780Z   - Downloading shipmonk/composer-dependency-analyser (1.8.4)
+2026-10-07T19:39:24.4454515Z   - Installing pestphp/pest-plugin (v5.0.0): Extracting archive
+2026-10-07T19:39:24.4830836Z   - Installing php-http/discovery (1.20.0): Extracting archive
+2026-10-07T19:39:24.4913123Z   - Installing infection/extension-installer (0.1.2): Extracting archive
+2026-10-07T19:39:24.4999196Z   - Installing phpstan/phpstan (2.2.16): Extracting archive
+2026-10-07T19:39:24.5005632Z   - Installing composer/semver (3.5.1): Extracting archive
+2026-10-07T19:39:24.9197335Z   - Installing tbachert/spi (v1.0.5): Extracting archive
+2026-10-07T19:39:24.9274962Z   - Installing phpstan/extension-installer (1.4.3): Extracting archive
+2026-10-07T19:39:24.9348940Z   - Installing aws/aws-crt-php (v1.2.7): Extracting archive
+2026-10-07T19:39:24.9359363Z   - Installing psr/clock (1.0.0): Extracting archive
+2026-10-07T19:39:24.9388230Z   - Installing voku/portable-ascii (2.1.1): Extracting archive
+2026-10-07T19:39:24.9434757Z   - Installing symfony/polyfill-php80 (v1.43.0): Extracting archive
+2026-10-07T19:39:24.9448875Z   - Installing symfony/polyfill-mbstring (v1.43.0): Extracting archive
+2026-10-07T19:39:24.9481807Z   - Installing symfony/polyfill-ctype (v1.37.0): Extracting archive
+2026-10-07T19:39:24.9482994Z   - Installing phpoption/phpoption (1.10.0): Extracting archive
+2026-10-07T19:39:24.9483918Z   - Installing graham-campbell/result-type (v1.2.0): Extracting archive
+2026-10-07T19:39:24.9629816Z   - Installing vlucas/phpdotenv (v5.7.0): Extracting archive
+2026-10-07T19:39:24.9661520Z   - Installing symfony/css-selector (v8.1.6): Extracting archive
+2026-10-07T19:39:24.9663216Z   - Installing tijsverkoyen/css-to-inline-styles (v2.4.0): Extracting archive
+2026-10-07T19:39:24.9665755Z   - Installing symfony/var-dumper (v8.1.7): Extracting archive
+2026-10-07T19:39:24.9667720Z   - Installing symfony/polyfill-uuid (v1.43.0): Extracting archive
+2026-10-07T19:39:24.9669611Z   - Installing symfony/uid (v8.1.8): Extracting archive
+2026-10-07T19:39:24.9701332Z   - Installing symfony/deprecation-contracts (v3.7.1): Extracting archive
+2026-10-07T19:39:24.9721233Z   - Installing symfony/routing (v8.1.8): Extracting archive
+2026-10-07T19:39:24.9729687Z   - Installing symfony/process (v8.1.7): Extracting archive
+2026-10-07T19:39:24.9730951Z   - Installing symfony/polyfill-php86 (v1.43.0): Extracting archive
+2026-10-07T19:39:24.9731990Z   - Installing symfony/polyfill-php85 (v1.43.0): Extracting archive
+2026-10-07T19:39:24.9732920Z   - Installing symfony/polyfill-php84 (v1.43.0): Extracting archive
+2026-10-07T19:39:24.9733874Z   - Installing symfony/polyfill-intl-normalizer (v1.43.0): Extracting archive
+2026-10-07T19:39:24.9734918Z   - Installing symfony/polyfill-intl-idn (v1.43.0): Extracting archive
+2026-10-07T19:39:24.9735964Z   - Installing symfony/mime (v8.1.7): Extracting archive
+2026-10-07T19:39:24.9736791Z   - Installing psr/container (2.0.2): Extracting archive
+2026-10-07T19:39:24.9741192Z   - Installing symfony/service-contracts (v3.7.3): Extracting archive
+2026-10-07T19:39:24.9761361Z   - Installing psr/event-dispatcher (1.0.0): Extracting archive
+2026-10-07T19:39:24.9781272Z   - Installing symfony/event-dispatcher-contracts (v3.7.1): Extracting archive
+2026-10-07T19:39:24.9801190Z   - Installing symfony/event-dispatcher (v8.1.5): Extracting archive
+2026-10-07T19:39:24.9802435Z   - Installing psr/log (3.0.2): Extracting archive
+2026-10-07T19:39:24.9821105Z   - Installing doctrine/lexer (3.0.3): Extracting archive
+2026-10-07T19:39:24.9841180Z   - Installing egulias/email-validator (4.0.4): Extracting archive
+2026-10-07T19:39:24.9861212Z   - Installing symfony/mailer (v8.1.7): Extracting archive
+2026-10-07T19:39:24.9864486Z   - Installing symfony/http-foundation (v8.1.8): Extracting archive
+2026-10-07T19:39:24.9865117Z   - Installing symfony/error-handler (v8.1.8): Extracting archive
+2026-10-07T19:39:24.9865903Z   - Installing symfony/http-kernel (v8.1.8): Extracting archive
+2026-10-07T19:39:24.9869308Z   - Installing symfony/finder (v8.1.8): Extracting archive
+2026-10-07T19:39:24.9870237Z   - Installing symfony/polyfill-intl-grapheme (v1.43.0): Extracting archive
+2026-10-07T19:39:24.9871189Z   - Installing symfony/string (v8.1.7): Extracting archive
+2026-10-07T19:39:24.9872043Z   - Installing symfony/console (v7.4.20): Extracting archive
+2026-10-07T19:39:24.9872841Z   - Installing ramsey/collection (2.1.1): Extracting archive
+2026-10-07T19:39:24.9873544Z   - Installing brick/math (0.14.8): Extracting archive
+2026-10-07T19:39:24.9874333Z   - Installing ramsey/uuid (4.9.4): Extracting archive
+2026-10-07T19:39:24.9875030Z   - Installing psr/simple-cache (3.0.0): Extracting archive
+2026-10-07T19:39:24.9875807Z   - Installing psr/http-message (2.0): Extracting archive
+2026-10-07T19:39:24.9876584Z   - Installing nunomaduro/termwind (v2.4.0): Extracting archive
+2026-10-07T19:39:24.9877456Z   - Installing symfony/translation-contracts (v3.7.1): Extracting archive
+2026-10-07T19:39:24.9878391Z   - Installing symfony/translation (v8.1.5): Extracting archive
+2026-10-07T19:39:24.9879251Z   - Installing symfony/clock (v8.1.0): Extracting archive
+2026-10-07T19:39:24.9880149Z   - Installing carbonphp/carbon-doctrine-types (3.2.1): Extracting archive
+2026-10-07T19:39:24.9881238Z   - Installing nesbot/carbon (3.14.2): Extracting archive
+2026-10-07T19:39:24.9882028Z   - Installing monolog/monolog (3.12.1): Extracting archive
+2026-10-07T19:39:24.9882844Z   - Installing psr/http-factory (1.1.0): Extracting archive
+2026-10-07T19:39:24.9883671Z   - Installing league/uri-interfaces (7.8.1): Extracting archive
+2026-10-07T19:39:24.9884493Z   - Installing league/uri (7.8.1): Extracting archive
+2026-10-07T19:39:24.9885256Z   - Installing league/mime-type-detection (1.17.0): Extracting archive
+2026-10-07T19:39:24.9886125Z   - Installing league/flysystem-local (3.35.3): Extracting archive
+2026-10-07T19:39:24.9886966Z   - Installing league/flysystem (3.36.0): Extracting archive
+2026-10-07T19:39:24.9887696Z   - Installing nette/utils (v4.1.5): Extracting archive
+2026-10-07T19:39:24.9888396Z   - Installing nette/schema (v1.3.6): Extracting archive
+2026-10-07T19:39:24.9889156Z   - Installing dflydev/dot-access-data (v3.0.3): Extracting archive
+2026-10-07T19:39:24.9889819Z   - Installing league/config (v1.2.0): Extracting archive
+2026-10-07T19:39:24.9890598Z   - Installing league/commonmark (2.10.3): Extracting archive
+2026-10-07T19:39:24.9891320Z   - Installing laravel/serializable-closure (v2.1.0): Extracting archive
+2026-10-07T19:39:24.9892124Z   - Installing laravel/prompts (v0.3.25): Extracting archive
+2026-10-07T19:39:24.9892888Z   - Installing guzzlehttp/uri-template (v2.0.1): Extracting archive
+2026-10-07T19:39:24.9893711Z   - Installing symfony/polyfill-php82 (v1.43.0): Extracting archive
+2026-10-07T19:39:24.9894483Z   - Installing guzzlehttp/psr7 (3.1.0): Extracting archive
+2026-10-07T19:39:24.9895250Z   - Installing guzzlehttp/promises (3.0.2): Extracting archive
+2026-10-07T19:39:24.9895755Z   - Installing psr/http-client (1.0.3): Extracting archive
+2026-10-07T19:39:24.9896327Z   - Installing guzzlehttp/guzzle (8.2.0): Extracting archive
+2026-10-07T19:39:24.9897039Z   - Installing fruitcake/php-cors (v1.4.0): Extracting archive
+2026-10-07T19:39:24.9897897Z   - Installing dragonmantank/cron-expression (v3.6.0): Extracting archive
+2026-10-07T19:39:24.9898716Z   - Installing doctrine/inflector (2.1.0): Extracting archive
+2026-10-07T19:39:24.9899642Z   - Installing laravel/framework (v13.35.0): Extracting archive
+2026-10-07T19:39:24.9900732Z   - Installing axiomasoft/corex (dev-main 1ee237d): Symlinking from packages/core
+2026-10-07T19:39:24.9901714Z   - Installing axiomasoft/corex-access (dev-main 8997152): Symlinking from packages/access
+2026-10-07T19:39:24.9902751Z   - Installing axioma-studio/azguard-core (0.3.0): Cloning 253cbf4cce from cache
+2026-10-07T19:39:25.6642251Z   - Installing axiomasoft/corex-access-azguard (dev-main 0f9b5f4): Symlinking from packages/access-azguard
+2026-10-07T19:39:25.6661657Z   - Installing axiomasoft/corex-custom-fields (dev-main b83417a): Symlinking from packages/custom-fields
+2026-10-07T19:39:25.6670816Z   - Installing staabm/side-effects-detector (1.0.5): Extracting archive
+2026-10-07T19:39:25.6673288Z   - Installing sebastian/version (7.0.1): Extracting archive
+2026-10-07T19:39:25.6675339Z   - Installing sebastian/type (7.0.2): Extracting archive
+2026-10-07T19:39:25.6677348Z   - Installing sebastian/recursion-context (8.0.1): Extracting archive
+2026-10-07T19:39:25.6679243Z   - Installing sebastian/object-enumerator (8.1.0): Extracting archive
+2026-10-07T19:39:25.6681126Z   - Installing sebastian/object-reflector (6.1.0): Extracting archive
+2026-10-07T19:39:25.6682897Z   - Installing sebastian/global-state (9.0.1): Extracting archive
+2026-10-07T19:39:25.6684627Z   - Installing sebastian/git-state (1.0.0): Extracting archive
+2026-10-07T19:39:25.6686371Z   - Installing sebastian/file-filter (1.0.0): Extracting archive
+2026-10-07T19:39:25.6688045Z   - Installing sebastian/exporter (8.2.1): Extracting archive
+2026-10-07T19:39:25.6689715Z   - Installing sebastian/environment (9.3.3): Extracting archive
+2026-10-07T19:39:25.6691470Z   - Installing sebastian/diff (9.0.1): Extracting archive
+2026-10-07T19:39:25.6693312Z   - Installing sebastian/comparator (8.4.0): Extracting archive
+2026-10-07T19:39:25.6695116Z   - Installing sebastian/cli-parser (5.0.1): Extracting archive
+2026-10-07T19:39:25.6696843Z   - Installing phpunit/php-timer (9.0.0): Extracting archive
+2026-10-07T19:39:25.6698701Z   - Installing phpunit/php-text-template (6.0.1): Extracting archive
+2026-10-07T19:39:25.6700435Z   - Installing phpunit/php-invoker (7.0.0): Extracting archive
+2026-10-07T19:39:25.6702246Z   - Installing phpunit/php-file-iterator (7.0.2): Extracting archive
+2026-10-07T19:39:25.6703923Z   - Installing theseer/tokenizer (2.0.1): Extracting archive
+2026-10-07T19:39:25.6706117Z   - Installing nikic/php-parser (v5.9.0): Extracting archive
+2026-10-07T19:39:25.6708081Z   - Installing sebastian/lines-of-code (5.0.2): Extracting archive
+2026-10-07T19:39:25.6709770Z   - Installing sebastian/complexity (6.0.0): Extracting archive
+2026-10-07T19:39:25.6711822Z   - Installing phpunit/php-code-coverage (14.4.1): Extracting archive
+2026-10-07T19:39:25.6713347Z   - Installing phar-io/version (3.2.1): Extracting archive
+2026-10-07T19:39:25.6715132Z   - Installing phar-io/manifest (2.0.4): Extracting archive
+2026-10-07T19:39:25.6716877Z   - Installing myclabs/deep-copy (1.14.0): Extracting archive
+2026-10-07T19:39:25.6718679Z   - Installing phpunit/phpunit (13.3.6): Extracting archive
+2026-10-07T19:39:25.6720679Z   - Installing pestphp/pest-plugin-profanity (v5.0.0): Extracting archive
+2026-10-07T19:39:25.6722351Z   - Installing pestphp/pest-plugin-mutate (v5.0.2): Extracting archive
+2026-10-07T19:39:25.6723903Z   - Installing webmozart/assert (2.5.0): Extracting archive
+2026-10-07T19:39:25.6725939Z   - Installing phpstan/phpdoc-parser (2.3.6): Extracting archive
+2026-10-07T19:39:25.6727417Z   - Installing phpdocumentor/reflection-common (2.2.1): Extracting archive
+2026-10-07T19:39:25.6729370Z   - Installing doctrine/deprecations (1.1.6): Extracting archive
+2026-10-07T19:39:25.6731158Z   - Installing phpdocumentor/type-resolver (2.1.0): Extracting archive
+2026-10-07T19:39:25.6733048Z   - Installing phpdocumentor/reflection-docblock (6.0.3): Extracting archive
+2026-10-07T19:39:25.6734567Z   - Installing ta-tikoma/phpunit-architecture-test (0.8.7): Extracting archive
+2026-10-07T19:39:25.6736190Z   - Installing pestphp/pest-plugin-arch (v5.0.0): Extracting archive
+2026-10-07T19:39:25.6737838Z   - Installing filp/whoops (2.18.6): Extracting archive
+2026-10-07T19:39:25.6739690Z   - Installing nunomaduro/collision (v8.9.5): Extracting archive
+2026-10-07T19:39:25.6741554Z   - Installing jean85/pretty-package-versions (2.1.1): Extracting archive
+2026-10-07T19:39:25.6743276Z   - Installing fidry/cpu-core-counter (1.4.1): Extracting archive
+2026-10-07T19:39:25.6744898Z   - Installing brianium/paratest (v7.25.0): Extracting archive
+2026-10-07T19:39:25.6746591Z   - Installing pestphp/pest (v5.3.0): Extracting archive
+2026-10-07T19:39:25.6748268Z   - Installing infection/include-interceptor (1.0.0): Extracting archive
+2026-10-07T19:39:25.6750079Z   - Installing infection/abstract-testframework-adapter (0.5.1): Extracting archive
+2026-10-07T19:39:25.6753228Z   - Installing axiomasoft/corex-infection-pest-adapter (0.1.0): Symlinking from scripts/quality/infection-pest-adapter
+2026-10-07T19:39:25.6776562Z   - Installing axiomasoft/corex-media (dev-main da09e4c): Symlinking from packages/media
+2026-10-07T19:39:25.6800537Z   - Installing axiomasoft/corex-notifications (dev-main bae17fb): Symlinking from packages/notifications
+2026-10-07T19:39:25.6823371Z   - Installing axiomasoft/corex-panels (dev-main 7a9d290): Symlinking from packages/panels
+2026-10-07T19:39:25.6844725Z   - Installing axiomasoft/corex-search (dev-main 3c0742a): Symlinking from packages/search
+2026-10-07T19:39:25.6867332Z   - Installing brick/money (0.10.3): Extracting archive
+2026-10-07T19:39:25.6871295Z   - Installing axiomasoft/corex-intl (dev-main a3ed493): Symlinking from packages/intl
+2026-10-07T19:39:25.6916842Z   - Installing axiomasoft/corex-search-intl (dev-main 50c8e44): Symlinking from packages/search-intl
+2026-10-07T19:39:25.6939022Z   - Installing symfony/polyfill-php81 (v1.38.1): Extracting archive
+2026-10-07T19:39:25.6941476Z   - Installing meilisearch/meilisearch-php (v1.16.1): Extracting archive
+2026-10-07T19:39:25.6944763Z   - Installing axiomasoft/corex-search-meilisearch (dev-main c6945fe): Symlinking from packages/search-meilisearch
+2026-10-07T19:39:25.6968989Z   - Installing axiomasoft/corex-workflow (dev-main be9a15f): Symlinking from packages/workflow
+2026-10-07T19:39:25.7008965Z   - Installing axiomasoft/corex-tasks (dev-main c029fb8): Symlinking from packages/tasks
+2026-10-07T19:39:25.7029232Z   - Installing rlanvin/php-rrule (v3.0.0): Extracting archive
+2026-10-07T19:39:25.7033020Z   - Installing axiomasoft/corex-recurrence (dev-main 335fd51): Symlinking from packages/recurrence
+2026-10-07T19:39:25.7058357Z   - Installing axiomasoft/corex-tasks-workflow (dev-main f546834): Symlinking from packages/tasks-workflow
+2026-10-07T19:39:25.7082039Z   - Installing firebase/php-jwt (v7.2.1): Extracting archive
+2026-10-07T19:39:25.7085489Z   - Installing axiomasoft/corex-tenancy (dev-main 6fb95b8): Symlinking from packages/tenancy
+2026-10-07T19:39:25.7111357Z   - Installing axiomasoft/corex-operations (dev-main 4c4790e): Symlinking from packages/operations
+2026-10-07T19:39:25.7136328Z   - Installing axiomasoft/corex-tools (dev-main e4ec02f): Symlinking from packages/tools
+2026-10-07T19:39:25.7162658Z   - Installing axiomasoft/corex-transfer (dev-main 0f338b1): Symlinking from packages/transfer
+2026-10-07T19:39:25.7188674Z   - Installing axiomasoft/corex-wakeup (dev-main 5dadbb4): Symlinking from packages/wakeup
+2026-10-07T19:39:25.7215368Z   - Installing axiomasoft/corex-webhooks (dev-main 0afaa94): Symlinking from packages/webhooks
+2026-10-07T19:39:25.7239631Z   - Installing beberlei/assert (v3.3.4): Extracting archive
+2026-10-07T19:39:25.7241952Z   - Installing composer/ca-bundle (1.5.14): Extracting archive
+2026-10-07T19:39:25.7244042Z   - Installing composer/pcre (3.4.0): Extracting archive
+2026-10-07T19:39:25.7245873Z   - Installing composer/class-map-generator (1.8.0): Extracting archive
+2026-10-07T19:39:25.7247629Z   - Installing composer/metadata-minifier (1.0.1): Extracting archive
+2026-10-07T19:39:25.7249348Z   - Installing composer/spdx-licenses (1.6.0): Extracting archive
+2026-10-07T19:39:25.7251396Z   - Installing giggsey/libphonenumber-for-php-lite (9.0.40): Extracting archive
+2026-10-07T19:39:25.7254543Z   - Installing flex/crm (dev-main 9d0cd81): Symlinking from products/flex-crm
+2026-10-07T19:39:25.7284341Z   - Installing hamcrest/hamcrest-php (v3.0.0): Extracting archive
+2026-10-07T19:39:25.7286410Z   - Installing thecodingmachine/safe (v3.4.0): Extracting archive
+2026-10-07T19:39:25.7288537Z   - Installing symfony/filesystem (v8.1.6): Extracting archive
+2026-10-07T19:39:25.7290449Z   - Installing sanmai/pipeline (7.12): Extracting archive
+2026-10-07T19:39:25.7292185Z   - Installing sanmai/later (0.1.8): Extracting archive
+2026-10-07T19:39:25.7293821Z   - Installing sanmai/duoclock (0.1.3): Extracting archive
+2026-10-07T19:39:25.7295400Z   - Installing sanmai/di-container (0.2): Extracting archive
+2026-10-07T19:39:25.7297112Z   - Installing ondram/ci-detector (4.2.0): Extracting archive
+2026-10-07T19:39:25.7298780Z   - Installing marc-mabe/php-enum (v4.7.2): Extracting archive
+2026-10-07T19:39:25.7300638Z   - Installing justinrainbow/json-schema (6.13.1): Extracting archive
+2026-10-07T19:39:25.7302325Z   - Installing infection/mutator (0.4.1): Extracting archive
+2026-10-07T19:39:25.7304249Z   - Installing composer/xdebug-handler (3.0.5): Extracting archive
+2026-10-07T19:39:25.7305943Z   - Installing colinodell/json5 (v3.0.0): Extracting archive
+2026-10-07T19:39:25.7307677Z   - Installing infection/infection (0.35.6): Extracting archive
+2026-10-07T19:39:25.7309343Z   - Installing iamcal/sql-parser (v0.7): Extracting archive
+2026-10-07T19:39:25.7311221Z   - Installing larastan/larastan (v3.12.2): Extracting archive
+2026-10-07T19:39:25.7312996Z   - Installing symfony/psr-http-message-bridge (v8.1.0): Extracting archive
+2026-10-07T19:39:25.7314715Z   - Installing laminas/laminas-diactoros (3.8.0): Extracting archive
+2026-10-07T19:39:25.7316329Z   - Installing laravel/octane (v2.21.0): Extracting archive
+2026-10-07T19:39:25.7318119Z   - Installing laravel/agent-detector (v2.0.4): Extracting archive
+2026-10-07T19:39:25.7319665Z   - Installing laravel/pao (v1.1.5): Extracting archive
+2026-10-07T19:39:25.7321608Z   - Installing laravel/pint (v1.32.1): Extracting archive
+2026-10-07T19:39:25.7323247Z   - Installing mtdowling/jmespath.php (2.9.2): Extracting archive
+2026-10-07T19:39:25.7324871Z   - Installing aws/aws-sdk-php (3.399.2): Extracting archive
+2026-10-07T19:39:25.7326645Z   - Installing league/flysystem-aws-s3-v3 (3.35.3): Extracting archive
+2026-10-07T19:39:25.7328176Z   - Installing open-telemetry/sem-conv (1.44.0): Extracting archive
+2026-10-07T19:39:25.7329835Z   - Installing open-telemetry/context (1.5.0): Extracting archive
+2026-10-07T19:39:25.7331594Z   - Installing open-telemetry/api (1.10.0): Extracting archive
+2026-10-07T19:39:25.7333190Z   - Installing nyholm/psr7-server (1.1.0): Extracting archive
+2026-10-07T19:39:25.7334849Z   - Installing open-telemetry/sdk (1.15.0): Extracting archive
+2026-10-07T19:39:25.7336463Z   - Installing opis/string (2.1.0): Extracting archive
+2026-10-07T19:39:25.7338201Z   - Installing opis/uri (1.1.0): Extracting archive
+2026-10-07T19:39:25.7339806Z   - Installing opis/json-schema (2.6.0): Extracting archive
+2026-10-07T19:39:25.7341677Z   - Installing symfony/polyfill-php83 (v1.43.0): Extracting archive
+2026-10-07T19:39:25.7343307Z   - Installing orchestra/sidekick (v1.2.23): Extracting archive
+2026-10-07T19:39:25.7345182Z   - Installing orchestra/canvas-core (v11.0.0): Extracting archive
+2026-10-07T19:39:25.7346537Z   - Installing symfony/yaml (v8.1.8): Extracting archive
+2026-10-07T19:39:25.7348143Z   - Installing orchestra/testbench-core (v11.5.0): Extracting archive
+2026-10-07T19:39:25.7349700Z   - Installing orchestra/canvas (v11.1.0): Extracting archive
+2026-10-07T19:39:25.7351466Z   - Installing psy/psysh (v0.12.24): Extracting archive
+2026-10-07T19:39:25.7353008Z   - Installing laravel/tinker (v3.0.2): Extracting archive
+2026-10-07T19:39:25.7354631Z   - Installing laravel/pail (v1.2.7): Extracting archive
+2026-10-07T19:39:25.7356197Z   - Installing fakerphp/faker (v1.24.1): Extracting archive
+2026-10-07T19:39:25.7357762Z   - Installing orchestra/workbench (v11.3.0): Extracting archive
+2026-10-07T19:39:25.7359381Z   - Installing mockery/mockery (1.6.15): Extracting archive
+2026-10-07T19:39:25.7361061Z   - Installing orchestra/testbench (v11.3.0): Extracting archive
+2026-10-07T19:39:25.7362649Z   - Installing revolt/event-loop (v1.0.9): Extracting archive
+2026-10-07T19:39:25.7364419Z   - Installing php-standard-library/foundation (6.3.0): Extracting archive
+2026-10-07T19:39:25.7366052Z   - Installing php-standard-library/promise (6.3.0): Extracting archive
+2026-10-07T19:39:25.7367662Z   - Installing php-standard-library/default (6.3.0): Extracting archive
+2026-10-07T19:39:25.7369195Z   - Installing php-standard-library/locale (6.3.0): Extracting archive
+2026-10-07T19:39:25.7370913Z   - Installing php-standard-library/interoperability (6.3.0): Extracting archive
+2026-10-07T19:39:25.7372521Z   - Installing php-standard-library/comparison (6.3.0): Extracting archive
+2026-10-07T19:39:25.7374113Z   - Installing php-standard-library/date-time (6.3.0): Extracting archive
+2026-10-07T19:39:25.7375657Z   - Installing php-standard-library/async (6.3.0): Extracting archive
+2026-10-07T19:39:25.7377087Z   - Installing php-standard-library/channel (6.3.0): Extracting archive
+2026-10-07T19:39:25.7378676Z   - Installing php-standard-library/collection (6.3.0): Extracting archive
+2026-10-07T19:39:25.7380085Z   - Installing php-standard-library/option (6.3.0): Extracting archive
+2026-10-07T19:39:25.7381988Z   - Installing php-standard-library/either-or-both (6.3.0): Extracting archive
+2026-10-07T19:39:25.7383543Z   - Installing php-standard-library/result (6.3.0): Extracting archive
+2026-10-07T19:39:25.7385102Z   - Installing php-standard-library/io (6.3.0): Extracting archive
+2026-10-07T19:39:25.7386718Z   - Installing php-standard-library/process (6.3.0): Extracting archive
+2026-10-07T19:39:25.7388282Z   - Installing php-standard-library/iter (6.3.0): Extracting archive
+2026-10-07T19:39:25.7389817Z   - Installing php-standard-library/range (6.3.0): Extracting archive
+2026-10-07T19:39:25.7391581Z   - Installing phpstan/phpstan-strict-rules (2.0.12): Extracting archive
+2026-10-07T19:39:25.7393066Z   - Installing react/promise (v3.3.0): Extracting archive
+2026-10-07T19:39:25.7394616Z   - Installing rector/rector (2.6.7): Extracting archive
+2026-10-07T19:39:25.7400459Z   - Installing jetbrains/phpstorm-stubs (v2026.2): Extracting archive
+2026-10-07T19:39:25.7401798Z   - Installing roave/better-reflection (6.73.0): Extracting archive
+2026-10-07T19:39:25.7403533Z   - Installing php-standard-library/vec (6.3.0): Extracting archive
+2026-10-07T19:39:25.7405519Z   - Installing php-standard-library/type (6.3.0): Extracting archive
+2026-10-07T19:39:25.7407039Z   - Installing php-standard-library/str (6.3.0): Extracting archive
+2026-10-07T19:39:25.7408629Z   - Installing php-standard-library/shell (6.3.0): Extracting archive
+2026-10-07T19:39:25.7410220Z   - Installing php-standard-library/regex (6.3.0): Extracting archive
+2026-10-07T19:39:25.7412209Z   - Installing php-standard-library/json (6.3.0): Extracting archive
+2026-10-07T19:39:25.7413843Z   - Installing php-standard-library/filesystem (6.3.0): Extracting archive
+2026-10-07T19:39:25.7415396Z   - Installing php-standard-library/file (6.3.0): Extracting archive
+2026-10-07T19:39:25.7417151Z   - Installing php-standard-library/env (6.3.0): Extracting archive
+2026-10-07T19:39:25.7419055Z   - Installing php-standard-library/dict (6.3.0): Extracting archive
+2026-10-07T19:39:25.7420771Z   - Installing ocramius/package-versions (2.12.0): Extracting archive
+2026-10-07T19:39:25.7422383Z   - Installing nikolaposa/version (4.2.1): Extracting archive
+2026-10-07T19:39:25.7423944Z   - Installing symfony/polyfill-php73 (v1.37.0): Extracting archive
+2026-10-07T19:39:25.7425414Z   - Installing seld/signal-handler (2.0.2): Extracting archive
+2026-10-07T19:39:25.7426911Z   - Installing seld/phar-utils (1.2.3): Extracting archive
+2026-10-07T19:39:25.7428399Z   - Installing seld/jsonlint (1.12.1): Extracting archive
+2026-10-07T19:39:25.7429915Z   - Installing composer/composer (2.10.3): Extracting archive
+2026-10-07T19:39:25.7431800Z   - Installing roave/backward-compatibility-check (8.23.0): Extracting archive
+2026-10-07T19:39:25.7433391Z   - Installing shipmonk/composer-dependency-analyser (1.8.4): Extracting archive
+2026-10-07T19:39:29.3091898Z Generating autoload files
+2026-10-07T19:39:29.6381029Z 121 packages you are using are looking for funding.
+2026-10-07T19:39:29.6381695Z Use the `composer fund` command to find out more!
+2026-10-07T19:39:29.6386672Z infection/extension-installer: Extensions installed
+2026-10-07T19:39:29.6387745Z > axiomasoft/corex-infection-pest-adapter: installed
+2026-10-07T19:39:29.6399459Z phpstan/extension-installer: Extensions installed
+2026-10-07T19:39:29.6400529Z > axiomasoft/corex: ignored
+2026-10-07T19:39:29.6401140Z > axiomasoft/corex: ignored
+2026-10-07T19:39:29.6401734Z > axiomasoft/corex-tenancy: ignored
+2026-10-07T19:39:29.6402349Z > axiomasoft/corex-tenancy: ignored
+2026-10-07T19:39:29.6402900Z > composer/composer: ignored
+2026-10-07T19:39:29.6403508Z > composer/pcre: ignored
+2026-10-07T19:39:29.6404449Z > larastan/larastan: ignored
+2026-10-07T19:39:29.6405231Z > nesbot/carbon: ignored
+2026-10-07T19:39:29.6405866Z > pestphp/pest: ignored
+2026-10-07T19:39:29.6406512Z > phpstan/phpstan-strict-rules: ignored
+2026-10-07T19:39:29.6819408Z ##[group]Run env -u COMPOSER_NO_AUDIT composer audit --locked
+2026-10-07T19:39:29.6819952Z [36;1menv -u COMPOSER_NO_AUDIT composer audit --locked[0m
+2026-10-07T19:39:29.6865601Z shell: /usr/bin/bash -e {0}
+2026-10-07T19:39:29.6865976Z env:
+2026-10-07T19:39:29.6866271Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T19:39:29.6866695Z   LARAVEL_VERSION: 13.*
+2026-10-07T19:39:29.6867056Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-07T19:39:29.6867415Z   COMPOSER_NO_INTERACTION: 1
+2026-10-07T19:39:29.6867761Z   COMPOSER_NO_AUDIT: 1
+2026-10-07T19:39:29.6868054Z ##[endgroup]
+2026-10-07T19:39:30.4001934Z No security vulnerability advisories found.
+2026-10-07T19:39:30.4216644Z ##[group]Run composer --working-dir=packages/tools update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
+2026-10-07T19:39:30.4217665Z [36;1mcomposer --working-dir=packages/tools update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"[0m
+2026-10-07T19:39:30.4268352Z shell: /usr/bin/bash -e {0}
+2026-10-07T19:39:30.4268752Z env:
+2026-10-07T19:39:30.4269071Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T19:39:30.4269424Z   LARAVEL_VERSION: 13.*
+2026-10-07T19:39:30.4269799Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-07T19:39:30.4270145Z   COMPOSER_NO_INTERACTION: 1
+2026-10-07T19:39:30.4270739Z   COMPOSER_NO_AUDIT: 1
+2026-10-07T19:39:30.4271090Z ##[endgroup]
+2026-10-07T19:39:30.6044227Z Loading composer repositories with package information
+2026-10-07T19:39:32.7715138Z Updating dependencies
+2026-10-07T19:39:32.8070172Z Lock file operations: 142 installs, 0 updates, 0 removals
+2026-10-07T19:39:32.8071771Z   - Locking axiomasoft/corex (dev-main 1ee237d)
+2026-10-07T19:39:32.8072804Z   - Locking axiomasoft/corex-operations (dev-main 4c4790e)
+2026-10-07T19:39:32.8079341Z   - Locking axiomasoft/corex-transfer (dev-main 0f338b1)
+2026-10-07T19:39:32.8080466Z   - Locking brianium/paratest (v7.25.0)
+2026-10-07T19:39:32.8081339Z   - Locking brick/math (1.0.0)
+2026-10-07T19:39:32.8082117Z   - Locking carbonphp/carbon-doctrine-types (3.2.1)
+2026-10-07T19:39:32.8082926Z   - Locking composer/semver (3.5.1)
+2026-10-07T19:39:32.8083682Z   - Locking dflydev/dot-access-data (v3.0.3)
+2026-10-07T19:39:32.8084392Z   - Locking doctrine/deprecations (1.1.6)
+2026-10-07T19:39:32.8085161Z   - Locking doctrine/inflector (2.1.0)
+2026-10-07T19:39:32.8085957Z   - Locking doctrine/lexer (3.0.3)
+2026-10-07T19:39:32.8086711Z   - Locking dragonmantank/cron-expression (v3.6.0)
+2026-10-07T19:39:32.8087930Z   - Locking egulias/email-validator (4.0.4)
+2026-10-07T19:39:32.8088633Z   - Locking fakerphp/faker (v1.24.1)
+2026-10-07T19:39:32.8089335Z   - Locking fidry/cpu-core-counter (1.4.1)
+2026-10-07T19:39:32.8089999Z   - Locking filp/whoops (2.18.6)
+2026-10-07T19:39:32.8090903Z   - Locking fruitcake/php-cors (v1.4.0)
+2026-10-07T19:39:32.8091618Z   - Locking graham-campbell/result-type (v1.2.0)
+2026-10-07T19:39:32.8092309Z   - Locking guzzlehttp/guzzle (8.2.0)
+2026-10-07T19:39:32.8093049Z   - Locking guzzlehttp/promises (3.0.2)
+2026-10-07T19:39:32.8093698Z   - Locking guzzlehttp/psr7 (3.1.0)
+2026-10-07T19:39:32.8095068Z   - Locking guzzlehttp/uri-template (v2.0.1)
+2026-10-07T19:39:32.8095786Z   - Locking hamcrest/hamcrest-php (v3.0.0)
+2026-10-07T19:39:32.8096441Z   - Locking iamcal/sql-parser (v0.7)
+2026-10-07T19:39:32.8097174Z   - Locking jean85/pretty-package-versions (2.1.1)
+2026-10-07T19:39:32.8097915Z   - Locking larastan/larastan (v3.13.0)
+2026-10-07T19:39:32.8098631Z   - Locking laravel/framework (v13.35.0)
+2026-10-07T19:39:32.8099303Z   - Locking laravel/pail (v1.2.7)
+2026-10-07T19:39:32.8099917Z   - Locking laravel/pint (v1.32.1)
+2026-10-07T19:39:32.8100770Z   - Locking laravel/prompts (v0.3.25)
+2026-10-07T19:39:32.8101471Z   - Locking laravel/serializable-closure (v2.1.0)
+2026-10-07T19:39:32.8102206Z   - Locking laravel/tinker (v3.0.2)
+2026-10-07T19:39:32.8102897Z   - Locking league/commonmark (2.10.3)
+2026-10-07T19:39:32.8103524Z   - Locking league/config (v1.2.0)
+2026-10-07T19:39:32.8104224Z   - Locking league/flysystem (3.36.0)
+2026-10-07T19:39:32.8104882Z   - Locking league/flysystem-local (3.35.3)
+2026-10-07T19:39:32.8105614Z   - Locking league/mime-type-detection (1.17.0)
+2026-10-07T19:39:32.8106300Z   - Locking league/uri (7.8.1)
+2026-10-07T19:39:32.8106924Z   - Locking league/uri-interfaces (7.8.1)
+2026-10-07T19:39:32.8107613Z   - Locking mockery/mockery (1.6.15)
+2026-10-07T19:39:32.8108228Z   - Locking monolog/monolog (3.12.1)
+2026-10-07T19:39:32.8108893Z   - Locking myclabs/deep-copy (1.14.0)
+2026-10-07T19:39:32.8109564Z   - Locking nesbot/carbon (3.14.2)
+2026-10-07T19:39:32.8110164Z   - Locking nette/schema (v1.3.6)
+2026-10-07T19:39:32.8112200Z   - Locking nette/utils (v4.1.5)
+2026-10-07T19:39:32.8112910Z   - Locking nikic/php-parser (v5.9.0)
+2026-10-07T19:39:32.8113659Z   - Locking nunomaduro/collision (v8.9.5)
+2026-10-07T19:39:32.8114308Z   - Locking nunomaduro/termwind (v2.4.0)
+2026-10-07T19:39:32.8114946Z   - Locking opis/json-schema (2.6.0)
+2026-10-07T19:39:32.8115587Z   - Locking opis/string (2.1.0)
+2026-10-07T19:39:32.8116180Z   - Locking opis/uri (1.1.0)
+2026-10-07T19:39:32.8116778Z   - Locking orchestra/canvas (v11.1.0)
+2026-10-07T19:39:32.8117453Z   - Locking orchestra/canvas-core (v11.0.0)
+2026-10-07T19:39:32.8118132Z   - Locking orchestra/sidekick (v1.2.23)
+2026-10-07T19:39:32.8118786Z   - Locking orchestra/testbench (v11.3.0)
+2026-10-07T19:39:32.8119465Z   - Locking orchestra/testbench-core (v11.5.0)
+2026-10-07T19:39:32.8120099Z   - Locking orchestra/workbench (v11.3.0)
+2026-10-07T19:39:32.8120996Z   - Locking pestphp/pest (v5.3.0)
+2026-10-07T19:39:32.8121545Z   - Locking pestphp/pest-plugin (v5.0.0)
+2026-10-07T19:39:32.8122350Z   - Locking pestphp/pest-plugin-arch (v5.0.0)
+2026-10-07T19:39:32.8123126Z   - Locking pestphp/pest-plugin-mutate (v5.0.2)
+2026-10-07T19:39:32.8123907Z   - Locking pestphp/pest-plugin-profanity (v5.0.0)
+2026-10-07T19:39:32.8124621Z   - Locking phar-io/manifest (2.0.4)
+2026-10-07T19:39:32.8125280Z   - Locking phar-io/version (3.2.1)
+2026-10-07T19:39:32.8126004Z   - Locking phpdocumentor/reflection-common (2.2.1)
+2026-10-07T19:39:32.8126813Z   - Locking phpdocumentor/reflection-docblock (6.0.3)
+2026-10-07T19:39:32.8127807Z   - Locking phpdocumentor/type-resolver (2.1.0)
+2026-10-07T19:39:32.8128556Z   - Locking phpoption/phpoption (1.10.0)
+2026-10-07T19:39:32.8129233Z   - Locking phpstan/phpdoc-parser (2.3.6)
+2026-10-07T19:39:32.8129924Z   - Locking phpstan/phpstan (2.3.0)
+2026-10-07T19:39:32.8130898Z   - Locking phpunit/php-code-coverage (14.4.1)
+2026-10-07T19:39:32.8131789Z   - Locking phpunit/php-file-iterator (7.0.2)
+2026-10-07T19:39:32.8132529Z   - Locking phpunit/php-invoker (7.0.0)
+2026-10-07T19:39:32.8133256Z   - Locking phpunit/php-text-template (6.0.1)
+2026-10-07T19:39:32.8133990Z   - Locking phpunit/php-timer (9.0.0)
+2026-10-07T19:39:32.8134618Z   - Locking phpunit/phpunit (13.3.6)
+2026-10-07T19:39:32.8135213Z   - Locking psr/clock (1.0.0)
+2026-10-07T19:39:32.8135839Z   - Locking psr/container (2.0.2)
+2026-10-07T19:39:32.8136440Z   - Locking psr/event-dispatcher (1.0.0)
+2026-10-07T19:39:32.8137065Z   - Locking psr/http-client (1.0.3)
+2026-10-07T19:39:32.8137751Z   - Locking psr/http-factory (1.1.0)
+2026-10-07T19:39:32.8138347Z   - Locking psr/http-message (2.0)
+2026-10-07T19:39:32.8139096Z   - Locking psr/log (3.0.2)
+2026-10-07T19:39:32.8139696Z   - Locking psr/simple-cache (3.0.0)
+2026-10-07T19:39:32.8140483Z   - Locking psy/psysh (v0.12.24)
+2026-10-07T19:39:32.8141172Z   - Locking ramsey/collection (2.1.1)
+2026-10-07T19:39:32.8141798Z   - Locking ramsey/uuid (4.9.4)
+2026-10-07T19:39:32.8142462Z   - Locking sebastian/cli-parser (5.0.1)
+2026-10-07T19:39:32.8143096Z   - Locking sebastian/comparator (8.4.0)
+2026-10-07T19:39:32.8143781Z   - Locking sebastian/complexity (6.0.0)
+2026-10-07T19:39:32.8144427Z   - Locking sebastian/diff (9.0.1)
+2026-10-07T19:39:32.8145038Z   - Locking sebastian/environment (9.3.3)
+2026-10-07T19:39:32.8145695Z   - Locking sebastian/exporter (8.2.1)
+2026-10-07T19:39:32.8146358Z   - Locking sebastian/file-filter (1.0.0)
+2026-10-07T19:39:32.8147019Z   - Locking sebastian/git-state (1.0.0)
+2026-10-07T19:39:32.8147662Z   - Locking sebastian/global-state (9.0.1)
+2026-10-07T19:39:32.8148303Z   - Locking sebastian/lines-of-code (5.0.2)
+2026-10-07T19:39:32.8149004Z   - Locking sebastian/object-enumerator (8.1.0)
+2026-10-07T19:39:32.8149672Z   - Locking sebastian/object-reflector (6.1.0)
+2026-10-07T19:39:32.8150529Z   - Locking sebastian/recursion-context (8.0.1)
+2026-10-07T19:39:32.8151263Z   - Locking sebastian/type (7.0.2)
+2026-10-07T19:39:32.8151877Z   - Locking sebastian/version (7.0.1)
+2026-10-07T19:39:32.8152610Z   - Locking staabm/side-effects-detector (1.0.5)
+2026-10-07T19:39:32.8153613Z   - Locking symfony/clock (v8.1.0)
+2026-10-07T19:39:32.8154288Z   - Locking symfony/console (v8.1.8)
+2026-10-07T19:39:32.8154982Z   - Locking symfony/css-selector (v8.1.6)
+2026-10-07T19:39:32.8155714Z   - Locking symfony/deprecation-contracts (v3.7.1)
+2026-10-07T19:39:32.8156520Z   - Locking symfony/error-handler (v8.1.8)
+2026-10-07T19:39:32.8157252Z   - Locking symfony/event-dispatcher (v8.1.5)
+2026-10-07T19:39:32.8158025Z   - Locking symfony/event-dispatcher-contracts (v3.7.1)
+2026-10-07T19:39:32.8158776Z   - Locking symfony/finder (v8.1.8)
+2026-10-07T19:39:32.8159525Z   - Locking symfony/http-foundation (v8.1.8)
+2026-10-07T19:39:32.8160452Z   - Locking symfony/http-kernel (v8.1.8)
+2026-10-07T19:39:32.8161189Z   - Locking symfony/mailer (v8.1.7)
+2026-10-07T19:39:32.8161888Z   - Locking symfony/mime (v8.1.7)
+2026-10-07T19:39:32.8162594Z   - Locking symfony/polyfill-ctype (v1.37.0)
+2026-10-07T19:39:32.8163338Z   - Locking symfony/polyfill-intl-grapheme (v1.43.0)
+2026-10-07T19:39:32.8164125Z   - Locking symfony/polyfill-intl-idn (v1.43.0)
+2026-10-07T19:39:32.8164919Z   - Locking symfony/polyfill-intl-normalizer (v1.43.0)
+2026-10-07T19:39:32.8165671Z   - Locking symfony/polyfill-mbstring (v1.43.0)
+2026-10-07T19:39:32.8166463Z   - Locking symfony/polyfill-php80 (v1.43.0)
+2026-10-07T19:39:32.8167163Z   - Locking symfony/polyfill-php82 (v1.43.0)
+2026-10-07T19:39:32.8167884Z   - Locking symfony/polyfill-php83 (v1.43.0)
+2026-10-07T19:39:32.8168614Z   - Locking symfony/polyfill-php84 (v1.43.0)
+2026-10-07T19:39:32.8169294Z   - Locking symfony/polyfill-php85 (v1.43.0)
+2026-10-07T19:39:32.8170018Z   - Locking symfony/polyfill-php86 (v1.43.0)
+2026-10-07T19:39:32.8171062Z   - Locking symfony/polyfill-uuid (v1.43.0)
+2026-10-07T19:39:32.8171827Z   - Locking symfony/process (v8.1.7)
+2026-10-07T19:39:32.8172506Z   - Locking symfony/routing (v8.1.8)
+2026-10-07T19:39:32.8173341Z   - Locking symfony/service-contracts (v3.7.3)
+2026-10-07T19:39:32.8174085Z   - Locking symfony/string (v8.1.7)
+2026-10-07T19:39:32.8174888Z   - Locking symfony/translation (v8.1.5)
+2026-10-07T19:39:32.8175640Z   - Locking symfony/translation-contracts (v3.7.1)
+2026-10-07T19:39:32.8176403Z   - Locking symfony/uid (v8.1.8)
+2026-10-07T19:39:32.8177065Z   - Locking symfony/var-dumper (v8.1.7)
+2026-10-07T19:39:32.8177768Z   - Locking symfony/yaml (v8.1.8)
+2026-10-07T19:39:32.8178491Z   - Locking ta-tikoma/phpunit-architecture-test (0.8.7)
+2026-10-07T19:39:32.8179241Z   - Locking theseer/tokenizer (2.0.1)
+2026-10-07T19:39:32.8179967Z   - Locking tijsverkoyen/css-to-inline-styles (v2.4.0)
+2026-10-07T19:39:32.8180817Z   - Locking vlucas/phpdotenv (v5.7.0)
+2026-10-07T19:39:32.8181515Z   - Locking voku/portable-ascii (2.1.1)
+2026-10-07T19:39:32.8182161Z   - Locking webmozart/assert (2.5.0)
+2026-10-07T19:39:32.8182792Z Writing lock file
+2026-10-07T19:39:32.8183524Z Installing dependencies from lock file (including require-dev)
+2026-10-07T19:39:32.8192657Z Package operations: 142 installs, 0 updates, 0 removals
+2026-10-07T19:39:32.8244236Z   - Downloading symfony/console (v8.1.8)
+2026-10-07T19:39:32.8249748Z   - Downloading brick/math (1.0.0)
+2026-10-07T19:39:32.8310729Z   - Downloading phpstan/phpstan (2.3.0)
+2026-10-07T19:39:32.8315484Z   - Downloading larastan/larastan (v3.13.0)
+2026-10-07T19:39:34.4710617Z   - Installing pestphp/pest-plugin (v5.0.0): Extracting archive
+2026-10-07T19:39:34.4840419Z   - Installing symfony/polyfill-ctype (v1.37.0): Extracting archive
+2026-10-07T19:39:34.4845722Z   - Installing symfony/polyfill-mbstring (v1.43.0): Extracting archive
+2026-10-07T19:39:34.4896711Z   - Installing symfony/deprecation-contracts (v3.7.1): Extracting archive
+2026-10-07T19:39:34.4938044Z   - Installing symfony/http-foundation (v8.1.8): Extracting archive
+2026-10-07T19:39:34.4952809Z   - Installing psr/event-dispatcher (1.0.0): Extracting archive
+2026-10-07T19:39:34.4964185Z   - Installing symfony/event-dispatcher-contracts (v3.7.1): Extracting archive
+2026-10-07T19:39:34.4965651Z   - Installing symfony/event-dispatcher (v8.1.5): Extracting archive
+2026-10-07T19:39:34.4972236Z   - Installing symfony/var-dumper (v8.1.7): Extracting archive
+2026-10-07T19:39:34.4973123Z   - Installing symfony/polyfill-php85 (v1.43.0): Extracting archive
+2026-10-07T19:39:34.4973955Z   - Installing psr/log (3.0.2): Extracting archive
+2026-10-07T19:39:34.5021271Z   - Installing symfony/error-handler (v8.1.8): Extracting archive
+2026-10-07T19:39:34.5029816Z   - Installing symfony/http-kernel (v8.1.8): Extracting archive
+2026-10-07T19:39:34.5051142Z   - Installing psr/clock (1.0.0): Extracting archive
+2026-10-07T19:39:34.5058654Z   - Installing voku/portable-ascii (2.1.1): Extracting archive
+2026-10-07T19:39:34.5059743Z   - Installing symfony/polyfill-php80 (v1.43.0): Extracting archive
+2026-10-07T19:39:34.5060823Z   - Installing phpoption/phpoption (1.10.0): Extracting archive
+2026-10-07T19:39:34.5061750Z   - Installing graham-campbell/result-type (v1.2.0): Extracting archive
+2026-10-07T19:39:34.5062787Z   - Installing vlucas/phpdotenv (v5.7.0): Extracting archive
+2026-10-07T19:39:34.5063628Z   - Installing symfony/css-selector (v8.1.6): Extracting archive
+2026-10-07T19:39:34.5064496Z   - Installing tijsverkoyen/css-to-inline-styles (v2.4.0): Extracting archive
+2026-10-07T19:39:34.5065105Z   - Installing symfony/polyfill-uuid (v1.43.0): Extracting archive
+2026-10-07T19:39:34.5065627Z   - Installing symfony/uid (v8.1.8): Extracting archive
+2026-10-07T19:39:34.5066157Z   - Installing symfony/routing (v8.1.8): Extracting archive
+2026-10-07T19:39:34.5066693Z   - Installing symfony/process (v8.1.7): Extracting archive
+2026-10-07T19:39:34.5067388Z   - Installing symfony/polyfill-php86 (v1.43.0): Extracting archive
+2026-10-07T19:39:34.5067953Z   - Installing symfony/polyfill-php84 (v1.43.0): Extracting archive
+2026-10-07T19:39:34.5068534Z   - Installing symfony/polyfill-intl-normalizer (v1.43.0): Extracting archive
+2026-10-07T19:39:34.5069371Z   - Installing symfony/polyfill-intl-idn (v1.43.0): Extracting archive
+2026-10-07T19:39:34.5069934Z   - Installing symfony/mime (v8.1.7): Extracting archive
+2026-10-07T19:39:34.5071155Z   - Installing psr/container (2.0.2): Extracting archive
+2026-10-07T19:39:34.5071785Z   - Installing symfony/service-contracts (v3.7.3): Extracting archive
+2026-10-07T19:39:34.5072256Z   - Installing doctrine/lexer (3.0.3): Extracting archive
+2026-10-07T19:39:34.5561551Z   - Installing egulias/email-validator (4.0.4): Extracting archive
+2026-10-07T19:39:34.5571151Z   - Installing symfony/mailer (v8.1.7): Extracting archive
+2026-10-07T19:39:34.5591383Z   - Installing symfony/finder (v8.1.8): Extracting archive
+2026-10-07T19:39:34.5611256Z   - Installing symfony/polyfill-intl-grapheme (v1.43.0): Extracting archive
+2026-10-07T19:39:34.5631031Z   - Installing symfony/string (v8.1.7): Extracting archive
+2026-10-07T19:39:34.5632123Z   - Installing symfony/console (v8.1.8): Extracting archive
+2026-10-07T19:39:34.5651254Z   - Installing ramsey/collection (2.1.1): Extracting archive
+2026-10-07T19:39:34.5660910Z   - Installing brick/math (1.0.0): Extracting archive
+2026-10-07T19:39:34.5661885Z   - Installing ramsey/uuid (4.9.4): Extracting archive
+2026-10-07T19:39:34.5662816Z   - Installing psr/simple-cache (3.0.0): Extracting archive
+2026-10-07T19:39:34.5663733Z   - Installing psr/http-message (2.0): Extracting archive
+2026-10-07T19:39:34.5664591Z   - Installing nunomaduro/termwind (v2.4.0): Extracting archive
+2026-10-07T19:39:34.5665616Z   - Installing symfony/translation-contracts (v3.7.1): Extracting archive
+2026-10-07T19:39:34.5666600Z   - Installing symfony/translation (v8.1.5): Extracting archive
+2026-10-07T19:39:34.5667459Z   - Installing symfony/clock (v8.1.0): Extracting archive
+2026-10-07T19:39:34.5668435Z   - Installing carbonphp/carbon-doctrine-types (3.2.1): Extracting archive
+2026-10-07T19:39:34.5669364Z   - Installing nesbot/carbon (3.14.2): Extracting archive
+2026-10-07T19:39:34.5670220Z   - Installing monolog/monolog (3.12.1): Extracting archive
+2026-10-07T19:39:34.5671202Z   - Installing psr/http-factory (1.1.0): Extracting archive
+2026-10-07T19:39:34.5672172Z   - Installing league/uri-interfaces (7.8.1): Extracting archive
+2026-10-07T19:39:34.5672962Z   - Installing league/uri (7.8.1): Extracting archive
+2026-10-07T19:39:34.5673731Z   - Installing league/mime-type-detection (1.17.0): Extracting archive
+2026-10-07T19:39:34.5674651Z   - Installing league/flysystem-local (3.35.3): Extracting archive
+2026-10-07T19:39:34.5675544Z   - Installing league/flysystem (3.36.0): Extracting archive
+2026-10-07T19:39:34.5676338Z   - Installing nette/utils (v4.1.5): Extracting archive
+2026-10-07T19:39:34.5677137Z   - Installing nette/schema (v1.3.6): Extracting archive
+2026-10-07T19:39:34.5678006Z   - Installing dflydev/dot-access-data (v3.0.3): Extracting archive
+2026-10-07T19:39:34.5678967Z   - Installing league/config (v1.2.0): Extracting archive
+2026-10-07T19:39:34.5679837Z   - Installing league/commonmark (2.10.3): Extracting archive
+2026-10-07T19:39:34.5680831Z   - Installing laravel/serializable-closure (v2.1.0): Extracting archive
+2026-10-07T19:39:34.5681694Z   - Installing laravel/prompts (v0.3.25): Extracting archive
+2026-10-07T19:39:34.5682498Z   - Installing guzzlehttp/uri-template (v2.0.1): Extracting archive
+2026-10-07T19:39:34.5683462Z   - Installing symfony/polyfill-php82 (v1.43.0): Extracting archive
+2026-10-07T19:39:34.5684026Z   - Installing guzzlehttp/psr7 (3.1.0): Extracting archive
+2026-10-07T19:39:34.5684520Z   - Installing guzzlehttp/promises (3.0.2): Extracting archive
+2026-10-07T19:39:34.5685153Z   - Installing psr/http-client (1.0.3): Extracting archive
+2026-10-07T19:39:34.5685662Z   - Installing guzzlehttp/guzzle (8.2.0): Extracting archive
+2026-10-07T19:39:34.5686253Z   - Installing fruitcake/php-cors (v1.4.0): Extracting archive
+2026-10-07T19:39:34.5687000Z   - Installing dragonmantank/cron-expression (v3.6.0): Extracting archive
+2026-10-07T19:39:34.5687542Z   - Installing doctrine/inflector (2.1.0): Extracting archive
+2026-10-07T19:39:34.5688516Z   - Installing laravel/framework (v13.35.0): Extracting archive
+2026-10-07T19:39:34.5689239Z   - Installing axiomasoft/corex (dev-main 1ee237d): Symlinking from ../core
+2026-10-07T19:39:34.5941701Z   - Installing axiomasoft/corex-operations (dev-main 4c4790e): Symlinking from ../operations
+2026-10-07T19:39:34.6137334Z   - Installing axiomasoft/corex-transfer (dev-main 0f338b1): Symlinking from ../transfer
+2026-10-07T19:39:34.6331450Z   - Installing fidry/cpu-core-counter (1.4.1): Extracting archive
+2026-10-07T19:39:34.6341289Z   - Installing filp/whoops (2.18.6): Extracting archive
+2026-10-07T19:39:34.6342120Z   - Installing hamcrest/hamcrest-php (v3.0.0): Extracting archive
+2026-10-07T19:39:34.6342738Z   - Installing jean85/pretty-package-versions (2.1.1): Extracting archive
+2026-10-07T19:39:34.6343272Z   - Installing phpstan/phpstan (2.3.0): Extracting archive
+2026-10-07T19:39:34.6343778Z   - Installing iamcal/sql-parser (v0.7): Extracting archive
+2026-10-07T19:39:34.6344293Z   - Installing larastan/larastan (v3.13.0): Extracting archive
+2026-10-07T19:39:34.6350967Z   - Installing laravel/pint (v1.32.1): Extracting archive
+2026-10-07T19:39:34.6351657Z   - Installing myclabs/deep-copy (1.14.0): Extracting archive
+2026-10-07T19:39:34.6352467Z   - Installing opis/string (2.1.0): Extracting archive
+2026-10-07T19:39:34.6353052Z   - Installing opis/uri (1.1.0): Extracting archive
+2026-10-07T19:39:34.6371371Z   - Installing opis/json-schema (2.6.0): Extracting archive
+2026-10-07T19:39:34.6372348Z   - Installing symfony/polyfill-php83 (v1.43.0): Extracting archive
+2026-10-07T19:39:34.6373193Z   - Installing composer/semver (3.5.1): Extracting archive
+2026-10-07T19:39:34.6374121Z   - Installing orchestra/sidekick (v1.2.23): Extracting archive
+2026-10-07T19:39:34.6375117Z   - Installing orchestra/canvas-core (v11.0.0): Extracting archive
+2026-10-07T19:39:34.6375970Z   - Installing symfony/yaml (v8.1.8): Extracting archive
+2026-10-07T19:39:34.6376886Z   - Installing staabm/side-effects-detector (1.0.5): Extracting archive
+2026-10-07T19:39:34.6377765Z   - Installing sebastian/version (7.0.1): Extracting archive
+2026-10-07T19:39:34.6378857Z   - Installing sebastian/type (7.0.2): Extracting archive
+2026-10-07T19:39:34.6379716Z   - Installing sebastian/recursion-context (8.0.1): Extracting archive
+2026-10-07T19:39:34.6380833Z   - Installing sebastian/object-enumerator (8.1.0): Extracting archive
+2026-10-07T19:39:34.6381742Z   - Installing sebastian/object-reflector (6.1.0): Extracting archive
+2026-10-07T19:39:34.6382652Z   - Installing sebastian/global-state (9.0.1): Extracting archive
+2026-10-07T19:39:34.6383585Z   - Installing sebastian/git-state (1.0.0): Extracting archive
+2026-10-07T19:39:34.6384438Z   - Installing sebastian/file-filter (1.0.0): Extracting archive
+2026-10-07T19:39:34.6385383Z   - Installing sebastian/exporter (8.2.1): Extracting archive
+2026-10-07T19:39:34.6386195Z   - Installing sebastian/environment (9.3.3): Extracting archive
+2026-10-07T19:39:34.6386982Z   - Installing sebastian/diff (9.0.1): Extracting archive
+2026-10-07T19:39:34.6387933Z   - Installing sebastian/comparator (8.4.0): Extracting archive
+2026-10-07T19:39:34.6388794Z   - Installing sebastian/cli-parser (5.0.1): Extracting archive
+2026-10-07T19:39:34.6389648Z   - Installing phpunit/php-timer (9.0.0): Extracting archive
+2026-10-07T19:39:34.6390643Z   - Installing phpunit/php-text-template (6.0.1): Extracting archive
+2026-10-07T19:39:34.6391557Z   - Installing phpunit/php-invoker (7.0.0): Extracting archive
+2026-10-07T19:39:34.6392514Z   - Installing phpunit/php-file-iterator (7.0.2): Extracting archive
+2026-10-07T19:39:34.6393363Z   - Installing theseer/tokenizer (2.0.1): Extracting archive
+2026-10-07T19:39:34.6394250Z   - Installing nikic/php-parser (v5.9.0): Extracting archive
+2026-10-07T19:39:34.6395102Z   - Installing sebastian/lines-of-code (5.0.2): Extracting archive
+2026-10-07T19:39:34.6395921Z   - Installing sebastian/complexity (6.0.0): Extracting archive
+2026-10-07T19:39:34.6396880Z   - Installing phpunit/php-code-coverage (14.4.1): Extracting archive
+2026-10-07T19:39:34.6397923Z   - Installing phar-io/version (3.2.1): Extracting archive
+2026-10-07T19:39:34.6398761Z   - Installing phar-io/manifest (2.0.4): Extracting archive
+2026-10-07T19:39:34.6399985Z   - Installing phpunit/phpunit (13.3.6): Extracting archive
+2026-10-07T19:39:34.6402011Z   - Installing orchestra/testbench-core (v11.5.0): Extracting archive
+2026-10-07T19:39:34.6403919Z   - Installing orchestra/canvas (v11.1.0): Extracting archive
+2026-10-07T19:39:34.6405579Z   - Installing nunomaduro/collision (v8.9.5): Extracting archive
+2026-10-07T19:39:34.6407181Z   - Installing psy/psysh (v0.12.24): Extracting archive
+2026-10-07T19:39:34.6408675Z   - Installing laravel/tinker (v3.0.2): Extracting archive
+2026-10-07T19:39:34.6410203Z   - Installing laravel/pail (v1.2.7): Extracting archive
+2026-10-07T19:39:34.6412101Z   - Installing fakerphp/faker (v1.24.1): Extracting archive
+2026-10-07T19:39:34.6413832Z   - Installing orchestra/workbench (v11.3.0): Extracting archive
+2026-10-07T19:39:34.6415449Z   - Installing mockery/mockery (1.6.15): Extracting archive
+2026-10-07T19:39:34.6416996Z   - Installing orchestra/testbench (v11.3.0): Extracting archive
+2026-10-07T19:39:34.6418553Z   - Installing pestphp/pest-plugin-profanity (v5.0.0): Extracting archive
+2026-10-07T19:39:34.6420020Z   - Installing pestphp/pest-plugin-mutate (v5.0.2): Extracting archive
+2026-10-07T19:39:34.6421809Z   - Installing webmozart/assert (2.5.0): Extracting archive
+2026-10-07T19:39:34.6423515Z   - Installing phpstan/phpdoc-parser (2.3.6): Extracting archive
+2026-10-07T19:39:34.6425099Z   - Installing phpdocumentor/reflection-common (2.2.1): Extracting archive
+2026-10-07T19:39:34.6426760Z   - Installing doctrine/deprecations (1.1.6): Extracting archive
+2026-10-07T19:39:34.6428273Z   - Installing phpdocumentor/type-resolver (2.1.0): Extracting archive
+2026-10-07T19:39:34.6429798Z   - Installing phpdocumentor/reflection-docblock (6.0.3): Extracting archive
+2026-10-07T19:39:34.6441503Z   - Installing ta-tikoma/phpunit-architecture-test (0.8.7): Extracting archive
+2026-10-07T19:39:34.6442965Z   - Installing pestphp/pest-plugin-arch (v5.0.0): Extracting archive
+2026-10-07T19:39:34.6443803Z   - Installing brianium/paratest (v7.25.0): Extracting archive
+2026-10-07T19:39:34.6444634Z   - Installing pestphp/pest (v5.3.0): Extracting archive
+2026-10-07T19:39:40.6891551Z 47 package suggestions were added by new dependencies, use `composer suggest` to see details.
+2026-10-07T19:39:40.6917709Z Generating autoload files
+2026-10-07T19:39:40.9517777Z 92 packages you are using are looking for funding.
+2026-10-07T19:39:40.9518806Z Use the `composer fund` command to find out more!
+2026-10-07T19:39:40.9804059Z ##[group]Run env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/tools
+2026-10-07T19:39:40.9804761Z [36;1menv -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/tools[0m
+2026-10-07T19:39:40.9845733Z shell: /usr/bin/bash -e {0}
+2026-10-07T19:39:40.9846190Z env:
+2026-10-07T19:39:40.9846496Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T19:39:40.9846846Z   LARAVEL_VERSION: 13.*
+2026-10-07T19:39:40.9847177Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-07T19:39:40.9847539Z   COMPOSER_NO_INTERACTION: 1
+2026-10-07T19:39:40.9847918Z   COMPOSER_NO_AUDIT: 1
+2026-10-07T19:39:40.9848216Z ##[endgroup]
+2026-10-07T19:39:41.5642273Z No security vulnerability advisories found.
+2026-10-07T19:39:41.5875247Z ##[group]Run composer --working-dir=packages/tools test:coverage
+2026-10-07T19:39:41.5876084Z [36;1mcomposer --working-dir=packages/tools test:coverage[0m
+2026-10-07T19:39:41.5935421Z shell: /usr/bin/bash -e {0}
+2026-10-07T19:39:41.5935887Z env:
+2026-10-07T19:39:41.5936397Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T19:39:41.5936881Z   LARAVEL_VERSION: 13.*
+2026-10-07T19:39:41.5937440Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-07T19:39:41.5937909Z   COMPOSER_NO_INTERACTION: 1
+2026-10-07T19:39:41.5938343Z   COMPOSER_NO_AUDIT: 1
+2026-10-07T19:39:41.5938814Z ##[endgroup]
+2026-10-07T19:39:44.1095986Z 
+2026-10-07T19:39:44.1102552Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\InstalledToolContractTest[39m
+2026-10-07T19:39:44.1158734Z   [32;1m✓[39;22m[90m [39m[90mboxed archive boots with explicit policy and cross account guard in[39m[90m…[39m [90m0.93s[39m  
+2026-10-07T19:39:44.1192424Z   [32;1m✓[39;22m[90m [39m[90mdirect and mcp projection share descriptor and result semantics ins[39m[90m…[39m [90m0.60s[39m  
+2026-10-07T19:39:44.1222272Z   [32;1m✓[39;22m[90m [39m[90mtool provider mounts no routes and rejects unknown or unguarded mut[39m[90m…[39m [90m0.15s[39m  
+2026-10-07T19:39:44.1251794Z   [32;1m✓[39;22m[90m [39m[90mlab cohort remains disjoint from archive after install inst 02 and[39m[90m… [39m [90m0.03s[39m  
+2026-10-07T19:39:44.5500858Z 
+2026-10-07T19:39:44.5505123Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\ToolAuthorizationLayersTest[39m
+2026-10-07T19:39:44.5532348Z   [32;1m✓[39;22m[90m [39m[90mclient actor record field and tenant layers deny independently[39m[90m      [39m [90m0.18s[39m  
+2026-10-07T19:39:44.5562513Z   [32;1m✓[39;22m[90m [39m[90mhttp and tool apply the same recursive read policy without trusting[39m[90m…[39m [90m0.26s[39m  
+2026-10-07T19:39:45.9470531Z 
+2026-10-07T19:39:45.9482148Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\ToolCatalogueTest[39m
+2026-10-07T19:39:45.9509746Z   [32;1m✓[39;22m[90m [39m[90mdiscovery filters activation policy and per tool deny metadata cat[39m[90m… [39m [90m0.03s[39m  
+2026-10-07T19:39:45.9543722Z   [32;1m✓[39;22m[90m [39m[90mdefault policy denies without breaking boot cat 02[39m[90m                  [39m [90m0.02s[39m  
+2026-10-07T19:39:45.9582174Z   [32;1m✓[39;22m[90m [39m[90mdiscover allow does not grant invoke cat 03[39m[90m                         [39m [90m0.02s[39m  
+2026-10-07T19:39:45.9612442Z   [32;1m✓[39;22m[90m [39m[90mpolicy reads trusted context not payload metadata cat 04[39m[90m            [39m [90m0.02s[39m  
+2026-10-07T19:39:45.9642262Z   [32;1m✓[39;22m[90m [39m[90maccount changes re read activation and policy without stale state c[39m[90m…[39m [90m0.02s[39m  
+2026-10-07T19:39:45.9680991Z   [32;1m✓[39;22m[90m [39m[90mepoch and activation changes are visible on next discover cat 06[39m[90m    [39m [90m0.02s[39m  
+2026-10-07T19:39:45.9721770Z   [32;1m✓[39;22m[90m [39m[90mcatalogue is deterministic sorted and caps at one thousand cat 07[39m[90m   [39m [90m1.18s[39m  
+2026-10-07T19:39:45.9743204Z   [32;1m✓[39;22m[90m [39m[90mcontract hash tracks current compiled bytes cat 08[39m[90m                  [39m [90m0.03s[39m  
+2026-10-07T19:39:45.9773957Z   [32;1m✓[39;22m[90m [39m[90mentity capabilities are not permission grants and metadata is not l[39m[90m…[39m [90m0.03s[39m  
+2026-10-07T19:39:46.8265391Z 
+2026-10-07T19:39:46.8266683Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\ToolContributionsTest[39m
+2026-10-07T19:39:46.8301403Z   [32;1m✓[39;22m[90m [39m[90mexternal control plane tools never tenant exposed contrib 01[39m[90m        [39m [90m0.07s[39m  
+2026-10-07T19:39:46.8331516Z   [32;1m✓[39;22m[90m [39m[90mselected p3 receipts map to actual mechanics contrib 02[39m[90m             [39m [90m0.03s[39m  
+2026-10-07T19:39:46.8360964Z   [32;1m✓[39;22m[90m [39m[90monly approved p4 receipts add finite contributions contrib 03[39m[90m       [39m [90m0.03s[39m  
+2026-10-07T19:39:46.8388989Z   [32;1m✓[39;22m[90m [39m[90mselected p5 wakeup binding without control plane edge contrib 04[39m[90m    [39m [90m0.03s[39m  
+2026-10-07T19:39:46.8420234Z   [32;1m✓[39;22m[90m [39m[90mp6 search import limits bound without bypass contrib 05[39m[90m             [39m [90m0.03s[39m  
+2026-10-07T19:39:46.8449334Z   [32;1m✓[39;22m[90m [39m[90mp7 utilities keep optional semantics contrib 06[39m[90m                     [39m [90m0.03s[39m  
+2026-10-07T19:39:46.8478479Z   [32;1m✓[39;22m[90m [39m[90marchive and lab cohorts are independent contrib 07[39m[90m                  [39m [90m0.62s[39m  
+2026-10-07T19:39:46.8507842Z   [32;1m✓[39;22m[90m [39m[90mincluded rows have exact tuple and hash receipt contrib 08[39m[90m          [39m [90m0.03s[39m  
+2026-10-07T19:39:47.1994313Z 
+2026-10-07T19:39:47.1996569Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\ToolCostInvocationTest[39m
+2026-10-07T19:39:47.2029336Z   [32;1m✓[39;22m[90m [39m[90mhttp and exposed tool share cost metadata without scope keys[39m[90m        [39m [90m0.37s[39m  
+2026-10-07T19:39:48.2937746Z 
+2026-10-07T19:39:48.2939323Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\ToolErrorTaxonomyTest[39m
+2026-10-07T19:39:48.2982200Z   [32;1m✓[39;22m[90m [39m[90mall thirteen codes resolve with safe metadata[39m[90m                       [39m [90m0.36s[39m  
+2026-10-07T19:39:48.3026164Z   [32;1m✓[39;22m[90m [39m[90mtyped schema failures and generic message fallback with data set "i[39m[90m…[39m [90m0.02s[39m  
+2026-10-07T19:39:48.3052124Z   [32;1m✓[39;22m[90m [39m[90mtyped schema failures and generic message fallback with data set "i[39m[90m…[39m [90m0.02s[39m  
+2026-10-07T19:39:48.3075594Z   [32;1m✓[39;22m[90m [39m[90mtyped schema failures and generic message fallback with data set "i[39m[90m…[39m [90m0.02s[39m  
+2026-10-07T19:39:48.3104787Z   [32;1m✓[39;22m[90m [39m[90mtyped schema failures and generic message fallback with data set "o[39m[90m…[39m [90m0.02s[39m  
+2026-10-07T19:39:48.3134570Z   [32;1m✓[39;22m[90m [39m[90mtyped schema failures and generic message fallback with data set "o[39m[90m…[39m [90m0.02s[39m  
+2026-10-07T19:39:48.3164532Z   [32;1m✓[39;22m[90m [39m[90mtyped schema failures and generic message fallback with data set "o[39m[90m…[39m [90m0.03s[39m  
+2026-10-07T19:39:48.3194306Z   [32;1m✓[39;22m[90m [39m[90munavailable branches remain non disclosing with data set "undeclare[39m[90m…[39m [90m0.03s[39m  
+2026-10-07T19:39:48.3224118Z   [32;1m✓[39;22m[90m [39m[90munavailable branches remain non disclosing with data set "inactive[39m[90m… [39m [90m0.03s[39m  
+2026-10-07T19:39:48.3253305Z   [32;1m✓[39;22m[90m [39m[90munavailable branches remain non disclosing with data set "policy"[39m[90m   [39m [90m0.03s[39m  
+2026-10-07T19:39:48.3282927Z   [32;1m✓[39;22m[90m [39m[90mexposed operation errors keep their namespace with data set "regist[39m[90m…[39m [90m0.15s[39m  
+2026-10-07T19:39:48.3312660Z   [32;1m✓[39;22m[90m [39m[90mexposed operation errors keep their namespace with data set "rate l[39m[90m…[39m [90m0.14s[39m  
+2026-10-07T19:39:48.3342298Z   [32;1m✓[39;22m[90m [39m[90mdefault guard refuses mutation before effect[39m[90m                        [39m [90m0.03s[39m  
+2026-10-07T19:39:48.3370984Z   [32;1m✓[39;22m[90m [39m[90mconsumer guard keeps unknown effect and operation key[39m[90m               [39m [90m0.03s[39m  
+2026-10-07T19:39:48.3400740Z   [32;1m✓[39;22m[90m [39m[90mguard cannot claim a fresh commit without invoking effect[39m[90m           [39m [90m0.14s[39m  
+2026-10-07T19:39:48.8199850Z 
+2026-10-07T19:39:48.8202114Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\ToolGuardConcurrencyTest[39m
+2026-10-07T19:39:48.8235676Z   [32;1m✓[39;22m[90m [39m[90mequal key requests replay under row lock without duplicate effects[39m[90m  [39m [90m0.52s[39m  
+2026-10-07T19:39:49.0941022Z 
+2026-10-07T19:39:49.0950018Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\ToolIdempotentInvocationTest[39m
+2026-10-07T19:39:49.0973194Z   [32;1m✓[39;22m[90m [39m[90mhttp key and exposed tool operation key share one effect[39m[90m            [39m [90m0.27s[39m  
+2026-10-07T19:39:53.7319574Z 
+2026-10-07T19:39:53.7321815Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\ToolInvocationTest[39m
+2026-10-07T19:39:53.7357047Z   [32;1m✓[39;22m[90m [39m[90mread transport and direct call share catalogue policy and handler i[39m[90m…[39m [90m0.37s[39m  
+2026-10-07T19:39:53.7388412Z   [32;1m✓[39;22m[90m [39m[90minvalid input rejected before handler invoke 02[39m[90m                     [39m [90m0.26s[39m  
+2026-10-07T19:39:53.7419302Z   [32;1m✓[39;22m[90m [39m[90mmutation default guard denies and client hints cannot bypass invoke[39m[90m…[39m [90m0.14s[39m  
+2026-10-07T19:39:53.7449463Z   [32;1m✓[39;22m[90m [39m[90mconsumer guard binds approval to principal scope hash and args invo[39m[90m…[39m [90m0.59s[39m  
+2026-10-07T19:39:53.7482079Z   [32;1m✓[39;22m[90m [39m[90mdomain key idempotency replays equal requests and conflicts on mism[39m[90m…[39m [90m0.58s[39m  
+2026-10-07T19:39:53.7511403Z   [32;1m✓[39;22m[90m [39m[90mstale resource version denies before effect invoke 06[39m[90m               [39m [90m0.48s[39m  
+2026-10-07T19:39:53.7541461Z   [32;1m✓[39;22m[90m [39m[90mprovider key timeout keeps unknown outcome and stable operation key[39m[90m…[39m [90m0.36s[39m  
+2026-10-07T19:39:53.7571103Z   [32;1m✓[39;22m[90m [39m[90moutput schema mismatch rolls back local transaction invoke 08[39m[90m       [39m [90m0.25s[39m  
+2026-10-07T19:39:53.7599790Z   [32;1m✓[39;22m[90m [39m[90mreplay requires current visibility invoke 09[39m[90m                        [39m [90m0.47s[39m  
+2026-10-07T19:39:53.7629768Z   [32;1m✓[39;22m[90m [39m[90mdraft and irreversible receive guarded treatment and read cannot mu[39m[90m…[39m [90m0.47s[39m  
+2026-10-07T19:39:53.7659081Z   [32;1m✓[39;22m[90m [39m[90munexpected exceptions produce safe error without secrets invoke 11[39m[90m  [39m [90m0.15s[39m  
+2026-10-07T19:39:53.7688977Z   [32;1m✓[39;22m[90m [39m[90mhandler reuses verified context and http provider requires wrapper[39m[90m… [39m [90m0.48s[39m  
+2026-10-07T19:39:53.7718184Z   [32;1m✓[39;22m[90m [39m[90mstale contract hash rejected invoke revision[39m[90m                        [39m [90m0.03s[39m  
+2026-10-07T19:39:54.0340024Z 
+2026-10-07T19:39:54.0344642Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\ToolLoadContourIntegrationTest[39m
+2026-10-07T19:39:54.0382537Z   [32;1m✓[39;22m[90m [39m[90mhttp and tool share one handler and declared cost clamps[39m[90m            [39m [90m0.30s[39m  
+2026-10-07T19:39:54.3001319Z 
+2026-10-07T19:39:54.3014795Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\ToolOperationParityTest[39m
+2026-10-07T19:39:54.3032217Z   [32;1m✓[39;22m[90m [39m[90mhttp and exposed tool share one handler call[39m[90m                        [39m [90m0.26s[39m  
+2026-10-07T19:39:54.3318044Z 
+2026-10-07T19:39:54.3319715Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Unit\OpisToolSchemaValidatorTest[39m
+2026-10-07T19:39:54.3350558Z   [32;1m✓[39;22m[90m [39m[90moffline adapter accepts valid values and reports nested error point[39m[90m…[39m [90m0.02s[39m  
+2026-10-07T19:39:54.3359717Z   [32;1m✓[39;22m[90m [39m[90mnumeric schema extension keywords and property names remain valid[39m
+2026-10-07T19:39:54.3368446Z   [32;1m✓[39;22m[90m [39m[90madapter rejects unsupported profiles[39m
+2026-10-07T19:39:54.3376932Z   [32;1m✓[39;22m[90m [39m[90mvalidation requires an admitted root[39m
+2026-10-07T19:39:54.5042627Z 
+2026-10-07T19:39:54.5052287Z   [30;42;1m PASS [39;49;22m[39m Tests\Unit\ToolDeclarationTest[39m
+2026-10-07T19:39:54.5082222Z   [32;1m✓[39;22m[90m [39m[90mit compiles explicit tool declarations into the existing API slice[39m[90m… [39m [90m0.05s[39m  
+2026-10-07T19:39:54.5111645Z   [32;1m✓[39;22m[90m [39m[90mit does not expose unannotated operations as tools (DESC-02)[39m[90m        [39m [90m0.02s[39m  
+2026-10-07T19:39:54.5141560Z   [32;1m✓[39;22m[90m [39m[90mit keeps stable tool tuple and contract hash across declaration ord[39m[90m…[39m [90m0.02s[39m  
+2026-10-07T19:39:54.5172122Z   [32;1m✓[39;22m[90m [39m[90mit rejects invalid canonical namespaces and wire collisions (DESC-0[39m[90m…[39m [90m0.02s[39m  
+2026-10-07T19:39:54.5202342Z   [32;1m✓[39;22m[90m [39m[90mit rejects duplicate tuples, foreign operation refs and invalid han[39m[90m…[39m [90m0.02s[39m  
+2026-10-07T19:39:54.5231962Z   [32;1m✓[39;22m[90m [39m[90mit compiles exposeTool against a same-module operation without addi[39m[90m…[39m [90m0.02s[39m  
+2026-10-07T19:39:54.5373874Z 
+2026-10-07T19:39:54.5375154Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Unit\ToolNameTest[39m
+2026-10-07T19:39:54.5404203Z   [32;1m✓[39;22m[90m [39m[90mwire name projects canonical code and version[39m[90m                       [39m [90m0.02s[39m  
+2026-10-07T19:39:54.5413121Z   [32;1m✓[39;22m[90m [39m[90mrejects invalid canonical codes[39m
+2026-10-07T19:39:54.5421953Z   [32;1m✓[39;22m[90m [39m[90mrejects reserved version suffix in verb[39m
+2026-10-07T19:39:54.5430621Z   [32;1m✓[39;22m[90m [39m[90mrejects invalid versions[39m
+2026-10-07T19:39:54.5697667Z 
+2026-10-07T19:39:54.5698979Z   [30;42;1m PASS [39;49;22m[39m Tests\Unit\ToolRegistryIntrospectionTest[39m
+2026-10-07T19:39:54.5729223Z   [32;1m✓[39;22m[90m [39m[90mit projects tool identity without leaking its handler into introspe[39m[90m…[39m [90m0.03s[39m  
+2026-10-07T19:39:54.5769011Z 
+2026-10-07T19:39:54.5770897Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Unit\ToolResultDefaultTest[39m
+2026-10-07T19:39:54.5801165Z   [32;1m✓[39;22m[90m [39m[90momitted metadata is an empty list and explicit metadata is preserve[39m[90m…[39m [90m0.01s[39m  
+2026-10-07T19:39:57.0271356Z 
+2026-10-07T19:39:57.0275498Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Unit\ToolSchemaSupervisorTest[39m
+2026-10-07T19:39:57.0303988Z   [32;1m✓[39;22m[90m [39m[90mslow start does not consume validation deadline[39m[90m                     [39m [90m0.40s[39m  
+2026-10-07T19:39:57.0334684Z   [32;1m✓[39;22m[90m [39m[90mready framing and stderr drain with data set #0[39m[90m                     [39m [90m0.10s[39m  
+2026-10-07T19:39:57.0364912Z   [32;1m✓[39;22m[90m [39m[90mready framing and stderr drain with data set #1[39m[90m                     [39m [90m0.08s[39m  
+2026-10-07T19:39:57.0394640Z   [32;1m✓[39;22m[90m [39m[90mready framing and stderr drain with data set #2[39m[90m                     [39m [90m0.08s[39m  
+2026-10-07T19:39:57.0423330Z   [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #0[39m[90m           [39m [90m0.21s[39m  
+2026-10-07T19:39:57.0452319Z   [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #1[39m[90m           [39m [90m0.07s[39m  
+2026-10-07T19:39:57.0481236Z   [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #2[39m[90m           [39m [90m0.08s[39m  
+2026-10-07T19:39:57.0510035Z   [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #3[39m[90m           [39m [90m0.17s[39m  
+2026-10-07T19:39:57.0538946Z   [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #4[39m[90m           [39m [90m0.23s[39m  
+2026-10-07T19:39:57.0567840Z   [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #5[39m[90m           [39m [90m0.25s[39m  
+2026-10-07T19:39:57.0596846Z   [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #6[39m[90m           [39m [90m0.08s[39m  
+2026-10-07T19:39:57.0625808Z   [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #7[39m[90m           [39m [90m0.08s[39m  
+2026-10-07T19:39:57.0655336Z   [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #8[39m[90m           [39m [90m0.08s[39m  
+2026-10-07T19:39:57.0684231Z   [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #9[39m[90m           [39m [90m0.08s[39m  
+2026-10-07T19:39:57.0713657Z   [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #10[39m[90m          [39m [90m0.08s[39m  
+2026-10-07T19:39:57.0743230Z   [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #11[39m[90m          [39m [90m0.08s[39m  
+2026-10-07T19:39:57.0772929Z   [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #12[39m[90m          [39m [90m0.07s[39m  
+2026-10-07T19:39:57.0802104Z   [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #13[39m[90m          [39m [90m0.07s[39m  
+2026-10-07T19:39:57.0830869Z   [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #14[39m[90m          [39m [90m0.07s[39m  
+2026-10-07T19:39:57.0860890Z   [32;1m✓[39;22m[90m [39m[90mmalformed handle is rejected[39m[90m                                        [39m [90m0.07s[39m  
+2026-10-07T19:39:57.0868944Z   [32;1m✓[39;22m[90m [39m[90mmissing executable is unavailable[39m
+2026-10-07T19:39:57.8893922Z 
+2026-10-07T19:39:57.8895532Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Unit\ToolSchemaTest[39m
+2026-10-07T19:39:57.8928912Z   [32;1m✓[39;22m[90m [39m[90madmits draft2020 12 schema closure offline[39m[90m                          [39m [90m0.14s[39m  
+2026-10-07T19:39:57.8959276Z   [32;1m✓[39;22m[90m [39m[90mrejects remote refs and dynamic keywords[39m[90m                            [39m [90m0.07s[39m  
+2026-10-07T19:39:57.8989570Z   [32;1m✓[39;22m[90m [39m[90mpreserves object vs array and safe integers[39m[90m                         [39m [90m0.02s[39m  
+2026-10-07T19:39:57.9019624Z   [32;1m✓[39;22m[90m [39m[90mrejects duplicate object keys[39m[90m                                       [39m [90m0.02s[39m  
+2026-10-07T19:39:57.9048956Z   [32;1m✓[39;22m[90m [39m[90mrejects dynamic schema keywords[39m[90m                                     [39m [90m0.07s[39m  
+2026-10-07T19:39:57.9079064Z   [32;1m✓[39;22m[90m [39m[90madditional properties same subschema semantics[39m[90m                      [39m [90m0.13s[39m  
+2026-10-07T19:39:57.9108655Z   [32;1m✓[39;22m[90m [39m[90mresource budget exhaustion rejects before handler[39m[90m                   [39m [90m0.19s[39m  
+2026-10-07T19:39:57.9138500Z   [32;1m✓[39;22m[90m [39m[90mvalidates instance with bounded errors[39m[90m                              [39m [90m0.20s[39m  
+2026-10-07T19:39:57.9595554Z 
+2026-10-07T19:39:57.9596845Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Unit\ToolSchemaWorkerContractTest[39m
+2026-10-07T19:39:57.9626492Z   [32;1m✓[39;22m[90m [39m[90minvalid input is framed as a safe coded response with data set "emp[39m[90m…[39m [90m0.03s[39m  
+2026-10-07T19:39:57.9635555Z   [32;1m✓[39;22m[90m [39m[90minvalid input is framed as a safe coded response with data set "whitespace"[39m
+2026-10-07T19:39:57.9644356Z   [32;1m✓[39;22m[90m [39m[90minvalid input is framed as a safe coded response with data set "unknown action"[39m
+2026-10-07T19:39:57.9653292Z   [32;1m✓[39;22m[90m [39m[90minvalid input is framed as a safe coded response with data set "missing action"[39m
+2026-10-07T19:39:57.9662143Z   [32;1m✓[39;22m[90m [39m[90minvalid input is framed as a safe coded response with data set "malformed 0"[39m
+2026-10-07T19:39:57.9671411Z   [32;1m✓[39;22m[90m [39m[90minvalid input is framed as a safe coded response with data set "malformed 1"[39m
+2026-10-07T19:39:57.9679893Z   [32;1m✓[39;22m[90m [39m[90minvalid input is framed as a safe coded response with data set "malformed 2"[39m
+2026-10-07T19:39:57.9688532Z   [32;1m✓[39;22m[90m [39m[90minvalid input is framed as a safe coded response with data set "malformed 3"[39m
+2026-10-07T19:39:57.9697409Z   [32;1m✓[39;22m[90m [39m[90minvalid input is framed as a safe coded response with data set "malformed 4"[39m
+2026-10-07T19:39:57.9706141Z   [32;1m✓[39;22m[90m [39m[90minvalid input is framed as a safe coded response with data set "malformed 5"[39m
+2026-10-07T19:39:57.9715602Z   [32;1m✓[39;22m[90m [39m[90minvalid input is framed as a safe coded response with data set "malformed 6"[39m
+2026-10-07T19:39:57.9724806Z   [32;1m✓[39;22m[90m [39m[90minvalid input is framed as a safe coded response with data set "malformed 7"[39m
+2026-10-07T19:39:57.9733522Z   [32;1m✓[39;22m[90m [39m[90minvalid input is framed as a safe coded response with data set "malformed 8"[39m
+2026-10-07T19:39:57.9742419Z   [32;1m✓[39;22m[90m [39m[90minvalid input is framed as a safe coded response with data set "malformed 9"[39m
+2026-10-07T19:39:57.9751346Z   [32;1m✓[39;22m[90m [39m[90madmission and validation keep the entire worker wire contract[39m
+2026-10-07T19:39:58.2412270Z 
+2026-10-07T19:39:58.2413884Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Unit\ToolSchemaWorkerTest[39m
+2026-10-07T19:39:58.2442511Z   [32;1m✓[39;22m[90m [39m[90mmalformed process request returns a coded failure with data set #0[39m[90m  [39m [90m0.07s[39m  
+2026-10-07T19:39:58.2464354Z   [32;1m✓[39;22m[90m [39m[90mmalformed process request returns a coded failure with data set #1[39m[90m  [39m [90m0.05s[39m  
+2026-10-07T19:39:58.2491633Z   [32;1m✓[39;22m[90m [39m[90mmalformed process request returns a coded failure with data set #2[39m[90m  [39m [90m0.05s[39m  
+2026-10-07T19:39:58.2519343Z   [32;1m✓[39;22m[90m [39m[90mmalformed process request returns a coded failure with data set #3[39m[90m  [39m [90m0.05s[39m  
+2026-10-07T19:39:58.2546591Z   [32;1m✓[39;22m[90m [39m[90mmalformed process request returns a coded failure with data set #4[39m[90m  [39m [90m0.05s[39m  
+2026-10-07T19:39:58.2555359Z 
+2026-10-07T19:39:58.2557452Z   [90mTests:[39m    [32;1m121 passed[39;22m[90m (755 assertions)[39m
+2026-10-07T19:39:58.2558540Z   [90mDuration:[39m [39m16.40s[39m
+2026-10-07T19:39:58.2559034Z 
+2026-10-07T19:39:58.5564620Z   Contracts/ToolCatalogue [90m.............................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.5612207Z   Contracts/ToolExecutionGuard [90m........................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.5658227Z   Contracts/ToolInvoker [90m...............................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.5706115Z   Contracts/ToolPolicy [90m................................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.5752092Z   Contracts/ToolRequestContext [90m........................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.5799621Z   Contracts/ToolSchemaValidator [90m.......................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.5844608Z   Data/ToolCall [90m.......................................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.5890675Z   Data/ToolCatalogueView [90m..............................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.5935686Z   Data/ToolDescriptor [90m.................................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.5980719Z   Data/ToolOutcome [90m....................................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.6026306Z   Data/ToolResult [90m.....................................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.6071565Z   Errors/Enums/ToolsErrorCode [90m.........................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.6117356Z   Errors/Internal/PackageProblemDefinitions [90m...........................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.6163625Z   Internal/ApiToolValidator  [33m25, 35, 39, 43, 47, 51, 55, 63..64, 77, 81, 87, 98, 111, 122, 126[39m[33m [39m[90m/[39m[33m 66.0%[39m  
+2026-10-07T19:39:58.6209762Z   Internal/CompiledToolCatalogue [90m......................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.6254906Z   Internal/DenyToolPolicy [90m.............................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.6305626Z   Internal/GuardedToolInvoker [90m.......[39m [33m94, 180, 190, 236, 256..261, 273[39m[33m [39m[90m/[39m[33m 93.8%[39m  
+2026-10-07T19:39:58.6350752Z   Internal/McpToolsProjection [90m.........................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.6399725Z   Internal/OpisToolSchemaValidator [90m...........[39m [33m33, 39, 55, 69, 91, 107[39m[33m [39m[90m/[39m[33m 88.9%[39m  
+2026-10-07T19:39:58.6444154Z   Internal/ReadOnlyToolExecutionGuard [90m.................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.6489700Z   Internal/ToolContractHasher [90m.........................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.6534620Z   Internal/ToolDescriptorFactory [90m..................................[39m [33m18[39m[33m [39m[90m/[39m[33m 85.7%[39m  
+2026-10-07T19:39:58.6582220Z   Internal/ToolName [90m...................................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.6628308Z   Internal/ToolRequestContext [90m.....................................[39m [33m37[39m[33m [39m[90m/[39m[33m 83.3%[39m  
+2026-10-07T19:39:58.6674160Z   Internal/ToolSchemaFailure [90m..........................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.6722059Z   Internal/ToolSchemaSupervisor [90m......[39m [33m33, 65, 147, 192, 219, 244, 250[39m[33m [39m[90m/[39m[33m 95.0%[39m  
+2026-10-07T19:39:58.6766901Z   Internal/ToolSchemaWorker [90m.......................[39m [33m103, 125..126, 132[39m[33m [39m[90m/[39m[33m 94.4%[39m  
+2026-10-07T19:39:58.6816562Z   Internal/ToolSectionCompiler [90m................................[39m [33m58, 64[39m[33m [39m[90m/[39m[33m 95.2%[39m  
+2026-10-07T19:39:58.6860217Z   ToolServiceProvider [90m.................................................[39m [32m100.0%[39m  
+2026-10-07T19:39:58.6883854Z   [90m────────────────────────────────────────────────────────────────────────────[39m  
+2026-10-07T19:39:58.6885427Z                                                                  [1mTotal: 93.1 %[22m  
+2026-10-07T19:39:58.6886012Z 
+2026-10-07T19:39:58.7203528Z ##[group]Run composer --working-dir=packages/tools analyse
+2026-10-07T19:39:58.7204305Z [36;1mcomposer --working-dir=packages/tools analyse[0m
+2026-10-07T19:39:58.7258569Z shell: /usr/bin/bash -e {0}
+2026-10-07T19:39:58.7259051Z env:
+2026-10-07T19:39:58.7259595Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T19:39:58.7260081Z   LARAVEL_VERSION: 13.*
+2026-10-07T19:39:58.7260776Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-07T19:39:58.7261300Z   COMPOSER_NO_INTERACTION: 1
+2026-10-07T19:39:58.7261752Z   COMPOSER_NO_AUDIT: 1
+2026-10-07T19:39:58.7262253Z ##[endgroup]
+2026-10-07T19:40:02.8031708Z 
+2026-10-07T19:40:02.8041748Z  [OK] No errors                                                                 
+2026-10-07T19:40:02.8042860Z 
+2026-10-07T19:40:02.8953757Z Post job cleanup.
+2026-10-07T19:40:02.9842380Z [command]/usr/bin/git version
+2026-10-07T19:40:02.9941250Z git version 2.55.0
+2026-10-07T19:40:02.9988102Z Temporarily overriding HOME='/home/runner/work/_temp/a546d9f3-83d5-4190-9789-e3f643900714' before making global git config changes
+2026-10-07T19:40:02.9989229Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-07T19:40:02.9990505Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/corex-mirror/corex-mirror
+2026-10-07T19:40:03.0045071Z Removing SSH command configuration
+2026-10-07T19:40:03.0045874Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-07T19:40:03.0111734Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-07T19:40:03.0438089Z Removing HTTP extra header
+2026-10-07T19:40:03.0444752Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-07T19:40:03.0499094Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-07T19:40:03.0921401Z Removing includeIf entries pointing to credentials config files
+2026-10-07T19:40:03.0941808Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-07T19:40:03.1061774Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-07T19:40:03.1697381Z Cleaning up orphan processes

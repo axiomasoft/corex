@@ -1,0 +1,986 @@
+﻿2026-10-07T19:09:38.4427082Z Current runner version: '2.337.0'
+2026-10-07T19:09:38.4514731Z ##[group]Runner Image Provisioner
+2026-10-07T19:09:38.4516508Z Hosted Compute Agent
+2026-10-07T19:09:38.4517555Z Version: 20260901.588
+2026-10-07T19:09:38.4518868Z Commit: f88ec8081b781fac6c440065ac7ff9e710ce3d0b
+2026-10-07T19:09:38.4530750Z Build Date: 2026-09-01T19:56:44Z
+2026-10-07T19:09:38.4532184Z Worker ID: {2bbce0ee-cd6b-4580-b5b3-c92ef41a8607}
+2026-10-07T19:09:38.4533622Z Azure Region: eastus
+2026-10-07T19:09:38.4534720Z ##[endgroup]
+2026-10-07T19:09:38.4537400Z ##[group]Operating System
+2026-10-07T19:09:38.4538449Z Ubuntu
+2026-10-07T19:09:38.4549932Z 24.04.5
+2026-10-07T19:09:38.4550953Z LTS
+2026-10-07T19:09:38.4551849Z ##[endgroup]
+2026-10-07T19:09:38.4552997Z ##[group]Runner Image
+2026-10-07T19:09:38.4553977Z Image: ubuntu-24.04
+2026-10-07T19:09:38.4555529Z Version: 20260927.320.1
+2026-10-07T19:09:38.4557691Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260927.320/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-07T19:09:38.4560828Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260927.320
+2026-10-07T19:09:38.4562547Z ##[endgroup]
+2026-10-07T19:09:38.4564445Z ##[group]GITHUB_TOKEN Permissions
+2026-10-07T19:09:38.4567455Z Contents: read
+2026-10-07T19:09:38.4568650Z Metadata: read
+2026-10-07T19:09:38.4590186Z ##[endgroup]
+2026-10-07T19:09:38.4593489Z Secret source: Actions
+2026-10-07T19:09:38.4595073Z Cache mode: write
+2026-10-07T19:09:38.4596678Z Prepare workflow directory
+2026-10-07T19:09:38.5771094Z Prepare all required actions
+2026-10-07T19:09:38.5847510Z Getting action download info
+2026-10-07T19:09:38.8159795Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-07T19:09:38.9556387Z Download action repository 'shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240' (SHA:f3e473d116dcccaddc5834248c87452386958240)
+2026-10-07T19:09:39.1929149Z Complete job name: Backward compatibility (Roave · PHP 8.4)
+2026-10-07T19:09:39.2871555Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-07T19:09:39.2872628Z with:
+2026-10-07T19:09:39.2873068Z   persist-credentials: false
+2026-10-07T19:09:39.2873575Z   fetch-depth: 0
+2026-10-07T19:09:39.2874034Z   repository: axiomik/corex-mirror
+2026-10-07T19:09:39.2877873Z   token: ***
+2026-10-07T19:09:39.2878300Z   ssh-strict: true
+2026-10-07T19:09:39.2878733Z   ssh-user: git
+2026-10-07T19:09:39.2879150Z   clean: true
+2026-10-07T19:09:39.2879793Z   sparse-checkout-cone-mode: true
+2026-10-07T19:09:39.2880324Z   fetch-tags: false
+2026-10-07T19:09:39.2880761Z   show-progress: true
+2026-10-07T19:09:39.2881203Z   lfs: false
+2026-10-07T19:09:39.2881615Z   submodules: false
+2026-10-07T19:09:39.2882066Z   set-safe-directory: true
+2026-10-07T19:09:39.2882570Z   allow-unsafe-pr-checkout: false
+2026-10-07T19:09:39.2883316Z env:
+2026-10-07T19:09:39.2883749Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T19:09:39.2884267Z ##[endgroup]
+2026-10-07T19:09:39.4085504Z Syncing repository: axiomik/corex-mirror
+2026-10-07T19:09:39.5106627Z ##[group]Getting Git version info
+2026-10-07T19:09:39.5107926Z Working directory is '/home/runner/work/corex-mirror/corex-mirror'
+2026-10-07T19:09:39.5109870Z [command]/usr/bin/git version
+2026-10-07T19:09:39.5110674Z git version 2.55.0
+2026-10-07T19:09:39.5113128Z ##[endgroup]
+2026-10-07T19:09:39.5121329Z Temporarily overriding HOME='/home/runner/work/_temp/64550a01-2355-4375-936e-4228e61383f1' before making global git config changes
+2026-10-07T19:09:39.5124065Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-07T19:09:39.5126305Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/corex-mirror/corex-mirror
+2026-10-07T19:09:39.5129030Z Deleting the contents of '/home/runner/work/corex-mirror/corex-mirror'
+2026-10-07T19:09:39.5131439Z ##[group]Determining repository object format
+2026-10-07T19:09:39.5133176Z ##[endgroup]
+2026-10-07T19:09:39.5134747Z ##[group]Initializing the repository
+2026-10-07T19:09:39.5136296Z [command]/usr/bin/git init /home/runner/work/corex-mirror/corex-mirror
+2026-10-07T19:09:39.5150857Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-07T19:09:39.5152554Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-07T19:09:39.5154081Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-07T19:09:39.5155266Z hint: call:
+2026-10-07T19:09:39.5155890Z hint:
+2026-10-07T19:09:39.5156666Z hint: 	git config --global init.defaultBranch <name>
+2026-10-07T19:09:39.5157642Z hint:
+2026-10-07T19:09:39.5158553Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-07T19:09:39.5164161Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-07T19:09:39.5165471Z hint:
+2026-10-07T19:09:39.5166142Z hint: 	git branch -m <name>
+2026-10-07T19:09:39.5166901Z hint:
+2026-10-07T19:09:39.5167917Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-07T19:09:39.5169839Z Initialized empty Git repository in /home/runner/work/corex-mirror/corex-mirror/.git/
+2026-10-07T19:09:39.5172488Z [command]/usr/bin/git remote add origin https://github.com/axiomik/corex-mirror
+2026-10-07T19:09:39.5174970Z ##[endgroup]
+2026-10-07T19:09:39.5176148Z ##[group]Disabling automatic garbage collection
+2026-10-07T19:09:39.5177174Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-07T19:09:39.5192397Z ##[endgroup]
+2026-10-07T19:09:39.5193745Z ##[group]Setting up auth
+2026-10-07T19:09:39.5194733Z Removing SSH command configuration
+2026-10-07T19:09:39.5196028Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-07T19:09:39.5221564Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-07T19:09:39.5955341Z Removing HTTP extra header
+2026-10-07T19:09:39.5963373Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-07T19:09:39.6006948Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-07T19:09:39.6253190Z Removing includeIf entries pointing to credentials config files
+2026-10-07T19:09:39.6255501Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-07T19:09:39.6293668Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-07T19:09:39.6560265Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-39eb9995-7e60-4b46-a962-7b012c67d5c2.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-07T19:09:39.6605339Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git.path /home/runner/work/_temp/git-credentials-39eb9995-7e60-4b46-a962-7b012c67d5c2.config
+2026-10-07T19:09:39.6644913Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-39eb9995-7e60-4b46-a962-7b012c67d5c2.config
+2026-10-07T19:09:39.6690233Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-39eb9995-7e60-4b46-a962-7b012c67d5c2.config
+2026-10-07T19:09:39.6731062Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-39eb9995-7e60-4b46-a962-7b012c67d5c2.config
+2026-10-07T19:09:39.6767306Z ##[endgroup]
+2026-10-07T19:09:39.6769063Z ##[group]Fetching the repository
+2026-10-07T19:09:39.6775123Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2026-10-07T19:09:45.5716954Z From https://github.com/axiomik/corex-mirror
+2026-10-07T19:09:45.5741701Z  * [new branch]        dependabot/composer/packages/intl/composer-b451d27a11 -> origin/dependabot/composer/packages/intl/composer-b451d27a11
+2026-10-07T19:09:45.5746645Z  * [new branch]        main       -> origin/main
+2026-10-07T19:09:45.5750637Z [command]/usr/bin/git branch --list --remote origin/main
+2026-10-07T19:09:45.5783641Z   origin/main
+2026-10-07T19:09:45.5830500Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+2026-10-07T19:09:45.5840653Z e2dc908194cea0a13108b88d5b02242d2684a763
+2026-10-07T19:09:45.5884121Z ##[endgroup]
+2026-10-07T19:09:45.5900085Z ##[group]Determining the checkout info
+2026-10-07T19:09:45.5902060Z ##[endgroup]
+2026-10-07T19:09:45.5904129Z [command]/usr/bin/git sparse-checkout disable
+2026-10-07T19:09:45.5982066Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-07T19:09:45.6031688Z ##[group]Checking out the ref
+2026-10-07T19:09:45.6033597Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-07T19:09:46.6368547Z Updating files:  57% (8720/15215)
+2026-10-07T19:09:46.6447808Z Updating files:  58% (8825/15215)
+2026-10-07T19:09:46.6638420Z Updating files:  59% (8977/15215)
+2026-10-07T19:09:46.7034171Z Updating files:  60% (9129/15215)
+2026-10-07T19:09:46.7262608Z Updating files:  61% (9282/15215)
+2026-10-07T19:09:46.7440289Z Updating files:  62% (9434/15215)
+2026-10-07T19:09:46.7660782Z Updating files:  63% (9586/15215)
+2026-10-07T19:09:46.7792893Z Updating files:  64% (9738/15215)
+2026-10-07T19:09:46.7891643Z Updating files:  65% (9890/15215)
+2026-10-07T19:09:46.7974133Z Updating files:  66% (10042/15215)
+2026-10-07T19:09:46.8338667Z Updating files:  67% (10195/15215)
+2026-10-07T19:09:46.9364305Z Updating files:  68% (10347/15215)
+2026-10-07T19:09:46.9565094Z Updating files:  69% (10499/15215)
+2026-10-07T19:09:46.9664740Z Updating files:  70% (10651/15215)
+2026-10-07T19:09:46.9792641Z Updating files:  71% (10803/15215)
+2026-10-07T19:09:46.9991537Z Updating files:  72% (10955/15215)
+2026-10-07T19:09:47.0354539Z Updating files:  73% (11107/15215)
+2026-10-07T19:09:47.0463863Z Updating files:  74% (11260/15215)
+2026-10-07T19:09:47.0602870Z Updating files:  75% (11412/15215)
+2026-10-07T19:09:47.0792860Z Updating files:  76% (11564/15215)
+2026-10-07T19:09:47.1050652Z Updating files:  77% (11716/15215)
+2026-10-07T19:09:47.1195094Z Updating files:  78% (11868/15215)
+2026-10-07T19:09:47.1580695Z Updating files:  79% (12020/15215)
+2026-10-07T19:09:47.2326771Z Updating files:  80% (12172/15215)
+2026-10-07T19:09:47.2426406Z Updating files:  81% (12325/15215)
+2026-10-07T19:09:47.2523681Z Updating files:  82% (12477/15215)
+2026-10-07T19:09:47.2720000Z Updating files:  83% (12629/15215)
+2026-10-07T19:09:47.2835769Z Updating files:  84% (12781/15215)
+2026-10-07T19:09:47.3199065Z Updating files:  85% (12933/15215)
+2026-10-07T19:09:47.3350851Z Updating files:  86% (13085/15215)
+2026-10-07T19:09:47.3400368Z Updating files:  87% (13238/15215)
+2026-10-07T19:09:47.3481739Z Updating files:  88% (13390/15215)
+2026-10-07T19:09:47.3565614Z Updating files:  89% (13542/15215)
+2026-10-07T19:09:47.4621149Z Updating files:  90% (13694/15215)
+2026-10-07T19:09:47.4768214Z Updating files:  91% (13846/15215)
+2026-10-07T19:09:47.4850191Z Updating files:  92% (13998/15215)
+2026-10-07T19:09:47.4959578Z Updating files:  93% (14150/15215)
+2026-10-07T19:09:47.5051830Z Updating files:  94% (14303/15215)
+2026-10-07T19:09:47.5364849Z Updating files:  95% (14455/15215)
+2026-10-07T19:09:47.5472069Z Updating files:  96% (14607/15215)
+2026-10-07T19:09:47.5571476Z Updating files:  97% (14759/15215)
+2026-10-07T19:09:47.5803097Z Updating files:  98% (14911/15215)
+2026-10-07T19:09:47.5943391Z Updating files:  99% (15063/15215)
+2026-10-07T19:09:47.5960147Z Updating files: 100% (15215/15215)
+2026-10-07T19:09:47.5969950Z Updating files: 100% (15215/15215), done.
+2026-10-07T19:09:47.8406045Z Switched to a new branch 'main'
+2026-10-07T19:09:47.8470205Z branch 'main' set up to track 'origin/main'.
+2026-10-07T19:09:47.8542710Z ##[endgroup]
+2026-10-07T19:09:47.8850285Z [command]/usr/bin/git log -1 --format=%H
+2026-10-07T19:09:47.8891034Z e2dc908194cea0a13108b88d5b02242d2684a763
+2026-10-07T19:09:47.8935273Z ##[group]Removing auth
+2026-10-07T19:09:47.8940331Z Removing SSH command configuration
+2026-10-07T19:09:47.8941270Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-07T19:09:47.8944049Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-07T19:09:47.9201767Z Removing HTTP extra header
+2026-10-07T19:09:47.9203426Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-07T19:09:47.9242874Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-07T19:09:47.9500337Z Removing includeIf entries pointing to credentials config files
+2026-10-07T19:09:47.9502327Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-07T19:09:47.9915955Z includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git.path
+2026-10-07T19:09:47.9917484Z includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git/worktrees/*.path
+2026-10-07T19:09:47.9921086Z includeif.gitdir:/github/workspace/.git.path
+2026-10-07T19:09:47.9922592Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-07T19:09:47.9927984Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git.path
+2026-10-07T19:09:47.9961446Z /home/runner/work/_temp/git-credentials-39eb9995-7e60-4b46-a962-7b012c67d5c2.config
+2026-10-07T19:09:47.9970250Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-39eb9995\-7e60\-4b46\-a962\-7b012c67d5c2\.config
+2026-10-07T19:09:48.0028256Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git/worktrees/*.path
+2026-10-07T19:09:48.0065541Z /home/runner/work/_temp/git-credentials-39eb9995-7e60-4b46-a962-7b012c67d5c2.config
+2026-10-07T19:09:48.0077410Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/corex-mirror/corex-mirror/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-39eb9995\-7e60\-4b46\-a962\-7b012c67d5c2\.config
+2026-10-07T19:09:48.0116373Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-07T19:09:48.0146524Z /github/runner_temp/git-credentials-39eb9995-7e60-4b46-a962-7b012c67d5c2.config
+2026-10-07T19:09:48.0155531Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-39eb9995\-7e60\-4b46\-a962\-7b012c67d5c2\.config
+2026-10-07T19:09:48.0220163Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-07T19:09:48.0247028Z /github/runner_temp/git-credentials-39eb9995-7e60-4b46-a962-7b012c67d5c2.config
+2026-10-07T19:09:48.0257060Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-39eb9995\-7e60\-4b46\-a962\-7b012c67d5c2\.config
+2026-10-07T19:09:48.0295867Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-07T19:09:48.0547807Z Removing credentials config '/home/runner/work/_temp/git-credentials-39eb9995-7e60-4b46-a962-7b012c67d5c2.config'
+2026-10-07T19:09:48.0558383Z ##[endgroup]
+2026-10-07T19:09:48.0850549Z ##[group]Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240
+2026-10-07T19:09:48.0851525Z with:
+2026-10-07T19:09:48.0851880Z   php-version: 8.4
+2026-10-07T19:09:48.0852486Z   extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
+2026-10-07T19:09:48.0853170Z   coverage: none
+2026-10-07T19:09:48.0853552Z   ini-file: production
+2026-10-07T19:09:48.0858093Z   github-token: ***
+2026-10-07T19:09:48.0858475Z env:
+2026-10-07T19:09:48.0858812Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T19:09:48.0859244Z ##[endgroup]
+2026-10-07T19:09:48.1280685Z [command]/usr/bin/bash /home/runner/work/_actions/shivammathur/setup-php/f3e473d116dcccaddc5834248c87452386958240/src/scripts/run.sh
+2026-10-07T19:09:48.1709735Z 
+2026-10-07T19:09:48.1710711Z [90;1m==> [0m[37;1mSetup PHP[0m
+2026-10-07T19:09:54.2495638Z [32;1m✓ [0m[34;1mPHP [0m[90;1mInstalled PHP 8.4.26[0m
+2026-10-07T19:09:54.2499752Z 
+2026-10-07T19:09:54.2504740Z [90;1m==> [0m[37;1mSetup Extensions[0m
+2026-10-07T19:09:54.2997809Z [32;1m✓ [0m[34;1mmbstring [0m[90;1mEnabled[0m
+2026-10-07T19:09:54.3032148Z [32;1m✓ [0m[34;1mpdo [0m[90;1mEnabled[0m
+2026-10-07T19:09:54.3067797Z [32;1m✓ [0m[34;1msqlite3 [0m[90;1mEnabled[0m
+2026-10-07T19:09:54.3096448Z [32;1m✓ [0m[34;1mpdo_sqlite [0m[90;1mEnabled[0m
+2026-10-07T19:09:54.3116450Z [32;1m✓ [0m[34;1mbcmath [0m[90;1mEnabled[0m
+2026-10-07T19:09:54.3151162Z [32;1m✓ [0m[34;1mcurl [0m[90;1mEnabled[0m
+2026-10-07T19:09:54.3184692Z [32;1m✓ [0m[34;1mintl [0m[90;1mEnabled[0m
+2026-10-07T19:09:54.3217007Z [32;1m✓ [0m[34;1mzip [0m[90;1mEnabled[0m
+2026-10-07T19:09:54.3251488Z [32;1m✓ [0m[34;1mgd [0m[90;1mEnabled[0m
+2026-10-07T19:09:54.3252065Z 
+2026-10-07T19:09:54.3252345Z [90;1m==> [0m[37;1mSetup Tools[0m
+2026-10-07T19:09:54.5887499Z [32;1m✓ [0m[34;1mcomposer [0m[90;1mAdded composer 2.10.3[0m
+2026-10-07T19:09:54.5893743Z 
+2026-10-07T19:09:54.5894387Z [90;1m==> [0m[37;1mSetup Coverage[0m
+2026-10-07T19:09:54.8287972Z [32;1m✓ [0m[34;1mnone [0m[90;1mDisabled Xdebug and PCOV[0m
+2026-10-07T19:09:54.8291560Z 
+2026-10-07T19:09:54.8292142Z [90;1m==> [0m[37;1mSponsor setup-php[0m
+2026-10-07T19:09:54.8293168Z [32;1m✓ [0m[34;1msetup-php [0m[90;1mhttps://setup-php.com/sponsor[0m
+2026-10-07T19:09:54.8491057Z ##[group]Run php scripts/ci-composer-update.php
+2026-10-07T19:09:54.8491474Z [36;1mphp scripts/ci-composer-update.php[0m
+2026-10-07T19:09:54.8823355Z shell: /usr/bin/bash -e {0}
+2026-10-07T19:09:54.8823656Z env:
+2026-10-07T19:09:54.8823903Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T19:09:54.8824226Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-07T19:09:54.8824528Z   COMPOSER_NO_INTERACTION: 1
+2026-10-07T19:09:54.8824812Z   COMPOSER_NO_AUDIT: 1
+2026-10-07T19:09:54.8825064Z ##[endgroup]
+2026-10-07T19:09:54.9338570Z CI locked toolchain: phpstan/phpstan 2.2.16
+2026-10-07T19:09:54.9340033Z CI locked toolchain: phpstan/phpstan-strict-rules 2.0.12
+2026-10-07T19:09:54.9340624Z CI locked toolchain: larastan/larastan v3.12.2
+2026-10-07T19:09:55.1008891Z Loading composer repositories with package information
+2026-10-07T19:09:58.9813431Z Updating dependencies
+2026-10-07T19:09:59.0576307Z Lock file operations: 0 installs, 40 updates, 0 removals
+2026-10-07T19:09:59.0579686Z   - Upgrading composer/semver (3.5.0 => 3.5.1)
+2026-10-07T19:09:59.0580798Z   - Upgrading doctrine/lexer (3.0.2 => 3.0.3)
+2026-10-07T19:09:59.0581630Z   - Upgrading fidry/cpu-core-counter (1.4.0 => 1.4.1)
+2026-10-07T19:09:59.0582460Z   - Upgrading filp/whoops (2.18.5 => 2.18.6)
+2026-10-07T19:09:59.0583253Z   - Upgrading firebase/php-jwt (v7.2.0 => v7.2.1)
+2026-10-07T19:09:59.0584111Z   - Upgrading justinrainbow/json-schema (6.13.0 => 6.13.1)
+2026-10-07T19:09:59.0584996Z   - Upgrading laravel/agent-detector (v2.0.2 => v2.0.4)
+2026-10-07T19:09:59.0585848Z   - Upgrading laravel/framework (v13.33.0 => v13.35.0)
+2026-10-07T19:09:59.0586667Z   - Upgrading laravel/prompts (v0.3.24 => v0.3.25)
+2026-10-07T19:09:59.0587470Z   - Upgrading monolog/monolog (3.12.0 => 3.12.1)
+2026-10-07T19:09:59.0588239Z   - Upgrading nesbot/carbon (3.14.1 => 3.14.2)
+2026-10-07T19:09:59.0589044Z   - Upgrading orchestra/sidekick (v1.2.22 => v1.2.23)
+2026-10-07T19:09:59.0590930Z   - Upgrading pestphp/pest (v5.2.1 => v5.3.0)
+2026-10-07T19:09:59.0591881Z   - Upgrading phpdocumentor/type-resolver (2.0.0 => 2.1.0)
+2026-10-07T19:09:59.0592809Z   - Upgrading phpunit/php-code-coverage (14.3.5 => 14.4.1)
+2026-10-07T19:09:59.0593673Z   - Upgrading phpunit/php-text-template (6.0.0 => 6.0.1)
+2026-10-07T19:09:59.0594468Z   - Upgrading phpunit/phpunit (13.3.4 => 13.3.6)
+2026-10-07T19:09:59.0595374Z   - Upgrading roave/backward-compatibility-check (8.22.0 => 8.23.0)
+2026-10-07T19:09:59.0596262Z   - Upgrading sebastian/environment (9.3.2 => 9.3.3)
+2026-10-07T19:09:59.0597033Z   - Upgrading sebastian/version (7.0.0 => 7.0.1)
+2026-10-07T19:09:59.0597764Z   - Upgrading seld/phar-utils (1.2.2 => 1.2.3)
+2026-10-07T19:09:59.0598489Z   - Upgrading symfony/console (v7.4.19 => v7.4.20)
+2026-10-07T19:09:59.0599471Z   - Upgrading symfony/error-handler (v8.1.5 => v8.1.8)
+2026-10-07T19:09:59.0600364Z   - Upgrading symfony/finder (v8.1.7 => v8.1.8)
+2026-10-07T19:09:59.0601147Z   - Upgrading symfony/http-foundation (v8.1.7 => v8.1.8)
+2026-10-07T19:09:59.0601961Z   - Upgrading symfony/http-kernel (v8.1.7 => v8.1.8)
+2026-10-07T19:09:59.0602831Z   - Upgrading symfony/polyfill-intl-grapheme (v1.41.0 => v1.43.0)
+2026-10-07T19:09:59.0603721Z   - Upgrading symfony/polyfill-intl-idn (v1.42.0 => v1.43.0)
+2026-10-07T19:09:59.0604644Z   - Upgrading symfony/polyfill-intl-normalizer (v1.42.0 => v1.43.0)
+2026-10-07T19:09:59.0605552Z   - Upgrading symfony/polyfill-mbstring (v1.38.2 => v1.43.0)
+2026-10-07T19:09:59.0606395Z   - Upgrading symfony/polyfill-php80 (v1.37.0 => v1.43.0)
+2026-10-07T19:09:59.0607213Z   - Upgrading symfony/polyfill-php82 (v1.38.1 => v1.43.0)
+2026-10-07T19:09:59.0608031Z   - Upgrading symfony/polyfill-php83 (v1.41.0 => v1.43.0)
+2026-10-07T19:09:59.0608850Z   - Upgrading symfony/polyfill-php84 (v1.38.1 => v1.43.0)
+2026-10-07T19:09:59.0609900Z   - Upgrading symfony/polyfill-php85 (v1.41.0 => v1.43.0)
+2026-10-07T19:09:59.0610744Z   - Upgrading symfony/polyfill-php86 (v1.41.0 => v1.43.0)
+2026-10-07T19:09:59.0611566Z   - Upgrading symfony/polyfill-uuid (v1.37.0 => v1.43.0)
+2026-10-07T19:09:59.0612691Z   - Upgrading symfony/routing (v8.1.6 => v8.1.8)
+2026-10-07T19:09:59.0613464Z   - Upgrading symfony/uid (v8.1.5 => v8.1.8)
+2026-10-07T19:09:59.0614162Z   - Upgrading symfony/yaml (v8.1.6 => v8.1.8)
+2026-10-07T19:09:59.0668430Z Writing lock file
+2026-10-07T19:09:59.0669195Z Installing dependencies from lock file (including require-dev)
+2026-10-07T19:09:59.0764353Z Package operations: 250 installs, 0 updates, 0 removals
+2026-10-07T19:09:59.0773742Z   - Downloading pestphp/pest-plugin (v5.0.0)
+2026-10-07T19:09:59.0778080Z   - Downloading php-http/discovery (1.20.0)
+2026-10-07T19:09:59.0782012Z   - Downloading infection/extension-installer (0.1.2)
+2026-10-07T19:09:59.0785697Z   - Downloading phpstan/phpstan (2.2.16)
+2026-10-07T19:09:59.0788806Z   - Downloading composer/semver (3.5.1)
+2026-10-07T19:09:59.0792652Z   - Downloading tbachert/spi (v1.0.5)
+2026-10-07T19:09:59.0795759Z   - Downloading phpstan/extension-installer (1.4.3)
+2026-10-07T19:09:59.0799456Z   - Downloading aws/aws-crt-php (v1.2.7)
+2026-10-07T19:09:59.0803044Z   - Downloading psr/clock (1.0.0)
+2026-10-07T19:09:59.0806596Z   - Downloading voku/portable-ascii (2.1.1)
+2026-10-07T19:09:59.0810482Z   - Downloading symfony/polyfill-php80 (v1.43.0)
+2026-10-07T19:09:59.0813525Z   - Downloading symfony/polyfill-mbstring (v1.43.0)
+2026-10-07T19:09:59.0816475Z   - Downloading symfony/polyfill-ctype (v1.37.0)
+2026-10-07T19:09:59.0819128Z   - Downloading phpoption/phpoption (1.10.0)
+2026-10-07T19:09:59.0822056Z   - Downloading graham-campbell/result-type (v1.2.0)
+2026-10-07T19:09:59.0824305Z   - Downloading vlucas/phpdotenv (v5.7.0)
+2026-10-07T19:09:59.0826162Z   - Downloading symfony/css-selector (v8.1.6)
+2026-10-07T19:09:59.0828618Z   - Downloading tijsverkoyen/css-to-inline-styles (v2.4.0)
+2026-10-07T19:09:59.0830794Z   - Downloading symfony/var-dumper (v8.1.7)
+2026-10-07T19:09:59.0832685Z   - Downloading symfony/polyfill-uuid (v1.43.0)
+2026-10-07T19:09:59.0834549Z   - Downloading symfony/uid (v8.1.8)
+2026-10-07T19:09:59.0836432Z   - Downloading symfony/deprecation-contracts (v3.7.1)
+2026-10-07T19:09:59.0838183Z   - Downloading symfony/routing (v8.1.8)
+2026-10-07T19:09:59.0840325Z   - Downloading symfony/process (v8.1.7)
+2026-10-07T19:09:59.0842171Z   - Downloading symfony/polyfill-php86 (v1.43.0)
+2026-10-07T19:09:59.0844092Z   - Downloading symfony/polyfill-php85 (v1.43.0)
+2026-10-07T19:09:59.0845843Z   - Downloading symfony/polyfill-php84 (v1.43.0)
+2026-10-07T19:09:59.0847758Z   - Downloading symfony/polyfill-intl-normalizer (v1.43.0)
+2026-10-07T19:09:59.0849830Z   - Downloading symfony/polyfill-intl-idn (v1.43.0)
+2026-10-07T19:09:59.0851546Z   - Downloading symfony/mime (v8.1.7)
+2026-10-07T19:09:59.0853306Z   - Downloading psr/container (2.0.2)
+2026-10-07T19:09:59.0855230Z   - Downloading symfony/service-contracts (v3.7.3)
+2026-10-07T19:09:59.0857023Z   - Downloading psr/event-dispatcher (1.0.0)
+2026-10-07T19:09:59.0859014Z   - Downloading symfony/event-dispatcher-contracts (v3.7.1)
+2026-10-07T19:09:59.0861214Z   - Downloading symfony/event-dispatcher (v8.1.5)
+2026-10-07T19:09:59.0862937Z   - Downloading psr/log (3.0.2)
+2026-10-07T19:09:59.0865350Z   - Downloading doctrine/lexer (3.0.3)
+2026-10-07T19:09:59.0867881Z   - Downloading egulias/email-validator (4.0.4)
+2026-10-07T19:09:59.0869877Z   - Downloading symfony/mailer (v8.1.7)
+2026-10-07T19:09:59.0871744Z   - Downloading symfony/http-foundation (v8.1.8)
+2026-10-07T19:09:59.0873533Z   - Downloading symfony/error-handler (v8.1.8)
+2026-10-07T19:09:59.0875293Z   - Downloading symfony/http-kernel (v8.1.8)
+2026-10-07T19:09:59.0877065Z   - Downloading symfony/finder (v8.1.8)
+2026-10-07T19:09:59.0878921Z   - Downloading symfony/polyfill-intl-grapheme (v1.43.0)
+2026-10-07T19:09:59.0880914Z   - Downloading symfony/string (v8.1.7)
+2026-10-07T19:09:59.0882705Z   - Downloading symfony/console (v7.4.20)
+2026-10-07T19:09:59.0885063Z   - Downloading ramsey/collection (2.1.1)
+2026-10-07T19:09:59.0887511Z   - Downloading brick/math (0.14.8)
+2026-10-07T19:09:59.0889640Z   - Downloading ramsey/uuid (4.9.4)
+2026-10-07T19:09:59.0891831Z   - Downloading psr/simple-cache (3.0.0)
+2026-10-07T19:09:59.0893385Z   - Downloading psr/http-message (2.0)
+2026-10-07T19:09:59.0895689Z   - Downloading nunomaduro/termwind (v2.4.0)
+2026-10-07T19:09:59.0897592Z   - Downloading symfony/translation-contracts (v3.7.1)
+2026-10-07T19:09:59.0899564Z   - Downloading symfony/translation (v8.1.5)
+2026-10-07T19:09:59.0901408Z   - Downloading symfony/clock (v8.1.0)
+2026-10-07T19:09:59.0903824Z   - Downloading carbonphp/carbon-doctrine-types (3.2.1)
+2026-10-07T19:09:59.0906067Z   - Downloading nesbot/carbon (3.14.2)
+2026-10-07T19:09:59.0908394Z   - Downloading monolog/monolog (3.12.1)
+2026-10-07T19:09:59.0910472Z   - Downloading psr/http-factory (1.1.0)
+2026-10-07T19:09:59.0912884Z   - Downloading league/uri-interfaces (7.8.1)
+2026-10-07T19:09:59.0914562Z   - Downloading league/uri (7.8.1)
+2026-10-07T19:09:59.0916386Z   - Downloading league/mime-type-detection (1.17.0)
+2026-10-07T19:09:59.0918076Z   - Downloading league/flysystem-local (3.35.3)
+2026-10-07T19:09:59.0920106Z   - Downloading league/flysystem (3.36.0)
+2026-10-07T19:09:59.0922406Z   - Downloading nette/utils (v4.1.5)
+2026-10-07T19:09:59.0924110Z   - Downloading nette/schema (v1.3.6)
+2026-10-07T19:09:59.0926416Z   - Downloading dflydev/dot-access-data (v3.0.3)
+2026-10-07T19:09:59.0928062Z   - Downloading league/config (v1.2.0)
+2026-10-07T19:09:59.0930134Z   - Downloading league/commonmark (2.10.3)
+2026-10-07T19:09:59.0932547Z   - Downloading laravel/serializable-closure (v2.1.0)
+2026-10-07T19:09:59.0934312Z   - Downloading laravel/prompts (v0.3.25)
+2026-10-07T19:09:59.0936677Z   - Downloading guzzlehttp/uri-template (v2.0.1)
+2026-10-07T19:09:59.0938442Z   - Downloading symfony/polyfill-php82 (v1.43.0)
+2026-10-07T19:09:59.0940351Z   - Downloading guzzlehttp/psr7 (3.1.0)
+2026-10-07T19:09:59.0942098Z   - Downloading guzzlehttp/promises (3.0.2)
+2026-10-07T19:09:59.0943816Z   - Downloading psr/http-client (1.0.3)
+2026-10-07T19:09:59.0945511Z   - Downloading guzzlehttp/guzzle (8.2.0)
+2026-10-07T19:09:59.0947842Z   - Downloading fruitcake/php-cors (v1.4.0)
+2026-10-07T19:09:59.0950493Z   - Downloading dragonmantank/cron-expression (v3.6.0)
+2026-10-07T19:09:59.0952206Z   - Downloading doctrine/inflector (2.1.0)
+2026-10-07T19:09:59.0954148Z   - Downloading laravel/framework (v13.35.0)
+2026-10-07T19:09:59.0958361Z   - Syncing axioma-studio/azguard-core (0.3.0) into cache
+2026-10-07T19:10:00.2120676Z   - Downloading staabm/side-effects-detector (1.0.5)
+2026-10-07T19:10:00.2121817Z   - Downloading sebastian/version (7.0.1)
+2026-10-07T19:10:00.2122603Z   - Downloading sebastian/type (7.0.2)
+2026-10-07T19:10:00.2123431Z   - Downloading sebastian/recursion-context (8.0.1)
+2026-10-07T19:10:00.2124314Z   - Downloading sebastian/object-enumerator (8.1.0)
+2026-10-07T19:10:00.2125690Z   - Downloading sebastian/object-reflector (6.1.0)
+2026-10-07T19:10:00.2130030Z   - Downloading sebastian/global-state (9.0.1)
+2026-10-07T19:10:00.2130789Z   - Downloading sebastian/git-state (1.0.0)
+2026-10-07T19:10:00.2138197Z   - Downloading sebastian/file-filter (1.0.0)
+2026-10-07T19:10:00.2139158Z   - Downloading sebastian/exporter (8.2.1)
+2026-10-07T19:10:00.2140410Z   - Downloading sebastian/environment (9.3.3)
+2026-10-07T19:10:00.2141259Z   - Downloading sebastian/diff (9.0.1)
+2026-10-07T19:10:00.2142104Z   - Downloading sebastian/comparator (8.4.0)
+2026-10-07T19:10:00.2142973Z   - Downloading sebastian/cli-parser (5.0.1)
+2026-10-07T19:10:00.2144957Z   - Downloading phpunit/php-timer (9.0.0)
+2026-10-07T19:10:00.2146858Z   - Downloading phpunit/php-text-template (6.0.1)
+2026-10-07T19:10:00.2148673Z   - Downloading phpunit/php-invoker (7.0.0)
+2026-10-07T19:10:00.2151006Z   - Downloading phpunit/php-file-iterator (7.0.2)
+2026-10-07T19:10:00.2153423Z   - Downloading theseer/tokenizer (2.0.1)
+2026-10-07T19:10:00.2155773Z   - Downloading nikic/php-parser (v5.9.0)
+2026-10-07T19:10:00.2157596Z   - Downloading sebastian/lines-of-code (5.0.2)
+2026-10-07T19:10:00.2159760Z   - Downloading sebastian/complexity (6.0.0)
+2026-10-07T19:10:00.2161822Z   - Downloading phpunit/php-code-coverage (14.4.1)
+2026-10-07T19:10:00.2163880Z   - Downloading phar-io/version (3.2.1)
+2026-10-07T19:10:00.2165690Z   - Downloading phar-io/manifest (2.0.4)
+2026-10-07T19:10:00.2168041Z   - Downloading myclabs/deep-copy (1.14.0)
+2026-10-07T19:10:00.2170199Z   - Downloading phpunit/phpunit (13.3.6)
+2026-10-07T19:10:00.2172157Z   - Downloading pestphp/pest-plugin-profanity (v5.0.0)
+2026-10-07T19:10:00.2173917Z   - Downloading pestphp/pest-plugin-mutate (v5.0.2)
+2026-10-07T19:10:00.2176260Z   - Downloading webmozart/assert (2.5.0)
+2026-10-07T19:10:00.2178077Z   - Downloading phpstan/phpdoc-parser (2.3.6)
+2026-10-07T19:10:00.2180903Z   - Downloading phpdocumentor/reflection-common (2.2.1)
+2026-10-07T19:10:00.2182716Z   - Downloading doctrine/deprecations (1.1.6)
+2026-10-07T19:10:00.2184528Z   - Downloading phpdocumentor/type-resolver (2.1.0)
+2026-10-07T19:10:00.2186379Z   - Downloading phpdocumentor/reflection-docblock (6.0.3)
+2026-10-07T19:10:00.2188814Z   - Downloading ta-tikoma/phpunit-architecture-test (0.8.7)
+2026-10-07T19:10:00.2191008Z   - Downloading pestphp/pest-plugin-arch (v5.0.0)
+2026-10-07T19:10:00.2193404Z   - Downloading filp/whoops (2.18.6)
+2026-10-07T19:10:00.2195283Z   - Downloading nunomaduro/collision (v8.9.5)
+2026-10-07T19:10:00.2197700Z   - Downloading jean85/pretty-package-versions (2.1.1)
+2026-10-07T19:10:00.2200339Z   - Downloading fidry/cpu-core-counter (1.4.1)
+2026-10-07T19:10:00.2202783Z   - Downloading brianium/paratest (v7.25.0)
+2026-10-07T19:10:00.2204575Z   - Downloading pestphp/pest (v5.3.0)
+2026-10-07T19:10:00.2206487Z   - Downloading infection/include-interceptor (1.0.0)
+2026-10-07T19:10:00.2208391Z   - Downloading infection/abstract-testframework-adapter (0.5.1)
+2026-10-07T19:10:00.2212472Z   - Downloading brick/money (0.10.3)
+2026-10-07T19:10:00.2215150Z   - Downloading symfony/polyfill-php81 (v1.38.1)
+2026-10-07T19:10:00.2217568Z   - Downloading meilisearch/meilisearch-php (v1.16.1)
+2026-10-07T19:10:00.2221522Z   - Downloading rlanvin/php-rrule (v3.0.0)
+2026-10-07T19:10:00.2225197Z   - Downloading firebase/php-jwt (v7.2.1)
+2026-10-07T19:10:00.2230078Z   - Downloading beberlei/assert (v3.3.4)
+2026-10-07T19:10:00.2231948Z   - Downloading composer/ca-bundle (1.5.14)
+2026-10-07T19:10:00.2233772Z   - Downloading composer/pcre (3.4.0)
+2026-10-07T19:10:00.2236240Z   - Downloading composer/class-map-generator (1.8.0)
+2026-10-07T19:10:00.2238008Z   - Downloading composer/metadata-minifier (1.0.1)
+2026-10-07T19:10:00.2240098Z   - Downloading composer/spdx-licenses (1.6.0)
+2026-10-07T19:10:00.2242663Z   - Downloading giggsey/libphonenumber-for-php-lite (9.0.40)
+2026-10-07T19:10:00.2245890Z   - Downloading hamcrest/hamcrest-php (v3.0.0)
+2026-10-07T19:10:00.2248336Z   - Downloading thecodingmachine/safe (v3.4.0)
+2026-10-07T19:10:00.2250448Z   - Downloading symfony/filesystem (v8.1.6)
+2026-10-07T19:10:00.2252861Z   - Downloading sanmai/pipeline (7.12)
+2026-10-07T19:10:00.2254650Z   - Downloading sanmai/later (0.1.8)
+2026-10-07T19:10:00.2256464Z   - Downloading sanmai/duoclock (0.1.3)
+2026-10-07T19:10:00.2258192Z   - Downloading sanmai/di-container (0.2)
+2026-10-07T19:10:00.2260930Z   - Downloading ondram/ci-detector (4.2.0)
+2026-10-07T19:10:00.2263247Z   - Downloading marc-mabe/php-enum (v4.7.2)
+2026-10-07T19:10:00.2265670Z   - Downloading justinrainbow/json-schema (6.13.1)
+2026-10-07T19:10:00.2267419Z   - Downloading infection/mutator (0.4.1)
+2026-10-07T19:10:00.2269171Z   - Downloading composer/xdebug-handler (3.0.5)
+2026-10-07T19:10:00.2271833Z   - Downloading colinodell/json5 (v3.0.0)
+2026-10-07T19:10:00.2273565Z   - Downloading infection/infection (0.35.6)
+2026-10-07T19:10:00.2275974Z   - Downloading iamcal/sql-parser (v0.7)
+2026-10-07T19:10:00.2278312Z   - Downloading larastan/larastan (v3.12.2)
+2026-10-07T19:10:00.2280530Z   - Downloading symfony/psr-http-message-bridge (v8.1.0)
+2026-10-07T19:10:00.2282885Z   - Downloading laminas/laminas-diactoros (3.8.0)
+2026-10-07T19:10:00.2284606Z   - Downloading laravel/octane (v2.21.0)
+2026-10-07T19:10:00.2286854Z   - Downloading laravel/agent-detector (v2.0.4)
+2026-10-07T19:10:00.2288415Z   - Downloading laravel/pao (v1.1.5)
+2026-10-07T19:10:00.2290456Z   - Downloading laravel/pint (v1.32.1)
+2026-10-07T19:10:00.2292918Z   - Downloading mtdowling/jmespath.php (2.9.2)
+2026-10-07T19:10:00.2294673Z   - Downloading aws/aws-sdk-php (3.399.2)
+2026-10-07T19:10:00.2296588Z   - Downloading league/flysystem-aws-s3-v3 (3.35.3)
+2026-10-07T19:10:00.2298967Z   - Downloading open-telemetry/sem-conv (1.44.0)
+2026-10-07T19:10:00.2301139Z   - Downloading open-telemetry/context (1.5.0)
+2026-10-07T19:10:00.2302934Z   - Downloading open-telemetry/api (1.10.0)
+2026-10-07T19:10:00.2305256Z   - Downloading nyholm/psr7-server (1.1.0)
+2026-10-07T19:10:00.2307024Z   - Downloading open-telemetry/sdk (1.15.0)
+2026-10-07T19:10:00.2309684Z   - Downloading opis/string (2.1.0)
+2026-10-07T19:10:00.2311654Z   - Downloading opis/uri (1.1.0)
+2026-10-07T19:10:00.2313403Z   - Downloading opis/json-schema (2.6.0)
+2026-10-07T19:10:00.2315228Z   - Downloading symfony/polyfill-php83 (v1.43.0)
+2026-10-07T19:10:00.2317472Z   - Downloading orchestra/sidekick (v1.2.23)
+2026-10-07T19:10:00.2319472Z   - Downloading orchestra/canvas-core (v11.0.0)
+2026-10-07T19:10:00.2321456Z   - Downloading symfony/yaml (v8.1.8)
+2026-10-07T19:10:00.2323291Z   - Downloading orchestra/testbench-core (v11.5.0)
+2026-10-07T19:10:00.2325039Z   - Downloading orchestra/canvas (v11.1.0)
+2026-10-07T19:10:00.2327387Z   - Downloading psy/psysh (v0.12.24)
+2026-10-07T19:10:00.2329184Z   - Downloading laravel/tinker (v3.0.2)
+2026-10-07T19:10:00.2332871Z   - Downloading laravel/pail (v1.2.7)
+2026-10-07T19:10:00.2335259Z   - Downloading fakerphp/faker (v1.24.1)
+2026-10-07T19:10:00.2337099Z   - Downloading orchestra/workbench (v11.3.0)
+2026-10-07T19:10:00.2339685Z   - Downloading mockery/mockery (1.6.15)
+2026-10-07T19:10:00.2341501Z   - Downloading orchestra/testbench (v11.3.0)
+2026-10-07T19:10:00.2343889Z   - Downloading revolt/event-loop (v1.0.9)
+2026-10-07T19:10:00.2346435Z   - Downloading php-standard-library/foundation (6.3.0)
+2026-10-07T19:10:00.2348225Z   - Downloading php-standard-library/promise (6.3.0)
+2026-10-07T19:10:00.2350427Z   - Downloading php-standard-library/default (6.3.0)
+2026-10-07T19:10:00.2352190Z   - Downloading php-standard-library/locale (6.3.0)
+2026-10-07T19:10:00.2354119Z   - Downloading php-standard-library/interoperability (6.3.0)
+2026-10-07T19:10:00.2355892Z   - Downloading php-standard-library/comparison (6.3.0)
+2026-10-07T19:10:00.2357643Z   - Downloading php-standard-library/date-time (6.3.0)
+2026-10-07T19:10:00.2359528Z   - Downloading php-standard-library/async (6.3.0)
+2026-10-07T19:10:00.2361523Z   - Downloading php-standard-library/channel (6.3.0)
+2026-10-07T19:10:00.2363333Z   - Downloading php-standard-library/collection (6.3.0)
+2026-10-07T19:10:00.2365099Z   - Downloading php-standard-library/option (6.3.0)
+2026-10-07T19:10:00.2366933Z   - Downloading php-standard-library/either-or-both (6.3.0)
+2026-10-07T19:10:00.2368700Z   - Downloading php-standard-library/result (6.3.0)
+2026-10-07T19:10:00.2370678Z   - Downloading php-standard-library/io (6.3.0)
+2026-10-07T19:10:00.2372545Z   - Downloading php-standard-library/process (6.3.0)
+2026-10-07T19:10:00.2374275Z   - Downloading php-standard-library/iter (6.3.0)
+2026-10-07T19:10:00.2376086Z   - Downloading php-standard-library/range (6.3.0)
+2026-10-07T19:10:00.2377868Z   - Downloading phpstan/phpstan-strict-rules (2.0.12)
+2026-10-07T19:10:00.2380586Z   - Downloading react/promise (v3.3.0)
+2026-10-07T19:10:00.2382983Z   - Downloading rector/rector (2.6.7)
+2026-10-07T19:10:00.2385399Z   - Downloading jetbrains/phpstorm-stubs (v2026.2)
+2026-10-07T19:10:00.2387665Z   - Downloading roave/better-reflection (6.73.0)
+2026-10-07T19:10:00.2389668Z   - Downloading php-standard-library/vec (6.3.0)
+2026-10-07T19:10:00.2391510Z   - Downloading php-standard-library/type (6.3.0)
+2026-10-07T19:10:00.2393449Z   - Downloading php-standard-library/str (6.3.0)
+2026-10-07T19:10:00.2395227Z   - Downloading php-standard-library/shell (6.3.0)
+2026-10-07T19:10:00.2397183Z   - Downloading php-standard-library/regex (6.3.0)
+2026-10-07T19:10:00.2398742Z   - Downloading php-standard-library/json (6.3.0)
+2026-10-07T19:10:00.2400992Z   - Downloading php-standard-library/filesystem (6.3.0)
+2026-10-07T19:10:00.2402891Z   - Downloading php-standard-library/file (6.3.0)
+2026-10-07T19:10:00.2404632Z   - Downloading php-standard-library/env (6.3.0)
+2026-10-07T19:10:00.2406423Z   - Downloading php-standard-library/dict (6.3.0)
+2026-10-07T19:10:00.2408803Z   - Downloading ocramius/package-versions (2.12.0)
+2026-10-07T19:10:00.2411504Z   - Downloading nikolaposa/version (4.2.1)
+2026-10-07T19:10:00.2413385Z   - Downloading symfony/polyfill-php73 (v1.37.0)
+2026-10-07T19:10:00.2415667Z   - Downloading seld/signal-handler (2.0.2)
+2026-10-07T19:10:00.2417599Z   - Downloading seld/phar-utils (1.2.3)
+2026-10-07T19:10:00.2419576Z   - Downloading seld/jsonlint (1.12.1)
+2026-10-07T19:10:00.2421518Z   - Downloading composer/composer (2.10.3)
+2026-10-07T19:10:00.2423461Z   - Downloading roave/backward-compatibility-check (8.23.0)
+2026-10-07T19:10:00.2425895Z   - Downloading shipmonk/composer-dependency-analyser (1.8.4)
+2026-10-07T19:10:05.4174124Z   - Installing pestphp/pest-plugin (v5.0.0): Extracting archive
+2026-10-07T19:10:05.4378111Z   - Installing php-http/discovery (1.20.0): Extracting archive
+2026-10-07T19:10:05.4475979Z   - Installing infection/extension-installer (0.1.2): Extracting archive
+2026-10-07T19:10:05.4563890Z   - Installing phpstan/phpstan (2.2.16): Extracting archive
+2026-10-07T19:10:05.4568691Z   - Installing composer/semver (3.5.1): Extracting archive
+2026-10-07T19:10:05.8372880Z   - Installing tbachert/spi (v1.0.5): Extracting archive
+2026-10-07T19:10:05.8467465Z   - Installing phpstan/extension-installer (1.4.3): Extracting archive
+2026-10-07T19:10:05.8548570Z   - Installing aws/aws-crt-php (v1.2.7): Extracting archive
+2026-10-07T19:10:05.8555140Z   - Installing psr/clock (1.0.0): Extracting archive
+2026-10-07T19:10:05.8600072Z   - Installing voku/portable-ascii (2.1.1): Extracting archive
+2026-10-07T19:10:05.8640286Z   - Installing symfony/polyfill-php80 (v1.43.0): Extracting archive
+2026-10-07T19:10:05.8700124Z   - Installing symfony/polyfill-mbstring (v1.43.0): Extracting archive
+2026-10-07T19:10:05.8735353Z   - Installing symfony/polyfill-ctype (v1.37.0): Extracting archive
+2026-10-07T19:10:05.8780094Z   - Installing phpoption/phpoption (1.10.0): Extracting archive
+2026-10-07T19:10:05.8820093Z   - Installing graham-campbell/result-type (v1.2.0): Extracting archive
+2026-10-07T19:10:05.8821208Z   - Installing vlucas/phpdotenv (v5.7.0): Extracting archive
+2026-10-07T19:10:05.8860126Z   - Installing symfony/css-selector (v8.1.6): Extracting archive
+2026-10-07T19:10:05.8880090Z   - Installing tijsverkoyen/css-to-inline-styles (v2.4.0): Extracting archive
+2026-10-07T19:10:05.8881213Z   - Installing symfony/var-dumper (v8.1.7): Extracting archive
+2026-10-07T19:10:05.8900135Z   - Installing symfony/polyfill-uuid (v1.43.0): Extracting archive
+2026-10-07T19:10:05.8919998Z   - Installing symfony/uid (v8.1.8): Extracting archive
+2026-10-07T19:10:05.8940071Z   - Installing symfony/deprecation-contracts (v3.7.1): Extracting archive
+2026-10-07T19:10:05.8959901Z   - Installing symfony/routing (v8.1.8): Extracting archive
+2026-10-07T19:10:05.8960887Z   - Installing symfony/process (v8.1.7): Extracting archive
+2026-10-07T19:10:05.8980046Z   - Installing symfony/polyfill-php86 (v1.43.0): Extracting archive
+2026-10-07T19:10:05.9000028Z   - Installing symfony/polyfill-php85 (v1.43.0): Extracting archive
+2026-10-07T19:10:05.9012557Z   - Installing symfony/polyfill-php84 (v1.43.0): Extracting archive
+2026-10-07T19:10:05.9017376Z   - Installing symfony/polyfill-intl-normalizer (v1.43.0): Extracting archive
+2026-10-07T19:10:05.9018519Z   - Installing symfony/polyfill-intl-idn (v1.43.0): Extracting archive
+2026-10-07T19:10:05.9019777Z   - Installing symfony/mime (v8.1.7): Extracting archive
+2026-10-07T19:10:05.9020750Z   - Installing psr/container (2.0.2): Extracting archive
+2026-10-07T19:10:05.9021980Z   - Installing symfony/service-contracts (v3.7.3): Extracting archive
+2026-10-07T19:10:05.9023165Z   - Installing psr/event-dispatcher (1.0.0): Extracting archive
+2026-10-07T19:10:05.9024314Z   - Installing symfony/event-dispatcher-contracts (v3.7.1): Extracting archive
+2026-10-07T19:10:05.9025539Z   - Installing symfony/event-dispatcher (v8.1.5): Extracting archive
+2026-10-07T19:10:05.9026476Z   - Installing psr/log (3.0.2): Extracting archive
+2026-10-07T19:10:05.9027253Z   - Installing doctrine/lexer (3.0.3): Extracting archive
+2026-10-07T19:10:05.9028190Z   - Installing egulias/email-validator (4.0.4): Extracting archive
+2026-10-07T19:10:05.9029157Z   - Installing symfony/mailer (v8.1.7): Extracting archive
+2026-10-07T19:10:05.9030362Z   - Installing symfony/http-foundation (v8.1.8): Extracting archive
+2026-10-07T19:10:05.9031359Z   - Installing symfony/error-handler (v8.1.8): Extracting archive
+2026-10-07T19:10:05.9032318Z   - Installing symfony/http-kernel (v8.1.8): Extracting archive
+2026-10-07T19:10:05.9033225Z   - Installing symfony/finder (v8.1.8): Extracting archive
+2026-10-07T19:10:05.9034284Z   - Installing symfony/polyfill-intl-grapheme (v1.43.0): Extracting archive
+2026-10-07T19:10:05.9035332Z   - Installing symfony/string (v8.1.7): Extracting archive
+2026-10-07T19:10:05.9036235Z   - Installing symfony/console (v7.4.20): Extracting archive
+2026-10-07T19:10:05.9037200Z   - Installing ramsey/collection (2.1.1): Extracting archive
+2026-10-07T19:10:05.9038107Z   - Installing brick/math (0.14.8): Extracting archive
+2026-10-07T19:10:05.9038975Z   - Installing ramsey/uuid (4.9.4): Extracting archive
+2026-10-07T19:10:05.9040215Z   - Installing psr/simple-cache (3.0.0): Extracting archive
+2026-10-07T19:10:05.9041093Z   - Installing psr/http-message (2.0): Extracting archive
+2026-10-07T19:10:05.9041983Z   - Installing nunomaduro/termwind (v2.4.0): Extracting archive
+2026-10-07T19:10:05.9043212Z   - Installing symfony/translation-contracts (v3.7.1): Extracting archive
+2026-10-07T19:10:05.9044212Z   - Installing symfony/translation (v8.1.5): Extracting archive
+2026-10-07T19:10:05.9045089Z   - Installing symfony/clock (v8.1.0): Extracting archive
+2026-10-07T19:10:05.9046025Z   - Installing carbonphp/carbon-doctrine-types (3.2.1): Extracting archive
+2026-10-07T19:10:05.9046969Z   - Installing nesbot/carbon (3.14.2): Extracting archive
+2026-10-07T19:10:05.9047810Z   - Installing monolog/monolog (3.12.1): Extracting archive
+2026-10-07T19:10:05.9048661Z   - Installing psr/http-factory (1.1.0): Extracting archive
+2026-10-07T19:10:05.9049822Z   - Installing league/uri-interfaces (7.8.1): Extracting archive
+2026-10-07T19:10:05.9050707Z   - Installing league/uri (7.8.1): Extracting archive
+2026-10-07T19:10:05.9051600Z   - Installing league/mime-type-detection (1.17.0): Extracting archive
+2026-10-07T19:10:05.9052587Z   - Installing league/flysystem-local (3.35.3): Extracting archive
+2026-10-07T19:10:05.9053518Z   - Installing league/flysystem (3.36.0): Extracting archive
+2026-10-07T19:10:05.9054366Z   - Installing nette/utils (v4.1.5): Extracting archive
+2026-10-07T19:10:05.9055200Z   - Installing nette/schema (v1.3.6): Extracting archive
+2026-10-07T19:10:05.9056083Z   - Installing dflydev/dot-access-data (v3.0.3): Extracting archive
+2026-10-07T19:10:05.9056992Z   - Installing league/config (v1.2.0): Extracting archive
+2026-10-07T19:10:05.9057849Z   - Installing league/commonmark (2.10.3): Extracting archive
+2026-10-07T19:10:05.9058828Z   - Installing laravel/serializable-closure (v2.1.0): Extracting archive
+2026-10-07T19:10:05.9060070Z   - Installing laravel/prompts (v0.3.25): Extracting archive
+2026-10-07T19:10:05.9060989Z   - Installing guzzlehttp/uri-template (v2.0.1): Extracting archive
+2026-10-07T19:10:05.9062063Z   - Installing symfony/polyfill-php82 (v1.43.0): Extracting archive
+2026-10-07T19:10:05.9063089Z   - Installing guzzlehttp/psr7 (3.1.0): Extracting archive
+2026-10-07T19:10:05.9064069Z   - Installing guzzlehttp/promises (3.0.2): Extracting archive
+2026-10-07T19:10:05.9065404Z   - Installing psr/http-client (1.0.3): Extracting archive
+2026-10-07T19:10:05.9066389Z   - Installing guzzlehttp/guzzle (8.2.0): Extracting archive
+2026-10-07T19:10:05.9067296Z   - Installing fruitcake/php-cors (v1.4.0): Extracting archive
+2026-10-07T19:10:05.9068286Z   - Installing dragonmantank/cron-expression (v3.6.0): Extracting archive
+2026-10-07T19:10:05.9069231Z   - Installing doctrine/inflector (2.1.0): Extracting archive
+2026-10-07T19:10:05.9070424Z   - Installing laravel/framework (v13.35.0): Extracting archive
+2026-10-07T19:10:05.9071543Z   - Installing axiomasoft/corex (dev-main 1ee237d): Symlinking from packages/core
+2026-10-07T19:10:05.9072870Z   - Installing axiomasoft/corex-access (dev-main 8997152): Symlinking from packages/access
+2026-10-07T19:10:05.9077964Z   - Installing axioma-studio/azguard-core (0.3.0): Cloning 253cbf4cce from cache
+2026-10-07T19:10:06.3436478Z   - Installing axiomasoft/corex-access-azguard (dev-main 0f9b5f4): Symlinking from packages/access-azguard
+2026-10-07T19:10:06.3457508Z   - Installing axiomasoft/corex-custom-fields (dev-main b83417a): Symlinking from packages/custom-fields
+2026-10-07T19:10:06.3477697Z   - Installing staabm/side-effects-detector (1.0.5): Extracting archive
+2026-10-07T19:10:06.3480401Z   - Installing sebastian/version (7.0.1): Extracting archive
+2026-10-07T19:10:06.3483160Z   - Installing sebastian/type (7.0.2): Extracting archive
+2026-10-07T19:10:06.3486008Z   - Installing sebastian/recursion-context (8.0.1): Extracting archive
+2026-10-07T19:10:06.3488771Z   - Installing sebastian/object-enumerator (8.1.0): Extracting archive
+2026-10-07T19:10:06.3491777Z   - Installing sebastian/object-reflector (6.1.0): Extracting archive
+2026-10-07T19:10:06.3494426Z   - Installing sebastian/global-state (9.0.1): Extracting archive
+2026-10-07T19:10:06.3497077Z   - Installing sebastian/git-state (1.0.0): Extracting archive
+2026-10-07T19:10:06.3499981Z   - Installing sebastian/file-filter (1.0.0): Extracting archive
+2026-10-07T19:10:06.3502747Z   - Installing sebastian/exporter (8.2.1): Extracting archive
+2026-10-07T19:10:06.3505474Z   - Installing sebastian/environment (9.3.3): Extracting archive
+2026-10-07T19:10:06.3508069Z   - Installing sebastian/diff (9.0.1): Extracting archive
+2026-10-07T19:10:06.3511060Z   - Installing sebastian/comparator (8.4.0): Extracting archive
+2026-10-07T19:10:06.3513706Z   - Installing sebastian/cli-parser (5.0.1): Extracting archive
+2026-10-07T19:10:06.3516233Z   - Installing phpunit/php-timer (9.0.0): Extracting archive
+2026-10-07T19:10:06.3518933Z   - Installing phpunit/php-text-template (6.0.1): Extracting archive
+2026-10-07T19:10:06.3521791Z   - Installing phpunit/php-invoker (7.0.0): Extracting archive
+2026-10-07T19:10:06.3524377Z   - Installing phpunit/php-file-iterator (7.0.2): Extracting archive
+2026-10-07T19:10:06.3526919Z   - Installing theseer/tokenizer (2.0.1): Extracting archive
+2026-10-07T19:10:06.3529905Z   - Installing nikic/php-parser (v5.9.0): Extracting archive
+2026-10-07T19:10:06.3532565Z   - Installing sebastian/lines-of-code (5.0.2): Extracting archive
+2026-10-07T19:10:06.3535155Z   - Installing sebastian/complexity (6.0.0): Extracting archive
+2026-10-07T19:10:06.3537798Z   - Installing phpunit/php-code-coverage (14.4.1): Extracting archive
+2026-10-07T19:10:06.3540739Z   - Installing phar-io/version (3.2.1): Extracting archive
+2026-10-07T19:10:06.3543613Z   - Installing phar-io/manifest (2.0.4): Extracting archive
+2026-10-07T19:10:06.3546242Z   - Installing myclabs/deep-copy (1.14.0): Extracting archive
+2026-10-07T19:10:06.3549035Z   - Installing phpunit/phpunit (13.3.6): Extracting archive
+2026-10-07T19:10:06.3551997Z   - Installing pestphp/pest-plugin-profanity (v5.0.0): Extracting archive
+2026-10-07T19:10:06.3554708Z   - Installing pestphp/pest-plugin-mutate (v5.0.2): Extracting archive
+2026-10-07T19:10:06.3557324Z   - Installing webmozart/assert (2.5.0): Extracting archive
+2026-10-07T19:10:06.3560282Z   - Installing phpstan/phpdoc-parser (2.3.6): Extracting archive
+2026-10-07T19:10:06.3563278Z   - Installing phpdocumentor/reflection-common (2.2.1): Extracting archive
+2026-10-07T19:10:06.3565631Z   - Installing doctrine/deprecations (1.1.6): Extracting archive
+2026-10-07T19:10:06.3568324Z   - Installing phpdocumentor/type-resolver (2.1.0): Extracting archive
+2026-10-07T19:10:06.3571231Z   - Installing phpdocumentor/reflection-docblock (6.0.3): Extracting archive
+2026-10-07T19:10:06.3573829Z   - Installing ta-tikoma/phpunit-architecture-test (0.8.7): Extracting archive
+2026-10-07T19:10:06.3576486Z   - Installing pestphp/pest-plugin-arch (v5.0.0): Extracting archive
+2026-10-07T19:10:06.3578967Z   - Installing filp/whoops (2.18.6): Extracting archive
+2026-10-07T19:10:06.3581913Z   - Installing nunomaduro/collision (v8.9.5): Extracting archive
+2026-10-07T19:10:06.3584587Z   - Installing jean85/pretty-package-versions (2.1.1): Extracting archive
+2026-10-07T19:10:06.3587200Z   - Installing fidry/cpu-core-counter (1.4.1): Extracting archive
+2026-10-07T19:10:06.3590168Z   - Installing brianium/paratest (v7.25.0): Extracting archive
+2026-10-07T19:10:06.3592913Z   - Installing pestphp/pest (v5.3.0): Extracting archive
+2026-10-07T19:10:06.3595697Z   - Installing infection/include-interceptor (1.0.0): Extracting archive
+2026-10-07T19:10:06.3598389Z   - Installing infection/abstract-testframework-adapter (0.5.1): Extracting archive
+2026-10-07T19:10:06.3602959Z   - Installing axiomasoft/corex-infection-pest-adapter (0.1.0): Symlinking from scripts/quality/infection-pest-adapter
+2026-10-07T19:10:06.3627257Z   - Installing axiomasoft/corex-media (dev-main da09e4c): Symlinking from packages/media
+2026-10-07T19:10:06.3650251Z   - Installing axiomasoft/corex-notifications (dev-main bae17fb): Symlinking from packages/notifications
+2026-10-07T19:10:06.3673315Z   - Installing axiomasoft/corex-panels (dev-main 7a9d290): Symlinking from packages/panels
+2026-10-07T19:10:06.3695974Z   - Installing axiomasoft/corex-search (dev-main 3c0742a): Symlinking from packages/search
+2026-10-07T19:10:06.3718345Z   - Installing brick/money (0.10.3): Extracting archive
+2026-10-07T19:10:06.3722532Z   - Installing axiomasoft/corex-intl (dev-main a3ed493): Symlinking from packages/intl
+2026-10-07T19:10:06.3746883Z   - Installing axiomasoft/corex-search-intl (dev-main 50c8e44): Symlinking from packages/search-intl
+2026-10-07T19:10:06.3770208Z   - Installing symfony/polyfill-php81 (v1.38.1): Extracting archive
+2026-10-07T19:10:06.3773536Z   - Installing meilisearch/meilisearch-php (v1.16.1): Extracting archive
+2026-10-07T19:10:06.3777881Z   - Installing axiomasoft/corex-search-meilisearch (dev-main c6945fe): Symlinking from packages/search-meilisearch
+2026-10-07T19:10:06.3803786Z   - Installing axiomasoft/corex-workflow (dev-main be9a15f): Symlinking from packages/workflow
+2026-10-07T19:10:06.3828438Z   - Installing axiomasoft/corex-tasks (dev-main c029fb8): Symlinking from packages/tasks
+2026-10-07T19:10:06.3852947Z   - Installing rlanvin/php-rrule (v3.0.0): Extracting archive
+2026-10-07T19:10:06.3857473Z   - Installing axiomasoft/corex-recurrence (dev-main 335fd51): Symlinking from packages/recurrence
+2026-10-07T19:10:06.3884257Z   - Installing axiomasoft/corex-tasks-workflow (dev-main f546834): Symlinking from packages/tasks-workflow
+2026-10-07T19:10:06.3909558Z   - Installing firebase/php-jwt (v7.2.1): Extracting archive
+2026-10-07T19:10:06.3913208Z   - Installing axiomasoft/corex-tenancy (dev-main 6fb95b8): Symlinking from packages/tenancy
+2026-10-07T19:10:06.3940870Z   - Installing axiomasoft/corex-operations (dev-main 4c4790e): Symlinking from packages/operations
+2026-10-07T19:10:06.3967490Z   - Installing axiomasoft/corex-tools (dev-main e4ec02f): Symlinking from packages/tools
+2026-10-07T19:10:06.3995073Z   - Installing axiomasoft/corex-transfer (dev-main 0f338b1): Symlinking from packages/transfer
+2026-10-07T19:10:06.4023602Z   - Installing axiomasoft/corex-wakeup (dev-main 5dadbb4): Symlinking from packages/wakeup
+2026-10-07T19:10:06.4051680Z   - Installing axiomasoft/corex-webhooks (dev-main 0afaa94): Symlinking from packages/webhooks
+2026-10-07T19:10:06.4078889Z   - Installing beberlei/assert (v3.3.4): Extracting archive
+2026-10-07T19:10:06.4081462Z   - Installing composer/ca-bundle (1.5.14): Extracting archive
+2026-10-07T19:10:06.4084131Z   - Installing composer/pcre (3.4.0): Extracting archive
+2026-10-07T19:10:06.4086861Z   - Installing composer/class-map-generator (1.8.0): Extracting archive
+2026-10-07T19:10:06.4089750Z   - Installing composer/metadata-minifier (1.0.1): Extracting archive
+2026-10-07T19:10:06.4092417Z   - Installing composer/spdx-licenses (1.6.0): Extracting archive
+2026-10-07T19:10:06.4095198Z   - Installing giggsey/libphonenumber-for-php-lite (9.0.40): Extracting archive
+2026-10-07T19:10:06.4099621Z   - Installing flex/crm (dev-main 9d0cd81): Symlinking from products/flex-crm
+2026-10-07T19:10:06.4127384Z   - Installing hamcrest/hamcrest-php (v3.0.0): Extracting archive
+2026-10-07T19:10:06.4129803Z   - Installing thecodingmachine/safe (v3.4.0): Extracting archive
+2026-10-07T19:10:06.4132513Z   - Installing symfony/filesystem (v8.1.6): Extracting archive
+2026-10-07T19:10:06.4135123Z   - Installing sanmai/pipeline (7.12): Extracting archive
+2026-10-07T19:10:06.4137698Z   - Installing sanmai/later (0.1.8): Extracting archive
+2026-10-07T19:10:06.4140645Z   - Installing sanmai/duoclock (0.1.3): Extracting archive
+2026-10-07T19:10:06.4143348Z   - Installing sanmai/di-container (0.2): Extracting archive
+2026-10-07T19:10:06.4145987Z   - Installing ondram/ci-detector (4.2.0): Extracting archive
+2026-10-07T19:10:06.4148689Z   - Installing marc-mabe/php-enum (v4.7.2): Extracting archive
+2026-10-07T19:10:06.4151721Z   - Installing justinrainbow/json-schema (6.13.1): Extracting archive
+2026-10-07T19:10:06.4154412Z   - Installing infection/mutator (0.4.1): Extracting archive
+2026-10-07T19:10:06.4157114Z   - Installing composer/xdebug-handler (3.0.5): Extracting archive
+2026-10-07T19:10:06.4160050Z   - Installing colinodell/json5 (v3.0.0): Extracting archive
+2026-10-07T19:10:06.4162731Z   - Installing infection/infection (0.35.6): Extracting archive
+2026-10-07T19:10:06.4165536Z   - Installing iamcal/sql-parser (v0.7): Extracting archive
+2026-10-07T19:10:06.4168174Z   - Installing larastan/larastan (v3.12.2): Extracting archive
+2026-10-07T19:10:06.4171245Z   - Installing symfony/psr-http-message-bridge (v8.1.0): Extracting archive
+2026-10-07T19:10:06.4173965Z   - Installing laminas/laminas-diactoros (3.8.0): Extracting archive
+2026-10-07T19:10:06.4176618Z   - Installing laravel/octane (v2.21.0): Extracting archive
+2026-10-07T19:10:06.4179638Z   - Installing laravel/agent-detector (v2.0.4): Extracting archive
+2026-10-07T19:10:06.4182226Z   - Installing laravel/pao (v1.1.5): Extracting archive
+2026-10-07T19:10:06.4184804Z   - Installing laravel/pint (v1.32.1): Extracting archive
+2026-10-07T19:10:06.4187465Z   - Installing mtdowling/jmespath.php (2.9.2): Extracting archive
+2026-10-07T19:10:06.4190353Z   - Installing aws/aws-sdk-php (3.399.2): Extracting archive
+2026-10-07T19:10:06.4193111Z   - Installing league/flysystem-aws-s3-v3 (3.35.3): Extracting archive
+2026-10-07T19:10:06.4195691Z   - Installing open-telemetry/sem-conv (1.44.0): Extracting archive
+2026-10-07T19:10:06.4198451Z   - Installing open-telemetry/context (1.5.0): Extracting archive
+2026-10-07T19:10:06.4201302Z   - Installing open-telemetry/api (1.10.0): Extracting archive
+2026-10-07T19:10:06.4203910Z   - Installing nyholm/psr7-server (1.1.0): Extracting archive
+2026-10-07T19:10:06.4206605Z   - Installing open-telemetry/sdk (1.15.0): Extracting archive
+2026-10-07T19:10:06.4209081Z   - Installing opis/string (2.1.0): Extracting archive
+2026-10-07T19:10:06.4236370Z   - Installing opis/uri (1.1.0): Extracting archive
+2026-10-07T19:10:06.4237380Z   - Installing opis/json-schema (2.6.0): Extracting archive
+2026-10-07T19:10:06.4238370Z   - Installing symfony/polyfill-php83 (v1.43.0): Extracting archive
+2026-10-07T19:10:06.4239746Z   - Installing orchestra/sidekick (v1.2.23): Extracting archive
+2026-10-07T19:10:06.4240830Z   - Installing orchestra/canvas-core (v11.0.0): Extracting archive
+2026-10-07T19:10:06.4242047Z   - Installing symfony/yaml (v8.1.8): Extracting archive
+2026-10-07T19:10:06.4243064Z   - Installing orchestra/testbench-core (v11.5.0): Extracting archive
+2026-10-07T19:10:06.4244112Z   - Installing orchestra/canvas (v11.1.0): Extracting archive
+2026-10-07T19:10:06.4245048Z   - Installing psy/psysh (v0.12.24): Extracting archive
+2026-10-07T19:10:06.4245945Z   - Installing laravel/tinker (v3.0.2): Extracting archive
+2026-10-07T19:10:06.4246876Z   - Installing laravel/pail (v1.2.7): Extracting archive
+2026-10-07T19:10:06.4247785Z   - Installing fakerphp/faker (v1.24.1): Extracting archive
+2026-10-07T19:10:06.4248751Z   - Installing orchestra/workbench (v11.3.0): Extracting archive
+2026-10-07T19:10:06.4249901Z   - Installing mockery/mockery (1.6.15): Extracting archive
+2026-10-07T19:10:06.4250741Z   - Installing orchestra/testbench (v11.3.0): Extracting archive
+2026-10-07T19:10:06.4254795Z   - Installing revolt/event-loop (v1.0.9): Extracting archive
+2026-10-07T19:10:06.4257698Z   - Installing php-standard-library/foundation (6.3.0): Extracting archive
+2026-10-07T19:10:06.4260753Z   - Installing php-standard-library/promise (6.3.0): Extracting archive
+2026-10-07T19:10:06.4263337Z   - Installing php-standard-library/default (6.3.0): Extracting archive
+2026-10-07T19:10:06.4265893Z   - Installing php-standard-library/locale (6.3.0): Extracting archive
+2026-10-07T19:10:06.4268512Z   - Installing php-standard-library/interoperability (6.3.0): Extracting archive
+2026-10-07T19:10:06.4271335Z   - Installing php-standard-library/comparison (6.3.0): Extracting archive
+2026-10-07T19:10:06.4273884Z   - Installing php-standard-library/date-time (6.3.0): Extracting archive
+2026-10-07T19:10:06.4276436Z   - Installing php-standard-library/async (6.3.0): Extracting archive
+2026-10-07T19:10:06.4278972Z   - Installing php-standard-library/channel (6.3.0): Extracting archive
+2026-10-07T19:10:06.4281884Z   - Installing php-standard-library/collection (6.3.0): Extracting archive
+2026-10-07T19:10:06.4284704Z   - Installing php-standard-library/option (6.3.0): Extracting archive
+2026-10-07T19:10:06.4287532Z   - Installing php-standard-library/either-or-both (6.3.0): Extracting archive
+2026-10-07T19:10:06.4290367Z   - Installing php-standard-library/result (6.3.0): Extracting archive
+2026-10-07T19:10:06.4292968Z   - Installing php-standard-library/io (6.3.0): Extracting archive
+2026-10-07T19:10:06.4295695Z   - Installing php-standard-library/process (6.3.0): Extracting archive
+2026-10-07T19:10:06.4298277Z   - Installing php-standard-library/iter (6.3.0): Extracting archive
+2026-10-07T19:10:06.4301818Z   - Installing php-standard-library/range (6.3.0): Extracting archive
+2026-10-07T19:10:06.4304524Z   - Installing phpstan/phpstan-strict-rules (2.0.12): Extracting archive
+2026-10-07T19:10:06.4307002Z   - Installing react/promise (v3.3.0): Extracting archive
+2026-10-07T19:10:06.4309840Z   - Installing rector/rector (2.6.7): Extracting archive
+2026-10-07T19:10:06.4312573Z   - Installing jetbrains/phpstorm-stubs (v2026.2): Extracting archive
+2026-10-07T19:10:06.4315201Z   - Installing roave/better-reflection (6.73.0): Extracting archive
+2026-10-07T19:10:06.4317802Z   - Installing php-standard-library/vec (6.3.0): Extracting archive
+2026-10-07T19:10:06.4320643Z   - Installing php-standard-library/type (6.3.0): Extracting archive
+2026-10-07T19:10:06.4323408Z   - Installing php-standard-library/str (6.3.0): Extracting archive
+2026-10-07T19:10:06.4326102Z   - Installing php-standard-library/shell (6.3.0): Extracting archive
+2026-10-07T19:10:06.4328736Z   - Installing php-standard-library/regex (6.3.0): Extracting archive
+2026-10-07T19:10:06.4331601Z   - Installing php-standard-library/json (6.3.0): Extracting archive
+2026-10-07T19:10:06.4334176Z   - Installing php-standard-library/filesystem (6.3.0): Extracting archive
+2026-10-07T19:10:06.4336696Z   - Installing php-standard-library/file (6.3.0): Extracting archive
+2026-10-07T19:10:06.4339192Z   - Installing php-standard-library/env (6.3.0): Extracting archive
+2026-10-07T19:10:06.4342274Z   - Installing php-standard-library/dict (6.3.0): Extracting archive
+2026-10-07T19:10:06.4344602Z   - Installing ocramius/package-versions (2.12.0): Extracting archive
+2026-10-07T19:10:06.4347157Z   - Installing nikolaposa/version (4.2.1): Extracting archive
+2026-10-07T19:10:06.4350001Z   - Installing symfony/polyfill-php73 (v1.37.0): Extracting archive
+2026-10-07T19:10:06.4352582Z   - Installing seld/signal-handler (2.0.2): Extracting archive
+2026-10-07T19:10:06.4355197Z   - Installing seld/phar-utils (1.2.3): Extracting archive
+2026-10-07T19:10:06.4357728Z   - Installing seld/jsonlint (1.12.1): Extracting archive
+2026-10-07T19:10:06.4360519Z   - Installing composer/composer (2.10.3): Extracting archive
+2026-10-07T19:10:06.4363280Z   - Installing roave/backward-compatibility-check (8.23.0): Extracting archive
+2026-10-07T19:10:06.4365796Z   - Installing shipmonk/composer-dependency-analyser (1.8.4): Extracting archive
+2026-10-07T19:10:11.2510452Z Generating autoload files
+2026-10-07T19:10:11.6743382Z 121 packages you are using are looking for funding.
+2026-10-07T19:10:11.6744329Z Use the `composer fund` command to find out more!
+2026-10-07T19:10:11.6750470Z infection/extension-installer: Extensions installed
+2026-10-07T19:10:11.6751387Z > axiomasoft/corex-infection-pest-adapter: installed
+2026-10-07T19:10:11.6752428Z phpstan/extension-installer: Extensions installed
+2026-10-07T19:10:11.6753530Z > axiomasoft/corex: ignored
+2026-10-07T19:10:11.6754084Z > axiomasoft/corex: ignored
+2026-10-07T19:10:11.6754649Z > axiomasoft/corex-tenancy: ignored
+2026-10-07T19:10:11.6755306Z > axiomasoft/corex-tenancy: ignored
+2026-10-07T19:10:11.6755901Z > composer/composer: ignored
+2026-10-07T19:10:11.6756449Z > composer/pcre: ignored
+2026-10-07T19:10:11.6756971Z > larastan/larastan: ignored
+2026-10-07T19:10:11.6757498Z > nesbot/carbon: ignored
+2026-10-07T19:10:11.6758007Z > pestphp/pest: ignored
+2026-10-07T19:10:11.6758552Z > phpstan/phpstan-strict-rules: ignored
+2026-10-07T19:10:11.7117412Z ##[group]Run env -u COMPOSER_NO_AUDIT composer audit --locked
+2026-10-07T19:10:11.7117902Z [36;1menv -u COMPOSER_NO_AUDIT composer audit --locked[0m
+2026-10-07T19:10:11.7184614Z shell: /usr/bin/bash -e {0}
+2026-10-07T19:10:11.7184878Z env:
+2026-10-07T19:10:11.7185088Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T19:10:11.7185362Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-07T19:10:11.7185615Z   COMPOSER_NO_INTERACTION: 1
+2026-10-07T19:10:11.7185852Z   COMPOSER_NO_AUDIT: 1
+2026-10-07T19:10:11.7186069Z ##[endgroup]
+2026-10-07T19:10:12.1707556Z No security vulnerability advisories found.
+2026-10-07T19:10:12.1922242Z ##[group]Run bash scripts/bc-check.sh
+2026-10-07T19:10:12.1922578Z [36;1mbash scripts/bc-check.sh[0m
+2026-10-07T19:10:12.1985913Z shell: /usr/bin/bash -e {0}
+2026-10-07T19:10:12.1986169Z env:
+2026-10-07T19:10:12.1986380Z   COMPOSER_ROOT_VERSION: dev-main
+2026-10-07T19:10:12.1986657Z   COMPOSER_PROCESS_TIMEOUT: 0
+2026-10-07T19:10:12.1986926Z   COMPOSER_NO_INTERACTION: 1
+2026-10-07T19:10:12.1987173Z   COMPOSER_NO_AUDIT: 1
+2026-10-07T19:10:12.1987389Z ##[endgroup]
+2026-10-07T19:10:12.5300461Z bc-check: BC_CHECK_BASE=76f8bdde496154c0a8901e459175cf306bedd860 (PHP 8.4)
+2026-10-07T19:10:12.5301884Z bc-check: roave 8.23.0
+2026-10-07T19:10:12.7469808Z bc-check: axiomasoft/corex-access-azguard (access-azguard) |new-package| base missing at 76f8bdde496154c0a8901e459175cf306bedd860
+2026-10-07T19:10:46.6098423Z bc-check: axiomasoft/corex-access (access) |bc-break| stability=stable base=2ca61e448e2579bae33a7e9e589b5d36e7da8172 candidate=34883d95baee4ed01e4d0b6a33c3cb4b5b6f3c67
+2026-10-07T19:10:46.6111148Z   - Installing league/commonmark (2.10.3): Extracting archive
+2026-10-07T19:10:46.6115263Z   - Installing laravel/serializable-closure (v2.1.0): Extracting archive
+2026-10-07T19:10:46.6140210Z   - Installing laravel/prompts (v0.3.25): Extracting archive
+2026-10-07T19:10:46.6150283Z   - Installing guzzlehttp/uri-template (v2.0.1): Extracting archive
+2026-10-07T19:10:46.6170280Z   - Installing symfony/polyfill-php82 (v1.43.0): Extracting archive
+2026-10-07T19:10:46.6189993Z   - Installing guzzlehttp/psr7 (3.1.0): Extracting archive
+2026-10-07T19:10:46.6191079Z   - Installing guzzlehttp/promises (3.0.2): Extracting archive
+2026-10-07T19:10:46.6210070Z   - Installing psr/http-client (1.0.3): Extracting archive
+2026-10-07T19:10:46.6230027Z   - Installing guzzlehttp/guzzle (8.2.0): Extracting archive
+2026-10-07T19:10:46.6250152Z   - Installing fruitcake/php-cors (v1.4.0): Extracting archive
+2026-10-07T19:10:46.6251226Z   - Installing dragonmantank/cron-expression (v3.6.0): Extracting archive
+2026-10-07T19:10:46.6270483Z   - Installing doctrine/inflector (2.1.0): Extracting archive
+2026-10-07T19:10:46.6290186Z   - Installing laravel/framework (v13.35.0): Extracting archive
+2026-10-07T19:10:46.6310219Z   - Installing axiomasoft/corex (1.0.x-dev c19fe48): Symlinking from packages/core
+2026-10-07T19:10:46.6311542Z 51 package suggestions were added by new dependencies, use `composer suggest` to see details.
+2026-10-07T19:10:46.6330269Z 54 packages you are using are looking for funding.
+2026-10-07T19:10:46.6350314Z Use the `composer fund` command to find out more!
+2026-10-07T19:10:46.6370143Z No security vulnerability advisories found.
+2026-10-07T19:10:46.6476335Z {"errors":[{"description":"Class CoreX\\Access\\Matrix\\Laravel\\AzGuardRoleModel has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Property CoreX\\Access\\Laravel\\AuthOptions#$bindPermissionLayer was removed","path":"/packages/access/src/Laravel/AuthOptions.php","line":11,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Access\\Laravel\\AuthOptions#$azguardPins was removed","path":"/packages/access/src/Laravel/AuthOptions.php","line":11,"column":1,"modificationType":"removed"},{"description":"The parameter $bindPermissionLayer of CoreX\\Access\\Laravel\\AuthOptions#__construct() changed from bool to a non-contravariant string|null","path":"/packages/access/src/Laravel/AuthOptions.php","line":17,"column":5,"modificationType":"changed"},{"description":"The parameter $workspaceScopeClass of CoreX\\Access\\Laravel\\AuthOptions#__construct() changed from string|null to a non-contravariant bool","path":"/packages/access/src/Laravel/AuthOptions.php","line":17,"column":5,"modificationType":"changed"},{"description":"The parameter $identityEnabled of CoreX\\Access\\Laravel\\AuthOptions#__construct() changed from bool to a non-contravariant string|null","path":"/packages/access/src/Laravel/AuthOptions.php","line":17,"column":5,"modificationType":"changed"},{"description":"The parameter $identityConnection of CoreX\\Access\\Laravel\\AuthOptions#__construct() changed from string|null to a non-contravariant string","path":"/packages/access/src/Laravel/AuthOptions.php","line":17,"column":5,"modificationType":"changed"},{"description":"The parameter $identityTable of CoreX\\Access\\Laravel\\AuthOptions#__construct() changed from string to a non-contravariant array","path":"/packages/access/src/Laravel/AuthOptions.php","line":17,"column":5,"modificationType":"changed"},{"description":"Property CoreX\\Access\\Roles\\Data\\RoleView#$azguardRoleId was removed","path":"/packages/access/src/Roles/Data/RoleView.php","line":9,"column":1,"modificationType":"removed"},{"description":"Method CoreX\\Access\\Roles\\Laravel\\RoleMatrixData::bindAzGuardRole() was removed","path":"/packages/access/src/Roles/Laravel/RoleMatrixData.php","line":15,"column":1,"modificationType":"removed"},{"description":"Method AzGuard\\Concerns\\HasPermissions#hasPermission() was removed","path":"/packages/access/src/Access/Laravel/PrincipalIdentity.php","line":18,"column":1,"modificationType":"removed"},{"description":"Method AzGuard\\Concerns\\HasPermissions#hasPermissionIn() was removed","path":"/packages/access/src/Access/Laravel/PrincipalIdentity.php","line":18,"column":1,"modificationType":"removed"},{"description":"Method AzGuard\\Concerns\\HasPermissions#hasContextGuard() was removed","path":"/packages/access/src/Access/Laravel/PrincipalIdentity.php","line":18,"column":1,"modificationType":"removed"},{"description":"Method AzGuard\\Concerns\\HasPermissions#checkPermission() was removed","path":"/packages/access/src/Access/Laravel/PrincipalIdentity.php","line":18,"column":1,"modificationType":"removed"},{"description":"Method AzGuard\\Concerns\\HasPermissions#permissionSet() was removed","path":"/packages/access/src/Access/Laravel/PrincipalIdentity.php","line":18,"column":1,"modificationType":"removed"},{"description":"Method AzGuard\\Concerns\\HasPermissions#permissions() was removed","path":"/packages/access/src/Access/Laravel/PrincipalIdentity.php","line":18,"column":1,"modificationType":"removed"},{"description":"Method AzGuard\\Concerns\\HasPermissions#isSuperAdmin() was removed","path":"/packages/access/src/Access/Laravel/PrincipalIdentity.php","line":18,"column":1,"modificationType":"removed"},{"description":"Method AzGuard\\Concerns\\HasPermissions#flushPermissions() was removed","path":"/packages/access/src/Access/Laravel/PrincipalIdentity.php","line":18,"column":1,"modificationType":"removed"},{"description":"These ancestors of CoreX\\Access\\Access\\Laravel\\PrincipalIdentity have been removed: [\"AzGuard\\\\Contracts\\\\HasPermissions\"]","path":"/packages/access/src/Access/Laravel/PrincipalIdentity.php","line":18,"column":1,"modificationType":"removed"},{"description":"Class CoreX\\Access\\Matrix\\Laravel\\AzGuardRoleModel has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Property CoreX\\Access\\Laravel\\AuthOptions#$bindPermissionLayer was removed","path":"/packages/access/src/Laravel/AuthOptions.php","line":11,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Access\\Laravel\\AuthOptions#$azguardPins was removed","path":"/packages/access/src/Laravel/AuthOptions.php","line":11,"column":1,"modificationType":"removed"},{"description":"The parameter $bindPermissionLayer of CoreX\\Access\\Laravel\\AuthOptions#__construct() changed from bool to a non-contravariant string|null","path":"/packages/access/src/Laravel/AuthOptions.php","line":17,"column":5,"modificationType":"changed"},{"description":"The parameter $workspaceScopeClass of CoreX\\Access\\Laravel\\AuthOptions#__construct() changed from string|null to a non-contravariant bool","path":"/packages/access/src/Laravel/AuthOptions.php","line":17,"column":5,"modificationType":"changed"},{"description":"The parameter $identityEnabled of CoreX\\Access\\Laravel\\AuthOptions#__construct() changed from bool to a non-contravariant string|null","path":"/packages/access/src/Laravel/AuthOptions.php","line":17,"column":5,"modificationType":"changed"},{"description":"The parameter $identityConnection of CoreX\\Access\\Laravel\\AuthOptions#__construct() changed from string|null to a non-contravariant string","path":"/packages/access/src/Laravel/AuthOptions.php","line":17,"column":5,"modificationType":"changed"},{"description":"The parameter $identityTable of CoreX\\Access\\Laravel\\AuthOptions#__construct() changed from string to a non-contravariant array","path":"/packages/access/src/Laravel/AuthOptions.php","line":17,"column":5,"modificationType":"changed"},{"description":"Property CoreX\\Access\\Roles\\Data\\RoleView#$azguardRoleId was removed","path":"/packages/access/src/Roles/Data/RoleView.php","line":9,"column":1,"modificationType":"removed"},{"description":"Method CoreX\\Access\\Roles\\Laravel\\RoleMatrixData::bindAzGuardRole() was removed","path":"/packages/access/src/Roles/Laravel/RoleMatrixData.php","line":15,"column":1,"modificationType":"removed"},{"description":"Method AzGuard\\Concerns\\HasPermissions#hasPermission() was removed","path":"/packages/access/src/Access/Laravel/PrincipalIdentity.php","line":18,"column":1,"modificationType":"removed"},{"description":"Method AzGuard\\Concerns\\HasPermissions#hasPermissionIn() was removed","path":"/packages/access/src/Access/Laravel/PrincipalIdentity.php","line":18,"column":1,"modificationType":"removed"},{"description":"Method AzGuard\\Concerns\\HasPermissions#hasContextGuard() was removed","path":"/packages/access/src/Access/Laravel/PrincipalIdentity.php","line":18,"column":1,"modificationType":"removed"},{"description":"Method AzGuard\\Concerns\\HasPermissions#checkPermission() was removed","path":"/packages/access/src/Access/Laravel/PrincipalIdentity.php","line":18,"column":1,"modificationType":"removed"},{"description":"Method AzGuard\\Concerns\\HasPermissions#permissionSet() was removed","path":"/packages/access/src/Access/Laravel/PrincipalIdentity.php","line":18,"column":1,"modificationType":"removed"},{"description":"Method AzGuard\\Concerns\\HasPermissions#permissions() was removed","path":"/packages/access/src/Access/Laravel/PrincipalIdentity.php","line":18,"column":1,"modificationType":"removed"},{"description":"Method AzGuard\\Concerns\\HasPermissions#isSuperAdmin() was removed","path":"/packages/access/src/Access/Laravel/PrincipalIdentity.php","line":18,"column":1,"modificationType":"removed"},{"description":"Method AzGuard\\Concerns\\HasPermissions#flushPermissions() was removed","path":"/packages/access/src/Access/Laravel/PrincipalIdentity.php","line":18,"column":1,"modificationType":"removed"},{"description":"These ancestors of CoreX\\Access\\Access\\Laravel\\PrincipalIdentity have been removed: [\"AzGuard\\\\Contracts\\\\HasPermissions\"]","path":"/packages/access/src/Access/Laravel/PrincipalIdentity.php","line":18,"column":1,"modificationType":"removed"}]}
+2026-10-07T19:10:46.6587345Z 38 backwards-incompatible changes detected
+2026-10-07T19:10:46.6588338Z bc-check: exact decision-bound unpublished delta — axiomasoft/corex-access
+2026-10-07T19:11:20.3821210Z bc-check: axiomasoft/corex (core) |bc-break| stability=stable base=055259b50288693d10e972356d950c837b0ae367 candidate=1ff5169b5d678a2b0e0fd1ba100d93df56eb81ed
+2026-10-07T19:11:20.3822468Z   - Installing laravel/serializable-closure (v2.1.0): Extracting archive
+2026-10-07T19:11:20.3840181Z   - Installing laravel/prompts (v0.3.25): Extracting archive
+2026-10-07T19:11:20.3871102Z   - Installing guzzlehttp/uri-template (v2.0.1): Extracting archive
+2026-10-07T19:11:20.3884809Z   - Installing symfony/polyfill-php82 (v1.43.0): Extracting archive
+2026-10-07T19:11:20.3936474Z   - Installing guzzlehttp/psr7 (3.1.0): Extracting archive
+2026-10-07T19:11:20.4000118Z   - Installing guzzlehttp/promises (3.0.2): Extracting archive
+2026-10-07T19:11:20.4040517Z   - Installing psr/http-client (1.0.3): Extracting archive
+2026-10-07T19:11:20.4080004Z   - Installing guzzlehttp/guzzle (8.2.0): Extracting archive
+2026-10-07T19:11:20.4120138Z   - Installing fruitcake/php-cors (v1.4.0): Extracting archive
+2026-10-07T19:11:20.4121347Z   - Installing dragonmantank/cron-expression (v3.6.0): Extracting archive
+2026-10-07T19:11:20.4122163Z   - Installing doctrine/inflector (2.1.0): Extracting archive
+2026-10-07T19:11:20.4122879Z   - Installing laravel/framework (v13.35.0): Extracting archive
+2026-10-07T19:11:20.4123611Z   - Installing nikic/php-parser (v5.9.0): Extracting archive
+2026-10-07T19:11:20.4124454Z   - Installing phpstan/phpstan (2.2.16): Symlinking from packages/_vendor/phpstan
+2026-10-07T19:11:20.4125474Z 47 package suggestions were added by new dependencies, use `composer suggest` to see details.
+2026-10-07T19:11:20.4126321Z 54 packages you are using are looking for funding.
+2026-10-07T19:11:20.4126917Z Use the `composer fund` command to find out more!
+2026-10-07T19:11:20.4127564Z No security vulnerability advisories found.
+2026-10-07T19:11:20.4392288Z {"errors":[{"description":"Case CoreX\\Errors\\Enums\\CoreErrorCode::SchemaInvalidSet was added","path":"/packages/core/src/Errors/Enums/CoreErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Errors\\Enums\\CoreErrorCode::SchemaDuplicateSet was added","path":"/packages/core/src/Errors/Enums/CoreErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Errors\\Enums\\CoreErrorCode::SchemaDuplicateMigration was added","path":"/packages/core/src/Errors/Enums/CoreErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Errors\\Enums\\CoreErrorCode::SchemaUnknownSet was added","path":"/packages/core/src/Errors/Enums/CoreErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Errors\\Enums\\CoreErrorCode::SchemaUnsupportedDriver was added","path":"/packages/core/src/Errors/Enums/CoreErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$idStrategy was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$settingsTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$auditLogsTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$featureFlagsTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$featureOverridesTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$departmentsTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$departmentUserTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$pubsubMessagesTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$pubsubCursorsTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$savedViewsTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$savedViewScopesTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$outboxMessagesTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$inboxMessagesTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"The parameter $idStrategy of CoreX\\Config\\Data\\CoreOptions#__construct() changed from CoreX\\Database\\Enums\\IdStrategy to a non-contravariant string","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $tenantContextResolver of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string to a non-contravariant bool","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $impersonationService of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string to a non-contravariant int|null","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $auditLogger of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string to a non-contravariant CoreX\\Messaging\\Enums\\PubSubDriver","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $auditRetention of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string to a non-contravariant int","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $settingDefaultsProvider of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string to a non-contravariant bool","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $departmentRepository of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string to a non-contravariant int","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $dataScopeAuthorizer of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string to a non-contravariant int","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $storageDurableRoot of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string to a non-contravariant int","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $storageEphemeralRoot of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string to a non-contravariant int","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $viewsConnection of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string|null to a non-contravariant string","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $auditEnabled of CoreX\\Config\\Data\\CoreOptions#__construct() changed from bool to a non-contravariant string","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $settingsCacheTtl of CoreX\\Config\\Data\\CoreOptions#__construct() changed from int|null to a non-contravariant array","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"Class CoreX\\Database\\Enums\\IdStrategy has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Database\\Laravel\\HasConfiguredId has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Method CoreX\\Database\\Laravel\\HasConfiguredId::bootHasConfiguredId() was removed","path":"/packages/core/src/Database/Laravel/BaseModel.php","line":24,"column":1,"modificationType":"removed"},{"description":"The return type of CoreX\\Database\\Laravel\\HasConfiguredId#getKeyType() changed from string to the non-covariant no type","path":"/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUniqueStringIds.php","line":72,"column":5,"modificationType":"changed"},{"description":"The return type of CoreX\\Database\\Laravel\\HasConfiguredId#getKeyType() changed from string to no type","path":"/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUniqueStringIds.php","line":72,"column":5,"modificationType":"changed"},{"description":"The return type of CoreX\\Database\\Laravel\\HasConfiguredId#getIncrementing() changed from bool to the non-covariant no type","path":"/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUniqueStringIds.php","line":86,"column":5,"modificationType":"changed"},{"description":"The return type of CoreX\\Database\\Laravel\\HasConfiguredId#getIncrementing() changed from bool to no type","path":"/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUniqueStringIds.php","line":86,"column":5,"modificationType":"changed"},{"description":"The return type of CoreX\\Database\\Laravel\\HasConfiguredId#newUniqueId() changed from string to the non-covariant no type","path":"/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUuids.php","line":16,"column":5,"modificationType":"changed"},{"description":"The return type of CoreX\\Database\\Laravel\\HasConfiguredId#newUniqueId() changed from string to no type","path":"/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUuids.php","line":16,"column":5,"modificationType":"changed"},{"description":"The return type of CoreX\\Database\\Laravel\\HasConfiguredId#uniqueIds() changed from array to the non-covariant no type","path":"/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUniqueStringIds.php","line":39,"column":5,"modificationType":"changed"},{"description":"The return type of CoreX\\Database\\Laravel\\HasConfiguredId#uniqueIds() changed from array to no type","path":"/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUniqueStringIds.php","line":39,"column":5,"modificationType":"changed"},{"description":"Class CoreX\\Database\\Laravel\\IdColumns has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Method CoreX\\Observability\\Internal\\OpenTelemetryBridge#record() was removed","path":"/packages/core/src/Observability/Internal/OpenTelemetryBridge.php","line":24,"column":1,"modificationType":"removed"},{"description":"Constant CoreX\\CoreServiceProvider::SCHEMA_VERSION was removed","path":"/packages/core/src/CoreServiceProvider.php","line":36,"column":1,"modificationType":"removed"},{"description":"Constant CoreX\\Modules\\ModulesServiceProvider::SCHEMA_VERSION was removed","path":"/packages/core/src/Modules/ModulesServiceProvider.php","line":20,"column":1,"modificationType":"removed"},{"description":"Case CoreX\\Errors\\Enums\\CoreErrorCode::SchemaInvalidSet was added","path":"/packages/core/src/Errors/Enums/CoreErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Errors\\Enums\\CoreErrorCode::SchemaDuplicateSet was added","path":"/packages/core/src/Errors/Enums/CoreErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Errors\\Enums\\CoreErrorCode::SchemaDuplicateMigration was added","path":"/packages/core/src/Errors/Enums/CoreErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Errors\\Enums\\CoreErrorCode::SchemaUnknownSet was added","path":"/packages/core/src/Errors/Enums/CoreErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Errors\\Enums\\CoreErrorCode::SchemaUnsupportedDriver was added","path":"/packages/core/src/Errors/Enums/CoreErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$idStrategy was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$settingsTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$auditLogsTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$featureFlagsTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$featureOverridesTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$departmentsTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$departmentUserTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$pubsubMessagesTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$pubsubCursorsTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$savedViewsTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$savedViewScopesTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$outboxMessagesTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Config\\Data\\CoreOptions#$inboxMessagesTable was removed","path":"/packages/core/src/Config/Data/CoreOptions.php","line":20,"column":1,"modificationType":"removed"},{"description":"The parameter $idStrategy of CoreX\\Config\\Data\\CoreOptions#__construct() changed from CoreX\\Database\\Enums\\IdStrategy to a non-contravariant string","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $tenantContextResolver of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string to a non-contravariant bool","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $impersonationService of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string to a non-contravariant int|null","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $auditLogger of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string to a non-contravariant CoreX\\Messaging\\Enums\\PubSubDriver","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $auditRetention of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string to a non-contravariant int","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $settingDefaultsProvider of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string to a non-contravariant bool","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $departmentRepository of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string to a non-contravariant int","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $dataScopeAuthorizer of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string to a non-contravariant int","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $storageDurableRoot of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string to a non-contravariant int","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $storageEphemeralRoot of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string to a non-contravariant int","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $viewsConnection of CoreX\\Config\\Data\\CoreOptions#__construct() changed from string|null to a non-contravariant string","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $auditEnabled of CoreX\\Config\\Data\\CoreOptions#__construct() changed from bool to a non-contravariant string","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $settingsCacheTtl of CoreX\\Config\\Data\\CoreOptions#__construct() changed from int|null to a non-contravariant array","path":"/packages/core/src/Config/Data/CoreOptions.php","line":36,"column":5,"modificationType":"changed"},{"description":"Class CoreX\\Database\\Enums\\IdStrategy has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Database\\Laravel\\HasConfiguredId has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Method CoreX\\Database\\Laravel\\HasConfiguredId::bootHasConfiguredId() was removed","path":"/packages/core/src/Database/Laravel/BaseModel.php","line":24,"column":1,"modificationType":"removed"},{"description":"The return type of CoreX\\Database\\Laravel\\HasConfiguredId#getKeyType() changed from string to the non-covariant no type","path":"/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUniqueStringIds.php","line":72,"column":5,"modificationType":"changed"},{"description":"The return type of CoreX\\Database\\Laravel\\HasConfiguredId#getKeyType() changed from string to no type","path":"/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUniqueStringIds.php","line":72,"column":5,"modificationType":"changed"},{"description":"The return type of CoreX\\Database\\Laravel\\HasConfiguredId#getIncrementing() changed from bool to the non-covariant no type","path":"/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUniqueStringIds.php","line":86,"column":5,"modificationType":"changed"},{"description":"The return type of CoreX\\Database\\Laravel\\HasConfiguredId#getIncrementing() changed from bool to no type","path":"/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUniqueStringIds.php","line":86,"column":5,"modificationType":"changed"},{"description":"The return type of CoreX\\Database\\Laravel\\HasConfiguredId#newUniqueId() changed from string to the non-covariant no type","path":"/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUuids.php","line":16,"column":5,"modificationType":"changed"},{"description":"The return type of CoreX\\Database\\Laravel\\HasConfiguredId#newUniqueId() changed from string to no type","path":"/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUuids.php","line":16,"column":5,"modificationType":"changed"},{"description":"The return type of CoreX\\Database\\Laravel\\HasConfiguredId#uniqueIds() changed from array to the non-covariant no type","path":"/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUniqueStringIds.php","line":39,"column":5,"modificationType":"changed"},{"description":"The return type of CoreX\\Database\\Laravel\\HasConfiguredId#uniqueIds() changed from array to no type","path":"/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUniqueStringIds.php","line":39,"column":5,"modificationType":"changed"},{"description":"Class CoreX\\Database\\Laravel\\IdColumns has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Method CoreX\\Observability\\Internal\\OpenTelemetryBridge#record() was removed","path":"/packages/core/src/Observability/Internal/OpenTelemetryBridge.php","line":24,"column":1,"modificationType":"removed"},{"description":"Constant CoreX\\CoreServiceProvider::SCHEMA_VERSION was removed","path":"/packages/core/src/CoreServiceProvider.php","line":36,"column":1,"modificationType":"removed"},{"description":"Constant CoreX\\Modules\\ModulesServiceProvider::SCHEMA_VERSION was removed","path":"/packages/core/src/Modules/ModulesServiceProvider.php","line":20,"column":1,"modificationType":"removed"}]}
+2026-10-07T19:11:20.4518607Z 92 backwards-incompatible changes detected
+2026-10-07T19:11:20.4519971Z bc-check: exact decision-bound unpublished delta — axiomasoft/corex
+2026-10-07T19:11:20.4521516Z bc-check: axiomasoft/corex-custom-fields (custom-fields) |compatible| stability=stable base=25379890de35b07abcaef8df093fb045a6e005dd candidate=7b1fdaa868fb708859f14711970823c205acf25d
+2026-10-07T19:11:20.4523633Z bc-check: axiomasoft/corex-intl (intl) |compatible| stability=stable base=048701ec8355603b324ed27b0a0a6309411e383e candidate=3a6bc167f7fa32f2485f3b1c679bb6bb8c59ebe9
+2026-10-07T19:11:20.4525737Z bc-check: axiomasoft/corex-media (media) |compatible| stability=stable base=714bf0e83714d1afe444bcabaf2bc8d8b1876e8f candidate=f791977a65784555ef23767f834fc60eb437fdfc
+2026-10-07T19:11:45.2200722Z bc-check: axiomasoft/corex-notifications (notifications) |compatible| stability=stable base=23858c0a8c96ca16c3ce0aac3dc0274c31d8bd04 candidate=c2721b601a44984215b1ba140a7c8dcb89870516
+2026-10-07T19:12:03.3231781Z bc-check: axiomasoft/corex-operations (operations) |bc-break| stability=stable base=335f87d4bf3ec932dd4df615311657d38b5ab453 candidate=03d62bde6d1ee2e792d88839d54f5d7b3510304a
+2026-10-07T19:12:03.3233687Z   - Installing guzzlehttp/uri-template (v2.0.1): Extracting archive
+2026-10-07T19:12:03.3235339Z   - Installing symfony/polyfill-php82 (v1.43.0): Extracting archive
+2026-10-07T19:12:03.3236876Z   - Installing guzzlehttp/psr7 (3.1.0): Extracting archive
+2026-10-07T19:12:03.3238166Z   - Installing guzzlehttp/promises (3.0.2): Extracting archive
+2026-10-07T19:12:03.3239150Z   - Installing psr/http-client (1.0.3): Extracting archive
+2026-10-07T19:12:03.3241309Z   - Installing guzzlehttp/guzzle (8.2.0): Extracting archive
+2026-10-07T19:12:03.3242251Z   - Installing fruitcake/php-cors (v1.4.0): Extracting archive
+2026-10-07T19:12:03.3243262Z   - Installing dragonmantank/cron-expression (v3.6.0): Extracting archive
+2026-10-07T19:12:03.3244279Z   - Installing doctrine/inflector (2.1.0): Extracting archive
+2026-10-07T19:12:03.3245205Z   - Installing laravel/framework (v13.35.0): Extracting archive
+2026-10-07T19:12:03.3246263Z   - Installing axiomasoft/corex (1.0.x-dev c19fe48): Symlinking from packages/core
+2026-10-07T19:12:03.3247783Z   - Installing axiomasoft/corex-transfer (1.0.x-dev e49ea82): Symlinking from packages/transfer
+2026-10-07T19:12:03.3249059Z   - Installing axiomasoft/corex-operations (1.0.x-dev 7367ddc): Symlinking from packages/operations
+2026-10-07T19:12:03.3250644Z   - Installing axiomasoft/corex-webhooks (1.0.x-dev ac4d637): Symlinking from packages/webhooks
+2026-10-07T19:12:03.3252093Z 53 package suggestions were added by new dependencies, use `composer suggest` to see details.
+2026-10-07T19:12:03.3253204Z 54 packages you are using are looking for funding.
+2026-10-07T19:12:03.3254242Z Use the `composer fund` command to find out more!
+2026-10-07T19:12:03.3255063Z No security vulnerability advisories found.
+2026-10-07T19:12:03.3289699Z {"errors":[{"description":"Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::InputEnvelopeInvalid was added","path":"/packages/operations/src/Errors/Enums/OperationsErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::UndeclaredFields was added","path":"/packages/operations/src/Errors/Enums/OperationsErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::UnsupportedMediaType was added","path":"/packages/operations/src/Errors/Enums/OperationsErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Class CoreX\\Operations\\Errors\\Laravel\\AcceptNegotiation has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Property CoreX\\Operations\\Definition\\Data\\ResourceId#$strategy was removed","path":"/packages/operations/src/Definition/Data/ResourceId.php","line":12,"column":1,"modificationType":"removed"},{"description":"Method CoreX\\Operations\\Definition\\Data\\ResourceId::fromConfigured() was removed","path":"/packages/operations/src/Definition/Data/ResourceId.php","line":12,"column":1,"modificationType":"removed"},{"description":"The parameter $strategy of CoreX\\Operations\\Definition\\Data\\ResourceId::fromValue() changed from CoreX\\Database\\Enums\\IdStrategy to a non-contravariant CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat","path":"/packages/operations/src/Definition/Data/ResourceId.php","line":21,"column":5,"modificationType":"changed"},{"description":"The parameter $expectedStrategy of CoreX\\Operations\\Definition\\Data\\ResourceId::parse() changed from CoreX\\Database\\Enums\\IdStrategy to a non-contravariant CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat","path":"/packages/operations/src/Definition/Data/ResourceId.php","line":28,"column":5,"modificationType":"changed"},{"description":"Property CoreX\\Operations\\Laravel\\Support\\ApiOptions#$problemTypeBase was removed","path":"/packages/operations/src/Laravel/Support/ApiOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"The parameter $problemTypeBase of CoreX\\Operations\\Laravel\\Support\\ApiOptions#__construct() changed from string to a non-contravariant array","path":"/packages/operations/src/Laravel/Support/ApiOptions.php","line":26,"column":5,"modificationType":"changed"},{"description":"Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::InputEnvelopeInvalid was added","path":"/packages/operations/src/Errors/Enums/OperationsErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::UndeclaredFields was added","path":"/packages/operations/src/Errors/Enums/OperationsErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::UnsupportedMediaType was added","path":"/packages/operations/src/Errors/Enums/OperationsErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Class CoreX\\Operations\\Errors\\Laravel\\AcceptNegotiation has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Property CoreX\\Operations\\Definition\\Data\\ResourceId#$strategy was removed","path":"/packages/operations/src/Definition/Data/ResourceId.php","line":12,"column":1,"modificationType":"removed"},{"description":"Method CoreX\\Operations\\Definition\\Data\\ResourceId::fromConfigured() was removed","path":"/packages/operations/src/Definition/Data/ResourceId.php","line":12,"column":1,"modificationType":"removed"},{"description":"The parameter $strategy of CoreX\\Operations\\Definition\\Data\\ResourceId::fromValue() changed from CoreX\\Database\\Enums\\IdStrategy to a non-contravariant CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat","path":"/packages/operations/src/Definition/Data/ResourceId.php","line":21,"column":5,"modificationType":"changed"},{"description":"The parameter $expectedStrategy of CoreX\\Operations\\Definition\\Data\\ResourceId::parse() changed from CoreX\\Database\\Enums\\IdStrategy to a non-contravariant CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat","path":"/packages/operations/src/Definition/Data/ResourceId.php","line":28,"column":5,"modificationType":"changed"},{"description":"Property CoreX\\Operations\\Laravel\\Support\\ApiOptions#$problemTypeBase was removed","path":"/packages/operations/src/Laravel/Support/ApiOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"The parameter $problemTypeBase of CoreX\\Operations\\Laravel\\Support\\ApiOptions#__construct() changed from string to a non-contravariant array","path":"/packages/operations/src/Laravel/Support/ApiOptions.php","line":26,"column":5,"modificationType":"changed"}]}
+2026-10-07T19:12:03.3333530Z 20 backwards-incompatible changes detected
+2026-10-07T19:12:03.3334579Z bc-check: exact decision-bound unpublished delta — axiomasoft/corex-operations
+2026-10-07T19:12:03.3336100Z bc-check: axiomasoft/corex-panels (panels) |compatible| stability=stable base=6c6de3cc625de616fae8a6af1e8ecc4be29bd9e0 candidate=56803ac80f0914d1d490951587a2170203f2b3d0
+2026-10-07T19:12:03.3338204Z bc-check: axiomasoft/corex-recurrence (recurrence) |compatible| stability=stable base=6b68f1314ef36c818834dc1200f03b157c3951c0 candidate=643d93eb521d91095120c1b50796bea08c88ab2f
+2026-10-07T19:12:03.3761572Z bc-check: axiomasoft/corex-search-intl (search-intl) |compatible| stability=stable base=6eef944c2a2a7f7b1f0a624cf32a5ae283af7f2d candidate=a57950882b200fab090703fdcbe0bc6823e89782
+2026-10-07T19:12:25.6830665Z bc-check: axiomasoft/corex-search-meilisearch (search-meilisearch) |compatible| stability=stable base=1a0ded745773c5134da328cb1017b69e95eee75d candidate=e24e882bdef2ee15e6d075ca42ccaba8de4886a5
+2026-10-07T19:12:26.9921277Z bc-check: axiomasoft/corex-search (search) |compatible| stability=stable base=c9513448c0ed68a3adf39242e928fc6ba3dcbf3a candidate=8e10f27d25193b5cf8ecfe67fee09f2c4f1b5d92
+2026-10-07T19:12:28.7001370Z bc-check: axiomasoft/corex-tasks-workflow (tasks-workflow) |compatible| stability=stable base=c0e8e1c4bf0ab590e2891dfceab61f7f76fc4e42 candidate=06f417c5cde8f84881d64744263a398d06b4b072
+2026-10-07T19:12:30.2811599Z bc-check: axiomasoft/corex-tasks (tasks) |compatible| stability=stable base=6a4cac920f0252622ef7e2ae50a8634da642a8b7 candidate=cf9f996bc0c36e65666f77445f971ea2be5d1a8d
+2026-10-07T19:13:17.6008759Z bc-check: axiomasoft/corex-tenancy (tenancy) |bc-break| stability=stable base=deb0b29a92bef21235fcd2e0e9c0f9d99b5c6ad8 candidate=cc2beb8061be29de8874611a6edc35825e387dad
+2026-10-07T19:13:17.6036322Z   - Installing laravel/prompts (v0.3.25): Extracting archive
+2026-10-07T19:13:17.6076693Z   - Installing guzzlehttp/uri-template (v2.0.1): Extracting archive
+2026-10-07T19:13:17.6087806Z   - Installing symfony/polyfill-php82 (v1.43.0): Extracting archive
+2026-10-07T19:13:17.6111365Z   - Installing guzzlehttp/psr7 (3.1.0): Extracting archive
+2026-10-07T19:13:17.6119181Z   - Installing guzzlehttp/promises (3.0.2): Extracting archive
+2026-10-07T19:13:17.6140623Z   - Installing psr/http-client (1.0.3): Extracting archive
+2026-10-07T19:13:17.6149138Z   - Installing guzzlehttp/guzzle (8.2.0): Extracting archive
+2026-10-07T19:13:17.6169899Z   - Installing fruitcake/php-cors (v1.4.0): Extracting archive
+2026-10-07T19:13:17.6182719Z   - Installing dragonmantank/cron-expression (v3.6.0): Extracting archive
+2026-10-07T19:13:17.6197931Z   - Installing doctrine/inflector (2.1.0): Extracting archive
+2026-10-07T19:13:17.6210290Z   - Installing laravel/framework (v13.35.0): Extracting archive
+2026-10-07T19:13:17.6230290Z   - Installing axiomasoft/corex (1.0.x-dev c19fe48): Symlinking from packages/core
+2026-10-07T19:13:17.6245402Z   - Installing axiomasoft/corex-wakeup (1.0.x-dev 4defb97): Symlinking from packages/wakeup
+2026-10-07T19:13:17.6259123Z   - Installing firebase/php-jwt (v7.2.1): Extracting archive
+2026-10-07T19:13:17.6271501Z 53 package suggestions were added by new dependencies, use `composer suggest` to see details.
+2026-10-07T19:13:17.6290147Z 54 packages you are using are looking for funding.
+2026-10-07T19:13:17.6310001Z Use the `composer fund` command to find out more!
+2026-10-07T19:13:17.6329867Z No security vulnerability advisories found.
+2026-10-07T19:13:17.6646234Z {"errors":[{"description":"Case CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode::ContextUnavailable was added","path":"/packages/tenancy/src/Errors/Enums/TenancyErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"The number of required arguments for CoreX\\Tenancy\\Account\\Laravel\\MigrationWaveOrchestrator#__construct() increased from 3 to 4","path":"/packages/tenancy/src/Account/Laravel/MigrationWaveOrchestrator.php","line":42,"column":5,"modificationType":"changed"},{"description":"The parameter $migrationRunner of CoreX\\Tenancy\\Account\\Laravel\\MigrationWaveOrchestrator#__construct() changed from Closure|null to a non-contravariant CoreX\\Database\\Contracts\\SchemaMigrator","path":"/packages/tenancy/src/Account/Laravel/MigrationWaveOrchestrator.php","line":42,"column":5,"modificationType":"changed"},{"description":"The number of required arguments for CoreX\\Tenancy\\Account\\Laravel\\AccountTemplateSnapshot::capture() increased from 1 to 2","path":"/packages/tenancy/src/Account/Laravel/AccountTemplateSnapshot.php","line":17,"column":5,"modificationType":"changed"},{"description":"The parameter $tenant of CoreX\\Tenancy\\Account\\Laravel\\AccountTemplateSnapshot::capture() changed from Stancl\\Tenancy\\Database\\Contracts\\TenantWithDatabase to a non-contravariant CoreX\\Context\\Data\\AccountRef","path":"/packages/tenancy/src/Account/Laravel/AccountTemplateSnapshot.php","line":17,"column":5,"modificationType":"changed"},{"description":"Class CoreX\\Tenancy\\PHPStan\\Rules\\StanclImportBoundaryRule has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"These ancestors of CoreX\\Tenancy\\Runtime\\Exceptions\\TenantCouldNotBeIdentifiedByHostException have been removed: [\"Stancl\\\\Tenancy\\\\Contracts\\\\TenantCouldNotBeIdentifiedException\"]","path":"/packages/tenancy/src/Runtime/Exceptions/TenantCouldNotBeIdentifiedByHostException.php","line":15,"column":1,"modificationType":"removed"},{"description":"Class CoreX\\Tenancy\\Laravel\\Bootstrappers\\WorkspaceContextBootstrapper has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"The number of required arguments for CoreX\\Tenancy\\Laravel\\Http\\Middleware\\AccountStatusGate#__construct() increased from 0 to 5","path":"/packages/tenancy/src/Laravel/Http/Middleware/AccountStatusGate.php","line":28,"column":5,"modificationType":"changed"},{"description":"The parameter $statusGate of CoreX\\Tenancy\\Laravel\\Http\\Middleware\\AccountStatusGate#__construct() changed from CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy|null to a non-contravariant CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy","path":"/packages/tenancy/src/Laravel/Http/Middleware/AccountStatusGate.php","line":28,"column":5,"modificationType":"changed"},{"description":"Property Stancl\\Tenancy\\Middleware\\IdentificationMiddleware::$onFail was removed","path":"/packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php","line":33,"column":1,"modificationType":"removed"},{"description":"Method Stancl\\Tenancy\\Middleware\\IdentificationMiddleware#initializeTenancy() was removed","path":"/packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php","line":33,"column":1,"modificationType":"removed"},{"description":"These ancestors of CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveTenantFromHost have been removed: [\"Stancl\\\\Tenancy\\\\Middleware\\\\IdentificationMiddleware\"]","path":"/packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php","line":33,"column":1,"modificationType":"removed"},{"description":"The number of required arguments for CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveTenantFromHost#__construct() increased from 2 to 5","path":"/packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $tenancy of CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveTenantFromHost#__construct() changed from Stancl\\Tenancy\\Tenancy to a non-contravariant CoreX\\Context\\Contracts\\TenancyManager","path":"/packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $resolver of CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveTenantFromHost#__construct() changed from CoreX\\Tenancy\\Laravel\\Resolvers\\HostTenantResolver to a non-contravariant CoreX\\Tenancy\\Runtime\\Internal\\HostAccountResolver","path":"/packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php","line":36,"column":5,"modificationType":"changed"},{"description":"Class CoreX\\Tenancy\\Laravel\\Resolvers\\HostTenantResolver has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Tenancy\\Laravel\\Listeners\\RevertTenancyOnJobException has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Property CoreX\\Tenancy\\Laravel\\Support\\ImpersonationPolicy#$requireApprovedBy was removed","path":"/packages/tenancy/src/Laravel/Support/ImpersonationPolicy.php","line":11,"column":1,"modificationType":"removed"},{"description":"The parameter $requireApprovedBy of CoreX\\Tenancy\\Laravel\\Support\\ImpersonationPolicy#__construct() changed from bool to a non-contravariant CoreX\\Tenancy\\Impersonation\\Enums\\ImpersonationProfile","path":"/packages/tenancy/src/Laravel/Support/ImpersonationPolicy.php","line":14,"column":5,"modificationType":"changed"},{"description":"Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$tenantModel was removed","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$idGenerator was removed","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$tenantDatabaseManager was removed","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$bootstrapperOrder was removed","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$provisioningPipeline was removed","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$hostIdentificationCache was removed","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$hostIdentificationCacheTtl was removed","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$hostIdentificationCacheStore was removed","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"The parameter $tenantModel of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant array","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $tenantDatabaseManager of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant array","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $bootstrapperOrder of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from array to a non-contravariant string","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $provisioningPipeline of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from array to a non-contravariant string","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $storageDurableDriver of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant bool","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $storageDurableRoot of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant bool","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $storageEphemeralRoot of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant int","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $hostIdentificationEnabled of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from bool to a non-contravariant string|null","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $hostIdentificationCacheStore of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string|null to a non-contravariant CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $domainTrustChallengeTtlSeconds of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from int to a non-contravariant string|null","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $statusGate of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy to a non-contravariant string|null","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $oidcEnabled of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from bool to a non-contravariant CoreX\\Config\\Data\\SecretRef|null","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $oidcClientId of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string|null to a non-contravariant array","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $oidcClientSecret of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from CoreX\\Config\\Data\\SecretRef|null to a non-contravariant int","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $oidcRedirectUri of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string|null to a non-contravariant string","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $oidcAllowedAlgs of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from array to a non-contravariant string|null","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $oidcDiscoveryCacheStore of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string|null to a non-contravariant int","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $oidcJwksCacheStore of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string|null to a non-contravariant CoreX\\Tenancy\\Laravel\\Support\\ImpersonationPolicy","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $oidcJwksRefetchCooldownSeconds of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from int to a non-contravariant string|null","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $impersonation of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from CoreX\\Tenancy\\Laravel\\Support\\ImpersonationPolicy to a non-contravariant CoreX\\Tenancy\\Laravel\\Support\\AccountLifecyclePolicy","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $oidcMaxSessionLifetimeMinutes of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from int to a non-contravariant string","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $workspacePathSegment of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string|null to a non-contravariant string","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $lifecycle of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from CoreX\\Tenancy\\Laravel\\Support\\AccountLifecyclePolicy to a non-contravariant int","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $wakeupDriver of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant array","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $wakeupRootConnection of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant array","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $wakeupLeaseSeconds of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from int to a non-contravariant string","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"Case CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode::ContextUnavailable was added","path":"/packages/tenancy/src/Errors/Enums/TenancyErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"The number of required arguments for CoreX\\Tenancy\\Account\\Laravel\\MigrationWaveOrchestrator#__construct() increased from 3 to 4","path":"/packages/tenancy/src/Account/Laravel/MigrationWaveOrchestrator.php","line":42,"column":5,"modificationType":"changed"},{"description":"The parameter $migrationRunner of CoreX\\Tenancy\\Account\\Laravel\\MigrationWaveOrchestrator#__construct() changed from Closure|null to a non-contravariant CoreX\\Database\\Contracts\\SchemaMigrator","path":"/packages/tenancy/src/Account/Laravel/MigrationWaveOrchestrator.php","line":42,"column":5,"modificationType":"changed"},{"description":"The number of required arguments for CoreX\\Tenancy\\Account\\Laravel\\AccountTemplateSnapshot::capture() increased from 1 to 2","path":"/packages/tenancy/src/Account/Laravel/AccountTemplateSnapshot.php","line":17,"column":5,"modificationType":"changed"},{"description":"The parameter $tenant of CoreX\\Tenancy\\Account\\Laravel\\AccountTemplateSnapshot::capture() changed from Stancl\\Tenancy\\Database\\Contracts\\TenantWithDatabase to a non-contravariant CoreX\\Context\\Data\\AccountRef","path":"/packages/tenancy/src/Account/Laravel/AccountTemplateSnapshot.php","line":17,"column":5,"modificationType":"changed"},{"description":"Class CoreX\\Tenancy\\PHPStan\\Rules\\StanclImportBoundaryRule has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"These ancestors of CoreX\\Tenancy\\Runtime\\Exceptions\\TenantCouldNotBeIdentifiedByHostException have been removed: [\"Stancl\\\\Tenancy\\\\Contracts\\\\TenantCouldNotBeIdentifiedException\"]","path":"/packages/tenancy/src/Runtime/Exceptions/TenantCouldNotBeIdentifiedByHostException.php","line":15,"column":1,"modificationType":"removed"},{"description":"Class CoreX\\Tenancy\\Laravel\\Bootstrappers\\WorkspaceContextBootstrapper has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"The number of required arguments for CoreX\\Tenancy\\Laravel\\Http\\Middleware\\AccountStatusGate#__construct() increased from 0 to 5","path":"/packages/tenancy/src/Laravel/Http/Middleware/AccountStatusGate.php","line":28,"column":5,"modificationType":"changed"},{"description":"The parameter $statusGate of CoreX\\Tenancy\\Laravel\\Http\\Middleware\\AccountStatusGate#__construct() changed from CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy|null to a non-contravariant CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy","path":"/packages/tenancy/src/Laravel/Http/Middleware/AccountStatusGate.php","line":28,"column":5,"modificationType":"changed"},{"description":"Property Stancl\\Tenancy\\Middleware\\IdentificationMiddleware::$onFail was removed","path":"/packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php","line":33,"column":1,"modificationType":"removed"},{"description":"Method Stancl\\Tenancy\\Middleware\\IdentificationMiddleware#initializeTenancy() was removed","path":"/packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php","line":33,"column":1,"modificationType":"removed"},{"description":"These ancestors of CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveTenantFromHost have been removed: [\"Stancl\\\\Tenancy\\\\Middleware\\\\IdentificationMiddleware\"]","path":"/packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php","line":33,"column":1,"modificationType":"removed"},{"description":"The number of required arguments for CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveTenantFromHost#__construct() increased from 2 to 5","path":"/packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $tenancy of CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveTenantFromHost#__construct() changed from Stancl\\Tenancy\\Tenancy to a non-contravariant CoreX\\Context\\Contracts\\TenancyManager","path":"/packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php","line":36,"column":5,"modificationType":"changed"},{"description":"The parameter $resolver of CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ResolveTenantFromHost#__construct() changed from CoreX\\Tenancy\\Laravel\\Resolvers\\HostTenantResolver to a non-contravariant CoreX\\Tenancy\\Runtime\\Internal\\HostAccountResolver","path":"/packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php","line":36,"column":5,"modificationType":"changed"},{"description":"Class CoreX\\Tenancy\\Laravel\\Resolvers\\HostTenantResolver has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Tenancy\\Laravel\\Listeners\\RevertTenancyOnJobException has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Property CoreX\\Tenancy\\Laravel\\Support\\ImpersonationPolicy#$requireApprovedBy was removed","path":"/packages/tenancy/src/Laravel/Support/ImpersonationPolicy.php","line":11,"column":1,"modificationType":"removed"},{"description":"The parameter $requireApprovedBy of CoreX\\Tenancy\\Laravel\\Support\\ImpersonationPolicy#__construct() changed from bool to a non-contravariant CoreX\\Tenancy\\Impersonation\\Enums\\ImpersonationProfile","path":"/packages/tenancy/src/Laravel/Support/ImpersonationPolicy.php","line":14,"column":5,"modificationType":"changed"},{"description":"Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$tenantModel was removed","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$idGenerator was removed","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$tenantDatabaseManager was removed","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$bootstrapperOrder was removed","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$provisioningPipeline was removed","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$hostIdentificationCache was removed","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$hostIdentificationCacheTtl was removed","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$hostIdentificationCacheStore was removed","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"The parameter $tenantModel of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant array","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $tenantDatabaseManager of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant array","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $bootstrapperOrder of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from array to a non-contravariant string","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $provisioningPipeline of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from array to a non-contravariant string","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $storageDurableDriver of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant bool","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $storageDurableRoot of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant bool","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $storageEphemeralRoot of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant int","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $hostIdentificationEnabled of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from bool to a non-contravariant string|null","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $hostIdentificationCacheStore of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string|null to a non-contravariant CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $domainTrustChallengeTtlSeconds of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from int to a non-contravariant string|null","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $statusGate of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy to a non-contravariant string|null","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $oidcEnabled of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from bool to a non-contravariant CoreX\\Config\\Data\\SecretRef|null","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $oidcClientId of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string|null to a non-contravariant array","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $oidcClientSecret of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from CoreX\\Config\\Data\\SecretRef|null to a non-contravariant int","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $oidcRedirectUri of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string|null to a non-contravariant string","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $oidcAllowedAlgs of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from array to a non-contravariant string|null","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $oidcDiscoveryCacheStore of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string|null to a non-contravariant int","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $oidcJwksCacheStore of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string|null to a non-contravariant CoreX\\Tenancy\\Laravel\\Support\\ImpersonationPolicy","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $oidcJwksRefetchCooldownSeconds of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from int to a non-contravariant string|null","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $impersonation of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from CoreX\\Tenancy\\Laravel\\Support\\ImpersonationPolicy to a non-contravariant CoreX\\Tenancy\\Laravel\\Support\\AccountLifecyclePolicy","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $oidcMaxSessionLifetimeMinutes of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from int to a non-contravariant string","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $workspacePathSegment of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string|null to a non-contravariant string","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $lifecycle of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from CoreX\\Tenancy\\Laravel\\Support\\AccountLifecyclePolicy to a non-contravariant int","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $wakeupDriver of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant array","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $wakeupRootConnection of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant array","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"},{"description":"The parameter $wakeupLeaseSeconds of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from int to a non-contravariant string","path":"/packages/tenancy/src/Laravel/Support/TenancyOptions.php","line":27,"column":5,"modificationType":"changed"}]}
+2026-10-07T19:13:17.6837921Z 108 backwards-incompatible changes detected
+2026-10-07T19:13:17.6851039Z bc-check: exact decision-bound unpublished delta — axiomasoft/corex-tenancy
+2026-10-07T19:13:17.6870702Z bc-check: axiomasoft/corex-tools (tools) |bc-break| stability=stable base=c365c6a80ac23341b2e760563793f826fa0cff85 candidate=99c6f14a95c53111041928270037aff4732c829b
+2026-10-07T19:13:17.6889994Z   - Installing laravel/prompts (v0.3.25): Extracting archive
+2026-10-07T19:13:17.6899984Z   - Installing guzzlehttp/uri-template (v2.0.1): Extracting archive
+2026-10-07T19:13:17.6910187Z   - Installing symfony/polyfill-php82 (v1.43.0): Extracting archive
+2026-10-07T19:13:17.6934059Z   - Installing guzzlehttp/psr7 (3.1.0): Extracting archive
+2026-10-07T19:13:17.6935577Z   - Installing guzzlehttp/promises (3.0.2): Extracting archive
+2026-10-07T19:13:17.6936986Z   - Installing psr/http-client (1.0.3): Extracting archive
+2026-10-07T19:13:17.6938331Z   - Installing guzzlehttp/guzzle (8.2.0): Extracting archive
+2026-10-07T19:13:17.6940387Z   - Installing fruitcake/php-cors (v1.4.0): Extracting archive
+2026-10-07T19:13:17.6941908Z   - Installing dragonmantank/cron-expression (v3.6.0): Extracting archive
+2026-10-07T19:13:17.6943414Z   - Installing doctrine/inflector (2.1.0): Extracting archive
+2026-10-07T19:13:17.6945126Z   - Installing laravel/framework (v13.35.0): Extracting archive
+2026-10-07T19:13:17.6947632Z   - Installing axiomasoft/corex (1.0.x-dev c19fe48): Symlinking from packages/core
+2026-10-07T19:13:17.6950603Z   - Installing axiomasoft/corex-operations (1.0.x-dev 7367ddc): Symlinking from packages/operations
+2026-10-07T19:13:17.6952328Z   - Installing axiomasoft/corex-transfer (1.0.x-dev e49ea82): Symlinking from packages/transfer
+2026-10-07T19:13:17.6954138Z 52 package suggestions were added by new dependencies, use `composer suggest` to see details.
+2026-10-07T19:13:17.6955530Z 54 packages you are using are looking for funding.
+2026-10-07T19:13:17.6957172Z Use the `composer fund` command to find out more!
+2026-10-07T19:13:17.6960408Z No security vulnerability advisories found.
+2026-10-07T19:13:17.6980647Z {"errors":[{"description":"Constant CoreX\\Tools\\Data\\ToolResult::OUTCOME_NOT_EXECUTED was removed","path":"/packages/tools/src/Data/ToolResult.php","line":12,"column":1,"modificationType":"removed"},{"description":"Constant CoreX\\Tools\\Data\\ToolResult::OUTCOME_COMMITTED was removed","path":"/packages/tools/src/Data/ToolResult.php","line":12,"column":1,"modificationType":"removed"},{"description":"Constant CoreX\\Tools\\Data\\ToolResult::OUTCOME_UNKNOWN was removed","path":"/packages/tools/src/Data/ToolResult.php","line":12,"column":1,"modificationType":"removed"},{"description":"Type of property CoreX\\Tools\\Data\\ToolResult#$outcome changed from string to CoreX\\Tools\\Data\\ToolOutcome","path":"/packages/tools/src/Data/ToolResult.php","line":16,"column":33,"modificationType":"changed"},{"description":"The parameter $outcome of CoreX\\Tools\\Data\\ToolResult#__construct() changed from string to a non-contravariant CoreX\\Tools\\Data\\ToolOutcome","path":"/packages/tools/src/Data/ToolResult.php","line":16,"column":5,"modificationType":"changed"},{"description":"Constant CoreX\\Tools\\Data\\ToolResult::OUTCOME_NOT_EXECUTED was removed","path":"/packages/tools/src/Data/ToolResult.php","line":12,"column":1,"modificationType":"removed"},{"description":"Constant CoreX\\Tools\\Data\\ToolResult::OUTCOME_COMMITTED was removed","path":"/packages/tools/src/Data/ToolResult.php","line":12,"column":1,"modificationType":"removed"},{"description":"Constant CoreX\\Tools\\Data\\ToolResult::OUTCOME_UNKNOWN was removed","path":"/packages/tools/src/Data/ToolResult.php","line":12,"column":1,"modificationType":"removed"},{"description":"Type of property CoreX\\Tools\\Data\\ToolResult#$outcome changed from string to CoreX\\Tools\\Data\\ToolOutcome","path":"/packages/tools/src/Data/ToolResult.php","line":16,"column":33,"modificationType":"changed"},{"description":"The parameter $outcome of CoreX\\Tools\\Data\\ToolResult#__construct() changed from string to a non-contravariant CoreX\\Tools\\Data\\ToolOutcome","path":"/packages/tools/src/Data/ToolResult.php","line":16,"column":5,"modificationType":"changed"}]}
+2026-10-07T19:13:17.6995466Z 10 backwards-incompatible changes detected
+2026-10-07T19:13:17.6997265Z bc-check: exact decision-bound unpublished delta — axiomasoft/corex-tools
+2026-10-07T19:13:17.7001047Z bc-check: axiomasoft/corex-transfer (transfer) |compatible| stability=stable base=28e7af37d17319d2edd7e2888fa4381987ea6c70 candidate=147e0198fd91d2f5079ad62a6309ff284ef001e8
+2026-10-07T19:13:17.7003183Z bc-check: axiomasoft/corex-wakeup (wakeup) |bc-break| stability=stable base=7e28d6e34020f088bd4bc242274918796bcb6859 candidate=020989cea4d62eb72d4608b8bdfbd9ecf094ba9f
+2026-10-07T19:13:17.7005682Z bc-check:   contract-surface: packages/wakeup/src/Contracts/DueWakeupSweeper.php
+2026-10-07T19:13:17.7007148Z   - Installing league/commonmark (2.10.3): Extracting archive
+2026-10-07T19:13:17.7008672Z   - Installing laravel/serializable-closure (v2.1.0): Extracting archive
+2026-10-07T19:13:17.7010421Z   - Installing laravel/prompts (v0.3.25): Extracting archive
+2026-10-07T19:13:17.7015120Z   - Installing guzzlehttp/uri-template (v2.0.1): Extracting archive
+2026-10-07T19:13:17.7016725Z   - Installing symfony/polyfill-php82 (v1.43.0): Extracting archive
+2026-10-07T19:13:17.7018644Z   - Installing guzzlehttp/psr7 (3.1.0): Extracting archive
+2026-10-07T19:13:17.7020184Z   - Installing guzzlehttp/promises (3.0.2): Extracting archive
+2026-10-07T19:13:17.7021497Z   - Installing psr/http-client (1.0.3): Extracting archive
+2026-10-07T19:13:17.7022735Z   - Installing guzzlehttp/guzzle (8.2.0): Extracting archive
+2026-10-07T19:13:17.7024639Z   - Installing fruitcake/php-cors (v1.4.0): Extracting archive
+2026-10-07T19:13:17.7026068Z   - Installing dragonmantank/cron-expression (v3.6.0): Extracting archive
+2026-10-07T19:13:17.7027475Z   - Installing doctrine/inflector (2.1.0): Extracting archive
+2026-10-07T19:13:17.7028957Z   - Installing laravel/framework (v13.35.0): Extracting archive
+2026-10-07T19:13:17.7031394Z   - Installing axiomasoft/corex (1.0.x-dev c19fe48): Symlinking from packages/core
+2026-10-07T19:13:17.7033238Z 51 package suggestions were added by new dependencies, use `composer suggest` to see details.
+2026-10-07T19:13:17.7035459Z 54 packages you are using are looking for funding.
+2026-10-07T19:13:17.7036789Z Use the `composer fund` command to find out more!
+2026-10-07T19:13:17.7038586Z No security vulnerability advisories found.
+2026-10-07T19:13:17.7066014Z {"errors":[{"description":"Class CoreX\\Wakeup\\Data\\WakeupRequest has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Wakeup\\Data\\CancelResult has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Wakeup\\Data\\ScheduleResult has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Wakeup\\Data\\SweepResult has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Wakeup\\Data\\WakeupDelivery has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Wakeup\\Data\\WakeupHandlerDefinition has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Wakeup\\Data\\WakeupWindow has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Wakeup\\Contracts\\DueWakeupSource has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Wakeup\\Contracts\\DueWakeupHandler has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Wakeup\\Contracts\\WakeupScheduler has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"The return type of CoreX\\Wakeup\\Contracts\\DueWakeupSweeper#sweep() changed from CoreX\\Wakeup\\Data\\SweepResult to the non-covariant CoreX\\Scheduling\\Data\\SweepResult","path":"/packages/wakeup/src/Contracts/DueWakeupSweeper.php","line":16,"column":5,"modificationType":"changed"},{"description":"The return type of CoreX\\Wakeup\\Contracts\\DueWakeupSweeper#sweep() changed from CoreX\\Wakeup\\Data\\SweepResult to CoreX\\Scheduling\\Data\\SweepResult","path":"/packages/wakeup/src/Contracts/DueWakeupSweeper.php","line":16,"column":5,"modificationType":"changed"},{"description":"Class CoreX\\Wakeup\\Data\\WakeupRequest has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Wakeup\\Data\\CancelResult has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Wakeup\\Data\\ScheduleResult has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Wakeup\\Data\\SweepResult has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Wakeup\\Data\\WakeupDelivery has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Wakeup\\Data\\WakeupHandlerDefinition has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Wakeup\\Data\\WakeupWindow has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Wakeup\\Contracts\\DueWakeupSource has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Wakeup\\Contracts\\DueWakeupHandler has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Class CoreX\\Wakeup\\Contracts\\WakeupScheduler has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"The return type of CoreX\\Wakeup\\Contracts\\DueWakeupSweeper#sweep() changed from CoreX\\Wakeup\\Data\\SweepResult to the non-covariant CoreX\\Scheduling\\Data\\SweepResult","path":"/packages/wakeup/src/Contracts/DueWakeupSweeper.php","line":16,"column":5,"modificationType":"changed"},{"description":"The return type of CoreX\\Wakeup\\Contracts\\DueWakeupSweeper#sweep() changed from CoreX\\Wakeup\\Data\\SweepResult to CoreX\\Scheduling\\Data\\SweepResult","path":"/packages/wakeup/src/Contracts/DueWakeupSweeper.php","line":16,"column":5,"modificationType":"changed"}]}
+2026-10-07T19:13:17.7092799Z 24 backwards-incompatible changes detected
+2026-10-07T19:13:17.7094288Z bc-check: exact decision-bound unpublished delta — axiomasoft/corex-wakeup
+2026-10-07T19:13:28.4863122Z bc-check: axiomasoft/corex-webhooks (webhooks) |bc-break| stability=stable base=df08fb3723084b20b9ff1323ee861e202fde7925 candidate=c59aeda6e0d9a2c4270f5c3013a57b45ccf791a1
+2026-10-07T19:13:28.4864678Z   - Installing laravel/prompts (v0.3.25): Extracting archive
+2026-10-07T19:13:28.4865372Z   - Installing guzzlehttp/uri-template (v2.0.1): Extracting archive
+2026-10-07T19:13:28.4866088Z   - Installing symfony/polyfill-php82 (v1.43.0): Extracting archive
+2026-10-07T19:13:28.4866744Z   - Installing guzzlehttp/psr7 (3.1.0): Extracting archive
+2026-10-07T19:13:28.4867345Z   - Installing guzzlehttp/promises (3.0.2): Extracting archive
+2026-10-07T19:13:28.4867970Z   - Installing psr/http-client (1.0.3): Extracting archive
+2026-10-07T19:13:28.4868664Z   - Installing guzzlehttp/guzzle (8.2.0): Extracting archive
+2026-10-07T19:13:28.4869776Z   - Installing fruitcake/php-cors (v1.4.0): Extracting archive
+2026-10-07T19:13:28.4870551Z   - Installing dragonmantank/cron-expression (v3.6.0): Extracting archive
+2026-10-07T19:13:28.4871313Z   - Installing doctrine/inflector (2.1.0): Extracting archive
+2026-10-07T19:13:28.4872002Z   - Installing laravel/framework (v13.35.0): Extracting archive
+2026-10-07T19:13:28.4872832Z   - Installing axiomasoft/corex (1.0.x-dev c19fe48): Symlinking from packages/core
+2026-10-07T19:13:28.4873801Z   - Installing axiomasoft/corex-operations (1.0.x-dev 7367ddc): Symlinking from packages/operations
+2026-10-07T19:13:28.4874494Z   - Installing axiomasoft/corex-transfer (1.0.x-dev e49ea82): Symlinking from packages/transfer
+2026-10-07T19:13:28.4875141Z 52 package suggestions were added by new dependencies, use `composer suggest` to see details.
+2026-10-07T19:13:28.4875628Z 54 packages you are using are looking for funding.
+2026-10-07T19:13:28.4875979Z Use the `composer fund` command to find out more!
+2026-10-07T19:13:28.4876310Z No security vulnerability advisories found.
+2026-10-07T19:13:28.4884011Z {"errors":[{"description":"Case CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode::WebhookEgressDenied was added","path":"/packages/webhooks/src/Errors/Enums/WebhooksErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Type of property CoreX\\Webhooks\\Data\\WebhookHttpResult#$errorCode changed from string|null to CoreX\\Webhooks\\Enums\\WebhookFailureReason|null","path":"/packages/webhooks/src/Data/WebhookHttpResult.php","line":17,"column":9,"modificationType":"changed"},{"description":"The parameter $errorCode of CoreX\\Webhooks\\Data\\WebhookHttpResult#__construct() changed from string|null to a non-contravariant CoreX\\Webhooks\\Enums\\WebhookFailureReason|null","path":"/packages/webhooks/src/Data/WebhookHttpResult.php","line":14,"column":5,"modificationType":"changed"},{"description":"The number of required arguments for CoreX\\Webhooks\\Data\\WebhookOptions#__construct() increased from 9 to 11","path":"/packages/webhooks/src/Data/WebhookOptions.php","line":18,"column":5,"modificationType":"changed"},{"description":"Case CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode::WebhookEgressDenied was added","path":"/packages/webhooks/src/Errors/Enums/WebhooksErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Type of property CoreX\\Webhooks\\Data\\WebhookHttpResult#$errorCode changed from string|null to CoreX\\Webhooks\\Enums\\WebhookFailureReason|null","path":"/packages/webhooks/src/Data/WebhookHttpResult.php","line":17,"column":9,"modificationType":"changed"},{"description":"The parameter $errorCode of CoreX\\Webhooks\\Data\\WebhookHttpResult#__construct() changed from string|null to a non-contravariant CoreX\\Webhooks\\Enums\\WebhookFailureReason|null","path":"/packages/webhooks/src/Data/WebhookHttpResult.php","line":14,"column":5,"modificationType":"changed"},{"description":"The number of required arguments for CoreX\\Webhooks\\Data\\WebhookOptions#__construct() increased from 9 to 11","path":"/packages/webhooks/src/Data/WebhookOptions.php","line":18,"column":5,"modificationType":"changed"}]}
+2026-10-07T19:13:28.4892787Z 8 backwards-incompatible changes detected
+2026-10-07T19:13:28.4893440Z bc-check: exact decision-bound unpublished delta — axiomasoft/corex-webhooks
+2026-10-07T19:15:27.4808600Z bc-check: axiomasoft/corex-workflow (workflow) |compatible| stability=stable base=d1872805e9e5aa1ce3e4f1650eec81a2ec60bf8f candidate=cce134dad1a151bd7dc0ccd5c9ad32a85ef5cb5e
+2026-10-07T19:15:27.4811441Z bc-check: OK
+2026-10-07T19:15:27.5030891Z Post job cleanup.
+2026-10-07T19:15:27.6092357Z [command]/usr/bin/git version
+2026-10-07T19:15:27.6204561Z git version 2.55.0
+2026-10-07T19:15:27.6410606Z Temporarily overriding HOME='/home/runner/work/_temp/a5d47a30-7af9-484f-9e92-bd265a7d6141' before making global git config changes
+2026-10-07T19:15:27.6454365Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-07T19:15:27.6490250Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/corex-mirror/corex-mirror
+2026-10-07T19:15:27.6578811Z Removing SSH command configuration
+2026-10-07T19:15:27.6611769Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-07T19:15:27.6660957Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-07T19:15:27.7455132Z Removing HTTP extra header
+2026-10-07T19:15:27.7490435Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-07T19:15:27.7581212Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-07T19:15:27.8367952Z Removing includeIf entries pointing to credentials config files
+2026-10-07T19:15:27.8390239Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-07T19:15:27.8462466Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-07T19:15:27.9246074Z Cleaning up orphan processes

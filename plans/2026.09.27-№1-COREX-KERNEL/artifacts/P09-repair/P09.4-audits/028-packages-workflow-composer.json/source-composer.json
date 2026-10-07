@@ -1,0 +1,58 @@
+{
+    "name": "axiomasoft/corex-workflow",
+    "description": "Optional durable workflow engine binding for CoreX modules.",
+    "type": "corex-module",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "axiomasoft/corex": "^1.0@dev",
+        "illuminate/contracts": "^13.0",
+        "illuminate/database": "^13.0",
+        "illuminate/support": "^13.0",
+        "psr/clock": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "CoreX\\Workflow\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CoreX\\Workflow\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "corex": {
+            "schema-version": 1,
+            "module": "CoreX\\Workflow\\WorkflowModule",
+            "package-type": "capability",
+            "stability": "stable"
+        },
+        "laravel": {
+            "providers": [
+                "CoreX\\Workflow\\WorkflowServiceProvider"
+            ]
+        },
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../core"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "scripts": {
+        "test": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php",
+        "test:coverage": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/workflow/phpstan.neon --memory-limit=2G --no-progress",
+        "lint:check": "../../vendor/bin/pint --test"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^11.3",
+        "orchestra/testbench-core": "^11.5"
+    }
+}

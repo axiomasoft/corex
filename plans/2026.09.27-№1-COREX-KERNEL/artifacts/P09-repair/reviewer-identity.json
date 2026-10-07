@@ -1,0 +1,42 @@
+{
+  "actual_session": "01a117f9-85b5-7eb1-ba90-8f4a0eda7465",
+  "route": "codex/gpt-6-astra/high",
+  "rollout_path": "/home/vostrikov/.codex/sessions/2026/10/07/rollout-2026-10-07T23-06-31-01a117f9-85b5-7eb1-ba90-8f4a0eda7465.jsonl",
+  "observed_records": [
+    {
+      "type": "session_meta",
+      "timestamp": "2026-10-07T20:06:31.128Z",
+      "payload": {
+        "id": "01a117f9-85b5-7eb1-ba90-8f4a0eda7465",
+        "cwd": "/home/vostrikov/projects/packages/corex",
+        "model_provider": "openai",
+        "source": {
+          "subagent": {
+            "thread_spawn": {
+              "parent_thread_id": "01a117f0-0c4f-7fb3-9855-cea7eb7f538f",
+              "depth": 1,
+              "agent_path": "/root/p098_recheck",
+              "agent_nickname": "Averroes",
+              "agent_role": null
+            }
+          }
+        },
+        "agent_nickname": "Averroes"
+      }
+    },
+    {
+      "type": "turn_context",
+      "timestamp": "2026-10-07T20:06:35.398Z",
+      "payload": {
+        "model": "gpt-6-astra",
+        "effort": "high",
+        "cwd": "/home/vostrikov/projects/packages/corex"
+      }
+    }
+  ],
+  "repair_sessions": [
+    "01a11796-aa4e-7081-a4c1-16e2352fc5bf",
+    "01a117f0-0c4f-7fb3-9855-cea7eb7f538f"
+  ],
+  "independence": "different native model and session, read-only"
+}

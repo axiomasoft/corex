@@ -1,0 +1,32 @@
+{
+  ".agents/skills/compact-responses": {
+    "candidate_blob_identical": true,
+    "sha256": "761e1675cd3e71130722a851c2a3967252756ae1839a2f9f2c1da0692c975962",
+    "target": "/home/vostrikov/projects/packages/swissknifeman/packages/skiller/skills/general/compact-responses"
+  },
+  ".agents/skills/db-test-preflight": {
+    "candidate_blob_identical": true,
+    "sha256": "8360897a58c4daa0d486ed50b3aa35dc3e4a19d227fd4a1f967452da48ac3b81",
+    "target": "/home/vostrikov/projects/packages/swissknifeman/packages/skiller/skills/devops/db-test-preflight"
+  },
+  ".agents/skills/mcp-advisor": {
+    "candidate_blob_identical": true,
+    "sha256": "15084cbf3c6c56124b30dbc8fbd7da285a311d980699cda191f8a111bb1e807d",
+    "target": "/home/vostrikov/projects/packages/swissknifeman/packages/skiller/skills/general/mcp-advisor"
+  },
+  ".agents/skills/node-pnpm-preflight": {
+    "candidate_blob_identical": true,
+    "sha256": "243764bfcfeb9060a41881f8acb17c08228cbaecdec626a5902647a059e246e7",
+    "target": "/home/vostrikov/projects/packages/swissknifeman/packages/skiller/skills/devops/node-pnpm-preflight"
+  },
+  ".agents/skills/plan-protocol": {
+    "candidate_blob_identical": true,
+    "sha256": "cbbb17988110ae1c6498daef0a04c588d12beff9e1abd3202caa2bab694b7dc6",
+    "target": "/home/vostrikov/projects/packages/swissknifeman/packages/skiller/skills/general/plan-protocol"
+  },
+  ".agents/skills/query-craft": {
+    "candidate_blob_identical": true,
+    "sha256": "72c2aa99e0da2e876c317c5c3be407d12ccf2696822c491a1579673dc22d596f",
+    "target": "/home/vostrikov/projects/packages/swissknifeman/packages/skiller/skills/research/query-craft"
+  }
+}

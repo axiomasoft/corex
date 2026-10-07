@@ -1,0 +1,24 @@
+{
+    "name": "axiomasoft/corex-infection-pest-adapter",
+    "description": "Bounded Pest CLI adapter for the pinned Infection compatibility spike.",
+    "type": "infection-extension",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "infection/abstract-testframework-adapter": "0.5.1",
+        "infection/include-interceptor": "^1.0",
+        "pestphp/pest": "^5.2.1",
+        "phpunit/phpunit": "^13.3.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "CoreX\\Tooling\\Infection\\": "src/"
+        }
+    },
+    "bin": ["bin/corex-pest"],
+    "extra": {
+        "infection": {
+            "class": "CoreX\\Tooling\\Infection\\PestAdapter"
+        }
+    }
+}

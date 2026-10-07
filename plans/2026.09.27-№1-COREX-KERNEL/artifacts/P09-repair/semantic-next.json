@@ -1,0 +1,14 @@
+{
+  "kind": "archive",
+  "exact": "archive: task:plan-close 2026.09.27-№1-COREX-KERNEL archive",
+  "phase": null,
+  "batch": null,
+  "items": [],
+  "route": null,
+  "launch": {
+    "claude": "/task:plan-close 2026.09.27-№1-COREX-KERNEL archive",
+    "codex": "$ task:plan-close 2026.09.27-№1-COREX-KERNEL archive"
+  },
+  "command": "task:plan-close 2026.09.27-№1-COREX-KERNEL archive",
+  "reason": ""
+}

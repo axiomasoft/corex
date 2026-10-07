@@ -1,0 +1,14 @@
+{
+  "command": [
+    "composer",
+    "--no-interaction",
+    "--no-plugins",
+    "--no-scripts",
+    "validate",
+    "--strict"
+  ],
+  "cwd": "/tmp/corex-p09-audit-source/packages/transfer",
+  "exit": 0,
+  "stderr": "Composer could not detect the root package (axiomasoft/corex-transfer) version, defaulting to '1.0.0'. See https://getcomposer.org/root-version\nComposer could not detect the root package (axiomasoft/corex-transfer) version, defaulting to '1.0.0'. See https://getcomposer.org/root-version\n",
+  "stdout": "./composer.json is valid\n"
+}

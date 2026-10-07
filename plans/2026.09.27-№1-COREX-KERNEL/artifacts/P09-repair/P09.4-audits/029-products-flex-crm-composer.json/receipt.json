@@ -1,0 +1,9 @@
+{
+  "classification": "source",
+  "commands": [],
+  "error": "manifest/lock content-hash mismatch: /home/vostrikov/projects/packages/corex/products/flex-crm/composer.json",
+  "manifest": "products/flex-crm/composer.json",
+  "manifest_sha256": "e2c4c7f0d8d21022d29d971c8387dc0cfd5aa8500d7b9d116b725532bcb2a56b",
+  "name": "flex/crm",
+  "status": "RED"
+}

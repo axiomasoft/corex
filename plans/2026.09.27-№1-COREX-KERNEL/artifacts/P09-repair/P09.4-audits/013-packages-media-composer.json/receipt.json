@@ -1,0 +1,9 @@
+{
+  "classification": "source",
+  "commands": [],
+  "error": "manifest/lock content-hash mismatch: /home/vostrikov/projects/packages/corex/packages/media/composer.json",
+  "manifest": "packages/media/composer.json",
+  "manifest_sha256": "454b9d7f171abdcd492f57baebac57d0971882d27158dc90a16252a08f0a1e10",
+  "name": "axiomasoft/corex-media",
+  "status": "RED"
+}

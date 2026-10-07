@@ -1,0 +1,9 @@
+{
+  "classification": "source",
+  "commands": [],
+  "error": "manifest/lock content-hash mismatch: /home/vostrikov/projects/packages/corex/packages/tenancy/composer.json",
+  "manifest": "packages/tenancy/composer.json",
+  "manifest_sha256": "eb66cc9c77e284059d901aa263bad62957767e2e312e7344aa47679649b3f1aa",
+  "name": "axiomasoft/corex-tenancy",
+  "status": "RED"
+}

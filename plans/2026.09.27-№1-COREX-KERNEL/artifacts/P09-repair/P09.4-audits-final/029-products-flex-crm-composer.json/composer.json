@@ -1,0 +1,162 @@
+{
+  "authors": [
+    {
+      "email": "dv.vostrikov@gmail.com",
+      "name": "Dmitry Vostrikov"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Flex\\Crm\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Flex\\Crm\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "description": "CoreX CRM module — pipelines, stages and deals on axiomasoft/corex (ULID, tenancy, money).",
+  "extra": {
+    "branch-alias": {
+      "dev-main": "1.0.x-dev"
+    },
+    "corex": {
+      "module": "Flex\\Crm\\CrmModule",
+      "package-type": "product",
+      "schema-version": 1,
+      "stability": "experimental"
+    },
+    "laravel": {
+      "providers": [
+        "Flex\\Crm\\CrmServiceProvider"
+      ]
+    }
+  },
+  "keywords": [
+    "laravel",
+    "crm",
+    "pipeline",
+    "deals",
+    "multi-tenancy"
+  ],
+  "license": "MIT",
+  "minimum-stability": "stable",
+  "name": "flex/crm",
+  "prefer-stable": true,
+  "repositories": [
+    {
+      "options": {
+        "symlink": false
+      },
+      "type": "path",
+      "url": "/tmp/corex-p09-audit-source/products/flex-crm/../../packages/core"
+    },
+    {
+      "options": {
+        "symlink": false
+      },
+      "type": "path",
+      "url": "/tmp/corex-p09-audit-source/products/flex-crm/../../packages/intl"
+    },
+    {
+      "options": {
+        "symlink": false
+      },
+      "type": "path",
+      "url": "/tmp/corex-p09-audit-source/products/flex-crm/../../packages/operations"
+    },
+    {
+      "options": {
+        "symlink": false,
+        "versions": {
+          "axiomasoft/corex-infection-pest-adapter": "0.1.0"
+        }
+      },
+      "type": "path",
+      "url": "/tmp/corex-p09-audit-source/scripts/quality/infection-pest-adapter"
+    },
+    {
+      "options": {
+        "symlink": false
+      },
+      "type": "path",
+      "url": "/tmp/corex-p09-audit-source/packages/*"
+    },
+    {
+      "options": {
+        "symlink": false
+      },
+      "type": "path",
+      "url": "/tmp/corex-p09-audit-source/products/*"
+    },
+    {
+      "name": "azguard",
+      "package": {
+        "autoload": {
+          "psr-4": {
+            "AzGuard\\": "packages/core/src/"
+          }
+        },
+        "extra": {
+          "laravel": {
+            "providers": [
+              "AzGuard\\AzGuardServiceProvider"
+            ]
+          }
+        },
+        "name": "axioma-studio/azguard-core",
+        "require": {
+          "illuminate/console": "^11.0|^12.0|^13.0",
+          "illuminate/contracts": "^11.0|^12.0|^13.0",
+          "illuminate/database": "^11.0|^12.0|^13.0",
+          "illuminate/filesystem": "^11.0|^12.0|^13.0",
+          "illuminate/http": "^11.0|^12.0|^13.0",
+          "illuminate/queue": "^11.0|^12.0|^13.0",
+          "illuminate/routing": "^11.0|^12.0|^13.0",
+          "illuminate/support": "^11.0|^12.0|^13.0",
+          "php": "^8.3"
+        },
+        "source": {
+          "reference": "253cbf4cce0226545cd96ca8c6bcbefe329b1403",
+          "type": "git",
+          "url": "https://github.com/axiomasoft/azguard-private.git"
+        },
+        "version": "0.3.0"
+      },
+      "type": "package"
+    }
+  ],
+  "require": {
+    "axiomasoft/corex": "^1.0@dev",
+    "axiomasoft/corex-intl": "^1.0@dev",
+    "axiomasoft/corex-operations": "^1.0@dev",
+    "brick/money": "^0.9 || ^0.10",
+    "ext-filter": "*",
+    "ext-mbstring": "*",
+    "giggsey/libphonenumber-for-php-lite": "^9.0",
+    "laravel/framework": "^13.0",
+    "php": "^8.4"
+  },
+  "require-dev": {
+    "larastan/larastan": "^3.12",
+    "laravel/pint": "^1.32",
+    "mockery/mockery": "^1.6",
+    "orchestra/testbench": "^11.3",
+    "orchestra/testbench-core": "^11.5",
+    "pestphp/pest": "^5.2"
+  },
+  "scripts": {
+    "analyse": "cd ../.. && vendor/bin/phpstan analyse -c products/flex-crm/phpstan.neon --memory-limit=2G --no-progress",
+    "lint": "pint",
+    "lint:check": "pint --test",
+    "test": "pest --exclude-group=pg",
+    "test:coverage": "pest --coverage --min=95",
+    "test:pg": "pest --group=pg"
+  },
+  "type": "corex-module"
+}

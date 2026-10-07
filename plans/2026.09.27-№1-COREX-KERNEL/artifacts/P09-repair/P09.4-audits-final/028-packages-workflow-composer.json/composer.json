@@ -1,0 +1,121 @@
+{
+  "autoload": {
+    "psr-4": {
+      "CoreX\\Workflow\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "CoreX\\Workflow\\Tests\\": "tests/"
+    }
+  },
+  "description": "Optional durable workflow engine binding for CoreX modules.",
+  "extra": {
+    "branch-alias": {
+      "dev-main": "1.0.x-dev"
+    },
+    "corex": {
+      "module": "CoreX\\Workflow\\WorkflowModule",
+      "package-type": "capability",
+      "schema-version": 1,
+      "stability": "stable"
+    },
+    "laravel": {
+      "providers": [
+        "CoreX\\Workflow\\WorkflowServiceProvider"
+      ]
+    }
+  },
+  "license": "MIT",
+  "minimum-stability": "stable",
+  "name": "axiomasoft/corex-workflow",
+  "prefer-stable": true,
+  "repositories": [
+    {
+      "options": {
+        "symlink": false
+      },
+      "type": "path",
+      "url": "/tmp/corex-p09-audit-source/packages/workflow/../core"
+    },
+    {
+      "options": {
+        "symlink": false,
+        "versions": {
+          "axiomasoft/corex-infection-pest-adapter": "0.1.0"
+        }
+      },
+      "type": "path",
+      "url": "/tmp/corex-p09-audit-source/scripts/quality/infection-pest-adapter"
+    },
+    {
+      "options": {
+        "symlink": false
+      },
+      "type": "path",
+      "url": "/tmp/corex-p09-audit-source/packages/*"
+    },
+    {
+      "options": {
+        "symlink": false
+      },
+      "type": "path",
+      "url": "/tmp/corex-p09-audit-source/products/*"
+    },
+    {
+      "name": "azguard",
+      "package": {
+        "autoload": {
+          "psr-4": {
+            "AzGuard\\": "packages/core/src/"
+          }
+        },
+        "extra": {
+          "laravel": {
+            "providers": [
+              "AzGuard\\AzGuardServiceProvider"
+            ]
+          }
+        },
+        "name": "axioma-studio/azguard-core",
+        "require": {
+          "illuminate/console": "^11.0|^12.0|^13.0",
+          "illuminate/contracts": "^11.0|^12.0|^13.0",
+          "illuminate/database": "^11.0|^12.0|^13.0",
+          "illuminate/filesystem": "^11.0|^12.0|^13.0",
+          "illuminate/http": "^11.0|^12.0|^13.0",
+          "illuminate/queue": "^11.0|^12.0|^13.0",
+          "illuminate/routing": "^11.0|^12.0|^13.0",
+          "illuminate/support": "^11.0|^12.0|^13.0",
+          "php": "^8.3"
+        },
+        "source": {
+          "reference": "253cbf4cce0226545cd96ca8c6bcbefe329b1403",
+          "type": "git",
+          "url": "https://github.com/axiomasoft/azguard-private.git"
+        },
+        "version": "0.3.0"
+      },
+      "type": "package"
+    }
+  ],
+  "require": {
+    "axiomasoft/corex": "^1.0@dev",
+    "illuminate/contracts": "^13.0",
+    "illuminate/database": "^13.0",
+    "illuminate/support": "^13.0",
+    "php": "^8.4",
+    "psr/clock": "^1.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^11.3",
+    "orchestra/testbench-core": "^11.5"
+  },
+  "scripts": {
+    "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/workflow/phpstan.neon --memory-limit=2G --no-progress",
+    "lint:check": "../../vendor/bin/pint --test",
+    "test": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php",
+    "test:coverage": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80"
+  },
+  "type": "corex-module"
+}

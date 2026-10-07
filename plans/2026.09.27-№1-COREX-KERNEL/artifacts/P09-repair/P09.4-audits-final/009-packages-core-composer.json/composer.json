@@ -1,0 +1,166 @@
+{
+  "authors": [
+    {
+      "email": "dv.vostrikov@gmail.com",
+      "name": "Dmitry Vostrikov"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "CoreX\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "classmap": [
+      "tests/Fixtures"
+    ],
+    "psr-4": {
+      "CoreX\\Testing\\": "tests/Support/"
+    }
+  },
+  "description": "CoreX kernel — base model (ULID), optional multi-tenancy, entity registry, settings, audit log, and money for any Laravel application.",
+  "extra": {
+    "branch-alias": {
+      "dev-main": "1.0.x-dev"
+    },
+    "corex": {
+      "package-type": "foundation",
+      "schema-version": 1,
+      "stability": "stable"
+    },
+    "laravel": {
+      "providers": [
+        "CoreX\\CoreServiceProvider"
+      ]
+    },
+    "phpstan": {
+      "includes": [
+        "extension.neon"
+      ]
+    }
+  },
+  "keywords": [
+    "laravel",
+    "kernel",
+    "multi-tenancy",
+    "ulid",
+    "entity-registry",
+    "audit",
+    "settings"
+  ],
+  "license": "MIT",
+  "minimum-stability": "stable",
+  "name": "axiomasoft/corex",
+  "prefer-stable": true,
+  "provide": {
+    "psr/clock-implementation": "1.0"
+  },
+  "repositories": [
+    {
+      "options": {
+        "symlink": false,
+        "versions": {
+          "axiomasoft/corex-infection-pest-adapter": "0.1.0"
+        }
+      },
+      "type": "path",
+      "url": "/tmp/corex-p09-audit-source/scripts/quality/infection-pest-adapter"
+    },
+    {
+      "options": {
+        "symlink": false
+      },
+      "type": "path",
+      "url": "/tmp/corex-p09-audit-source/packages/*"
+    },
+    {
+      "options": {
+        "symlink": false
+      },
+      "type": "path",
+      "url": "/tmp/corex-p09-audit-source/products/*"
+    },
+    {
+      "name": "azguard",
+      "package": {
+        "autoload": {
+          "psr-4": {
+            "AzGuard\\": "packages/core/src/"
+          }
+        },
+        "extra": {
+          "laravel": {
+            "providers": [
+              "AzGuard\\AzGuardServiceProvider"
+            ]
+          }
+        },
+        "name": "axioma-studio/azguard-core",
+        "require": {
+          "illuminate/console": "^11.0|^12.0|^13.0",
+          "illuminate/contracts": "^11.0|^12.0|^13.0",
+          "illuminate/database": "^11.0|^12.0|^13.0",
+          "illuminate/filesystem": "^11.0|^12.0|^13.0",
+          "illuminate/http": "^11.0|^12.0|^13.0",
+          "illuminate/queue": "^11.0|^12.0|^13.0",
+          "illuminate/routing": "^11.0|^12.0|^13.0",
+          "illuminate/support": "^11.0|^12.0|^13.0",
+          "php": "^8.3"
+        },
+        "source": {
+          "reference": "253cbf4cce0226545cd96ca8c6bcbefe329b1403",
+          "type": "git",
+          "url": "https://github.com/axiomasoft/azguard-private.git"
+        },
+        "version": "0.3.0"
+      },
+      "type": "package"
+    }
+  ],
+  "require": {
+    "ext-ctype": "*",
+    "ext-mbstring": "*",
+    "illuminate/auth": "^13.0",
+    "illuminate/console": "^13.0",
+    "illuminate/contracts": "^13.0",
+    "illuminate/database": "^13.0",
+    "illuminate/events": "^13.0",
+    "illuminate/queue": "^13.0",
+    "illuminate/support": "^13.0",
+    "laravel/framework": "^13.0",
+    "php": "^8.4",
+    "psr/clock": "^1.0"
+  },
+  "require-dev": {
+    "ext-pdo": "*",
+    "larastan/larastan": "^3.12",
+    "mockery/mockery": "^1.6",
+    "nikic/php-parser": "^5.4",
+    "open-telemetry/api": "^1.4",
+    "open-telemetry/sdk": "^1.4",
+    "orchestra/testbench": "^11.3",
+    "orchestra/testbench-core": "^11.5",
+    "phpstan/phpdoc-parser": "^2.3",
+    "phpstan/phpstan": "^2.2.16",
+    "phpunit/phpunit": "^12.0",
+    "psr/log": "^3.0",
+    "symfony/console": "^7.2|^8.0",
+    "symfony/filesystem": "^7.2|^8.0",
+    "symfony/process": "^7.2|^8.0"
+  },
+  "scripts": {
+    "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/core/phpstan.neon --memory-limit=2G --no-progress",
+    "lint:check": "../../vendor/bin/pint --test",
+    "test": "../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage,ModulesPackage --exclude-group=pg",
+    "test:coverage": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage,ModulesPackage --exclude-group=pg --coverage --min=80",
+    "test:pg": "../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage,ModulesPackage --group=pg"
+  },
+  "suggest": {
+    "nikic/php-parser": "Development tooling for source API and error registry scans.",
+    "open-telemetry/api": "Optional operation and messaging traces. CoreX boots without it.",
+    "phpstan/phpdoc-parser": "Development tooling for source API PHPDoc parsing.",
+    "phpstan/phpstan": "Development tooling for shipped static analysis rules.",
+    "psr/log": "Optional PSR-3 projection of operation lifecycle events."
+  },
+  "type": "library"
+}

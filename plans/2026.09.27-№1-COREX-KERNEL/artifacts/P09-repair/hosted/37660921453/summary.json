@@ -1,0 +1,52 @@
+{
+  "run_id": 37660921453,
+  "source_sha": "842285161551c09f950af72d95d776107993d212",
+  "url": "https://github.com/axiomik/corex-mirror/actions/runs/37660921453",
+  "status": "completed",
+  "conclusion": "failure",
+  "counts": {
+    "success": 27,
+    "failure": 3,
+    "skipped": 3
+  },
+  "failed_jobs": [
+    {
+      "id": 112927916486,
+      "name": "Remaining cohort package aggregator",
+      "steps": [
+        "Core and modules SQLite suites"
+      ]
+    },
+    {
+      "id": 112927916587,
+      "name": "Standalone dependencies and lockfile audits",
+      "steps": [
+        "Analyse every standalone package"
+      ]
+    },
+    {
+      "id": 112927916778,
+      "name": "Static analysis & code style",
+      "steps": [
+        "PHPStan (modules-lint on tests/)"
+      ]
+    }
+  ],
+  "observed_at": "2026-10-07T19:59:19.240325+00:00",
+  "artifact_sha256": {
+    "run.json": "ad23527d7d5b11223bdeecde772afa9f11faca1042b19c9bc73e1bb52eab5e6c",
+    "job-112927916500.log": "b10f2581a079fef8b9a071eceb21b3f277cd8282073b99e2c6fc3d675ab66af8",
+    "job-112927916451.log": "48d87582d0f7599e044556586631c9847ac9891b4137d435b48f9c1f34a8c0e9",
+    "job-112927916609.log": "abc0dd285d2c30790fcf2830ccbb71e428b66e9c3859d786c1dc99b16a30b192",
+    "job-112927916778.log": "14f9297a833e2e9a60c84220a195e40ccaf1b3dd8a81c8a6ee219cc4580c4679",
+    "job-112927916587.log": "4028a49c97e71381c1a3ff8e64dad35b0d48a985677440404e8094e3fdc48531",
+    "jobs.json": "a9d2a08b3f629950ea318c937b31a996349b6f521d422eb9fd5cd26d1f302e4b",
+    "job-112927916556.log": "6ff4d9dd5733dd96964dcd65d3b7b5aa4a0086fa72daa7df9372b5ba45ae8eff",
+    "job-112927916552.log": "cd03cd3a6bece8b79219fd26c6eb914f810ccdca398f767d5717ef5c30c41d7a",
+    "job-112927916152.log": "f0765d8dfe2b0e7d2427862ab5be9ca8f0c87ceaa976e3c18dc90ef483b3e7ed",
+    "job-112927916488.log": "17c513234583a8e4f28984f5ff5521369b13784e8b7adc60c69083fb9ddc5e21",
+    "job-112927916486.log": "63f94f10a744ca7cd56cee12d1deac342bd38304e88adf7f8cd7081411857781",
+    "job-112927916598.log": "f3fbb4a08e3362f67c6e44cf5fe6f2f52a02be2af2a9bd15a7a60b50bf7bc912",
+    "job-112927916631.log": "c7025bdb791aff9068364dfed1356b1926f5481394f0afefb2e7af93e0d1ee7e"
+  }
+}

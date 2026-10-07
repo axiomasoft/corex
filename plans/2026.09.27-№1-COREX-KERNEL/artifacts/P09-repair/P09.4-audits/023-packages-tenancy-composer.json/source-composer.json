@@ -1,0 +1,110 @@
+{
+    "name": "axiomasoft/corex-tenancy",
+    "description": "CoreX physical DB-per-account tenancy — root-schema control plane (B-11, D13).",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "multi-tenancy",
+        "saas"
+    ],
+    "authors": [
+        {
+            "name": "Dmitry Vostrikov",
+            "email": "dv.vostrikov@gmail.com"
+        }
+    ],
+    "require": {
+        "ext-ctype": "*",
+        "ext-filter": "*",
+        "ext-mbstring": "*",
+        "ext-openssl": "*",
+        "ext-session": "*",
+        "ext-sodium": "*",
+        "php": "^8.4",
+        "axiomasoft/corex": "^1.0@dev",
+        "firebase/php-jwt": "^7.1",
+        "laravel/framework": "^13.0",
+        "nesbot/carbon": "^3.0",
+        "psr/clock": "^1.0",
+        "psr/log": "^3.0",
+        "symfony/http-foundation": "^7.2|^8.0"
+    },
+    "require-dev": {
+        "ext-pdo": "*",
+        "ext-tokenizer": "*",
+        "phpstan/phpstan": "^2.2.16",
+        "axiomasoft/corex-wakeup": "^1.0@dev",
+        "larastan/larastan": "^3.12",
+        "laravel/pint": "^1.32",
+        "league/flysystem-aws-s3-v3": "3.35.3",
+        "mockery/mockery": "^1.6",
+        "nikic/php-parser": "^5.4",
+        "orchestra/testbench": "^11.3",
+        "orchestra/testbench-core": "^11.5",
+        "pestphp/pest": "^5.2",
+        "symfony/console": "^7.2|^8.0",
+        "symfony/http-kernel": "^7.2|^8.0",
+        "symfony/process": "^7.2|^8.0",
+        "ext-redis": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "CoreX\\Tenancy\\": "src/"
+        }
+    },
+    "suggest": {
+        "league/flysystem-aws-s3-v3": "Install the qualified native S3 adapter to explicitly construct optional ObjectTenantStorage.",
+        "axiomasoft/corex-wakeup": "Install to opt into root_registry wakeup hints; boxed and local_sweep profiles do not require it.",
+        "ext-redis": "Optional Redis account menu cache integration; its conformance tests require this extension."
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CoreX\\Tenancy\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "corex": {
+            "schema-version": 1,
+            "package-type": "capability",
+            "stability": "stable"
+        },
+        "laravel": {
+            "providers": [
+                "CoreX\\Tenancy\\TenancyServiceProvider"
+            ]
+        },
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
+        },
+        "phpstan": {
+            "includes": [
+                "extension.neon"
+            ]
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../core"
+        },
+        {
+            "type": "path",
+            "url": "../wakeup"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "process-timeout": 900,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "scripts": {
+        "test": "pest",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/tenancy/phpstan.neon --memory-limit=2G --no-progress",
+        "lint": "pint",
+        "lint:check": "pint --test"
+    }
+}

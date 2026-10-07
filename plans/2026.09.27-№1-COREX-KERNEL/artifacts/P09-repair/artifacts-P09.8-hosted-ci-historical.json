@@ -1,0 +1,24 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P09.8-hosted-ci",
+  "title": "P09.8 exact-source ordinary hosted CI and owning diagnostics",
+  "sections": [
+    {
+      "id": "ci",
+      "title": "Completed hosted CI",
+      "text": "Ordinary CI on 1bfcb0324197c9e3ae8a050dea2b8f1d84b7f6dc completed/failure: run37652373568 at https://github.com/axiomik/corex-mirror/actions/runs/37652373568;20success,10failure,3D133-planned mutation skips. Five owning causes: C1 P09.13,P09.14: Pest TestCase/group bindings missing in root and default Composer entrypoints for Transfer/Search/Meilisearch; C2 P09.3: CRM coverage94.3% below unchanged95% floor; C3 P09.14: Missing direct phpunit/phpunit dev dependency for new MeilisearchTestCase; C4 P09.12: Zizmor rejects three static-expression obfuscation forms in disabled mutation jobs; C5 P09.4: Hosted source audit gate rejects COMPOSER_NO_AUDIT environment. No hosted GREEN or phase closure. Earlier ax1oma/academici exact-source runs were blocked by billing without executing jobs; current axiomik has actual execution evidence."
+    },
+    {
+      "id": "preservation",
+      "title": "Scope and preservation",
+      "text": "Root integration model codex/gpt-6.1-sol/high, authorized by current owner reply «выпоняй под текущей». Independent native reviewer codex/gpt-6-astra/high FINDINGS:2 is preserved in artifacts-P09.8-review-verdict. All2879 tracked product paths in hosted before/after manifests remain identical, hasha262963bc68e7f7a3a9812fc73a0f594b310138309000e7260e2459b0d24db43; reviewer independently covers3119 unchanged non-plan paths. No local behavioral suite, mutation, Infection, probe, self-test or replay ran. P09.8 is read-only: owner repair authorization for P09.3/4/12/13/14 has been requested; no product repair or owning-item reopen has occurred. Scope excludes release/SBOM/DoD27/qualification/tag/version/publication. Raw run/jobs/logs and SHA256 ledger: artifacts/P09.8-review/hosted/summary.json."
+    }
+  ],
+  "applies_to": [
+    "P09.8"
+  ],
+  "provenance": {
+    "path": "artifacts/P09.8-review/hosted/summary.json",
+    "sha256": "1dbf16adedec7f6f238485dd800e43c8b97f2a1a9fd0b24c77dbf4e0b3991100"
+  }
+}

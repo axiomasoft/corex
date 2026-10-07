@@ -1,0 +1,194 @@
+{
+  "classification": "source",
+  "commands": [
+    {
+      "exit": 0,
+      "output": "validate-source.json",
+      "role": "validate-source",
+      "sha256": "fb9dee52042eea7efc614b8a9fa4bf1dfdbc4fcaa7920870124cc829d0aba659"
+    },
+    {
+      "exit": 0,
+      "output": "solve.json",
+      "role": "solve",
+      "sha256": "3a73caed866f759aa1a020f5aff42163a3ccaba26bcd184c7d500ad26efe1556"
+    },
+    {
+      "exit": 0,
+      "output": "validate.json",
+      "role": "validate",
+      "sha256": "0ec8480436e08c8fb0b500f61bf72269fb74ef52d3f18caeeeb5958c4ecd9091"
+    },
+    {
+      "exit": 0,
+      "output": "audit.json",
+      "role": "audit",
+      "sha256": "589b9d33322a2ca7b1e818cde9fa585423a7e34897fa813f8c2c322d5926edd3"
+    }
+  ],
+  "effective_manifest_sha256": "385e978cdfba65ba79bab3d7e1f0249f102d1cc87e8491f7c95072fc374c2423",
+  "lock_kind": "isolated-solve",
+  "lock_sha256": "c8af58c8c4595a8379b705d68cdb6a1bebf24e4c9312ae6a5b0ea86d3c574889",
+  "manifest": "packages/webhooks/composer.json",
+  "manifest_sha256": "93f3898a1eb02282637d22b7d820bfe90e2ea3dc8b35623f2614dfa879e4da46",
+  "name": "axiomasoft/corex-webhooks",
+  "repository_bindings": [
+    {
+      "manifest": "packages/core/composer.json",
+      "owner": "packages/webhooks/composer.json",
+      "sha256": "48c0e66cb2482afb5fa0cc5fe5f8ade9c41d37efcc4f5dabf9c0664dddbf5429",
+      "url": "../core"
+    },
+    {
+      "manifest": "packages/operations/composer.json",
+      "owner": "packages/webhooks/composer.json",
+      "sha256": "a662308bb1ca48f80a9bf7d9c7ac8fcdadb35a6105d9f37386e5205d05ef45b1",
+      "url": "../operations"
+    },
+    {
+      "manifest": "packages/transfer/composer.json",
+      "owner": "packages/webhooks/composer.json",
+      "sha256": "7f01457b5072a3fee457c73d7f849a910fb3cbbcd456d5b725c14edc1fb7bcc0",
+      "url": "../transfer"
+    },
+    {
+      "manifest": "scripts/quality/infection-pest-adapter/composer.json",
+      "owner": "composer.json",
+      "sha256": "89dd5e7b05df9477de13c108ed861505a3b5633e209cc342bbdd22a012996588",
+      "url": "scripts/quality/infection-pest-adapter"
+    },
+    {
+      "manifest": "packages/access/composer.json",
+      "owner": "composer.json",
+      "sha256": "44a8b389d4c66de908d59a8f3ce5ea664285a91aacc284c6dd4004e41fddd870",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/access-azguard/composer.json",
+      "owner": "composer.json",
+      "sha256": "7745988ee7e2bca03068102679b0c682bf035ab7b50ed3077d1e777f2aebcf22",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/core/composer.json",
+      "owner": "composer.json",
+      "sha256": "48c0e66cb2482afb5fa0cc5fe5f8ade9c41d37efcc4f5dabf9c0664dddbf5429",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/custom-fields/composer.json",
+      "owner": "composer.json",
+      "sha256": "672c49c4ba8226448e87c35cc2277276a830aa9b7448b15420b4c19b714774eb",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/intl/composer.json",
+      "owner": "composer.json",
+      "sha256": "786a10784cb2655859f171d8684bd92391c5d3f7ac7d9ab2884c46d2e82469f4",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/media/composer.json",
+      "owner": "composer.json",
+      "sha256": "454b9d7f171abdcd492f57baebac57d0971882d27158dc90a16252a08f0a1e10",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/notifications/composer.json",
+      "owner": "composer.json",
+      "sha256": "37ae5feae573566c79420c887e01f2c3de6f467c6a82499fb6cf800080a528e9",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/operations/composer.json",
+      "owner": "composer.json",
+      "sha256": "a662308bb1ca48f80a9bf7d9c7ac8fcdadb35a6105d9f37386e5205d05ef45b1",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/panels/composer.json",
+      "owner": "composer.json",
+      "sha256": "5fde68209cfb3b1c760f5ed87b718a749ea1903049d2e6864fda7435f06426a3",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/recurrence/composer.json",
+      "owner": "composer.json",
+      "sha256": "f7b3407d6137ae7198b843dca15a98f854f39fe777c852a60a8545f46651e63e",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/search/composer.json",
+      "owner": "composer.json",
+      "sha256": "cbf90d2a81f1d7b3b4b37b0d545636628d6407dc17974248d528205460a0ad83",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/search-intl/composer.json",
+      "owner": "composer.json",
+      "sha256": "9602756006a807536d7fd233770e6a85a18b8237b90e6b1a471252c7b27e8c6b",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/search-meilisearch/composer.json",
+      "owner": "composer.json",
+      "sha256": "f3933c72d2bb49cfa1725ca1f7191f0affe7edbb3b3d6bfe74a345c1c7276e6d",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/tasks/composer.json",
+      "owner": "composer.json",
+      "sha256": "adfa0ea885b3f38ad7edf9c6b88e940950c40e07eb639a27d79c1840eb221c6d",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/tasks-workflow/composer.json",
+      "owner": "composer.json",
+      "sha256": "8e4771e65237fcb8315158c58813c7e2057ca5ebd57b3b5c7eca80321d5305e2",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/tenancy/composer.json",
+      "owner": "composer.json",
+      "sha256": "eb66cc9c77e284059d901aa263bad62957767e2e312e7344aa47679649b3f1aa",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/tools/composer.json",
+      "owner": "composer.json",
+      "sha256": "082dc851fbba1bc72d123569f90408461b07ae709867d1c6678af3b795e0be87",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/transfer/composer.json",
+      "owner": "composer.json",
+      "sha256": "7f01457b5072a3fee457c73d7f849a910fb3cbbcd456d5b725c14edc1fb7bcc0",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/wakeup/composer.json",
+      "owner": "composer.json",
+      "sha256": "f0e1f13902d3e8bd95d52d0227a36e7108111b3674e0e1cbacaea93e9f931c1b",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/webhooks/composer.json",
+      "owner": "composer.json",
+      "sha256": "93f3898a1eb02282637d22b7d820bfe90e2ea3dc8b35623f2614dfa879e4da46",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "packages/workflow/composer.json",
+      "owner": "composer.json",
+      "sha256": "13f40a6accffc40b0a997c1307abdc15a1da3def4c0107d2803fe3ff3b5b6a01",
+      "url": "packages/*"
+    },
+    {
+      "manifest": "products/flex-crm/composer.json",
+      "owner": "composer.json",
+      "sha256": "e2c4c7f0d8d21022d29d971c8387dc0cfd5aa8500d7b9d116b725532bcb2a56b",
+      "url": "products/*"
+    }
+  ],
+  "status": "GREEN"
+}

@@ -1,0 +1,24 @@
+{
+  "verdict": "FINDINGS:1",
+  "reviewer": "codex/gpt-6-astra/high",
+  "session": "01a117f9-85b5-7eb1-ba90-8f4a0eda7465",
+  "source_sha": "e2dc908194cea0a13108b88d5b02242d2684a763",
+  "resolved": [
+    "F1",
+    "F2",
+    "dependency/audit/workflow/binding blockers"
+  ],
+  "findings": [
+    {
+      "id": "F3",
+      "owner": "P09.4",
+      "title": "Mandatory Rector gate red",
+      "evidence": "hosted/37672026959/job-112965922624.log:1642-2218",
+      "impact": "Ordinary CI failure29success1failure3D133skips;12Rector diagnostics,exit2",
+      "log_sha256": "9ff1b6f0f2e52ef5f8e48c55e1d9cb6b778d6ab6eb06900e8bc87e37da7c3eea"
+    }
+  ],
+  "product_hashes_identical": true,
+  "marker_absent": true,
+  "hosted_core_directory": "362passed+4suppressed optional .env warning cases/1363assertions,job success; not warning-free"
+}

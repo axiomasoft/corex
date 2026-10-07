@@ -1,29 +1,29 @@
 {
   "$schema": "urn:swissknifeman:task:plan:document:v1",
   "id": "artifacts-P09.8-review-verdict",
-  "title": "P09.8 independent review verdict",
+  "title": "P09.8 final native independent GREEN verdict",
   "sections": [
     {
       "id": "verdict",
-      "title": "Independent code verdict",
-      "text": "review:codex/gpt-6-astra FINDINGS:2. Actual reviewer codex/gpt-6-astra/high; native session01a1175f-c10c-78c1-baff-26e5fb2fa45f. Supersedes historical GREEN issued before exact-HEAD hosted CI completed. F1 P2: missing root/standalone PgTestCase/pg-group integration for Transfer and Search causes three PG18 failures and eight failures in each PHP8.4/8.5 hermetic root job (six Transfer SQL,one Transfer resume,one Search phrase); owning repairs P09.13+P09.14. F2 P2: CRM coverage94.3%<unchanged95% after71passing tests/340assertions, with new Value boundary paths uncovered; owning repair P09.3. P09.8 remains unaccepted."
+      "title": "Current independent verdict",
+      "text": "review:codex/gpt-6-astra GREEN. Actual native codex/gpt-6-astra/high, native provider openai, session 01a117f9-85b5-7eb1-ba90-8f4a0eda7465; repair/integrator codex/gpt-6.1-sol/high session01a117f0-0c4f-7fb3-9855-cea7eb7f538f. Final source 4174e3e95d5c23097df9ef293e3603186733ce56. All confirmed F1/F2/F3 and recurring PG18 APT bootstrap blockers closed. Previous FINDINGS:2, FINDINGS:1 and pending-CI history retained as historical evidence; no premature GREEN reused."
     },
     {
       "id": "source",
-      "title": "Source and preservation",
-      "text": "Base f0faead86201935c71cd0c2d8731e2e41bcc26e5 → HEAD 1bfcb0324197c9e3ae8a050dea2b8f1d84b7f6dc; non-plan diff SHA256 25eead518d70bc5afdb9e1de625f2ee2bd79a5bcc34a0f1f8dbdc234b313f970. All 3119 manifest paths unchanged; before/after manifest SHA256 ee40bdeca142536a2e497e2a33f84ec7f4632b340a59c2df3599dfdafb5bfde0. Source fingerprints and native identity retained under artifacts/P09.8-review/."
+      "title": "Read-only source integrity",
+      "text": "3452 regular product files and six tracked directory symlink targets identical before/after native read-only recheck; manifest SHA256 ef35e425204ff5e96e7aa3020eff1befd43e20e40943322d10125e2ff867f23a. Product worktree clean; scripts/.plan-close-deferred absent. No maintained packages/products src, runtime require fields, API/SPI/schema changed across repair chain. Report and before/after fingerprints: artifacts/P09-repair/."
     },
     {
       "id": "evidence",
-      "title": "Review evidence and limits",
-      "text": "Consumed specs + retained diff + completed checks only, under D125/D132/D133. Verified 97 log hashes, 23 current source bindings, nine clean JUnit files, and 514 Octane source/lock/raw bindings. No test, mutation, probe, self-test, replay, release/candidate/SBOM/DoD27 or publishing executions. Raw detailed review: artifacts/P09.8-review/review-report.md. Context-budget defect recorded independently. Hosted CI remains integrator-owned; the native reviewer did not finish or commit the item. Bounded live-CI follow-up consumed hosted job112898736741 and112898736744 logs; current FINDINGS:2 supersedes the earlier pending-CI GREEN, preserved in artifacts/P09.8-review/review-report-pending-ci-historical.md. Concrete paths/triggers/impact/repair ownership and raw hashes: findings.json and review-report.md. No product fixes or local suites executed."
+      "title": "Ordinary acceptance and explicit limits",
+      "text": "Exact-source ordinary CI run37680630750 https://github.com/axiomik/corex-mirror/actions/runs/37680630750, completed/success,33jobs via per_page100:30success3D133intentional mutation skips;32raw ledger entries verified including30successfuljoblogs. CRM92/433 coverage95.8%>=95%, root87.1%13311/15277>=80%, sourceaudits25rootsGREEN, dependency/analysis/BC/API/Golden/architecture/security/Octane ordinary jobsGREEN. Tenancy actualpg_dump18.6 and626passed/2301assertions+6existingconditionalservice/SDKtestskips; no realSDKexecutionclaim. Coredirectory362passed+4optional.envwarningcases/1363assertions, notwarning-free. No mutation execution/MSI or release/RC/SBOM/DoD27/version/tag/publication qualification. Fresh native detailed verdict independent-review-report.md; integrator owns finish/commits and post-bookkeeping V5 lineage equality."
     }
   ],
   "applies_to": [
     "P09.8"
   ],
   "provenance": {
-    "path": "artifacts/P09.8-review/review-report.md",
-    "sha256": "6e85cf4dc931924defadf40ce44d3204aaa238e158b9f297e92fb061c94d372a"
+    "path": "artifacts/P09-repair/independent-review-report.md",
+    "sha256": "b952db3b338baf985b6eef9eaf10dc56cf83ae1c2c886c90cff82f0b464a5180"
   }
 }

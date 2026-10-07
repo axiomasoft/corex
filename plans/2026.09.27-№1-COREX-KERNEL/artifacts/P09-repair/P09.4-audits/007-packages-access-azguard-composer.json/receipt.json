@@ -1,0 +1,9 @@
+{
+  "classification": "source",
+  "commands": [],
+  "error": "manifest/lock content-hash mismatch: /home/vostrikov/projects/packages/corex/packages/access-azguard/composer.json",
+  "manifest": "packages/access-azguard/composer.json",
+  "manifest_sha256": "7745988ee7e2bca03068102679b0c682bf035ab7b50ed3077d1e777f2aebcf22",
+  "name": "axiomasoft/corex-access-azguard",
+  "status": "RED"
+}

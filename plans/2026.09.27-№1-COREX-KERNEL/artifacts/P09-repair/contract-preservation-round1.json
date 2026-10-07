@@ -1,0 +1,40 @@
+{
+  "base": "1bfcb0324197c9e3ae8a050dea2b8f1d84b7f6dc",
+  "candidate": "e2dc908194cea0a13108b88d5b02242d2684a763",
+  "changed_product_paths": [
+    ".github/workflows/ci.yml",
+    "composer.json",
+    "composer.lock",
+    "packages/access/composer.json",
+    "packages/core/composer.json",
+    "packages/search-meilisearch/composer.json",
+    "packages/search-meilisearch/tests/Feature/IndexLifecycleTest.php",
+    "packages/search-meilisearch/tests/Feature/MeilisearchSearchProviderTest.php",
+    "packages/search-meilisearch/tests/Pest.php",
+    "packages/search/tests/Pest.php",
+    "packages/search/tests/Pg/PostgresSearchProviderTest.php",
+    "packages/transfer/tests/Pest.php",
+    "packages/transfer/tests/Pg/ReleaseResumeTest.php",
+    "packages/transfer/tests/Pg/SqlTransferExecutorTest.php",
+    "phpstan-tests-lint.neon",
+    "products/flex-crm/tests/Feature/ValueBoundaryTest.php"
+  ],
+  "manifest_runtime_requirements": [
+    {
+      "manifest": "packages/access/composer.json",
+      "production_requirements_identical": true,
+      "old_require_sha256": "b03ea9fb601d290571df9d9e1c5bf8fae58cc6d10096361fa8c6860bb2261d85"
+    },
+    {
+      "manifest": "packages/core/composer.json",
+      "production_requirements_identical": true,
+      "old_require_sha256": "2bc3792aa11a2849d11c669a9579c381d98917e95296aa957a5af6e736324f80"
+    },
+    {
+      "manifest": "packages/search-meilisearch/composer.json",
+      "production_requirements_identical": true,
+      "old_require_sha256": "91b7554c87f229b73b403c59ca60ec7c59c17d64aa30985db0b52e6d3be60486"
+    }
+  ],
+  "maintained_production_php_api_spi_schema_unchanged": true
+}

@@ -1,0 +1,9 @@
+{
+  "classification": "source",
+  "commands": [],
+  "error": "manifest/lock content-hash mismatch: /home/vostrikov/projects/packages/corex/packages/panels/composer.json",
+  "manifest": "packages/panels/composer.json",
+  "manifest_sha256": "5fde68209cfb3b1c760f5ed87b718a749ea1903049d2e6864fda7435f06426a3",
+  "name": "axiomasoft/corex-panels",
+  "status": "RED"
+}

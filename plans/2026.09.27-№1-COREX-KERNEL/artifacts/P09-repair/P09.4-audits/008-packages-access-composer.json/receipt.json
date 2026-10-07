@@ -1,0 +1,9 @@
+{
+  "classification": "source",
+  "commands": [],
+  "error": "manifest/lock content-hash mismatch: /home/vostrikov/projects/packages/corex/packages/access/composer.json",
+  "manifest": "packages/access/composer.json",
+  "manifest_sha256": "44a8b389d4c66de908d59a8f3ce5ea664285a91aacc284c6dd4004e41fddd870",
+  "name": "axiomasoft/corex-access",
+  "status": "RED"
+}

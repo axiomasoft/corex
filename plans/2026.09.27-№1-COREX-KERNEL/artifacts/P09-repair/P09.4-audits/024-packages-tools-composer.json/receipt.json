@@ -1,0 +1,9 @@
+{
+  "classification": "source",
+  "commands": [],
+  "error": "manifest/lock content-hash mismatch: /home/vostrikov/projects/packages/corex/packages/tools/composer.json",
+  "manifest": "packages/tools/composer.json",
+  "manifest_sha256": "082dc851fbba1bc72d123569f90408461b07ae709867d1c6678af3b795e0be87",
+  "name": "axiomasoft/corex-tools",
+  "status": "RED"
+}

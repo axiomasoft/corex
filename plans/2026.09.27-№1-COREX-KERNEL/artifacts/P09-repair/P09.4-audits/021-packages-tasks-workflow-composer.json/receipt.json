@@ -1,0 +1,9 @@
+{
+  "classification": "source",
+  "commands": [],
+  "error": "manifest/lock content-hash mismatch: /home/vostrikov/projects/packages/corex/packages/tasks-workflow/composer.json",
+  "manifest": "packages/tasks-workflow/composer.json",
+  "manifest_sha256": "8e4771e65237fcb8315158c58813c7e2057ca5ebd57b3b5c7eca80321d5305e2",
+  "name": "axiomasoft/corex-tasks-workflow",
+  "status": "RED"
+}

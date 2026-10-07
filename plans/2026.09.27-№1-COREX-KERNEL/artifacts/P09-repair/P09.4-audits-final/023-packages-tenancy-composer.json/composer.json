@@ -1,0 +1,176 @@
+{
+  "authors": [
+    {
+      "email": "dv.vostrikov@gmail.com",
+      "name": "Dmitry Vostrikov"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "CoreX\\Tenancy\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "CoreX\\Tenancy\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    },
+    "process-timeout": 900
+  },
+  "description": "CoreX physical DB-per-account tenancy — root-schema control plane (B-11, D13).",
+  "extra": {
+    "branch-alias": {
+      "dev-main": "1.0.x-dev"
+    },
+    "corex": {
+      "package-type": "capability",
+      "schema-version": 1,
+      "stability": "stable"
+    },
+    "laravel": {
+      "providers": [
+        "CoreX\\Tenancy\\TenancyServiceProvider"
+      ]
+    },
+    "phpstan": {
+      "includes": [
+        "extension.neon"
+      ]
+    }
+  },
+  "keywords": [
+    "laravel",
+    "multi-tenancy",
+    "saas"
+  ],
+  "license": "MIT",
+  "minimum-stability": "stable",
+  "name": "axiomasoft/corex-tenancy",
+  "prefer-stable": true,
+  "repositories": [
+    {
+      "options": {
+        "symlink": false
+      },
+      "type": "path",
+      "url": "/tmp/corex-p09-audit-source/packages/tenancy/../core"
+    },
+    {
+      "options": {
+        "symlink": false
+      },
+      "type": "path",
+      "url": "/tmp/corex-p09-audit-source/packages/tenancy/../wakeup"
+    },
+    {
+      "options": {
+        "symlink": false,
+        "versions": {
+          "axiomasoft/corex-infection-pest-adapter": "0.1.0"
+        }
+      },
+      "type": "path",
+      "url": "/tmp/corex-p09-audit-source/scripts/quality/infection-pest-adapter"
+    },
+    {
+      "options": {
+        "symlink": false
+      },
+      "type": "path",
+      "url": "/tmp/corex-p09-audit-source/packages/*"
+    },
+    {
+      "options": {
+        "symlink": false
+      },
+      "type": "path",
+      "url": "/tmp/corex-p09-audit-source/products/*"
+    },
+    {
+      "name": "azguard",
+      "package": {
+        "autoload": {
+          "psr-4": {
+            "AzGuard\\": "packages/core/src/"
+          }
+        },
+        "extra": {
+          "laravel": {
+            "providers": [
+              "AzGuard\\AzGuardServiceProvider"
+            ]
+          }
+        },
+        "name": "axioma-studio/azguard-core",
+        "require": {
+          "illuminate/console": "^11.0|^12.0|^13.0",
+          "illuminate/contracts": "^11.0|^12.0|^13.0",
+          "illuminate/database": "^11.0|^12.0|^13.0",
+          "illuminate/filesystem": "^11.0|^12.0|^13.0",
+          "illuminate/http": "^11.0|^12.0|^13.0",
+          "illuminate/queue": "^11.0|^12.0|^13.0",
+          "illuminate/routing": "^11.0|^12.0|^13.0",
+          "illuminate/support": "^11.0|^12.0|^13.0",
+          "php": "^8.3"
+        },
+        "source": {
+          "reference": "253cbf4cce0226545cd96ca8c6bcbefe329b1403",
+          "type": "git",
+          "url": "https://github.com/axiomasoft/azguard-private.git"
+        },
+        "version": "0.3.0"
+      },
+      "type": "package"
+    }
+  ],
+  "require": {
+    "axiomasoft/corex": "^1.0@dev",
+    "ext-ctype": "*",
+    "ext-filter": "*",
+    "ext-mbstring": "*",
+    "ext-openssl": "*",
+    "ext-session": "*",
+    "ext-sodium": "*",
+    "firebase/php-jwt": "^7.1",
+    "laravel/framework": "^13.0",
+    "nesbot/carbon": "^3.0",
+    "php": "^8.4",
+    "psr/clock": "^1.0",
+    "psr/log": "^3.0",
+    "symfony/http-foundation": "^7.2|^8.0"
+  },
+  "require-dev": {
+    "axiomasoft/corex-wakeup": "^1.0@dev",
+    "ext-pdo": "*",
+    "ext-redis": "*",
+    "ext-tokenizer": "*",
+    "larastan/larastan": "^3.12",
+    "laravel/pint": "^1.32",
+    "league/flysystem-aws-s3-v3": "3.35.3",
+    "mockery/mockery": "^1.6",
+    "nikic/php-parser": "^5.4",
+    "orchestra/testbench": "^11.3",
+    "orchestra/testbench-core": "^11.5",
+    "pestphp/pest": "^5.2",
+    "phpstan/phpstan": "^2.2.16",
+    "symfony/console": "^7.2|^8.0",
+    "symfony/http-kernel": "^7.2|^8.0",
+    "symfony/process": "^7.2|^8.0"
+  },
+  "scripts": {
+    "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/tenancy/phpstan.neon --memory-limit=2G --no-progress",
+    "lint": "pint",
+    "lint:check": "pint --test",
+    "test": "pest"
+  },
+  "suggest": {
+    "axiomasoft/corex-wakeup": "Install to opt into root_registry wakeup hints; boxed and local_sweep profiles do not require it.",
+    "ext-redis": "Optional Redis account menu cache integration; its conformance tests require this extension.",
+    "league/flysystem-aws-s3-v3": "Install the qualified native S3 adapter to explicitly construct optional ObjectTenantStorage."
+  },
+  "type": "library"
+}

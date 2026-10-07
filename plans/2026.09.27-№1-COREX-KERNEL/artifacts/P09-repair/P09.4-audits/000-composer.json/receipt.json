@@ -1,0 +1,25 @@
+{
+  "classification": "source",
+  "commands": [
+    {
+      "exit": 0,
+      "output": "validate.json",
+      "role": "validate",
+      "sha256": "a78ebc47a93d26f4a7048e1072d543d25fb7d8c8b0836d41ba7951482e16f573"
+    },
+    {
+      "exit": 0,
+      "output": "audit.json",
+      "role": "audit",
+      "sha256": "e77dfaa21b34f05746832bbf4511e14e1eae837cc2bc478f0af02cca6cf340d2"
+    }
+  ],
+  "effective_manifest_sha256": "aef8d6a690d59fdc422ff1a619d07c5a091a9acfd6f3b931f944b61c225bb350",
+  "lock_kind": "source",
+  "lock_sha256": "46f9aa7f0833dd75e3317c9fbb3d33250bfc16c1bd345822869e2dd6def67d6b",
+  "manifest": "composer.json",
+  "manifest_sha256": "aef8d6a690d59fdc422ff1a619d07c5a091a9acfd6f3b931f944b61c225bb350",
+  "name": "corex/monorepo",
+  "source_lock_sha256": "46f9aa7f0833dd75e3317c9fbb3d33250bfc16c1bd345822869e2dd6def67d6b",
+  "status": "GREEN"
+}

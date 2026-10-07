@@ -1,0 +1,71 @@
+{
+    "name": "axiomasoft/corex-intl",
+    "description": "Typed locale, money/rate snapshots, and offline geography reference utilities for CoreX.",
+    "type": "corex-module",
+    "license": "MIT",
+    "require": {
+        "ext-intl": "*",
+        "ext-mbstring": "*",
+        "php": "^8.4",
+        "axiomasoft/corex": "^1.0@dev",
+        "brick/math": "^0.14|^0.15",
+        "brick/money": "^0.9 || ^0.10",
+        "illuminate/contracts": "^13.0",
+        "illuminate/database": "^13.0",
+        "illuminate/support": "^13.0",
+        "psr/clock": "^1.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.12",
+        "laravel/pint": "^1.32",
+        "orchestra/testbench": "^11.3",
+        "orchestra/testbench-core": "^11.5",
+        "pestphp/pest": "^5.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "CoreX\\Intl\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CoreX\\Intl\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "corex": {
+            "schema-version": 1,
+            "module": "CoreX\\Intl\\IntlModule",
+            "package-type": "capability",
+            "stability": "stable"
+        },
+        "laravel": {
+            "providers": [
+                "CoreX\\Intl\\IntlServiceProvider"
+            ]
+        },
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../core"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "scripts": {
+        "test": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg",
+        "test:pg": "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=pg",
+        "test:coverage": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/intl/phpstan.neon --memory-limit=2G --no-progress",
+        "lint:check": "../../vendor/bin/pint --test"
+    }
+}
