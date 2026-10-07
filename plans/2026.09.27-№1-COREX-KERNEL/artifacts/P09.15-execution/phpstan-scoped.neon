@@ -1,0 +1,18 @@
+includes:
+    - /home/vostrikov/projects/packages/corex/packages/core/extension.neon
+    - /home/vostrikov/projects/packages/corex/vendor/pestphp/pest/extension.neon
+
+parameters:
+    level: 0
+    tmpDir: /home/vostrikov/projects/packages/corex/build/phpstan-p0915-tests
+    paths:
+        - /home/vostrikov/projects/packages/corex/packages/core/tests/Feature/ReleaseContextLifecycleTest.php
+        - /home/vostrikov/projects/packages/corex/packages/core/tests/Release/OctaneLifecycleTest.php
+        - /home/vostrikov/projects/packages/corex/packages/core/tests/Release/octane-consumer/LifecycleServiceProvider.php
+        - /home/vostrikov/projects/packages/corex/packages/core/tests/Release/octane-consumer/bootstrap/app.php
+        - /home/vostrikov/projects/packages/corex/packages/core/tests/Release/octane-consumer/config/app.php
+        - /home/vostrikov/projects/packages/corex/packages/core/tests/Release/octane-consumer/config/logging.php
+        - /home/vostrikov/projects/packages/corex/packages/core/tests/Release/octane-consumer/config/database.php
+        - /home/vostrikov/projects/packages/corex/packages/core/tests/Release/octane-consumer/config/cache.php
+    scanDirectories:
+        - /home/vostrikov/projects/packages/corex/packages/core/tests/Release/octane-consumer/vendor/laravel/octane/src

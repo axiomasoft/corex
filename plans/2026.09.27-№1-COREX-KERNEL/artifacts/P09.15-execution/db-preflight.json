@@ -1,0 +1,40 @@
+{
+  "mode": "host",
+  "host": "127.0.0.1",
+  "port": 5434,
+  "database": "corex_p0915_queue_bc5caf5a_test",
+  "suffix_guard": true,
+  "migrations": "QueueTenantContextTest beforeEach applies tenancy root SchemaSets on this disposable database",
+  "container": {
+    "Command": "\"docker-entrypoint.s\u2026\"",
+    "CreatedAt": "2026-07-15 08:28:39 +0300 MSK",
+    "Engine": "",
+    "ExitCode": 0,
+    "Health": "healthy",
+    "ID": "fa633b7899c0",
+    "Image": "postgres:16-alpine",
+    "Labels": "com.docker.compose.config-hash=9a898ebb693512775e331be49e54bb610f4a9262446480b3bf48db95d5dd4bb9,com.docker.compose.container-number=1,com.docker.compose.image=sha256:de3a4eab8fdfa507ea92aac488b916b08089e515db49b055fe71dfa271ba3a28,com.docker.compose.oneoff=False,com.docker.compose.project.config_files=/home/vostrikov/projects/packages/corex/docker-compose.yml,com.docker.compose.project.working_dir=/home/vostrikov/projects/packages/corex,com.docker.compose.service=pgsql,com.docker.compose.depends_on=,com.docker.compose.project=corex,com.docker.compose.version=5.3.1",
+    "LocalVolumes": "1",
+    "Mounts": "corex_corex_pg\u2026",
+    "Name": "corex_pgsql_test",
+    "Names": "corex_pgsql_test",
+    "Networks": "corex_default",
+    "Ports": "127.0.0.1:5434->5432/tcp",
+    "Project": "corex",
+    "Publishers": [
+      {
+        "URL": "127.0.0.1",
+        "TargetPort": 5432,
+        "PublishedPort": 5434,
+        "Protocol": "tcp"
+      }
+    ],
+    "RunningFor": "2 months ago",
+    "Service": "pgsql",
+    "Size": "0B",
+    "State": "running",
+    "Status": "Up 9 hours (healthy)"
+  },
+  "exists": true,
+  "owned_database_removed": true
+}

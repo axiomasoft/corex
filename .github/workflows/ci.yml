@@ -69,6 +69,40 @@ jobs:
       - name: Configuration reference
         run: composer configuration-reference
 
+  octane-lifecycle:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.4', '8.5']
+    name: Octane source lifecycle · PHP ${{ matrix.php }} · Laravel 13
+    env:
+      OCTANE_PHP: ${{ matrix.php }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
+          coverage: none
+
+      - name: Install locked Octane source consumer
+        run: composer --working-dir=packages/core/tests/Release/octane-consumer install --prefer-dist --no-interaction --no-progress --no-scripts
+
+      - name: Audit Octane consumer lock
+        run: composer --working-dir=packages/core/tests/Release/octane-consumer audit --locked
+
+      - name: Receipt integrity controls
+        run: python3 -m unittest discover -s scripts/quality/tests -p test_octane_proof.py
+
+      - name: Real Octane Worker handlers
+        run: python3 scripts/quality/octane-proof.py --source-root . --matrix "$OCTANE_PHP" --evidence-dir build/quality/octane
+
   tests-pg:
     permissions:
       contents: read

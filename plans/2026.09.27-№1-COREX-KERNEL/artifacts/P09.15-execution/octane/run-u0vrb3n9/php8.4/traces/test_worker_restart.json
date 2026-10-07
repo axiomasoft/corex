@@ -1,0 +1,24 @@
+{
+    "case": "test_worker_restart",
+    "executed": true,
+    "implementation": "Laravel\\Octane\\Worker",
+    "execution_scope": "real-php-worker-handler",
+    "pid": 1803732,
+    "handles": 2,
+    "events": {
+        "Laravel\\Octane\\Events\\WorkerStarting": 2,
+        "Laravel\\Octane\\Events\\RequestReceived": 2,
+        "Laravel\\Octane\\Events\\RequestHandled": 2,
+        "Laravel\\Octane\\Events\\RequestTerminated": 2,
+        "Laravel\\Octane\\Events\\WorkerStopping": 2
+    },
+    "tenants": [
+        "0198a000-0000-7000-8000-00000000000a",
+        "0198a000-0000-7000-8000-00000000000b"
+    ],
+    "statuses": [
+        200,
+        200
+    ],
+    "errors": []
+}

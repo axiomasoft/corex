@@ -1,0 +1,5 @@
+{
+  "cmd": "PGSQL_DATABASE=corex_p0915_queue_bc5caf5a_test PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/tenancy/tests --configuration=packages/tenancy/phpunit.xml --bootstrap=vendor/autoload.php packages/tenancy/tests/Feature/QueueTenantContextTest.php --group=pg '--filter=worker processes job A then job B|real nested sync jobs restore|job whose account is missing' --log-junit=build/quality/P09.15/queue-tenancy.xml",
+  "exit_code": 0,
+  "elapsed_seconds": 1.817
+}

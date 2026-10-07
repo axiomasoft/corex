@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="Packages\tenancy\tests\Feature\QueueTenantContextTest" file="packages/tenancy/tests/Feature/QueueTenantContextTest.php" tests="3" assertions="21" errors="0" failures="0" skipped="0" time="1.684925">
+    <testcase name="it a job whose account is missing fails without falling back to the previous database" file="packages/tenancy/tests/Feature/QueueTenantContextTest.php::it a job whose account is missing fails without falling back to the previous database" class="Packages\tenancy\tests\Feature\QueueTenantContextTest" classname="Packages.tenancy.tests.Feature.QueueTenantContextTest" assertions="4" time="0.507982"/>
+    <testcase name="it real nested sync jobs restore the outer account and workspace after success and after failure" file="packages/tenancy/tests/Feature/QueueTenantContextTest.php::it real nested sync jobs restore the outer account and workspace after success and after failure" class="Packages\tenancy\tests\Feature\QueueTenantContextTest" classname="Packages.tenancy.tests.Feature.QueueTenantContextTest" assertions="12" time="0.583526"/>
+    <testcase name="it a worker processes job A then job B in one process: each sees its own account and database, central in between" file="packages/tenancy/tests/Feature/QueueTenantContextTest.php::it a worker processes job A then job B in one process: each sees its own account and database, central in between" class="Packages\tenancy\tests\Feature\QueueTenantContextTest" classname="Packages.tenancy.tests.Feature.QueueTenantContextTest" assertions="5" time="0.593417"/>
+  </testsuite>
+</testsuites>
