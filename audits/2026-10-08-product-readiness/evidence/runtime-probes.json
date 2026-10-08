@@ -1,0 +1,44 @@
+{
+    "installed_manifest_shape": [
+        {
+            "input": "null",
+            "modules": 0,
+            "packages": 0,
+            "code_versions": 0,
+            "exception": null
+        },
+        {
+            "input": "\"invalid-root\"",
+            "modules": 0,
+            "packages": 0,
+            "code_versions": 0,
+            "exception": null
+        },
+        {
+            "input": "{\"packages\":null}",
+            "modules": 0,
+            "packages": 0,
+            "code_versions": 0,
+            "exception": null
+        },
+        {
+            "input": "{\"packages\":\"invalid-list\"}",
+            "modules": 0,
+            "packages": 0,
+            "code_versions": 0,
+            "exception": null
+        }
+    ],
+    "principal_budget_collision": {
+        "principals": [
+            "user:5",
+            "agent:5"
+        ],
+        "captured_actor_ids": [
+            "5",
+            "5"
+        ],
+        "actor_bucket_keys_equal": true,
+        "uses_sqlite_memory_only": true
+    }
+}

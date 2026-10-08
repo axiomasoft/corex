@@ -1,0 +1,25 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\CompositionBindingsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit keeps Provisioning register bindings on the measured key, concre[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps Identity register bindings on the measured key, concrete a[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit binds the identity password rehash port to the tenancy table own[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit omits Wakeup bindings when driver is local_sweep[39m[90m                 [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps Workspace register bindings on the measured key, concrete[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit binds Wakeup when driver is root_registry[39m[90m                        [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps DomainTrust register bindings on the measured key, concret[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit registers composition modules through PackageRegistrar[39m[90m           [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit binds Authentication when oidc is enabled[39m[90m                        [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps Database register bindings on the measured key, concrete a[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps Runtime register bindings on the measured key, concrete an[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit omits Authentication bindings when oidc is disabled[39m[90m              [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\WakeupRoutingTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit keeps the earliest root hint and increments its revision on ever[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit reclaims expired root leases and rebuilds lost hints in bounded[39m[90m… [39m [90m0.58s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit does not let a stale root claimant delete a concurrently refresh[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit runs valid root sweeps and rejects invalid limits before doing r[39m[90m…[39m [90m0.23s[39m  
+
+  [90mTests:[39m    [32;1m16 passed[39;22m[90m (218 assertions)[39m
+  [90mDuration:[39m [39m2.06s[39m
+  [90mRandom Order Seed:[39m [39m1791462007[39m
+

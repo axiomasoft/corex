@@ -1,0 +1,37 @@
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Media\Tests\ConfigReportSectionTest[39m
+  [32;1m✓[39;22m[90m [39m[90msection registers in report order and redacts its secrets[39m[90m           [39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Conversion\ConversionEdgeCasesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit does not advertise a conversion when no matching driver is insta[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps malformed source conversions pending for durable retry ins[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects output facts that exceed the immutable conversion profil[39m[90m…[39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Conversion\ConversionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit creates one bounded GD thumbnail for a file/profile/version[39m[90m      [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit purges a published conversion together with its deleting origina[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\MediaLifecycleEdgeCasesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit keeps staged uploads private and schedules their purge when stor[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps attachment operations idempotent and rejects unavailable f[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit marks a failed purge unknown instead of publishing a false delet[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed trusted media inputs before creating storage k[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects an unregistered purpose and a server-detected executable[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rechecks policy before publishing uploaded bytes and when an aut[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit publishes media as a standalone CoreX module[39m[90m                     [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit reports an unavailable storage stream instead of returning a non[39m[90m…[39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\MediaLifecycleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit stores, reads, replays, attaches, and detaches private media[39m[90m     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies all operations until a consumer policy explicitly allows[39m[90m… [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a replay key with a different content digest[39m[90m             [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses deletion while an authoritative relation exists and purg[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\MediaOptionsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects a non-positive max upload bytes limit with (0)[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects a non-positive max upload bytes limit with (-1)[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects an empty allowed mime type list[39m
+
+  [90mTests:[39m    [32;1m21 passed[39;22m[90m (61 assertions)[39m
+  [90mDuration:[39m [39m0.50s[39m
+
