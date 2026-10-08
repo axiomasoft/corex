@@ -44,9 +44,9 @@ final readonly class MaterializationStore
             cursor: $receipt->cursor,
             created: 0,
             noop: 0,
-            conflict: 0,
+            conflict: $receipt->conflict,
             retired: $receipt->retired,
-            unknown: false,
+            unknown: $receipt->unknown,
         );
     }
 

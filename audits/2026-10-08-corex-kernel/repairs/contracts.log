@@ -1,0 +1,2 @@
+contract-guard: no resources/contracts/php-api.json changes in 4174e3e95d5c23097df9ef293e3603186733ce56..HEAD — OK
+> bash scripts/contract-guard.sh

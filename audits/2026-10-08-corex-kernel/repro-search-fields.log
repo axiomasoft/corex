@@ -1,0 +1,13 @@
+{
+    "case": "search-fields",
+    "fields_seen_by_authorizer": [
+        []
+    ],
+    "returned_records": [
+        {
+            "id": "worker-1",
+            "name": "Example",
+            "salary": 100000
+        }
+    ]
+}

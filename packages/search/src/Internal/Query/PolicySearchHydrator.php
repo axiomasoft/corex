@@ -34,18 +34,23 @@ final readonly class PolicySearchHydrator implements SearchHydrator
             if (! $current instanceof CurrentSearchRecord
                 || $current->record->entity !== $candidate->record->entity
                 || $current->record->id !== $candidate->record->id
-                || ! hash_equals($schema->schemaHash, $current->schemaHash)
-                || ! $this->authorizer->authorize(
-                    scope: $scope,
-                    entity: $current->record->entity,
-                    subjectId: $current->record->id,
-                    fields: [],
-                    action: 'search.hydrate',
-                )->allowed) {
+                || ! hash_equals($schema->schemaHash, $current->schemaHash)) {
                 continue;
             }
 
-            $records[] = array_intersect_key($current->fields, array_flip($schema->resultColumns));
+            $projection = array_intersect_key($current->fields, array_flip($schema->resultColumns));
+
+            if (! $this->authorizer->authorize(
+                scope: $scope,
+                entity: $current->record->entity,
+                subjectId: $current->record->id,
+                fields: array_keys($projection),
+                action: 'search.hydrate',
+            )->allowed) {
+                continue;
+            }
+
+            $records[] = $projection;
         }
 
         return new SearchPage(records: $records, nextAfterId: $candidates->nextAfterId, truncated: $candidates->truncated);

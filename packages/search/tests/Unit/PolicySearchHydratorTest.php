@@ -52,3 +52,36 @@ it('drops deleted, stale and policy-denied candidates before returning schema-ap
         ->and($page->nextAfterId)->toBe('v1.cursor')
         ->and($page->truncated)->toBeTrue();
 });
+
+it('authorizes the returned field projection for the current actor', function (): void {
+    $schema = new SearchSnapshot(
+        entity: 'employees', schemaHash: str_repeat('a', 64), table: 'employees', idColumn: 'id', searchableColumns: ['name'], resultColumns: ['id', 'name', 'salary'],
+    );
+    $record = new RecordRef(entity: 'employees', id: 'employee-1');
+    $seen = [];
+    $hydrator = new PolicySearchHydrator(
+        static fn (): CurrentSearchRecord => new CurrentSearchRecord(
+            record: $record, schemaHash: $schema->schemaHash, revision: str_repeat('d', 64),
+            fields: ['id' => 'employee-1', 'name' => 'Alice', 'salary' => 100000, 'private_note' => 'hidden'],
+        ),
+        new CallableDataScopeAuthorizer(
+            static function (DataScope $scope, string $entity, string $subjectId, array $fields) use (&$seen): bool {
+                $seen[] = $fields;
+
+                return $scope->actorId === 'payroll' || ! in_array('salary', $fields, true);
+            },
+        ),
+    );
+    $pages = [];
+    foreach (['employee', 'payroll'] as $actor) {
+        $scope = DataScope::fromTenantContext(
+            context: new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false),
+            connectionIdentity: 'pgsql:account-a', actorId: $actor, restoreEpoch: str_repeat('b', 64),
+        );
+        $pages[] = $hydrator->authorize($scope, new CandidatePage(candidates: [new Candidate($record)], nextAfterId: null, truncated: false), $schema)->records;
+    }
+
+    expect($pages[0])->toBe([])
+        ->and($pages[1])->toBe([['id' => 'employee-1', 'name' => 'Alice', 'salary' => 100000]])
+        ->and($seen)->toBe([['id', 'name', 'salary'], ['id', 'name', 'salary']]);
+});

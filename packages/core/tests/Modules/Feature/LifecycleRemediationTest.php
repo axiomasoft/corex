@@ -3,6 +3,14 @@
 declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Database\Contracts\SchemaSetProvider;
+use CoreX\Database\Contracts\SchemaSets;
+use CoreX\Database\Data\SchemaSet;
+use CoreX\Database\Enums\SchemaLifecycle;
+use CoreX\Database\Enums\SchemaScope;
+use CoreX\Database\Internal\CoreSchemaSets;
+use CoreX\Database\Internal\TaggedSchemaSets;
 use CoreX\Features\Contracts\FeatureFlags;
 use CoreX\Features\Internal\DatabaseFeatureFlags;
 use CoreX\Modules\Contracts\ModuleActivationGate;
@@ -171,4 +179,71 @@ it('uses the current physical default when lifecycle connection is unpinned', fu
     $lifecycle->enable('corex/stub-feature-flag');
     expect(DB::table('sys_feature_flags')->where('key', 'sff.beta_mode')->exists())->toBeTrue()
         ->and(DB::getDefaultConnection())->toBe('pgsql');
+});
+
+it('preserves template module ownership through clone enable purge and repair', function (): void {
+    $path = __DIR__.'/../../../../../tests/Stubs/Lifecycle/migrations/base';
+    $set = new SchemaSet(
+        package: 'corex/stub-base', name: 'tenant', scope: SchemaScope::Tenant,
+        path: $path, version: 1, lifecycle: SchemaLifecycle::Module,
+    );
+    $provider = new class($set) implements SchemaSetProvider
+    {
+        public function __construct(private SchemaSet $set) {}
+
+        public function sets(): array
+        {
+            return [$this->set];
+        }
+    };
+    app()->instance(SchemaSets::class, new TaggedSchemaSets([new CoreSchemaSets, $provider]));
+    app()->forgetInstance(SchemaMigrator::class);
+    $migrator = resolve(SchemaMigrator::class);
+    $template = 'corex_module_template_'.bin2hex(random_bytes(6)).'_test';
+    $clone = 'corex_template_clone_'.bin2hex(random_bytes(6)).'_test';
+    config(['database.connections.clone_admin' => [...config('database.connections.pgsql'), 'database' => 'postgres']]);
+    $admin = DB::connection('clone_admin');
+    $admin->statement('CREATE DATABASE "'.$template.'"');
+    config(['database.connections.module_template' => [...config('database.connections.pgsql'), 'database' => $template]]);
+
+    try {
+        expect(DB::connection('module_template')->getDatabaseName())->toBe($template);
+        Schema::connection('module_template')->create('host_preserved', fn ($table) => $table->id());
+        $migrator->migrate(SchemaScope::Tenant, 'module_template', true);
+        expect(DB::connection('module_template')->table('mod_records')->where('module_name', 'corex/stub-base')->where('record_type', 'table')->count())->toBe(2);
+        $migrator->migrateSets([$set->id()], 'module_template');
+        DB::disconnect('module_template');
+        $admin->statement('CREATE DATABASE "'.$clone.'" TEMPLATE "'.$template.'"');
+        config(['database.connections.module_clone' => [...config('database.connections.pgsql'), 'database' => $clone]]);
+        $db = DB::connection('module_clone');
+        expect($db->getDatabaseName())->toBe($clone);
+        $lifecycle = new DatabaseModuleLifecycle(
+            registry: resolve(ModuleRegistry::class), discovery: new ModuleDiscovery(fallbackModules: [StubBaseModule::class]),
+            records: app()->make(DatabaseRecordsRegistrar::class, ['connection' => 'module_clone']), container: app(),
+            tenantContextResolver: resolve(TenantContextResolver::class), connections: resolve(ConnectionResolverInterface::class),
+            events: resolve(Dispatcher::class), clock: resolve(ClockInterface::class),
+            migrationPaths: ['corex/stub-base' => $path], connection: 'module_clone',
+        );
+        app()->instance(FeatureFlags::class, new DatabaseFeatureFlags('module_clone'));
+        $lifecycle->enable('corex/stub-base');
+        $lifecycle->upgrade('corex/stub-base');
+        $lifecycle->disable('corex/stub-base', DisableReason::Manual);
+        $lifecycle->uninstall('corex/stub-base', keepData: false);
+        expect($lifecycle->status('corex/stub-base')->state->value)->toBe('purged')
+            ->and($db->getSchemaBuilder()->hasTable('sba_widgets'))->toBeFalse()
+            ->and($db->getSchemaBuilder()->hasTable('host_preserved'))->toBeTrue()
+            ->and($db->getSchemaBuilder()->hasTable('mod_modules'))->toBeTrue()
+            ->and($db->table('mod_records')->where('module_name', 'corex/stub-base')->count())->toBe(0)
+            ->and(DB::connection('module_template')->getSchemaBuilder()->hasTable('sba_widgets'))->toBeTrue();
+        $lifecycle->repair('corex/stub-base');
+        $lifecycle->enable('corex/stub-base');
+        expect($db->getSchemaBuilder()->hasTable('sba_widgets'))->toBeTrue()
+            ->and($db->table('mod_records')->where('module_name', 'corex/stub-base')->where('record_type', 'table')->count())->toBe(2);
+    } finally {
+        DB::purge('module_clone');
+        $admin->statement('DROP DATABASE IF EXISTS "'.$clone.'" WITH (FORCE)');
+        DB::purge('module_template');
+        $admin->statement('DROP DATABASE "'.$template.'" WITH (FORCE)');
+        DB::purge('clone_admin');
+    }
 });

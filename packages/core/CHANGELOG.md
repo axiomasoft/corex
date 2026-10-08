@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — kernel audit repairs (2026-10-08)
+
+- Preserve proven PostgreSQL module schema ownership in template and explicit-set migrations through the same transactional claims boundary as lifecycle; install the tenant registry prerequisite for explicit module selections.
+
+
 ## Unreleased — Laravel 13 platform (P09.9, D132)
 
 - Require Laravel 13 and PHP 8.4+; support PHP 8.4–8.5. Laravel 12 support is removed. Testbench uses the Laravel 13 family; package versions and runtime contracts are unchanged.

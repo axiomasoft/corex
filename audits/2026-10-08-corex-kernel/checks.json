@@ -1,0 +1,176 @@
+[
+  {
+    "name": "manifests",
+    "command": [
+      "python3",
+      "scripts/manifest-check.py"
+    ],
+    "exit": 0,
+    "seconds": 0.03,
+    "log": "manifests.log"
+  },
+  {
+    "name": "layout",
+    "command": [
+      "python3",
+      "scripts/module-layout-gate.py"
+    ],
+    "exit": 0,
+    "seconds": 0.31,
+    "log": "layout.log"
+  },
+  {
+    "name": "schema",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "schema-gate"
+    ],
+    "exit": 0,
+    "seconds": 0.72,
+    "log": "schema.log"
+  },
+  {
+    "name": "graph",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "package-graph-gate"
+    ],
+    "exit": 0,
+    "seconds": 6.08,
+    "log": "graph.log"
+  },
+  {
+    "name": "ownership",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "ownership-gate"
+    ],
+    "exit": 0,
+    "seconds": 0.66,
+    "log": "ownership.log"
+  },
+  {
+    "name": "table-ownership",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "table-ownership-gate"
+    ],
+    "exit": 0,
+    "seconds": 0.66,
+    "log": "table-ownership.log"
+  },
+  {
+    "name": "table-writes",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "table-write-ownership-gate"
+    ],
+    "exit": 0,
+    "seconds": 6.68,
+    "log": "table-writes.log"
+  },
+  {
+    "name": "config",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "config-composition-gate"
+    ],
+    "exit": 0,
+    "seconds": 0.82,
+    "log": "config.log"
+  },
+  {
+    "name": "globals",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "runtime-globals-gate"
+    ],
+    "exit": 0,
+    "seconds": 1.42,
+    "log": "globals.log"
+  },
+  {
+    "name": "rename",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "rename-completeness"
+    ],
+    "exit": 0,
+    "seconds": 1.32,
+    "log": "rename.log"
+  },
+  {
+    "name": "naming",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "naming-gate"
+    ],
+    "exit": 0,
+    "seconds": 5.68,
+    "log": "naming.log"
+  },
+  {
+    "name": "errors",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "error-registry"
+    ],
+    "exit": 0,
+    "seconds": 4.92,
+    "log": "errors.log"
+  },
+  {
+    "name": "api",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "php-api"
+    ],
+    "exit": 0,
+    "seconds": 5.67,
+    "log": "api.log"
+  },
+  {
+    "name": "quality",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "quality:ceilings"
+    ],
+    "exit": 0,
+    "seconds": 0.56,
+    "log": "quality.log"
+  },
+  {
+    "name": "config-reference",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "configuration-reference"
+    ],
+    "exit": 0,
+    "seconds": 0.67,
+    "log": "config-reference.log"
+  },
+  {
+    "name": "docs",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "package-docs-gate"
+    ],
+    "exit": 0,
+    "seconds": 5.83,
+    "log": "docs.log"
+  }
+]

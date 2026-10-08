@@ -1,0 +1,244 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P09.9",
+  "title": "Preflight Infection 0.35.6 with separate Laravel12/13 Pest stacks and reproducible locks",
+  "status": "blocked",
+  "summary": "Verify eight PHP8.4/8.5 × Laravel12/13 × SQLite/PG rows using exact branch-specific Pest stacks.",
+  "why": "Resolve the Composer process constraint conflict without narrowing the supported matrix or weakening mutation evidence.",
+  "scope": {
+    "include": [
+      "Two repository-only harness manifests/locks, selected by Laravel major.",
+      "Bounded Pest adapter exact alternatives and lock-aware receipt verification.",
+      "Fresh eight-row tenancy compatibility spike and negative controls."
+    ],
+    "exclude": [
+      "P09.5 and all other items; production MSI and mutation-test improvements.",
+      "Public package dependency/API/schema/product changes, root dependency version changes.",
+      "Release qualification, RC, publishing, tags, push, workflow dispatch."
+    ]
+  },
+  "depends_on": [
+    "P09.4"
+  ],
+  "decisions": [
+    "D118",
+    "D120",
+    "D17",
+    "D18",
+    "D19",
+    "D73",
+    "D103",
+    "D113",
+    "D121",
+    "D125",
+    "D131"
+  ],
+  "reads": [
+    {
+      "ref": "knowledge/P09.9-stack-proposal#execution",
+      "why": "Approved bounded runbook and lock/receipt invariants",
+      "required": true
+    },
+    {
+      "ref": "D131",
+      "why": "Exact owner-approved exception; must be accepted",
+      "required": true
+    },
+    {
+      "ref": "D120",
+      "why": "Preserved MSI/quality policy and approved amendment",
+      "required": true
+    },
+    {
+      "ref": "D125",
+      "why": "Repository-only scope",
+      "required": true
+    },
+    {
+      "path": "scripts/quality/infection-spike.py",
+      "why": "Current prepare_cell/run_row/check_rows behavior",
+      "required": true
+    },
+    {
+      "path": "scripts/quality/infection-pest-adapter/README.md",
+      "why": "Existing fallback limits and trace behavior",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "scripts/quality/infection-stacks/laravel12/composer.json",
+      "change": "create"
+    },
+    {
+      "path": "scripts/quality/infection-stacks/laravel12/composer.lock",
+      "change": "create"
+    },
+    {
+      "path": "scripts/quality/infection-stacks/laravel13/composer.json",
+      "change": "create"
+    },
+    {
+      "path": "scripts/quality/infection-stacks/laravel13/composer.lock",
+      "change": "create"
+    },
+    {
+      "path": "scripts/quality/infection-compatibility.json",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/infection-spike.py",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/tests/test_infection_spike.py",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/infection-pest-adapter/composer.json",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/infection-pest-adapter/README.md",
+      "change": "modify"
+    },
+    {
+      "path": "composer.lock",
+      "change": "modify"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "P09.9-compatibility",
+      "path": "@plan/artifacts/P09.9-execution-after-D131/matrix/receipt.json",
+      "role": "output"
+    },
+    {
+      "id": "P09.9-handoff",
+      "path": "@plan/artifacts/P09.9-execution-after-D131/completion.md",
+      "role": "output"
+    },
+    {
+      "path": "@plan/artifacts/P09.9-stack-proposal/spike/receipt.json",
+      "role": "input"
+    }
+  ],
+  "rules": [
+    "Соблюдать D125, D118/D120 и технические правила D121, D17/D73/D103/D113. Release-положения прежнего дизайна исключены D125; внешние записи не разрешены.",
+    "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
+    "Поведение/API/SPI/schema не менять молча ради зелёного tooling; precise decision+CHANGELOG+API/Golden для public delta.",
+    "Каждый новый gate негатив-проверен на temp fixtures; coverage/MSI/quality scopes и пороги не снижать. Если packages/*/src меняется, surviving fixed mutations --all до завершения.",
+    "Self-check + scoped checks; repair owning item. Независимое full-review фазы отдельное P09.8 по действующим требованиям плана.",
+    "Изменение scope не запускает исполнение. При запуске проверить актуальное завершение P08 и independent corrected-design review. Release owner questions/grants не являются допуском для code-items.",
+    "D125: выполнять только repository scope; требования к rc/candidate/SBOM/27-row release DoD и публикации пропущены, не переносить их в этот item.",
+    "D131 must be accepted by the owner before changing pins; only the Laravel12 harness may use Pest4.7.8/PHPUnit12.5.33. Root composer.json and all package/product manifests unchanged.",
+    "Update the root lock only for adapter require metadata; every other complete locked package record and root content-hash must remain unchanged.",
+    "Two exact manifest/lock templates; per-cell install only, independent vendors, real platform requirements and audit. Receipt v2 binds Laravel-selected stack id, manifest/lock digests, source/tests/tools and actual runtime versions.",
+    "Previous v1 receipts remain historical. Eight fresh rows with identical source/tests/control hashes; old partial Laravel13 receipts cannot be merged to claim success.",
+    "Explicit scope ends at P09.9 even after GREEN. P09.5 and release work require a subsequent owner instruction."
+  ],
+  "guidance": "Execute only after D131 accepted and this exact patch applied. Read knowledge/P09.9-stack-proposal#execution. Preserve previous incompatible evidence and replace no old receipt. Stop after P09.9; no automatic successor execution.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "scripts/php84 python3 scripts/quality/infection-spike.py --package tenancy --matrix all --output build/quality/infection-spike",
+      "expect": "exit0 all eight rows using the exact Laravel-selected stacks, fresh actual Pest + mutants + raw XML/JUnit/flags/runtime versions; no reused partial evidence",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "python3 scripts/quality/infection-spike.py --check build/quality/infection-spike/receipt.json",
+      "expect": "exit0 v2 full matrix; branch-specific exact pins and stack/lock hashes validated; reject missing/wrong/duplicate/stale rows",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "python3 -m unittest discover -s scripts/quality/tests -p test_infection_spike.py",
+      "expect": "exit0 existing negatives plus wrong branch/lock, changed template, update instead of install, mixed stack versions, stale v1 receipt and root lock drift",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "scripts/php84 composer audit --locked",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "scripts/php84 composer validate --strict",
+      "expect": "exit0; root manifest/dependency pins unchanged and adapter lock metadata consistent",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "scripts/php84 python3 scripts/quality/infection-spike.py --check-stacks",
+      "expect": "exit0 strict Composer validation/audit/lock-install/platform checks for both Laravel locks on both actual PHP versions; assert root locked records invariant",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "cmd": "scripts/php84 vendor/bin/pint --test scripts/quality/infection-pest-adapter",
+      "expect": "exit0 affected adapter scope",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Two exact repository-only harness manifest/lock templates and v2 policy/verifier.",
+    "Fresh eight-row compatible receipt with real Pest, coverage XML/JUnit, PDO witnesses and actual mutant/process controls, or explicit BLOCKED.",
+    "Root dependency invariance proof, per-stack audits/platform/install proof and completion limited to P09.9."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "xhigh"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed",
+    "notes": "RAG:— current source facts",
+    "captures": []
+  },
+  "result": {
+    "started_at": "2026-10-07T09:21:01Z",
+    "finished_at": "2026-10-07T09:53:50Z",
+    "executor": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "session": "01a115a8-8b2f-7363-8a5c-ec68dc8c5ee5"
+    },
+    "notes": "Exact version conflict reproduced on PHP8.4 and PHP8.5; four Laravel13 SQLite/PG rows verified with actual Pest, coverage/JUnit and killed/escaped/uncovered/timeout/exit137 controls. 19 negative tests, root PHPStan, Pint and Composer strict validate/audit pass. Evidence: artifacts/P09.9-execution/completion.md and matrix/receipt.json; full receipt remains incompatible, no production MSI claim.",
+    "pending": [
+      "V1/V2 full matrix: four Laravel12 DB rows could not execute because exact dependency solves fail."
+    ],
+    "escalation": "Owner/plan-author must reconcile Pest5.2.1 symfony/process ^8.1.7 with Laravel12 symfony/process ^7.2.0 or explicitly amend the testing matrix/engine policy. D120 prohibits silent downgrades or engine substitution; P09.5 remains unadmitted.",
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 1,
+        "at": "2026-10-07T09:53:50Z"
+      },
+      {
+        "id": "V2",
+        "exit": 1,
+        "at": "2026-10-07T09:53:50Z"
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-10-07T09:53:50Z"
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-10-07T09:53:50Z"
+      }
+    ]
+  },
+  "updated_at": "2026-10-07T09:53:50Z"
+}

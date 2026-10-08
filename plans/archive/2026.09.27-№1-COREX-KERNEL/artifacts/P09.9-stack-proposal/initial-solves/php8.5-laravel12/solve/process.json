@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "/usr/bin/php8.5",
+    "/home/vostrikov/.config/herd-lite/bin/composer",
+    "update",
+    "--no-install",
+    "--no-plugins",
+    "--no-scripts",
+    "--no-progress"
+  ],
+  "cwd": "/tmp/corex-p099-stack-design-38sm2hqx/php8.5-laravel12",
+  "exit": 2,
+  "seconds": 10.489,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "8b81101b49d898ada2c25f13e093ae65153b392901fe8fa01020e8fe58a91867"
+}

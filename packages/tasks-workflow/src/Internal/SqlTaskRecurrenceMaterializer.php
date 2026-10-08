@@ -15,6 +15,7 @@ use CoreX\Recurrence\Data\ExpansionCursor;
 use CoreX\Recurrence\Data\ExpansionLimits;
 use CoreX\Recurrence\Data\Occurrence;
 use CoreX\Recurrence\Data\RecurrenceWindow;
+use CoreX\Recurrence\Exceptions\StaleCursorException;
 use CoreX\Scheduling\Contracts\WakeupScheduler;
 use CoreX\Scheduling\Data\WakeupRequest;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
@@ -26,6 +27,7 @@ use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
 use CoreX\TasksWorkflow\Data\MaterializationReceipt;
 use CoreX\TasksWorkflow\Data\MaterializationWindow;
 use CoreX\TasksWorkflow\Data\SeriesReference;
+use CoreX\TasksWorkflow\Exceptions\MaterializationConflict;
 use CoreX\TasksWorkflow\Exceptions\StaleMaterialization;
 use CoreX\TasksWorkflow\Exceptions\UnsupportedMaterialization;
 use DateInterval;
@@ -33,6 +35,7 @@ use DateTimeImmutable;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Connection;
 use Override;
+use stdClass;
 
 final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
 {
@@ -76,11 +79,24 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
             throw StaleMaterialization::definition($series->id);
         }
 
+        $scheduler = null;
+
+        if ($this->wakeupEnabled) {
+            if (! $this->container->bound(WakeupScheduler::class)) {
+                throw UnsupportedMaterialization::connection('Enabled materialization wakeup requires a WakeupScheduler.');
+            }
+            // Resolve the adapter/handler registry before entering the effect.
+            $scheduler = $this->container->make(WakeupScheduler::class);
+        }
+
         $store = new MaterializationStore(connection: $this->connection, receipts: $this->receipts);
         $existing = $store->findOperation($token->operationKey);
 
         if ($existing !== null) {
-            return $store->assertReplayable(existing: $existing, payloadHash: $payloadHash);
+            $receipt = $store->assertReplayable(existing: $existing, payloadHash: $payloadHash);
+            $this->scheduleWakeup(context: $context, series: $series, window: $window, payloadHash: $payloadHash, receipt: $receipt, scheduler: $scheduler);
+
+            return $receipt;
         }
 
         $seriesRow = $this->connection
@@ -112,6 +128,12 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
                 throw StaleMaterialization::restoreEpoch($series->id);
             }
 
+            $replay = $store->findOperation($token->operationKey);
+
+            if ($replay !== null) {
+                return $store->assertReplayable($replay, $payloadHash);
+            }
+
             $decoded = SeriesDefinitionCodec::decode(
                 definitionJson: $this->jsonColumn($seriesRow->definition),
                 templateJson: $this->jsonColumn($seriesRow->template),
@@ -131,16 +153,7 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
                 memoryMiB: 128,
             );
 
-            $page = $this->expander->expand(
-                set: $decoded['set'],
-                window: $recurrenceWindow,
-                limits: $limits,
-                after: null,
-            );
-
-            if ($page->status === 'unsupported' || $page->status === 'invalid') {
-                throw UnsupportedMaterialization::expansion($page->status);
-            }
+            $after = $this->restoreCursor(state: $state, store: $store);
 
             $startedAt = microtime(true);
             $taskRefs = [];
@@ -149,16 +162,35 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
             $conflict = 0;
             $unknown = false;
             $committedPrefix = $state->complete_through !== null ? Value::text($state->complete_through) : null;
-            $lastCommittedKey = $committedPrefix;
 
-            foreach ($page->occurrences as $occurrence) {
-                if ((microtime(true) - $startedAt) >= $window->maxSeconds) {
-                    break;
+            $nextCursor = $after;
+            while (count($taskRefs) < $limits->emitted && (microtime(true) - $startedAt) < $window->maxSeconds) {
+                // Expand one effect at a time so every cursor belongs to a
+                // committed occurrence, even when the task loop stops early.
+                $pageLimits = new ExpansionLimits(
+                    rangeDays: $limits->rangeDays, emitted: 1, candidateSteps: $limits->candidateSteps,
+                    wallSeconds: $limits->wallSeconds, memoryMiB: $limits->memoryMiB,
+                );
+
+                try {
+                    $page = $this->expander->expand($decoded['set'], $recurrenceWindow, $pageLimits, $nextCursor);
+                } catch (StaleCursorException) {
+                    // Revision/window/runtime changes start a new traversal;
+                    // occurrence uniqueness preserves already committed effects.
+                    $nextCursor = null;
+                    $page = $this->expander->expand($decoded['set'], $recurrenceWindow, $pageLimits);
                 }
 
-                if (count($taskRefs) >= $window->pageLimit) {
+                if ($page->status === 'unsupported' || $page->status === 'invalid') {
+                    throw UnsupportedMaterialization::expansion($page->status);
+                }
+
+                if ($page->occurrences === []) {
+                    $nextCursor = $page->nextCursor;
+
                     break;
                 }
+                $occurrence = $page->occurrences[0];
 
                 $result = $this->materializeOccurrence(
                     scope: $scope,
@@ -189,49 +221,28 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
                     }
 
                     $taskRefs[] = $result['reference'];
-                    $lastCommittedKey = $occurrence->key;
                     $committedPrefix = $occurrence->effectiveDateOrInstant;
+                    $nextCursor = $page->nextCursor;
                 } else {
+                    break;
+                }
+
+                if ($nextCursor === null) {
                     break;
                 }
             }
 
-            if ($unknown) {
-                $receipt = $this->buildReceipt(
-                    taskRefs: $taskRefs,
-                    committedPrefix: $state->complete_through !== null ? Value::text($state->complete_through) : null,
-                    cursor: null,
-                    created: $created,
-                    noop: $noop,
-                    conflict: $conflict,
-                    retired: false,
-                    unknown: true,
-                );
-                $store->persistOperation(operationKey: $token->operationKey, payloadHash: $payloadHash, restoreEpoch: $scope->restoreEpoch, resultRef: $store->receiptToStored($receipt));
-
-                return $receipt;
-            }
-
-            $nextCursor = $page->nextCursor;
-            $nextCompleteThrough = $conflict > 0
-                ? ($state->complete_through !== null ? Value::text($state->complete_through) : null)
-                : ($lastCommittedKey !== null ? $committedPrefix : ($state->complete_through !== null ? Value::text($state->complete_through) : null));
-
-            if ($created > 0 || $noop > 0) {
-                $store->advanceState(
-                    seriesKey: $series->id,
-                    generation: Value::text($state->generation),
-                    completeThrough: $nextCompleteThrough,
-                    cursor: $nextCursor === null ? null : [
-                        'setHash' => $nextCursor->setHash,
-                        'windowHash' => $nextCursor->windowHash,
-                        'tzdbVersion' => $nextCursor->tzdbVersion,
-                        'libraryVersion' => $nextCursor->libraryVersion,
-                        'resumePosition' => $nextCursor->resumePosition,
-                    ],
-                    restoreEpoch: $scope->restoreEpoch,
-                );
-            }
+            $processed = $created + $noop;
+            $nextCompleteThrough = $processed > 0 ? $committedPrefix : ($state->complete_through !== null ? Value::text($state->complete_through) : null);
+            $store->advanceState(
+                seriesKey: $series->id, generation: Value::text($state->generation), completeThrough: $nextCompleteThrough,
+                cursor: $nextCursor === null ? null : [
+                    'setHash' => $nextCursor->setHash, 'windowHash' => $nextCursor->windowHash,
+                    'tzdbVersion' => $nextCursor->tzdbVersion, 'libraryVersion' => $nextCursor->libraryVersion,
+                    'resumePosition' => $nextCursor->resumePosition,
+                ],
+                restoreEpoch: $scope->restoreEpoch,
+            );
 
             $receipt = $this->buildReceipt(
                 taskRefs: $taskRefs,
@@ -241,7 +252,7 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
                 noop: $noop,
                 conflict: $conflict,
                 retired: false,
-                unknown: false,
+                unknown: $unknown,
             );
 
             $store->persistOperation(operationKey: $token->operationKey, payloadHash: $payloadHash, restoreEpoch: $scope->restoreEpoch, resultRef: $store->receiptToStored($receipt));
@@ -249,9 +260,22 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
             return $receipt;
         });
 
-        $this->scheduleWakeup(context: $context, series: $series, window: $window);
+        $this->scheduleWakeup(context: $context, series: $series, window: $window, payloadHash: $payloadHash, receipt: $receipt, scheduler: $scheduler);
 
         return $receipt;
+    }
+
+    private function restoreCursor(stdClass $state, MaterializationStore $store): ?ExpansionCursor
+    {
+        if ($state->cursor === null) {
+            return null;
+        }
+        $stored = json_decode($this->jsonColumn($state->cursor), true, flags: JSON_THROW_ON_ERROR);
+
+        return $store->receiptFromStored([
+            'cursor' => $stored, 'version' => self::VERSION, 'taskRefs' => [], 'pageDigest' => MaterializationHasher::pageDigest([]),
+            'created' => 0, 'noop' => 0, 'conflict' => 0, 'retired' => false, 'unknown' => false,
+        ])->cursor;
     }
 
     /** @return array{reference: ?TaskReference, created: bool, conflict: bool, unknown: bool} */
@@ -421,22 +445,30 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
         return json_encode($value, JSON_THROW_ON_ERROR);
     }
 
-    private function scheduleWakeup(TenantContext $context, SeriesReference $series, MaterializationWindow $window): void
+    private function scheduleWakeup(TenantContext $context, SeriesReference $series, MaterializationWindow $window, string $payloadHash, MaterializationReceipt $receipt, ?WakeupScheduler $scheduler): void
     {
-        if (! $this->wakeupEnabled || ! $this->container->bound(WakeupScheduler::class)) {
+        if ($scheduler === null || $receipt->retired || $receipt->unknown || $receipt->conflict > 0) {
             return;
         }
 
         $kind = $this->wakeupHandlerKind;
         $fireAt = new DateTimeImmutable($window->end)->sub(new DateInterval('P1D'));
 
-        $this->container->make(WakeupScheduler::class)->schedule(new WakeupRequest(
+        $result = $scheduler->schedule(new WakeupRequest(
             context: $context,
             kind: $kind,
-            requestKey: 'materialize:'.$series->id,
+            requestKey: 'materialize:'.hash('sha256', $payloadHash."\0".json_encode($receipt->cursor?->resumePosition, JSON_THROW_ON_ERROR)),
             fireAt: $fireAt,
             window: null,
             payload: JsonDocuments::capture(MaterializationHasher::wakeupPayload(series: $series, window: $window)),
         ));
+
+        if ($result->status === 'conflict') {
+            throw MaterializationConflict::forOperationKey($result->requestKey);
+        }
+
+        if (! in_array($result->status, ['created', 'existing'], true)) {
+            throw UnsupportedMaterialization::connection('Materialization wakeup was not durably scheduled.');
+        }
     }
 }

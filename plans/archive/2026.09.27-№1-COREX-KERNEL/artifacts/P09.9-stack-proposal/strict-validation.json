@@ -1,0 +1,18 @@
+[
+  {
+    "cell": "php8.4-laravel12",
+    "exit": 0
+  },
+  {
+    "cell": "php8.4-laravel13",
+    "exit": 0
+  },
+  {
+    "cell": "php8.5-laravel12",
+    "exit": 0
+  },
+  {
+    "cell": "php8.5-laravel13",
+    "exit": 0
+  }
+]

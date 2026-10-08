@@ -1,0 +1,31 @@
+{
+    "case": "task-resume",
+    "expected_tasks": 6,
+    "actual_tasks": 2,
+    "calls": [
+        {
+            "created": 2,
+            "noop": 0,
+            "cursor": {
+                "scanned": 2,
+                "emitted": 2
+            }
+        },
+        {
+            "created": 0,
+            "noop": 2,
+            "cursor": {
+                "scanned": 2,
+                "emitted": 2
+            }
+        },
+        {
+            "created": 0,
+            "noop": 2,
+            "cursor": {
+                "scanned": 2,
+                "emitted": 2
+            }
+        }
+    ]
+}

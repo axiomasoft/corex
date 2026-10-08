@@ -1,0 +1,9 @@
+{
+    "case": "digest-stamp",
+    "wakeup_failure": "handler-version-mismatch",
+    "wakeup_state": "failed",
+    "digest_state": "admitted",
+    "delivery_rows": 1,
+    "sweep_failed": 1,
+    "sweep_completed": 1
+}

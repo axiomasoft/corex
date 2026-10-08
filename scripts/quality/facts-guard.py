@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-PLAN = Path('plans/2026.09.27-№1-COREX-KERNEL')
+PLAN = Path('plans/archive/2026.09.27-№1-COREX-KERNEL')
 FACTS_SCRIPT = PLAN / 'artifacts/P09-design/scripts/facts.py'
 
 

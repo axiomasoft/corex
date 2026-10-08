@@ -1,0 +1,12 @@
+{
+    "case": "task-full-control",
+    "expected_tasks": 6,
+    "actual_tasks": 6,
+    "calls": [
+        {
+            "created": 6,
+            "noop": 0,
+            "cursor": null
+        }
+    ]
+}

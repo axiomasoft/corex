@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — kernel audit repairs (2026-10-08)
+
+- Resume durable materialization checkpoints at committed occurrence boundaries. Register the optional scoped wakeup handler through kernel tags; give each window/revision/checkpoint its own immutable request identity, expose schedule conflicts and recover failed post-commit scheduling on operation replay.
+
+
 ## Unreleased — Laravel 13 platform (P09.9, D132)
 
 - Require Laravel 13 and PHP 8.4+; support PHP 8.4–8.5. Laravel 12 support is removed. Testbench uses the Laravel 13 family; package versions and runtime contracts are unchanged.

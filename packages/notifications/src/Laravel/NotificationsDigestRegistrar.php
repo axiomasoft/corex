@@ -64,8 +64,7 @@ final class NotificationsDigestRegistrar implements PackageRegistrar
         ));
         $app->scoped(NotificationDigestDueSource::class, static fn (Application $app): NotificationDigestDueSource => new NotificationDigestDueSource(
             connection: $app->make(DatabaseManager::class)->connection(),
-            digests: $app->make(DigestBuilder::class),
-            handler: $app->make(DigestWakeupHandler::class),
+            scheduler: $app->make(WakeupScheduler::class),
         ));
 
     }

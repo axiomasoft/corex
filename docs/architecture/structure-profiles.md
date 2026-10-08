@@ -5,7 +5,7 @@
 Статьи [STR-002…STR-006](constitution.md#группа-str--структура) задают единую раскладку
 модулей для всех пакетов независимо от числа файлов. Решения — PLAN3.D57 и PLAN3.D58;
 термины и закрытый список модулей ядра —
-[glossary](../../plans/2026.09.27-№1-COREX-KERNEL/research/03-glossary.md), N5.
+[glossary](../../plans/archive/2026.09.27-№1-COREX-KERNEL/views/knowledge/research-03-glossary.md), N5.
 Продукт `products/flex-crm` сохраняет собственную раскладку (N8).
 
 ## Корневой и feature modules

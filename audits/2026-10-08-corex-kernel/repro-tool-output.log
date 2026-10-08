@@ -1,0 +1,8 @@
+{
+    "case": "tool-output",
+    "first_outcome": "not-executed",
+    "first_error": "tools.output_contract_failed",
+    "retry_outcome": "not-executed",
+    "committed_effect_rows": 2,
+    "idempotency_rows": 0
+}

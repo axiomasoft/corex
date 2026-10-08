@@ -1,0 +1,6 @@
+{
+  "launcher": "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan.py",
+  "sha256": "66f7e7d5d7d3c7380ab08374725d68c507589e5dfaa82cb416ac3e1e6da3f964",
+  "installed_adapter": "/home/vostrikov/.codex/plugins/cache/swissknifeman/task/0.28.4",
+  "note": "Use current layout-v4 plan.py. Stale adapter plan-work.py instructions are inapplicable to the already migrated plan."
+}

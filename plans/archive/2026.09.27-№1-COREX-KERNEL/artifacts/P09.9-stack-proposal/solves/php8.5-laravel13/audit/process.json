@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "/usr/bin/php8.5",
+    "-d",
+    "extension=/tmp/corex-p099-stack-design-io0_mv2y/php85-bcmath/extracted/usr/lib/php/20250925/bcmath.so",
+    "/home/vostrikov/.config/herd-lite/bin/composer",
+    "audit",
+    "--locked",
+    "--format=json",
+    "--no-plugins"
+  ],
+  "cwd": "/tmp/corex-p099-stack-design-io0_mv2y/php8.5-laravel13",
+  "exit": 0,
+  "seconds": 1.368,
+  "stdout_sha256": "e464a6f19a008d852b61fd0966a47b663d20d70ccfba0b30edd6483a787f15f5",
+  "stderr_sha256": "89cf071eca89425b33eb91ab2353cd5e1df99404dc17464426506041794e0e7e"
+}

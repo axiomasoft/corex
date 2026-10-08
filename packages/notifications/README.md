@@ -19,8 +19,10 @@ write `corex-wakeup.handlers`. An enabled digest without a bound `WakeupSchedule
 configuration violation. The package registers the
 `notification.digest.v1` wakeup consumer. A digest freezes at most 100 notification IDs per
 explicit UTC half-open window. The shared local wakeup runner admits a separate digest delivery;
-its durable SQL due source recreates residual and late closed-window batches after a restart,
-without mutating a completed wakeup request key. Current cancellation and preference state is
+its SQL due source selects only frozen runs and recreates missing durable requests for
+those exact runs after a restart. Recovery never invokes the handler directly or
+replaces a cancelled, quarantined or completed request. The durable runner remains
+the admission boundary. Residual and late batches require an explicit builder call. Current cancellation and preference state is
 checked before admission. Once admitted, the delivery is an immutable effect.
 `corex-notifications.digest.accept_legacy_unstamped=true` is a dangerous mode: production starts only when
 `corex.acknowledged_dangerous_modes` lists that exact path.

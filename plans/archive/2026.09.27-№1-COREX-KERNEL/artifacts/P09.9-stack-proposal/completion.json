@@ -1,0 +1,27 @@
+{
+  "scope": "P09.9 stack conflict design only",
+  "decision": "PLAN3.D131 open, recommend option A",
+  "accepted_contract_unchanged": true,
+  "protected_repository_inputs_unchanged": true,
+  "other_items_unchanged": true,
+  "solve_checks": {
+    "spike_cells": 4,
+    "full_root_projection_cells": 4,
+    "platform_and_audit": "all exit0",
+    "cross_php_lock_replays": 4,
+    "strict_spike_manifest_validation": 4
+  },
+  "runtime_acceptance": "not run; eight fresh Pest/coverage/JUnit/mutation rows remain mandatory after owner approval",
+  "plan_check": "0 errors, 0 warnings; original plan and isolated pending patch with repository paths",
+  "next": {
+    "ok": true,
+    "data": {
+      "message": "waiting: blocked P09.9 — Owner/plan-author must reconcile Pest5.2.1 symfony/process ^8.1.7 with Laravel12 symfony/process ^7.2.0 or explicitly amend the testing matrix/engine policy. D120 prohibits silent downgrades or engine substitution; P09.5 remains unadmitted."
+    }
+  },
+  "excluded": [
+    "P09.5",
+    "all other items",
+    "release execution"
+  ]
+}

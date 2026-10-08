@@ -1,0 +1,317 @@
+{
+  "result": "solve-evidence-only",
+  "cells": [
+    {
+      "php": "8.4",
+      "laravel": "12",
+      "php_binary_sha256": "7a2cd713d672ca4a581fa83bb453e697e5399d863bfde40d804f540dfb177f02",
+      "solve": {
+        "argv": [
+          "/usr/bin/php8.4",
+          "/home/vostrikov/.config/herd-lite/bin/composer",
+          "update",
+          "--no-install",
+          "--no-plugins",
+          "--no-scripts",
+          "--no-progress"
+        ],
+        "cwd": "/tmp/corex-p099-stack-design-26ba485k/php8.4-laravel12",
+        "exit": 0,
+        "seconds": 9.335,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "0eccae836bfdfdf2b66de6a2bbfa6e02e969392d86aadb83728e5ecc39fadf67"
+      },
+      "versions": {
+        "infection/infection": "0.35.6",
+        "infection/abstract-testframework-adapter": "0.5.1",
+        "infection/include-interceptor": "1.0.0",
+        "axiomasoft/corex-infection-pest-adapter": "0.1.0",
+        "laravel/framework": "12.69.3",
+        "orchestra/testbench": "10.12.0",
+        "pestphp/pest": "4.7.8",
+        "phpunit/phpunit": "12.5.33",
+        "symfony/process": "7.4.19",
+        "brianium/paratest": "7.20.0",
+        "orchestra/testbench-core": "10.15.0"
+      },
+      "platform": {
+        "argv": [
+          "/usr/bin/php8.4",
+          "/home/vostrikov/.config/herd-lite/bin/composer",
+          "check-platform-reqs",
+          "--lock",
+          "--no-plugins"
+        ],
+        "cwd": "/tmp/corex-p099-stack-design-26ba485k/php8.4-laravel12",
+        "exit": 0,
+        "seconds": 0.164,
+        "stdout_sha256": "5281a9eb6899550c55284a39a3108fa72f6d90be07cc7981d424c0ff0dae92d6",
+        "stderr_sha256": "a9064f2083fb53a99cf60a987a8345fc6b38eb63485a02b8766e4d8d8c312030"
+      },
+      "audit": {
+        "argv": [
+          "/usr/bin/php8.4",
+          "/home/vostrikov/.config/herd-lite/bin/composer",
+          "audit",
+          "--locked",
+          "--no-plugins",
+          "--format=json"
+        ],
+        "cwd": "/tmp/corex-p099-stack-design-26ba485k/php8.4-laravel12",
+        "exit": 0,
+        "seconds": 1.318,
+        "stdout_sha256": "e464a6f19a008d852b61fd0966a47b663d20d70ccfba0b30edd6483a787f15f5",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "php": "8.5",
+      "laravel": "12",
+      "php_binary_sha256": "2d059aa6d433b73285c68cef6fa37b66bf7f4834240b34b944ad68caade7aad6",
+      "solve": {
+        "argv": [
+          "/usr/bin/php8.5",
+          "/home/vostrikov/.config/herd-lite/bin/composer",
+          "update",
+          "--no-install",
+          "--no-plugins",
+          "--no-scripts",
+          "--no-progress"
+        ],
+        "cwd": "/tmp/corex-p099-stack-design-26ba485k/php8.5-laravel12",
+        "exit": 0,
+        "seconds": 8.437,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "fba13ba1882208c846d13be4103c4b41ef3d22c72711eba2c2804bc6d296f744"
+      },
+      "versions": {
+        "infection/infection": "0.35.6",
+        "infection/abstract-testframework-adapter": "0.5.1",
+        "infection/include-interceptor": "1.0.0",
+        "axiomasoft/corex-infection-pest-adapter": "0.1.0",
+        "laravel/framework": "12.69.3",
+        "orchestra/testbench": "10.12.0",
+        "pestphp/pest": "4.7.8",
+        "phpunit/phpunit": "12.5.33",
+        "symfony/process": "7.4.19",
+        "brianium/paratest": "7.20.0",
+        "orchestra/testbench-core": "10.15.0"
+      },
+      "platform": {
+        "argv": [
+          "/usr/bin/php8.5",
+          "/home/vostrikov/.config/herd-lite/bin/composer",
+          "check-platform-reqs",
+          "--lock",
+          "--no-plugins"
+        ],
+        "cwd": "/tmp/corex-p099-stack-design-26ba485k/php8.5-laravel12",
+        "exit": 0,
+        "seconds": 0.114,
+        "stdout_sha256": "a53b39aae21265bf65c08e4935dfd74013b948222851a5586bf170b0fd3493e2",
+        "stderr_sha256": "eb91169280c2a7ee967a2e5382714c75fc56d6d0f97a002b0f45aa7d908abc5f"
+      },
+      "audit": {
+        "argv": [
+          "/usr/bin/php8.5",
+          "/home/vostrikov/.config/herd-lite/bin/composer",
+          "audit",
+          "--locked",
+          "--no-plugins",
+          "--format=json"
+        ],
+        "cwd": "/tmp/corex-p099-stack-design-26ba485k/php8.5-laravel12",
+        "exit": 0,
+        "seconds": 1.367,
+        "stdout_sha256": "e464a6f19a008d852b61fd0966a47b663d20d70ccfba0b30edd6483a787f15f5",
+        "stderr_sha256": "3986c162af56735c262232244a97f74c9a29e1f4b72a8c611549d0b84f57d191"
+      },
+      "shared_lock_install": {
+        "argv": [
+          "/usr/bin/php8.5",
+          "/home/vostrikov/.config/herd-lite/bin/composer",
+          "install",
+          "--dry-run",
+          "--no-plugins",
+          "--no-scripts",
+          "--no-progress"
+        ],
+        "cwd": "/tmp/corex-p099-stack-design-26ba485k/php8.5-laravel12",
+        "exit": 0,
+        "seconds": 0.165,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "09b2a9927f81c37898ec91ffa3784f1ad0d1055fe51c7094343990e1487f0940"
+      },
+      "shared_lock_platform": {
+        "argv": [
+          "/usr/bin/php8.5",
+          "/home/vostrikov/.config/herd-lite/bin/composer",
+          "check-platform-reqs",
+          "--lock",
+          "--no-plugins"
+        ],
+        "cwd": "/tmp/corex-p099-stack-design-26ba485k/php8.5-laravel12",
+        "exit": 0,
+        "seconds": 0.115,
+        "stdout_sha256": "a53b39aae21265bf65c08e4935dfd74013b948222851a5586bf170b0fd3493e2",
+        "stderr_sha256": "eb91169280c2a7ee967a2e5382714c75fc56d6d0f97a002b0f45aa7d908abc5f"
+      }
+    },
+    {
+      "php": "8.4",
+      "laravel": "13",
+      "php_binary_sha256": "7a2cd713d672ca4a581fa83bb453e697e5399d863bfde40d804f540dfb177f02",
+      "solve": {
+        "argv": [
+          "/usr/bin/php8.4",
+          "/home/vostrikov/.config/herd-lite/bin/composer",
+          "update",
+          "--no-install",
+          "--no-plugins",
+          "--no-scripts",
+          "--no-progress"
+        ],
+        "cwd": "/tmp/corex-p099-stack-design-26ba485k/php8.4-laravel13",
+        "exit": 0,
+        "seconds": 9.384,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "3d7668d374042978d47d66ac4086482e47aca6fc1cd39ebdabf1cb41ad7d4c16"
+      },
+      "versions": {
+        "infection/infection": "0.35.6",
+        "infection/abstract-testframework-adapter": "0.5.1",
+        "infection/include-interceptor": "1.0.0",
+        "axiomasoft/corex-infection-pest-adapter": "0.1.0",
+        "laravel/framework": "13.35.0",
+        "orchestra/testbench": "11.3.0",
+        "pestphp/pest": "5.2.1",
+        "phpunit/phpunit": "13.3.4",
+        "symfony/process": "8.1.7",
+        "brianium/paratest": "7.25.0",
+        "orchestra/testbench-core": "11.5.0"
+      },
+      "platform": {
+        "argv": [
+          "/usr/bin/php8.4",
+          "/home/vostrikov/.config/herd-lite/bin/composer",
+          "check-platform-reqs",
+          "--lock",
+          "--no-plugins"
+        ],
+        "cwd": "/tmp/corex-p099-stack-design-26ba485k/php8.4-laravel13",
+        "exit": 0,
+        "seconds": 0.164,
+        "stdout_sha256": "5281a9eb6899550c55284a39a3108fa72f6d90be07cc7981d424c0ff0dae92d6",
+        "stderr_sha256": "a9064f2083fb53a99cf60a987a8345fc6b38eb63485a02b8766e4d8d8c312030"
+      },
+      "audit": {
+        "argv": [
+          "/usr/bin/php8.4",
+          "/home/vostrikov/.config/herd-lite/bin/composer",
+          "audit",
+          "--locked",
+          "--no-plugins",
+          "--format=json"
+        ],
+        "cwd": "/tmp/corex-p099-stack-design-26ba485k/php8.4-laravel13",
+        "exit": 0,
+        "seconds": 1.318,
+        "stdout_sha256": "e464a6f19a008d852b61fd0966a47b663d20d70ccfba0b30edd6483a787f15f5",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "php": "8.5",
+      "laravel": "13",
+      "php_binary_sha256": "2d059aa6d433b73285c68cef6fa37b66bf7f4834240b34b944ad68caade7aad6",
+      "solve": {
+        "argv": [
+          "/usr/bin/php8.5",
+          "/home/vostrikov/.config/herd-lite/bin/composer",
+          "update",
+          "--no-install",
+          "--no-plugins",
+          "--no-scripts",
+          "--no-progress"
+        ],
+        "cwd": "/tmp/corex-p099-stack-design-26ba485k/php8.5-laravel13",
+        "exit": 0,
+        "seconds": 8.535,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "acce1055b26953ce509fdadda6a8c7b18d9b12c4b0185667e080703618231aed"
+      },
+      "versions": {
+        "infection/infection": "0.35.6",
+        "infection/abstract-testframework-adapter": "0.5.1",
+        "infection/include-interceptor": "1.0.0",
+        "axiomasoft/corex-infection-pest-adapter": "0.1.0",
+        "laravel/framework": "13.35.0",
+        "orchestra/testbench": "11.3.0",
+        "pestphp/pest": "5.2.1",
+        "phpunit/phpunit": "13.3.4",
+        "symfony/process": "8.1.7",
+        "brianium/paratest": "7.25.0",
+        "orchestra/testbench-core": "11.5.0"
+      },
+      "platform": {
+        "argv": [
+          "/usr/bin/php8.5",
+          "/home/vostrikov/.config/herd-lite/bin/composer",
+          "check-platform-reqs",
+          "--lock",
+          "--no-plugins"
+        ],
+        "cwd": "/tmp/corex-p099-stack-design-26ba485k/php8.5-laravel13",
+        "exit": 0,
+        "seconds": 0.114,
+        "stdout_sha256": "a53b39aae21265bf65c08e4935dfd74013b948222851a5586bf170b0fd3493e2",
+        "stderr_sha256": "eb91169280c2a7ee967a2e5382714c75fc56d6d0f97a002b0f45aa7d908abc5f"
+      },
+      "audit": {
+        "argv": [
+          "/usr/bin/php8.5",
+          "/home/vostrikov/.config/herd-lite/bin/composer",
+          "audit",
+          "--locked",
+          "--no-plugins",
+          "--format=json"
+        ],
+        "cwd": "/tmp/corex-p099-stack-design-26ba485k/php8.5-laravel13",
+        "exit": 0,
+        "seconds": 1.316,
+        "stdout_sha256": "e464a6f19a008d852b61fd0966a47b663d20d70ccfba0b30edd6483a787f15f5",
+        "stderr_sha256": "3986c162af56735c262232244a97f74c9a29e1f4b72a8c611549d0b84f57d191"
+      },
+      "shared_lock_install": {
+        "argv": [
+          "/usr/bin/php8.5",
+          "/home/vostrikov/.config/herd-lite/bin/composer",
+          "install",
+          "--dry-run",
+          "--no-plugins",
+          "--no-scripts",
+          "--no-progress"
+        ],
+        "cwd": "/tmp/corex-p099-stack-design-26ba485k/php8.5-laravel13",
+        "exit": 0,
+        "seconds": 0.165,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "2927e36a8c8141489257df3a7bfc6a946cbb9f9d6c6ece68cebdff0b42c17d4e"
+      },
+      "shared_lock_platform": {
+        "argv": [
+          "/usr/bin/php8.5",
+          "/home/vostrikov/.config/herd-lite/bin/composer",
+          "check-platform-reqs",
+          "--lock",
+          "--no-plugins"
+        ],
+        "cwd": "/tmp/corex-p099-stack-design-26ba485k/php8.5-laravel13",
+        "exit": 0,
+        "seconds": 0.165,
+        "stdout_sha256": "a53b39aae21265bf65c08e4935dfd74013b948222851a5586bf170b0fd3493e2",
+        "stderr_sha256": "eb91169280c2a7ee967a2e5382714c75fc56d6d0f97a002b0f45aa7d908abc5f"
+      }
+    }
+  ]
+}

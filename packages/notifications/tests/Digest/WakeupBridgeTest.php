@@ -11,6 +11,7 @@ use CoreX\Notifications\Digest\Contracts\DigestBuilder;
 use CoreX\Notifications\Digest\Data\DigestWindow;
 use CoreX\Notifications\Digest\Internal\DigestTick;
 use CoreX\Notifications\Digest\Internal\DigestWakeupAdapter;
+use CoreX\Notifications\Digest\Internal\NotificationDigestDueSource;
 use CoreX\Notifications\Inbox\Contracts\NotificationCenter;
 use CoreX\Notifications\Inbox\Contracts\NotificationPolicy;
 use CoreX\Notifications\Inbox\Data\EntityReference;
@@ -19,7 +20,10 @@ use CoreX\Notifications\Inbox\Data\NotificationContext;
 use CoreX\Notifications\Inbox\Data\NotificationInput;
 use CoreX\Notifications\Inbox\Data\NotificationSubject;
 use CoreX\Notifications\Internal\NotificationsOptions;
+use CoreX\Notifications\Preferences\Contracts\PreferenceRepository;
+use CoreX\Notifications\Preferences\Data\NotificationPreference;
 use CoreX\Notifications\Tests\TestCase;
+use CoreX\Scheduling\Contracts\WakeupScheduler;
 use CoreX\Scheduling\Data\WakeupDelivery;
 use CoreX\Scheduling\Data\WakeupRequest;
 use CoreX\Scheduling\Data\WakeupWindow;
@@ -215,3 +219,59 @@ function insertLegacyDigestWakeup(string $requestKey, array $payload): void
         'updated_at' => $now,
     ]);
 }
+
+it('keeps real frozen digests behind durable admission and cancellation', function (string $mode): void {
+    $digest = freezeDigest('real-admission');
+    $preferences = Mockery::mock(PreferenceRepository::class);
+    $preferences->shouldReceive('get')->andReturn(new NotificationPreference('1', ['in_app'], 'hourly'));
+    app()->forgetScopedInstances();
+    app()->instance(PreferenceRepository::class, $preferences);
+    $key = 'notification.digest:'.$digest->id;
+    $row = DB::table('sys_wakeup_requests')->where('request_key', $key)->first();
+
+    if ($mode === 'lease') {
+        DB::table('sys_wakeup_requests')->where('request_key', $key)->update(['status' => 'running', 'lease_until' => new DateTimeImmutable('+1 hour')]);
+    } elseif ($mode === 'retry') {
+        DB::table('sys_wakeup_requests')->where('request_key', $key)->update(['status' => 'failed', 'attempt' => 1, 'retry_at' => new DateTimeImmutable('+1 hour')]);
+    } elseif ($mode === 'cancelled') {
+        resolve(WakeupScheduler::class)->cancel(digestContext()->tenant, $key);
+    } elseif ($mode !== 'valid') {
+        $payload = json_decode($row->payload, true, flags: JSON_THROW_ON_ERROR);
+
+        if ($mode === 'missing') {
+            $payload = $payload['data'];
+        } else {
+            $payload['_corex']['extension']['version'] = 'notification-digest/0';
+        }
+        DB::table('sys_wakeup_requests')->where('request_key', $key)->update(['payload' => json_encode($payload, JSON_THROW_ON_ERROR)]);
+    }
+    wakeup_bridge_sweep(digestContext()->tenant, 10);
+    wakeup_bridge_sweep(digestContext()->tenant, 10);
+    expect(DB::table('ntf_deliveries')->where('digest_run_id', $digest->id)->count())->toBe($mode === 'valid' ? 1 : 0)
+        ->and(DB::table('ntf_digest_runs')->where('id', $digest->id)->value('state'))->toBe($mode === 'valid' ? 'admitted' : 'frozen');
+})->with(['mismatch', 'missing', 'cancelled', 'lease', 'retry', 'valid']);
+
+it('recovers the concrete frozen run after terminal history longer than the source limit', function (): void {
+    $old = freezeDigest('history');
+    DB::table('ntf_digest_runs')->where('id', $old->id)->update(['state' => 'skipped']);
+    $history = (array) DB::table('ntf_digest_runs')->where('id', $old->id)->first();
+    $history['id'] = (string) Str::uuid7();
+    $history['batch_seq'] = 1;
+    $history['state'] = 'admitted';
+    DB::table('ntf_digest_runs')->insert($history);
+    $new = freezeDigest('due-after-history');
+    DB::table('ntf_digest_runs')->where('state', '!=', 'frozen')->update(['period_start' => new DateTimeImmutable('-3 hours'), 'period_end' => new DateTimeImmutable('-2 hours')]);
+    DB::table('sys_wakeup_requests')->delete();
+    $preferences = Mockery::mock(PreferenceRepository::class);
+    $preferences->shouldReceive('get')->andReturn(new NotificationPreference('1', ['in_app'], 'hourly'));
+    app()->forgetScopedInstances();
+    app()->instance(PreferenceRepository::class, $preferences);
+    $source = resolve(NotificationDigestDueSource::class);
+    $result = $source->sweep(digestContext()->tenant, new DateTimeImmutable, 1);
+    expect($result->completed)->toBe(0)
+        ->and(DB::table('sys_wakeup_requests')->where('request_key', 'notification.digest:'.$new->id)->count())->toBe(1)
+        ->and(DB::table('sys_wakeup_requests')->where('request_key', 'notification.digest:'.$old->id)->count())->toBe(0);
+    wakeup_bridge_sweep(digestContext()->tenant, 1);
+    expect(DB::table('ntf_deliveries')->where('digest_run_id', $new->id)->count())->toBe(1)
+        ->and($source->nextDue(digestContext()->tenant))->toBeNull();
+});

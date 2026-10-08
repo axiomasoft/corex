@@ -1,0 +1,13 @@
+{
+    "case": "task-wakeup-no-handler",
+    "expected_tasks": 6,
+    "actual_tasks": 3,
+    "calls": [
+        {
+            "error": "Wakeup handler [task-recurrence.materialize] is not registered.",
+            "operation_receipt_committed": true
+        }
+    ],
+    "schedule_statuses": [],
+    "wakeup_requests": []
+}

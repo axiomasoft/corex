@@ -1,0 +1,10 @@
+{
+    "case": "digest-starvation",
+    "selected_periods": [
+        "01:00",
+        "01:00",
+        "01:00"
+    ],
+    "new_run_state": "frozen",
+    "next_due": "2026-10-07T01:00:00+00:00"
+}

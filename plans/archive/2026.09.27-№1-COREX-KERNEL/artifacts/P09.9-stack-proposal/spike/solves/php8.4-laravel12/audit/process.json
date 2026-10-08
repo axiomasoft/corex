@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "/usr/bin/php8.4",
+    "/home/vostrikov/.config/herd-lite/bin/composer",
+    "audit",
+    "--locked",
+    "--no-plugins",
+    "--format=json"
+  ],
+  "cwd": "/tmp/corex-p099-stack-design-26ba485k/php8.4-laravel12",
+  "exit": 0,
+  "seconds": 1.318,
+  "stdout_sha256": "e464a6f19a008d852b61fd0966a47b663d20d70ccfba0b30edd6483a787f15f5",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

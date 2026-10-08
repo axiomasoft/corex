@@ -1,0 +1,28 @@
+{
+    "case": "task-wakeup",
+    "expected_tasks": 6,
+    "actual_tasks": 6,
+    "calls": [
+        {
+            "created": 3,
+            "noop": 0,
+            "cursor": null
+        },
+        {
+            "created": 3,
+            "noop": 0,
+            "cursor": null
+        }
+    ],
+    "schedule_statuses": [
+        "created",
+        "conflict"
+    ],
+    "wakeup_requests": [
+        {
+            "request_key": "materialize:audit-series",
+            "fire_at": "2026-09-03 00:00:00",
+            "status": "pending"
+        }
+    ]
+}

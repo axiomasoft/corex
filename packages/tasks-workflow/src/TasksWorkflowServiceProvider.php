@@ -13,12 +13,14 @@ use CoreX\Database\Contracts\SchemaSetProvider;
 use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Recurrence\Contracts\RecurrenceExpander;
 use CoreX\Recurrence\Laravel\RecurrenceFactory;
+use CoreX\Scheduling\Data\WakeupHandlerDefinition;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
 use CoreX\Tasks\Task\Contracts\CreateTaskCommand;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
 use CoreX\TasksWorkflow\Errors\Internal\PackageProblemDefinitions;
 use CoreX\TasksWorkflow\Internal\DangerousModesCheck;
+use CoreX\TasksWorkflow\Internal\MaterializationWakeupHandler;
 use CoreX\TasksWorkflow\Internal\SqlTaskRecurrenceMaterializer;
 use CoreX\TasksWorkflow\Internal\TasksWorkflowOptions;
 use CoreX\TasksWorkflow\Internal\TasksWorkflowSchemaSets;
@@ -44,6 +46,17 @@ final class TasksWorkflowServiceProvider extends ServiceProvider
         $this->app->singleton(TasksWorkflowOptions::class, static fn (Application $app): TasksWorkflowOptions => TasksWorkflowOptions::fromArray(
             (array) $app->make(Repository::class)->get('corex-tasks-workflow', []),
         ));
+        $this->app->scoped(MaterializationWakeupHandler::class);
+        $options = TasksWorkflowOptions::fromArray((array) $this->app->make(Repository::class)->get('corex-tasks-workflow', []));
+
+        if ($options->wakeupEnabled) {
+            $this->app->singleton('corex.tasks-workflow.materialization-wakeup-handler', static function (Application $app): WakeupHandlerDefinition {
+                $options = $app->make(TasksWorkflowOptions::class);
+
+                return new WakeupHandlerDefinition(kind: $options->wakeupHandlerKind, version: $options->wakeupHandlerVersion, handler: $options->wakeupHandler, acceptLegacyUnstamped: $options->wakeupAcceptLegacyUnstamped);
+            });
+            $this->app->tag('corex.tasks-workflow.materialization-wakeup-handler', WakeupHandlerDefinition::TAG);
+        }
         $this->app->tag([DangerousModesCheck::class], RuntimeConfigCheck::class);
 
         $this->app->singleton(RecurrenceExpander::class, static fn (): RecurrenceExpander => RecurrenceFactory::create());

@@ -77,31 +77,28 @@ final class RRuleRecurrenceExpander implements RecurrenceExpander
         $windowBounds = $this->windowBounds(set: $set, window: $window, limits: $limits);
 
         foreach ($source as $candidate) {
+            // Seeking replays at most the saved prefix and shares the page's
+            // wall/memory bounds. Only new candidates spend its processing budget.
+            if ((microtime(true) - $startedAt) > $limits->wallSeconds || memory_get_usage(true) > $memoryLimit) {
+                $status = 'partial';
+                $scanned = max($scanned, $resumeOffset);
+
+                break;
+            }
+
             if ($scanned < $resumeOffset) {
                 $scanned++;
 
                 continue;
             }
 
+            if (($scanned - $resumeOffset) >= $limits->candidateSteps || $emitted >= $limits->emitted) {
+                $status = 'partial';
+
+                break;
+            }
+
             $scanned++;
-
-            if ($scanned > $limits->candidateSteps) {
-                $status = 'partial';
-
-                break;
-            }
-
-            if ((microtime(true) - $startedAt) > $limits->wallSeconds) {
-                $status = 'partial';
-
-                break;
-            }
-
-            if (memory_get_usage(true) > $memoryLimit) {
-                $status = 'partial';
-
-                break;
-            }
 
             $candidateInstant = DateTimeImmutable::createFromMutable($candidate);
 
@@ -159,11 +156,6 @@ final class RRuleRecurrenceExpander implements RecurrenceExpander
             $emitted++;
             $completeThrough = $effective;
 
-            if (($emittedSoFar + $emitted) >= $limits->emitted) {
-                $status = $this->hasMoreCandidates(source: $source, scanned: $scanned) ? 'partial' : 'complete';
-
-                break;
-            }
         }
 
         $totalEmitted = $emittedSoFar + $emitted;
@@ -453,21 +445,5 @@ final class RRuleRecurrenceExpander implements RecurrenceExpander
         $instant = new DateTimeImmutable($effective);
 
         return $instant->getOffset();
-    }
-
-    /** @param RSet<int, DateTime> $source */
-    private function hasMoreCandidates(RSet $source, int $scanned): bool
-    {
-        $index = 0;
-
-        foreach ($source as $_) {
-            $index++;
-
-            if ($index > $scanned) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

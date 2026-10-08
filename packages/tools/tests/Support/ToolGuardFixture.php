@@ -7,7 +7,6 @@ namespace CoreX\Tools\Tests\Support;
 use Closure;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Validation\Data\JsonObject;
-use CoreX\Operations\Validation\Data\JsonValue;
 use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Data\ToolCall;
@@ -15,10 +14,8 @@ use CoreX\Tools\Data\ToolDescriptor;
 use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Data\ToolResult;
 use CoreX\Tools\Errors\Enums\ToolsErrorCode;
-use CoreX\Tools\Internal\ToolSchemaSupervisor;
 use Illuminate\Support\Facades\DB;
 use LogicException;
-use RuntimeException;
 use Throwable;
 
 /** Consumer guard fixture binding approval, idempotency and resource version for tests. */
@@ -187,36 +184,19 @@ final class ToolGuardFixture implements ToolExecutionGuard
         }
 
         if ($this->enforceOutputInTransaction && ! $this->simulateExternalCommit) {
-            $runner = function () use ($tool, $call, $effect): ToolResult {
-                $result = $effect();
+            try {
+                return DB::transaction(static function () use ($effect): ToolResult {
+                    $result = $effect();
 
-                if ($result->outcome !== ToolOutcome::Committed || $result->structuredData === null) {
-                    return $result;
-                }
-
-                try {
-                    $validator = new ToolSchemaSupervisor;
-                    $handle = $validator->admit(schema: $tool->outputSchema, profile: $tool->schemaProfile);
-                    $validation = $validator->validate(
-                        schema: $handle,
-                        value: new JsonValue(canonicalJson: $result->structuredData->canonicalJson),
-                    );
-
-                    if (! $validation->valid) {
-                        return $this->denied(errorCode: ToolsErrorCode::OutputContractFailed, call: $call);
+                    if ($result->outcome !== ToolOutcome::Committed) {
+                        throw new ToolEffectRollback($result);
                     }
-                } catch (RuntimeException) {
-                    return $this->denied(errorCode: ToolsErrorCode::InternalError, call: $call);
-                }
 
-                return $result;
-            };
-
-            if (DB::transactionLevel() > 0) {
-                return $runner();
+                    return $result;
+                });
+            } catch (ToolEffectRollback $rollback) {
+                return $rollback->result;
             }
-
-            return DB::transaction($runner);
         }
 
         $result = $effect();

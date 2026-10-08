@@ -1,5 +1,10 @@
 ## Unreleased — PHP 8.4 modernization (P09.4)
 
+## Unreleased — kernel audit repairs (2026-10-08)
+
+- Clarify ToolExecutionGuard rollback obligations for local failed effects; prove invalid output, exceptions, retry and receipt replay with real writes. No SPI signature changes.
+
+
 ## Unreleased — Laravel 13 platform (P09.9, D132)
 
 - Require Laravel 13 and PHP 8.4+; support PHP 8.4–8.5. Laravel 12 support is removed. Testbench uses the Laravel 13 family; package versions and runtime contracts are unchanged.

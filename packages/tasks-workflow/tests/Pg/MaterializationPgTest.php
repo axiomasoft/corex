@@ -22,7 +22,6 @@ use CoreX\TasksWorkflow\Data\MaterializationWindow;
 use CoreX\TasksWorkflow\Data\SeriesReference;
 use CoreX\TasksWorkflow\Exceptions\UnsupportedMaterialization;
 use CoreX\TasksWorkflow\Internal\MaterializationHasher;
-use CoreX\TasksWorkflow\Internal\MaterializationWakeupHandler;
 use CoreX\TasksWorkflow\Internal\TasksWorkflowOptions;
 use CoreX\TasksWorkflow\Tests\PgTestCase;
 use CoreX\TasksWorkflow\Tests\Support\SeriesSeeder;
@@ -30,6 +29,7 @@ use CoreX\TasksWorkflow\Tests\Support\SeriesSeeder;
 require_once __DIR__.'/../../../wakeup/tests/Support/PackageBridge.php';
 use CoreX\Scheduling\Contracts\WakeupScheduler;
 use CoreX\Scheduling\Data\WakeupRequest;
+use CoreX\TasksWorkflow\TasksWorkflowServiceProvider;
 use CoreX\Workflow\Internal\WorkflowOptions;
 use CoreX\Workflow\WorkflowServiceProvider;
 use Illuminate\Support\Facades\DB;
@@ -141,7 +141,7 @@ it('MAT-06 schedules a stamped complete payload and materializes through the han
     resolve(TaskRecurrenceCommand::class)->materialize(pgScope($this), $series, $window, pgToken($this, $series, $window, 'pg-06-a'));
 
     $stored = json_decode(
-        (string) DB::table('sys_wakeup_requests')->where('request_key', 'materialize:series-pg-06')->value('payload'),
+        (string) DB::table('sys_wakeup_requests')->where('kind', MaterializationHasher::HANDLER_KIND)->value('payload'),
         true,
         flags: JSON_THROW_ON_ERROR,
     );
@@ -254,15 +254,10 @@ it('MAT-08 denies cross-account restore epoch reuse on postgres', function (): v
 
 function registerMaterializationWakeup(): void
 {
+    app()['config']->set('corex-tasks-workflow.wakeup.enabled', true);
+    app()->forgetInstance(TasksWorkflowOptions::class);
+    app()->register(TasksWorkflowServiceProvider::class, force: true);
     wakeup_bridge_register();
-    app()['config']->set('corex-wakeup.handlers', [
-        MaterializationHasher::HANDLER_KIND => [
-            'handler' => MaterializationWakeupHandler::class,
-            'version' => MaterializationHasher::HANDLER_VERSION,
-            'accept_legacy_unstamped' => false,
-        ],
-    ]);
-    app()->forgetInstance(wakeup_bridge_options());
     app()->forgetInstance(wakeup_bridge_registry());
     app()->forgetScopedInstances();
 }

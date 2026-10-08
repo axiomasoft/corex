@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — kernel audit repairs (2026-10-08)
+
+- Resume with page emission/candidate budgets, checkpoint only processed candidates, and bound replay by the same wall and memory limits without a second lookahead traversal.
+
+
 ## Unreleased — Laravel 13 platform (P09.9, D132)
 
 - Require Laravel 13 and PHP 8.4+; support PHP 8.4–8.5. Laravel 12 support is removed. Testbench uses the Laravel 13 family; package versions and runtime contracts are unchanged.

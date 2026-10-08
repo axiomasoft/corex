@@ -252,3 +252,48 @@ it('REC-11 refuses pinned tzdb versions that differ from runtime', function (): 
     expect($page->status)->toBe('unsupported')
         ->and($page->occurrences)->toBeEmpty();
 });
+
+it('REC-12 resumes all occurrences with independent page emission and candidate budgets', function (int $emitted, int $steps, bool $exceptions): void {
+    $set = recurrenceSet(
+        seriesId: 'six-pages', start: new DateStart('UTC', '2026-10-01T00:00:00Z', null), rrule: 'FREQ=DAILY;COUNT=6',
+        exdates: $exceptions ? ['2026-10-02T00:00:00Z'] : [],
+        overrides: $exceptions ? [new RecurrenceOverride('2026-10-04T00:00:00Z', null, true)] : [],
+    );
+    $window = new RecurrenceWindow('UTC', '2026-10-01T00:00:00Z', '2026-10-07T00:00:00Z');
+    $expander = RecurrenceFactory::create();
+    $expected = $expander->expand($set, $window, new ExpansionLimits(memoryMiB: 256))->occurrences;
+    $cursor = null;
+    $actual = [];
+    $previousScanned = 0;
+    for ($i = 0; $i < 10; $i++) {
+        $page = $expander->expand($set, $window, new ExpansionLimits(emitted: $emitted, candidateSteps: $steps, memoryMiB: 256), $cursor);
+        expect(count($page->occurrences))->toBeLessThanOrEqual($emitted)
+            ->and($page->scanned - $previousScanned)->toBeLessThanOrEqual($steps);
+        $actual = array_merge($actual, $page->occurrences);
+        $previousScanned = $page->scanned;
+        $cursor = $page->nextCursor;
+
+        if ($cursor === null) {
+            break;
+        }
+    }
+    expect($cursor)->toBeNull()
+        ->and($actual)->toEqual($expected);
+})->with([[2, 2, false], [1, 6, false], [3, 3, true], [1, 1, true]]);
+
+it('REC-13 stops before a candidate without losing it at the exclusive window end', function (): void {
+    $set = recurrenceSet('window-budget', new DateStart('DATE', '2026-10-01', null), 'FREQ=DAILY;COUNT=6');
+    $window = new RecurrenceWindow('DATE', '2026-10-03', '2026-10-06');
+    $cursor = null;
+    $values = [];
+    for ($i = 0; $i < 8; $i++) {
+        $page = RecurrenceFactory::create()->expand($set, $window, new ExpansionLimits(emitted: 1, candidateSteps: 1, memoryMiB: 256), $cursor);
+        $values = array_merge($values, array_map(static fn ($occurrence) => $occurrence->effectiveDateOrInstant, $page->occurrences));
+        $cursor = $page->nextCursor;
+
+        if ($cursor === null) {
+            break;
+        }
+    }
+    expect($cursor)->toBeNull()->and($values)->toBe(['2026-10-03', '2026-10-04', '2026-10-05']);
+});

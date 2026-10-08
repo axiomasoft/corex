@@ -4,20 +4,25 @@ declare(strict_types=1);
 
 namespace CoreX\Database\Internal;
 
+use Closure;
 use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Database\Data\SchemaSet;
 use CoreX\Database\Data\SchemaSetStatus;
+use CoreX\Database\Enums\SchemaLifecycle;
 use CoreX\Database\Enums\SchemaScope;
 use CoreX\Database\Exceptions\SchemaSetException;
+use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Migrations\Migrator;
 use InvalidArgumentException;
+use LogicException;
 
 /** @internal */
 final readonly class LaravelSchemaMigrator implements SchemaMigrator
 {
-    public function __construct(private SchemaSets $sets, private Migrator $migrator, private DatabaseManager $db) {}
+    /** @param ?Closure(Connection, string, array<string, string>, Closure):void $moduleMigrations */
+    public function __construct(private SchemaSets $sets, private Migrator $migrator, private DatabaseManager $db, private ?Closure $moduleMigrations = null) {}
 
     public function migrate(SchemaScope $scope, ?string $connection = null, bool $includeModules = false): array
     {
@@ -106,14 +111,47 @@ final readonly class LaravelSchemaMigrator implements SchemaMigrator
         $groups = $this->groups(sets: $sets, connection: $connection);
         $ran = [];
         foreach ($groups as $name => $group) {
-            $ran = [...$ran, ...$this->migrator->usingConnection($name, function () use ($group): array {
+            $ran = [...$ran, ...$this->migrator->usingConnection($name, function () use ($group, $name): array {
+                $db = $this->db->connection($name);
+                $hasModules = array_any($group, static fn (SchemaSet $set): bool => $set->lifecycle === SchemaLifecycle::Module);
+
+                $prerequisite = $hasModules && $db->getDriverName() === 'pgsql' && ! $db->getSchemaBuilder()->hasTable('mod_records')
+                    ? $this->sets->get('axiomasoft/corex:tenant')
+                    : null;
                 $repository = $this->migrator->getRepository();
 
                 if (! $repository->repositoryExists()) {
                     $repository->createRepository();
                 }
                 $before = $repository->getRan();
-                $this->migrator->run(array_map(static fn (SchemaSet $set): string => $set->path, $group));
+                $owners = [];
+                foreach ($group as $set) {
+                    if ($set->lifecycle === SchemaLifecycle::Module) {
+                        foreach ($this->migrator->getMigrationFiles([$set->path]) as $file) {
+                            $canonical = realpath($file);
+                            $owners[$canonical === false ? $file : $canonical] = $set->package;
+                        }
+                    }
+                }
+                $run = function () use ($group, $prerequisite): void {
+                    if ($prerequisite !== null) {
+                        $this->migrator->run([$prerequisite->path]);
+                    }
+                    $this->migrator->run(array_map(static fn (SchemaSet $set): string => $set->path, $group));
+                };
+
+                if ($owners === [] || $db->getDriverName() === 'sqlite') {
+                    $run();
+                } else {
+                    if ($db->getDriverName() !== 'pgsql') {
+                        throw new LogicException('Module schema ownership requires PostgreSQL.');
+                    }
+
+                    if ($this->moduleMigrations === null) {
+                        throw new LogicException('Module schema ownership requires the registered module migration boundary.');
+                    }
+                    ($this->moduleMigrations)($db, $name, $owners, $run);
+                }
 
                 return array_values(array_diff($repository->getRan(), $before));
             })];

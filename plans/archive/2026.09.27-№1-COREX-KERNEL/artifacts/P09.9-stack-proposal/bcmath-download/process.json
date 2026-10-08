@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "apt-get",
+    "download",
+    "php8.5-bcmath=8.5.11-1+ubuntu24.04.1+deb.sury.org+1"
+  ],
+  "cwd": "/tmp/corex-p099-stack-design-io0_mv2y/php85-bcmath",
+  "exit": 0,
+  "seconds": 2.872,
+  "stdout_sha256": "4835b01f18c6213061de6bf89673cbeafb61227dbcfa39fc7cdeb183b7380da2",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

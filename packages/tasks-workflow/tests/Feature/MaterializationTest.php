@@ -7,15 +7,21 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\WriteToken;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Recurrence\Contracts\RecurrenceExpander;
 use CoreX\Recurrence\Data\DateStart;
+use CoreX\Recurrence\Data\ExpansionLimits;
 use CoreX\Recurrence\Data\RecurrenceOverride;
 use CoreX\Recurrence\Data\RecurrenceSet;
+use CoreX\Recurrence\Data\RecurrenceWindow;
 use CoreX\Scheduling\Data\WakeupDelivery;
 use CoreX\Scheduling\Data\WakeupRequest;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
+use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
 use CoreX\Tasks\Project\Internal\Models\Project;
+use CoreX\Tasks\Task\Contracts\CreateTaskCommand;
 use CoreX\Tasks\Task\Data\ActorData;
 use CoreX\Tasks\Task\Data\TaskDraft;
+use CoreX\Tasks\Task\Data\TaskReference;
 use CoreX\Tasks\Task\Internal\Models\Stage;
 use CoreX\Tasks\Task\Internal\Models\Task;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
@@ -24,6 +30,7 @@ use CoreX\TasksWorkflow\Data\SeriesReference;
 use CoreX\TasksWorkflow\Exceptions\StaleMaterialization;
 use CoreX\TasksWorkflow\Exceptions\UnsupportedMaterialization;
 use CoreX\TasksWorkflow\Internal\MaterializationHasher;
+use CoreX\TasksWorkflow\Internal\MaterializationStore;
 use CoreX\TasksWorkflow\Internal\MaterializationWakeupHandler;
 use CoreX\TasksWorkflow\Internal\ScopeConnectionGuard;
 use CoreX\TasksWorkflow\Tests\Support\SeriesSeeder;
@@ -317,3 +324,107 @@ function wakeupDelivery(object $context, array $payload, string $requestKey): Wa
         attempt: 1,
     );
 }
+
+it('MAT-13 continues small pages with fresh keys while identical replay leaves the checkpoint alone', function (): void {
+    $set = SeriesSeeder::dailySet('series-pages', 'rev-1', 6);
+    $series = SeriesSeeder::seed('series-pages', $set, $this->template, $this->restoreEpoch);
+    $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-08', pageLimit: 2);
+    $materializer = resolve(TaskRecurrenceCommand::class);
+    foreach ([1, 2, 3] as $page) {
+        $token = matToken($this, $series, $window, 'page-'.$page);
+        $receipt = $materializer->materialize(matScope($this), $series, $window, $token);
+        $checkpoint = DB::table('corex_task_series_state')->where('series_key', $series->id)->first();
+        expect($receipt->created)->toBe(2);
+        $replay = $materializer->materialize(matScope($this), $series, $window, $token);
+        expect($replay->created)->toBe(0)
+            ->and(DB::table('corex_task_series_state')->where('series_key', $series->id)->first())->toEqual($checkpoint);
+    }
+    expect($receipt->cursor)->toBeNull()
+        ->and(Task::query()->count())->toBe(6)
+        ->and(DB::table('corex_task_occurrences')->count())->toBe(6);
+});
+
+it('MAT-14 checkpoints only the committed prefix before an unknown or conflict', function (string $state): void {
+    $set = SeriesSeeder::dailySet('series-stop', 'rev-1', 6);
+    $series = SeriesSeeder::seed('series-stop', $set, $this->template, $this->restoreEpoch);
+    $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-08', pageLimit: 3);
+    $store = new MaterializationStore(DB::connection(), resolve(TaskOperationReceipts::class));
+    $page = resolve(RecurrenceExpander::class)->expand($set, new RecurrenceWindow('DATE', $window->start, $window->end), new ExpansionLimits(memoryMiB: 256));
+    $blocked = $page->occurrences[1];
+    $id = $store->insertPendingOccurrence($series->id, $series->immutableRevision, $blocked->key, [], $blocked->effectiveDateOrInstant, 'blocked');
+    DB::table('corex_task_occurrences')->where('id', $id)->update(['state' => $state]);
+    $first = resolve(TaskRecurrenceCommand::class)->materialize(matScope($this), $series, $window, matToken($this, $series, $window, 'stop-1'));
+    expect($first->created)->toBe(1)
+        ->and($first->cursor?->resumePosition['scanned'])->toBe(1)
+        ->and($first->committedPrefix)->toBe('2026-09-01');
+    $checkpoint = DB::table('corex_task_series_state')->where('series_key', $series->id)->first();
+    $replay = resolve(TaskRecurrenceCommand::class)->materialize(matScope($this), $series, $window, matToken($this, $series, $window, 'stop-1'));
+    expect($replay->unknown)->toBe($first->unknown)->and($replay->conflict)->toBe($first->conflict)
+        ->and(DB::table('corex_task_series_state')->where('series_key', $series->id)->first())->toEqual($checkpoint);
+    DB::table('corex_task_occurrences')->where('id', $id)->delete();
+    $second = resolve(TaskRecurrenceCommand::class)->materialize(matScope($this), $series, $window, matToken($this, $series, $window, 'stop-2'));
+    $third = resolve(TaskRecurrenceCommand::class)->materialize(matScope($this), $series, $window, matToken($this, $series, $window, 'stop-3'));
+    expect($second->created)->toBe(3)->and($third->created)->toBe(2)->and(Task::query()->count())->toBe(6);
+})->with(['unknown', 'committed']);
+
+it('MAT-15 resets the cursor for a changed window', function (): void {
+    $set = SeriesSeeder::dailySet('series-window', 'rev-1', 6);
+    $series = SeriesSeeder::seed('series-window', $set, $this->template, $this->restoreEpoch);
+    $firstWindow = new MaterializationWindow(start: '2026-09-01', end: '2026-09-04', pageLimit: 2);
+    resolve(TaskRecurrenceCommand::class)->materialize(matScope($this), $series, $firstWindow, matToken($this, $series, $firstWindow, 'window-1'));
+    $nextWindow = new MaterializationWindow(start: '2026-09-04', end: '2026-09-08', pageLimit: 3);
+    $next = resolve(TaskRecurrenceCommand::class)->materialize(matScope($this), $series, $nextWindow, matToken($this, $series, $nextWindow, 'window-2'));
+    expect($next->created)->toBe(3)->and(Task::query()->count())->toBe(5);
+});
+
+it('MAT-16 preserves the tail when the task loop exhausts wall time after a write', function (): void {
+    $set = SeriesSeeder::dailySet('series-time', 'rev-1', 4);
+    $series = SeriesSeeder::seed('series-time', $set, $this->template, $this->restoreEpoch);
+    $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-08', pageLimit: 3, maxSeconds: 1);
+    $command = resolve(CreateTaskCommand::class);
+    app()->instance(CreateTaskCommand::class, new class($command) implements CreateTaskCommand
+    {
+        private bool $first = true;
+
+        public function __construct(private CreateTaskCommand $inner) {}
+
+        public function handle(TaskDraft $draft): TaskReference
+        {
+            $ref = $this->inner->handle($draft);
+
+            if ($this->first) {
+                $this->first = false;
+                usleep(1_100_000);
+            }
+
+            return $ref;
+        }
+    });
+    app()->forgetInstance(TaskRecurrenceCommand::class);
+    $first = resolve(TaskRecurrenceCommand::class)->materialize(matScope($this), $series, $window, matToken($this, $series, $window, 'time-1'));
+    $second = resolve(TaskRecurrenceCommand::class)->materialize(matScope($this), $series, $window, matToken($this, $series, $window, 'time-2'));
+    expect($first->created)->toBe(1)->and($first->cursor?->resumePosition['scanned'])->toBe(1)
+        ->and($second->created)->toBe(3)->and(Task::query()->count())->toBe(4);
+});
+
+it('MAT-17 resets a persisted partial cursor after revision or library identity changes', function (string $change): void {
+    $set = SeriesSeeder::dailySet('series-binding', 'rev-1', 6);
+    $series = SeriesSeeder::seed('series-binding', $set, $this->template, $this->restoreEpoch);
+    $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-08', pageLimit: 2);
+    resolve(TaskRecurrenceCommand::class)->materialize(matScope($this), $series, $window, matToken($this, $series, $window, 'binding-0'));
+
+    if ($change === 'revision') {
+        $series = SeriesSeeder::seed('series-binding', SeriesSeeder::dailySet('series-binding', 'rev-2', 6), $this->template, $this->restoreEpoch);
+        DB::table('corex_task_series_state')->where('series_key', $series->id)->update(['active_revision' => 'rev-2']);
+    } else {
+        $cursor = json_decode(DB::table('corex_task_series_state')->where('series_key', $series->id)->value('cursor'), true, flags: JSON_THROW_ON_ERROR);
+        $cursor['libraryVersion'] = 'previous-library';
+        DB::table('corex_task_series_state')->where('series_key', $series->id)->update(['cursor' => json_encode($cursor, JSON_THROW_ON_ERROR)]);
+    }
+    foreach ([1, 2, 3] as $page) {
+        $receipt = resolve(TaskRecurrenceCommand::class)->materialize(matScope($this), $series, $window, matToken($this, $series, $window, 'binding-'.$page));
+    }
+    expect($receipt->cursor)->toBeNull()
+        ->and(Task::query()->count())->toBe($change === 'revision' ? 8 : 6)
+        ->and(DB::table('corex_task_occurrences')->where('immutable_revision', $series->immutableRevision)->count())->toBe(6);
+})->with(['revision', 'library']);

@@ -1,0 +1,121 @@
+{
+  "schema": "corex-kernel-audit-execution/1",
+  "date": "2026-10-08",
+  "source_report": "../REPORT.md",
+  "head": "4deaa44919ce0d57062ffd5d32c18610ad3fd572",
+  "status": "completed",
+  "findings": [
+    {
+      "id": "KRN-01",
+      "status": "fixed",
+      "repair": "PostgreSQL template и explicit sets используют общий lifecycle schema-diff; prerequisite registry устанавливается раньше Module, journal/claims/DDL атомарны. Настоящий template clone проходит enable/upgrade/purge/repair; host/platform и исходный template сохраняются.",
+      "evidence": [
+        "test-lifecycle-pg.log",
+        "test-schema-contract.log"
+      ]
+    },
+    {
+      "id": "KRN-02",
+      "status": "fixed",
+      "repair": "Hydrator передаёт авторизатору точные поля возвращаемой проекции. При field denial запись исключается.",
+      "evidence": [
+        "test-search.log"
+      ]
+    },
+    {
+      "id": "KRN-03",
+      "status": "fixed",
+      "repair": "Официальная транзакционная host fixture принудительно откатывает non-committed callback через rollback signal/savepoint. SPI документация явно требует rollback до not-executed; provider-key сохраняет unknown. Internal invoker и default read-only policy не изменены.",
+      "evidence": [
+        "test-tools.log"
+      ]
+    },
+    {
+      "id": "KRN-04",
+      "status": "fixed",
+      "repair": "Разделены абсолютный resume offset и бюджеты страницы; cursor включает только обработанных кандидатов. Seek проверяет wall/memory budget, повторный lookahead удалён.",
+      "evidence": [
+        "test-recurrence.log"
+      ]
+    },
+    {
+      "id": "KRN-05",
+      "status": "fixed",
+      "repair": "Materializer восстанавливает cursor из state и обрабатывает по одному occurrence до его committed checkpoint. Unknown/conflict/time stop сохраняют хвост; смена window/revision/library сбрасывает traversal; restore epoch проверяется. Replay сохраняет исход unknown/conflict и не продвигает state.",
+      "evidence": [
+        "test-materialization.log",
+        "test-materialization-pg.log"
+      ]
+    },
+    {
+      "id": "KRN-06",
+      "status": "fixed",
+      "repair": "Digest recovery больше не вызывает handler напрямую; создаёт missing immutable request через Scheduling SPI. Stamp mismatch/missing, cancellation, lease и retry остаются под durable admission.",
+      "evidence": [
+        "test-digest.log"
+      ]
+    },
+    {
+      "id": "KRN-07",
+      "status": "fixed",
+      "repair": "sweep/nextDue выбирают только frozen runs, конкретный run не пересоздаётся builder-ом. Skipped/admitted history длиннее лимита не вытесняет новую работу; recovery не считается completion.",
+      "evidence": [
+        "test-digest.log"
+      ]
+    },
+    {
+      "id": "KRN-08",
+      "status": "fixed",
+      "repair": "Package provider регистрирует scoped handler и immutable kernel-tagged definition из собственных options. Проверены оба порядка providers, default/custom stamps, legacy option, отсутствие scheduler до эффекта и duplicate kind rejection.",
+      "evidence": [
+        "test-materialization.log",
+        "test-materialization-pg.log"
+      ]
+    },
+    {
+      "id": "KRN-09",
+      "status": "fixed",
+      "repair": "Immutable request key привязан к revision/definition/window/restore epoch и continuation checkpoint. Replay повторяет scheduling с прежним ключом; новые окна/revisions/checkpoints получают новые. Conflict виден; scheduling failure после commit восстанавливается replay без повторения задач.",
+      "evidence": [
+        "test-materialization.log",
+        "test-materialization-pg.log"
+      ]
+    }
+  ],
+  "validation": {
+    "summary": {
+      "tests": 129,
+      "passed": 129,
+      "assertions": 752
+    },
+    "targeted_test_runs": 8,
+    "gates_passed": 14,
+    "changed_source_analysis_packages": 6,
+    "lint": "passed",
+    "commands": [
+      "tests.json",
+      "gates.json",
+      "analysis.json",
+      "lint.json"
+    ]
+  },
+  "semver": {
+    "native_public_signatures": "unchanged",
+    "php_api_manifest_gate": "passed",
+    "contract_guard": "passed",
+    "changelog": "updated in each affected package"
+  },
+  "isolation": {
+    "sqlite": ":memory:",
+    "postgres": "corex_kernel_repair_test; generated corex_module_template_*_test and corex_template_clone_*_test",
+    "temporary_databases": "removed; final database catalog query returned no matching databases",
+    "graph_report": "copied to package-graph-report.json; original report restored byte for byte"
+  },
+  "limits": [
+    "Полные root/package suites, coverage, mutation, полный Pint/PHPStan/Rector и нагрузочные прогоны не запускались по scope отчёта.",
+    "Seek recurrence остаётся bounded replay итератора библиотеки: большие offsets могут требовать большего wall budget, при исчерпании cursor не теряет необработанные события.",
+    "Старые templates без ownership claims не получают эвристических claims по именам; для гарантий purge требуется подготовленный исправленным механизмом template.",
+    "Recovery scheduling после domain commit требует повторить тот же operation key; будущие materialization windows выбирает caller явно."
+  ],
+  "workspace": "Existing plan/generated view changes were not edited. Original audit observations remain historical; passing regressions are in owning packages."
+}

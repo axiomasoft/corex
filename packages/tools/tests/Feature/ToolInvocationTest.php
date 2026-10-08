@@ -13,6 +13,7 @@ use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Operations\ApiServiceProvider;
+use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
@@ -43,10 +44,13 @@ use CoreX\Tools\Tests\Support\ToolGuardFixture;
 use CoreX\Tools\Tests\Support\ToolPolicyFixture;
 use CoreX\Tools\Tests\TestCase;
 use CoreX\Tools\ToolServiceProvider;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use LogicException;
+use Psr\Clock\ClockInterface;
+use RuntimeException;
 
 final class ToolInvocationTest extends TestCase
 {
@@ -336,9 +340,68 @@ final class ToolInvocationTest extends TestCase
         $this->policy->allowInvoke = true;
         $invoker = $this->app->make(ToolInvoker::class);
         $bad = $invoker->invoke($this->context(), $this->makeToolCall('notes.badoutput'));
-
         $this->assertToolError(ToolsErrorCode::OutputContractFailed, $bad->errorCode);
         self::assertSame(0, CountingHandler::$calls);
+        $this->modules->registry = $this->compile([
+            Api::tool('notes.badwrite', MutatingHandler::class, 'notes.create', $this->objectSchema(['operation_key' => ['type' => 'string']]), $this->outputSchema(), 'write', 'domain-key')
+                ->titled('Bad write', 'Writes before failing output validation'),
+        ]);
+        $call = $this->makeToolCall('notes.badwrite', ['operation_key' => 'bad-8'], operationKey: 'bad-8');
+        foreach ([1, 2] as $attempt) {
+            $bad = $invoker->invoke($this->context(), $call);
+            self::assertSame(ToolOutcome::NotExecuted, $bad->outcome);
+            $this->assertToolError(ToolsErrorCode::OutputContractFailed, $bad->errorCode);
+            self::assertSame(0, DB::table('tool_effects')->count());
+            self::assertSame(0, DB::table('tool_idempotency')->count());
+        }
+        self::assertSame(2, MutatingHandler::$calls);
+    }
+
+    public function test_exception_after_local_write_rolls_back_and_successful_retry_replays_receipt(): void
+    {
+        $this->policy->allowInvoke = true;
+        $fail = true;
+        $this->app->bind(MutatingHandler::class, function () use (&$fail): OperationHandler {
+            return new class($fail) implements OperationHandler
+            {
+                public function __construct(private bool $fail) {}
+
+                public function handle(RequestContext $context, array $input, array $parameters): array
+                {
+                    $result = (new MutatingHandler(resolve(ConnectionResolverInterface::class), resolve(ClockInterface::class)))->handle($context, $input, $parameters);
+
+                    if ($this->fail) {
+                        throw new RuntimeException('Failure after write');
+                    }
+
+                    return $result;
+                }
+            };
+        });
+        $invoker = $this->app->make(ToolInvoker::class);
+        $call = $this->makeToolCall('notes.create', ['name' => 'alpha', 'operation_key' => 'throw-8'], operationKey: 'throw-8');
+        $bad = $invoker->invoke($this->context(), $call);
+        self::assertSame(ToolOutcome::NotExecuted, $bad->outcome);
+        self::assertSame(0, DB::table('tool_effects')->count());
+        self::assertSame(0, DB::table('tool_idempotency')->count());
+        $fail = false;
+        self::assertSame(ToolOutcome::Committed, $invoker->invoke($this->context(), $call)->outcome);
+        self::assertTrue($invoker->invoke($this->context(), $call)->replayed);
+        self::assertSame(1, DB::table('tool_effects')->count());
+        self::assertSame(1, DB::table('tool_idempotency')->count());
+    }
+
+    public function test_provider_output_failure_preserves_uncertain_external_effect(): void
+    {
+        $this->policy->allowInvoke = true;
+        $this->modules->registry = $this->compile([
+            Api::tool('notes.external', MutatingHandler::class, 'notes.create', $this->objectSchema(['operation_key' => ['type' => 'string']]), $this->outputSchema(), 'write', 'provider-key')
+                ->titled('External write', 'Models an already committed provider effect'),
+        ]);
+        $result = $this->app->make(ToolInvoker::class)->invoke($this->context(), $this->makeToolCall('notes.external', ['operation_key' => 'external-8'], operationKey: 'external-8'));
+        self::assertSame(ToolOutcome::Unknown, $result->outcome);
+        self::assertSame(1, DB::table('tool_effects')->count());
+        self::assertSame('external-8', $result->operationKey);
     }
 
     public function test_replay_requires_current_visibility_invoke_09(): void

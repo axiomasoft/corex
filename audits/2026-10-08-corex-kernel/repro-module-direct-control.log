@@ -1,0 +1,6 @@
+{
+    "case": "module-direct-control",
+    "table_claims_after_enable": 2,
+    "module_state_after_purge": "purged",
+    "table_survived_purge": false
+}

@@ -1,0 +1,24 @@
+Package: php8.5-bcmath
+Source: php8.5
+Priority: optional
+Section: php
+Installed-Size: 100
+Maintainer: Debian PHP Maintainers <team+pkg-php@tracker.debian.org>
+Architecture: amd64
+Version: 8.5.11-1+ubuntu24.04.1+deb.sury.org+1
+Provides: php-bcmath
+Depends: php-common (>= 2:95~), ucf, php8.5-common (= 8.5.11-1+ubuntu24.04.1+deb.sury.org+1), libc6 (>= 2.14)
+Filename: pool/main/p/php8.5/php8.5-bcmath_8.5.11-1+ubuntu24.04.1+deb.sury.org+1_amd64.deb
+Size: 28810
+MD5sum: fd7130a8cb4d63f28d6731dab435ca93
+SHA1: 6a4e35d4daa04356eafdd9fb162c6a6522303655
+SHA256: f988bd727556b7a3b7dbedd18a74d9a47a60688a8f2129682209a843891c76eb
+SHA512: 42d7194aa6a0704d575125f854b0f8299e207a0771470129efe2d6d9ba0f92772d225d7f05e1dc8f217c4d958d25687e290ec4aa31a015664f9b1aa82b84ad9a
+Description-en: Bcmath module for PHP
+ This package provides the Bcmath module(s) for PHP.
+ .
+ PHP (recursive acronym for PHP: Hypertext Preprocessor) is a widely-used
+ open source general-purpose scripting language that is especially suited
+ for web development and can be embedded into HTML.
+Description-md5: 8f9f425714b203a9b7d1f3678f64c107
+

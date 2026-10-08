@@ -49,6 +49,14 @@ basename во всём репозитории.
 `includeModules: true` добавляет Module-наборы. Module-наборы также создаются через
 `ModuleLifecycle::enable()`, который получает пути из реестра. `migrateSets()` исполняет
 явно выбранные id, в том числе в тестах через трейт `MigratesSchemaSets`.
+На PostgreSQL оба пути Module-наборов используют тот же per-migration schema diff,
+что lifecycle: journal, DDL и `mod_records` claims сохраняются одной транзакцией
+под lifecycle graph lock. Если явная Module-выборка устанавливается в новую базу,
+мигратор добавляет prerequisite `axiomasoft/corex:tenant` для registry/claims.
+В template clone должны переноситься и Laravel journal, и `mod_records`; последующий
+`enable` использует уже сохранённые claims. Владение старых таблиц без claims нельзя
+восстановить по имени или префиксу. SQLite-наборы сохраняют самостоятельный путь
+установки; PostgreSQL lifecycle/purge на этом драйвере не поддерживается.
 
 Для Central и Tenant можно указать соединение; по умолчанию используется default connection.
 Dedicated исполняет каждый набор на его собственном соединении и запрещает общий

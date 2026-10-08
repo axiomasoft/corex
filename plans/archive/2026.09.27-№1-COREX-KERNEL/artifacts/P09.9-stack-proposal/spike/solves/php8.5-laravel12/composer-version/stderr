@@ -1,0 +1,3 @@
+PHP Deprecated:  Case statements followed by a semicolon (;) are deprecated, use a colon (:) instead in phar:///home/vostrikov/.config/herd-lite/bin/composer/vendor/react/promise/src/functions.php on line 300
+PHP version 8.5.11 (/usr/bin/php8.5)
+Run the "diagnose" command to get more detailed diagnostics output.

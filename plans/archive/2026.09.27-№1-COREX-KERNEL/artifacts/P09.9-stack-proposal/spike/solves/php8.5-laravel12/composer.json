@@ -1,0 +1,44 @@
+{
+  "name": "corex/infection-spike",
+  "description": "Repository-only P09.9 compatibility harness",
+  "type": "project",
+  "license": "MIT",
+  "require-dev": {
+    "php": "^8.4",
+    "infection/infection": "0.35.6",
+    "infection/abstract-testframework-adapter": "0.5.1",
+    "infection/include-interceptor": "1.0.0",
+    "axiomasoft/corex-infection-pest-adapter": "0.1.0",
+    "laravel/framework": "12.69.3",
+    "orchestra/testbench": "10.12.0",
+    "pestphp/pest": "4.7.8",
+    "phpunit/phpunit": "12.5.33",
+    "symfony/process": "7.4.19"
+  },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "scripts/quality/infection-pest-adapter",
+      "options": {
+        "symlink": false,
+        "versions": {
+          "axiomasoft/corex-infection-pest-adapter": "0.1.0"
+        }
+      }
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "CoreX\\Tenancy\\": "packages/tenancy/src/",
+      "CoreX\\InfectionSpike\\": "controls/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true,
+      "infection/extension-installer": true
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}

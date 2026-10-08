@@ -35,3 +35,9 @@ Package error identities use backed enums and a boot compiled kernel registry.
 Error constructors require `ErrorCode`; descriptors keep scoped string wire codes.
 See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
 validated replay and safe mapping.
+
+Each expansion call has its own emission and new-candidate budgets. Cursor counters
+remain absolute traversal positions. Seeking the saved prefix is bounded by the
+same wall-clock and memory limits; budget exhaustion preserves the previous position
+and never reports completion for unprocessed candidates. Large offsets may require
+more wall time to replay the library iterator. No separate unbounded lookahead runs.

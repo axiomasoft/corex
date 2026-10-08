@@ -1,0 +1,57 @@
+[
+  {
+    "url": "https://raw.githubusercontent.com/pestphp/pest/v4.7.8/composer.json",
+    "path": "sources/pest-4.7.8-composer.json",
+    "sha256": "3a05f506a5718749b7f9ba812235e3088face3bd36ba1025a7303c3115dd19f5"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/pestphp/pest/v5.2.1/composer.json",
+    "path": "sources/pest-5.2.1-composer.json",
+    "sha256": "5fa3f13e5869826f1cd0a4ee408d639a0405b4fc7587b8bf07e6e0b77949bbe5"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/sebastianbergmann/phpunit/12.5.33/composer.json",
+    "path": "sources/phpunit-12.5.33-composer.json",
+    "sha256": "703f2d8c9ca370f190e360966f9723ffe4ecc5a13509578d4a31c0712460604e"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/sebastianbergmann/phpunit/13.3.4/composer.json",
+    "path": "sources/phpunit-13.3.4-composer.json",
+    "sha256": "0237805a435a4c8d09e2ae2d1f7fdc7c73e89738d049d832052f1b2c1dd91947"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/laravel/framework/v12.69.3/composer.json",
+    "path": "sources/laravel-12.69.3-composer.json",
+    "sha256": "6ba9088c35c48fa0013d0e042a50c9ec87e97db4e1ce1d533863d4090eb5efb8"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/laravel/framework/v13.35.0/composer.json",
+    "path": "sources/laravel-13.35.0-composer.json",
+    "sha256": "569e7ab8a687a35d011999d64e2380dbda1cdb0e4c657cb310fcdbf19dee2a1a"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/orchestral/testbench/v10.12.0/composer.json",
+    "path": "sources/testbench-10.12.0-composer.json",
+    "sha256": "efc5850b61472303e9392b1f29d8ac4ba706a3097e64625c882221a25b1c00c7"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/orchestral/testbench/v11.3.0/composer.json",
+    "path": "sources/testbench-11.3.0-composer.json",
+    "sha256": "7032467dda52d7eb5a0ba48b91f61107e7b3cd3bd0f4f5ed88a8e70f77af87ca"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/symfony/process/v7.4.19/composer.json",
+    "path": "sources/process-7.4.19-composer.json",
+    "sha256": "6bd8967c3e4e4164500a03c9c4bae1359b4910f954c609f21d95e31663fcb440"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/symfony/process/v8.1.7/composer.json",
+    "path": "sources/process-8.1.7-composer.json",
+    "sha256": "89d9717724f39225a9517242fcc9cd833a54720da8404a94835345839636c0af"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/infection/infection/0.35.6/composer.json",
+    "path": "sources/infection-0.35.6-composer.json",
+    "sha256": "023efdf90097deb9b4ce0e178de280569608cfbe6a61051d2a05d1ec16755551"
+  }
+]

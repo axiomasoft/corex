@@ -18,7 +18,23 @@ Install with `composer require axiomasoft/corex-tasks-workflow` through the conf
 
 ## Failure semantics
 
-Materialization is bounded and uses durable task operation receipts to deduplicate effects. Invalid context, stale write tokens and unsupported recurrence data are rejected rather than bypassed. Wakeup and completion capture are disabled by default; enabling them requires their declared bindings and versioned registrations.
+Materialization is bounded and uses durable task operation receipts to deduplicate effects. Invalid context, stale write tokens and unsupported recurrence data are rejected rather than bypassed. Wakeup and completion capture are disabled by default. Enabling wakeup requires a
+bound `WakeupScheduler`; the package registers its scoped handler and immutable
+`WakeupHandlerDefinition` through the kernel tag using its own handler options.
+
+Fresh operation keys continue a saved partial cursor. Each task is committed before
+its recurrence checkpoint advances; conflict or unknown leaves the remaining tail
+for reconciliation. Changed windows/revisions/runtime bindings restart traversal,
+while SQL occurrence identity deduplicates existing tasks. Restore-epoch mismatch
+is rejected.
+
+Scheduling follows the domain commit. A request key includes revision, definition,
+window, restore epoch and continuation checkpoint. Identical operation replay retries
+scheduling with the same identity without advancing tasks again; a new window or
+partial checkpoint gets its own request. If scheduling throws after commit, retry the
+same operation key to recover the missing request. Schedule conflicts are surfaced
+as materialization conflicts. Wakeups continue the encoded window; callers explicitly
+choose future windows.
 
 ## Typed errors
 

@@ -1,0 +1,27 @@
+{
+  "status": "archived",
+  "path": "plans/archive/2026.09.27-№1-COREX-KERNEL",
+  "previous_tracked_and_untracked_files": 8403,
+  "changed_during_archive": [
+    "artifacts/P09-design/scripts/facts.py",
+    "log.jsonl",
+    "plan.json",
+    "views/handoff.md",
+    "views/index.md",
+    "views/plan.md",
+    "views/status.md"
+  ],
+  "plan_errors": 0,
+  "plan_warnings": 246,
+  "generated_views": "checked through plan.py",
+  "bc_decision_hashes_verified": 27,
+  "inventory_packages": 22,
+  "validation": {
+    "targeted_archive_tests": 11,
+    "assertions": 149,
+    "result": "passed",
+    "product_document_script_diff_check": "passed",
+    "historical_raw_logs": "preserved verbatim, including existing whitespace",
+    "existing_plan_warnings": 246
+  }
+}

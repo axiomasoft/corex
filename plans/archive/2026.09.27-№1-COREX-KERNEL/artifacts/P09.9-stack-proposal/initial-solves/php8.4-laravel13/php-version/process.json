@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "/usr/bin/php8.4",
+    "-r",
+    "echo PHP_VERSION, PHP_EOL;"
+  ],
+  "cwd": "/tmp/corex-p099-stack-design-38sm2hqx/php8.4-laravel13",
+  "exit": 0,
+  "seconds": 0.032,
+  "stdout_sha256": "1212983895036341ff1ca20c3342562009494506a8ed6ef6e14a2f219881ce22",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

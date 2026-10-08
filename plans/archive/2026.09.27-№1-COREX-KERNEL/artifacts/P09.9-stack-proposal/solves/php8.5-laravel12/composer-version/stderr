@@ -1,0 +1,3 @@
+Composer is operating slower than normal because you have Xdebug enabled. See https://getcomposer.org/xdebug
+PHP version 8.5.11 (/usr/bin/php8.5)
+Run the "diagnose" command to get more detailed diagnostics output.
