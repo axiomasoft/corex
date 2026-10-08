@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 REPO_DELIVERY = ROOT / 'delivery/remaining-cohort-20260915'
-PLAN = ROOT / 'plans/archive/2026.09.15-№1-COREX-FLEXCRM-REMAINING'
+RECORD = ROOT / 'release/remaining-cohort-20260915'
 RUNNER_SCRIPT = Path(__file__).resolve()
 QUALITY_SCRIPT = Path(__file__).with_name('remaining-cohort-quality.py')
 EXPORT_SCRIPT = Path(__file__).with_name('remaining-cohort-export.py')

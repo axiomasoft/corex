@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Database\Seeders;
 
-use CoreX\Access\Enums\PrincipalType;
 use CoreX\Access\Roles\Internal\Models\Role;
+use CoreX\Context\Enums\PrincipalType;
 use Illuminate\Database\Seeder;
 
 /**

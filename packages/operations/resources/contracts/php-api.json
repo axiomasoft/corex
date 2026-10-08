@@ -72,7 +72,7 @@
                         },
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -119,7 +119,7 @@
                         },
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -166,7 +166,7 @@
                         },
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -204,7 +204,7 @@
                         },
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -222,34 +222,6 @@
                         }
                     ],
                     "return": "bool",
-                    "doc": []
-                }
-            },
-            "properties": [],
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
-        "CoreX\\Operations\\Authorization\\Contracts\\Principal": {
-            "kind": "interface",
-            "layer": "spi-implement",
-            "since": "1.0",
-            "final": false,
-            "readonly": false,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": [],
-            "methods": {
-                "id": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": true,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
                     "doc": []
                 }
             },
@@ -287,7 +259,7 @@
                             "flags": 0
                         }
                     ],
-                    "return": "?CoreX\\Operations\\Authorization\\Contracts\\Principal",
+                    "return": "?CoreX\\Context\\Contracts\\Principal",
                     "doc": []
                 }
             },
@@ -384,7 +356,7 @@
                         },
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -422,7 +394,7 @@
                         },
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -460,7 +432,7 @@
                         },
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -511,7 +483,7 @@
                         },
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -3345,70 +3317,6 @@
             "enum_backing": null,
             "enum_cases": []
         },
-        "CoreX\\Operations\\Definition\\Contracts\\OperationHandler": {
-            "kind": "interface",
-            "layer": "spi-implement",
-            "since": "1.0",
-            "final": false,
-            "readonly": false,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": [],
-            "methods": {
-                "handle": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": true,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "input",
-                            "type": "array",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "parameters",
-                            "type": "array",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "array",
-                    "doc": {
-                        "@param": [
-                            "array<string, mixed> $input",
-                            "array<string, string> $parameters"
-                        ],
-                        "@return": [
-                            "(array<string, mixed> | list<mixed>)"
-                        ]
-                    }
-                }
-            },
-            "properties": [],
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
         "CoreX\\Operations\\Definition\\Contracts\\OperationRegistry": {
             "kind": "interface",
             "layer": "spi-call",
@@ -3776,7 +3684,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     }
                 }
@@ -3793,7 +3701,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     },
                     "hooks": []
@@ -3809,7 +3717,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ],
                         "@var": [
                             "list<string>"
@@ -3828,7 +3736,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     },
                     "hooks": []
@@ -3844,7 +3752,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     },
                     "hooks": []
@@ -3860,7 +3768,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ],
                         "@var": [
                             "(array<string, (scalar | null)> | null)"
@@ -3879,7 +3787,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     },
                     "hooks": []
@@ -3895,7 +3803,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     },
                     "hooks": []
@@ -3911,7 +3819,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     },
                     "hooks": []
@@ -3927,7 +3835,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     },
                     "hooks": []
@@ -3943,7 +3851,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     },
                     "hooks": []
@@ -3959,7 +3867,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     },
                     "hooks": []
@@ -3975,7 +3883,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     },
                     "hooks": []
@@ -3991,7 +3899,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     },
                     "hooks": []
@@ -4007,7 +3915,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     },
                     "hooks": []
@@ -4023,7 +3931,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     },
                     "hooks": []
@@ -4039,7 +3947,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     },
                     "hooks": []
@@ -4055,7 +3963,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     },
                     "hooks": []
@@ -4071,7 +3979,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ],
                         "@var": [
                             "(list<string> | null)"
@@ -4090,7 +3998,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     },
                     "hooks": []
@@ -4106,7 +4014,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ],
                         "@var": [
                             "list<string>"
@@ -4125,7 +4033,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     },
                     "hooks": []
@@ -4141,7 +4049,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     },
                     "hooks": []
@@ -4157,7 +4065,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ]
                     },
                     "hooks": []
@@ -4173,7 +4081,7 @@
                         "@param": [
                             "(array<string, int> | null) $cost",
                             "array<string, list<string>> $inputRules",
-                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
+                            "class-string<\\CoreX\\Invocation\\Contracts\\OperationHandler> $handler"
                         ],
                         "@var": [
                             "(list<string> | null)"
@@ -4607,7 +4515,7 @@
                         },
                         {
                             "name": "metadata",
-                            "type": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                            "type": "CoreX\\Invocation\\Data\\InvocationMetadata",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -4645,7 +4553,7 @@
                         },
                         {
                             "name": "metadata",
-                            "type": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                            "type": "CoreX\\Invocation\\Data\\InvocationMetadata",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -5414,6 +5322,15 @@
                             "flags": 1
                         },
                         {
+                            "name": "principalType",
+                            "type": "CoreX\\Context\\Enums\\PrincipalType",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
                             "name": "principalId",
                             "type": "string",
                             "by_reference": false,
@@ -5532,6 +5449,16 @@
                 "principalId": {
                     "flags": 1,
                     "type": "string",
+                    "readonly": true,
+                    "visibility": "public",
+                    "static": false,
+                    "default": null,
+                    "doc": [],
+                    "hooks": []
+                },
+                "principalType": {
+                    "flags": 1,
+                    "type": "CoreX\\Context\\Enums\\PrincipalType",
                     "readonly": true,
                     "visibility": "public",
                     "static": false,
@@ -5833,7 +5760,7 @@
                         },
                         {
                             "name": "principal",
-                            "type": "CoreX\\Operations\\Authorization\\Contracts\\Principal",
+                            "type": "CoreX\\Context\\Contracts\\Principal",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -5842,7 +5769,7 @@
                         },
                         {
                             "name": "metadata",
-                            "type": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                            "type": "CoreX\\Invocation\\Data\\InvocationMetadata",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -5850,7 +5777,7 @@
                             "flags": 0
                         }
                     ],
-                    "return": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                    "return": "CoreX\\Invocation\\Contracts\\RequestContext",
                     "doc": []
                 }
             },
@@ -6005,54 +5932,6 @@
             "enum_backing": null,
             "enum_cases": []
         },
-        "CoreX\\Operations\\Invocation\\Contracts\\RequestContext": {
-            "kind": "interface",
-            "layer": "spi-implement",
-            "since": "1.0",
-            "final": false,
-            "readonly": false,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": [],
-            "methods": {
-                "metadata": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": true,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
-                    "doc": []
-                },
-                "principal": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": true,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "CoreX\\Operations\\Authorization\\Contracts\\Principal",
-                    "doc": []
-                },
-                "tenant": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": true,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "CoreX\\Context\\Data\\TenantContext",
-                    "doc": []
-                }
-            },
-            "properties": [],
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
         "CoreX\\Operations\\Invocation\\Contracts\\RequestContextProvider": {
             "kind": "interface",
             "layer": "spi-implement",
@@ -6072,155 +5951,11 @@
                     "abstract": true,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                    "return": "CoreX\\Invocation\\Contracts\\RequestContext",
                     "doc": []
                 }
             },
             "properties": [],
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
-        "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata": {
-            "kind": "class",
-            "layer": "api",
-            "since": "1.0",
-            "final": true,
-            "readonly": true,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": [],
-            "methods": {
-                "__construct": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "requestId",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "version",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "operationId",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "method",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "correlationId",
-                            "type": "?string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": true,
-                            "default": "null",
-                            "flags": 0
-                        },
-                        {
-                            "name": "accept",
-                            "type": "?string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": true,
-                            "default": "null",
-                            "flags": 0
-                        }
-                    ],
-                    "return": null,
-                    "doc": []
-                }
-            },
-            "properties": {
-                "accept": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "correlationId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "method": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "operationId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "requestId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "version": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -6255,7 +5990,7 @@
                         },
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -6301,7 +6036,7 @@
             "properties": {
                 "context": {
                     "flags": 1,
-                    "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                    "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                     "readonly": true,
                     "visibility": "public",
                     "static": false,
@@ -6540,7 +6275,7 @@
                             "flags": 0
                         }
                     ],
-                    "return": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                    "return": "CoreX\\Invocation\\Data\\InvocationMetadata",
                     "doc": []
                 }
             },
@@ -6579,7 +6314,7 @@
                         },
                         {
                             "name": "authenticatedPrincipal",
-                            "type": "CoreX\\Operations\\Authorization\\Contracts\\Principal",
+                            "type": "CoreX\\Context\\Contracts\\Principal",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -6588,7 +6323,7 @@
                         },
                         {
                             "name": "requestMetadata",
-                            "type": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                            "type": "CoreX\\Invocation\\Data\\InvocationMetadata",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -6596,7 +6331,7 @@
                             "flags": 0
                         }
                     ],
-                    "return": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                    "return": "CoreX\\Invocation\\Contracts\\RequestContext",
                     "doc": []
                 }
             },
@@ -8887,7 +8622,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+                "CoreX\\Invocation\\Contracts\\OperationHandler"
             ],
             "uses": [],
             "doc": [],
@@ -8901,7 +8636,7 @@
                     "parameters": [
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -9303,7 +9038,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+                "CoreX\\Invocation\\Contracts\\OperationHandler"
             ],
             "uses": [],
             "doc": [],
@@ -9337,7 +9072,7 @@
                     "parameters": [
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -9381,13 +9116,13 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Operations\\Authorization\\Contracts\\Principal",
+                "CoreX\\Context\\Contracts\\Principal",
                 "CoreX\\Operations\\Authorization\\Contracts\\PrincipalResolver"
             ],
             "uses": [],
             "doc": [],
             "methods": {
-                "id": {
+                "principalId": {
                     "visibility": "public",
                     "static": false,
                     "final": false,
@@ -9395,6 +9130,16 @@
                     "by_reference": false,
                     "parameters": [],
                     "return": "string",
+                    "doc": []
+                },
+                "principalType": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "CoreX\\Context\\Enums\\PrincipalType",
                     "doc": []
                 },
                 "resolve": {
@@ -9414,7 +9159,7 @@
                             "flags": 0
                         }
                     ],
-                    "return": "?CoreX\\Operations\\Authorization\\Contracts\\Principal",
+                    "return": "?CoreX\\Context\\Contracts\\Principal",
                     "doc": []
                 }
             },
@@ -9443,7 +9188,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+                "CoreX\\Invocation\\Contracts\\OperationHandler"
             ],
             "uses": [],
             "doc": [],
@@ -9457,7 +9202,7 @@
                     "parameters": [
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -9686,7 +9431,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+                "CoreX\\Invocation\\Contracts\\OperationHandler"
             ],
             "uses": [],
             "doc": [],
@@ -9729,7 +9474,7 @@
                     "parameters": [
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -9784,7 +9529,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+                "CoreX\\Invocation\\Contracts\\OperationHandler"
             ],
             "uses": [],
             "doc": [],
@@ -9798,7 +9543,7 @@
                     "parameters": [
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -9853,7 +9598,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+                "CoreX\\Invocation\\Contracts\\OperationHandler"
             ],
             "uses": [],
             "doc": [],
@@ -9867,7 +9612,7 @@
                     "parameters": [
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -9911,7 +9656,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+                "CoreX\\Invocation\\Contracts\\OperationHandler"
             ],
             "uses": [],
             "doc": [],
@@ -9925,7 +9670,7 @@
                     "parameters": [
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -9980,7 +9725,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+                "CoreX\\Invocation\\Contracts\\OperationHandler"
             ],
             "uses": [],
             "doc": [],
@@ -9994,7 +9739,7 @@
                     "parameters": [
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -10038,7 +9783,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+                "CoreX\\Invocation\\Contracts\\OperationHandler"
             ],
             "uses": [],
             "doc": [],
@@ -10052,7 +9797,7 @@
                     "parameters": [
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,

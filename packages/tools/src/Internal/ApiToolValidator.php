@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Internal;
 
+use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Modules\Data\Api;
 use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Operations\Definition\Contracts\OperationDefinitionValidator;
-use CoreX\Operations\Definition\Contracts\OperationHandler;
 use JsonException;
 
 /** @internal Validates compiled tool declarations without depending on tool runtime. */

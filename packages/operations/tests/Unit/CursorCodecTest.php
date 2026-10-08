@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Operations\Tests\Unit;
 
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Operations\Definition\Contracts\OperationHandler;
+use CoreX\Invocation\Contracts\OperationHandler;
+use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Pagination\Contracts\CursorKeyring;
 use CoreX\Operations\Pagination\Internal\OrderingRegistry;
 use CoreX\Operations\Pagination\Internal\SignedCursorCodec;

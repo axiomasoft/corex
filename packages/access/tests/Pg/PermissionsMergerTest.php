@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\AccessChecker;
-use CoreX\Access\Enums\PrincipalType;
 use CoreX\Access\Extend\Internal\PermissionsMerger;
 use CoreX\Access\Matrix\Events\RoleMatrixCompiled;
 use CoreX\Access\Roles\Internal\Models\Role;
@@ -12,6 +11,7 @@ use CoreX\Access\Roles\Internal\Models\RoleAssignment;
 use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
 use CoreX\Access\Tests\Stubs\Deal;
 use CoreX\Access\Tests\Stubs\FakeModuleRegistry;
+use CoreX\Context\Enums\PrincipalType;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Data\EntityDefinition;
 use CoreX\Modules\Data\Permissions;

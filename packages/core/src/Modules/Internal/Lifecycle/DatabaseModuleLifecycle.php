@@ -524,7 +524,7 @@ final readonly class DatabaseModuleLifecycle implements ModuleLifecycle
 
     private function reconcileClaims(string $module): void
     {
-        $objects = new ModuleMigrationClaims($this->db(), $this->records, $this->container->make('events'))->schemaObjects();
+        $objects = new ModuleMigrationClaims(connection: $this->db(), records: $this->records, events: $this->container->make('events'))->schemaObjects();
 
         $claims = $this->db()->table(self::RECORDS_TABLE)
             ->where('module_name', $module)

@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace CoreX\Access\Access\Internal;
 
 use CoreX\Access\Contracts\AccessChecker;
-use CoreX\Access\Contracts\Principal;
 use CoreX\Access\Data\RecordContext;
-use CoreX\Access\Enums\PrincipalType;
 use CoreX\Access\Enums\Scope;
 use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Matrix\Contracts\EntityActivity;
 use CoreX\Access\Matrix\Contracts\ScopeMapVersions as ScopeMapVersion;
+use CoreX\Context\Contracts\Principal;
 use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Enums\PrincipalType;
 use CoreX\Modules\Contracts\EntityRegistry;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Query\Builder;

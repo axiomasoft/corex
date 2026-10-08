@@ -25,8 +25,6 @@ use CoreX\Tenancy\Laravel\Support\TenancyConfigSection;
 use CoreX\Tenancy\Laravel\TenancyPortBindings;
 use CoreX\Tenancy\Laravel\WakeupRegistrar;
 use CoreX\Tenancy\Laravel\WorkspaceRegistrar;
-use CoreX\Wakeup\Contracts\DueWakeupSweeper;
-use CoreX\Wakeup\Contracts\WakeupScheduleHint;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\ServiceProvider;
 use Override;
@@ -96,11 +94,9 @@ final class TenancyServiceProvider extends ServiceProvider
             ? $wakeup['driver']
             : 'local_sweep';
 
-        if (
-            $wakeupDriver === 'root_registry'
-            && interface_exists(WakeupScheduleHint::class)
-            && interface_exists(DueWakeupSweeper::class)
-        ) {
+        // Contracts live in CoreX\Scheduling; the sweeper is resolved lazily from whichever backend binds it.
+        // A missing backend is reported by TenancyConfigSection::adapters() and fails loudly on first use.
+        if ($wakeupDriver === 'root_registry') {
             $registrars[] = new WakeupRegistrar;
         }
 

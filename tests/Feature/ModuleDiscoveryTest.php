@@ -71,6 +71,33 @@ it('rejects a discovered class that does not extend ModuleDefinition', function 
     expect(fn () => $discovery->discover())->toThrow(InvalidManifestException::class);
 });
 
+it('skips corex-module packages without a module class but rejects an invalid one', function (mixed $module, ?string $error): void {
+    $corex = ['schema-version' => 1];
+
+    if ($module !== 'absent') {
+        $corex['module'] = $module;
+    }
+
+    $installedJson = (string) tempnam(sys_get_temp_dir(), 'corex-modules-');
+    file_put_contents($installedJson, json_encode(['packages' => [['name' => 'acme/lib', 'type' => 'corex-module', 'extra' => ['corex' => $corex]]]]));
+
+    try {
+        $discover = fn (): array => new ModuleDiscovery(installedJsonPath: $installedJson)->discover();
+
+        if ($error === null) {
+            expect($discover())->toBe([]);
+        } else {
+            expect($discover)->toThrow(InvalidManifestException::class, $error);
+        }
+    } finally {
+        unlink($installedJson);
+    }
+})->with([
+    'absent module' => ['absent', null],
+    'empty string' => ['', 'Discovered module class []'],
+    'non-string' => [['CoreX\\Nope'], 'Discovered module class [array]'],
+]);
+
 it('corex:modules:compile does not fail when discovery reports no CoreX module packages', function (): void {
     $installedJson = tempnam(sys_get_temp_dir(), 'corex-modules-');
     file_put_contents($installedJson, '{"packages":[]}');

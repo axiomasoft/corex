@@ -131,7 +131,7 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
             $replay = $store->findOperation($token->operationKey);
 
             if ($replay !== null) {
-                return $store->assertReplayable($replay, $payloadHash);
+                return $store->assertReplayable(existing: $replay, payloadHash: $payloadHash);
             }
 
             $decoded = SeriesDefinitionCodec::decode(
@@ -173,12 +173,12 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
                 );
 
                 try {
-                    $page = $this->expander->expand($decoded['set'], $recurrenceWindow, $pageLimits, $nextCursor);
+                    $page = $this->expander->expand(set: $decoded['set'], window: $recurrenceWindow, limits: $pageLimits, after: $nextCursor);
                 } catch (StaleCursorException) {
                     // Revision/window/runtime changes start a new traversal;
                     // occurrence uniqueness preserves already committed effects.
                     $nextCursor = null;
-                    $page = $this->expander->expand($decoded['set'], $recurrenceWindow, $pageLimits);
+                    $page = $this->expander->expand(set: $decoded['set'], window: $recurrenceWindow, limits: $pageLimits);
                 }
 
                 if ($page->status === 'unsupported' || $page->status === 'invalid') {

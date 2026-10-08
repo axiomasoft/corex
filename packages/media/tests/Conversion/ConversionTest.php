@@ -35,7 +35,6 @@ function thumbnailBytes(): string
     ob_start();
     imagejpeg($image, quality: 90);
     $bytes = ob_get_clean();
-    imagedestroy($image);
 
     return $bytes;
 }

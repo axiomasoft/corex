@@ -20,10 +20,10 @@ use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Modules\Internal\Lifecycle\DatabaseRecordsRegistrar;
 use CoreX\Modules\Internal\Lifecycle\ModuleMigrationClaims;
 use Illuminate\Console\Application as Artisan;
+use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Events\Dispatcher;
 use LogicException;
 use Psr\Clock\ClockInterface;
 use ReflectionClass;
@@ -35,7 +35,7 @@ final class DatabaseRegistrar implements PackageRegistrar
     {
         $app->tag([CoreSchemaSets::class], SchemaSetProvider::class);
         $app->singleton(SchemaSets::class, static fn (Application $app): SchemaSets => self::schemaSets($app));
-        $app->singleton(SchemaMigrator::class, static fn (Application $app): SchemaMigrator => new LaravelSchemaMigrator(sets: $app->make(SchemaSets::class), migrator: $app->make('migrator'), db: $app->make('db'), moduleMigrations: static fn (Connection $db, string $name, array $owners, Closure $run) => self::runModuleMigrations($app, $db, $name, $owners, $run)));
+        $app->singleton(SchemaMigrator::class, static fn (Application $app): SchemaMigrator => new LaravelSchemaMigrator(sets: $app->make(SchemaSets::class), migrator: $app->make('migrator'), db: $app->make('db'), moduleMigrations: static fn (Connection $db, string $name, array $owners, Closure $run) => self::runModuleMigrations(app: $app, db: $db, name: $name, owners: $owners, run: $run)));
     }
 
     public function boot(Application $app): void
@@ -48,32 +48,40 @@ final class DatabaseRegistrar implements PackageRegistrar
     /** @param array<string, string> $owners */
     private static function runModuleMigrations(Application $app, Connection $db, string $name, array $owners, Closure $run): void
     {
-        $events = $db->getEventDispatcher();
+        $events = $db->getEventDispatcher() ?? throw new LogicException('Module schema ownership requires the Laravel migration dispatcher.');
+        $db->transaction(static fn () => self::claimModuleMigrations(app: $app, db: $db, name: $name, events: $events, owners: $owners, run: $run));
+    }
 
-        if (! $events instanceof Dispatcher) {
-            throw new LogicException('Module schema ownership requires the Laravel migration dispatcher.');
+    /**
+     * Runs module migrations under the lifecycle graph lock and records an ownership claim per migration.
+     *
+     * @param  array<string, string>  $owners  canonical migration file => owning module
+     */
+    private static function claimModuleMigrations(Application $app, Connection $db, string $name, EventDispatcher $events, array $owners, Closure $run): void
+    {
+        $db->statement('select pg_advisory_xact_lock(hashtext(?))', ['corex:module-lifecycle-graph']);
+        $claims = new ModuleMigrationClaims(connection: $db, records: new DatabaseRecordsRegistrar(connections: $app->make('db'), clock: $app->make(ClockInterface::class), connection: $name), events: $events);
+        $error = $claims->run(
+            moduleForMigration: static fn (Migration $migration): ?string => self::migrationOwner(migration: $migration, owners: $owners),
+            run: $run,
+        );
+
+        if ($error !== null) {
+            throw $error;
         }
-        $db->transaction(static function () use ($db, $name, $events, $owners, $run, $app): void {
-            $db->statement('select pg_advisory_xact_lock(hashtext(?))', ['corex:module-lifecycle-graph']);
-            $claims = new ModuleMigrationClaims($db, new DatabaseRecordsRegistrar($app->make('db'), $app->make(ClockInterface::class), $name), $events);
-            $error = $claims->run(
-                moduleForMigration: static function (Migration $migration) use ($owners): ?string {
-                    $file = new ReflectionClass($migration)->getFileName();
+    }
 
-                    if ($file === false) {
-                        return null;
-                    }
-                    $canonical = realpath($file);
+    /** @param  array<string, string>  $owners */
+    private static function migrationOwner(Migration $migration, array $owners): ?string
+    {
+        $file = new ReflectionClass($migration)->getFileName();
 
-                    return $owners[$canonical === false ? $file : $canonical] ?? null;
-                },
-                run: $run,
-            );
+        if ($file === false) {
+            return null;
+        }
+        $canonical = realpath($file);
 
-            if ($error !== null) {
-                throw $error;
-            }
-        });
+        return $owners[$canonical === false ? $file : $canonical] ?? null;
     }
 
     private static function registerCommands(Artisan $artisan): void

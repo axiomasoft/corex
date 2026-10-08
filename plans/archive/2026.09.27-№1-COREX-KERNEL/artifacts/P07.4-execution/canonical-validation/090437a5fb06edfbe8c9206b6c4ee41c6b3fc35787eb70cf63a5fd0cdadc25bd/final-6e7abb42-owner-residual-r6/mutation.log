@@ -2962,7 +2962,7 @@ mutation-check[P05-scoped-to-singleton]: гоняю: vendor/bin/pest --exclude-g
                             'XDG_SESSION_DESKTOP' => 'ubuntu',
                             'XDG_SESSION_TYPE' => 'wayland',
                             'GIT_SEQUENCE_EDITOR' => 'true',
-                            'PERPLEXITY_API_KEY' => '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',
+                            'PERPLEXITY_API_KEY' => 'pplx-<REDACTED>',
                             'SYSTEMD_EXEC_PID' => '4258',
                             '_' => 'vendor/bin/pest',
                             'XAUTHORITY' => '/run/user/1000/.mutter-Xwaylandauth.47VQW3',

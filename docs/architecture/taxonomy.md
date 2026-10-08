@@ -98,3 +98,9 @@
 | `products/flex-crm` | flex/crm | corex-module | product | experimental |
 
 Source-derived surface: [public-api](../reference/public-api.md).
+
+`tools` и `webhooks` — расширения operations: они законно зависят от axiomasoft/corex-operations и
+не образуют отдельного ранга. Контракт обработчика (`OperationHandler`, `RequestContext`, `Principal`,
+`InvocationMetadata`) принадлежит ядру (`CoreX\Invocation`), поэтому продукт (`flex/crm`) объявляет
+операции без prod-зависимости от operations; ребро `flex/crm → axiomasoft/corex-operations` запрещено
+package-graph-gate ([решение](decisions/2026-10-08-invocation-kernel-contract.md)).

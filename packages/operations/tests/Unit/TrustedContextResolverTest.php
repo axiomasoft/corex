@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Unit;
 
+use CoreX\Context\Contracts\Principal;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Operations\Authorization\Contracts\Principal;
+use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Internal\TrustedContextResolver;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\TestCase;

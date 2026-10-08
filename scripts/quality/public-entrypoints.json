@@ -4,7 +4,7 @@
         {
             "symbol": "CoreX\\AccessAzguard\\Internal\\AutMatrixGrantSource::priority",
             "source": "packages/access-azguard/src/Internal/AutMatrixGrantSource.php",
-            "source_sha256": "35d8d24e85b738d5c7c78a76f01206ba837669cbd39ab9695f90c17898714352",
+            "source_sha256": "0150fc4fa101b1cfc9f407bc894c0b191875f8078e5139b1b80aedb70baffc8a",
             "kind": "framework",
             "reason": "AzGuard orders this exact registered GrantSource through its priority contract method during grant resolution.",
             "root": {
@@ -108,13 +108,13 @@
         {
             "symbol": "CoreX\\Access\\Access\\Internal\\DirectGrantLookup::__construct",
             "source": "packages/access/src/Access/Internal/DirectGrantLookup.php",
-            "source_sha256": "561704b875516a9a665121c3b06b5dbc280fa77d30e2090dfb0b4b729439f0d0",
+            "source_sha256": "fdde20fadc9d8e59a49a2c5e3cffd0dd9374460aa33bac2b1024c22341e74c88",
             "kind": "framework",
             "reason": "The registered DefaultAccessChecker receives this concrete grant lookup through constructor injection; no explicit new expression is required by Laravel's container.",
             "root": {
                 "path": "packages/access/src/Access/Internal/DefaultAccessChecker.php",
                 "anchor": "private readonly DirectGrantLookup $directGrants",
-                "sha256": "7a0fcd5a52053897896abc590b77eded1493e9396fec4a995243e4129ec901c2"
+                "sha256": "0f0a48fd928ce8300b9c775f9e415a259e6072c19abebe50bc2ab2f76bc934e3"
             },
             "expires": null
         },
@@ -290,7 +290,7 @@
         {
             "symbol": "CoreX\\Access\\Roles\\Internal\\Models\\RoleAssignment::role",
             "source": "packages/access/src/Roles/Internal/Models/RoleAssignment.php",
-            "source_sha256": "2745646f0dc95e3be25c1166ee0f69f8686a3a330d9ba12efc0e478e9ca4ce91",
+            "source_sha256": "10aaa9e7e1b98499bee07cbca75478438dda98a8a0a819ae4d12cc954064bd36",
             "kind": "framework",
             "reason": "Eloquent resolves the exact relationship CoreX\\Access\\Roles\\Internal\\Models\\RoleAssignment::role by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
@@ -1811,7 +1811,7 @@
         {
             "symbol": "CoreX\\Operations\\Errors\\Internal\\OperationErrorBoundary::__construct",
             "source": "packages/operations/src/Errors/Internal/OperationErrorBoundary.php",
-            "source_sha256": "59e3bdf0c8440f4cba0abac4a35ace67d961c37703bbf3f00ccac49c79ebd200",
+            "source_sha256": "f33190fe29b84d5270fc091fee5b8eb86784c745c8aca9d6640df9244dfa532e",
             "kind": "framework",
             "reason": "Laravel's routing middleware pipeline resolves this exact registered operation error middleware through the container before invoking handle.",
             "root": {
@@ -1824,7 +1824,7 @@
         {
             "symbol": "CoreX\\Operations\\Errors\\Internal\\OperationErrorBoundary::handle",
             "source": "packages/operations/src/Errors/Internal/OperationErrorBoundary.php",
-            "source_sha256": "59e3bdf0c8440f4cba0abac4a35ace67d961c37703bbf3f00ccac49c79ebd200",
+            "source_sha256": "f33190fe29b84d5270fc091fee5b8eb86784c745c8aca9d6640df9244dfa532e",
             "kind": "framework",
             "reason": "Laravel's routing middleware pipeline invokes the handle convention on this exact registered middleware.",
             "root": {

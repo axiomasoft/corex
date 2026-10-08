@@ -1,0 +1,808 @@
+{
+  "candidate_sha256": "1f5ae4c1534c989edaacbc67e94e222be5526b37aaf5d3e561cc9290b37ac583",
+  "dod": {
+    "DOD-14": "PASS",
+    "DOD-15": "PASS",
+    "DOD-26": "PASS"
+  },
+  "item": "P17.6",
+  "matrix": [
+    {
+      "databases": [
+        "sqlite"
+      ],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "id": "bare-single-php8.4-l12",
+      "installed": [
+        "corex/core"
+      ],
+      "kind": "profile",
+      "laravel": 12,
+      "lock_sha256": "52dd77d075e67b5d497097ad2a71d1fceef1e20ec623f29f289db824cbe33b43",
+      "locked": [],
+      "packages": [
+        "corex/core"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "bare-single",
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "databases": [
+        "sqlite"
+      ],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "id": "bare-single-php8.4-l13",
+      "installed": [
+        "corex/core"
+      ],
+      "kind": "profile",
+      "laravel": 13,
+      "lock_sha256": "09b9234e44227accbdb964111293cb74ea0db1eb928253b4f84d0b41bf01a19e",
+      "locked": [],
+      "packages": [
+        "corex/core"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "bare-single",
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "databases": [
+        "sqlite"
+      ],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "id": "modular-single-php8.4-l12",
+      "installed": [
+        "corex/attributes",
+        "corex/core",
+        "corex/modules",
+        "corex/search",
+        "corex/transfer",
+        "corex/workflow"
+      ],
+      "kind": "profile",
+      "laravel": 12,
+      "lock_sha256": "4093a74b778ad3f45c44799c014a350498084d4b70bb3ab84618bd0e08fa6ada",
+      "locked": [],
+      "packages": [
+        "corex/core",
+        "corex/modules",
+        "corex/attributes",
+        "corex/search",
+        "corex/transfer",
+        "corex/workflow"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "modular-single",
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "databases": [
+        "sqlite"
+      ],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "id": "modular-single-php8.4-l13",
+      "installed": [
+        "corex/attributes",
+        "corex/core",
+        "corex/modules",
+        "corex/search",
+        "corex/transfer",
+        "corex/workflow"
+      ],
+      "kind": "profile",
+      "laravel": 13,
+      "lock_sha256": "3da3553f73231aa43d46a4700e9dd983be021f1d6a29162f024510ab8836e4d4",
+      "locked": [],
+      "packages": [
+        "corex/core",
+        "corex/modules",
+        "corex/attributes",
+        "corex/search",
+        "corex/transfer",
+        "corex/workflow"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "modular-single",
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "databases": [
+        "corex_p176_tenant_a_test",
+        "corex_p176_tenant_b_test"
+      ],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "id": "modular-multi-php8.4-l12",
+      "installed": [
+        "corex/attributes",
+        "corex/core",
+        "corex/modules",
+        "corex/tenancy",
+        "corex/workflow"
+      ],
+      "kind": "profile",
+      "laravel": 12,
+      "lock_sha256": "a4dd0ce53080c9587e2c24191b4596a450f7e834b928af665c313877603dc9ae",
+      "locked": [],
+      "packages": [
+        "corex/core",
+        "corex/modules",
+        "corex/tenancy",
+        "corex/attributes",
+        "corex/workflow"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "modular-multi",
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "databases": [
+        "corex_p176_tenant_a_test",
+        "corex_p176_tenant_b_test"
+      ],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "id": "modular-multi-php8.4-l13",
+      "installed": [
+        "corex/attributes",
+        "corex/core",
+        "corex/modules",
+        "corex/tenancy",
+        "corex/workflow"
+      ],
+      "kind": "profile",
+      "laravel": 13,
+      "lock_sha256": "5538e0396e4940ffe4b9735e9b5284c4ce3f67a8bfe3ee4fb1ebe0bc031541fc",
+      "locked": [],
+      "packages": [
+        "corex/core",
+        "corex/modules",
+        "corex/tenancy",
+        "corex/attributes",
+        "corex/workflow"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "modular-multi",
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "databases": [
+        "sqlite"
+      ],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "id": "worker-only-php8.4-l12",
+      "installed": [
+        "corex/core",
+        "corex/modules",
+        "corex/recurrence",
+        "corex/tasks",
+        "corex/tasks-workflow",
+        "corex/wakeup",
+        "corex/workflow"
+      ],
+      "kind": "profile",
+      "laravel": 12,
+      "lock_sha256": "4c2ad9dd93abe35fe28bfd6b126a3843a0720030ea5d728330257973d8a96f23",
+      "locked": [],
+      "packages": [
+        "corex/core",
+        "corex/wakeup",
+        "corex/workflow",
+        "corex/tasks",
+        "corex/tasks-workflow"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "worker-only",
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "databases": [
+        "sqlite"
+      ],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "id": "worker-only-php8.4-l13",
+      "installed": [
+        "corex/core",
+        "corex/modules",
+        "corex/recurrence",
+        "corex/tasks",
+        "corex/tasks-workflow",
+        "corex/wakeup",
+        "corex/workflow"
+      ],
+      "kind": "profile",
+      "laravel": 13,
+      "lock_sha256": "20f339398a3c327db673aeebe0d390a1f9b516f6a6deed53fc62fccf91a2dc98",
+      "locked": [],
+      "packages": [
+        "corex/core",
+        "corex/wakeup",
+        "corex/workflow",
+        "corex/tasks",
+        "corex/tasks-workflow"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "worker-only",
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "databases": [
+        "sqlite"
+      ],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "id": "search-portable-php8.4-l12",
+      "installed": [
+        "corex/core",
+        "corex/search"
+      ],
+      "kind": "profile",
+      "laravel": 12,
+      "lock_sha256": "1894ad7dcaa4474f95941c3fad95cfb4b8c1db78ab9296049186af1ea70a5462",
+      "locked": [],
+      "packages": [
+        "corex/core",
+        "corex/search",
+        "corex/search-intl"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "search-portable",
+      "removed": [
+        "corex/search-intl"
+      ],
+      "status": "passed"
+    },
+    {
+      "databases": [
+        "sqlite"
+      ],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "id": "search-portable-php8.4-l13",
+      "installed": [
+        "corex/core",
+        "corex/search"
+      ],
+      "kind": "profile",
+      "laravel": 13,
+      "lock_sha256": "f2225d637a6939f859302b947d9c00bd309422e32b715cf5af15899d59010353",
+      "locked": [],
+      "packages": [
+        "corex/core",
+        "corex/search",
+        "corex/search-intl"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "search-portable",
+      "removed": [
+        "corex/search-intl"
+      ],
+      "status": "passed"
+    },
+    {
+      "databases": [
+        "sqlite"
+      ],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "id": "full-corex-php8.4-l12",
+      "installed": [
+        "corex/access",
+        "corex/attributes",
+        "corex/core",
+        "corex/intl",
+        "corex/media",
+        "corex/modules",
+        "corex/notifications",
+        "corex/operations",
+        "corex/panels",
+        "corex/recurrence",
+        "corex/search",
+        "corex/search-intl",
+        "corex/search-meilisearch",
+        "corex/tasks",
+        "corex/tasks-workflow",
+        "corex/tenancy",
+        "corex/transfer",
+        "corex/wakeup",
+        "corex/workflow"
+      ],
+      "kind": "profile",
+      "laravel": 12,
+      "lock_sha256": "86330023cfcc5007522fef0ecc715c968e8a2fa1bccc29ff05e81b5ffd3e1e48",
+      "locked": [],
+      "packages": [
+        "corex/access",
+        "corex/attributes",
+        "corex/core",
+        "corex/intl",
+        "corex/media",
+        "corex/modules",
+        "corex/notifications",
+        "corex/operations",
+        "corex/panels",
+        "corex/recurrence",
+        "corex/search",
+        "corex/search-intl",
+        "corex/search-meilisearch",
+        "corex/tasks",
+        "corex/tasks-workflow",
+        "corex/tenancy",
+        "corex/transfer",
+        "corex/wakeup",
+        "corex/workflow"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "full-corex",
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "id": "full-corex-php8.4-l13",
+      "kind": "profile",
+      "laravel": 13,
+      "packages": [
+        "corex/access",
+        "corex/attributes",
+        "corex/core",
+        "corex/intl",
+        "corex/media",
+        "corex/modules",
+        "corex/notifications",
+        "corex/operations",
+        "corex/panels",
+        "corex/recurrence",
+        "corex/search",
+        "corex/search-intl",
+        "corex/search-meilisearch",
+        "corex/tasks",
+        "corex/tasks-workflow",
+        "corex/tenancy",
+        "corex/transfer",
+        "corex/wakeup",
+        "corex/workflow"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "profile": "full-corex",
+      "reason": "corex/access constraint ^12.0",
+      "status": "excluded"
+    },
+    {
+      "databases": [],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "edge": "min",
+      "id": "edge-min-php8.3-l12-corex/access",
+      "installed": [
+        "corex/access",
+        "corex/core",
+        "corex/modules"
+      ],
+      "kind": "edge",
+      "laravel": 12,
+      "lock_sha256": "a44fd378d54bcfa7dac86956eb74708af708711d87d1533617e3dd4cfe4dc39e",
+      "locked": [],
+      "packages": [
+        "corex/access"
+      ],
+      "php": "8.3",
+      "prefer_lowest": false,
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "databases": [],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "edge": "max",
+      "id": "edge-max-php8.5-l12-corex/access",
+      "installed": [
+        "corex/access",
+        "corex/core",
+        "corex/modules"
+      ],
+      "kind": "edge",
+      "laravel": 12,
+      "lock_sha256": "c18b8f7e042863a14d967c5c6c1b0cfe4c52850d54ebde520c1171a649dc8811",
+      "locked": [],
+      "packages": [
+        "corex/access"
+      ],
+      "php": "8.5",
+      "prefer_lowest": false,
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "databases": [],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "edge": "prefer-lowest",
+      "id": "edge-prefer-lowest-php8.3-l12-corex/access",
+      "installed": [
+        "corex/access",
+        "corex/core",
+        "corex/modules"
+      ],
+      "kind": "edge",
+      "laravel": 12,
+      "lock_sha256": "f49a17b6b64053f45218e4627b15490000784bcbefd51729583eedb475d721e6",
+      "locked": [],
+      "packages": [
+        "corex/access"
+      ],
+      "php": "8.3",
+      "prefer_lowest": true,
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "id": "edge-excluded-l13-corex/access",
+      "kind": "edge",
+      "laravel": 13,
+      "packages": [
+        "corex/access"
+      ],
+      "php": "8.3",
+      "reason": "corex/access constraint ^12.0",
+      "status": "excluded"
+    },
+    {
+      "databases": [],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "edge": "min",
+      "id": "edge-min-php8.3-l12-corex/attributes",
+      "installed": [
+        "corex/attributes",
+        "corex/core",
+        "corex/intl",
+        "corex/media",
+        "corex/modules",
+        "corex/notifications",
+        "corex/operations",
+        "corex/panels",
+        "corex/recurrence",
+        "corex/search",
+        "corex/search-intl",
+        "corex/tasks",
+        "corex/tasks-workflow",
+        "corex/transfer",
+        "corex/wakeup",
+        "corex/workflow"
+      ],
+      "kind": "edge",
+      "laravel": 12,
+      "lock_sha256": "9862f6af664373f8c3977d1476351ffe65f9873528c08d06c786a1118859e17e",
+      "locked": [],
+      "packages": [
+        "corex/attributes",
+        "corex/core",
+        "corex/intl",
+        "corex/media",
+        "corex/modules",
+        "corex/notifications",
+        "corex/operations",
+        "corex/panels",
+        "corex/search",
+        "corex/search-intl",
+        "corex/tasks",
+        "corex/tasks-workflow",
+        "corex/transfer",
+        "corex/wakeup",
+        "corex/workflow"
+      ],
+      "php": "8.3",
+      "prefer_lowest": false,
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "databases": [],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "edge": "max",
+      "id": "edge-max-php8.5-l13-corex/attributes",
+      "installed": [
+        "corex/attributes",
+        "corex/core",
+        "corex/intl",
+        "corex/media",
+        "corex/modules",
+        "corex/notifications",
+        "corex/operations",
+        "corex/panels",
+        "corex/recurrence",
+        "corex/search",
+        "corex/search-intl",
+        "corex/tasks",
+        "corex/tasks-workflow",
+        "corex/transfer",
+        "corex/wakeup",
+        "corex/workflow"
+      ],
+      "kind": "edge",
+      "laravel": 13,
+      "lock_sha256": "9b63609d13ec339c96941cfda50e106c404eaa6c39b7067bac42236eaf0569d4",
+      "locked": [],
+      "packages": [
+        "corex/attributes",
+        "corex/core",
+        "corex/intl",
+        "corex/media",
+        "corex/modules",
+        "corex/notifications",
+        "corex/operations",
+        "corex/panels",
+        "corex/search",
+        "corex/search-intl",
+        "corex/tasks",
+        "corex/tasks-workflow",
+        "corex/transfer",
+        "corex/wakeup",
+        "corex/workflow"
+      ],
+      "php": "8.5",
+      "prefer_lowest": false,
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "databases": [],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "edge": "prefer-lowest",
+      "id": "edge-prefer-lowest-php8.3-l12-corex/attributes",
+      "installed": [
+        "corex/attributes",
+        "corex/core",
+        "corex/intl",
+        "corex/media",
+        "corex/modules",
+        "corex/notifications",
+        "corex/operations",
+        "corex/panels",
+        "corex/recurrence",
+        "corex/search",
+        "corex/search-intl",
+        "corex/tasks",
+        "corex/tasks-workflow",
+        "corex/transfer",
+        "corex/wakeup",
+        "corex/workflow"
+      ],
+      "kind": "edge",
+      "laravel": 12,
+      "lock_sha256": "2e35f7e344a6d3295ecfc0dc02478d2ad5f2b22071a61f9592a7f50664cf23a1",
+      "locked": [],
+      "packages": [
+        "corex/attributes",
+        "corex/core",
+        "corex/intl",
+        "corex/media",
+        "corex/modules",
+        "corex/notifications",
+        "corex/operations",
+        "corex/panels",
+        "corex/search",
+        "corex/search-intl",
+        "corex/tasks",
+        "corex/tasks-workflow",
+        "corex/transfer",
+        "corex/wakeup",
+        "corex/workflow"
+      ],
+      "php": "8.3",
+      "prefer_lowest": true,
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "databases": [],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "edge": "min",
+      "id": "edge-min-php8.3-lnone-corex/recurrence",
+      "installed": [
+        "corex/core",
+        "corex/recurrence",
+        "corex/search",
+        "corex/search-meilisearch"
+      ],
+      "kind": "edge",
+      "laravel": null,
+      "lock_sha256": "4f8cb1c72fabfcdca90d374eccabf6fc2ae83f4e74ec5e277a9edeadfae2f4ce",
+      "locked": [],
+      "packages": [
+        "corex/recurrence",
+        "corex/search-meilisearch"
+      ],
+      "php": "8.3",
+      "prefer_lowest": false,
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "databases": [],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "edge": "max",
+      "id": "edge-max-php8.5-lnone-corex/recurrence",
+      "installed": [
+        "corex/core",
+        "corex/recurrence",
+        "corex/search",
+        "corex/search-meilisearch"
+      ],
+      "kind": "edge",
+      "laravel": null,
+      "lock_sha256": "999cfa74c1ee70572907cacd535399bdd494805709a99d018ba17841347dde69",
+      "locked": [],
+      "packages": [
+        "corex/recurrence",
+        "corex/search-meilisearch"
+      ],
+      "php": "8.5",
+      "prefer_lowest": false,
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "databases": [],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "edge": "prefer-lowest",
+      "id": "edge-prefer-lowest-php8.3-lnone-corex/recurrence",
+      "installed": [
+        "corex/core",
+        "corex/recurrence",
+        "corex/search",
+        "corex/search-meilisearch"
+      ],
+      "kind": "edge",
+      "laravel": null,
+      "lock_sha256": "747a203bcc4eb004d4bc5fd1158e162b4c8365d567995ce35cd3e7551bf85a41",
+      "locked": [],
+      "packages": [
+        "corex/recurrence",
+        "corex/search-meilisearch"
+      ],
+      "php": "8.3",
+      "prefer_lowest": true,
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "databases": [],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "edge": "min",
+      "id": "edge-min-php8.4-l12-corex/tenancy",
+      "installed": [
+        "corex/core",
+        "corex/tenancy"
+      ],
+      "kind": "edge",
+      "laravel": 12,
+      "lock_sha256": "b1ea564ea3ba2a9ea6a43f3c7b3dd85c05c16b3902661d876d919a7af4d9542b",
+      "locked": [],
+      "packages": [
+        "corex/tenancy"
+      ],
+      "php": "8.4",
+      "prefer_lowest": false,
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "databases": [],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "edge": "max",
+      "id": "edge-max-php8.5-l13-corex/tenancy",
+      "installed": [
+        "corex/core",
+        "corex/tenancy"
+      ],
+      "kind": "edge",
+      "laravel": 13,
+      "lock_sha256": "f76289a506259753acc69d6fb43eb5d801f28d80385e918f99fab8abcb454fcf",
+      "locked": [],
+      "packages": [
+        "corex/tenancy"
+      ],
+      "php": "8.5",
+      "prefer_lowest": false,
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "databases": [],
+      "discovery": [
+        "  nunomaduro/termwind \u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m\u001b[90m.\u001b[39m \u001b[32;1mDONE\u001b[39;22m"
+      ],
+      "edge": "prefer-lowest",
+      "id": "edge-prefer-lowest-php8.4-l12-corex/tenancy",
+      "installed": [
+        "corex/core",
+        "corex/tenancy"
+      ],
+      "kind": "edge",
+      "laravel": 12,
+      "lock_sha256": "b3a164d03d56afb9bc8fe24b3543e133be22d73daa523029a052aa937beaa786",
+      "locked": [],
+      "packages": [
+        "corex/tenancy"
+      ],
+      "php": "8.4",
+      "prefer_lowest": true,
+      "removed": [],
+      "status": "passed"
+    },
+    {
+      "id": "edge-excluded-php8.3-corex/tenancy",
+      "kind": "edge",
+      "laravel": 12,
+      "packages": [
+        "corex/tenancy"
+      ],
+      "php": "8.3",
+      "reason": "corex/tenancy php constraint ^8.4",
+      "status": "excluded"
+    }
+  ],
+  "mode": "all",
+  "result": "PASS",
+  "schema_version": "corex-profile-receipt/1",
+  "source_commit": "7ab843485577bf840cc0db6bd66081fbcafd3331"
+}

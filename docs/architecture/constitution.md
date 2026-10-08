@@ -198,7 +198,7 @@
   `deprecated`; `experimental` живёт ограниченное число минорных релизов и каждое его BC-изменение
   объявляется в `CHANGELOG.md` пакета
 **Владелец.** api-policy.md
-**Enforcement.** `composer bc-check`; релизная authority остаётся отдельным gate.
+**Enforcement.** `composer php-api` (snapshot публичной поверхности) и CHANGELOG пакета; автоматический BC-дифф (Roave) удалён 2026-10-08 (аудит, решение владельца).
 **Исключения.** —
 **Почему.** См. решения и политики, названные во владельце.
 
@@ -222,7 +222,7 @@
 **Правило.** Snapshot схемы внешнего API и BC-дифф PHP-символов — два разных контракта; один не
   заменяет другой
 **Владелец.** api-policy.md
-**Enforcement.** `composer api-contract` (wire snapshot), `composer bc-check` (PHP BC).
+**Enforcement.** `composer api-contract` (wire snapshot), `composer php-api` + golden php-surface (PHP-поверхность; Roave BC-дифф удалён 2026-10-08).
 **Исключения.** —
 **Почему.** См. решения и политики, названные во владельце.
 

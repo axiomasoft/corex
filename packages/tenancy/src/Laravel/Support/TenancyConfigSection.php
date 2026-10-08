@@ -8,6 +8,7 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Messaging\Enums\PubSubDriver;
+use CoreX\Scheduling\Contracts\DueWakeupSweeper;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class TenancyConfigSection implements ConfigReportSection
@@ -43,7 +44,7 @@ final class TenancyConfigSection implements ConfigReportSection
     public function adapters(): array
     {
         $selected = config('corex-tenancy.wakeup.driver') === 'root_registry';
-        $available = class_exists('CoreX\\Wakeup\\WakeupServiceProvider');
+        $available = app()->bound(DueWakeupSweeper::class);
 
         return [['line' => 'adapter wakeup.root_registry='.($selected ? ($available ? 'available' : 'missing') : 'not-selected'), 'error' => $selected && ! $available ? 'adapter wakeup.root_registry missing' : null]];
     }

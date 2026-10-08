@@ -5,7 +5,7 @@ This is factual evidence, not a Composer constraint, runtime registry, or releas
 | Field | Recorded fact |
 | --- | --- |
 | Package / license / profile | `axiomasoft/corex` / MIT / public L0 |
-| Policy / declared constraint | PHP 8.4–8.5 and Laravel 12–13 / `php:^8.4`, Illuminate `^12.0|^13.0` |
+| Policy / declared constraint | PHP `^8.4` and Laravel 13 / `laravel/framework:^13.0`, Illuminate `^13.0`; historical Laravel 12 proof below is not a current support claim |
 | Public local proof | P4.4 historical runtime versions: 8.3.33, 8.4.1 and 8.5.10 against Laravel 12 and 13; cold update, platform check and fresh lock install |
 | Release-ready status | Not claimed. The P4.4 receipt is local evidence; it is not a current hosted-runner or publication receipt. |
 | P4 source and prior candidate | `ea7d0dbdf36b122904abba91e124018c11b939ed`; tree `62ad7daeeb13d1274598816f01b88e4809bdf017`; prior ZIP `65cd551dceff281c8863889cefe1a640efde61bdf1b4134e1c9094f4fa3f3685` |

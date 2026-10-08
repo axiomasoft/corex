@@ -1,0 +1,20 @@
+{
+  "schema_version": "design-bundle-checks/v1",
+  "generated_at": "2026-09-20T11:40:18Z",
+  "command": "plan-views.py bundle --stdout",
+  "persisted_future_bundles": false,
+  "items": [
+    {"item": "P17.1", "output_sha256": "316133c94cc34dacf59c71b23eeb046ae2e2701de3ddedf7f4253068075290b0", "entries": 17},
+    {"item": "P17.2", "output_sha256": "0dcf404e84bc4c20689099f977832e1bef7da85039a9a1d7d7b3519cf54651d8", "entries": 13},
+    {"item": "P17.3", "output_sha256": "0b9877ea69da207c645caccf3294eb160b03b38763f37ec4ced39572208942c6", "entries": 15},
+    {"item": "P17.4", "output_sha256": "d43d5bbd2c7284463e7fb5e29c6b46b0a26031c7ab4f863dc812149afe6c492b", "entries": 15},
+    {"item": "P17.5", "output_sha256": "42f86a75cdbd99077f8c54853a45aa2242c0e734feb6709a5222a5e56ea56fb2", "entries": 17},
+    {"item": "P17.6", "output_sha256": "a7b0ae01e2ae236967c14386c76f5ecd8526f4a9dd623936b380face9011fe34", "entries": 17},
+    {"item": "P17.7", "output_sha256": "f402587ae45fe861f2e249212098de0bad91be52fa4ce00cec6eaf1fd9950f8a", "entries": 17},
+    {"item": "P17.8", "output_sha256": "31d419243bfc8f22bed6b165b2e0d832f94471b5a73a7449e0a9aa2dff8fe050", "entries": 15},
+    {"item": "P17.9", "output_sha256": "e5e4cb89fb61000ed65c593f95b80f5633c5ed79e5d7ac0d93b86051d801eb4b", "entries": 24},
+    {"item": "P17.10", "output_sha256": "09567db20c2d9eb2ec22d53ed1fb2af2bf0b35946441ec717cfd887e1f5281eb", "entries": 20},
+    {"item": "P17.11", "output_sha256": "d7b8abf6a746ab62f8b645886d86ae01b4feecbafaf61fdafb6c2718cef75105", "entries": 24},
+    {"item": "P17.12", "output_sha256": "09e37cfda4e05a0553f2e710ff580c4c7adc015ca77dfcab70544fde0dfe0b7d", "entries": 12}
+  ]
+}

@@ -6,6 +6,9 @@ namespace CoreX\Tools\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
+use CoreX\Invocation\Contracts\OperationHandler;
+use CoreX\Invocation\Contracts\RequestContext;
+use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Data\Api;
 use CoreX\Modules\Data\CompiledRegistry;
@@ -13,9 +16,6 @@ use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Operations\ApiServiceProvider;
-use CoreX\Operations\Definition\Contracts\OperationHandler;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\Testing\BrokenHandler;
 use CoreX\Operations\Testing\CatalogueModuleFixture;
@@ -362,13 +362,13 @@ final class ToolInvocationTest extends TestCase
         $this->policy->allowInvoke = true;
         $fail = true;
         $this->app->bind(MutatingHandler::class, function () use (&$fail): OperationHandler {
-            return new class($fail) implements OperationHandler
+            return new readonly class($fail) implements OperationHandler
             {
                 public function __construct(private bool $fail) {}
 
                 public function handle(RequestContext $context, array $input, array $parameters): array
                 {
-                    $result = (new MutatingHandler(resolve(ConnectionResolverInterface::class), resolve(ClockInterface::class)))->handle($context, $input, $parameters);
+                    $result = new MutatingHandler(resolve(ConnectionResolverInterface::class), resolve(ClockInterface::class))->handle($context, $input, $parameters);
 
                     if ($this->fail) {
                         throw new RuntimeException('Failure after write');

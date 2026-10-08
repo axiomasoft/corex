@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Matrix\Internal;
 
-use CoreX\Access\Enums\PrincipalType;
 use CoreX\Access\Enums\Scope;
 use CoreX\Access\Roles\Data\RoleMatrixEntry;
 use CoreX\Access\Roles\Data\RoleView;
 use CoreX\Access\Roles\Laravel\RoleMatrixData;
+use CoreX\Context\Enums\PrincipalType;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Enums\Capability;
 use Illuminate\Database\Connection;

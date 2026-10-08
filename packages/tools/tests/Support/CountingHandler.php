@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Tests\Support;
 
-use CoreX\Operations\Definition\Contracts\OperationHandler;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Invocation\Contracts\OperationHandler;
+use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Tools\Contracts\ToolRequestContext;
 
 final class CountingHandler implements OperationHandler
@@ -18,7 +18,7 @@ final class CountingHandler implements OperationHandler
 
         return [
             'name' => (string) ($input['name'] ?? 'note'),
-            'actor' => $context->principal()->id(),
+            'actor' => $context->principal()->principalId(),
             'account' => $context->tenant()->account->id,
             'operation_key' => $context instanceof ToolRequestContext ? $context->operationKey() : null,
             'contract_hash' => $context instanceof ToolRequestContext ? $context->toolContractHash() : null,

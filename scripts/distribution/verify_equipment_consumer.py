@@ -15,7 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 APP = ROOT / "fixtures" / "consumers" / "equipment-registry"
-RECEIPT = ROOT / "plans" / "2026.09.19-№1-COREX-PLATFORM-HARDENING" / "findings" / "P17-consumer-receipt.json"
+RECEIPT = ROOT / "release" / "1.0" / "findings" / "P17-consumer-receipt.json"
 PROBE = ROOT / "scripts" / "distribution" / "extension_fixture_probe.php"
 BANNED = re.compile(r"\b(?:flex|crm|cms|store|storefront|customer|lead|deal)\b|content-page|Flex\\\\|flex/", re.IGNORECASE)
 PACKAGE = "equipment/registry"

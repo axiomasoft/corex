@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Tests\Support;
 
-use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Validation\Data\JsonObject;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolDescriptor;
@@ -22,7 +22,7 @@ final class ToolPolicyFixture implements ToolPolicy
     {
         $this->calls[] = [
             'action' => 'discover',
-            'principal' => $context->principal()->id(),
+            'principal' => $context->principal()->principalId(),
             'account' => $context->tenant()->account->id,
             'code' => $tool->code,
         ];
@@ -34,7 +34,7 @@ final class ToolPolicyFixture implements ToolPolicy
     {
         $this->calls[] = [
             'action' => 'invoke',
-            'principal' => $context->principal()->id(),
+            'principal' => $context->principal()->principalId(),
             'account' => $context->tenant()->account->id,
             'code' => $tool->code,
         ];

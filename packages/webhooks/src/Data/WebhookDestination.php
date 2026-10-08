@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Webhooks\Data;
 
 use CoreX\Attributes\Api;
+use CoreX\Webhooks\Internal\WebhookUrlPolicy;
 use InvalidArgumentException;
 
 /** Canonical HTTPS destination shared by URL admission and host egress policies. */
@@ -45,7 +46,7 @@ final readonly class WebhookDestination
 
         $host = strtolower($parts['host']);
 
-        if (! self::isCanonicalDnsName($host) || @inet_pton($host) !== false) {
+        if (! WebhookUrlPolicy::isCanonicalDnsName($host) || @inet_pton($host) !== false) {
             throw new InvalidArgumentException('webhook_url_forbidden');
         }
 
@@ -60,24 +61,5 @@ final readonly class WebhookDestination
         }
 
         return new self(scheme: 'https', host: $host, port: 443, path: $path);
-    }
-
-    private static function isCanonicalDnsName(string $host): bool
-    {
-        if ($host === ''
-            || strlen($host) > 253
-            || $host !== strtolower($host)
-            || str_ends_with($host, '.')
-            || preg_match('/\A[0-9.]+\z/D', $host) === 1) {
-            return false;
-        }
-
-        $labels = explode('.', $host);
-
-        if (count($labels) < 2) {
-            return false;
-        }
-
-        return array_all($labels, fn ($label) => ! (preg_match('/\A[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\z/D', $label) !== 1));
     }
 }

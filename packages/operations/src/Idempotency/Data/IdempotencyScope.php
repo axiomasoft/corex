@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace CoreX\Operations\Idempotency\Data;
 
 use CoreX\Attributes\Api;
+use CoreX\Context\Enums\PrincipalType;
 use InvalidArgumentException;
 
-/** Tenant-local identity included in an idempotency key's collision domain. */
+/**
+ * Tenant-local identity included in an idempotency key's collision domain.
+ * A principal is (type, id): ids are unique only within a principal type.
+ */
 #[Api(since: '1.0')]
 final readonly class IdempotencyScope
 {
@@ -16,6 +20,7 @@ final readonly class IdempotencyScope
         public string $databaseName,
         public string $accountId,
         public ?string $workspaceId,
+        public PrincipalType $principalType,
         public string $principalId,
         public ?string $clientId,
         public string $apiMajor,
@@ -52,6 +57,7 @@ final readonly class IdempotencyScope
             'database_name' => $this->databaseName,
             'operation_id' => $this->operationId,
             'principal_id' => $this->principalId,
+            'principal_type' => $this->principalType->value,
             'workspace_id' => $this->workspaceId,
         ];
     }

@@ -113,13 +113,6 @@ function curl_errno(CurlHandle|FakeCurlHandle $handle): int
     return $handle instanceof CurlHandle ? \curl_errno($handle) : CurlRuntimeFixture::$errno;
 }
 
-function curl_close(CurlHandle|FakeCurlHandle $handle): void
-{
-    if ($handle instanceof CurlHandle) {
-        \curl_close($handle);
-    }
-}
-
 namespace CoreX\Webhooks\Tests\Feature;
 
 use CoreX\Webhooks\Data\ValidatedWebhookRequest;
@@ -311,7 +304,7 @@ PHP;
 
             $this->assertSame('', \curl_exec($handle), \curl_error($handle));
             $this->assertSame(202, \curl_getinfo($handle, CURLINFO_RESPONSE_CODE));
-            \curl_close($handle);
+            unset($handle);
 
             $captured = base64_decode(stream_get_contents($pipes[1]), true);
             $stderr = stream_get_contents($pipes[2]);

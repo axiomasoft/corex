@@ -38,6 +38,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Context\Contracts\IdentityPasswordRehasher` | spi-implement | 1.0 |
 | `CoreX\Context\Contracts\ImpersonationGuard` | spi-call | 1.0 |
 | `CoreX\Context\Contracts\ImpersonationService` | spi-implement | 1.0 |
+| `CoreX\Context\Contracts\Principal` | spi-implement | 1.0 |
 | `CoreX\Context\Contracts\TenancyManager` | spi-implement | 1.0 |
 | `CoreX\Context\Contracts\TenantContextResolver` | spi-implement | 1.0 |
 | `CoreX\Context\Contracts\TenantContextRestorer` | spi-implement | 1.0 |
@@ -50,10 +51,12 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Context\Data\TenantContext` | api | 1.0 |
 | `CoreX\Context\Data\WorkspaceRef` | api | 1.0 |
 | `CoreX\Context\Enums\ImpersonationRestrictedAction` | api | 1.0 |
+| `CoreX\Context\Enums\PrincipalType` | api | 1.0 |
 | `CoreX\Context\Exceptions\CentralContextException` | api | 1.0 |
 | `CoreX\Context\Exceptions\ImpersonationRestrictedException` | api | 1.0 |
 | `CoreX\Context\Exceptions\ScopeContextMismatch` | api | 1.0 |
 | `CoreX\Context\Laravel\ContextRegistrar` | spi-call | 1.0 |
+| `CoreX\Context\Laravel\WorkspaceScopeProvider` | spi-implement | 1.0 |
 | `CoreX\CoreServiceProvider` | spi-call | 1.0 |
 | `CoreX\Data\Contracts\DataScopeAuthorizer` | spi-implement | 1.0 |
 | `CoreX\Data\Contracts\DataScopeCodec` | spi-implement | 1.0 |
@@ -102,6 +105,9 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Features\Data\FeatureFlagDefinition` | api | 1.0 |
 | `CoreX\Features\Events\FeatureFlagToggled` | spi-call | 1.0 |
 | `CoreX\Features\Laravel\FeaturesRegistrar` | spi-call | 1.0 |
+| `CoreX\Invocation\Contracts\OperationHandler` | spi-implement | 1.0 |
+| `CoreX\Invocation\Contracts\RequestContext` | spi-implement | 1.0 |
+| `CoreX\Invocation\Data\InvocationMetadata` | api | 1.0 |
 | `CoreX\Messaging\Contracts\Cancellable` | spi-implement | 1.0 |
 | `CoreX\Messaging\Contracts\CloudEventCodec` | api | 1.0 |
 | `CoreX\Messaging\Contracts\DurableMessagePublisher` | spi-implement | 1.0 |
@@ -222,6 +228,8 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Observability\Laravel\ObservabilityRegistrar` | spi-call | 1.0 |
 | `CoreX\Scheduling\Contracts\DueWakeupHandler` | spi-implement | 1.0 |
 | `CoreX\Scheduling\Contracts\DueWakeupSource` | spi-implement | 1.0 |
+| `CoreX\Scheduling\Contracts\DueWakeupSweeper` | spi-implement | 1.0 |
+| `CoreX\Scheduling\Contracts\WakeupScheduleHint` | spi-implement | 1.0 |
 | `CoreX\Scheduling\Contracts\WakeupScheduler` | spi-implement | 1.0 |
 | `CoreX\Scheduling\Data\CancelResult` | api | 1.0 |
 | `CoreX\Scheduling\Data\ScheduleResult` | api | 1.0 |
@@ -258,11 +266,9 @@ Attributes own membership. Members belong to this package; direct extends/implem
 |:--|:--|:--|
 | `CoreX\Access\Access\Laravel\PrincipalIdentity` | spi-call | 1.0 |
 | `CoreX\Access\Contracts\AccessChecker` | spi-implement | 1.0 |
-| `CoreX\Access\Contracts\Principal` | spi-implement | 1.0 |
 | `CoreX\Access\Contracts\RoleMatrixCompiler` | spi-implement | 1.0 |
 | `CoreX\Access\CoreAuthServiceProvider` | spi-call | 1.0 |
 | `CoreX\Access\Data\RecordContext` | api | 1.0 |
-| `CoreX\Access\Enums\PrincipalType` | api | 1.0 |
 | `CoreX\Access\Enums\Scope` | api | 1.0 |
 | `CoreX\Access\Errors\Enums\AccessErrorCode` | api | 1.0 |
 | `CoreX\Access\Exceptions\ScopeCapabilityMismatch` | api | 1.0 |
@@ -465,7 +471,6 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer` | spi-implement | 1.0 |
 | `CoreX\Operations\Authorization\Contracts\OperationAuthorizer` | spi-implement | 1.0 |
 | `CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer` | spi-implement | 1.0 |
-| `CoreX\Operations\Authorization\Contracts\Principal` | spi-implement | 1.0 |
 | `CoreX\Operations\Authorization\Contracts\PrincipalResolver` | spi-implement | 1.0 |
 | `CoreX\Operations\Authorization\Contracts\ReplayAuthorizer` | spi-implement | 1.0 |
 | `CoreX\Operations\Authorization\Laravel\DeclaredFieldAuthorizer` | spi-call | 1.0 |
@@ -497,7 +502,6 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Operations\Cost\Laravel\CostOptionsParser` | spi-call | 1.0 |
 | `CoreX\Operations\Cost\Laravel\CostRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Definition\Contracts\OperationDefinitionValidator` | spi-call | 1.0 |
-| `CoreX\Operations\Definition\Contracts\OperationHandler` | spi-implement | 1.0 |
 | `CoreX\Operations\Definition\Contracts\OperationRegistry` | spi-call | 1.0 |
 | `CoreX\Operations\Definition\Contracts\SchemaContributor` | spi-implement | 1.0 |
 | `CoreX\Operations\Definition\Data\Operation` | spi-call | 1.0 |
@@ -520,9 +524,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Operations\Invocation\Contracts\EffectiveCapabilities` | spi-call | 1.0 |
 | `CoreX\Operations\Invocation\Contracts\OperationDispatcher` | spi-call | 1.0 |
 | `CoreX\Operations\Invocation\Contracts\OperationInvoker` | api | 1.0 |
-| `CoreX\Operations\Invocation\Contracts\RequestContext` | spi-implement | 1.0 |
 | `CoreX\Operations\Invocation\Contracts\RequestContextProvider` | spi-implement | 1.0 |
-| `CoreX\Operations\Invocation\Data\InvocationMetadata` | api | 1.0 |
 | `CoreX\Operations\Invocation\Data\OperationInvocation` | api | 1.0 |
 | `CoreX\Operations\Invocation\Data\OperationResult` | api | 1.0 |
 | `CoreX\Operations\Invocation\Enums\InputEnvelope` | api | 1.0 |

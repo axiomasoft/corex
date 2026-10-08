@@ -6,9 +6,9 @@ namespace CoreX\Operations\Authorization\Laravel;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
 use CoreX\Operations\Definition\Data\Operation;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
 use Override;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]

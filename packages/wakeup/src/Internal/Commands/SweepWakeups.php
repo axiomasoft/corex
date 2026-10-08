@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Wakeup\Internal\Commands;
 
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Wakeup\Contracts\DueWakeupSweeper;
+use CoreX\Scheduling\Contracts\DueWakeupSweeper;
 use Illuminate\Console\Command;
 
 final class SweepWakeups extends Command

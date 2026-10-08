@@ -51,6 +51,7 @@ use Illuminate\Cache\Repository as CacheRepository;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Database\Events\MigrationStarted;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -241,6 +242,18 @@ it('enables a module from available: migrations run, mod_records + mod_modules p
         ->and($log->to_state)->toBe(ModuleState::Enabled->value);
 
     Event::assertDispatched(ModuleEnabled::class, fn (ModuleEnabled $event): bool => $event->module === 'corex/stub-base');
+});
+
+it('claims and cleans up through the wrapped dispatcher when events are faked', function (): void {
+    // Event::fake() forwards listen() but ignores forget(): claim listeners must live on the real dispatcher.
+    $fake = Event::fake([ModuleEnabled::class]);
+    $before = count($fake->dispatcher->getRawListeners()[MigrationStarted::class] ?? []);
+
+    lifecycleFor(migrationPaths: ['corex/stub-base' => lifecycleStubsPath('base')])->enable('corex/stub-base');
+
+    expect(lifecyclePg()->table('mod_records')->where('module_name', 'corex/stub-base')->pluck('reference')->all())
+        ->toContain('sba_widgets')
+        ->and(count($fake->dispatcher->getRawListeners()[MigrationStarted::class] ?? []))->toBe($before);
 });
 
 it('rejects enable when a dependency is not enabled, without touching the database (AC-6)', function (): void {

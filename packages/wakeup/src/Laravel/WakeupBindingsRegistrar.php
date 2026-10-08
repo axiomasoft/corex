@@ -12,11 +12,12 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Scheduling\Contracts\DueWakeupSource;
+use CoreX\Scheduling\Contracts\DueWakeupSweeper;
+use CoreX\Scheduling\Contracts\WakeupScheduleHint;
 use CoreX\Scheduling\Contracts\WakeupScheduler;
 use CoreX\Scheduling\Data\WakeupHandlerDefinition;
 use CoreX\Time\Laravel\SystemClock;
-use CoreX\Wakeup\Contracts\DueWakeupSweeper;
-use CoreX\Wakeup\Contracts\WakeupScheduleHint;
+use CoreX\Wakeup\Contracts\DueWakeupSweeper as DeprecatedDueWakeupSweeper;
 use CoreX\Wakeup\Internal\DangerousModesCheck;
 use CoreX\Wakeup\Internal\SqlWakeupScheduler;
 use CoreX\Wakeup\Internal\SweepRunner;
@@ -71,6 +72,7 @@ final class WakeupBindingsRegistrar implements PackageRegistrar
             maxAttempts: $app->make(WakeupOptions::class)->maxAttempts,
             clock: $app->make(ClockInterface::class),
         ));
+        $app->alias(DueWakeupSweeper::class, DeprecatedDueWakeupSweeper::class);
     }
 
     #[Override]
@@ -136,7 +138,7 @@ final class WakeupBindingsRegistrar implements PackageRegistrar
     {
         $hints = [];
 
-        foreach ($app->tagged('corex.wakeup.hints') as $hint) {
+        foreach ($app->tagged(WakeupScheduleHint::TAG) as $hint) {
             if (! $hint instanceof WakeupScheduleHint) {
                 throw new RuntimeException('Wakeup hints must implement WakeupScheduleHint.');
             }

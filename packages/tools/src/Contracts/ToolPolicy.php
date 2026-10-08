@@ -6,7 +6,7 @@ namespace CoreX\Tools\Contracts;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Validation\Data\JsonObject;
 use CoreX\Tools\Data\ToolDescriptor;
 

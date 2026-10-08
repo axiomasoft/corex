@@ -18,9 +18,9 @@ trait AssertsContainerBindings
         $first = $app->make($abstract);
         $second = $app->make($abstract);
         expect($first)->toBeInstanceOf($expectedConcrete);
-        expect($first)->toBe($second);
+        expect(spl_object_id($first))->toBe(spl_object_id($second));
         $app->forgetScopedInstances();
-        expect($app->make($abstract))->toBe($first);
+        expect(spl_object_id($app->make($abstract)))->toBe(spl_object_id($first));
     }
 
     private function assertScopedBinding(
@@ -32,11 +32,12 @@ trait AssertsContainerBindings
         expect($app->isShared($abstract))->toBeTrue();
         $first = $app->make($abstract);
         expect($first)->toBeInstanceOf($expectedConcrete);
-        expect($app->make($abstract))->toBe($first);
+        // Object ids, not objects: an identity diff would export the container and its environment.
+        expect(spl_object_id($app->make($abstract)))->toBe(spl_object_id($first));
         $app->forgetScopedInstances();
         $next = $app->make($abstract);
         expect($next)->toBeInstanceOf($expectedConcrete);
-        expect($next)->not->toBe($first);
+        expect(spl_object_id($next))->not->toBe(spl_object_id($first));
     }
 
     private function assertTransientBinding(
@@ -49,6 +50,6 @@ trait AssertsContainerBindings
         $first = $app->make($abstract);
         $second = $app->make($abstract);
         expect($first)->toBeInstanceOf($expectedConcrete);
-        expect($first)->not->toBe($second);
+        expect(spl_object_id($first))->not->toBe(spl_object_id($second));
     }
 }

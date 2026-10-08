@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased — workspace scope through the kernel contract (audit 2026-10-08 P-04)
+
+- `WorkspaceRegistrar` binds `CoreX\Context\Laravel\WorkspaceScopeProvider` to `WorkspaceScope`, so access no longer needs the scope's class name in config.
+
+## Unreleased — wakeup through kernel contracts (audit 2026-10-08)
+
+- The root_registry integration depends on `CoreX\Scheduling\Contracts` only; no `CoreX\Wakeup` import remains. With `wakeup.driver=root_registry` the integration is always registered and resolves the sweeper lazily; a missing backend is reported by the config report and fails on first use instead of being skipped silently.
+
 ## Unreleased — Laravel 13 platform (P09.9, D132)
 
 - Require Laravel 13 and PHP 8.4+; support PHP 8.4–8.5. Laravel 12 support is removed. Testbench uses the Laravel 13 family; package versions and runtime contracts are unchanged.

@@ -9,16 +9,16 @@ use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Invocation\Contracts\OperationHandler;
+use CoreX\Invocation\Contracts\RequestContext;
+use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Data\Api;
 use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
-use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Definition\Data\Operation;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Internal\ResolvedContext;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Laravel\Support\ApiOptions;
@@ -257,7 +257,7 @@ final class P13QueryHandler implements OperationHandler
     {
         self::$calls++;
 
-        return ['id' => $parameters['id'], 'title' => 'Found', 'actor' => $context->principal()->id(), 'account' => $context->tenant()->account->id];
+        return ['id' => $parameters['id'], 'title' => 'Found', 'actor' => $context->principal()->principalId(), 'account' => $context->tenant()->account->id];
     }
 }
 
@@ -269,7 +269,7 @@ final class P13CommandHandler implements OperationHandler
     {
         self::$calls++;
 
-        return ['id' => 'n-2', 'title' => $input['title'], 'actor' => $context->principal()->id(), 'account' => $context->tenant()->account->id];
+        return ['id' => 'n-2', 'title' => $input['title'], 'actor' => $context->principal()->principalId(), 'account' => $context->tenant()->account->id];
     }
 }
 

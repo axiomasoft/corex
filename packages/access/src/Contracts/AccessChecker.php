@@ -8,6 +8,7 @@ use CoreX\Access\Data\RecordContext;
 use CoreX\Access\Enums\Scope;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Context\Contracts\Principal;
 
 /**
  * Two-phase permission check (B-11 §5.5): allowed() is the capability gate

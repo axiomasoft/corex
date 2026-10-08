@@ -20,7 +20,7 @@
         "packages/search-intl/src/SearchIntlServiceProvider.php": 3,
         "packages/search-meilisearch/src/MeilisearchServiceProvider.php": 1,
         "packages/search/src/SearchServiceProvider.php": 3,
-        "packages/tasks-workflow/src/TasksWorkflowServiceProvider.php": 3,
+        "packages/tasks-workflow/src/TasksWorkflowServiceProvider.php": 1,
         "packages/tasks/src/Planning/Internal/PlanningOperationsServiceProvider.php": 1,
         "packages/tasks/src/TasksServiceProvider.php": 8,
         "packages/tenancy/src/TenancyServiceProvider.php": 0,

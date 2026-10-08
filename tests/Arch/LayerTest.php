@@ -17,10 +17,28 @@ use CoreX\Tests\Support\SourceScanner;
 // (directory collectors) would also work but adds a dependency the require-graph +
 // source scan already make unnecessary.
 
-// Foundation = the CoreX\*-namespaced packages (L0 agnostic + L1 domain-base). The
-// crm package IS the Flex\* thematic layer (L2, may depend on corex/*) — it is
-// intentionally excluded from the "may not import Flex" scan.
-$foundationPackages = ['core', 'tenancy', 'access', 'tasks', 'operations', 'tools', 'webhooks', 'recurrence'];
+// Foundation = every axiomasoft/* package under packages/ (L0 agnostic + L1 domain-base),
+// derived from composer.json so a new package is covered without editing this file (a
+// hand-kept list had silently drifted to 8 of 21 packages). The crm product IS the Flex\*
+// thematic layer (L2, may depend on corex/*) and lives under products/, outside the scan.
+/** @var array<string, list<string>> $foundationNamespaces package dir => PSR-4 prefixes */
+$foundationNamespaces = [];
+
+foreach (glob(SourceScanner::packagePath('*', 'composer.json')) ?: [] as $manifest) {
+    $composer = json_decode((string) file_get_contents($manifest), associative: true, flags: JSON_THROW_ON_ERROR);
+
+    if (str_starts_with((string) ($composer['name'] ?? ''), 'axiomasoft/')) {
+        $foundationNamespaces[basename(dirname($manifest))] = array_keys($composer['autoload']['psr-4'] ?? []);
+    }
+}
+
+ksort($foundationNamespaces);
+$foundationPackages = array_keys($foundationNamespaces);
+
+test('foundation package discovery covers the monorepo', function () use ($foundationPackages): void {
+    expect($foundationPackages)->toContain('core', 'tenancy', 'access', 'tasks', 'operations', 'tools', 'webhooks', 'recurrence')
+        ->and(count($foundationPackages))->toBeGreaterThanOrEqual(21);
+});
 
 // (1) Foundation ↛ Thematic: no corex/* source may import a Flex\* namespace.
 // The vendor inversion D70 fixed was exactly this kind of leak.
@@ -71,16 +89,15 @@ test('axiomasoft/corex declares no monorepo package dependencies', function (): 
     expect($monorepoRequires)->toBe([]);
 });
 
-// (2b) Source-level counterpart of 2a: core owns the CoreX\Tenancy\* contracts
-// physically (boxed-safe, brain-recon §5), so those imports are legal; forbidden
-// are the *sibling packages* Modules/Auth/Tasks and any Flex\* namespace.
-test('axiomasoft/corex source imports no sibling package namespace', function (): void {
-    $offenders = SourceScanner::filesMatching(
-        SourceScanner::packagePath('core', 'src'),
-        '/\buse\s+(CoreX\\\\(Access|Tasks|Operations|Tools|Webhooks)|Flex)\\\\/',
-    );
+// (2b) Source-level counterpart of 2a: core imports no namespace of any sibling
+// package (tenant contracts live in core's own Context module) and no Flex\*.
+// The sibling list is derived from the same composer.json scan as above.
+test('axiomasoft/corex source imports no sibling package namespace', function () use ($foundationNamespaces): void {
+    $siblings = array_merge(...array_values(array_diff_key($foundationNamespaces, ['core' => true])));
+    $alternatives = implode('|', array_map(static fn (string $prefix): string => preg_quote($prefix, '/'), [...$siblings, 'Flex\\']));
 
-    expect($offenders)->toBe([]);
+    expect($siblings)->not->toBeEmpty()
+        ->and(SourceScanner::filesMatching(SourceScanner::packagePath('core', 'src'), '/\buse\s+(?:function\s+|const\s+)?(?:'.$alternatives.')/'))->toBe([]);
 });
 
 test('tenant content does not bypass its owning storage adapter', function (): void {

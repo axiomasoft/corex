@@ -15,6 +15,13 @@
 !/.agents/skills/
 !/.agents/skills/**
 /.agents/skills/**/*.bak
+# Machine-local symlinks into a developer checkout (absolute /home/... targets).
+/.agents/skills/compact-responses
+/.agents/skills/db-test-preflight
+/.agents/skills/mcp-advisor
+/.agents/skills/node-pnpm-preflight
+/.agents/skills/plan-protocol
+/.agents/skills/query-craft
 !/.agents/plugins/
 !/.agents/plugins/**
 /.codex/
@@ -62,3 +69,6 @@ __pycache__/
 /docs/03_Dev/
 .mcp.json
 .grok/config.toml
+# Agent session state (tool-call logs) and editor backups of agent instruction files.
+/.grok/state/
+/*.md.bak

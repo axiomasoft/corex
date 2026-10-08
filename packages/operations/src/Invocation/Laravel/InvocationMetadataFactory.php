@@ -6,7 +6,7 @@ namespace CoreX\Operations\Invocation\Laravel;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Operations\Invocation\Data\InvocationMetadata;
+use CoreX\Invocation\Data\InvocationMetadata;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 

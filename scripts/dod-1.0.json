@@ -16,9 +16,9 @@
         "P17.8"
       ],
       "mode": "candidate-receipt",
-      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-scorecard-docs-receipt.json",
+      "receipt": "release/1.0/findings/P17-scorecard-docs-receipt.json",
       "freshness_inputs": [
-        "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/scripts/architecture/src/Scorecard.php",
+        "release/1.0/scripts/architecture/src/Scorecard.php",
         "scripts/package-docs-gate.php",
         "tests/Arch/PackageDocsTest.php"
       ],
@@ -112,7 +112,7 @@
         "P11.3"
       ],
       "mode": "candidate-receipt",
-      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-consumer-receipt.json",
+      "receipt": "release/1.0/findings/P17-consumer-receipt.json",
       "freshness_inputs": [
         "scripts/distribution/verify_equipment_consumer.py"
       ],
@@ -196,7 +196,7 @@
         "P17.6"
       ],
       "mode": "candidate-receipt",
-      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-profile-receipt.json",
+      "receipt": "release/1.0/findings/P17-profile-receipt.json",
       "freshness_inputs": [
         "scripts/distribution/profile-proof.py",
         "scripts/distribution/install-profiles.json"
@@ -210,7 +210,7 @@
         "P17.6"
       ],
       "mode": "candidate-receipt",
-      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-profile-receipt.json",
+      "receipt": "release/1.0/findings/P17-profile-receipt.json",
       "freshness_inputs": [
         "scripts/distribution/profile-proof.py",
         "scripts/distribution/install-profiles.json"
@@ -239,10 +239,10 @@
         "P9.8"
       ],
       "mode": "candidate-receipt",
-      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P16-profile-a-receipts.md",
+      "receipt": "release/1.0/knowledge/findings-P16-profile-a-receipts.json",
       "freshness_inputs": [
-        "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P16-profile-a-receipts.md",
-        "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/decisions/D107-attributes-is-producer-adjusted-profile-b.md"
+        "release/1.0/knowledge/findings-P16-profile-a-receipts.json",
+        "release/1.0/decisions/D107.json"
       ],
       "negative_fixture": "omitted-profile-b"
     },
@@ -266,7 +266,7 @@
         "P17.5"
       ],
       "mode": "candidate-receipt",
-      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-consumer-receipt.json",
+      "receipt": "release/1.0/findings/P17-consumer-receipt.json",
       "freshness_inputs": [
         "scripts/distribution/verify_equipment_consumer.py"
       ],
@@ -279,7 +279,7 @@
         "P17.2"
       ],
       "mode": "candidate-receipt",
-      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-extension-receipt.json",
+      "receipt": "release/1.0/findings/P17-extension-receipt.json",
       "freshness_inputs": [
         "scripts/distribution/verify_extension_fixtures.py"
       ],
@@ -292,7 +292,7 @@
         "P17.7"
       ],
       "mode": "candidate-receipt",
-      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-upgrade-receipt.json",
+      "receipt": "release/1.0/findings/P17-upgrade-receipt.json",
       "freshness_inputs": [
         "scripts/distribution/upgrade-proof.py",
         "scripts/distribution/release-baselines.json"
@@ -301,17 +301,19 @@
     },
     {
       "id": "DOD-22",
-      "statement": "PHP/API/schema compatibility diff is part of the release gate.",
+      "statement": "PHP API surface snapshot check is part of the release gate (Roave BC diff removed 2026-10-08).",
       "owner": [
         "P3.4",
         "P17.1"
       ],
       "mode": "live-command",
       "command": [
-        "bash",
-        "scripts/bc-check.sh"
+        "php",
+        "scripts/php-api.php",
+        "--strict",
+        "--check"
       ],
-      "negative_fixture": "bc-unclassified"
+      "negative_fixture": "php-api-drift"
     },
     {
       "id": "DOD-23",
@@ -362,7 +364,7 @@
         "P17.6"
       ],
       "mode": "candidate-receipt",
-      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-profile-receipt.json",
+      "receipt": "release/1.0/findings/P17-profile-receipt.json",
       "freshness_inputs": [
         "scripts/distribution/profile-proof.py",
         "scripts/distribution/install-profiles.json"
@@ -376,7 +378,7 @@
         "P17.5"
       ],
       "mode": "candidate-receipt",
-      "receipt": "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-consumer-receipt.json",
+      "receipt": "release/1.0/findings/P17-consumer-receipt.json",
       "freshness_inputs": [
         "scripts/distribution/verify_equipment_consumer.py"
       ],

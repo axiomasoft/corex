@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Contracts\Principal;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Enums\PrincipalType;
+use CoreX\Invocation\Contracts\RequestContext;
+use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
-use CoreX\Operations\Authorization\Contracts\Principal;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Invocation\Contracts\ContextResolver;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Internal\OperationDispatcher;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use Flex\Crm\ApiShared\CrmIdentifier;
@@ -30,7 +31,12 @@ it('declares and dispatches company, contact and association operations through 
 
     $principal = new class implements Principal
     {
-        public function id(): string
+        public function principalType(): PrincipalType
+        {
+            return PrincipalType::User;
+        }
+
+        public function principalId(): string
         {
             return 'trusted-user';
         }

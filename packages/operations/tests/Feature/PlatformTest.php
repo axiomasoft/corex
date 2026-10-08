@@ -8,6 +8,8 @@ use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Invocation\Contracts\OperationHandler;
+use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Data\Api;
 use CoreX\Modules\Data\CompiledRegistry;
@@ -16,13 +18,11 @@ use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
-use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Internal\OperationRegistry;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Errors\Internal\OperationErrorBoundary;
 use CoreX\Operations\Internal\Http\ApiController;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Invocation\Contracts\RequestContextProvider;
 use CoreX\Operations\Invocation\Internal\OperationDispatcher;
 use CoreX\Operations\Laravel\Support\ApiOptions;
@@ -93,7 +93,7 @@ final class PlatformTest extends TestCase
         {
             public function allows(Operation $operation, RequestContext $context): bool
             {
-                return $operation->ability === 'notes.read' && $context->principal()->id() === 'trusted-user';
+                return $operation->ability === 'notes.read' && $context->principal()->principalId() === 'trusted-user';
             }
         });
     }
@@ -342,7 +342,7 @@ final class PlatformTest extends TestCase
             {
                 PlatformTest::assertSame($context, $this->provider->current());
 
-                return ['actor' => $this->provider->current()->principal()->id()];
+                return ['actor' => $this->provider->current()->principal()->principalId()];
             }
         };
         $this->app->instance(NoteHandler::class, $handler);

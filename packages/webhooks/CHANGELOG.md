@@ -1,3 +1,7 @@
+## Unreleased — invocation contract in the kernel (audit 2026-10-08 P-02)
+
+- Operation handlers and context use `CoreX\Invocation` kernel contracts; the former `CoreX\Operations\...` names are deprecated aliases of the same types. Public webhook contracts are unchanged.
+
 ## Unreleased — PHP 8.4 modernization (P09.4)
 
 ## Unreleased — Laravel 13 platform (P09.9, D132)

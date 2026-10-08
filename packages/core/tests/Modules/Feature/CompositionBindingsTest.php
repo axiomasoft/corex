@@ -119,3 +119,27 @@ function assertSingletonBinding(
     $app->forgetScopedInstances();
     expect($app->make($abstract))->toBe($first);
 }
+
+it('reads module code versions from installed.json and fails closed on a corrupt manifest', function (): void {
+    $root = sys_get_temp_dir().'/corex-wiring-'.bin2hex(random_bytes(4));
+    mkdir($root.'/vendor/composer', recursive: true);
+    $manifest = $root.'/vendor/composer/installed.json';
+    $original = $this->app->basePath();
+    $this->app->setBasePath($root);
+
+    try {
+        file_put_contents($manifest, json_encode(['packages' => [['name' => 'acme/mod', 'type' => 'corex-module', 'version' => '1.2.3']]]));
+        expect($this->app->make('corex.modules.wiring')['codeVersions'])->toBe(['acme/mod' => '1.2.3']);
+
+        $this->app->forgetInstance('corex.modules.wiring');
+        file_put_contents($manifest, '{corrupt');
+        expect(fn () => $this->app->make('corex.modules.wiring'))->toThrow(JsonException::class);
+    } finally {
+        $this->app->setBasePath($original);
+        $this->app->forgetInstance('corex.modules.wiring');
+        unlink($manifest);
+        rmdir($root.'/vendor/composer');
+        rmdir($root.'/vendor');
+        rmdir($root);
+    }
+});

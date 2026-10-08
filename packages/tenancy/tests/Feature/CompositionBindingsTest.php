@@ -9,6 +9,7 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Contracts\TenantDatabaseLifecycle;
 use CoreX\Context\Internal\NullImpersonationService;
+use CoreX\Context\Laravel\WorkspaceScopeProvider;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Tenancy\Account\Internal\DatabaseTenantProvisioner;
@@ -36,6 +37,7 @@ use CoreX\Tenancy\Laravel\DomainTrustRegistrar;
 use CoreX\Tenancy\Laravel\IdentityRegistrar;
 use CoreX\Tenancy\Laravel\ProvisioningRegistrar;
 use CoreX\Tenancy\Laravel\RuntimeRegistrar;
+use CoreX\Tenancy\Laravel\Scopes\WorkspaceScope;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Laravel\WakeupRegistrar;
 use CoreX\Tenancy\Laravel\WorkspaceRegistrar;
@@ -51,6 +53,7 @@ use CoreX\Tenancy\Tests\Concerns\AssertsContainerBindings;
 use CoreX\Tenancy\Tests\TestCase;
 use CoreX\Tenancy\Workspace\Contracts\WorkspaceResolver;
 use CoreX\Tenancy\Workspace\Internal\DatabaseWorkspaceResolver;
+use CoreX\Tenancy\Workspace\Internal\TenancyWorkspaceScopeProvider;
 
 uses(AssertsContainerBindings::class);
 uses()->group('pg');
@@ -143,6 +146,8 @@ it('keeps Workspace register bindings on the measured key, concrete and lifetime
         PrincipalWorkspaceResolver::class,
         DatabaseWorkspaceResolver::class,
     );
+    $this->assertSingletonBinding($app, WorkspaceScopeProvider::class, TenancyWorkspaceScopeProvider::class);
+    expect($app->make(WorkspaceScopeProvider::class)->scopeClass())->toBe(WorkspaceScope::class);
 });
 
 it('keeps DomainTrust register bindings on the measured key, concrete and lifetime', function (): void {

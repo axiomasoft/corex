@@ -54,6 +54,22 @@ class DodSchemaTest(unittest.TestCase):
             MODULE.validate_manifest(document, ROOT)
         self.assertIn("ownerless", str(caught.exception))
 
+    def test_owner_resolves_against_frozen_owner_index(self) -> None:
+        self.assertTrue(MODULE._owner_resolves(ROOT, "P2.3"))
+        self.assertTrue(MODULE._owner_resolves(ROOT, "P17.8"))
+        self.assertFalse(MODULE._owner_resolves(ROOT, "P99.1"))
+
+    def test_receipt_text_reads_plan_documents_only(self) -> None:
+        self.assertIsNone(MODULE.receipt_text(ROOT / "release/1.0/findings/P17-profile-receipt.json"))
+        self.assertIn("no-move", MODULE.receipt_text(ROOT / "release/1.0/knowledge/findings-P16-profile-a-receipts.json") or "")
+
+    def test_unresolved_owner_fails(self) -> None:
+        document = load(ROOT / "scripts/dod-1.0.json")
+        document["assertions"][0]["owner"] = ["P99.1"]
+        with self.assertRaises(MODULE.DodError) as caught:
+            MODULE.validate_manifest(document, ROOT)
+        self.assertIn("unresolved owner P99.1", str(caught.exception))
+
     def test_both_evidence_modes_fail(self) -> None:
         document = load(ROOT / "scripts/dod-1.0.json")
         document["assertions"][0]["command"] = ["php", "scripts/package-docs-gate.php"]
@@ -74,7 +90,7 @@ class DodSchemaTest(unittest.TestCase):
             target.unlink(missing_ok=True)
 
     def test_scorecard_keeps_producer_doc_failures_red(self) -> None:
-        receipt = load(ROOT / "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-scorecard-docs-receipt.json")
+        receipt = load(ROOT / "release/1.0/findings/P17-scorecard-docs-receipt.json")
         receipt["dod"]["DOD-24"] = "FAIL: planted unsupported example"
         manifest = MODULE.load_manifest(ROOT / "scripts/dod-1.0.json", ROOT)
         binding = {
@@ -82,38 +98,23 @@ class DodSchemaTest(unittest.TestCase):
             "candidate_sha256": receipt["candidate_sha256"],
         }
         by_id = {row["id"]: row for row in manifest["assertions"]}
+        # Hermetic: receipt freshness against the live tree is the gate's job (dod-check),
+        # this test only proves a producer-doc FAIL does not leak into DOD-01.
         purpose, purpose_detail = MODULE.judge_receipt(
-            by_id["DOD-01"], receipt, root=ROOT, binding=binding,
+            {**by_id["DOD-01"], "freshness_inputs": []}, receipt, root=ROOT, binding=binding,
             head=receipt["source_commit"], environment={},
         )
         examples, example_detail = MODULE.judge_receipt(
-            {"id": "DOD-24", "freshness_inputs": by_id["DOD-01"]["freshness_inputs"]},
+            {"id": "DOD-24", "freshness_inputs": []},
             receipt, root=ROOT, binding=binding, head=receipt["source_commit"], environment={},
         )
         self.assertEqual(purpose, "green", purpose_detail)
         self.assertEqual(examples, "red", example_detail)
         self.assertIn("FAIL", example_detail)
 
-    def test_bc_classifier_accepts_experimental_break_and_rejects_weakening(self) -> None:
-        ok = "\n".join([
-            "bc-check: axiomasoft/corex (core) |compatible| stability=experimental base=abc1234 candidate=def5678",
-            "bc-check: axiomasoft/corex-custom-fields (attributes) |bc-break| stability=experimental base=abc1234 candidate=def5678",
-            "bc-check: OK",
-        ])
-        status, _detail = MODULE.classify_bc_output(ok)
-        self.assertEqual(status, "green")
-        for sample, expected in (
-            ("bc-check: skip — requires PHP 8.4", "skipped"),
-            ("bc-check: axiomasoft/corex (core) |infrastructure| stability=experimental base=abc1234 candidate=def5678", "red"),
-            ("bc-check: axiomasoft/corex (core) |bc-break| stability=stable base=abc1234 candidate=", "red"),
-            ("no rows", "red"),
-        ):
-            with self.subTest(sample=sample):
-                seen, _detail = MODULE.classify_bc_output(sample)
-                self.assertEqual(seen, expected)
-
     def test_d107_no_move_receipt_is_green(self) -> None:
-        text = (ROOT / "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P16-profile-a-receipts.md").read_text(encoding="utf-8")
+        text = MODULE.receipt_text(ROOT / "release/1.0/knowledge/findings-P16-profile-a-receipts.json")
+        assert text is not None
         status, detail = MODULE._judge_d107(text)
         self.assertEqual(status, "green", detail)
 

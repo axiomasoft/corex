@@ -24,12 +24,12 @@ if str(_DISTRIBUTION) not in sys.path:
 from plan_close_deferral import DeferralDenied, active as deferral_active, refuse_remote
 
 ROOT = Path(__file__).resolve().parents[2]
-PLAN = ROOT / 'plans/archive/2026.09.15-№1-COREX-FLEXCRM-REMAINING'
+RECORD = ROOT / 'release/remaining-cohort-20260915'
 REPO_DELIVERY = ROOT / 'delivery/remaining-cohort-20260915'
-PLAN_DELIVERY = PLAN / 'delivery/remaining-cohort-20260915'
+RECORD_DELIVERY = RECORD / 'delivery/remaining-cohort-20260915'
 PRIVATE_DIR = REPO_DELIVERY / 'private'
 SHARED_CACHE = (REPO_DELIVERY / 'installed-candidate/composer-cache').resolve()
-EVIDENCE = PLAN_DELIVERY / 'evidence'
+EVIDENCE = RECORD_DELIVERY / 'evidence'
 PRIVATE_SCRIPT = Path(__file__).resolve()
 INSTALLED_REPO = REPO_DELIVERY / 'installed-candidate/repository'
 FIXTURES = REPO_DELIVERY / 'fixtures'
@@ -584,7 +584,7 @@ def build_evidence(
         'lock_sha256': sha256_path(ROOT / 'composer.lock'),
         'config_sha256': sha256_path(PRIVATE_SCRIPT),
         'fixture_sha256': sha256_path(REPO_DELIVERY / 'private-read-packet.json'),
-        'log_path': str(log_path.relative_to(PLAN)),
+        'log_path': str(log_path.relative_to(RECORD)),
         'log_sha256': sha256_path(log_path),
         'cases': cases,
         'grant_sha256': grant_sha,
@@ -639,14 +639,14 @@ def build_report(
         '|---|---|---|---|---|---|---|---|---|---|---|---|',
     ])
     for case, path, envelope in evidence_rows:
-        rel = path.relative_to(PLAN)
+        rel = path.relative_to(RECORD)
         lines.append(
             f"| {case} | `{rel}` | `{sha256_path(path)}` | private | p9-cohort/1 | {envelope['cell']} | `{envelope['command']}` | `{envelope['cwd']}` | `{envelope['runtime']}` | `{envelope['start']}` | `{envelope['end']}` | {envelope['exit']} | {envelope['result']} |"
         )
     lines.extend(['', '## Adoption', '', '| Surface | Gate | Exact digest | Owner | Result | Resume |', '|---|---|---|---|---|---|'])
     for row in adoption_rows:
         lines.append('| ' + ' | '.join(row) + ' |')
-    (PLAN / 'findings/P9-private-auth.md').write_text('\n'.join(lines) + '\n')
+    (RECORD / 'findings/P9-private-auth.md').write_text('\n'.join(lines) + '\n')
 
 
 def assert_local_reconcile_allowed() -> None:
@@ -744,7 +744,7 @@ def execute_reconcile() -> dict:
         ('delivery/remaining-cohort-20260915/installed-candidate/receipt.json', sha256_path(REPO_DELIVERY / 'installed-candidate/receipt.json'), 'installed candidate receipt'),
         ('delivery/remaining-cohort-20260915/private/receipt.json', receipt_sha, 'private receipt'),
         ('scripts/distribution/remaining-cohort-private.py', sha256_path(PRIVATE_SCRIPT), 'private proof recipe'),
-        ('research/P9-cohort-design.md', sha256_path(PLAN / 'research/P9-cohort-design.md'), 'design contract'),
+        ('research/P9-cohort-design.md', sha256_path(RECORD / 'research/P9-cohort-design.md'), 'design contract'),
     ]
     adoption_rows = [
         ('private-read-packet/1', 'G-PRIVATE', f'`{packet_sha}`', 'P9.4', 'PASS', 'exact private read executed'),
@@ -919,7 +919,7 @@ def finalize_report() -> dict:
         ('delivery/remaining-cohort-20260915/installed-candidate/receipt.json', sha256_path(REPO_DELIVERY / 'installed-candidate/receipt.json'), 'installed candidate receipt'),
         ('delivery/remaining-cohort-20260915/private/receipt.json', receipt_sha, 'private receipt'),
         ('scripts/distribution/remaining-cohort-private.py', sha256_path(PRIVATE_SCRIPT), 'private proof recipe'),
-        ('research/P9-cohort-design.md', sha256_path(PLAN / 'research/P9-cohort-design.md'), 'design contract'),
+        ('research/P9-cohort-design.md', sha256_path(RECORD / 'research/P9-cohort-design.md'), 'design contract'),
     ]
     adoption_rows = [
         ('private-read-packet/1', 'G-PRIVATE', f'`{packet_sha}`', 'P9.4', 'PASS', 'exact private read executed'),

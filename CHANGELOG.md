@@ -4,6 +4,11 @@
 
 ## [Unreleased]
 
+### Removed
+
+- Audit 2026-10-08 (owner decision): Roave BC diff removed — `composer bc-check`, `scripts/bc-check.sh`, `scripts/bc/**` (accepted base, approved-deltas list and its plan-decision binding), the `backward-compatibility` CI job, `tests/Arch/PhpApiBcTest.php` and the `roave/backward-compatibility-check` dev dependency. Public surface stays guarded by `composer php-api` snapshots, golden php-surface + REBASELINE and package CHANGELOGs.
+- `dod-release` CI job removed (DoD preflight is bound to `plans/`).
+
 ### Changed
 
 - P16.12: path-bearing Composer/PHPStan/graph-gate/CI/docs/CHANGELOG carriers reconciled to post-P16 physical layout; `extra.corex.public-api` namespaces unchanged (D92). Generated graph report and PHPStan contour regenerated via owners. Mutation P1.24 patches retargeted from `packages/core/src/PubSub/` to `packages/core/src/Messaging/`.

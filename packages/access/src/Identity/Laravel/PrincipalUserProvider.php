@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace CoreX\Access\Identity\Laravel;
 
 use CoreX\Access\Access\Laravel\PrincipalIdentity;
-use CoreX\Access\Enums\PrincipalType;
 use CoreX\Access\Identity\Internal\LowercaseColumn;
 use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\IdentityPasswordRehasher;
+use CoreX\Context\Enums\PrincipalType;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Database\Query\Builder;

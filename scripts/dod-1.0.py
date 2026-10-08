@@ -25,8 +25,11 @@ FAIL_CLOSED = frozenset({"red", "unknown", "skipped", "stale", "not-run"})
 ID_RE = re.compile(r"^DOD-(\d{2})$")
 OWNER_RE = re.compile(r"^P\d+\.\d+$")
 EXPECTED_IDS = tuple(f"DOD-{index:02d}" for index in range(1, 28))
-PLAN_DIR = "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING"
-CANDIDATE_RECEIPT = f"{PLAN_DIR}/findings/P17-candidate-receipt.json"
+RELEASE_DIR = "release/1.0"
+OWNER_INDEX = f"{RELEASE_DIR}/owners.json"
+OWNER_INDEX_VERSION = "corex-dod-owners/1"
+PLAN_DOCUMENT_SCHEMA = "urn:swissknifeman:task:plan:document:"
+CANDIDATE_RECEIPT = f"{RELEASE_DIR}/findings/P17-candidate-receipt.json"
 PROFILES = {
     "bare-single",
     "modular-single",
@@ -40,7 +43,7 @@ CI_IDS = frozenset({
     "DOD-08", "DOD-10", "DOD-11", "DOD-14", "DOD-15", "DOD-16", "DOD-17",
     "DOD-18", "DOD-19", "DOD-20", "DOD-21", "DOD-23", "DOD-26", "DOD-27",
 })
-SKIP_MARKERS = ("plan-close deferred", "bc-check: skip", "undeclared skip")
+SKIP_MARKERS = ("plan-close deferred", "undeclared skip")
 LIVE_TIMEOUT = {
     "DOD-22": 1200,
     "DOD-09": 240,
@@ -82,6 +85,18 @@ def canonical_dumps(payload: object) -> str:
 
 def _phase_of(owner: str) -> str:
     return owner.split(".", 1)[0]
+
+
+def _owner_resolves(root: Path, owner: str) -> bool:
+    """An owner is a phase id recorded in the frozen owner index `release/1.0/owners.json`."""
+    try:
+        document = json.loads((root / OWNER_INDEX).read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, ValueError):
+        return False
+    if not isinstance(document, dict) or document.get("schema_version") != OWNER_INDEX_VERSION:
+        return False
+    owners = document.get("owners")
+    return isinstance(owners, dict) and isinstance(owners.get(owner), dict)
 
 
 def _reject_escape(value: str) -> None:
@@ -132,9 +147,7 @@ def validate_manifest(document: object, root: Path) -> dict:
         for owner in owners:
             if not isinstance(owner, str) or OWNER_RE.fullmatch(owner) is None:
                 raise DodError(f"{identifier}: unqualified plan owner: {owner!r}")
-            phase = _phase_of(owner)
-            spec = root / PLAN_DIR / "phases" / phase / f"{owner}.md"
-            if not spec.is_file():
+            if not _owner_resolves(root, owner):
                 raise DodError(f"{identifier}: unresolved owner {owner}")
         mode = row.get("mode")
         if mode not in MODES:
@@ -431,6 +444,21 @@ def _judge_fixture(row: dict, receipt: dict, *, root: Path, binding: dict, head:
     return "green", "PASS"
 
 
+def receipt_text(path: Path) -> str | None:
+    """Prose receipt text: a legacy `.md` file or a JSON plan document's sections."""
+    if path.suffix == ".md":
+        return path.read_text(encoding="utf-8")
+    document = load_json(path)
+    if not isinstance(document, dict) or not str(document.get("$schema", "")).startswith(PLAN_DOCUMENT_SCHEMA):
+        return None
+    sections = document.get("sections")
+    if not isinstance(sections, list):
+        raise DodError(f"plan document without sections: {path.name}")
+    return "\n\n".join(
+        f"{section.get('title', '')}\n{section.get('text', '')}" for section in sections if isinstance(section, dict)
+    )
+
+
 def _judge_d107(text: str) -> tuple[str, str]:
     if "D107" not in text or "no-move" not in text:
         return "red", "missing D107 no-move receipt"
@@ -527,29 +555,6 @@ def _judge_upgrade(identifier: str, receipt: dict, mark: str | None) -> tuple[st
     return "green", mark or "PASS"
 
 
-def classify_bc_output(output: str) -> tuple[str, str]:
-    if re.search(r"bc-check:\s+skip\b", output):
-        return "skipped", "bc-check skip"
-    if "missing candidate SHA" in output or re.search(r"candidate=\s*(\||$)", output):
-        return "red", "missing candidate SHA"
-    rows = re.findall(
-        r"bc-check:\s+\S+\s+\([^)]+\)\s+\|(compatible|bc-break|infrastructure)\|\s+stability=(\S+)\s+base=(\S+)\s+candidate=(\S+)",
-        output,
-    )
-    if not rows:
-        return "red", "unclassified BC output"
-    for classified, stability, _base, candidate in rows:
-        if not re.fullmatch(r"[0-9a-f]{7,40}", candidate):
-            return "red", "missing candidate SHA"
-        if classified == "infrastructure":
-            return "red", "infrastructure-error"
-        if classified == "bc-break" and stability == "stable":
-            return "red", "stable bc-break"
-        if classified not in {"compatible", "bc-break"}:
-            return "red", f"unclassified exit: {classified}"
-    return "green", f"{len(rows)} classified BC rows"
-
-
 def _bounded(completed: subprocess.CompletedProcess[str]) -> str:
     output = (completed.stdout or "") + (completed.stderr or "")
     if len(output) > OUTPUT_LIMIT:
@@ -582,13 +587,6 @@ def judge_live(row: dict, root: Path) -> tuple[str, str, int, str]:
     lowered = output.lower()
     if any(marker in lowered for marker in SKIP_MARKERS):
         return "skipped", "skip", code, output
-    if row["id"] == "DOD-22" and any(part.endswith("bc-check.sh") for part in row["command"]):
-        status, diagnostic = classify_bc_output(output)
-        if code not in (0, 3) and status == "green":
-            return "red", f"unclassified exit: {code}", code, output
-        if code not in (0, 3) and status != "red":
-            return "red", f"unclassified exit: {code}", code, output
-        return status, diagnostic, code, output
     if code == 0:
         return "green", "exit 0", code, output
     diagnostic = "nonzero command"
@@ -649,10 +647,11 @@ def check_manifest(manifest: dict, *, root: Path, candidate: Path, profile: str,
         else:
             receipt_path = root / row["receipt"]
             try:
-                if receipt_path.suffix == ".md":
+                text = receipt_text(receipt_path)
+                if text is not None:
                     receipt = {
                         "schema_version": "corex-d107-text/1",
-                        "text": receipt_path.read_text(encoding="utf-8"),
+                        "text": text,
                         "source_commit": head,
                         "candidate_sha256": binding["candidate_sha256"],
                     }

@@ -121,7 +121,7 @@ final class CurlWebhookTransport implements WebhookHttpTransport
             }
 
             if ($executed === false) {
-                return $this->failure(errorCode: $this->curlErrorCode(curl_errno($handle)), startedAt: $startedAt);
+                return $this->failure(errorCode: WebhookFailureReason::NetworkFailure, startedAt: $startedAt);
             }
 
             if (! $this->sameAddress(actual: $peerAddress, expected: $request->address)) {
@@ -136,8 +136,6 @@ final class CurlWebhookTransport implements WebhookHttpTransport
             );
         } catch (Throwable) {
             return $this->failure(errorCode: WebhookFailureReason::TransportFailure, startedAt: $startedAt);
-        } finally {
-            curl_close($handle);
         }
     }
 
@@ -150,16 +148,6 @@ final class CurlWebhookTransport implements WebhookHttpTransport
             'Webhook-Timestamp: '.$request->signatureHeaders['webhook-timestamp'],
             'Webhook-Signature: '.$request->signatureHeaders['webhook-signature'],
         ];
-    }
-
-    private function curlErrorCode(int $errno): WebhookFailureReason
-    {
-        return match ($errno) {
-            CURLE_OPERATION_TIMEDOUT => WebhookFailureReason::NetworkFailure,
-            CURLE_COULDNT_CONNECT, CURLE_COULDNT_RESOLVE_HOST => WebhookFailureReason::NetworkFailure,
-            CURLE_SSL_CONNECT_ERROR, CURLE_SSL_CACERT => WebhookFailureReason::NetworkFailure,
-            default => WebhookFailureReason::NetworkFailure,
-        };
     }
 
     private function sameAddress(string $actual, string $expected): bool

@@ -60,7 +60,7 @@ final class MaterializationSchedulingTest extends TestCase
     {
         parent::setUp();
         $this->migrateSchemaSets(['axiomasoft/corex-wakeup:tenant']);
-        app(ModuleRegistry::class)->shouldReceive('compiled')->andReturn(CompiledRegistry::empty());
+        resolve(ModuleRegistry::class)->shouldReceive('compiled')->andReturn(CompiledRegistry::empty());
     }
 
     private function series(int $count = 6): SeriesReference

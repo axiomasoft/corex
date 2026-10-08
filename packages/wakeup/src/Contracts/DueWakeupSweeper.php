@@ -6,14 +6,12 @@ namespace CoreX\Wakeup\Contracts;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Context\Data\TenantContext;
-use CoreX\Scheduling\Data\SweepResult;
-use DateTimeImmutable;
+use CoreX\Scheduling\Contracts\DueWakeupSweeper as SchedulingDueWakeupSweeper;
 
+/**
+ * BC alias: existing implementers and type hints keep working.
+ *
+ * @deprecated Use {@see SchedulingDueWakeupSweeper}; removed in 2.0.
+ */
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
-interface DueWakeupSweeper
-{
-    public function sweep(TenantContext $context, int $limit): SweepResult;
-
-    public function nextDue(TenantContext $context): ?DateTimeImmutable;
-}
+interface DueWakeupSweeper extends SchedulingDueWakeupSweeper {}

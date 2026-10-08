@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Laravel;
 
-use CoreX\Access\Contracts\Principal;
 use CoreX\Access\Data\RecordContext;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Context\Contracts\Principal;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 

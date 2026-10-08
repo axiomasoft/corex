@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Invocation\Internal;
 
+use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
@@ -11,7 +12,6 @@ use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\ContextResolver;
 use CoreX\Operations\Invocation\Contracts\EffectiveCapabilities;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Invocation\Laravel\InvocationMetadataFactory;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\Versioning\Contracts\ApiProfiles as ApiProfileFactory;

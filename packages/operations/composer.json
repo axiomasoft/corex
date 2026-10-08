@@ -41,7 +41,10 @@
     "autoload": {
         "psr-4": {
             "CoreX\\Operations\\": "src/"
-        }
+        },
+        "files": [
+            "src/Invocation/Internal/deprecated-aliases.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

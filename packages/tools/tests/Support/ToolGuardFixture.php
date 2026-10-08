@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tools\Tests\Support;
 
 use Closure;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Validation\Data\JsonObject;
 use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
@@ -79,7 +79,7 @@ final class ToolGuardFixture implements ToolExecutionGuard
     public function bindingDigest(ToolDescriptor $tool, RequestContext $context, ToolCall $call): string
     {
         return hash('sha256', implode('|', [
-            $context->principal()->id(),
+            $context->principal()->principalId(),
             $context->tenant()->account->id,
             $context->tenant()->workspace?->id ?? '',
             $tool->module,

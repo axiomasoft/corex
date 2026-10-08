@@ -38,7 +38,10 @@
     "autoload": {
         "psr-4": {
             "CoreX\\Access\\": "src/"
-        }
+        },
+        "files": [
+            "src/Internal/deprecated-aliases.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

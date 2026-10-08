@@ -1,3 +1,7 @@
+## Unreleased — invocation contract in the kernel (audit 2026-10-08 P-02)
+
+- `ToolInvoker`, `ToolRequestContext` and tool handlers use `CoreX\Invocation\Contracts\RequestContext` from the kernel; the former `CoreX\Operations\...` names are deprecated aliases of the same types, so no implementation changes are required.
+
 ## Unreleased — PHP 8.4 modernization (P09.4)
 
 ## Unreleased — kernel audit repairs (2026-10-08)

@@ -237,7 +237,7 @@
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
-            "validation": "use-site",
+            "validation": "boot",
             "deprecated_aliases": "",
             "notes": ""
         },

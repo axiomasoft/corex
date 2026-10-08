@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Access\Laravel;
 
-use CoreX\Access\Contracts\Principal;
-use CoreX\Access\Enums\PrincipalType;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Context\Contracts\Principal;
+use CoreX\Context\Enums\PrincipalType;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Override;
 

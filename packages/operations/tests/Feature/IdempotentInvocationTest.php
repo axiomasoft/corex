@@ -6,9 +6,13 @@ namespace CoreX\Operations\Tests\Feature;
 
 use Closure;
 use CoreX\Config\Data\SecretRef;
+use CoreX\Context\Contracts\Principal;
 use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Enums\PrincipalType;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Errors\Contracts\ProblemRegistry;
+use CoreX\Invocation\Contracts\RequestContext;
+use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
@@ -26,8 +30,6 @@ use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Idempotency\Internal\IdempotentOperationInvoker;
 use CoreX\Operations\Idempotency\Internal\SqlIdempotencyStore;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Data\OperationResult;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
@@ -125,6 +127,17 @@ final class IdempotentInvocationTest extends TestCase
         }
 
         self::assertSame(1, $this->inner->calls);
+    }
+
+    public function test_same_id_under_different_principal_types_never_replays_across_principals(): void
+    {
+        $invoker = $this->invoker();
+        $user = $invoker->invoke($this->invocation(principal: new TypedPrincipal(PrincipalType::User, 'shared-5')));
+        $agent = $invoker->invoke($this->invocation(principal: new TypedPrincipal(PrincipalType::Agent, 'shared-5')));
+
+        self::assertFalse($user->replayed);
+        self::assertFalse($agent->replayed, 'An agent request was served the cached response of a user with the same id.');
+        self::assertSame(2, $this->inner->calls);
     }
 
     public function test_required_forbidden_conflict_in_progress_and_contract_mismatch_skip_effect(): void
@@ -230,12 +243,13 @@ final class IdempotentInvocationTest extends TestCase
         ?Operation $operation = null,
         string $requestId = 'request-1',
         string $method = 'POST',
+        ?Principal $principal = null,
     ): OperationInvocation {
         return new OperationInvocation(
             operation: $operation ?? $this->operation(),
             context: ResolvedContexts::make(
                 tenantContext: $this->tenants->current(),
-                authenticatedPrincipal: $this->principal,
+                authenticatedPrincipal: $principal ?? $this->principal,
                 requestMetadata: new InvocationMetadata($requestId, 'v1', 'notes.create', $method),
             ),
             input: JsonDocuments::capture($input),
@@ -446,5 +460,20 @@ final class AmbiguousCommitConnection extends SQLiteConnection
         }
 
         return $result;
+    }
+}
+
+final readonly class TypedPrincipal implements Principal
+{
+    public function __construct(private PrincipalType $type, private string $id) {}
+
+    public function principalType(): PrincipalType
+    {
+        return $this->type;
+    }
+
+    public function principalId(): string
+    {
+        return $this->id;
     }
 }

@@ -50,8 +50,10 @@ it('does not carry scoped services or tenant context across a lifecycle boundary
     $this->app->forgetScopedInstances();
     residentEnterTenant($this->app, RESIDENT_TENANT_B);
 
+    // Compare object ids, not objects: a failing identity diff would export the whole
+    // container (incl. the process environment) into logs that end up in the repo.
     foreach ($first as $abstract => $instance) {
-        expect($this->app->make($abstract))->not->toBe($instance, $abstract.' survived the lifecycle boundary');
+        expect(spl_object_id($this->app->make($abstract)))->not->toBe(spl_object_id($instance), $abstract.' survived the lifecycle boundary');
     }
 
     expect($this->app->make(TenantContextResolver::class)->current()->account->id)->toBe(RESIDENT_TENANT_B)
@@ -61,8 +63,8 @@ it('does not carry scoped services or tenant context across a lifecycle boundary
 it('keeps scoped services stable inside one lifecycle', function (): void {
     residentEnterTenant($this->app, RESIDENT_TENANT_A);
 
-    expect($this->app->make(Outbox::class))->toBe($this->app->make(Outbox::class))
-        ->and($this->app->make(TenantStorage::class))->toBe($this->app->make(TenantStorage::class));
+    expect(spl_object_id($this->app->make(Outbox::class)))->toBe(spl_object_id($this->app->make(Outbox::class)))
+        ->and(spl_object_id($this->app->make(TenantStorage::class)))->toBe(spl_object_id($this->app->make(TenantStorage::class)));
 });
 
 it('builds tenant storage for the tenant that is current after the boundary', function (): void {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Unit;
 
-use CoreX\Operations\Invocation\Data\InvocationMetadata;
+use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Laravel\InvocationMetadataFactory;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\TestCase;

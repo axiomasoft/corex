@@ -235,7 +235,7 @@ def candidate_binding(directory: Path) -> dict:
 
 def build_candidate(root: Path, output: Path) -> Path:
     module = release_candidate_module()
-    frozen = root / "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json"
+    frozen = root / "release/1.0/artifacts/P17/release-cohort.json"
     manifest = module.load_json(frozen)
     module.build_repository(root, manifest["source_commit"], "1.0.0", output, module.load_policy(), enforce_clean=True)
     digest = hashlib.sha256((output / "candidate.json").read_bytes()).hexdigest()

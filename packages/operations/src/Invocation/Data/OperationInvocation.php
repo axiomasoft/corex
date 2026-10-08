@@ -6,8 +6,8 @@ namespace CoreX\Operations\Invocation\Data;
 
 use CoreX\Attributes\Api;
 use CoreX\Data\Data\JsonDocument;
+use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Definition\Data\Operation;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
 
 #[Api(since: '1.0')]
 final readonly class OperationInvocation

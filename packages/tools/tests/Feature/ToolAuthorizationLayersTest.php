@@ -9,6 +9,9 @@ use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
+use CoreX\Invocation\Contracts\OperationHandler;
+use CoreX\Invocation\Contracts\RequestContext;
+use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Data\Api;
 use CoreX\Modules\Data\ModuleManifest;
@@ -19,14 +22,11 @@ use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
-use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Data\ResourceId;
 use CoreX\Operations\Definition\Enums\ResourceIdFormat;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Internal\OperationDispatcher;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
 use CoreX\Operations\Testing\ContextFixture;
@@ -360,7 +360,7 @@ final class ToolAuthorizationLayersAuthorizationHandler implements OperationHand
         $resource = ResourceId::parse((string) $input['resource_id'], ResourceIdFormat::Uuid7, 'note');
 
         if ($resource->toString() === ToolAuthorizationLayersTest::ForeignTenantResource
-            || $input['owner'] !== $context->principal()->id()) {
+            || $input['owner'] !== $context->principal()->principalId()) {
             throw new ApiError(OperationsErrorCode::ResourceNotFound, 404, 'Resource not found.');
         }
 

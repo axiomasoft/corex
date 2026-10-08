@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — kernel invocation contract (audit 2026-10-08 P-02)
+
+- CRM operation handlers implement `CoreX\Invocation\Contracts\OperationHandler` from the kernel. `axiomasoft/corex-operations` moves from `require` to `require-dev` + `suggest`: install it in the host to serve the CRM API; the product itself no longer depends on the operations runtime (enforced by package-graph-gate).
+
 ## Unreleased — Laravel 13 platform (P09.9, D132)
 
 - Require Laravel 13 and PHP 8.4+; support PHP 8.4–8.5. Laravel 12 support is removed. Testbench uses the Laravel 13 family; package versions and runtime contracts are unchanged.

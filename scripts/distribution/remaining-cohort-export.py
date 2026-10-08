@@ -14,10 +14,10 @@ from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[2]
-PLAN = ROOT / 'plans/archive/2026.09.15-№1-COREX-FLEXCRM-REMAINING'
+RECORD = ROOT / 'release/remaining-cohort-20260915'
 REPO_DELIVERY = ROOT / 'delivery/remaining-cohort-20260915'
-PLAN_DELIVERY = PLAN / 'delivery/remaining-cohort-20260915'
-EVIDENCE = PLAN_DELIVERY / 'evidence'
+RECORD_DELIVERY = RECORD / 'delivery/remaining-cohort-20260915'
+EVIDENCE = RECORD_DELIVERY / 'evidence'
 POLICY_PATH = Path(__file__).with_name('remaining-cohort-policy.json')
 EXPORTER_PATH = Path(__file__).with_name('export.py')
 FIXED_TIME = (1980, 1, 1, 0, 0, 0)
@@ -321,7 +321,7 @@ def build_evidence(case: str, command: list[str], candidate_sha: str, source_com
         'lock_sha256': sha256_path(ROOT / 'composer.lock'),
         'config_sha256': sha256_path(POLICY_PATH),
         'fixture_sha256': sha256_path(REPO_DELIVERY / 'candidate.json'),
-        'log_path': str(log_path.relative_to(PLAN)),
+        'log_path': str(log_path.relative_to(RECORD)),
         'log_sha256': sha256_path(log_path),
         'cases': cases,
     }
@@ -496,7 +496,7 @@ def build_report(candidate_sha: str, attestation_sha: str, export_map_sha: str, 
         lines.append(f'| `{path}` | `{digest}` | {role} |')
     lines.extend(['', '## Evidence', '', '| ID | Path | SHA256 | Kind | Cohort | Cell | Command | Cwd | Runtime | Start | End | Exit | Result |', '|---|---|---|---|---|---|---|---|---|---|---|---|'])
     for case, path, envelope in evidence_rows:
-        rel = path.relative_to(PLAN)
+        rel = path.relative_to(RECORD)
         lines.append(
             f"| {case} | `{rel}` | `{sha256_path(path)}` | local | p9-cohort/1 | dist-local | `{envelope['command']}` | `{envelope['cwd']}` | `{envelope['runtime']}` | `{envelope['start']}` | `{envelope['end']}` | {envelope['exit']} | PASS |"
         )
@@ -511,7 +511,7 @@ def build_report(candidate_sha: str, attestation_sha: str, export_map_sha: str, 
         f'| public/packages.json | G-RELEASE | `{public_sha}` | P9.2 | PASS | hosted/released install pending |',
         f'| p9-cohort/1 candidate | G-RELEASE | `{candidate_sha}` | P9.1 | PASS | unchanged intake identity |',
     ])
-    (PLAN / 'findings/P9-artifacts.md').write_text('\n'.join(lines) + '\n')
+    (RECORD / 'findings/P9-artifacts.md').write_text('\n'.join(lines) + '\n')
 
 
 def main() -> int:
@@ -555,7 +555,7 @@ def main() -> int:
         ('delivery/remaining-cohort-20260915/build/build-attestation.json', attestation_sha, 'build attestation'),
         ('delivery/remaining-cohort-20260915/build/export-map.json', export_map_sha, 'export map'),
         ('delivery/remaining-cohort-20260915/public/packages.json', public_sha, 'public composer metadata'),
-        ('research/P9-cohort-design.md', sha256_path(PLAN / 'research/P9-cohort-design.md'), 'design contract'),
+        ('research/P9-cohort-design.md', sha256_path(RECORD / 'research/P9-cohort-design.md'), 'design contract'),
     ]
     build_report(candidate_sha, attestation_sha, export_map_sha, public_sha, evidence_rows, input_rows)
     print(json.dumps({

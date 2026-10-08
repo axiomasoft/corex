@@ -6,10 +6,10 @@ namespace CoreX\Operations\Testing;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Operations\Definition\Contracts\OperationHandler;
+use CoreX\Invocation\Contracts\OperationHandler;
+use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -37,7 +37,7 @@ final class NoteHandler implements OperationHandler
         };
 
         return ['title' => $input['title'] ?? 'Note', 'id' => $parameters['id'] ?? 'new',
-            'actor' => $context->principal()->id(), 'account' => $context->tenant()->account->id,
+            'actor' => $context->principal()->principalId(), 'account' => $context->tenant()->account->id,
             'workspace' => $context->tenant()->workspace?->id];
     }
 }

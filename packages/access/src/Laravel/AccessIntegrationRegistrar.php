@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Laravel;
 
+use CoreX\Access\Access\Internal\EffectiveWorkspaceScope;
 use CoreX\Access\Access\Internal\WorkspaceScopeWiring;
 use CoreX\Access\Extend\Internal\PermissionsMerger;
 use CoreX\Access\Identity\Laravel\PrincipalUserProvider;
@@ -34,7 +35,7 @@ final class AccessIntegrationRegistrar implements PackageRegistrar
 
         WorkspaceScopeWiring::wire(
             registry: $app->make(EntityRegistry::class),
-            scopeClass: $app->make(AuthOptions::class)->workspaceScopeClass,
+            scopeClass: $app->make(EffectiveWorkspaceScope::class)->class,
             make: static fn (string $class): Scope => self::workspaceScope(app: $app, class: $class),
         );
 

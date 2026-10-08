@@ -6,7 +6,7 @@ Guarded tool runtime for CoreX operations: schemas, contract hash and MCP projec
 composer require axiomasoft/corex-tools
 ```
 
-Requires PHP 8.4 and Laravel 13. Uses CoreX Operations through its public contracts.
+Requires PHP 8.4 and Laravel 13. An operations extension: it builds on axiomasoft/corex-operations and requires its runtime. Handlers and request context use the kernel `CoreX\Invocation` contracts.
 
 ## Configuration
 

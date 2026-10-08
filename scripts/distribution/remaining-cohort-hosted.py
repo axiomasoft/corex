@@ -18,11 +18,11 @@ if str(_DISTRIBUTION) not in sys.path:
 from plan_close_deferral import DeferralDenied, refuse_remote
 
 ROOT = Path(__file__).resolve().parents[2]
-PLAN = ROOT / 'plans/archive/2026.09.15-№1-COREX-FLEXCRM-REMAINING'
+RECORD = ROOT / 'release/remaining-cohort-20260915'
 REPO_DELIVERY = ROOT / 'delivery/remaining-cohort-20260915'
-PLAN_DELIVERY = PLAN / 'delivery/remaining-cohort-20260915'
+RECORD_DELIVERY = RECORD / 'delivery/remaining-cohort-20260915'
 HOSTED = REPO_DELIVERY / 'hosted'
-EVIDENCE = PLAN_DELIVERY / 'evidence'
+EVIDENCE = RECORD_DELIVERY / 'evidence'
 HOSTED_SCRIPT = Path(__file__).resolve()
 COHORT_WORKFLOW = ROOT / '.github/workflows/remaining-cohort-proof.yml'
 WORKFLOW_FILE = 'remaining-cohort-proof.yml'
@@ -380,7 +380,7 @@ def build_evidence(
         'lock_sha256': sha256_path(ROOT / 'composer.lock'),
         'config_sha256': sha256_path(HOSTED_SCRIPT),
         'fixture_sha256': sha256_path(REPO_DELIVERY / 'runner-packet.json'),
-        'log_path': str(log_path.relative_to(PLAN)),
+        'log_path': str(log_path.relative_to(RECORD)),
         'log_sha256': sha256_path(log_path),
         'cases': cases,
         'run_url': hosted.get('run_url'),
@@ -422,14 +422,14 @@ def build_report(
         lines.append(f'| `{path}` | `{digest}` | {role} |')
     lines.extend(['', '## Evidence', '', '| ID | Path | SHA256 | Kind | Cohort | Cell | Command | Cwd | Runtime | Start | End | Exit | Result |', '|---|---|---|---|---|---|---|---|---|---|---|---|'])
     for case, path, envelope in evidence_rows:
-        rel = path.relative_to(PLAN)
+        rel = path.relative_to(RECORD)
         lines.append(
             f"| {case} | `{rel}` | `{sha256_path(path)}` | hosted | p9-cohort/1 | {envelope['cell']} | `{envelope['command']}` | `{envelope['cwd']}` | `{envelope['runtime']}` | `{envelope['start']}` | `{envelope['end']}` | {envelope['exit']} | {envelope['result']} |"
         )
     lines.extend(['', '## Adoption', '', '| Surface | Gate | Exact digest | Owner | Result | Resume |', '|---|---|---|---|---|---|'])
     for row in adoption_rows:
         lines.append('| ' + ' | '.join(row) + ' |')
-    (PLAN / 'findings/P9-hosted-runs.md').write_text('\n'.join(lines) + '\n')
+    (RECORD / 'findings/P9-hosted-runs.md').write_text('\n'.join(lines) + '\n')
 
 
 def case_catalog() -> list[tuple[str, str, str]]:
@@ -559,7 +559,7 @@ def build_hosted_report_from_cache(
         ('delivery/remaining-cohort-20260915/installed-candidate/receipt.json', sha256_path(REPO_DELIVERY / 'installed-candidate/receipt.json'), 'installed candidate receipt'),
         ('.github/workflows/remaining-cohort-proof.yml', sha256_path(COHORT_WORKFLOW) if COHORT_WORKFLOW.is_file() else '', 'hosted workflow helper'),
         ('delivery/remaining-cohort-20260915/hosted/receipt.json', receipt_sha, 'hosted receipt'),
-        ('research/P9-cohort-design.md', sha256_path(PLAN / 'research/P9-cohort-design.md'), 'design contract'),
+        ('research/P9-cohort-design.md', sha256_path(RECORD / 'research/P9-cohort-design.md'), 'design contract'),
     ]
     mirror_note = (
         f'mirror execution on `{repository}` (canonical `{canonical}`)'

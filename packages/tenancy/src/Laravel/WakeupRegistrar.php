@@ -8,6 +8,8 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Modules\Contracts\PackageRegistrar;
+use CoreX\Scheduling\Contracts\DueWakeupSweeper;
+use CoreX\Scheduling\Contracts\WakeupScheduleHint;
 use CoreX\Tenancy\Integration\Internal\Wakeup\RootRegistryWakeupHint;
 use CoreX\Tenancy\Integration\Internal\Wakeup\RootWakeupReconciler;
 use CoreX\Tenancy\Integration\Internal\Wakeup\SweepRootWakeups;
@@ -22,8 +24,6 @@ use Psr\Log\LoggerInterface;
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class WakeupRegistrar implements PackageRegistrar
 {
-    private const string WAKEUP_SWEEPER = 'CoreX\\Wakeup\\Contracts\\DueWakeupSweeper';
-
     #[Override]
     public function register(Application $app): void
     {
@@ -36,7 +36,7 @@ final class WakeupRegistrar implements PackageRegistrar
                 logger: $app->make(LoggerInterface::class),
             ),
         );
-        $app->tag(RootRegistryWakeupHint::class, 'corex.wakeup.hints');
+        $app->tag(RootRegistryWakeupHint::class, WakeupScheduleHint::TAG);
         $app->scoped(
             RootWakeupReconciler::class,
             static fn (Application $app): RootWakeupReconciler => new RootWakeupReconciler(
@@ -45,7 +45,7 @@ final class WakeupRegistrar implements PackageRegistrar
                 clock: $app->make(ClockInterface::class),
                 hint: $app->make(RootRegistryWakeupHint::class),
                 tenancy: $app->make(TenancyManager::class),
-                sweeper: $app->make(self::WAKEUP_SWEEPER),
+                sweeper: $app->make(DueWakeupSweeper::class),
                 leaseSeconds: $app->make(TenancyOptions::class)->wakeupLeaseSeconds,
             ),
         );

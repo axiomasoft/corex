@@ -1,0 +1,20 @@
+{
+  "strict": true,
+  "check": true,
+  "diagnostics": [
+    {
+      "code": "API-UNCLASSIFIED",
+      "file": "packages/core/src/Config/RuntimeGlobalsProbe.php",
+      "line": 9,
+      "symbol": "CoreX\\Config\\RuntimeGlobalsProbe",
+      "path": "declaration",
+      "message": "Missing Api/Spi annotation"
+    }
+  ],
+  "report_keys": [
+    "schema",
+    "owners",
+    "manifests",
+    "diagnostics"
+  ]
+}

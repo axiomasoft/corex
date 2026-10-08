@@ -20,8 +20,8 @@ from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parents[2]
 BASELINES_PATH = ROOT / "scripts/distribution/release-baselines.json"
-RECEIPT_PATH = ROOT / "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-upgrade-receipt.json"
-COHORT_PATH = ROOT / "plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json"
+RECEIPT_PATH = ROOT / "release/1.0/findings/P17-upgrade-receipt.json"
+COHORT_PATH = ROOT / "release/1.0/artifacts/P17/release-cohort.json"
 CANDIDATE_DIGEST = "9f0af7384d06db47a463cd64196324371450c91531e1aed66f7cfe3f2dc62a10"
 SOURCE_COMMIT = "5db31fd4aebf1dcd172754479ad9cf9da59719d6"
 VERSION = "1.0.0"

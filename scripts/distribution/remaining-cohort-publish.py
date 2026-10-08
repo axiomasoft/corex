@@ -25,9 +25,9 @@ from publish_guard import Admission, Evidence, Operation, PublicationDenied, Unk
 
 ROOT = Path(__file__).resolve().parents[2]
 REPO_DELIVERY = ROOT / 'delivery/remaining-cohort-20260915'
-PLAN = ROOT / 'plans/archive/2026.09.15-№1-COREX-FLEXCRM-REMAINING'
-PLAN_DELIVERY = PLAN / 'delivery/remaining-cohort-20260915'
-EVIDENCE = PLAN_DELIVERY / 'evidence'
+RECORD = ROOT / 'release/remaining-cohort-20260915'
+RECORD_DELIVERY = RECORD / 'delivery/remaining-cohort-20260915'
+EVIDENCE = RECORD_DELIVERY / 'evidence'
 PUBLICATION_DIR = REPO_DELIVERY / 'publication'
 ARTIFACTS_DIR = REPO_DELIVERY / 'build/artifacts'
 PUBLISH_SCRIPT = Path(__file__).resolve()
@@ -117,16 +117,16 @@ def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def plan_path(relative: str) -> Path:
+def record_path(relative: str) -> Path:
     if relative.startswith('delivery/'):
         return REPO_DELIVERY / relative.removeprefix('delivery/remaining-cohort-20260915/')
     if relative.startswith('findings/') or relative.startswith('research/'):
-        return PLAN / relative
+        return RECORD / relative
     return ROOT / relative
 
 
 def digest_map(paths: dict[str, str]) -> dict[str, str]:
-    return {path: sha256_path(plan_path(path)) for path in paths}
+    return {path: sha256_path(record_path(path)) for path in paths}
 
 
 def build_operations(candidate: dict, export_map: dict) -> list[dict]:
@@ -307,7 +307,7 @@ def build_gate_request(packet_sha: str) -> None:
         '- Prepared packet/NO-GO is not phase GREEN; P9.8 owns actual publication bytes.',
         '',
     ])
-    (PLAN / 'findings/P9-release-gate-request.md').write_text('\n'.join(lines))
+    (RECORD / 'findings/P9-release-gate-request.md').write_text('\n'.join(lines))
 
 
 def case_catalog() -> list[tuple[str, str, str]]:
@@ -326,10 +326,10 @@ def verify_packet_01(packet: dict) -> dict:
     if packet['candidate_sha256'] != candidate_sha:
         raise PublicationPacketError('candidate digest drift')
     for path, digest in packet['branch_receipts'].items():
-        if sha256_path(plan_path(path)) != digest:
+        if sha256_path(record_path(path)) != digest:
             raise PublicationPacketError(f'stale branch receipt {path}')
     for path, digest in packet['proof_inputs'].items():
-        if sha256_path(plan_path(path)) != digest:
+        if sha256_path(record_path(path)) != digest:
             raise PublicationPacketError(f'stale proof input {path}')
     if packet['build_attestation_sha256'] != sha256_path(REPO_DELIVERY / 'build/build-attestation.json'):
         raise PublicationPacketError('build attestation drift')
@@ -394,7 +394,7 @@ def verify_packet_04(packet: dict) -> dict:
 def verify_packet_05(packet: dict) -> dict:
     packet_path = REPO_DELIVERY / 'publication-packet.json'
     packet_sha = sha256_path(packet_path)
-    gate_path = PLAN / 'findings/P9-release-gate-request.md'
+    gate_path = RECORD / 'findings/P9-release-gate-request.md'
     gate_text = gate_path.read_text(encoding='utf-8')
     if packet_sha not in gate_text:
         raise PublicationPacketError('gate request not bound to packet digest')
@@ -411,7 +411,7 @@ def verify_packet_05(packet: dict) -> dict:
 
 
 def verify_packet_06(packet: dict) -> dict:
-    gate_text = (PLAN / 'findings/P9-release-gate-request.md').read_text(encoding='utf-8')
+    gate_text = (RECORD / 'findings/P9-release-gate-request.md').read_text(encoding='utf-8')
     for row in P10_P11_RESIDUALS:
         if row[0] not in gate_text:
             raise PublicationPacketError(f'missing residual {row[0]} in gate request')
@@ -786,7 +786,7 @@ def repository_existence_map(repositories: list[str]) -> dict[str, bool | None]:
 
 
 def find_grant_decision(packet_sha: str) -> Path | None:
-    for path in sorted((PLAN / 'decisions').glob('D*.md')):
+    for path in sorted((RECORD / 'decisions').glob('D*.md')):
         text = path.read_text(encoding='utf-8')
         if '[OWNER-GATE:G-RELEASE]' not in text:
             continue
@@ -805,7 +805,7 @@ def load_grant(packet_sha: str) -> dict:
     return {
         'gate': 'G-RELEASE',
         'grant_sha256': packet_sha,
-        'decision_path': str(decision.relative_to(PLAN)),
+        'decision_path': str(decision.relative_to(RECORD)),
         'decision_sha256': sha256_path(decision),
         'branch': 'remaining-cohort-publish',
         'scope': 'P9.8:p9-publication-packet/1:exact-cohort-operations',
@@ -1476,7 +1476,7 @@ def build_publication_evidence(
         'lock_sha256': sha256_path(ROOT / 'composer.lock'),
         'config_sha256': sha256_path(PUBLISH_SCRIPT),
         'fixture_sha256': sha256_path(REPO_DELIVERY / 'publication-packet.json'),
-        'log_path': str(log_path.relative_to(PLAN)),
+        'log_path': str(log_path.relative_to(RECORD)),
         'log_sha256': sha256_path(log_path),
         'cases': cases,
         'grant_sha256': grant_sha or packet_sha256_placeholder(),
@@ -1526,14 +1526,14 @@ def build_publication_report(
         '|---|---|---|---|---|---|---|---|---|---|---|---|',
     ])
     for case, path, envelope in evidence_rows:
-        rel = path.relative_to(PLAN)
+        rel = path.relative_to(RECORD)
         lines.append(
             f"| {case} | `{rel}` | `{sha256_path(path)}` | release | p9-cohort/1 | {envelope['cell']} | `{envelope['command']}` | `{envelope['cwd']}` | `{envelope['runtime']}` | `{envelope['start']}` | `{envelope['end']}` | {envelope['exit']} | {envelope['result']} |"
         )
     lines.extend(['', '## Adoption', '', '| Surface | Gate | Exact digest | Owner | Result | Resume |', '|---|---|---|---|---|---|'])
     for row in adoption_rows:
         lines.append('| ' + ' | '.join(row) + ' |')
-    (PLAN / 'findings/P9-publication.md').write_text('\n'.join(lines) + '\n')
+    (RECORD / 'findings/P9-publication.md').write_text('\n'.join(lines) + '\n')
 
 
 def finalize_publication(
@@ -1589,9 +1589,9 @@ def finalize_publication(
         ('delivery/remaining-cohort-20260915/publication-ledger.json', sha256_path(REPO_DELIVERY / 'publication-ledger.json'), 'publication ledger'),
         ('delivery/remaining-cohort-20260915/publication/receipt.json', receipt_sha, 'publication receipt'),
         ('delivery/remaining-cohort-20260915/publication/preflight.json', sha256_path(PUBLICATION_DIR / 'preflight.json'), 'publication preflight'),
-        ('findings/P9-release-gate-request.md', sha256_path(PLAN / 'findings/P9-release-gate-request.md'), 'G-RELEASE gate request'),
+        ('findings/P9-release-gate-request.md', sha256_path(RECORD / 'findings/P9-release-gate-request.md'), 'G-RELEASE gate request'),
         ('scripts/distribution/remaining-cohort-publish.py', sha256_path(PUBLISH_SCRIPT), 'publication helper recipe'),
-        ('research/P9-cohort-design.md', sha256_path(PLAN / 'research/P9-cohort-design.md'), 'design contract'),
+        ('research/P9-cohort-design.md', sha256_path(RECORD / 'research/P9-cohort-design.md'), 'design contract'),
     ]
     adoption_rows = [
         ('p9-publication-packet/1', 'G-RELEASE', f'`{packet_sha}`', 'P9.7', 'PASS', 'exact publication operations sealed'),
@@ -1640,7 +1640,7 @@ def build_evidence(
         'lock_sha256': sha256_path(ROOT / 'composer.lock'),
         'config_sha256': sha256_path(PUBLISH_SCRIPT),
         'fixture_sha256': sha256_path(REPO_DELIVERY / 'publication-packet.json'),
-        'log_path': str(log_path.relative_to(PLAN)),
+        'log_path': str(log_path.relative_to(RECORD)),
         'log_sha256': sha256_path(log_path),
         'cases': cases,
         'grant_sha256': grant_sha,
@@ -1683,14 +1683,14 @@ def build_report(
         '|---|---|---|---|---|---|---|---|---|---|---|---|',
     ])
     for case, path, envelope in evidence_rows:
-        rel = path.relative_to(PLAN)
+        rel = path.relative_to(RECORD)
         lines.append(
             f"| {case} | `{rel}` | `{sha256_path(path)}` | packet | p9-cohort/1 | {envelope['cell']} | `{envelope['command']}` | `{envelope['cwd']}` | `{envelope['runtime']}` | `{envelope['start']}` | `{envelope['end']}` | {envelope['exit']} | {envelope['result']} |"
         )
     lines.extend(['', '## Adoption', '', '| Surface | Gate | Exact digest | Owner | Result | Resume |', '|---|---|---|---|---|---|'])
     for row in adoption_rows:
         lines.append('| ' + ' | '.join(row) + ' |')
-    (PLAN / 'findings/P9-publication-packet.md').write_text('\n'.join(lines) + '\n')
+    (RECORD / 'findings/P9-publication-packet.md').write_text('\n'.join(lines) + '\n')
 
 
 def execute_build() -> dict:
@@ -1756,9 +1756,9 @@ def execute_finalize() -> dict:
         ('delivery/remaining-cohort-20260915/private/receipt.json', sha256_path(REPO_DELIVERY / 'private/receipt.json'), 'private receipt'),
         ('delivery/remaining-cohort-20260915/publication-packet.json', packet_sha, 'publication packet'),
         ('delivery/remaining-cohort-20260915/publication-ledger.json', sha256_path(REPO_DELIVERY / 'publication-ledger.json'), 'publication ledger'),
-        ('findings/P9-release-gate-request.md', sha256_path(PLAN / 'findings/P9-release-gate-request.md'), 'G-RELEASE gate request'),
+        ('findings/P9-release-gate-request.md', sha256_path(RECORD / 'findings/P9-release-gate-request.md'), 'G-RELEASE gate request'),
         ('scripts/distribution/remaining-cohort-publish.py', sha256_path(PUBLISH_SCRIPT), 'publication helper recipe'),
-        ('research/P9-cohort-design.md', sha256_path(PLAN / 'research/P9-cohort-design.md'), 'design contract'),
+        ('research/P9-cohort-design.md', sha256_path(RECORD / 'research/P9-cohort-design.md'), 'design contract'),
     ]
     adoption_rows = [
         ('p9-publication-packet/1', 'G-RELEASE', f'`{packet_sha}`', 'P9.7', 'PASS' if all(v == 'PASS' for v in case_results.values()) else 'PENDING', 'P9.8 G-RELEASE publication'),

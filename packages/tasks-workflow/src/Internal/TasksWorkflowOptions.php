@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\TasksWorkflow\Internal;
 
 use CoreX\Config\Laravel\ConfigurationValidator;
+use CoreX\Scheduling\Data\WakeupHandlerDefinition;
 
 /** @internal Package composition type: read only by the provider, registrars and runtime checks. */
 final readonly class TasksWorkflowOptions
@@ -39,6 +40,12 @@ final readonly class TasksWorkflowOptions
         $violations->failIfAny();
 
         return new self(wakeupEnabled: $wakeupEnabled, wakeupHandlerKind: $handlerKind, wakeupHandlerVersion: $handlerVersion, wakeupHandler: $handler, wakeupAcceptLegacyUnstamped: $acceptLegacy, completionCaptureEnabled: $captureEnabled, completionCaptureDefinitionRef: $definitionRef, completionCaptureVersionRef: $versionRef);
+    }
+
+    /** Versioned durable registration of the materialization handler (D96 §C.9). */
+    public function wakeupHandlerDefinition(): WakeupHandlerDefinition
+    {
+        return new WakeupHandlerDefinition(kind: $this->wakeupHandlerKind, version: $this->wakeupHandlerVersion, handler: $this->wakeupHandler, acceptLegacyUnstamped: $this->wakeupAcceptLegacyUnstamped);
     }
 
     /** @return list<string> config paths of enabled dangerous modes */

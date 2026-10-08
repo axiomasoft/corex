@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
+use CoreX\Access\Access\Internal\EffectiveWorkspaceScope;
 use CoreX\Access\Access\Internal\ScopePredicate;
 use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Data\RecordContext;
-use CoreX\Access\Enums\PrincipalType;
 use CoreX\Access\Enums\Scope;
-use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Laravel\ScopeResolver;
 use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
 use CoreX\Access\Matrix\Internal\MatrixValidator;
@@ -22,6 +21,7 @@ use CoreX\Access\Tests\Stubs\FakeTenancyManager;
 use CoreX\Access\Tests\Stubs\FakeWorkspaceScope;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Context\Enums\PrincipalType;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Data\EntityDefinition;
 use CoreX\Modules\Enums\Capability;
@@ -262,13 +262,9 @@ it('cascade_view off hides child-workspace rows; on shows them', function (): vo
     expect($idsOn)->toContain($childRow->id);
 });
 
-// D109 — account lifts EXACTLY the pinned scope class, never an unrelated one.
+// D109 — account lifts EXACTLY the effective scope class, never an unrelated one.
 it('account scope lifts exactly the pinned workspace scope class, never an unrelated global scope', function (): void {
-    config(['corex-access.workspace_scope_class' => FakeWorkspaceScope::class]);
-    app()->instance(
-        AuthOptions::class,
-        AuthOptions::fromArray((array) config('corex-access')),
-    );
+    app()->instance(EffectiveWorkspaceScope::class, new EffectiveWorkspaceScope(FakeWorkspaceScope::class));
 
     $workspaceId = ($this->makeWorkspace)('wsAccount');
     $otherWorkspaceId = ($this->makeWorkspace)('wsAccountOther');

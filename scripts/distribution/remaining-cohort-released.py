@@ -14,10 +14,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-PLAN = ROOT / 'plans/archive/2026.09.15-№1-COREX-FLEXCRM-REMAINING'
+RECORD = ROOT / 'release/remaining-cohort-20260915'
 REPO_DELIVERY = ROOT / 'delivery/remaining-cohort-20260915'
-PLAN_DELIVERY = PLAN / 'delivery/remaining-cohort-20260915'
-EVIDENCE = PLAN_DELIVERY / 'evidence'
+RECORD_DELIVERY = RECORD / 'delivery/remaining-cohort-20260915'
+EVIDENCE = RECORD_DELIVERY / 'evidence'
 FIXTURES = REPO_DELIVERY / 'fixtures'
 RELEASED = REPO_DELIVERY / 'released-installed'
 DELIVERY_ENDPOINT = RELEASED / 'delivery-endpoint'
@@ -98,11 +98,11 @@ def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def plan_path(relative: str) -> Path:
+def record_path(relative: str) -> Path:
     if relative.startswith('delivery/'):
         return REPO_DELIVERY / relative.removeprefix('delivery/remaining-cohort-20260915/')
     if relative.startswith('findings/') or relative.startswith('research/'):
-        return PLAN / relative
+        return RECORD / relative
     return ROOT / relative
 
 
@@ -380,7 +380,7 @@ def build_compatibility_passport(
         f'| G-PRIVATE | `{sha256_path(REPO_DELIVERY / "private/receipt.json")}` | PASS | unchanged |',
         f'| G-RELEASE | `{sha256_path(REPO_DELIVERY / "publication/receipt.json")}` | PARTIAL-D45 | PLAN-CLOSE-CI remote reconcile |',
     ]
-    (PLAN / 'findings/P9-compatibility-passport.md').write_text('\n'.join(lines) + '\n')
+    (RECORD / 'findings/P9-compatibility-passport.md').write_text('\n'.join(lines) + '\n')
 
 
 def build_cohort_receipt(
@@ -398,7 +398,7 @@ def build_cohort_receipt(
         'findings/P9-compatibility-passport.md',
         'delivery/remaining-cohort-20260915/public/released-cohort.json',
     ]:
-        path = plan_path(relative)
+        path = record_path(relative)
         if not path.is_file():
             raise ReleasedError(f'sealed input missing: {relative}')
         sealed.append((relative, sha256_path(path)))
@@ -454,7 +454,7 @@ def build_cohort_receipt(
         f'- compatibility passport: `{passport_sha}`',
         '- candidate pass: unchanged intake identity bound through AWR-08 joins',
     ])
-    (PLAN / 'findings/P9-cohort-receipt.md').write_text('\n'.join(lines) + '\n')
+    (RECORD / 'findings/P9-cohort-receipt.md').write_text('\n'.join(lines) + '\n')
 
 
 def build_evidence(
@@ -502,7 +502,7 @@ def build_evidence(
         'lock_sha256': sha256_path(ROOT / 'composer.lock'),
         'config_sha256': sha256_path(RELEASED_SCRIPT),
         'fixture_sha256': sha256_path(DELIVERY_MANIFEST),
-        'log_path': str(log_path.relative_to(PLAN)),
+        'log_path': str(log_path.relative_to(RECORD)),
         'log_sha256': sha256_path(log_path),
         'cases': cases,
         'delivery_urls': [manifest['delivery_urls'][package] for package in packages[:3]],
@@ -548,7 +548,7 @@ def build_released_report(
         '|---|---|---|---|---|---|---|---|---|---|---|---|',
     ])
     for case, path, envelope in evidence_rows:
-        rel = path.relative_to(PLAN)
+        rel = path.relative_to(RECORD)
         lines.append(
             f"| {case} | `{rel}` | `{sha256_path(path)}` | released-installed | p9-cohort/1 | {envelope['cell']} | `{envelope['command']}` | `{envelope['cwd']}` | `{envelope['runtime']}` | `{envelope['start']}` | `{envelope['end']}` | {envelope['exit']} | PASS |"
         )
@@ -563,11 +563,11 @@ def build_released_report(
         f'| p9-build-attestation/1 | G-RELEASE | `{attestation_sha}` | P9.2 | PASS | unchanged build join |',
         f'| p9-cohort/1 candidate | G-RELEASE | `{candidate_sha}` | P9.1 | PASS | unchanged intake identity |',
     ])
-    (PLAN / 'findings/P9-released-install.md').write_text('\n'.join(lines) + '\n')
+    (RECORD / 'findings/P9-released-install.md').write_text('\n'.join(lines) + '\n')
 
 
 def verify_release_05() -> dict:
-    path = PLAN / 'findings/P9-compatibility-passport.md'
+    path = RECORD / 'findings/P9-compatibility-passport.md'
     text = path.read_text(encoding='utf-8')
     required = (
         '## Declared support',
@@ -585,7 +585,7 @@ def verify_release_05() -> dict:
 
 
 def verify_release_06() -> dict:
-    path = PLAN / 'findings/P9-cohort-receipt.md'
+    path = RECORD / 'findings/P9-cohort-receipt.md'
     text = path.read_text(encoding='utf-8')
     for section in ('## Requirements', '## Producer edges', '## Sealed inputs'):
         if section not in text:
@@ -599,7 +599,7 @@ def verify_release_06() -> dict:
 
 
 def verify_release_07() -> dict:
-    path = PLAN / 'findings/P9-cohort-receipt.md'
+    path = RECORD / 'findings/P9-cohort-receipt.md'
     text = path.read_text(encoding='utf-8')
     if '| P10 |' not in text or '| P11 |' not in text:
         raise ReleasedError('P10/P11 producer edges missing')
@@ -670,7 +670,7 @@ def finalize() -> dict:
         released_receipt_sha,
         released_cohort_sha,
     )
-    passport_sha = sha256_path(PLAN / 'findings/P9-compatibility-passport.md')
+    passport_sha = sha256_path(RECORD / 'findings/P9-compatibility-passport.md')
     build_cohort_receipt(
         candidate_sha,
         released_cohort_sha,
@@ -707,7 +707,7 @@ def finalize() -> dict:
         ('delivery/remaining-cohort-20260915/released-installed/receipt.json', released_receipt_sha, 'released installed receipt'),
         ('delivery/remaining-cohort-20260915/public/released-cohort.json', released_cohort_sha, 'released cohort manifest'),
         ('scripts/distribution/remaining-cohort-released.py', sha256_path(RELEASED_SCRIPT), 'released install recipe'),
-        ('research/P9-cohort-design.md', sha256_path(PLAN / 'research/P9-cohort-design.md'), 'design contract'),
+        ('research/P9-cohort-design.md', sha256_path(RECORD / 'research/P9-cohort-design.md'), 'design contract'),
     ]
     build_released_report(
         candidate_sha,

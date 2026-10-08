@@ -23,10 +23,11 @@ use Illuminate\Database\Eloquent\Scope;
  * makes the mismatch structurally impossible instead, proven by a stub
  * (positive + negative case).
  *
- * $scopeClass absent or its class not loaded (boxed profile without
- * axiomasoft/corex-tenancy, AC-28) ⇒ silent skip: boxed has no workspaces at all, and
- * the RBAC `workspace` scope ({@see ScopePredicate}, D107) stays correct on
- * its own without this global scope ever being registered.
+ * $scopeClass comes from {@see EffectiveWorkspaceScope} (fail-closed: a
+ * configured class must exist). null ⇒ boxed profile without
+ * axiomasoft/corex-tenancy (AC-28), explicitly nothing to wire: boxed has no
+ * workspaces, and the RBAC `workspace` scope ({@see ScopePredicate}, D107)
+ * stays correct on its own.
  *
  * Called from {@see CoreAuthServiceProvider::boot()}, the same
  * precedent as `CoreX\Modules\Internal\Audit\AuditCapabilityWiring`.
@@ -35,10 +36,13 @@ use Illuminate\Database\Eloquent\Scope;
  */
 final class WorkspaceScopeWiring
 {
-    /** @param  Closure(class-string): Scope<Model>  $make  builds the scope instance (the caller owns the container). */
+    /**
+     * @param  class-string|null  $scopeClass
+     * @param  Closure(class-string): Scope<Model>  $make  builds the scope instance (the caller owns the container).
+     */
     public static function wire(EntityRegistry $registry, ?string $scopeClass, Closure $make): void
     {
-        if ($scopeClass === null || ! class_exists($scopeClass)) {
+        if ($scopeClass === null) {
             return;
         }
 

@@ -1,0 +1,57 @@
+{
+  "contract_fingerprint": "956aedacb0583d4fa63c38f41d4351ecfdc98a1d9670d7d0d01e4d015e6754bf",
+  "effects": {
+    "idem-integer": 1,
+    "idem-ulid": 1,
+    "idem-uuid": 1,
+    "idem-uuidv7": 1
+  },
+  "error": {
+    "semantic": {
+      "category": "not_found",
+      "code": "resource_not_found",
+      "details": {},
+      "path": null,
+      "retryable": false
+    },
+    "status": 404
+  },
+  "item": "P17.3",
+  "mcp_contract_hash": "0550f5d1efa7cbae12308da1351f9729e512b363807e39d1be529306a53ae6e9",
+  "mcp_tool": "notes.create",
+  "negatives": [
+    "stale-digest",
+    "unexpected-field",
+    "graphql-artifact"
+  ],
+  "query": [
+    [
+      {
+        "id": "delivery-1"
+      }
+    ],
+    [
+      {
+        "id": "delivery-2"
+      }
+    ]
+  ],
+  "resource_ids": [
+    "note:uuid:01900000-0000-7000-8000-000000000001",
+    "note:uuid:550e8400-e29b-41d4-a716-446655440000",
+    "note:ulid:01ARZ3NDEKTSV4RRFFQ69G5FAV",
+    "note:integer:42"
+  ],
+  "result": "PASS",
+  "revocation": {
+    "field": "secret-pruned",
+    "record": "access_denied"
+  },
+  "schema_version": "corex-api-client-receipt/1",
+  "snapshots": {
+    "errors.json": "7ee83cc186d72bf8f50a4cd6bba78ce7d5bafb20973e81ee119ad4642111ca66",
+    "openapi.json": "b5c54bb9987ab4ab83ab30b5f8494c8fe36d87f1b6001b09cb8a0fe861f534d1",
+    "operations.json": "52e48b82218bebe846e65e0bf984dbe8e4f7f8ea481d6c67439cb38bf8ba8196",
+    "webhooks.json": "af380203beaa1accbee1296510329991e58adba88c17d54e2a9a3d1ca4759a65"
+  }
+}

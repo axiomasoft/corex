@@ -73,10 +73,10 @@ final readonly class ModuleDiscovery implements \CoreX\Modules\Contracts\ModuleD
 
             $extra = $package['extra'] ?? null;
             $corex = is_array($extra) ? ($extra['corex'] ?? null) : null;
-            $class = is_array($corex) ? ($corex['module'] ?? null) : null;
 
-            if (is_string($class)) {
-                $classes[] = $class;
+            // An absent `module` marks a non-modular package (taxonomy.md); a present but non-string one is invalid.
+            if (is_array($corex) && array_key_exists('module', $corex)) {
+                $classes[] = is_string($corex['module']) ? $corex['module'] : get_debug_type($corex['module']);
             }
         }
 

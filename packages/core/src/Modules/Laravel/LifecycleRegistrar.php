@@ -83,8 +83,9 @@ final class LifecycleRegistrar implements PackageRegistrar
             return ['codeVersions' => $codeVersions, 'migrationPaths' => $migrationPaths];
         }
 
+        // Fail closed like ModuleDiscovery: a corrupt manifest must not silently reset every code version to 0.0.0.
         /** @var mixed $data */
-        $data = json_decode((string) file_get_contents($path), associative: true);
+        $data = json_decode((string) file_get_contents($path), associative: true, flags: JSON_THROW_ON_ERROR);
 
         if (! is_array($data)) {
             return ['codeVersions' => $codeVersions, 'migrationPaths' => $migrationPaths];

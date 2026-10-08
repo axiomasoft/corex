@@ -6,6 +6,7 @@ namespace CoreX\Access\Laravel;
 
 use CoreX\Access\Access\Internal\DefaultAccessChecker;
 use CoreX\Access\Access\Internal\DefaultScopeResolver;
+use CoreX\Access\Access\Internal\EffectiveWorkspaceScope;
 use CoreX\Access\Access\Internal\ScopeAvailability;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Contracts\RoleMatrixCompiler;
@@ -29,6 +30,10 @@ final class AccessBindingsRegistrar implements PackageRegistrar
 
         $app->singleton(AuthOptions::class, static fn (Application $app): AuthOptions => AuthOptions::fromArray(
             (array) $app->make(Repository::class)->get('corex-access', []),
+        ));
+        $app->singleton(EffectiveWorkspaceScope::class, static fn (Application $app): EffectiveWorkspaceScope => EffectiveWorkspaceScope::resolve(
+            options: $app->make(AuthOptions::class),
+            container: $app,
         ));
 
         // scoped(), not singleton() — DefaultAccessChecker's scopeFor() memo

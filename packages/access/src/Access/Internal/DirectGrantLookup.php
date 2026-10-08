@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Access\Internal;
 
-use CoreX\Access\Contracts\Principal;
+use CoreX\Context\Contracts\Principal;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Query\Builder;
 use Psr\Clock\ClockInterface;

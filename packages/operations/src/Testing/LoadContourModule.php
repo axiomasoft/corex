@@ -6,10 +6,10 @@ namespace CoreX\Operations\Testing;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Invocation\Contracts\OperationHandler;
+use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Modules\Data\Api;
 use CoreX\Modules\Data\CompiledRegistry;
-use CoreX\Operations\Definition\Contracts\OperationHandler;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class LoadContourModule implements OperationHandler
@@ -64,7 +64,7 @@ final class LoadContourModule implements OperationHandler
         return [
             'title' => $input['title'] ?? 'Note',
             'id' => $parameters['id'] ?? 'new',
-            'actor' => $context->principal()->id(),
+            'actor' => $context->principal()->principalId(),
             'account' => $context->tenant()->account->id,
             'workspace' => $context->tenant()->workspace?->id,
         ];

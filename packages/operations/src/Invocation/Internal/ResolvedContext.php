@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Invocation\Internal;
 
+use CoreX\Context\Contracts\Principal;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Operations\Authorization\Contracts\Principal;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Invocation\Data\InvocationMetadata;
+use CoreX\Invocation\Contracts\RequestContext;
+use CoreX\Invocation\Data\InvocationMetadata;
 use Override;
 
 /** @internal */

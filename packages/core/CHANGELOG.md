@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — invocation contract in the kernel (audit 2026-10-08 P-02)
+
+- Add `CoreX\Invocation\Contracts\OperationHandler` (SPI implement), `RequestContext` and `CoreX\Invocation\Data\InvocationMetadata`, moved from axiomasoft/corex-operations so product modules ship operation handlers against the kernel only (docs/architecture/decisions/2026-10-08-invocation-kernel-contract.md).
+- Add `CoreX\Context\Contracts\Principal` (SPI implement: `principalType()`, `principalId()`) and `CoreX\Context\Enums\PrincipalType`, moved from axiomasoft/corex-access: the single principal concept, used by access checks and returned by `RequestContext::principal()`.
+
+## Unreleased — scheduling contracts completed (audit 2026-10-08)
+
+- Add `CoreX\Scheduling\Contracts\DueWakeupSweeper` and `WakeupScheduleHint` (with `TAG`), moved from axiomasoft/corex-wakeup so consumers depend on the kernel only.
+- Add `CoreX\Context\Laravel\WorkspaceScopeProvider` (SPI implement): names the workspace-isolation global scope; axiomasoft/corex-tenancy binds it, unbound means no workspaces.
+
 ## Unreleased — kernel audit repairs (2026-10-08)
 
 - Preserve proven PostgreSQL module schema ownership in template and explicit-set migrations through the same transactional claims boundary as lifecycle; install the tenant registry prerequisite for explicit module selections.

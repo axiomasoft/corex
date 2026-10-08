@@ -7,7 +7,7 @@ namespace CoreX\Operations\Definition\Data;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Data\Data\JsonDocument;
-use CoreX\Operations\Definition\Contracts\OperationHandler;
+use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Operations\Definition\Enums\OperationMode;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Invocation\Enums\InputEnvelope;

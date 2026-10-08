@@ -1,0 +1,7 @@
+case=INSTALL-04
+command=/usr/bin/python3 /home/vostrikov/projects/packages/corex/scripts/distribution/remaining-cohort-installed.py --verify-install-04
+cwd=/home/vostrikov/projects/packages/corex
+exit=0
+--- stdout ---
+
+--- stderr ---

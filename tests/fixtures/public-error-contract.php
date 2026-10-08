@@ -470,7 +470,7 @@ return [
             'owner' => 'axiomasoft/corex-operations',
             'source' => 'packages/operations/src/Invocation/Internal/DefaultOperationInvoker.php',
             'adapter' => 'field-path-api-error',
-            'sha256' => '6f02120d925b229a2df266d7a298fca4a95a6b34e83f9eb5b0cbc1ce95b62135',
+            'sha256' => '5ae9f58c49ab58f39220e20b1e733600d896767f7cb0ac7204f86e406634c4f1',
         ],
         4 => [
             'owner' => 'axiomasoft/corex-operations',

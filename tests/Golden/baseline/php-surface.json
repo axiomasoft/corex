@@ -632,7 +632,7 @@
                     {
                         "byRef": false,
                         "name": "p",
-                        "type": "CoreX\\Access\\Contracts\\Principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
                         "variadic": false
                     },
                     {
@@ -656,7 +656,7 @@
                     {
                         "byRef": false,
                         "name": "p",
-                        "type": "CoreX\\Access\\Contracts\\Principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
                         "variadic": false
                     },
                     {
@@ -680,7 +680,7 @@
                     {
                         "byRef": false,
                         "name": "p",
-                        "type": "CoreX\\Access\\Contracts\\Principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
                         "variadic": false
                     },
                     {
@@ -774,7 +774,7 @@
                     {
                         "byRef": false,
                         "name": "p",
-                        "type": "CoreX\\Access\\Contracts\\Principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
                         "variadic": false
                     },
                     {
@@ -836,7 +836,7 @@
                     {
                         "byRef": false,
                         "name": "p",
-                        "type": "CoreX\\Access\\Contracts\\Principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
                         "variadic": false
                     },
                     {
@@ -852,6 +852,56 @@
         },
         "parent": null,
         "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Access\\Access\\Internal\\EffectiveWorkspaceScope": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "class",
+                        "type": "?string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "resolve": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Access\\Laravel\\AuthOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "container",
+                        "type": "Illuminate\\Contracts\\Container\\Container",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "class": {
+                "name": "class",
+                "readonly": true,
+                "static": false,
+                "type": "?string"
+            }
+        },
         "readonly": true
     },
     "CoreX\\Access\\Access\\Internal\\PermissionSurface": {
@@ -963,8 +1013,8 @@
                     },
                     {
                         "byRef": false,
-                        "name": "options",
-                        "type": "CoreX\\Access\\Laravel\\AuthOptions",
+                        "name": "workspaceScope",
+                        "type": "CoreX\\Access\\Access\\Internal\\EffectiveWorkspaceScope",
                         "variadic": false
                     },
                     {
@@ -994,7 +1044,7 @@
                     {
                         "byRef": false,
                         "name": "p",
-                        "type": "CoreX\\Access\\Contracts\\Principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
                         "variadic": false
                     }
                 ],
@@ -1018,7 +1068,7 @@
                     {
                         "byRef": false,
                         "name": "p",
-                        "type": "CoreX\\Access\\Contracts\\Principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
                         "variadic": false
                     }
                 ],
@@ -1072,7 +1122,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Access\\Contracts\\Principal",
+            "CoreX\\Context\\Contracts\\Principal",
             "Illuminate\\Contracts\\Auth\\Authenticatable"
         ],
         "internal": false,
@@ -1083,7 +1133,7 @@
                     {
                         "byRef": false,
                         "name": "type",
-                        "type": "CoreX\\Access\\Enums\\PrincipalType",
+                        "type": "CoreX\\Context\\Enums\\PrincipalType",
                         "variadic": false
                     },
                     {
@@ -1108,7 +1158,7 @@
                     {
                         "byRef": false,
                         "name": "principal",
-                        "type": "CoreX\\Access\\Contracts\\Principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
                         "variadic": false
                     }
                 ],
@@ -1157,7 +1207,7 @@
             },
             "principalType": {
                 "params": [],
-                "return": "CoreX\\Access\\Enums\\PrincipalType",
+                "return": "CoreX\\Context\\Enums\\PrincipalType",
                 "static": false
             },
             "setRememberToken": {
@@ -1190,7 +1240,7 @@
                     {
                         "byRef": false,
                         "name": "p",
-                        "type": "CoreX\\Access\\Contracts\\Principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
                         "variadic": false
                     },
                     {
@@ -1214,7 +1264,7 @@
                     {
                         "byRef": false,
                         "name": "p",
-                        "type": "CoreX\\Access\\Contracts\\Principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
                         "variadic": false
                     },
                     {
@@ -1238,7 +1288,7 @@
                     {
                         "byRef": false,
                         "name": "p",
-                        "type": "CoreX\\Access\\Contracts\\Principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
                         "variadic": false
                     },
                     {
@@ -1262,29 +1312,6 @@
                     }
                 ],
                 "return": "CoreX\\Access\\Enums\\Scope",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\Access\\Contracts\\Principal": {
-        "abstract": false,
-        "constants": [],
-        "final": false,
-        "interfaces": [],
-        "internal": false,
-        "kind": "interface",
-        "methods": {
-            "principalId": {
-                "params": [],
-                "return": "string",
-                "static": false
-            },
-            "principalType": {
-                "params": [],
-                "return": "CoreX\\Access\\Enums\\PrincipalType",
                 "static": false
             }
         },
@@ -1388,89 +1415,6 @@
             }
         },
         "readonly": true
-    },
-    "CoreX\\Access\\Enums\\PrincipalType": {
-        "abstract": false,
-        "constants": {
-            "Agent": {
-                "type": "CoreX\\Access\\Enums\\PrincipalType",
-                "value": {
-                    "enum": "CoreX\\Access\\Enums\\PrincipalType",
-                    "case": "Agent",
-                    "value": "agent"
-                }
-            },
-            "ApiKey": {
-                "type": "CoreX\\Access\\Enums\\PrincipalType",
-                "value": {
-                    "enum": "CoreX\\Access\\Enums\\PrincipalType",
-                    "case": "ApiKey",
-                    "value": "api_key"
-                }
-            },
-            "User": {
-                "type": "CoreX\\Access\\Enums\\PrincipalType",
-                "value": {
-                    "enum": "CoreX\\Access\\Enums\\PrincipalType",
-                    "case": "User",
-                    "value": "user"
-                }
-            }
-        },
-        "final": true,
-        "interfaces": [
-            "BackedEnum",
-            "UnitEnum"
-        ],
-        "internal": false,
-        "kind": "enum",
-        "methods": {
-            "cases": {
-                "params": [],
-                "return": "array",
-                "static": true
-            },
-            "from": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "value",
-                        "type": "string|int",
-                        "variadic": false
-                    }
-                ],
-                "return": "static",
-                "static": true
-            },
-            "tryFrom": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "value",
-                        "type": "string|int",
-                        "variadic": false
-                    }
-                ],
-                "return": "?static",
-                "static": true
-            }
-        },
-        "parent": null,
-        "properties": {
-            "name": {
-                "name": "name",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "value": {
-                "name": "value",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            }
-        },
-        "readonly": false
     },
     "CoreX\\Access\\Enums\\Scope": {
         "abstract": false,
@@ -2230,7 +2174,7 @@
                     {
                         "byRef": false,
                         "name": "p",
-                        "type": "CoreX\\Access\\Contracts\\Principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
                         "variadic": false
                     },
                     {
@@ -6026,6 +5970,29 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Context\\Contracts\\Principal": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "principalId": {
+                "params": [],
+                "return": "string",
+                "static": false
+            },
+            "principalType": {
+                "params": [],
+                "return": "CoreX\\Context\\Enums\\PrincipalType",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Context\\Contracts\\TenancyManager": {
         "abstract": false,
         "constants": [],
@@ -6785,6 +6752,89 @@
         },
         "readonly": false
     },
+    "CoreX\\Context\\Enums\\PrincipalType": {
+        "abstract": false,
+        "constants": {
+            "Agent": {
+                "type": "CoreX\\Context\\Enums\\PrincipalType",
+                "value": {
+                    "enum": "CoreX\\Context\\Enums\\PrincipalType",
+                    "case": "Agent",
+                    "value": "agent"
+                }
+            },
+            "ApiKey": {
+                "type": "CoreX\\Context\\Enums\\PrincipalType",
+                "value": {
+                    "enum": "CoreX\\Context\\Enums\\PrincipalType",
+                    "case": "ApiKey",
+                    "value": "api_key"
+                }
+            },
+            "User": {
+                "type": "CoreX\\Context\\Enums\\PrincipalType",
+                "value": {
+                    "enum": "CoreX\\Context\\Enums\\PrincipalType",
+                    "case": "User",
+                    "value": "user"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
     "CoreX\\Context\\Exceptions\\CentralContextException": {
         "abstract": false,
         "constants": [],
@@ -7226,6 +7276,24 @@
                     }
                 ],
                 "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Context\\Laravel\\WorkspaceScopeProvider": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "scopeClass": {
+                "params": [],
+                "return": "string",
                 "static": false
             }
         },
@@ -13921,6 +13989,13 @@
                         "byRef": false,
                         "name": "db",
                         "type": "Illuminate\\Database\\DatabaseManager",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "moduleMigrations",
+                        "type": "?Closure",
                         "variadic": false
                     }
                 ],
@@ -21738,6 +21813,165 @@
         },
         "parent": null,
         "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Invocation\\Contracts\\OperationHandler": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "input",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "parameters",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Invocation\\Contracts\\RequestContext": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "metadata": {
+                "params": [],
+                "return": "CoreX\\Invocation\\Data\\InvocationMetadata",
+                "static": false
+            },
+            "principal": {
+                "params": [],
+                "return": "CoreX\\Context\\Contracts\\Principal",
+                "static": false
+            },
+            "tenant": {
+                "params": [],
+                "return": "CoreX\\Context\\Data\\TenantContext",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Invocation\\Data\\InvocationMetadata": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "requestId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "version",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "operationId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "method",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "correlationId",
+                        "type": "?string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "accept",
+                        "type": "?string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "accept": {
+                "name": "accept",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "correlationId": {
+                "name": "correlationId",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "method": {
+                "name": "method",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "operationId": {
+                "name": "operationId",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "requestId": {
+                "name": "requestId",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "version": {
+                "name": "version",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
         "readonly": true
     },
     "CoreX\\Media\\Contracts\\ConversionDriver": {
@@ -35097,6 +35331,66 @@
         "properties": [],
         "readonly": true
     },
+    "CoreX\\Modules\\Internal\\Lifecycle\\ModuleMigrationClaims": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connection",
+                        "type": "Illuminate\\Database\\Connection",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "records",
+                        "type": "CoreX\\Modules\\Contracts\\RecordsRegistrar",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "events",
+                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "run": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "moduleForMigration",
+                        "type": "Closure",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "run",
+                        "type": "Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "?Throwable",
+                "static": false
+            },
+            "schemaObjects": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\Modules\\Internal\\ReadRegistryIntrospection": {
         "abstract": false,
         "constants": {
@@ -38482,14 +38776,8 @@
                     },
                     {
                         "byRef": false,
-                        "name": "digests",
-                        "type": "CoreX\\Notifications\\Digest\\Contracts\\DigestBuilder",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "handler",
-                        "type": "CoreX\\Notifications\\Digest\\Internal\\DigestWakeupHandler",
+                        "name": "scheduler",
+                        "type": "CoreX\\Scheduling\\Contracts\\WakeupScheduler",
                         "variadic": false
                     }
                 ],
@@ -41140,7 +41428,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     }
                 ],
@@ -41171,7 +41459,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     }
                 ],
@@ -41202,7 +41490,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -41226,7 +41514,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -41237,24 +41525,6 @@
                     }
                 ],
                 "return": "bool",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\Operations\\Authorization\\Contracts\\Principal": {
-        "abstract": false,
-        "constants": [],
-        "final": false,
-        "interfaces": [],
-        "internal": false,
-        "kind": "interface",
-        "methods": {
-            "id": {
-                "params": [],
-                "return": "string",
                 "static": false
             }
         },
@@ -41279,7 +41549,7 @@
                         "variadic": false
                     }
                 ],
-                "return": "?CoreX\\Operations\\Authorization\\Contracts\\Principal",
+                "return": "?CoreX\\Context\\Contracts\\Principal",
                 "static": false
             }
         },
@@ -41345,7 +41615,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     }
                 ],
@@ -41378,7 +41648,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     }
                 ],
@@ -41409,7 +41679,7 @@
                         "variadic": false
                     }
                 ],
-                "return": "?CoreX\\Operations\\Authorization\\Contracts\\Principal",
+                "return": "?CoreX\\Context\\Contracts\\Principal",
                 "static": false
             }
         },
@@ -41438,7 +41708,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -41462,7 +41732,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -41486,7 +41756,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -41516,7 +41786,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -44674,43 +44944,6 @@
         "properties": [],
         "readonly": false
     },
-    "CoreX\\Operations\\Definition\\Contracts\\OperationHandler": {
-        "abstract": false,
-        "constants": [],
-        "final": false,
-        "interfaces": [],
-        "internal": false,
-        "kind": "interface",
-        "methods": {
-            "handle": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "input",
-                        "type": "array",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "parameters",
-                        "type": "array",
-                        "variadic": false
-                    }
-                ],
-                "return": "array",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
     "CoreX\\Operations\\Definition\\Contracts\\OperationRegistry": {
         "abstract": false,
         "constants": [],
@@ -45760,7 +45993,7 @@
                     {
                         "byRef": false,
                         "name": "metadata",
-                        "type": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                        "type": "CoreX\\Invocation\\Data\\InvocationMetadata",
                         "variadic": false
                     }
                 ],
@@ -45784,7 +46017,7 @@
                     {
                         "byRef": false,
                         "name": "metadata",
-                        "type": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                        "type": "CoreX\\Invocation\\Data\\InvocationMetadata",
                         "variadic": false
                     }
                 ],
@@ -46311,7 +46544,7 @@
                     {
                         "byRef": false,
                         "name": "metadata",
-                        "type": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                        "type": "CoreX\\Invocation\\Data\\InvocationMetadata",
                         "variadic": false
                     }
                 ],
@@ -46388,7 +46621,7 @@
                     {
                         "byRef": false,
                         "name": "metadata",
-                        "type": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                        "type": "CoreX\\Invocation\\Data\\InvocationMetadata",
                         "variadic": false
                     },
                     {
@@ -46407,7 +46640,7 @@
                     {
                         "byRef": false,
                         "name": "metadata",
-                        "type": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                        "type": "CoreX\\Invocation\\Data\\InvocationMetadata",
                         "variadic": false
                     }
                 ],
@@ -46458,7 +46691,7 @@
                     {
                         "byRef": false,
                         "name": "metadata",
-                        "type": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                        "type": "CoreX\\Invocation\\Data\\InvocationMetadata",
                         "variadic": false
                     }
                 ],
@@ -46482,7 +46715,7 @@
                     {
                         "byRef": false,
                         "name": "metadata",
-                        "type": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                        "type": "CoreX\\Invocation\\Data\\InvocationMetadata",
                         "variadic": false
                     }
                 ],
@@ -46594,7 +46827,7 @@
                     {
                         "byRef": false,
                         "name": "metadata",
-                        "type": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                        "type": "CoreX\\Invocation\\Data\\InvocationMetadata",
                         "variadic": false
                     }
                 ],
@@ -46946,6 +47179,12 @@
                     },
                     {
                         "byRef": false,
+                        "name": "principalType",
+                        "type": "CoreX\\Context\\Enums\\PrincipalType",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
                         "name": "principalId",
                         "type": "string",
                         "variadic": false
@@ -47021,6 +47260,12 @@
                 "readonly": true,
                 "static": false,
                 "type": "string"
+            },
+            "principalType": {
+                "name": "principalType",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Context\\Enums\\PrincipalType"
             },
             "workspaceId": {
                 "name": "workspaceId",
@@ -47860,17 +48105,17 @@
                     {
                         "byRef": false,
                         "name": "principal",
-                        "type": "CoreX\\Operations\\Authorization\\Contracts\\Principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
                         "variadic": false
                     },
                     {
                         "byRef": false,
                         "name": "metadata",
-                        "type": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                        "type": "CoreX\\Invocation\\Data\\InvocationMetadata",
                         "variadic": false
                     }
                 ],
-                "return": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                "return": "CoreX\\Invocation\\Contracts\\RequestContext",
                 "static": false
             }
         },
@@ -47970,34 +48215,6 @@
         "properties": [],
         "readonly": false
     },
-    "CoreX\\Operations\\Invocation\\Contracts\\RequestContext": {
-        "abstract": false,
-        "constants": [],
-        "final": false,
-        "interfaces": [],
-        "internal": false,
-        "kind": "interface",
-        "methods": {
-            "metadata": {
-                "params": [],
-                "return": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
-                "static": false
-            },
-            "principal": {
-                "params": [],
-                "return": "CoreX\\Operations\\Authorization\\Contracts\\Principal",
-                "static": false
-            },
-            "tenant": {
-                "params": [],
-                "return": "CoreX\\Context\\Data\\TenantContext",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
     "CoreX\\Operations\\Invocation\\Contracts\\RequestContextProvider": {
         "abstract": false,
         "constants": [],
@@ -48008,107 +48225,13 @@
         "methods": {
             "current": {
                 "params": [],
-                "return": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                "return": "CoreX\\Invocation\\Contracts\\RequestContext",
                 "static": false
             }
         },
         "parent": null,
         "properties": [],
         "readonly": false
-    },
-    "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "requestId",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "version",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "operationId",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "method",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "correlationId",
-                        "type": "?string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "accept",
-                        "type": "?string",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "accept": {
-                "name": "accept",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "correlationId": {
-                "name": "correlationId",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "method": {
-                "name": "method",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "operationId": {
-                "name": "operationId",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "requestId": {
-                "name": "requestId",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "version": {
-                "name": "version",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            }
-        },
-        "readonly": true
     },
     "CoreX\\Operations\\Invocation\\Data\\OperationInvocation": {
         "abstract": false,
@@ -48129,7 +48252,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -48161,7 +48284,7 @@
                 "name": "context",
                 "readonly": true,
                 "static": false,
-                "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext"
+                "type": "CoreX\\Invocation\\Contracts\\RequestContext"
             },
             "idempotencyKey": {
                 "name": "idempotencyKey",
@@ -48438,7 +48561,7 @@
             },
             "current": {
                 "params": [],
-                "return": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                "return": "CoreX\\Invocation\\Contracts\\RequestContext",
                 "static": false
             }
         },
@@ -48693,7 +48816,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Invocation\\Contracts\\RequestContext"
+            "CoreX\\Invocation\\Contracts\\RequestContext"
         ],
         "internal": true,
         "kind": "class",
@@ -48709,13 +48832,13 @@
                     {
                         "byRef": false,
                         "name": "authenticatedPrincipal",
-                        "type": "CoreX\\Operations\\Authorization\\Contracts\\Principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
                         "variadic": false
                     },
                     {
                         "byRef": false,
                         "name": "requestMetadata",
-                        "type": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                        "type": "CoreX\\Invocation\\Data\\InvocationMetadata",
                         "variadic": false
                     }
                 ],
@@ -48724,12 +48847,12 @@
             },
             "metadata": {
                 "params": [],
-                "return": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                "return": "CoreX\\Invocation\\Data\\InvocationMetadata",
                 "static": false
             },
             "principal": {
                 "params": [],
-                "return": "CoreX\\Operations\\Authorization\\Contracts\\Principal",
+                "return": "CoreX\\Context\\Contracts\\Principal",
                 "static": false
             },
             "tenant": {
@@ -48788,17 +48911,17 @@
                     {
                         "byRef": false,
                         "name": "principal",
-                        "type": "CoreX\\Operations\\Authorization\\Contracts\\Principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
                         "variadic": false
                     },
                     {
                         "byRef": false,
                         "name": "metadata",
-                        "type": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                        "type": "CoreX\\Invocation\\Data\\InvocationMetadata",
                         "variadic": false
                     }
                 ],
-                "return": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                "return": "CoreX\\Invocation\\Contracts\\RequestContext",
                 "static": false
             }
         },
@@ -48829,7 +48952,7 @@
                         "variadic": false
                     }
                 ],
-                "return": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                "return": "CoreX\\Invocation\\Data\\InvocationMetadata",
                 "static": true
             }
         },
@@ -48856,17 +48979,17 @@
                     {
                         "byRef": false,
                         "name": "authenticatedPrincipal",
-                        "type": "CoreX\\Operations\\Authorization\\Contracts\\Principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
                         "variadic": false
                     },
                     {
                         "byRef": false,
                         "name": "requestMetadata",
-                        "type": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                        "type": "CoreX\\Invocation\\Data\\InvocationMetadata",
                         "variadic": false
                     }
                 ],
-                "return": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                "return": "CoreX\\Invocation\\Contracts\\RequestContext",
                 "static": true
             }
         },
@@ -50663,7 +50786,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
         ],
         "internal": false,
         "kind": "class",
@@ -50673,7 +50796,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -50913,7 +51036,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
         ],
         "internal": false,
         "kind": "class",
@@ -50935,7 +51058,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -50964,15 +51087,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Authorization\\Contracts\\Principal",
+            "CoreX\\Context\\Contracts\\Principal",
             "CoreX\\Operations\\Authorization\\Contracts\\PrincipalResolver"
         ],
         "internal": false,
         "kind": "class",
         "methods": {
-            "id": {
+            "principalId": {
                 "params": [],
                 "return": "string",
+                "static": false
+            },
+            "principalType": {
+                "params": [],
+                "return": "CoreX\\Context\\Enums\\PrincipalType",
                 "static": false
             },
             "resolve": {
@@ -50984,7 +51112,7 @@
                         "variadic": false
                     }
                 ],
-                "return": "?CoreX\\Operations\\Authorization\\Contracts\\Principal",
+                "return": "?CoreX\\Context\\Contracts\\Principal",
                 "static": false
             }
         },
@@ -51004,7 +51132,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
         ],
         "internal": false,
         "kind": "class",
@@ -51014,7 +51142,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -51153,7 +51281,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
         ],
         "internal": false,
         "kind": "class",
@@ -51181,7 +51309,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -51217,7 +51345,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
         ],
         "internal": false,
         "kind": "class",
@@ -51227,7 +51355,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -51263,7 +51391,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
         ],
         "internal": false,
         "kind": "class",
@@ -51273,7 +51401,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -51302,7 +51430,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
         ],
         "internal": false,
         "kind": "class",
@@ -51312,7 +51440,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -51348,7 +51476,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
         ],
         "internal": false,
         "kind": "class",
@@ -51358,7 +51486,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -51387,7 +51515,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
         ],
         "internal": false,
         "kind": "class",
@@ -51397,7 +51525,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -55779,6 +55907,85 @@
                     }
                 ],
                 "return": "CoreX\\Scheduling\\Data\\SweepResult",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Scheduling\\Contracts\\DueWakeupSweeper": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "nextDue": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    }
+                ],
+                "return": "?DateTimeImmutable",
+                "static": false
+            },
+            "sweep": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "limit",
+                        "type": "int",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Scheduling\\Data\\SweepResult",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Scheduling\\Contracts\\WakeupScheduleHint": {
+        "abstract": false,
+        "constants": {
+            "TAG": {
+                "type": "string",
+                "value": "corex.wakeup.hints"
+            }
+        },
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "scheduled": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "fireAt",
+                        "type": "DateTimeImmutable",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
                 "static": false
             }
         },
@@ -61647,6 +61854,37 @@
         "properties": [],
         "readonly": true
     },
+    "CoreX\\TasksWorkflow\\Internal\\MaterializationBindings": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "wakeupEnabled",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\TasksWorkflow\\Internal\\MaterializationHasher": {
         "abstract": false,
         "constants": {
@@ -62398,6 +62636,11 @@
                 ],
                 "return": "self",
                 "static": true
+            },
+            "wakeupHandlerDefinition": {
+                "params": [],
+                "return": "CoreX\\Scheduling\\Data\\WakeupHandlerDefinition",
+                "static": false
             }
         },
         "parent": null,
@@ -73599,7 +73842,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Wakeup\\Contracts\\WakeupScheduleHint"
+            "CoreX\\Scheduling\\Contracts\\WakeupScheduleHint"
         ],
         "internal": true,
         "kind": "class",
@@ -73700,7 +73943,7 @@
                     {
                         "byRef": false,
                         "name": "sweeper",
-                        "type": "CoreX\\Wakeup\\Contracts\\DueWakeupSweeper",
+                        "type": "CoreX\\Scheduling\\Contracts\\DueWakeupSweeper",
                         "variadic": false
                     },
                     {
@@ -82358,6 +82601,26 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Tenancy\\Workspace\\Internal\\TenancyWorkspaceScopeProvider": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Context\\Laravel\\WorkspaceScopeProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "scopeClass": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\Time\\Laravel\\LaravelClock": {
         "abstract": false,
         "constants": [],
@@ -82506,7 +82769,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     }
                 ],
@@ -82537,7 +82800,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -82574,7 +82837,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -82611,7 +82874,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     }
                 ],
@@ -82629,7 +82892,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -82652,7 +82915,7 @@
         "constants": [],
         "final": false,
         "interfaces": [
-            "CoreX\\Operations\\Invocation\\Contracts\\RequestContext"
+            "CoreX\\Invocation\\Contracts\\RequestContext"
         ],
         "internal": false,
         "kind": "interface",
@@ -83545,7 +83808,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     }
                 ],
@@ -83590,7 +83853,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     }
                 ],
@@ -83608,7 +83871,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -83683,7 +83946,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -83741,7 +84004,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -83778,7 +84041,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     }
                 ],
@@ -83865,7 +84128,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -83999,7 +84262,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+            "CoreX\\Invocation\\Contracts\\RequestContext",
             "CoreX\\Tools\\Contracts\\ToolRequestContext"
         ],
         "internal": true,
@@ -84010,7 +84273,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -84031,7 +84294,7 @@
             },
             "metadata": {
                 "params": [],
-                "return": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+                "return": "CoreX\\Invocation\\Data\\InvocationMetadata",
                 "static": false
             },
             "operationKey": {
@@ -84041,7 +84304,7 @@
             },
             "principal": {
                 "params": [],
-                "return": "CoreX\\Operations\\Authorization\\Contracts\\Principal",
+                "return": "CoreX\\Context\\Contracts\\Principal",
                 "static": false
             },
             "tenant": {
@@ -86958,41 +87221,12 @@
         "abstract": false,
         "constants": [],
         "final": false,
-        "interfaces": [],
+        "interfaces": [
+            "CoreX\\Scheduling\\Contracts\\DueWakeupSweeper"
+        ],
         "internal": false,
         "kind": "interface",
-        "methods": {
-            "nextDue": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "context",
-                        "type": "CoreX\\Context\\Data\\TenantContext",
-                        "variadic": false
-                    }
-                ],
-                "return": "?DateTimeImmutable",
-                "static": false
-            },
-            "sweep": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "context",
-                        "type": "CoreX\\Context\\Data\\TenantContext",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "limit",
-                        "type": "int",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Scheduling\\Data\\SweepResult",
-                "static": false
-            }
-        },
+        "methods": [],
         "parent": null,
         "properties": [],
         "readonly": false
@@ -87001,29 +87235,12 @@
         "abstract": false,
         "constants": [],
         "final": false,
-        "interfaces": [],
+        "interfaces": [
+            "CoreX\\Scheduling\\Contracts\\WakeupScheduleHint"
+        ],
         "internal": false,
         "kind": "interface",
-        "methods": {
-            "scheduled": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "context",
-                        "type": "CoreX\\Context\\Data\\TenantContext",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "fireAt",
-                        "type": "DateTimeImmutable",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": false
-            }
-        },
+        "methods": [],
         "parent": null,
         "properties": [],
         "readonly": false
@@ -87043,7 +87260,7 @@
                     {
                         "byRef": false,
                         "name": "sweeper",
-                        "type": "CoreX\\Wakeup\\Contracts\\DueWakeupSweeper",
+                        "type": "CoreX\\Scheduling\\Contracts\\DueWakeupSweeper",
                         "variadic": false
                     },
                     {
@@ -87225,6 +87442,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Scheduling\\Contracts\\DueWakeupSweeper",
             "CoreX\\Wakeup\\Contracts\\DueWakeupSweeper"
         ],
         "internal": true,
@@ -89979,7 +90197,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
         ],
         "internal": true,
         "kind": "class",
@@ -89989,7 +90207,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -90609,7 +90827,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
         ],
         "internal": true,
         "kind": "class",
@@ -90619,7 +90837,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -91012,6 +91230,18 @@
                     {
                         "byRef": false,
                         "name": "address",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": true
+            },
+            "isCanonicalDnsName": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "host",
                         "type": "string",
                         "variadic": false
                     }
@@ -92918,7 +93148,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
         ],
         "internal": false,
         "kind": "class",
@@ -92940,7 +93170,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -92969,7 +93199,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
         ],
         "internal": false,
         "kind": "class",
@@ -92991,7 +93221,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -93020,7 +93250,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
         ],
         "internal": false,
         "kind": "class",
@@ -93042,7 +93272,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -93527,7 +93757,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
         ],
         "internal": false,
         "kind": "class",
@@ -93549,7 +93779,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -93578,7 +93808,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
         ],
         "internal": false,
         "kind": "class",
@@ -93600,7 +93830,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -93629,7 +93859,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
         ],
         "internal": false,
         "kind": "class",
@@ -93651,7 +93881,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {
@@ -93680,7 +93910,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+            "CoreX\\Invocation\\Contracts\\OperationHandler"
         ],
         "internal": false,
         "kind": "class",
@@ -93702,7 +93932,7 @@
                     {
                         "byRef": false,
                         "name": "context",
-                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                         "variadic": false
                     },
                     {

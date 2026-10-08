@@ -43,40 +43,33 @@ final readonly class GdThumbnailDriver implements ConversionDriver
         $target = imagecreatetruecolor($width, $height);
 
         if ($target === false) {
-            imagedestroy($source);
-
             throw new MediaOperationConflict('The conversion target could not be allocated.');
         }
 
-        try {
-            if ($facts['mime'] === 'image/png') {
-                imagealphablending($target, false);
-                imagesavealpha($target, true);
-                $color = imagecolorallocatealpha($target, 0, 0, 0, 127);
+        if ($facts['mime'] === 'image/png') {
+            imagealphablending($target, false);
+            imagesavealpha($target, true);
+            $color = imagecolorallocatealpha($target, 0, 0, 0, 127);
 
-                if ($color === false) {
-                    throw new MediaOperationConflict('The conversion transparency could not be allocated.');
-                }
-                imagefill($target, 0, 0, $color);
+            if ($color === false) {
+                throw new MediaOperationConflict('The conversion transparency could not be allocated.');
             }
-
-            if (! imagecopyresampled($target, $source, 0, 0, 0, 0, $width, $height, $sourceWidth, $sourceHeight)) {
-                throw new MediaOperationConflict('The conversion target could not be rendered.');
-            }
-
-            ob_start();
-            $written = $facts['mime'] === 'image/png' ? imagepng($target) : imagejpeg($target, quality: 85);
-            $bytes = ob_get_clean();
-
-            if (! $written || ! is_string($bytes) || $bytes === '' || strlen($bytes) > $this->profile->maxOutputBytes) {
-                throw new MediaOperationConflict('The conversion output is invalid.');
-            }
-
-            return new ConversionOutput(bytes: $bytes, mimeType: $facts['mime'], width: $width, height: $height);
-        } finally {
-            imagedestroy($source);
-            imagedestroy($target);
+            imagefill($target, 0, 0, $color);
         }
+
+        if (! imagecopyresampled($target, $source, 0, 0, 0, 0, $width, $height, $sourceWidth, $sourceHeight)) {
+            throw new MediaOperationConflict('The conversion target could not be rendered.');
+        }
+
+        ob_start();
+        $written = $facts['mime'] === 'image/png' ? imagepng($target) : imagejpeg($target, quality: 85);
+        $bytes = ob_get_clean();
+
+        if (! $written || ! is_string($bytes) || $bytes === '' || strlen($bytes) > $this->profile->maxOutputBytes) {
+            throw new MediaOperationConflict('The conversion output is invalid.');
+        }
+
+        return new ConversionOutput(bytes: $bytes, mimeType: $facts['mime'], width: $width, height: $height);
     }
 
     /** @return array{positive-int, positive-int} */

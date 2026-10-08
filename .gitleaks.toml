@@ -1,0 +1,31 @@
+# Secret scan policy for scripts/secret-scan-gate.sh (gitleaks >= 8.25, full git history).
+# Provider-specific rules (pplx-, ghp_, AKIA, sk_live_ …) stay active everywhere, including
+# evidence archives. Only the low-confidence generic rule and content digests are allowlisted,
+# each narrowed to the paths where they are known false positives.
+title = "CoreX secret scan"
+
+[extend]
+useDefault = true
+
+# Deterministic public HMAC test vector, rather than disabling generic-key detection
+# for every future credential in tests, audits or release evidence.
+[[rules]]
+id = "generic-api-key"
+[[rules.allowlists]]
+description = "Published deterministic HMAC fixture (bytes 0..31)"
+condition = "AND"
+regexTarget = "secret"
+regexes = ['''^whsec_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8=$''']
+paths = ['''(^|/)tests/''', '''^(plans|audits|release)/''']
+
+[[rules.allowlists]]
+description = "SHA-256 content digests in evidence manifests are fingerprints, not credentials"
+condition = "AND"
+regexTarget = "secret"
+regexes = ['''^[0-9a-f]{64}$''']
+paths = ['''^(plans|audits|delivery|release|api)/''']
+
+[[allowlists]]
+description = "Registered public placeholder default; flagged by the config report, never a real secret"
+regexTarget = "secret"
+regexes = ['''^(0123456789abcdef){4}$''']

@@ -88,13 +88,19 @@ precedence over parameter routes. Only declared methods execute; unknown method/
 Success must carry an envelope, so 204 is not supported. Use a new operation/API version for a
 breaking request or response change. Public interface changes follow the package's SemVer policy.
 
+Handlers implement the kernel contract `CoreX\Invocation\Contracts\OperationHandler`, so a module
+declaring operations does not need this package at runtime. The former `CoreX\Operations\...`
+names of `OperationHandler`, `RequestContext`, `Principal` and `InvocationMetadata` are deprecated
+aliases of the same types and are removed in 2.0. The caller is the kernel
+`CoreX\Context\Contracts\Principal` (`principalType()`, `principalId()`), the same type access checks.
+
 ```php
-final class CreateNoteOperation implements \CoreX\Operations\Definition\Contracts\OperationHandler
+final class CreateNoteOperation implements \CoreX\Invocation\Contracts\OperationHandler
 {
     public function __construct(private readonly CreateNote $action) {}
 
     public function handle(
-        \CoreX\Operations\Invocation\Contracts\RequestContext $context,
+        \CoreX\Invocation\Contracts\RequestContext $context,
         array $input,
         array $parameters,
     ): array {

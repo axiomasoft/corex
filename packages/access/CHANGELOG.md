@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — principal concept in the kernel (audit 2026-10-08 P-02)
+
+- Deprecated: `CoreX\Access\Contracts\Principal` and `CoreX\Access\Enums\PrincipalType` are now `class_alias` names of the kernel `CoreX\Context\Contracts\Principal` and `CoreX\Context\Enums\PrincipalType` (same types, same methods and cases). Existing implementations and type hints keep working; switch imports to the new names. The aliases are removed in 2.0.
+- `PrincipalIdentity` is therefore also the operation caller (`RequestContext::principal()`), with no adapter.
+
+## Unreleased — fail-closed workspace scope (audit 2026-10-08 P-04)
+
+- `corex-access.workspace_scope_class` now defaults to `null`: the workspace scope comes from the kernel `WorkspaceScopeProvider` that tenancy binds; without it no workspace scope is applied (boxed, AC-28).
+- A class set in `workspace_scope_class` overrides the provider and must exist; a missing class now throws `InvalidArgumentException` at boot instead of silently leaving workspace-scoped models unscoped. Hosts that published the old default without installing tenancy must remove the key (or set it to `null`). `AuthOptions` is unchanged.
+
 ## Unreleased — Laravel 13 platform (P09.9, D132)
 
 - Require Laravel 13 and PHP 8.4+; support PHP 8.4–8.5. Laravel 12 support is removed. Testbench uses the Laravel 13 family; package versions and runtime contracts are unchanged.

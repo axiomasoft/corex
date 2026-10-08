@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SNAPSHOTS = ROOT / "api" / "v1"
 REST_CLIENT = ROOT / "fixtures" / "clients" / "rest" / "client.py"
 MCP_CLIENT = ROOT / "fixtures" / "clients" / "mcp" / "client.py"
-RECEIPT = ROOT / "plans" / "2026.09.19-№1-COREX-PLATFORM-HARDENING" / "findings" / "P17-api-client-receipt.json"
+RECEIPT = ROOT / "release" / "1.0" / "findings" / "P17-api-client-receipt.json"
 CURSOR = "/webhook-deliveries?cursor=v1.opaque%2Etoken"
 CURSOR_TOKEN = "v1.opaque%2Etoken"
 

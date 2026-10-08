@@ -28,13 +28,15 @@ final class OperationFingerprint
     public static function scope(OperationInvocation $invocation, Connection $connection): IdempotencyScope
     {
         $tenant = $invocation->context->tenant();
+        $principal = $invocation->context->principal();
 
         return new IdempotencyScope(
             connectionName: (string) $connection->getName(),
             databaseName: $connection->getDatabaseName(),
             accountId: $tenant->account->id,
             workspaceId: $tenant->workspace?->id,
-            principalId: $invocation->context->principal()->id(),
+            principalType: $principal->principalType(),
+            principalId: $principal->principalId(),
             clientId: null,
             apiMajor: $invocation->operation->version,
             operationId: $invocation->operation->id,

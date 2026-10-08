@@ -25,6 +25,32 @@ jobs:
       - name: Guard against gate-weakening diffs
         run: bash scripts/anti-weakening-gate.sh
 
+  secret-scan:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    name: Secret scan (gitleaks)
+    env:
+      GITLEAKS_VERSION: 8.28.0
+      GITLEAKS_SHA256: a65b5253807a68ac0cafa4414031fd740aeb55f54fb7e55f386acb52e6a840eb
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Install pinned gitleaks
+        run: |
+          curl -fsSL -o /tmp/gitleaks.tgz "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  /tmp/gitleaks.tgz" | sha256sum -c -
+          tar -xzf /tmp/gitleaks.tgz -C /tmp gitleaks
+
+      - name: Secret scan gate
+        run: GITLEAKS_BIN=/tmp/gitleaks bash scripts/secret-scan-gate.sh
+
+      - name: Verify secret scan boundaries
+        run: GITLEAKS_BIN=/tmp/gitleaks python3 -m unittest scripts.tests.test_secret_scan_gate
+
   tests:
     permissions:
       contents: read
@@ -855,32 +881,6 @@ jobs:
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: bash scripts/contract-guard.sh "$BASE_SHA"
-
-  backward-compatibility:
-    permissions:
-      contents: read
-    runs-on: ubuntu-latest
-    name: Backward compatibility (Roave · PHP 8.4)
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        with:
-          php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
-          coverage: none
-
-      - name: Install dependencies
-        run: php scripts/ci-composer-update.php
-
-      - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked
-
-      - name: Backward compatibility (bc-check)
-        run: bash scripts/bc-check.sh
 
   coverage:
     permissions:

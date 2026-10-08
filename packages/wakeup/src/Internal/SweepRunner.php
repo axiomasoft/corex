@@ -22,6 +22,7 @@ use Psr\Clock\ClockInterface;
 use RuntimeException;
 use Throwable;
 
+/** Implements the deprecated alias (which extends the Scheduling contract) so both bindings resolve to it until 2.0. */
 final readonly class SweepRunner implements DueWakeupSweeper
 {
     /** @param list<DueWakeupSource> $dueSources */

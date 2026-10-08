@@ -220,29 +220,5 @@ jobs:
       - name: Verify remaining cohort export recipe
         run: python3 scripts/distribution/remaining-cohort-export.py
 
-  dod-release:
-    permissions:
-      contents: read
-    if: ${{ github.ref == 'refs/heads/main' }}
-    runs-on: ubuntu-latest
-    name: Release preflight
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        with:
-          php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
-          coverage: none
-          tools: composer
-      - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
-
-      - name: Composer audit
-        run: composer audit --locked
-      - name: Verify sealed preflight refusal boundaries
-        run: python3 -m unittest scripts/distribution/tests/test_release_preflight.py
-      - name: Qualify the committed stable source without publication
-        run: python3 scripts/distribution/release_preflight.py seal --receipt $RUNNER_TEMP/release-preflight.json --packet $RUNNER_TEMP/publication-packet.json
+      - name: Verify release refusal boundaries and DoD schema
+        run: python3 -m unittest scripts.tests.test_dod_1_0 scripts.distribution.tests.test_release_preflight

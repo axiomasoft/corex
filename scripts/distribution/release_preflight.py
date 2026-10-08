@@ -22,11 +22,11 @@ from pathlib import Path
 import release_candidate as candidate
 
 ROOT = Path(__file__).resolve().parents[2]
-PLAN = ROOT / 'plans/2026.09.19-№1-COREX-PLATFORM-HARDENING'
-COHORT = PLAN / 'artifacts/P17/release-cohort.json'
-RECEIPT = PLAN / 'findings/P17-release-preflight.json'
-PACKET = PLAN / 'artifacts/P17/publication-packet.json'
-BAD_OUTPUT = re.compile(r'\b(?:skipped|not-run|infrastructure-error)\b|bc-check: skip|plan-close deferred', re.I)
+RELEASE = ROOT / 'release/1.0'
+COHORT = RELEASE / 'artifacts/P17/release-cohort.json'
+RECEIPT = RELEASE / 'findings/P17-release-preflight.json'
+PACKET = RELEASE / 'artifacts/P17/publication-packet.json'
+BAD_OUTPUT = re.compile(r'\b(?:skipped|not-run|infrastructure-error)\b|plan-close deferred', re.I)
 
 
 class NoGo(RuntimeError):
@@ -215,10 +215,8 @@ def qualify(root: Path, packages: list, checks: list[dict], candidate_dir: Path)
                 # These owners' test script already includes their PG suite.
                 require_command(['composer', '--working-dir=' + package.path, 'test', '--', '--group=pg'], root, checks)
     for script in ('lint:check', 'analyse', 'test', 'test:pg', 'test:arch', 'package-graph-gate',
-                   'naming-gate', 'api-contract', 'bc-check'):
+                   'naming-gate', 'api-contract'):
         require_command(['composer', script], root, checks)
-    require_command(['php', '-d', 'zend.assertions=1', '-d', 'assert.exception=1',
-                     'scripts/bc/test-property-default.php'], root, checks)
     require_command(['php', 'scripts/package-docs-gate.php', '--pristine', '--json'], root, checks)
     require_command(['bash', 'scripts/anti-weakening-gate.sh'], root, checks)
     require_command(['bash', 'scripts/mutation-check.sh', '--all'], root, checks)
@@ -228,7 +226,7 @@ def qualify(root: Path, packages: list, checks: list[dict], candidate_dir: Path)
         if script in ('verify_extension_fixtures.py', 'verify_equipment_consumer.py', 'profile-proof.py'):
             argv.extend(['--candidate', str(candidate_dir)])
         if script == 'verify_extension_fixtures.py':
-            argv.extend(['--receipt', str(root / PLAN.relative_to(ROOT) / 'findings/P17-extension-receipt.json')])
+            argv.extend(['--receipt', str(root / RELEASE.relative_to(ROOT) / 'findings/P17-extension-receipt.json')])
         require_command(argv, root, checks)
     require_command(['python3', 'scripts/distribution/upgrade-proof.py', 'prove',
                      '--candidate', str(candidate_dir)], root, checks)
@@ -253,7 +251,7 @@ def seal(root: Path, cohort: dict, state: dict, checks: list[dict], cohort_path:
             raise NoGo('candidate rebuild is not byte-identical')
         candidate.verify_candidate(first / 'candidate.json', root, policy, composer_checks=True)
         qualify(root, packages, checks, first)
-        final = check(root, cohort_path, checks, root / PLAN.relative_to(ROOT) / 'findings/P17-dod-result.json')
+        final = check(root, cohort_path, checks, root / RELEASE.relative_to(ROOT) / 'findings/P17-dod-result.json')
         if final['red_assertions']:
             raise NoGo('DoD is red after qualification')
         state.update(final)

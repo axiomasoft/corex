@@ -2,7 +2,7 @@
     "schema": "corex-rename-completeness/1",
     "generated_by": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/scripts/p02-transfer.py manifest",
     "exclude": [
-        "~^(plans|audits)/~",
+        "~^(plans|audits|release)/~",
         "~(^|/)CHANGELOG\\.md$~",
         "~/docs/history/~",
         "~^docs/architecture/rename-registry\\.md$~",

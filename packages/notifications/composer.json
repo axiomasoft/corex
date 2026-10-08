@@ -14,6 +14,7 @@
         "ext-pdo": "*",
         "larastan/larastan": "^3.12",
         "laravel/pint": "^1.32",
+        "mockery/mockery": "^1.6",
         "orchestra/testbench": "^11.3",
         "orchestra/testbench-core": "^11.5",
         "pestphp/pest": "^5.2"

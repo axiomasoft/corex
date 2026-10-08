@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Contact\Api;
 
-use CoreX\Operations\Definition\Contracts\OperationHandler;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Invocation\Contracts\OperationHandler;
+use CoreX\Invocation\Contracts\RequestContext;
 use Flex\Crm\Contact\Models\Contact;
 use Flex\Crm\Context\ContextGuard;
 use Flex\Crm\Internal\Value;

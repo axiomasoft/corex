@@ -13,13 +13,30 @@ use Illuminate\Database\Events\MigrationStarted;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Events\QueuedClosure;
+use Illuminate\Support\Testing\Fakes\EventFake;
+use LogicException;
 use stdClass;
 use Throwable;
 
 /** Shared ownership boundary for lifecycle and template module migrations. */
 final readonly class ModuleMigrationClaims
 {
-    public function __construct(private Connection $connection, private RecordsRegistrar $records, private Dispatcher $events) {}
+    private Dispatcher $events;
+
+    /**
+     * Listeners are attached to and removed from the concrete Laravel dispatcher. `Event::fake()`
+     * wraps it: listen() is forwarded but forget() is a no-op, so the wrapped instance is used.
+     */
+    public function __construct(private Connection $connection, private RecordsRegistrar $records, EventDispatcher $events)
+    {
+        $concrete = $events instanceof EventFake ? $events->dispatcher : $events;
+
+        if (! $concrete instanceof Dispatcher) {
+            throw new LogicException('Module schema ownership requires the Laravel event dispatcher.');
+        }
+
+        $this->events = $concrete;
+    }
 
     /**
      * @param  Closure(Migration):?string  $moduleForMigration

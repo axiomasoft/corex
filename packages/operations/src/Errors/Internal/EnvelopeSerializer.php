@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Errors\Internal;
 
-use CoreX\Operations\Invocation\Data\InvocationMetadata;
+use CoreX\Invocation\Data\InvocationMetadata;
 use Illuminate\Http\JsonResponse;
 
 /** @internal */

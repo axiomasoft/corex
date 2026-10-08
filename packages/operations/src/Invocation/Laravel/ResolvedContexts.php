@@ -6,10 +6,10 @@ namespace CoreX\Operations\Invocation\Laravel;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Context\Contracts\Principal;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Operations\Authorization\Contracts\Principal;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Invocation\Data\InvocationMetadata;
+use CoreX\Invocation\Contracts\RequestContext;
+use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Internal\ResolvedContext;
 
 /** Build the engine's request context through its public contract. */

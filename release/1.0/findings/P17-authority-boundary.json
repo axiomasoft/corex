@@ -1,0 +1,53 @@
+{
+  "candidate": {
+    "boundary_evidence": [
+      "phases/P17/P17.11.md#Scope-Excluded",
+      "decisions/D97-release-is-preflighted-then-forward-only.md",
+      "decisions/D138-p1711-producer-remediation.md",
+      "findings/P17-remote-reconcile.json#interpretation"
+    ],
+    "evidence_ids": [
+      "findings/P17-release-preflight.json",
+      "findings/P17-remote-reconcile.json",
+      "findings/P17-seal-matrix-evidence.json",
+      "findings/P17-independent-review.json"
+    ],
+    "executor_actor": "plan-exec/composer-resume/20260927",
+    "external": false,
+    "item_id": "P17.11",
+    "plan_id": "2026.09.19-№1-COREX-PLATFORM-HARDENING",
+    "rag": {
+      "evidence_ids": [],
+      "required": false,
+      "status": "not-required"
+    },
+    "resolutions_tried": [
+      "D138 local producer remediation committed at 7ab8434",
+      "Release matrix largely green per seal-resume/v3; upgrade-proof owner-stopped",
+      "Fresh read-only GET metadata for corex-access and corex-operations still HTTP404"
+    ],
+    "review": {
+      "context": "isolated-child-return",
+      "evidence_ids": [
+        "EXT-01",
+        "EXT-02",
+        "EXT-03",
+        "EXT-04",
+        "EXT-05",
+        "EXT-06"
+      ],
+      "reviewer_actor": "isolated-review/p1711_boundary_review",
+      "verdict": "JUSTIFIED"
+    },
+    "schema_version": "block-candidate/v1",
+    "scope_class": "authority",
+    "scope_coverage": "outside-scope",
+    "signal_class": "authority-boundary"
+  },
+  "evaluation": {
+    "action": "terminal-block",
+    "journal_result": null,
+    "reason_code": "BLOCK_CONFIRMED",
+    "terminal_allowed": true
+  }
+}

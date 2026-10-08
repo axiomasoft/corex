@@ -34,6 +34,7 @@
         "orchestra/testbench": "^11.3",
         "orchestra/testbench-core": "^11.5",
         "pestphp/pest": "^5.2",
+        "psr/clock": "^1.0",
         "symfony/process": "^7.2|^8.0"
     },
     "autoload": {

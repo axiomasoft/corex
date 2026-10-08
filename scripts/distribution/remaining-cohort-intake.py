@@ -10,10 +10,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-PLAN = ROOT / 'plans/archive/2026.09.15-№1-COREX-FLEXCRM-REMAINING'
+RECORD = ROOT / 'release/remaining-cohort-20260915'
 REPO_DELIVERY = ROOT / 'delivery/remaining-cohort-20260915'
-PLAN_DELIVERY = PLAN / 'delivery/remaining-cohort-20260915'
-EVIDENCE = PLAN_DELIVERY / 'evidence'
+RECORD_DELIVERY = RECORD / 'delivery/remaining-cohort-20260915'
+EVIDENCE = RECORD_DELIVERY / 'evidence'
 COHORT_VERSION = '0.4.0-alpha.20260918'
 REPOSITORY = 'axiomasoft/corex'
 
@@ -158,9 +158,9 @@ def build_candidate(profile_plan: dict, baselines: dict, source_commit: str) -> 
         'requires': requires,
         'public_packages': [name for name, _, _ in PUBLIC_PACKAGES],
         'private_profiles': [PRIVATE_PROFILE['profile_id']],
-        'p2_contract_hashes': {path: sha256_path(PLAN / path) for path in P2_INPUTS},
-        'p1_input_hashes': {path: sha256_path(PLAN / path) for path in P1_INPUTS},
-        'producer_seal_hashes': {path: sha256_path(PLAN / path) for path in PRODUCER_SEALS},
+        'p2_contract_hashes': {path: sha256_path(RECORD / path) for path in P2_INPUTS},
+        'p1_input_hashes': {path: sha256_path(RECORD / path) for path in P1_INPUTS},
+        'producer_seal_hashes': {path: sha256_path(RECORD / path) for path in PRODUCER_SEALS},
         'profile_plan_sha256': profile_sha,
         'baselines_sha256': baselines_sha,
         'source_subtree_hashes': source_subtree_hashes,
@@ -198,7 +198,7 @@ def build_evidence(case: str, command: list[str], candidate_sha: str, source_com
         'result': 'PASS' if run['exit'] == 0 else 'FAIL', 'source_commit': source_commit, 'recipe_commit': source_commit,
         'candidate_sha256': candidate_sha, 'lock_sha256': sha256_path(ROOT / 'composer.lock'),
         'config_sha256': sha256_path(ROOT / 'scripts/distribution/export-policy.json'),
-        'fixture_sha256': sha256_path(REPO_DELIVERY / 'profile-plan.json'), 'log_path': str(log_path.relative_to(PLAN)),
+        'fixture_sha256': sha256_path(REPO_DELIVERY / 'profile-plan.json'), 'log_path': str(log_path.relative_to(RECORD)),
         'log_sha256': sha256_path(log_path), 'cases': cases,
     }
     write_json(envelope_path, envelope)
@@ -221,7 +221,7 @@ def build_report(candidate_sha: str, profile_plan: dict, baselines: dict, eviden
         lines.append(f'| `{path}` | `{digest}` | {role} |')
     lines.extend(['', '## Evidence', '', '| ID | Path | SHA256 | Kind | Cohort | Cell | Command | Cwd | Runtime | Start | End | Exit | Result |', '|---|---|---|---|---|---|---|---|---|---|---|---|'])
     for case, path, envelope in evidence_rows:
-        rel = path.relative_to(PLAN)
+        rel = path.relative_to(RECORD)
         lines.append(f"| {case} | `{rel}` | `{sha256_path(path)}` | local | p9-cohort/1 | intake-local | `{envelope['command']}` | `{envelope['cwd']}` | `{envelope['runtime']}` | `{envelope['start']}` | `{envelope['end']}` | {envelope['exit']} | PASS |")
     lines.extend(['', '## Adoption', '', '| Surface | Gate | Exact digest | Owner | Result | Resume |', '|---|---|---|---|---|---|',
         f'| p9-cohort/1 candidate | G-RELEASE | `{candidate_sha}` | P9.1 | PASS | P9.2 build/export only |',
@@ -229,22 +229,22 @@ def build_report(candidate_sha: str, profile_plan: dict, baselines: dict, eviden
         f'| p9-baselines/1 | G-RELEASE | `{sha256_path(REPO_DELIVERY / "baselines.json")}` | P9.4 | not-applicable | installed upgrade pending |',
         f'| optional auth private profile | G-PRIVATE | `{PRIVATE_PROFILE["profile_id"]}` | P9.6 | not-applicable | exact private channel pending |',
         '| historical E2/E3/E5 receipts | G-RELEASE | `ef089764dbdb6f85e0aaf54c318acf8405a279259bed5cfd16331c88fc3ccf87` | P1 ledger | not-applicable | never substitute current cohort proof |'])
-    (PLAN / 'findings/P9-intake.md').write_text('\n'.join(lines) + '\n')
+    (RECORD / 'findings/P9-intake.md').write_text('\n'.join(lines) + '\n')
 
 
 def verify_p1_p2(candidate_path: Path) -> int:
     candidate = json.loads(candidate_path.read_text())
     for path, expected in candidate['p1_input_hashes'].items():
-        if sha256_path(PLAN / path) != expected:
+        if sha256_path(RECORD / path) != expected:
             return 1
     for path, expected in candidate['p2_contract_hashes'].items():
-        if sha256_path(PLAN / path) != expected:
+        if sha256_path(RECORD / path) != expected:
             return 1
     return 0 if {'R45', 'R51', 'R52'} <= set(candidate['frozen_r_ac']) else 1
 
 
 def verify_producer_seals() -> int:
-    return 0 if all(contract in (PLAN / path).read_text() for path, contract in PRODUCER_SEALS.items()) else 1
+    return 0 if all(contract in (RECORD / path).read_text() for path, contract in PRODUCER_SEALS.items()) else 1
 
 
 def verify_requires(candidate_path: Path) -> int:
@@ -266,7 +266,7 @@ def verify_profiles(profile_path: Path) -> int:
 
 
 def verify_p2_delta() -> int:
-    text = (PLAN / 'findings/P2-contract-proposals.md').read_text()
+    text = (RECORD / 'findings/P2-contract-proposals.md').read_text()
     return 0 if 'auth-policy/keep' in text and 'cohort-qualification/keep' in text else 1
 
 
@@ -301,13 +301,13 @@ def main() -> int:
         if envelope['result'] != 'PASS':
             return 1
         evidence_rows.append((case, path, envelope))
-    input_rows = [(p, sha256_path(PLAN / p), 'producer or P1/P2 seal') for p in P1_INPUTS + P2_INPUTS + list(PRODUCER_SEALS)]
+    input_rows = [(p, sha256_path(RECORD / p), 'producer or P1/P2 seal') for p in P1_INPUTS + P2_INPUTS + list(PRODUCER_SEALS)]
     input_rows.extend([
         ('delivery/remaining-cohort-20260915/candidate.json', candidate_sha, 'frozen intake identity'),
         ('delivery/remaining-cohort-20260915/profile-plan.json', sha256_path(REPO_DELIVERY / 'profile-plan.json'), 'selected matrix profiles'),
         ('delivery/remaining-cohort-20260915/baselines.json', sha256_path(REPO_DELIVERY / 'baselines.json'), 'upgrade/first-install baselines'),
-        ('research/P9-cohort-design.md', sha256_path(PLAN / 'research/P9-cohort-design.md'), 'design contract'),
-        ('decisions/D14-release-cohort.md', sha256_path(PLAN / 'decisions/D14-release-cohort.md'), 'owner cohort decision'),
+        ('research/P9-cohort-design.md', sha256_path(RECORD / 'research/P9-cohort-design.md'), 'design contract'),
+        ('decisions/D14-release-cohort.md', sha256_path(RECORD / 'decisions/D14-release-cohort.md'), 'owner cohort decision'),
     ])
     build_report(candidate_sha, profile_plan, baselines, evidence_rows, input_rows)
     print(json.dumps({'result': 'PASS', 'candidate_sha256': candidate_sha, 'cohort_id': candidate['cohort_id']}))

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Errors\Internal;
 
+use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Invocation\Data\InvocationMetadata;
 
 /** @internal Response metadata and headers. */
 final class ErrorWire

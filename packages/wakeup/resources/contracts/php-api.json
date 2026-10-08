@@ -9,61 +9,17 @@
             "final": false,
             "readonly": false,
             "abstract": false,
-            "extends": [],
+            "extends": [
+                "CoreX\\Scheduling\\Contracts\\DueWakeupSweeper"
+            ],
             "implements": [],
             "uses": [],
-            "doc": [],
-            "methods": {
-                "nextDue": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": true,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "context",
-                            "type": "CoreX\\Context\\Data\\TenantContext",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "?DateTimeImmutable",
-                    "doc": []
-                },
-                "sweep": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": true,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "context",
-                            "type": "CoreX\\Context\\Data\\TenantContext",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "limit",
-                            "type": "int",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "CoreX\\Scheduling\\Data\\SweepResult",
-                    "doc": []
-                }
+            "doc": {
+                "@deprecated": [
+                    ""
+                ]
             },
+            "methods": [],
             "properties": [],
             "constants": [],
             "enum_backing": null,
@@ -76,41 +32,17 @@
             "final": false,
             "readonly": false,
             "abstract": false,
-            "extends": [],
+            "extends": [
+                "CoreX\\Scheduling\\Contracts\\WakeupScheduleHint"
+            ],
             "implements": [],
             "uses": [],
-            "doc": [],
-            "methods": {
-                "scheduled": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": true,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "context",
-                            "type": "CoreX\\Context\\Data\\TenantContext",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "fireAt",
-                            "type": "DateTimeImmutable",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "void",
-                    "doc": []
-                }
+            "doc": {
+                "@deprecated": [
+                    ""
+                ]
             },
+            "methods": [],
             "properties": [],
             "constants": [],
             "enum_backing": null,

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Access\Access\Internal;
 
 use CoreX\Access\Contracts\AccessChecker;
-use CoreX\Access\Contracts\Principal;
 use CoreX\Access\Data\RecordContext;
 use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Laravel\ScopeResolver;
 use CoreX\Access\Matrix\Contracts\EntityActivity;
+use CoreX\Context\Contracts\Principal;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Override;

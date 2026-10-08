@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Invocation\Internal;
 
+use CoreX\Context\Contracts\Principal;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Exceptions\CentralContextException;
-use CoreX\Operations\Authorization\Contracts\Principal;
+use CoreX\Invocation\Contracts\RequestContext;
+use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\ContextResolver;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
-use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use Illuminate\Http\Request;
 use Override;
 

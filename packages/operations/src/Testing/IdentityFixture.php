@@ -6,7 +6,8 @@ namespace CoreX\Operations\Testing;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Operations\Authorization\Contracts\Principal;
+use CoreX\Context\Contracts\Principal;
+use CoreX\Context\Enums\PrincipalType;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,12 @@ final class IdentityFixture implements Principal, PrincipalResolver
 {
     public bool $authenticated = true;
 
-    public function id(): string
+    public function principalType(): PrincipalType
+    {
+        return PrincipalType::User;
+    }
+
+    public function principalId(): string
     {
         return 'trusted-user';
     }

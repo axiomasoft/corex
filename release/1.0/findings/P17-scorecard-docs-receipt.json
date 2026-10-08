@@ -1,0 +1,408 @@
+{
+  "schema_version": "corex-scorecard-docs-receipt/1",
+  "item": "P17.8",
+  "result": "PASS",
+  "generated_at": "2026-09-27T17:15:42.190061+00:00",
+  "source_commit": "7ab843485577bf840cc0db6bd66081fbcafd3331",
+  "candidate_sha256": "1f5ae4c1534c989edaacbc67e94e222be5526b37aaf5d3e561cc9290b37ac583",
+  "scorecard": {
+    "rows": 20,
+    "criteria": 12,
+    "csv": "plans/2026.09.19-\u21161-COREX-PLATFORM-HARDENING/artifacts/architecture/scorecard.csv",
+    "csv_sha256": "fac53588d22a951f12fee8169c1580913a7d172b94aa1ebf22fa6b8604c95214",
+    "markdown": "docs/architecture/scorecard.md",
+    "markdown_sha256": "bc5b624640a1dc4f7f8f7c95a220f7fe47e10b3274a8d2fc66a8d8d5eb46173b",
+    "byte_stable_rerun": true,
+    "forbidden_kpi_terms": [],
+    "below_two_cells": 73
+  },
+  "docs_gate": {
+    "schema_version": "corex-package-docs-gate/1",
+    "ok": true,
+    "cohort_count": 19,
+    "packages": [
+      {
+        "package": "corex/access",
+        "path": "packages/access",
+        "readme": "/home/vostrikov/projects/packages/corex/packages/access/README.md",
+        "producer_phase": "P7",
+        "package_type": "capability",
+        "topics": {
+          "installation": "heading",
+          "configuration": "equivalent",
+          "extension": "heading",
+          "failure": "equivalent"
+        },
+        "examples": [
+          {
+            "index": 0,
+            "lint": "pass",
+            "symbols": [],
+            "pristine": null,
+            "violations": []
+          }
+        ],
+        "violations": []
+      },
+      {
+        "package": "corex/attributes",
+        "path": "packages/attributes",
+        "readme": "/home/vostrikov/projects/packages/corex/packages/attributes/README.md",
+        "producer_phase": "P10",
+        "package_type": "capability",
+        "topics": {
+          "installation": "heading",
+          "configuration": "equivalent",
+          "extension": "heading",
+          "failure": "equivalent"
+        },
+        "examples": [],
+        "violations": []
+      },
+      {
+        "package": "corex/core",
+        "path": "packages/core",
+        "readme": "/home/vostrikov/projects/packages/corex/packages/core/README.md",
+        "producer_phase": "P6",
+        "package_type": "foundation",
+        "topics": {
+          "installation": "heading",
+          "configuration": "equivalent",
+          "extension": "equivalent",
+          "failure": "equivalent"
+        },
+        "examples": [],
+        "violations": []
+      },
+      {
+        "package": "corex/intl",
+        "path": "packages/intl",
+        "readme": "/home/vostrikov/projects/packages/corex/packages/intl/README.md",
+        "producer_phase": "P16",
+        "package_type": "capability",
+        "topics": {
+          "installation": "heading",
+          "configuration": "heading",
+          "extension": "heading",
+          "failure": "heading"
+        },
+        "examples": [],
+        "violations": []
+      },
+      {
+        "package": "corex/media",
+        "path": "packages/media",
+        "readme": "/home/vostrikov/projects/packages/corex/packages/media/README.md",
+        "producer_phase": "P7",
+        "package_type": "capability",
+        "topics": {
+          "installation": "heading",
+          "configuration": "equivalent",
+          "extension": "equivalent",
+          "failure": "equivalent"
+        },
+        "examples": [],
+        "violations": []
+      },
+      {
+        "package": "corex/modules",
+        "path": "packages/modules",
+        "readme": "/home/vostrikov/projects/packages/corex/packages/modules/README.md",
+        "producer_phase": "P8",
+        "package_type": "foundation",
+        "topics": {
+          "installation": "heading",
+          "configuration": "equivalent",
+          "extension": "equivalent",
+          "failure": "heading"
+        },
+        "examples": [],
+        "violations": []
+      },
+      {
+        "package": "corex/notifications",
+        "path": "packages/notifications",
+        "readme": "/home/vostrikov/projects/packages/corex/packages/notifications/README.md",
+        "producer_phase": "P5",
+        "package_type": "capability",
+        "topics": {
+          "installation": "heading",
+          "configuration": "equivalent",
+          "extension": "heading",
+          "failure": "equivalent"
+        },
+        "examples": [],
+        "violations": []
+      },
+      {
+        "package": "corex/operations",
+        "path": "packages/operations",
+        "readme": "/home/vostrikov/projects/packages/corex/packages/operations/README.md",
+        "producer_phase": "P13",
+        "package_type": "capability",
+        "topics": {
+          "installation": "heading",
+          "configuration": "equivalent",
+          "extension": "equivalent",
+          "failure": "heading"
+        },
+        "examples": [
+          {
+            "index": 1,
+            "lint": "pass",
+            "symbols": [],
+            "pristine": null,
+            "violations": []
+          },
+          {
+            "index": 2,
+            "lint": "pass",
+            "symbols": [
+              "CoreX\\Api\\Contracts\\OperationHandler",
+              "CoreX\\Api\\Contracts\\RequestContext"
+            ],
+            "pristine": {
+              "archive": "/tmp/corex-docs-candidate-1875983/artifacts/corex-operations-1.0.0.zip",
+              "missing": []
+            },
+            "violations": []
+          },
+          {
+            "index": 3,
+            "lint": "pass",
+            "symbols": [],
+            "pristine": null,
+            "violations": []
+          },
+          {
+            "index": 5,
+            "lint": "pass",
+            "symbols": [],
+            "pristine": null,
+            "violations": []
+          }
+        ],
+        "violations": []
+      },
+      {
+        "package": "corex/panels",
+        "path": "packages/panels",
+        "readme": "/home/vostrikov/projects/packages/corex/packages/panels/README.md",
+        "producer_phase": "P11",
+        "package_type": "capability",
+        "topics": {
+          "installation": "heading",
+          "configuration": "heading",
+          "extension": "equivalent",
+          "failure": "heading"
+        },
+        "examples": [],
+        "violations": []
+      },
+      {
+        "package": "corex/recurrence",
+        "path": "packages/recurrence",
+        "readme": "/home/vostrikov/projects/packages/corex/packages/recurrence/README.md",
+        "producer_phase": "P4",
+        "package_type": "capability",
+        "topics": {
+          "installation": "heading",
+          "configuration": "not-applicable",
+          "extension": "heading",
+          "failure": "heading"
+        },
+        "examples": [
+          {
+            "index": 0,
+            "lint": "pass",
+            "symbols": [],
+            "pristine": null,
+            "violations": []
+          }
+        ],
+        "violations": []
+      },
+      {
+        "package": "corex/search",
+        "path": "packages/search",
+        "readme": "/home/vostrikov/projects/packages/corex/packages/search/README.md",
+        "producer_phase": "P12",
+        "package_type": "capability",
+        "topics": {
+          "installation": "equivalent",
+          "configuration": "equivalent",
+          "extension": "equivalent",
+          "failure": "equivalent"
+        },
+        "examples": [],
+        "violations": []
+      },
+      {
+        "package": "corex/search-intl",
+        "path": "packages/search-intl",
+        "readme": "/home/vostrikov/projects/packages/corex/packages/search-intl/README.md",
+        "producer_phase": "P12",
+        "package_type": "integration",
+        "topics": {
+          "installation": "heading",
+          "configuration": "equivalent",
+          "extension": "heading",
+          "failure": "heading"
+        },
+        "examples": [
+          {
+            "index": 1,
+            "lint": "pass",
+            "symbols": [],
+            "pristine": null,
+            "violations": []
+          }
+        ],
+        "violations": []
+      },
+      {
+        "package": "corex/search-meilisearch",
+        "path": "packages/search-meilisearch",
+        "readme": "/home/vostrikov/projects/packages/corex/packages/search-meilisearch/README.md",
+        "producer_phase": "P12",
+        "package_type": "integration",
+        "topics": {
+          "installation": "heading",
+          "configuration": "equivalent",
+          "extension": "heading",
+          "failure": "heading"
+        },
+        "examples": [],
+        "violations": []
+      },
+      {
+        "package": "corex/tasks",
+        "path": "packages/tasks",
+        "readme": "/home/vostrikov/projects/packages/corex/packages/tasks/README.md",
+        "producer_phase": "P16",
+        "package_type": "capability",
+        "topics": {
+          "installation": "heading",
+          "configuration": "not-applicable",
+          "extension": "equivalent",
+          "failure": "equivalent"
+        },
+        "examples": [
+          {
+            "index": 0,
+            "lint": "pass",
+            "symbols": [
+              "CoreX\\Tasks\\Contracts\\CreateTaskCommand",
+              "CoreX\\Tasks\\Data\\TaskDraft"
+            ],
+            "pristine": {
+              "archive": "/tmp/corex-docs-candidate-1875983/artifacts/corex-tasks-1.0.0.zip",
+              "missing": []
+            },
+            "violations": []
+          }
+        ],
+        "violations": []
+      },
+      {
+        "package": "corex/tasks-workflow",
+        "path": "packages/tasks-workflow",
+        "readme": "/home/vostrikov/projects/packages/corex/packages/tasks-workflow/README.md",
+        "producer_phase": "P4",
+        "package_type": "integration",
+        "topics": {
+          "installation": "heading",
+          "configuration": "heading",
+          "extension": "heading",
+          "failure": "heading"
+        },
+        "examples": [],
+        "violations": []
+      },
+      {
+        "package": "corex/tenancy",
+        "path": "packages/tenancy",
+        "readme": "/home/vostrikov/projects/packages/corex/packages/tenancy/README.md",
+        "producer_phase": "P9",
+        "package_type": "capability",
+        "topics": {
+          "installation": "heading",
+          "configuration": "heading",
+          "extension": "heading",
+          "failure": "heading"
+        },
+        "examples": [],
+        "violations": []
+      },
+      {
+        "package": "corex/transfer",
+        "path": "packages/transfer",
+        "readme": "/home/vostrikov/projects/packages/corex/packages/transfer/README.md",
+        "producer_phase": "P12",
+        "package_type": "capability",
+        "topics": {
+          "installation": "heading",
+          "configuration": "heading",
+          "extension": "heading",
+          "failure": "equivalent"
+        },
+        "examples": [],
+        "violations": []
+      },
+      {
+        "package": "corex/wakeup",
+        "path": "packages/wakeup",
+        "readme": "/home/vostrikov/projects/packages/corex/packages/wakeup/README.md",
+        "producer_phase": "P5",
+        "package_type": "capability",
+        "topics": {
+          "installation": "heading",
+          "configuration": "equivalent",
+          "extension": "heading",
+          "failure": "heading"
+        },
+        "examples": [],
+        "violations": []
+      },
+      {
+        "package": "corex/workflow",
+        "path": "packages/workflow",
+        "readme": "/home/vostrikov/projects/packages/corex/packages/workflow/README.md",
+        "producer_phase": "P11",
+        "package_type": "capability",
+        "topics": {
+          "installation": "heading",
+          "configuration": "heading",
+          "extension": "equivalent",
+          "failure": "heading"
+        },
+        "examples": [],
+        "violations": []
+      }
+    ],
+    "violations": []
+  },
+  "planted_negatives": {
+    "missing_heading": "FAIL named packages/search-intl/README.md heading=installation producer=P12",
+    "internal_example": "FAIL named packages/recurrence/README.md CoreX\\Recurrence\\Internal\\HiddenExpander producer=P4",
+    "removed": true
+  },
+  "validation": {
+    "composer_lint_check": "PASS targeted pint --test",
+    "package_docs_arch": "{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":3,\"passed\":3,\"assertions\":13,\"duration_ms\":362}",
+    "pest_exit": 0,
+    "pristine_archive_examples": "PASS"
+  },
+  "dod": {
+    "DOD-01": "PASS: scorecard responsibility=2 for all 20 live packages",
+    "DOD-04": "PASS: scorecard public-api=2 for all 20 live packages; R4 remains the machine import gate",
+    "DOD-24": "PASS: all cohort examples use public API and resolve from candidate archives",
+    "DOD-25": "PASS: all cohort READMEs cover installation, configuration, extension and failure"
+  },
+  "inputs": {
+    "scorecard_php_sha256": "2d2b4614acdff84b2e169c9bb6d3273823fc9b3d4b7bea51c1451880afd5ce3b",
+    "docs_gate_sha256": "18ff485260b2b259b6f68e3291c039a64c2474a6d2fdddb78649a49d60d35520",
+    "arch_test_sha256": "faf5cc32ac2f44617819231316f88c766d7663f2e3440747583666e176c76ce3"
+  },
+  "remediation": "D128/P17.11; rerun against stable committed candidate"
+}

@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Access\Enums\PrincipalType;
 use CoreX\Access\Matrix\Events\RoleMatrixCompiled;
 use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
 use CoreX\Access\Matrix\Internal\MatrixValidator;
@@ -12,6 +11,7 @@ use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
 use CoreX\Access\Roles\Laravel\RoleMatrixData;
 use CoreX\Access\Tests\Stubs\Deal;
 use CoreX\Access\Tests\Stubs\FakeModuleRegistry;
+use CoreX\Context\Enums\PrincipalType;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Data\EntityDefinition;
 use CoreX\Modules\Enums\Capability;

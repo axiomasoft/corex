@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tools\Internal;
 
 use Closure;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;

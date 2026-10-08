@@ -4,6 +4,15 @@ declare(strict_types=1);
 
 // P12.3 / P12A.4 / P3.3 — executable package graph gate (R1–R5, D41).
 
+// Gate runs (incl. tampered probes) must never rewrite or delete the tracked report artifact.
+function packageGraphTestReport(): string
+{
+    return sys_get_temp_dir().'/corex-package-graph-test-report.json';
+}
+
+beforeEach(fn () => putenv('PACKAGE_GRAPH_REPORT='.packageGraphTestReport()));
+afterEach(fn () => putenv('PACKAGE_GRAPH_REPORT'));
+
 test('package graph gate reports no violations', function (): void {
     $repoRoot = dirname(__DIR__, 2);
     $command = escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' 2>&1';
@@ -22,7 +31,7 @@ test('package graph gate reports no violations', function (): void {
         ->and($joined)->toContain('HOST-RESERVED NAMESPACE: CoreX\\SearchMeilisearch\\')
         ->and($joined)->not->toContain('UNDECLARED DEPENDENCY EXCEPTION: axiomasoft/corex-tasks-workflow -> axiomasoft/corex-wakeup');
 
-    $reportPath = $repoRoot.'/artifacts/P12-package-graph/report.json';
+    $reportPath = packageGraphTestReport();
     expect(is_file($reportPath))->toBeTrue();
 
     $report = json_decode((string) file_get_contents($reportPath), true, flags: JSON_THROW_ON_ERROR);
@@ -45,14 +54,13 @@ test('package graph gate forbids a notifications import of corex-wakeup', functi
 
     file_put_contents($probePath, $tamperedContents);
 
-    $command = escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' 2>&1';
-    $output = [];
-    $exitCode = 0;
-
-    exec($command, $output, $exitCode);
-
-    file_put_contents($probePath, $originalContents);
-    exec(escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' >/dev/null 2>&1');
+    try {
+        $output = [];
+        $exitCode = 0;
+        exec(escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' 2>&1', $output, $exitCode);
+    } finally {
+        file_put_contents($probePath, $originalContents);
+    }
 
     $joined = implode("\n", $output);
 
@@ -78,14 +86,13 @@ PHP;
 
     file_put_contents($probePath, $probeContents);
 
-    $command = escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' 2>&1';
-    $output = [];
-    $exitCode = 0;
-
-    exec($command, $output, $exitCode);
-
-    unlink($probePath);
-    @unlink($repoRoot.'/artifacts/P12-package-graph/report.json');
+    try {
+        $output = [];
+        $exitCode = 0;
+        exec(escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' 2>&1', $output, $exitCode);
+    } finally {
+        unlink($probePath);
+    }
 
     $joined = implode("\n", $output);
 

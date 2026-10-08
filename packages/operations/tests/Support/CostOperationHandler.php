@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Support;
 
-use CoreX\Operations\Definition\Contracts\OperationHandler;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Invocation\Contracts\OperationHandler;
+use CoreX\Invocation\Contracts\RequestContext;
 
 final class CostOperationHandler implements OperationHandler
 {

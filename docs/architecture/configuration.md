@@ -26,7 +26,7 @@
 | corex-access.identity.enabled | axiomasoft/corex-access | unobserved | unobserved | no | deployment | no | use-site | AuthOptions::$identityEnabled |  |  |
 | corex-access.identity.table | axiomasoft/corex-access | unobserved | unobserved | no | deployment | no | use-site | AuthOptions::$identityTable |  |  |
 | corex-access.panel | axiomasoft/corex-access | unobserved | unobserved | no | deployment | no | use-site | AuthOptions::$panel |  |  |
-| corex-access.workspace_scope_class | axiomasoft/corex-access | string | CoreX\Tenancy\Laravel\Scopes\WorkspaceScope | no | product-policy | unobserved | use-site | AuthOptions::$workspaceScopeClass |  |  |
+| corex-access.workspace_scope_class | axiomasoft/corex-access | null | null | no | product-policy | unobserved | boot | AuthOptions::$workspaceScopeClass |  |  |
 | corex-custom-fields.definitions | axiomasoft/corex-custom-fields | array | [] | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$composition |  |  |
 | corex-custom-fields.drivers.ddl | axiomasoft/corex-custom-fields | bool | true | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$composition |  |  |
 | corex-custom-fields.drivers.eav | axiomasoft/corex-custom-fields | bool | true | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$composition |  |  |

@@ -11,7 +11,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Access\\Contracts\\Principal",
+                "CoreX\\Context\\Contracts\\Principal",
                 "Illuminate\\Contracts\\Auth\\Authenticatable"
             ],
             "uses": [],
@@ -26,7 +26,7 @@
                     "parameters": [
                         {
                             "name": "type",
-                            "type": "CoreX\\Access\\Enums\\PrincipalType",
+                            "type": "CoreX\\Context\\Enums\\PrincipalType",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -64,7 +64,7 @@
                     "parameters": [
                         {
                             "name": "principal",
-                            "type": "CoreX\\Access\\Contracts\\Principal",
+                            "type": "CoreX\\Context\\Contracts\\Principal",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -162,7 +162,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Access\\Enums\\PrincipalType",
+                    "return": "CoreX\\Context\\Enums\\PrincipalType",
                     "doc": []
                 },
                 "setRememberToken": {
@@ -212,7 +212,7 @@
                     "parameters": [
                         {
                             "name": "p",
-                            "type": "CoreX\\Access\\Contracts\\Principal",
+                            "type": "CoreX\\Context\\Contracts\\Principal",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -250,7 +250,7 @@
                     "parameters": [
                         {
                             "name": "p",
-                            "type": "CoreX\\Access\\Contracts\\Principal",
+                            "type": "CoreX\\Context\\Contracts\\Principal",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -288,7 +288,7 @@
                     "parameters": [
                         {
                             "name": "p",
-                            "type": "CoreX\\Access\\Contracts\\Principal",
+                            "type": "CoreX\\Context\\Contracts\\Principal",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -324,44 +324,6 @@
                         }
                     ],
                     "return": "CoreX\\Access\\Enums\\Scope",
-                    "doc": []
-                }
-            },
-            "properties": [],
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
-        "CoreX\\Access\\Contracts\\Principal": {
-            "kind": "interface",
-            "layer": "spi-implement",
-            "since": "1.0",
-            "final": false,
-            "readonly": false,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": [],
-            "methods": {
-                "principalId": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": true,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
-                    "doc": []
-                },
-                "principalType": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": true,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "CoreX\\Access\\Enums\\PrincipalType",
                     "doc": []
                 }
             },
@@ -525,27 +487,6 @@
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
-        },
-        "CoreX\\Access\\Enums\\PrincipalType": {
-            "kind": "enum",
-            "layer": "api",
-            "since": "1.0",
-            "final": false,
-            "readonly": false,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": [],
-            "methods": [],
-            "properties": [],
-            "constants": [],
-            "enum_backing": "string",
-            "enum_cases": {
-                "Agent": "'agent'",
-                "ApiKey": "'api_key'",
-                "User": "'user'"
-            }
         },
         "CoreX\\Access\\Enums\\Scope": {
             "kind": "enum",
@@ -1281,7 +1222,7 @@
                         },
                         {
                             "name": "p",
-                            "type": "CoreX\\Access\\Contracts\\Principal",
+                            "type": "CoreX\\Context\\Contracts\\Principal",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,

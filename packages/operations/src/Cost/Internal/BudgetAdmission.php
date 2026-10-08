@@ -119,7 +119,7 @@ final readonly class BudgetAdmission implements BudgetExecution
                 installationId: $this->installationId,
                 accountId: $tenant->account->id,
                 clientId: ($this->clientId)($invocation),
-                actorId: $invocation->context->principal()->id(),
+                actorId: $invocation->context->principal()->principalId(),
             ), cost: $estimate);
         } catch (HttpExceptionInterface $error) {
             if ($error->getStatusCode() === 429) {

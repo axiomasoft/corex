@@ -1,0 +1,140 @@
+{
+  "schema": "corex-redaction-provenance/1",
+  "base_revision": "509d619199ea99c2d050deec4ae988d708b6b690",
+  "note": "Historical receipts retain their original hashes. These listed bytes were redacted for SEC-01, not silently requalified. Key validity was not verified by this reviewer.",
+  "files": [
+    {
+      "path": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P06.4-execution/mutation-all-final.log",
+      "action": "redact",
+      "removed_tokens": 1,
+      "original_sha256": "486d260526972da7788f2c965c76053e71b20e7bc42d8adcb8b08ef9209a91a4",
+      "current_sha256": "74c58711b3287e706d1b9d0ba2df632e605efe4ea105319ae1be995151efbdbf"
+    },
+    {
+      "path": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P06.4-execution/mutation-all.log",
+      "action": "redact",
+      "removed_tokens": 1,
+      "original_sha256": "88230e4755d26995f7f6d53feee577da54244b2ca37ebdb68727c7d199c3349c",
+      "current_sha256": "3cede9725ab7e1962d029e567d917cb582055c4e5df2c995011c069938305777"
+    },
+    {
+      "path": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-6e7abb42-owner-residual-r6/mutation.log",
+      "action": "redact",
+      "removed_tokens": 1,
+      "original_sha256": "0c9573c0fc6eb4c0ff964a4d209b40ab83efd4c0afbae55f8bd91d623c22d3ea",
+      "current_sha256": "4a198c5b931be770fb51ba826cbd1b2dcf95e10183db5a2ebc112d034345209b"
+    },
+    {
+      "path": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/0981013bf7583b33266b22b601bb1f7cd11cf7f39ff4469d5c7098eb4bae7da7/final-9e56afe6-env-r2/mutation.log",
+      "action": "redact",
+      "removed_tokens": 1,
+      "original_sha256": "1b2f42a26a387bf1d996b717309d0368f85cb5975af4a07af340be1feae65f11",
+      "current_sha256": "d663bf5374ce49096712b6ada1ffb4bb367f98a1062064c72a163e65458010c4"
+    },
+    {
+      "path": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/validation-90f21c877997-r1/mutation.log",
+      "action": "redact",
+      "removed_tokens": 1,
+      "original_sha256": "c6cecc574f5acd253b72a8eeb5fee6481ed52d437aad77f526f9e3a4d0a754bf",
+      "current_sha256": "d5e69136cbfdf4805141dbb0025106d8777c1940827829fe56c5bc70a636edfe"
+    },
+    {
+      "path": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4/owner-review/source-blobs/1b2f42a26a387bf1d996b717309d0368f85cb5975af4a07af340be1feae65f11",
+      "action": "redact",
+      "removed_tokens": 1,
+      "original_sha256": "1b2f42a26a387bf1d996b717309d0368f85cb5975af4a07af340be1feae65f11",
+      "current_sha256": "d663bf5374ce49096712b6ada1ffb4bb367f98a1062064c72a163e65458010c4"
+    },
+    {
+      "path": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4/owner-review/source-blobs/c6cecc574f5acd253b72a8eeb5fee6481ed52d437aad77f526f9e3a4d0a754bf",
+      "action": "redact",
+      "removed_tokens": 1,
+      "original_sha256": "c6cecc574f5acd253b72a8eeb5fee6481ed52d437aad77f526f9e3a4d0a754bf",
+      "current_sha256": "d5e69136cbfdf4805141dbb0025106d8777c1940827829fe56c5bc70a636edfe"
+    },
+    {
+      "path": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/mutation.log",
+      "action": "redact",
+      "removed_tokens": 1,
+      "original_sha256": "da29e62dbc7527d85cfc7a174855e72138e3fdc7bec28a366e68eddab5293989",
+      "current_sha256": "65210d8743b7d913852e93b206397b688cfe630638db1b7e046a32d73decd976"
+    },
+    {
+      "path": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P08-ci-repair/mutation-all.log",
+      "action": "delete",
+      "removed_tokens": 1,
+      "original_sha256": "4755accd7f33cf0e14002636b9bbf333897c98b0880903f9c6dbf4a07f638625",
+      "current_sha256": null
+    },
+    {
+      "path": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P08.1-execution/mutation-all.log",
+      "action": "redact",
+      "removed_tokens": 1,
+      "original_sha256": "fca327f3aaadfab6efbe3bfe986473a6b43209b5d3c461a8da127aef0989cf5d",
+      "current_sha256": "6d1e07bf7fbd28b61bc3a6e463a928aaffce3262f5c2ce7402d518e1498a67f9"
+    },
+    {
+      "path": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P08.1-execution/mutation-final.log",
+      "action": "redact",
+      "removed_tokens": 1,
+      "original_sha256": "d0610c785e7510cbb5541885c922980d2e38a80a1499dfdd9496e9b739c29dc5",
+      "current_sha256": "eeec5d7783c46d09dddd07922a90ae913d2e3803843013a2462d5b9fab9b35b1"
+    },
+    {
+      "path": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P08.2-execution/validation/073-mutation-all-final3/output.log",
+      "action": "delete",
+      "removed_tokens": 1,
+      "original_sha256": "ffd51d6a6fd6f9e7dc44ce81133101006fc188c6fc2747f17d583bac152c43bf",
+      "current_sha256": null
+    },
+    {
+      "path": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/V22.log",
+      "action": "redact",
+      "removed_tokens": 1,
+      "original_sha256": "d6a64fc2e78cd992acf319a40c3740e175801c0ed4e547d4ccc4dfb659e1bd0f",
+      "current_sha256": "e87ed766c44cadf17daa545568f1fe2eb8ebd8c697fef99e5e744aa23d1d5bd0"
+    },
+    {
+      "path": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P09.11-execution/V22.log",
+      "action": "redact",
+      "removed_tokens": 1,
+      "original_sha256": "d8cdd5f17466dd56ae9f9ffa8b38fa8288eb23cf84c2059348702deb8f1aeac7",
+      "current_sha256": "8f100d734af7e64d01df5d6879c24a9b8a6117c810a6475b67eed59e92deb521"
+    },
+    {
+      "path": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P09.12-execution/fixed-mutations.log",
+      "action": "redact",
+      "removed_tokens": 1,
+      "original_sha256": "8afee059b159a7a0d5631aa942917b5aa6e6c085b20688fefc9ebdabb888246c",
+      "current_sha256": "0876feb94b58eab101b2e53996ff55e8f9d70f2a0b6ad49c9cfda22d34ff7f70"
+    },
+    {
+      "path": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P09.2-execution/V22.log",
+      "action": "redact",
+      "removed_tokens": 1,
+      "original_sha256": "c327c895ee3d0f18c52e5f97cd0f8bbd9a31e728ea1e4d3739444a4a4dd8e5ea",
+      "current_sha256": "edbe7b35aec26b59bfa126e7af703f2c21a86d7bdce00d4c040e578a0d079cb2"
+    },
+    {
+      "path": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P09.3-execution/V12.log",
+      "action": "redact",
+      "removed_tokens": 1,
+      "original_sha256": "ef218f975c8eb51a93e15dcce5e442395a781a00537a33c0811f63eecf093210",
+      "current_sha256": "07441505319e08bc2464e1ee222e52559594ade3464686305e42f447145efd1b"
+    },
+    {
+      "path": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V17.log",
+      "action": "redact",
+      "removed_tokens": 1,
+      "original_sha256": "a336a5640578cfc018d396e9305123246814b280a57c8e4e71a597a316058b94",
+      "current_sha256": "67039868c489e9ba016fb0cefbc318707a8dddbbcd93c04602a56720ee93bdc6"
+    },
+    {
+      "path": "plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P09.5-execution/fixed-mutations.log",
+      "action": "redact",
+      "removed_tokens": 1,
+      "original_sha256": "388e0edb30f9bb351d619ce813997f503c4622e199ca03378c303145017e8aab",
+      "current_sha256": "c88d5ac04cbeb7f5bf90d0ea6ca092b8a7c76fd5856398e177b9e88ad9e3030d"
+    }
+  ]
+}

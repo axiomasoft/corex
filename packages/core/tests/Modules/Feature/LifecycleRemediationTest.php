@@ -187,7 +187,7 @@ it('preserves template module ownership through clone enable purge and repair', 
         package: 'corex/stub-base', name: 'tenant', scope: SchemaScope::Tenant,
         path: $path, version: 1, lifecycle: SchemaLifecycle::Module,
     );
-    $provider = new class($set) implements SchemaSetProvider
+    $provider = new readonly class($set) implements SchemaSetProvider
     {
         public function __construct(private SchemaSet $set) {}
 

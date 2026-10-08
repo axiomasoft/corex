@@ -133,7 +133,8 @@ final readonly class WebhookUrlPolicy
         return array_all(self::DENIED_IPV6_CIDRS, fn ($cidr) => ! self::matchesCidr(packedAddress: $packed, cidr: $cidr));
     }
 
-    private static function isCanonicalDnsName(string $host): bool
+    /** Shared with WebhookDestination so both entry points accept exactly the same host names. */
+    public static function isCanonicalDnsName(string $host): bool
     {
         if ($host === ''
             || strlen($host) > 253

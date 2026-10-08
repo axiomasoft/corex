@@ -4,7 +4,6 @@
 includes:
     - packages/core/extension.neon
     - packages/tenancy/extension.neon
-    - vendor/composer/composer/phpstan/rules.neon
     - vendor/composer/pcre/extension.neon
     - vendor/larastan/larastan/extension.neon
     - vendor/nesbot/carbon/extension.neon

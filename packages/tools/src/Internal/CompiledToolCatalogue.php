@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Tools\Internal;
 
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Tools\Contracts\ToolCatalogue;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCatalogueView;

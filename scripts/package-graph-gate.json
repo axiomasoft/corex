@@ -23,39 +23,6 @@
             "reason": "Transfer bulk execution is suggest-only and fail-closed when the optional package or factory is absent (P14.20)."
         },
         {
-            "from": "axiomasoft/corex-tenancy",
-            "to": "axiomasoft/corex-wakeup",
-            "import_file": "packages/tenancy/src/TenancyServiceProvider.php",
-            "guard_file": "packages/tenancy/src/TenancyServiceProvider.php",
-            "guard_contains": [
-                "interface_exists(WakeupScheduleHint::class)",
-                "interface_exists(DueWakeupSweeper::class)"
-            ],
-            "reason": "Optional wakeup integration guarded by interface_exists() before registration (P12.1 receipt)."
-        },
-        {
-            "from": "axiomasoft/corex-tenancy",
-            "to": "axiomasoft/corex-wakeup",
-            "import_file": "packages/tenancy/src/Integration/Internal/Wakeup/RootRegistryWakeupHint.php",
-            "guard_file": "packages/tenancy/src/TenancyServiceProvider.php",
-            "guard_contains": [
-                "interface_exists(WakeupScheduleHint::class)",
-                "interface_exists(DueWakeupSweeper::class)"
-            ],
-            "reason": "Integration/Wakeup root-registry hint adapter; registered only when axiomasoft/corex-wakeup is present."
-        },
-        {
-            "from": "axiomasoft/corex-tenancy",
-            "to": "axiomasoft/corex-wakeup",
-            "import_file": "packages/tenancy/src/Integration/Internal/Wakeup/RootWakeupReconciler.php",
-            "guard_file": "packages/tenancy/src/TenancyServiceProvider.php",
-            "guard_contains": [
-                "interface_exists(WakeupScheduleHint::class)",
-                "interface_exists(DueWakeupSweeper::class)"
-            ],
-            "reason": "Integration/Wakeup root reconciler; registered only when axiomasoft/corex-wakeup is present."
-        },
-        {
             "from": "axiomasoft/corex-custom-fields",
             "to": "axiomasoft/corex",
             "import_file": "packages/custom-fields/src/AttributesServiceProvider.php",
@@ -84,6 +51,11 @@
             "from": "axiomasoft/corex-notifications",
             "to": "axiomasoft/corex-wakeup",
             "reason": "Scheduling contracts live in the kernel; notifications must not depend on wakeup (D96.11)."
+        },
+        {
+            "from": "flex/crm",
+            "to": "axiomasoft/corex-operations",
+            "reason": "Operation handlers implement the kernel CoreX\\Invocation contract; the product must not depend on the operations runtime (audit 2026-10-08 P-02)."
         }
     ],
     "reservations": [

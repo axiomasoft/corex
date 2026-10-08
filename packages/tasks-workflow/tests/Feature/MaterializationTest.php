@@ -36,6 +36,7 @@ use CoreX\TasksWorkflow\Internal\ScopeConnectionGuard;
 use CoreX\TasksWorkflow\Tests\Support\SeriesSeeder;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Sleep;
 use Illuminate\Support\Str;
 
 beforeEach(function (): void {
@@ -386,7 +387,7 @@ it('MAT-16 preserves the tail when the task loop exhausts wall time after a writ
     {
         private bool $first = true;
 
-        public function __construct(private CreateTaskCommand $inner) {}
+        public function __construct(private readonly CreateTaskCommand $inner) {}
 
         public function handle(TaskDraft $draft): TaskReference
         {
@@ -394,7 +395,7 @@ it('MAT-16 preserves the tail when the task loop exhausts wall time after a writ
 
             if ($this->first) {
                 $this->first = false;
-                usleep(1_100_000);
+                Sleep::usleep(1_100_000);
             }
 
             return $ref;

@@ -23,7 +23,7 @@
                     "parameters": [
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -70,7 +70,7 @@
                         },
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -130,7 +130,7 @@
                     "parameters": [
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -186,7 +186,7 @@
                         },
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -215,7 +215,7 @@
                         },
                         {
                             "name": "context",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -249,7 +249,7 @@
             "readonly": false,
             "abstract": false,
             "extends": [
-                "CoreX\\Operations\\Invocation\\Contracts\\RequestContext"
+                "CoreX\\Invocation\\Contracts\\RequestContext"
             ],
             "implements": [],
             "uses": [],

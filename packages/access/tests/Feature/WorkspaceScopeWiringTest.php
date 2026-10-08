@@ -71,8 +71,8 @@ it('does not wire the workspace global scope onto a model without the WorkspaceS
     expect($model->getGlobalScopes())->toBe([]);
 });
 
-// AC-28 — boxed profile: no scope class pinned ⇒ silent skip, never an error.
-it('silently skips wiring when the scope class is null (boxed profile, no config pin)', function (): void {
+// AC-28 — boxed profile: no effective scope class ⇒ explicitly nothing wired, never an error.
+it('wires nothing when the effective scope class is null (boxed profile)', function (): void {
     $model = new class extends Model
     {
         protected $table = 'wiring_probe';
@@ -94,33 +94,6 @@ it('silently skips wiring when the scope class is null (boxed profile, no config
     ));
 
     WorkspaceScopeWiring::wire($registry, null, static fn (string $class): Scope => app()->make($class));
-
-    expect($model->getGlobalScopes())->toBe([]);
-});
-
-// Symmetric case — a pinned class that does not exist (e.g. axiomasoft/corex-tenancy not installed) also silently skips.
-it('silently skips wiring when the pinned scope class does not exist', function (): void {
-    $model = new class extends Model
-    {
-        protected $table = 'wiring_probe';
-
-        protected $guarded = [];
-    };
-
-    $registry = new ArrayEntityRegistry;
-    $registry->register(new EntityDefinition(
-        handle: 'wiring.missing-class',
-        model: $model::class,
-        table: 'wiring_probe',
-        module: 'test',
-        labelSingular: 'x',
-        labelPlural: 'x',
-        capabilities: [Capability::WorkspaceScoped],
-        fields: [],
-        titleAttribute: null,
-    ));
-
-    WorkspaceScopeWiring::wire($registry, 'CoreX\\Access\\Tests\\Stubs\\DoesNotExist', static fn (string $class): Scope => app()->make($class));
 
     expect($model->getGlobalScopes())->toBe([]);
 });

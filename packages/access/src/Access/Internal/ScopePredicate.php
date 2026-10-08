@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Access\Internal;
 
-use CoreX\Access\Contracts\Principal;
-use CoreX\Access\Enums\PrincipalType;
 use CoreX\Access\Enums\Scope;
-use CoreX\Access\Laravel\AuthOptions;
+use CoreX\Context\Contracts\Principal;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Context\Enums\PrincipalType;
 use CoreX\Departments\Laravel\DepartmentQueries;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
@@ -40,7 +39,7 @@ final readonly class ScopePredicate
 {
     public function __construct(
         private TenancyManager $tenancyManager,
-        private AuthOptions $options,
+        private EffectiveWorkspaceScope $workspaceScope,
         private ConnectionResolverInterface $connections,
     ) {}
 
@@ -281,7 +280,7 @@ final readonly class ScopePredicate
 
     /**
      * No predicate of its own; additionally lifts the workspace global scope
-     * PINNED by config (D109) — never `withoutGlobalScopes()`, which would
+     * resolved by EffectiveWorkspaceScope (D109) — never `withoutGlobalScopes()`, which would
      * also strip SoftDeletes and any other unrelated scope a model carries.
      */
     /**
@@ -290,9 +289,9 @@ final readonly class ScopePredicate
      */
     private function applyAccount(Builder $q): Builder
     {
-        $scopeClass = $this->options->workspaceScopeClass;
+        $scopeClass = $this->workspaceScope->class;
 
-        if (is_string($scopeClass) && $scopeClass !== '') {
+        if ($scopeClass !== null) {
             $q->withoutGlobalScope($scopeClass);
         }
 

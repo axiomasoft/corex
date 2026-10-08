@@ -29,17 +29,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Workspace scope class (D109)
+    | Workspace scope class override (D109)
     |--------------------------------------------------------------------------
-    | Class WorkspaceScopeWiring::wire() registers as a global scope on every
-    | Capability::WorkspaceScoped model, and Access\ScopePredicate lifts via
-    | withoutGlobalScope() for scope `account` — a STRING, never an imported
-    | class reference: axiomasoft/corex-access does not depend on axiomasoft/corex-tenancy (AC-28),
-    | so CoreX\Tenancy\Laravel\Scopes\WorkspaceScope is not necessarily loadable.
-    | null = there is no workspace scope to register or lift (boxed profiles
-    | without axiomasoft/corex-tenancy).
+    | null (default) = use the scope named by the kernel
+    | CoreX\Context\Laravel\WorkspaceScopeProvider, which axiomasoft/corex-tenancy
+    | binds; no binding = boxed profile, explicitly no workspace scope (AC-28).
+    | A class set here overrides the provider and MUST exist — a missing
+    | class fails at boot instead of silently leaving models unscoped.
+    | WorkspaceScopeWiring registers it on every Capability::WorkspaceScoped
+    | model; Access\ScopePredicate lifts it for scope `account`.
     */
-    'workspace_scope_class' => 'CoreX\\Tenancy\\Laravel\\Scopes\\WorkspaceScope',
+    'workspace_scope_class' => null,
 
     /*
     |--------------------------------------------------------------------------

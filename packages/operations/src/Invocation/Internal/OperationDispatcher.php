@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Operations\Invocation\Internal;
 
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Definition\Contracts\OperationRegistry;
 use CoreX\Operations\Definition\Data\Operation;
@@ -14,7 +15,6 @@ use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\ContextResolver;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
-use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Enums\InputEnvelope;
 use CoreX\Operations\Invocation\Laravel\InvocationMetadataFactory;

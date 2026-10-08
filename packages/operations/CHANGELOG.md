@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased — idempotency scope keyed by principal type (audit 2026-10-08)
+
+- Security fix: `IdempotencyScope` gains `PrincipalType $principalType` (before `principalId`) and its collision domain now includes `principal_type`. Previously principals of different types with the same id (user `5` and agent `5`) shared an idempotency scope, so one could be served the other's stored response or be rejected as a conflicting replay. Stored scope hashes change; in-flight keys from before the upgrade are not replayed.
+
+## Unreleased — invocation contract moved to the kernel (audit 2026-10-08 P-02)
+
+- Deprecated: `CoreX\Operations\Definition\Contracts\OperationHandler`, `CoreX\Operations\Invocation\Contracts\RequestContext`, `CoreX\Operations\Authorization\Contracts\Principal` and `CoreX\Operations\Invocation\Data\InvocationMetadata` are now `class_alias` names of `CoreX\Invocation\Contracts\OperationHandler`, `CoreX\Invocation\Contracts\RequestContext`, `CoreX\Context\Contracts\Principal` and `CoreX\Invocation\Data\InvocationMetadata` (axiomasoft/corex). Same types, so existing handlers keep working unchanged; switch imports to the new names.
+- Breaking (unpublished): the operations principal is now the single kernel principal, so `Principal::id()` becomes `principalId()` and implementations add `principalType(): PrincipalType`. `PrincipalResolver` implementations can return access's `PrincipalIdentity` directly. The aliases are removed in 2.0.
+
 ## Unreleased — Laravel 13 platform (P09.9, D132)
 
 - Require Laravel 13 and PHP 8.4+; support PHP 8.4–8.5. Laravel 12 support is removed. Testbench uses the Laravel 13 family; package versions and runtime contracts are unchanged.

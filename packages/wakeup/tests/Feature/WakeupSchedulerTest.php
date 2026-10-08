@@ -8,6 +8,8 @@ use CoreX\Context\Data\TenantContext;
 use CoreX\CoreServiceProvider;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Scheduling\Contracts\DueWakeupHandler;
+use CoreX\Scheduling\Contracts\DueWakeupSweeper as SchedulingDueWakeupSweeper;
+use CoreX\Scheduling\Contracts\WakeupScheduleHint as SchedulingWakeupScheduleHint;
 use CoreX\Scheduling\Contracts\WakeupScheduler;
 use CoreX\Scheduling\Data\WakeupDelivery;
 use CoreX\Scheduling\Data\WakeupHandlerDefinition;
@@ -583,4 +585,13 @@ it('preserves a FrozenClock already bound when the wakeup provider registers', f
 
     expect(resolve(ClockInterface::class))->toBe($clock)
         ->and($clock->now()->format(DateTimeImmutable::ATOM))->toBe('2026-03-04T05:06:07+00:00');
+});
+
+it('keeps the deprecated wakeup contracts as BC aliases of the Scheduling contracts', function (): void {
+    $sweeper = resolve(SchedulingDueWakeupSweeper::class);
+
+    expect($sweeper)->toBeInstanceOf(DueWakeupSweeper::class)
+        ->and(spl_object_id(resolve(DueWakeupSweeper::class)))->toBe(spl_object_id($sweeper))
+        ->and(is_subclass_of(WakeupScheduleHint::class, SchedulingWakeupScheduleHint::class))->toBeTrue()
+        ->and(WakeupScheduleHint::TAG)->toBe('corex.wakeup.hints');
 });

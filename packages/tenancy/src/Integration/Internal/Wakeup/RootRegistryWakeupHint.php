@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Integration\Internal\Wakeup;
 
 use CoreX\Context\Data\TenantContext;
+use CoreX\Scheduling\Contracts\WakeupScheduleHint;
 use CoreX\Tenancy\Integration\Internal\DatabaseValue;
-use CoreX\Wakeup\Contracts\WakeupScheduleHint;
 use DateTimeImmutable;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\ConnectionResolverInterface;

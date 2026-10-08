@@ -7,6 +7,7 @@ namespace CoreX\Operations\Tests\Feature;
 use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Enums\PrincipalType;
 use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Database\Enums\SchemaScope;
@@ -199,6 +200,7 @@ final class IdempotencyStoreTest extends TestCase
             databaseName: ':memory:',
             accountId: 'other-account',
             workspaceId: null,
+            principalType: PrincipalType::User,
             principalId: 'principal-1',
             clientId: null,
             apiMajor: 'v1',
@@ -379,6 +381,7 @@ final class IdempotencyStoreTest extends TestCase
             databaseName: $database ?? $connection->getDatabaseName(),
             accountId: 'account-1',
             workspaceId: null,
+            principalType: PrincipalType::User,
             principalId: 'principal-1',
             clientId: 'client-1',
             apiMajor: 'v1',

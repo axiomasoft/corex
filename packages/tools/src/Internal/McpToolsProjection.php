@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tools\Internal;
 
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
+use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
 use CoreX\Tools\Contracts\ToolCatalogue;

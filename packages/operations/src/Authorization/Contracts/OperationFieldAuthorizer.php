@@ -6,8 +6,8 @@ namespace CoreX\Operations\Authorization\Contracts;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Definition\Data\Operation;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
 
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface OperationFieldAuthorizer

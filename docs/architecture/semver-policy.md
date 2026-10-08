@@ -16,22 +16,17 @@ Api запрещена. Protected hooks обещаются только Spi Impl
 Имена параметров входят в контракт named arguments. Native и вложенные PHPDoc типы,
 properties, enum values, константы и defaults входят в `php-api/1` snapshots.
 
-`composer bc-check` сравнивает каждый пакет отдельно через Roave.
-Default base — `scripts/bc/accepted-base.json`, принятая unpublished поверхность P04.3
-по D01/D63/D64. `BC_CHECK_BASE` выбирает конкретный release revision; stable BC gate
-действует для всех изменений после этого anchor. Base и candidate
-имеют собственную selection: удалённый base Api/Spi остаётся в сравнении даже при
-отсутствии в candidate manifest. Атрибуты читаются из соответствующих source bytes;
-Internal зависимости сохраняются для reflector. Историческая revision до разметки
-может использовать только свой прежний namespace carrier; текущий carrier удалён.
-Generated manifests никогда не авторизуют BC membership. Api/Spi с `@internal` запрещены
-strict scanner, blanket internal filter для поддерживаемых типов недопустим.
+Автоматического BC-диффа (Roave, `composer bc-check`) больше нет: владелец удалил его 2026-10-08
+(аудит `audits/2026-10-08-core-audit.md`), потому что 1.0 не опубликован, а допуск поломок держался
+на решениях из `plans/`, которые удаляются. Изменения публичной поверхности видны в `php-api/1`
+snapshots (`composer php-api`) и golden php-surface (строка `tests/Golden/REBASELINE.md` в том же
+коммите); BC-обещание фиксируется CHANGELOG пакета. Это временный режим подготовки ещё
+не опубликованного 1.0, принятый в [ревью ветки](../../audits/2026-10-08-hardening-review/REVIEW.md).
+**До стабильного релиза** обязателен независимый BC-дифф против утверждённой базы,
+а затем против опубликованного тега, без зависимости от `plans/`.
+Проверка свежести snapshot не доказывает совместимость; обновление snapshot вместе
+с кодом и CHANGELOG не авторизует breaking change поддерживаемого релиза.
 
-Stable/deprecated BC break — RED. До 1.0 experimental delta допускается только с
-объявленной breaking записью PLAN3.P04 в changelog пакета (D01/D63/D64); Roave infrastructure
-error, missing dependency и неподдерживаемый PHP всегда RED. Это разрешение не означает
-релиз, публикацию или live CI proof. `BC_CHECK_FORCE_STABLE` проверяет строгую ветку.
-
-PHP signature BC, snapshots и behavioral tests дополняют друг друга. Семантика ошибок,
+Snapshots и behavioral tests дополняют друг друга. Семантика ошибок,
 pagination, wire/schema, authorization и транзакций проверяется соответствующими
-поведенческими gates и [API policy](api-policy.md); Roave их не доказывает.
+поведенческими gates и [API policy](api-policy.md).

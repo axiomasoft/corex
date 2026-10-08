@@ -1,0 +1,357 @@
+unused-public: scanned 3037 public methods; 356 failures
+ENTRYPOINT-STALE CoreX\Access\Access\Laravel\PrincipalIdentity::fromPrincipal invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Access\Access\Laravel\PrincipalIdentity::getAuthIdentifierName invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Access\Access\Laravel\PrincipalIdentity::getAuthPasswordName invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Access\Access\Laravel\PrincipalIdentity::getMorphClass invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Access\Access\Laravel\PrincipalIdentity::getRememberToken invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Access\Access\Laravel\PrincipalIdentity::getRememberTokenName invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Access\Access\Laravel\PrincipalIdentity::setRememberToken invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Access\Enums\Scope::weight invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Access\Exceptions\ScopeCapabilityMismatch::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Access\Extend\Internal\PermissionsMerger::__invoke invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Audit\Laravel\HasAuditLog::bootHasAuditLog invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Config\Data\SecretRef::__debugInfo invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Config\Data\SecretRef::__serialize invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Config\Data\SecretRef::__toString invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Config\Exceptions\InvalidConfiguration::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Config\Laravel\CoreOptionsParser::current invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Context\Exceptions\CentralContextException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Context\Exceptions\ImpersonationRestrictedException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Context\Exceptions\ScopeContextMismatch::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\CustomFields\Data\AttributeLifecycle::assertTransition invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\CustomFields\Exceptions\InvalidAttributeTables::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Data\Exceptions\InvalidScopePayload::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Database\Exceptions\SchemaSetException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Database\Internal\Commands\SchemaMigrateCommand::handle invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Database\Internal\Commands\SchemaStatusCommand::handle invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Departments\Exceptions\CrossWorkspaceMoveException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Departments\Exceptions\DepartmentCycleException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Errors\Exceptions\ProblemRegistryException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Features\Data\FeatureFlagDefinition::make invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Features\Data\FeatureFlagDefinition::module invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Features\Data\FeatureFlagDefinition::payload invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Intl\Currency\Exceptions\InvalidRateException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Intl\Currency\Exceptions\SnapshotExpiredException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Intl\Formatting\Exceptions\UnsupportedFormattingException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Intl\Locale\Exceptions\InvalidLocaleException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Intl\Territory\Exceptions\AccessDeniedException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Intl\Territory\Exceptions\OperationConflictException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Intl\Territory\Exceptions\SchemaMismatchException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Messaging\Contracts\Cancellable::cancel invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Messaging\Contracts\Cancellable::isCancelled invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Messaging\Exceptions\InboxRefused::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Messaging\Exceptions\InvalidMessage::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Messaging\Exceptions\OutboxLeaseLost::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Messaging\Exceptions\OutboxRefused::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Messaging\Exceptions\UnknownMessageContract::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Messaging\Internal\OpenTelemetryTraceContextBridge::linkedConsumer invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Messaging\PHPStan\Rules\DurablePayloadPromotedPropertyRule::getNodeType invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Messaging\PHPStan\Rules\DurablePayloadPromotedPropertyRule::processNode invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Messaging\PHPStan\Rules\DurablePayloadRule::getNodeType invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Messaging\PHPStan\Rules\DurablePayloadRule::processNode invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Contracts\DisableHook::__invoke invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Contracts\EnableHook::__invoke invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Contracts\ModuleRegistrar::register invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Contracts\ModuleRegistrar::registered invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Contracts\PurgeHook::__invoke invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Contracts\RecordsRegistrar::release invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Data\Api::asBulkCommand invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Data\Api::extendResource invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Data\Entity::customFields invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Data\ModuleManifest::components invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Data\ModuleManifest::suggests invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Exceptions\CompilationException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Exceptions\EntityNotFound::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Exceptions\HasEnabledDependentsException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Exceptions\InvalidManifestException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Exceptions\InvalidRegistryPoint::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Exceptions\InvalidStateTransitionException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Exceptions\MissingDependencyException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Exceptions\ModuleEnableFailedException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Exceptions\ModuleNotFound::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Exceptions\ModuleUpgradeFailedException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Exceptions\RegistryFrozen::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Exceptions\RegistryInputUnavailable::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Exceptions\StaleRegistryRevision::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Internal\Lifecycle\DatabaseRecordsRegistrar::release invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Internal\ServiceProviderModuleRegistrar::register invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Internal\ServiceProviderModuleRegistrar::registered invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\ModulesServiceProvider::register invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\PHPStan\Rules\AbstractDatabaseCallRule::getNodeType invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\PHPStan\Rules\AbstractDatabaseCallRule::processNode invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\PHPStan\Rules\NoDirectSystemTableWriteRule::getNodeType invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\PHPStan\Rules\NoDirectSystemTableWriteRule::processNode invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\PHPStan\Rules\NoEvalRule::getNodeType invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\PHPStan\Rules\NoEvalRule::processNode invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\PHPStan\Rules\NoForeignPrefixSqlRule::getNodeType invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\PHPStan\Rules\NoForeignPrefixSqlRule::processNode invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\PHPStan\Rules\NoFsOutsideModuleRule::getNodeType invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\PHPStan\Rules\NoFsOutsideModuleRule::processNode invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Modules\Testing\ExtensionContract::errors invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Notifications\Delivery\Contracts\NotificationChannelDriver::reconcile invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Notifications\Delivery\Internal\InAppChannelDriver::reconcile invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Notifications\Inbox\Exceptions\NotificationAccessDenied::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Notifications\Inbox\Exceptions\NotificationOperationConflict::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Operations\ApiServiceProvider::boot invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Operations\ApiServiceProvider::register invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Operations\Bulk\Internal\TransferCapabilityUnavailable::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Operations\Bulk\Laravel\BulkRegistrar::boot invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Operations\Bulk\Laravel\BulkRegistrar::register invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Operations\Bulk\Laravel\BulkRouteRegistrar::register invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Operations\Cost\Exceptions\BudgetRateLimited::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Operations\Cost\Exceptions\BudgetStoreUnavailable::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Operations\Cost\Laravel\CostRegistrar::register invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Operations\Definition\Contracts\OperationDefinitionValidator::validateRoutePair invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Operations\Definition\Data\ResourceId::__toString invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Operations\Laravel\ApiSchemaRegistrar::register invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Operations\Laravel\Commands\PruneApiOperations::handle invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Operations\Testing\CatalogueModuleFixture::active invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Operations\Testing\ModuleFixture::active invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Operations\Validation\Laravel\JsonValueFactory::fromDecoded invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Panels\Contracts\PanelProvider::access invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Panels\SavedViews\Laravel\SavedViewsRegistrar::register invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Recurrence\Data\DateWindow::__construct invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Recurrence\Data\InstantWindow::__construct invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Recurrence\Exceptions\StaleCursorException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Recurrence\Exceptions\UnsupportedEnvironmentException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\SearchMeilisearch\Exceptions\InvalidMeilisearchConfiguration::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\SearchMeilisearch\Internal\MeilisearchSearchProvider::capabilities invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Search\Contracts\SearchDocuments::page invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Search\Exceptions\InvalidSearchConfiguration::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Search\Internal\Postgres\PostgresSearchProvider::capabilities invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Settings\Data\SettingsScope::account invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Settings\Exceptions\SettingValueTooLargeException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Settings\Exceptions\UnsupportedScopeException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Storage\Exceptions\StorageCapabilityUnavailable::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Storage\Exceptions\StorageOperationFailed::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\TasksWorkflow\Exceptions\MaterializationConflict::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\TasksWorkflow\Exceptions\StaleMaterialization::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\TasksWorkflow\Exceptions\UnsupportedMaterialization::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\TasksWorkflow\Internal\CaptureTaskCompletion::capture invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tasks\Access\Exceptions\TasksModuleDisabled::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tasks\Planning\Exceptions\InvalidPlanningDraft::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tasks\Planning\Exceptions\PlanningConflict::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tasks\Task\Contracts\TaskCompletionCapture::capture invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Account\Events\AccountPurged::name invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Account\Events\AccountSuspended::name invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Account\Events\ExportReady::name invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Account\Events\GraceStarted::name invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Account\Events\TrialStarted::name invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException::render invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\DomainTrust\Data\NormalizedHost::__toString invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\DomainTrust\Exceptions\DomainTrustDenied::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\DomainTrust\Exceptions\DomainTrustDisabled::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Identity\Events\UserSynced::name invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Impersonation\Events\ImpersonationEnded::name invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Impersonation\Events\ImpersonationStarted::name invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Integration\Internal\Wakeup\SweepRootWakeups::handle invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Laravel\Commands\IdentitiesReconcileCommand::handle invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Laravel\Commands\PendingClearCommand::handle invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Laravel\Commands\PendingCreateCommand::handle invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Laravel\Commands\TenantsMigrateCommand::handle invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Laravel\Http\Middleware\AllowImpersonatedWrites::handle invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Laravel\Http\Middleware\DenyImpersonatedWrites::handle invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Laravel\Http\Middleware\EnforceSessionLifetime::handle invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Laravel\Http\Middleware\ImpersonationSessionGuard::handle invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Laravel\Scopes\WorkspaceScope::apply invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Membership\Events\MembershipGranted::__construct invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Membership\Exceptions\CentralProtocolViolation::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Membership\Exceptions\CentralUnauthorized::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Membership\Exceptions\CentralUnavailable::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Membership\Exceptions\CredentialIssuanceDenied::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Membership\Exceptions\InboxConflict::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Membership\Exceptions\PairStoreViolation::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Membership\Exceptions\ProjectionDenied::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Membership\Exceptions\RevokeUncertain::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Provisioning\Exceptions\ClaimConflict::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Provisioning\Exceptions\ClaimUnavailable::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Provisioning\Exceptions\TemplateIntegrityException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Runtime\Exceptions\TenantContextUnavailable::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Runtime\Exceptions\TenantCouldNotBeIdentifiedByHostException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Workspace\Exceptions\InvitationNotAcceptableException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Tenancy\Workspace\Exceptions\NoDefaultWorkspaceException::errorDescriptor invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Wakeup\Internal\Commands\SweepWakeups::handle invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Webhooks\Contracts\WebhookDeliveryStore::forEvent invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Webhooks\Internal\SqlWebhookDeliveryStore::forEvent invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Webhooks\Laravel\WebhookRegistrar::boot invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Webhooks\Laravel\WebhookRegistrar::register invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Workflow\Contracts\EngineAdapter::start invalid source hash, intended contract, root evidence or expiry
+ENTRYPOINT-STALE CoreX\Workflow\Internal\UnavailableEngineAdapter::start invalid source hash, intended contract, root evidence or expiry
+UNUSED-PUBLIC CoreX\Access\Access\Laravel\PrincipalIdentity::fromPrincipal packages/access/src/Access/Laravel/PrincipalIdentity.php:27
+UNUSED-PUBLIC CoreX\Access\Access\Laravel\PrincipalIdentity::getAuthIdentifierName packages/access/src/Access/Laravel/PrincipalIdentity.php:50
+UNUSED-PUBLIC CoreX\Access\Access\Laravel\PrincipalIdentity::getAuthPasswordName packages/access/src/Access/Laravel/PrincipalIdentity.php:62
+UNUSED-PUBLIC CoreX\Access\Access\Laravel\PrincipalIdentity::getMorphClass packages/access/src/Access/Laravel/PrincipalIdentity.php:45
+UNUSED-PUBLIC CoreX\Access\Access\Laravel\PrincipalIdentity::getRememberToken packages/access/src/Access/Laravel/PrincipalIdentity.php:81
+UNUSED-PUBLIC CoreX\Access\Access\Laravel\PrincipalIdentity::getRememberTokenName packages/access/src/Access/Laravel/PrincipalIdentity.php:93
+UNUSED-PUBLIC CoreX\Access\Access\Laravel\PrincipalIdentity::setRememberToken packages/access/src/Access/Laravel/PrincipalIdentity.php:87
+UNUSED-PUBLIC CoreX\Access\Enums\Scope::weight packages/access/src/Enums/Scope.php:25
+UNUSED-PUBLIC CoreX\Access\Extend\Internal\PermissionsMerger::__invoke packages/access/src/Extend/Internal/PermissionsMerger.php:39
+UNUSED-PUBLIC CoreX\Audit\Laravel\HasAuditLog::bootHasAuditLog packages/core/src/Audit/Laravel/HasAuditLog.php:26
+UNUSED-PUBLIC CoreX\Config\Data\SecretRef::__debugInfo packages/core/src/Config/Data/SecretRef.php:36
+UNUSED-PUBLIC CoreX\Config\Data\SecretRef::__serialize packages/core/src/Config/Data/SecretRef.php:42
+UNUSED-PUBLIC CoreX\Config\Data\SecretRef::__toString packages/core/src/Config/Data/SecretRef.php:30
+UNUSED-PUBLIC CoreX\Config\Exceptions\InvalidConfiguration::errorDescriptor packages/core/src/Config/Exceptions/InvalidConfiguration.php:25
+UNUSED-PUBLIC CoreX\Config\Laravel\CoreOptionsParser::current packages/core/src/Config/Laravel/CoreOptionsParser.php:40
+UNUSED-PUBLIC CoreX\Context\Exceptions\ScopeContextMismatch::errorDescriptor packages/core/src/Context/Exceptions/ScopeContextMismatch.php:42
+UNUSED-PUBLIC CoreX\CustomFields\Data\AttributeLifecycle::assertTransition packages/custom-fields/src/Data/AttributeLifecycle.php:34
+UNUSED-PUBLIC CoreX\CustomFields\Exceptions\InvalidAttributeTables::errorDescriptor packages/custom-fields/src/Exceptions/InvalidAttributeTables.php:26
+UNUSED-PUBLIC CoreX\Data\Exceptions\InvalidScopePayload::errorDescriptor packages/core/src/Data/Exceptions/InvalidScopePayload.php:27
+UNUSED-PUBLIC CoreX\Database\Internal\Commands\SchemaMigrateCommand::handle packages/core/src/Database/Internal/Commands/SchemaMigrateCommand.php:21
+UNUSED-PUBLIC CoreX\Database\Internal\Commands\SchemaStatusCommand::handle packages/core/src/Database/Internal/Commands/SchemaStatusCommand.php:18
+UNUSED-PUBLIC CoreX\Departments\Exceptions\CrossWorkspaceMoveException::errorDescriptor packages/core/src/Departments/Exceptions/CrossWorkspaceMoveException.php:32
+UNUSED-PUBLIC CoreX\Departments\Exceptions\DepartmentCycleException::errorDescriptor packages/core/src/Departments/Exceptions/DepartmentCycleException.php:29
+UNUSED-PUBLIC CoreX\Errors\Exceptions\ProblemRegistryException::errorDescriptor packages/core/src/Errors/Exceptions/ProblemRegistryException.php:20
+UNUSED-PUBLIC CoreX\Features\Data\FeatureFlagDefinition::make packages/core/src/Features/Data/FeatureFlagDefinition.php:23
+UNUSED-PUBLIC CoreX\Features\Data\FeatureFlagDefinition::module packages/core/src/Features/Data/FeatureFlagDefinition.php:28
+UNUSED-PUBLIC CoreX\Features\Data\FeatureFlagDefinition::payload packages/core/src/Features/Data/FeatureFlagDefinition.php:39
+UNUSED-PUBLIC CoreX\Intl\Currency\Exceptions\InvalidRateException::errorDescriptor packages/intl/src/Currency/Exceptions/InvalidRateException.php:21
+UNUSED-PUBLIC CoreX\Intl\Currency\Exceptions\SnapshotExpiredException::errorDescriptor packages/intl/src/Currency/Exceptions/SnapshotExpiredException.php:21
+UNUSED-PUBLIC CoreX\Intl\Formatting\Exceptions\UnsupportedFormattingException::errorDescriptor packages/intl/src/Formatting/Exceptions/UnsupportedFormattingException.php:21
+UNUSED-PUBLIC CoreX\Intl\Locale\Exceptions\InvalidLocaleException::errorDescriptor packages/intl/src/Locale/Exceptions/InvalidLocaleException.php:21
+UNUSED-PUBLIC CoreX\Intl\Territory\Exceptions\AccessDeniedException::errorDescriptor packages/intl/src/Territory/Exceptions/AccessDeniedException.php:21
+UNUSED-PUBLIC CoreX\Intl\Territory\Exceptions\OperationConflictException::errorDescriptor packages/intl/src/Territory/Exceptions/OperationConflictException.php:21
+UNUSED-PUBLIC CoreX\Intl\Territory\Exceptions\SchemaMismatchException::errorDescriptor packages/intl/src/Territory/Exceptions/SchemaMismatchException.php:21
+UNUSED-PUBLIC CoreX\Messaging\Contracts\Cancellable::cancel packages/core/src/Messaging/Contracts/Cancellable.php:18
+UNUSED-PUBLIC CoreX\Messaging\Contracts\Cancellable::isCancelled packages/core/src/Messaging/Contracts/Cancellable.php:20
+UNUSED-PUBLIC CoreX\Messaging\Exceptions\InboxRefused::errorDescriptor packages/core/src/Messaging/Exceptions/InboxRefused.php:24
+UNUSED-PUBLIC CoreX\Messaging\Exceptions\InvalidMessage::errorDescriptor packages/core/src/Messaging/Exceptions/InvalidMessage.php:32
+UNUSED-PUBLIC CoreX\Messaging\Exceptions\OutboxLeaseLost::errorDescriptor packages/core/src/Messaging/Exceptions/OutboxLeaseLost.php:24
+UNUSED-PUBLIC CoreX\Messaging\Exceptions\OutboxRefused::errorDescriptor packages/core/src/Messaging/Exceptions/OutboxRefused.php:32
+UNUSED-PUBLIC CoreX\Messaging\Exceptions\UnknownMessageContract::errorDescriptor packages/core/src/Messaging/Exceptions/UnknownMessageContract.php:29
+UNUSED-PUBLIC CoreX\Messaging\Internal\OpenTelemetryTraceContextBridge::linkedConsumer packages/core/src/Messaging/Internal/OpenTelemetryTraceContextBridge.php:27
+UNUSED-PUBLIC CoreX\Messaging\PHPStan\Rules\DurablePayloadPromotedPropertyRule::getNodeType packages/core/src/Messaging/PHPStan/Rules/DurablePayloadPromotedPropertyRule.php:26
+UNUSED-PUBLIC CoreX\Messaging\PHPStan\Rules\DurablePayloadPromotedPropertyRule::processNode packages/core/src/Messaging/PHPStan/Rules/DurablePayloadPromotedPropertyRule.php:35
+UNUSED-PUBLIC CoreX\Messaging\PHPStan\Rules\DurablePayloadRule::getNodeType packages/core/src/Messaging/PHPStan/Rules/DurablePayloadRule.php:30
+UNUSED-PUBLIC CoreX\Messaging\PHPStan\Rules\DurablePayloadRule::processNode packages/core/src/Messaging/PHPStan/Rules/DurablePayloadRule.php:39
+UNUSED-PUBLIC CoreX\Modules\Contracts\DisableHook::__invoke packages/core/src/Modules/Contracts/DisableHook.php:18
+UNUSED-PUBLIC CoreX\Modules\Contracts\EnableHook::__invoke packages/core/src/Modules/Contracts/EnableHook.php:18
+UNUSED-PUBLIC CoreX\Modules\Contracts\ModuleRegistrar::register packages/core/src/Modules/Contracts/ModuleRegistrar.php:30
+UNUSED-PUBLIC CoreX\Modules\Contracts\ModuleRegistrar::registered packages/core/src/Modules/Contracts/ModuleRegistrar.php:33
+UNUSED-PUBLIC CoreX\Modules\Contracts\PurgeHook::__invoke packages/core/src/Modules/Contracts/PurgeHook.php:18
+UNUSED-PUBLIC CoreX\Modules\Contracts\RecordsRegistrar::release packages/core/src/Modules/Contracts/RecordsRegistrar.php:25
+UNUSED-PUBLIC CoreX\Modules\Data\Api::asBulkCommand packages/core/src/Modules/Data/Api.php:233
+UNUSED-PUBLIC CoreX\Modules\Data\Api::extendResource packages/core/src/Modules/Data/Api.php:169
+UNUSED-PUBLIC CoreX\Modules\Data\Entity::customFields packages/core/src/Modules/Data/Entity.php:97
+UNUSED-PUBLIC CoreX\Modules\Data\ModuleManifest::components packages/core/src/Modules/Data/ModuleManifest.php:152
+UNUSED-PUBLIC CoreX\Modules\Data\ModuleManifest::suggests packages/core/src/Modules/Data/ModuleManifest.php:136
+UNUSED-PUBLIC CoreX\Modules\Exceptions\CompilationException::errorDescriptor packages/core/src/Modules/Exceptions/CompilationException.php:205
+UNUSED-PUBLIC CoreX\Modules\Exceptions\EntityNotFound::errorDescriptor packages/core/src/Modules/Exceptions/EntityNotFound.php:21
+UNUSED-PUBLIC CoreX\Modules\Exceptions\HasEnabledDependentsException::errorDescriptor packages/core/src/Modules/Exceptions/HasEnabledDependentsException.php:26
+UNUSED-PUBLIC CoreX\Modules\Exceptions\InvalidManifestException::errorDescriptor packages/core/src/Modules/Exceptions/InvalidManifestException.php:57
+UNUSED-PUBLIC CoreX\Modules\Exceptions\InvalidRegistryPoint::errorDescriptor packages/core/src/Modules/Exceptions/InvalidRegistryPoint.php:21
+UNUSED-PUBLIC CoreX\Modules\Exceptions\InvalidStateTransitionException::errorDescriptor packages/core/src/Modules/Exceptions/InvalidStateTransitionException.php:41
+UNUSED-PUBLIC CoreX\Modules\Exceptions\MissingDependencyException::errorDescriptor packages/core/src/Modules/Exceptions/MissingDependencyException.php:25
+UNUSED-PUBLIC CoreX\Modules\Exceptions\ModuleEnableFailedException::errorDescriptor packages/core/src/Modules/Exceptions/ModuleEnableFailedException.php:35
+UNUSED-PUBLIC CoreX\Modules\Exceptions\ModuleNotFound::errorDescriptor packages/core/src/Modules/Exceptions/ModuleNotFound.php:21
+UNUSED-PUBLIC CoreX\Modules\Exceptions\ModuleUpgradeFailedException::errorDescriptor packages/core/src/Modules/Exceptions/ModuleUpgradeFailedException.php:37
+UNUSED-PUBLIC CoreX\Modules\Exceptions\RegistryFrozen::errorDescriptor packages/core/src/Modules/Exceptions/RegistryFrozen.php:37
+UNUSED-PUBLIC CoreX\Modules\Exceptions\RegistryInputUnavailable::errorDescriptor packages/core/src/Modules/Exceptions/RegistryInputUnavailable.php:26
+UNUSED-PUBLIC CoreX\Modules\Exceptions\StaleRegistryRevision::errorDescriptor packages/core/src/Modules/Exceptions/StaleRegistryRevision.php:21
+UNUSED-PUBLIC CoreX\Modules\Internal\Lifecycle\DatabaseRecordsRegistrar::release packages/core/src/Modules/Internal/Lifecycle/DatabaseRecordsRegistrar.php:57
+UNUSED-PUBLIC CoreX\Modules\Internal\ServiceProviderModuleRegistrar::register packages/core/src/Modules/Internal/ServiceProviderModuleRegistrar.php:26
+UNUSED-PUBLIC CoreX\Modules\Internal\ServiceProviderModuleRegistrar::registered packages/core/src/Modules/Internal/ServiceProviderModuleRegistrar.php:34
+UNUSED-PUBLIC CoreX\Modules\ModulesServiceProvider::register packages/core/src/Modules/ModulesServiceProvider.php:23
+UNUSED-PUBLIC CoreX\Modules\PHPStan\Rules\AbstractDatabaseCallRule::getNodeType packages/core/src/Modules/PHPStan/Rules/AbstractDatabaseCallRule.php:30
+UNUSED-PUBLIC CoreX\Modules\PHPStan\Rules\AbstractDatabaseCallRule::processNode packages/core/src/Modules/PHPStan/Rules/AbstractDatabaseCallRule.php:39
+UNUSED-PUBLIC CoreX\Modules\PHPStan\Rules\NoDirectSystemTableWriteRule::getNodeType packages/core/src/Modules/PHPStan/Rules/NoDirectSystemTableWriteRule.php:52
+UNUSED-PUBLIC CoreX\Modules\PHPStan\Rules\NoDirectSystemTableWriteRule::processNode packages/core/src/Modules/PHPStan/Rules/NoDirectSystemTableWriteRule.php:61
+UNUSED-PUBLIC CoreX\Modules\PHPStan\Rules\NoEvalRule::getNodeType packages/core/src/Modules/PHPStan/Rules/NoEvalRule.php:25
+UNUSED-PUBLIC CoreX\Modules\PHPStan\Rules\NoEvalRule::processNode packages/core/src/Modules/PHPStan/Rules/NoEvalRule.php:34
+UNUSED-PUBLIC CoreX\Modules\PHPStan\Rules\NoForeignPrefixSqlRule::getNodeType packages/core/src/Modules/PHPStan/Rules/NoForeignPrefixSqlRule.php:48
+UNUSED-PUBLIC CoreX\Modules\PHPStan\Rules\NoForeignPrefixSqlRule::processNode packages/core/src/Modules/PHPStan/Rules/NoForeignPrefixSqlRule.php:57
+UNUSED-PUBLIC CoreX\Modules\PHPStan\Rules\NoFsOutsideModuleRule::getNodeType packages/core/src/Modules/PHPStan/Rules/NoFsOutsideModuleRule.php:45
+UNUSED-PUBLIC CoreX\Modules\PHPStan\Rules\NoFsOutsideModuleRule::processNode packages/core/src/Modules/PHPStan/Rules/NoFsOutsideModuleRule.php:54
+UNUSED-PUBLIC CoreX\Modules\Testing\ExtensionContract::errors packages/core/src/Modules/Testing/ExtensionContract.php:193
+UNUSED-PUBLIC CoreX\Notifications\Delivery\Contracts\NotificationChannelDriver::reconcile packages/notifications/src/Delivery/Contracts/NotificationChannelDriver.php:20
+UNUSED-PUBLIC CoreX\Notifications\Delivery\Internal\InAppChannelDriver::reconcile packages/notifications/src/Delivery/Internal/InAppChannelDriver.php:31
+UNUSED-PUBLIC CoreX\Notifications\Digest\Internal\DigestWakeupHandler::__invoke packages/notifications/src/Digest/Internal/DigestWakeupHandler.php:23
+UNUSED-PUBLIC CoreX\Notifications\Digest\Internal\Value::nullableText packages/notifications/src/Digest/Internal/Value.php:22
+UNUSED-PUBLIC CoreX\Notifications\Inbox\Exceptions\NotificationAccessDenied::errorDescriptor packages/notifications/src/Inbox/Exceptions/NotificationAccessDenied.php:17
+UNUSED-PUBLIC CoreX\Notifications\Inbox\Exceptions\NotificationOperationConflict::errorDescriptor packages/notifications/src/Inbox/Exceptions/NotificationOperationConflict.php:17
+UNUSED-PUBLIC CoreX\Operations\ApiServiceProvider::boot packages/operations/src/ApiServiceProvider.php:57
+UNUSED-PUBLIC CoreX\Operations\ApiServiceProvider::register packages/operations/src/ApiServiceProvider.php:43
+UNUSED-PUBLIC CoreX\Operations\Bulk\Internal\TransferCapabilityUnavailable::errorDescriptor packages/operations/src/Bulk/Internal/TransferCapabilityUnavailable.php:22
+UNUSED-PUBLIC CoreX\Operations\Bulk\Laravel\BulkRegistrar::boot packages/operations/src/Bulk/Laravel/BulkRegistrar.php:24
+UNUSED-PUBLIC CoreX\Operations\Bulk\Laravel\BulkRegistrar::register packages/operations/src/Bulk/Laravel/BulkRegistrar.php:19
+UNUSED-PUBLIC CoreX\Operations\Bulk\Laravel\BulkRouteRegistrar::register packages/operations/src/Bulk/Laravel/BulkRouteRegistrar.php:19
+UNUSED-PUBLIC CoreX\Operations\Cost\Exceptions\BudgetRateLimited::errorDescriptor packages/operations/src/Cost/Exceptions/BudgetRateLimited.php:18
+UNUSED-PUBLIC CoreX\Operations\Cost\Exceptions\BudgetStoreUnavailable::errorDescriptor packages/operations/src/Cost/Exceptions/BudgetStoreUnavailable.php:17
+UNUSED-PUBLIC CoreX\Operations\Cost\Laravel\CostRegistrar::register packages/operations/src/Cost/Laravel/CostRegistrar.php:19
+UNUSED-PUBLIC CoreX\Operations\Definition\Contracts\OperationDefinitionValidator::validateRoutePair packages/operations/src/Definition/Contracts/OperationDefinitionValidator.php:20
+UNUSED-PUBLIC CoreX\Operations\Definition\Data\ResourceId::__toString packages/operations/src/Definition/Data/ResourceId.php:64
+UNUSED-PUBLIC CoreX\Operations\Laravel\ApiSchemaRegistrar::register packages/operations/src/Laravel/ApiSchemaRegistrar.php:18
+UNUSED-PUBLIC CoreX\Operations\Laravel\Commands\PruneApiOperations::handle packages/operations/src/Laravel/Commands/PruneApiOperations.php:28
+UNUSED-PUBLIC CoreX\Operations\Testing\CatalogueModuleFixture::active packages/operations/src/Testing/CatalogueModuleFixture.php:46
+UNUSED-PUBLIC CoreX\Operations\Testing\ModuleFixture::active packages/operations/src/Testing/ModuleFixture.php:35
+UNUSED-PUBLIC CoreX\Operations\Validation\Laravel\JsonValueFactory::fromDecoded packages/operations/src/Validation/Laravel/JsonValueFactory.php:14
+UNUSED-PUBLIC CoreX\Panels\Contracts\PanelProvider::access packages/panels/src/Contracts/PanelProvider.php:19
+UNUSED-PUBLIC CoreX\Panels\SavedViews\Laravel\SavedViewsRegistrar::register packages/panels/src/SavedViews/Laravel/SavedViewsRegistrar.php:19
+UNUSED-PUBLIC CoreX\Recurrence\Data\DateWindow::__construct packages/recurrence/src/Data/DateWindow.php:13
+UNUSED-PUBLIC CoreX\Recurrence\Data\InstantWindow::__construct packages/recurrence/src/Data/InstantWindow.php:14
+UNUSED-PUBLIC CoreX\Recurrence\Exceptions\StaleCursorException::errorDescriptor packages/recurrence/src/Exceptions/StaleCursorException.php:17
+UNUSED-PUBLIC CoreX\Recurrence\Exceptions\UnsupportedEnvironmentException::errorDescriptor packages/recurrence/src/Exceptions/UnsupportedEnvironmentException.php:16
+UNUSED-PUBLIC CoreX\SearchMeilisearch\Exceptions\InvalidMeilisearchConfiguration::errorDescriptor packages/search-meilisearch/src/Exceptions/InvalidMeilisearchConfiguration.php:44
+UNUSED-PUBLIC CoreX\SearchMeilisearch\Internal\MeilisearchSearchProvider::capabilities packages/search-meilisearch/src/Internal/MeilisearchSearchProvider.php:28
+UNUSED-PUBLIC CoreX\Search\Contracts\SearchDocuments::page packages/search/src/Contracts/SearchDocuments.php:16
+UNUSED-PUBLIC CoreX\Search\Exceptions\InvalidSearchConfiguration::errorDescriptor packages/search/src/Exceptions/InvalidSearchConfiguration.php:44
+UNUSED-PUBLIC CoreX\Search\Internal\Postgres\PostgresSearchProvider::capabilities packages/search/src/Internal/Postgres/PostgresSearchProvider.php:39
+UNUSED-PUBLIC CoreX\Settings\Data\SettingsScope::account packages/core/src/Settings/Data/SettingsScope.php:30
+UNUSED-PUBLIC CoreX\Settings\Exceptions\SettingValueTooLargeException::errorDescriptor packages/core/src/Settings/Exceptions/SettingValueTooLargeException.php:30
+UNUSED-PUBLIC CoreX\Settings\Exceptions\UnsupportedScopeException::errorDescriptor packages/core/src/Settings/Exceptions/UnsupportedScopeException.php:32
+UNUSED-PUBLIC CoreX\Storage\Exceptions\StorageCapabilityUnavailable::errorDescriptor packages/core/src/Storage/Exceptions/StorageCapabilityUnavailable.php:16
+UNUSED-PUBLIC CoreX\Storage\Exceptions\StorageOperationFailed::errorDescriptor packages/core/src/Storage/Exceptions/StorageOperationFailed.php:16
+UNUSED-PUBLIC CoreX\TasksWorkflow\Exceptions\MaterializationConflict::errorDescriptor packages/tasks-workflow/src/Exceptions/MaterializationConflict.php:26
+UNUSED-PUBLIC CoreX\TasksWorkflow\Exceptions\StaleMaterialization::errorDescriptor packages/tasks-workflow/src/Exceptions/StaleMaterialization.php:31
+UNUSED-PUBLIC CoreX\TasksWorkflow\Exceptions\UnsupportedMaterialization::errorDescriptor packages/tasks-workflow/src/Exceptions/UnsupportedMaterialization.php:26
+UNUSED-PUBLIC CoreX\TasksWorkflow\Internal\CaptureTaskCompletion::capture packages/tasks-workflow/src/Internal/CaptureTaskCompletion.php:30
+UNUSED-PUBLIC CoreX\Tasks\Access\Exceptions\TasksModuleDisabled::errorDescriptor packages/tasks/src/Access/Exceptions/TasksModuleDisabled.php:22
+UNUSED-PUBLIC CoreX\Tasks\Planning\Exceptions\InvalidPlanningDraft::errorDescriptor packages/tasks/src/Planning/Exceptions/InvalidPlanningDraft.php:22
+UNUSED-PUBLIC CoreX\Tasks\Planning\Exceptions\PlanningConflict::errorDescriptor packages/tasks/src/Planning/Exceptions/PlanningConflict.php:22
+UNUSED-PUBLIC CoreX\Tasks\Task\Contracts\TaskCompletionCapture::capture packages/tasks/src/Task/Contracts/TaskCompletionCapture.php:15
+UNUSED-PUBLIC CoreX\Tenancy\Account\Events\AccountPurged::name packages/tenancy/src/Account/Events/AccountPurged.php:33
+UNUSED-PUBLIC CoreX\Tenancy\Account\Events\AccountSuspended::name packages/tenancy/src/Account/Events/AccountSuspended.php:33
+UNUSED-PUBLIC CoreX\Tenancy\Account\Events\ExportReady::name packages/tenancy/src/Account/Events/ExportReady.php:33
+UNUSED-PUBLIC CoreX\Tenancy\Account\Events\GraceStarted::name packages/tenancy/src/Account/Events/GraceStarted.php:34
+UNUSED-PUBLIC CoreX\Tenancy\Account\Events\TrialStarted::name packages/tenancy/src/Account/Events/TrialStarted.php:36
+UNUSED-PUBLIC CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException::errorDescriptor packages/tenancy/src/Authentication/Exceptions/OidcAuthenticationException.php:90
+UNUSED-PUBLIC CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException::render packages/tenancy/src/Authentication/Exceptions/OidcAuthenticationException.php:85
+UNUSED-PUBLIC CoreX\Tenancy\DomainTrust\Data\NormalizedHost::__toString packages/tenancy/src/DomainTrust/Data/NormalizedHost.php:37
+UNUSED-PUBLIC CoreX\Tenancy\DomainTrust\Exceptions\DomainTrustDenied::errorDescriptor packages/tenancy/src/DomainTrust/Exceptions/DomainTrustDenied.php:16
+UNUSED-PUBLIC CoreX\Tenancy\DomainTrust\Exceptions\DomainTrustDisabled::errorDescriptor packages/tenancy/src/DomainTrust/Exceptions/DomainTrustDisabled.php:16
+UNUSED-PUBLIC CoreX\Tenancy\Identity\Events\UserSynced::name packages/tenancy/src/Identity/Events/UserSynced.php:28
+UNUSED-PUBLIC CoreX\Tenancy\Impersonation\Events\ImpersonationEnded::name packages/tenancy/src/Impersonation/Events/ImpersonationEnded.php:29
+UNUSED-PUBLIC CoreX\Tenancy\Impersonation\Events\ImpersonationStarted::name packages/tenancy/src/Impersonation/Events/ImpersonationStarted.php:29
+UNUSED-PUBLIC CoreX\Tenancy\Integration\Internal\Wakeup\SweepRootWakeups::handle packages/tenancy/src/Integration/Internal/Wakeup/SweepRootWakeups.php:16
+UNUSED-PUBLIC CoreX\Tenancy\Laravel\Commands\IdentitiesReconcileCommand::handle packages/tenancy/src/Laravel/Commands/IdentitiesReconcileCommand.php:29
+UNUSED-PUBLIC CoreX\Tenancy\Laravel\Commands\PendingClearCommand::handle packages/tenancy/src/Laravel/Commands/PendingClearCommand.php:27
+UNUSED-PUBLIC CoreX\Tenancy\Laravel\Commands\PendingCreateCommand::handle packages/tenancy/src/Laravel/Commands/PendingCreateCommand.php:28
+UNUSED-PUBLIC CoreX\Tenancy\Laravel\Commands\TenantsMigrateCommand::handle packages/tenancy/src/Laravel/Commands/TenantsMigrateCommand.php:26
+UNUSED-PUBLIC CoreX\Tenancy\Laravel\Http\Middleware\AllowImpersonatedWrites::handle packages/tenancy/src/Laravel/Http/Middleware/AllowImpersonatedWrites.php:27
+UNUSED-PUBLIC CoreX\Tenancy\Laravel\Http\Middleware\DenyImpersonatedWrites::handle packages/tenancy/src/Laravel/Http/Middleware/DenyImpersonatedWrites.php:32
+UNUSED-PUBLIC CoreX\Tenancy\Laravel\Http\Middleware\EnforceSessionLifetime::handle packages/tenancy/src/Laravel/Http/Middleware/EnforceSessionLifetime.php:32
+UNUSED-PUBLIC CoreX\Tenancy\Laravel\Http\Middleware\ImpersonationSessionGuard::handle packages/tenancy/src/Laravel/Http/Middleware/ImpersonationSessionGuard.php:36
+UNUSED-PUBLIC CoreX\Tenancy\Laravel\Scopes\WorkspaceScope::apply packages/tenancy/src/Laravel/Scopes/WorkspaceScope.php:27
+UNUSED-PUBLIC CoreX\Tenancy\Membership\Events\MembershipGranted::__construct packages/tenancy/src/Membership/Events/MembershipGranted.php:16
+UNUSED-PUBLIC CoreX\Tenancy\Membership\Exceptions\CentralProtocolViolation::errorDescriptor packages/tenancy/src/Membership/Exceptions/CentralProtocolViolation.php:16
+UNUSED-PUBLIC CoreX\Tenancy\Membership\Exceptions\CentralUnauthorized::errorDescriptor packages/tenancy/src/Membership/Exceptions/CentralUnauthorized.php:17
+UNUSED-PUBLIC CoreX\Tenancy\Membership\Exceptions\CentralUnavailable::errorDescriptor packages/tenancy/src/Membership/Exceptions/CentralUnavailable.php:16
+UNUSED-PUBLIC CoreX\Tenancy\Membership\Exceptions\CredentialIssuanceDenied::errorDescriptor packages/tenancy/src/Membership/Exceptions/CredentialIssuanceDenied.php:16
+UNUSED-PUBLIC CoreX\Tenancy\Membership\Exceptions\InboxConflict::errorDescriptor packages/tenancy/src/Membership/Exceptions/InboxConflict.php:16
+UNUSED-PUBLIC CoreX\Tenancy\Membership\Exceptions\PairStoreViolation::errorDescriptor packages/tenancy/src/Membership/Exceptions/PairStoreViolation.php:17
+UNUSED-PUBLIC CoreX\Tenancy\Membership\Exceptions\ProjectionDenied::errorDescriptor packages/tenancy/src/Membership/Exceptions/ProjectionDenied.php:16
+UNUSED-PUBLIC CoreX\Tenancy\Membership\Exceptions\RevokeUncertain::errorDescriptor packages/tenancy/src/Membership/Exceptions/RevokeUncertain.php:21
+UNUSED-PUBLIC CoreX\Tenancy\Provisioning\Exceptions\ClaimConflict::errorDescriptor packages/tenancy/src/Provisioning/Exceptions/ClaimConflict.php:16
+UNUSED-PUBLIC CoreX\Tenancy\Provisioning\Exceptions\ClaimUnavailable::errorDescriptor packages/tenancy/src/Provisioning/Exceptions/ClaimUnavailable.php:16
+UNUSED-PUBLIC CoreX\Tenancy\Provisioning\Exceptions\TemplateIntegrityException::errorDescriptor packages/tenancy/src/Provisioning/Exceptions/TemplateIntegrityException.php:16
+UNUSED-PUBLIC CoreX\Tenancy\Runtime\Exceptions\TenantContextUnavailable::errorDescriptor packages/tenancy/src/Runtime/Exceptions/TenantContextUnavailable.php:51
+UNUSED-PUBLIC CoreX\Tenancy\Runtime\Exceptions\TenantCouldNotBeIdentifiedByHostException::errorDescriptor packages/tenancy/src/Runtime/Exceptions/TenantCouldNotBeIdentifiedByHostException.php:28
+UNUSED-PUBLIC CoreX\Tenancy\Workspace\Exceptions\InvitationNotAcceptableException::errorDescriptor packages/tenancy/src/Workspace/Exceptions/InvitationNotAcceptableException.php:23
+UNUSED-PUBLIC CoreX\Tenancy\Workspace\Exceptions\NoDefaultWorkspaceException::errorDescriptor packages/tenancy/src/Workspace/Exceptions/NoDefaultWorkspaceException.php:24
+UNUSED-PUBLIC CoreX\Wakeup\Internal\Commands\SweepWakeups::handle packages/wakeup/src/Internal/Commands/SweepWakeups.php:17
+UNUSED-PUBLIC CoreX\Webhooks\Contracts\WebhookDeliveryStore::forEvent packages/webhooks/src/Contracts/WebhookDeliveryStore.php:18
+UNUSED-PUBLIC CoreX\Webhooks\Internal\SqlWebhookDeliveryStore::forEvent packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php:51
+UNUSED-PUBLIC CoreX\Webhooks\Laravel\WebhookRegistrar::boot packages/webhooks/src/Laravel/WebhookRegistrar.php:24
+UNUSED-PUBLIC CoreX\Webhooks\Laravel\WebhookRegistrar::register packages/webhooks/src/Laravel/WebhookRegistrar.php:19
+UNUSED-PUBLIC CoreX\Workflow\Contracts\EngineAdapter::start packages/workflow/src/Contracts/EngineAdapter.php:19
+UNUSED-PUBLIC CoreX\Workflow\Internal\UnavailableEngineAdapter::start packages/workflow/src/Internal/UnavailableEngineAdapter.php:17

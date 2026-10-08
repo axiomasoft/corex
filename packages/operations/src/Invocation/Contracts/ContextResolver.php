@@ -6,8 +6,9 @@ namespace CoreX\Operations\Invocation\Contracts;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Operations\Authorization\Contracts\Principal;
-use CoreX\Operations\Invocation\Data\InvocationMetadata;
+use CoreX\Context\Contracts\Principal;
+use CoreX\Invocation\Contracts\RequestContext;
+use CoreX\Invocation\Data\InvocationMetadata;
 use Illuminate\Http\Request;
 
 #[Spi(kind: SpiKind::Implement, since: '1.0')]

@@ -1,0 +1,2 @@
+> vendor/bin/pint --test
+{"tool":"pint","result":"fail","files":[{"path":"packages\/notifications\/src\/Digest\/Internal\/DigestTick.php","fixers":["braces_position","no_unused_imports","single_line_empty_body","blank_line_after_namespace"]}]}Script vendor/bin/pint --test handling the lint:check event returned with error code 1

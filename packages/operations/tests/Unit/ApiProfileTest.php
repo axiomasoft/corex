@@ -6,10 +6,10 @@ namespace CoreX\Operations\Tests\Unit;
 
 use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Errors\Enums\UnavailabilityReason;
+use CoreX\Invocation\Contracts\OperationHandler;
+use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Modules\Data\Api;
 use CoreX\Modules\Data\CompiledRegistry;
-use CoreX\Operations\Definition\Contracts\OperationHandler;
-use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\Tests\TestCase;
 use CoreX\Operations\Versioning\Internal\ApiProfileFactory;
