@@ -66,8 +66,8 @@ serena-code graph (LSP) is relevant on the fly - the disclaimer does not apply t
 ## Project Communications
 
 - **scope memory:** `project:corex`; shared `ns:*`/`global` only by explicit authorized request.
-- **namespaces:** `axioma` (within a group - general, between groups - isolated).
-- **linked to:** azguard, chatom, chatomio.
+- **namespaces:** `axioma, corex` (within a group - general, between groups - isolated).
+- **linked to:** —.
 - see current connections: `maind graph --project corex`.
 
 If something breaks in a linked project, remember that the link exists: changes here can
