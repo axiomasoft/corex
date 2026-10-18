@@ -1,7 +1,0 @@
-{
-  "strict_apply_count": 35,
-  "reanchored": [
-    "scripts/mutations/API-physical-context.patch"
-  ],
-  "sabotage_preserved": "Only comparison context changed; original false && physical-tenancy bypass remains byte-identical."
-}

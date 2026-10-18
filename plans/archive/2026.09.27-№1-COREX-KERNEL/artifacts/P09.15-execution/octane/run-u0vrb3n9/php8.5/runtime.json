@@ -1,1 +1,0 @@
-{"php":"8.5.11","laravel":"v13.35.0","octane":"v2.21.0","octane_ref":"ce755128c9c2be39adcf8b50ec757c97b3b30eb7","core_path":"\/home\/vostrikov\/projects\/packages\/corex\/packages\/core","implementation":"Laravel\\Octane\\Worker","worker_file":"\/home\/vostrikov\/projects\/packages\/corex\/packages\/core\/tests\/Release\/octane-consumer\/vendor\/laravel\/octane\/src\/Worker.php"}

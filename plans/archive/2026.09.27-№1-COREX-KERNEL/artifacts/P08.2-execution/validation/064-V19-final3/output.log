@@ -1,2 +1,0 @@
-> php scripts/rename-completeness-gate.php
-rename-completeness OK: 855 tokens, 12110 files, sections classes,namespaces,packages,paths,identifiers

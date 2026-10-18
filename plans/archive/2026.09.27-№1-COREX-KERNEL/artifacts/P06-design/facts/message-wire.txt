@@ -1,7 +1,0 @@
-# published-message wire references
-packages/core/src/Messaging/Data/MessageEnvelope.php:14: * Конверт опубликованного сообщения (MSG-003).
-packages/core/src/Messaging/Contracts/MessagePublisher.php:19: * ровно двенадцать ключей в объявленном порядке; `contract` — строка `name.vN`,
-docs/architecture/references.md:16:| CloudEvents | Обязательные атрибуты конверта; `type` как стабильное публичное имя контракта | MSG-003, MSG-004 |
-docs/architecture/message-policy.md:26:| `envelope-version` | Версия формата конверта — отдельно от версии схемы содержимого | целое неотрицательное, версия формата конверта |
-docs/architecture/README.md:86:| MSG-003 | MSG | нет — P5 | объявлено, фаза P5 |
-docs/architecture/constitution.md:414:### MSG-003 — Опубликованное сообщение несёт конверт с обязательными полями; их перечень — в…

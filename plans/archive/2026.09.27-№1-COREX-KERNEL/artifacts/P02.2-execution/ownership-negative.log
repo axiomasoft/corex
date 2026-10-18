@@ -1,3 +1,0 @@
-> php scripts/ownership-gate.php
-ownership FAIL: new: O2 namespace corex/operations CoreX\Api\Testing expected CoreX\Operations
-Script php scripts/ownership-gate.php handling the ownership-gate event returned with error code 1

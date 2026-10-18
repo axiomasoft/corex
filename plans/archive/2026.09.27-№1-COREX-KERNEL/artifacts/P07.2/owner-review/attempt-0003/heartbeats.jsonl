@@ -1,4 +1,0 @@
-{"schema_version": "review-heartbeat/v1", "session_id": "01a10824-ef67-7990-856e-1d370afe0a08", "phase": "session/prompt", "process_alive": true, "elapsed_seconds": 30.0, "idle_seconds": 0.019, "activity_events": 149, "responses": 1}
-{"schema_version": "review-heartbeat/v1", "session_id": "01a10824-ef67-7990-856e-1d370afe0a08", "phase": "session/prompt", "process_alive": true, "elapsed_seconds": 60.0, "idle_seconds": 0.018, "activity_events": 293, "responses": 3}
-{"schema_version": "review-heartbeat/v1", "session_id": "01a10824-ef67-7990-856e-1d370afe0a08", "phase": "session/prompt", "process_alive": true, "elapsed_seconds": 90.0, "idle_seconds": 0.044, "activity_events": 457, "responses": 4}
-{"schema_version": "review-heartbeat/v1", "session_id": "01a10824-ef67-7990-856e-1d370afe0a08", "phase": "session/prompt", "process_alive": true, "elapsed_seconds": 120.0, "idle_seconds": 0.006, "activity_events": 601, "responses": 6}

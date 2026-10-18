@@ -1,7 +1,0 @@
-$ php scripts/package-docs-gate.php; bash scripts/anti-weakening-gate.sh
-package-docs-gate: OK cohort=20
-ANTI-WEAKENING GATE: база сравнения = 5911120cba72449a67ec6eac82478b51e085ec3d
-ANTI-WEAKENING GATE: allowance НЕАКТИВНА (sqlite -4, D79, sha=97fdc77) — база сравнения не совпадает
-ANTI-WEAKENING GATE: тесты sqlite 1110 -> 1110, pg 604 -> 604
-ANTI-WEAKENING GATE: OK
-exit=0

@@ -1,2 +1,0 @@
-DATA-003 packages/webhooks/src/Internal/WebhookRetention.php:149 dynamic table name on write
-DATA-003: 267 resolved write sites, 1 violations

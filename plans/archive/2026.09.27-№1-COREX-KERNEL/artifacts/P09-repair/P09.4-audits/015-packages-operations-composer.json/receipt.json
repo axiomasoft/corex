@@ -1,9 +1,0 @@
-{
-  "classification": "source",
-  "commands": [],
-  "error": "manifest/lock content-hash mismatch: /home/vostrikov/projects/packages/corex/packages/operations/composer.json",
-  "manifest": "packages/operations/composer.json",
-  "manifest_sha256": "a662308bb1ca48f80a9bf7d9c7ac8fcdadb35a6105d9f37386e5205d05ef45b1",
-  "name": "axiomasoft/corex-operations",
-  "status": "RED"
-}

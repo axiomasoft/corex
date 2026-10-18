@@ -1,7 +1,0 @@
-{
-  "id": "V8",
-  "command": "scripts/php84 composer --working-dir=packages/tenancy test -- --exclude-group=pg",
-  "exit_code": 0,
-  "duration_seconds": 2.899,
-  "log": "V8.log"
-}

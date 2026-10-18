@@ -1,7 +1,0 @@
-{
-  "observation": "medium compact review completed GREEN immediately before attempted retry; the retry launch replaced its raw output before it was read",
-  "recovery": "supported grok export recovers completed assistant verbatim; usage and original input packet retained",
-  "duplicate_pid": 539108,
-  "duplicate_action": "SIGINT and reconcile exit130 before restoring final artifact",
-  "product_delta": false
-}

@@ -1,5 +1,0 @@
-contract-guard: no resources/contracts/php-api.json changes in 0899bca5e081c8f2fcd544fcbad774ee9b73a51c..HEAD — OK
-contract-guard: packages/core/resources/contracts/php-api.json changed WITH CHANGELOG — OK
-contract-guard: packages/tenancy/resources/contracts/php-api.json changed WITH CHANGELOG — OK
-contract-guard: packages/wakeup/resources/contracts/php-api.json changed WITH CHANGELOG — OK
-contract-guard: all PHP surface changes accompanied by a CHANGELOG — OK

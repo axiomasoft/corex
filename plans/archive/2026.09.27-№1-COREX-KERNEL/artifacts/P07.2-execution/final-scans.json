@@ -1,8 +1,0 @@
-{
-  "product_commit": "ef8a2869e0d7ee8f3a1ab5cbfddf60b78d1b4db6",
-  "stancl_scan_exit": 1,
-  "stancl_matches": 0,
-  "staging_absent": true,
-  "lock_stancl_packages": [],
-  "configuration_namespace": "corex-tenancy"
-}

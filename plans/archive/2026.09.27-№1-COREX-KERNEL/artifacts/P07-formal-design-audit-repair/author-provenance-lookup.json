@@ -1,7 +1,0 @@
-{
-  "source": "installed Task adapter capture_current",
-  "thread": "01a1066b-551a-7802-8595-c79a71f425e4",
-  "available": false,
-  "error": "ROUTE_LAUNCH_MISMATCH: current Codex turn does not contain exact Task invocation line",
-  "scope": "author provenance lookup only; no self-attestation or manual private-log probing"
-}

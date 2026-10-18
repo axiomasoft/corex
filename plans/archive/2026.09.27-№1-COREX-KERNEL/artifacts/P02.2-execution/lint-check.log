@@ -1,2 +1,0 @@
-> vendor/bin/pint --test
-{"tool":"pint","result":"fail","files":[{"path":"packages\/operations\/config\/corex-api.php","fixers":["no_extra_blank_lines"]}]}Script vendor/bin/pint --test handling the lint:check event returned with error code 1

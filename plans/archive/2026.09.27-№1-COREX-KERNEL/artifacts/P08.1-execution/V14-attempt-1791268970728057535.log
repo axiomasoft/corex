@@ -1,6 +1,0 @@
-ANTI-WEAKENING GATE: база сравнения = 1e6aba0d050ae47fb769cbbbf603a3d8c64f1f70
-ANTI-WEAKENING GATE: allowance НЕАКТИВНА (sqlite -4, D79, sha=97fdc77) — база сравнения не совпадает
-ANTI-WEAKENING GATE: allowance НЕАКТИВНА (sqlite -5, D95, sha=1f42e01d10d21582746b31f89525f59e5ab024ff) — база сравнения не совпадает
-ANTI-WEAKENING GATE: allowance НЕАКТИВНА (pg -1, D95, sha=1f42e01d10d21582746b31f89525f59e5ab024ff) — база сравнения не совпадает
-ANTI-WEAKENING GATE: тесты sqlite 1211 -> 1211, pg 669 -> 669
-ANTI-WEAKENING GATE: OK

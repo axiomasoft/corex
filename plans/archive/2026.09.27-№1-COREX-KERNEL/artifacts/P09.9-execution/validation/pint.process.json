@@ -1,9 +1,0 @@
-{
-  "argv": [
-    "scripts/php84",
-    "vendor/bin/pint",
-    "--test",
-    "scripts/quality/infection-pest-adapter/src/PestAdapter.php"
-  ],
-  "exit": 0
-}

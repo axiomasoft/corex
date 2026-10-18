@@ -1,5 +1,0 @@
-{
-  "status": "rejected",
-  "decision": "D132",
-  "warning": "Do not apply the D131 split-stack approved-plan-edits.json. Current contract is knowledge/P09.9-laravel13#execution."
-}

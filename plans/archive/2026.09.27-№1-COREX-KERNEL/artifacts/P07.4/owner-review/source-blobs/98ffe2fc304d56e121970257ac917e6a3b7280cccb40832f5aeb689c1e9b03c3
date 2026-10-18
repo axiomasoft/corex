@@ -1,8 +1,0 @@
-candidate=90f21c877997ccd69055ccb5cdda1b7e5ebe9d01
-command=bash scripts/contract-guard.sh "$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/base-commit.txt)"
-started=2026-10-05T06:51:19.325366+00:00
-contract-guard: packages/access/resources/contracts/php-api.json changed WITH CHANGELOG — OK
-contract-guard: packages/access-azguard/resources/contracts/php-api.json changed WITH CHANGELOG — OK
-contract-guard: all PHP surface changes accompanied by a CHANGELOG — OK
-
-exit=0

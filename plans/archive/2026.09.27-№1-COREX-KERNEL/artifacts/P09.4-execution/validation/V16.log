@@ -1,2 +1,0 @@
-> vendor/bin/pest --testsuite=Golden --exclude-group=pg
-{"tool":"pest","result":"passed","tests":7,"passed":7,"assertions":3502,"duration_ms":6984}

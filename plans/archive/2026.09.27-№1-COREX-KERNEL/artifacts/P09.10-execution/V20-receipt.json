@@ -1,7 +1,0 @@
-{
-  "id": "V20",
-  "command": "scripts/php84 composer schema-gate",
-  "exit_code": 0,
-  "duration_seconds": 0.653,
-  "log": "V20.log"
-}

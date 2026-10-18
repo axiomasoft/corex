@@ -1,9 +1,0 @@
-{
-    "php": "8.4.26",
-    "redis": "6.3.0",
-    "igbinary": "3.2.16",
-    "ini_scan_dir": "\/etc\/php\/8.4\/cli\/conf.d:\/tmp\/corex-p074-php-runtime\/ini",
-    "redis_sha256": "1fed6c8c33f2ef370e37ee588f444cc186f2a709c6a2131666369e78308edb52",
-    "igbinary_sha256": "eba0eba3be47597b03dd0f4f87eb0b544013eafacb214d9b0b8973372ae37a76",
-    "origin": "apt package from configured ondrej\/php PPA; extracted locally; no system configuration changed"
-}

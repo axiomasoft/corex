@@ -1,7 +1,0 @@
-{
-  "environment_current": true,
-  "inputs_current": true,
-  "kind": "probe; not full-fragment MSI acceptance",
-  "original_base": "/home/vostrikov/projects/packages/corex/build/quality/mutation/probe-/tenancy-security/3c0e36bbb4bd4e70af6a3a092ec0dccf",
-  "receipt_sha256": "02eda93de5bb6e92c1e11628101b354d201f0fdab34cfb759626e46d33393f6c"
-}

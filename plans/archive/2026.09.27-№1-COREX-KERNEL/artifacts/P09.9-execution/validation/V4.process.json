@@ -1,9 +1,0 @@
-{
-  "argv": [
-    "scripts/php84",
-    "composer",
-    "audit",
-    "--locked"
-  ],
-  "exit": 0
-}

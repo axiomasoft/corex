@@ -1,3 +1,0 @@
-> bash scripts/run-root-tests.sh 
-{"tool":"pest","raw":["RuntimeException","A facade root has not been set.","at vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php:361","357 {","358 $instance = static::getFacadeRoot();","359","360 if (! $instance) {","361 throw new RuntimeException('A facade root has not been set.');","362 }","363","364 return $instance->$method(..$args);","365 }","1 scripts/schema-gate.php:971","Illuminate\\Support\\Facades\\Facade::__callStatic()","2 tests/Unit/SchemaGateTest.php:7"]}
-Script bash scripts/run-root-tests.sh @additional_args handling the test event returned with error code 1

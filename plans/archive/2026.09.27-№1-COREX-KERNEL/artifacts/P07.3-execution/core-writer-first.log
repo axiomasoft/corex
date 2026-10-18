@@ -1,3 +1,0 @@
-> ../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage,ModulesPackage --exclude-group=pg '--filter=SynchronousAuditWriter'
-{"tool":"pest","raw":["Pest\\Exceptions\\TestCaseAlreadyInUse","The test case [CoreX\\Testing\\CoreXTestCase] may not be used here. The folder [/home/vostrikov/projects/packages/corex/packages/core/tests/Feature/SynchronousAuditWriterTest.php] is already bound to the test case [CoreX\\Testing\\CoreXTestCase]."]}
-Script ../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage,ModulesPackage --exclude-group=pg handling the test event returned with error code 1

@@ -1,7 +1,0 @@
-{
-  "reason": "The first package tenancy process exceeded the PostgreSQL 100 connection limit; the server had no remaining test sessions after process exit.",
-  "initial": "validation-initial.json",
-  "retry": "validation-retry/checks.json",
-  "product_changes_for_retry": false,
-  "result": "GREEN"
-}

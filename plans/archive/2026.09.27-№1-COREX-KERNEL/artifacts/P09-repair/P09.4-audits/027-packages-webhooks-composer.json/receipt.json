@@ -1,9 +1,0 @@
-{
-  "classification": "source",
-  "commands": [],
-  "error": "manifest/lock content-hash mismatch: /home/vostrikov/projects/packages/corex/packages/webhooks/composer.json",
-  "manifest": "packages/webhooks/composer.json",
-  "manifest_sha256": "93f3898a1eb02282637d22b7d820bfe90e2ea3dc8b35623f2614dfa879e4da46",
-  "name": "axiomasoft/corex-webhooks",
-  "status": "RED"
-}

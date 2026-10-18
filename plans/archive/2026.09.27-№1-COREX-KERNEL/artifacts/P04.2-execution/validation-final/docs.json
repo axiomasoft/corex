@@ -1,9 +1,0 @@
-{
-  "name": "docs",
-  "command": "scripts/php84 php scripts/package-docs-gate.php",
-  "exit_code": 0,
-  "duration_ms": 158,
-  "patch_sha256": "fdf8c17b34038274696aa9f38bae34a9d1a306f792a82f6f990c2341c924f2b1",
-  "log": "validation-final/docs.log",
-  "log_sha256": "5aeb6cf46f665c6be35b63deac881dd466826ca0f927559c270b3287a3b6385e"
-}

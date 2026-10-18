@@ -1,7 +1,0 @@
-{
-  "id": "V12",
-  "command": "PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/access test:pg",
-  "exit_code": 0,
-  "duration_seconds": 26.378,
-  "log": "V12.log"
-}

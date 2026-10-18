@@ -1,9 +1,0 @@
-{
-  "host": "http://127.0.0.1:32772",
-  "health": {
-    "status": "available"
-  },
-  "container": "corex-p09-repair-meilisearch",
-  "image": "getmeili/meilisearch:v1.16",
-  "isolation": "new container, no volume, loopback random port; random test index prefix with teardown"
-}

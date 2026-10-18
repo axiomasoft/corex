@@ -1,5 +1,0 @@
-sys_departments.sort_order: int -> bigint; value/nullability preserved
-sys_outbox_messages.attempts: int -> bigint; value/nullability preserved
-core: all index methods/order/predicates, FK actions, CHECK expressions, table/column membership preserved
-sys_saved_views.position: int -> bigint; value/nullability preserved
-panels: all index methods/order/predicates, FK actions, CHECK expressions, table/column membership preserved

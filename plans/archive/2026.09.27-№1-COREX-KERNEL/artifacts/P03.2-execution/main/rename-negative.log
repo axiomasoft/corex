@@ -1,5 +1,0 @@
-rename-completeness OK: 859 tokens, 7604 files, sections classes,namespaces,packages,paths,identifiers
-tests/Support/SourceScanner.php:112 classes CoreX\Access\Access\AutMatrixGrantSource
-rename-completeness FAIL: 1 occurrence(s)
-negative: old FQCN detected with exit 1
-restored: exact original bytes; gate exit 0

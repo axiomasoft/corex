@@ -1,3 +1,0 @@
-$ scripts/php84 vendor/bin/pint --test scripts/schema-gate.php tests/Unit/SchemaGateTest.php tests/Golden/Support/SchemaCatalogue.php tests/Golden/SchemaGoldenTest.php
-{"tool":"pint","result":"passed"}
-exit=0

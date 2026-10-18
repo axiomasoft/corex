@@ -1,5 +1,0 @@
-> pest '--group=pg'
-
-  [37;44;1m INFO [39;49;22m No tests found.
-
-Script pest handling the test event returned with error code 1

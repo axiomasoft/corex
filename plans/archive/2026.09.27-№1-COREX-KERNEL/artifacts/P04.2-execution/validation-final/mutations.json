@@ -1,9 +1,0 @@
-{
-  "name": "mutations",
-  "command": "PGSQL_PORT=5432 scripts/php84 bash scripts/mutation-check.sh --all",
-  "exit_code": 0,
-  "duration_ms": 12185,
-  "patch_sha256": "fdf8c17b34038274696aa9f38bae34a9d1a306f792a82f6f990c2341c924f2b1",
-  "log": "validation-final/mutations.log",
-  "log_sha256": "34e6095c1c0c137b339f0854156fb194321a8512e8119a0109c61ad4bec2aa07"
-}

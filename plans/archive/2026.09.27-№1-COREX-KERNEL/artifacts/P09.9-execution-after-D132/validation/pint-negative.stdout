@@ -1,1 +1,0 @@
-{"tool":"pint","result":"fail","files":[{"path":"\/tmp\/tmphksqlaaz\/packages\/tenancy\/src\/Fixture.php","fixers":["blank_line_after_opening_tag","binary_operator_spaces"]}]}

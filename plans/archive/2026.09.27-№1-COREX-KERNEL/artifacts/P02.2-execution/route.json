@@ -1,1 +1,0 @@
-{"cwd": "/home/vostrikov/projects/packages/corex", "effort": "high", "invocation": "$ task:plan-run 2026.09.27-№1-COREX-KERNEL P02.1 P02.2", "model": "gpt-6-sol", "model_class": "implementation", "source": "provider-thread-state", "source_version": "codex-turn-context-v1", "thread_id": "01a0e984-103f-7032-a0a5-cfb63fc53ebc", "ts": "2026-09-28T19:43:09Z"}

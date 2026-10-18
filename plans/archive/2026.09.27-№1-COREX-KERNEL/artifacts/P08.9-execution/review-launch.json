@@ -1,8 +1,0 @@
-{
-  "provider": "grok",
-  "model": "grok-4.7",
-  "effort": "high",
-  "session_id": "19ce957d-51e6-4a83-92a0-5c3500e2ac19",
-  "context_parameter": null,
-  "read_only": true
-}

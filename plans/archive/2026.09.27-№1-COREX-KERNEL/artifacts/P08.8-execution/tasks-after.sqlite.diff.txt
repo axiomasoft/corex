@@ -1,5 +1,0 @@
-corex_task_operations: rename indexes corex_task_operations_request_key_unique -> corex_task_operations_request_key_uq
-tsk_stages: rename indexes tsk_stages_project_id_code_unique -> tsk_stages_project_id_code_uq
-tsk_task_targets: rename indexes tsk_tt_entity_ix -> tsk_task_targets_entity_ix
-tsk_time_logs: rename indexes tsk_tl_task_ix -> tsk_time_logs_task_ix
-tsk_time_logs: rename indexes tsk_tl_user_ix -> tsk_time_logs_user_ix

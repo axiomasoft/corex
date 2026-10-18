@@ -1,6 +1,0 @@
-{
-  "candidate": "d93a61ec71a94d8851e5fed7c31c6ff47ba56acb",
-  "method": "git archive exact committed candidate with vendor symlink; excludes unrelated untracked design PHP prototypes",
-  "checkout": "/tmp/corex-p064-lint-512suu6v",
-  "exit_code": 0
-}

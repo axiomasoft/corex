@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuites>
-  <testsuite name="Packages\transfer\tests\Pg\SqlTransferExecutorTest" file="packages/transfer/tests/Pg/SqlTransferExecutorTest.php" tests="1" assertions="4" errors="0" failures="0" skipped="0" time="0.164381">
-    <testcase name="it rolls back only the failed row savepoint and continues the batch" file="packages/transfer/tests/Pg/SqlTransferExecutorTest.php::it rolls back only the failed row savepoint and continues the batch" class="Packages\transfer\tests\Pg\SqlTransferExecutorTest" classname="Packages.transfer.tests.Pg.SqlTransferExecutorTest" assertions="4" time="0.164381"/>
-  </testsuite>
-</testsuites>

@@ -1,6 +1,0 @@
-{
-  "exit": 0,
-  "stdout": "gate P09-DESIGN-P08 granted\nnext: run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P09.1\n",
-  "stderr": "",
-  "note": "Owner authorization 2026-10-06 (verbatim): «После независимого GREEN и подтверждения P08 разрешаю зарегистрировать owner grant P09-DESIGN-P08, процитировав это условное разрешение.» Conditions fulfilled and source-bound in knowledge/artifacts-P09-D125-admission: fresh independent codex/gpt-6-sol/high session 01a112b8-87f9-7333-aafe-9fd459898f5d GREEN, no findings/no writes; design author codex/gpt-6.1-sol/high differs. P08.10 done and phase hosted closure verified live via gh api at ax1oma/corex-mirror CI run37508077385, SHA1f824f74fa0044819f991346e484dad82872827a, completed/success all37 jobs, current mirror main same SHA; scripts/.plan-close-deferred absent. Current HEAD f0faead86201935c71cd0c2d8731e2e41bcc26e5 is descendant with plan-only bookkeeping and all3295 nonplan files identical to tested SHA. Historical facts snapshot preserved; exact P08 anchor deltas and future mandatory pre/verify-pre/post recorded. Readiness grant only for repository-only D125 P09.1; no start/implementation/version/publication/push/tags/release qualification or other owner grants."
-}

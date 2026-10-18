@@ -1,8 +1,0 @@
-{
-  "collisions": [
-    "scripts/bc-check.sh",
-    "scripts/package-graph-gate.php",
-    "tests/Arch/PackageGraphTest.php"
-  ],
-  "anchor_mode": "split"
-}

@@ -1,5 +1,0 @@
-bc-check: BC_CHECK_BASE=76f8bdde496154c0a8901e459175cf306bedd860 (PHP 8.4)
-bc-check: roave 8.22.0
-bc-check: axiomasoft/corex-tenancy (tenancy) |bc-break| stability=stable base=984c18d2f10548b403deeabb31ad6432210ee129 candidate=1b666c381d3e87a330fe2b911d534286218dc5d3
-bc-check: exact decision-bound unpublished delta — axiomasoft/corex-tenancy
-bc-check: OK

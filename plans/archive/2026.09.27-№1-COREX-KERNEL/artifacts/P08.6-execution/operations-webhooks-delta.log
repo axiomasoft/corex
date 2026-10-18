@@ -1,9 +1,0 @@
-> pest '--filter=LoadSchemaTest'
-
-   PASS  CoreX\Operations\Tests\Feature\LoadSchemaTest
-  ✓ schema registration is inert and requires explicit identity          0.05s
-  ✓ sqlite schemas constraints isolation and rollback                    0.04s
-  ✓ postgresql schema and constraints                                    0.25s
-
-  Tests:    3 passed (78 assertions)
-  Duration: 0.43s

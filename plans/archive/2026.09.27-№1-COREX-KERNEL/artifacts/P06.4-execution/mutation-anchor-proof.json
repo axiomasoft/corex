@@ -1,8 +1,0 @@
-{
-  "base": "1bc9634e201d230ed17403aa061710af72c76e1a",
-  "baseline_exit": 1,
-  "baseline_diagnostic": "error: patch failed: packages/operations/src/Invocation/Internal/OperationDispatcher.php:117\nerror: packages/operations/src/Invocation/Internal/OperationDispatcher.php: patch does not apply\n",
-  "candidate_exit": 0,
-  "same_sabotage": "disable only the undeclared fields rejection; reanchor to P06.1 $undeclared guard",
-  "source_unchanged": "packages/operations/src/Invocation/Internal/OperationDispatcher.php"
-}

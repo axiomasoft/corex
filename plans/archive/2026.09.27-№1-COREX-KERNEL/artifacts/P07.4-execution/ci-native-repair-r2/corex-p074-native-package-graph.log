@@ -1,8 +1,0 @@
-HOST-RESERVED NAMESPACE: CoreX\SearchMeilisearch\ host=axiomasoft/corex-search owner=axiomasoft/corex-search-meilisearch — host-reserved adapter namespace; host defines zero classes under the prefix; class_counts={"axiomasoft/corex-search":0,"axiomasoft/corex-search-meilisearch":9}
-UNDECLARED DEPENDENCY EXCEPTION: axiomasoft/corex-tasks-workflow -> axiomasoft/corex-wakeup in packages/tasks-workflow/src/Internal/MaterializationWakeupHandler.php — ADR P12.1; expires when: handler registration guarded in TasksWorkflowServiceProvider or axiomasoft/corex-wakeup promoted to require
-packages/access-azguard/src/Internal/AccessAzguardOptions.php:14: CoreX\AccessAzguard\Internal\AccessAzguardOptions [R4b] → axiomasoft/corex-access-azguard (API-UNRESOLVED-TYPE AzGuard\Models\Role)
-packages/access-azguard/src/Internal/AutMatrixGrantSource.php:44: CoreX\AccessAzguard\Internal\AutMatrixGrantSource [R4b] → axiomasoft/corex-access-azguard (API-UNRESOLVED-TYPE AzGuard\Registry\Values\PermissionSet)
-packages/access-azguard/src/Internal/MatrixPermissionCatalogBuilder.php:44: CoreX\AccessAzguard\Internal\MatrixPermissionCatalogBuilder [R4b] → axiomasoft/corex-access-azguard (API-UNRESOLVED-TYPE AzGuard\Registry\Contracts\PermissionDefinition)
-packages/access-azguard/src/Internal/WorkspacePermissionLayer.php:29: CoreX\AccessAzguard\Internal\WorkspacePermissionLayer [R4b] → axiomasoft/corex-access-azguard (API-UNRESOLVED-TYPE AzGuard\Registry\Values\PermissionSet)
-packages/access-azguard/src/Internal/WorkspacePermissionLayer.php:29: CoreX\AccessAzguard\Internal\WorkspacePermissionLayer [R4b] → axiomasoft/corex-access-azguard (API-UNRESOLVED-TYPE AzGuard\Registry\Values\PermissionSet)
-package-graph-gate: 5 violation(s)

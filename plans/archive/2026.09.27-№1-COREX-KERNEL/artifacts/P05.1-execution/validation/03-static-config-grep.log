@@ -1,5 +1,0 @@
-$ git grep -n -E 'CoreX\\Config\\Internal\\Config\b' -- packages products tests scripts; echo grep-exit=$?; test -f packages/core/src/Config/Internal/Config.php && echo file-present || echo file-absent
-packages/core/CHANGELOG.md:5:- Removed the static `CoreX\Config\Internal\Config` holder: `CoreOptions` is a lazy shared singleton read once at boot (`app(CoreOptions::class)` in migrations and tests; call `forgetInstance(CoreOptions::class)` after writing `corex` config in a booted test). Added `CoreOptions::$acknowledgedDangerousModes` (`corex.acknowledged_dangerous_modes`, exact config paths only), the `RuntimeConfigCheck` SPI and `RuntimeConfigGate`: checks run when the HTTP application finishes booting or a console command starts, except build commands. `corex:config:validate` runs them too, accepts `--production`, lists acknowledged dangerous modes as warnings and reports the `corex-operations.require_physical_tenancy=false` opt-out as a notice. `CoreOptionsParser::current()` is deprecated and returns the shared `CoreOptions`.
-grep-exit=0
-file-absent
-exit=0

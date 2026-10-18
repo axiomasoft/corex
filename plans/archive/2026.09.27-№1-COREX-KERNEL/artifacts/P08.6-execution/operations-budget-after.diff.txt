@@ -1,7 +1,0 @@
-sys_api_budget_buckets: rename indexes sys_api_budget_buckets_pkey -> sys_api_budget_buckets_pk
-sys_api_budget_buckets: rename checks budget_buckets_counts -> sys_api_budget_buckets_counts_ck
-sys_api_budget_reservations: rename indexes sys_api_budget_reservations_retention_idx -> sys_api_budget_reservations_retention_ix
-sys_api_budget_reservations: rename indexes sys_api_budget_reservations_pkey -> sys_api_budget_reservations_pk
-sys_api_budget_reservations: rename checks budget_reservations_state -> sys_api_budget_reservations_state_ck
-sys_api_budget_reservations: rename checks budget_reservations_counts -> sys_api_budget_reservations_counts_ck
-sys_api_budget_reservations: rename checks budget_reservations_keys -> sys_api_budget_reservations_keys_ck

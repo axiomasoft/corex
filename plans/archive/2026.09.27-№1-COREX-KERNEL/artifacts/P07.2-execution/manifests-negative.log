@@ -1,4 +1,0 @@
-tenancy: prerelease: axiomasoft/stancl-tenancy='>=4.0.0-alpha1 <=4.0.0-alpha1'
-> python3 scripts/manifest-check.py
-manifests FAIL: 1 violations
-Script python3 scripts/manifest-check.py handling the manifests:check event returned with error code 1

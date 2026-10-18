@@ -1,5 +1,0 @@
-> python3 scripts/module-layout-gate.py
-new R3 packages/access-azguard/src/AccessAzguardRegistrar.php
-new R5 packages/tenancy/src/Account/Internal/Jobs/CreateDatabaseFromTemplate.php CoreX\Tenancy\Provisioning\Internal\Database\TemplateClonePostgreSQLManager
-module-layout FAIL: 1361 files, 2 violations, 0 baselined, 2 new, 0 stale; R0 0, R1 0, R2 0, R3 1, R4 0, R5 1, R6 0
-Script python3 scripts/module-layout-gate.py handling the module-layout-gate event returned with error code 1

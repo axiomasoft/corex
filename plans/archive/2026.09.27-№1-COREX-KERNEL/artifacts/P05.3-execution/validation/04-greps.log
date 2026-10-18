@@ -1,4 +1,0 @@
-connection-count growth files: 0
-facade grep exit 1
-fatal: path 'packages/core/src/Messaging/Internal/PubSubManager.php' does not exist in 'a59c38b2'
-PubSubManager absent

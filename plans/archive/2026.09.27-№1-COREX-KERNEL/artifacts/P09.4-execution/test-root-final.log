@@ -1,3 +1,0 @@
-> bash scripts/run-root-tests.sh 
-{"tool":"pest","result":"failed","tests":1273,"passed":1272,"assertions":6502,"duration_ms":232650,"failed":1,"failures":[{"test":"P\\Tests\\Arch\\RectorLaravelSubsetTest::__pest_evaluable_it_executes_every_pinned_upstream_fixture_and_preservation_policy_controls_with_isolated_stubs","file":"/home/vostrikov/projects/packages/corex/tests/Arch/RectorLaravelSubsetTest.php","line":82,"message":"Failed asserting that two strings are identical.\n--- Expected\n+++ Actual\n@@ @@\n-'scripts/quality/rector/Laravel/src'\n+'scripts/quality/rector/Laravel/src/'"}]}
-Script bash scripts/run-root-tests.sh @additional_args handling the test event returned with error code 1

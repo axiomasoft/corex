@@ -1,9 +1,0 @@
-{
-  "schema": "p04-replay-equality/v1",
-  "patch_sha256": "d7735d64826dd96e3cbb3b5fb9f78abbc31ad564c1250bd7c0f2ffb635913bbe",
-  "paths": 1521,
-  "mapped_classes": 115,
-  "mismatches": [],
-  "vendor": "independent relocated root/package vendors; own package links resolve inside replay checkout",
-  "generated_graph_report": "validation-final/generated-graph-report.json; generated_at is the only difference; sealed preimage bytes restored"
-}

@@ -1,9 +1,0 @@
-{
-  "classification": "source",
-  "commands": [],
-  "error": "manifest/lock content-hash mismatch: /home/vostrikov/projects/packages/corex/packages/search-meilisearch/composer.json",
-  "manifest": "packages/search-meilisearch/composer.json",
-  "manifest_sha256": "f3933c72d2bb49cfa1725ca1f7191f0affe7edbb3b3d6bfe74a345c1c7276e6d",
-  "name": "axiomasoft/corex-search-meilisearch",
-  "status": "RED"
-}

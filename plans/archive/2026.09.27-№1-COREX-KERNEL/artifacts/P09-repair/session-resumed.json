@@ -1,9 +1,0 @@
-{
-  "model": "gpt-6.1-sol",
-  "effort": "high",
-  "session": "01a117f0-0c4f-7fb3-9855-cea7eb7f538f",
-  "observed_from": "rollout turn_context",
-  "runtime": "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan.py",
-  "runtime_version": "0.28.3",
-  "stale_cache_projection": "0.26.1; not executed"
-}

@@ -1,4 +1,0 @@
-sys_api_bulk_operations: rename indexes sys_api_bulk_operations_claim_idx -> sys_api_bulk_operations_claim_ix
-sys_api_bulk_operations: rename indexes sys_api_bulk_operations_submission_unique -> sys_api_bulk_operations_submission_uq
-sys_api_idempotency: rename indexes sys_api_idempotency_retention_idx -> sys_api_idempotency_retention_ix
-sys_api_idempotency: rename indexes sys_api_idempotency_scope_key_unique -> sys_api_idempotency_scope_key_uq

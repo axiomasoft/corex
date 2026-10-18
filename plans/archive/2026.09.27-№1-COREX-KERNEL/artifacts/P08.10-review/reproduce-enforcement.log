@@ -1,5 +1,0 @@
-{"probe":"raw-sql-S6","column_type":"bigint","allowlist":[],"hits":[]}
-{"probe":"raw-sql-S6","column_type":"integer","allowlist":[],"hits":[]}
-{"probe":"golden-null-uniqueness","catalogues_equal":true,"before_ddl":"CREATE UNIQUE INDEX p0810_review_probe_uq ON public.p0810_review_probe USING btree (workspace_id, code) NULLS NOT DISTINCT","after_ddl":"CREATE UNIQUE INDEX p0810_review_probe_uq ON public.p0810_review_probe USING btree (workspace_id, code)","catalogue_index":[{"name":"p0810_review_probe_uq","kind":"uq","columns":["workspace_id","code"],"predicate":null,"method":"btree"}]}
-{"probe":"changed-behavior","duplicate_global_keys_accepted":2}
-{"probe":"rollback","remaining_table":null}

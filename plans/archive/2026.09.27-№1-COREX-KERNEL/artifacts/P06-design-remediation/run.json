@@ -1,9 +1,0 @@
-{
-  "run_id": "e0b2aec1-9248-469a-a3a8-890e09abbdf7",
-  "session_id": "01a10273-bd3c-7300-b84f-ff7d514e7d94",
-  "fingerprint": "121c3dec52ab48041129b808dbe3dc2ebf7fb2d7f56c7cc4775a5ecdbf554167",
-  "actor": "auditor/root/codex/gpt-6.1-sol/xhigh",
-  "scope": "independent recheck of A1–A6/m1–m2 plus integration of unchanged prior full-design audit evidence",
-  "initial_fingerprint": "94ae01bf5baa5b44a81ee21113db4259f45fb7da29dab51d427de277200bd250",
-  "revision_reason": "Bounded A3 receiver fixture consumer correction identified by independent reviewer."
-}

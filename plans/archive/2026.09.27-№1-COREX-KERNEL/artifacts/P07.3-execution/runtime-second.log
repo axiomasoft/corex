@@ -1,4 +1,0 @@
-> php scripts/runtime-globals-gate.php
-runtime-globals-gate: G1 0, G2 0, G3 0, G4 0, G5 0 outside baseline
-runtime-globals-gate: baseline files=0 findings=0 (prefix packages/tenancy/src/Impersonation/)
-runtime-globals-gate: OK

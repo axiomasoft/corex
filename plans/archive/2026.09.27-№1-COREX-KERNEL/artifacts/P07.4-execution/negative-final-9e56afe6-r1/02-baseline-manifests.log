@@ -1,9 +1,0 @@
-candidate=9e56afe69ef2525f7ec3a68ca3b252e6b9bf1078
-command=scripts/php84 composer manifests:check
-mutation=none; bridge already unreleased
-started=2026-10-05T07:42:57.032020+00:00
-> python3 scripts/manifest-check.py
-manifests OK: 23 roots
-
-exit=0
-verified=true

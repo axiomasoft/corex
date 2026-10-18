@@ -1,6 +1,0 @@
-{
-  "command": "scripts/php84 composer php-api",
-  "exit_code": 0,
-  "diagnostics": [],
-  "stale_lines": []
-}

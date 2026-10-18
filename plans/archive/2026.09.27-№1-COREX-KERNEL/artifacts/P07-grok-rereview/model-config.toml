@@ -1,2 +1,0 @@
-[model."grok-4.7"]
-context_window = 500000

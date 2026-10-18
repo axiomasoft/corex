@@ -1,6 +1,0 @@
-{
-  "injected": "legacy mergeConfigFrom key tenancy",
-  "exit_code": 1,
-  "expected_violation": "O2 config axiomasoft/corex-tenancy tenancy expected corex-tenancy",
-  "restored": true
-}

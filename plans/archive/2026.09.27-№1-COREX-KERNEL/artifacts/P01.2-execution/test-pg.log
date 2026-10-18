@@ -1,2 +1,0 @@
-> vendor/bin/pest --group=pg
-{"tool":"pest","result":"passed","tests":239,"passed":239,"assertions":1149,"duration_ms":48183}
