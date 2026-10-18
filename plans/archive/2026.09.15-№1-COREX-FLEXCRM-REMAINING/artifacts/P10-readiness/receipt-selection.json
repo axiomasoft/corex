@@ -1,7 +1,0 @@
-{
-  "schema_version": "receipt-selection/1",
-  "item": "P10.2",
-  "mode": "readiness",
-  "di_subconditions_pending": 63,
-  "note": "Readiness only; actual effective DI requires artifacts/P10-external imports."
-}

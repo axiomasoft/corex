@@ -1,7 +1,0 @@
-{
-  "schema_version": "p11-tests-owner-receipt/1",
-  "accepting_actor": "executor/P11.3",
-  "item": "P11.3",
-  "scope": "consumer-test-qualification",
-  "note": "CoreX executor provenance for test receipt reconciliation; consumer acceptance remains independently owned."
-}

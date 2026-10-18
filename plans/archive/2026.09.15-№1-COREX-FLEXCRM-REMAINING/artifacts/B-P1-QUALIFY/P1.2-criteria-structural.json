@@ -1,9 +1,0 @@
-{
-  "stage": "criteria",
-  "result": "PASS",
-  "sources": 100,
-  "requirements": 52,
-  "parent_criteria": 365,
-  "atoms": 688,
-  "semantic_review": "P1.2-semantic-review.json PASS, independent lossless coverage PASS"
-}

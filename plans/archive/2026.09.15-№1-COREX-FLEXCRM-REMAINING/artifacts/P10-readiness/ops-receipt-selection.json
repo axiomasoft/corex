@@ -1,7 +1,0 @@
-{
-  "schema_version": "receipt-selection/1",
-  "item": "P10.8",
-  "mode": "readiness",
-  "b33_ac_parents_pending": 15,
-  "note": "Readiness only; actual effective B33 ops requires artifacts/P10-external imports."
-}

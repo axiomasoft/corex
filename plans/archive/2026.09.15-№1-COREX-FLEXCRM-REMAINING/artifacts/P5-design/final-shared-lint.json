@@ -1,7 +1,0 @@
-{
-  "chunk_id": "06457b",
-  "wall_time_seconds": 1.9814907750000001,
-  "exit_code": 1,
-  "original_token_count": 57,
-  "output": "ERROR: plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/handoff.md:3: handoff.Next: CONTINUITY_CONTEXT_INVALID (CONTINUITY_CONTEXT_INVALID)\nplan-lint: ПРОВАЛ (1 план(ов), 1 ошибок, 0 предупреждений)\n"
-}

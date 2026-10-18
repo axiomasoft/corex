@@ -1,7 +1,0 @@
-{
-  "schema_version": "p11-intake-owner-receipt/1",
-  "accepting_actor": "executor/P11.1",
-  "item": "P11.1",
-  "scope": "local-qualification-only",
-  "note": "Laboratory intake operator provenance; not consumer acceptance or foreign write grant."
-}

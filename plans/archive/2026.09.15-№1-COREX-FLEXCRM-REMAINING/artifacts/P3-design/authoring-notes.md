@@ -1,1 +1,0 @@
-P3 initial lint reproduced two current authoring defects: friction used prose rather than enum; assurance seams used uppercase SQL/Redis. Corrected current new encoding preserving original observation, archived original invalid JSON; lowercased seam IDs. No historical item/decision meaning or product state changed. Rebuilt affected views and reran original lint.

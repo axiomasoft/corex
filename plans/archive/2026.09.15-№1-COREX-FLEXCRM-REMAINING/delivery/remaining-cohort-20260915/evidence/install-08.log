@@ -1,7 +1,0 @@
-case=INSTALL-08
-command=/usr/bin/python3 /home/vostrikov/projects/packages/corex/scripts/distribution/remaining-cohort-installed.py --verify-install-08
-cwd=/home/vostrikov/projects/packages/corex
-exit=0
---- stdout ---
-
---- stderr ---

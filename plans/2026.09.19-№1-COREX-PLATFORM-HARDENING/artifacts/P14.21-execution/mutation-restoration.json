@@ -1,8 +1,0 @@
-{
-  "nonapplicable_patch_exit": 2,
-  "dirty_source_sha256": "200fc7f86f03db66820884b3dd7c7ae0ce4e42c065240b43685e3faaaef2ac3a",
-  "staged_entries_sha256": "6e3742f0035597012c74319142da2f49dea4a45e3e400303b955810f1d973033",
-  "source_preserved": true,
-  "index_entries_preserved": true,
-  "all_target_files_restored": true
-}

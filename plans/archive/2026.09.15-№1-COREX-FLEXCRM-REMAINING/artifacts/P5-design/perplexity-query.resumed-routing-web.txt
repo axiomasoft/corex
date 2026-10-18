@@ -1,1 +1,0 @@
-What are reliable practices for a disposable routing-hint cache over durable SQL scheduled jobs: minimum due-time upserts, revision/lease-epoch conditional deletion, and reconciliation after cache loss? Explain concurrent-update races. Cite PostgreSQL and AWS primary documentation, distinguish their primitives from application design. Under 400 words.

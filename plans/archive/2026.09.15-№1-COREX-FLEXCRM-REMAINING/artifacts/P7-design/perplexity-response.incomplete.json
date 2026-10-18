@@ -1,8 +1,0 @@
-{
-  "content": [
-    {
-      "type": "text",
-      "text": "Yes—these are sound generic design choices, with several important qualifications. The central theme is to keep authoritative identifiers and exact values separate from presentation, vendor APIs, recurrence expansion, and asynchronous scheduling;"
-    }
-  ]
-}

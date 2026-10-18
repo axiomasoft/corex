@@ -1,5 +1,0 @@
-> bash scripts/bc-check.sh
-bc-check: BC_CHECK_BASE=9608b488bc1ab1fcf635cf08254b5f6687e0d60a (PHP 8.4)
-bc-check: roave 8.22.0
-bc-check: corex/transfer (transfer) |compatible| stability=experimental base=4831592b557af7911e8874a4793ee582bf6b74c7 candidate=b77d85148d6f7371e3b4c81f5b6585658fea2ffe
-bc-check: OK

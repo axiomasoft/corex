@@ -1,7 +1,0 @@
-{
-  "schema": "handoff-recommendation-receipt/v1",
-  "receipt_verification": "PASS",
-  "attempted_helper": "plan_delivery.required_final_message",
-  "outcome": "STALE_TERMINAL_RECEIPT: terminal delivery receipt is required",
-  "resolution": "Keep verified non-product design receipt and copy recommendation exactly; do not mint product terminal status"
-}

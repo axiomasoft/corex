@@ -1,3 +1,0 @@
-case=INTAKE-03
-result=PASS
-command=/usr/bin/python3 -B /home/vostrikov/projects/packages/corex/plans/2026.09.15-№1-COREX-FLEXCRM-REMAINING/scripts/reconcile-consumer.py --prepare-intake --case INTAKE-03
