@@ -1,3 +1,0 @@
-> PGSQL_HOST=127.0.0.1 PGSQL_PORT=1 PGSQL_DATABASE=corex_test bash scripts/run-root-tests.sh
-{"tool":"pest","result":"passed","tests":1124,"passed":1124,"assertions":5645,"duration_ms":202239}
-{"tool":"pest","result":"passed","tests":17,"passed":17,"assertions":79,"duration_ms":775}

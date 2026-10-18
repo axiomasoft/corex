@@ -1,6 +1,0 @@
-{
-  "source": "HEAD examples.md (sourceClasses unchanged in prior B1-B3 remediation)",
-  "exit": 255,
-  "stderr_excerpt": "PHP Fatal error:  Cannot redeclare class CoreX\\Attributes\\Internal\\Laravel\\AttributeCompositionRegistrar (previously declared in /home/vostrikov/projects/packages/corex/packages/attributes/src/Laravel/AttributeCompositionRegistrar.php:11) in /home/vostrikov/projects/packages/corex/packages/attributes/src/Laravel/AttributeCompositionRegistrar.php on line 11\nPHP Stack trace:\nPHP   1. {main}() /tmp/corex-preimage-_p9z3xlb/original.php:0\nPHP   2. CoreX\\Tests\\Golden\\Support\\GoldenSnapshot::sourceClasses($repoRoot = '/home/vostrikov/projects/packages/corex') /tmp/corex-preimage-_p9z3xlb/original.php:139\nPHP   3. array_filter($array = [0 => 'CoreX\\\\Auth\\\\Access\\\\ScopePredicate', 1 => 'CoreX\\\\Auth\\\\Access\\\\PermissionSurface', 2 => 'CoreX\\\\Auth\\\\Access\\\\WorkspaceScopeWiring', 3 => 'CoreX\\\\Auth\\\\Access\\\\WorkspacePermissionLayer', 4 => 'CoreX\\\\Auth\\\\Access\\\\DefaultScopeResolver', 5 => 'CoreX\\\\Auth\\\\Access\\\\ScopeAvailability', 6 => 'CoreX\\\\Auth\\\\Access\\\\PrincipalIdentity', 7 => 'CoreX\\\\Auth\\\\Access\\\\DefaultAccessChecker', 8 => 'CoreX\\\\Auth\\\\Access\\\\DirectGrantLookup', 9 => 'CoreX\\\\Auth\\\\Access\\\\",
-  "stdout_excerpt": ""
-}

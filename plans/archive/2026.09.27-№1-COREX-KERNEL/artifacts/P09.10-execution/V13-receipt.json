@@ -1,7 +1,0 @@
-{
-  "id": "V13",
-  "command": "PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/tenancy test -- --group=pg",
-  "exit_code": 0,
-  "duration_seconds": 471.33,
-  "log": "V13.log"
-}

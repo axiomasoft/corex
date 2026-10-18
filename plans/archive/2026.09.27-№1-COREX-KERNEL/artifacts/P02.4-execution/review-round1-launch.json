@@ -1,9 +1,0 @@
-{
-  "provider": "cursor",
-  "model": "grok-4.6",
-  "effort": "high",
-  "selector": "cursor-grok-4.6-high",
-  "workspace": "/home/vostrikov/projects/packages/corex",
-  "mode": "ask",
-  "started": 1790667206.474841
-}

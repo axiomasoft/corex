@@ -1,7 +1,0 @@
-{"result": "PASS", "repository": "file:///home/vostrikov/projects/packages/corex/build/p03-design-x2n11bdm/.composer-provider-staging", "staging": "/home/vostrikov/projects/packages/corex/build/p03-design-x2n11bdm/.composer-provider-staging", "registered": ["/home/vostrikov/projects/packages/corex/build/p03-design-x2n11bdm", "/home/vostrikov/projects/packages/corex/build/p03-design-x2n11bdm/packages/tenancy", "/home/vostrikov/projects/packages/corex/build/p03-design-x2n11bdm/packages/access"]}
-lock: local FQCN metadata matches; dependencies unchanged; staging manifests restored
-Loading composer repositories with package information
-Updating dependencies
-Lock file operations: 0 installs, 0 updates, 0 removals
-Writing lock file
-No security vulnerability advisories found.

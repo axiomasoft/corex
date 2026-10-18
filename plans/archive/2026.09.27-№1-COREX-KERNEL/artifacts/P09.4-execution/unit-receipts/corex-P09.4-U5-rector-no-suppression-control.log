@@ -1,1 +1,0 @@
-{"tool":"rector","result":"passed","totals":{"changed_files":0,"errors":0},"changed_files":["tests/Arch/RectorLaravelSubsetTest.php","scripts/quality/rector/import.php"]}

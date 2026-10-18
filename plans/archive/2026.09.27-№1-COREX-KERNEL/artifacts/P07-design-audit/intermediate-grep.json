@@ -1,7 +1,0 @@
-{
-  "declared_command": "git grep -n -E 'Stancl\\\\\\\\Tenancy\\\\\\\\(Tenancy|Bootstrappers|Middleware|Listeners|Resolvers)|tenancy\\(\\)' -- packages/tenancy/src",
-  "focused_command": "git grep -n -E 'Stancl\\\\\\\\Tenancy\\\\\\\\(Tenancy|Bootstrappers|Middleware|Listeners|Resolvers)|tenancy\\(\\)' -- packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php",
-  "exit_code": 0,
-  "stdout": "packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:71:        $account = tenancy()->tenant;\npackages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:142:        $account = tenancy()->tenant;\n",
-  "stderr": ""
-}

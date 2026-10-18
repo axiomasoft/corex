@@ -1,6 +1,0 @@
-{
-  "invocation": "$ task:plan-exec '2026.09.15-№1-COREX-FLEXCRM-REMAINING' P3.3 P3.4 P3.5 P3.6 P3.7",
-  "model_selector": "gpt-5.6-terra",
-  "effort_selector": "high",
-  "role": "successor recommendation only; not provider-thread attestation or execution grant"
-}

@@ -1,8 +1,0 @@
-{
-  "new_scoped_active_handoff": "mem_mutrmzzo_2a6e3aa91d46",
-  "scope": "project:corex",
-  "source": "handoff.md",
-  "prior_legacy_fact": "mem_mutecjcj_a16029fa1956",
-  "legacy_cleanup": "MCP rejected: fact not allowed scope of this project (insulation namespace); retained without bypass",
-  "repository_is_authoritative": true
-}

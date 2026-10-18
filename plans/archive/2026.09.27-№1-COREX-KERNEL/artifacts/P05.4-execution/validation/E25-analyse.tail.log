@@ -1,3 +1,0 @@
-==> phpstan.neon
-{"tool":"phpstan","result":"passed","errors":0}
-ceilings OK

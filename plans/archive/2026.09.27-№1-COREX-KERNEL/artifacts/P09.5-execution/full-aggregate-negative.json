@@ -1,6 +1,0 @@
-{
-  "cmd": "python3 scripts/quality/mutation.py --all",
-  "exit": 1,
-  "stderr": "Mutation RED: Missing fragment receipt: access/security\n",
-  "expected": "RED: probe cannot satisfy full-source acceptance"
-}

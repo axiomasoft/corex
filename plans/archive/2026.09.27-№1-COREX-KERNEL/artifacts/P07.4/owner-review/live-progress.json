@@ -1,9 +1,0 @@
-{
-  "action": "return-owning-continuation",
-  "detail": "ACP stopReason=end_turn; usage_complete=True",
-  "elapsed_seconds": 695.657,
-  "phase": "complete",
-  "process_alive": false,
-  "schema_version": "review-heartbeat/v1",
-  "session_id": "01a10b1b-f36b-7041-a839-f6ccaf24dad9"
-}

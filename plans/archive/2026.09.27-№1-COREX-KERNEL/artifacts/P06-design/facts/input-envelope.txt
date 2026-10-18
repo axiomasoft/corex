@@ -1,8 +1,0 @@
-# input envelope branches in OperationDispatcher
-52:                ?? throw new ApiError(OperationsErrorCode::AuthenticationRequired, 401, 'Authentication is required.');
-100:            $input = $request->query->all();
-102:            if (! $request->isJson() || $request->query->count() !== 0) {
-103:                throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'A JSON object body without query parameters is required.');
-110:                throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Malformed JSON body.');
-114:                throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'A JSON object body is required.');
-121:            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Input contains undeclared fields.');

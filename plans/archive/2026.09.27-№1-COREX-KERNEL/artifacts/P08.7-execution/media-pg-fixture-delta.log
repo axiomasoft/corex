@@ -1,7 +1,0 @@
-> pest --group=pg
-
-   PASS  Tests\Pg\ConversionConcurrencyTest
-  ✓ it uses a PostgreSQL file-row lock across independent connections    0.25s
-
-  Tests:    1 passed (1 assertions)
-  Duration: 0.30s

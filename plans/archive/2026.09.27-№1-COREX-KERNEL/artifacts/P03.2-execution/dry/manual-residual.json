@@ -1,9 +1,0 @@
-{
-  "file": "scripts/tests/test_module_layout_gate.py",
-  "change": "R1 planted fixture path/namespace Support -> Unlisted; kernel root remains forbidden, CONFIG/rules/test count unchanged",
-  "baseline_red": true,
-  "before": "rename-all.log",
-  "after": "rename-all-after.log",
-  "delta_validation": "layout-python-negatives.log: 8 passed",
-  "manual_residuals": 1
-}

@@ -1,2 +1,0 @@
-ownership FAIL: new: O1 table aut_role_assignments owners corex/access,corex/tasks
-ownership FAIL: new: O4 table corex/tasks aut_role_assignments catalog-owner corex/access

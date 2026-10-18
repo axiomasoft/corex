@@ -1,9 +1,0 @@
-{
-  "name": "packages-remaining",
-  "command": "scripts/php84 bash build/p042-packages-remaining.sh",
-  "exit_code": 0,
-  "duration_ms": 174771,
-  "patch_sha256": "d7735d64826dd96e3cbb3b5fb9f78abbc31ad564c1250bd7c0f2ffb635913bbe",
-  "log": "validation-final/packages-remaining.log",
-  "log_sha256": "62d07202327b74913362cbe51f7adb9ef4ccb9cef665a46c0b54dbf67f02e938"
-}

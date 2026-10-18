@@ -1,9 +1,0 @@
-{
-  "argv": [
-    "python3",
-    "scripts/quality/infection-spike.py",
-    "--check",
-    "build/quality/infection-spike/receipt.json"
-  ],
-  "exit": 1
-}

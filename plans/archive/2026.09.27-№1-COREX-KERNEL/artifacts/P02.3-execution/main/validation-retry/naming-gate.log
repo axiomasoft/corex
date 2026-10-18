@@ -1,3 +1,0 @@
-> bash scripts/ci-deferred-guard.sh php scripts/naming-gate.php
-naming-gate: OK
-naming-gate: grandfather=3

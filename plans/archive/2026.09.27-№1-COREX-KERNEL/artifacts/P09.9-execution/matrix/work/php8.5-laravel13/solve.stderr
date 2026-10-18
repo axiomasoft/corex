@@ -1,8 +1,0 @@
-PHP Deprecated:  Case statements followed by a semicolon (;) are deprecated, use a colon (:) instead in phar:///home/vostrikov/.config/herd-lite/bin/composer/vendor/react/promise/src/functions.php on line 300
-Deprecation Notice: The predefined locally scoped $http_response_header variable is deprecated, call http_get_last_response_headers() instead in phar:///home/vostrikov/.config/herd-lite/bin/composer/vendor/justinrainbow/json-schema/src/JsonSchema/Uri/Retrievers/FileGetContents.php:55
-Installing dependencies from lock file (including require-dev)
-Verifying lock file contents can be installed on current platform.
-Nothing to install, update or remove
-Generating autoload files
-101 packages you are using are looking for funding.
-Use the `composer fund` command to find out more!

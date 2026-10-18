@@ -1,1 +1,0 @@
-Filament Laravel panels: explain panel provider/plugin customization and duplicate panel/plugin ID behavior. Cite two exact canonical filamentphp/filament GitHub source files and an official documentation URL. Maximum 180 words, complete answer.

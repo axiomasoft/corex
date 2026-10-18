@@ -1,2 +1,0 @@
-> bash scripts/contract-guard.sh
-contract-guard: no src/Contracts changes in 90c3deea36cdd7d4b4e799904f5c53366cbe8950..HEAD — OK

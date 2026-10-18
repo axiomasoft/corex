@@ -1,9 +1,0 @@
-diff --git a/tests/Golden/baseline/wire.json b/tests/Golden/baseline/wire.json
-index 269d357..dfef93d 100644
---- a/tests/Golden/baseline/wire.json
-+++ b/tests/Golden/baseline/wire.json
-@@ -1519,3 +1519,4 @@
-         "topics": []
-     }
- }
-+

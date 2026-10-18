@@ -1,3 +1,0 @@
-$ scripts/php84 vendor/bin/pest tests/Arch/ProviderSizeTest.php
-{"tool":"pest","result":"passed","tests":7,"passed":7,"assertions":25,"duration_ms":3654}
-exit=0

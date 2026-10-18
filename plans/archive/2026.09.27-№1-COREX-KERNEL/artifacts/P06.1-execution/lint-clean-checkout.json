@@ -1,6 +1,0 @@
-{
-  "candidate": "d6ed2cdeb90d612d2c02d00f4fe89f37f0ac3d28",
-  "checkout": "/tmp/corex-p06-1-lint-cs0gqkx0",
-  "exit_code": 0,
-  "method": "git archive of exact candidate, root vendor symlink, composer lint:check"
-}

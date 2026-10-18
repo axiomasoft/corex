@@ -1,1 +1,0 @@
-Post-commit native terminal delivery receipt: ../../.plan-cache/P3.2-terminal-delivery.json (runtime cache ignored by Git). It is rebuilt and verified against final handoff/state/journal after the single scoped product/evidence commit. Native global future identity D2a BLOCKED is retained in final-bookkeeping-checks.json; no owner exception granted for identity.

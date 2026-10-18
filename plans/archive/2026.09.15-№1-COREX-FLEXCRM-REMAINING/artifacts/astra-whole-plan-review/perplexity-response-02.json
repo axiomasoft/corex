@@ -1,8 +1,0 @@
-{
-  "content": [
-    {
-      "type": "text",
-      "text": "\"Concern\",\"Canonical source path\",\"Canonical test path\"\n\"Permission-cache reset\",\"src/PermissionRegistrar.php — forgetCachedPermissions() clears the registrar’s in-memory permissions plus the configured cache store/tag.\",\"tests/Integration/CacheTest.php\"\n\"Team context resolver\",\"src/PermissionRegistrar.php — owns the current permissions-team ID and resolver integration.\",\"tests/Integration/PermissionRegistrarTest.php, plus tests/Traits/TeamScopeTest.php\"\n\"Long-lived/Octane isolation\",\"src/PermissionRegistrar.php, together with the package’s Octane listener wiring.\",\"tests/Integration/OctaneListenerTest.php — specifically exercises separate sandbox applications and differing setPermissionsTeamId() values, guarding against context bleed between requests.\""
-    }
-  ]
-}

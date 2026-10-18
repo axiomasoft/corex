@@ -1,1 +1,0 @@
-{"stage": "design", "result": "PASS", "specs": 7, "requirements": 8, "semantic_acceptance": "item-owned; checker cannot substitute executed proof", "runtime_or_live_proof": false}

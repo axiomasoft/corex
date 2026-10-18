@@ -1,8 +1,0 @@
-{
-  "model": "gpt-6.1-sol",
-  "effort": "high",
-  "session": "01a11796-aa4e-7081-a4c1-16e2352fc5bf",
-  "observed_from": "rollout turn_context",
-  "base_product": "1bfcb0324197c9e3ae8a050dea2b8f1d84b7f6dc",
-  "base_bookkeeping": "f3d7802d3d1f2810ca90ec9127929edc2e0d3b52"
-}

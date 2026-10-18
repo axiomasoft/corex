@@ -1,7 +1,0 @@
-{
-  "id": "V1",
-  "command": "scripts/php84 vendor/bin/phpstan analyse -c packages/access/phpstan.neon --memory-limit=2G --no-progress",
-  "exit_code": 0,
-  "log": "V1.log",
-  "observation": "Actual successful command exit recorded by exec before receipt construction"
-}

@@ -1,6 +1,0 @@
-{
-  "status": "PASS",
-  "snapshot_sha256": "87b68673c805b913458a1ab141f4c1dbfad5d68e9c1db4a7d0a9e3a2a879321d",
-  "four_members": "reuse actual consumed current-root exact-byte carrier proof, live digest equal",
-  "item_state": "active reducer state fully consumed before first product write; historical preSTART read preserved"
-}

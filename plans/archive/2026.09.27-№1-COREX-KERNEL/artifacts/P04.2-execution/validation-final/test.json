@@ -1,9 +1,0 @@
-{
-  "name": "test",
-  "command": "scripts/php84 composer test",
-  "exit_code": 0,
-  "duration_ms": 37007,
-  "patch_sha256": "d7735d64826dd96e3cbb3b5fb9f78abbc31ad564c1250bd7c0f2ffb635913bbe",
-  "log": "validation-final/test.log",
-  "log_sha256": "63ce68fb5b794896dc99f1bf7ec86d071e4f0753ab558afe033bf954548b3333"
-}

@@ -1,7 +1,0 @@
-{
-  "schema_version": "p10-intake-owner-receipt/1",
-  "accepting_actor": "executor/P10.1",
-  "item": "P10.1",
-  "scope": "local-preparation-only",
-  "note": "Laboratory intake operator provenance; not deployment acceptance."
-}

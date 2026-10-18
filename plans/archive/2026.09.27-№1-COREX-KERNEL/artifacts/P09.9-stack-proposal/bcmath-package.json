@@ -1,7 +1,0 @@
-{
-  "version": "8.5.11-1+ubuntu24.04.1+deb.sury.org+1",
-  "action": "download and extract only",
-  "deb_sha256": "f988bd727556b7a3b7dbedd18a74d9a47a60688a8f2129682209a843891c76eb",
-  "module_sha256": "760ce811f6b6398a343110cba87dbaff312a996f96b2803f035852d8fb747949",
-  "module": "/tmp/corex-p099-stack-design-io0_mv2y/php85-bcmath/extracted/usr/lib/php/20250925/bcmath.so"
-}

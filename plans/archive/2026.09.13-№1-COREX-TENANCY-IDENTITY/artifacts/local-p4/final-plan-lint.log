@@ -1,4 +1,0 @@
-plan-lint: OK (1 план(ов), 0 ошибок, 3 предупреждений)
-WARN: plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/phases/P2/P2.md: фаза P2 заявляет оркестрацию (multi-agent/fan-out), но нет workflow-скрипта в `plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/workflows/` — DoR §7 (D29)
-WARN: plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/phases/P4/P4.md: фаза P4 заявляет оркестрацию (multi-agent/fan-out), но нет workflow-скрипта в `plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/workflows/` — DoR §7 (D29)
-WARN: plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/phases/P6/P6.md: фаза P6 заявляет оркестрацию (multi-agent/fan-out), но нет workflow-скрипта в `plans/2026.09.13-№1-COREX-TENANCY-IDENTITY/workflows/` — DoR §7 (D29)

@@ -1,4 +1,0 @@
-projection OK: 1168 exact rows, 278 moves, 461 groups, source SHA-256 unchanged
-missing-row rejected 1
-stale-source-digest rejected 1
-restored exact projection bytes; GREEN

@@ -1,8 +1,0 @@
-{
-  "driver": "pgsql",
-  "tables": [
-    "sys_api_budget_buckets",
-    "sys_api_budget_reservations"
-  ],
-  "matches_dedicated_golden": true
-}

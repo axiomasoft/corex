@@ -1,2 +1,0 @@
-> ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg
-{"tool":"pest","result":"passed","tests":11,"passed":11,"assertions":29,"duration_ms":18}

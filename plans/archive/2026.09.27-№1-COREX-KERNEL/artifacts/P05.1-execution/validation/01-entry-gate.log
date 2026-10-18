@@ -1,3 +1,0 @@
-$ gh run list --workflow CI --branch main --limit 3 --json conclusion,headSha | head -c 600
-[{"conclusion":"failure","headSha":"5911120cba72449a67ec6eac82478b51e085ec3d"},{"conclusion":"success","headSha":"4522e2b3f1ac741518387d24d1dd83248e97cc34"},{"conclusion":"failure","headSha":"cd007298c44e43637d78721097ef14be73d59d6d"}]
-exit=0

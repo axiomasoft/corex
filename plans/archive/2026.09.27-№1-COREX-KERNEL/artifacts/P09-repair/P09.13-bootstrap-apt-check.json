@@ -1,9 +1,0 @@
-{
-  "isolated_apt_root": "/tmp/corex-pgdg-ci-92u_sqka",
-  "no_host_apt_or_database_writes": true,
-  "positive_exit": 0,
-  "unrelated_source_ignored": true,
-  "negative_broad_update_exit": 100,
-  "install_simulation_exit": 0,
-  "actual_pg18_binary_and_behavior": "final hosted CI required; local apt check only downloads signed PGDG metadata, no install"
-}

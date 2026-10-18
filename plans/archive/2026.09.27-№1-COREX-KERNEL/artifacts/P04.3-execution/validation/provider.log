@@ -1,1 +1,0 @@
-provider-size-gate: packages/core/src/CoreServiceProvider.php singleton=18 scoped=6 bind=3 bindIf=0 total=27 exceeds ratchet=26

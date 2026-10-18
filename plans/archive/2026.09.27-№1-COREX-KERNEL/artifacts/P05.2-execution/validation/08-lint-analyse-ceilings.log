@@ -1,5 +1,0 @@
-$ scripts/php84 composer lint:check 2>&1 | tail -1; scripts/php84 composer analyse > plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05.2-execution/validation/../analyse-full.log 2>&1; echo analyse-exit=$?; scripts/php84 composer analyse:tests-lint 2>&1 | tail -1; php scripts/quality-ceiling-guard.php
-{"tool":"pint","result":"passed"}analyse-exit=0
-{"tool":"phpstan","result":"passed","errors":0}
-ceilings OK
-exit=0

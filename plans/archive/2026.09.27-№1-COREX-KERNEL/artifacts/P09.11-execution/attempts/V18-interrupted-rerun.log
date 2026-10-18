@@ -1,4 +1,0 @@
-> bash scripts/bc-check.sh
-bc-check: BC_CHECK_BASE=76f8bdde496154c0a8901e459175cf306bedd860 (PHP 8.4)
-bc-check: roave 8.22.0
-bc-check: axiomasoft/corex-access-azguard (access-azguard) |new-package| base missing at 76f8bdde496154c0a8901e459175cf306bedd860

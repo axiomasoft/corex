@@ -1,1 +1,0 @@
-{"tool":"pint","result":"fixed","files":[{"path":"tests\/fixtures\/public-error-contract.php","fixers":["array_syntax","single_space_around_construct","no_multiline_whitespace_around_double_arrow","array_indentation","constant_case"]}]}

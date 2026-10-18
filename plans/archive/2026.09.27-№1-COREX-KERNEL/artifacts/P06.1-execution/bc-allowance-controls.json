@@ -1,8 +1,0 @@
-{
-  "exact_approved_delta": true,
-  "wrong_base_rejected": true,
-  "wrong_package_rejected": true,
-  "changed_break_rejected": true,
-  "missing_break_rejected": true,
-  "extra_break_rejected": true
-}

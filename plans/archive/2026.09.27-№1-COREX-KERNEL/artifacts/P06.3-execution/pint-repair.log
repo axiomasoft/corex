@@ -1,1 +1,0 @@
-{"tool":"pint","result":"fixed","files":[{"path":"packages\/core\/tests\/Unit\/CloudEventCodecTest.php","fixers":["no_extra_blank_lines"]}]}

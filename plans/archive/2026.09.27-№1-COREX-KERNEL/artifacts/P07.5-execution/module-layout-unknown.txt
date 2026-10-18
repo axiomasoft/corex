@@ -1,2 +1,0 @@
-new R1 packages/core/src/UnknownModule/Probe.php
-module-layout FAIL: 1364 files, 1 violations, 0 baselined, 1 new, 0 stale; R0 0, R1 1, R2 0, R3 0, R4 0, R5 0, R6 0

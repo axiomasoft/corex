@@ -1,5 +1,0 @@
-> bash scripts/bc-check.sh
-bc-check: BC_CHECK_BASE=76f8bdde496154c0a8901e459175cf306bedd860 (PHP 8.4)
-bc-check: roave 8.22.0
-bc-check: axiomasoft/corex-webhooks (webhooks) |compatible| stability=stable base=edb7f4a23d1f5d66b8059287fca9685e275a5759 candidate=e5c3f86a1d7708c14898fd3e2bc47769d94416d0
-bc-check: OK

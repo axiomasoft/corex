@@ -1,1 +1,0 @@
-mutation-check: patch scripts/mutations/P1.15-drop-entities.patch cannot apply; original bytes retained

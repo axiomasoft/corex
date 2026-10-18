@@ -1,9 +1,0 @@
-{
-  "driver": "s3",
-  "key": "corex-msi-test",
-  "secret": "corex-msi-testing-only",
-  "region": "us-east-1",
-  "bucket": "corex-msi-security-test",
-  "endpoint": "http://127.0.0.1:32770",
-  "use_path_style_endpoint": true
-}

@@ -1,6 +1,0 @@
-{
-  "ok": true,
-  "data": {
-    "message": "waiting: blocked P09.9 — Owner/plan-author must reconcile Pest5.2.1 symfony/process ^8.1.7 with Laravel12 symfony/process ^7.2.0 or explicitly amend the testing matrix/engine policy. D120 prohibits silent downgrades or engine substitution; P09.5 remains unadmitted."
-  }
-}

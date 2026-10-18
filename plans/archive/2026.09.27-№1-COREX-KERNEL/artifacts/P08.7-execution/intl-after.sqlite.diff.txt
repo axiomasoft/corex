@@ -1,3 +1,0 @@
-corex_rate_batches: rename indexes corex_rate_batches_operation_key_unique -> corex_rate_batches_operation_key_uq
-corex_rate_snapshots: rename indexes corex_rate_snapshots_publication_unique -> corex_rate_snapshots_publication_uq
-corex_reference_records: rename indexes corex_reference_records_scan_idx -> corex_reference_records_scan_ix

@@ -1,2 +1,0 @@
-> vendor/bin/pint --test
-{"tool":"pint","result":"fail","files":[{"path":"plans\/2026.09.27-\u21161-COREX-KERNEL\/artifacts\/P07.4-execution\/ci-native-acceptance-r2\/native-bootstrap.php","fixers":["fully_qualified_strict_types","blank_line_after_opening_tag","braces_position","statement_indentation","not_operator_with_successor_space","single_line_after_imports","blank_line_before_statement","binary_operator_spaces"]}]}Script vendor/bin/pint --test handling the lint:check event returned with error code 1

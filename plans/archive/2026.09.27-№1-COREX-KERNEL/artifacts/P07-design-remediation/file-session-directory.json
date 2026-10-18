@@ -1,7 +1,0 @@
-{
-    "baseline_handler_returned_true_but_lost_session": true,
-    "warning_count": 1,
-    "precreated_directory_read_write": true,
-    "installed_handler_sha256": "1c0d0f724ced9b6fb65a73c0d29878ed14bff322d051d7e3cca1c8eb4b6dad2f",
-    "project_db_connections": 0
-}

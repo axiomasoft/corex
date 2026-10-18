@@ -1,7 +1,0 @@
-{
-  "packages/access/CHANGELOG.md": "4139805aa09ca37ba84d9b3471fb0baa2705158c2883a2a5defc5e0d23d513b5",
-  "packages/access/resources/contracts/php-api.json": "c51571fb785fff13270d075f1d31f1012e9cda77e66c15ac61ff219a09a5c3a4",
-  "docs/reference/public-api.md": "44731762b4cded544366d8f7e98f5283af1d79594fcf7699c36915fac04e053b",
-  "tests/Golden/baseline/php-surface.json": "c6648a8b46710375152aab520b48784f0e72660fd9c5f1581ba6d870f95a214d",
-  "scripts/bc/approved-deltas.json": "aba789c6e37d37e0f4df9577d589a3145fbb61775d38a2ed905a281d55f09ada"
-}

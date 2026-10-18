@@ -1,7 +1,0 @@
-{
-  "commit": "e673ebd4477539079456d424583f56e5b8a360b7",
-  "anti_weakening_exit_code": 0,
-  "reviewed_bytes_preserved": true,
-  "anchor": "product-anchor.json",
-  "review": "review-round2-input-digests.json"
-}

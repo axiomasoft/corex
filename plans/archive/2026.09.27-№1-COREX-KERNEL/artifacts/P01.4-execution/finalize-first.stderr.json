@@ -1,6 +1,0 @@
-{
-  "error": "PLAN_RECONCILIATION_INCOMPLETE",
-  "stage": "delivery",
-  "detail": "phase P02 not found in Layout v2",
-  "resolution": "P02 stays in backlog per D21/D24. Use documented plan-design <PLAN-ID> invocation, with P02 explicitly named in route rationale and remaining scope; do not promote/design a future phase before O-3."
-}

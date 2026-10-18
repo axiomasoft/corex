@@ -1,9 +1,0 @@
-
-  [30;42;1m PASS [39;49;22m[39m Tests\Feature\RegistryFieldCastsTest[39m
-  [32;1m✓[39;22m[90m [39m[90mit compiles a consumer money field using the intl cast registration[39m[90m [39m [90m0.24s[39m  
-
-  [90mTests:[39m    [32;1m1 passed[39;22m[90m (1 assertions)[39m
-  [90mDuration:[39m [39m0.29s[39m
-  [90mRandom Order Seed:[39m [39m1790627020[39m
-
-> pest --exclude-group=pg 'tests/Feature/RegistryFieldCastsTest.php'

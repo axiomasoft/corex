@@ -1,8 +1,0 @@
-{
-  "content": [
-    {
-      "type": "text",
-      "text": "nWidart laravel-modules is application-composition infrastructure: its module manifest/config determines which module providers Laravel discovers and registers, so boot ordering matters when one module’s provider consumes bindings, config, routes, or migrations supplied by another. Treat priority as an explicit dependency-ordering mechanism, not a substitute for a real contract. A common failure mode is a consumer provider booting before its dependency has registered a binding, producing “target class/binding does not exist” errors or silently reading incomplete configuration; the package itself is designed around module service-provider registration.\nSpatie laravel-data is boundary-level typed construction: it hydrates DTO properties and can infer Laravel validation rules from PHP types (for example, ?string becomes nullable|string) before object creation. Its failure mode is assuming every Data::from($array) invocation validates: automatic validation is documented for request injection and from(Request), but not other sources unless you configure Always or call validate()/validateAndCreate(). Thus an unvalidated array can reach DTO construction—or fail later during coercion—despite a strongly typed DTO.\n\nSources:\n1. [github](https://github.com/nWidart/laravel-modules)\n2. [spatie](https://spatie.be/docs/laravel-data/v4/validation/introduction)"
-    }
-  ]
-}

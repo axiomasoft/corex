@@ -1,9 +1,0 @@
-NAME               IMAGE                COMMAND                  SERVICE   CREATED        STATUS                  PORTS
-corex_pgsql_test   postgres:16-alpine   "docker-entrypoint.s…"   pgsql     2 months ago   Up 25 hours (healthy)   127.0.0.1:5434->5432/tcp
-127.0.0.1:5434 - accepting connections
-php84 OK: 8.4.26, extensions complete
-APP_ENV=UNSET (phpunit/harness supplies testing + sqlite :memory:)
-DB_CONNECTION=UNSET (phpunit/harness supplies testing + sqlite :memory:)
-DB_DATABASE=UNSET (phpunit/harness supplies testing + sqlite :memory:)
-{"client_host":"127.0.0.1","client_port":"5434","target_database":"corex_test","live":{"actual_database":"corex_test","actual_user":"corex","server_address":"172.21.0.2/32","server_port":5432}}
-ISOLATION GREEN: sqlite :memory: root/package harnesses; live PG corex_test at 127.0.0.1:5434; PG cases own schema migration/reset, temp database/bootstrap paths.

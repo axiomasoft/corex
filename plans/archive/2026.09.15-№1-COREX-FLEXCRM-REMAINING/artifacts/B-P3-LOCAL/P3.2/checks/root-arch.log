@@ -1,2 +1,0 @@
-> vendor/bin/pest --testsuite=Arch
-{"tool":"pest","result":"passed","tests":6,"passed":6,"assertions":6,"duration_ms":20}

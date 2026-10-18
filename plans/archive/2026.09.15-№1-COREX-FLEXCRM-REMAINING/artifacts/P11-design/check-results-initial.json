@@ -1,8 +1,0 @@
-{
-  "continuity": "ModuleNotFoundError: core; missing installed runtime monorepo sys.path",
-  "decisions": "D16 heading must be exact ## Почему",
-  "lint": "Authority exact declaration rejected trailing period",
-  "state": "PASS 78 carriers",
-  "status": "PASS",
-  "bundle": "PASS P1.1"
-}

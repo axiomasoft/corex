@@ -1,9 +1,0 @@
-candidate=90f21c877997ccd69055ccb5cdda1b7e5ebe9d01
-command=scripts/php84 composer package-graph-gate
-started=2026-10-05T06:51:54.370226+00:00
-> bash scripts/ci-deferred-guard.sh php scripts/package-graph-gate.php
-HOST-RESERVED NAMESPACE: CoreX\SearchMeilisearch\ host=axiomasoft/corex-search owner=axiomasoft/corex-search-meilisearch — host-reserved adapter namespace; host defines zero classes under the prefix; class_counts={"axiomasoft/corex-search":0,"axiomasoft/corex-search-meilisearch":9}
-UNDECLARED DEPENDENCY EXCEPTION: axiomasoft/corex-tasks-workflow -> axiomasoft/corex-wakeup in packages/tasks-workflow/src/Internal/MaterializationWakeupHandler.php — ADR P12.1; expires when: handler registration guarded in TasksWorkflowServiceProvider or axiomasoft/corex-wakeup promoted to require
-package-graph-gate: OK
-
-exit=0

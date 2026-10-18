@@ -1,2 +1,0 @@
-> ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=meilisearch
-{"tool":"pest","result":"passed","tests":7,"passed":7,"assertions":16,"duration_ms":113}

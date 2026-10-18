@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuites>
-  <testsuite name="Packages\transfer\tests\Pg\SqlTransferExecutorTest" file="packages/transfer/tests/Pg/SqlTransferExecutorTest.php" tests="1" assertions="2" errors="0" failures="0" skipped="0" time="0.224803">
-    <testcase name="it deduplicates an identical external record across independent jobs before target apply" file="packages/transfer/tests/Pg/SqlTransferExecutorTest.php::it deduplicates an identical external record across independent jobs before target apply" class="Packages\transfer\tests\Pg\SqlTransferExecutorTest" classname="Packages.transfer.tests.Pg.SqlTransferExecutorTest" assertions="2" time="0.224803"/>
-  </testsuite>
-</testsuites>

@@ -1,4 +1,0 @@
-$ python3 scripts/manifest-check.py; python3 -c "import json;print(json.load(open('packages/core/composer.json'))['extra']['laravel']['providers'])"
-manifests OK: 22 roots
-['CoreX\\CoreServiceProvider']
-exit=0

@@ -1,7 +1,0 @@
-{
-  "schema_version": "plan-execution-policy/v1",
-  "version": "2.0.0",
-  "token_admission": "disabled",
-  "scope": "all-items",
-  "owner_decision": "decisions/D37-disable-token-admission.md"
-}

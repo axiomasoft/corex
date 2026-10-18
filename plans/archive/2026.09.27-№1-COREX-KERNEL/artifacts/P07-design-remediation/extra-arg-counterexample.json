@@ -1,8 +1,0 @@
-{
-    "php": "8.4.26",
-    "declared_parameters": 4,
-    "supplied_arguments": 5,
-    "exception": null,
-    "constructed": true,
-    "interpretation": "Surplus argument is unintended and removed from current proof; claimed ArgumentCountError is not reproduced on this runtime. Original raw review remains historical."
-}

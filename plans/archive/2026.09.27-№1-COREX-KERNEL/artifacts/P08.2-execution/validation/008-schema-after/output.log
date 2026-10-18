@@ -1,2 +1,0 @@
-central {"scope": true, "sets": true, "migration_files": true, "migrated": true, "columns": true, "constraints": true, "indexes": true, "pg_dump_schema": true}
-tenant {"scope": true, "sets": true, "migration_files": true, "migrated": true, "columns": true, "constraints": true, "indexes": true, "pg_dump_schema": true}

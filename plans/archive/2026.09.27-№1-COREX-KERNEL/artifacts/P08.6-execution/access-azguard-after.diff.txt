@@ -1,2 +1,0 @@
-aut_azguard_role_links: rename indexes aut_azguard_role_links_pkey -> aut_azguard_role_links_pk
-aut_azguard_role_links: rename indexes aut_azguard_role_links_azguard_role_id_unique -> aut_azguard_role_links_azguard_role_id_uq

@@ -1,9 +1,0 @@
-{
-  "pre_mutation": "allow",
-  "pre_final": "allow",
-  "pre_mutation_source": "task_contract.pre_mutation; original admitted route reused, no new execution",
-  "pre_final_source": "terminal_policy.validate_entry + plan_delivery.build_terminal_receipt; owner-qualified Validation in validation-summary.md",
-  "contract_sha256": "92b59a233a6862f12ab8b504e1e19de09f91fab32b3198f153f696d3277ccdeb",
-  "terminal_spec_sha256": "8e91df8d19c2a13775d024c1d04eed01b4a44989ca5aa5000da5d1357c428a6b",
-  "next_exact": "run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P07.2"
-}

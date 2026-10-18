@@ -1,5 +1,0 @@
-> bash scripts/bc-check.sh
-bc-check: BC_CHECK_BASE=76f8bdde496154c0a8901e459175cf306bedd860 (PHP 8.4)
-bc-check: roave 8.22.0
-bc-check: infrastructure RED — BC_CHECK_JOBS must be 1..4
-Script bash scripts/bc-check.sh handling the bc-check event returned with error code 1

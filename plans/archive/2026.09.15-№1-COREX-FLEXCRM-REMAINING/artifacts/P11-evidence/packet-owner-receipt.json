@@ -1,7 +1,0 @@
-{
-  "schema_version": "p11-packet-owner-receipt/1",
-  "accepting_actor": "executor/P11.5",
-  "item": "P11.5",
-  "scope": "reconciliation-packet-preparation",
-  "note": "CoreX executor provenance for packet preparation; foreign write grant remains separately owned."
-}

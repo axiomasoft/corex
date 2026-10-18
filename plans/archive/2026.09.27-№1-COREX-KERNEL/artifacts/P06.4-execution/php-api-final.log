@@ -1,4 +1,0 @@
-Raw command output preserved losslessly in php-api-final.log.gz.
-Uncompressed SHA-256: 5a7063079b232a3d60808fc03d8f1e6450581383eec7ca43fa0fa2f381489682
-Uncompressed bytes: 3907520
-Read with: gzip -dc php-api-final.log.gz

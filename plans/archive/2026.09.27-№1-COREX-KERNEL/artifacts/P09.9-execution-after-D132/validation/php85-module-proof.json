@@ -1,5 +1,0 @@
-{
-  "source": "/tmp/corex-p099-stack-design-io0_mv2y/php85-bcmath/extracted/usr/lib/php/20250925/bcmath.so",
-  "sha256": "760ce811f6b6398a343110cba87dbaff312a996f96b2803f035852d8fb747949",
-  "scope": "process-local PHP8.5 module scan; no system config change"
-}

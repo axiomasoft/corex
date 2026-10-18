@@ -1,7 +1,0 @@
-{
-  "status": "reconciled",
-  "actual_path": "findings/P1-source-reconciliation.md",
-  "sha256": "c8c6f5368d3d0d1aeb54f12eda521f28f89e3af1eca89fbbf8ea70870056caae",
-  "evidence": "P1.1 validator actual file checks PASS, immutable terminal validation evidence retained",
-  "historical_projection_issue": "Unquoted Files sentence punctuation became .md. in original native graph. Missing synthetic path is not missing validated product. Historical spec/journal/graph left immutable; P1.2–P1.4 Files now use exact quoted paths."
-}

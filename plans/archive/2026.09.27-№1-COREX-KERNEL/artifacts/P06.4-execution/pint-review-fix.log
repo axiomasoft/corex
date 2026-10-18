@@ -1,1 +1,0 @@
-{"tool":"pint","result":"fixed","files":[{"path":"packages\/webhooks\/tests\/Feature\/WebhookEgressPolicyTest.php","fixers":["no_multiple_statements_per_line","braces_position","statement_indentation","blank_line_before_statement"]}]}

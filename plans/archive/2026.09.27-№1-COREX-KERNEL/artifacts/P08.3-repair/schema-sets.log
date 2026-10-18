@@ -1,4 +1,0 @@
-$ scripts/php84 php scripts/schema-gate.php --check
-schema-gate: registry manifest OK
-
-exit=0

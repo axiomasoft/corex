@@ -1,2 +1,0 @@
-WARN: plans/2026.09.27-№1-COREX-KERNEL/phases/P04/P04.md: фаза P04 заявляет оркестрацию (multi-agent/fan-out), но нет workflow-скрипта в `plans/2026.09.27-№1-COREX-KERNEL/workflows/` — DoR §7 (D29)
-plan-lint: OK (1 план(ов), 0 ошибок, 1 предупреждений; новых от рабочего дерева: 0)

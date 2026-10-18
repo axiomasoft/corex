@@ -1,5 +1,0 @@
-Addendum: **GREEN remains scoped to the dirty D125 amendments**, not the earlier P09 design audit or implementation acceptance.
-
-Checked D125, `plan.json`, `phases/P09/phase.json`, and all 17 `phases/P09/P09.*.json` items. Read the `repository-only`, `dod-map`, `checks`, and `grok-repair` sections of `research-P09-design.json`, plus `repository-only` and `candidate` in `artifacts-P09-design-examples.json`. Also checked `AGENTS.md`, `plans/ACTIVE.md`, the Task review adapter, the relevant Task lifecycle functions, `phases/P08/phase.json`, and the existing P09 readiness receipt. Generated views were checked through read-only `plan.py render --check`.
-
-Limitations: I did not run product tests, perform a whole prior audit, or independently query GitHub. The parent separately verified the hosted P08 run and product blob equality. My session did not expose its own model metadata; the parent observed session `01a112b8-87f9-7333-aafe-9fd459898f5d` with turn-context model `gpt-6-sol/high`. No writes or corrections were made.

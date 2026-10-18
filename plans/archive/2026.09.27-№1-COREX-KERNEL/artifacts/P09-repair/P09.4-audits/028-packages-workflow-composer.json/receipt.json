@@ -1,9 +1,0 @@
-{
-  "classification": "source",
-  "commands": [],
-  "error": "manifest/lock content-hash mismatch: /home/vostrikov/projects/packages/corex/packages/workflow/composer.json",
-  "manifest": "packages/workflow/composer.json",
-  "manifest_sha256": "13f40a6accffc40b0a997c1307abdc15a1da3def4c0107d2803fe3ff3b5b6a01",
-  "name": "axiomasoft/corex-workflow",
-  "status": "RED"
-}

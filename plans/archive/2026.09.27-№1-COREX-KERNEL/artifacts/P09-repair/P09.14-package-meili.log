@@ -1,2 +1,0 @@
-> ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=meilisearch '--log-junit=../../plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09-repair/P09.14-package-meili.xml'
-{"tool":"pest","result":"passed","tests":3,"passed":3,"assertions":18,"duration_ms":1803}

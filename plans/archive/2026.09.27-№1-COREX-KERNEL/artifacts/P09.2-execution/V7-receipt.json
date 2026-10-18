@@ -1,7 +1,0 @@
-{
-  "id": "V7",
-  "command": "scripts/php84 composer --working-dir=packages/access test -- --exclude-group=pg",
-  "exit_code": 0,
-  "log": "V7.log",
-  "observation": "Actual successful command exit recorded by exec before receipt construction"
-}
