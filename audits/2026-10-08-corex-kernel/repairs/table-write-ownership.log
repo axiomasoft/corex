@@ -1,2 +1,0 @@
-DATA-003: OK (268 statically resolved writes)
-> php scripts/table-write-ownership-gate.php

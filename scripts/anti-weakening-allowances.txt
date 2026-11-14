@@ -1,20 +1,3 @@
-# Anti-weakening-gate allowances (P2.15/D93).
-#
-# Формат (позиционный, ровно 4 первых поля + свободный текст причины):
-#   <base-sha> <lane:sqlite|pg> <дельта, отрицательная> <D#> <причина>
-#
-# Скидка применяется гейтом ТОЛЬКО пока текущий BASE_REF (merge-base HEAD origin/main)
-# равен sha этой строки (полное сравнение, не префикс) — как только origin/main уезжает,
-# скидка авто-истекает. Постоянный floor (по образцу coverage-min-floor.txt) отвергнут
-# владельцем: он позволил бы тихо накапливать и вычитать разницу тестов в будущем.
-#
-# Новая строка добавляется ТОЛЬКО когда дельта названа поимённо (D# + файл-источник +
-# item, см. Code Guidance P2.15) — allowance без D# запрещена.
-
-97fdc77 sqlite -4 D79 P2.14 — удалён packages/access/tests/Feature/TenantBoundaryTest.php вместе со снесённым legacy row-level каркасом
-
-1f42e01d10d21582746b31f89525f59e5ab024ff sqlite -5 D95 P07.2 — retired boundary/rule tests; source: plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P07.2-execution/retired-test-inventory.json
-1f42e01d10d21582746b31f89525f59e5ab024ff pg -1 D95 P07.2 — retired provider discovery assertion, native engine test preserved; source: plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P07.2-execution/retired-test-inventory.json
-
-f6d9e41e13e39dbf7b44ce89788591ed8e742e41 sqlite -2 D112 P08.2 — removed configurable ULID/table-option tests, native UUIDv7 persistence added; source: plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P08.2-execution/retired-test-inventory.json
-f6d9e41e13e39dbf7b44ce89788591ed8e742e41 pg -8 D112 P08.2 — removed ConfigurableIdTest.php (whole-file PG classification), configurable schema contract retired; source: plans/archive/2026.09.27-№1-COREX-KERNEL/artifacts/P08.2-execution/retired-test-inventory.json
+# Explicit, base-bound test retirement allowances.
+# Format: <base-sha> <sqlite|pg> <negative-delta> <decision-id> <reason>
+de9e40460cc41b05fd9d64f9e3ca6b81475e451b sqlite -4 CLEANUP-20261114 Owner-requested retirement of frozen export/install proofs: ExportArtifactTest (2), PristineProofTest (1), PrivateAuthProofTest (1); reusable candidate/export boundaries remain in scripts/distribution/tests/test_release_candidate.py and test_publish_guard.py.

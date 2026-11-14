@@ -172,7 +172,6 @@ Remote webhook delivery выключена по умолчанию и требу
 Local grants и synthetic tests не разрешают production migration/rotation или live sends.
 Setup, endpoint semantics и оставшиеся host boundaries —
 [API README](../../packages/operations/README.md); текущие commands/hashes/negative fixtures —
-[P14 qualification receipt](../../plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P14-execution-validation.md).
 
 ## Контракт ошибки
 

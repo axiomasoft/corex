@@ -6,37 +6,6 @@ on:
 permissions: {}
 
 jobs:
-  public-candidates:
-    permissions:
-      contents: read
-    if: ${{ github.ref == 'refs/heads/main' }}
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - php: '8.4'
-            laravel: '12'
-          - php: '8.4'
-            laravel: '13'
-          - php: '8.5'
-            laravel: '12'
-          - php: '8.5'
-            laravel: '13'
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
-          coverage: none
-      - name: Verify sealed public candidates
-        env:
-          LARAVEL_VERSION: ${{ matrix.laravel }}
-        run: python3 scripts/distribution/pristine-proof.py --laravel "$LARAVEL_VERSION"
-
   extension-fixtures:
     permissions:
       contents: read
@@ -102,7 +71,7 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
           tools: composer
-      - name: Prove the equipment registry against the frozen candidate
+      - name: Prove the equipment registry against the current candidate
         run: python3 scripts/distribution/verify_equipment_consumer.py
 
   install-profiles:
@@ -144,7 +113,7 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
           coverage: none
           tools: composer
-      - name: Prove install profiles from the frozen candidate
+      - name: Prove install profiles from the current candidate
         env:
           PGSQL_HOST: 127.0.0.1
           PGSQL_PORT: 5434
@@ -194,31 +163,7 @@ jobs:
           PGSQL_USERNAME: corex
           PGSQL_PASSWORD: corex
           GH_TOKEN: ${{ github.token }}
-        run: python3 scripts/distribution/upgrade-proof.py prove --receipt $RUNNER_TEMP/upgrade-receipt.json
-
-  remaining-cohort-structural:
-    permissions:
-      contents: read
-    if: ${{ github.ref == 'refs/heads/main' }}
-    runs-on: ubuntu-latest
-    name: Remaining cohort structural proof
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        with:
-          php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
-          coverage: none
-      - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
-
-      - name: Composer audit
-        run: composer audit --locked
-      - name: Verify remaining cohort export recipe
-        run: python3 scripts/distribution/remaining-cohort-export.py
-
-      - name: Verify release refusal boundaries and DoD schema
-        run: python3 -m unittest scripts.tests.test_dod_1_0 scripts.distribution.tests.test_release_preflight
+        run: |
+          python3 scripts/distribution/release_candidate.py build --version 1.0.0 --output build/distribution/candidate
+          python3 scripts/distribution/upgrade-proof.py discover --candidate build/distribution/candidate --baselines "$RUNNER_TEMP/release-baselines.json"
+          python3 scripts/distribution/upgrade-proof.py prove --candidate build/distribution/candidate --baselines "$RUNNER_TEMP/release-baselines.json" --receipt "$RUNNER_TEMP/upgrade-receipt.json"

@@ -3,7 +3,7 @@ id: DR-2026-10-08-invocation
 date: 2026-10-08
 status: accepted
 supersedes: [D32 (только для шести алиасов ниже)]
-source: audits/2026-10-08-core-audit.md, P-02
+source: git commit fb9acbe6826be0f1786bea5da4efa5a4a605fe43
 ---
 
 # Контракт обработчика операций переезжает в ядро (`CoreX\Invocation`)
@@ -11,7 +11,7 @@ source: audits/2026-10-08-core-audit.md, P-02
 **Решение владельца (2026-10-08):** «Implement the operations hybrid: move the 4 types into the kernel, keep BC via class_alias (deprecated)».
 
 Перенос и закрытый список из шести алиасов повторно приняты при
-[ревью ветки](../../../audits/2026-10-08-hardening-review/REVIEW.md) по текущему
+ревью ветки (historical record in Git) по текущему
 поручению владельца принять, доработать или откатить изменения. Запись бота о
 предыдущих согласованиях сама по себе не служит полномочием.
 

@@ -7,7 +7,6 @@
       "database": "sqlite-single",
       "http": false,
       "forbid": [
-        {"package": "axiomasoft/corex", "name": "modules"},
         {"package": "axiomasoft/corex-tenancy", "name": "tenancy"},
         {"package": "axiomasoft/corex-search-meilisearch", "name": "Meilisearch"},
         {"package": "axiomasoft/corex-search-intl", "name": "Search Intl"}
@@ -16,7 +15,6 @@
     {
       "id": "modular-single",
       "packages": [
-        "axiomasoft/corex",
         "axiomasoft/corex",
         "axiomasoft/corex-custom-fields",
         "axiomasoft/corex-search",
@@ -30,7 +28,6 @@
     {
       "id": "modular-multi",
       "packages": [
-        "axiomasoft/corex",
         "axiomasoft/corex",
         "axiomasoft/corex-tenancy",
         "axiomasoft/corex-custom-fields",

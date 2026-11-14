@@ -28,7 +28,7 @@ def composers() -> dict[str, dict]:
     for path in sorted((ROOT / "packages").glob("*/composer.json")):
         payload = json.loads(path.read_text(encoding="utf-8"))
         name = payload.get("name")
-        if isinstance(name, str) and name.startswith("corex/"):
+        if isinstance(name, str) and name.startswith("axiomasoft/corex"):
             found[name] = payload
     return found
 
@@ -64,10 +64,9 @@ class ProfileProofTest(unittest.TestCase):
             MODULE.assert_no_workspace(str(ROOT / "vendor/autoload.php"), ROOT)
         self.assertIn("workspace path", str(caught.exception))
 
-    def test_bare_single_names_modules_meilisearch_and_search_intl(self) -> None:
+    def test_bare_single_names_meilisearch_and_search_intl(self) -> None:
         profile = MODULE.require_profile(self.manifest, "bare-single")
         for package, name in (
-            ("axiomasoft/corex", "modules"),
             ("axiomasoft/corex-search-meilisearch", "Meilisearch"),
             ("axiomasoft/corex-search-intl", "Search Intl"),
         ):
@@ -90,29 +89,29 @@ class ProfileProofTest(unittest.TestCase):
         self.assertIn("Search Intl", str(caught.exception))
 
     def test_constraints_do_not_cross_every_package_with_every_lane(self) -> None:
-        self.assertEqual(MODULE.declared_laravel_majors(self.composers["axiomasoft/corex-access"]), (12,))
-        self.assertEqual(MODULE.declared_laravel_majors(self.composers["axiomasoft/corex"]), (12, 13))
+        self.assertEqual(MODULE.declared_laravel_majors(self.composers["axiomasoft/corex-access"]), (13,))
+        self.assertEqual(MODULE.declared_laravel_majors(self.composers["axiomasoft/corex"]), (13,))
         self.assertEqual(MODULE.declared_laravel_majors(self.composers["axiomasoft/corex-recurrence"]), ())
         self.assertFalse(MODULE.allows(MODULE.php_constraint(self.composers["axiomasoft/corex-tenancy"]), (8, 3, 0)))
         self.assertTrue(MODULE.allows(MODULE.php_constraint(self.composers["axiomasoft/corex-tenancy"]), (8, 4, 1)))
-        signatures = {tuple(row["packages"][:1]): row["laravel"] for row in MODULE.group_packages(self.composers)}
-        self.assertEqual(signatures[("axiomasoft/corex-access",)], [12])
-        self.assertNotIn(13, signatures[("axiomasoft/corex-access",)])
-        self.assertEqual(signatures[("axiomasoft/corex-recurrence",)], [])
+        groups = {name: row["laravel"] for row in MODULE.group_packages(self.composers) for name in row["packages"]}
+        self.assertEqual(groups["axiomasoft/corex-access"], [13])
+        self.assertEqual(groups["axiomasoft/corex-recurrence"], [])
 
-    def test_full_corex_laravel_13_is_excluded_by_access(self) -> None:
+    def test_profiles_follow_current_laravel_support(self) -> None:
         cells = MODULE.plan_profiles(self.manifest, self.composers, list(AVAILABLE))
-        excluded = next(cell for cell in cells if cell["id"] == "full-corex-php8.4-l13")
-        self.assertEqual(excluded["status"], "excluded")
-        self.assertIn("axiomasoft/corex-access", excluded["reason"])
+        full = next(cell for cell in cells if cell["id"] == "full-corex-php8.4-l13")
+        self.assertEqual(full["status"], "included")
+        reason = MODULE.exclusion_reason(["axiomasoft/corex-access"], self.composers, 12, (8, 4, 1))
+        self.assertIn("axiomasoft/corex-access", reason or "")
         included = [cell["id"] for cell in cells if cell["profile"] == "bare-single" and cell["status"] == "included"]
-        self.assertEqual(included, ["bare-single-php8.4-l12", "bare-single-php8.4-l13"])
+        self.assertEqual(included, ["bare-single-php8.4-l13"])
 
     def test_tenancy_php_83_is_excluded_by_name(self) -> None:
         cells = MODULE.plan_edges(self.composers, list(AVAILABLE))
-        excluded = next(cell for cell in cells if cell["id"] == "edge-excluded-php8.3-corex/tenancy")
+        excluded = next(cell for cell in cells if cell["status"] == "excluded" and cell["php"] == "8.3" and "axiomasoft/corex-tenancy" in cell["packages"])
         self.assertEqual(excluded["status"], "excluded")
-        self.assertIn("axiomasoft/corex-tenancy", excluded["reason"])
+        self.assertIn(excluded["packages"][0], excluded["reason"])
         self.assertIn("8.4", excluded["reason"])
 
 

@@ -1,7 +1,0 @@
-...........dod-1.0: generated document drifted
-.....................
-----------------------------------------------------------------------
-Ran 32 tests in 4.749s
-
-OK
-{"result": "NO-GO", "packet_sha256": null, "receipt": "/tmp/tmphvnckfje/receipt.json"}

@@ -1,2 +1,0 @@
-schema-gate: OK (21 sets)
-> bash scripts/ci-deferred-guard.sh php scripts/schema-gate.php

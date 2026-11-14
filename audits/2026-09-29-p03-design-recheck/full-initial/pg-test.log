@@ -1,5 +1,0 @@
-> vendor/bin/pest --group=pg
-PHPUnit 13.3.4 by Sebastian Bergmann and contributors.
-
-Test directory "/home/vostrikov/projects/packages/corex/build/p03-audit-dry/packages/core/tests/Views" not found
-Script vendor/bin/pest --group=pg handling the test:pg event returned with error code 2

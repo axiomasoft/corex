@@ -14,8 +14,6 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-CANDIDATE_DIGEST = "9f0af7384d06db47a463cd64196324371450c91531e1aed66f7cfe3f2dc62a10"
-SOURCE_COMMIT = "5db31fd4aebf1dcd172754479ad9cf9da59719d6"
 FIXTURES = (
     {
         "id": "custom-search-provider",
@@ -235,12 +233,8 @@ def candidate_binding(directory: Path) -> dict:
 
 def build_candidate(root: Path, output: Path) -> Path:
     module = release_candidate_module()
-    frozen = root / "release/1.0/artifacts/P17/release-cohort.json"
-    manifest = module.load_json(frozen)
-    module.build_repository(root, manifest["source_commit"], "1.0.0", output, module.load_policy(), enforce_clean=True)
-    digest = hashlib.sha256((output / "candidate.json").read_bytes()).hexdigest()
-    if digest != hashlib.sha256(frozen.read_bytes()).hexdigest():
-        raise SystemExit(f"candidate digest {digest} does not match the frozen candidate digest")
+    source = module.resolve_commit(root, 'HEAD')
+    module.build_repository(root, source, '1.0.0', output, module.load_policy(), enforce_clean=True)
     return output
 
 

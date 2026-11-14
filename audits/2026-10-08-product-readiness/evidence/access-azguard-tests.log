@@ -1,2 +1,0 @@
-> ../../vendor/bin/pest --test-directory=packages/access-azguard/tests --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg
-{"tool":"pest","result":"passed","tests":49,"passed":49,"assertions":173,"duration_ms":2346}

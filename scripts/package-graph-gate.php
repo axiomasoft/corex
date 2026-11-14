@@ -56,7 +56,7 @@ $repoRoot = dirname(__DIR__);
 $configPath = $repoRoot.'/scripts/package-graph-gate.json';
 // PACKAGE_GRAPH_REPORT lets tests write the report outside the tracked artifact.
 $reportOverride = getenv('PACKAGE_GRAPH_REPORT');
-$reportPath = is_string($reportOverride) && $reportOverride !== '' ? $reportOverride : $repoRoot.'/artifacts/P12-package-graph/report.json';
+$reportPath = is_string($reportOverride) && $reportOverride !== '' ? $reportOverride : $repoRoot.'/build/package-graph/report.json';
 
 // The whole-monorepo AST/ownership graph exceeds PHP's 128 MiB CLI default.
 ini_set('memory_limit', '1G');

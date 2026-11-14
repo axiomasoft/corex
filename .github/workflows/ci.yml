@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, p1r-remediation]
+    branches: [main]
   pull_request:
 
 permissions: {}

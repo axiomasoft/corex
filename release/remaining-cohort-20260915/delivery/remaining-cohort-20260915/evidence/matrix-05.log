@@ -1,7 +1,0 @@
-case=MATRIX-05
-command=/usr/bin/python3 /home/vostrikov/projects/packages/corex/scripts/distribution/remaining-cohort-quality.py --verify-mutation-applicability
-cwd=/home/vostrikov/projects/packages/corex
-exit=0
---- stdout ---
-
---- stderr ---

@@ -8,50 +8,6 @@
 .php-cs-fixer.cache
 /build/
 .DS_Store
-
-# Local AI-tool state and machine-specific integrations.
-# .agents/skills/ and .agents/plugins/ are shared artifacts — committed
-/.agents/**
-!/.agents/skills/
-!/.agents/skills/**
-/.agents/skills/**/*.bak
-# Machine-local symlinks into a developer checkout (absolute /home/... targets).
-/.agents/skills/compact-responses
-/.agents/skills/db-test-preflight
-/.agents/skills/mcp-advisor
-/.agents/skills/node-pnpm-preflight
-/.agents/skills/plan-protocol
-/.agents/skills/query-craft
-!/.agents/plugins/
-!/.agents/plugins/**
-/.codex/
-/.cursor/
-**/.cursor/
-/.serena/
-/.swissknifeman/
-/.mcp.json
-/.mcp.json.bak
-# .claude/agents/, rules/, hooks/, workflows/, guidelines/, output-styles/, skills/ — committed
-# Machine-specific or regenerated .claude/ files:
-.claude/settings.json
-.claude/settings.local.json
-.claude/settings*.bak
-.claude/agent-pack.lock.json
-.claude/*.env.ini
-.claude/*.env.ini.bak
-.claude/maind-*.sh
-.claude/.maind-feature-log.last
-.claude/runs/
-.claude/analyze/
-.claude/analyst/
-.claude/worktrees/
-.claude/scheduled_tasks.lock
-.claude/**/*.bak
-/.swissknife.json.bak
-
-# Generated Task runtime state and ad-hoc diagnostic output.
-/plans/**/.plan-cache/
-/scratch_gate.log
 __pycache__/
 *.py[cod]
 *.tmp
@@ -59,16 +15,38 @@ __pycache__/
 *~
 .composer*
 
-# Local qualification harness output; committed receipts live under plans/**/artifacts/.
-/delivery/
-/artifacts/bc-*/
-/artifacts/bc-check-*.log
-/artifacts/bc-check-*.txt
+# Local AI environments are installed through swissknifeman, never vendored.
+/.ai/
+/.agents/
+/.claude/
+/.codex/
+/.cursor/
+**/.cursor/
+/.grok/
+/.gemini/
+/.antigravity/
+/.serena/
+/.swissknifeman/
+/.swissknife.json
+/.swissknife.json.bak
+/.mcp.json
+/.mcp.json.*
+/.vscode/mcp.json
+/AGENTS.md
+/AGENTS.local.md
+/CLAUDE.md
+/CLAUDE.local.md
+/GEMINI.md
+/skills-lock.json
+/*.md.bak
 
-# CoreX specifications and ADRs are maintained in the Brain vault.
+# Plans, audits, qualification receipts and generated diagnostics are local state.
+/plans
+/tasks
+/audits/
+/artifacts/
+/release/
+/delivery/
+/scratch_gate.log
 /docs/03_Dev/
 .mcp.json
-.grok/config.toml
-# Agent session state (tool-call logs) and editor backups of agent instruction files.
-/.grok/state/
-/*.md.bak

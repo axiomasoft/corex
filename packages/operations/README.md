@@ -444,7 +444,6 @@ checks exact bytes, and `composer api-contract` checks intra-major compatibility
 extends the same generator and manifest; planted topic/payload/PII/signature/id/major/cost-default
 changes must fail the compatibility gate. Current commands, input/snapshot/output hashes,
 all 16 threat-matrix rows, repaired failures and limits are recorded in the
-[P14 qualification receipt](../../plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P14-execution-validation.md).
 
 ## Typed errors
 

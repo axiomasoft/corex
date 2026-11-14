@@ -194,4 +194,3 @@ expiry и отсутствие reservation никогда не разрешаю�
 
 Schema owner и retained classes — [table-ownership.md](table-ownership.md).
 Current proof, grants, hashes и ограничения —
-[P14 qualification receipt](../../plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P14-execution-validation.md).

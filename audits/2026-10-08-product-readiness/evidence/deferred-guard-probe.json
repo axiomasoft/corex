@@ -1,8 +1,0 @@
-{
-  "wrapped_command_exit_if_run": 47,
-  "actual_exit": 0,
-  "ci_environment": true,
-  "stdout": "Plan-close deferred (D44/D45): /tmp/corex-deferred-audit-yje7bo3p/scripts/.plan-close-deferred present \u2014 remote publish + CI only at PLAN-CLOSE-CI.\n",
-  "stderr": "",
-  "isolated_temporary_copy": true
-}

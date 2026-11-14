@@ -40,7 +40,7 @@ class UpgradeProofTest(unittest.TestCase):
 
     def test_stale_candidate_fails_by_name(self) -> None:
         with self.assertRaisesRegex(MODULE.UpgradeError, "stale candidate"):
-            MODULE.assert_candidate("0" * 64)
+            MODULE.assert_candidate("0" * 64, "1" * 64)
 
     def test_migration_fault_without_forward_recovery_fails_by_name(self) -> None:
         scenario = json.loads((FIXTURES / "migration-fault.json").read_text(encoding="utf-8"))

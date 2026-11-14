@@ -1,3 +1,0 @@
-> vendor/bin/pest --testsuite=Golden
-PHP Fatal error:  Could not check compatibility between CoreX\Modules\Internal\Registry\CompiledModuleRegistry::get(string $name): CoreX\Modules\Internal\Registry\CompiledModule and CoreX\Modules\Contracts\ModuleRegistry::get(string $name): CoreX\Modules\Registry\CompiledModule, because class CoreX\Modules\Internal\Registry\CompiledModule is not available in /home/vostrikov/projects/packages/corex/build/p03-audit-dry/packages/core/src/Modules/Internal/Registry/CompiledModuleRegistry.php on line 79
-Script vendor/bin/pest --testsuite=Golden handling the golden event returned with error code 1

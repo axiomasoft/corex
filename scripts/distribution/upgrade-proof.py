@@ -19,11 +19,8 @@ from pathlib import Path
 from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parents[2]
-BASELINES_PATH = ROOT / "scripts/distribution/release-baselines.json"
-RECEIPT_PATH = ROOT / "release/1.0/findings/P17-upgrade-receipt.json"
-COHORT_PATH = ROOT / "release/1.0/artifacts/P17/release-cohort.json"
-CANDIDATE_DIGEST = "9f0af7384d06db47a463cd64196324371450c91531e1aed66f7cfe3f2dc62a10"
-SOURCE_COMMIT = "5db31fd4aebf1dcd172754479ad9cf9da59719d6"
+BASELINES_PATH = ROOT / "build/distribution/release-baselines.json"
+RECEIPT_PATH = ROOT / "build/distribution/upgrade-receipt.json"
 VERSION = "1.0.0"
 CACHE = Path(os.environ.get("COREX_UPGRADE_CACHE", "/tmp/corex-upgrade-baselines"))
 COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
@@ -88,7 +85,7 @@ def release_version(tag: str) -> str:
     return tag[1:] if tag.startswith("v") else tag
 
 
-def assert_candidate(actual: str, expected: str = CANDIDATE_DIGEST) -> None:
+def assert_candidate(actual: str, expected: str) -> None:
     if actual != expected:
         raise UpgradeError("stale candidate")
 
@@ -134,7 +131,7 @@ def recovery_sql(detail: str) -> str | None:
     return None
 
 
-def assert_baseline_row(row: dict, source_commit: str = SOURCE_COMMIT) -> None:
+def assert_baseline_row(row: dict, source_commit: str = "") -> None:
     classification = row.get("classification")
     if classification == "new-package":
         absence = row.get("absence")
@@ -161,8 +158,8 @@ def select_latest(releases: list[dict]) -> dict | None:
     return max(usable, key=lambda release: version_key(str(release["tag"])))
 
 
-def cohort_packages() -> list[dict]:
-    return load_json(COHORT_PATH)["packages"]
+def cohort_packages(candidate_path: Path) -> list[dict]:
+    return load_json(candidate_path / "candidate.json")["packages"]
 
 
 def gh_json(path: str) -> tuple[int, dict | list | None, str]:
@@ -262,17 +259,18 @@ def download_asset(mirror: str, tag: str, api_url: str, destination: Path) -> Pa
     return destination
 
 
-def discover(path: Path = BASELINES_PATH) -> dict:
-    rows = [discover_package(package) for package in cohort_packages()]
+def discover(path: Path = BASELINES_PATH, *, candidate_path: Path) -> dict:
+    binding = profile_module().extension_module().candidate_binding(candidate_path)
+    rows = [discover_package(package) for package in cohort_packages(candidate_path)]
     for row in rows:
         assert_baseline_row(row)
     document = {
         "schema_version": "corex-release-baselines/1",
-        "candidate_sha256": CANDIDATE_DIGEST,
-        "source_commit": SOURCE_COMMIT,
+        **binding,
         "observed_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "packages": rows,
     }
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(document, indent=2) + "\n", encoding="utf-8")
     return document
 
@@ -589,12 +587,14 @@ def prove_row(row: dict, baseline_repo: Path, candidate_repo: Path, profiles) ->
 
 
 def prove(path: Path, only: str | None, candidate_path: Path | None = None) -> dict:
+    if candidate_path is None:
+        raise UpgradeError("an explicit candidate directory is required")
     document = load_json(path)
     # The immutable baseline descriptor remains evidence of remote releases;
     # the freshly installed dist, not its historical candidate stamp, binds this proof.
     rows = document["packages"]
     names = [row["package"] for row in rows]
-    expected = [package["name"] for package in cohort_packages()]
+    expected = [package["name"] for package in cohort_packages(candidate_path)]
     if names != expected:
         raise UpgradeError("generic skip")
     for row in rows:
@@ -634,11 +634,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--baselines", type=Path, default=BASELINES_PATH)
     parser.add_argument("--receipt", type=Path, default=RECEIPT_PATH)
     parser.add_argument("--only")
-    parser.add_argument("--candidate", type=Path)
+    parser.add_argument("--candidate", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
         if args.action == "discover":
-            document = discover(args.baselines)
+            document = discover(args.baselines, candidate_path=args.candidate)
             print(json.dumps({"result": "PINNED", "packages": len(document["packages"]), "baselines": str(args.baselines)}))
             return 0
         receipt = prove(args.baselines, args.only, args.candidate)
