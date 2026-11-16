@@ -9,7 +9,7 @@
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
         "brick/math": "^0.14|^0.15",
-        "brick/money": "^0.9 || ^0.10",
+        "brick/money": "^0.15.2",
         "illuminate/contracts": "^13.0",
         "illuminate/database": "^13.0",
         "illuminate/support": "^13.0",

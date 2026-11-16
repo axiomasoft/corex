@@ -22,7 +22,7 @@
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
         "axiomasoft/corex-intl": "^1.0@dev",
-        "brick/money": "^0.9 || ^0.10",
+        "brick/money": "^0.15.2",
         "giggsey/libphonenumber-for-php-lite": "^9.0",
         "laravel/framework": "^13.0"
     },
