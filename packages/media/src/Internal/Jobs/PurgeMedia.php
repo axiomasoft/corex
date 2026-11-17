@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Media\Internal\Jobs;
 
-use CoreX\Media\Internal\MediaOperationConflict;
 use CoreX\Media\Internal\MediaOperationStore;
-use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -25,7 +23,7 @@ final class PurgeMedia implements ShouldQueue
 
     public function __construct(public readonly string $fileId) {}
 
-    public function handle(MediaOperationStore $operations, TenantStorage $storage): void
+    public function handle(MediaOperationStore $operations): void
     {
         $claim = $operations->claimPurge($this->fileId);
 
@@ -34,11 +32,6 @@ final class PurgeMedia implements ShouldQueue
         }
 
         try {
-            foreach ($claim->objectKeys as $objectKey) {
-                if (! $storage->disk()->delete($objectKey)) {
-                    throw new MediaOperationConflict('Media bytes could not be purged.');
-                }
-            }
             $operations->completePurge($claim);
         } catch (Throwable $exception) {
             $operations->markUnknown($claim);

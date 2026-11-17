@@ -1,7 +1,7 @@
 {
     "name": "axiomasoft/corex-search",
     "description": "Typed, policy-hydrated search boundary for CoreX.",
-    "type": "corex-module",
+    "type": "packman-module",
     "license": "MIT",
     "require": {
         "ext-openssl": "*",
@@ -10,7 +10,8 @@
         "illuminate/contracts": "^13.0",
         "illuminate/database": "^13.0",
         "illuminate/support": "^13.0",
-        "psr/clock": "^1.0"
+        "psr/clock": "^1.0",
+        "axiomasoft/packman-schema": "^0.1@dev"
     },
     "autoload": {
         "psr-4": {

@@ -5,7 +5,6 @@ declare(strict_types=1);
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Tasks\Access\Contracts\TaskPlanningAccess;
 use CoreX\Tasks\Planning\Contracts\TaskPlanningCommand;
 use CoreX\Tasks\Planning\Data\PlanningToken;
@@ -18,6 +17,7 @@ use CoreX\Tasks\Time\Internal\Models\TimeLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Mockery\MockInterface;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 beforeEach(function (): void {
     $this->resetPgSchema();

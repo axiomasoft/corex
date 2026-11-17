@@ -12,8 +12,7 @@ use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Messaging\Contracts\CloudEventCodec;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
-use CoreX\Modules\Contracts\PackageRegistrar;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Pagination\Contracts\CursorCodec;
 use CoreX\Webhooks\Contracts\WebhookDeliveryStore;
 use CoreX\Webhooks\Contracts\WebhookEgressPolicy;
@@ -39,6 +38,7 @@ use CoreX\Webhooks\Internal\WebhookUrlPolicy;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
@@ -64,7 +64,7 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
             projectors: self::projectors(app: $app, options: $app->make(WebhookOptions::class)),
         ));
         $app->scoped(WebhookSubscriptionStore::class, static fn (Application $app): SqlWebhookSubscriptionStore => new SqlWebhookSubscriptionStore(
-            connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
+            connection: $app->make(ApiSchemaConnections::class)->tenant(),
             contexts: $app->make(TenantContextRestorer::class),
             catalogue: $app->make(WebhookTopicCatalogue::class),
             clock: $app->make(ClockInterface::class),
@@ -72,12 +72,12 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
         ));
         $app->scoped(WebhookDeliveryStore::class, static fn (Application $app): SqlWebhookDeliveryStore => self::deliveryStore(app: $app, options: $app->make(WebhookOptions::class)));
         $app->scoped(WebhookManagement::class, static fn (Application $app): WebhookManagement => new WebhookManagement(
-            connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
+            connection: $app->make(ApiSchemaConnections::class)->tenant(),
             contexts: $app->make(TenantContextRestorer::class),
             cursors: $app->make(CursorCodec::class),
         ));
         $app->scoped(WebhookReplay::class, static fn (Application $app): WebhookReplay => new WebhookReplay(
-            connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
+            connection: $app->make(ApiSchemaConnections::class)->tenant(),
             contexts: $app->make(TenantContextRestorer::class),
             topics: $app->make(WebhookTopicCatalogue::class),
             clock: $app->make(ClockInterface::class),
@@ -85,7 +85,7 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
             audit: $app->make(AuditLogger::class),
         ));
         $app->scoped(WebhookFanout::class, static fn (Application $app): WebhookFanout => new WebhookFanout(
-            connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
+            connection: $app->make(ApiSchemaConnections::class)->tenant(),
             inbox: $app->make(Inbox::class),
             catalogue: $app->make(WebhookTopicCatalogue::class),
             projectors: self::projectors(app: $app, options: $app->make(WebhookOptions::class)),
@@ -93,7 +93,7 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
             codec: $app->make(CloudEventCodec::class),
         ));
         $app->scoped(WebhookRetention::class, static fn (Application $app): WebhookRetention => new WebhookRetention(
-            connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
+            connection: $app->make(ApiSchemaConnections::class)->tenant(),
             contexts: $app->make(TenantContextRestorer::class),
             clock: $app->make(ClockInterface::class),
             bodyRetentionSeconds: $app->make(WebhookOptions::class)->bodyRetentionSeconds,
@@ -119,7 +119,7 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
     private static function deliveryStore(Application $app, WebhookOptions $options): SqlWebhookDeliveryStore
     {
         return new SqlWebhookDeliveryStore(
-            connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
+            connection: $app->make(ApiSchemaConnections::class)->tenant(),
             contexts: $app->make(TenantContextRestorer::class),
             clock: $app->make(ClockInterface::class),
             retry: $app->make(WebhookRetryPolicy::class),

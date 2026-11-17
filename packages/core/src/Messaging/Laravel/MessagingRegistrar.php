@@ -28,11 +28,11 @@ use CoreX\Messaging\Internal\SqlDeliveryHealth;
 use CoreX\Messaging\Internal\SqlInbox;
 use CoreX\Messaging\Internal\SqlOutbox;
 use CoreX\Messaging\Internal\SqlOutboxRelay;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionInterface;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 use Psr\Clock\ClockInterface;
 
 /** Composition of the kernel module; the public provider delegates here. */

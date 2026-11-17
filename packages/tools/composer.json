@@ -14,10 +14,11 @@
         "illuminate/support": "^13.0",
         "illuminate/validation": "^13.0",
         "symfony/http-kernel": "^7.2|^8.0",
-        "axiomasoft/corex-operations": "^1.0@dev"
+        "axiomasoft/corex-operations": "^1.0@dev",
+        "axiomasoft/packman-modules": "^0.1@dev"
     },
     "suggest": {
-        "axiomasoft/corex-transfer": "Optional bounded import/export adapter for durable bulk operations",
+        "axiomasoft/corex-import-export": "Optional bounded import/export adapter for durable bulk operations",
         "opis/json-schema": "2.4.1 — bounded offline tool-schema/1 validation adapter",
         "ext-curl": "Optional webhook transport; missing curl returns capability_unavailable."
     },
@@ -27,7 +28,7 @@
         "ext-pcntl": "*",
         "ext-pdo": "*",
         "phpunit/phpunit": "^12.0|^13.0",
-        "axiomasoft/corex-transfer": "^1.0@dev",
+        "axiomasoft/corex-import-export": "^1.0@dev",
         "larastan/larastan": "^3.12",
         "laravel/pint": "^1.32",
         "opis/json-schema": "^2.4.1",
@@ -35,7 +36,9 @@
         "orchestra/testbench-core": "^11.5",
         "pestphp/pest": "^5.2",
         "psr/clock": "^1.0",
-        "symfony/process": "^7.2|^8.0"
+        "symfony/process": "^7.2|^8.0",
+        "axiomasoft/packman": "^0.1@dev",
+        "axiomasoft/packman-schema": "^0.1@dev"
     },
     "autoload": {
         "psr-4": {
@@ -58,7 +61,7 @@
         },
         {
             "type": "path",
-            "url": "../transfer"
+            "url": "../import-export"
         }
     ],
     "minimum-stability": "stable",
@@ -85,7 +88,7 @@
         },
         "laravel": {
             "providers": [
-                "CoreX\\Tools\\ToolServiceProvider"
+                "CoreX\\Tools\\ToolsServiceProvider"
             ]
         }
     }

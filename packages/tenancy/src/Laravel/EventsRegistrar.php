@@ -6,7 +6,6 @@ namespace CoreX\Tenancy\Laravel;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\DomainTrust\Internal\Models\Domain;
 use CoreX\Tenancy\Impersonation\Internal\ImpersonatedModelWriteGuard;
@@ -18,6 +17,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Queue\Events\JobAttempted;
 use Illuminate\Queue\Events\JobProcessing;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class EventsRegistrar implements PackageRegistrar

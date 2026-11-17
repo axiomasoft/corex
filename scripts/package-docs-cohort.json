@@ -53,20 +53,20 @@
       "path": "packages/tasks"
     },
     {
-      "name": "axiomasoft/corex-tasks-workflow",
-      "path": "packages/tasks-workflow"
+      "name": "axiomasoft/corex-recurring-tasks",
+      "path": "packages/recurring-tasks"
     },
     {
       "name": "axiomasoft/corex-tenancy",
       "path": "packages/tenancy"
     },
     {
-      "name": "axiomasoft/corex-transfer",
-      "path": "packages/transfer"
+      "name": "axiomasoft/corex-import-export",
+      "path": "packages/import-export"
     },
     {
-      "name": "axiomasoft/corex-wakeup",
-      "path": "packages/wakeup"
+      "name": "axiomasoft/corex-scheduler",
+      "path": "packages/scheduler"
     },
     {
       "name": "axiomasoft/corex-workflow",

@@ -15,9 +15,9 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Context\Internal\ImpersonationGuard as ImpersonationGuardImplementation;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 
 /** Composition of the kernel module; the public provider delegates here. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

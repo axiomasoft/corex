@@ -5,20 +5,25 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Tests;
 
 use CoreX\CoreServiceProvider;
-use CoreX\Database\Testing\MigratesSchemaSets;
-use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier as TemplateIntegrityVerifierContract;
-use CoreX\Tenancy\Laravel\Support\TenancyOptions;
-use CoreX\Tenancy\Provisioning\Internal\Database\SchemaCatalogueSerializer;
-use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
+use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier;
+use CoreX\Tenancy\Provisioning\Contracts\AccountResources;
+use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks;
+use CoreX\Tenancy\Runtime\Contracts\AccountIsolationMapper;
 use CoreX\Tenancy\TenancyServiceProvider;
 use CoreX\Tenancy\Tests\Stubs\StubIdentityProvider;
 use CoreX\Tenancy\Tests\Support\IsolatesDatabasePath;
-use Illuminate\Database\Connectors\ConnectionFactory;
+use CoreX\Tenancy\Tests\Support\TestAccountResources;
+use CoreX\Tenancy\Tests\Support\TestTemplateIntegrity;
+use CoreX\Tenancy\Tests\Support\TestTenantHost;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Override;
+use Packman\Schema\Testing\MigratesSchemaSets;
+use Tenant\Contracts\Context\ContextResolver;
+use Tenant\Contracts\Verification\BindingVerifier;
+use Tenant\Laravel\TenantServiceProvider;
 
 /**
  * root_* is PG-only DDL on the central connection (D14/D16) — no sqlite
@@ -57,6 +62,8 @@ abstract class TestCase extends Orchestra
     /** Физический host-profile включаем только в регрессии порядка middleware. */
     public static bool $hostIdentificationEnabled = false;
 
+    public static bool $runtimeSessionEnabled = false;
+
     /**
      * @param  Application  $app
      * @return list<class-string>
@@ -67,7 +74,8 @@ abstract class TestCase extends Orchestra
             CoreServiceProvider::class,
             // Core's scoped semantic restorer is decorated by tenancy (D49).
             // Testbench disables package discovery, so register both owners.
-            // The package owns its physical tenancy engine (PLAN3.D95).
+            // The host supplies Tenant runtime facilities and trusted account projections.
+            TenantServiceProvider::class,
             TenancyServiceProvider::class,
         ];
     }
@@ -98,7 +106,7 @@ abstract class TestCase extends Orchestra
         $this->resolveIsolatedApplicationCore($app);
     }
 
-    /** Per-test cache/session fixtures; the tenant isolation under test needs real stores, never `array`. */
+    /** Per-test filesystem fixtures for the host cache and CoreX session middleware. */
     private ?string $runtimeFixtures = null;
 
     /** @param Application $app */
@@ -112,7 +120,6 @@ abstract class TestCase extends Orchestra
             'path' => $this->runtimeFixtures.'/cache',
             'lock_path' => $this->runtimeFixtures.'/cache',
         ]);
-        $app['config']->set('corex-tenancy.cache_stores', ['tenant_file']);
         $app['config']->set('session.driver', 'file');
         $app['config']->set('session.files', $this->runtimeFixtures.'/sessions');
         $app['config']->set('database.default', 'pgsql');
@@ -130,6 +137,27 @@ abstract class TestCase extends Orchestra
             'schema' => 'public',
         ]);
         $app['config']->set('corex-tenancy.host_identification.enabled', static::$hostIdentificationEnabled);
+        $app['config']->set('tenant', [
+            'runtime_profile' => 'laravel-pg-database', 'central_connection' => 'pgsql',
+            'cache_stores' => [], 'central_cache_stores' => [],
+            'facilities' => ['database' => true, 'cache' => false, 'session' => static::$runtimeSessionEnabled, 'storage' => false],
+            'storage_driver' => 'local',
+            'shared' => [
+                'cache' => ['owner' => 'test:host', 'purpose' => 'test:domain'],
+                'session' => ['owner' => 'test:host', 'purpose' => 'test:domain'],
+                'storage' => ['owner' => 'test:host', 'purpose' => 'test:domain'],
+            ],
+        ]);
+        $host = new TestTenantHost($app->make('db'), $this->runtimeFixtures);
+        $app->instance(TestTenantHost::class, $host);
+        $app->instance(AccountIsolationMapper::class, $host);
+        $app->instance(ContextResolver::class, $host);
+        $app->instance(BindingVerifier::class, $host);
+        $app->singleton(TestAccountResources::class);
+        $app->alias(TestAccountResources::class, AccountResources::class);
+        $app->singleton(TestTemplateIntegrity::class);
+        $app->alias(TestTemplateIntegrity::class, TemplateIntegrityVerifier::class);
+        $app->alias(TestTemplateIntegrity::class, TemplateIntegrityChecks::class);
 
         if (! static::$oidcEnabled) {
             return;
@@ -192,50 +220,13 @@ abstract class TestCase extends Orchestra
 
     public static function trustTemplate(string $templateId, string $database): void
     {
-        $central = DB::connection('pgsql');
-        $configuration = $central->getConfig();
-        $configuration['database'] = $database;
-        $templateConnection = new ConnectionFactory(app())->make($configuration, 'corex-template-test-catalogue');
-        $serializer = resolve(SchemaCatalogueSerializer::class);
+        resolve(TestTemplateIntegrity::class)->trust($templateId, $database);
+    }
 
-        try {
-            $schemaHash = $serializer->hash($templateConnection);
-        } finally {
-            $templateConnection->disconnect();
-        }
-
-        $template = DB::table('root_templates')->where('id', $templateId)->first(['id', 'version', 'embedding_model', 'embedding_dim']);
-        $payload = [
-            'canonical_schema_sha256' => $schemaHash,
-            'embedding' => [
-                'dimension' => (string) $template->embedding_dim,
-                'model' => $template->embedding_model,
-            ],
-            'format_version' => 1,
-            'template_id' => $template->id,
-            'template_version' => (string) $template->version,
-        ];
-        $keypair = sodium_crypto_sign_keypair();
-        $signature = sodium_crypto_sign_detached(
-            'corex-template-manifest/v1'."\0".$serializer->encode($payload),
-            sodium_crypto_sign_secretkey($keypair),
-        );
-        $base64Url = static fn (string $value): string => rtrim(strtr(base64_encode($value), '+/', '-_'), '=');
-
-        DB::table('root_templates')->where('id', $templateId)->update(['schema_hash' => $schemaHash]);
-        config([
-            'corex-tenancy.template_integrity.trusted_keys' => ['test' => $base64Url(sodium_crypto_sign_publickey($keypair))],
-            'corex-tenancy.template_integrity.manifests' => [
-                $templateId => [
-                    'payload' => $payload,
-                    'signature' => $base64Url($signature),
-                    'trusted_key_id' => 'test',
-                ],
-            ],
-        ]);
-        app()->forgetInstance(TenancyOptions::class);
-        // Singletons that captured the previous options snapshot must be rebuilt against the new one.
-        app()->forgetInstance(TemplateIntegrityVerifier::class);
-        app()->forgetInstance(TemplateIntegrityVerifierContract::class);
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // Domain fixtures address central PostgreSQL outside an active Tenant frame.
+        DB::setDefaultConnection('pgsql');
     }
 }

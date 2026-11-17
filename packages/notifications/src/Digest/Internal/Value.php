@@ -19,11 +19,6 @@ final class Value
         return (string) $value;
     }
 
-    public static function nullableText(mixed $value): ?string
-    {
-        return $value === null ? null : self::text($value);
-    }
-
     public static function integer(mixed $value): int
     {
         if (is_int($value)) {

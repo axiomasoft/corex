@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Media\Internal;
 
 use CoreX\Media\Contracts\ConversionDriver;
+use CoreX\Media\Exceptions\MediaOperationConflict;
 
 final class ConversionProfiles
 {

@@ -6,8 +6,8 @@ namespace CoreX\Access\Matrix\Internal;
 
 use CoreX\Access\Matrix\Contracts\EntityActivity;
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Modules\Contracts\EntityRegistry;
-use CoreX\Modules\Contracts\ModuleRegistry;
+use Packman\Modules\Contracts\Entities\EntityRegistry;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 /**
  * Single owner of "does this entity_key currently give out a permission

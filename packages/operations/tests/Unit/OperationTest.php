@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Modules\Data\Api;
 use CoreX\Operations\Definition\Enums\OperationMode;
 use CoreX\Operations\Definition\Laravel\OperationFactory;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Tests\Support\OperationHandlerDouble;
+use Packman\Modules\Data\Extenders\Api;
 
 $schema = ['type' => 'object'];
 

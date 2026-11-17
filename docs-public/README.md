@@ -2,19 +2,30 @@
 
 ## Установка
 
+Сначала настройте канал зависимостей приложения по
+[инструкции экосистемы](../docs/architecture/ecosystem-dependencies.md).
+Текущая интеграция использует зафиксированные development-снимки; это не объявление
+публикации пакетов на Packagist.
+
 ```bash
-composer require axiomasoft/corex
+composer require 'axiomasoft/corex:^1.0@dev'
 php artisan vendor:publish --tag=corex-config
-php artisan vendor:publish --tag=corex-migrations-tenant
-php artisan migrate --database=<tenant>
+php artisan vendor:publish --tag=packman-modules-config
+php artisan packman:schema:migrate --scope=tenant --database=<tenant>
+php artisan packman:schema:status --scope=tenant --database=<tenant>
 ```
 
-Настройки ядра находятся в `config/corex.php`; настройки модулей — во вложенном разделе `modules`
-(`corex.modules`). Env подсистемы модулей сохраняют префикс `COREX_MODULES_`. Дополнительные пакеты
-устанавливаются как `axiomasoft/corex-<name>` и используют собственные теги и конфиги из
-[таблицы пакетов](../README.md#пакеты). Для SavedViews нужен `axiomasoft/corex-panels` и публикация
-`corex-panels-migrations-tenant`; конфигурация access — `corex-access`, env — `COREX_ACCESS_*`.
-Tenancy использует env `COREX_TENANCY_*`, а конфиг движка остаётся `tenancy.php`.
+Настройки ядра находятся в `config/corex.php`, модулей Packman — в `config/modules.php`
+с переменными `PACKMAN_MODULES_*`. Миграции пакетов не публикуются. Наборы модулей
+устанавливает `Packman\Modules\Contracts\Lifecycle\ModuleLifecycle`; `--modules`
+добавляет их при подготовке шаблона. В production для автоматической миграции нужен `--force`.
+
+Дополнительные пакеты используют собственные теги и конфиги из
+[таблицы пакетов](../README.md#пакеты). Saved views предоставляет Packman Panels через
+`axiomasoft/corex-panels`; его таблицы создаёт Packman Schema. Конфигурация access —
+`corex-access`, env — `COREX_ACCESS_*`. Доменная конфигурация tenancy —
+`corex-tenancy`, env — `COREX_TENANCY_*`; host отдельно собирает внешний Tenant runtime
+и его физические адаптеры по [tenancy README](../packages/tenancy/README.md).
 
 ## PHP API и расширение
 
@@ -25,9 +36,3 @@ Api разрешает вызов/чтение/catch; реализация ко�
 Internal не импортируется чужим пакетом. `composer php-api` проверяет source и
 свежесть snapshots; [SemVer policy](../docs/architecture/semver-policy.md)
 определяет совместимость. `since` не означает, что релиз уже опубликован.
-
-## Синхронизация документации
-
-Двусторонний синк с `docs-public/` код-репозитория. Репозиторий ещё не создан:
-после создания заполнить поле `repo:` во frontmatter `CoreX.md` и выполнить
-первый `brain sync` (см. `docs/workflow/brain-cli.md`).

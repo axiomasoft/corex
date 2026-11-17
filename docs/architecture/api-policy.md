@@ -159,7 +159,7 @@ Unknown outcomes требуют reconciliation; rollback не отменяет n
 Current result access проверяет scope/field policy/hash; foreign ids скрыты за 404.
 
 Hard profile transfer: 1 GiB/source, 1 MiB/row, 256 fields, depth32, batch500,
-errors1000, runtime30s, memory128MiB. Проверки cooperative; один read/write call не
+errors1000, runtime30s, memory128MiB по умолчанию; host config `corex-import-export.limits.max_memory_mib` допускает 1..1024MiB для полного PHP процесса. Проверки cooperative; один read/write call не
 preemptible. Host process limits, edge/body/request-rate/concurrency caps остаются
 обязательной частью установки. Input parameters≤20KiB, failures page≤100,
 result TTL24h≤metadata TTL30d; active jobs не prune. Retention не воскрешает cancelled

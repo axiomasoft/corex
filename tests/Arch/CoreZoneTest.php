@@ -8,10 +8,6 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
-use CoreX\Database\Contracts\SchemaSets;
-use CoreX\Database\Enums\SchemaLifecycle;
-use CoreX\Database\Enums\SchemaScope;
-use CoreX\Database\Exceptions\SchemaSetException;
 use CoreX\Messaging\Events\DomainEvent;
 use CoreX\Messaging\Internal\DomainEventDefaults;
 use CoreX\Observability\Contracts\TracePropagation;
@@ -20,6 +16,10 @@ use CoreX\Panels\SavedViews\Internal\SqlSavedViewRepository;
 use CoreX\Settings\Data\SettingsScope;
 use CoreX\Settings\Enums\SettingScope;
 use CoreX\Tests\Support\SourceScanner;
+use Packman\Schema\Contracts\Migration\SchemaSets;
+use Packman\Schema\Enums\SchemaLifecycle;
+use Packman\Schema\Enums\SchemaScope;
+use Packman\Schema\Exceptions\SchemaSetException;
 
 // P6.2 — zone arch gate (D32/D101). Matrix is copied from the design, not read at runtime.
 // Scheduling is the P07.5 kernel module and may import Foundation and tenancy contracts.
@@ -48,6 +48,10 @@ const CORE_ZONE_ALLOWED = [
 
 /** @var list<string> */
 const CORE_ZONE_COMPOSITION = [
+    'packages/core/src/Foundation/Laravel/PackmanRegistrar.php',
+    'packages/core/src/Foundation/Internal/PackmanActorResolver.php',
+    'packages/core/src/Foundation/Internal/PackmanContextResolver.php',
+    'packages/core/src/Foundation/Internal/PackmanFeatureFlags.php',
     'packages/core/src/Config/Laravel/CoreOptionsParser.php',
     'packages/core/src/Config/Internal/KernelConfigSection.php',
     'packages/core/src/CoreServiceProvider.php',
@@ -55,9 +59,6 @@ const CORE_ZONE_COMPOSITION = [
     'packages/core/src/Config/Laravel/RuntimeConfigGate.php',
     'packages/core/src/Config/Data/CoreOptions.php',
     'packages/core/src/Config/Internal/Commands/ValidateConfigCommand.php',
-    'packages/core/src/Modules/Internal/ServiceProviderModuleRegistrar.php',
-    'packages/core/src/Modules/Contracts/PackageRegistrar.php',
-    'packages/core/src/Modules/Laravel/RegistersNothingOnBoot.php',
     'packages/core/src/Audit/Laravel/AuditRegistrar.php',
     'packages/core/src/Config/Laravel/ConfigRegistrar.php',
     'packages/core/src/Config/Laravel/ConfiguredImplementation.php',
@@ -70,7 +71,6 @@ const CORE_ZONE_COMPOSITION = [
     'packages/core/src/Errors/Laravel/ProblemRegistryFactory.php',
     'packages/core/src/Features/Laravel/FeaturesRegistrar.php',
     'packages/core/src/Messaging/Laravel/MessagingRegistrar.php',
-    'packages/core/src/Modules/Laravel/CoreModulesRegistrar.php',
     'packages/core/src/Observability/Laravel/ObservabilityRegistrar.php',
     'packages/core/src/Settings/Laravel/SettingsRegistrar.php',
     'packages/core/src/Storage/Laravel/StorageRegistrar.php',
@@ -250,9 +250,9 @@ const CORE_ZONE_DUMP = [
     'Context/Contracts/TenantDatabaseLifecycle.php' => 'TenancyContracts',
     'Context/Contracts/TenantDatabaseProvisioner.php' => 'TenancyContracts',
     'Context/Data/AccountRef.php' => 'TenancyContracts',
+    'Context/Data/DatabaseConnectionConfig.php' => 'TenancyContracts',
     'Context/Data/TenantContext.php' => 'TenancyContracts',
     'Context/Data/WorkspaceRef.php' => 'TenancyContracts',
-    'Context/Data/DatabaseConnectionConfig.php' => 'TenancyContracts',
     'Context/Enums/ImpersonationRestrictedAction.php' => 'TenancyContracts',
     'Context/Exceptions/CentralContextException.php' => 'TenancyContracts',
     'Context/Exceptions/ImpersonationRestrictedException.php' => 'TenancyContracts',
@@ -399,8 +399,7 @@ test('every core src file is classified into a zone or composition/testing', fun
         ->and(zoneOf('packages/core/src/Errors/Enums/ErrorCategory.php'))->toBe('Foundation')
         ->and(zoneOf('packages/core/src/Errors/Enums/UnavailabilityReason.php'))->toBe('Foundation')
         ->and(coreZoneKind('packages/core/src/Config/Data/CoreOptions.php'))->toBe('composition')
-        ->and(coreZoneKind('packages/core/src/Modules/Contracts/PackageRegistrar.php'))->toBe('composition')
-        ->and(coreZoneKind('packages/core/src/Modules/Laravel/RegistersNothingOnBoot.php'))->toBe('composition');
+        ->and(coreZoneKind('packages/core/src/Foundation/Laravel/PackmanRegistrar.php'))->toBe('composition');
 });
 
 test('zone files import only allowed CoreX zones (R-Z1)', function (): void {

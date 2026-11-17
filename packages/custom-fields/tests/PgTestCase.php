@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace CoreX\CustomFields\Tests;
 
 use CoreX\CoreServiceProvider;
-use CoreX\CustomFields\AttributesServiceProvider;
-use CoreX\Database\Testing\MigratesSchemaSets;
+use CoreX\CustomFields\CustomFieldsServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Override;
+use Packman\Schema\Testing\MigratesSchemaSets;
 use RuntimeException;
 
 abstract class PgTestCase extends Orchestra
@@ -19,7 +19,7 @@ abstract class PgTestCase extends Orchestra
     #[Override]
     protected function getPackageProviders($app): array
     {
-        return [CoreServiceProvider::class, AttributesServiceProvider::class];
+        return [CoreServiceProvider::class, CustomFieldsServiceProvider::class];
     }
 
     #[Override]

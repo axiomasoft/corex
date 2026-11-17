@@ -27,7 +27,6 @@ const LITMUS_FOUNDATION = [
     'packages/core/src/Data/Contracts/DataScopeAuthorizer.php',
     'packages/core/src/Data/Contracts/DataScopeCodec.php',
     'packages/core/src/Messaging/Contracts/DurablePayload.php',
-    'packages/core/src/Modules/Contracts/ModuleRegistrar.php',
     'packages/core/src/Data/Data/DataScopeAccessDecision.php',
     'packages/core/src/Audit/Enums/ActorType.php',
     'packages/core/src/Messaging/Contracts/Cancellable.php',
@@ -94,7 +93,7 @@ test('foundation litmus hard conditions are green on the clean tree', function (
 
 test('condition 1 below the grep bar warns and does not fail the gate', function (): void {
     expect(litmusTypeAdoption('packages/core/src/Data/Data/RecordRef.php', 'RecordRef'))->toBe('pass')
-        ->and(litmusTypeAdoption('packages/core/src/Modules/Contracts/ModuleRegistrar.php', 'ModuleRegistrar'))->toBe('warning')
+        ->and(litmusTypeAdoption('packages/core/src/Time/Laravel/LaravelClock.php', 'LaravelClock'))->toBe('warning')
         ->and(litmusRl3Offenders())->toBe([]);
 });
 
@@ -338,7 +337,6 @@ function litmusLiveFoundationFiles(): array
         'Data/Contracts/DataScopeAuthorizer.php',
         'Data/Contracts/DataScopeCodec.php',
         'Messaging/Contracts/DurablePayload.php',
-        'Modules/Contracts/ModuleRegistrar.php',
         'Data/DataScopeAccessDecision.php',
         'Audit/Enums/ActorType.php',
         'Messaging/Contracts/Cancellable.php',

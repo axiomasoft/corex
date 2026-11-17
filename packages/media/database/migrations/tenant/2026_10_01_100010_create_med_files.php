@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('request_key', 128)->unique('med_files_request_key_uq');
             $table->char('request_digest', 64);
             $table->string('state', 16);
-            $table->string('object_key');
+            $table->string('account_id', 128);
+            $table->string('blob_id', 128)->nullable();
             $table->string('mime_type', 255);
             $table->string('kind', 128);
             $table->unsignedBigInteger('size_bytes');

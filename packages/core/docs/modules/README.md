@@ -1,77 +1,30 @@
-# axiomasoft/corex
+# CoreX modules on Packman
 
-Модульная система CoreX (namespace `CoreX\Modules\`): манифест модуля, discovery,
-`RegistryCompiler` + extenders, `ModuleRegistry` (compiled hot-path),
-lifecycle-FSM (`enable`/`disable`/`upgrade`/`archive`/`purge`) и реестр владения
-для безопасного purge. Ставится поверх `axiomasoft/corex`. MIT.
+CoreX uses `axiomasoft/packman-modules` for discovery, manifest compilation, entity registries
+and module lifecycle. Module definitions and executable schema sets belong to their owning
+Composer packages; the application selects and activates the installed modules.
 
-## Требование к СУБД
+## Public contracts
 
-Модульная система **требует PostgreSQL 16**: `mod_*`-таблицы и lifecycle-FSM
-используют `pg_advisory_xact_lock`/`CHECK`/`jsonb`. SQLite-лейн покрывает
-только pure-PHP код; lifecycle/purge/кеш-инвалидация проверяются
-исключительно на `composer test:pg`.
+- `Packman\Modules\Contracts\Definition\ModuleDefinition` and
+  `Packman\Modules\Data\Lifecycle\ModuleManifest` declare a module.
+- `Packman\Modules\Contracts\Registry\ModuleRegistry` exposes the compiled catalogue and
+  checks current context activation.
+- `Packman\Modules\Contracts\Lifecycle\ModuleLifecycle` owns activation, upgrade and removal.
+- `Packman\Schema\Contracts\Migration\SchemaSetProvider` supplies package-owned schema sets.
 
-## Установка схемы
+CoreX's `CoreServiceProvider` registers its Packman adapters. `CoreX\Context\Data\TenantContext`
+implements Packman's context scope; CoreX projects actor, feature flag and entity-audit behavior
+through public upstream contracts. There is no second CoreX loader, registry or lifecycle engine.
 
-Таблицы `mod_modules`, `mod_records`, `mod_lifecycle_log` принадлежат tenant-набору ядра:
+## Schema ownership
 
-```bash
-php artisan corex:schema:migrate --scope=tenant --database=<tenant>
-```
+`axiomasoft/packman-modules:tenant` owns `mod_modules`, `mod_records` and `mod_lifecycle_log`.
+The schema registry is provided by Packman Schema. Install the relevant tenant sets with
+`php artisan packman:schema:migrate --scope=tenant --database=<tenant>`; the host selects the
+trusted connection and supplies `--force` in production. Package migration files are executed
+in place rather than copied into the application.
 
-Соединение lifecycle задаётся `corex.modules.connection` (`null` = default).
-Пути Module-наборов объявляют пакеты через `SchemaSetProvider`; lifecycle берёт их из `SchemaSets`.
-Версия набора — `SchemaSet::version`; новые файлы исполняются командой схемы без копирования в приложение.
-
-## Идентификаторы и время
-
-Ключевые колонки (`mod_modules.id`, `mod_lifecycle_log.id`/`actor_id`) используют UUID.
-Модели генерируют UUIDv7 через Laravel `HasUuids`. Все `timestamptz` — с явной микросекундной точностью
-(`precision: 6`). Порядок purge в `mod_records` детерминирован монотонным
-`seq bigserial` (не часами) — FK-безопасный обратный порядок удаления.
-
-## Tool declarations (P8)
-
-Modules may expose headless tools through the existing `Api` extender: `Api::tool()` for
-standalone handlers and `Api::exposeTool()` to project an already-declared operation. Tool
-declarations compile into the same API slice as HTTP operations; they do not create routes or
-implicit CRUD. Canonical tuple, wire name, contract hash and schema validation are enforced at
-compile time; runtime catalogue and guarded invocation live in optional `axiomasoft/corex-operations`.
-
-## Registry introspection
-
-`RegistryIntrospection` exposes a read-only map of the eight compiled extenders, entity/field
-ownership and capability traits, plus a bounded `why()` explanation for module activation.
-Diagnostics redact handler classes, connection topology and other confidential internals.
-The local operator CLI is:
-
-```bash
-php artisan corex:modules:why example/demo
-php artisan corex:modules:why example/demo --account=<trusted-account-id> --json
-```
-
-Without `--account`, output is declaration-only and does not claim a tenant activation verdict.
-Tested installed compatibility passports remain a consumer/P9 obligation.
-
-## Compatibility evidence
-
-The factual compatibility passport, its local proof class, and explicit limits
-are in [PACKAGE.md](PACKAGE.md). It does not extend Composer constraints or
-constitute a publication promise.
-
-## Failure semantics
-
-Invalid or conflicting module declarations fail compilation before publishing a registry. A disabled module is not an implicit grant. Lifecycle and purge require the supported tenant PostgreSQL connection and package-owned schema; connection, dependency or ownership failures must be resolved before retry. Preserve transaction boundaries and do not replace a rejected lifecycle operation with direct table writes.
-
-### Optional compiler contributions
-
-Resolve `RegistryCompiler` through the container so installed contributors are included.
-A package may register its Eloquent cast with `FieldCastRegistry::register($castClass, $type)`;
-cast arguments such as `:USD` are ignored during lookup. The built-in scalar mappings still work
-without optional packages.
-
-Packages tag their `ManifestSectionCompiler` implementation with the interface name. Each
-compiler owns one API declaration mode, its validation phase and normalized records. Operations
-runs before tools, allowing exposed tools to resolve declared operations. An unsupported mode
-fails compilation instead of silently omitting declarations.
+For application-specific entities and operations, declare the corresponding Packman extenders
+in the owning module manifest. CoreX operations, access, custom fields and search consume those
+public declarations without depending on an internal compiler implementation.

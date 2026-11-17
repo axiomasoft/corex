@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — Packman runtime
+
+- Breaking: module declarations and schema registrations use Packman contracts directly; module lifecycle and schema execution are owned by Packman.
+
 ## Unreleased — kernel audit repairs (2026-10-08)
 
 - Authorize the exact schema-approved field projection during hydration; deny a candidate when the current actor cannot read its returned fields.
@@ -19,7 +23,7 @@
 
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
-- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `packman:schema:migrate`; migration publishing is removed.
 
 - Added internal `SearchOptions`, a lazy singleton resolved in `boot()` that validates the shape of `corex-search`.
 

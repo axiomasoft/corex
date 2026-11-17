@@ -1,7 +1,7 @@
 {
     "name": "axiomasoft/corex-search-intl",
     "description": "Optional localized projection glue between axiomasoft/corex-intl and axiomasoft/corex-search.",
-    "type": "corex-module",
+    "type": "packman-module",
     "license": "MIT",
     "require": {
         "php": "^8.4",
@@ -15,7 +15,8 @@
         "laravel/pint": "^1.32",
         "orchestra/testbench": "^11.3",
         "orchestra/testbench-core": "^11.5",
-        "pestphp/pest": "^5.2"
+        "pestphp/pest": "^5.2",
+        "axiomasoft/packman-schema": "^0.1@dev"
     },
     "autoload": {
         "psr-4": {

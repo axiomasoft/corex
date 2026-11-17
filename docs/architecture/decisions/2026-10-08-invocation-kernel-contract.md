@@ -1,12 +1,17 @@
 ---
 id: DR-2026-10-08-invocation
 date: 2026-10-08
-status: accepted
+status: superseded
 supersedes: [D32 (только для шести алиасов ниже)]
 source: git commit fb9acbe6826be0f1786bea5da4efa5a4a605fe43
 ---
 
 # Контракт обработчика операций переезжает в ядро (`CoreX\Invocation`)
+
+> Обновление 2026-11-17: владелец разрешил несовместимый редизайн до первого использования.
+> Алиасы удалены; используются только канонические контракты ядра. Описанное ниже
+> исключение для `class_alias` — историческое решение, больше не действующее.
+
 
 **Решение владельца (2026-10-08):** «Implement the operations hybrid: move the 4 types into the kernel, keep BC via class_alias (deprecated)».
 

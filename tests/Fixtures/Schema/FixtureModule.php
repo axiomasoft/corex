@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Fixtures\Schema;
 
-use CoreX\Modules\Contracts\ModuleDefinition;
-use CoreX\Modules\Data\ModuleManifest;
+use Packman\Modules\Contracts\Definition\ModuleDefinition;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
 
 final class FixtureModule extends ModuleDefinition
 {

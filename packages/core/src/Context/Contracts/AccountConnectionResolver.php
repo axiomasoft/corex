@@ -10,9 +10,9 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\DatabaseConnectionConfig;
 
 /**
- * Full Laravel connection config for an account's tenant database (host/port
- * of the cell's pooler, database, username). Boxed installs never bind this
- * — only cloud (axiomasoft/corex-tenancy) resolves real accounts.
+ * Host-owned, verified database identity used to admit account-scoped work.
+ * A Tenant host derives this projection from its trusted resource binding;
+ * resolving an identity never switches, provisions or opens a connection.
  */
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface AccountConnectionResolver

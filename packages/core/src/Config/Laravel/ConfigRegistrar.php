@@ -9,10 +9,10 @@ use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Config\Data\CoreOptions;
 use CoreX\Config\Internal\KernelConfigSection;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 
 /** Composition of the kernel module; the public provider delegates here. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

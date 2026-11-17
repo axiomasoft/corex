@@ -11,9 +11,9 @@ use CoreX\Config\Laravel\ConfiguredImplementation;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 
 /** Composition of the kernel module; the public provider delegates here. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

@@ -15,10 +15,10 @@ use CoreX\Access\Matrix\Laravel\MatrixPortBindings;
 use CoreX\Access\Roles\Internal\SystemRoleMutationScope;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class AccessBindingsRegistrar implements PackageRegistrar

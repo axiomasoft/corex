@@ -9,24 +9,24 @@ use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Database\Contracts\SchemaSets;
-use CoreX\Operations\ApiServiceProvider;
+use CoreX\ImportExport\Contracts\ExportRunner;
+use CoreX\ImportExport\Contracts\TransferRunner;
 use CoreX\Operations\Bulk\Contracts\BulkTransferFactory;
 use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
 use CoreX\Operations\Bulk\Internal\SqlBulkOperationStore;
 use CoreX\Operations\Bulk\Internal\TransferBulkExecutor;
 use CoreX\Operations\Bulk\Internal\TransferCapabilityUnavailable;
 use CoreX\Operations\Cost\Data\CostOptions;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
+use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Tests\TestCase;
 use CoreX\Time\Testing\FrozenClock;
-use CoreX\Transfer\Contracts\ExportRunner;
-use CoreX\Transfer\Contracts\TransferRunner;
 use DateTimeImmutable;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use Packman\Schema\Contracts\Migration\SchemaSets;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -40,21 +40,21 @@ final class LoadContourBootTest extends TestCase
 
         self::assertArrayNotHasKey('public-api', $composer['extra']['corex']);
         $surface = json_decode((string) file_get_contents(dirname(__DIR__, 2).'/resources/contracts/php-api.json'), true, flags: JSON_THROW_ON_ERROR);
-        self::assertArrayHasKey(ApiServiceProvider::class, $surface['symbols']);
-        self::assertSame('spi-call', $surface['symbols'][ApiServiceProvider::class]['layer']);
-        self::assertSame(['ext-filter', 'ext-mbstring', 'php', 'axiomasoft/corex', 'illuminate/auth', 'illuminate/console', 'illuminate/contracts', 'illuminate/database', 'illuminate/http', 'illuminate/support', 'illuminate/validation', 'psr/clock', 'symfony/http-kernel'], array_keys($require));
+        self::assertArrayHasKey(OperationsServiceProvider::class, $surface['symbols']);
+        self::assertSame('spi-call', $surface['symbols'][OperationsServiceProvider::class]['layer']);
+        self::assertSame(['ext-filter', 'ext-mbstring', 'php', 'axiomasoft/corex', 'illuminate/auth', 'illuminate/console', 'illuminate/contracts', 'illuminate/database', 'illuminate/http', 'illuminate/support', 'illuminate/validation', 'psr/clock', 'symfony/http-kernel', 'axiomasoft/packman', 'axiomasoft/packman-modules', 'axiomasoft/packman-schema'], array_keys($require));
         self::assertSame('^13.0', $require['illuminate/http']);
         self::assertSame('^13.0', $require['illuminate/support']);
         self::assertSame('^13.0', $require['illuminate/validation']);
-        self::assertArrayNotHasKey('axiomasoft/corex-transfer', $require);
-        self::assertArrayHasKey('axiomasoft/corex-transfer', $composer['suggest']);
+        self::assertArrayNotHasKey('axiomasoft/corex-import-export', $require);
+        self::assertArrayHasKey('axiomasoft/corex-import-export', $composer['suggest']);
         self::assertMatchesRegularExpression('/\A13\./', Application::VERSION);
         self::assertSame([], $this->foreignInternalImports());
 
         $gate = json_decode((string) file_get_contents(dirname(__DIR__, 4).'/scripts/package-graph-gate.json'), true);
         $edges = array_values(array_filter(
             $gate['allowlist'],
-            static fn (array $entry): bool => $entry['from'] === 'axiomasoft/corex-operations' && $entry['to'] === 'axiomasoft/corex-transfer',
+            static fn (array $entry): bool => $entry['from'] === 'axiomasoft/corex-operations' && $entry['to'] === 'axiomasoft/corex-import-export',
         ));
 
         self::assertSame([
@@ -75,7 +75,7 @@ final class LoadContourBootTest extends TestCase
         self::assertTrue(interface_exists(ExportRunner::class));
         $this->configure('api_budget_stub');
         $this->configure('api_tenant');
-        $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(ApiSchemaConnections::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [
@@ -84,7 +84,7 @@ final class LoadContourBootTest extends TestCase
         ]);
         $connection = DB::connection('api_tenant');
 
-        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
         $clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 use CoreX\Access\Access\Internal\WorkspaceScopeWiring;
 use CoreX\Access\Tests\Stubs\FakeWorkspaceScope;
-use CoreX\Modules\Data\EntityDefinition;
-use CoreX\Modules\Enums\Capability;
-use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
+use Packman\Modules\Data\Entities\EntityDefinition;
+use Packman\Modules\Enums\Entities\Capability;
+use Packman\Modules\Testing\ArrayEntityRegistry;
 
 // Each test below declares its OWN `new class extends Model {}` at its own
 // source line: PHP treats every distinct anonymous-class expression site as

@@ -7,9 +7,6 @@ namespace CoreX\Operations\Laravel;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\RuntimeConfigCheck;
-use CoreX\Modules\Contracts\ManifestSectionCompiler;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
@@ -37,6 +34,9 @@ use CoreX\Time\Laravel\SystemClock;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
+use Packman\Modules\Contracts\Compiler\ManifestSectionCompiler;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Psr\Clock\ClockInterface;
 
 /** Composition of the operations package. */

@@ -1,7 +1,7 @@
 {
     "name": "axiomasoft/corex-workflow",
     "description": "Optional durable workflow engine binding for CoreX modules.",
-    "type": "corex-module",
+    "type": "packman-module",
     "license": "MIT",
     "require": {
         "php": "^8.4",
@@ -9,7 +9,9 @@
         "illuminate/contracts": "^13.0",
         "illuminate/database": "^13.0",
         "illuminate/support": "^13.0",
-        "psr/clock": "^1.0"
+        "psr/clock": "^1.0",
+        "axiomasoft/packman-modules": "^0.1@dev",
+        "axiomasoft/packman-schema": "^0.1@dev"
     },
     "autoload": {
         "psr-4": {
@@ -24,7 +26,6 @@
     "extra": {
         "corex": {
             "schema-version": 1,
-            "module": "CoreX\\Workflow\\WorkflowModule",
             "package-type": "capability",
             "stability": "stable"
         },
@@ -35,6 +36,9 @@
         },
         "branch-alias": {
             "dev-main": "1.0.x-dev"
+        },
+        "packman": {
+            "module": "CoreX\\Workflow\\WorkflowModule"
         }
     },
     "repositories": [
@@ -53,6 +57,7 @@
     },
     "require-dev": {
         "orchestra/testbench": "^11.3",
-        "orchestra/testbench-core": "^11.5"
+        "orchestra/testbench-core": "^11.5",
+        "axiomasoft/packman": "^0.1@dev"
     }
 }

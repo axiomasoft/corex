@@ -12,11 +12,11 @@ use CoreX\Data\Data\DataScope;
 use CoreX\Data\Internal\AllowAllDataScopeAuthorizer;
 use CoreX\Data\Internal\CallableDataScopeAuthorizer;
 
-function jsonbScope(string $connectionIdentity = 'pgsql:corex_test', ?string $restoreEpoch = null): DataScope
+function jsonbScope(?string $connectionIdentity = null, ?string $restoreEpoch = null): DataScope
 {
     return DataScope::fromTenantContext(
         context: new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true),
-        connectionIdentity: $connectionIdentity,
+        connectionIdentity: $connectionIdentity ?? 'pgsql:'.(getenv('PGSQL_DATABASE') ?: 'corex_test'),
         actorId: 'user-1',
         restoreEpoch: $restoreEpoch ?? str_repeat('a', 64),
     );

@@ -3,9 +3,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Modules\Data\InstalledPackageVersion;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Modules\Testing\ExtensionContract;
+use Packman\Modules\Data\Compiler\InstalledPackageVersion;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Modules\Testing\ExtensionContract;
 
 $root = dirname(__DIR__);
 $fixture = ($argv[1] ?? null) === '--fixture' ? ($argv[2] ?? null) : null;
@@ -23,14 +23,13 @@ if (count($argv) > 1 && ($fixture === null || ! is_file($fixture) || ! str_ends_
  * @var array<string, string>
  */
 $classification = [
-    'CoreX\\Modules\\Internal\\InMemoryEntityRegistry' => 'projection',
+    'CoreX\\Tenancy\\Runtime\\Internal\\TenantRuntimeManager' => 'runtime manager',
     'CoreX\\Errors\\Contracts\\ProblemRegistry' => 'boot-built catalogue',
     'CoreX\\Errors\\Internal\\CompiledProblemRegistry' => 'boot-built catalogue',
     'CoreX\\Operations\\Definition\\Contracts\\OperationRegistry' => 'projection',
     'CoreX\\Operations\\Pagination\\Contracts\\OrderingRegistry' => 'projection',
     'CoreX\\Search\\Contracts\\SearchDriverRegistry' => 'driver factory',
     'CoreX\\Search\\Internal\\ManagerDriverRegistry' => 'driver factory',
-    'CoreX\\Modules\\Contracts\\FieldCastRegistry' => 'boot-built catalogue',
     'CoreX\\Webhooks\\Internal\\WebhookTopicCatalogue' => 'projection',
     'CoreX\\Tools\\Contracts\\ToolCatalogue' => 'projection',
     'CoreX\\Tools\\Internal\\CompiledToolCatalogue' => 'projection',
@@ -48,17 +47,8 @@ $classification = [
     'CoreX\\Messaging\\Internal\\ArrayMessageContractRegistry' => 'authority',
     'CoreX\\Context\\Contracts\\TenancyManager' => 'runtime manager',
     'CoreX\Context\Internal\NullTenancyManager' => 'runtime manager',
-    'CoreX\Modules\Data\CompiledRegistry' => 'authority',
-    'CoreX\\Modules\\Contracts\\EntityRegistry' => 'projection',
-    'CoreX\\Modules\\Contracts\\ModuleRegistry' => 'authority',
-    'CoreX\Modules\Testing\ArrayEntityRegistry' => 'projection',
-    'CoreX\\Modules\\Internal\\Registry\\CompiledModuleRegistry' => 'authority',
-    'CoreX\\Panels\\Contracts\\PanelCatalogue' => 'boot-built catalogue',
-    'CoreX\\Panels\\Internal\\ModulePanelCatalogue' => 'boot-built catalogue',
     'CoreX\Search\Internal\SearchManager' => 'driver factory',
-    'CoreX\Tenancy\Provisioning\Internal\Database\TemplateClonePostgreSQLManager' => 'runtime manager',
-    'CoreX\\Tenancy\\Runtime\\Internal\\DatabaseTenancyManager' => 'runtime manager',
-    'CoreX\\Wakeup\\Internal\\WakeupHandlerRegistry' => 'authority',
+    'CoreX\\Scheduler\\Internal\\WakeupHandlerRegistry' => 'authority',
 ];
 
 $violations = [];

@@ -22,14 +22,14 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Context\Enums\PrincipalType;
-use CoreX\Modules\Contracts\EntityRegistry;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\EntityDefinition;
-use CoreX\Modules\Enums\Capability;
-use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Packman\Modules\Contracts\Entities\EntityRegistry;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Entities\EntityDefinition;
+use Packman\Modules\Enums\Entities\Capability;
+use Packman\Modules\Testing\ArrayEntityRegistry;
 
 uses()->group('pg');
 

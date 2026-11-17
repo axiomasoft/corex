@@ -15,6 +15,10 @@ import sys
 import tempfile
 from pathlib import Path
 
+# Also support the test harness loading this script by file path.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from ecosystem_repositories import is_corex_package, snapshot_repositories
+
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST_PATH = ROOT / "scripts/distribution/install-profiles.json"
 MATRIX_PATH = ROOT / "build/distribution/profile-matrix.json"
@@ -391,7 +395,7 @@ def assert_cohort_platform(consumer: Path, version: tuple[int, int, int], cell_i
     for row in installed.get("packages", []):
         name = row.get("name", "")
         php = row.get("require", {}).get("php") if isinstance(row.get("require"), dict) else None
-        if name.startswith("corex/") and isinstance(php, str) and not allows(php, version):
+        if is_corex_package(name) and isinstance(php, str) and not allows(php, version):
             raise ProfileError(f"{cell_id}: {name} php constraint {php}")
 
 
@@ -431,7 +435,8 @@ def write_consumer(consumer: Path, packages: list[str], laravel: int, repository
     composer["require"] = dict(sorted(require.items()))
     composer["repositories"] = [
         {"type": "composer", "url": str(repository)},
-        {"type": "composer", "url": "https://repo.packagist.org", "exclude": ["corex/*", "axioma-studio/*"]},
+        *snapshot_repositories(ROOT),
+        {"type": "composer", "url": "https://repo.packagist.org", "exclude": ["axiomasoft/corex", "axiomasoft/corex-*", "corex/*", "axioma-studio/*"]},
         {"packagist.org": False},
     ]
     composer["minimum-stability"] = "dev"
@@ -550,14 +555,14 @@ def locked_summary(payload: dict) -> list[str]:
         if not isinstance(row, dict):
             continue
         name = row.get("name", "")
-        if name.startswith("corex/") or name in {"laravel/framework", "illuminate/support"}:
+        if is_corex_package(name) or name in {"laravel/framework", "illuminate/support"}:
             names.append(f"{name}:{row.get('version')}")
     return sorted(names)
 
 
 def execute_cell(cell: dict, profile: dict | None, repository: Path, workspace: Path, available: list[dict], extensions) -> dict:
     binary = interpreter_for(cell["php"], available)
-    laravel = 12 if cell["laravel"] is None else int(cell["laravel"])
+    laravel = 13 if cell["laravel"] is None else int(cell["laravel"])
     prefix = "corex-profile-" + cell["id"].replace("/", "-") + "-"
     with tempfile.TemporaryDirectory(prefix=prefix) as temporary:
         root = Path(temporary)
@@ -656,7 +661,7 @@ def execute_cell(cell: dict, profile: dict | None, repository: Path, workspace: 
         if show.returncode != 0:
             fail_command(cell["id"], show)
         shown = json.loads(show.stdout)
-        cohort_installed = sorted(name for name in report["packages"] if name.startswith("corex/"))
+        cohort_installed = sorted(name for name in report["packages"] if is_corex_package(name))
         return {
             "installed": cohort_installed,
             "locked": locked_summary(shown),
@@ -665,40 +670,6 @@ def execute_cell(cell: dict, profile: dict | None, repository: Path, workspace: 
             "databases": report["databases"],
             "removed": removed,
         }
-
-
-def merge_azguard(repository: Path) -> None:
-    package = Path(os.environ.get("COREX_AZGUARD_LOCAL", "/home/vostrikov/projects/packages/azguard")) / "packages/core"
-    if not (package / "composer.json").is_file():
-        raise ProfileError("missing package: axioma-studio/azguard-core")
-    import zipfile
-    version = "0.2.0"
-    archive_path = repository / "artifacts" / "azguard-core-0.2.0.zip"
-    composer = load_json(package / "composer.json")
-    composer["version"] = version
-    composer.pop("repositories", None)
-    with zipfile.ZipFile(archive_path, "w") as bundle:
-        for path in sorted(package.rglob("*")):
-            if not path.is_file():
-                continue
-            relative = path.relative_to(package).as_posix()
-            if any(part in {"vendor", ".git", ".env"} for part in Path(relative).parts):
-                continue
-            body = json.dumps(composer, indent=4).encode() + b"\n" if relative == "composer.json" else path.read_bytes()
-            bundle.writestr(relative, body)
-    packages = load_json(repository / "packages.json")
-    packages["packages"]["axioma-studio/azguard-core"] = {
-        version: {
-            "name": "axioma-studio/azguard-core",
-            "version": version,
-            "type": composer.get("type", "library"),
-            "require": composer.get("require", {}),
-            "autoload": composer.get("autoload", {}),
-            "extra": composer.get("extra", {}),
-            "dist": {"type": "zip", "url": archive_path.resolve().as_uri(), "reference": version},
-        }
-    }
-    (repository / "packages.json").write_text(json.dumps(packages) + "\n", encoding="utf-8")
 
 
 def archive_composers(candidate: Path) -> dict[str, dict]:
@@ -748,7 +719,6 @@ def prove(candidate: Path | None, *, mode: str, only: str | None, php: str | Non
         binding = extensions.candidate_binding(built)
         repository = root / "repository"
         extensions.materialize_repository(built, repository)
-        merge_azguard(repository)
         composers = archive_composers(built)
         profiles = {profile["id"]: profile for profile in manifest["profiles"]}
         planned = plan_profiles(manifest, composers, available) + plan_edges(composers, available)

@@ -2,6 +2,4 @@
 
 declare(strict_types=1);
 
-use CoreX\Notifications\Tests\TestCase;
-
-uses(TestCase::class)->in(__DIR__.'/Feature');
+// Feature files select their TestCase explicitly for root and package runners.

@@ -7,13 +7,13 @@ namespace CoreX\Workflow\Laravel;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Workflow\Contracts\EngineAdapter;
 use CoreX\Workflow\Internal\SqlWorkflowBinding;
 use CoreX\Workflow\Internal\UnavailableEngineAdapter;
 use CoreX\Workflow\Internal\WorkflowOptions;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Psr\Clock\ClockInterface;
 
 /** Builds the workflow binding from the container; the engine adapter and module registry are optional. */

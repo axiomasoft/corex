@@ -73,7 +73,7 @@ final readonly class OpenApiDocumentGenerator implements OpenApiDocuments
 
             $entry = [
                 'operationId' => $operation->id,
-                'x-corex-module' => $operation->module,
+                'x-packman-module' => $operation->module,
                 'x-corex-ability' => $operation->ability,
                 'x-corex-authentication-required' => true,
                 'parameters' => $parameters,

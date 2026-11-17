@@ -10,7 +10,7 @@ Requires PHP 8.4 and Laravel 13. An operations extension: it builds on axiomasof
 
 ## Configuration
 
-Register `CoreX\Tools\ToolServiceProvider` alongside `CoreX\Operations\ApiServiceProvider`. Tool admission uses the host bindings for trusted context, authorization and guarded execution. Install `opis/json-schema` when offline JSON Schema validation is required.
+Register `CoreX\Tools\ToolsServiceProvider` alongside `CoreX\Operations\OperationsServiceProvider`. Tool admission uses the host bindings for trusted context, authorization and guarded execution. Install `opis/json-schema` when offline JSON Schema validation is required.
 
 ## Public contracts
 

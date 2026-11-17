@@ -7,14 +7,16 @@ namespace CoreX\Media;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
-use CoreX\Database\Contracts\SchemaSetProvider;
 use CoreX\Media\Internal\Commands\SweepMediaOperations;
 use CoreX\Media\Internal\MediaSchemaSets;
 use CoreX\Media\Internal\Support\MediaConfigSection;
 use CoreX\Media\Laravel\MediaBindingsRegistrar;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
+use Packman\Schema\Contracts\Migration\SchemaSetProvider;
+use Vaulter\Media\VaulterMediaServiceProvider;
+use Vaulter\VaulterServiceProvider;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class MediaServiceProvider extends ServiceProvider
@@ -25,6 +27,8 @@ final class MediaServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->register(VaulterServiceProvider::class);
+        $this->app->register(VaulterMediaServiceProvider::class);
         $this->app->tag([MediaSchemaSets::class], SchemaSetProvider::class);
 
         $this->app->tag([MediaConfigSection::class], ConfigReportSection::class);

@@ -5,13 +5,13 @@ declare(strict_types=1);
 use CoreX\Context\Contracts\IdentityPasswordRehasher;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Identity\Contracts\IdentitySyncer;
 use CoreX\Tenancy\Identity\Events\UserSynced;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
 
 uses()->group('pg');
 

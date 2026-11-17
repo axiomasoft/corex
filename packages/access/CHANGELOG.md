@@ -1,8 +1,16 @@
 # Changelog
 
+## Unreleased — package boundaries
+
+- Breaking before release: Rename the public Laravel provider to `CoreX\Access\AccessServiceProvider`.
+
+## Unreleased — Packman runtime
+
+- Breaking: module declarations and schema registrations use Packman contracts directly; module lifecycle and schema execution are owned by Packman.
+
 ## Unreleased — principal concept in the kernel (audit 2026-10-08 P-02)
 
-- Deprecated: `CoreX\Access\Contracts\Principal` and `CoreX\Access\Enums\PrincipalType` are now `class_alias` names of the kernel `CoreX\Context\Contracts\Principal` and `CoreX\Context\Enums\PrincipalType` (same types, same methods and cases). Existing implementations and type hints keep working; switch imports to the new names. The aliases are removed in 2.0.
+- Breaking before release: remove `CoreX\Access\Contracts\Principal` and `CoreX\Access\Enums\PrincipalType` aliases. Consumers use kernel `CoreX\Context\Contracts\Principal` and `CoreX\Context\Enums\PrincipalType` directly; `PrincipalIdentity` implements the kernel contract.
 - `PrincipalIdentity` is therefore also the operation caller (`RequestContext::principal()`), with no adapter.
 
 ## Unreleased — fail-closed workspace scope (audit 2026-10-08 P-04)
@@ -35,7 +43,7 @@
 
 ## Unreleased — native authorization (P07.4)
 
-- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `packman:schema:migrate`; migration publishing is removed.
 
 - Breaking before 1.0: access evaluates its own role matrix and direct grants; AzGuard integration moved to the optional `corex-access-azguard` package.
 - Added `aut_direct_grants` and the `RoleMatrixCompiled` event. Compilation dispatches synchronously in the tenant transaction and invalidates scope versions after commit.
@@ -43,7 +51,7 @@
 
 ## Unreleased — thin providers and registrars (P05.2)
 
-- `CoreAuthServiceProvider` delegates to `AccessBindingsRegistrar` and `AccessIntegrationRegistrar`; bindings, order and lifetimes are unchanged.
+- `AccessServiceProvider` delegates to `AccessBindingsRegistrar` and `AccessIntegrationRegistrar`; bindings, order and lifetimes are unchanged.
 
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
@@ -118,7 +126,7 @@ Repo-level tag `v0.2.0` per D17 default policy (no per-package split mirror conf
   `fromPrincipal()` and the `agent`/`api_key` lanes are unaffected — only
   `PrincipalUserProvider` ever passes a hash.
 - `config/corex-auth.php` — new `identity` section (`enabled`/`connection`/`table`/`columns`)
-  + `Auth::provider('corex-principal', …)` registered in `CoreAuthServiceProvider::boot()`
+  + `Auth::provider('corex-principal', …)` registered in `AccessServiceProvider::boot()`
   under `corex-auth.identity.enabled`. The package never writes to `config('auth.*')` itself —
   a consumer opts in with `auth.providers.users.driver = 'corex-principal'` (README).
   Parity with the OIDC cloud lane (`corex/tenancy`, P2.22) is structural: both logins end at
@@ -142,7 +150,7 @@ Repo-level tag `v0.2.0` per D17 default policy (no per-package split mirror conf
   наполнение матрицы — задача модулей (`Extend\Permissions`, P2.9).
 - `config/corex-auth.php` — панель UI-матрицы + конфиг-пины AzGuard (`table_names.roles`,
   `column_names.morph_type = uuid`, D104), применяются на `az-guard.*` в
-  `CoreAuthServiceProvider` без правки самого пакета AzGuard.
+  `AccessServiceProvider` без правки самого пакета AzGuard.
 - Второй (PG16) тест-лейн пакета: `tests/Pg` + `PgTestCase`, скрипты `test`/`test:pg`
   (D105) — существующий sqlite-лейн (7 тестов) не тронут.
 - `Contracts\AccessChecker` (+`RecordContext`) — двухфазная проверка прав (B-11 §5.5):
@@ -188,17 +196,17 @@ Repo-level tag `v0.2.0` per D17 default policy (no per-package split mirror conf
   и `Matrix\MatrixPermissionCatalogBuilder` фильтруют через НЕГО (один шов, не два расходящихся
   условия); строки `aut_role_matrix` неактивного модуля не удаляются — только перестают давать
   ключ, восстанавливаются на re-enable без правки матрицы (D113).
-- `Extend\PermissionsMerger` — листенер `ModuleEnabled`/`ModuleDisabled` (`CoreAuthServiceProvider::boot()`),
+- `Extend\PermissionsMerger` — листенер `ModuleEnabled`/`ModuleDisabled` (`AccessServiceProvider::boot()`),
   на каждое enable/disable перекомпилирует всю матрицу (`RoleMatrixCompiler::recompileAll()`);
   строк матрицы сам не создаёт (D113 — это дело модулей). `merge()` также валидирует декларации
-  `CoreX\Modules\Data\Permissions` против `EntityRegistry`: сущность, неизвестная реестру,
+  `Packman\Modules\Data\Extenders\Permissions` против `EntityRegistry`: сущность, неизвестная реестру,
   игнорируется fail-closed и попадает в возвращаемый список предупреждений (никогда не в лог).
 - `Access\PermissionSurface` — read-only читатель декларированной поверхности прав
   `(entity_key, action, допустимые scope)` активных модулей для UI-матрицы, поверх
   `Access\ScopeAvailability` (P2.9): `isScopeable() === false` ⇒ единственный допустимый scope —
   `account`.
 - `Contracts\RoleMatrixCompiler` теперь забинжен в контейнере на `Matrix\DatabaseRoleMatrixCompiler`
-  (`CoreAuthServiceProvider::register()`) — ранее ничего не резолвило интерфейс, только прямое
+  (`AccessServiceProvider::register()`) — ранее ничего не резолвило интерфейс, только прямое
   конструирование класса.
 
 ### Requires

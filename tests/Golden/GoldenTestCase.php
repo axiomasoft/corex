@@ -4,41 +4,43 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Golden;
 
-use AzGuard\AzGuardServiceProvider;
-use CoreX\Access\CoreAuthServiceProvider;
-use CoreX\AccessAzguard\AccessAzguardServiceProvider;
+use CoreX\Access\AccessServiceProvider;
 use CoreX\CoreServiceProvider;
-use CoreX\CustomFields\AttributesServiceProvider;
+use CoreX\CustomFields\CustomFieldsServiceProvider;
+use CoreX\ImportExport\ImportExportServiceProvider;
 use CoreX\Intl\IntlServiceProvider;
 use CoreX\Media\MediaServiceProvider;
-use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Notifications\NotificationsServiceProvider;
-use CoreX\Operations\ApiServiceProvider;
+use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Panels\PanelsServiceProvider;
+use CoreX\RecurringTasks\RecurringTasksServiceProvider;
+use CoreX\Scheduler\SchedulerServiceProvider;
 use CoreX\Search\SearchServiceProvider;
 use CoreX\SearchIntl\SearchIntlServiceProvider;
-use CoreX\SearchMeilisearch\MeilisearchServiceProvider;
+use CoreX\SearchMeilisearch\SearchMeilisearchServiceProvider;
 use CoreX\Tasks\TasksServiceProvider;
-use CoreX\TasksWorkflow\TasksWorkflowServiceProvider;
+use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier;
+use CoreX\Tenancy\Provisioning\Contracts\AccountResources;
+use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks;
+use CoreX\Tenancy\Runtime\Contracts\AccountIsolationMapper;
 use CoreX\Tenancy\TenancyServiceProvider;
 use CoreX\Tests\TestCase;
-use CoreX\Tools\ToolServiceProvider;
-use CoreX\Transfer\TransferServiceProvider;
-use CoreX\Wakeup\WakeupServiceProvider;
+use CoreX\Tools\ToolsServiceProvider;
 use CoreX\Workflow\WorkflowServiceProvider;
 use Flex\Crm\CrmServiceProvider;
 use Illuminate\Support\ServiceProvider;
+use Mockery;
+use Packman\Modules\ModulesServiceProvider;
 use RuntimeException;
+use Tenant\Contracts\Runtime\TenantRuntime;
 
 abstract class GoldenTestCase extends TestCase
 {
     protected function getPackageProviders($app): array
     {
         return [
-            AzGuardServiceProvider::class,
-            CoreAuthServiceProvider::class,
-            AccessAzguardServiceProvider::class,
-            AttributesServiceProvider::class,
+            AccessServiceProvider::class,
+            CustomFieldsServiceProvider::class,
             CoreServiceProvider::class,
             CrmServiceProvider::class,
             IntlServiceProvider::class,
@@ -48,17 +50,33 @@ abstract class GoldenTestCase extends TestCase
             PanelsServiceProvider::class,
             SearchServiceProvider::class,
             SearchIntlServiceProvider::class,
-            MeilisearchServiceProvider::class,
+            SearchMeilisearchServiceProvider::class,
             TasksServiceProvider::class,
-            TasksWorkflowServiceProvider::class,
+            RecurringTasksServiceProvider::class,
             TenancyServiceProvider::class,
-            TransferServiceProvider::class,
-            WakeupServiceProvider::class,
+            ImportExportServiceProvider::class,
+            SchedulerServiceProvider::class,
             WorkflowServiceProvider::class,
-            ApiServiceProvider::class,
-            ToolServiceProvider::class,
+            OperationsServiceProvider::class,
+            ToolsServiceProvider::class,
             ...$this->manifestProviders(),
         ];
+    }
+
+    /** Config-only tests declare host ports; unexpected runtime calls fail on these mocks. */
+    protected function declareTenancyHostConfiguration(): void
+    {
+        $app = $this->app ?? throw new RuntimeException('Host configuration requires a bootstrapped application.');
+
+        foreach ([
+            TenantRuntime::class,
+            AccountIsolationMapper::class,
+            AccountResources::class,
+            TemplateIntegrityChecks::class,
+            TemplateIntegrityVerifier::class,
+        ] as $contract) {
+            $app->instance($contract, Mockery::mock($contract));
+        }
     }
 
     /** @return list<class-string> */

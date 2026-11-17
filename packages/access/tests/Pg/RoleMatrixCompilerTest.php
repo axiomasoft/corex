@@ -12,13 +12,13 @@ use CoreX\Access\Roles\Laravel\RoleMatrixData;
 use CoreX\Access\Tests\Stubs\Deal;
 use CoreX\Access\Tests\Stubs\FakeModuleRegistry;
 use CoreX\Context\Enums\PrincipalType;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\EntityDefinition;
-use CoreX\Modules\Enums\Capability;
-use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Entities\EntityDefinition;
+use Packman\Modules\Enums\Entities\Capability;
+use Packman\Modules\Testing\ArrayEntityRegistry;
 
 uses()->group('pg');
 

@@ -9,10 +9,10 @@ use CoreX\Intl\Errors\Enums\IntlErrorCode;
 use CoreX\Notifications\Errors\Enums\NotificationsErrorCode;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Recurrence\Errors\Enums\RecurrenceErrorCode;
+use CoreX\RecurringTasks\Errors\Enums\RecurringTasksErrorCode;
 use CoreX\Search\Errors\Enums\SearchErrorCode;
 use CoreX\SearchMeilisearch\Errors\Enums\SearchMeilisearchErrorCode;
 use CoreX\Tasks\Errors\Enums\TasksErrorCode;
-use CoreX\TasksWorkflow\Errors\Enums\TasksWorkflowErrorCode;
 use CoreX\Tenancy\Errors\Enums\TenancyErrorCode;
 use CoreX\Tools\Errors\Enums\ToolsErrorCode;
 use CoreX\Webhooks\Errors\Enums\WebhooksErrorCode;
@@ -470,7 +470,7 @@ return [
             'owner' => 'axiomasoft/corex-operations',
             'source' => 'packages/operations/src/Invocation/Internal/DefaultOperationInvoker.php',
             'adapter' => 'field-path-api-error',
-            'sha256' => '5ae9f58c49ab58f39220e20b1e733600d896767f7cb0ac7204f86e406634c4f1',
+            'sha256' => '7f0049702507c63f82b35e35af15ceff52f5355df3d009e997ddc0ab8b01bda6',
         ],
         4 => [
             'owner' => 'axiomasoft/corex-operations',
@@ -1533,6 +1533,39 @@ return [
             ],
         ],
         95 => [
+            'code' => 'recurring-tasks.materialization_conflict',
+            'enum' => RecurringTasksErrorCode::class,
+            'type' => 'urn:corex:problem:recurring-tasks.materialization_conflict',
+            'status' => 409,
+            'title' => 'Materialization conflict.',
+            'category' => 'conflict',
+            'retryable' => false,
+            'detail_keys' => [
+            ],
+        ],
+        96 => [
+            'code' => 'recurring-tasks.stale_materialization',
+            'enum' => RecurringTasksErrorCode::class,
+            'type' => 'urn:corex:problem:recurring-tasks.stale_materialization',
+            'status' => 409,
+            'title' => 'Stale materialization.',
+            'category' => 'conflict',
+            'retryable' => false,
+            'detail_keys' => [
+            ],
+        ],
+        97 => [
+            'code' => 'recurring-tasks.unsupported_materialization',
+            'enum' => RecurringTasksErrorCode::class,
+            'type' => 'urn:corex:problem:recurring-tasks.unsupported_materialization',
+            'status' => 422,
+            'title' => 'Unsupported materialization.',
+            'category' => 'unsupported',
+            'retryable' => false,
+            'detail_keys' => [
+            ],
+        ],
+        98 => [
             'code' => 'search-meilisearch.invalid_meilisearch_configuration',
             'enum' => SearchMeilisearchErrorCode::class,
             'type' => 'urn:corex:problem:search-meilisearch.invalid_meilisearch_configuration',
@@ -1543,46 +1576,13 @@ return [
             'detail_keys' => [
             ],
         ],
-        96 => [
+        99 => [
             'code' => 'search.invalid_search_configuration',
             'enum' => SearchErrorCode::class,
             'type' => 'urn:corex:problem:search.invalid_search_configuration',
             'status' => 500,
             'title' => 'Invalid search configuration.',
             'category' => 'internal',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        97 => [
-            'code' => 'tasks-workflow.materialization_conflict',
-            'enum' => TasksWorkflowErrorCode::class,
-            'type' => 'urn:corex:problem:tasks-workflow.materialization_conflict',
-            'status' => 409,
-            'title' => 'Materialization conflict.',
-            'category' => 'conflict',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        98 => [
-            'code' => 'tasks-workflow.stale_materialization',
-            'enum' => TasksWorkflowErrorCode::class,
-            'type' => 'urn:corex:problem:tasks-workflow.stale_materialization',
-            'status' => 409,
-            'title' => 'Stale materialization.',
-            'category' => 'conflict',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        99 => [
-            'code' => 'tasks-workflow.unsupported_materialization',
-            'enum' => TasksWorkflowErrorCode::class,
-            'type' => 'urn:corex:problem:tasks-workflow.unsupported_materialization',
-            'status' => 422,
-            'title' => 'Unsupported materialization.',
-            'category' => 'unsupported',
             'retryable' => false,
             'detail_keys' => [
             ],

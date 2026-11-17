@@ -7,17 +7,17 @@ namespace ThirdParty\Panels;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Database\Laravel\BaseModel;
-use CoreX\Modules\Data\Entity;
-use CoreX\Modules\Data\FieldDefinition;
-use CoreX\Modules\Data\InstalledPackageVersion;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Panels\Contracts\PanelCatalogue;
-use CoreX\Panels\Contracts\PanelProvider;
-use CoreX\Panels\Data\EntityReference;
-use CoreX\Panels\Data\PanelAccess;
-use CoreX\Panels\Data\PanelContext;
-use CoreX\Panels\Data\PanelDescriptor;
-use CoreX\Panels\Data\PanelReference;
+use Packman\Modules\Data\Compiler\InstalledPackageVersion;
+use Packman\Modules\Data\Entities\Entity;
+use Packman\Modules\Data\Entities\FieldDefinition;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Panels\Contracts\Registry\PanelCatalogue;
+use Packman\Panels\Contracts\Registry\PanelProvider;
+use Packman\Panels\Data\Admission\PanelAccess;
+use Packman\Panels\Data\Panel\PanelContext;
+use Packman\Panels\Data\Panel\PanelDescriptor;
+use Packman\Panels\Data\Panel\PanelReference;
+use Packman\Panels\Data\Subjects\EntityReference;
 use RuntimeException;
 
 final class Module

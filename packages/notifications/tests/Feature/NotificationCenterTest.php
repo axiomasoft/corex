@@ -245,7 +245,7 @@ it('freezes at most one hundred notifications in a half-open digest window', fun
         ->and(DB::table('sys_wakeup_requests')->where('request_key', "notification.digest:{$digest->id}")->count())->toBe(1);
 });
 
-it('admits a closed digest through the shared wakeup runner and freezes residual batches', function (): void {
+it('drains bounded digest batches through the shared runner without duplicating terminal work', function (bool $admit): void {
     allowNotifications();
     $preferences = notificationPreferences();
     $preferences->set(notificationContext(), new PreferenceInput(
@@ -270,13 +270,26 @@ it('admits a closed digest through the shared wakeup runner and freezes residual
     expect($first)->not->toBeNull()
         ->and(DB::table('ntf_digest_items')->where('run_id', $first->id)->count())->toBe(100);
 
+    if (! $admit) {
+        $preferences->set(notificationContext(), new PreferenceInput(
+            eventType: 'document.ready', channels: ['in_app'], digest: 'off', expectedVersion: '2',
+        ));
+    }
+
     wakeup_bridge_sweep(notificationContext()->tenant, 100);
 
-    expect(DB::table('ntf_digest_runs')->where('id', $first->id)->value('state'))->toBe('admitted')
-        ->and(DB::table('ntf_deliveries')->where('digest_run_id', $first->id)->value('state'))->toBe('pending')
+    expect(DB::table('ntf_digest_runs')->where('id', $first->id)->value('state'))->toBe($admit ? 'admitted' : 'skipped')
+        ->and(DB::table('ntf_deliveries')->where('digest_run_id', $first->id)->value('state'))->toBe($admit ? 'pending' : null)
         ->and(DB::table('ntf_digest_runs')->count())->toBe(2)
         ->and(DB::table('ntf_digest_items')->count())->toBe(101);
-});
+
+    wakeup_bridge_sweep(notificationContext()->tenant, 100);
+    wakeup_bridge_sweep(notificationContext()->tenant, 100);
+
+    expect(DB::table('ntf_digest_runs')->where('state', $admit ? 'admitted' : 'skipped')->count())->toBe(2)
+        ->and(DB::table('ntf_deliveries')->whereNotNull('digest_run_id')->count())->toBe($admit ? 2 : 0)
+        ->and(DB::table('ntf_digest_items')->count())->toBe(101);
+})->with(['admitted' => true, 'disabled preferences' => false]);
 
 it('keeps an admitted digest effect when a later preference change disables future digests', function (): void {
     allowNotifications();

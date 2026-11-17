@@ -6,15 +6,15 @@ namespace ThirdParty\Search;
 
 use CoreX\Data\Data\DataScope;
 use CoreX\Database\Laravel\BaseModel;
-use CoreX\Modules\Data\Entity;
-use CoreX\Modules\Data\FieldDefinition;
-use CoreX\Modules\Data\InstalledPackageVersion;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Modules\Testing\ExtensionContract;
 use CoreX\Search\Contracts\IndexDriver;
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Data\IndexBatch;
 use CoreX\Search\Data\SearchQuery;
+use Packman\Modules\Data\Compiler\InstalledPackageVersion;
+use Packman\Modules\Data\Entities\Entity;
+use Packman\Modules\Data\Entities\FieldDefinition;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Modules\Testing\ExtensionContract;
 use RuntimeException;
 
 final class Module

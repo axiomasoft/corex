@@ -1,7 +1,7 @@
 {
     "name": "axiomasoft/corex-search-meilisearch",
     "description": "Optional Meilisearch candidate adapter for axiomasoft/corex-search.",
-    "type": "corex-module",
+    "type": "packman-module",
     "license": "MIT",
     "require": {
         "ext-filter": "*",
@@ -30,7 +30,7 @@
         },
         "laravel": {
             "providers": [
-                "CoreX\\SearchMeilisearch\\MeilisearchServiceProvider"
+                "CoreX\\SearchMeilisearch\\SearchMeilisearchServiceProvider"
             ]
         },
         "branch-alias": {

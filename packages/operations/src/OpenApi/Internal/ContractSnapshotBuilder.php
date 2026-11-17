@@ -249,7 +249,7 @@ final readonly class ContractSnapshotBuilder
                 'responses' => [(string) $status => ['description' => 'Success']],
                 'x-corex-ability' => $operation['ability'],
                 'x-corex-cost' => $operation['cost'],
-                'x-corex-module' => 'axiomasoft/corex-operations',
+                'x-packman-module' => 'axiomasoft/corex-operations',
             ];
             $paths[$path] = $pathItem;
         }

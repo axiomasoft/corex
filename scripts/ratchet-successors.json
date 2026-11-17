@@ -52,10 +52,10 @@
         "corex/search-intl": "axiomasoft/corex-search-intl",
         "corex/search-meilisearch": "axiomasoft/corex-search-meilisearch",
         "corex/tasks": "axiomasoft/corex-tasks",
-        "corex/tasks-workflow": "axiomasoft/corex-tasks-workflow",
+        "corex/tasks-workflow": "axiomasoft/corex-recurring-tasks",
         "corex/tenancy": "axiomasoft/corex-tenancy",
-        "corex/transfer": "axiomasoft/corex-transfer",
-        "corex/wakeup": "axiomasoft/corex-wakeup",
+        "corex/transfer": "axiomasoft/corex-import-export",
+        "corex/wakeup": "axiomasoft/corex-scheduler",
         "corex/workflow": "axiomasoft/corex-workflow",
         "flex/crm": "flex/crm"
     },

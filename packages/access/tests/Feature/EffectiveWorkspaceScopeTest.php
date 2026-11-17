@@ -7,11 +7,11 @@ use CoreX\Access\Laravel\AccessIntegrationRegistrar;
 use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Tests\Stubs\FakeWorkspaceScope;
 use CoreX\Context\Laravel\WorkspaceScopeProvider;
-use CoreX\Modules\Contracts\EntityRegistry;
-use CoreX\Modules\Data\EntityDefinition;
-use CoreX\Modules\Enums\Capability;
-use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Illuminate\Database\Eloquent\Model;
+use Packman\Modules\Contracts\Entities\EntityRegistry;
+use Packman\Modules\Data\Entities\EntityDefinition;
+use Packman\Modules\Enums\Entities\Capability;
+use Packman\Modules\Testing\ArrayEntityRegistry;
 
 // Fail-closed access → tenancy isolation scope (audit P-04). Every test boots
 // the real registrar against fresh option/scope singletons; each declares its

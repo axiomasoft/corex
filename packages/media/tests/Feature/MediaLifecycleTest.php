@@ -12,16 +12,16 @@ use CoreX\Media\Data\MediaAction;
 use CoreX\Media\Data\MediaContext;
 use CoreX\Media\Data\MediaSubject;
 use CoreX\Media\Data\UploadInput;
+use CoreX\Media\Exceptions\MediaAccessDenied;
+use CoreX\Media\Exceptions\MediaFileInUse;
+use CoreX\Media\Exceptions\MediaOperationConflict;
 use CoreX\Media\Internal\DenyMediaPolicy;
 use CoreX\Media\Internal\Jobs\PurgeMedia;
-use CoreX\Media\Internal\MediaAccessDenied;
-use CoreX\Media\Internal\MediaFileInUse;
-use CoreX\Media\Internal\MediaOperationConflict;
 use CoreX\Media\Internal\MediaOperationStore;
 use CoreX\Media\Laravel\UploadedFileSource;
-use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Vaulter\Media\Contracts\Cas\BlobPins;
 
 final class AllowAllMediaPolicy implements MediaPolicy
 {
@@ -108,8 +108,8 @@ it('refuses deletion while an authoritative relation exists and purges after det
 
     expect($deleted->deleted)->toBeTrue()->and($deleted->purgePending)->toBeTrue();
 
-    new PurgeMedia($stored->id)->handle(resolve(MediaOperationStore::class), resolve(TenantStorage::class));
+    new PurgeMedia($stored->id)->handle(resolve(MediaOperationStore::class));
 
     expect(DB::table('med_files')->where('id', $stored->id)->value('state'))->toBe('deleted')
-        ->and(resolve(TenantStorage::class)->disk()->exists("media/originals/{$stored->id}"))->toBeFalse();
+        ->and(resolve(BlobPins::class)->countByOwner())->toBe([]);
 });

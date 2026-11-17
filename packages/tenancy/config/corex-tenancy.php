@@ -2,10 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Runtime\Internal\Bootstrappers\CachePrefixBootstrapper;
-use CoreX\Tenancy\Runtime\Internal\Bootstrappers\ConnectionBootstrapper;
-use CoreX\Tenancy\Runtime\Internal\Bootstrappers\SessionConnectionBootstrapper;
-
 return [
 
     /*
@@ -18,51 +14,8 @@ return [
     */
     'central_connection' => env('COREX_TENANCY_CENTRAL_CONNECTION', 'pgsql'),
 
-    /*
-    |--------------------------------------------------------------------------
-    | Golden-template integrity core (P2.2)
-    |--------------------------------------------------------------------------
-    |
-    | The verifier authenticates a separately distributed, signed manifest
-    | against its public signing key and a recorded schema hash. The empty
-    | default intentionally fails closed. Write-path consumers are introduced
-    | separately; values are deployment configuration and private signing
-    | material never belongs here.
-    |
-    */
-    'template_integrity' => [
-        'trusted_keys' => [],
-        'manifests' => [],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | TenancyManager bootstrappers (fixed order, PLAN3.D95/D98)
-    |--------------------------------------------------------------------------
-    | Connection → cache prefix → session. The connection bootstrapper comes
-    | first and exactly once; host-supplied TenantBootstrapper classes may only
-    | follow the stock ones and must not depend on the TenancyManager.
-    */
-    'bootstrappers' => [
-        ConnectionBootstrapper::class,
-        CachePrefixBootstrapper::class,
-        SessionConnectionBootstrapper::class,
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Cache isolation (prefix mode — NOT cache tags)
-    |--------------------------------------------------------------------------
-    | `cache_stores` are the stores isolated per account (null = the application's
-    | default cache store): redis/memcached/
-    | database stores get `cache_prefix` (`%tenant%` = SHA-256 of the account
-    | id, prepended to the store prefix); a file store gets a per-account
-    | directory and lock directory. Any other driver (array, null, failover,
-    | custom) is refused. `host_identification.cache_store` and the dedicated
-    | `session.store` must not be listed here.
-    */
-    'cache_prefix' => 'tenant_%tenant%_',
-    'cache_stores' => null,
+    // Runtime facilities and template attestations belong to the external Tenant host.
+    // Bind TenantRuntime, AccountIsolationMapper, AccountResources and the integrity ports.
 
     /*
     |--------------------------------------------------------------------------
@@ -88,8 +41,7 @@ return [
     | middleware group nor the aliases — the package pushes nothing onto the
     | host application's global middleware stack either way (D10). The cache
     | holds host → account id only (never a miss) in `cache_store`, which is
-    | outside `cache_stores`; null = the default store, which then must not be
-    | one of them.
+    | a host-owned central store; the Tenant host must keep it outside tenant facilities.
     */
     'host_identification' => [
         'enabled' => (bool) env('COREX_TENANCY_HOST_IDENTIFICATION_ENABLED', false),
@@ -231,7 +183,7 @@ return [
 
     'wakeup' => [
         // The portable default never touches the root database. A deployment
-        // explicitly chooses root_registry only after installing axiomasoft/corex-wakeup.
+        // explicitly chooses root_registry only after installing axiomasoft/corex-scheduler.
         'driver' => env('COREX_TENANCY_WAKEUP_DRIVER', 'local_sweep'),
         'root_connection' => env('COREX_TENANCY_WAKEUP_ROOT_CONNECTION', 'pgsql'),
         'lease_seconds' => (int) env('COREX_TENANCY_WAKEUP_LEASE_SECONDS', 60),

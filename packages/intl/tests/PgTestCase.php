@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Tests;
 
-use CoreX\Database\Testing\MigratesSchemaSets;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Override;
+use Packman\Schema\Testing\MigratesSchemaSets;
 use RuntimeException;
 
 abstract class PgTestCase extends TestCase

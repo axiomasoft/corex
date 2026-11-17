@@ -17,6 +17,9 @@ import sys
 import tempfile
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from ecosystem_repositories import reviewed_snapshot_names, reviewed_toolchain_arguments, with_snapshot_requirements
+
 ROOT = Path(__file__).resolve().parents[2]
 EXCLUDED = {".git", "vendor", "node_modules", "build", "plans", "artifacts", "delivery", "dist", "__pycache__", ".pytest_cache", ".phpunit.cache", "audits"}
 # Codex appends execution events during tool calls; these are not source inputs.
@@ -244,14 +247,28 @@ def inherited_repositories(root: Path, manifest_path: Path, manifest: dict) -> t
     return repositories, bindings
 
 
+def source_manifest(root: Path, path: Path, manifest: dict) -> tuple[dict, list]:
+    effective = dict(manifest)
+    effective["repositories"], bindings = inherited_repositories(root, path, manifest)
+    effective = with_snapshot_requirements(effective, root, bindings)
+    require_stable_harness(effective, bindings, root, str(path.relative_to(root)))
+    return effective, bindings
+
+
 def require_stable_harness(manifest: dict, bindings: list, root: Path, label: str) -> None:
     if manifest.get("minimum-stability", "stable") != "stable":
         raise AuditError(f"unstable source harness constraints: {label}")
     local_names = {read_json(root / binding["manifest"]).get("name") for binding in bindings}
+    try:
+        reviewed = reviewed_snapshot_names(root, manifest.get("repositories", []))
+        if reviewed:
+            require_lock(root / "composer.json", root / "composer.lock")
+    except (OSError, ValueError, TypeError) as error:
+        raise AuditError(f"invalid reviewed dependency snapshots: {label}: {error}") from error
     for section in ("require", "require-dev"):
         requirements = manifest.get(section, {})
         for name, constraint in requirements.items():
-            if name not in local_names and re.search(r"(?:dev|alpha|beta|\brc\d*)", str(constraint), re.IGNORECASE):
+            if name not in local_names and name not in reviewed and re.search(r"(?:dev|alpha|beta|\brc\d*)", str(constraint), re.IGNORECASE):
                 raise AuditError(f"unstable external harness dependency: {label}: {name}")
 
 
@@ -280,12 +297,10 @@ def audit_root(root: Path, row: dict, directory: Path, environment: dict[str, st
                 raise AuditError(f"validate failed: {row['manifest']}")
             with tempfile.TemporaryDirectory(prefix="corex-source-audit-") as temporary:
                 working = Path(temporary)
-                effective = dict(manifest)
-                effective["repositories"], receipt["repository_bindings"] = inherited_repositories(root, path, manifest)
-                require_stable_harness(effective, receipt["repository_bindings"], root, row["manifest"])
+                effective, receipt["repository_bindings"] = source_manifest(root, path, manifest)
                 write_json(working / "composer.json", effective)
                 shutil.copyfile(working / "composer.json", directory / "composer.json")
-                receipt["commands"].append(run_command("solve", ["update", "--no-install", "--no-progress", "--prefer-dist"], working, environment, directory, runner, timeout))
+                receipt["commands"].append(run_command("solve", ["update", "--no-install", "--no-progress", "--prefer-dist", *reviewed_toolchain_arguments(root, effective)], working, environment, directory, runner, timeout))
                 if receipt["commands"][-1]["exit"]:
                     raise AuditError(f"bounded solve failed: {row['manifest']}")
                 require_lock(working / "composer.json", working / "composer.lock")
@@ -373,8 +388,8 @@ def verify_evidence(root: Path, evidence: Path) -> None:
             if effective != original:
                 raise AuditError(f"source manifest substitution: {row['manifest']}")
         else:
-            repositories, bindings = inherited_repositories(root, root / receipt["manifest"], original)
-            if effective != {**original, "repositories": repositories} or bindings != receipt.get("repository_bindings"):
+            expected_manifest, bindings = source_manifest(root, root / receipt["manifest"], original)
+            if effective != expected_manifest or bindings != receipt.get("repository_bindings"):
                 raise AuditError(f"isolated manifest/repository substitution: {row['manifest']}")
             require_stable_harness(effective, bindings, root, row['manifest'])
         if receipt["lock_kind"] == "source" and digest((root / receipt["manifest"]).with_name("composer.lock")) != receipt["source_lock_sha256"]:

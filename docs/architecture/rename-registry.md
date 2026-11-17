@@ -19,7 +19,7 @@
 | `GateDecision` | `ModuleActivationDecision` | modules | P15 | P15.1 | — | A44 |
 | `SettingDefault` | `DefaultSettingDefinition` | modules | P15 | P15.1 | — | A44 |
 | `ModuleContext` | `ModuleRuntimeContext` | modules | P15 | P15.1 | — | A44 |
-| `WhyCommand` | `ExplainModuleCommand` | modules | P15 | P15.1 | сигнатура artisan `corex:modules:why` **сохраняется** | A46 |
+| `WhyCommand` | `ExplainModuleCommand` | modules | P15 | P15.1 | сигнатура artisan `modules:why` **сохраняется** | A46 |
 | `RegistryFieldCatalogue` | `ModuleFieldCatalogue` | attributes | P10/P15 | P15.2 | после P10 как источник composite | A50 |
 | `StructuralAttributeFilter` | `SchemaAttributeFilter` | attributes | P15 | P15.2 | — | A79 |
 | `WriteResult` | `AttributeWriteResult` | attributes | P15 | P15.2 | — | A79 |
@@ -37,7 +37,7 @@
 | `RequestMetadata` | `InvocationMetadata` | api | P15 | P15.8 | — | A68 |
 | `OpenApi` | `OpenApiDocumentGenerator` | api | P15 | P15.8 | — | A68 |
 | `AccountsResult` | `AvailableAccounts` | tenancy | P15 | P15.9 | — | A79 |
-| `TasksWorkflowModule` | `TaskWorkflowIntegration` | tasks-workflow | P15 | P15.6 | discovery; идентификатор модуля (composer-имя) **не меняется** | A80 |
+| `RecurringTasksModule` | `TaskWorkflowIntegration` | tasks-workflow | P15 | P15.6 | discovery; идентификатор модуля (composer-имя) **не меняется** | A80 |
 | `corex/api` | `axiomasoft/corex-operations` | api | P15 | P15.11 | принято D134; каталог `packages/operations` | A67 |
 | `corex/auth` | `axiomasoft/corex-access` | auth | P15 | P15.12 | принято D135; каталог `packages/access` | A72 |
 

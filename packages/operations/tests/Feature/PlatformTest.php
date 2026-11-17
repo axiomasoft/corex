@@ -10,12 +10,6 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Invocation\Contracts\RequestContext;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\Api;
-use CoreX\Modules\Data\CompiledRegistry;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Modules\Exceptions\CompilationException;
-use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Definition\Data\Operation;
@@ -34,6 +28,12 @@ use CoreX\Operations\Testing\NoteHandler;
 use CoreX\Operations\Tests\TestCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Compiler\CompiledRegistry;
+use Packman\Modules\Data\Extenders\Api;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Modules\Exceptions\Compiler\CompilationException;
+use Packman\Modules\Internal\Compiler\RegistryCompiler;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 final class PlatformTest extends TestCase

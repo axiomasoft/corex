@@ -8,7 +8,7 @@ index f1e16b4..a2df19d 100644
          if (! is_file($this->cachePath)) {
 -            if ($this->failIfMissing) {
 -                throw new RuntimeException(sprintf(
--                    'Compiled module registry not found at [%s]. Run `php artisan corex:modules:compile` (or `php artisan optimize`) as part of the deploy.',
+-                    'Compiled module registry not found at [%s]. Run `php artisan modules:compile` (or `php artisan optimize`) as part of the deploy.',
 -                    $this->cachePath,
 -                ));
 -            }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\SearchIntl\Tests;
 
-use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Intl\IntlServiceProvider;
 use CoreX\Search\SearchServiceProvider;
 use CoreX\SearchIntl\Contracts\SavedViewLabelReader;
@@ -14,6 +13,7 @@ use CoreX\SearchIntl\SearchIntlServiceProvider;
 use CoreX\SearchIntl\Tests\Support\SearchIntlTestCase;
 use Illuminate\Support\Facades\DB;
 use Override;
+use Packman\Schema\Testing\MigratesSchemaSets;
 
 abstract class TestCase extends SearchIntlTestCase
 {

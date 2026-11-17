@@ -11,12 +11,16 @@
 
 ### Changed
 
+- Pre-release package redesign: explicit `import-export`, `scheduler` and `recurring-tasks` package identities; matching Laravel provider names; Packman owns panel and saved-view engines and schema. CoreX panels is a trusted-context bridge. The [package map](docs/architecture/package-map.md) documents ownership and dependency directions.
+
 - P16.12: path-bearing Composer/PHPStan/graph-gate/CI/docs/CHANGELOG carriers reconciled to post-P16 physical layout; `extra.corex.public-api` namespaces unchanged (D92). Generated graph report and PHPStan contour regenerated via owners. Mutation P1.24 patches retargeted from `packages/core/src/PubSub/` to `packages/core/src/Messaging/`.
 - P15.13: реестр переименований помечен исполненным; `scripts/p15-rename-completeness-gate.php` и manifest сверяют 40 old-token исходов P15 с outcome-aware allowlist; корневой `CHANGELOG.md` — единственный release-visible журнал rename (D85).
 - P15.11–P15.12: идентичность пакетов принята владельцем (D134, D135). `corex/api` / `packages/api` стали `corex/operations` / `packages/operations`; `corex/auth` / `packages/auth` стали `corex/access` / `packages/access`. Пространства `CoreX\Api` и `CoreX\Auth`, ключи конфигурации, префиксы маршрутов, идентификаторы операций и префиксы таблиц не менялись. Composer `replace` не добавлялся.
 - P15.10: публичные FQCN зон ядра переехали без alias. `CoreX\PubSub\*` стал `CoreX\Messaging\*`, контракты аудита и `Auditable` — `CoreX\Audit\Contracts\*`, `AuditLog` — `CoreX\Audit\Internal\AuditLog`, `CoreX\Views\*` — `CoreX\SavedViews\*`, `DataScopeAccessDecision` — `CoreX\Support\Data\DataScopeAccessDecision`. Имена таблиц и morph-значения не менялись.
 
 ### Fixed
+
+- Consumer distribution probes inherit exact portable owner snapshots, preserve candidate precedence and record current CoreX package names. Removed the machine-local AzGuard 0.2 archive substitution. Standalone CI and source audits use a shared generated-manifest installer, admit only reachable reviewed development snapshots and preserve the root analysis toolchain pins. Installation documentation now names the unpublished Vaulter compatibility patch and its source-delivery requirement.
 
 - P5.16: PostgreSQL-миграции messaging создают outbox/inbox по настроенным именам таблиц; цели raw partial indexes безопасно экранируются грамматикой соединения.
 - P5.15: `corex/core` объявляет публичными корнями только `CoreX\Messaging\Contracts` и `CoreX\Messaging\Data`; команды `PruneOutboxMessages`, `RelayOutbox` и `ShowDeliveryHealth` помечены `@internal` и не входят в поддерживаемый API. R4b читает class-level docblock у `final` / `abstract` / `readonly` типов.
@@ -75,9 +79,9 @@
   `ConversionCoordinator` читают снимок `corex-media` вместо `config()`.
 - P7.8: `ModulesOptions` связывается в `ModulesServiceProvider`;
   `RepositoryModuleRegistryCache` и hot-path потребители connection/cache
-  читают снимок `corex-modules` вместо `config()`.
+  читают снимок `packman-modules` вместо `config()`.
 - P7.7: access/matrix в `corex/auth` читают `AuthOptions` вместо `config()`.
-- P7.6: `AuthOptions` связывается в `CoreAuthServiceProvider`; identity lane и
+- P7.6: `AuthOptions` связывается в `AccessServiceProvider`; identity lane и
   проекция AzGuard pins берут снимок `corex-auth` на границе composition.
 - P7.5: workspace и OIDC-контроллеры читают `ImpersonationPolicy` /
   `TenancyOptions` вместо `config()`.
@@ -136,9 +140,9 @@
 - P1.1: архитектурная конституция — 58 статей, 22 анти-цели, каталог исключений (docs/architecture/constitution.md).
 - P8.1 source qualification: `findings/P8-source-qualification.md` (QUAL-01–05), delivery `tool-source-qualification-20260915/`; кандидат `opis/json-schema` 2.4.1 квалифицирован, не установлен в root vendor.
 - P8.2 tool declarations: `Api::tool` / `Api::exposeTool` в `corex/modules`, `ToolDescriptor` и bounded `tool-schema/1` validation (`ToolSchemaSupervisor` + optional Opis) в `corex/api`; `findings/P8-descriptors.md` (DESC-01–09).
-- P8.3 tool catalogue/policy: `ToolCatalogue`, `ToolPolicy`, `CompiledToolCatalogue`, `DenyToolPolicy`, `ToolServiceProvider` в `corex/api`; current-policy discover без authority cache; `findings/P8-catalogue-policy.md` (CAT-01–09).
+- P8.3 tool catalogue/policy: `ToolCatalogue`, `ToolPolicy`, `CompiledToolCatalogue`, `DenyToolPolicy`, `ToolsServiceProvider` в `corex/api`; current-policy discover без authority cache; `findings/P8-catalogue-policy.md` (CAT-01–09).
 - P8.4 guarded invocation: `ToolInvoker`, `ToolExecutionGuard`, `GuardedToolInvoker`, `ReadOnlyToolExecutionGuard`, `ToolCall`, `ToolResult`, `ToolRequestContext` в `corex/api`; schema/contract-hash guarded headless invoke; `findings/P8-invocation.md` (INVOKE-01–12).
-- P8.5 registry introspection: `RegistryIntrospection`, `RegistryMap`, `ModuleExplanation`, `ReadRegistryIntrospection` и CLI `corex:modules:why` в `corex/modules`; bounded extension-point map и read-only activation diagnostics; `findings/P8-introspection.md` (INTRO-01–07).
+- P8.5 registry introspection: `RegistryIntrospection`, `RegistryMap`, `ModuleExplanation`, `ReadRegistryIntrospection` и CLI `modules:why` в `corex/modules`; bounded extension-point map и read-only activation diagnostics; `findings/P8-introspection.md` (INTRO-01–07).
 - P8.6 contribution bindings: `packages/api/docs/tool-integration.md`, neutral `ArchiveToolModule`/`LabToolModule` fixtures, `ToolContributionsTest`; selected P3–P7 bindings и external19 ownership map; `findings/P8-contributions.md` (CONTRIB-01–08).
 - P8.7 installed tool seal: `McpToolsProjection`, `InstalledToolContractTest`, delivery `tool-install-qualification-20260915/`; cold ZIP install + fake MCP parity; `findings/P8-installed.md` (INST-01–06) и `findings/P8-tool-receipts.md` (p8-tool-receipts/1 seal).
 - P9.2 cohort dist export: `scripts/distribution/remaining-cohort-export.py`, `remaining-cohort-policy.json`, delivery `remaining-cohort-20260915/build/` + `public/packages.json`; `findings/P9-artifacts.md` (DIST-01–08).
@@ -152,12 +156,12 @@
 
 ### Changed
 
-- **BREAKING** `corex/modules`: `Dep`→`ModuleDependency` (`$kind`/`$package`), `Manifest`→`ModuleManifest`, `GateDecision`→`ModuleActivationDecision`, `SettingDefault`→`DefaultSettingDefinition`, `ModuleContext`→`ModuleRuntimeContext`, `CorexModule`→`ModuleDefinition`, `WhyCommand`→`ExplainModuleCommand`. Composer module id и сигнатура `corex:modules:why` сохранены; алиасов нет (P15.1, D85/D86).
+- **BREAKING** `corex/modules`: `Dep`→`ModuleDependency` (`$kind`/`$package`), `Manifest`→`ModuleManifest`, `GateDecision`→`ModuleActivationDecision`, `SettingDefault`→`DefaultSettingDefinition`, `ModuleContext`→`ModuleRuntimeContext`, `CorexModule`→`ModuleDefinition`, `WhyCommand`→`ExplainModuleCommand`. Composer module id и сигнатура `modules:why` сохранены; алиасов нет (P15.1, D85/D86).
 - **BREAKING** `corex/attributes`: `RegistryFieldCatalogue`→`ModuleFieldCatalogue`, `StructuralAttributeFilter`→`SchemaAttributeFilter`, `WriteResult`→`AttributeWriteResult`, `OperationKey`→`SchemaOperationId`; алиасов нет (P15.2, D85).
 - **BREAKING** `corex/search`: `UnsupportedSearchProvider`→`UnavailableSearchProvider` (P15.3, D85).
 - **BREAKING** `corex/search-meilisearch`: `MeilisearchQueryAdapter`→`MeilisearchSearchProvider` (P15.4, D85).
 - **BREAKING** `corex/transfer`: `DatabaseTransferRunner`→`SqlTransferExecutor`, `ImportTarget`→`TransferSink` (P15.5, D85).
-- **BREAKING** `corex/tasks-workflow`: `CompletionCaptureObserver`→`CaptureTaskCompletion`, `TasksWorkflowModule`→`TaskWorkflowIntegration`; Composer module id `corex/tasks-workflow` сохранён (P15.6, D85/D86).
+- **BREAKING** `corex/tasks-workflow`: `CompletionCaptureObserver`→`CaptureTaskCompletion`, `RecurringTasksModule`→`TaskWorkflowIntegration`; Composer module id `corex/tasks-workflow` сохранён (P15.6, D85/D86).
 - **BREAKING** `corex/wakeup`: `DueSource`→`DueWakeupSource`, `WakeupHandler`→`DueWakeupHandler`, `WakeupHint`→`WakeupScheduleHint`, `WakeupSweeper`→`DueWakeupSweeper`; `WakeupScheduler` сохранён; алиасов нет (P15.7, D85/D87).
 - **BREAKING** `corex/api`: `Dispatcher`→`OperationDispatcher`, `ErrorBoundary`→`OperationErrorBoundary`, `RequestMetadata`→`InvocationMetadata`, `OpenApi`→`OpenApiDocumentGenerator`; маршруты, config keys, operation id и OpenAPI/error wire не менялись; алиасов нет (P15.8, D85).
 - **BREAKING** `corex/tenancy`: `AccountsResult`→`AvailableAccounts`; поля конструктора и сериализация Redis/cache без изменений; алиасов нет (P15.9, D85).
@@ -168,7 +172,7 @@
 - `corex/search`: `SearchManager` с реестром драйверов (`null`, `postgres`); fail-closed конфигурация; дефолт `corex-search.driver` — `null` (P12.5).
 - `corex/search-meilisearch`: неймспейс `CoreX\Search\Meilisearch\`; драйвер регистрируется через `SearchManager::extend()` вместо биндинга `SearchProvider`; ключ `enabled` удалён (P12.5).
 - Пакет `corex/search-intl`: hard rename из `corex/intl-search` (PSR-4 `CoreX\SearchIntl\`; P12.6).
-- Пакет `corex/transfer`: hard rename (PSR-4 `CoreX\Transfer\`, каталог `src/Data/` вместо `src/Support/`, конфиг `corex-transfer.*`; P12.4).
+- Пакет `corex/transfer`: hard rename (PSR-4 `CoreX\ImportExport\`, каталог `src/Data/` вместо `src/Support/`, конфиг `corex-import-export.*`; P12.4).
 - `corex/intl`: в `require` добавлен `corex/modules` (наследование `CorexModule`).
 - `corex/tasks-workflow`: в `require` добавлен `corex/workflow` (фактические импорты `CoreX\Workflow\*`).
 
@@ -177,5 +181,5 @@
 - Presence-семантика `ValuePatch`/`ValueBag`; разделение `DatabaseTransferRunner` (TR2–TR4); полная декомпозиция `DataScope`; сокращение `corex/core`; вынос `config()` из domain; tenant `singleton` → scoped; DTO в `Contracts/`; public API census; пин Meilisearch SDK — см. `docs/audit-2026-09-17-deferred.md`.
 - Корневой `composer test:packages` расширен с 8 до 20 пакетов; `corex/core` и `corex/modules` получили скрипты `test`/`test:coverage`/`analyse`/`lint:check` (прогон через корневой `phpunit.xml` и testsuite `CorePackage`/`ModulesPackage`).
 - Корневой `composer.json`: в `require` добавлены `corex/attributes`, `corex/transfer`, `corex/search-meilisearch`; в `autoload-dev` — тестовые неймспейсы пакетов без локального `vendor`.
-- `corex/intl`: в манифест добавлен `tablePrefix('int')` — обязательное поле D37 для `corex:modules:compile` (таблицы пакета по-прежнему `corex_*`; выравнивание префикса со схемой — отдельная работа).
+- `corex/intl`: в манифест добавлен `tablePrefix('int')` — обязательное поле D37 для `modules:compile` (таблицы пакета по-прежнему `corex_*`; выравнивание префикса со схемой — отдельная работа).
 - Корневой `composer.json`: скрипт `package-graph-gate`; `corex/tasks-workflow`: привязка `RecurrenceExpander` без `use` чужого `Internal` (совместимость с R2).

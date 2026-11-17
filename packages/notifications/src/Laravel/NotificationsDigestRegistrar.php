@@ -6,7 +6,6 @@ namespace CoreX\Notifications\Laravel;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Notifications\Digest\Contracts\DigestBuilder;
 use CoreX\Notifications\Digest\Internal\DigestTick;
 use CoreX\Notifications\Digest\Internal\DigestWakeupAdapter;
@@ -23,6 +22,7 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 use Psr\Clock\ClockInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
@@ -38,6 +38,7 @@ final class NotificationsDigestRegistrar implements PackageRegistrar
             connection: $app->make(DatabaseManager::class)->connection(),
             preferences: $app->make(PreferenceRepository::class),
             clock: $app->make(ClockInterface::class),
+            digests: $app->make(DigestBuilder::class),
         ));
         $app->singleton(DigestWakeupAdapter::class, static fn (Application $app): DigestWakeupAdapter => new DigestWakeupAdapter(
             // Resolved through the active container at call time: a resident worker replaces it per request, so the

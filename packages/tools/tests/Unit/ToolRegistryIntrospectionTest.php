@@ -4,26 +4,19 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Tests\Unit;
 
-use CoreX\CoreServiceProvider;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Contracts\RegistryIntrospection;
-use CoreX\Modules\Data\Api;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Modules\Internal\Compiler\RegistryCompiler;
-use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Testing\CatalogueModuleFixture;
 use CoreX\Operations\Testing\StubOperationHandler;
-use CoreX\Tools\ToolServiceProvider;
+use CoreX\Tools\Tests\Support\BootsToolStack;
 use Orchestra\Testbench\TestCase;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Contracts\Registry\RegistryIntrospection;
+use Packman\Modules\Data\Extenders\Api;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Modules\Internal\Compiler\RegistryCompiler;
 
-uses(TestCase::class);
+uses(TestCase::class, BootsToolStack::class);
 
 it('projects tool identity without leaking its handler into introspection', function (): void {
-    $this->app->register(ApiServiceProvider::class);
-    $this->app->register(ToolServiceProvider::class);
-    $this->app->register(CoreServiceProvider::class);
-    $this->app->register(ModulesServiceProvider::class);
     $manifest = ModuleManifest::make('example/tools')->title('Tools')->tablePrefix('tls')->extends([
         Api::tool('demo.read', StubOperationHandler::class, 'demo.read', ['type' => 'object'], ['type' => 'object'], 'read', 'read-only'),
     ]);

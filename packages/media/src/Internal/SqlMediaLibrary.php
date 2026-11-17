@@ -14,19 +14,20 @@ use CoreX\Media\Data\MediaFileRef;
 use CoreX\Media\Data\MediaReadRef;
 use CoreX\Media\Data\MediaSubject;
 use CoreX\Media\Data\UploadInput;
+use CoreX\Media\Exceptions\MediaAccessDenied;
+use CoreX\Media\Exceptions\MediaFileInUse;
+use CoreX\Media\Exceptions\MediaOperationConflict;
 use CoreX\Media\Internal\Support\MediaOptions;
-use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
 use Psr\Clock\ClockInterface;
-use Throwable;
 
 final readonly class SqlMediaLibrary implements MediaLibrary
 {
     public function __construct(
         private ConnectionInterface $connection,
-        private TenantStorage $storage,
+        private MediaBlobs $blobs,
         private MediaPolicy $policy,
         private MediaOperationStore $operations,
         private ConversionCoordinator $conversions,
@@ -36,6 +37,8 @@ final readonly class SqlMediaLibrary implements MediaLibrary
 
     public function store(MediaContext $context, UploadInput $input): MediaFileRef
     {
+        $this->blobs->assertContext($this->connection, $context);
+
         if (! $this->policy->allows(context: $context, action: MediaAction::Store, subject: new MediaSubject)) {
             throw new MediaAccessDenied('Media upload is denied.');
         }
@@ -62,7 +65,7 @@ final readonly class SqlMediaLibrary implements MediaLibrary
         $existing = $this->connection->table('med_files')->where('request_key', $input->requestKey)->first();
 
         if ($existing !== null) {
-            if ($existing->request_digest !== $digest) {
+            if ($existing->request_digest !== $digest || $existing->account_id !== $context->tenant->account->id || $existing->workspace_scope_key !== $context->tenant->workspace?->id) {
                 throw new MediaOperationConflict('Media request key conflicts with different content.');
             }
 
@@ -74,10 +77,9 @@ final readonly class SqlMediaLibrary implements MediaLibrary
         }
 
         $id = (string) Str::uuid();
-        $key = "media/originals/{$id}";
         $size = $input->file->size;
 
-        if ($size < 1 || $size > $this->options->maxUploadBytes) {
+        if ($size < 1 || $size !== strlen($bytes) || $size > $this->options->maxUploadBytes) {
             throw new MediaOperationConflict('Media upload size is invalid.');
         }
         $mime = $input->file->mimeType ?? 'application/octet-stream';
@@ -98,14 +100,27 @@ final readonly class SqlMediaLibrary implements MediaLibrary
         }
 
         try {
-            $this->connection->transaction(function () use ($context, $id, $input, $digest, $key, $size, $mime, $checksum): void {
+            return $this->blobs->transaction($this->connection, function () use ($context, $id, $input, $digest, $size, $mime, $checksum, $bytes): MediaFileRef {
                 $this->connection->table('med_files')->insert([
                     'id' => $id, 'request_key' => $input->requestKey, 'request_digest' => $digest, 'state' => 'staged',
-                    'object_key' => $key, 'mime_type' => $mime, 'size_bytes' => $size, 'sha256' => $checksum,
+                    'account_id' => $context->tenant->account->id, 'blob_id' => null, 'mime_type' => $mime, 'size_bytes' => $size, 'sha256' => $checksum,
                     'kind' => $input->purpose, 'uploaded_actor_kind' => $context->actorKind,
                     'uploaded_actor_id' => $context->actorId, 'workspace_scope_key' => $context->tenant->workspace?->id,
                     'version' => 1, 'created_at' => $this->clock->now(), 'updated_at' => $this->clock->now(),
                 ]);
+                // Owner row is locked before Vaulter acquires the blob lock.
+                $blob = $this->blobs->commit($bytes, $context->tenant->account->id);
+                $reference = new MediaFileRef($id, $input->purpose, $mime, $size, $checksum, 'ready');
+
+                if (! $this->policy->allows($context, MediaAction::Store, new MediaSubject($reference))) {
+                    throw new MediaAccessDenied('Media upload is denied.');
+                }
+                $this->blobs->pin($blob->id, 'corex.media.file', $id);
+                $this->connection->table('med_files')->where('id', $id)->update([
+                    'blob_id' => $blob->id, 'state' => 'ready', 'updated_at' => $this->clock->now(),
+                ]);
+
+                return $reference;
             });
         } catch (QueryException $exception) {
             $existing = $this->connection->table('med_files')->where('request_key', $input->requestKey)->first();
@@ -114,74 +129,18 @@ final readonly class SqlMediaLibrary implements MediaLibrary
                 throw $exception;
             }
 
-            if ($existing->request_digest !== $digest) {
-                throw new MediaOperationConflict('Media request key conflicts with different content.');
-            }
-
-            if ($existing->state !== 'ready') {
-                throw new MediaOperationConflict('Media request is not ready for replay.');
+            if ($existing->request_digest !== $digest || $existing->state !== 'ready' || $existing->account_id !== $context->tenant->account->id || $existing->workspace_scope_key !== $context->tenant->workspace?->id) {
+                throw new MediaOperationConflict('Media request key conflicts with different content or state.');
             }
 
             return $this->reference($existing);
         }
-
-        $stream = fopen('php://temp', 'w+b');
-
-        if ($stream !== false) {
-            fwrite($stream, $bytes);
-            rewind($stream);
-        }
-
-        try {
-            if ($stream === false || ! $this->storage->disk()->writeStream($key, $stream, ['visibility' => 'private'])) {
-                throw new MediaOperationConflict('Media bytes could not be stored.');
-            }
-        } catch (Throwable $exception) {
-            $this->connection->transaction(function () use ($id): void {
-                $this->connection->table('med_files')->where('id', $id)->where('state', 'staged')->update(['state' => 'deleting', 'updated_at' => $this->clock->now()]);
-                $this->operations->enqueuePurge(fileId: $id);
-            });
-
-            throw $exception instanceof MediaOperationConflict
-                ? $exception
-                : new MediaOperationConflict('Media bytes could not be stored.', previous: $exception);
-        } finally {
-            if (is_resource($stream)) {
-                fclose($stream);
-            }
-        }
-
-        $published = $this->connection->transaction(function () use ($context, $id): ?bool {
-            $file = $this->connection->table('med_files')->where('id', $id)->lockForUpdate()->first();
-
-            if ($file === null || $file->state !== 'staged') {
-                return false;
-            }
-
-            if (! $this->policy->allows(context: $context, action: MediaAction::Store, subject: new MediaSubject($this->reference($file)))) {
-                $this->connection->table('med_files')->where('id', $id)->update(['state' => 'deleting', 'updated_at' => $this->clock->now()]);
-                $this->operations->enqueuePurge(fileId: $id);
-
-                return null;
-            }
-
-            return $this->connection->table('med_files')->where('id', $id)->where('state', 'staged')->update(['state' => 'ready', 'updated_at' => $this->clock->now()]) === 1;
-        });
-
-        if ($published === null) {
-            throw new MediaAccessDenied('Media upload is denied.');
-        }
-
-        if (! $published) {
-            throw new MediaOperationConflict('Media upload could not be published.');
-        }
-
-        return new MediaFileRef(id: $id, kind: $input->purpose, mimeType: $mime, sizeBytes: $size, sha256: $checksum, state: 'ready');
     }
 
     public function read(MediaContext $context, string $fileId): MediaReadRef
     {
-        $file = $this->connection->table('med_files')->where('id', $fileId)->where('state', 'ready')->first();
+        $this->blobs->assertContext($this->connection, $context);
+        $file = $this->connection->table('med_files')->where('id', $fileId)->where('account_id', $context->tenant->account->id)->where('state', 'ready')->first();
 
         if ($file === null || ! $this->policy->allows(context: $context, action: MediaAction::Read, subject: new MediaSubject($this->reference($file)))) {
             throw new MediaAccessDenied('Media read is denied.');
@@ -193,13 +152,14 @@ final readonly class SqlMediaLibrary implements MediaLibrary
             sizeBytes: Value::integer($file->size_bytes),
             sha256: Value::text($file->sha256),
             openStream: function () use ($context, $file): mixed {
-                $current = $this->connection->table('med_files')->where('id', $file->id)->where('state', 'ready')->first();
+                $this->blobs->assertContext($this->connection, $context);
+                $current = $this->connection->table('med_files')->where('id', $file->id)->where('account_id', $context->tenant->account->id)->where('state', 'ready')->first();
 
                 if ($current === null || ! $this->policy->allows(context: $context, action: MediaAction::Read, subject: new MediaSubject($this->reference($current)))) {
                     throw new MediaAccessDenied('Media read is denied.');
                 }
 
-                $stream = $this->storage->disk()->readStream(Value::text($current->object_key));
+                $stream = $this->blobs->read(Value::text($current->blob_id));
 
                 if (! is_resource($stream)) {
                     throw new MediaOperationConflict('Media stream is unavailable.');
@@ -210,15 +170,44 @@ final readonly class SqlMediaLibrary implements MediaLibrary
         );
     }
 
+    public function readConversion(MediaContext $context, string $fileId, string $profile): ?MediaReadRef
+    {
+        // The parent reference is the authorization boundary for every derivative.
+        $this->read($context, $fileId);
+        $conversion = $this->conversions->ready($fileId, $profile);
+
+        if ($conversion === null) {
+            return null;
+        }
+
+        return new MediaReadRef(
+            fileId: $fileId,
+            mimeType: Value::text(Value::field($conversion, 'mime_type')),
+            sizeBytes: Value::integer(Value::field($conversion, 'size_bytes')),
+            sha256: Value::text(Value::field($conversion, 'sha256')),
+            openStream: function () use ($context, $fileId, $profile, $conversion): mixed {
+                $this->read($context, $fileId);
+                $current = $this->conversions->ready($fileId, $profile);
+
+                if ($current === null || Value::field($current, 'id') !== Value::field($conversion, 'id')) {
+                    throw new MediaOperationConflict('The conversion reference is no longer current.');
+                }
+
+                return $this->blobs->read(Value::text(Value::field($current, 'blob_id')));
+            },
+        );
+    }
+
     public function delete(MediaContext $context, string $fileId): DeleteResult
     {
-        $candidate = $this->connection->table('med_files')->where('id', $fileId)->first();
+        $this->blobs->assertContext($this->connection, $context);
+        $candidate = $this->connection->table('med_files')->where('id', $fileId)->where('account_id', $context->tenant->account->id)->first();
 
         if ($candidate !== null && ! $this->policy->allows(context: $context, action: MediaAction::Delete, subject: new MediaSubject($this->reference($candidate)))) {
             throw new MediaAccessDenied('Media deletion is denied.');
         }
         $file = $this->connection->transaction(function () use ($context, $fileId): ?object {
-            $file = $this->connection->table('med_files')->where('id', $fileId)->lockForUpdate()->first();
+            $file = $this->connection->table('med_files')->where('id', $fileId)->where('account_id', $context->tenant->account->id)->lockForUpdate()->first();
 
             if ($file === null || in_array($file->state, ['deleted', 'deleting'], true)) {
                 return null;
@@ -231,7 +220,7 @@ final readonly class SqlMediaLibrary implements MediaLibrary
             if ($this->connection->table('med_relations')->where('file_id', $fileId)->exists()) {
                 throw new MediaFileInUse('Media file still has usages.');
             }
-            $this->connection->table('med_files')->where('id', $fileId)->update(['state' => 'deleting', 'updated_at' => $this->clock->now()]);
+            $this->connection->table('med_files')->where('id', $fileId)->where('account_id', $context->tenant->account->id)->update(['state' => 'deleting', 'updated_at' => $this->clock->now()]);
             $this->operations->enqueuePurge(fileId: $fileId);
 
             return $file;
@@ -246,7 +235,8 @@ final readonly class SqlMediaLibrary implements MediaLibrary
 
     public function conversion(MediaContext $context, string $fileId, string $profile): ?MediaConversionRef
     {
-        $file = $this->connection->table('med_files')->where('id', $fileId)->where('state', 'ready')->first();
+        $this->blobs->assertContext($this->connection, $context);
+        $file = $this->connection->table('med_files')->where('id', $fileId)->where('account_id', $context->tenant->account->id)->where('state', 'ready')->first();
 
         if ($file === null || ! $this->policy->allows(context: $context, action: MediaAction::Read, subject: new MediaSubject($this->reference($file)))) {
             throw new MediaAccessDenied('Media conversion is denied.');

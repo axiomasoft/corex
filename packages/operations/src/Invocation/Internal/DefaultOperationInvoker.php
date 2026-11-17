@@ -9,7 +9,6 @@ use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Errors\Enums\CoreErrorCode;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Invocation\Contracts\RequestContext;
-use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
@@ -22,6 +21,7 @@ use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Data\OperationResult;
 use Illuminate\Contracts\Container\Container;
 use LogicException;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 /** Transport-neutral activation, authorization and exactly-once handler call. */
 final readonly class DefaultOperationInvoker implements OperationInvoker

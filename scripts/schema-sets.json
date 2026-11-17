@@ -12,29 +12,14 @@
         "axiomasoft/corex-media": "10",
         "axiomasoft/corex-notifications": "11",
         "axiomasoft/corex-search": "12",
-        "axiomasoft/corex-transfer": "13",
-        "axiomasoft/corex-wakeup": "14",
+        "axiomasoft/corex-import-export": "13",
+        "axiomasoft/corex-scheduler": "14",
         "axiomasoft/corex-workflow": "15",
         "axiomasoft/corex-tasks": "16",
-        "axiomasoft/corex-tasks-workflow": "17",
+        "axiomasoft/corex-recurring-tasks": "17",
         "flex/crm": "50"
     },
     "sets": [
-        {
-            "id": "axiomasoft/corex-access-azguard:tenant",
-            "package": "axiomasoft/corex-access-azguard",
-            "name": "tenant",
-            "scope": "tenant",
-            "path": "packages/access-azguard/database/migrations/tenant",
-            "version": 1,
-            "drivers": [
-                "pgsql",
-                "sqlite"
-            ],
-            "lifecycle": "platform",
-            "requires": [],
-            "connection": null
-        },
         {
             "id": "axiomasoft/corex-access:tenant",
             "package": "axiomasoft/corex-access",
@@ -74,6 +59,21 @@
             "version": 1,
             "drivers": [
                 "pgsql"
+            ],
+            "lifecycle": "platform",
+            "requires": [],
+            "connection": null
+        },
+        {
+            "id": "axiomasoft/corex-import-export:tenant",
+            "package": "axiomasoft/corex-import-export",
+            "name": "tenant",
+            "scope": "tenant",
+            "path": "packages/import-export/database/migrations/tenant",
+            "version": 1,
+            "drivers": [
+                "pgsql",
+                "sqlite"
             ],
             "lifecycle": "platform",
             "requires": [],
@@ -155,11 +155,26 @@
             "connection": null
         },
         {
-            "id": "axiomasoft/corex-panels:tenant",
-            "package": "axiomasoft/corex-panels",
+            "id": "axiomasoft/corex-recurring-tasks:tenant",
+            "package": "axiomasoft/corex-recurring-tasks",
             "name": "tenant",
             "scope": "tenant",
-            "path": "packages/panels/database/migrations/tenant",
+            "path": "packages/recurring-tasks/database/migrations/tenant",
+            "version": 1,
+            "drivers": [
+                "pgsql",
+                "sqlite"
+            ],
+            "lifecycle": "module",
+            "requires": [],
+            "connection": null
+        },
+        {
+            "id": "axiomasoft/corex-scheduler:tenant",
+            "package": "axiomasoft/corex-scheduler",
+            "name": "tenant",
+            "scope": "tenant",
+            "path": "packages/scheduler/database/migrations/tenant",
             "version": 1,
             "drivers": [
                 "pgsql",
@@ -181,21 +196,6 @@
                 "sqlite"
             ],
             "lifecycle": "platform",
-            "requires": [],
-            "connection": null
-        },
-        {
-            "id": "axiomasoft/corex-tasks-workflow:tenant",
-            "package": "axiomasoft/corex-tasks-workflow",
-            "name": "tenant",
-            "scope": "tenant",
-            "path": "packages/tasks-workflow/database/migrations/tenant",
-            "version": 1,
-            "drivers": [
-                "pgsql",
-                "sqlite"
-            ],
-            "lifecycle": "module",
             "requires": [],
             "connection": null
         },
@@ -239,36 +239,6 @@
                 "pgsql"
             ],
             "lifecycle": "platform",
-            "requires": [],
-            "connection": null
-        },
-        {
-            "id": "axiomasoft/corex-transfer:tenant",
-            "package": "axiomasoft/corex-transfer",
-            "name": "tenant",
-            "scope": "tenant",
-            "path": "packages/transfer/database/migrations/tenant",
-            "version": 1,
-            "drivers": [
-                "pgsql",
-                "sqlite"
-            ],
-            "lifecycle": "platform",
-            "requires": [],
-            "connection": null
-        },
-        {
-            "id": "axiomasoft/corex-wakeup:tenant",
-            "package": "axiomasoft/corex-wakeup",
-            "name": "tenant",
-            "scope": "tenant",
-            "path": "packages/wakeup/database/migrations/tenant",
-            "version": 1,
-            "drivers": [
-                "pgsql",
-                "sqlite"
-            ],
-            "lifecycle": "module",
             "requires": [],
             "connection": null
         },

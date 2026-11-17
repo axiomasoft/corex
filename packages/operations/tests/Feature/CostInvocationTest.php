@@ -13,10 +13,6 @@ use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Invocation\Data\InvocationMetadata;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\Api;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
@@ -46,7 +42,7 @@ use CoreX\Operations\Invocation\Data\OperationResult;
 use CoreX\Operations\Invocation\Internal\DefaultOperationInvoker;
 use CoreX\Operations\Invocation\Internal\OperationDispatcher;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
@@ -56,6 +52,10 @@ use DateTimeImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Extenders\Api;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Modules\Internal\Compiler\RegistryCompiler;
 use RuntimeException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Throwable;
@@ -78,7 +78,7 @@ final class CostInvocationTest extends TestCase
         $this->tenants->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
         $this->principal = new IdentityFixture;
         Schema::dropIfExists('sys_api_idempotency');
-        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
     }
 
     protected function tearDown(): void

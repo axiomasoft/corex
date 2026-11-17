@@ -8,11 +8,11 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Data\CoreOptions;
 use CoreX\Config\Laravel\ConfiguredImplementation;
-use CoreX\Modules\Contracts\PackageRegistrar;
-use CoreX\Settings\Contracts\SettingDefaultsProvider;
 use CoreX\Settings\Contracts\SettingsRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
+use Packman\Settings\Contracts\SettingDefaultsProviderInterface as SettingDefaultsProvider;
 
 /** Composition of the kernel module; the public provider delegates here. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

@@ -242,6 +242,53 @@ class AuditRootsTest(unittest.TestCase):
         self.manifest("tests/fixtures/worker/composer.json", "example/worker", require={"external/unstable": "dev-main"})
         self.assert_red(self.run_audit(), "unstable external harness dependency")
 
+    def reviewed_snapshot(self):
+        package = {
+            "name": "external/reviewed", "type": "library", "version": "dev-main",
+            "source": {"type": "git", "url": "https://example.com/reviewed.git", "reference": "a" * 40},
+            "require": {"php": "^8.4"}, "autoload": {"psr-4": {"Reviewed\\": "src/"}},
+            "extra": {"branch-alias": {"dev-main": "1.0.x-dev"}},
+        }
+        repository = {"type": "package", "package": package}
+        self.manifest("composer.json", "example/root", locked=True, repositories=[repository])
+        lock = MODULE.read_json(self.root / "composer.lock")
+        lock["content-hash"] = MODULE.content_hash(MODULE.read_json(self.root / "composer.json"))
+        lock["packages"].append(package)
+        MODULE.write_json(self.root / "composer.lock", lock)
+        return repository
+
+    def test_exact_reviewed_pinned_external_dependency_is_allowed(self):
+        repository = self.reviewed_snapshot()
+        effective = {"minimum-stability": "stable", "repositories": [repository],
+                     "require": {"external/reviewed": "^1.0@dev"}}
+        MODULE.require_stable_harness(effective, [], self.root, "worker")
+
+    def test_snapshot_allowance_rejects_shadowed_or_unreviewed_metadata(self):
+        repository = self.reviewed_snapshot()
+        effective = {"minimum-stability": "stable", "repositories": [repository],
+                     "require": {"external/reviewed": "^1.0@dev"}}
+        changed = json.loads(json.dumps(repository))
+        changed["package"]["source"]["reference"] = "b" * 40
+        effective["repositories"] = [changed, repository]
+        with self.assertRaisesRegex(MODULE.AuditError, "effective snapshot differs"):
+            MODULE.require_stable_harness(effective, [], self.root, "worker")
+        effective["repositories"] = [repository]
+        lock = MODULE.read_json(self.root / "composer.lock")
+        lock["packages"][-1]["autoload"] = {"psr-4": {"Changed\\": "src/"}}
+        MODULE.write_json(self.root / "composer.lock", lock)
+        with self.assertRaisesRegex(MODULE.AuditError, "differs from reviewed root lock"):
+            MODULE.require_stable_harness(effective, [], self.root, "worker")
+
+    def test_snapshot_allowance_rejects_stale_root_lock(self):
+        repository = self.reviewed_snapshot()
+        effective = {"minimum-stability": "stable", "repositories": [repository],
+                     "require": {"external/reviewed": "^1.0@dev"}}
+        root_manifest = MODULE.read_json(self.root / "composer.json")
+        root_manifest["require"]["example/stable"] = "^2.0"
+        MODULE.write_json(self.root / "composer.json", root_manifest)
+        with self.assertRaisesRegex(MODULE.AuditError, "content-hash mismatch"):
+            MODULE.require_stable_harness(effective, [], self.root, "worker")
+
     def test_generated_and_legacy_install_artifacts_are_not_source_roots(self):
         for name in ("vendor/bad", "build/candidate", "plans/history", "artifacts/prototype", "delivery/rc", "node_modules/package"):
             self.manifest(f"{name}/composer.json", "bad/ignored")

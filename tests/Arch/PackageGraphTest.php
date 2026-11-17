@@ -29,7 +29,7 @@ test('package graph gate reports no violations', function (): void {
     expect($joined)->toContain('package-graph-gate: OK')
         ->and($joined)->not->toContain('LEGACY NAMESPACE SPLIT:')
         ->and($joined)->toContain('HOST-RESERVED NAMESPACE: CoreX\\SearchMeilisearch\\')
-        ->and($joined)->not->toContain('UNDECLARED DEPENDENCY EXCEPTION: axiomasoft/corex-tasks-workflow -> axiomasoft/corex-wakeup');
+        ->and($joined)->not->toContain('UNDECLARED DEPENDENCY EXCEPTION: axiomasoft/corex-recurring-tasks -> axiomasoft/corex-scheduler');
 
     $reportPath = packageGraphTestReport();
     expect(is_file($reportPath))->toBeTrue();
@@ -42,13 +42,13 @@ test('package graph gate reports no violations', function (): void {
         ->and($report['undeclared_dependency_exceptions'] ?? null)->toBe([]);
 });
 
-test('package graph gate forbids a notifications import of corex-wakeup', function (): void {
+test('package graph gate forbids a notifications import of corex-scheduler', function (): void {
     $repoRoot = dirname(__DIR__, 2);
     $probePath = $repoRoot.'/packages/notifications/src/Digest/Internal/DigestTick.php';
     $originalContents = (string) file_get_contents($probePath);
     $tamperedContents = str_replace(
         'namespace CoreX\\Notifications\\Digest\\Internal;',
-        "namespace CoreX\\Notifications\\Digest\\Internal;\n\nuse CoreX\\Wakeup\\Contracts\\DueWakeupSweeper;",
+        "namespace CoreX\\Notifications\\Digest\\Internal;\n\nuse CoreX\\Scheduler\\Contracts\\DueWakeupSweeper;",
         $originalContents,
     );
 
@@ -65,7 +65,7 @@ test('package graph gate forbids a notifications import of corex-wakeup', functi
     $joined = implode("\n", $output);
 
     expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
-        ->and($joined)->toContain('axiomasoft/corex-notifications → axiomasoft/corex-wakeup')
+        ->and($joined)->toContain('axiomasoft/corex-notifications → axiomasoft/corex-scheduler')
         ->and($joined)->toContain('DigestTick.php');
 });
 
@@ -111,7 +111,7 @@ declare(strict_types=1);
 
 namespace CoreX\Config;
 
-use CoreX\Wakeup\Contracts\{WakeupScheduleHint};
+use CoreX\Scheduler\Contracts\{WakeupScheduleHint};
 
 final class GroupUseProbe
 {
@@ -155,7 +155,7 @@ final class FqcnGraphProbe
 {
     public function touch(): void
     {
-        new \CoreX\Wakeup\Contracts\WakeupScheduleHint();
+        new \CoreX\Scheduler\Contracts\WakeupScheduleHint();
     }
 }
 PHP;
@@ -365,7 +365,7 @@ test('package graph gate reports R1 for wakeup import outside Integration/Wakeup
         expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
             ->and($joined)->toContain('[R1]')
             ->and($joined)->toContain('WakeupForeignContextProbe.php')
-            ->and($joined)->toContain('axiomasoft/corex-wakeup');
+            ->and($joined)->toContain('axiomasoft/corex-scheduler');
     } finally {
         if (is_file($probePath)) {
             unlink($probePath);

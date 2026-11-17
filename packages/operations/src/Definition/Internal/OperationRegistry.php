@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Definition\Internal;
 
-use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Laravel\OperationFactory;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use LogicException;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 final readonly class OperationRegistry implements \CoreX\Operations\Definition\Contracts\OperationRegistry
 {

@@ -8,7 +8,6 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Invocation\Contracts\OperationHandler;
-use CoreX\Modules\Data\Api;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
 use CoreX\Operations\Definition\Internal\ApiOperationValidator;
@@ -16,6 +15,7 @@ use CoreX\Operations\Definition\Internal\OperationContractHasher;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Invocation\Enums\InputEnvelope;
 use LogicException;
+use Packman\Modules\Data\Extenders\Api;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class OperationFactory

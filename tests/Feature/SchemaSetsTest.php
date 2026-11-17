@@ -3,34 +3,32 @@
 declare(strict_types=1);
 
 use CoreX\Access\Internal\AccessSchemaSets;
-use CoreX\AccessAzguard\Internal\AccessAzguardSchemaSets;
 use CoreX\CustomFields\Internal\CustomFieldsSchemaSets;
-use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Database\Contracts\SchemaSets;
-use CoreX\Database\Data\SchemaSet;
-use CoreX\Database\Enums\SchemaLifecycle;
-use CoreX\Database\Enums\SchemaScope;
-use CoreX\Database\Exceptions\SchemaSetException;
-use CoreX\Database\Internal\CoreSchemaSets;
-use CoreX\Database\Internal\TaggedSchemaSets;
+use CoreX\ImportExport\Internal\ImportExportSchemaSets;
 use CoreX\Intl\Internal\IntlSchemaSets;
 use CoreX\Media\Internal\MediaSchemaSets;
 use CoreX\Notifications\Internal\NotificationsSchemaSets;
 use CoreX\Operations\Internal\OperationsSchemaSets;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
-use CoreX\Panels\Internal\PanelsSchemaSets;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
+use CoreX\Panels\PanelsServiceProvider;
+use CoreX\RecurringTasks\Internal\RecurringTasksSchemaSets;
+use CoreX\Scheduler\Internal\SchedulerSchemaSets;
 use CoreX\Search\Internal\SearchSchemaSets;
 use CoreX\Tasks\Internal\TasksSchemaSets;
-use CoreX\TasksWorkflow\Internal\TasksWorkflowSchemaSets;
 use CoreX\Tenancy\Internal\TenancySchemaSets;
 use CoreX\Tests\Fixtures\Schema\FixtureSchemaSets;
-use CoreX\Transfer\Internal\TransferSchemaSets;
-use CoreX\Wakeup\Internal\WakeupSchemaSets;
 use CoreX\Webhooks\Internal\WebhooksSchemaSets;
 use CoreX\Workflow\Internal\WorkflowSchemaSets;
 use Flex\Crm\Internal\CrmSchemaSets;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use Packman\Schema\Contracts\Migration\SchemaSets;
+use Packman\Schema\Data\Migration\SchemaSet;
+use Packman\Schema\Enums\SchemaLifecycle;
+use Packman\Schema\Enums\SchemaScope;
+use Packman\Schema\Exceptions\SchemaSetException;
+use Packman\Schema\Internal\Migration\TaggedSchemaSets;
 
 require_once __DIR__.'/../Fixtures/Schema/FixtureSchemaSets.php';
 
@@ -105,24 +103,24 @@ it('preflights all selected drivers before creating the migration journal', func
 
 it('migrates and reports pending applied and unknown journal entries', function (): void {
     schemaRegistry(schemaFixture());
-    $this->artisan('corex:schema:status')->assertExitCode(1);
-    $this->artisan('corex:schema:migrate')->assertSuccessful();
+    $this->artisan('packman:schema:status')->assertExitCode(1);
+    $this->artisan('packman:schema:migrate')->assertSuccessful();
     expect(Schema::hasTable('schema_platform'))->toBeTrue();
-    $this->artisan('corex:schema:migrate')->expectsOutput('Nothing to migrate.')->assertSuccessful();
-    $this->artisan('corex:schema:status')->assertSuccessful();
+    $this->artisan('packman:schema:migrate')->expectsOutput('Nothing to migrate.')->assertSuccessful();
+    $this->artisan('packman:schema:status')->assertSuccessful();
     DB::table('migrations')->insert(['migration' => '2026_10_01_980020_missing', 'batch' => 2]);
     expect(resolve(SchemaMigrator::class)->status(SchemaScope::Tenant)[0]->unknown)->toBe(['2026_10_01_980020_missing']);
-    $this->artisan('corex:schema:status')->assertExitCode(1);
+    $this->artisan('packman:schema:status')->assertExitCode(1);
     DB::table('migrations')->where('migration', '2026_10_01_980020_missing')->delete();
     DB::table('migrations')->where('migration', '2026_10_01_980010_create_schema_platform')->delete();
-    $this->artisan('corex:schema:status')->assertExitCode(1);
+    $this->artisan('packman:schema:status')->assertExitCode(1);
 });
 
 it('leaves module sets pending until explicitly included', function (): void {
     schemaRegistry(schemaFixture(), schemaFixture('module'));
-    $this->artisan('corex:schema:migrate')->assertSuccessful();
+    $this->artisan('packman:schema:migrate')->assertSuccessful();
     expect(Schema::hasTable('schema_module'))->toBeFalse();
-    $this->artisan('corex:schema:migrate', ['--modules' => true])->assertSuccessful();
+    $this->artisan('packman:schema:migrate', ['--modules' => true])->assertSuccessful();
     expect(Schema::hasTable('schema_module'))->toBeTrue();
 });
 
@@ -134,7 +132,7 @@ it('runs dedicated sets on their own connection and restores the ambient connect
     expect(Schema::connection('schema_second')->hasTable('schema_dedicated'))->toBeTrue()
         ->and(Schema::hasTable('schema_dedicated'))->toBeFalse()
         ->and(DB::getDefaultConnection())->toBe($default);
-    $this->artisan('corex:schema:status', ['--scope' => 'dedicated'])->assertSuccessful();
+    $this->artisan('packman:schema:status', ['--scope' => 'dedicated'])->assertSuccessful();
 });
 
 it('rejects dedicated connection overrides through all entry points', function (): void {
@@ -160,12 +158,12 @@ it('refuses mixed scopes and unknown sets before running migrations', function (
 
 it('rejects unknown command scopes and requires production confirmation', function (): void {
     schemaRegistry(schemaFixture());
-    $this->artisan('corex:schema:migrate', ['--scope' => 'unknown'])->assertExitCode(2);
-    $this->artisan('corex:schema:status', ['--scope' => 'unknown'])->assertExitCode(2);
+    $this->artisan('packman:schema:migrate', ['--scope' => 'unknown'])->assertExitCode(2);
+    $this->artisan('packman:schema:status', ['--scope' => 'unknown'])->assertExitCode(2);
     app()->detectEnvironment(fn () => 'production');
-    $this->artisan('corex:schema:migrate')->expectsConfirmation('Are you sure you want to run this command?', 'no')->assertExitCode(1);
+    $this->artisan('packman:schema:migrate')->expectsConfirmation('Are you sure you want to run this command?', 'no')->assertExitCode(1);
     expect(Schema::hasTable('schema_platform'))->toBeFalse();
-    $this->artisan('corex:schema:migrate', ['--force' => true])->assertSuccessful();
+    $this->artisan('packman:schema:migrate', ['--force' => true])->assertSuccessful();
 });
 
 it('does not report another registered set migration as unknown', function (): void {
@@ -180,28 +178,29 @@ it('does not report another registered set migration as unknown', function (): v
 
 it('compiles the actual declarations of every schema-owning package', function (): void {
     config(['database.connections.schema_budget' => ['driver' => 'sqlite', 'database' => ':memory:', 'prefix' => '']]);
-    $schema = ApiSchemaRegistrar::fromSchema([
+    $schema = ApiSchemaConnections::fromSchema([
         'budget' => ['connection' => 'schema_budget', 'driver' => 'sqlite', 'database' => ':memory:'],
         'tenant' => ['connection' => 'testbench', 'driver' => 'sqlite', 'database' => ':memory:'],
     ], resolve('db'));
+    app()->register(PanelsServiceProvider::class);
+    app()->forgetInstance(SchemaSets::class);
+    $platformSets = resolve(SchemaSets::class)->all();
     $sets = new TaggedSchemaSets([
-        new CoreSchemaSets,
+        new FixtureSchemaSets($platformSets),
         new TenancySchemaSets,
         new AccessSchemaSets,
-        new AccessAzguardSchemaSets,
         new OperationsSchemaSets($schema),
         new WebhooksSchemaSets,
-        new PanelsSchemaSets,
         new CustomFieldsSchemaSets,
         new IntlSchemaSets,
         new MediaSchemaSets,
         new NotificationsSchemaSets,
         new SearchSchemaSets,
-        new TransferSchemaSets,
-        new WakeupSchemaSets,
+        new ImportExportSchemaSets,
+        new SchedulerSchemaSets,
         new WorkflowSchemaSets,
         new TasksSchemaSets,
-        new TasksWorkflowSchemaSets,
+        new RecurringTasksSchemaSets,
         new CrmSchemaSets,
     ]);
     expect($sets->all())->toHaveCount(21)

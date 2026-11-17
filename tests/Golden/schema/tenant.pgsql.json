@@ -1,45 +1,6 @@
 {
     "driver": "pgsql",
     "tables": {
-        "aut_azguard_role_links": {
-            "columns": {
-                "azguard_role_id": {
-                    "type": "bigint",
-                    "nullable": false,
-                    "default": null
-                },
-                "role_id": {
-                    "type": "uuid",
-                    "nullable": false,
-                    "default": null
-                }
-            },
-            "indexes": [
-                {
-                    "name": "aut_azguard_role_links_azguard_role_id_uq",
-                    "kind": "uq",
-                    "columns": [
-                        "azguard_role_id"
-                    ],
-                    "predicate": null,
-                    "method": "btree",
-                    "nulls_not_distinct": false
-                },
-                {
-                    "name": "aut_azguard_role_links_pk",
-                    "kind": "pk",
-                    "columns": [
-                        "role_id"
-                    ],
-                    "predicate": null,
-                    "method": "btree",
-                    "nulls_not_distinct": false
-                }
-            ],
-            "foreign_keys": [],
-            "checks": [],
-            "triggers": []
-        },
         "aut_direct_grants": {
             "columns": {
                 "created_at": {
@@ -4057,6 +4018,11 @@
         },
         "med_conversions": {
             "columns": {
+                "blob_id": {
+                    "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                },
                 "created_at": {
                     "type": "timestamp(0) without time zone",
                     "nullable": true,
@@ -4082,11 +4048,6 @@
                     "nullable": true,
                     "default": null
                 },
-                "object_key": {
-                    "type": "character varying(255)",
-                    "nullable": true,
-                    "default": null
-                },
                 "profile_digest": {
                     "type": "character(64)",
                     "nullable": false,
@@ -4095,6 +4056,11 @@
                 "profile_key": {
                     "type": "character varying(128)",
                     "nullable": false,
+                    "default": null
+                },
+                "sha256": {
+                    "type": "character(64)",
+                    "nullable": true,
                     "default": null
                 },
                 "size_bytes": {
@@ -4166,6 +4132,16 @@
         },
         "med_files": {
             "columns": {
+                "account_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "blob_id": {
+                    "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                },
                 "created_at": {
                     "type": "timestamp(0) without time zone",
                     "nullable": true,
@@ -4187,11 +4163,6 @@
                     "default": null
                 },
                 "mime_type": {
-                    "type": "character varying(255)",
-                    "nullable": false,
-                    "default": null
-                },
-                "object_key": {
                     "type": "character varying(255)",
                     "nullable": false,
                     "default": null
@@ -4275,11 +4246,6 @@
         },
         "med_operations": {
             "columns": {
-                "attempt_object_key": {
-                    "type": "character varying(255)",
-                    "nullable": true,
-                    "default": null
-                },
                 "attempts": {
                     "type": "bigint",
                     "nullable": false,
@@ -4482,12 +4448,12 @@
         "mod_lifecycle_log": {
             "columns": {
                 "actor_id": {
-                    "type": "uuid",
+                    "type": "character varying(191)",
                     "nullable": true,
                     "default": null
                 },
                 "actor_type": {
-                    "type": "character varying(16)",
+                    "type": "character varying(64)",
                     "nullable": false,
                     "default": null
                 },
@@ -4564,7 +4530,7 @@
             "checks": [
                 {
                     "name": "mod_lifecycle_log_actor_ck",
-                    "expression": "((actor_type)::text = ANY ((ARRAY['user'::character varying, 'system'::character varying, 'platform'::character varying, 'cli'::character varying, 'support'::character varying])::text[]))"
+                    "expression": "(char_length(TRIM(BOTH FROM actor_type)) > 0)"
                 },
                 {
                     "name": "mod_lifecycle_log_operation_ck",

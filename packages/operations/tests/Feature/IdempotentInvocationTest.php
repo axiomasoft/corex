@@ -13,7 +13,6 @@ use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Invocation\Data\InvocationMetadata;
-use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
 use CoreX\Operations\Definition\Data\Operation;
@@ -33,7 +32,7 @@ use CoreX\Operations\Invocation\Contracts\OperationInvoker;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Data\OperationResult;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
@@ -46,6 +45,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\SQLiteConnection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Modules\Internal\Compiler\RegistryCompiler;
 use PDO;
 use RuntimeException;
 
@@ -79,7 +79,7 @@ final class IdempotentInvocationTest extends TestCase
         Schema::dropIfExists('sys_api_idempotency');
         Schema::dropIfExists('idempotent_effects');
 
-        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
         Schema::create('idempotent_effects', static function (Blueprint $table): void {
             $table->id();
             $table->string('value');

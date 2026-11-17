@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Tools\Tests;
 
 use CoreX\CoreServiceProvider;
-use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Operations\ApiServiceProvider;
-use CoreX\Tools\ToolServiceProvider;
+use CoreX\Operations\OperationsServiceProvider;
+use CoreX\Tools\ToolsServiceProvider;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Packman\Modules\ModulesServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
@@ -21,7 +21,7 @@ abstract class TestCase extends Orchestra
     /** @param Application $app */
     protected function getPackageProviders($app): array
     {
-        return [ApiServiceProvider::class, ToolServiceProvider::class, CoreServiceProvider::class, ModulesServiceProvider::class];
+        return [OperationsServiceProvider::class, ToolsServiceProvider::class, CoreServiceProvider::class, ModulesServiceProvider::class];
     }
 
     /** @param Application $app */

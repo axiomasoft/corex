@@ -63,18 +63,4 @@ final class Value
 
         return $result;
     }
-
-    /** @return list<string> */
-    public static function strings(mixed $value): array
-    {
-        if (! is_array($value) || ! array_is_list($value)) {
-            throw new RuntimeException('Expected a string list.');
-        }
-        $result = [];
-        foreach ($value as $item) {
-            $result[] = self::text($item);
-        }
-
-        return $result;
-    }
 }

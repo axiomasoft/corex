@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Tenancy\Contracts\PrincipalWorkspaceResolver;
 use CoreX\Tenancy\Identity\Internal\Models\User;
 use CoreX\Tenancy\Workspace\Exceptions\NoDefaultWorkspaceException;
@@ -13,6 +12,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Packman\Schema\Contracts\Migration\SchemaSets;
 
 uses()->group('pg');
 

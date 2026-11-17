@@ -6,11 +6,11 @@ namespace CoreX\Access\Tests;
 
 use CoreX\Access\Tests\Support\CoreAuthTestCase;
 use CoreX\Access\Tests\Support\FixtureTenantSchemaSets;
-use CoreX\Database\Contracts\SchemaSetProvider;
-use CoreX\Database\Testing\MigratesSchemaSets;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Override;
+use Packman\Schema\Contracts\Migration\SchemaSetProvider;
+use Packman\Schema\Testing\MigratesSchemaSets;
 
 /**
  * PG16 lane for `aut_*` DDL (jsonb, CHECK, UNIQUE NULLS NOT DISTINCT,

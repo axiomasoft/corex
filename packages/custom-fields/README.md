@@ -11,9 +11,9 @@ including the physical `pgsql:<database>` identity, authorization callback, reco
 token. Reads and writes always validate the active field snapshot and all fifteen supported scalar
 types when `axiomasoft/corex` is installed and both registries are bound.
 
-Without `axiomasoft/corex`, `FieldCatalogue`, `AttributeStore`, and `SchemaOperations` resolve to
-`UnavailableAttributes`. Dynamic attribute fields are unavailable in that configuration; this is an
-observable fail-closed state, not a silent degradation.
+`axiomasoft/corex` is a required dependency. If its entity/module registries have not been bound,
+`FieldCatalogue`, `AttributeStore`, and `SchemaOperations` resolve to `UnavailableAttributes`.
+Dynamic attribute fields remain unavailable until the host completes that composition.
 
 Schema requests persist an idempotent operation only. They do not execute SQL in the request path.
 A trusted asynchronous worker invokes `SchemaOperationWorker` with a fresh `DataScope`; it claims
@@ -50,6 +50,6 @@ validated replay and safe mapping.
 
 ## Schema installation
 
-Register the package provider, then run `php artisan corex:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `corex:schema:status`.
+Register the package provider, then run `php artisan packman:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `packman:schema:status`.
 
 Схема: набор(ы) `tenant`, baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.

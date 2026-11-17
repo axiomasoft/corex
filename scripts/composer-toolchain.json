@@ -1,0 +1,5 @@
+[
+    "phpstan/phpstan",
+    "phpstan/phpstan-strict-rules",
+    "larastan/larastan"
+]

@@ -35,7 +35,7 @@ final class WorkspaceScopedRecordStub extends Model
     }
 }
 
-/** Minimal in-memory {@see TenancyManager} — the real DatabaseTenancyManager requires a physical database context this unit test has no reason to drive. */
+/** Minimal in-memory {@see TenancyManager} — the runtime adapter requires a physical database context this unit test does not need. */
 final class FakeTenancyManagerStub implements TenancyManager
 {
     private ?TenantContext $ctx = null;

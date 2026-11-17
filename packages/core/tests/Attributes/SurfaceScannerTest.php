@@ -79,6 +79,26 @@ final class SurfaceScannerTest extends TestCase
         self::assertContains('API-UNRESOLVED-TYPE', array_column($this->scan()->diagnostics, 'code'));
     }
 
+    public function test_attributes_class_strings_reference_external_contracts_without_embedding_them(): void
+    {
+        $this->source(<<<'SOURCE'
+        namespace Demo;
+        #[\CoreX\Attributes\Api] final readonly class Options {
+            /** @param class-string<\Psr\Clock\ClockInterface> $clock */
+            public function __construct(public string $clock) {}
+        }
+        SOURCE);
+        self::assertSame([], $this->scan()->diagnostics);
+
+        $this->source(<<<'SOURCE'
+        namespace Demo;
+        #[\CoreX\Attributes\Api] final readonly class Options {
+            public function __construct(public \Psr\Clock\ClockInterface $clock) {}
+        }
+        SOURCE);
+        self::assertContains('API-PAYLOAD', array_column($this->scan()->diagnostics, 'code'));
+    }
+
     public function test_attributes_scanner_checks_nested_imported_aliases_and_promoted_property_docs(): void
     {
         $this->source(<<<'SOURCE'

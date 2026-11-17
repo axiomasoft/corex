@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — package boundaries
+
+- Breaking before release: Replace the duplicate panel catalogue, saved-view storage and schema with `axiomasoft/packman-panels`. CoreX retains its provider bridge and `PanelContexts` trusted user-context projection. Panel/SavedViews consumers now use Packman public types and `packman-panels` configuration; the sole table owner is `axiomasoft/packman-panels:tenant`. Remove duplicate engine tests and cover actual CoreX-to-Packman composition through public contracts.
+
 ## Unreleased — Laravel 13 platform (P09.9, D132)
 
 - Require Laravel 13 and PHP 8.4+; support PHP 8.4–8.5. Laravel 12 support is removed. Testbench uses the Laravel 13 family; package versions and runtime contracts are unchanged.
@@ -18,7 +22,7 @@
 
 ## Unreleased — thin providers and registrars (P05.2)
 
-- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `packman:schema:migrate`; migration publishing is removed.
 
 - `PanelsServiceProvider` delegates to `SavedViewsBindingsRegistrar` and `PanelsBindingsRegistrar`; `SavedViewsRegistrar::register()` stays as a deprecated shim.
 

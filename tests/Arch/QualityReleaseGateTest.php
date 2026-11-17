@@ -18,6 +18,10 @@ it('rejects suppressed debt, incomplete analysis scopes and nonzero completed ce
         $files->copy($root.'/phpstan-extensions.neon', $fixture.'/phpstan-extensions.neon');
         foreach (['.', 'packages/core', 'packages/access-azguard'] as $dir) {
             $config = file_get_contents($root.'/'.$dir.'/phpstan.neon');
+
+            if ($dir === 'packages/access-azguard') {
+                $config = str_replace('        - src', "        - src\n        - database/migrations", $config);
+            }
             $files->put($fixture.'/'.$dir.'/phpstan.neon', $config);
 
             if (str_contains($config, '    - phpstan-baseline.neon')) {

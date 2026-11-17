@@ -19,7 +19,7 @@ use Stringable;
  *
  * Eloquent-observer instance (created/updated/deleted/restored/forceDeleted)
  * for models exposed via EntityRegistry::byCapability(Auditable) — attached in
- * CoreX\Modules\ModulesServiceProvider::boot(), not here: this package cannot
+ * Packman\Modules\ModulesServiceProvider::boot(), not here: this package cannot
  * depend on axiomasoft/corex (axiomasoft/corex already requires axiomasoft/corex, a
  * reverse dependency would cycle).
  *

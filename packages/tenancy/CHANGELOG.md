@@ -1,12 +1,25 @@
 # Changelog
 
+## Unreleased — external Tenant ownership
+
+- Remove inactive native cache/template options and bootstrapper/factory seams; manual context notifications remain distinct from protected Tenant runtime observations.
+
+- Replace the embedded connection/cache/session runtime with TenantRuntimeManager over axiomasoft/tenant and a required trusted AccountIsolationMapper.
+- Delegate physical provisioning, exports and deletion to the required AccountResources host port; remove native route resolvers, template cloning and physical template verification.
+- Keep CoreX account/workspace, signup and export metadata orchestration; report missing host bindings in configuration diagnostics.
+- Reject obsolete bootstrappers configuration; this is a breaking change to the unused package.
+
+## Unreleased — Packman runtime
+
+- Breaking: module declarations and schema registrations use Packman contracts directly; module lifecycle and schema execution are owned by Packman.
+
 ## Unreleased — workspace scope through the kernel contract (audit 2026-10-08 P-04)
 
 - `WorkspaceRegistrar` binds `CoreX\Context\Laravel\WorkspaceScopeProvider` to `WorkspaceScope`, so access no longer needs the scope's class name in config.
 
 ## Unreleased — wakeup through kernel contracts (audit 2026-10-08)
 
-- The root_registry integration depends on `CoreX\Scheduling\Contracts` only; no `CoreX\Wakeup` import remains. With `wakeup.driver=root_registry` the integration is always registered and resolves the sweeper lazily; a missing backend is reported by the config report and fails on first use instead of being skipped silently.
+- The root_registry integration depends on `CoreX\Scheduling\Contracts` only; no `CoreX\Scheduler` import remains. With `wakeup.driver=root_registry` the integration is always registered and resolves the sweeper lazily; a missing backend is reported by the config report and fails on first use instead of being skipped silently.
 
 ## Unreleased — Laravel 13 platform (P09.9, D132)
 
@@ -31,7 +44,7 @@
 
 ## Unreleased — PLAN3.P07.6 host-cache correction
 
-- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `packman:schema:migrate`; migration publishing is removed.
 - `MigrationWaveOrchestrator` now requires `SchemaMigrator` and migrates all platform tenant sets on the account connection.
 
 - Fence host mappings after committed account/domain saves and deletes, including cascade deletion.

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Definition\Internal;
 
-use CoreX\Modules\Data\Api;
-use CoreX\Modules\Exceptions\CompilationException;
 use JsonException;
+use Packman\Modules\Data\Extenders\Api;
+use Packman\Modules\Exceptions\Compiler\CompilationException;
 
 /** @internal Validates serializable declarations without depending on an API runtime. */
 final class ApiOperationValidator

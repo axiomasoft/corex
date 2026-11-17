@@ -8,7 +8,6 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Operations\Bulk\Laravel\BulkHttpRegistrar;
 use CoreX\Operations\Invocation\Contracts\ContextResolver;
 use CoreX\Operations\Invocation\Internal\TrustedContextResolver;
@@ -16,6 +15,7 @@ use CoreX\Operations\Laravel\Support\ApiOptions;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 
 /** Composition of the operations package. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Account;
 
-use CoreX\Wakeup\Contracts\WakeupScheduleHint;
+use CoreX\Scheduler\Contracts\WakeupScheduleHint;
 
 /**
  * Negative fixture for P9.7: a wakeup contract import outside

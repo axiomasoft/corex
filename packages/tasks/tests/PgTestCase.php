@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Tests;
 
-use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Tasks\Tests\Support\TasksTestCase;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Override;
+use Packman\Schema\Testing\MigratesSchemaSets;
 
 abstract class PgTestCase extends TasksTestCase
 {

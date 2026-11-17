@@ -8,19 +8,14 @@ use Closure;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Invocation\Data\InvocationMetadata;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\Api;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Invocation\Internal\ResolvedContext;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\Pagination\Data\CursorPayload;
 use CoreX\Operations\Testing\ContextFixture;
@@ -39,8 +34,13 @@ use CoreX\Tools\Data\ToolDescriptor;
 use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Data\ToolResult;
 use CoreX\Tools\Internal\ToolDescriptorFactory;
-use CoreX\Tools\ToolServiceProvider;
+use CoreX\Tools\ToolsServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Extenders\Api;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Modules\Internal\Compiler\RegistryCompiler;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
 
 final class OperationContractTest extends TestCase
 {
@@ -52,7 +52,7 @@ final class OperationContractTest extends TestCase
 
     protected function getPackageProviders($app): array
     {
-        return [...parent::getPackageProviders($app), ToolServiceProvider::class];
+        return [...parent::getPackageProviders($app), ToolsServiceProvider::class];
     }
 
     protected function setUp(): void
@@ -60,7 +60,7 @@ final class OperationContractTest extends TestCase
         parent::setUp();
         $this->app['config']->set('app.key', 'p13-contract-test-secret');
         Schema::dropIfExists('sys_api_idempotency');
-        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
 
         $input = self::schema(['title' => ['type' => 'string']]);
         $output = self::schema([

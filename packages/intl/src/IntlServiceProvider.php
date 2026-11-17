@@ -7,7 +7,6 @@ namespace CoreX\Intl;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
-use CoreX\Database\Contracts\SchemaSetProvider;
 use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Intl\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Intl\Internal\IntlConfigSection;
@@ -15,10 +14,11 @@ use CoreX\Intl\Internal\IntlSchemaSets;
 use CoreX\Intl\Laravel\IntlBindingsRegistrar;
 use CoreX\Intl\Laravel\IntlReferenceRegistrar;
 use CoreX\Intl\Money\Laravel\MoneyCast;
-use CoreX\Modules\Contracts\FieldCastRegistry;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
+use Packman\Modules\Contracts\Compiler\FieldCastRegistry;
+use Packman\Schema\Contracts\Migration\SchemaSetProvider;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class IntlServiceProvider extends ServiceProvider

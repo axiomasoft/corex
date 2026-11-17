@@ -9,7 +9,6 @@ use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Tenancy\Account\Contracts\AccountRead;
 use CoreX\Tenancy\Impersonation\Internal\Models\ImpersonationGrant;
 use CoreX\Tenancy\Laravel\Http\Middleware\AccountStatusGate;
@@ -39,6 +38,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 use RuntimeException;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]

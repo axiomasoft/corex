@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Golden;
 
-use CoreX\Database\Enums\SchemaScope;
 use CoreX\Tests\Golden\Support\SchemaCatalogue;
 use CoreX\Tests\Golden\Support\SchemaEnvironment;
 use Illuminate\Support\Facades\DB;
+use Packman\Schema\Enums\SchemaScope;
 use PHPUnit\Framework\Attributes\Group;
 use RuntimeException;
 

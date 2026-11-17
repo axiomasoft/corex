@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace CoreX\Operations\Tests;
 
 use CoreX\CoreServiceProvider;
-use CoreX\Database\Contracts\SchemaSets;
-use CoreX\Database\Testing\MigratesSchemaSets;
-use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Operations\ApiServiceProvider;
+use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Webhooks\WebhooksServiceProvider;
 use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Packman\Modules\ModulesServiceProvider;
+use Packman\Schema\Contracts\Migration\SchemaSets;
+use Packman\Schema\Testing\MigratesSchemaSets;
 
 abstract class TestCase extends Orchestra
 {
@@ -34,7 +34,7 @@ abstract class TestCase extends Orchestra
     /** @param Application $app */
     protected function getPackageProviders($app): array
     {
-        return [ApiServiceProvider::class, WebhooksServiceProvider::class, CoreServiceProvider::class, ModulesServiceProvider::class];
+        return [OperationsServiceProvider::class, WebhooksServiceProvider::class, CoreServiceProvider::class, ModulesServiceProvider::class];
     }
 
     /** @param Application $app */

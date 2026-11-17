@@ -3,16 +3,17 @@
 declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Context\Data\TenantContext;
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\CompiledModule;
-use CoreX\Modules\Data\CompiledRegistry;
 use CoreX\Workflow\Contracts\WorkflowBinding;
 use CoreX\Workflow\Data\SignalRequest;
 use CoreX\Workflow\Data\TransitionRequest;
 use CoreX\Workflow\Data\TriggerRequest;
+use CoreX\Workflow\Internal\WorkflowOptions;
 use CoreX\Workflow\Tests\TestCase;
+use Packman\Context\Contracts\ContextScopeInterface;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Compiler\CompiledModule;
+use Packman\Modules\Data\Compiler\CompiledRegistry;
 
 uses(TestCase::class);
 
@@ -183,12 +184,12 @@ it('treats an unrelated registry fingerprint change as the same work', function 
             throw new RuntimeException('unused');
         }
 
-        public function active(TenantContext $ctx): array
+        public function active(ContextScopeInterface $ctx): array
         {
             return [];
         }
 
-        public function isActive(string $name, TenantContext $ctx): bool
+        public function isActive(string $name, ContextScopeInterface $ctx): bool
         {
             return false;
         }
@@ -217,4 +218,17 @@ it('treats an unrelated registry fingerprint change as the same work', function 
 
     expect($binding->capture(triggerRequest('workflow:stamp:drift'))->status)->toBe('existing')
         ->and(json_decode((string) $this->app['db']->table('sys_workflow_intents')->where('request_key', 'workflow:stamp:drift')->value('payload'), true)['registryFingerprint'])->toBe('fingerprint-a');
+});
+
+it('checks workflow triggers through the public Packman registry projection', function (): void {
+    $payload = CompiledRegistry::empty()->toArray();
+    $payload['workflow'] = [['kind' => 'trigger', 'stepClass' => null, 'entityHandle' => 'test.ticket', 'eventNames' => ['created']]];
+    $registry = Mockery::mock(ModuleRegistry::class);
+    $registry->shouldReceive('isActive')->andReturnTrue();
+    $registry->shouldReceive('compiled')->andReturn(CompiledRegistry::fromArray($payload));
+    $this->app->instance(ModuleRegistry::class, $registry);
+    config(['corex-workflow.enforce_declarations' => true]);
+    $this->app->forgetInstance(WorkflowOptions::class);
+
+    expect(resolve(WorkflowBinding::class)->capture(triggerRequest('workflow:packman:declared'))->status)->toBe('created');
 });

@@ -2,46 +2,6 @@
     "schema": "php-api/1",
     "package": "axiomasoft/corex-custom-fields",
     "symbols": {
-        "CoreX\\CustomFields\\AttributesServiceProvider": {
-            "kind": "class",
-            "layer": "spi-call",
-            "since": "1.0",
-            "final": true,
-            "readonly": false,
-            "abstract": false,
-            "extends": [
-                "Illuminate\\Support\\ServiceProvider"
-            ],
-            "implements": [],
-            "uses": [],
-            "doc": [],
-            "methods": {
-                "boot": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "void",
-                    "doc": []
-                },
-                "register": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "void",
-                    "doc": []
-                }
-            },
-            "properties": [],
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
         "CoreX\\CustomFields\\Contracts\\AttributeFilter": {
             "kind": "interface",
             "layer": "spi-implement",
@@ -430,6 +390,46 @@
                         }
                     ],
                     "return": "CoreX\\CustomFields\\Data\\DriftReport",
+                    "doc": []
+                }
+            },
+            "properties": [],
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
+        "CoreX\\CustomFields\\CustomFieldsServiceProvider": {
+            "kind": "class",
+            "layer": "spi-call",
+            "since": "1.0",
+            "final": true,
+            "readonly": false,
+            "abstract": false,
+            "extends": [
+                "Illuminate\\Support\\ServiceProvider"
+            ],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "boot": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "void",
+                    "doc": []
+                },
+                "register": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "void",
                     "doc": []
                 }
             },

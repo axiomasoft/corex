@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Tests;
 
-use CoreX\Access\CoreAuthServiceProvider;
+use CoreX\Access\AccessServiceProvider;
 use CoreX\Access\Internal\Support\AccessConfigSection;
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\CoreServiceProvider;
-use CoreX\Modules\ModulesServiceProvider;
 use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase;
+use Packman\Modules\ModulesServiceProvider;
 
 final class ConfigReportSectionTest extends TestCase
 {
     protected function getPackageProviders($app): array
     {
-        return [CoreServiceProvider::class, ModulesServiceProvider::class, CoreAuthServiceProvider::class];
+        return [CoreServiceProvider::class, ModulesServiceProvider::class, AccessServiceProvider::class];
     }
 
     public function test_section_registers_in_report_order_and_redacts_its_secrets(): void

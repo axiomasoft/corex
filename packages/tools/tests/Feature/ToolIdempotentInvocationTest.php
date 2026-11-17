@@ -10,16 +10,9 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Invocation\Data\InvocationMetadata;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\Api;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Modules\Internal\Compiler\RegistryCompiler;
-use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
@@ -32,7 +25,8 @@ use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Internal\OperationDispatcher;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
+use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
@@ -47,13 +41,19 @@ use CoreX\Tools\Data\ToolDescriptor;
 use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Data\ToolResult;
 use CoreX\Tools\Internal\ToolDescriptorFactory;
-use CoreX\Tools\ToolServiceProvider;
+use CoreX\Tools\ToolsServiceProvider;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Extenders\Api;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Modules\Internal\Compiler\RegistryCompiler;
+use Packman\Modules\ModulesServiceProvider;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
 
 final class ToolIdempotentInvocationTest extends TestCase
 {
@@ -85,7 +85,7 @@ final class ToolIdempotentInvocationTest extends TestCase
 
     protected function getPackageProviders($app): array
     {
-        return [CoreServiceProvider::class, ModulesServiceProvider::class, ApiServiceProvider::class, ToolServiceProvider::class];
+        return [CoreServiceProvider::class, ModulesServiceProvider::class, OperationsServiceProvider::class, ToolsServiceProvider::class];
     }
 
     protected function setUp(): void
@@ -94,7 +94,7 @@ final class ToolIdempotentInvocationTest extends TestCase
         $this->connection = DB::connection('sqlite');
         Schema::dropIfExists('sys_api_idempotency');
         Schema::dropIfExists('idempotent_effects');
-        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
         Schema::create('idempotent_effects', static function (Blueprint $table): void {
             $table->id();
             $table->string('value');

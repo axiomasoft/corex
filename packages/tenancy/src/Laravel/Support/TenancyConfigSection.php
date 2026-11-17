@@ -9,6 +9,11 @@ use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Messaging\Enums\PubSubDriver;
 use CoreX\Scheduling\Contracts\DueWakeupSweeper;
+use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier;
+use CoreX\Tenancy\Provisioning\Contracts\AccountResources;
+use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks;
+use CoreX\Tenancy\Runtime\Contracts\AccountIsolationMapper;
+use Tenant\Contracts\Runtime\TenantRuntime;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class TenancyConfigSection implements ConfigReportSection
@@ -46,7 +51,14 @@ final class TenancyConfigSection implements ConfigReportSection
         $selected = config('corex-tenancy.wakeup.driver') === 'root_registry';
         $available = app()->bound(DueWakeupSweeper::class);
 
-        return [['line' => 'adapter wakeup.root_registry='.($selected ? ($available ? 'available' : 'missing') : 'not-selected'), 'error' => $selected && ! $available ? 'adapter wakeup.root_registry missing' : null]];
+        $adapters = [['line' => 'adapter wakeup.root_registry='.($selected ? ($available ? 'available' : 'missing') : 'not-selected'), 'error' => $selected && ! $available ? 'adapter wakeup.root_registry missing' : null]];
+
+        foreach ([TenantRuntime::class, AccountIsolationMapper::class, AccountResources::class, TemplateIntegrityChecks::class, TemplateIntegrityVerifier::class] as $contract) {
+            $bound = app()->bound($contract);
+            $adapters[] = ['line' => 'adapter '.$contract.'='.($bound ? 'available' : 'missing'), 'error' => $bound ? null : 'Required tenancy host adapter '.$contract.' is missing'];
+        }
+
+        return $adapters;
     }
 
     private function scalar(mixed $value): string

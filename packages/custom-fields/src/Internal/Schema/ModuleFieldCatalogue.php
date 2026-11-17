@@ -13,9 +13,9 @@ use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Data\IndexPolicy;
 use CoreX\CustomFields\Internal\Support\Validation;
 use CoreX\Data\Data\DataScope;
-use CoreX\Modules\Contracts\EntityRegistry;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\EntityField;
+use Packman\Modules\Contracts\Entities\EntityRegistry;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Entities\EntityField;
 use RuntimeException;
 
 final readonly class ModuleFieldCatalogue implements FieldCatalogue

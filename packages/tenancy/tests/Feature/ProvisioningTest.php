@@ -2,16 +2,13 @@
 
 declare(strict_types=1);
 
-use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\ProvisionParams;
 use CoreX\Tenancy\Account\Internal\DatabaseTenantProvisioner;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Provisioning\Exceptions\TemplateIntegrityException;
-use CoreX\Tenancy\Provisioning\Internal\ClusterAccountConnectionResolver;
-use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
+use CoreX\Tenancy\Tests\Support\TestTemplateIntegrity as TemplateIntegrityVerifier;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Connection;
-use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -125,7 +122,7 @@ function makeAccountRow(string $clusterId, array $overrides = []): string
     DB::table('root_accounts')->insert(array_merge([
         'id' => $id,
         'cluster_id' => $clusterId,
-        'db_name' => 'acc_'.str_replace('-', '', $id),
+        'db_name' => 'acc_'.str_replace('-', '', $id).'_test',
         'template_version' => 1,
         'embedding_model' => 'bge-m3',
         'embedding_dim' => 1024,
@@ -159,7 +156,7 @@ it('creates an Account with a UUIDv7 key and typed custom columns', function ():
         ->and(property_exists($raw, 'data'))->toBeFalse();
 });
 
-it('provisions a database by cloning the golden template via STRATEGY WAL_LOG, without Migrate/Seed', function (): void {
+it('provisions through the host physical owner with the qualified template', function (): void {
     $clusterId = makeClusterRow();
     makeReadyTemplate(1);
     $accountId = makeAccountRow($clusterId);
@@ -181,7 +178,7 @@ it('provisions a database by cloning the golden template via STRATEGY WAL_LOG, w
     $exists = DB::selectOne('SELECT datname FROM pg_database WHERE datname = ?', [$targetDb]);
     expect($exists)->not->toBeNull();
 
-    // STRATEGY WAL_LOG actually copied the golden template's data.
+    // The test host physical owner materialized the qualified template.
     $clone = connectTo($targetDb);
     expect($clone->table('smoke_marker')->value('note'))->toBe('golden-template-clone');
 
@@ -309,27 +306,4 @@ it('fixes embedding_model/dim and other provisioning params onto the account row
         ->and($row->embedding_dim)->toBe(1024)
         ->and($row->vertical_code)->toBe('crm')
         ->and($row->locale)->toBe('en');
-});
-
-it('resolves the tenant connection from root_clusters+db_name and follows cluster_id (AC-9)', function (): void {
-    $clusterA = makeClusterRow(['pgbouncer_host' => 'pgbouncer-a.local']);
-    $clusterB = makeClusterRow(['pgbouncer_host' => 'pgbouncer-b.local']);
-    $accountId = makeAccountRow($clusterA);
-
-    $resolver = new ClusterAccountConnectionResolver(connections: resolve(ConnectionResolverInterface::class), centralConnection: 'pgsql');
-    $accountRef = new AccountRef(
-        id: $accountId,
-        slug: 'irrelevant',
-        status: 'pending',
-        features: [],
-        limits: [],
-    );
-
-    $config = $resolver->resolve($accountRef);
-    expect($config->host)->toBe('pgbouncer-a.local');
-
-    DB::table('root_accounts')->where('id', $accountId)->update(['cluster_id' => $clusterB]);
-
-    $config = $resolver->resolve($accountRef);
-    expect($config->host)->toBe('pgbouncer-b.local');
 });

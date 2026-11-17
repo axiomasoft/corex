@@ -12,8 +12,8 @@ use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks;
 
 /**
- * Persists verified provisioning parameters, then clones synchronously. Replays verify the
- * existing account database instead of cloning again.
+ * Persists verified provisioning parameters, then requests a committed host resource.
+ * Replays require the physical owner to verify the existing account resource.
  */
 final readonly class DatabaseTenantProvisioner implements TenantDatabaseProvisioner
 {

@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Flex\Crm\Tests\Support;
 
 use CoreX\CoreServiceProvider;
-use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Intl\IntlServiceProvider;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Internal\Compiler\RegistryCompiler;
-use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Operations\ApiServiceProvider;
+use CoreX\Operations\OperationsServiceProvider;
 use Flex\Crm\CrmModule;
 use Flex\Crm\CrmServiceProvider;
 use Illuminate\Foundation\Application;
 use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Internal\Compiler\RegistryCompiler;
+use Packman\Modules\ModulesServiceProvider;
+use Packman\Schema\Testing\MigratesSchemaSets;
 
 /**
  * Package-local Testbench base for CRM suites (D94).
@@ -36,7 +36,7 @@ abstract class CrmTestCase extends Orchestra
         return [
             CoreServiceProvider::class,
             ModulesServiceProvider::class,
-            ApiServiceProvider::class,
+            OperationsServiceProvider::class,
             IntlServiceProvider::class,
             CrmServiceProvider::class,
         ];

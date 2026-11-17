@@ -8,10 +8,8 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Invocation\Data\InvocationMetadata;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
+use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
@@ -29,9 +27,11 @@ use CoreX\Tools\Tests\Support\LabToolModule;
 use CoreX\Tools\Tests\Support\ToolGuardFixture;
 use CoreX\Tools\Tests\Support\ToolPolicyFixture;
 use CoreX\Tools\Tests\TestCase;
-use CoreX\Tools\ToolServiceProvider;
+use CoreX\Tools\ToolsServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\ModulesServiceProvider;
 
 final class ToolContributionsTest extends TestCase
 {
@@ -49,7 +49,7 @@ final class ToolContributionsTest extends TestCase
 
     protected function getPackageProviders($app): array
     {
-        return [ApiServiceProvider::class, ToolServiceProvider::class, CoreServiceProvider::class, ModulesServiceProvider::class];
+        return [OperationsServiceProvider::class, ToolsServiceProvider::class, CoreServiceProvider::class, ModulesServiceProvider::class];
     }
 
     protected function setUp(): void

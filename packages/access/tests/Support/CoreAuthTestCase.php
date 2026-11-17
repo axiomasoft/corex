@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Tests\Support;
 
-use CoreX\Access\CoreAuthServiceProvider;
+use CoreX\Access\AccessServiceProvider;
 use CoreX\CoreServiceProvider;
-use CoreX\Modules\Contracts\EntityRegistry;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Packman\Modules\Contracts\Entities\EntityRegistry;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\ModulesServiceProvider;
+use Packman\Modules\Testing\ArrayEntityRegistry;
 
 /**
  * Testbench base wiring axiomasoft/corex and axiomasoft/corex-access.
@@ -29,7 +29,7 @@ abstract class CoreAuthTestCase extends Orchestra
         return [
             CoreServiceProvider::class,
             ModulesServiceProvider::class,
-            CoreAuthServiceProvider::class,
+            AccessServiceProvider::class,
         ];
     }
 

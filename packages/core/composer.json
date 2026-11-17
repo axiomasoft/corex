@@ -1,6 +1,6 @@
 {
     "name": "axiomasoft/corex",
-    "description": "CoreX kernel — base model (ULID), optional multi-tenancy, entity registry, settings, audit log, and money for any Laravel application.",
+    "description": "CoreX application foundation — tenant context, settings, audit and messaging on Packman modules and schema.",
     "type": "library",
     "license": "MIT",
     "keywords": [
@@ -30,7 +30,10 @@
         "illuminate/queue": "^13.0",
         "illuminate/support": "^13.0",
         "laravel/framework": "^13.0",
-        "psr/clock": "^1.0"
+        "psr/clock": "^1.0",
+        "axiomasoft/packman": "^0.1@dev",
+        "axiomasoft/packman-schema": "^0.1@dev",
+        "axiomasoft/packman-modules": "^0.1@dev"
     },
     "provide": {
         "psr/clock-implementation": "1.0"

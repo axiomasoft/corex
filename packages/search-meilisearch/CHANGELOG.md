@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — package boundaries
+
+- Breaking before release: Rename the public Laravel provider to `CoreX\SearchMeilisearch\SearchMeilisearchServiceProvider`.
+
 ## Unreleased — Laravel 13 platform (P09.9, D132)
 
 - Require Laravel 13 and PHP 8.4+; support PHP 8.4–8.5. Laravel 12 support is removed. Testbench uses the Laravel 13 family; package versions and runtime contracts are unchanged.
@@ -18,7 +22,7 @@
 
 ## Unreleased — kernel package and API migration
 
-- Breaking (PLAN3.P02–P04, pre-1.0): The bridge owns CoreX\SearchMeilisearch and MeilisearchServiceProvider; configuration failures have package-owned typed codes and the concrete search driver is Internal.
+- Breaking (PLAN3.P02–P04, pre-1.0): The bridge owns CoreX\SearchMeilisearch and SearchMeilisearchServiceProvider; configuration failures have package-owned typed codes and the concrete search driver is Internal.
 - Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.
 
 ## Unreleased — PHP surface strict cutover

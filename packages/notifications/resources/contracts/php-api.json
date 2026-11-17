@@ -2322,7 +2322,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [],
             "doc": [],
@@ -2382,7 +2382,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [],
             "doc": [],
@@ -2441,7 +2441,7 @@
             "readonly": false,
             "abstract": false,
             "extends": [
-                "CoreX\\Modules\\Contracts\\ModuleDefinition"
+                "Packman\\Modules\\Contracts\\Definition\\ModuleDefinition"
             ],
             "implements": [],
             "uses": [],
@@ -2454,7 +2454,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Modules\\Data\\ModuleManifest",
+                    "return": "Packman\\Modules\\Data\\Lifecycle\\ModuleManifest",
                     "doc": []
                 }
             },

@@ -14,10 +14,10 @@ use CoreX\Intl\Territory\Internal\Reference\FixtureReferenceNormalizer;
 use CoreX\Intl\Territory\Internal\Reference\ReferenceCursorCodec;
 use CoreX\Intl\Territory\Internal\Reference\SqlDatasetImporter;
 use CoreX\Intl\Territory\Internal\Reference\SqlGeographyProvider;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Connection;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 use Psr\Clock\ClockInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]

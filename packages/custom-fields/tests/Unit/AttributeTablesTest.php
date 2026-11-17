@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Tests\Unit;
 
-use CoreX\CustomFields\AttributesServiceProvider;
+use CoreX\CustomFields\CustomFieldsServiceProvider;
 use CoreX\CustomFields\Data\AttributeTables;
 use CoreX\CustomFields\Exceptions\InvalidAttributeTables;
 use Orchestra\Testbench\TestCase;
@@ -15,7 +15,7 @@ final class AttributeTablesTest extends TestCase
     #[Override]
     protected function getPackageProviders($app): array
     {
-        return [AttributesServiceProvider::class];
+        return [CustomFieldsServiceProvider::class];
     }
 
     public function test_it_accepts_the_shipped_default_table_names(): void

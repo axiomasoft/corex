@@ -118,10 +118,10 @@ jobs:
           coverage: none
 
       - name: Install locked Octane source consumer
-        run: composer --working-dir=packages/core/tests/Release/octane-consumer install --prefer-dist --no-interaction --no-progress --no-scripts
+        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/core/tests/Release/octane-consumer update --prefer-dist --no-interaction --no-progress --no-scripts
 
       - name: Audit Octane consumer lock
-        run: env -u COMPOSER_NO_AUDIT composer --working-dir=packages/core/tests/Release/octane-consumer audit --locked
+        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/core/tests/Release/octane-consumer audit --locked
 
       - name: Receipt integrity controls
         run: python3 -m unittest discover -s scripts/quality/tests -p test_octane_proof.py
@@ -223,10 +223,10 @@ jobs:
         run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
-        run: composer --working-dir=packages/operations update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
+        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/operations update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
 
       - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/operations
+        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/operations audit --locked
       - name: Operations tests and coverage
         run: composer --working-dir=packages/operations test:coverage
       - name: Operations static analysis
@@ -264,10 +264,10 @@ jobs:
         run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
-        run: composer --working-dir=packages/tools update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
+        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/tools update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
 
       - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/tools
+        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/tools audit --locked
       - name: Tools tests and coverage
         run: composer --working-dir=packages/tools test:coverage
       - name: Tools static analysis
@@ -305,10 +305,10 @@ jobs:
         run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
-        run: composer --working-dir=packages/webhooks update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
+        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/webhooks update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
 
       - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/webhooks
+        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/webhooks audit --locked
       - name: Webhooks tests and coverage
         run: composer --working-dir=packages/webhooks test:coverage
       - name: Webhooks static analysis
@@ -334,13 +334,13 @@ jobs:
       - name: Composer audit
         run: env -u COMPOSER_NO_AUDIT composer audit --locked
       - name: Wakeup tests
-        run: composer --working-dir=packages/wakeup test
+        run: composer --working-dir=packages/scheduler test
       - name: Notification tests
         run: composer --working-dir=packages/notifications test
       - name: Notification and wakeup static analysis
         run: |
           composer --working-dir=packages/notifications analyse
-          composer --working-dir=packages/wakeup analyse
+          composer --working-dir=packages/scheduler analyse
 
   notifications-pg-tests:
     permissions:
@@ -418,10 +418,10 @@ jobs:
         run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
-        run: composer --working-dir=packages/panels update --prefer-dist --no-interaction --no-progress
+        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/panels update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/panels
+        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/panels audit --locked
       - name: Panels SQLite tests
         run: composer --working-dir=packages/panels test -- --exclude-group=pg
       - name: Panels tests and coverage
@@ -456,10 +456,10 @@ jobs:
         run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
-        run: composer --working-dir=packages/media update --prefer-dist --no-interaction --no-progress
+        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/media update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/media
+        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/media audit --locked
       - name: Media tests and coverage
         run: composer --working-dir=packages/media test:coverage
       - name: Media static analysis
@@ -500,10 +500,10 @@ jobs:
         run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
-        run: composer --working-dir=packages/media update --prefer-dist --no-interaction --no-progress
+        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/media update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/media
+        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/media audit --locked
       - name: Media PostgreSQL concurrency test
         run: composer --working-dir=packages/media test:pg
         env:
@@ -562,10 +562,10 @@ jobs:
         run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
-        run: composer --working-dir=packages/tenancy update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
+        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/tenancy update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
 
       - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/tenancy
+        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/tenancy audit --locked
 
       - name: Install PostgreSQL 18 client
         timeout-minutes: 8
@@ -631,10 +631,10 @@ jobs:
         run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
-        run: composer --working-dir=products/flex-crm update --prefer-dist --no-interaction --no-progress
+        run: python3 scripts/composer-with-snapshots.py --working-dir=products/flex-crm update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=products/flex-crm
+        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=products/flex-crm audit --locked
 
       - name: Crm tests
         run: composer --working-dir=products/flex-crm test
@@ -668,25 +668,25 @@ jobs:
         run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install access dependencies
-        run: composer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
+        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit (access)
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/access
+        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/access audit --locked
 
       - name: Install access AzGuard bridge dependencies
-        run: composer --working-dir=packages/access-azguard update --prefer-dist --no-interaction --no-progress
+        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/access-azguard update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit (access AzGuard bridge)
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/access-azguard
+        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/access-azguard audit --locked
 
       - name: Install remaining standalone package harnesses
         run: |
-          for package in media tasks tasks-workflow panels operations tenancy webhooks tools recurrence; do
-            composer --working-dir="packages/$package" update --prefer-dist --no-interaction --no-progress
-            env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir="packages/$package"
+          for package in media tasks recurring-tasks panels operations tenancy webhooks tools recurrence; do
+            python3 scripts/composer-with-snapshots.py --working-dir="packages/$package" update --prefer-dist --no-interaction --no-progress
+            env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir="packages/$package" audit --locked
           done
-          composer --working-dir=products/flex-crm update --prefer-dist --no-interaction --no-progress
-          env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=products/flex-crm
+          python3 scripts/composer-with-snapshots.py --working-dir=products/flex-crm update --prefer-dist --no-interaction --no-progress
+          env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=products/flex-crm audit --locked
 
       - name: Per-package test aggregator
         run: composer test:packages
@@ -731,10 +731,10 @@ jobs:
         run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
-        run: composer --working-dir=packages/tasks update --prefer-dist --no-interaction --no-progress
+        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/tasks update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/tasks
+        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/tasks audit --locked
 
       - name: Tasks tests
         run: composer --working-dir=packages/tasks test
@@ -794,10 +794,10 @@ jobs:
         run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
-        run: composer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
+        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/access
+        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/access audit --locked
 
       - name: Auth tests
         run: composer --working-dir=packages/access test
@@ -970,16 +970,16 @@ jobs:
         run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install access dependencies
-        run: composer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
+        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit (access)
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/access
+        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/access audit --locked
 
       - name: Install access AzGuard bridge dependencies
-        run: composer --working-dir=packages/access-azguard update --prefer-dist --no-interaction --no-progress
+        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/access-azguard update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit (access AzGuard bridge)
-        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/access-azguard
+        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/access-azguard audit --locked
 
       - name: PHPStan
         run: composer analyse
@@ -994,7 +994,7 @@ jobs:
         run: vendor/bin/pest tests/Arch/UnusedPublicGateTest.php tests/Arch/QualityReleaseGateTest.php tests/Arch/MigrationToolingGuardTest.php tests/Arch/RectorLaravelSubsetTest.php
 
       - name: Composer source audit controls
-        run: python3 -m unittest discover -s scripts/distribution/tests -p test_audit_roots.py
+        run: python3 -m unittest discover -s scripts/distribution/tests -q
 
       - name: Audit every maintained Composer source root
         run: env -u COMPOSER_NO_AUDIT python3 scripts/distribution/audit-roots.py --scope source --evidence-dir build/quality/audits
@@ -1239,7 +1239,7 @@ jobs:
       - name: Audit every standalone package lockfile
         run: |
           for manifest in packages/*/composer.json products/*/composer.json; do
-            env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir="$(dirname "$manifest")"
+            env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir="$(dirname "$manifest")" audit --locked
           done
 
   zizmor:

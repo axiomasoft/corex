@@ -8,6 +8,7 @@ use CoreX\Audit\Contracts\AuditRetention;
 use CoreX\Audit\Data\AuditEntry;
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Audit\Internal\AuditLog;
+use CoreX\Audit\Internal\ModuleAuditHook;
 use CoreX\Audit\Internal\NullAuditRetention;
 use CoreX\Audit\Internal\QueuedAuditLogger;
 use CoreX\Audit\Internal\RecordAuditEntry;
@@ -17,10 +18,6 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
-use CoreX\Modules\Data\EntityDefinition;
-use CoreX\Modules\Enums\Capability;
-use CoreX\Modules\Internal\Audit\AuditCapabilityWiring;
-use CoreX\Modules\Testing\ArrayEntityRegistry;
 use CoreX\Tests\Stubs\StubAuditableThing;
 use CoreX\Tests\Stubs\Widget;
 use Illuminate\Database\Connection;
@@ -32,6 +29,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Packman\Modules\Data\Entities\EntityDefinition;
+use Packman\Modules\Enums\Entities\Capability;
+use Packman\Modules\Testing\ArrayEntityRegistry;
 
 uses()->group('pg');
 
@@ -217,7 +217,7 @@ it('auto-observer records byCapability(Auditable) with sensitive masking (AC-20)
     $registry = new ArrayEntityRegistry;
     $registry->register(auditEntityFor(StubAuditableThing::class, 'stub_auditable_things', 'stub.auditable_thing'));
 
-    AuditCapabilityWiring::wire($registry);
+    (new ModuleAuditHook)->wire($registry);
 
     $thing = StubAuditableThing::create(['name' => 'alpha', 'secret' => 'top-secret']);
 
@@ -232,7 +232,7 @@ it('auto-observer skips models that already opt in via HasAuditLog (no double re
     $registry = new ArrayEntityRegistry;
     $registry->register(auditEntityFor(Widget::class, 'widgets', 'stub.widget'));
 
-    AuditCapabilityWiring::wire($registry);
+    (new ModuleAuditHook)->wire($registry);
 
     Widget::create(['name' => 'one']);
 
@@ -250,7 +250,7 @@ it('actor_type falls back to system when unauthenticated', function (): void {
     $registry = new ArrayEntityRegistry;
     $registry->register(auditEntityFor(StubAuditableThing::class, 'stub_auditable_things', 'stub.auditable_thing'));
 
-    AuditCapabilityWiring::wire($registry);
+    (new ModuleAuditHook)->wire($registry);
 
     StubAuditableThing::create(['name' => 'alpha']);
 
@@ -355,7 +355,7 @@ it('killswitch silences the capability path, not only the trait (A60)', function
     $registry = new ArrayEntityRegistry;
     $registry->register(auditEntityFor(StubAuditableThing::class, 'stub_auditable_things', 'stub.auditable_thing'));
 
-    AuditCapabilityWiring::wire($registry);
+    (new ModuleAuditHook)->wire($registry);
 
     StubAuditableThing::create(['name' => 'alpha', 'secret' => 'top-secret']);
 
@@ -412,7 +412,7 @@ it('killswitch aborts in the observer itself — an unconditional logger stays u
     $registry = new ArrayEntityRegistry;
     $registry->register(auditEntityFor(StubAuditableThing::class, 'stub_auditable_things', 'stub.auditable_thing'));
 
-    AuditCapabilityWiring::wire($registry);
+    (new ModuleAuditHook)->wire($registry);
 
     StubAuditableThing::create(['name' => 'alpha', 'secret' => 'top-secret']);
 

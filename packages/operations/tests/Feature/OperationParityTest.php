@@ -8,10 +8,6 @@ use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Invocation\Contracts\RequestContext;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\Api;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Definition\Data\Operation;
@@ -22,6 +18,10 @@ use CoreX\Operations\Testing\ModuleFixture;
 use CoreX\Operations\Testing\NoteHandler;
 use CoreX\Operations\Tests\TestCase;
 use Illuminate\Http\Request;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Extenders\Api;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Modules\Internal\Compiler\RegistryCompiler;
 
 final class OperationParityTest extends TestCase
 {

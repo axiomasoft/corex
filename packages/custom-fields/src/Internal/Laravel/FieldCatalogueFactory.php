@@ -8,9 +8,9 @@ use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Internal\Schema\ModuleFieldCatalogue;
 use CoreX\CustomFields\Internal\Schema\StaticFieldCatalogue;
-use CoreX\Modules\Contracts\EntityRegistry;
-use CoreX\Modules\Contracts\ModuleRegistry;
 use Illuminate\Contracts\Foundation\Application;
+use Packman\Modules\Contracts\Entities\EntityRegistry;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 /** @internal Composition of the FieldCatalogue binding. */
 final class FieldCatalogueFactory

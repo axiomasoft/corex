@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Internal;
 
-use CoreX\Modules\Data\Api;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use Packman\Modules\Data\Extenders\Api;
 
 /** Deterministic contract hash for one compiled tool declaration. */
 final class ToolContractHasher

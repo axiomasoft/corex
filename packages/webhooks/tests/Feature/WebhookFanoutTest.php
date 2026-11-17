@@ -7,8 +7,6 @@ namespace CoreX\Webhooks\Tests\Feature;
 use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
-use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\MessagePublisher;
 use CoreX\Messaging\Data\MessageContract;
@@ -18,7 +16,7 @@ use CoreX\Messaging\Enums\MessageClass;
 use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Internal\JsonCloudEventCodec;
 use CoreX\Messaging\Testing\MessagingFixtures;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Time\Testing\FrozenClock;
@@ -35,6 +33,8 @@ use DateTimeImmutable;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use Packman\Schema\Contracts\Migration\SchemaSets;
 use PHPUnit\Framework\Attributes\Group;
 use RuntimeException;
 use TypeError;
@@ -51,7 +51,7 @@ final class WebhookFanoutTest extends TestCase
         $this->configure('api_tenant');
         $this->selectSchema('api_tenant');
 
-        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
         $this->inbox();
     }
 
@@ -166,7 +166,7 @@ final class WebhookFanoutTest extends TestCase
         try {
             $this->selectSchema('api_pg_tenant');
 
-            $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+            $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
             $this->inbox('api_pg_tenant');
             $connection = DB::connection('api_pg_tenant');
             $this->subscribe('sub-pg', $connection->getName());
@@ -267,7 +267,7 @@ final class WebhookFanoutTest extends TestCase
 
     private function selectSchema(string $tenant): void
     {
-        $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(ApiSchemaConnections::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
         $driver = (string) $this->app['config']->get('database.connections.'.$tenant.'.driver');

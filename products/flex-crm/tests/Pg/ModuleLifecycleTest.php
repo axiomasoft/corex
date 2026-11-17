@@ -2,27 +2,27 @@
 
 declare(strict_types=1);
 
-use CoreX\Modules\Contracts\ModuleLifecycle;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Enums\DisableReason;
-use CoreX\Modules\Internal\Discovery\ModuleDiscovery;
-use CoreX\Modules\Internal\Support\ModulesOptions;
 use Flex\Crm\CrmModule;
 use Flex\Crm\Tests\Support\AccountFixture;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Packman\Modules\Contracts\Lifecycle\ModuleLifecycle;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Enums\Lifecycle\DisableReason;
+use Packman\Modules\Internal\Discovery\ModuleDiscovery;
+use Packman\Modules\Internal\Support\ModulesOptions;
 
 uses()->group('pg');
 
 it('discovers CRM composer metadata and manages its schema through the standard lifecycle', function (): void {
-    config(['database.default' => 'pgsql', 'corex.modules.connection' => 'pgsql']);
+    config(['database.default' => 'pgsql', 'modules.connection' => 'pgsql']);
     app()->forgetInstance(ModulesOptions::class);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     AccountFixture::migrate();
     expect(Schema::hasTable('crm_companies'))->toBeFalse();
-    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], DB::getDefaultConnection());
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant', 'axiomasoft/packman-modules:tenant'], DB::getDefaultConnection());
 
     $consumer = database_path('consumer');
     mkdir($consumer.'/vendor/composer', 0700, true);
@@ -40,8 +40,8 @@ it('discovers CRM composer metadata and manages its schema through the standard 
     $this->app->forgetInstance(ModuleDiscovery::class);
     $discovered = $this->app->make(ModuleDiscovery::class)->discover();
     expect($discovered)->toHaveCount(1)->and($discovered[0]->composerName)->toBe('flex/crm')
-        ->and($metadata['extra']['corex']['module'])->toBe(CrmModule::class);
-    $this->artisan('corex:modules:compile')->assertSuccessful();
+        ->and($metadata['extra']['packman']['module'])->toBe(CrmModule::class);
+    $this->artisan('modules:compile')->assertSuccessful();
     $this->app->forgetInstance(ModuleRegistry::class);
     $this->app->forgetInstance(ModuleLifecycle::class);
     $lifecycle = resolve(ModuleLifecycle::class);

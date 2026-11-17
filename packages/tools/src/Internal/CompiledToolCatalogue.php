@@ -6,7 +6,6 @@ namespace CoreX\Tools\Internal;
 
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Invocation\Contracts\RequestContext;
-use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Tools\Contracts\ToolCatalogue;
@@ -14,6 +13,7 @@ use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCatalogueView;
 use CoreX\Tools\Data\ToolDescriptor;
 use Override;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 /** Fresh current-policy catalogue projection over the compiled API slice. */
 final readonly class CompiledToolCatalogue implements ToolCatalogue

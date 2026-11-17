@@ -13,11 +13,11 @@ use Override;
 
 /**
  * Fired by {@see CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle::drop()} once the account's
- * physical database has been dropped (B-11 §5.1/§7.3, D13/AC-7) — the
+ * physical owner has confirmed deletion — the
  * `AccountLifecycle::purge()` caller does the `root_accounts` soft-delete
  * and `root_domains` cleanup, not this event's source. Built with an
  * explicit {@see TenantContext} — no tenancy is initialized at drop time
- * (central-scope `DROP DATABASE`).
+ * (the operation uses the central account identity).
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class AccountPurged extends DomainEvent

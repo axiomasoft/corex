@@ -45,7 +45,7 @@ class ReleaseCandidateTest(unittest.TestCase):
             },
             'excluded': [
                 {'path': 'products/flex-crm', 'reason': 'flex-product-consumer'},
-                {'path': 'packages/transfer', 'reason': 'tombstone'},
+                {'path': 'packages/import-export', 'reason': 'tombstone'},
             ],
         }
 

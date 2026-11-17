@@ -1,8 +1,8 @@
 <?php
 
 declare(strict_types=1);
-use CoreX\Database\Contracts\SchemaSets;
-use CoreX\Database\Enums\SchemaScope;
+use Packman\Schema\Contracts\Migration\SchemaSets;
+use Packman\Schema\Enums\SchemaScope;
 
 it('registers control plane and tenant schema on distinct scopes', function (): void {
     $sets = resolve(SchemaSets::class);

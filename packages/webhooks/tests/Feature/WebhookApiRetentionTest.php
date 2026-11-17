@@ -11,18 +11,14 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\CoreServiceProvider;
 use CoreX\Data\Data\DataScope;
-use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Database\Contracts\SchemaSets;
-use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Enums\MessageClass;
 use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Testing\MessagingFixtures;
-use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
+use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Operations\Pagination\Contracts\CursorKeyring;
 use CoreX\Operations\Pagination\Internal\SignedCursorCodec;
 use CoreX\Operations\Testing\ContextFixture;
@@ -44,6 +40,10 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use Orchestra\Testbench\TestCase;
+use Packman\Modules\ModulesServiceProvider;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use Packman\Schema\Contracts\Migration\SchemaSets;
+use Packman\Schema\Testing\MigratesSchemaSets;
 use PHPUnit\Framework\Attributes\Group;
 
 final class WebhookApiRetentionTest extends TestCase
@@ -61,7 +61,7 @@ final class WebhookApiRetentionTest extends TestCase
 
     protected function getPackageProviders($app): array
     {
-        return [CoreServiceProvider::class, ModulesServiceProvider::class, ApiServiceProvider::class, WebhooksServiceProvider::class];
+        return [CoreServiceProvider::class, ModulesServiceProvider::class, OperationsServiceProvider::class, WebhooksServiceProvider::class];
     }
 
     private const string OldEvent = '11111111-1111-4111-8111-111111111111';
@@ -397,10 +397,10 @@ final class WebhookApiRetentionTest extends TestCase
 
     private function migrate(string $directory): void
     {
-        $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(ApiSchemaConnections::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
-        $this->migrateSchemaSets(["axiomasoft/corex-webhooks:{$directory}"], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(["axiomasoft/corex-webhooks:{$directory}"], resolve(ApiSchemaConnections::class)->tenant()->getName());
     }
 
     private function configure(string $name, string $driver, string $database): void
@@ -422,7 +422,7 @@ final class WebhookApiRetentionTest extends TestCase
         string $tenantDriver,
         string $tenantDatabase,
     ): void {
-        $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(ApiSchemaConnections::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [

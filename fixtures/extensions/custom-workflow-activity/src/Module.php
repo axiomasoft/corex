@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace ThirdParty\Workflow;
 
 use CoreX\Database\Laravel\BaseModel;
-use CoreX\Modules\Data\Entity;
-use CoreX\Modules\Data\ExtensionStamp;
-use CoreX\Modules\Data\FieldDefinition;
-use CoreX\Modules\Data\InstalledPackageVersion;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Modules\Internal\Extend\Workflow;
-use CoreX\Modules\Testing\ExtensionContract;
+use Packman\Modules\Data\Compiler\ExtensionStamp;
+use Packman\Modules\Data\Compiler\InstalledPackageVersion;
+use Packman\Modules\Data\Entities\Entity;
+use Packman\Modules\Data\Entities\FieldDefinition;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Modules\Internal\Extend\Workflow;
+use Packman\Modules\Testing\ExtensionContract;
 use RuntimeException;
 
 final class MaintenanceActivity {}

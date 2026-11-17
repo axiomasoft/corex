@@ -8,7 +8,7 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\Tenancy\Account\Internal\Models\Account;
-use CoreX\Tenancy\Runtime\Internal\DatabaseTenancyManager;
+use CoreX\Tenancy\Runtime\Internal\TenantRuntimeManager;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -23,9 +23,8 @@ beforeEach(function (): void {
 
     $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
-    // A real (empty) tenant database — DatabaseTenancyBootstrapper checks
-    // existence in local/testing envs; no clone/provisioning pipeline needed
-    // for a connection-switch test.
+    // A real empty database exercises the external runtime database facility
+    // without involving the account provisioning pipeline.
     DB::statement('DROP DATABASE IF EXISTS '.TENANT_DB_TM);
     DB::statement('CREATE DATABASE '.TENANT_DB_TM);
 
@@ -84,7 +83,7 @@ it('cloud initialize()/end() switches connection+session and context() reflects 
     $account = makeAccountTM(makeClusterRowTM());
     $ref = new AccountRef(id: $account->id, slug: (string) $account->slug, status: $account->status, features: [], limits: []);
 
-    /** @var DatabaseTenancyManager $manager */
+    /** @var TenantRuntimeManager $manager */
     $manager = resolve(TenancyManager::class);
 
     expect($manager->initialized())->toBeFalse()
@@ -104,8 +103,7 @@ it('cloud initialize()/end() switches connection+session and context() reflects 
 
     expect($manager->initialized())->toBeTrue()
         ->and($reader->currentDefault())->toBe('tenant')
-        ->and(DB::connection('tenant')->getDatabaseName())->toBe(TENANT_DB_TM)
-        ->and(config('session.connection'))->toBe('tenant');
+        ->and(DB::connection('tenant')->getDatabaseName())->toBe(TENANT_DB_TM);
 
     $ctx = $manager->context();
     expect($ctx)->not->toBeNull()
@@ -137,7 +135,7 @@ it('runFor() initializes, runs the closure, and always ends — nesting restores
     $refA = new AccountRef(id: $accountA->id, slug: (string) $accountA->slug, status: $accountA->status, features: [], limits: []);
     $refB = new AccountRef(id: $accountB->id, slug: (string) $accountB->slug, status: $accountB->status, features: [], limits: []);
 
-    /** @var DatabaseTenancyManager $manager */
+    /** @var TenantRuntimeManager $manager */
     $manager = resolve(TenancyManager::class);
 
     $workspace = new WorkspaceRef(id: (string) Str::uuid(), slug: 'outer', type: 'department', path: '/outer', parentId: null);
@@ -149,12 +147,12 @@ it('runFor() initializes, runs the closure, and always ends — nesting restores
         expect($inner)->toBe($refB->id)
             // nesting restored the outer account (AC-28 б), not the central scope.
             ->and($manager->context()->account->id)->toBe($refA->id)
-            ->and($manager->context()->workspace)->toBe($workspace);
+            ->and($manager->context()->workspace)->toEqual($workspace);
 
         expect(fn () => $manager->runFor($refB, null, static fn () => throw new RuntimeException('nested failure')))
             ->toThrow(RuntimeException::class, 'nested failure');
         expect($manager->context()->account->id)->toBe($refA->id)
-            ->and($manager->context()->workspace)->toBe($workspace);
+            ->and($manager->context()->workspace)->toEqual($workspace);
     });
 
     expect($manager->initialized())->toBeFalse();
@@ -167,7 +165,7 @@ it('a callback that throws inside runFor() still ends tenancy (unconditional rev
     $account = makeAccountTM(makeClusterRowTM());
     $ref = new AccountRef(id: $account->id, slug: (string) $account->slug, status: $account->status, features: [], limits: []);
 
-    /** @var DatabaseTenancyManager $manager */
+    /** @var TenantRuntimeManager $manager */
     $manager = resolve(TenancyManager::class);
 
     expect(fn () => $manager->runFor($ref, null, function (): void {
@@ -195,5 +193,5 @@ it('TenancyManagerContextResolver::current() throws CentralContextException outs
 });
 
 it('is wired via the TenancyManager contract binding, not a hardcoded concrete (D10)', function (): void {
-    expect(resolve(TenancyManager::class))->toBeInstanceOf(DatabaseTenancyManager::class);
+    expect(resolve(TenancyManager::class))->toBeInstanceOf(TenantRuntimeManager::class);
 });

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Access\Extend\Internal;
 
 use CoreX\Access\Contracts\RoleMatrixCompiler;
-use CoreX\Modules\Contracts\EntityRegistry;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Events\ModuleDisabled;
-use CoreX\Modules\Events\ModuleEnabled;
+use Packman\Modules\Contracts\Entities\EntityRegistry;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Events\Lifecycle\ModuleDisabled;
+use Packman\Modules\Events\Lifecycle\ModuleEnabled;
 
 /**
  * Ties `aut_role_matrix` compilation to module lifecycle (AC-27, D112/D113):

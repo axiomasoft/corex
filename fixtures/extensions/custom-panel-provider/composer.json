@@ -4,10 +4,10 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "php": "^8.3",
-        "axiomasoft/corex": "^1.0",
-        "axiomasoft/corex": "^1.0",
-        "axiomasoft/corex-panels": "^1.0"
+        "php": "^8.4",
+        "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/packman-modules": "^0.1@dev",
+        "axiomasoft/packman-panels": "^0.1@dev"
     },
     "autoload": {
         "psr-4": {

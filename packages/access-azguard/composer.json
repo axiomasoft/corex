@@ -1,17 +1,18 @@
 {
     "name": "axiomasoft/corex-access-azguard",
-    "description": "Optional AzGuard integration for the CoreX Access permission matrix.",
+    "description": "CoreX authorization and query visibility adapter for AzGuard 2.",
     "type": "library",
     "license": "MIT",
     "require": {
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
         "axiomasoft/corex-access": "^1.0@dev",
-        "axioma-studio/azguard-core": "^0.3",
         "illuminate/contracts": "^13.0",
         "illuminate/database": "^13.0",
         "illuminate/support": "^13.0",
-        "psr/clock": "^1.0"
+        "axiomasoft/azguard": "^2.0@dev",
+        "axiomasoft/packman": "^0.1@dev",
+        "axiomasoft/packman-modules": "^0.1@dev"
     },
     "require-dev": {
         "larastan/larastan": "^3.12",
@@ -34,9 +35,9 @@
     },
     "extra": {
         "corex": {
-            "schema-version": 1,
             "package-type": "integration",
-            "stability": "unreleased"
+            "stability": "unreleased",
+            "schema-version": 1
         },
         "laravel": {
             "providers": [
@@ -48,41 +49,6 @@
         }
     },
     "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "axioma-studio/azguard-core",
-                "version": "0.3.0",
-                "source": {
-                    "type": "git",
-                    "url": "https://github.com/axiomasoft/azguard-private.git",
-                    "reference": "253cbf4cce0226545cd96ca8c6bcbefe329b1403"
-                },
-                "require": {
-                    "php": "^8.3",
-                    "illuminate/console": "^11.0|^12.0|^13.0",
-                    "illuminate/contracts": "^11.0|^12.0|^13.0",
-                    "illuminate/database": "^11.0|^12.0|^13.0",
-                    "illuminate/filesystem": "^11.0|^12.0|^13.0",
-                    "illuminate/http": "^11.0|^12.0|^13.0",
-                    "illuminate/queue": "^11.0|^12.0|^13.0",
-                    "illuminate/routing": "^11.0|^12.0|^13.0",
-                    "illuminate/support": "^11.0|^12.0|^13.0"
-                },
-                "autoload": {
-                    "psr-4": {
-                        "AzGuard\\": "packages/core/src/"
-                    }
-                },
-                "extra": {
-                    "laravel": {
-                        "providers": [
-                            "AzGuard\\AzGuardServiceProvider"
-                        ]
-                    }
-                }
-            }
-        },
         {
             "type": "path",
             "url": "../core"

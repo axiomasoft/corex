@@ -8,8 +8,8 @@ use CoreX\Media\Data\ConversionInput;
 use CoreX\Media\Data\ConversionOutput;
 use CoreX\Media\Data\ConversionProfile;
 use CoreX\Media\Data\MediaConversionRef;
+use CoreX\Media\Exceptions\MediaOperationConflict;
 use CoreX\Media\Internal\Support\MediaOptions;
-use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Database\ConnectionInterface;
 use Psr\Clock\ClockInterface;
 use Throwable;
@@ -18,7 +18,7 @@ final readonly class ConversionCoordinator
 {
     public function __construct(
         private ConnectionInterface $connection,
-        private TenantStorage $storage,
+        private MediaBlobs $blobs,
         private ConversionProfiles $profiles,
         private MediaOperationStore $operations,
         private MediaOptions $options,
@@ -27,6 +27,7 @@ final readonly class ConversionCoordinator
 
     public function request(string $fileId, string $profileKey): ?MediaConversionRef
     {
+        $this->blobs->assertConnection($this->connection);
         $driver = $this->profiles->driver($profileKey);
 
         if ($driver === null) {
@@ -49,6 +50,12 @@ final readonly class ConversionCoordinator
             ])->lockForUpdate()->first();
 
             if ($conversion !== null) {
+                if ($conversion->state === 'superseded') {
+                    // A deployment rollback may reactivate a previously retired digest.
+                    $this->connection->table('med_conversions')->where('id', $conversion->id)->update(['state' => 'pending', 'updated_at' => $this->clock->now()]);
+                    $this->operations->enqueueConversion(fileId: $fileId, profileKey: $profile->key, profileDigest: $digest, sourceVersion: Value::integer($file->version));
+                }
+
                 return $conversion->state === 'ready' ? $this->reference($conversion) : null;
             }
 
@@ -67,21 +74,41 @@ final readonly class ConversionCoordinator
         });
     }
 
+    public function ready(string $fileId, string $profileKey): ?object
+    {
+        $this->blobs->assertConnection($this->connection);
+        $driver = $this->profiles->driver($profileKey);
+
+        if ($driver === null) {
+            return null;
+        }
+        $file = $this->connection->table('med_files')->where('id', $fileId)->where('account_id', $this->blobs->accountId())->where('state', 'ready')->first();
+
+        if ($file === null) {
+            return null;
+        }
+
+        return $this->connection->table('med_conversions')->where('file_id', $fileId)
+            ->where('profile_key', $profileKey)->where('profile_digest', $this->profiles->digest($driver))
+            ->where('source_version', $file->version)->where('state', 'ready')->first();
+    }
+
     public function process(string $fileId, string $profileKey): void
     {
+        $this->blobs->assertConnection($this->connection);
         $driver = $this->profiles->driver($profileKey);
 
         if ($driver === null) {
             return;
         }
-        $claim = $this->operations->claimConversion(fileId: $fileId, profileKey: $profileKey);
+        $claim = $this->operations->claimConversion(fileId: $fileId, profileKey: $profileKey, profileDigest: $this->profiles->digest($driver));
 
         if ($claim === null) {
             return;
         }
 
         try {
-            $stream = $this->storage->disk()->readStream($claim->sourceKey);
+            $stream = $this->blobs->read($claim->sourceBlobId);
 
             if (! is_resource($stream)) {
                 throw new MediaOperationConflict('The conversion source could not be opened.');
@@ -99,26 +126,7 @@ final readonly class ConversionCoordinator
 
             $output = $driver->convert(new ConversionInput(sourceBytes: $sourceBytes, sourceMimeType: $claim->sourceMimeType, profile: $driver->profile()));
             $this->assertOutputIsBounded(output: $output, profile: $driver->profile());
-            $stream = fopen('php://temp', 'w+b');
-
-            if ($stream === false) {
-                throw new MediaOperationConflict('The conversion output stream could not be opened.');
-            }
-
-            try {
-                fwrite($stream, $output->bytes);
-                rewind($stream);
-
-                if (! $this->storage->disk()->writeStream($claim->attemptObjectKey, $stream, ['visibility' => 'private'])) {
-                    throw new MediaOperationConflict('The conversion output could not be stored.');
-                }
-            } finally {
-                fclose($stream);
-            }
-
-            if (! $this->operations->completeConversion(claim: $claim, mimeType: $output->mimeType, sizeBytes: strlen($output->bytes), width: $output->width, height: $output->height)) {
-                $this->storage->disk()->delete($claim->attemptObjectKey);
-            }
+            $this->operations->completeConversion(claim: $claim, bytes: $output->bytes, mimeType: $output->mimeType, sizeBytes: strlen($output->bytes), width: $output->width, height: $output->height);
         } catch (Throwable $exception) {
             $this->operations->markConversionUnknown($claim);
 

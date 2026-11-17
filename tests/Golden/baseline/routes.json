@@ -48,7 +48,7 @@
         "uri": "api/v1/bulk-operations/{id}/result"
     },
     {
-        "action": "CoreX\\Webhooks\\Laravel\\WebhookRouteRegistrar@forward",
+        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
         "methods": [
             "GET"
         ],
@@ -56,7 +56,7 @@
         "uri": "api/v1/webhook-deliveries"
     },
     {
-        "action": "CoreX\\Webhooks\\Laravel\\WebhookRouteRegistrar@forward",
+        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
         "methods": [
             "POST"
         ],
@@ -64,7 +64,7 @@
         "uri": "api/v1/webhook-deliveries/replay"
     },
     {
-        "action": "CoreX\\Webhooks\\Laravel\\WebhookRouteRegistrar@forward",
+        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
         "methods": [
             "GET"
         ],
@@ -72,7 +72,7 @@
         "uri": "api/v1/webhook-deliveries/{id}"
     },
     {
-        "action": "CoreX\\Webhooks\\Laravel\\WebhookRouteRegistrar@forward",
+        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
         "methods": [
             "GET"
         ],
@@ -80,7 +80,7 @@
         "uri": "api/v1/webhook-deliveries/{id}/attempts"
     },
     {
-        "action": "CoreX\\Webhooks\\Laravel\\WebhookRouteRegistrar@forward",
+        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
         "methods": [
             "POST"
         ],
@@ -88,7 +88,7 @@
         "uri": "api/v1/webhook-deliveries/{id}/replay"
     },
     {
-        "action": "CoreX\\Webhooks\\Laravel\\WebhookRouteRegistrar@forward",
+        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
         "methods": [
             "GET"
         ],
@@ -96,7 +96,7 @@
         "uri": "api/v1/webhook-subscriptions"
     },
     {
-        "action": "CoreX\\Webhooks\\Laravel\\WebhookRouteRegistrar@forward",
+        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
         "methods": [
             "POST"
         ],
@@ -104,7 +104,7 @@
         "uri": "api/v1/webhook-subscriptions"
     },
     {
-        "action": "CoreX\\Webhooks\\Laravel\\WebhookRouteRegistrar@forward",
+        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
         "methods": [
             "PATCH"
         ],
@@ -112,7 +112,7 @@
         "uri": "api/v1/webhook-subscriptions/{id}"
     },
     {
-        "action": "CoreX\\Webhooks\\Laravel\\WebhookRouteRegistrar@forward",
+        "action": "CoreX\\Webhooks\\Laravel\\WebhookController@forward",
         "methods": [
             "POST"
         ],

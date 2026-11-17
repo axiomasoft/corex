@@ -6,8 +6,8 @@ namespace CoreX\Operations\Definition\Contracts;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Modules\Data\Api;
 use CoreX\Operations\Definition\Internal\ApiOperationValidator;
+use Packman\Modules\Data\Extenders\Api;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class OperationDefinitionValidator

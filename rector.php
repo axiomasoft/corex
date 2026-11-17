@@ -38,7 +38,6 @@ return RectorConfig::configure()
     ])
     ->withConfiguredRule(ServerVariableToRequestFacadeRector::class, [
         ServerVariableToRequestFacadeRector::PRESERVE_PATHS => [
-            __DIR__.'/packages/core/src/Modules/Laravel/ModulesBootRegistrar.php',
         ],
     ])
     ->withConfiguredRule(ClassPropertyAssignToConstructorPromotionRector::class, [
@@ -52,9 +51,9 @@ return RectorConfig::configure()
         'Psr\\Container\\ContainerInterface',
         'Illuminate\\Contracts\\Container\\Container',
         'Illuminate\\Container\\Container',
-        'CoreX\\Transfer\\Contracts\\TransferRunner',
-        'CoreX\\Wakeup\\WakeupServiceProvider',
-        'CoreX\\Wakeup\\Contracts\\DueWakeupSweeper',
+        'CoreX\\ImportExport\\Contracts\\TransferRunner',
+        'CoreX\\Scheduler\\WakeupServiceProvider',
+        'CoreX\\Scheduler\\Contracts\\DueWakeupSweeper',
         'Illuminate\\Database\\Eloquent\\Model',
         'Illuminate\\Http\\Request',
         'CoreX\\Context\\Contracts\\TenancyManager',
@@ -71,13 +70,13 @@ return RectorConfig::configure()
         'CoreX\\Errors\\Internal\\CompiledProblemRegistry',
         'CoreX\\Messaging\\Contracts\\MessageContractRegistry',
         'CoreX\\Messaging\\Internal\\ArrayMessageContractRegistry',
-        'CoreX\\Modules\\Contracts\\EntityRegistry',
-        'CoreX\\Modules\\Contracts\\FieldCastRegistry',
-        'CoreX\\Modules\\Contracts\\ModuleRegistry',
-        'CoreX\\Modules\\Data\\CompiledRegistry',
-        'CoreX\\Modules\\Internal\\InMemoryEntityRegistry',
-        'CoreX\\Modules\\Internal\\Registry\\CompiledModuleRegistry',
-        'CoreX\\Modules\\Testing\\ArrayEntityRegistry',
+        'Packman\\Modules\\Contracts\\Entities\\EntityRegistry',
+        'Packman\\Modules\\Contracts\\Compiler\\FieldCastRegistry',
+        'Packman\\Modules\\Contracts\\Registry\\ModuleRegistry',
+        'Packman\\Modules\\Data\\Compiler\\CompiledRegistry',
+        'Packman\\Modules\\Internal\\Entities\\InMemoryEntityRegistry',
+        'Packman\\Modules\\Internal\\Registry\\CompiledModuleRegistry',
+        'Packman\\Modules\\Testing\\ArrayEntityRegistry',
         'CoreX\\Operations\\Definition\\Contracts\\OperationRegistry',
         'CoreX\\Operations\\Definition\\Internal\\OperationRegistry',
         'CoreX\\Operations\\Errors\\Exceptions\\ApiError',
@@ -90,10 +89,10 @@ return RectorConfig::configure()
         'CoreX\\Search\\Internal\\SearchManager',
         'CoreX\\Tenancy\\Contracts\\TenantContext',
         'CoreX\\Tenancy\\Provisioning\\Internal\\Database\\TemplateClonePostgreSQLManager',
-        'CoreX\\Tenancy\\Runtime\\Internal\\DatabaseTenancyManager',
+        'CoreX\\Tenancy\\Runtime\\Internal\\TenantRuntimeManager',
         'CoreX\\Tools\\Contracts\\ToolCatalogue',
         'CoreX\\Tools\\Internal\\CompiledToolCatalogue',
-        'CoreX\\Wakeup\\Internal\\WakeupHandlerRegistry',
+        'CoreX\\Scheduler\\Internal\\WakeupHandlerRegistry',
         'CoreX\\Webhooks\\Internal\\WebhookTopicCatalogue',
     ])
     ->withImportNames(removeUnusedImports: true);

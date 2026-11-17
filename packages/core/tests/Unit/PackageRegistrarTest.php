@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Modules\Contracts\PackageRegistrar;
-use CoreX\Modules\Laravel\RegistersNothingOnBoot;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Application as FoundationApplication;
+use Packman\Foundation\Concerns\RegistersNothingOnBoot;
+use Packman\Foundation\Contracts\PackageRegistrar;
 
 it('records register and boots as a no-op', function (): void {
     $registrar = new class implements PackageRegistrar

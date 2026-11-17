@@ -287,7 +287,7 @@
     {
         "ability": "notes.read",
         "capabilities": [],
-        "contract_hash": "0d90b785107bc47573978790ea285ff01d8c232bcc47a2808a81dea63f83c286",
+        "contract_hash": "77befdf400148b55a1f37c2ce25415483197bb232b0fadcee714325fdac339e3",
         "cost": {
             "enforcement": {
                 "account": "observe",
@@ -331,7 +331,7 @@
     {
         "ability": "notes.read",
         "capabilities": [],
-        "contract_hash": "4bcb1d1a341603a3d078bfafb52ce81e86a6684ebcfabecaba3b35355aa2eaae",
+        "contract_hash": "fc6fae615496fe6f5b4bda7e29c2ce000da92bc8663ff97fc4591a6ca3f148b6",
         "cost": {
             "enforcement": {
                 "account": "observe",

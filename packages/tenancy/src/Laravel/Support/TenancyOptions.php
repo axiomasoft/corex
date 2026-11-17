@@ -9,26 +9,15 @@ use CoreX\Attributes\SpiKind;
 use CoreX\Config\Data\SecretRef;
 use CoreX\Config\Laravel\ConfigurationValidator;
 use CoreX\Tenancy\Impersonation\Enums\ImpersonationProfile;
-use CoreX\Tenancy\Runtime\Contracts\TenantBootstrapper;
-use CoreX\Tenancy\Runtime\Internal\Bootstrappers\CachePrefixBootstrapper;
-use CoreX\Tenancy\Runtime\Internal\Bootstrappers\ConnectionBootstrapper;
-use CoreX\Tenancy\Runtime\Internal\Bootstrappers\SessionConnectionBootstrapper;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class TenancyOptions
 {
     /**
-     * @param  list<class-string<TenantBootstrapper>>  $bootstrappers
-     * @param  list<string>  $cacheStores
      * @param  list<string>  $oidcAllowedAlgs
-     * @param  array<string, string>  $templateIntegrityTrustedKeys
-     * @param  array<string, array<string, mixed>>  $templateIntegrityManifests
      */
     public function __construct(
         public string $centralConnection,
-        public array $bootstrappers,
-        public string $cachePrefix,
-        public array $cacheStores,
         public string $storageDurableDriver,
         public string $storageDurableRoot,
         public string $storageEphemeralRoot,
@@ -59,8 +48,6 @@ final readonly class TenancyOptions
         public string $wakeupDriver,
         public string $wakeupRootConnection,
         public int $wakeupLeaseSeconds,
-        public array $templateIntegrityTrustedKeys,
-        public array $templateIntegrityManifests,
         public string $membershipGuard,
     ) {}
 
@@ -72,15 +59,10 @@ final readonly class TenancyOptions
         $violations = new ConfigurationValidator;
 
         $centralConnection = self::nonEmpty(violations: $violations, path: 'central_connection', value: $config['central_connection'] ?? 'pgsql');
-        $bootstrappers = self::bootstrappers(violations: $violations, value: $config['bootstrappers'] ?? null);
 
-        $cachePrefix = self::nonEmpty(violations: $violations, path: 'cache_prefix', value: $config['cache_prefix'] ?? 'tenant_%tenant%_');
-
-        if (! str_contains($cachePrefix, '%tenant%')) {
-            $violations->add(path: 'corex-tenancy.cache_prefix', message: 'must contain %tenant%');
+        if (($config['bootstrappers'] ?? []) !== []) {
+            $violations->add(path: 'corex-tenancy.bootstrappers', message: 'is no longer supported; compose facilities through axiomasoft/tenant-laravel');
         }
-
-        $cacheStores = self::cacheStores(violations: $violations, value: $config['cache_stores'] ?? []);
 
         $storage = is_array($config['storage'] ?? null) ? $config['storage'] : [];
         $storageDurableDriver = self::nonEmpty(
@@ -120,12 +102,6 @@ final readonly class TenancyOptions
         $hostCacheStore = self::nullableNonEmptyString(
             $hostIdentification['cache_store'] ?? null,
         );
-
-        // Host lookups run before any account context and must stay central: the host store is
-        // never one of the per-account (prefixed) stores.
-        if ($hostCacheStore !== null && in_array($hostCacheStore, $cacheStores, true)) {
-            $violations->add(path: 'corex-tenancy.host_identification.cache_store', message: 'must not be one of cache_stores');
-        }
 
         $domainTrust = is_array($config['domain_trust'] ?? null) ? $config['domain_trust'] : [];
         $domainTrustEnabled = self::bool(violations: $violations, path: 'domain_trust.enabled', value: $domainTrust['enabled'] ?? false);
@@ -234,12 +210,6 @@ final readonly class TenancyOptions
 
         $wakeupLeaseSeconds = self::positiveInt(violations: $violations, path: 'wakeup.lease_seconds', value: $wakeup['lease_seconds'] ?? 60);
 
-        $templateIntegrity = is_array($config['template_integrity'] ?? null)
-            ? $config['template_integrity']
-            : [];
-        $templateIntegrityTrustedKeys = self::stringMap($templateIntegrity['trusted_keys'] ?? []);
-        $templateIntegrityManifests = self::arrayMap($templateIntegrity['manifests'] ?? []);
-
         $membershipGuardConfig = is_array($config['membership_guard'] ?? null)
             ? $config['membership_guard']
             : [];
@@ -253,9 +223,6 @@ final readonly class TenancyOptions
 
         return new self(
             centralConnection: $centralConnection,
-            bootstrappers: $bootstrappers,
-            cachePrefix: $cachePrefix,
-            cacheStores: $cacheStores,
             storageDurableDriver: $storageDurableDriver,
             storageDurableRoot: $storageDurableRoot,
             storageEphemeralRoot: $storageEphemeralRoot,
@@ -286,8 +253,6 @@ final readonly class TenancyOptions
             wakeupDriver: $wakeupDriver,
             wakeupRootConnection: $wakeupRootConnection,
             wakeupLeaseSeconds: $wakeupLeaseSeconds,
-            templateIntegrityTrustedKeys: $templateIntegrityTrustedKeys,
-            templateIntegrityManifests: $templateIntegrityManifests,
             membershipGuard: $membershipGuard,
         );
     }
@@ -314,96 +279,6 @@ final readonly class TenancyOptions
             exportRoute: $exportRoute,
             readOnlyMethods: $normalized,
         );
-    }
-
-    /**
-     * Closed order: the stock bootstrappers keep their relative order with the connection one
-     * first and exactly once; host-supplied bootstrappers may follow, never precede.
-     *
-     * @return list<class-string<TenantBootstrapper>>
-     */
-    private static function bootstrappers(ConfigurationValidator $violations, mixed $value): array
-    {
-        $value ??= [
-            ConnectionBootstrapper::class,
-            CachePrefixBootstrapper::class,
-            SessionConnectionBootstrapper::class,
-        ];
-
-        if (! is_array($value) || $value === []) {
-            $violations->add(path: 'corex-tenancy.bootstrappers', message: 'must be a non-empty list of class names');
-
-            return [];
-        }
-
-        $stock = [ConnectionBootstrapper::class, CachePrefixBootstrapper::class, SessionConnectionBootstrapper::class];
-        $resolved = [];
-        $lastStock = -1;
-        $hostSeen = false;
-
-        foreach (array_values($value) as $index => $class) {
-            $path = 'corex-tenancy.bootstrappers.'.$index;
-
-            if (! is_string($class) || ! class_exists($class) || ! is_a($class, TenantBootstrapper::class, true)) {
-                $violations->add(path: $path, message: 'must be an existing class implementing '.TenantBootstrapper::class);
-
-                continue;
-            }
-
-            if (in_array($class, $resolved, true)) {
-                $violations->add(path: $path, message: 'must not be listed twice');
-
-                continue;
-            }
-
-            $position = array_search($class, $stock, true);
-
-            if ($position === false) {
-                $hostSeen = true;
-            } elseif ($hostSeen || $position < $lastStock) {
-                $violations->add(path: $path, message: 'stock bootstrappers must keep their order and precede host bootstrappers');
-            } else {
-                $lastStock = $position;
-            }
-
-            $resolved[] = $class;
-        }
-
-        if (($resolved[0] ?? null) !== ConnectionBootstrapper::class) {
-            $violations->add(path: 'corex-tenancy.bootstrappers.0', message: ConnectionBootstrapper::class.' must come first');
-        }
-
-        return $resolved;
-    }
-
-    /** @return list<string> */
-    private static function cacheStores(ConfigurationValidator $violations, mixed $value): array
-    {
-        if (! is_array($value)) {
-            $violations->add(path: 'corex-tenancy.cache_stores', message: 'must be a list of cache store names');
-
-            return [];
-        }
-
-        $stores = [];
-
-        foreach (array_values($value) as $index => $store) {
-            if (! is_string($store) || $store === '') {
-                $violations->add(path: 'corex-tenancy.cache_stores.'.$index, message: 'must be a non-empty store name');
-
-                continue;
-            }
-
-            if (in_array($store, $stores, true)) {
-                $violations->add(path: 'corex-tenancy.cache_stores.'.$index, message: 'must be unique');
-
-                continue;
-            }
-
-            $stores[] = $store;
-        }
-
-        return $stores;
     }
 
     private static function optionalSecret(ConfigurationValidator $violations, string $path, mixed $value): ?SecretRef
@@ -433,44 +308,6 @@ final readonly class TenancyOptions
         foreach ($value as $item) {
             if (is_string($item) && $item !== '') {
                 $resolved[] = $item;
-            }
-        }
-
-        return $resolved;
-    }
-
-    /** @return array<string, string> */
-    private static function stringMap(mixed $value): array
-    {
-        if (! is_array($value)) {
-            return [];
-        }
-
-        $resolved = [];
-
-        foreach ($value as $key => $item) {
-            if (is_string($key) && $key !== '' && is_string($item) && $item !== '') {
-                $resolved[$key] = $item;
-            }
-        }
-
-        return $resolved;
-    }
-
-    /**
-     * @return array<string, array<string, mixed>>
-     */
-    private static function arrayMap(mixed $value): array
-    {
-        if (! is_array($value)) {
-            return [];
-        }
-
-        $resolved = [];
-
-        foreach ($value as $key => $item) {
-            if (is_string($key) && $key !== '' && is_array($item)) {
-                $resolved[$key] = array_filter($item, is_string(...), ARRAY_FILTER_USE_KEY);
             }
         }
 

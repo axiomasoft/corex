@@ -8,8 +8,6 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Messaging\Data\MessageContract;
@@ -22,7 +20,7 @@ use CoreX\Operations\Definition\Enums\OperationMode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Invocation\Internal\OperationDispatcher;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Pagination\Contracts\CursorKeyring;
 use CoreX\Operations\Pagination\Internal\SignedCursorCodec;
 use CoreX\Operations\Testing\ContextFixture;
@@ -32,7 +30,8 @@ use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Data\WebhookTopic;
 use CoreX\Webhooks\Internal\WebhookManagement;
 use CoreX\Webhooks\Internal\WebhookTopicCatalogue;
-use CoreX\Webhooks\Laravel\WebhookRouteRegistrar;
+use CoreX\Webhooks\Laravel\WebhookController;
+use CoreX\Webhooks\Laravel\WebhookHttpRegistrar;
 use CoreX\Webhooks\Tests\TestCase;
 use DateInterval;
 use DateTimeImmutable;
@@ -41,6 +40,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route as RouteFacade;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use Packman\Schema\Contracts\Migration\SchemaSets;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -62,7 +63,7 @@ final class WebhookManagementTest extends TestCase
         $this->selectSchema();
         $this->connection = DB::connection('api_tenant');
 
-        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-26T15:00:00.000000+00:00'));
         $this->contexts = new ContextFixture;
         $this->contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
@@ -141,7 +142,7 @@ final class WebhookManagementTest extends TestCase
 
     public function test_literal_routes_forward_every_operation_through_the_shared_dispatcher(): void
     {
-        WebhookRouteRegistrar::register($this->app);
+        (new WebhookHttpRegistrar)->boot($this->app);
         $routes = array_values(array_filter(
             RouteFacade::getRoutes()->getRoutes(),
             static fn (Route $route): bool => str_starts_with((string) $route->getName(), 'corex.api.webhooks.'),
@@ -154,7 +155,7 @@ final class WebhookManagementTest extends TestCase
         self::assertCount(9, $routes);
         self::assertInstanceOf(Route::class, $replay);
         self::assertSame(
-            WebhookRouteRegistrar::class.'@forward',
+            WebhookController::class.'@forward',
             $replay->getAction('uses'),
         );
         self::assertSame(['POST'], $replay->methods());
@@ -184,7 +185,7 @@ final class WebhookManagementTest extends TestCase
             idempotency: IdempotencyRequirement::Required,
             effect: 'tenant_transactional',
         );
-        WebhookRouteRegistrar::assertOperationContract($replay);
+        WebhookController::assertOperationContract($replay);
 
         foreach ([
             $this->operation('POST', '/webhook-deliveries/{id}/replay', 'webhooks.manage', ['webhooks.manage'], IdempotencyRequirement::Required, 'tenant_transactional'),
@@ -192,7 +193,7 @@ final class WebhookManagementTest extends TestCase
             $this->operation('POST', '/webhook-deliveries/{id}/replay', 'webhooks.replay', ['webhooks.replay'], IdempotencyRequirement::Required, null),
         ] as $invalid) {
             try {
-                WebhookRouteRegistrar::assertOperationContract($invalid);
+                WebhookController::assertOperationContract($invalid);
                 self::fail('Unsafe webhook operation metadata was accepted.');
             } catch (ApiError $error) {
                 self::assertSame('core.internal_error', $error->errorCode);
@@ -302,7 +303,7 @@ final class WebhookManagementTest extends TestCase
 
     private function selectSchema(): void
     {
-        $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(ApiSchemaConnections::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [

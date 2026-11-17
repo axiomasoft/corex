@@ -7,8 +7,6 @@ namespace CoreX\Operations\Laravel;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Errors\Contracts\ProblemRegistry;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
 use CoreX\Operations\Errors\Internal\ErrorMapper;
@@ -19,6 +17,8 @@ use CoreX\Operations\Invocation\Contracts\OperationInvoker;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Connection;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 /** Composition of the operations package. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

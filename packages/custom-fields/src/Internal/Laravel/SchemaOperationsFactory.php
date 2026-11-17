@@ -10,10 +10,10 @@ use CoreX\CustomFields\Data\AttributeTables;
 use CoreX\CustomFields\Internal\Schema\QueuedSchemaOperations;
 use CoreX\CustomFields\Internal\UnavailableAttributes;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Modules\Contracts\EntityRegistry;
-use CoreX\Modules\Contracts\ModuleRegistry;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
+use Packman\Modules\Contracts\Entities\EntityRegistry;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 /** @internal Composition of the SchemaOperations binding. */
 final class SchemaOperationsFactory

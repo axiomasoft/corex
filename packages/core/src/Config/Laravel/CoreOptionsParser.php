@@ -25,23 +25,17 @@ use CoreX\Departments\Internal\DatabaseDepartmentRepository;
 use CoreX\Features\Contracts\FeatureFlags;
 use CoreX\Features\Internal\DatabaseFeatureFlags;
 use CoreX\Messaging\Enums\PubSubDriver;
-use CoreX\Settings\Contracts\SettingDefaultsProvider;
 use CoreX\Settings\Contracts\SettingsRepository;
 use CoreX\Settings\Internal\DatabaseSettingsRepository;
 use CoreX\Settings\Internal\NullSettingDefaultsProvider;
 use DateInterval;
+use Packman\Settings\Contracts\SettingDefaultsProviderInterface as SettingDefaultsProvider;
 use Throwable;
 
 /** Parses the host Laravel configuration and validates module bindings. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class CoreOptionsParser
 {
-    /** @deprecated Resolve `CoreOptions` from the container; it is a shared lazy singleton. */
-    public static function current(): CoreOptions
-    {
-        return resolve(CoreOptions::class);
-    }
-
     /** @param  array<array-key, mixed>  $config */
     public static function fromArray(array $config): CoreOptions
     {

@@ -6,11 +6,11 @@ namespace CoreX\Tasks;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Modules\Contracts\ModuleDefinition;
-use CoreX\Modules\Data\Entity;
-use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Tasks\Project\Internal\Models\Project;
 use CoreX\Tasks\Task\Internal\Models\Task;
+use Packman\Modules\Contracts\Definition\ModuleDefinition;
+use Packman\Modules\Data\Entities\Entity;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class TasksModule extends ModuleDefinition

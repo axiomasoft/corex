@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Testing\CoreXTestCase;
 use CoreX\Tests\Support\SourceScanner;
+use Illuminate\Filesystem\Filesystem;
 
 // P16.10 — D33/D94 closed. CoreX\Testing is dev-autoload only.
 // Production src must not import the retired harness namespaces.
@@ -37,6 +38,25 @@ test('CoreX\\Testing is dev-autoload only and production src has no harness file
 
 test('package tests do not import another package Testing namespace', function (): void {
     expect(testingCrossPackageImportOffenders(SourceScanner::repoRoot()))->toBe([]);
+});
+
+test('cross-package test imports are checked only in owned test roots', function (): void {
+    $root = sys_get_temp_dir().'/corex-testing-ownership-'.bin2hex(random_bytes(8));
+    $files = new Filesystem;
+    $owned = 'packages/media/tests/Feature/Leak.php';
+    $installed = 'packages/media/vendor/axiomasoft/corex/tests/Feature/Valid.php';
+
+    try {
+        foreach ([$owned, $installed] as $path) {
+            $files->ensureDirectoryExists(dirname($root.'/'.$path));
+            $files->put($root.'/'.$path, "<?php\nuse CoreX\\Testing\\CoreXTestCase;\n");
+        }
+
+        expect(testingCrossPackageImportOffenders($root))
+            ->toBe([$owned.' imports CoreX\\Testing\\CoreXTestCase']);
+    } finally {
+        $files->deleteDirectory($root);
+    }
 });
 
 test('R-T1 planting in ActorType names the file', function (): void {
@@ -132,7 +152,7 @@ function testingCrossPackageImportOffenders(string $root): array
 {
     $offenders = [];
     $roots = [
-        $root.'/packages',
+        ...glob($root.'/packages/*/tests', GLOB_ONLYDIR) ?: [],
         $root.'/tests',
     ];
 

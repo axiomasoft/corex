@@ -63,7 +63,7 @@ Money             → Foundation, TenancyContracts
 
 | Файлы | Зона |
 |:--|:--|
-| `DataScopeAuthorizer.php`, `DataScopeCodec.php`, `DescribesError.php`, `DurablePayload.php`, `ModuleRegistrar.php`, `OperationObserver.php` | Foundation |
+| `DataScopeAuthorizer.php`, `DataScopeCodec.php`, `DescribesError.php`, `DurablePayload.php`, `OperationObserver.php` | Foundation |
 | `DepartmentRepository.php` | Departments |
 | `FeatureFlagDefinition.php`, `FeatureFlags.php` | Features |
 | `IdentityPasswordRehasher.php` | TenancyContracts |
@@ -248,3 +248,10 @@ P15.10 применил D88. Текущие имена:
 Исполняемые R-Z0/R-Z1/R-Z2 добавляет P6.2, R-L3 — P6.3, R-T1 — P6.5.
 Нормативные посадки должны краснеть с именем файла и символа. Основная точка запуска:
 `composer test` через `tests/Arch/CoreZoneTest.php` и `TestingAutoloadTest.php`.
+
+## Packman composition
+
+`Foundation/Internal/PackmanActorResolver.php`, `PackmanContextResolver.php`,
+`PackmanFeatureFlags.php` и `Foundation/Laravel/PackmanRegistrar.php` относятся к
+Composition: они связывают внешний Packman с доменными сервисами CoreX.
+Прежние `Modules/*` принадлежат Packman и больше не входят во внутреннюю карту CoreX.

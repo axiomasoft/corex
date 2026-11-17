@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Modules\Data\CompiledRegistry;
-use CoreX\Modules\Data\EntityDefinition;
-use CoreX\Modules\Enums\Capability;
 use CoreX\Tests\Stubs\Widget;
+use Packman\Modules\Data\Compiler\CompiledRegistry;
+use Packman\Modules\Data\Entities\EntityDefinition;
+use Packman\Modules\Enums\Entities\Capability;
 
 // P2.9/A9 — introducing Ownable/WorkspaceScoped must not shift the existing
 // 7 cases' values or ordinal position; a mistake here would silently rewrite

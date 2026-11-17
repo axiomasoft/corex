@@ -6,8 +6,6 @@ namespace CoreX\Tenancy\Laravel;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Modules\Contracts\PackageRegistrar;
-use CoreX\Modules\Laravel\RegistersNothingOnBoot;
 use CoreX\Tenancy\Contracts\DomainChallengeStore;
 use CoreX\Tenancy\Contracts\DomainOwnershipProofVerifier;
 use CoreX\Tenancy\Contracts\DomainTrustAuthorizer;
@@ -20,6 +18,8 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionResolverInterface;
 use Override;
+use Packman\Foundation\Concerns\RegistersNothingOnBoot;
+use Packman\Foundation\Contracts\PackageRegistrar;
 use Psr\Clock\ClockInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]

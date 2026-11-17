@@ -14,9 +14,6 @@ use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\CoreServiceProvider;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
-use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Database\Contracts\SchemaSets;
-use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
@@ -24,10 +21,8 @@ use CoreX\Messaging\Enums\MessageClass;
 use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Internal\JsonCloudEventCodec;
 use CoreX\Messaging\Testing\MessagingFixtures;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Operations\ApiServiceProvider;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
+use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\LoadContourModule;
@@ -55,6 +50,11 @@ use DateTimeImmutable;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Orchestra\Testbench\TestCase;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\ModulesServiceProvider;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use Packman\Schema\Contracts\Migration\SchemaSets;
+use Packman\Schema\Testing\MigratesSchemaSets;
 use PHPUnit\Framework\Attributes\Group;
 
 final class WebhookLoadContourIntegrationTest extends TestCase
@@ -80,7 +80,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
 
     protected function getPackageProviders($app): array
     {
-        return [CoreServiceProvider::class, ModulesServiceProvider::class, ApiServiceProvider::class, WebhooksServiceProvider::class];
+        return [CoreServiceProvider::class, ModulesServiceProvider::class, OperationsServiceProvider::class, WebhooksServiceProvider::class];
     }
 
     protected function setUp(): void
@@ -128,7 +128,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
         try {
             $this->selectSchema('api_budget_stub', 'sqlite', ':memory:', 'api_p1420_tenant', 'pgsql', $database);
 
-            $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+            $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
             $connection = DB::connection('api_p1420_tenant');
             $connection->getSchemaBuilder()->create('sys_inbox_messages', function (Blueprint $table): void {
                 $table->string('consumer', 120);
@@ -261,7 +261,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
         string $tenantDriver,
         string $tenantDatabase,
     ): void {
-        $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(ApiSchemaConnections::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [
@@ -276,7 +276,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
         $this->configureSqlite('api_tenant');
         $this->selectSchema('api_budget_stub', 'sqlite', ':memory:', 'api_tenant', 'sqlite', ':memory:');
 
-        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
         $connection = DB::connection('api_tenant');
         $account = new AccountRef('account-1', 'account', 'active', [], []);
         $contexts = new ContextFixture;

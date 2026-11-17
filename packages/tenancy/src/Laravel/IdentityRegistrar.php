@@ -8,8 +8,6 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\IdentityPasswordRehasher;
 use CoreX\Context\Contracts\TenancyManager;
-use CoreX\Modules\Contracts\PackageRegistrar;
-use CoreX\Modules\Laravel\RegistersNothingOnBoot;
 use CoreX\Tenancy\Account\Contracts\AccountRead;
 use CoreX\Tenancy\Identity\Contracts\IdentitySyncer;
 use CoreX\Tenancy\Identity\Internal\DatabaseIdentitySyncer;
@@ -18,6 +16,8 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionResolverInterface;
 use Override;
+use Packman\Foundation\Concerns\RegistersNothingOnBoot;
+use Packman\Foundation\Contracts\PackageRegistrar;
 use Psr\Clock\ClockInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]

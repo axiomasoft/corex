@@ -7,8 +7,6 @@ use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Enums\PrincipalType;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Invocation\Data\InvocationMetadata;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Definition\Data\Operation;
@@ -21,6 +19,8 @@ use Flex\Crm\Tests\Support\TestContext;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Internal\Compiler\RegistryCompiler;
 
 it('declares and dispatches company, contact and association operations through the platform boundary', function (): void {
     $compiled = resolve(RegistryCompiler::class)->compile(manifests: [(new CrmModule)->manifest()], installedPackages: []);

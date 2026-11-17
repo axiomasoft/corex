@@ -4,24 +4,19 @@ declare(strict_types=1);
 
 namespace CoreX\Media\Tests;
 
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
-use Override;
 use RuntimeException;
 
 abstract class PgTestCase extends TestCase
 {
-    /** @param Application $app */
-    #[Override]
     protected function defineEnvironment($app): void
     {
         parent::defineEnvironment($app);
-        $database = getenv('PGSQL_DATABASE') ?: 'corex_test';
+        $database = getenv('PGSQL_DATABASE') ?: '';
 
-        if (preg_match('/^[a-z0-9_]+_test$/D', $database) !== 1) {
-            throw new RuntimeException('Media PostgreSQL tests require PGSQL_DATABASE ending in _test.');
+        if (! str_ends_with($database, '_test')) {
+            throw new RuntimeException('Media PostgreSQL tests require an explicitly isolated *_test database.');
         }
-
         $app['config']->set('database.default', 'pgsql');
         $app['config']->set('database.connections.pgsql', [
             'driver' => 'pgsql',
@@ -30,18 +25,18 @@ abstract class PgTestCase extends TestCase
             'database' => $database,
             'username' => getenv('PGSQL_USERNAME') ?: 'corex',
             'password' => getenv('PGSQL_PASSWORD') ?: 'corex',
-            'charset' => 'utf8',
-            'prefix' => '',
-            'schema' => 'public',
+            'charset' => 'utf8', 'prefix' => '', 'schema' => 'public', 'timezone' => 'UTC',
         ]);
+        $app['config']->set('vaulter.database.connection', 'pgsql');
     }
 
-    #[Override]
     protected function defineDatabaseMigrations(): void
     {
+        if (! $this->app->environment('testing') || ! str_ends_with(DB::connection()->getDatabaseName(), '_test')) {
+            throw new RuntimeException('Refusing media migrations outside an isolated testing database.');
+        }
         DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
         DB::statement('CREATE SCHEMA public');
-
         parent::defineDatabaseMigrations();
     }
 }

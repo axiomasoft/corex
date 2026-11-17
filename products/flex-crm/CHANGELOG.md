@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — Packman runtime
+
+- Breaking: module declarations and schema registrations use Packman contracts directly; module lifecycle and schema execution are owned by Packman.
+
 ## Unreleased — kernel invocation contract (audit 2026-10-08 P-02)
 
 - CRM operation handlers implement `CoreX\Invocation\Contracts\OperationHandler` from the kernel. `axiomasoft/corex-operations` moves from `require` to `require-dev` + `suggest`: install it in the host to serve the CRM API; the product itself no longer depends on the operations runtime (enforced by package-graph-gate).
@@ -21,7 +25,7 @@
 
 ## [Unreleased]
 
-- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `packman:schema:migrate`; migration publishing is removed.
 
 ### Changed
 

@@ -2,11 +2,6 @@
     "domain_events": {
         "CoreX\\Departments\\Events\\DepartmentMoved": "core.department.moved",
         "CoreX\\Features\\Events\\FeatureFlagToggled": "core.feature.toggled",
-        "CoreX\\Modules\\Events\\ModuleArchived": "mod.module.archived",
-        "CoreX\\Modules\\Events\\ModuleDisabled": "mod.module.disabled",
-        "CoreX\\Modules\\Events\\ModuleEnabled": "mod.module.enabled",
-        "CoreX\\Modules\\Events\\ModulePurged": "mod.module.purged",
-        "CoreX\\Modules\\Events\\ModuleUpgraded": "mod.module.upgraded",
         "CoreX\\Settings\\Events\\SettingChanged": "core.setting.changed",
         "CoreX\\Tenancy\\Account\\Events\\AccountPurged": "account.purged",
         "CoreX\\Tenancy\\Account\\Events\\AccountSuspended": "account.suspended",

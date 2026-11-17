@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__.'/../Support/SchedulingDigestFixtures.php';
-require_once __DIR__.'/../../../wakeup/tests/Support/PackageBridge.php';
+require_once __DIR__.'/../../../scheduler/tests/Support/PackageBridge.php';
 
 use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Notifications\Digest\Internal\DigestWakeupAdapter;
@@ -23,7 +23,7 @@ it('schedules an enabled digest exactly once', function (): void {
 });
 
 it('rejects a duplicate wakeup handler kind when the host config repeats the tagged kind', function (): void {
-    app()['config']->set('corex-wakeup.handlers', [
+    app()['config']->set('corex-scheduler.handlers', [
         'notification.digest.v1' => [
             'handler' => DigestWakeupAdapter::class,
             'version' => 'notification-digest/1',
@@ -33,5 +33,5 @@ it('rejects a duplicate wakeup handler kind when the host config repeats the tag
     app()->forgetInstance(wakeup_bridge_options());
 
     expect(fn () => wakeup_bridge_register())
-        ->toThrow(InvalidConfiguration::class, 'corex-wakeup.handlers.notification.digest.v1: duplicate wakeup handler kind');
+        ->toThrow(InvalidConfiguration::class, 'corex-scheduler.handlers.notification.digest.v1: duplicate wakeup handler kind');
 });

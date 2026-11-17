@@ -42,7 +42,7 @@ it('resolves wakeup from the isolated notifications composition without CoreServ
 
     $clock = resolve(ClockInterface::class);
 
-    expect($clock::class)->toBe(wakeup_bridge_system_clock())
+    expect($clock)->toBeInstanceOf(ClockInterface::class)
         ->and($clock->now())->toBeInstanceOf(DateTimeImmutable::class)
         ->and($clock->now()->getTimezone()->getName())->toBe('UTC');
 

@@ -7,7 +7,6 @@ namespace CoreX\Tenancy\Laravel;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenancyManager;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Scheduling\Contracts\DueWakeupSweeper;
 use CoreX\Scheduling\Contracts\WakeupScheduleHint;
 use CoreX\Tenancy\Integration\Internal\Wakeup\RootRegistryWakeupHint;
@@ -18,6 +17,7 @@ use Illuminate\Console\Application as Artisan;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionResolverInterface;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 

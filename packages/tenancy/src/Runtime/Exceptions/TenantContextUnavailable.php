@@ -23,11 +23,6 @@ final class TenantContextUnavailable extends RuntimeException implements Describ
         return new self("Account [{$accountId}] does not exist — cannot enter its tenant context.");
     }
 
-    public static function missingDatabase(string $accountId): self
-    {
-        return new self("Account [{$accountId}] has no tenant database yet.");
-    }
-
     public static function missingWorkspace(string $workspaceId): self
     {
         return new self("Workspace [{$workspaceId}] does not exist in the current account.");
@@ -41,11 +36,6 @@ final class TenantContextUnavailable extends RuntimeException implements Describ
     public static function invalidPayload(): self
     {
         return new self('The queued tenant payload is malformed.');
-    }
-
-    public static function runtimePoisoned(): self
-    {
-        return new self('The tenant runtime failed to restore its state and must be recreated before reuse.');
     }
 
     public function errorDescriptor(): ErrorDescriptor

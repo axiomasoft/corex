@@ -7,7 +7,6 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Internal\NullTenancyManager;
-use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Departments\Internal\Models\Department;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Identity\Internal\Models\User;
@@ -23,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 uses()->group('pg');

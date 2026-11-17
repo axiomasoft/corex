@@ -1132,7 +1132,7 @@
                 "UnknownEffect": "'tools.unknown_effect'"
             }
         },
-        "CoreX\\Tools\\ToolServiceProvider": {
+        "CoreX\\Tools\\ToolsServiceProvider": {
             "kind": "class",
             "layer": "spi-call",
             "since": "1.0",

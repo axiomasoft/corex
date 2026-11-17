@@ -4,7 +4,7 @@
 
 ## Контракт
 
-- lifecycle manifest: `CoreX\Tasks\TasksModule`, package type `corex-module`;
+- lifecycle manifest: `CoreX\Tasks\TasksModule`, package type `packman-module`;
 - восемь tenant-таблиц с префиксом `tsk_`: projects, stages, sprints, tasks,
   targets, watchers, time logs и timers;
 - UUIDv7 генерируются через Laravel `HasUuids`;
@@ -40,10 +40,9 @@ $task = app(\CoreX\Tasks\Task\Contracts\CreateTaskCommand::class)->handle(
 );
 ```
 
-Миграции применяет lifecycle `axiomasoft/corex`; service provider их не загружает.
-Alignment migration автоматически заменяет только пустую legacy-схему. При
-наличии legacy-строк она останавливается до DDL и требует отдельного
-согласованного переноса данных.
+Миграции применяет `Packman\Modules\Contracts\Lifecycle\ModuleLifecycle`;
+service provider их не загружает. Невыпущенная baseline-схема описывает новую
+установку. Перенос данных из старой экспериментальной схемы требует отдельной миграции.
 
 ## Проверки
 
@@ -54,15 +53,9 @@ composer analyse
 composer lint:check
 ```
 
-## Compatibility evidence
-
-The factual compatibility passport, its local proof class, and explicit limits
-are in [PACKAGE.md](PACKAGE.md). It does not extend Composer constraints or
-constitute a publication promise.
-
 ## Installation
 
-Install with `composer require axiomasoft/corex-tasks` from the approved CoreX channel and register the module through `axiomasoft/corex`. Enable it for the trusted tenant so module lifecycle applies its owned schema. Bind the three task access ports before invoking writes; their default implementations deny commands.
+Install with `composer require axiomasoft/corex-tasks` from the approved CoreX channel and register the module through Packman Modules. Enable it for the trusted tenant so module lifecycle applies its owned schema. Bind the three task access ports before invoking writes; their default implementations deny commands.
 
 ## Завершение и чтение задачи
 
@@ -73,7 +66,7 @@ Install with `composer require axiomasoft/corex-tasks` from the approved CoreX c
 Интеграция завершения реализует `TaskCompletionCapture` и получает
 `TaskCompletionCandidate` через тег `corex.tasks.completion-captures`. Вызов
 синхронный, до сохранения, внутри транзакции команды: ошибка capture откатывает
-изменение статуса. Tasks Workflow проверяет реальный переход в Done, сохраняет
+изменение статуса. Интеграция `axiomasoft/corex-recurring-tasks` проверяет реальный переход в Done, сохраняет
 receipt без повторов и пропускает отключённую либо отсутствующую интеграцию.
 
 `TaskOperationReceipt::resultRef` содержит `JsonDocument`; JSON-представление
@@ -88,6 +81,6 @@ validated replay and safe mapping.
 
 ## Schema installation
 
-Register the package provider, then run `php artisan corex:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `corex:schema:status`.
+Register the package provider, then run `php artisan packman:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `packman:schema:status`.
 
 Схема: набор(ы) `tenant`, baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.

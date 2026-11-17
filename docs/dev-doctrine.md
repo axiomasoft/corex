@@ -11,8 +11,12 @@ CoreX — монорепозиторий переиспользуемых Larave
 допустимые зависимости задаются Composer-манифестами и
 `scripts/package-graph-gate.json`. Импорт чужого `Internal` запрещён.
 
-AzGuard самостоятельно владеет своим движком ролей. Интеграционный пакет CoreX
-декорирует контракты хостов и не становится владельцем их предметной области.
+Packman владеет module/schema/panels runtime, Tenant — изоляцией и физическими
+ресурсами, AzGuard — своим движком ролей. CoreX адаптирует account/workspace,
+прикладные политики и контракты хоста через публичные API владельцев. Chatom
+conversation messages и CoreX domain outbox имеют разное назначение; пустой
+пакет-обёртка без реального потребителя не создаётся.
+См. [карту пакетов](architecture/package-map.md).
 
 ## Публичные контракты
 
@@ -25,22 +29,33 @@ AzGuard самостоятельно владеет своим движком р
 они хранятся в Git. Обновление снимка само по себе не доказывает совместимость.
 Перед стабильной публикацией нужен независимый BC-дифф против утверждённой базы.
 
-Публичные идентификаторы ядра используют `corex`: конфигурация `corex.modules`,
-переменные `COREX_MODULES_*`, команды `corex:modules:*`, publish-тег `corex-config`.
+Конфигурация доменного ядра — `corex`, publish-тег — `corex-config`.
+Модульный runtime принадлежит Packman: конфигурация `modules`, переменные
+`PACKMAN_MODULES_*`, команды `modules:*`.
 `flex/crm` — имя продукта, а не устаревшее имя ядра.
 
 ## Модули и схема
 
-Модуль — Composer-пакет `type: corex-module` с наследником `ModuleDefinition`.
+Модуль — Composer-пакет `type: packman-module` с наследником
+`Packman\Modules\Contracts\Definition\ModuleDefinition` и `extra.packman.module`.
 Версия берётся из Composer metadata. Изменение имени модуля требует миграции данных.
 
 Механизмы расширения: события, extenders, компоненты, capabilities и Contracts/DI.
 Набор extenders закрыт: Entity, EntityField, Permissions, Api, Filament, Menu, Routes,
 Workflow. Новый механизм требует отдельного архитектурного решения.
+CoreX не копирует compiler, registry или lifecycle и не сохраняет BC aliases.
+Адаптеры CoreX связывают Packman с account-контекстом, аудитом и feature flags.
+Рабочие пакеты используют только публичные API/SPI Packman.
+В текущем upstream некоторые constructor DTO и compiler test seams ещё находятся
+в `Internal`; проверки компиляции могут использовать их как временную тестовую
+границу, но production-код CoreX от них не зависит.
 
-Схему объявляют `SchemaSet` через `SchemaSetProvider`; исполняет её `SchemaMigrator`.
+Схему объявляют `Packman\Schema\Data\Migration\SchemaSet` через
+`Packman\Schema\Contracts\Migration\SchemaSetProvider`; исполняет её Packman
+`SchemaMigrator`. Контрольные таблицы `mod_*` принадлежат
+`axiomasoft/packman-modules:tenant`; CoreX объявляет только свою доменную схему.
 Пакеты не публикуют миграции и не вызывают `loadMigrationsFrom`.
-Используются `corex:schema:migrate` и `corex:schema:status` с явным scope;
+Используются `packman:schema:migrate` и `packman:schema:status` с явным scope;
 в production для изменения схемы нужен `--force`.
 См. [политику схемы](architecture/schema-policy.md) и
 [каталог владения таблицами](architecture/table-ownership.md).

@@ -6,7 +6,6 @@ use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Exceptions\ImpersonationRestrictedException;
-use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException;
 use CoreX\Tenancy\Authentication\Internal\Oidc\OidcClient;
@@ -26,6 +25,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
 
 // P2.11 — grant validation (D143) + read-only-session effects, through the
 // REAL callback() lane (D145 imp branch). Negative-first per Code Guidance.

@@ -9,10 +9,10 @@ use CoreX\CustomFields\Data\AttributeId;
 use CoreX\CustomFields\Data\AttributeLifecycle;
 use CoreX\CustomFields\Data\IndexPolicy;
 use CoreX\Database\Laravel\BaseModel;
-use CoreX\Modules\Data\Entity;
-use CoreX\Modules\Data\FieldDefinition;
-use CoreX\Modules\Data\InstalledPackageVersion;
-use CoreX\Modules\Data\ModuleManifest;
+use Packman\Modules\Data\Compiler\InstalledPackageVersion;
+use Packman\Modules\Data\Entities\Entity;
+use Packman\Modules\Data\Entities\FieldDefinition;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
 use RuntimeException;
 
 final class Module

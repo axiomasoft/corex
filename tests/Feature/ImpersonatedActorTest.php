@@ -107,7 +107,7 @@ it('sys_audit_log_actor_ck accepts support in the baseline', function (): void {
     DB::connection('pgsql')->statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    test()->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
+    test()->migrateSchemaSets(['axiomasoft/corex:tenant', 'axiomasoft/packman-modules:tenant'], 'pgsql');
 
     // Outside impersonation — regression (ц): the original vocabulary still writes.
     DB::connection('pgsql')->table('sys_audit_log')->insert([
@@ -146,7 +146,7 @@ it('mod_lifecycle_log_actor_ck accepts support under impersonation', function ()
     DB::connection('pgsql')->statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    test()->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
+    test()->migrateSchemaSets(['axiomasoft/corex:tenant', 'axiomasoft/packman-modules:tenant'], 'pgsql');
 
     // Outside impersonation — regression (ц): the original vocabulary still writes.
     DB::connection('pgsql')->table('mod_lifecycle_log')->insert([

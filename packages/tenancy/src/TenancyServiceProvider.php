@@ -7,14 +7,11 @@ namespace CoreX\Tenancy;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
-use CoreX\Database\Contracts\SchemaSetProvider;
 use CoreX\Errors\Laravel\ProblemDefinitions;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Tenancy\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Tenancy\Internal\TenancySchemaSets;
 use CoreX\Tenancy\Laravel\AuthenticationRegistrar;
 use CoreX\Tenancy\Laravel\ConsoleRegistrar;
-use CoreX\Tenancy\Laravel\DatabaseRegistrar;
 use CoreX\Tenancy\Laravel\DomainTrustRegistrar;
 use CoreX\Tenancy\Laravel\EventsRegistrar;
 use CoreX\Tenancy\Laravel\HttpRegistrar;
@@ -28,6 +25,8 @@ use CoreX\Tenancy\Laravel\WorkspaceRegistrar;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
+use Packman\Schema\Contracts\Migration\SchemaSetProvider;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class TenancyServiceProvider extends ServiceProvider
@@ -70,7 +69,6 @@ final class TenancyServiceProvider extends ServiceProvider
 
         $registrars = [
             new RuntimeRegistrar,
-            new DatabaseRegistrar,
             new ProvisioningRegistrar,
             new IdentityRegistrar,
             new WorkspaceRegistrar,

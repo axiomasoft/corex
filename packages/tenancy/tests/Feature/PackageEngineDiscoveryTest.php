@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Tenancy\Account\Internal\Models\Account;
-use CoreX\Tenancy\Runtime\Internal\DatabaseTenancyManager;
+use CoreX\Tenancy\Runtime\Internal\TenantRuntimeManager;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -16,7 +16,7 @@ it('boots the package engine and generates account ids', function (): void {
     DB::purge('pgsql');
     $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
-    expect(resolve(TenancyManager::class))->toBeInstanceOf(DatabaseTenancyManager::class);
+    expect(resolve(TenancyManager::class))->toBeInstanceOf(TenantRuntimeManager::class);
 
     $cluster = (string) Str::uuid();
     $identity = (string) Str::uuid();

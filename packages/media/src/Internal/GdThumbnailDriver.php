@@ -8,6 +8,7 @@ use CoreX\Media\Contracts\ConversionDriver;
 use CoreX\Media\Data\ConversionInput;
 use CoreX\Media\Data\ConversionOutput;
 use CoreX\Media\Data\ConversionProfile;
+use CoreX\Media\Exceptions\MediaOperationConflict;
 
 final readonly class GdThumbnailDriver implements ConversionDriver
 {

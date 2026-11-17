@@ -1,5 +1,13 @@
 ## Unreleased — invocation contract in the kernel (audit 2026-10-08 P-02)
 
+## Unreleased — package boundaries
+
+- Breaking before release: Rename the public Laravel provider to `CoreX\Tools\ToolsServiceProvider`.
+
+## Unreleased — Packman runtime
+
+- Breaking: module declarations and schema registrations use Packman contracts directly; module lifecycle and schema execution are owned by Packman.
+
 - `ToolInvoker`, `ToolRequestContext` and tool handlers use `CoreX\Invocation\Contracts\RequestContext` from the kernel; the former `CoreX\Operations\...` names are deprecated aliases of the same types, so no implementation changes are required.
 
 ## Unreleased — PHP 8.4 modernization (P09.4)

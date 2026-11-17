@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace CoreX\Operations\Tests\Feature;
 
 use CoreX\Config\Data\SecretRef;
-use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Operations\Cost\Data\ActualCost;
 use CoreX\Operations\Cost\Data\BudgetScope;
 use CoreX\Operations\Cost\Data\EstimatedCost;
 use CoreX\Operations\Cost\Internal\SqlBudgetReservation;
 use CoreX\Operations\Cost\Internal\SqlOperationBudget;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Tests\TestCase;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Time\Testing\FrozenClock;
@@ -20,6 +18,8 @@ use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use Packman\Schema\Contracts\Migration\SchemaSets;
 use PHPUnit\Framework\Attributes\Group;
 use RuntimeException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
@@ -394,7 +394,7 @@ final class OperationBudgetTest extends TestCase
 
     private function selectSchema(string $budget, string $tenant): void
     {
-        $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(ApiSchemaConnections::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [

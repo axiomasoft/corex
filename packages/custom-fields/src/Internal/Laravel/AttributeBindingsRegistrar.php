@@ -10,9 +10,9 @@ use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Contracts\SchemaOperations;
 use CoreX\CustomFields\Internal\Query\SchemaAttributeFilter;
 use CoreX\CustomFields\Internal\UnavailableAttributes;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 
 /** @internal Scoped attribute services of the package. */
 final class AttributeBindingsRegistrar implements PackageRegistrar

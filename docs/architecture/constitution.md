@@ -79,7 +79,7 @@
 ### PKG-004 — Любая межпакетная зависимость объявлена в `composer.json` пакета-потребителя
 **Правило.** Любая межпакетная зависимость объявлена в `composer.json` пакета-потребителя
 **Владелец.** Этот документ.
-**Enforcement.** `composer package-graph-gate` → правило R1, на каждый PR. Ребро `axiomasoft/corex-notifications → axiomasoft/corex-wakeup` запрещено (R6): контракты пробуждения живут в `CoreX\Scheduling`, пакет notifications их не импортирует из `corex-wakeup`.
+**Enforcement.** `composer package-graph-gate` → правило R1, на каждый PR. Ребро `axiomasoft/corex-notifications → axiomasoft/corex-scheduler` запрещено (R6): контракты пробуждения живут в `CoreX\Scheduling`, пакет notifications их не импортирует из `corex-scheduler`.
 **Исключения.** —
 **Почему.** Неявная зависимость ломает установку по профилю (boxed без tenancy)
 
@@ -98,31 +98,27 @@
 **Исключения.** —
 **Почему.** Иначе предметная область расползается по адаптерам
 
-### PKG-007 — В `packages/{core,modules,tenancy,auth,tasks}` нет `flex`-литералов…
-**Правило.** В `packages/{core,modules,tenancy,auth,tasks}` нет `flex`-литералов (php/json/md/sql),
+### PKG-007 — В `packages/{core,tenancy,access,tasks}` нет `flex`-литералов…
+**Правило.** В `packages/{core,tenancy,access,tasks}` нет `flex`-литералов (php/json/md/sql),
   кроме явного allow-list
 **Владелец.** ../dev-doctrine.md §1 (D94)
 **Enforcement.** `composer test:arch` → «foundation packages carry no flex product literals»
 **Исключения.** —
 **Почему.** Запрет уровня буквален и в тексте, не только в коде
 
-### PKG-008 — Новый пакет получает прописку по `dev-doctrine.md` §1, имя по §3, свой тестовый сьют…
-**Правило.** Новый пакет получает прописку по `dev-doctrine.md` §1, имя по §3, свой тестовый сьют и
-  CI-джоб по §2
-**Владелец.** ../dev-doctrine.md §§1–3
-**Enforcement.** `composer test:packages` (цикл по 20 живым пакетам)
+### PKG-008 — Каждый пакет включён в проверки монорепозитория
+**Правило.** Новый пакет получает Composer-манифест, собственный тестовый сьют и проверки
+  применимых архитектурных, API и schema-контрактов по `dev-doctrine.md`.
+**Владелец.** [Доктрина разработки](../dev-doctrine.md), раздел «Проверки».
+**Enforcement.** `composer test:packages` перечисляет пакеты и продукты с `phpunit.xml`;
+  состав CI определяется `.github/workflows/ci.yml`.
 **Исключения.** —
-**Почему.** Сьют без джоба = отсутствие регрессионной защиты. `composer test:packages` перечисляет
-  **20 живых пакетов** (все, кроме тумбстоуна). Утверждение «контур неполон» в статью не
-  переносится: оно опровергнуто.
+**Почему.** Новый пакет должен проходить те же проверки, что и существующие.
 
-### PKG-009 — Каталог `packages/transfer` — тумбстоун ренейма: он не входит ни в один контур…
-**Правило.** Каталог `packages/transfer` — тумбстоун ренейма: он не входит ни в один контур
-  (тесты, статанализ, CI, split) и не получает кода
-**Владелец.** Этот документ.
-**Enforcement.** нет — свойство проверяется отсутствием пути в `composer.json` и `phpstan.neon`
-**Исключения.** —
-**Почему.** Пустой каталог с одним `CHANGELOG.md` — исторический след, а не пакет (D13)
+### PKG-009 — Отменена: исторический каталог import-export
+Статья о пустом историческом каталоге отменена при перестройке экосистемы.
+`packages/import-export` теперь содержит действующий `axiomasoft/corex-import-export`,
+включённый в тесты, анализ и дистрибуцию. Идентификатор статьи не переиспользуется.
 
 ## Группа STR — структура
 
@@ -532,7 +528,7 @@
 **Правило.** Дубликат идентификатора в точке расширения — ошибка компиляции, а не молчаливое
   переопределение
 **Владелец.** extension-policy.md
-**Enforcement.** `corex-wakeup` объединяет `corex-wakeup.handlers` с тегом `WakeupHandlerDefinition::TAG` (`corex.scheduling.wakeup-handlers`); повтор `kind` → `InvalidConfiguration` при boot. Источники срока — тег `DueWakeupSource::TAG` (`corex.scheduling.due-sources`).
+**Enforcement.** `corex-scheduler` объединяет `corex-scheduler.handlers` с тегом `WakeupHandlerDefinition::TAG` (`corex.scheduling.wakeup-handlers`); повтор `kind` → `InvalidConfiguration` при boot. Источники срока — тег `DueWakeupSource::TAG` (`corex.scheduling.due-sources`).
 **Исключения.** —
 **Почему.** См. решения и политики, названные во владельце.
 

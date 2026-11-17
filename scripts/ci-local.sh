@@ -15,7 +15,7 @@ if [[ -n "${LARAVEL_VERSION:-}" ]]; then
     update_args+=(--with "illuminate/contracts:$LARAVEL_VERSION")
 fi
 scripts/php84 composer "${update_args[@]}"
-scripts/php84 composer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
+scripts/php84 python3 scripts/composer-with-snapshots.py --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
 if (( $# )); then
     "$@"
 else

@@ -6,11 +6,11 @@ namespace CoreX\Access\Access\Internal;
 
 use CoreX\Access\Enums\Scope;
 use CoreX\Access\Exceptions\ScopeCapabilityMismatch;
-use CoreX\Modules\Contracts\EntityRegistry;
-use CoreX\Modules\Enums\Capability;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
+use Packman\Modules\Contracts\Entities\EntityRegistry;
+use Packman\Modules\Enums\Entities\Capability;
 
 /**
  * Normalizes a compiled Scope against the entity's declared capabilities

@@ -324,8 +324,8 @@ final readonly class AccountLifecycle
             throw new RuntimeException('Export and purge must run outside a transaction.');
         }
         $key = 'corex-account-external:'.$accountId;
-        // A separate transaction holds the lock while DROP DATABASE executes
-        // outside a transaction on the central connection (PgBouncer-safe).
+        // Serialize this account's orchestration while the external owner completes its operation.
+        // Keep the central metadata connection outside the lock transaction.
         $configuration = $connection->getConfig();
 
         if (! is_array($configuration)) {

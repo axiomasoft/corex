@@ -7,14 +7,15 @@ use CoreX\Context\Data\TenantContext;
 use CoreX\CustomFields\Data\AttributeId;
 use CoreX\CustomFields\Internal\Schema\ModuleFieldCatalogue;
 use CoreX\Data\Data\DataScope;
-use CoreX\Modules\Contracts\EntityRegistry;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\CompiledEntityField;
-use CoreX\Modules\Data\CompiledModule;
-use CoreX\Modules\Data\CompiledRegistry;
-use CoreX\Modules\Data\EntityDefinition;
-use CoreX\Modules\Data\EntityField;
-use CoreX\Modules\Enums\Capability;
+use Packman\Context\Contracts\ContextScopeInterface;
+use Packman\Modules\Contracts\Entities\EntityRegistry;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Compiler\CompiledEntityField;
+use Packman\Modules\Data\Compiler\CompiledModule;
+use Packman\Modules\Data\Compiler\CompiledRegistry;
+use Packman\Modules\Data\Entities\EntityDefinition;
+use Packman\Modules\Data\Entities\EntityField;
+use Packman\Modules\Enums\Entities\Capability;
 
 it('projects active compiled entity fields without creating another registry', function (): void {
     $context = new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true);
@@ -50,12 +51,12 @@ it('projects active compiled entity fields without creating another registry', f
                 return $handle === $this->entity->handle;
             }
 
-            public function all(?TenantContext $ctx = null): array
+            public function all(?ContextScopeInterface $ctx = null): array
             {
                 return [$this->entity];
             }
 
-            public function byCapability(Capability $cap, ?TenantContext $ctx = null): array
+            public function byCapability(Capability $cap, ?ContextScopeInterface $ctx = null): array
             {
                 return [];
             }
@@ -79,12 +80,12 @@ it('projects active compiled entity fields without creating another registry', f
                 throw new RuntimeException('Unused.');
             }
 
-            public function active(TenantContext $ctx): array
+            public function active(ContextScopeInterface $ctx): array
             {
                 return [];
             }
 
-            public function isActive(string $name, TenantContext $ctx): bool
+            public function isActive(string $name, ContextScopeInterface $ctx): bool
             {
                 return false;
             }

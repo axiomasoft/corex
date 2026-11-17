@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased — package boundaries
+
+- Breaking before release: Rename the public Laravel provider to `CoreX\CustomFields\CustomFieldsServiceProvider`.
+
+## Unreleased — Packman runtime
+
+- Breaking: module declarations and schema registrations use Packman contracts directly; module lifecycle and schema execution are owned by Packman.
+
 ## Unreleased — Laravel 13 platform (P09.9, D132)
 
 - Require Laravel 13 and PHP 8.4+; support PHP 8.4–8.5. Laravel 12 support is removed. Testbench uses the Laravel 13 family; package versions and runtime contracts are unchanged.
@@ -20,9 +28,9 @@
 
 ## Unreleased — thin providers and registrars (P05.2)
 
-- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `packman:schema:migrate`; migration publishing is removed.
 
-- `AttributesServiceProvider` delegates to messaging, composition and bindings registrars; multi-statement closures moved to `AttributeStoreFactory`, `SchemaOperationsFactory` and `FieldCatalogueFactory`. With the kernel provider the module registry is always bound, so `SchemaOperations` resolves to the queued DDL implementation.
+- `CustomFieldsServiceProvider` delegates to messaging, composition and bindings registrars; multi-statement closures moved to `AttributeStoreFactory`, `SchemaOperationsFactory` and `FieldCatalogueFactory`. With the kernel provider the module registry is always bound, so `SchemaOperations` resolves to the queued DDL implementation.
 
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 

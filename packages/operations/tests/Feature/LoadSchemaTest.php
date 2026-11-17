@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Database\Contracts\SchemaSets;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Tests\TestCase;
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use Packman\Schema\Contracts\Migration\SchemaSets;
 use PHPUnit\Framework\Attributes\Group;
 
 final class LoadSchemaTest extends TestCase
@@ -44,7 +44,7 @@ final class LoadSchemaTest extends TestCase
     {
         self::assertFalse(DB::connection('sqlite')->getSchemaBuilder()->hasTable('sys_api_budget_buckets'));
         $this->app['config']->set('corex-operations.schema', null);
-        $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(ApiSchemaConnections::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
         $this->expectException(InvalidArgumentException::class);
@@ -175,7 +175,7 @@ final class LoadSchemaTest extends TestCase
 
     private function selectSchema(string $budget, string $tenant): void
     {
-        $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(ApiSchemaConnections::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [
@@ -202,8 +202,8 @@ final class LoadSchemaTest extends TestCase
         if ($includeBudget) {
             $this->migrateSchemaSets(['axiomasoft/corex-operations:budget']);
         }
-        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
-        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
 
         return [$budget, $bulk, $webhook];
     }
@@ -304,7 +304,7 @@ final class LoadSchemaTest extends TestCase
     private function runDown(string $id): void
     {
         $set = resolve(SchemaSets::class)->get($id);
-        $this->rollbackSchemaSet($id, $set->connection ?? resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->rollbackSchemaSet($id, $set->connection ?? resolve(ApiSchemaConnections::class)->tenant()->getName());
     }
 
     private function expectQueryFailure(callable $operation): void

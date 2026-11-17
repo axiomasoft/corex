@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Modules\Contracts\ModuleRegistry;
 use Flex\Crm\Company\Actions\CreateCompany;
 use Flex\Crm\Company\Data\CompanyData;
 use Flex\Crm\Company\Events\CompanyCreated;
@@ -23,6 +22,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 it('fails closed for disabled CRM and tenant context mismatch', function (): void {
     $ctx = $this->crmContext->current();

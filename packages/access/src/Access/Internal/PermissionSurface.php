@@ -7,8 +7,8 @@ namespace CoreX\Access\Access\Internal;
 use CoreX\Access\Enums\Scope;
 use CoreX\Access\Exceptions\ScopeCapabilityMismatch;
 use CoreX\Access\Matrix\Contracts\EntityActivity as ActiveEntityFilter;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\Permissions;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Extenders\Permissions;
 
 /**
  * Read-only reader of the declared permission surface — `(entity_key,

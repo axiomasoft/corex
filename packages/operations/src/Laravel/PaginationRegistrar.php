@@ -6,8 +6,6 @@ namespace CoreX\Operations\Laravel;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Operations\Definition\Internal\OperationRegistry;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\Pagination\Contracts\CursorCodec;
@@ -17,6 +15,8 @@ use CoreX\Operations\Pagination\Internal\OrderingRegistry;
 use CoreX\Operations\Pagination\Internal\SignedCursorCodec;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Psr\Clock\ClockInterface;
 
 /** Composition of the operations package. */

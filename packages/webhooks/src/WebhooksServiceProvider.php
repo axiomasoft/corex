@@ -6,7 +6,6 @@ namespace CoreX\Webhooks;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Database\Contracts\SchemaSetProvider;
 use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
 use CoreX\Webhooks\Data\WebhookOptions;
@@ -18,6 +17,7 @@ use CoreX\Webhooks\Internal\WebhooksSchemaSets;
 use CoreX\Webhooks\Laravel\WebhookBindingsRegistrar;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Packman\Schema\Contracts\Migration\SchemaSetProvider;
 
 /** Explicit webhook composition; remote delivery remains opt-in. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

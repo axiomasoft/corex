@@ -9,8 +9,6 @@ use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
 use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
@@ -19,7 +17,7 @@ use CoreX\Operations\Bulk\Internal\BulkOperations;
 use CoreX\Operations\Bulk\Internal\BulkResultReader;
 use CoreX\Operations\Bulk\Internal\SqlBulkOperationStore;
 use CoreX\Operations\Bulk\Internal\TransferBulkExecutor;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Tests\Fixtures\BulkTransferFactory;
 use CoreX\Operations\Tests\TestCase;
@@ -27,6 +25,8 @@ use CoreX\Time\Testing\FrozenClock;
 use DateTimeImmutable;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use Packman\Schema\Contracts\Migration\SchemaSets;
 
 final class BulkResultAccessTest extends TestCase
 {
@@ -49,7 +49,7 @@ final class BulkResultAccessTest extends TestCase
         ]);
         DB::purge('api_budget_stub');
         DB::purge('api_tenant');
-        $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(ApiSchemaConnections::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [
@@ -57,7 +57,7 @@ final class BulkResultAccessTest extends TestCase
             'tenant' => ['connection' => 'api_tenant', 'driver' => 'sqlite', 'database' => ':memory:'],
         ]);
         $connection = DB::connection('api_tenant');
-        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
         $clock = new FrozenClock(new DateTimeImmutable('2026-09-25T10:00:00.000000+00:00'));

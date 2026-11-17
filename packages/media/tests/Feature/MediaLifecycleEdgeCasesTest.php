@@ -12,20 +12,21 @@ use CoreX\Media\Data\MediaAction;
 use CoreX\Media\Data\MediaContext;
 use CoreX\Media\Data\MediaSubject;
 use CoreX\Media\Data\UploadInput;
+use CoreX\Media\Exceptions\MediaAccessDenied;
+use CoreX\Media\Exceptions\MediaOperationConflict;
 use CoreX\Media\Internal\ConversionCoordinator;
 use CoreX\Media\Internal\Jobs\PurgeMedia;
-use CoreX\Media\Internal\MediaAccessDenied;
-use CoreX\Media\Internal\MediaOperationConflict;
+use CoreX\Media\Internal\MediaBlobs;
 use CoreX\Media\Internal\MediaOperationStore;
 use CoreX\Media\Internal\SqlMediaLibrary;
 use CoreX\Media\Internal\Support\MediaOptions;
 use CoreX\Media\Laravel\UploadedFileSource;
 use CoreX\Media\MediaModule;
-use CoreX\Storage\Contracts\TenantStorage;
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Psr\Clock\ClockInterface;
+use Vaulter\Media\Contracts\Cas\BlobPins;
+use Vaulter\Media\Contracts\Cas\BlobStore;
 
 function mediaEdgeContext(): MediaContext
 {
@@ -53,20 +54,17 @@ function edgeUpload(string $requestKey, string $contents): UploadInput
     return new UploadInput($requestKey, UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('safe.txt', $contents)), 'attachment');
 }
 
-it('keeps staged uploads private and schedules their purge when storage write fails', function (): void {
+it('rolls back the owner reference when Vaulter commit fails', function (): void {
     allowMediaEdges();
-    $disk = Mockery::mock(Filesystem::class);
-    $disk->shouldReceive('writeStream')->once()->andReturnFalse();
-    $storage = Mockery::mock(TenantStorage::class);
-    $storage->shouldReceive('disk')->andReturn($disk);
-    app()->instance(TenantStorage::class, $storage);
+    $store = Mockery::mock(BlobStore::class);
+    $store->shouldReceive('commit')->once()->andThrow(new RuntimeException('storage unavailable'));
+    app()->instance(BlobStore::class, $store);
     app()->forgetScopedInstances();
 
     expect(fn (): mixed => resolve(MediaLibrary::class)->store(mediaEdgeContext(), edgeUpload('failed-write', 'partial bytes')))
-        ->toThrow(MediaOperationConflict::class);
-
-    expect(DB::table('med_files')->where('request_key', 'failed-write')->value('state'))->toBe('deleting')
-        ->and(DB::table('med_operations')->where('kind', 'purge')->count())->toBe(1);
+        ->toThrow(RuntimeException::class, 'storage unavailable');
+    expect(DB::table('med_files')->where('request_key', 'failed-write')->exists())->toBeFalse()
+        ->and(resolve(BlobPins::class)->countByOwner())->toBe([]);
 });
 
 it('keeps attachment operations idempotent and rejects unavailable files', function (): void {
@@ -92,15 +90,15 @@ it('marks a failed purge unknown instead of publishing a false delete', function
     $file = $library->store(mediaEdgeContext(), edgeUpload('purge-unknown', 'bytes'));
     $library->delete(mediaEdgeContext(), $file->id);
 
-    $disk = Mockery::mock(Filesystem::class);
-    $disk->shouldReceive('delete')->once()->andReturnFalse();
-    $storage = Mockery::mock(TenantStorage::class);
-    $storage->shouldReceive('disk')->andReturn($disk);
+    $pins = Mockery::mock(BlobPins::class);
+    $pins->shouldReceive('unpin')->once()->andThrow(new RuntimeException('pin unavailable'));
+    app()->instance(BlobPins::class, $pins);
+    app()->forgetScopedInstances();
 
-    expect(fn (): mixed => new PurgeMedia($file->id)->handle(resolve(MediaOperationStore::class), $storage))
-        ->toThrow(MediaOperationConflict::class);
-
+    expect(fn (): mixed => new PurgeMedia($file->id)->handle(resolve(MediaOperationStore::class)))
+        ->toThrow(RuntimeException::class, 'pin unavailable');
     expect(DB::table('med_files')->where('id', $file->id)->value('state'))->toBe('deleting')
+        ->and(DB::table('med_files')->where('id', $file->id)->value('blob_id'))->not->toBeNull()
         ->and(DB::table('med_operations')->where('file_id', $file->id)->where('kind', 'purge')->value('state'))->toBe('unknown');
 });
 
@@ -149,7 +147,7 @@ it('rechecks policy before publishing uploaded bytes and when an authorized hand
     };
     $library = new SqlMediaLibrary(
         resolve('db')->connection(),
-        resolve(TenantStorage::class),
+        resolve(MediaBlobs::class),
         $policy,
         resolve(MediaOperationStore::class),
         resolve(ConversionCoordinator::class),
@@ -165,8 +163,8 @@ it('rechecks policy before publishing uploaded bytes and when an authorized hand
 
     expect(fn (): mixed => $library->store(mediaEdgeContext(), edgeUpload('publish-recheck', 'bytes')))
         ->toThrow(MediaAccessDenied::class);
-    expect(DB::table('med_files')->where('request_key', 'publish-recheck')->value('state'))->toBe('deleting')
-        ->and(DB::table('med_operations')->where('file_id', DB::table('med_files')->where('request_key', 'publish-recheck')->value('id'))->where('kind', 'purge')->count())->toBe(1);
+    expect(DB::table('med_files')->where('request_key', 'publish-recheck')->exists())->toBeFalse()
+        ->and(resolve(BlobPins::class)->countByOwner())->toBe(['corex.media.file' => 1]);
 });
 
 it('publishes media as a standalone CoreX module', function (): void {
@@ -180,11 +178,9 @@ it('reports an unavailable storage stream instead of returning a non-resource fr
     allowMediaEdges();
     $library = resolve(MediaLibrary::class);
     $file = $library->store(mediaEdgeContext(), edgeUpload('unavailable-stream', 'ready bytes'));
-    $disk = Mockery::mock(Filesystem::class);
-    $disk->shouldReceive('readStream')->once()->andReturnNull();
-    $storage = Mockery::mock(TenantStorage::class);
-    $storage->shouldReceive('disk')->andReturn($disk);
-    app()->instance(TenantStorage::class, $storage);
+    $store = Mockery::mock(BlobStore::class);
+    $store->shouldReceive('read')->once()->andReturnNull();
+    app()->instance(BlobStore::class, $store);
     app()->forgetScopedInstances();
     $read = resolve(MediaLibrary::class)->read(mediaEdgeContext(), $file->id);
 

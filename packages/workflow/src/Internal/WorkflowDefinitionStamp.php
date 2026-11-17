@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Workflow\Internal;
 
-use CoreX\Modules\Data\ExtensionStamp;
 use CoreX\Workflow\Data\TriggerRequest;
 use InvalidArgumentException;
+use Packman\Modules\Data\Compiler\ExtensionStamp;
 
 /**
  * Versioned workflow definition identity carried inside an existing intent payload.

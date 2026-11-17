@@ -15,12 +15,12 @@ use CoreX\Audit\Internal\DatabaseSynchronousAuditWriter;
 use CoreX\Config\Data\CoreOptions;
 use CoreX\Config\Laravel\ConfiguredImplementation;
 use CoreX\Context\Contracts\ImpersonationService;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Http\Request;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 
 /** Composition of the kernel module; the public provider delegates here. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

@@ -6,10 +6,10 @@ namespace CoreX\CustomFields\Internal\Laravel;
 
 use CoreX\CustomFields\Data\AttributeTables;
 use CoreX\CustomFields\Internal\CustomFieldsOptions;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 
 /** @internal Builds validated package configuration once per application. */
 final class AttributeCompositionRegistrar implements PackageRegistrar

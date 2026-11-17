@@ -9,8 +9,6 @@ use CoreX\Attributes\SpiKind;
 use CoreX\Audit\Contracts\SynchronousAuditWriter;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Modules\Contracts\PackageRegistrar;
-use CoreX\Modules\Laravel\RegistersNothingOnBoot;
 use CoreX\Tenancy\Account\Contracts\AccountRead;
 use CoreX\Tenancy\Authentication\Internal\Http\Controllers\LogoutController;
 use CoreX\Tenancy\Authentication\Internal\Http\Controllers\OidcLoginController;
@@ -34,6 +32,8 @@ use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Http\Client\Factory as HttpFactory;
 use Illuminate\Support\Str;
 use Override;
+use Packman\Foundation\Concerns\RegistersNothingOnBoot;
+use Packman\Foundation\Contracts\PackageRegistrar;
 use Psr\Clock\ClockInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]

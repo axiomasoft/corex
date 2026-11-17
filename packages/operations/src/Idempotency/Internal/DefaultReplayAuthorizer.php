@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Operations\Idempotency\Internal;
 
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
@@ -16,6 +15,7 @@ use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Data\StoredOperationOutcome;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use Override;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 /** Re-checks module, client scope, operation and field access before a stored outcome is replayed. */
 final readonly class DefaultReplayAuthorizer implements ReplayAuthorizer

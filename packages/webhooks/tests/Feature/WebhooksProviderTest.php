@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Webhooks\Tests\Feature;
 
 use CoreX\CoreServiceProvider;
-use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Laravel\Commands\PruneApiOperations;
 use CoreX\Operations\Laravel\Support\ApiOptions;
+use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Webhooks\Data\WebhookOptions;
 use CoreX\Webhooks\Internal\WebhookRetention;
 use CoreX\Webhooks\WebhooksServiceProvider;
@@ -16,13 +15,14 @@ use Illuminate\Config\Repository;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase;
+use Packman\Modules\ModulesServiceProvider;
 use ReflectionMethod;
 
 final class WebhooksProviderTest extends TestCase
 {
     protected function getPackageProviders($app): array
     {
-        return [CoreServiceProvider::class, ModulesServiceProvider::class, ApiServiceProvider::class, WebhooksServiceProvider::class];
+        return [CoreServiceProvider::class, ModulesServiceProvider::class, OperationsServiceProvider::class, WebhooksServiceProvider::class];
     }
 
     protected function defineEnvironment($app): void

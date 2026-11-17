@@ -2,7 +2,7 @@
     "allowlist": [
         {
             "from": "axiomasoft/corex-operations",
-            "to": "axiomasoft/corex-transfer",
+            "to": "axiomasoft/corex-import-export",
             "import_file": "packages/operations/src/Bulk/Data/BulkTransferSession.php",
             "guard_file": "packages/operations/src/Bulk/Internal/TransferBulkExecutor.php",
             "guard_contains": [
@@ -13,7 +13,7 @@
         },
         {
             "from": "axiomasoft/corex-operations",
-            "to": "axiomasoft/corex-transfer",
+            "to": "axiomasoft/corex-import-export",
             "import_file": "packages/operations/src/Bulk/Internal/TransferBulkExecutor.php",
             "guard_file": "packages/operations/src/Bulk/Internal/TransferBulkExecutor.php",
             "guard_contains": [
@@ -25,8 +25,8 @@
         {
             "from": "axiomasoft/corex-custom-fields",
             "to": "axiomasoft/corex",
-            "import_file": "packages/custom-fields/src/AttributesServiceProvider.php",
-            "guard_file": "packages/custom-fields/src/AttributesServiceProvider.php",
+            "import_file": "packages/custom-fields/src/CustomFieldsServiceProvider.php",
+            "guard_file": "packages/custom-fields/src/CustomFieldsServiceProvider.php",
             "guard_contains": [
                 "bound(EntityRegistry::class)",
                 "bound(ModuleRegistry::class)"
@@ -37,19 +37,19 @@
             "from": "axiomasoft/corex-custom-fields",
             "to": "axiomasoft/corex",
             "import_file": "packages/custom-fields/src/Internal/Schema/ModuleFieldCatalogue.php",
-            "guard_file": "packages/custom-fields/src/AttributesServiceProvider.php",
+            "guard_file": "packages/custom-fields/src/CustomFieldsServiceProvider.php",
             "guard_contains": [
                 "bound(EntityRegistry::class)",
                 "bound(ModuleRegistry::class)"
             ],
-            "reason": "ModuleFieldCatalogue is constructed only from the guarded FieldCatalogue binding in AttributesServiceProvider (P12.7 receipt)."
+            "reason": "ModuleFieldCatalogue is constructed only from the guarded FieldCatalogue binding in CustomFieldsServiceProvider (P12.7 receipt)."
         }
     ],
     "undeclared_dependency_exceptions": [],
     "forbidden_edges": [
         {
             "from": "axiomasoft/corex-notifications",
-            "to": "axiomasoft/corex-wakeup",
+            "to": "axiomasoft/corex-scheduler",
             "reason": "Scheduling contracts live in the kernel; notifications must not depend on wakeup (D96.11)."
         },
         {

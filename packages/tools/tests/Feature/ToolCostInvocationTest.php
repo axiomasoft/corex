@@ -11,17 +11,9 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Invocation\Data\InvocationMetadata;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\Api;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Modules\Internal\Compiler\RegistryCompiler;
-use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
@@ -32,8 +24,9 @@ use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
 use CoreX\Operations\Invocation\Internal\OperationDispatcher;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Laravel\InvocationFixtures;
+use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
@@ -49,12 +42,19 @@ use CoreX\Tools\Data\ToolDescriptor;
 use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Data\ToolResult;
 use CoreX\Tools\Internal\ToolDescriptorFactory;
-use CoreX\Tools\ToolServiceProvider;
+use CoreX\Tools\ToolsServiceProvider;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Extenders\Api;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Modules\Internal\Compiler\RegistryCompiler;
+use Packman\Modules\ModulesServiceProvider;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use Packman\Schema\Contracts\Migration\SchemaSets;
 use RuntimeException;
 
 final class ToolCostInvocationTest extends TestCase
@@ -79,7 +79,7 @@ final class ToolCostInvocationTest extends TestCase
 
     protected function getPackageProviders($app): array
     {
-        return [CoreServiceProvider::class, ModulesServiceProvider::class, ApiServiceProvider::class, ToolServiceProvider::class];
+        return [CoreServiceProvider::class, ModulesServiceProvider::class, OperationsServiceProvider::class, ToolsServiceProvider::class];
     }
 
     protected function setUp(): void
@@ -89,7 +89,7 @@ final class ToolCostInvocationTest extends TestCase
         $this->tenants->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
         $this->principal = new IdentityFixture;
         Schema::dropIfExists('sys_api_idempotency');
-        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+        resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
     }
 
     protected function tearDown(): void
@@ -184,7 +184,7 @@ final class ToolCostInvocationTest extends TestCase
             'foreign_key_constraints' => true,
         ]);
         DB::purge('api_budget_admission');
-        $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(ApiSchemaConnections::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [

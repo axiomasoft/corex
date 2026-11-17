@@ -10,7 +10,6 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\DatabaseConnectionConfig;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
-use CoreX\Modules\Contracts\ModuleRegistry;
 use Flex\Crm\Context\Contracts\CrmExecutionContext;
 use Flex\Crm\Context\Data\Actor;
 use Flex\Crm\Context\Data\ExecutionContext;
@@ -18,6 +17,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Mockery;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 final class TestContext implements AccountConnectionResolver, CrmExecutionContext
 {

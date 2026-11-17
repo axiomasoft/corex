@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Golden;
 
-use CoreX\Database\Data\SchemaSet;
-use CoreX\Database\Enums\SchemaScope;
 use CoreX\Tests\Golden\Support\SchemaCatalogue;
 use CoreX\Tests\Golden\Support\SchemaEnvironment;
 use Flex\Crm\Tests\Support\AccountFixture;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
+use Packman\Schema\Data\Migration\SchemaSet;
+use Packman\Schema\Enums\SchemaScope;
 use Throwable;
 
 final class SchemaSqliteGoldenTest extends GoldenTestCase

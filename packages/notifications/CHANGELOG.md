@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — Packman runtime
+
+- Breaking: module declarations and schema registrations use Packman contracts directly; module lifecycle and schema execution are owned by Packman.
+- Admit each digest and freeze its remaining bounded batch in one transaction; subsequent sweeps deliver every notification without duplicating an admitted batch.
+
 ## Unreleased — kernel audit repairs (2026-10-08)
 
 - Recover concrete frozen digest requests through WakeupScheduler instead of direct handler calls; preserve durable admission/cancellation/lease/retry fencing and exclude terminal history from due selection.
@@ -20,9 +25,9 @@
 
 ## Unreleased — digest wakeup without a wakeup package dependency (P07.5)
 
-- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `packman:schema:migrate`; migration publishing is removed.
 
-- Breaking (pre-1.0): removed the production `axiomasoft/corex-wakeup` requirement. The package keeps it as `require-dev` so the base API compare and the digest bridge tests can install the runner. An enabled digest tags `WakeupHandlerDefinition` and `DueWakeupSource` instead of writing `corex-wakeup.handlers`. `DigestSchedulerCheck` rejects an enabled digest when `WakeupScheduler` is not bound. Disabled digests still freeze a batch and never schedule.
+- Breaking (pre-1.0): removed the production `axiomasoft/corex-scheduler` requirement. The package keeps it as `require-dev` so the base API compare and the digest bridge tests can install the runner. An enabled digest tags `WakeupHandlerDefinition` and `DueWakeupSource` instead of writing `corex-scheduler.handlers`. `DigestSchedulerCheck` rejects an enabled digest when `WakeupScheduler` is not bound. Disabled digests still freeze a batch and never schedule.
 
 ## Unreleased — thin providers and registrars (P05.2)
 

@@ -42,8 +42,8 @@ app(LogActivity::class)->handle($contact, ActivityType::Call, 'Intro call');
 
 ## Установка и lifecycle
 
-Composer обнаруживает `flex/crm` как `corex-module` через `CrmModule`.
-После `corex:modules:compile` включите его через `ModuleLifecycle::enable('flex/crm')`
+Composer обнаруживает `flex/crm` как `packman-module` через `CrmModule`.
+После `modules:compile` включите его через `ModuleLifecycle::enable('flex/crm')`
 в целевой tenant DB. Lifecycle выполняет миграции и учитывает владение схемой;
 provider больше не запускает CRM-миграции при общей команде `migrate`.
 Disable сохраняет данные, повторный enable идемпотентен.
@@ -68,6 +68,6 @@ legacy `custom_fields` on those two models are not part of that contract.
 
 ## Schema installation
 
-Register the package provider, then run `php artisan corex:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `corex:schema:status`.
+Register the package provider, then run `php artisan packman:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `packman:schema:status`.
 
 Схема: набор(ы) `tenant`, baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.

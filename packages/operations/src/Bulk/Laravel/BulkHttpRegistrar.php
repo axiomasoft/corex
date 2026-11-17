@@ -6,12 +6,12 @@ namespace CoreX\Operations\Bulk\Laravel;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Operations\Bulk\Data\BulkOptions;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 
 /** Registers the bulk operation routes once the API routes are enabled. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

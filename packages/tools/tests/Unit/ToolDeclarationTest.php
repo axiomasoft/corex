@@ -4,28 +4,18 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Tests\Unit;
 
-use CoreX\CoreServiceProvider;
-use CoreX\Modules\Data\Api;
-use CoreX\Modules\Data\CompiledRegistry;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Modules\Exceptions\CompilationException;
-use CoreX\Modules\Internal\Compiler\RegistryCompiler;
-use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Testing\StubOperationHandler;
 use CoreX\Tools\Internal\ToolDescriptorFactory;
-use CoreX\Tools\ToolServiceProvider;
+use CoreX\Tools\Tests\Support\BootsToolStack;
 use Orchestra\Testbench\TestCase;
+use Packman\Modules\Data\Compiler\CompiledRegistry;
+use Packman\Modules\Data\Extenders\Api;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Modules\Exceptions\Compiler\CompilationException;
+use Packman\Modules\Internal\Compiler\RegistryCompiler;
 use stdClass;
 
-uses(TestCase::class);
-
-beforeEach(function (): void {
-    $this->app->register(ApiServiceProvider::class);
-    $this->app->register(ToolServiceProvider::class);
-    $this->app->register(CoreServiceProvider::class);
-    $this->app->register(ModulesServiceProvider::class);
-});
+uses(TestCase::class, BootsToolStack::class);
 
 $objectSchema = static fn (): array => [
     '$schema' => 'https://json-schema.org/draft/2020-12/schema',

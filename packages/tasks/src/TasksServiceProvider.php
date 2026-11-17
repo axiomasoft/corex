@@ -6,7 +6,6 @@ namespace CoreX\Tasks;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Database\Contracts\SchemaSetProvider;
 use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
@@ -34,6 +33,7 @@ use CoreX\Tasks\Task\Internal\Models\Task;
 use CoreX\Tasks\Task\Laravel\TaskPortBindings;
 use Illuminate\Support\ServiceProvider;
 use LogicException;
+use Packman\Schema\Contracts\Migration\SchemaSetProvider;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class TasksServiceProvider extends ServiceProvider

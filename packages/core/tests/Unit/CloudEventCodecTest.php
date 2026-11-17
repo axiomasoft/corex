@@ -89,7 +89,7 @@ it('rejects malformed source URI references', function (string $source): void {
 
 it('accepts absolute schema URIs', function (string $schema): void {
     expect(cloudEventCodec($schema)->encode(cloudEventMessage()))->toContain('"dataschema":"'.$schema.'"');
-})->with(['urn:corex:schema:v1', 'https://schemas.example.test/v1.json']);
+})->with(['urn:schema:v1', 'https://schemas.example.test/v1.json']);
 
 it('rejects invalid schema URIs', function (string $schema): void {
     cloudEventCodec($schema);

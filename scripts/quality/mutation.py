@@ -25,7 +25,7 @@ GROUPS = {'killed': 'killedCount', 'escaped': 'escapedCount', 'timeouted': 'time
           'killedByStaticAnalysis': 'killedByStaticAnalysisCount', 'ignored': 'ignoredCount'}
 STATS = {'totalMutantsCount', 'skippedCount', 'msi', 'mutationCodeCoverage', 'coveredCodeMsi', *GROUPS.values()}
 SECURITY_PACKAGES = {'access', 'access-azguard', 'tenancy', 'tools', 'webhooks'}
-MESSAGING_PACKAGES = {'wakeup', 'workflow', 'tasks-workflow', 'transfer'}
+MESSAGING_PACKAGES = {'scheduler', 'workflow', 'recurring-tasks', 'import-export'}
 SECURITY_CORE = ('Context/', 'Tenancy/', 'Database/', 'Data/', 'Modules/Internal/Gate/')
 ANCHORS = ('Modules/Internal/Gate/AllowAllActivationGate.php',
            'Modules/Internal/Gate/ModuleActivationDecision.php', 'Modules/Contracts/ModuleActivationGate.php',

@@ -4,14 +4,13 @@
     "type": "project",
     "license": "MIT",
     "require": {
-        "php": "^8.3",
+        "php": "^8.4",
         "axiomasoft/corex-custom-fields": "^1.0",
         "axiomasoft/corex": "^1.0",
-        "axiomasoft/corex": "^1.0",
         "axiomasoft/corex-search": "^1.0",
-        "axiomasoft/corex-transfer": "^1.0",
+        "axiomasoft/corex-import-export": "^1.0",
         "axiomasoft/corex-workflow": "^1.0",
-        "laravel/framework": "^12.0"
+        "laravel/framework": "^13.0"
     },
     "autoload": {
         "psr-4": {

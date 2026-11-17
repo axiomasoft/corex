@@ -6,7 +6,7 @@ namespace CoreX\Tenancy\Runtime\Events;
 
 use CoreX\Attributes\Api;
 
-/** Dispatched after every bootstrapper switched to the account. Listeners must not start a context switch. */
+/** Manual initialize/setWorkspace notification after Tenant entered. Protected runFor uses Tenant observations. Listeners must not switch context. */
 #[Api(since: '1.0')]
 final readonly class TenantContextInitialized
 {

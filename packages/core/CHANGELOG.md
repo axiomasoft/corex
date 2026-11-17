@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — Packman runtime
+
+- Breaking before release: remove unused deprecated `CoreOptionsParser::current()`; resolve the shared `CoreOptions` instance from the container.
+
+- Breaking: module declarations and schema registrations use Packman contracts directly; module lifecycle and schema execution are owned by Packman.
+
 ## Unreleased — invocation contract in the kernel (audit 2026-10-08 P-02)
 
 - Add `CoreX\Invocation\Contracts\OperationHandler` (SPI implement), `RequestContext` and `CoreX\Invocation\Data\InvocationMetadata`, moved from axiomasoft/corex-operations so product modules ship operation handlers against the kernel only (docs/architecture/decisions/2026-10-08-invocation-kernel-contract.md).
@@ -7,7 +13,7 @@
 
 ## Unreleased — scheduling contracts completed (audit 2026-10-08)
 
-- Add `CoreX\Scheduling\Contracts\DueWakeupSweeper` and `WakeupScheduleHint` (with `TAG`), moved from axiomasoft/corex-wakeup so consumers depend on the kernel only.
+- Add `CoreX\Scheduling\Contracts\DueWakeupSweeper` and `WakeupScheduleHint` (with `TAG`), moved from axiomasoft/corex-scheduler so consumers depend on the kernel only.
 - Add `CoreX\Context\Laravel\WorkspaceScopeProvider` (SPI implement): names the workspace-isolation global scope; axiomasoft/corex-tenancy binds it, unbound means no workspaces.
 
 ## Unreleased — kernel audit repairs (2026-10-08)
@@ -40,10 +46,10 @@
 
 ## Unreleased — scheduling contracts (P07.5)
 
-- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `packman:schema:migrate`; migration publishing is removed.
 - Add the schema registry, migrator, scope/lifecycle DTOs, commands and testing trait; remove provider schema-version constants. Add coded schema errors.
 
-- Added kernel module `CoreX\Scheduling`. Moved `WakeupScheduler`, `DueWakeupSource`, `DueWakeupHandler`, `WakeupRequest`, `WakeupWindow`, `WakeupDelivery`, `WakeupHandlerDefinition`, `ScheduleResult`, `CancelResult` and `SweepResult` from `CoreX\Wakeup` with no aliases. `DueWakeupSource::TAG` is `corex.scheduling.due-sources`; `WakeupHandlerDefinition::TAG` is `corex.scheduling.wakeup-handlers`.
+- Added kernel module `CoreX\Scheduling`. Moved `WakeupScheduler`, `DueWakeupSource`, `DueWakeupHandler`, `WakeupRequest`, `WakeupWindow`, `WakeupDelivery`, `WakeupHandlerDefinition`, `ScheduleResult`, `CancelResult` and `SweepResult` from `CoreX\Scheduler` with no aliases. `DueWakeupSource::TAG` is `corex.scheduling.due-sources`; `WakeupHandlerDefinition::TAG` is `corex.scheduling.wakeup-handlers`.
 
 ## Unreleased — PLAN3.P07.3 mandatory synchronous audit
 
@@ -64,7 +70,7 @@
 
 ## Unreleased — thin providers and registrars (P05.2)
 
-- `CoreServiceProvider` is the only public provider of the kernel: it registers `ModulesServiceProvider` itself (after the kernel bindings, so module-aware services refine them) and delegates bindings to per-module registrars (`Config`, `Context`, `Data`, `Messaging`, `Settings`, `Audit`, `Features`, `Departments`, `Storage`, `Time`, `Observability`, `Errors`, modules). Apps no longer need to list `ModulesServiceProvider` separately. `corex:modules:repair` is a regular command class.
+- `CoreServiceProvider` is the only public provider of the kernel: it registers `ModulesServiceProvider` itself (after the kernel bindings, so module-aware services refine them) and delegates bindings to per-module registrars (`Config`, `Context`, `Data`, `Messaging`, `Settings`, `Audit`, `Features`, `Departments`, `Storage`, `Time`, `Observability`, `Errors`, modules). Apps no longer need to list `ModulesServiceProvider` separately. `modules:repair` is a regular command class.
 
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
@@ -110,7 +116,7 @@
   (`Contracts|Data|Enums|Events|Exceptions`); see `docs/architecture/constitution.md` STR-003. Drain queues before
   upgrading; stored `*_type` values holding an old model FQCN no longer resolve (no aliases, PLAN3.D01).
 
-- Breaking before 1.0: Move module configuration into `corex.modules` within `config/corex.php`; publish it through `corex-config`, combine kernel migration tags, and rename the PubSub prune command to `corex:messaging:prune-pubsub`. Module cache identifiers use `corex.modules`.
+- Breaking before 1.0: Move module configuration into `modules` within `config/corex.php`; publish it through `corex-config`, combine kernel migration tags, and rename the PubSub prune command to `corex:messaging:prune-pubsub`. Module cache identifiers use `modules`.
 
 ## Unreleased
 
@@ -126,6 +132,7 @@
 Пакет pre-1.0 — breaking-изменения публичных контрактов легальны в MINOR до 1.0 (D17).
 
 ## [Unreleased]
+
 
 - Tenant schema baseline v1: one file per table, explicit constraint/index names, bigint counters, and folded actor checks; the temporary `tenant-modules` set is removed.
 

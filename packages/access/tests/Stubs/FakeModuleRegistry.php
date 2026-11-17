@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Tests\Stubs;
 
-use CoreX\Context\Data\TenantContext;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\CompiledModule;
-use CoreX\Modules\Data\CompiledRegistry;
-use CoreX\Modules\Data\Permissions;
-use CoreX\Modules\Exceptions\ModuleNotFound;
+use Packman\Context\Contracts\ContextScopeInterface;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Compiler\CompiledModule;
+use Packman\Modules\Data\Compiler\CompiledRegistry;
+use Packman\Modules\Data\Extenders\Permissions;
+use Packman\Modules\Exceptions\Registry\ModuleNotFound;
 
 /**
  * Test double for ModuleRegistry. The real, file-backed
@@ -54,12 +54,12 @@ final class FakeModuleRegistry implements ModuleRegistry
         throw new ModuleNotFound($name);
     }
 
-    public function active(TenantContext $ctx): array
+    public function active(ContextScopeInterface $ctx): array
     {
         return [];
     }
 
-    public function isActive(string $name, TenantContext $ctx): bool
+    public function isActive(string $name, ContextScopeInterface $ctx): bool
     {
         return in_array($name, $this->active, true);
     }

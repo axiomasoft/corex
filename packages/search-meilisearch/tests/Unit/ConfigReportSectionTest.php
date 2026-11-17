@@ -7,7 +7,7 @@ namespace CoreX\SearchMeilisearch\Tests\Unit;
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\CoreServiceProvider;
 use CoreX\SearchMeilisearch\Internal\MeilisearchConfigSection;
-use CoreX\SearchMeilisearch\MeilisearchServiceProvider;
+use CoreX\SearchMeilisearch\SearchMeilisearchServiceProvider;
 use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase;
 
@@ -15,7 +15,7 @@ final class ConfigReportSectionTest extends TestCase
 {
     protected function getPackageProviders($app): array
     {
-        return [CoreServiceProvider::class, MeilisearchServiceProvider::class];
+        return [CoreServiceProvider::class, SearchMeilisearchServiceProvider::class];
     }
 
     public function test_section_registers_in_report_order_and_redacts_its_secrets(): void

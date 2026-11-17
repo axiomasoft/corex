@@ -9,9 +9,6 @@ use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\ImpersonationGuard;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantDatabaseLifecycle;
-use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Modules\Contracts\PackageRegistrar;
-use CoreX\Modules\Laravel\RegistersNothingOnBoot;
 use CoreX\Tenancy\Account\Internal\DatabaseTenantProvisioner;
 use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycle;
 use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycleFsm;
@@ -20,13 +17,17 @@ use CoreX\Tenancy\Account\Laravel\MigrationWaveOrchestrator;
 use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
 use CoreX\Tenancy\Laravel\Support\HostResolverCacheInvalidator;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
-use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
+use CoreX\Tenancy\Provisioning\Contracts\AccountResources;
+use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks;
 use CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Connectors\ConnectionFactory;
 use Override;
+use Packman\Foundation\Concerns\RegistersNothingOnBoot;
+use Packman\Foundation\Contracts\PackageRegistrar;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
 use Psr\Clock\ClockInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
@@ -41,7 +42,7 @@ final class ProvisioningRegistrar implements PackageRegistrar
             DatabaseTenantProvisioner::class,
             static fn (Application $app): DatabaseTenantProvisioner => new DatabaseTenantProvisioner(
                 centralConnection: $app->make(TenancyOptions::class)->centralConnection,
-                templateIntegrityVerifier: $app->make(TemplateIntegrityVerifier::class),
+                templateIntegrityVerifier: $app->make(TemplateIntegrityChecks::class),
             ),
         );
 
@@ -50,7 +51,8 @@ final class ProvisioningRegistrar implements PackageRegistrar
             static fn (Application $app): PendingPool => new PendingPool(
                 centralConnection: $app->make(TenancyOptions::class)->centralConnection,
                 provisioner: $app->make(DatabaseTenantProvisioner::class),
-                templateIntegrityVerifier: $app->make(TemplateIntegrityVerifier::class),
+                resources: $app->make(AccountResources::class),
+                templateIntegrityVerifier: $app->make(TemplateIntegrityChecks::class),
                 connections: $app->make(ConnectionResolverInterface::class),
             ),
         );
@@ -62,6 +64,7 @@ final class ProvisioningRegistrar implements PackageRegistrar
                 connections: $app->make(ConnectionResolverInterface::class),
                 clock: $app->make(ClockInterface::class),
                 events: $app->make(Dispatcher::class),
+                resources: $app->make(AccountResources::class),
             ),
         );
         $app->singleton(
@@ -79,7 +82,7 @@ final class ProvisioningRegistrar implements PackageRegistrar
                 fsm: $app->make(AccountLifecycleFsm::class),
                 tenantDatabaseLifecycle: $app->make(TenantDatabaseLifecycle::class),
                 impersonationGuard: $app->make(ImpersonationGuard::class),
-                templateIntegrityVerifier: $app->make(TemplateIntegrityVerifier::class),
+                templateIntegrityVerifier: $app->make(TemplateIntegrityChecks::class),
                 lifecycle: $app->make(AccountLifecyclePolicy::class),
                 connections: $app->make(ConnectionResolverInterface::class),
                 clock: $app->make(ClockInterface::class),
@@ -94,7 +97,7 @@ final class ProvisioningRegistrar implements PackageRegistrar
             static fn (Application $app): MigrationWaveOrchestrator => new MigrationWaveOrchestrator(
                 centralConnection: $app->make(TenancyOptions::class)->centralConnection,
                 tenancy: $app->make(TenancyManager::class),
-                templateIntegrityVerifier: $app->make(TemplateIntegrityVerifier::class),
+                templateIntegrityVerifier: $app->make(TemplateIntegrityChecks::class),
                 schema: $app->make(SchemaMigrator::class),
             ),
         );

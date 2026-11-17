@@ -14,7 +14,7 @@ The package publishes tenant migrations for `aut_roles`, `aut_role_assignments`,
 
 ## Extension contracts
 
-Consumers bind `CoreX\Access\Matrix\Contracts\EntityActivity` to decide whether an entity is active and may implement `CoreX\Access\Contracts\RoleMatrixCompiler` when using another compiler. The default bindings are installed by `CoreAuthServiceProvider`.
+Consumers bind `CoreX\Access\Matrix\Contracts\EntityActivity` to decide whether an entity is active and may implement `CoreX\Access\Contracts\RoleMatrixCompiler` when using another compiler. The default bindings are installed by `AccessServiceProvider`.
 
 ## Identity provider
 
@@ -48,6 +48,6 @@ Package error identities use backed enums and a boot compiled kernel registry. S
 
 ## Schema installation
 
-Register the package provider, then run `php artisan corex:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `corex:schema:status`.
+Register the package provider, then run `php artisan packman:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `packman:schema:status`.
 
 Схема: наборы `tenant` и `tenant-cloud`, baseline v1. Cloud FK требуют tenancy; boxed использует только `tenant`. Baseline заменяет невыпущенную upgrade-цепочку.

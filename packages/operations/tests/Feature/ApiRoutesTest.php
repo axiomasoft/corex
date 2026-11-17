@@ -9,16 +9,12 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Invocation\Contracts\RequestContext;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\Api;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Modules\Internal\Compiler\RegistryCompiler;
-use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Definition\Data\Operation;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Laravel\Support\ApiOptions;
+use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
@@ -27,6 +23,10 @@ use CoreX\Operations\Versioning\Internal\ApiProfileFactory;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Extenders\Api;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Modules\Internal\Compiler\RegistryCompiler;
 
 final class ApiRoutesTest extends TestCase
 {
@@ -49,7 +49,7 @@ final class ApiRoutesTest extends TestCase
         $this->app['config']->set('app.key', 'api-routes-idempotency-secret');
         Schema::dropIfExists('sys_api_idempotency');
 
-        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
         $schema = ['type' => 'object'];
         $sync = Api::operation('notes.create', 'POST', '/notes', RouteNoteHandler::class, 'notes.write', $schema, $schema)
             ->asCommand()->idempotency('required')->effect('tenant_transactional')->capability('notes.write.v1');
@@ -90,7 +90,7 @@ final class ApiRoutesTest extends TestCase
         $this->assertSame(1, collect($this->app['router']->getRoutes())->filter(
             static fn ($route): bool => $route->getName() === 'corex.api.operation',
         )->count());
-        $this->app->register(ApiServiceProvider::class, force: true);
+        $this->app->register(OperationsServiceProvider::class, force: true);
         $this->assertSame(1, collect(Route::getRoutes())->filter(
             static fn ($route): bool => $route->getName() === 'corex.api.discovery',
         )->count());

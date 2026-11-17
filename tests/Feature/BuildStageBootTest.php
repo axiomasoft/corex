@@ -8,8 +8,8 @@ use CoreX\Config\Data\CoreOptions;
 use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Config\Laravel\RuntimeConfigGate;
 use CoreX\Notifications\Internal\NotificationsOptions;
+use CoreX\Scheduler\Internal\SchedulerOptions;
 use CoreX\Tests\Golden\GoldenTestCase;
-use CoreX\Wakeup\Internal\WakeupOptions;
 use CoreX\Workflow\Internal\WorkflowOptions;
 use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Support\Facades\Artisan;
@@ -36,7 +36,7 @@ final class BuildStageBootTest extends GoldenTestCase
     public function test_every_provider_boots_on_an_empty_environment(): void
     {
         self::assertInstanceOf(CoreOptions::class, $this->app->make(CoreOptions::class));
-        self::assertInstanceOf(WakeupOptions::class, $this->app->make(WakeupOptions::class));
+        self::assertInstanceOf(SchedulerOptions::class, $this->app->make(SchedulerOptions::class));
         self::assertSame([], RuntimeConfigGate::violations($this->app, false));
     }
 
@@ -67,6 +67,7 @@ final class BuildStageBootTest extends GoldenTestCase
 
     public function test_an_exact_acknowledgement_passes_and_is_reported_by_the_validate_command(): void
     {
+        $this->declareTenancyHostConfiguration();
         $this->production(dangerousWorkflow: true, acknowledged: [self::WORKFLOW_MODE]);
 
         $this->startCommand('queue:work');
@@ -78,7 +79,7 @@ final class BuildStageBootTest extends GoldenTestCase
 
     public function test_a_pattern_in_the_acknowledgement_list_is_a_shape_violation(): void
     {
-        config(['corex.acknowledged_dangerous_modes' => ['corex-wakeup.*']]);
+        config(['corex.acknowledged_dangerous_modes' => ['corex-scheduler.*']]);
         $this->app->forgetInstance(CoreOptions::class);
 
         try {
@@ -114,6 +115,7 @@ final class BuildStageBootTest extends GoldenTestCase
 
     public function test_the_validate_command_reports_the_physical_tenancy_opt_out_as_a_notice(): void
     {
+        $this->declareTenancyHostConfiguration();
         config(['corex-operations.require_physical_tenancy' => false]);
 
         self::assertSame(0, Artisan::call('corex:config:validate'));

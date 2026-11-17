@@ -6,8 +6,6 @@ namespace CoreX\Workflow\Internal;
 
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\ExtensionStamp;
 use CoreX\Workflow\Contracts\EngineAdapter;
 use CoreX\Workflow\Contracts\WorkflowBinding;
 use CoreX\Workflow\Data\CaptureResult;
@@ -19,6 +17,8 @@ use CoreX\Workflow\Data\TriggerRequest;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Compiler\ExtensionStamp;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
@@ -198,10 +198,14 @@ final readonly class SqlWorkflowBinding implements WorkflowBinding
             throw new UnsupportedWorkflowCapability('The workflow module is not active for the current tenant.');
         }
 
-        foreach ($this->modules->compiled()->workflow as $workflow) {
-            if ($workflow->kind === 'trigger'
-                && $workflow->entityHandle === $request->entityHandle
-                && in_array($request->eventName, $workflow->eventNames, true)) {
+        // Read the public, immutable compiled projection rather than compiler implementation objects.
+        foreach ($this->modules->compiled()->toArray()['workflow'] ?? [] as $workflow) {
+            $events = $workflow['eventNames'] ?? [];
+
+            if (($workflow['kind'] ?? null) === 'trigger'
+                && ($workflow['entityHandle'] ?? null) === $request->entityHandle
+                && is_array($events)
+                && in_array($request->eventName, $events, true)) {
                 return;
             }
         }

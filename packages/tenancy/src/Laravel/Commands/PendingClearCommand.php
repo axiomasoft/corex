@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Date;
 use InvalidArgumentException;
 
 /**
- * Drops stale pending болванки — DROP DATABASE + DELETE root_accounts —
+ * Discards stale pending resources through their owner and deletes the account metadata
  * whose `template_version` no longer matches the current golden template
  * (`--template-version`) and/or whose `created_at` is older than
  * `--older-than` (e.g. `24h`, `7d`, `30m`, `45s`).

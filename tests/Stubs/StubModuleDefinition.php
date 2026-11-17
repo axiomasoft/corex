@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Stubs;
 
-use CoreX\Modules\Contracts\ModuleDefinition;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Modules\Internal\Settings\DefaultSettingDefinition;
+use Packman\Modules\Contracts\Definition\ModuleDefinition;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Modules\Internal\Settings\DefaultSettingDefinition;
 
 /**
  * Minimal module used across P1.3–P1.6 tests: a title, a valid tablePrefix

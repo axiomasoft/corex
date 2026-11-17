@@ -1,16 +1,19 @@
 {
     "name": "axiomasoft/corex-notifications",
     "description": "Durable tenant-scoped notification primitives for CoreX.",
-    "type": "corex-module",
+    "type": "packman-module",
     "license": "MIT",
     "require": {
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
         "laravel/framework": "^13.0",
-        "psr/clock": "^1.0"
+        "psr/clock": "^1.0",
+        "axiomasoft/packman": "^0.1@dev",
+        "axiomasoft/packman-modules": "^0.1@dev",
+        "axiomasoft/packman-schema": "^0.1@dev"
     },
     "require-dev": {
-        "axiomasoft/corex-wakeup": "^1.0@dev",
+        "axiomasoft/corex-scheduler": "^1.0@dev",
         "ext-pdo": "*",
         "larastan/larastan": "^3.12",
         "laravel/pint": "^1.32",
@@ -32,7 +35,6 @@
     "extra": {
         "corex": {
             "schema-version": 1,
-            "module": "CoreX\\Notifications\\NotificationsModule",
             "package-type": "capability",
             "stability": "stable"
         },
@@ -43,6 +45,9 @@
         },
         "branch-alias": {
             "dev-main": "1.0.x-dev"
+        },
+        "packman": {
+            "module": "CoreX\\Notifications\\NotificationsModule"
         }
     },
     "repositories": [
@@ -52,7 +57,7 @@
         },
         {
             "type": "path",
-            "url": "../wakeup"
+            "url": "../scheduler"
         }
     ],
     "minimum-stability": "stable",

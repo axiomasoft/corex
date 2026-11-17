@@ -1,13 +1,27 @@
 # Changelog
 
+## Unreleased — package boundaries
+
+- Remove the obsolete empty `CatalogueModuleFixture::flush()` test hook; current Packman `ModuleRegistry` has no flush method.
+
+- Rename the budget/tenant connection holder to `ApiSchemaConnections`; its public factory and connection admission checks remain intact.
+
+- Breaking before release: remove deprecated invocation aliases and the `CostRegistrar`, `BulkRegistrar` and `ApiSchemaConnections::register()` shims. Use kernel invocation/principal contracts and the provider’s canonical bindings and HTTP registrars.
+
+- Breaking before release: Rename the public Laravel provider to `CoreX\Operations\OperationsServiceProvider` and update optional bulk integration to `axiomasoft/corex-import-export`.
+
+## Unreleased — Packman runtime
+
+- Breaking: module declarations and schema registrations use Packman contracts directly; module lifecycle and schema execution are owned by Packman.
+
 ## Unreleased — idempotency scope keyed by principal type (audit 2026-10-08)
 
 - Security fix: `IdempotencyScope` gains `PrincipalType $principalType` (before `principalId`) and its collision domain now includes `principal_type`. Previously principals of different types with the same id (user `5` and agent `5`) shared an idempotency scope, so one could be served the other's stored response or be rejected as a conflicting replay. Stored scope hashes change; in-flight keys from before the upgrade are not replayed.
 
 ## Unreleased — invocation contract moved to the kernel (audit 2026-10-08 P-02)
 
-- Deprecated: `CoreX\Operations\Definition\Contracts\OperationHandler`, `CoreX\Operations\Invocation\Contracts\RequestContext`, `CoreX\Operations\Authorization\Contracts\Principal` and `CoreX\Operations\Invocation\Data\InvocationMetadata` are now `class_alias` names of `CoreX\Invocation\Contracts\OperationHandler`, `CoreX\Invocation\Contracts\RequestContext`, `CoreX\Context\Contracts\Principal` and `CoreX\Invocation\Data\InvocationMetadata` (axiomasoft/corex). Same types, so existing handlers keep working unchanged; switch imports to the new names.
-- Breaking (unpublished): the operations principal is now the single kernel principal, so `Principal::id()` becomes `principalId()` and implementations add `principalType(): PrincipalType`. `PrincipalResolver` implementations can return access's `PrincipalIdentity` directly. The aliases are removed in 2.0.
+- Operation handlers use `CoreX\Invocation\Contracts\OperationHandler`, `CoreX\Invocation\Contracts\RequestContext`, `CoreX\Context\Contracts\Principal` and `CoreX\Invocation\Data\InvocationMetadata` from `axiomasoft/corex` directly.
+- Breaking (unpublished): the operations principal is now the single kernel principal, so `Principal::id()` becomes `principalId()` and implementations add `principalType(): PrincipalType`. `PrincipalResolver` implementations can return access's `PrincipalIdentity` directly.
 
 ## Unreleased — Laravel 13 platform (P09.9, D132)
 
@@ -35,7 +49,7 @@
 
 ## Unreleased — strict input envelopes and RFC 9457 errors
 
-- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `packman:schema:migrate`; migration publishing is removed.
 
 - Breaking before 1.0: operation errors always use `application/problem+json` with registry-owned type/title and occurrence detail; successes contain only data and meta. Remove Accept negotiation and the configurable problem type base.
 - Add the public InputEnvelope enum and Operation inputEnvelope policy derived by OperationFactory; reject invalid envelopes, unsupported media types and undeclared fields with distinct registered codes.
@@ -46,7 +60,7 @@
 
 ## Unreleased — thin providers and registrars (P05.2)
 
-- `ApiServiceProvider` delegates to `OperationsBindingsRegistrar`, `IdempotencyRegistrar`, `PaginationRegistrar`, `HttpRegistrar`, `ApiSchemaBindingsRegistrar`, `CostBindingsRegistrar` and `BulkBindingsRegistrar`. The anonymous replay authorizer, cursor keyring and handler-failure holder are named classes (`DefaultReplayAuthorizer`, `ConfiguredCursorKeyring`, `HandlerFailure`); the idempotency store is built by `IdempotencyStoreFactory`. `ApiSchemaRegistrar`, `CostRegistrar` and `BulkRegistrar` keep their static entry points as deprecated shims over the new registrars.
+- `OperationsServiceProvider` delegates to `OperationsBindingsRegistrar`, `IdempotencyRegistrar`, `PaginationRegistrar`, `HttpRegistrar`, `ApiSchemaBindingsRegistrar`, `CostBindingsRegistrar` and `BulkBindingsRegistrar`. The anonymous replay authorizer, cursor keyring and handler-failure holder are named classes (`DefaultReplayAuthorizer`, `ConfiguredCursorKeyring`, `HandlerFailure`); the idempotency store is built by `IdempotencyStoreFactory`.
 
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
@@ -101,7 +115,7 @@
 - Deterministic OpenAPI 3.1 projection from compiled operations. Resource metadata does not create implicit CRUD.
 - Standalone package tests, PHPStan and CI coverage floor of 80%. Manual provider registration only; no automatic routes, module enable or migrations.
 - Tool descriptor projection (`ToolDescriptor`) and bounded offline `tool-schema/1` validation (`ToolSchemaValidator`, `ToolSchemaSupervisor`, optional Opis adapter). Canonical `JsonObject`/`JsonValue` wrappers preserve object/array distinction and safe integer bounds.
-- Current-policy tool catalogue (`ToolCatalogue`, `CompiledToolCatalogue`, `ToolCatalogueView`) with fresh module activation and consumer `ToolPolicy` filtering, deterministic sorted revision, 1000-descriptor cap and default deny policy. Register via explicit `ToolServiceProvider`; no authority cache or routes.
+- Current-policy tool catalogue (`ToolCatalogue`, `CompiledToolCatalogue`, `ToolCatalogueView`) with fresh module activation and consumer `ToolPolicy` filtering, deterministic sorted revision, 1000-descriptor cap and default deny policy. Register via explicit `ToolsServiceProvider`; no authority cache or routes.
 - Guarded headless invocation (`ToolInvoker`, `GuardedToolInvoker`, `ToolCall`, `ToolResult`, `ToolRequestContext`) with schema validation, contract-hash checks, additive tool metadata on trusted context and `ToolExecutionGuard` seam. Default `ReadOnlyToolExecutionGuard` admits read tools only; consumer guards own approval, idempotency and mutation policy.
 - Fake MCP transport parity via `Internal\McpToolsProjection` (`mcp-tools-projection/1`, protocol `MCP2025-11-25`) mapping tools/list and tools/call onto the same catalogue and invoker without installing routes or live endpoints.
 - Installed consumer qualification tests (`InstalledToolContractTest`) and delivery `tool-install-qualification-20260915/` cold ZIP install verifier.

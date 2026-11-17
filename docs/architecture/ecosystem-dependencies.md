@@ -1,0 +1,116 @@
+# Зависимости экосистемы
+
+CoreX использует публичные контракты Packman, Tenant, AzGuard и Vaulter.
+Текущая ветка интеграции проверяет development-снимки этих владельцев. Ограничения
+`^0.1@dev`, `^1.0@dev` и `^2.0@dev` в Composer не утверждают, что стабильные версии
+уже опубликованы или что эти источники доступны без авторизации.
+
+## Зафиксированные исходники
+
+Корневой `composer.json` содержит inline-репозитории `type: package`; `composer.lock`
+фиксирует разрешённые зависимости. Каждый снимок содержит точный Git commit и
+PSR-4 пути внутри монорепозитория владельца. Они нужны потому, что одного VCS URL
+монорепозитория недостаточно для обнаружения его дочерних Composer-пакетов.
+
+| Владелец | Пакеты | Source reference |
+|---|---|---|
+| Packman | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins` | `366fc104f22b388607f77d506ae5e36cd0e99666` |
+| AzGuard | `azguard` | `457eed3a07e0a25eae934fd35f532cde3d69fa86` |
+| Tenant | `tenant`, `tenant-laravel` | `6089b4c3d288b28e1ba8ce7e88f37c4f0a100cbe` |
+| Vaulter | `vaulter-core`, `vaulter-media` | `56de17dfcee26aa047761bca4d1b0ba5f2c2d866` |
+
+Все имена в таблице имеют префикс `axiomasoft/`. Снимки используют `dev-main` и
+числовой branch alias владельца; это метаданные разрешения, а не доказательство,
+что commit находится в опубликованном `main`. AzGuard source URL указывает на
+`axiomasoft/azguard-private`; среде установки нужен доступ к этому репозиторию.
+
+Vaulter commit — локальная ветка `corex-integration-fix` отдельного checkout
+`vaulter-corex-integration`. Она исправляет совместимость с Packman contracts,
+регистрацию модулей, конфигурацию и запуск media CAS. **Commit ещё не опубликован
+в указанном GitHub source.** Чистый CI не сможет получить его только по `composer.lock`.
+Локальный успешный install из доступного checkout/cache не доказывает remote install.
+
+## Разработка в монорепозитории
+
+При доступности всех source commits запускайте из корня:
+
+```bash
+scripts/php84 --check
+scripts/php84 composer install --prefer-source
+```
+
+CoreX-пакеты и продукт устанавливаются из относительных `packages/*` и `products/*`.
+Внешние снимки не зависят от соседних директорий. Для неопубликованного Vaulter
+нужен переданный checkout с указанным commit или Git bundle, развёрнутый в отдельный
+локальный репозиторий. Проверить commit можно без изменения checkout:
+
+```bash
+git -C /absolute/path/vaulter-corex-integration cat-file -e 56de17dfcee26aa047761bca4d1b0ba5f2c2d866^{commit}
+```
+
+Для локальной установки можно направить только Vaulter source URL на этот checkout
+через настройки Git **одного процесса**, сохранив Composer-манифест и lockfile:
+
+```bash
+env \
+  GIT_CONFIG_COUNT=1 \
+  GIT_CONFIG_KEY_0=url.file:///absolute/path/vaulter-corex-integration/.insteadOf \
+  GIT_CONFIG_VALUE_0=https://github.com/axiomasoft/vaulter.git \
+  scripts/php84 composer install --prefer-source
+```
+
+Замените абсолютный путь своим. Если Git environment уже настроен через
+`GIT_CONFIG_COUNT`, добавьте правило к нему, сохранив прежние записи. Не коммитьте
+машинные пути, токены или credentials в Composer metadata. Публикация patch в
+upstream либо доставка проверенного Git bundle в CI — отдельный обязательный шаг
+перед воспроизводимой установкой на чистой машине.
+
+## Отдельная установка пакета для разработки
+
+Корневой `composer install` достаточен для обычных проверок монорепозитория.
+Если проверке нужен собственный `vendor` пакета, используйте общий wrapper:
+
+```bash
+scripts/php84 python3 scripts/composer-with-snapshots.py --working-dir=packages/media update --prefer-source --no-interaction
+scripts/php84 python3 scripts/composer-with-snapshots.py --working-dir=packages/media audit --locked
+```
+
+Wrapper использует то же наследование репозиториев, что и source audit: сохраняет
+пакетные объявления, затем добавляет репозитории родителей. Локальные path-зависимости
+должны находиться внутри этого checkout. Внешние development-зависимости разрешены
+только при точном совпадении source и package metadata с reviewed root lock; общий
+`minimum-stability` остаётся `stable`. Composer требует root stability flags, поэтому
+wrapper добавляет `@dev` только достижимым по `require` проверенным снимкам владельцев;
+пакеты из остальных optional-интеграций не устанавливаются.
+При `update` PHPStan, strict rules и Larastan получают точные версии из root lock,
+если входят в граф зависимостей пакета; тот же список инструментов использует root CI.
+
+Рядом с исходным манифестом создаются игнорируемые `.composer-snapshots.json` и
+`.composer-snapshots.lock`. Исходные `composer.json`/`composer.lock` не переписываются;
+`vendor` и пути autoload остаются локальными для пакета. Последующие `install`,
+`validate` и `audit --locked` этого окружения запускаются тем же wrapper. Обычные
+Composer scripts пакета используют установленный `vendor`. Генерируемые manifests
+и locks содержат локальные paths, поэтому не входят в артефакты публикации.
+Octane consumer harness использует эту же установку; его исходный манифест сохраняет
+точный PHPUnit constraint, а устаревший lock до выделения Packman удалён.
+
+## Приложение-потребитель и дистрибуция
+
+Composer не наследует `repositories` зависимостей. Корень приложения должен иметь
+свой одобренный CoreX Composer-канал и соответствующие внешние package-снимки либо
+доступный Composer-канал владельцев с эквивалентными пакетами. Не копируйте
+монорепозиторные `path` repositories в приложение. Для временного snapshot-канала
+копируются целиком соответствующие `type: package` записи, включая `source`,
+`require`, `autoload`, providers и branch aliases; один commit без этих метаданных
+не описывает дочерний пакет.
+
+После настройки канала выберите нужные пакеты, например
+`composer require 'axiomasoft/corex:^1.0@dev'`, и сохраните lockfile приложения.
+Split-артефакты CoreX не включают чужой исходный код и не предоставляют внешний
+Composer-канал автоматически. Проверки consumer fixtures добавляют снимки владельцев
+после candidate-репозитория; для их Git sources действуют те же требования доступа.
+
+При обновлении владельца согласованно обновляют inline metadata и lockfile,
+проверяют API адаптера и его интеграционные тесты. Перед публикацией CoreX каждый
+используемый source reference должен быть доступен целевой среде; локальный patch
+нужно доставить отдельно или заменить доступным проверенным upstream commit.

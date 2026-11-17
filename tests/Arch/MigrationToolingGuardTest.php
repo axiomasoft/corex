@@ -42,9 +42,6 @@ it('keeps migration bytes untouched by Pint and Rector with working negative con
         $files->copy($root.'/composer.json', $fixture.'/composer.json');
         $files->copy($root.'/composer.lock', $fixture.'/composer.lock');
         $files->copyDirectory($root.'/scripts/quality/rector/Laravel/config', $fixture.'/scripts/quality/rector/Laravel/config');
-        $cliGuard = 'packages/core/src/Modules/Laravel/ModulesBootRegistrar.php';
-        $files->ensureDirectoryExists(dirname($fixture.'/'.$cliGuard));
-        $files->copy($root.'/'.$cliGuard, $fixture.'/'.$cliGuard);
         $rector = $files->get($root.'/rector.php');
         $files->put($fixture.'/rector.php', $rector);
         $run = static function (array $command) use ($fixture): Process {

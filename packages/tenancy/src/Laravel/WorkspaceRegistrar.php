@@ -7,14 +7,14 @@ namespace CoreX\Tenancy\Laravel;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Context\Laravel\WorkspaceScopeProvider;
-use CoreX\Modules\Contracts\PackageRegistrar;
-use CoreX\Modules\Laravel\RegistersNothingOnBoot;
 use CoreX\Tenancy\Contracts\PrincipalWorkspaceResolver;
 use CoreX\Tenancy\Workspace\Contracts\WorkspaceResolver;
 use CoreX\Tenancy\Workspace\Internal\DatabaseWorkspaceResolver;
 use CoreX\Tenancy\Workspace\Internal\TenancyWorkspaceScopeProvider;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Foundation\Concerns\RegistersNothingOnBoot;
+use Packman\Foundation\Contracts\PackageRegistrar;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class WorkspaceRegistrar implements PackageRegistrar

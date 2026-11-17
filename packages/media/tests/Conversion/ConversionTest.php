@@ -15,9 +15,10 @@ use CoreX\Media\Internal\Jobs\ConvertMedia;
 use CoreX\Media\Internal\Jobs\PurgeMedia;
 use CoreX\Media\Internal\MediaOperationStore;
 use CoreX\Media\Laravel\UploadedFileSource;
-use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Vaulter\Media\Contracts\Cas\BlobPins;
+use Vaulter\Media\Contracts\Cas\BlobStore;
 
 function conversionContext(): MediaContext
 {
@@ -61,11 +62,17 @@ it('creates one bounded GD thumbnail for a file/profile/version', function (): v
     $conversion = resolve(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail');
     $stored = DB::table('med_conversions')->where('file_id', $file->id)->first();
 
+    $read = resolve(MediaLibrary::class)->readConversion(conversionContext(), $file->id, 'thumbnail');
+    $stream = ($read->openStream)();
+    $converted = stream_get_contents($stream);
+    fclose($stream);
+
     expect($conversion)->not->toBeNull()
         ->and($conversion->width)->toBe(100)
         ->and($conversion->height)->toBe(50)
         ->and($stored->state)->toBe('ready')
-        ->and(getimagesizefromstring(resolve('filesystem')->disk('media')->get($stored->object_key))[0])->toBe(100);
+        ->and(getimagesizefromstring($converted)[0])->toBe(100)
+        ->and($read->sha256)->toBe(hash('sha256', $converted));
 });
 
 it('purges a published conversion together with its deleting original', function (): void {
@@ -84,11 +91,23 @@ it('purges a published conversion together with its deleting original', function
     );
     resolve(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail');
     new ConvertMedia($file->id, 'thumbnail')->handle(resolve(ConversionCoordinator::class));
-    $outputKey = DB::table('med_conversions')->where('file_id', $file->id)->value('object_key');
+    $outputKey = DB::table('med_conversions')->where('file_id', $file->id)->value('blob_id');
 
     resolve(MediaLibrary::class)->delete(conversionContext(), $file->id);
-    new PurgeMedia($file->id)->handle(resolve(MediaOperationStore::class), resolve(TenantStorage::class));
+    new PurgeMedia($file->id)->handle(resolve(MediaOperationStore::class));
 
     expect($outputKey)->toBeString()
-        ->and(resolve(TenantStorage::class)->disk()->exists($outputKey))->toBeFalse();
+        ->and(resolve(BlobPins::class)->countByOwner())->toBe([])
+        ->and(mediaBlobBytes($outputKey))->not->toBeEmpty();
 });
+
+function mediaBlobBytes(string $id): string
+{
+    $stream = resolve(BlobStore::class)->read($id);
+
+    try {
+        return stream_get_contents($stream);
+    } finally {
+        fclose($stream);
+    }
+}

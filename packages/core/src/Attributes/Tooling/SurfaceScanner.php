@@ -446,8 +446,10 @@ final class SurfaceScanner
             $file = $loader->findFile($name);
 
             // The inspected tree is authoritative; the host autoloader may only supply vendor dependencies.
-            if ($file !== false && str_contains($file, '/vendor/') && ! str_contains($file, '/vendor/axiomasoft/')) {
-                $this->parseFile(absolute: $file, relative: '@vendor/'.$name, owner: '@vendor', product: false);
+            $realFile = $file === false ? false : realpath($file);
+
+            if ($realFile !== false && str_contains($realFile, '/vendor/')) {
+                $this->parseFile(absolute: $realFile, relative: '@vendor/'.$name, owner: '@vendor', product: false);
 
                 break;
             }
@@ -896,7 +898,8 @@ final class SurfaceScanner
             } elseif (is_array($value)) {
                 foreach ($value as $i => $child) {
                     if ($child instanceof Doc\Node) {
-                        $this->walkDoc(type: $type, node: $child, path: $path.'.'.$key.'.'.$i, aliases: $aliases, visiting: $visiting, line: $line);
+                        $bound = $node instanceof Doc\Type\GenericTypeNode && $node->type->name === 'class-string' && $key === 'genericTypes';
+                        $this->walkDoc(type: $type, node: $child, path: $path.($bound ? '.class-string' : '').'.'.$key.'.'.$i, aliases: $aliases, visiting: $visiting, line: $line);
                     }
                 }
             }
@@ -1033,6 +1036,12 @@ final class SurfaceScanner
 
             if (str_contains($targetName, '\\Internal\\')) {
                 $this->error(type: $origin, code: 'API-INTERNAL-TYPE', path: $next, message: $targetName, line: $reference['line']);
+            }
+
+            // A class-string names a type; it does not embed an instance in the
+            // payload. Resolution and public-boundary checks still apply above.
+            if (str_contains($reference['path'], '.class-string.')) {
+                continue;
             }
 
             if (in_array($targetName, ['stdClass', 'DateTime', 'DateTimeInterface'], true) || ($target !== null && $target->owner === '@vendor' && ! $target->node instanceof Enum_ && ! str_contains($reference['path'], '@throws')) || $this->isModelOrCollection(name: $targetName, visited: []) || ($target !== null && $target->node instanceof Class_ && ! $this->isThrowable(name: $targetName, visited: []) && $target->node->getProperties() !== [] && (! $target->node->isFinal() || ! $target->node->isReadonly()))) {

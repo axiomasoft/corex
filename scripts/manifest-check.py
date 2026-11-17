@@ -17,8 +17,20 @@ ALIAS = '1.0.x-dev'
 MONO_CONSTRAINT = '^1.0@dev'
 PHP = '^8.4'
 ILLUMINATE = '^13.0'
-# Temporary pinned upstream exceptions for packages without stable releases.
-ALLOWED_PRERELEASE = {}
+# Unreleased ecosystem dependencies are fixed to reviewed commits in the root
+# package repositories and lockfile; other prerelease dependencies remain forbidden.
+ALLOWED_PRERELEASE = {
+    'axiomasoft/packman': '^0.1@dev',
+    'axiomasoft/packman-modules': '^0.1@dev',
+    'axiomasoft/packman-schema': '^0.1@dev',
+    'axiomasoft/packman-panels': '^0.1@dev',
+    'axiomasoft/packman-plugins': '^0.1@dev',
+    'axiomasoft/azguard': '^2.0@dev',
+    'axiomasoft/tenant': '^1.0@dev',
+    'axiomasoft/tenant-laravel': '^1.0@dev',
+    'axiomasoft/vaulter-core': '^1.0@dev',
+    'axiomasoft/vaulter-media': '^1.0@dev',
+}
 # The AzGuard bridge stays outside the release set until its upstream is published.
 UNRELEASED = {'axiomasoft/corex-access-azguard'}
 VALID_STABILITY = {'stable', 'experimental', 'internal', 'deprecated', 'unreleased'}
@@ -114,6 +126,21 @@ def main() -> int:
             for name in sorted(closure(data)):
                 if packages[name][0] not in paths:
                     bad('path-repo', f'no path repository ../{packages[name][0]} for {name}')
+
+    repository_packages = {
+        repository['package']['name']: repository['package']
+        for repository in roots[0][1].get('repositories', [])
+        if repository.get('type') == 'package'
+    }
+    lock = load(ROOT / 'composer.lock')
+    locked_packages = {package['name']: package for package in lock.get('packages', []) + lock.get('packages-dev', [])}
+    for name in ALLOWED_PRERELEASE:
+        source = repository_packages.get(name, {}).get('source', {})
+        reference = source.get('reference', '')
+        if source.get('type') != 'git' or not re.fullmatch(r'[0-9a-f]{40}', reference):
+            violations.append(f'ROOT: ecosystem-pin: {name} must have an exact Git commit')
+        elif locked_packages.get(name, {}).get('source') != source:
+            violations.append(f'ROOT: ecosystem-pin: {name} lockfile differs from reviewed repository source')
 
     for line in violations:
         print(line)

@@ -7,7 +7,6 @@ namespace CoreX\Workflow;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\RuntimeConfigCheck;
-use CoreX\Database\Contracts\SchemaSetProvider;
 use CoreX\Workflow\Contracts\WorkflowBinding;
 use CoreX\Workflow\Internal\DangerousModesCheck;
 use CoreX\Workflow\Internal\SqlWorkflowBinding;
@@ -18,6 +17,7 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Packman\Schema\Contracts\Migration\SchemaSetProvider;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class WorkflowServiceProvider extends ServiceProvider

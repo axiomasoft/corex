@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\Api;
-use CoreX\Modules\Data\CompiledRegistry;
-use CoreX\Modules\Data\InstalledPackageVersion;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
 use CoreX\Operations\OpenApi\Internal\ContractSnapshotBuilder;
 use CoreX\Operations\Testing\ModuleFixture;
 use CoreX\Operations\Testing\NoteHandler;
 use CoreX\Operations\Tests\TestCase;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Compiler\CompiledRegistry;
+use Packman\Modules\Data\Compiler\InstalledPackageVersion;
+use Packman\Modules\Data\Extenders\Api;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Modules\Internal\Compiler\RegistryCompiler;
 
 final class ContractSnapshotTest extends TestCase
 {

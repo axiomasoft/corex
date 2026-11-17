@@ -53,7 +53,7 @@
     },
     "packages/core": {
       "distribution": "public",
-      "mirror": "axiomasoft/corex-modules"
+      "mirror": "axiomasoft/packman-modules"
     },
     "packages/notifications": {
       "distribution": "public",
@@ -87,21 +87,21 @@
       "distribution": "public",
       "mirror": "axiomasoft/corex-tasks"
     },
-    "packages/tasks-workflow": {
+    "packages/recurring-tasks": {
       "distribution": "public",
-      "mirror": "axiomasoft/corex-tasks-workflow"
+      "mirror": "axiomasoft/corex-recurring-tasks"
     },
     "packages/tenancy": {
       "distribution": "public",
       "mirror": "axiomasoft/corex-tenancy"
     },
-    "packages/transfer": {
+    "packages/import-export": {
       "distribution": "public",
-      "mirror": "axiomasoft/corex-transfer"
+      "mirror": "axiomasoft/corex-import-export"
     },
-    "packages/wakeup": {
+    "packages/scheduler": {
       "distribution": "public",
-      "mirror": "axiomasoft/corex-wakeup"
+      "mirror": "axiomasoft/corex-scheduler"
     },
     "packages/workflow": {
       "distribution": "public",
@@ -114,7 +114,7 @@
       "reason": "flex-product-consumer"
     },
     {
-      "path": "packages/transfer",
+      "path": "packages/import-export",
       "reason": "tombstone"
     }
   ]

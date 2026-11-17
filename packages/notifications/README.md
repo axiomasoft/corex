@@ -14,8 +14,8 @@ providers can add channel drivers and recipient resolution without changing the 
 
 When `corex-notifications.digest.enabled` is enabled, the package tags a
 `WakeupHandlerDefinition` (`corex.scheduling.wakeup-handlers`) and a `DueWakeupSource`
-(`corex.scheduling.due-sources`). It does not depend on `axiomasoft/corex-wakeup` and does not
-write `corex-wakeup.handlers`. An enabled digest without a bound `WakeupScheduler` is a
+(`corex.scheduling.due-sources`). It does not depend on `axiomasoft/corex-scheduler` and does not
+write `corex-scheduler.handlers`. An enabled digest without a bound `WakeupScheduler` is a
 configuration violation. The package registers the
 `notification.digest.v1` wakeup consumer. A digest freezes at most 100 notification IDs per
 explicit UTC half-open window. The shared local wakeup runner admits a separate digest delivery;
@@ -44,6 +44,6 @@ validated replay and safe mapping.
 
 ## Schema installation
 
-Register the package provider, then run `php artisan corex:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `corex:schema:status`.
+Register the package provider, then run `php artisan packman:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `packman:schema:status`.
 
 Схема: набор(ы) `tenant`, baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.

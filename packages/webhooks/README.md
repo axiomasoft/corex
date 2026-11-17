@@ -10,7 +10,7 @@ Requires PHP 8.4 and Laravel 13. An operations extension: it builds on axiomasof
 
 ## Configuration
 
-Register `CoreX\Webhooks\WebhooksServiceProvider` alongside `CoreX\Operations\ApiServiceProvider`. Publish `corex-webhooks-config`, then run `php artisan corex:schema:migrate --scope=tenant --database=<tenant>`. Remote delivery requires both `delivery_enabled` and `worker_ready`, plus a host-owned key ring; both flags default to false.
+Register `CoreX\Webhooks\WebhooksServiceProvider` alongside `CoreX\Operations\OperationsServiceProvider`. Publish `corex-webhooks-config`, then run `php artisan packman:schema:migrate --scope=tenant --database=<tenant>`. Remote delivery requires both `delivery_enabled` and `worker_ready`, plus a host-owned key ring; both flags default to false.
 
 ## Public contracts
 

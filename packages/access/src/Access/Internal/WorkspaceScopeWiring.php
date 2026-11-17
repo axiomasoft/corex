@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Access\Access\Internal;
 
 use Closure;
-use CoreX\Access\CoreAuthServiceProvider;
-use CoreX\Modules\Contracts\EntityRegistry;
-use CoreX\Modules\Enums\Capability;
+use CoreX\Access\AccessServiceProvider;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
+use Packman\Modules\Contracts\Entities\EntityRegistry;
+use Packman\Modules\Enums\Entities\Capability;
 
 /**
  * Auto-registers the workspace global scope on every model whose entity
@@ -29,8 +29,8 @@ use Illuminate\Database\Eloquent\Scope;
  * workspaces, and the RBAC `workspace` scope ({@see ScopePredicate}, D107)
  * stays correct on its own.
  *
- * Called from {@see CoreAuthServiceProvider::boot()}, the same
- * precedent as `CoreX\Modules\Internal\Audit\AuditCapabilityWiring`.
+ * Called from {@see AccessServiceProvider::boot()}, the same
+ * precedent as `CoreX\Audit\Internal\ModuleAuditHook`.
  *
  * @internal spec: B-11 §5.4 п.5, P2.9 D115
  */

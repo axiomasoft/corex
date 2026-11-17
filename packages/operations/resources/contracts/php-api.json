@@ -2,46 +2,6 @@
     "schema": "php-api/1",
     "package": "axiomasoft/corex-operations",
     "symbols": {
-        "CoreX\\Operations\\ApiServiceProvider": {
-            "kind": "class",
-            "layer": "spi-call",
-            "since": "1.0",
-            "final": true,
-            "readonly": false,
-            "abstract": false,
-            "extends": [
-                "Illuminate\\Support\\ServiceProvider"
-            ],
-            "implements": [],
-            "uses": [],
-            "doc": [],
-            "methods": {
-                "boot": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "void",
-                    "doc": []
-                },
-                "register": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "void",
-                    "doc": []
-                }
-            },
-            "properties": [],
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
         "CoreX\\Operations\\Authorization\\Contracts\\ClientScopeAuthorizer": {
             "kind": "interface",
             "layer": "spi-implement",
@@ -1527,7 +1487,7 @@
                     "parameters": [
                         {
                             "name": "runner",
-                            "type": "(CoreX\\Transfer\\Contracts\\TransferRunner|CoreX\\Transfer\\Contracts\\ExportRunner)",
+                            "type": "(CoreX\\ImportExport\\Contracts\\TransferRunner|CoreX\\ImportExport\\Contracts\\ExportRunner)",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -1536,7 +1496,7 @@
                         },
                         {
                             "name": "transfer",
-                            "type": "CoreX\\Transfer\\Data\\TransferRef",
+                            "type": "CoreX\\ImportExport\\Data\\TransferRef",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -1545,7 +1505,7 @@
                         },
                         {
                             "name": "token",
-                            "type": "CoreX\\Transfer\\Data\\StepToken",
+                            "type": "CoreX\\ImportExport\\Data\\StepToken",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -1554,7 +1514,7 @@
                         },
                         {
                             "name": "cancellation",
-                            "type": "CoreX\\Transfer\\Contracts\\CancellationSignal",
+                            "type": "CoreX\\ImportExport\\Contracts\\CancellationSignal",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -1563,7 +1523,7 @@
                         },
                         {
                             "name": "results",
-                            "type": "CoreX\\Transfer\\Contracts\\TransferResultReader",
+                            "type": "CoreX\\ImportExport\\Contracts\\TransferResultReader",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -1572,7 +1532,7 @@
                         },
                         {
                             "name": "manifest",
-                            "type": "?CoreX\\Transfer\\Data\\Export\\ExportManifest",
+                            "type": "?CoreX\\ImportExport\\Data\\Export\\ExportManifest",
                             "by_reference": false,
                             "variadic": false,
                             "optional": true,
@@ -1581,7 +1541,7 @@
                         },
                         {
                             "name": "cursor",
-                            "type": "?CoreX\\Transfer\\Data\\Export\\ExportCursor",
+                            "type": "?CoreX\\ImportExport\\Data\\Export\\ExportCursor",
                             "by_reference": false,
                             "variadic": false,
                             "optional": true,
@@ -1596,7 +1556,7 @@
             "properties": {
                 "cancellation": {
                     "flags": 1,
-                    "type": "CoreX\\Transfer\\Contracts\\CancellationSignal",
+                    "type": "CoreX\\ImportExport\\Contracts\\CancellationSignal",
                     "readonly": true,
                     "visibility": "public",
                     "static": false,
@@ -1606,7 +1566,7 @@
                 },
                 "cursor": {
                     "flags": 1,
-                    "type": "?CoreX\\Transfer\\Data\\Export\\ExportCursor",
+                    "type": "?CoreX\\ImportExport\\Data\\Export\\ExportCursor",
                     "readonly": true,
                     "visibility": "public",
                     "static": false,
@@ -1616,7 +1576,7 @@
                 },
                 "manifest": {
                     "flags": 1,
-                    "type": "?CoreX\\Transfer\\Data\\Export\\ExportManifest",
+                    "type": "?CoreX\\ImportExport\\Data\\Export\\ExportManifest",
                     "readonly": true,
                     "visibility": "public",
                     "static": false,
@@ -1626,7 +1586,7 @@
                 },
                 "results": {
                     "flags": 1,
-                    "type": "CoreX\\Transfer\\Contracts\\TransferResultReader",
+                    "type": "CoreX\\ImportExport\\Contracts\\TransferResultReader",
                     "readonly": true,
                     "visibility": "public",
                     "static": false,
@@ -1636,7 +1596,7 @@
                 },
                 "runner": {
                     "flags": 1,
-                    "type": "(CoreX\\Transfer\\Contracts\\TransferRunner|CoreX\\Transfer\\Contracts\\ExportRunner)",
+                    "type": "(CoreX\\ImportExport\\Contracts\\TransferRunner|CoreX\\ImportExport\\Contracts\\ExportRunner)",
                     "readonly": true,
                     "visibility": "public",
                     "static": false,
@@ -1646,7 +1606,7 @@
                 },
                 "token": {
                     "flags": 1,
-                    "type": "CoreX\\Transfer\\Data\\StepToken",
+                    "type": "CoreX\\ImportExport\\Data\\StepToken",
                     "readonly": true,
                     "visibility": "public",
                     "static": false,
@@ -1656,7 +1616,7 @@
                 },
                 "transfer": {
                     "flags": 1,
-                    "type": "CoreX\\Transfer\\Data\\TransferRef",
+                    "type": "CoreX\\ImportExport\\Data\\TransferRef",
                     "readonly": true,
                     "visibility": "public",
                     "static": false,
@@ -1714,7 +1674,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [],
             "doc": [],
@@ -1774,7 +1734,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [],
             "doc": [],
@@ -1880,68 +1840,6 @@
                             "array<array-key, mixed> $config"
                         ]
                     }
-                }
-            },
-            "properties": [],
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
-        "CoreX\\Operations\\Bulk\\Laravel\\BulkRegistrar": {
-            "kind": "class",
-            "layer": "spi-call",
-            "since": "1.0",
-            "final": true,
-            "readonly": true,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": {
-                "@deprecated": [
-                    ""
-                ]
-            },
-            "methods": {
-                "boot": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "app",
-                            "type": "Illuminate\\Contracts\\Foundation\\Application",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "void",
-                    "doc": []
-                },
-                "register": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "app",
-                            "type": "Illuminate\\Contracts\\Foundation\\Application",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "void",
-                    "doc": []
                 }
             },
             "properties": [],
@@ -3095,7 +2993,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [],
             "doc": [],
@@ -3188,48 +3086,6 @@
             "enum_backing": null,
             "enum_cases": []
         },
-        "CoreX\\Operations\\Cost\\Laravel\\CostRegistrar": {
-            "kind": "class",
-            "layer": "spi-call",
-            "since": "1.0",
-            "final": true,
-            "readonly": true,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": {
-                "@deprecated": [
-                    ""
-                ]
-            },
-            "methods": {
-                "register": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "app",
-                            "type": "Illuminate\\Contracts\\Foundation\\Application",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "void",
-                    "doc": []
-                }
-            },
-            "properties": [],
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
         "CoreX\\Operations\\Definition\\Contracts\\OperationDefinitionValidator": {
             "kind": "class",
             "layer": "spi-call",
@@ -3271,7 +3127,7 @@
                     "parameters": [
                         {
                             "name": "api",
-                            "type": "CoreX\\Modules\\Data\\Api",
+                            "type": "Packman\\Modules\\Data\\Extenders\\Api",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -3291,7 +3147,7 @@
                     "parameters": [
                         {
                             "name": "first",
-                            "type": "CoreX\\Modules\\Data\\Api",
+                            "type": "Packman\\Modules\\Data\\Extenders\\Api",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -3300,7 +3156,7 @@
                         },
                         {
                             "name": "second",
-                            "type": "CoreX\\Modules\\Data\\Api",
+                            "type": "Packman\\Modules\\Data\\Extenders\\Api",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -4307,7 +4163,7 @@
                     "parameters": [
                         {
                             "name": "api",
-                            "type": "CoreX\\Modules\\Data\\Api",
+                            "type": "Packman\\Modules\\Data\\Extenders\\Api",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -6349,7 +6205,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [],
             "doc": [],
@@ -6400,7 +6256,7 @@
             "enum_backing": null,
             "enum_cases": []
         },
-        "CoreX\\Operations\\Laravel\\ApiSchemaRegistrar": {
+        "CoreX\\Operations\\Laravel\\ApiSchemaConnections": {
             "kind": "class",
             "layer": "spi-call",
             "since": "1.0",
@@ -6513,32 +6369,8 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\Operations\\Laravel\\ApiSchemaRegistrar)",
+                    "return": "self(CoreX\\Operations\\Laravel\\ApiSchemaConnections)",
                     "doc": []
-                },
-                "register": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "app",
-                            "type": "Illuminate\\Contracts\\Foundation\\Application",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "void",
-                    "doc": {
-                        "@deprecated": [
-                            ""
-                        ]
-                    }
                 },
                 "tenant": {
                     "visibility": "public",
@@ -6614,7 +6446,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [],
             "doc": [],
@@ -6674,7 +6506,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [],
             "doc": [],
@@ -6784,7 +6616,7 @@
                     "parameters": [
                         {
                             "name": "modules",
-                            "type": "CoreX\\Modules\\Contracts\\ModuleRegistry",
+                            "type": "Packman\\Modules\\Contracts\\Registry\\ModuleRegistry",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -6953,7 +6785,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [],
             "doc": [],
@@ -7013,7 +6845,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [],
             "doc": [],
@@ -7635,6 +7467,46 @@
                             "array<string, mixed>"
                         ]
                     }
+                }
+            },
+            "properties": [],
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
+        "CoreX\\Operations\\OperationsServiceProvider": {
+            "kind": "class",
+            "layer": "spi-call",
+            "since": "1.0",
+            "final": true,
+            "readonly": false,
+            "abstract": false,
+            "extends": [
+                "Illuminate\\Support\\ServiceProvider"
+            ],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "boot": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "void",
+                    "doc": []
+                },
+                "register": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "void",
+                    "doc": []
                 }
             },
             "properties": [],
@@ -8680,7 +8552,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\ModuleRegistry"
+                "Packman\\Modules\\Contracts\\Registry\\ModuleRegistry"
             ],
             "uses": [],
             "doc": [],
@@ -8694,7 +8566,7 @@
                     "parameters": [
                         {
                             "name": "registry",
-                            "type": "CoreX\\Modules\\Data\\CompiledRegistry",
+                            "type": "Packman\\Modules\\Data\\Compiler\\CompiledRegistry",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -8714,7 +8586,7 @@
                     "parameters": [
                         {
                             "name": "ctx",
-                            "type": "CoreX\\Context\\Data\\TenantContext",
+                            "type": "Packman\\Context\\Contracts\\ContextScopeInterface",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -8752,17 +8624,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Modules\\Data\\CompiledRegistry",
-                    "doc": []
-                },
-                "flush": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "void",
+                    "return": "Packman\\Modules\\Data\\Compiler\\CompiledRegistry",
                     "doc": []
                 },
                 "get": {
@@ -8782,7 +8644,7 @@
                             "flags": 0
                         }
                     ],
-                    "return": "CoreX\\Modules\\Data\\CompiledModule",
+                    "return": "Packman\\Modules\\Data\\Compiler\\CompiledModule",
                     "doc": []
                 },
                 "isActive": {
@@ -8803,7 +8665,7 @@
                         },
                         {
                             "name": "ctx",
-                            "type": "CoreX\\Context\\Data\\TenantContext",
+                            "type": "Packman\\Context\\Contracts\\ContextScopeInterface",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -8852,7 +8714,7 @@
                 },
                 "registry": {
                     "flags": 1,
-                    "type": "CoreX\\Modules\\Data\\CompiledRegistry",
+                    "type": "Packman\\Modules\\Data\\Compiler\\CompiledRegistry",
                     "readonly": false,
                     "visibility": "public",
                     "static": false,
@@ -9238,7 +9100,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Modules\\Data\\CompiledRegistry",
+                    "return": "Packman\\Modules\\Data\\Compiler\\CompiledRegistry",
                     "doc": []
                 }
             },
@@ -9267,7 +9129,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\ModuleRegistry"
+                "Packman\\Modules\\Contracts\\Registry\\ModuleRegistry"
             ],
             "uses": [],
             "doc": [],
@@ -9281,7 +9143,7 @@
                     "parameters": [
                         {
                             "name": "registry",
-                            "type": "CoreX\\Modules\\Data\\CompiledRegistry",
+                            "type": "Packman\\Modules\\Data\\Compiler\\CompiledRegistry",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -9301,7 +9163,7 @@
                     "parameters": [
                         {
                             "name": "ctx",
-                            "type": "CoreX\\Context\\Data\\TenantContext",
+                            "type": "Packman\\Context\\Contracts\\ContextScopeInterface",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -9329,7 +9191,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Modules\\Data\\CompiledRegistry",
+                    "return": "Packman\\Modules\\Data\\Compiler\\CompiledRegistry",
                     "doc": []
                 },
                 "get": {
@@ -9349,7 +9211,7 @@
                             "flags": 0
                         }
                     ],
-                    "return": "CoreX\\Modules\\Data\\CompiledModule",
+                    "return": "Packman\\Modules\\Data\\Compiler\\CompiledModule",
                     "doc": []
                 },
                 "isActive": {
@@ -9370,7 +9232,7 @@
                         },
                         {
                             "name": "ctx",
-                            "type": "CoreX\\Context\\Data\\TenantContext",
+                            "type": "Packman\\Context\\Contracts\\ContextScopeInterface",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -9395,7 +9257,7 @@
                 },
                 "registry": {
                     "flags": 1,
-                    "type": "CoreX\\Modules\\Data\\CompiledRegistry",
+                    "type": "Packman\\Modules\\Data\\Compiler\\CompiledRegistry",
                     "readonly": false,
                     "visibility": "public",
                     "static": false,
@@ -10604,7 +10466,7 @@
                     "parameters": [
                         {
                             "name": "registry",
-                            "type": "CoreX\\Modules\\Data\\CompiledRegistry",
+                            "type": "Packman\\Modules\\Data\\Compiler\\CompiledRegistry",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,

@@ -6,7 +6,6 @@ namespace Flex\Crm\Context;
 
 use CoreX\Context\Contracts\AccountConnectionResolver;
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Modules\Contracts\ModuleRegistry;
 use Flex\Crm\Context\Contracts\CrmExecutionContext;
 use Flex\Crm\Context\Data\ExecutionContext;
 use Flex\Crm\Internal\Value;
@@ -14,6 +13,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 /** @internal Mandatory package admission; consumer adapters can only narrow it. */
 final readonly class ContextGuard

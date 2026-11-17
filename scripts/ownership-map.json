@@ -76,7 +76,7 @@
         "axiomasoft/corex-recurrence": {
             "dir": "recurrence",
             "root": "CoreX\\Recurrence",
-            "config": null,
+            "config": "corex-panels",
             "tag_prefix": null,
             "env_prefix": null,
             "command_prefix": null
@@ -113,13 +113,13 @@
             "env_prefix": "COREX_TASKS_",
             "command_prefix": "corex:tasks:"
         },
-        "axiomasoft/corex-tasks-workflow": {
-            "dir": "tasks-workflow",
-            "root": "CoreX\\TasksWorkflow",
-            "config": "corex-tasks-workflow",
-            "tag_prefix": "corex-tasks-workflow-",
-            "env_prefix": "COREX_TASKS_WORKFLOW_",
-            "command_prefix": "corex:tasks-workflow:"
+        "axiomasoft/corex-recurring-tasks": {
+            "dir": "recurring-tasks",
+            "root": "CoreX\\RecurringTasks",
+            "config": "corex-recurring-tasks",
+            "tag_prefix": "corex-recurring-tasks-",
+            "env_prefix": "COREX_RECURRING_TASKS_",
+            "command_prefix": "corex:recurring-tasks:"
         },
         "axiomasoft/corex-tenancy": {
             "dir": "tenancy",
@@ -130,21 +130,21 @@
             "command_prefix": "corex:tenancy:",
             "upstream_config": []
         },
-        "axiomasoft/corex-transfer": {
-            "dir": "transfer",
-            "root": "CoreX\\Transfer",
-            "config": "corex-transfer",
-            "tag_prefix": "corex-transfer-",
-            "env_prefix": "COREX_TRANSFER_",
-            "command_prefix": "corex:transfer:"
+        "axiomasoft/corex-import-export": {
+            "dir": "import-export",
+            "root": "CoreX\\ImportExport",
+            "config": "corex-import-export",
+            "tag_prefix": "corex-import-export-",
+            "env_prefix": "COREX_IMPORT_EXPORT_",
+            "command_prefix": "corex:import-export:"
         },
-        "axiomasoft/corex-wakeup": {
-            "dir": "wakeup",
-            "root": "CoreX\\Wakeup",
-            "config": "corex-wakeup",
-            "tag_prefix": "corex-wakeup-",
-            "env_prefix": "COREX_WAKEUP_",
-            "command_prefix": "corex:wakeup:"
+        "axiomasoft/corex-scheduler": {
+            "dir": "scheduler",
+            "root": "CoreX\\Scheduler",
+            "config": "corex-scheduler",
+            "tag_prefix": "corex-scheduler-",
+            "env_prefix": "COREX_SCHEDULER_",
+            "command_prefix": "corex:scheduler:"
         },
         "axiomasoft/corex-workflow": {
             "dir": "workflow",
@@ -190,9 +190,9 @@
             "Departments",
             "Errors",
             "Features",
+            "Foundation",
             "Invocation",
             "Messaging",
-            "Modules",
             "Observability",
             "Scheduling",
             "Settings",

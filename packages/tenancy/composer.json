@@ -1,6 +1,6 @@
 {
     "name": "axiomasoft/corex-tenancy",
-    "description": "CoreX physical DB-per-account tenancy — root-schema control plane (B-11, D13).",
+    "description": "CoreX account and workspace lifecycle with external Tenant runtime and host-owned physical resources.",
     "type": "library",
     "license": "MIT",
     "keywords": [
@@ -28,13 +28,16 @@
         "nesbot/carbon": "^3.0",
         "psr/clock": "^1.0",
         "psr/log": "^3.0",
-        "symfony/http-foundation": "^7.2|^8.0"
+        "symfony/http-foundation": "^7.2|^8.0",
+        "axiomasoft/packman": "^0.1@dev",
+        "axiomasoft/packman-schema": "^0.1@dev",
+        "axiomasoft/tenant": "^1.0@dev"
     },
     "require-dev": {
         "ext-pdo": "*",
         "ext-tokenizer": "*",
         "phpstan/phpstan": "^2.2.16",
-        "axiomasoft/corex-wakeup": "^1.0@dev",
+        "axiomasoft/corex-scheduler": "^1.0@dev",
         "larastan/larastan": "^3.12",
         "laravel/pint": "^1.32",
         "league/flysystem-aws-s3-v3": "3.35.3",
@@ -46,7 +49,8 @@
         "symfony/console": "^7.2|^8.0",
         "symfony/http-kernel": "^7.2|^8.0",
         "symfony/process": "^7.2|^8.0",
-        "ext-redis": "*"
+        "ext-redis": "*",
+        "axiomasoft/tenant-laravel": "^1.0@dev"
     },
     "autoload": {
         "psr-4": {
@@ -55,8 +59,10 @@
     },
     "suggest": {
         "league/flysystem-aws-s3-v3": "Install the qualified native S3 adapter to explicitly construct optional ObjectTenantStorage.",
-        "axiomasoft/corex-wakeup": "Install to opt into root_registry wakeup hints; boxed and local_sweep profiles do not require it.",
-        "ext-redis": "Optional Redis account menu cache integration; its conformance tests require this extension."
+        "axiomasoft/corex-scheduler": "Install to opt into root_registry wakeup hints; boxed and local_sweep profiles do not require it.",
+        "ext-redis": "Optional Redis account menu cache integration; its conformance tests require this extension.",
+        "axiomasoft/tenant-laravel": "Compose the single host TenantRuntime and guarded Laravel facilities.",
+        "axiomasoft/tenant-postgres": "Verified PostgreSQL resource binding and physical provisioning owner."
     },
     "autoload-dev": {
         "psr-4": {
@@ -90,7 +96,7 @@
         },
         {
             "type": "path",
-            "url": "../wakeup"
+            "url": "../scheduler"
         }
     ],
     "minimum-stability": "stable",

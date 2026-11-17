@@ -158,6 +158,44 @@
                     "return": "CoreX\\Media\\Data\\MediaReadRef",
                     "doc": []
                 },
+                "readConversion": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": true,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "context",
+                            "type": "CoreX\\Media\\Data\\MediaContext",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "fileId",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "profile",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "?CoreX\\Media\\Data\\MediaReadRef",
+                    "doc": []
+                },
                 "store": {
                     "visibility": "public",
                     "static": false,
@@ -579,226 +617,6 @@
             "enum_backing": null,
             "enum_cases": []
         },
-        "CoreX\\Media\\Data\\ConversionClaim": {
-            "kind": "class",
-            "layer": "api",
-            "since": "1.0",
-            "final": true,
-            "readonly": true,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": [],
-            "methods": {
-                "__construct": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "operationId",
-                            "type": "int",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "conversionId",
-                            "type": "int",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "fileId",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "epoch",
-                            "type": "int",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "fileVersion",
-                            "type": "int",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "sourceKey",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "sourceMimeType",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "profileKey",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "profileDigest",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "attemptObjectKey",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        }
-                    ],
-                    "return": null,
-                    "doc": []
-                }
-            },
-            "properties": {
-                "attemptObjectKey": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "conversionId": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "epoch": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "fileId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "fileVersion": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "operationId": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "profileDigest": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "profileKey": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "sourceKey": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "sourceMimeType": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
         "CoreX\\Media\\Data\\ConversionInput": {
             "kind": "class",
             "layer": "api",
@@ -872,74 +690,6 @@
                     "hooks": []
                 },
                 "sourceMimeType": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
-        "CoreX\\Media\\Data\\ConversionOperationRequest": {
-            "kind": "class",
-            "layer": "api",
-            "since": "1.0",
-            "final": true,
-            "readonly": true,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": [],
-            "methods": {
-                "__construct": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "fileId",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "profileKey",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        }
-                    ],
-                    "return": null,
-                    "doc": []
-                }
-            },
-            "properties": {
-                "fileId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "profileKey": {
                     "flags": 1,
                     "type": "string",
                     "readonly": true,
@@ -1961,135 +1711,6 @@
             "enum_backing": null,
             "enum_cases": []
         },
-        "CoreX\\Media\\Data\\PurgeClaim": {
-            "kind": "class",
-            "layer": "api",
-            "since": "1.0",
-            "final": true,
-            "readonly": true,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": [],
-            "methods": {
-                "__construct": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "operationId",
-                            "type": "int",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "fileId",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "epoch",
-                            "type": "int",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "fileVersion",
-                            "type": "int",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "objectKeys",
-                            "type": "array",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        }
-                    ],
-                    "return": null,
-                    "doc": []
-                }
-            },
-            "properties": {
-                "epoch": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "fileId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "fileVersion": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "objectKeys": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@var": [
-                            "list<string>"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "operationId": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
         "CoreX\\Media\\Data\\UploadFile": {
             "kind": "class",
             "layer": "api",
@@ -2302,6 +1923,63 @@
             "enum_backing": null,
             "enum_cases": []
         },
+        "CoreX\\Media\\Exceptions\\MediaAccessDenied": {
+            "kind": "class",
+            "layer": "api",
+            "since": "1.0",
+            "final": true,
+            "readonly": false,
+            "abstract": false,
+            "extends": [
+                "RuntimeException"
+            ],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": [],
+            "properties": [],
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
+        "CoreX\\Media\\Exceptions\\MediaFileInUse": {
+            "kind": "class",
+            "layer": "api",
+            "since": "1.0",
+            "final": true,
+            "readonly": false,
+            "abstract": false,
+            "extends": [
+                "RuntimeException"
+            ],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": [],
+            "properties": [],
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
+        "CoreX\\Media\\Exceptions\\MediaOperationConflict": {
+            "kind": "class",
+            "layer": "api",
+            "since": "1.0",
+            "final": true,
+            "readonly": false,
+            "abstract": false,
+            "extends": [
+                "RuntimeException"
+            ],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": [],
+            "properties": [],
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
         "CoreX\\Media\\Laravel\\GdThumbnailDriverFactory": {
             "kind": "class",
             "layer": "spi-call",
@@ -2349,7 +2027,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [],
             "doc": [],
@@ -2446,7 +2124,7 @@
             "readonly": false,
             "abstract": false,
             "extends": [
-                "CoreX\\Modules\\Contracts\\ModuleDefinition"
+                "Packman\\Modules\\Contracts\\Definition\\ModuleDefinition"
             ],
             "implements": [],
             "uses": [],
@@ -2459,7 +2137,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Modules\\Data\\ModuleManifest",
+                    "return": "Packman\\Modules\\Data\\Lifecycle\\ModuleManifest",
                     "doc": []
                 }
             },

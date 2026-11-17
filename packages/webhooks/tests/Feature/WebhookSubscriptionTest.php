@@ -8,8 +8,6 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Data\DataScope;
-use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
@@ -17,7 +15,7 @@ use CoreX\Messaging\Enums\MessageClass;
 use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Time\Testing\FrozenClock;
@@ -31,6 +29,8 @@ use CoreX\Webhooks\Tests\TestCase;
 use DateTimeImmutable;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use Packman\Schema\Contracts\Migration\SchemaSets;
 use PHPUnit\Framework\Attributes\Group;
 
 final class WebhookSubscriptionTest extends TestCase
@@ -50,7 +50,7 @@ final class WebhookSubscriptionTest extends TestCase
         $this->configure('api_tenant');
         $this->selectSchema();
 
-        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
         $connection = DB::connection('api_tenant');
@@ -183,11 +183,11 @@ final class WebhookSubscriptionTest extends TestCase
                 'driver' => 'pgsql',
                 'database' => $database,
             ]);
-            $this->app->forgetInstance(ApiSchemaRegistrar::class);
+            $this->app->forgetInstance(ApiSchemaConnections::class);
             $this->app->forgetInstance(SchemaSets::class);
             $this->app->forgetInstance(SchemaMigrator::class);
 
-            $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+            $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
             $connection = DB::connection('api_pg_tenant');
             $contexts = new ContextFixture;
             $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
@@ -276,7 +276,7 @@ final class WebhookSubscriptionTest extends TestCase
 
     private function selectSchema(): void
     {
-        $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(ApiSchemaConnections::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [

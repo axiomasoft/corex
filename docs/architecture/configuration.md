@@ -12,10 +12,6 @@
 | key | owner | type | default | secret | mode | reloadable | validation | typed_options_field | deprecated_aliases | notes |
 |:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|
 | auth.* | axiomasoft/corex-access | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  | undeclared-read |
-| corex-access-azguard.azguard_pins.column_names.morph_type | axiomasoft/corex-access-azguard | string | uuid | no | product-policy | unobserved | boot | AccessAzguardOptions::$morphType |  |  |
-| corex-access-azguard.azguard_pins.models.role | axiomasoft/corex-access-azguard | unobserved | unobserved | no | product-policy | unobserved | boot | AccessAzguardOptions::$roleModel |  |  |
-| corex-access-azguard.azguard_pins.table_names.roles | axiomasoft/corex-access-azguard | string | az_guard_roles | no | product-policy | unobserved | boot | AccessAzguardOptions::$rolesTable |  |  |
-| corex-access-azguard.bind_permission_layer | axiomasoft/corex-access-azguard | unobserved | unobserved | no | deployment | no | boot | AccessAzguardOptions::$bindPermissionLayer |  |  |
 | corex-access.cache.store | axiomasoft/corex-access | unobserved | unobserved | no | deployment | no | use-site | AuthOptions::$cacheStore |  |  |
 | corex-access.identity.columns.active | axiomasoft/corex-access | string | is_active | no | product-policy | unobserved | unobserved | AuthOptions::$identityColumns |  |  |
 | corex-access.identity.columns.deleted_at | axiomasoft/corex-access | string | deleted_at | no | product-policy | unobserved | unobserved | AuthOptions::$identityColumns |  |  |
@@ -34,6 +30,10 @@
 | corex-custom-fields.sources | axiomasoft/corex-custom-fields | array | unobserved | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$composition |  |  |
 | corex-custom-fields.storage_by_entity | axiomasoft/corex-custom-fields | array | [] | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$composition |  |  |
 | corex-custom-fields.storage_driver | axiomasoft/corex-custom-fields | string | jsonb | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$composition |  |  |
+| corex-import-export.limits.batch_rows | axiomasoft/corex-import-export | int | 500 | no | product-policy | unobserved | unobserved | ImportExportOptions::$limitsBatchRows |  |  |
+| corex-import-export.limits.max_fields | axiomasoft/corex-import-export | int | 256 | no | product-policy | unobserved | unobserved | ImportExportOptions::$limitsMaxFields |  |  |
+| corex-import-export.limits.max_memory_mib | axiomasoft/corex-import-export | int | 128 | no | deployment | no | 1..1024 MiB at boot | ImportExportOptions::$limitsMaxMemoryMiB |  | Total worker process budget; default 128 MiB. Process supervisor and PHP memory_limit remain host backstops. |
+| corex-import-export.limits.max_record_bytes | axiomasoft/corex-import-export | int | 1048576 | no | product-policy | unobserved | unobserved | ImportExportOptions::$limitsMaxRecordBytes |  |  |
 | corex-intl.formatting.icu_enabled | axiomasoft/corex-intl | unobserved | unobserved | no | product-policy | unobserved | unobserved | IntlOptions::$formattingIcuEnabled |  |  |
 | corex-intl.locale.allow_parent | axiomasoft/corex-intl | bool | true | no | product-policy | unobserved | unobserved | IntlOptions::$localeAllowParent |  |  |
 | corex-intl.locale.app_tag | axiomasoft/corex-intl | string | en | no | product-policy | unobserved | unobserved | IntlOptions::$localeAppTag |  |  |
@@ -93,7 +93,17 @@
 | corex-operations.routes.middleware | axiomasoft/corex-operations | array | [] | no | deployment | no | unobserved | ApiOptions::$routeMiddleware |  |  |
 | corex-operations.routes.prefix | axiomasoft/corex-operations | string | api | no | deployment | no | unobserved | ApiOptions::$routePrefix |  |  |
 | corex-operations.versions | axiomasoft/corex-operations | array | unobserved | no | product-policy | unobserved | unobserved | ApiOptions::$versions |  |  |
-| corex-panels.provider_tag | axiomasoft/corex-panels | string | corex.panels.providers | no | product-policy | unobserved | unobserved | PanelsOptions::$providerTag |  |  |
+| corex-recurring-tasks.completion_capture.definition_ref | axiomasoft/corex-recurring-tasks | string | task-completion/1 | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$completionCaptureDefinitionRef |  |  |
+| corex-recurring-tasks.completion_capture.enabled | axiomasoft/corex-recurring-tasks | bool | false | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$completionCaptureEnabled |  |  |
+| corex-recurring-tasks.completion_capture.version_ref | axiomasoft/corex-recurring-tasks | string | task-completion/1 | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$completionCaptureVersionRef |  |  |
+| corex-recurring-tasks.wakeup.accept_legacy_unstamped | axiomasoft/corex-recurring-tasks | bool | false | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$wakeupAcceptLegacyUnstamped |  |  |
+| corex-recurring-tasks.wakeup.enabled | axiomasoft/corex-recurring-tasks | bool | false | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$wakeupEnabled |  |  |
+| corex-recurring-tasks.wakeup.handler | axiomasoft/corex-recurring-tasks | string | CoreX\RecurringTasks\Internal\MaterializationWakeupHandler | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$wakeupHandler |  |  |
+| corex-recurring-tasks.wakeup.handler_kind | axiomasoft/corex-recurring-tasks | string | task-recurrence.materialize | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$wakeupHandlerKind |  |  |
+| corex-recurring-tasks.wakeup.handler_version | axiomasoft/corex-recurring-tasks | string | task-materialization/1 | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$wakeupHandlerVersion |  |  |
+| corex-scheduler.handlers | axiomasoft/corex-scheduler | array | [] | no | product-policy | unobserved | unobserved | SchedulerOptions::$handlers |  |  |
+| corex-scheduler.lease_seconds | axiomasoft/corex-scheduler | int | 60 | no | product-policy | unobserved | unobserved | SchedulerOptions::$leaseSeconds |  |  |
+| corex-scheduler.max_attempts | axiomasoft/corex-scheduler | int | 5 | no | product-policy | unobserved | unobserved | SchedulerOptions::$maxAttempts |  |  |
 | corex-search-intl.enabled | axiomasoft/corex-search-intl | unobserved | unobserved | no | deployment | no | unobserved | SearchIntlOptions::$enabled |  |  |
 | corex-search-meilisearch.host | axiomasoft/corex-search-meilisearch | null | null | no | product-policy | unobserved | unobserved | MeilisearchOptions::$host |  |  |
 | corex-search-meilisearch.index_uid | axiomasoft/corex-search-meilisearch | null | null | no | product-policy | unobserved | unobserved | MeilisearchOptions::$indexUid |  |  |
@@ -102,17 +112,6 @@
 | corex-search.driver | axiomasoft/corex-search | string | null | no | product-policy | unobserved | unobserved | SearchOptions::$driver |  |  |
 | corex-search.postgres.scan_budget | axiomasoft/corex-search | int | 1000 | no | product-policy | unobserved | unobserved | SearchOptions::$scanBudget |  |  |
 | corex-search.postgres.text_search_config | axiomasoft/corex-search | string | simple | no | product-policy | unobserved | unobserved | SearchOptions::$textSearchConfig |  |  |
-| corex-tasks-workflow.completion_capture.definition_ref | axiomasoft/corex-tasks-workflow | string | task-completion/1 | no | product-policy | unobserved | unobserved | TasksWorkflowOptions::$completionCaptureDefinitionRef |  |  |
-| corex-tasks-workflow.completion_capture.enabled | axiomasoft/corex-tasks-workflow | bool | false | no | product-policy | unobserved | unobserved | TasksWorkflowOptions::$completionCaptureEnabled |  |  |
-| corex-tasks-workflow.completion_capture.version_ref | axiomasoft/corex-tasks-workflow | string | task-completion/1 | no | product-policy | unobserved | unobserved | TasksWorkflowOptions::$completionCaptureVersionRef |  |  |
-| corex-tasks-workflow.wakeup.accept_legacy_unstamped | axiomasoft/corex-tasks-workflow | bool | false | no | product-policy | unobserved | unobserved | TasksWorkflowOptions::$wakeupAcceptLegacyUnstamped |  |  |
-| corex-tasks-workflow.wakeup.enabled | axiomasoft/corex-tasks-workflow | bool | false | no | product-policy | unobserved | unobserved | TasksWorkflowOptions::$wakeupEnabled |  |  |
-| corex-tasks-workflow.wakeup.handler | axiomasoft/corex-tasks-workflow | string | CoreX\TasksWorkflow\Internal\MaterializationWakeupHandler | no | product-policy | unobserved | unobserved | TasksWorkflowOptions::$wakeupHandler |  |  |
-| corex-tasks-workflow.wakeup.handler_kind | axiomasoft/corex-tasks-workflow | string | task-recurrence.materialize | no | product-policy | unobserved | unobserved | TasksWorkflowOptions::$wakeupHandlerKind |  |  |
-| corex-tasks-workflow.wakeup.handler_version | axiomasoft/corex-tasks-workflow | string | task-materialization/1 | no | product-policy | unobserved | unobserved | TasksWorkflowOptions::$wakeupHandlerVersion |  |  |
-| corex-tenancy.bootstrappers | axiomasoft/corex-tenancy | array | unobserved | no | product-policy | unobserved | use-site | TenancyOptions::$bootstrappers |  |  |
-| corex-tenancy.cache_prefix | axiomasoft/corex-tenancy | string | tenant_%tenant%_ | no | product-policy | unobserved | use-site | TenancyOptions::$cachePrefix |  |  |
-| corex-tenancy.cache_stores | axiomasoft/corex-tenancy | null | null | no | product-policy | unobserved | use-site | TenancyOptions::$cacheStores |  |  |
 | corex-tenancy.central_connection | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$centralConnection |  |  |
 | corex-tenancy.domain_trust.challenge_ttl_seconds | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$domainTrustChallengeTtlSeconds |  |  |
 | corex-tenancy.domain_trust.enabled | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$domainTrustEnabled |  |  |
@@ -145,19 +144,11 @@
 | corex-tenancy.storage.durable_driver | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$storageDurableDriver |  |  |
 | corex-tenancy.storage.durable_root | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$storageDurableRoot |  |  |
 | corex-tenancy.storage.ephemeral_root | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$storageEphemeralRoot |  |  |
-| corex-tenancy.template_integrity.manifests | axiomasoft/corex-tenancy | array | [] | no | product-policy | unobserved | use-site | TenancyOptions::$templateIntegrityManifests |  | undeclared-read |
-| corex-tenancy.template_integrity.trusted_keys | axiomasoft/corex-tenancy | array | *** | yes | secret | unobserved | use-site | TenancyOptions::$templateIntegrityTrustedKeys |  | undeclared-read |
 | corex-tenancy.trial_days | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$lifecycle |  |  |
 | corex-tenancy.wakeup.driver | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$wakeupDriver |  |  |
 | corex-tenancy.wakeup.lease_seconds | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$wakeupLeaseSeconds |  |  |
 | corex-tenancy.wakeup.root_connection | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$wakeupRootConnection |  |  |
 | corex-tenancy.workspace.path_segment | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$workspacePathSegment |  |  |
-| corex-transfer.limits.batch_rows | axiomasoft/corex-transfer | int | 500 | no | product-policy | unobserved | unobserved | TransferOptions::$limitsBatchRows |  |  |
-| corex-transfer.limits.max_fields | axiomasoft/corex-transfer | int | 256 | no | product-policy | unobserved | unobserved | TransferOptions::$limitsMaxFields |  |  |
-| corex-transfer.limits.max_record_bytes | axiomasoft/corex-transfer | int | 1048576 | no | product-policy | unobserved | unobserved | TransferOptions::$limitsMaxRecordBytes |  |  |
-| corex-wakeup.handlers | axiomasoft/corex-wakeup | array | [] | no | product-policy | unobserved | unobserved | WakeupOptions::$handlers |  |  |
-| corex-wakeup.lease_seconds | axiomasoft/corex-wakeup | int | 60 | no | product-policy | unobserved | unobserved | WakeupOptions::$leaseSeconds |  |  |
-| corex-wakeup.max_attempts | axiomasoft/corex-wakeup | int | 5 | no | product-policy | unobserved | unobserved | WakeupOptions::$maxAttempts |  |  |
 | corex-webhooks.body_retention_seconds | axiomasoft/corex-webhooks | int | 604800 | no | product-policy | unobserved | unobserved | WebhookOptions::$bodyRetentionSeconds |  |  |
 | corex-webhooks.delivery_enabled | axiomasoft/corex-webhooks | bool | false | no | product-policy | unobserved | unobserved | WebhookOptions::$deliveryEnabled |  |  |
 | corex-webhooks.history_retention_seconds | axiomasoft/corex-webhooks | int | 2592000 | no | product-policy | unobserved | unobserved | WebhookOptions::$historyRetentionSeconds |  |  |
@@ -186,10 +177,6 @@
 | corex.messaging.lease_seconds | axiomasoft/corex | int | 120 | no | product-policy | unobserved | unobserved | CoreOptions::$messagingLeaseSeconds |  |  |
 | corex.messaging.max_attempts | axiomasoft/corex | int | 8 | no | product-policy | unobserved | unobserved | CoreOptions::$messagingMaxAttempts |  |  |
 | corex.messaging.outbox_retention | axiomasoft/corex | string | 14 days | no | product-policy | unobserved | unobserved | CoreOptions::$messagingOutboxRetention |  |  |
-| corex.modules.cache.prefix | axiomasoft/corex | unobserved | unobserved | no | deployment | no | use-site | ModulesOptions::$cachePrefix |  |  |
-| corex.modules.cache.store | axiomasoft/corex | unobserved | unobserved | no | deployment | no | use-site | ModulesOptions::$cacheStore |  |  |
-| corex.modules.cache.ttl | axiomasoft/corex | unobserved | unobserved | no | deployment | no | use-site | ModulesOptions::$cacheTtl |  |  |
-| corex.modules.connection | axiomasoft/corex | unobserved | unobserved | no | deployment | no | use-site | ModulesOptions::$connection |  |  |
 | corex.pubsub.driver | axiomasoft/corex | const | PubSubDriver::Null | no | product-policy | unobserved | use-site | CoreOptions::$pubsubDriver |  |  |
 | corex.pubsub.octane_worker_opt_in | axiomasoft/corex | bool | false | no | product-policy | unobserved | use-site | CoreOptions::$pubsubOctaneWorkerOptIn |  |  |
 | corex.pubsub.poll_interval_microseconds | axiomasoft/corex | int | 50000 | no | product-policy | unobserved | use-site | CoreOptions::$pubsubPollIntervalMicroseconds |  |  |

@@ -6,18 +6,18 @@ namespace CoreX\Operations\Tests\Fixtures;
 
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\ImportExport\Contracts\CancellationSignal;
+use CoreX\ImportExport\Contracts\ExportRunner;
+use CoreX\ImportExport\Contracts\TransferResultReader;
+use CoreX\ImportExport\Contracts\TransferRunner;
+use CoreX\ImportExport\Data\Export\ExportCursor;
+use CoreX\ImportExport\Data\Export\ExportManifest;
+use CoreX\ImportExport\Data\SourceCursor;
+use CoreX\ImportExport\Data\StepToken;
+use CoreX\ImportExport\Data\TransferReceipt;
+use CoreX\ImportExport\Data\TransferRef;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Data\BulkTransferSession;
-use CoreX\Transfer\Contracts\CancellationSignal;
-use CoreX\Transfer\Contracts\ExportRunner;
-use CoreX\Transfer\Contracts\TransferResultReader;
-use CoreX\Transfer\Contracts\TransferRunner;
-use CoreX\Transfer\Data\Export\ExportCursor;
-use CoreX\Transfer\Data\Export\ExportManifest;
-use CoreX\Transfer\Data\SourceCursor;
-use CoreX\Transfer\Data\StepToken;
-use CoreX\Transfer\Data\TransferReceipt;
-use CoreX\Transfer\Data\TransferRef;
 use RuntimeException;
 
 final class BulkTransferFactory implements \CoreX\Operations\Bulk\Contracts\BulkTransferFactory

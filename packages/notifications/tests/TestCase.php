@@ -5,16 +5,17 @@ declare(strict_types=1);
 namespace CoreX\Notifications\Tests;
 
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Notifications\Internal\NotificationsOptions;
 use CoreX\Notifications\NotificationsServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Testing\MigratesSchemaSets;
 
-require_once __DIR__.'/../../wakeup/tests/Support/PackageBridge.php';
-use CoreX\Database\Laravel\DatabaseRegistrar;
+require_once __DIR__.'/../../scheduler/tests/Support/PackageBridge.php';
 use Illuminate\Support\Facades\DB;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Override;
+use Packman\PackmanServiceProvider;
+use Packman\Schema\Laravel\SchemaServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
@@ -27,13 +28,12 @@ abstract class TestCase extends Orchestra
         $app['config']->set('corex-notifications.digest.enabled', true);
         $app['config']->set('corex-notifications.digest.accept_legacy_unstamped', false);
 
-        return [wakeup_bridge_provider(), NotificationsServiceProvider::class];
+        return [PackmanServiceProvider::class, SchemaServiceProvider::class, wakeup_bridge_provider(), NotificationsServiceProvider::class];
     }
 
     #[Override]
     protected function defineEnvironment($app): void
     {
-        (new DatabaseRegistrar)->register($app);
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite.database', ':memory:');
         $app['config']->set('queue.default', 'sync');
@@ -47,7 +47,7 @@ abstract class TestCase extends Orchestra
         Schema::dropIfExists('ntf_recipient_state');
         Schema::dropIfExists('ntf_notifications');
         Schema::dropIfExists('sys_wakeup_requests');
-        $this->migrateSchemaSets(['axiomasoft/corex-wakeup:tenant'], DB::getDefaultConnection());
+        $this->migrateSchemaSets(['axiomasoft/corex-scheduler:tenant'], DB::getDefaultConnection());
         $this->migrateSchemaSets(['axiomasoft/corex-notifications:tenant'], DB::getDefaultConnection());
     }
 

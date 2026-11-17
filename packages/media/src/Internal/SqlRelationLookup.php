@@ -12,21 +12,25 @@ use CoreX\Media\Data\MediaAction;
 use CoreX\Media\Data\MediaContext;
 use CoreX\Media\Data\MediaFileRef;
 use CoreX\Media\Data\MediaSubject;
+use CoreX\Media\Exceptions\MediaAccessDenied;
+use CoreX\Media\Exceptions\MediaOperationConflict;
 use Illuminate\Database\ConnectionInterface;
 use Psr\Clock\ClockInterface;
 
 final readonly class SqlRelationLookup implements RelationLookup
 {
-    public function __construct(private ConnectionInterface $connection, private MediaPolicy $policy, private ClockInterface $clock) {}
+    public function __construct(private ConnectionInterface $connection, private MediaPolicy $policy, private ClockInterface $clock, private MediaBlobs $blobs) {}
 
     public function attach(MediaContext $context, AttachmentInput $input): void
     {
+        $this->blobs->assertContext($this->connection, $context);
+
         if (! $this->policy->allows(context: $context, action: MediaAction::Attach, subject: new MediaSubject(attachment: $input))) {
             throw new MediaAccessDenied('Media attachment is denied.');
         }
 
         $this->connection->transaction(function () use ($context, $input): void {
-            $file = $this->connection->table('med_files')->where('id', $input->fileId)->lockForUpdate()->first();
+            $file = $this->connection->table('med_files')->where('id', $input->fileId)->where('account_id', $context->tenant->account->id)->lockForUpdate()->first();
 
             if ($file === null || $file->state !== 'ready') {
                 throw new MediaOperationConflict('Media file is unavailable.');
@@ -45,12 +49,14 @@ final readonly class SqlRelationLookup implements RelationLookup
 
     public function detach(MediaContext $context, AttachmentInput $input): void
     {
+        $this->blobs->assertContext($this->connection, $context);
+
         if (! $this->policy->allows(context: $context, action: MediaAction::Detach, subject: new MediaSubject(attachment: $input))) {
             throw new MediaAccessDenied('Media detachment is denied.');
         }
 
         $this->connection->transaction(function () use ($context, $input): void {
-            $file = $this->connection->table('med_files')->where('id', $input->fileId)->lockForUpdate()->first();
+            $file = $this->connection->table('med_files')->where('id', $input->fileId)->where('account_id', $context->tenant->account->id)->lockForUpdate()->first();
 
             if ($file === null) {
                 throw new MediaOperationConflict('Media file is unavailable.');
@@ -71,11 +77,13 @@ final readonly class SqlRelationLookup implements RelationLookup
     /** @return list<AttachmentRef> */
     public function usages(MediaContext $context, string $fileId, int $limit = 50): array
     {
+        $this->blobs->assertContext($this->connection, $context);
+
         if ($limit < 1 || $limit > 50) {
             throw new MediaOperationConflict('Media usage limit is invalid.');
         }
 
-        $file = $this->connection->table('med_files')->where('id', $fileId)->first();
+        $file = $this->connection->table('med_files')->where('id', $fileId)->where('account_id', $context->tenant->account->id)->first();
 
         if ($file === null || ! $this->policy->allows(context: $context, action: MediaAction::Read, subject: new MediaSubject(new MediaFileRef(id: Value::text($file->id), kind: Value::text($file->kind), mimeType: Value::text($file->mime_type), sizeBytes: Value::integer($file->size_bytes), sha256: Value::text($file->sha256), state: Value::text($file->state))))) {
             throw new MediaAccessDenied('Media usage lookup is denied.');

@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Database\Enums\SchemaScope;
 use CoreX\Tenancy\Account\Internal\DatabaseTenantProvisioner;
 use CoreX\Tenancy\Account\Internal\Models\AccountSchemaState;
 use CoreX\Tenancy\Account\Internal\PendingPool;
 use CoreX\Tenancy\Account\Laravel\MigrationWaveOrchestrator;
-use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
+use CoreX\Tenancy\Provisioning\Contracts\AccountResources;
+use CoreX\Tenancy\Tests\Support\TestTemplateIntegrity as TemplateIntegrityVerifier;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use Packman\Schema\Enums\SchemaScope;
 
 // P2.12 — MigrationWaveOrchestrator + corex:tenancy:migrate (B-11 §5.6). "MW"
 // suffix on shared helpers, same reasoning as AccountLifecycleTest.php's
@@ -125,6 +126,7 @@ function makeMwAccounts(int $count, ?string $clusterId = null): array
     $templateIntegrityVerifier = resolve(TemplateIntegrityVerifier::class);
 
     return new PendingPool(
+        resources: resolve(AccountResources::class),
         connections: resolve(ConnectionResolverInterface::class),
         centralConnection: 'pgsql',
         provisioner: new DatabaseTenantProvisioner(

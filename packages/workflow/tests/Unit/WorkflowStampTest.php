@@ -5,9 +5,9 @@ declare(strict_types=1);
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Modules\Data\ExtensionStamp;
 use CoreX\Workflow\Data\TriggerRequest;
 use CoreX\Workflow\Internal\WorkflowDefinitionStamp;
+use Packman\Modules\Data\Compiler\ExtensionStamp;
 
 function stampRequest(string $definitionRef = 'definition:1', string $versionRef = 'version:1'): TriggerRequest
 {

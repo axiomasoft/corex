@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Definition\Internal;
 
-use CoreX\Modules\Data\Api;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use Packman\Modules\Data\Extenders\Api;
 
 /** Canonical operation-contract/1 hash. Excludes activation, host and time. */
 final class OperationContractHasher

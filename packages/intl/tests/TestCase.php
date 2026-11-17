@@ -6,12 +6,12 @@ namespace CoreX\Intl\Tests;
 
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Internal\AllowAllDataScopeAuthorizer;
-use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Intl\IntlServiceProvider;
 use CoreX\Intl\Tests\Support\IntlTestCase;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Override;
+use Packman\Schema\Testing\MigratesSchemaSets;
 
 abstract class TestCase extends IntlTestCase
 {

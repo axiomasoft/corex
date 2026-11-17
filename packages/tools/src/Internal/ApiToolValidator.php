@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Tools\Internal;
 
 use CoreX\Invocation\Contracts\OperationHandler;
-use CoreX\Modules\Data\Api;
-use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Operations\Definition\Contracts\OperationDefinitionValidator;
 use JsonException;
+use Packman\Modules\Data\Extenders\Api;
+use Packman\Modules\Exceptions\Compiler\CompilationException;
 
 /** @internal Validates compiled tool declarations without depending on tool runtime. */
 final class ApiToolValidator

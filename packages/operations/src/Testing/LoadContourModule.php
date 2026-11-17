@@ -8,8 +8,8 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Invocation\Contracts\RequestContext;
-use CoreX\Modules\Data\Api;
-use CoreX\Modules\Data\CompiledRegistry;
+use Packman\Modules\Data\Compiler\CompiledRegistry;
+use Packman\Modules\Data\Extenders\Api;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class LoadContourModule implements OperationHandler

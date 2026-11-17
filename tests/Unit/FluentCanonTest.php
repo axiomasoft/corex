@@ -3,16 +3,16 @@
 declare(strict_types=1);
 
 use CoreX\Features\Data\FeatureFlagDefinition;
-use CoreX\Modules\Data\Api;
-use CoreX\Modules\Data\Entity;
-use CoreX\Modules\Data\EntityField;
-use CoreX\Modules\Data\Permissions;
-use CoreX\Modules\Internal\Extend\Filament;
-use CoreX\Modules\Internal\Extend\Menu;
-use CoreX\Modules\Internal\Extend\Routes;
-use CoreX\Modules\Internal\Extend\Workflow;
-use CoreX\Modules\Internal\Settings\DefaultSettingDefinition;
 use CoreX\Settings\Data\SettingsScope;
+use Packman\Modules\Data\Entities\Entity;
+use Packman\Modules\Data\Entities\EntityField;
+use Packman\Modules\Data\Extenders\Api;
+use Packman\Modules\Data\Extenders\Permissions;
+use Packman\Modules\Internal\Extend\Filament;
+use Packman\Modules\Internal\Extend\Menu;
+use Packman\Modules\Internal\Extend\Routes;
+use Packman\Modules\Internal\Extend\Workflow;
+use Packman\Modules\Internal\Settings\DefaultSettingDefinition;
 
 // Fluent-canon pin (P3.6, A13): a manifest-authoring DTO in Contracts/Extend
 // is never built with `new` by a module author — it exposes at least one

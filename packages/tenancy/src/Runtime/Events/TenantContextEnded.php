@@ -6,7 +6,7 @@ namespace CoreX\Tenancy\Runtime\Events;
 
 use CoreX\Attributes\Api;
 
-/** Dispatched after the account context ended and every bootstrapper reverted. */
+/** Manual end/setWorkspace notification after Tenant restored the adapter-owned frame. Protected runFor uses Tenant observations. */
 #[Api(since: '1.0')]
 final readonly class TenantContextEnded
 {

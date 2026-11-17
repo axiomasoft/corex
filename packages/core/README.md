@@ -1,9 +1,9 @@
 # axiomasoft/corex
 
 Ядро CoreX для любого Laravel-приложения: `BaseModel` (ULID/UUIDv7/int-шов), `Settings` (каскад
-System→Tenant→User), append-only `Audit`, `MoneyCast`, департаменты (ltree),
-фичефлаги, PubSub-контракт, реестр сущностей и контракты отложенного пробуждения
-`CoreX\Scheduling` (исполнение — пакет `corex-wakeup`). MIT.
+System→Tenant→User), append-only `Audit`, tenant-контекст, департаменты (ltree),
+фичефлаги, PubSub-контракт, адаптация реестра сущностей Packman и контракты отложенного пробуждения
+`CoreX\Scheduling` (исполнение — пакет `corex-scheduler`). MIT.
 
 Пакет ставится как зависимость приложения-потребителя; публичные контракты —
 в `<Module>/Contracts/`; DTO помечены `#[Api]`, адаптеры интеграции — `#[Spi]`.
@@ -22,11 +22,11 @@ PG-нативные конструкции без SQLite-эквивалента.
 ## Установка схемы
 
 Настройки публикуются через `php artisan vendor:publish --tag=corex-config`.
-Наборы `sys_*` и `mod_*` принадлежат ядру и выполняются непосредственно из пакета на PostgreSQL tenant-соединении:
+Набор `sys_*` принадлежит CoreX; `mod_*` — Packman Modules. Оба исполняет Packman на PostgreSQL tenant-соединении:
 
 ```bash
-php artisan corex:schema:migrate --scope=tenant --database=<tenant>
-php artisan corex:schema:status --scope=tenant --database=<tenant>
+php artisan packman:schema:migrate --scope=tenant --database=<tenant>
+php artisan packman:schema:status --scope=tenant --database=<tenant>
 ```
 
 В single-DB установке можно опустить `--database`: используется default connection.
@@ -36,10 +36,10 @@ php artisan corex:schema:status --scope=tenant --database=<tenant>
 
 ### Версия схемы и апгрейды
 
-Поколение каждого набора доступно через `CoreX\Database\Data\SchemaSet::version` в реестре
-`CoreX\Database\Contracts\SchemaSets`. Файлы исполняются из пакета; копии в приложении не нужны.
+Поколение каждого набора доступно через `Packman\Schema\Data\Migration\SchemaSet::version` в реестре
+`Packman\Schema\Contracts\Migration\SchemaSets`. Файлы исполняются из пакета; копии в приложении не нужны.
 После фиксации baseline изменение схемы поставляется новым файлом с повышением версии набора.
-Повторный `corex:schema:migrate` применяет только отсутствующие в журнале Laravel `migrations` файлы.
+Повторный `packman:schema:migrate` применяет только отсутствующие в журнале Laravel `migrations` файлы.
 
 
 ## Mandatory support audit
@@ -58,13 +58,7 @@ Custom implementations must provide the same committed, fail-closed behavior.
 keyset-пагинация и tie-break сортировки идут **только по `seq`**, а не по
 `id`/`occurred_at` (часы принявшего узла монотонности не дают).
 
-## Compatibility evidence
-
-The factual compatibility passport, its local proof class, and explicit limits
-are in [PACKAGE.md](PACKAGE.md). It does not extend Composer constraints or
-constitute a publication promise.
-
-### Provider composition
+## Provider composition
 
 Public providers are thin composition roots: they merge configuration, publish assets and register commands, and
 delegate every binding to `PackageRegistrar` services listed in a `REGISTRARS` constant. A registrar keeps the
@@ -72,7 +66,7 @@ original binding order and lifetimes; a factory closure in a provider or registr
 anything with branching moves to a named `<Thing>Factory`. `CoreServiceProvider` registers `ModulesServiceProvider`
 itself, so applications list only `CoreX\CoreServiceProvider`.
 
-### Configuration report contributions
+## Configuration report contributions
 
 `corex:config:validate` collects services tagged with `CoreX\Config\Contracts\ConfigReportSection`.
 Each package owns its options types, secret keys and defaults, drivers and adapters. Sections
@@ -86,7 +80,7 @@ separate `CoreX\Config\Contracts\RuntimeConfigCheck` services tagged by the owni
 run when the HTTP application finishes booting or a console command starts (build commands such as
 `package:discover`, `config:cache`, `optimize` and `corex:config:validate` are exempt). In
 `production`, an enabled dangerous mode (`corex-workflow.enforce_declarations=false`,
-`accept_legacy_unstamped=true` of notifications, tasks-workflow or any wakeup handler) stops the
+`accept_legacy_unstamped=true` of notifications, recurring-tasks or any wakeup handler) stops the
 process unless its exact config path is listed in `corex.acknowledged_dangerous_modes`; patterns
 are rejected. `corex:config:validate` runs the same checks (`--production` evaluates them as
 production), prints acknowledged modes as warnings and the `corex-operations.require_physical_tenancy=false`
@@ -95,7 +89,7 @@ opt-out as a notice, and exits non-zero on a violation.
 Consumer tests can create messaging adapters through
 `CoreX\Messaging\Testing\MessagingFixtures`; the factory returns the public messaging contracts.
 
-The merged module subsystem is documented in [modules/README](docs/modules/README.md) and [modules/PACKAGE](docs/modules/PACKAGE.md). Its original changelog is retained in [history](docs/history/corex-modules-CHANGELOG.md).
+The module runtime belongs to `axiomasoft/packman-modules`; CoreX contributes context, audit and feature adapters. See the [package map](../../docs/architecture/package-map.md).
 
 ## JSON в публичных DTO
 
@@ -125,4 +119,4 @@ validated replay and safe mapping.
 
 ## Схема
 
-Набор `tenant`, baseline v1 (PostgreSQL). Он содержит таблицы `sys_*` и `mod_*`; исполнение — `corex:schema:migrate --scope=tenant`. Миграции не публикуются.
+Набор `tenant`, baseline v1 (PostgreSQL). Он содержит таблицы `sys_*`; `mod_*` предоставляет `axiomasoft/packman-modules:tenant`; исполнение — `packman:schema:migrate --scope=tenant`. Миграции не публикуются.

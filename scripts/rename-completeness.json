@@ -15,7 +15,7 @@
         "classes": [
             {
                 "old": "CoreX\\Attributes\\AttributesServiceProvider",
-                "new": "CoreX\\CustomFields\\AttributesServiceProvider",
+                "new": "CoreX\\CustomFields\\CustomFieldsServiceProvider",
                 "match": "fqcn"
             },
             {
@@ -370,7 +370,7 @@
             },
             {
                 "old": "CoreX\\Attributes\\Tests\\Unit\\AttributesServiceProviderTest",
-                "new": "CoreX\\CustomFields\\Tests\\Unit\\AttributesServiceProviderTest",
+                "new": "CoreX\\CustomFields\\Tests\\Unit\\CustomFieldsServiceProviderTest",
                 "match": "fqcn"
             },
             {
@@ -725,12 +725,12 @@
             },
             {
                 "old": "CoreX\\Modules\\DefaultSettingDefinition",
-                "new": "CoreX\\Modules\\Internal\\Settings\\DefaultSettingDefinition",
+                "new": "Packman\\Modules\\Internal\\Settings\\DefaultSettingDefinition",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\ModuleActivationDecision",
-                "new": "CoreX\\Modules\\Internal\\Gate\\ModuleActivationDecision",
+                "new": "Packman\\Modules\\Internal\\Gate\\ModuleActivationDecision",
                 "match": "fqcn"
             },
             {
@@ -740,7 +740,7 @@
             },
             {
                 "old": "CoreX\\Modules\\ModuleDependency",
-                "new": "CoreX\\Modules\\Internal\\Definition\\ModuleDependency",
+                "new": "Packman\\Modules\\Internal\\Definition\\ModuleDependency",
                 "match": "fqcn"
             },
             {
@@ -750,12 +750,12 @@
             },
             {
                 "old": "CoreX\\Modules\\ModuleRuntimeContext",
-                "new": "CoreX\\Modules\\Data\\ModuleRuntimeContext",
+                "new": "Packman\\Modules\\Data\\Lifecycle\\ModuleRuntimeContext",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\ModuleStatus",
-                "new": "CoreX\\Modules\\Data\\ModuleStatus",
+                "new": "Packman\\Modules\\Data\\Lifecycle\\ModuleStatus",
                 "match": "fqcn"
             },
             {
@@ -2270,142 +2270,142 @@
             },
             {
                 "old": "CoreX\\Modules\\Commands\\CompileModulesCommand",
-                "new": "CoreX\\Modules\\Internal\\Commands\\CompileModulesCommand",
+                "new": "Packman\\Modules\\Internal\\Commands\\CompileModulesCommand",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Commands\\ExplainModuleCommand",
-                "new": "CoreX\\Modules\\Internal\\Commands\\ExplainModuleCommand",
+                "new": "Packman\\Modules\\Internal\\Commands\\ExplainModuleCommand",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Compiler\\CompilationValidator",
-                "new": "CoreX\\Modules\\Internal\\Compiler\\CompilationValidator",
+                "new": "Packman\\Modules\\Internal\\Compiler\\CompilationValidator",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Compiler\\CompiledSettingDefault",
-                "new": "CoreX\\Modules\\Internal\\Compiler\\CompiledSettingDefault",
+                "new": "Packman\\Modules\\Internal\\Compiler\\CompiledSettingDefault",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Compiler\\ExtensionReplacement",
-                "new": "CoreX\\Modules\\Data\\ExtensionReplacement",
+                "new": "Packman\\Modules\\Data\\Compiler\\ExtensionReplacement",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Compiler\\FieldCastMap",
-                "new": "CoreX\\Modules\\Internal\\Compiler\\FieldCastMap",
+                "new": "Packman\\Modules\\Internal\\Compiler\\FieldCastMap",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Compiler\\InstalledPackages",
-                "new": "CoreX\\Modules\\Internal\\Compiler\\InstalledPackages",
+                "new": "Packman\\Modules\\Internal\\Compiler\\InstalledPackages",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Compiler\\PipelineStages",
-                "new": "CoreX\\Modules\\Internal\\Compiler\\PipelineStages",
+                "new": "Packman\\Modules\\Internal\\Compiler\\PipelineStages",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Definition\\ModuleDependency",
-                "new": "CoreX\\Modules\\Internal\\Definition\\ModuleDependency",
+                "new": "Packman\\Modules\\Internal\\Definition\\ModuleDependency",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Definition\\ModuleRuntimeContext",
-                "new": "CoreX\\Modules\\Data\\ModuleRuntimeContext",
+                "new": "Packman\\Modules\\Data\\Lifecycle\\ModuleRuntimeContext",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Definition\\ModuleStatus",
-                "new": "CoreX\\Modules\\Data\\ModuleStatus",
+                "new": "Packman\\Modules\\Data\\Lifecycle\\ModuleStatus",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Extend\\Extender",
-                "new": "CoreX\\Modules\\Contracts\\Extender",
+                "new": "Packman\\Modules\\Contracts\\Compiler\\Extender",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Extend\\Filament",
-                "new": "CoreX\\Modules\\Internal\\Extend\\Filament",
+                "new": "Packman\\Modules\\Internal\\Extend\\Filament",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Extend\\Menu",
-                "new": "CoreX\\Modules\\Internal\\Extend\\Menu",
+                "new": "Packman\\Modules\\Internal\\Extend\\Menu",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Extend\\Routes",
-                "new": "CoreX\\Modules\\Internal\\Extend\\Routes",
+                "new": "Packman\\Modules\\Internal\\Extend\\Routes",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Extend\\Workflow",
-                "new": "CoreX\\Modules\\Internal\\Extend\\Workflow",
+                "new": "Packman\\Modules\\Internal\\Extend\\Workflow",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Gate\\AllowAllActivationGate",
-                "new": "CoreX\\Modules\\Internal\\Gate\\AllowAllActivationGate",
+                "new": "Packman\\Modules\\Internal\\Gate\\AllowAllActivationGate",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Gate\\ModuleActivationDecision",
-                "new": "CoreX\\Modules\\Internal\\Gate\\ModuleActivationDecision",
+                "new": "Packman\\Modules\\Internal\\Gate\\ModuleActivationDecision",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Lifecycle\\DatabaseModuleLifecycle",
-                "new": "CoreX\\Modules\\Internal\\Lifecycle\\DatabaseModuleLifecycle",
+                "new": "Packman\\Modules\\Internal\\Lifecycle\\DatabaseModuleLifecycle",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Lifecycle\\DatabaseModuleStateReader",
-                "new": "CoreX\\Modules\\Internal\\Lifecycle\\DatabaseModuleStateReader",
+                "new": "Packman\\Modules\\Internal\\Lifecycle\\DatabaseModuleStateReader",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Lifecycle\\DatabaseRecordsRegistrar",
-                "new": "CoreX\\Modules\\Internal\\Lifecycle\\DatabaseRecordsRegistrar",
+                "new": "Packman\\Modules\\Internal\\Lifecycle\\DatabaseRecordsRegistrar",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Registry\\ArrayModuleStateReader",
-                "new": "CoreX\\Modules\\Internal\\Registry\\ArrayModuleStateReader",
+                "new": "Packman\\Modules\\Internal\\Registry\\ArrayModuleStateReader",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Registry\\CompiledModuleRegistry",
-                "new": "CoreX\\Modules\\Internal\\Registry\\CompiledModuleRegistry",
+                "new": "Packman\\Modules\\Internal\\Registry\\CompiledModuleRegistry",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Registry\\RepositoryModuleRegistryCache",
-                "new": "CoreX\\Modules\\Internal\\Registry\\RepositoryModuleRegistryCache",
+                "new": "Packman\\Modules\\Internal\\Registry\\RepositoryModuleRegistryCache",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Settings\\CompiledSettingDefaultsProvider",
-                "new": "CoreX\\Modules\\Internal\\Settings\\CompiledSettingDefaultsProvider",
+                "new": "Packman\\Modules\\Internal\\Settings\\CompiledSettingDefaultsProvider",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Settings\\DefaultSettingDefinition",
-                "new": "CoreX\\Modules\\Internal\\Settings\\DefaultSettingDefinition",
+                "new": "Packman\\Modules\\Internal\\Settings\\DefaultSettingDefinition",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Support\\ModulesConfigSection",
-                "new": "CoreX\\Modules\\Internal\\Support\\ModulesConfigSection",
+                "new": "Packman\\Modules\\Internal\\Support\\ModulesConfigSection",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Support\\ModulesOptions",
-                "new": "CoreX\\Modules\\Internal\\Support\\ModulesOptions",
+                "new": "Packman\\Modules\\Internal\\Support\\ModulesOptions",
                 "match": "fqcn"
             },
             {
@@ -2635,7 +2635,7 @@
             },
             {
                 "old": "CoreX\\TasksWorkflow\\TaskWorkflowIntegration",
-                "new": "CoreX\\TasksWorkflow\\Internal\\TaskWorkflowIntegration",
+                "new": "CoreX\\RecurringTasks\\Internal\\TaskWorkflowIntegration",
                 "match": "fqcn"
             },
             {
@@ -3265,12 +3265,12 @@
             },
             {
                 "old": "CoreX\\Wakeup\\Commands\\SweepWakeups",
-                "new": "CoreX\\Wakeup\\Internal\\Commands\\SweepWakeups",
+                "new": "CoreX\\Scheduler\\Internal\\Commands\\SweepWakeups",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Wakeup\\Commands\\ValidateWakeupStamps",
-                "new": "CoreX\\Wakeup\\Internal\\Commands\\ValidateWakeupStamps",
+                "new": "CoreX\\Scheduler\\Internal\\Commands\\ValidateWakeupStamps",
                 "match": "fqcn"
             },
             {
@@ -3281,6 +3281,31 @@
             {
                 "old": "CoreX\\Webhooks\\Commands\\PruneWebhooks",
                 "new": "CoreX\\Webhooks\\Internal\\Commands\\PruneWebhooks",
+                "match": "fqcn"
+            },
+            {
+                "old": "CoreX\\Access\\CoreAuthServiceProvider",
+                "new": "CoreX\\Access\\AccessServiceProvider",
+                "match": "fqcn"
+            },
+            {
+                "old": "CoreX\\CustomFields\\AttributesServiceProvider",
+                "new": "CoreX\\CustomFields\\CustomFieldsServiceProvider",
+                "match": "fqcn"
+            },
+            {
+                "old": "CoreX\\Operations\\ApiServiceProvider",
+                "new": "CoreX\\Operations\\OperationsServiceProvider",
+                "match": "fqcn"
+            },
+            {
+                "old": "CoreX\\Tools\\ToolServiceProvider",
+                "new": "CoreX\\Tools\\ToolsServiceProvider",
+                "match": "fqcn"
+            },
+            {
+                "old": "CoreX\\SearchMeilisearch\\MeilisearchServiceProvider",
+                "new": "CoreX\\SearchMeilisearch\\SearchMeilisearchServiceProvider",
                 "match": "fqcn"
             }
         ],
@@ -3834,6 +3859,21 @@
                 "old": "CoreX\\Webhooks\\Commands",
                 "new": "—",
                 "match": "prefix"
+            },
+            {
+                "old": "CoreX\\Transfer\\",
+                "new": "CoreX\\ImportExport\\",
+                "match": "prefix"
+            },
+            {
+                "old": "CoreX\\Wakeup\\",
+                "new": "CoreX\\Scheduler\\",
+                "match": "prefix"
+            },
+            {
+                "old": "CoreX\\TasksWorkflow\\",
+                "new": "CoreX\\RecurringTasks\\",
+                "match": "prefix"
             }
         ],
         "packages": [
@@ -3909,7 +3949,7 @@
             },
             {
                 "old": "corex/tasks-workflow",
-                "new": "axiomasoft/corex-tasks-workflow",
+                "new": "axiomasoft/corex-recurring-tasks",
                 "match": "word"
             },
             {
@@ -3919,17 +3959,32 @@
             },
             {
                 "old": "corex/transfer",
-                "new": "axiomasoft/corex-transfer",
+                "new": "axiomasoft/corex-import-export",
                 "match": "word"
             },
             {
                 "old": "corex/wakeup",
-                "new": "axiomasoft/corex-wakeup",
+                "new": "axiomasoft/corex-scheduler",
                 "match": "word"
             },
             {
                 "old": "corex/workflow",
                 "new": "axiomasoft/corex-workflow",
+                "match": "word"
+            },
+            {
+                "old": "axiomasoft/corex-transfer",
+                "new": "axiomasoft/corex-import-export",
+                "match": "word"
+            },
+            {
+                "old": "axiomasoft/corex-wakeup",
+                "new": "axiomasoft/corex-scheduler",
+                "match": "word"
+            },
+            {
+                "old": "axiomasoft/corex-tasks-workflow",
+                "new": "axiomasoft/corex-recurring-tasks",
                 "match": "word"
             }
         ],
@@ -3945,13 +4000,18 @@
                 "match": "word"
             },
             {
-                "old": "packages/import-export",
-                "new": "—",
+                "old": "packages/transfer",
+                "new": "packages/import-export",
                 "match": "word"
             },
             {
-                "old": "packages/modules",
-                "new": "—",
+                "old": "packages/wakeup",
+                "new": "packages/scheduler",
+                "match": "word"
+            },
+            {
+                "old": "packages/tasks-workflow",
+                "new": "packages/recurring-tasks",
                 "match": "word"
             }
         ],
@@ -3982,13 +4042,13 @@
             },
             {
                 "old": "corex-task-recurrence",
-                "new": "corex-tasks-workflow",
+                "new": "corex-recurring-tasks",
                 "match": "word",
                 "kind": "config"
             },
             {
                 "old": "corex-modules",
-                "new": "corex.modules",
+                "new": "modules",
                 "match": "word",
                 "kind": "config"
             },

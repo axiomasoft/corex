@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Tenancy\Membership\Data\PairKey;
 use CoreX\Tenancy\Membership\Exceptions\InboxConflict;
 use CoreX\Tenancy\Membership\Exceptions\PairStoreViolation;
@@ -12,6 +11,7 @@ use CoreX\Tenancy\Tests\Support\Membership\TransportFixture;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
+use Packman\Schema\Contracts\Migration\SchemaSets;
 
 uses(TestCase::class);
 

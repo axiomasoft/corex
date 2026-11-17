@@ -21,7 +21,8 @@ return new class extends Migration
             $table->char('profile_digest', 64);
             $table->unsignedBigInteger('source_version');
             $table->string('state', 16);
-            $table->string('object_key')->nullable();
+            $table->string('blob_id', 128)->nullable();
+            $table->char('sha256', 64)->nullable();
             $table->string('mime_type', 255)->nullable();
             $table->unsignedBigInteger('size_bytes')->nullable();
             $table->unsignedInteger('width')->nullable();

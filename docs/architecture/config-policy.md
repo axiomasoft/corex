@@ -53,7 +53,7 @@
 ### Опасные режимы и подтверждение
 
 Список закрыт: `corex-workflow.enforce_declarations = false`; `accept_legacy_unstamped = true`
-(`corex-notifications.digest`, `corex-tasks-workflow.wakeup`, любой `corex-wakeup.handlers.<kind>`).
+(`corex-notifications.digest`, `corex-recurring-tasks.wakeup`, любой `corex-scheduler.handlers.<kind>`).
 В `production` включённый опасный режим останавливает старт (`InvalidConfiguration`), если его точный
 путь не перечислен в `corex.acknowledged_dangerous_modes`. Шаблоны и «подтвердить всё» не
 поддерживаются; подтверждённый режим виден в `corex:config:validate` как предупреждение.

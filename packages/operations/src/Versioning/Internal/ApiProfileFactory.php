@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Operations\Versioning\Internal;
 
 use CoreX\Errors\Enums\UnavailabilityReason;
-use CoreX\Modules\Data\Api;
-use CoreX\Modules\Data\CompiledRegistry;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Laravel\OperationFactory;
 use CoreX\Operations\Laravel\Support\ApiOptions;
@@ -17,6 +15,8 @@ use CoreX\Operations\Versioning\Data\CapabilityDescriptor;
 use CoreX\Operations\Versioning\Data\DeprecationDescriptor;
 use CoreX\Operations\Versioning\Data\EffectiveCapability;
 use InvalidArgumentException;
+use Packman\Modules\Data\Compiler\CompiledRegistry;
+use Packman\Modules\Data\Extenders\Api;
 
 /** Builds one sorted code profile. Tenant activation is resolved separately. */
 final class ApiProfileFactory implements ApiProfiles

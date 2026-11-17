@@ -2508,7 +2508,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [],
             "doc": [],
@@ -2559,6 +2559,82 @@
             "enum_backing": null,
             "enum_cases": []
         },
+        "CoreX\\Webhooks\\Laravel\\WebhookController": {
+            "kind": "class",
+            "layer": "spi-call",
+            "since": "1.0",
+            "final": true,
+            "readonly": true,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "assertOperationContract": {
+                    "visibility": "public",
+                    "static": true,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "operation",
+                            "type": "CoreX\\Operations\\Definition\\Data\\Operation",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "void",
+                    "doc": []
+                },
+                "forward": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "request",
+                            "type": "Illuminate\\Http\\Request",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "dispatcher",
+                            "type": "CoreX\\Operations\\Invocation\\Contracts\\OperationDispatcher",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "operations",
+                            "type": "CoreX\\Operations\\Definition\\Contracts\\OperationRegistry",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "Illuminate\\Http\\JsonResponse",
+                    "doc": []
+                }
+            },
+            "properties": [],
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
         "CoreX\\Webhooks\\Laravel\\WebhookHttpRegistrar": {
             "kind": "class",
             "layer": "spi-call",
@@ -2568,7 +2644,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [],
             "doc": [],
@@ -2654,164 +2730,6 @@
                             "array<array-key, mixed> $config"
                         ]
                     }
-                }
-            },
-            "properties": [],
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
-        "CoreX\\Webhooks\\Laravel\\WebhookRegistrar": {
-            "kind": "class",
-            "layer": "spi-call",
-            "since": "1.0",
-            "final": true,
-            "readonly": true,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": {
-                "@deprecated": [
-                    ""
-                ]
-            },
-            "methods": {
-                "boot": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "app",
-                            "type": "Illuminate\\Contracts\\Foundation\\Application",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "void",
-                    "doc": []
-                },
-                "register": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "app",
-                            "type": "Illuminate\\Contracts\\Foundation\\Application",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "void",
-                    "doc": []
-                }
-            },
-            "properties": [],
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
-        "CoreX\\Webhooks\\Laravel\\WebhookRouteRegistrar": {
-            "kind": "class",
-            "layer": "spi-call",
-            "since": "1.0",
-            "final": true,
-            "readonly": true,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": [],
-            "methods": {
-                "assertOperationContract": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "operation",
-                            "type": "CoreX\\Operations\\Definition\\Data\\Operation",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "void",
-                    "doc": []
-                },
-                "forward": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "request",
-                            "type": "Illuminate\\Http\\Request",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "dispatcher",
-                            "type": "CoreX\\Operations\\Invocation\\Contracts\\OperationDispatcher",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "operations",
-                            "type": "CoreX\\Operations\\Definition\\Contracts\\OperationRegistry",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "Illuminate\\Http\\JsonResponse",
-                    "doc": []
-                },
-                "register": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "app",
-                            "type": "Illuminate\\Contracts\\Foundation\\Application",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "void",
-                    "doc": []
                 }
             },
             "properties": [],

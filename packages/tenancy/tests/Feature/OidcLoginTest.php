@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Authentication\Internal\Oidc\OidcClient;
 use CoreX\Tenancy\Tests\Stubs\StubIdentityProvider;
@@ -16,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
 
 // AC-14 — authorization-code + PKCE + nonce (D129), Implementation Rule 5
 // order (research/10 §3). Negative-first per the P2.22 pre-mortem (§7): each
@@ -81,7 +81,7 @@ function trackDbOL(string $db): void
 // Every central-table helper below targets the 'pgsql' connection EXPLICITLY
 // (never bare DB::table()) — initAccountWithTenantOL() calls
 // Tenancy::initialize(), which flips the app's DEFAULT connection to
-// 'tenant' for the rest of the test (DatabaseTenancyBootstrapper); a bare
+// 'tenant' for the active runtime frame; a bare
 // DB::table('root_identities') called afterwards would silently insert into
 // the TENANT database (which has no such table) instead of the central one.
 function makeClusterOL(): string

@@ -6,12 +6,12 @@ namespace CoreX\Webhooks\Tests\Feature;
 
 use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\CoreServiceProvider;
-use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Operations\ApiServiceProvider;
+use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Webhooks\Contracts\WebhookSigner;
 use CoreX\Webhooks\Data\WebhookOptions;
 use CoreX\Webhooks\WebhooksServiceProvider;
 use Orchestra\Testbench\TestCase;
+use Packman\Modules\ModulesServiceProvider;
 
 final class WebhookLoadContourBootTest extends TestCase
 {
@@ -26,7 +26,7 @@ final class WebhookLoadContourBootTest extends TestCase
 
     protected function getPackageProviders($app): array
     {
-        return [CoreServiceProvider::class, ModulesServiceProvider::class, ApiServiceProvider::class, WebhooksServiceProvider::class];
+        return [CoreServiceProvider::class, ModulesServiceProvider::class, OperationsServiceProvider::class, WebhooksServiceProvider::class];
     }
 
     public function test_boot_disables_remote_delivery_and_reports_missing_signing(): void

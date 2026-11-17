@@ -19,6 +19,9 @@ interface MediaLibrary
 
     public function read(MediaContext $context, string $fileId): MediaReadRef;
 
+    /** Ready output only; null until the requested current profile has been published. */
+    public function readConversion(MediaContext $context, string $fileId, string $profile): ?MediaReadRef;
+
     public function delete(MediaContext $context, string $fileId): DeleteResult;
 
     public function conversion(MediaContext $context, string $fileId, string $profile): ?MediaConversionRef;

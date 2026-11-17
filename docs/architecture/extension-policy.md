@@ -66,7 +66,7 @@ version и диагностический отпечаток реестра. О�
 Гейт `scripts/extension-contract-gate.php` содержит полный поимённый список классов и
 интерфейсов с суффиксом `Registry`, `Catalogue` или `Manager`. Новый кандидат не проходит
 гейт до явной классификации; не-каталожные runtime managers также отмечены поимённо.
-`CoreX\Modules\Testing\ExtensionContract::verify()` принимает manifests и явные
+`Packman\Modules\Testing\ExtensionContract::verify()` принимает manifests и явные
 `InstalledPackageVersion` из scalar fixtures. Он возвращает типизированный результат с
 `passed()`, `summary()` и fingerprint; Pest/PHPUnit и внешние пакеты могут использовать
 одну и ту же проверку без контейнера Laravel.

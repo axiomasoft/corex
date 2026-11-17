@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Stubs;
 
-use CoreX\Settings\Contracts\SettingDefaultsProvider;
 use Override;
+use Packman\Settings\Contracts\SettingDefaultsProviderInterface as SettingDefaultsProvider;
 
 final readonly class StubSettingDefaultsProvider implements SettingDefaultsProvider
 {

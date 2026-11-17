@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace CoreX\Operations\Bulk\Data;
 
 use CoreX\Attributes\Api;
-use CoreX\Transfer\Contracts\CancellationSignal;
-use CoreX\Transfer\Contracts\ExportRunner;
-use CoreX\Transfer\Contracts\TransferResultReader;
-use CoreX\Transfer\Contracts\TransferRunner;
-use CoreX\Transfer\Data\Export\ExportCursor;
-use CoreX\Transfer\Data\Export\ExportManifest;
-use CoreX\Transfer\Data\StepToken;
-use CoreX\Transfer\Data\TransferRef;
+use CoreX\ImportExport\Contracts\CancellationSignal;
+use CoreX\ImportExport\Contracts\ExportRunner;
+use CoreX\ImportExport\Contracts\TransferResultReader;
+use CoreX\ImportExport\Contracts\TransferRunner;
+use CoreX\ImportExport\Data\Export\ExportCursor;
+use CoreX\ImportExport\Data\Export\ExportManifest;
+use CoreX\ImportExport\Data\StepToken;
+use CoreX\ImportExport\Data\TransferRef;
 use InvalidArgumentException;
 
 #[Api(since: '1.0')]

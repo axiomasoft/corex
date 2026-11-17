@@ -12,14 +12,14 @@ use CoreX\Media\Data\MediaAction;
 use CoreX\Media\Data\MediaContext;
 use CoreX\Media\Data\MediaSubject;
 use CoreX\Media\Data\UploadInput;
+use CoreX\Media\Exceptions\MediaOperationConflict;
 use CoreX\Media\Internal\ConversionCoordinator;
 use CoreX\Media\Internal\ConversionProfiles;
 use CoreX\Media\Internal\Jobs\ConvertMedia;
-use CoreX\Media\Internal\MediaOperationConflict;
+use CoreX\Media\Internal\MediaBlobs;
 use CoreX\Media\Internal\MediaOperationStore;
 use CoreX\Media\Internal\Support\MediaOptions;
 use CoreX\Media\Laravel\UploadedFileSource;
-use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Psr\Clock\ClockInterface;
@@ -98,7 +98,7 @@ it('rejects output facts that exceed the immutable conversion profile', function
     ]);
     $operations = resolve(MediaOperationStore::class);
     $operations->enqueueConversion($file->id, 'bounded', $digest, 1);
-    $coordinator = new ConversionCoordinator(resolve('db')->connection(), resolve(TenantStorage::class), $profiles, $operations, resolve(MediaOptions::class), resolve(ClockInterface::class));
+    $coordinator = new ConversionCoordinator(resolve('db')->connection(), resolve(MediaBlobs::class), $profiles, $operations, resolve(MediaOptions::class), resolve(ClockInterface::class));
 
     expect(fn (): mixed => $coordinator->process($file->id, 'bounded'))->toThrow(MediaOperationConflict::class);
 

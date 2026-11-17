@@ -11,8 +11,8 @@ return (new Configuration)
     ->addPathToScan(__DIR__.'/database', isDev: true)
     // discovery: standalone Testbench installs laravel/framework, which replaces the declared illuminate components
     ->ignoreErrorsOnPackage('laravel/framework', [ErrorType::SHADOW_DEPENDENCY])
-    // discovery: composer suggest; guarded optional adapter remains installable without axiomasoft/corex-transfer
-    ->ignoreErrorsOnPackage('axiomasoft/corex-transfer', [ErrorType::DEV_DEPENDENCY_IN_PROD])
+    // discovery: composer suggest; guarded optional adapter remains installable without axiomasoft/corex-import-export
+    ->ignoreErrorsOnPackage('axiomasoft/corex-import-export', [ErrorType::DEV_DEPENDENCY_IN_PROD])
     // discovery: Testbench laravel/framework replaces illuminate/http; shipped Illuminate imports/helpers use this component
     ->ignoreErrorsOnPackage('illuminate/http', [ErrorType::UNUSED_DEPENDENCY])
     // discovery: Testbench laravel/framework replaces illuminate/support; shipped Illuminate imports/helpers use this component

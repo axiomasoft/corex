@@ -7,9 +7,7 @@ namespace CoreX\Webhooks\Tests\Feature;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Data\DataScope;
-use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Database\Contracts\SchemaSets;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Time\Testing\FrozenClock;
@@ -22,6 +20,8 @@ use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use Packman\Schema\Contracts\Migration\SchemaSets;
 use PHPUnit\Framework\Attributes\Group;
 use Throwable;
 
@@ -47,7 +47,7 @@ final class WebhookConcurrencyTest extends TestCase
         try {
             $this->selectSchema($database);
 
-            $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+            $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
             $connection = DB::connection('api_pg_tenant');
             $clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
             $scope = $this->scope($connection);
@@ -188,7 +188,7 @@ final class WebhookConcurrencyTest extends TestCase
 
     private function selectSchema(string $database): void
     {
-        $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(ApiSchemaConnections::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('database.connections.api_budget_stub', [

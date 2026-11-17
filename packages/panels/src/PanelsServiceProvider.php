@@ -6,39 +6,16 @@ namespace CoreX\Panels;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Database\Contracts\SchemaSetProvider;
-use CoreX\Modules\Contracts\PackageRegistrar;
-use CoreX\Panels\Internal\PanelsSchemaSets;
-use CoreX\Panels\Laravel\PanelsBindingsRegistrar;
-use CoreX\Panels\SavedViews\Laravel\SavedViewsBindingsRegistrar;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Packman\Panels\Laravel\PanelsServiceProvider as PackmanPanelsServiceProvider;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class PanelsServiceProvider extends ServiceProvider
 {
-    /** @var list<class-string<PackageRegistrar>> */
-    private const array REGISTRARS = [SavedViewsBindingsRegistrar::class, PanelsBindingsRegistrar::class];
-
     #[Override]
     public function register(): void
     {
-        $this->app->tag([PanelsSchemaSets::class], SchemaSetProvider::class);
-
-        $this->app->booted($this->publishMigrations(...));
-        $this->mergeConfigFrom(__DIR__.'/../config/corex-panels.php', 'corex-panels');
-
-        foreach (self::REGISTRARS as $registrar) {
-            (new $registrar)->register($this->app);
-        }
+        $this->app->register(PackmanPanelsServiceProvider::class);
     }
-
-    public function boot(): void
-    {
-        foreach (self::REGISTRARS as $registrar) {
-            (new $registrar)->boot($this->app);
-        }
-    }
-
-    private function publishMigrations(): void {}
 }

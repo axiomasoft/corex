@@ -2,19 +2,15 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Exceptions\InvalidConfiguration;
-use CoreX\Context\Contracts\AccountConnectionResolver;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\Data\DatabaseConnectionConfig;
 use CoreX\Tenancy\Account\Internal\Models\Account;
-use CoreX\Tenancy\Runtime\Internal\CentralTemplateConnectionResolver;
-use CoreX\Tenancy\Runtime\Internal\DatabaseTenancyManager;
 use CoreX\Tenancy\Tests\Support\Scope\MarkerWriter;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Tenant\Exceptions\TenantFailure;
 
 uses(TestCase::class)->group('pg');
 
@@ -93,7 +89,7 @@ function markersSB(): array
     return $rows;
 }
 
-it('a service resolved before a runFor keeps its database, the one resolved inside writes to the other, and re-resolution after is back (D95 п.3)', function (): void {
+it('a captured writer cannot cross a Tenant generation and fresh resolution returns to the outer account', function (): void {
     $manager = resolve(TenancyManager::class);
     $manager->initialize($this->accounts['a']);
     $held = resolve(MarkerWriter::class);
@@ -103,12 +99,12 @@ it('a service resolved before a runFor keeps its database, the one resolved insi
         resolve(MarkerWriter::class)->write('inside');
     });
 
-    $held->write('held');
+    expect(fn () => $held->write('held'))->toThrow(TenantFailure::class);
     $after = resolve(MarkerWriter::class);
     $after->write('after');
 
     expect($after)->not->toBe($held)
-        ->and(markersSB())->toBe(['central' => [], 'a' => ['after', 'held'], 'b' => ['inside']]);
+        ->and(markersSB())->toBe(['central' => [], 'a' => ['after'], 'b' => ['inside']]);
 });
 
 it('central → A: a writer built central is not reused inside A (initialize resets scope without any compensating switch)', function (): void {
@@ -137,90 +133,4 @@ it('A → central: end() resets scope, the A writer is not reused centrally', fu
     expect($central)->not->toBe($inA)
         ->and($central->database())->toBe($this->central)
         ->and(markersSB())->toBe(['central' => ['central'], 'a' => [], 'b' => []]);
-});
-
-it('transfers central URL credentials and options to the account connection and leaves the central config untouched', function (): void {
-    $central = DB::connection('pgsql')->getConfig();
-    $url = sprintf(
-        'postgresql://%s:%s@%s:%s/%s?application_name=url-central',
-        rawurlencode((string) $central['username']),
-        rawurlencode((string) $central['password']),
-        $central['host'],
-        $central['port'],
-        $central['database'],
-    );
-    $urlOnly = ['driver' => 'pgsql', 'url' => $url, 'charset' => 'utf8', 'prefix' => '', 'schema' => 'public', 'timezone' => 'UTC'];
-    config(['database.connections.pgsql' => $urlOnly]);
-    DB::purge('pgsql');
-    $before = config('database.connections.pgsql');
-
-    $manager = resolve(TenancyManager::class);
-    $manager->initialize($this->accounts['a']);
-    $tenant = config('database.connections.tenant');
-    resolve(MarkerWriter::class)->write('only-a');
-
-    expect($tenant)->not->toHaveKey('url')
-        ->and($tenant['database'])->toBe($this->databases['a'])
-        ->and($tenant['username'])->toBe($central['username'])
-        ->and($tenant['password'])->toBe($central['password'])
-        ->and($tenant['application_name'])->toBe('url-central')
-        ->and(markersSB())->toBe(['central' => [], 'a' => ['only-a'], 'b' => []]);
-
-    $manager->end();
-
-    expect(config('database.connections.pgsql'))->toBe($before);
-});
-
-it('keeps a host resolver\'s credential/option overrides and refuses routing options', function (): void {
-    $central = DB::connection('pgsql')->getConfig();
-    $resolver = new class($central) implements AccountConnectionResolver
-    {
-        public array $options = ['application_name' => 'resolver-name'];
-
-        public function __construct(private readonly array $central) {}
-
-        public function resolve(AccountRef $account): DatabaseConnectionConfig
-        {
-            $database = DB::connection('pgsql')->table('root_accounts')->where('id', $account->id)->value('db_name');
-
-            return new DatabaseConnectionConfig(
-                driver: 'pgsql',
-                host: (string) $this->central['host'],
-                port: (int) $this->central['port'],
-                database: (string) $database,
-                username: (string) $this->central['username'],
-                options: $this->options + ['password' => $this->central['password']],
-            );
-        }
-    };
-    app()->instance(AccountConnectionResolver::class, $resolver);
-    app()->forgetInstance(DatabaseTenancyManager::class);
-    $manager = resolve(TenancyManager::class);
-
-    $manager->initialize($this->accounts['a']);
-    expect(config('database.connections.tenant.application_name'))->toBe('resolver-name');
-    $manager->end();
-
-    foreach (['host', 'database', 'read', 'write', 'url', 'port', 'driver', 'username'] as $routing) {
-        $resolver->options = [$routing => 'evil'];
-        expect(fn () => $manager->initialize($this->accounts['b']))->toThrow(InvalidConfiguration::class, 'routing keys in options');
-        expect($manager->initialized())->toBeFalse()->and(DB::getDefaultConnection())->toBe('pgsql');
-    }
-});
-
-it('a replica overlay on the central connection never overrides the account route', function (): void {
-    $central = DB::connection('pgsql')->getConfig();
-    // overlays on the real host, so the central lookups keep working; the point is that they never reach the account route
-    config(['database.connections.pgsql.read' => ['host' => $central['host']], 'database.connections.pgsql.write' => ['host' => $central['host']]]);
-    DB::purge('pgsql');
-
-    $manager = resolve(TenancyManager::class);
-    $manager->initialize($this->accounts['a']);
-
-    expect(config('database.connections.tenant'))->not->toHaveKeys(['read', 'write'])
-        ->and(config('database.connections.tenant.host'))->toBe($central['host']);
-});
-
-it('the stock resolver is bound as the account connection resolver', function (): void {
-    expect(resolve(AccountConnectionResolver::class))->toBeInstanceOf(CentralTemplateConnectionResolver::class);
 });

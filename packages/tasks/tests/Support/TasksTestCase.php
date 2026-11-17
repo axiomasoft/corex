@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Tasks\Tests\Support;
 
 use CoreX\CoreServiceProvider;
-use CoreX\Database\Testing\MigratesSchemaSets;
-use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Tasks\TasksServiceProvider;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Packman\Modules\ModulesServiceProvider;
+use Packman\Schema\Testing\MigratesSchemaSets;
 
 /**
  * Package-local Testbench base for Tasks suites (D94).

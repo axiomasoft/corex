@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Internal;
 
-use CoreX\Database\Contracts\SchemaSetProvider;
-use CoreX\Database\Data\SchemaSet;
-use CoreX\Database\Enums\SchemaScope;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
+use Packman\Schema\Contracts\Migration\SchemaSetProvider;
+use Packman\Schema\Data\Migration\SchemaSet;
+use Packman\Schema\Enums\SchemaScope;
 
 /** @internal */
 final readonly class OperationsSchemaSets implements SchemaSetProvider
 {
-    public function __construct(private ApiSchemaRegistrar $schema) {}
+    public function __construct(private ApiSchemaConnections $schema) {}
 
     public function sets(): array
     {

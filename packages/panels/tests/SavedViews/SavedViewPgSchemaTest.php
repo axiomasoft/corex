@@ -6,10 +6,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 beforeEach(function (): void {
+    $database = config('database.connections.pgsql.database');
+
+    if (! app()->environment('testing') || ! is_string($database) || ! str_ends_with($database, '_test')) {
+        throw new RuntimeException('Saved-view PostgreSQL tests require an isolated *_test database.');
+    }
     config(['database.default' => 'pgsql']);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
-    $this->migrateSchemaSets(['axiomasoft/corex-panels:tenant'], 'pgsql');
+    $this->migrateSchemaSets(['axiomasoft/packman-panels:tenant'], 'pgsql');
 });
 
 it('creates the saved-view scope lock before the composite view foreign key', function (): void {

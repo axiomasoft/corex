@@ -8,7 +8,6 @@ use Closure;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Errors\Enums\CoreErrorCode;
-use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
 use CoreX\Operations\Cost\Contracts\BudgetExecution as BudgetAdmission;
@@ -28,6 +27,7 @@ use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Data\OperationResult;
 use Illuminate\Database\Connection;
 use Override;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Throwable;
 
 /** @internal Adds tenant-transactional idempotency around the shared operation invoker. */

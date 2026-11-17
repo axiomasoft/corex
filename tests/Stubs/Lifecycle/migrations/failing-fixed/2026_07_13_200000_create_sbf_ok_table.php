@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Modules\Contracts\RecordsRegistrar;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Packman\Modules\Contracts\Lifecycle\RecordsRegistrar;
 
 return new class extends Migration
 {

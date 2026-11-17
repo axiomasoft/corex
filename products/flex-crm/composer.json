@@ -1,7 +1,7 @@
 {
     "name": "flex/crm",
     "description": "CoreX CRM module — pipelines, stages and deals on axiomasoft/corex (ULID, tenancy, money).",
-    "type": "corex-module",
+    "type": "packman-module",
     "license": "MIT",
     "keywords": [
         "laravel",
@@ -24,7 +24,9 @@
         "axiomasoft/corex-intl": "^1.0@dev",
         "brick/money": "^0.9 || ^0.10",
         "giggsey/libphonenumber-for-php-lite": "^9.0",
-        "laravel/framework": "^13.0"
+        "laravel/framework": "^13.0",
+        "axiomasoft/packman-modules": "^0.1@dev",
+        "axiomasoft/packman-schema": "^0.1@dev"
     },
     "require-dev": {
         "axiomasoft/corex-operations": "^1.0@dev",
@@ -51,7 +53,6 @@
     "extra": {
         "corex": {
             "schema-version": 1,
-            "module": "Flex\\Crm\\CrmModule",
             "package-type": "product",
             "stability": "experimental"
         },
@@ -62,6 +63,9 @@
         },
         "branch-alias": {
             "dev-main": "1.0.x-dev"
+        },
+        "packman": {
+            "module": "Flex\\Crm\\CrmModule"
         }
     },
     "repositories": [

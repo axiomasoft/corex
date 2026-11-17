@@ -1,6 +1,16 @@
+## Unreleased — canonical registration
+
+- Rename the HTTP forwarding class to `WebhookController`; `WebhookHttpRegistrar` remains the sole route registrar.
+
+- Breaking before release: remove `WebhookRegistrar` and `WebhookController::register()`. Register the provider or call `WebhookBindingsRegistrar` and `WebhookHttpRegistrar` directly; route forwarding and operation-contract validation remain unchanged.
+
 ## Unreleased — invocation contract in the kernel (audit 2026-10-08 P-02)
 
-- Operation handlers and context use `CoreX\Invocation` kernel contracts; the former `CoreX\Operations\...` names are deprecated aliases of the same types. Public webhook contracts are unchanged.
+## Unreleased — Packman runtime
+
+- Breaking: module declarations and schema registrations use Packman contracts directly; module lifecycle and schema execution are owned by Packman.
+
+- Operation handlers and context use `CoreX\Invocation` kernel contracts; the former `CoreX\Operations\...` aliases are removed. Public webhook contracts are unchanged.
 
 ## Unreleased — PHP 8.4 modernization (P09.4)
 
@@ -23,7 +33,7 @@
 - Shipped migrations obtain their `up()` connection from the schema migrator's current connection. Test retention fixtures use `SchemaMigrator` instead of calling migration `up()` directly. DDL is unchanged.
 
 
-- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `packman:schema:migrate`; migration publishing is removed.
 
 - Breaking pre-1.0 (PLAN3.P06.4): `WebhookHttpResult::$errorCode` now accepts `?WebhookFailureReason`, with 20 typed delivery causes; transport errors use the declared reason set and SQL persists enum values.
 - Added public `WebhookFailureReason`, canonical `WebhookDestination` and implementable `WebhookEgressPolicy`. Hosts can restrict destinations on subscription create/update and before every delivery attempt, retry and replay; denial produces `webhooks.webhook_egress_denied` (422) or terminal `egress_denied` without network I/O.
@@ -36,7 +46,7 @@
 
 ## Unreleased — thin providers and registrars (P05.2)
 
-- `WebhooksServiceProvider` uses `WebhookBindingsRegistrar` and `WebhookHttpRegistrar`; `WebhookRegistrar` and `WebhookRouteRegistrar::register()` stay as deprecated shims.
+- `WebhooksServiceProvider` uses `WebhookBindingsRegistrar` and `WebhookHttpRegistrar`.
 
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 

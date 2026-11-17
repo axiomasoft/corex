@@ -8,12 +8,12 @@ use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Errors\Enums\UnavailabilityReason;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Invocation\Contracts\RequestContext;
-use CoreX\Modules\Data\Api;
-use CoreX\Modules\Data\CompiledRegistry;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\Tests\TestCase;
 use CoreX\Operations\Versioning\Internal\ApiProfileFactory;
 use InvalidArgumentException;
+use Packman\Modules\Data\Compiler\CompiledRegistry;
+use Packman\Modules\Data\Extenders\Api;
 
 final class ApiProfileTest extends TestCase
 {

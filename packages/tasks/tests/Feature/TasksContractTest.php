@@ -7,7 +7,6 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
 use CoreX\Tasks\Access\Exceptions\TasksModuleDisabled;
@@ -38,6 +37,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Mockery\MockInterface;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 beforeEach(function (): void {
     $this->workspaceId = (string) Str::uuid7();
@@ -475,8 +475,8 @@ it('publishes the lifecycle manifest instead of loading migrations from its prov
 
     expect($manifest->composerName)->toBe(TasksModule::NAME)
         ->and($manifest->tablePrefix)->toBe('tsk')
-        ->and($composer['type'])->toBe('corex-module')
-        ->and($composer['extra']['corex']['module'])->toBe(TasksModule::class)
+        ->and($composer['type'])->toBe('packman-module')
+        ->and($composer['extra']['packman']['module'])->toBe(TasksModule::class)
         ->and($provider)->not->toContain('loadMigrationsFrom');
 });
 

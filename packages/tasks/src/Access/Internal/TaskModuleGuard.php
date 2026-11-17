@@ -6,10 +6,10 @@ namespace CoreX\Tasks\Access\Internal;
 
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Tasks\Access\Contracts\TaskModuleContext;
 use CoreX\Tasks\Access\Exceptions\TasksModuleDisabled;
 use CoreX\Tasks\TasksModule;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 final readonly class TaskModuleGuard implements TaskModuleContext
 {

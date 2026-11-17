@@ -12,15 +12,15 @@ use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
 use CoreX\Access\Tests\Stubs\Deal;
 use CoreX\Access\Tests\Stubs\FakeModuleRegistry;
 use CoreX\Context\Enums\PrincipalType;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\EntityDefinition;
-use CoreX\Modules\Data\Permissions;
-use CoreX\Modules\Enums\DisableReason;
-use CoreX\Modules\Events\ModuleDisabled;
-use CoreX\Modules\Events\ModuleEnabled;
-use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Entities\EntityDefinition;
+use Packman\Modules\Data\Extenders\Permissions;
+use Packman\Modules\Enums\Lifecycle\DisableReason;
+use Packman\Modules\Events\Lifecycle\ModuleDisabled;
+use Packman\Modules\Events\Lifecycle\ModuleEnabled;
+use Packman\Modules\Testing\ArrayEntityRegistry;
 
 uses()->group('pg');
 

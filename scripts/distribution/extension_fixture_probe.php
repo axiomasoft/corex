@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 use CoreX\Attributes\Api;
 use CoreX\Attributes\Spi;
-use CoreX\Modules\Data\InstalledPackageVersion;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Modules\Testing\ExtensionContract;
 use CoreX\Search\Internal\SearchManager;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
+use Packman\Modules\Data\Compiler\InstalledPackageVersion;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Modules\Testing\ExtensionContract;
 
 $arguments = parseArguments(array_slice($argv, 1));
 $vendor = $arguments['vendor'];

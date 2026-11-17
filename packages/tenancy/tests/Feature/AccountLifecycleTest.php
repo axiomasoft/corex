@@ -20,9 +20,11 @@ use CoreX\Tenancy\Account\Internal\PendingPool;
 use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
 use CoreX\Tenancy\Laravel\Support\HostResolverCacheInvalidator;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
-use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
+use CoreX\Tenancy\Provisioning\Contracts\AccountResources;
 use CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle;
 use CoreX\Tenancy\Runtime\Internal\HostAccountResolver;
+use CoreX\Tenancy\Tests\Support\TestAccountResources;
+use CoreX\Tenancy\Tests\Support\TestTemplateIntegrity as TemplateIntegrityVerifier;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
@@ -156,6 +158,7 @@ function lcLifecycle(?ImpersonationService $impersonation = null, ?TenantDatabas
         lifecycle: resolve(AccountLifecyclePolicy::class), connections: resolve(ConnectionResolverInterface::class), clock: resolve(ClockInterface::class), events: resolve(Dispatcher::class), connectionFactory: resolve(ConnectionFactory::class), hostCache: resolve(HostResolverCacheInvalidator::class),
         centralConnection: 'pgsql',
         pendingPool: new PendingPool(
+            resources: resolve(AccountResources::class),
             connections: resolve(ConnectionResolverInterface::class),
             centralConnection: 'pgsql',
             provisioner: new DatabaseTenantProvisioner(
@@ -165,7 +168,7 @@ function lcLifecycle(?ImpersonationService $impersonation = null, ?TenantDatabas
             templateIntegrityVerifier: $templateIntegrityVerifier,
         ),
         fsm: new AccountLifecycleFsm,
-        tenantDatabaseLifecycle: $tenantDatabaseLifecycle ?? new DatabaseTenantLifecycle(connections: resolve(ConnectionResolverInterface::class), clock: resolve(ClockInterface::class), events: resolve(Dispatcher::class), centralConnection: 'pgsql'),
+        tenantDatabaseLifecycle: $tenantDatabaseLifecycle ?? new DatabaseTenantLifecycle(connections: resolve(ConnectionResolverInterface::class), clock: resolve(ClockInterface::class), events: resolve(Dispatcher::class), centralConnection: 'pgsql', resources: resolve(AccountResources::class)),
         impersonationGuard: app()->makeWith(ImpersonationGuard::class, ['impersonation' => $impersonation ?? new NullImpersonationService]),
         templateIntegrityVerifier: $templateIntegrityVerifier,
     );
@@ -178,6 +181,7 @@ function activateLcAccount(): AccountRef
     makeLcTemplateRow();
     $templateIntegrityVerifier = resolve(TemplateIntegrityVerifier::class);
     new PendingPool(
+        resources: resolve(AccountResources::class),
         connections: resolve(ConnectionResolverInterface::class),
         centralConnection: 'pgsql',
         provisioner: new DatabaseTenantProvisioner(
@@ -309,8 +313,8 @@ it('purge() after a ready export drops the DB, soft-deletes the account, removes
     $database = new DatabaseTenantLifecycle(
         connections: resolve(ConnectionResolverInterface::class), clock: resolve(ClockInterface::class), events: resolve(Dispatcher::class),
         centralConnection: 'pgsql',
-        writer: static fn (): array => ['storage_path' => $archive, 'size_bytes' => 12],
-        verifier: static fn (string $path, int $size): bool => $path === $archive && is_file($path) && is_readable($path) && filesize($path) === $size && hash_equals($digest, (string) hash_file('sha256', $path)),
+        resources: new TestAccountResources(writer: static fn (): array => ['storage_path' => $archive, 'size_bytes' => 12],
+            verifier: static fn (string $path, int $size): bool => $path === $archive && is_file($path) && is_readable($path) && filesize($path) === $size && hash_equals($digest, (string) hash_file('sha256', $path))),
     );
     $this->beforeApplicationDestroyed(static fn () => unlink($archive));
     $exportId = lcLifecycle(tenantDatabaseLifecycle: $database)->requestExport($account);
@@ -349,15 +353,15 @@ it('refuses ready and DROP when an archive is unavailable', function (): void {
     $database = new DatabaseTenantLifecycle(
         connections: resolve(ConnectionResolverInterface::class), clock: resolve(ClockInterface::class), events: resolve(Dispatcher::class),
         centralConnection: 'pgsql',
-        writer: static fn (): array => ['storage_path' => '/missing/archive.dump', 'size_bytes' => 12],
-        verifier: static fn (): bool => false,
+        resources: new TestAccountResources(writer: static fn (): array => ['storage_path' => '/missing/archive.dump', 'size_bytes' => 12],
+            verifier: static fn (): bool => false),
     );
-    expect(fn () => $database->export($account, 'offboarding'))->toThrow(RuntimeException::class, 'archive is unavailable');
+    expect(fn () => $database->export($account, 'offboarding'))->toThrow(RuntimeException::class, 'physical owner did not verify');
     expect(DB::table('root_account_exports')->where('account_id', $account->id)->value('status'))->toBe('running');
     DB::table('root_account_exports')->where('account_id', $account->id)->update([
         'status' => 'ready', 'storage_path' => '/missing/archive.dump', 'size_bytes' => 12,
     ]);
-    expect(fn () => $database->drop($account))->toThrow(RuntimeException::class, 'archive is unavailable');
+    expect(fn () => $database->drop($account))->toThrow(RuntimeException::class, 'physical owner did not verify');
     $name = DB::table('root_accounts')->where('id', $account->id)->value('db_name');
     expect(DB::table('pg_database')->where('datname', $name)->exists())->toBeTrue();
 });

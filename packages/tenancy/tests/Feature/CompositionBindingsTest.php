@@ -10,7 +10,6 @@ use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Contracts\TenantDatabaseLifecycle;
 use CoreX\Context\Internal\NullImpersonationService;
 use CoreX\Context\Laravel\WorkspaceScopeProvider;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Tenancy\Account\Internal\DatabaseTenantProvisioner;
 use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycle;
@@ -32,28 +31,28 @@ use CoreX\Tenancy\Impersonation\Internal\DatabaseImpersonationService;
 use CoreX\Tenancy\Integration\Internal\Wakeup\RootRegistryWakeupHint;
 use CoreX\Tenancy\Integration\Internal\Wakeup\RootWakeupReconciler;
 use CoreX\Tenancy\Laravel\AuthenticationRegistrar;
-use CoreX\Tenancy\Laravel\DatabaseRegistrar;
 use CoreX\Tenancy\Laravel\DomainTrustRegistrar;
 use CoreX\Tenancy\Laravel\IdentityRegistrar;
 use CoreX\Tenancy\Laravel\ProvisioningRegistrar;
 use CoreX\Tenancy\Laravel\RuntimeRegistrar;
 use CoreX\Tenancy\Laravel\Scopes\WorkspaceScope;
-use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Laravel\WakeupRegistrar;
 use CoreX\Tenancy\Laravel\WorkspaceRegistrar;
-use CoreX\Tenancy\Provisioning\Internal\Database\SchemaCatalogueSerializer;
-use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityLock;
+use CoreX\Tenancy\Provisioning\Contracts\AccountResources;
 use CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle;
 use CoreX\Tenancy\Runtime\Internal\ConnectionGuardedTenantContextRestorer;
-use CoreX\Tenancy\Runtime\Internal\DatabaseTenancyManager;
 use CoreX\Tenancy\Runtime\Internal\QueueTenantContext;
 use CoreX\Tenancy\Runtime\Internal\Storage\ContextTenantStorage;
 use CoreX\Tenancy\Runtime\Internal\TenancyManagerContextResolver;
+use CoreX\Tenancy\Runtime\Internal\TenantRuntimeManager;
 use CoreX\Tenancy\Tests\Concerns\AssertsContainerBindings;
+use CoreX\Tenancy\Tests\Support\TestAccountResources;
+use CoreX\Tenancy\Tests\Support\TestTemplateIntegrity;
 use CoreX\Tenancy\Tests\TestCase;
 use CoreX\Tenancy\Workspace\Contracts\WorkspaceResolver;
 use CoreX\Tenancy\Workspace\Internal\DatabaseWorkspaceResolver;
 use CoreX\Tenancy\Workspace\Internal\TenancyWorkspaceScopeProvider;
+use Packman\Foundation\Contracts\PackageRegistrar;
 
 uses(AssertsContainerBindings::class);
 uses()->group('pg');
@@ -66,8 +65,8 @@ beforeEach(function (): void {
 
 it('keeps Runtime register bindings on the measured key, concrete and lifetime', function (): void {
     $app = $this->app;
-    $this->assertSingletonBinding($app, DatabaseTenancyManager::class, DatabaseTenancyManager::class);
-    $this->assertSingletonBinding($app, TenancyManager::class, DatabaseTenancyManager::class);
+    $this->assertSingletonBinding($app, TenantRuntimeManager::class, TenantRuntimeManager::class);
+    $this->assertSingletonBinding($app, TenancyManager::class, TenantRuntimeManager::class);
     $this->assertSingletonBinding($app, QueueTenantContext::class, QueueTenantContext::class);
     $this->assertSingletonBinding(
         $app,
@@ -81,29 +80,17 @@ it('keeps Runtime register bindings on the measured key, concrete and lifetime',
         ConnectionGuardedTenantContextRestorer::class,
     );
 
-    foreach ($app->make(TenancyOptions::class)->bootstrappers as $bootstrapper) {
-        $this->assertSingletonBinding($app, $bootstrapper, $bootstrapper);
-    }
 });
 
 it('binds the identity password rehash port to the tenancy table owner', function (): void {
     $this->assertSingletonBinding($this->app, IdentityPasswordRehasher::class, DatabaseIdentitySyncer::class);
 });
 
-it('keeps Database register bindings on the measured key, concrete and lifetime', function (): void {
-    $app = $this->app;
-    $this->assertSingletonBinding($app, SchemaCatalogueSerializer::class, SchemaCatalogueSerializer::class);
-    $this->assertSingletonBinding($app, TemplateIntegrityLock::class, TemplateIntegrityLock::class);
-    $this->assertSingletonBinding(
-        $app,
-        CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier::class,
-        CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier::class,
-    );
-    $this->assertSingletonBinding(
-        $app,
-        TemplateIntegrityVerifier::class,
-        CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier::class,
-    );
+it('uses explicit host physical ownership contracts', function (): void {
+    expect(resolve(AccountResources::class))
+        ->toBeInstanceOf(TestAccountResources::class);
+    expect(resolve(TemplateIntegrityVerifier::class))
+        ->toBeInstanceOf(TestTemplateIntegrity::class);
 });
 
 it('keeps Provisioning register bindings on the measured key, concrete and lifetime', function (): void {
@@ -220,7 +207,6 @@ it('binds Wakeup when driver is root_registry', function (): void {
 it('registers composition modules through PackageRegistrar', function (): void {
     $registrars = [
         new RuntimeRegistrar,
-        new DatabaseRegistrar,
         new ProvisioningRegistrar,
         new IdentityRegistrar,
         new WorkspaceRegistrar,

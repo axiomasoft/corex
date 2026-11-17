@@ -9,9 +9,9 @@ use CoreX\Attributes\SpiKind;
 use CoreX\Config\Data\CoreOptions;
 use CoreX\Config\Laravel\ConfiguredImplementation;
 use CoreX\Features\Contracts\FeatureFlags;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 
 /** Composition of the kernel module; the public provider delegates here. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

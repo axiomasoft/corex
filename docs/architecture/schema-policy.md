@@ -6,28 +6,28 @@
 
 ## Наборы и регистрация
 
-`CoreX\Database\Data\SchemaSet` описывает единицу исполнения:
+`Packman\Schema\Data\Migration\SchemaSet` описывает единицу исполнения:
 
 | Поле | Правило |
 |:--|:--|
 | `id()` | `<composer-name>:<set>`, уникально в реестре; `<set>` — имя каталога |
 | `package` | Composer-имя владельца |
 | `scope` | `SchemaScope::Central`, `Tenant` или `Dedicated` |
-| `lifecycle` | `SchemaLifecycle::Platform` либо `Module` для пакета с `extra.corex.module` |
+| `lifecycle` | `SchemaLifecycle::Platform` либо `Module` для пакета с `extra.packman.module` |
 | `path` | Абсолютный путь к `database/migrations/<set>` внутри пакета |
 | `version` | Целое поколение ≥ 1; baseline — 1 |
 | `drivers` | Содержит `pgsql`; содержит `sqlite`, если набор поддерживает SQLite |
 | `requires` | Composer-имена пакетов, чьи наборы должны быть зарегистрированы; иначе набор неактивен |
 | `connection` | Имя соединения из Options владельца; обязательно только для `Dedicated` |
 
-Пакет реализует `CoreX\Database\Contracts\SchemaSetProvider` во внутреннем классе и в
+Пакет реализует `Packman\Schema\Contracts\Migration\SchemaSetProvider` во внутреннем классе и в
 `register()` своего service provider тегирует этот класс именем контракта:
 
 ```php
 $this->app->tag([PackageSchemaSets::class], SchemaSetProvider::class);
 ```
 
-Singleton `CoreX\Database\Contracts\SchemaSets` собирает теги при первом разрешении,
+Singleton `Packman\Schema\Contracts\Migration\SchemaSets` собирает теги при первом разрешении,
 сортирует наборы по id и сохраняет неизменяемый реестр. Некорректный путь, повтор id,
 повтор basename миграции в одной scope, отсутствие `pgsql` или неверное сочетание scope
 и connection приводят к исключению. Статический гейт дополнительно требует уникальность
@@ -52,7 +52,7 @@ basename во всём репозитории.
 На PostgreSQL оба пути Module-наборов используют тот же per-migration schema diff,
 что lifecycle: journal, DDL и `mod_records` claims сохраняются одной транзакцией
 под lifecycle graph lock. Если явная Module-выборка устанавливается в новую базу,
-мигратор добавляет prerequisite `axiomasoft/corex:tenant` для registry/claims.
+мигратор добавляет prerequisite `axiomasoft/packman-modules:tenant` для registry/claims.
 В template clone должны переноситься и Laravel journal, и `mod_records`; последующий
 `enable` использует уже сохранённые claims. Владение старых таблиц без claims нельзя
 восстановить по имени или префиксу. SQLite-наборы сохраняют самостоятельный путь
@@ -70,19 +70,19 @@ basename файла. Дополнительный журнал CoreX не соз
 ## Команды установки и проверки
 
 ```bash
-php artisan corex:schema:migrate --scope=tenant
-php artisan corex:schema:status --scope=tenant
-php artisan corex:schema:migrate --scope=central --database=central
-php artisan corex:schema:migrate --scope=dedicated
+php artisan packman:schema:migrate --scope=tenant
+php artisan packman:schema:status --scope=tenant
+php artisan packman:schema:migrate --scope=central --database=central
+php artisan packman:schema:migrate --scope=dedicated
 ```
 
 Имена соединений задаёт приложение. На production для миграции нужен `--force`.
 Операторский шаблон аккаунта создаётся командой
-`corex:schema:migrate --scope=tenant --modules --database=<template>`;
+`packman:schema:migrate --scope=tenant --modules --database=<template>`;
 обычная активация модулей проходит через `ModuleLifecycle`.
 Tenancy wave runner мигрирует Platform-наборы Tenant на соединении `tenant`, сохраняя
 свою блокировку и транзакцию; модульные наборы догоняет `ModuleLifecycle::upgrade()`.
-`corex:schema:status` возвращает exit 1 при `pending` или `unknown`; повторная миграция
+`packman:schema:status` возвращает exit 1 при `pending` или `unknown`; повторная миграция
 без новых файлов ничего не исполняет.
 
 ## Форма baseline

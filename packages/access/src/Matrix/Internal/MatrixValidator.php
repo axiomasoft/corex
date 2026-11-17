@@ -9,11 +9,11 @@ use CoreX\Access\Roles\Data\RoleMatrixEntry;
 use CoreX\Access\Roles\Data\RoleView;
 use CoreX\Access\Roles\Laravel\RoleMatrixData;
 use CoreX\Context\Enums\PrincipalType;
-use CoreX\Modules\Contracts\EntityRegistry;
-use CoreX\Modules\Enums\Capability;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
+use Packman\Modules\Contracts\Entities\EntityRegistry;
+use Packman\Modules\Enums\Entities\Capability;
 
 /**
  * Warns (never throws) about two classes of matrix-row risk — the return

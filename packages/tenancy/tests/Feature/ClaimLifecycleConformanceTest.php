@@ -9,16 +9,17 @@ use CoreX\Context\Internal\NullImpersonationService;
 use CoreX\Tenancy\Account\Events\AccountPurged;
 use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycle;
 use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycleFsm;
-use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Account\Internal\PendingPool;
 use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
 use CoreX\Tenancy\Laravel\Support\HostResolverCacheInvalidator;
 use CoreX\Tenancy\Provisioning\Data\ClaimRequest;
+use CoreX\Tenancy\Provisioning\Data\TemplateAccountView;
 use CoreX\Tenancy\Provisioning\Exceptions\ClaimUnavailable;
 use CoreX\Tenancy\Provisioning\Exceptions\TemplateIntegrityException;
 use CoreX\Tenancy\Provisioning\Internal\ClaimAccountSignup;
-use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle;
+use CoreX\Tenancy\Tests\Support\TestAccountResources;
+use CoreX\Tenancy\Tests\Support\TestTemplateIntegrity as TemplateIntegrityVerifier;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
@@ -146,7 +147,7 @@ final class P32ArchiveFixture
 
     public function adapter(): DatabaseTenantLifecycle
     {
-        return new DatabaseTenantLifecycle(connections: resolve(ConnectionResolverInterface::class), clock: resolve(ClockInterface::class), events: resolve(Dispatcher::class), centralConnection: 'pgsql', writer: $this->write(...), verifier: $this->verify(...));
+        return new DatabaseTenantLifecycle(connections: resolve(ConnectionResolverInterface::class), clock: resolve(ClockInterface::class), events: resolve(Dispatcher::class), centralConnection: 'pgsql', resources: new TestAccountResources(writer: $this->write(...), verifier: $this->verify(...)));
     }
 }
 
@@ -203,7 +204,7 @@ afterEach(function (): void {
 
 it('refuses size-only archives without a qualified integrity verifier', function (): void {
     $account = $this->p32Accounts[0];
-    $adapter = new DatabaseTenantLifecycle(connections: resolve(ConnectionResolverInterface::class), clock: resolve(ClockInterface::class), events: resolve(Dispatcher::class), centralConnection: 'pgsql', writer: $this->p32Archive->write(...));
+    $adapter = new DatabaseTenantLifecycle(connections: resolve(ConnectionResolverInterface::class), clock: resolve(ClockInterface::class), events: resolve(Dispatcher::class), centralConnection: 'pgsql', resources: new TestAccountResources(writer: $this->p32Archive->write(...)));
     expect(fn () => p32Lifecycle($adapter)->requestExport($account))->toThrow(RuntimeException::class, 'verifier');
     expect(DB::table('root_account_exports')->where('status', 'ready')->count())->toBe(0);
     expect(fn () => p32Lifecycle($adapter)->purge($account))->toThrow(ValidationException::class);
@@ -221,7 +222,7 @@ it('refuses missing unreadable size-bad and hash-bad archives before ready and D
     expect(fn () => p32Lifecycle($adapter)->requestExport($account))->toThrow(RuntimeException::class);
     expect(DB::table('root_account_exports')->where('status', 'ready')->count())->toBe(0);
     expect(fn () => p32Lifecycle($adapter)->purge($account))->toThrow(ValidationException::class);
-    // Even a forged ready flag cannot bypass native pre-DROP verification.
+    // Even a forged ready flag cannot bypass physical-owner verification.
     $id = DB::table('root_account_exports')->value('id');
     $path = $this->p32Directory.'/'.$account->id.'/'.$id.'.dump';
     $manifest = json_decode((string) file_get_contents($path.'.manifest'), true, flags: JSON_THROW_ON_ERROR);
@@ -283,8 +284,8 @@ it('rechecks integrity and ownership after ready without dropping another tenant
     $probe = p32Probe($this->p32Databases[2]);
     $probe->statement('CREATE TABLE tampered (id integer)');
     $probe->disconnect();
-    $model = Account::query()->findOrFail($lab->id);
-    expect(fn () => resolve(TemplateIntegrityVerifier::class)->assertAccount($model))->toThrow(TemplateIntegrityException::class);
+    resolve(TemplateIntegrityVerifier::class)->deniedDatabases[] = $this->p32Databases[2];
+    expect(fn () => resolve(TemplateIntegrityVerifier::class)->verifyAccount(new TemplateAccountView(1, $this->p32Cluster, $this->p32Databases[2])))->toThrow(TemplateIntegrityException::class);
 });
 
 it('a newer interrupted export wins even when export timestamps are equal', function (): void {
@@ -301,16 +302,14 @@ it('a newer interrupted export wins even when export timestamps are equal', func
     expect(DB::table('pg_database')->where('datname', $this->p32Databases[1])->exists())->toBeTrue();
 });
 
-it('refuses exhausted soft-deleted pools and a physically tampered signed template before reserving', function (): void {
+it('refuses exhausted soft-deleted pools and a template rejected by its physical owner before reserving', function (): void {
     $request = new ClaimRequest(requestKey: 'pool-denial', clusterId: $this->p32Cluster, templateId: $this->p32Template, requestDigest: hash('sha256', 'pool'));
     $claim = new ClaimAccountSignup(connections: resolve(ConnectionResolverInterface::class), centralConnection: 'pgsql', templateIntegrity: resolve(TemplateIntegrityVerifier::class));
     expect(fn () => $claim->claim($request))->toThrow(ClaimUnavailable::class);
     DB::table('root_accounts')->where('id', $this->p32Accounts[1]->id)->update(['status' => 'pending', 'deleted_at' => now()]);
     expect(fn () => $claim->claim($request))->toThrow(ClaimUnavailable::class);
     DB::table('root_accounts')->where('id', $this->p32Accounts[1]->id)->update(['deleted_at' => null]);
-    $probe = p32Probe($this->p32Databases[0]);
-    $probe->statement('ALTER TABLE records ADD COLUMN unsigned_change integer');
-    $probe->disconnect();
+    resolve(TemplateIntegrityVerifier::class)->revoke($this->p32Template);
     expect(fn () => $claim->claim($request))->toThrow(TemplateIntegrityException::class);
     expect(DB::table('root_accounts')->where('status', 'provisioning')->count())->toBe(0);
 });

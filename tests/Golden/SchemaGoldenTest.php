@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Golden;
 
-use CoreX\Database\Enums\SchemaScope;
 use CoreX\Tests\Golden\Support\SchemaCatalogue;
 use CoreX\Tests\Golden\Support\SchemaEnvironment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Testing\PendingCommand;
+use Packman\Schema\Enums\SchemaScope;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 
@@ -41,7 +41,7 @@ final class SchemaGoldenTest extends GoldenTestCase
         $catalogue = SchemaCatalogue::of($connection);
         self::assertSame([], $catalogue['enum_types']);
         $this->assertSchemaNames($catalogue);
-        $command = $this->artisan('corex:schema:migrate', ['--scope' => $scope->value, '--modules' => true, ...($override === null ? [] : ['--database' => $override])]);
+        $command = $this->artisan('packman:schema:migrate', ['--scope' => $scope->value, '--modules' => true, ...($override === null ? [] : ['--database' => $override])]);
         self::assertInstanceOf(PendingCommand::class, $command);
         $command->expectsOutput('Nothing to migrate.')->assertSuccessful();
         $this->assertSchemaGolden($catalogue, __DIR__.'/schema/'.$scope->value.'.pgsql.json');

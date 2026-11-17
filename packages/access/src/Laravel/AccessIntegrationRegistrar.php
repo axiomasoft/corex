@@ -10,10 +10,6 @@ use CoreX\Access\Extend\Internal\PermissionsMerger;
 use CoreX\Access\Identity\Laravel\PrincipalUserProvider;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Modules\Contracts\EntityRegistry;
-use CoreX\Modules\Contracts\PackageRegistrar;
-use CoreX\Modules\Events\ModuleDisabled;
-use CoreX\Modules\Events\ModuleEnabled;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
@@ -21,6 +17,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use InvalidArgumentException;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
+use Packman\Modules\Contracts\Entities\EntityRegistry;
+use Packman\Modules\Events\Lifecycle\ModuleDisabled;
+use Packman\Modules\Events\Lifecycle\ModuleEnabled;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class AccessIntegrationRegistrar implements PackageRegistrar

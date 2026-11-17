@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Account\Internal;
 
+use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\ProvisionParams;
 use CoreX\Tenancy\Account\Internal\Models\Account;
+use CoreX\Tenancy\Provisioning\Contracts\AccountResources;
 use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks;
 use CoreX\Tenancy\Provisioning\Data\TemplateAccountView;
 use DateTimeInterface;
@@ -19,8 +21,8 @@ use stdClass;
 
 /**
  * Pending-pool mechanics (B-11 §5.2, AC-4/AC-5): keeps `pending_pool_size`
- * pre-cloned account databases per cell so signup never waits on
- * `CREATE DATABASE … TEMPLATE` (p95 < 3с). Pending болванки carry
+ * provisioned account resources per cell so signup can claim a prepared resource.
+ * Pending accounts carry
  * `status='pending'`, `slug`/`owner_identity_id` NULL — the frozen
  * DB_SCHEMA table-CHECK on `root_accounts` already allows that state
  * (D14/P2.2), so no `pending_since` column is needed: `status` alone encodes "not yet claimed".
@@ -40,6 +42,7 @@ final readonly class PendingPool
         private DatabaseTenantProvisioner $provisioner,
         private TemplateIntegrityChecks $templateIntegrityVerifier,
         private ConnectionResolverInterface $connections,
+        private AccountResources $resources,
     ) {}
 
     /**
@@ -54,7 +57,7 @@ final readonly class PendingPool
         $created = [];
 
         for ($i = 0; $i < $count; $i++) {
-            $created[] = $this->cloneOne(clusterId: $clusterId, status: 'pending');
+            $created[] = $this->provisionOne(clusterId: $clusterId, status: 'pending');
         }
 
         return $created;
@@ -114,13 +117,13 @@ final readonly class PendingPool
             return DatabaseValue::text($candidate->id);
         });
 
-        $id = $claimedId ?? $this->cloneOne(clusterId: null, status: 'provisioning');
+        $id = $claimedId ?? $this->provisionOne(clusterId: null, status: 'provisioning');
 
         return Account::on($this->centralConnection)->findOrFail($id);
     }
 
     /**
-     * Delete stale pending болванки — DROP DATABASE + DELETE root_accounts
+     * Discard stale pending resources through the owner, then delete root_accounts
      * — either by `template_version` (schema drifted from a new golden
      * template) and/or by age (`created_at` older than $olderThan). At
      * least one filter is required: an unfiltered clear would nuke the
@@ -167,12 +170,9 @@ final readonly class PendingPool
                 continue;
             }
 
-            $databaseName = DatabaseValue::text($row->db_name);
-
-            if (preg_match('/\Aacc_[a-zA-Z0-9_]+\z/D', $databaseName) !== 1) {
-                throw new RuntimeException('Invalid pending account database name; refusing DROP.');
-            }
-            $this->db()->statement('DROP DATABASE IF EXISTS "'.$databaseName.'"');
+            $this->resources->discardUnclaimed(new AccountRef(
+                id: DatabaseValue::text($row->id), slug: '', status: 'provisioning', features: [], limits: [],
+            ));
 
             $this->db()->transaction(function () use ($row, &$cleared): void {
                 $deleted = $this->db()
@@ -197,7 +197,7 @@ final readonly class PendingPool
         return $cleared;
     }
 
-    private function cloneOne(?string $clusterId, string $status): string
+    private function provisionOne(?string $clusterId, string $status): string
     {
         $cluster = $clusterId !== null
             ? $this->clusterRow($clusterId)

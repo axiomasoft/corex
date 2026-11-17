@@ -8,7 +8,6 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Database\Laravel\DatabaseRegistrar;
-use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Time\Laravel\TimeRegistrar;
 use CoreX\Workflow\Contracts\EngineAdapter;
 use CoreX\Workflow\Data\SignalRequest;
@@ -20,6 +19,9 @@ use CoreX\Workflow\Data\TriggerRequest;
 use CoreX\Workflow\WorkflowServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Override;
+use Packman\PackmanServiceProvider;
+use Packman\Schema\Laravel\SchemaServiceProvider;
+use Packman\Schema\Testing\MigratesSchemaSets;
 
 final class TestTenantContextResolver implements TenantContextResolver
 {
@@ -54,7 +56,7 @@ abstract class TestCase extends Orchestra
     #[Override]
     protected function getPackageProviders($app): array
     {
-        return [WorkflowServiceProvider::class];
+        return [PackmanServiceProvider::class, SchemaServiceProvider::class, WorkflowServiceProvider::class];
     }
 
     #[Override]

@@ -9,15 +9,16 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Database\Enums\SchemaScope;
 use CoreX\Tenancy\Account\Internal\DatabaseValue;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Account\Internal\Models\AccountSchemaState;
-use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
+use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks;
+use CoreX\Tenancy\Provisioning\Data\TemplateAccountView;
 use CoreX\Tenancy\Provisioning\Internal\Models\MigrationBatch;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use Packman\Schema\Enums\SchemaScope;
 use Throwable;
 
 /**
@@ -42,7 +43,7 @@ final readonly class MigrationWaveOrchestrator
     public function __construct(
         private string $centralConnection,
         private TenancyManager $tenancy,
-        private TemplateIntegrityVerifier $templateIntegrityVerifier,
+        private TemplateIntegrityChecks $templateIntegrityVerifier,
         private SchemaMigrator $schema,
         private ?Closure $migrationRunner = null,
     ) {}
@@ -71,7 +72,7 @@ final readonly class MigrationWaveOrchestrator
         Account::query()
             ->where('deleted_at', null)
             ->each(function (Account $account): void {
-                $this->templateIntegrityVerifier->assertAccount($account);
+                $this->templateIntegrityVerifier->verifyAccount(new TemplateAccountView($account->template_version, $account->cluster_id, $account->db_name));
             });
     }
 

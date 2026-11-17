@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Flex\Crm;
 
-use CoreX\Modules\Contracts\ModuleDefinition;
-use CoreX\Modules\Data\Api;
-use CoreX\Modules\Data\Entity;
-use CoreX\Modules\Data\ModuleManifest;
 use Flex\Crm\Activity\Models\Activity;
 use Flex\Crm\ApiShared\CrmSchemas;
 use Flex\Crm\Company\Api\CreateCompanyOperation;
@@ -24,6 +20,10 @@ use Flex\Crm\Deal\Models\Pipeline;
 use Flex\Crm\Deal\Models\Stage;
 use Flex\Crm\Lead\Models\Lead;
 use Override;
+use Packman\Modules\Contracts\Definition\ModuleDefinition;
+use Packman\Modules\Data\Entities\Entity;
+use Packman\Modules\Data\Extenders\Api;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
 
 final class CrmModule extends ModuleDefinition
 {

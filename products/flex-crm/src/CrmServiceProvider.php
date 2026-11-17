@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Flex\Crm;
 
-use CoreX\Database\Contracts\SchemaSetProvider;
 use Flex\Crm\Internal\CrmSchemaSets;
 use Flex\Crm\Internal\Value;
 use Flex\Crm\Support\CrmOptions;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\ServiceProvider;
+use Packman\Schema\Contracts\Migration\SchemaSetProvider;
 
 final class CrmServiceProvider extends ServiceProvider
 {

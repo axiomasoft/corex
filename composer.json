@@ -17,14 +17,14 @@
         "axiomasoft/corex-panels": "^1.0@dev",
         "axiomasoft/corex-media": "^1.0@dev",
         "axiomasoft/corex-notifications": "^1.0@dev",
-        "axiomasoft/corex-wakeup": "^1.0@dev",
+        "axiomasoft/corex-scheduler": "^1.0@dev",
         "axiomasoft/corex-tenancy": "^1.0@dev",
         "axiomasoft/corex-operations": "^1.0@dev",
-        "axiomasoft/corex-tasks-workflow": "^1.0@dev",
+        "axiomasoft/corex-recurring-tasks": "^1.0@dev",
         "axiomasoft/corex-intl": "^1.0@dev",
         "axiomasoft/corex-search-intl": "^1.0@dev",
         "axiomasoft/corex-custom-fields": "^1.0@dev",
-        "axiomasoft/corex-transfer": "^1.0@dev",
+        "axiomasoft/corex-import-export": "^1.0@dev",
         "axiomasoft/corex-search-meilisearch": "^1.0@dev",
         "axiomasoft/corex-recurrence": "^1.0@dev",
         "axiomasoft/corex-search": "^1.0@dev"
@@ -43,7 +43,6 @@
         "open-telemetry/sdk": "^1.4",
         "axiomasoft/corex-access": "^1.0@dev",
         "axiomasoft/corex-access-azguard": "^1.0@dev",
-        "axioma-studio/azguard-core": "^0.3",
         "phpstan/extension-installer": "^1.4.3",
         "phpstan/phpstan-strict-rules": "^2.0.12",
         "shipmonk/composer-dependency-analyser": "^1.8.4",
@@ -53,7 +52,17 @@
         "infection/infection": "0.35.6",
         "axiomasoft/corex-infection-pest-adapter": "0.1.0",
         "league/flysystem-aws-s3-v3": "3.35.3",
-        "laravel/octane": "2.21.0"
+        "laravel/octane": "2.21.0",
+        "axiomasoft/packman": "^0.1@dev",
+        "axiomasoft/packman-modules": "^0.1@dev",
+        "axiomasoft/packman-schema": "^0.1@dev",
+        "axiomasoft/azguard": "^2.0@dev",
+        "axiomasoft/packman-panels": "^0.1@dev",
+        "axiomasoft/packman-plugins": "^0.1@dev",
+        "axiomasoft/tenant": "^1.0@dev",
+        "axiomasoft/tenant-laravel": "^1.0@dev",
+        "axiomasoft/vaulter-core": "^1.0@dev",
+        "axiomasoft/vaulter-media": "^1.0@dev"
     },
     "autoload-dev": {
         "psr-4": {
@@ -69,14 +78,14 @@
             "CoreX\\SearchIntl\\Tests\\": "packages/search-intl/tests/",
             "CoreX\\SearchMeilisearch\\Tests\\": "packages/search-meilisearch/tests/",
             "CoreX\\Search\\Tests\\": "packages/search/tests/",
-            "CoreX\\TasksWorkflow\\Tests\\": "packages/tasks-workflow/tests/",
+            "CoreX\\RecurringTasks\\Tests\\": "packages/recurring-tasks/tests/",
             "CoreX\\Tasks\\Tests\\": "packages/tasks/tests/",
             "CoreX\\Tenancy\\Tests\\": "packages/tenancy/tests/",
             "CoreX\\Testing\\": "packages/core/tests/Support/",
             "CoreX\\Tests\\Golden\\": "tests/Golden/",
             "CoreX\\Tools\\Tests\\": "packages/tools/tests/",
-            "CoreX\\Transfer\\Tests\\": "packages/transfer/tests/",
-            "CoreX\\Wakeup\\Tests\\": "packages/wakeup/tests/",
+            "CoreX\\ImportExport\\Tests\\": "packages/import-export/tests/",
+            "CoreX\\Scheduler\\Tests\\": "packages/scheduler/tests/",
             "CoreX\\Webhooks\\Tests\\": "packages/webhooks/tests/",
             "CoreX\\Workflow\\Tests\\": "packages/workflow/tests/",
             "Flex\\Crm\\Tests\\": "products/flex-crm/tests/",
@@ -96,8 +105,8 @@
             "packages/notifications/tests",
             "packages/search/tests",
             "packages/search-meilisearch/tests",
-            "packages/wakeup/tests",
-            "packages/tasks-workflow/tests"
+            "packages/scheduler/tests",
+            "packages/recurring-tasks/tests"
         ],
         "files": [
             "packages/custom-fields/tests/helpers.php"
@@ -122,44 +131,678 @@
             "url": "products/*"
         },
         {
-            "name": "azguard",
             "type": "package",
             "package": {
-                "name": "axioma-studio/azguard-core",
-                "version": "0.3.0",
+                "name": "axiomasoft/packman",
+                "version": "dev-main",
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/axiomasoft/packman.git",
+                    "reference": "366fc104f22b388607f77d506ae5e36cd0e99666"
+                },
+                "require": {
+                    "php": "^8.4",
+                    "psr/clock": "^1.0"
+                },
+                "suggest": {
+                    "illuminate/console": "Optional Laravel Artisan console commands (`packman:doctor`, `packman:config:validate`).",
+                    "illuminate/contracts": "Optional Laravel container, event dispatcher, config, and validation bindings.",
+                    "illuminate/database": "Optional schema status checks in Laravel applications.",
+                    "illuminate/support": "Optional PackmanServiceProvider auto-discovery and Laravel adapters."
+                },
+                "type": "library",
+                "extra": {
+                    "packman": {
+                        "schema-version": 1,
+                        "package-type": "kernel",
+                        "stability": "stable",
+                        "error-prefix": "packman",
+                        "owns": [
+                            "Attributes",
+                            "Config",
+                            "Context",
+                            "Data",
+                            "Doctor",
+                            "Errors",
+                            "Events",
+                            "Features",
+                            "Foundation",
+                            "Settings"
+                        ]
+                    },
+                    "laravel": {
+                        "providers": [
+                            "Packman\\PackmanServiceProvider"
+                        ]
+                    },
+                    "branch-alias": {
+                        "dev-main": "0.1.x-dev"
+                    }
+                },
+                "autoload": {
+                    "psr-4": {
+                        "Packman\\": "packages/core/src/"
+                    }
+                },
+                "license": [
+                    "MIT"
+                ],
+                "authors": [
+                    {
+                        "name": "Dmitry Vostrikov",
+                        "email": "dv.vostrikov@gmail.com"
+                    }
+                ],
+                "description": "Packman unified ecosystem kernel — attributes, foundation registrars, context contracts, JsonDocument, configuration options/compiler/cache, RFC 9457 error registry, doctor diagnostics, domain events, features, and settings contracts.",
+                "keywords": [
+                    "attributes",
+                    "config",
+                    "doctor",
+                    "errors",
+                    "kernel",
+                    "laravel",
+                    "packman",
+                    "php"
+                ]
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "axiomasoft/packman-modules",
+                "version": "dev-main",
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/axiomasoft/packman.git",
+                    "reference": "366fc104f22b388607f77d506ae5e36cd0e99666"
+                },
+                "require": {
+                    "axiomasoft/packman": "^0.1|^1.0@dev",
+                    "axiomasoft/packman-schema": "^0.1|^1.0@dev",
+                    "illuminate/console": "^12.0|^13.0",
+                    "illuminate/container": "^12.0|^13.0",
+                    "illuminate/contracts": "^12.0|^13.0",
+                    "illuminate/database": "^12.0|^13.0",
+                    "illuminate/events": "^12.0|^13.0",
+                    "illuminate/queue": "^12.0|^13.0",
+                    "illuminate/support": "^12.0|^13.0",
+                    "php": "^8.4",
+                    "psr/clock": "^1.0"
+                },
+                "type": "library",
+                "extra": {
+                    "packman": {
+                        "error-prefix": "modules"
+                    },
+                    "laravel": {
+                        "providers": [
+                            "Packman\\Modules\\ModulesServiceProvider"
+                        ]
+                    },
+                    "phpstan": {
+                        "includes": [
+                            "packages/modules/extension.neon"
+                        ]
+                    },
+                    "branch-alias": {
+                        "dev-main": "0.1.x-dev"
+                    }
+                },
+                "autoload": {
+                    "psr-4": {
+                        "Packman\\Modules\\": "packages/modules/src/"
+                    }
+                },
+                "license": [
+                    "MIT"
+                ],
+                "description": "Universal Packman Composer-discovered DB-backed platform module and plugin compiler, lifecycle FSM, schema ownership claims, and PHPStan boundary rules."
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "axiomasoft/packman-schema",
+                "version": "dev-main",
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/axiomasoft/packman.git",
+                    "reference": "366fc104f22b388607f77d506ae5e36cd0e99666"
+                },
+                "require": {
+                    "axiomasoft/packman": "^0.1|^1.0@dev",
+                    "illuminate/console": "^12.0|^13.0",
+                    "illuminate/contracts": "^12.0|^13.0",
+                    "illuminate/database": "^12.0|^13.0",
+                    "illuminate/support": "^12.0|^13.0",
+                    "php": "^8.4",
+                    "psr/clock": "^1.0"
+                },
+                "type": "library",
+                "extra": {
+                    "packman": {
+                        "error-prefix": "schema"
+                    },
+                    "laravel": {
+                        "providers": [
+                            "Packman\\Schema\\Laravel\\SchemaServiceProvider"
+                        ]
+                    },
+                    "branch-alias": {
+                        "dev-main": "0.1.x-dev"
+                    }
+                },
+                "autoload": {
+                    "psr-4": {
+                        "Packman\\Schema\\": "packages/schema/src/"
+                    }
+                },
+                "license": [
+                    "MIT"
+                ],
+                "description": "Universal Packman schema governance, schema sets, table ownership, prefix fingerprinting, PostgreSQL constraint naming, and step compiler."
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "axiomasoft/azguard",
+                "version": "dev-main",
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/azguard-private.git",
-                    "reference": "253cbf4cce0226545cd96ca8c6bcbefe329b1403"
+                    "reference": "457eed3a07e0a25eae934fd35f532cde3d69fa86"
                 },
                 "require": {
-                    "php": "^8.3",
-                    "illuminate/console": "^11.0|^12.0|^13.0",
-                    "illuminate/contracts": "^11.0|^12.0|^13.0",
-                    "illuminate/database": "^11.0|^12.0|^13.0",
-                    "illuminate/filesystem": "^11.0|^12.0|^13.0",
-                    "illuminate/http": "^11.0|^12.0|^13.0",
-                    "illuminate/queue": "^11.0|^12.0|^13.0",
-                    "illuminate/routing": "^11.0|^12.0|^13.0",
-                    "illuminate/support": "^11.0|^12.0|^13.0"
+                    "axiomasoft/packman": "^0.1",
+                    "axiomasoft/packman-panels": "^0.1",
+                    "axiomasoft/packman-plugins": "^0.1",
+                    "axiomasoft/packman-schema": "^0.1",
+                    "illuminate/auth": "^13.0",
+                    "illuminate/console": "^13.0",
+                    "illuminate/contracts": "^13.0",
+                    "illuminate/database": "^13.0",
+                    "illuminate/filesystem": "^13.0",
+                    "illuminate/http": "^13.0",
+                    "illuminate/log": "^13.0",
+                    "illuminate/queue": "^13.0",
+                    "illuminate/routing": "^13.0",
+                    "illuminate/support": "^13.0",
+                    "php": "^8.4"
+                },
+                "suggest": {
+                    "dragonmantank/cron-expression": "Required to validate cron expressions and run Laravel scheduled maintenance without laravel/framework."
+                },
+                "type": "library",
+                "extra": {
+                    "branch-alias": {
+                        "dev-main": "2.0.x-dev"
+                    },
+                    "laravel": {
+                        "providers": [
+                            "AzGuard\\AzGuardServiceProvider"
+                        ]
+                    },
+                    "packman": {
+                        "schema-version": 1,
+                        "package-type": "capability",
+                        "stability": "stable",
+                        "error-prefix": "azguard",
+                        "owns": [
+                            "Attributes",
+                            "Authorization",
+                            "Catalog",
+                            "Changes",
+                            "Concerns",
+                            "Configuration",
+                            "Context",
+                            "Contracts",
+                            "Diagnostics",
+                            "Directories",
+                            "Errors",
+                            "Events",
+                            "Exceptions",
+                            "Extensions",
+                            "Facades",
+                            "Kernel",
+                            "Laravel",
+                            "Panels",
+                            "Permissions",
+                            "Plugins",
+                            "Policies",
+                            "Registrars",
+                            "Roles",
+                            "Schema",
+                            "Sources",
+                            "Storage",
+                            "Support",
+                            "Tenancy",
+                            "Testing"
+                        ]
+                    }
                 },
                 "autoload": {
                     "psr-4": {
                         "AzGuard\\": "packages/core/src/"
                     }
                 },
+                "license": [
+                    "MIT"
+                ],
+                "authors": [
+                    {
+                        "name": "Dmitry Vostrikov",
+                        "email": "dv.vostrikov@gmail.com"
+                    }
+                ],
+                "description": "Panel-based authorization for Laravel: permission sources, explicit policy authority, scoped assignments",
+                "homepage": "https://github.com/axiomasoft/azguard",
+                "keywords": [
+                    "access-control",
+                    "authorization",
+                    "gate",
+                    "laravel",
+                    "permissions",
+                    "rbac",
+                    "roles"
+                ],
+                "support": {
+                    "email": "dv.vostrikov@gmail.com",
+                    "issues": "https://github.com/axiomasoft/azguard/issues",
+                    "security": "https://github.com/axiomasoft/azguard-private/blob/main/SECURITY.md",
+                    "source": "https://github.com/axiomasoft/azguard"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "axiomasoft/packman-panels",
+                "version": "dev-main",
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/axiomasoft/packman.git",
+                    "reference": "366fc104f22b388607f77d506ae5e36cd0e99666"
+                },
+                "require": {
+                    "axiomasoft/packman": "^0.1|^1.0@dev",
+                    "axiomasoft/packman-schema": "^0.1|^1.0@dev",
+                    "illuminate/contracts": "^12.0|^13.0",
+                    "illuminate/database": "^12.0|^13.0",
+                    "illuminate/support": "^12.0|^13.0",
+                    "php": "^8.4",
+                    "psr/clock": "^1.0"
+                },
+                "suggest": {
+                    "axiomasoft/packman-modules": "Optional module and entity registry integration for ModulePanelCatalogue and EntityViewSchemaProvider.",
+                    "axiomasoft/packman-plugins": "Optional extension plugin integration for WithPanels providers."
+                },
+                "type": "library",
+                "extra": {
+                    "packman": {
+                        "error-prefix": "panels"
+                    },
+                    "laravel": {
+                        "providers": [
+                            "Packman\\Panels\\Laravel\\PanelsServiceProvider"
+                        ]
+                    },
+                    "branch-alias": {
+                        "dev-main": "0.1.x-dev"
+                    }
+                },
+                "autoload": {
+                    "psr-4": {
+                        "Packman\\Panels\\": "packages/panels/src/"
+                    }
+                },
+                "license": [
+                    "MIT"
+                ],
+                "description": "Universal Packman headless panel descriptors, two-phase PanelRegistry/PanelRecipe builder, slot/form data projection, admission evaluation, and SQL saved views."
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "axiomasoft/packman-plugins",
+                "version": "dev-main",
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/axiomasoft/packman.git",
+                    "reference": "366fc104f22b388607f77d506ae5e36cd0e99666"
+                },
+                "require": {
+                    "axiomasoft/packman": "^0.1|^1.0@dev",
+                    "illuminate/console": "^12.0|^13.0",
+                    "illuminate/container": "^12.0|^13.0",
+                    "illuminate/contracts": "^12.0|^13.0",
+                    "illuminate/support": "^12.0|^13.0",
+                    "php": "^8.4"
+                },
+                "suggest": {
+                    "axiomasoft/packman-schema": "Optional schema ownership integration for plugins declaring owned schema nouns."
+                },
+                "type": "library",
+                "extra": {
+                    "packman": {
+                        "error-prefix": "plugins"
+                    },
+                    "laravel": {
+                        "providers": [
+                            "Packman\\Plugins\\Laravel\\PluginsServiceProvider"
+                        ]
+                    },
+                    "branch-alias": {
+                        "dev-main": "0.1.x-dev"
+                    }
+                },
+                "autoload": {
+                    "psr-4": {
+                        "Packman\\Plugins\\": "packages/plugins/src/"
+                    }
+                },
+                "license": [
+                    "MIT"
+                ],
+                "description": "Universal Packman intra-package plugin graph compiler, capabilities, typed slots, and immutable contribution registry."
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "axiomasoft/tenant",
+                "description": "Portable isolation context and scoped execution contracts.",
+                "type": "library",
+                "require": {
+                    "php": ">=8.4 <8.6",
+                    "ext-intl": "*",
+                    "axiomasoft/packman": "^0.1"
+                },
+                "autoload": {
+                    "psr-4": {
+                        "Tenant\\": "packages/tenant/src/"
+                    },
+                    "files": [
+                        "packages/tenant/src/aliases.php"
+                    ]
+                },
+                "extra": {
+                    "packman": {
+                        "schema-version": 1,
+                        "package-type": "domain",
+                        "stability": "stable",
+                        "error-prefix": "tenant",
+                        "owns": [
+                            "Attributes",
+                            "Composition",
+                            "Contracts",
+                            "Data",
+                            "Enums",
+                            "Errors",
+                            "Exceptions",
+                            "Extensions",
+                            "Internal",
+                            "Runtime"
+                        ]
+                    },
+                    "branch-alias": {
+                        "dev-main": "1.0.x-dev"
+                    }
+                },
+                "version": "dev-main",
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/axiomasoft/tenant.git",
+                    "reference": "6089b4c3d288b28e1ba8ce7e88f37c4f0a100cbe"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "axiomasoft/tenant-laravel",
+                "description": "Guarded Laravel facilities for the Tenant runtime.",
+                "type": "library",
+                "require": {
+                    "php": ">=8.4 <8.6",
+                    "ext-intl": "*",
+                    "ext-posix": "*",
+                    "axiomasoft/packman": "^0.1",
+                    "axiomasoft/tenant": "^1.0",
+                    "illuminate/cache": "^12.0 || ^13.0",
+                    "illuminate/database": "^12.0 || ^13.0",
+                    "illuminate/events": "^12.0 || ^13.0",
+                    "illuminate/filesystem": "^12.0 || ^13.0",
+                    "illuminate/http": "^12.0 || ^13.0",
+                    "illuminate/queue": "^12.0 || ^13.0",
+                    "illuminate/session": "^12.0 || ^13.0",
+                    "illuminate/support": "^12.0 || ^13.0",
+                    "laravel/framework": "^12.0 || ^13.0",
+                    "league/flysystem-local": "^3.0"
+                },
+                "autoload": {
+                    "psr-4": {
+                        "Tenant\\Laravel\\": "packages/tenant-laravel/src/"
+                    },
+                    "files": [
+                        "packages/tenant-laravel/src/aliases.php"
+                    ]
+                },
                 "extra": {
                     "laravel": {
                         "providers": [
-                            "AzGuard\\AzGuardServiceProvider"
+                            "Tenant\\Laravel\\TenantServiceProvider"
                         ]
+                    },
+                    "packman": {
+                        "schema-version": 1,
+                        "package-type": "addon",
+                        "stability": "stable",
+                        "error-prefix": "tenant",
+                        "owns": [
+                            "Codec",
+                            "Configuration",
+                            "Contracts",
+                            "Data",
+                            "Diagnostics",
+                            "Http",
+                            "Internal",
+                            "Laravel",
+                            "Queue",
+                            "Registrars"
+                        ]
+                    },
+                    "branch-alias": {
+                        "dev-main": "1.0.x-dev"
                     }
+                },
+                "version": "dev-main",
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/axiomasoft/tenant.git",
+                    "reference": "6089b4c3d288b28e1ba8ce7e88f37c4f0a100cbe"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "axiomasoft/vaulter-core",
+                "description": "Vaulter kernel: module registry, operation pipeline, idempotency, events and outbox, problem details, tenancy and diagnostics. Install axiomasoft/vaulter for the full product.",
+                "type": "library",
+                "license": "MIT",
+                "keywords": [
+                    "laravel",
+                    "kernel",
+                    "modules",
+                    "idempotency",
+                    "outbox",
+                    "tenancy"
+                ],
+                "homepage": "https://github.com/axiomasoft/vaulter",
+                "authors": [
+                    {
+                        "name": "Dmitry Vostrikov",
+                        "email": "dv.vostrikov@gmail.com"
+                    }
+                ],
+                "support": {
+                    "issues": "https://github.com/axiomasoft/vaulter/issues",
+                    "source": "https://github.com/axiomasoft/vaulter"
+                },
+                "replace": {
+                    "axioma-studio/vaulter-core": "self.version"
+                },
+                "require": {
+                    "php": ">=8.4 <8.6",
+                    "axiomasoft/packman": "^0.1",
+                    "axiomasoft/packman-plugins": "^0.1",
+                    "axiomasoft/packman-schema": "^0.1",
+                    "illuminate/console": "^13.0",
+                    "illuminate/contracts": "^13.0",
+                    "illuminate/database": "^13.0",
+                    "illuminate/http": "^13.0",
+                    "illuminate/routing": "^13.0",
+                    "illuminate/support": "^13.0",
+                    "illuminate/validation": "^13.0",
+                    "psr/http-message": "^1.1|^2.0",
+                    "psr/log": "^3.0",
+                    "staudenmeir/laravel-cte": "^1.12"
+                },
+                "suggest": {
+                    "axiomasoft/vaulter-filament": "Filament admin UI for documents, folders and permissions.",
+                    "axiomasoft/vaulter-media": "Content-addressed file/blob layer (CAS): the concrete ContentStore/StorageDriver/BlobStore engine behind the Contracts\\Cas seam. Required for Drive file upload/download/versioning.",
+                    "axiomasoft/vaulter-drive": "File/folder tree behaviour + resumable uploads: StorageManager, the DriveHandle factory, PurgeTrash/SweepUploads. Required for Vaulter::for()/forStorage() and the Drive REST surface.",
+                    "axiomasoft/vaulter-documents": "Document-node behaviour: document types and codecs, revisions, comments and export. Required for Vaulter::registerHandler()/registerExporter() and the document REST surface.",
+                    "axiomasoft/packman-testkit": "Testing kit (`Packman\\Testkit\\*`) powering core test suites.",
+                    "orchestra/testbench": "Testing kit: the base of every suite and of FreshApplication; the kit is loaded by tests only.",
+                    "opis/json-schema": "Testing kit: the OpenAPI contract check (VAULTER_OPENAPI_VALIDATE=1).",
+                    "symfony/yaml": "Testing kit: reads openapi/vaulter-v1.yaml for the contract check."
+                },
+                "autoload": {
+                    "psr-4": {
+                        "Vaulter\\": "packages/core/src/"
+                    }
+                },
+                "extra": {
+                    "packman": {
+                        "schema-version": 1,
+                        "package-type": "foundation",
+                        "stability": "stable",
+                        "error-prefix": "vaulter",
+                        "owns": [
+                            "Attributes",
+                            "Configuration",
+                            "Console",
+                            "Contracts",
+                            "Data",
+                            "Database",
+                            "Doctor",
+                            "Errors",
+                            "Events",
+                            "Exceptions",
+                            "Http",
+                            "Idempotency",
+                            "Internal",
+                            "Laravel",
+                            "Models",
+                            "Modules",
+                            "Observability",
+                            "Operations",
+                            "Providers",
+                            "Schema",
+                            "Security",
+                            "Support",
+                            "Tenancy",
+                            "Testing",
+                            "ValueObjects"
+                        ]
+                    },
+                    "laravel": {
+                        "providers": [
+                            "Vaulter\\VaulterServiceProvider"
+                        ]
+                    },
+                    "branch-alias": {
+                        "dev-main": "1.0.x-dev"
+                    }
+                },
+                "version": "dev-main",
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/axiomasoft/vaulter.git",
+                    "reference": "56de17dfcee26aa047761bca4d1b0ba5f2c2d866"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "axiomasoft/vaulter-media",
+                "description": "Content-addressed file/blob layer (CAS) for Vaulter — sha256 dedup, race-free commit, two-phase GC over Flysystem.",
+                "type": "library",
+                "license": "MIT",
+                "keywords": [
+                    "laravel",
+                    "cas",
+                    "content-addressed",
+                    "blob",
+                    "storage",
+                    "dedup",
+                    "vaulter"
+                ],
+                "homepage": "https://github.com/axiomasoft/vaulter",
+                "authors": [
+                    {
+                        "name": "Dmitry Vostrikov",
+                        "email": "dv.vostrikov@gmail.com"
+                    }
+                ],
+                "support": {
+                    "issues": "https://github.com/axiomasoft/vaulter/issues",
+                    "source": "https://github.com/axiomasoft/vaulter"
+                },
+                "replace": {
+                    "axioma-studio/vaulter-media": "self.version"
+                },
+                "require": {
+                    "php": ">=8.4 <8.6",
+                    "axiomasoft/packman": "^0.1",
+                    "axiomasoft/vaulter-core": "self.version"
+                },
+                "autoload": {
+                    "psr-4": {
+                        "Vaulter\\Media\\": "packages/media/src/"
+                    }
+                },
+                "extra": {
+                    "laravel": {
+                        "providers": [
+                            "Vaulter\\Media\\VaulterMediaServiceProvider"
+                        ]
+                    },
+                    "branch-alias": {
+                        "dev-main": "1.0.x-dev"
+                    }
+                },
+                "version": "dev-main",
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/axiomasoft/vaulter.git",
+                    "reference": "56de17dfcee26aa047761bca4d1b0ba5f2c2d866"
                 }
             }
         }
     ],
     "extra": {
-        "laravel": {},
+        "laravel": {
+            "dont-discover": [
+                "axiomasoft/tenant-laravel",
+                "axiomasoft/vaulter-core",
+                "axiomasoft/vaulter-media"
+            ]
+        },
         "phpstan/extension-installer": {
             "ignore": [
                 "axiomasoft/corex",
@@ -168,7 +811,8 @@
                 "larastan/larastan",
                 "nesbot/carbon",
                 "pestphp/pest",
-                "phpstan/phpstan-strict-rules"
+                "phpstan/phpstan-strict-rules",
+                "axiomasoft/packman-modules"
             ]
         }
     },
@@ -187,7 +831,7 @@
         "test:hermetic": "PGSQL_HOST=127.0.0.1 PGSQL_PORT=1 PGSQL_DATABASE=corex_test bash scripts/run-root-tests.sh @additional_args",
         "ci:local": "bash scripts/ci-local.sh",
         "test:pg": "vendor/bin/pest --group=pg",
-        "test:packages": "for p in packages/access packages/access-azguard packages/core packages/custom-fields packages/intl packages/media packages/notifications packages/operations packages/panels packages/recurrence packages/search packages/search-intl packages/search-meilisearch packages/tasks packages/tasks-workflow packages/tenancy packages/tools packages/transfer packages/wakeup packages/webhooks packages/workflow products/flex-crm; do echo \"==> $p\" && composer --working-dir=\"$p\" test -- --exclude-group=pg || exit 1; done",
+        "test:packages": "bash scripts/run-package-tests.sh @additional_args",
         "test:arch": "vendor/bin/pest --testsuite=Arch",
         "package-graph-gate": "php scripts/package-graph-gate.php",
         "package-docs-gate": "php scripts/package-docs-gate.php",

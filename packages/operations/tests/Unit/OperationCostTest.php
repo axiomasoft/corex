@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Modules\Data\Api;
 use CoreX\Operations\Cost\Data\CostInput;
 use CoreX\Operations\Cost\Internal\DeclaredCostEstimator;
 use CoreX\Operations\Definition\Data\Operation;
@@ -14,6 +13,7 @@ use CoreX\Operations\Tests\TestCase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Packman\Modules\Data\Extenders\Api;
 
 uses(TestCase::class);
 

@@ -98,7 +98,7 @@ def load_policy(path: Path = POLICY_PATH) -> dict[str, Any]:
     excluded = policy.get('excluded')
     if excluded != [
         {'path': 'products/flex-crm', 'reason': 'flex-product-consumer'},
-        {'path': 'packages/transfer', 'reason': 'tombstone'},
+        {'path': 'packages/import-export', 'reason': 'tombstone'},
     ]:
         raise CandidateError('policy exclusions must preserve FlexCRM and the import-export tombstone')
     return policy
@@ -150,8 +150,8 @@ def derive_cohort(packages: list[PackageSource], policy: dict[str, Any]) -> list
     foreign = sorted(package.path for package in packages if not package.name.startswith('corex/'))
     if foreign != ['products/flex-crm']:
         raise CandidateError(f'unexpected non-CoreX package set: {foreign}')
-    if any(package.path == 'packages/transfer' for package in packages):
-        raise CandidateError('packages/transfer tombstone unexpectedly exists')
+    if any(package.path == 'packages/import-export' for package in packages):
+        raise CandidateError('packages/import-export tombstone unexpectedly exists')
     paths = {package.path for package in live_corex}
     policy_paths = set(policy['channels'])
     if paths != policy_paths:

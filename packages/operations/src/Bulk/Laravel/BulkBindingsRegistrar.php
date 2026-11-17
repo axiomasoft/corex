@@ -9,7 +9,6 @@ use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Operations\Bulk\Contracts\BulkOperationStore;
 use CoreX\Operations\Bulk\Contracts\BulkTransferFactory;
 use CoreX\Operations\Bulk\Data\BulkOperation;
@@ -23,10 +22,11 @@ use CoreX\Operations\Bulk\Internal\BulkWorker;
 use CoreX\Operations\Bulk\Internal\SqlBulkOperationStore;
 use CoreX\Operations\Bulk\Internal\TransferBulkExecutor;
 use CoreX\Operations\Bulk\Internal\TransferCapabilityUnavailable;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 use Psr\Clock\ClockInterface;
 
 /** Composition of the package; the legacy static entry point delegates here. */
@@ -43,7 +43,7 @@ final class BulkBindingsRegistrar implements PackageRegistrar
             (array) $app->make(Repository::class)->get('corex-operations.bulk', []),
         ));
         $app->scoped(BulkRetention::class, static fn (Application $app): BulkRetention => new BulkRetention(
-            connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
+            connection: $app->make(ApiSchemaConnections::class)->tenant(),
             scopeCodec: $app->make(DataScopeCodec::class),
             contexts: $app->make(TenantContextRestorer::class),
             clock: $app->make(ClockInterface::class),
@@ -57,7 +57,7 @@ final class BulkBindingsRegistrar implements PackageRegistrar
         }
 
         $app->scoped(BulkOperationStore::class, static fn (Application $app): SqlBulkOperationStore => new SqlBulkOperationStore(
-            connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
+            connection: $app->make(ApiSchemaConnections::class)->tenant(),
             scopeCodec: $app->make(DataScopeCodec::class),
             contexts: $app->make(TenantContextRestorer::class),
             clock: $app->make(ClockInterface::class),
@@ -68,7 +68,7 @@ final class BulkBindingsRegistrar implements PackageRegistrar
             factory: self::factory($app),
             store: $app->make(BulkOperationStore::class),
             clock: $app->make(ClockInterface::class),
-            transferInstalled: interface_exists('CoreX\\Transfer\\Contracts\\TransferRunner'),
+            transferInstalled: interface_exists('CoreX\\ImportExport\\Contracts\\TransferRunner'),
             retrySeconds: $app->make(BulkOptions::class)->retrySeconds,
             scopes: $app->make(DataScopeCodec::class),
         ));

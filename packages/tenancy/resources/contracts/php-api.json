@@ -628,7 +628,7 @@
                         },
                         {
                             "name": "templateIntegrityVerifier",
-                            "type": "CoreX\\Tenancy\\Provisioning\\Internal\\Database\\TemplateIntegrityVerifier",
+                            "type": "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateIntegrityChecks",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -637,7 +637,7 @@
                         },
                         {
                             "name": "schema",
-                            "type": "CoreX\\Database\\Contracts\\SchemaMigrator",
+                            "type": "Packman\\Schema\\Contracts\\Migration\\SchemaMigrator",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -3421,10 +3421,10 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [
-                "CoreX\\Modules\\Laravel\\RegistersNothingOnBoot"
+                "Packman\\Foundation\\Concerns\\RegistersNothingOnBoot"
             ],
             "doc": [],
             "methods": {
@@ -3641,7 +3641,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [],
             "doc": [],
@@ -3692,48 +3692,6 @@
             "enum_backing": null,
             "enum_cases": []
         },
-        "CoreX\\Tenancy\\Laravel\\DatabaseRegistrar": {
-            "kind": "class",
-            "layer": "spi-call",
-            "since": "1.0",
-            "final": true,
-            "readonly": false,
-            "abstract": false,
-            "extends": [],
-            "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
-            ],
-            "uses": [
-                "CoreX\\Modules\\Laravel\\RegistersNothingOnBoot"
-            ],
-            "doc": [],
-            "methods": {
-                "register": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "app",
-                            "type": "Illuminate\\Contracts\\Foundation\\Application",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "void",
-                    "doc": []
-                }
-            },
-            "properties": [],
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
         "CoreX\\Tenancy\\Laravel\\DomainTrustRegistrar": {
             "kind": "class",
             "layer": "spi-call",
@@ -3743,10 +3701,10 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [
-                "CoreX\\Modules\\Laravel\\RegistersNothingOnBoot"
+                "Packman\\Foundation\\Concerns\\RegistersNothingOnBoot"
             ],
             "doc": [],
             "methods": {
@@ -3785,7 +3743,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [],
             "doc": [],
@@ -3845,7 +3803,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [],
             "doc": [],
@@ -4628,10 +4586,10 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [
-                "CoreX\\Modules\\Laravel\\RegistersNothingOnBoot"
+                "Packman\\Foundation\\Concerns\\RegistersNothingOnBoot"
             ],
             "doc": [],
             "methods": {
@@ -4670,10 +4628,10 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [
-                "CoreX\\Modules\\Laravel\\RegistersNothingOnBoot"
+                "Packman\\Foundation\\Concerns\\RegistersNothingOnBoot"
             ],
             "doc": [],
             "methods": {
@@ -4712,7 +4670,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [],
             "doc": [],
@@ -5343,33 +5301,6 @@
                             "flags": 1
                         },
                         {
-                            "name": "bootstrappers",
-                            "type": "array",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "cachePrefix",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "cacheStores",
-                            "type": "array",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
                             "name": "storageDurableDriver",
                             "type": "string",
                             "by_reference": false,
@@ -5640,24 +5571,6 @@
                             "flags": 1
                         },
                         {
-                            "name": "templateIntegrityTrustedKeys",
-                            "type": "array",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "templateIntegrityManifests",
-                            "type": "array",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
                             "name": "membershipGuard",
                             "type": "string",
                             "by_reference": false,
@@ -5670,10 +5583,6 @@
                     "return": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     }
@@ -5704,60 +5613,6 @@
                 }
             },
             "properties": {
-                "bootstrappers": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
-                            "list<string> $oidcAllowedAlgs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "cachePrefix": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
-                            "list<string> $oidcAllowedAlgs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "cacheStores": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
-                            "list<string> $oidcAllowedAlgs"
-                        ]
-                    },
-                    "hooks": []
-                },
                 "centralConnection": {
                     "flags": 1,
                     "type": "string",
@@ -5767,10 +5622,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5785,10 +5636,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5803,10 +5650,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5821,10 +5664,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5839,10 +5678,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5857,10 +5692,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5875,10 +5706,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5893,10 +5720,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5911,10 +5734,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5929,10 +5748,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5947,10 +5762,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5965,10 +5776,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5983,10 +5790,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6001,10 +5804,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6019,10 +5818,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6037,10 +5832,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6055,10 +5846,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6073,10 +5860,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6091,10 +5874,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6109,10 +5888,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6127,10 +5902,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6145,10 +5916,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6163,10 +5930,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6181,10 +5944,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6199,10 +5958,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6217,10 +5972,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6235,10 +5986,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6253,46 +6000,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
-                            "list<string> $oidcAllowedAlgs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "templateIntegrityManifests": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
-                            "list<string> $oidcAllowedAlgs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "templateIntegrityTrustedKeys": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6307,10 +6014,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6325,10 +6028,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6343,10 +6042,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6361,10 +6056,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6425,36 +6116,6 @@
             "uses": [],
             "doc": [],
             "methods": {
-                "frameworkConfig": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "CoreX\\Tenancy\\Runtime\\Internal\\FrameworkConfig",
-                    "doc": []
-                },
-                "manager": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "app",
-                            "type": "Illuminate\\Contracts\\Foundation\\Application",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "CoreX\\Tenancy\\Runtime\\Internal\\DatabaseTenancyManager",
-                    "doc": []
-                },
                 "payloadHook": {
                     "visibility": "public",
                     "static": true,
@@ -6498,7 +6159,7 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [],
             "doc": [],
@@ -6558,10 +6219,10 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Modules\\Contracts\\PackageRegistrar"
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
             ],
             "uses": [
-                "CoreX\\Modules\\Laravel\\RegistersNothingOnBoot"
+                "Packman\\Foundation\\Concerns\\RegistersNothingOnBoot"
             ],
             "doc": [],
             "methods": {
@@ -9198,9 +8859,9 @@
             "enum_backing": null,
             "enum_cases": []
         },
-        "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateDatabaseCloner": {
+        "CoreX\\Tenancy\\Provisioning\\Contracts\\AccountResources": {
             "kind": "interface",
-            "layer": "spi-call",
+            "layer": "spi-implement",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -9210,7 +8871,56 @@
             "uses": [],
             "doc": [],
             "methods": {
-                "createForAccount": {
+                "discardUnclaimed": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": true,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "account",
+                            "type": "CoreX\\Context\\Data\\AccountRef",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "void",
+                    "doc": []
+                },
+                "drop": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": true,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "account",
+                            "type": "CoreX\\Context\\Data\\AccountRef",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "archive",
+                            "type": "CoreX\\Tenancy\\Provisioning\\Data\\AccountArchive",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "void",
+                    "doc": []
+                },
+                "exists": {
                     "visibility": "public",
                     "static": false,
                     "final": false,
@@ -9230,7 +8940,7 @@
                     "return": "bool",
                     "doc": []
                 },
-                "databaseExists": {
+                "export": {
                     "visibility": "public",
                     "static": false,
                     "final": false,
@@ -9238,8 +8948,84 @@
                     "by_reference": false,
                     "parameters": [
                         {
-                            "name": "name",
+                            "name": "account",
+                            "type": "CoreX\\Context\\Data\\AccountRef",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "exportId",
                             "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "kind",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "CoreX\\Tenancy\\Provisioning\\Data\\AccountArchive",
+                    "doc": []
+                },
+                "provision": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": true,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "account",
+                            "type": "CoreX\\Context\\Data\\AccountRef",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "params",
+                            "type": "CoreX\\Context\\Data\\ProvisionParams",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "void",
+                    "doc": []
+                },
+                "verifyArchive": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": true,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "account",
+                            "type": "CoreX\\Context\\Data\\AccountRef",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "archive",
+                            "type": "CoreX\\Tenancy\\Provisioning\\Data\\AccountArchive",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -9319,6 +9105,109 @@
                 }
             },
             "properties": [],
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
+        "CoreX\\Tenancy\\Provisioning\\Data\\AccountArchive": {
+            "kind": "class",
+            "layer": "api",
+            "since": "1.0",
+            "final": true,
+            "readonly": true,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "reference",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "sizeBytes",
+                            "type": "int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "formats",
+                            "type": "array",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "[]",
+                            "flags": 1
+                        }
+                    ],
+                    "return": null,
+                    "doc": {
+                        "@param": [
+                            "list<non-empty-string> $formats"
+                        ]
+                    }
+                }
+            },
+            "properties": {
+                "formats": {
+                    "flags": 1,
+                    "type": "array",
+                    "readonly": true,
+                    "visibility": "public",
+                    "static": false,
+                    "default": null,
+                    "doc": {
+                        "@param": [
+                            "list<non-empty-string> $formats"
+                        ]
+                    },
+                    "hooks": []
+                },
+                "reference": {
+                    "flags": 1,
+                    "type": "string",
+                    "readonly": true,
+                    "visibility": "public",
+                    "static": false,
+                    "default": null,
+                    "doc": {
+                        "@param": [
+                            "list<non-empty-string> $formats"
+                        ]
+                    },
+                    "hooks": []
+                },
+                "sizeBytes": {
+                    "flags": 1,
+                    "type": "int",
+                    "readonly": true,
+                    "visibility": "public",
+                    "static": false,
+                    "default": null,
+                    "doc": {
+                        "@param": [
+                            "list<non-empty-string> $formats"
+                        ]
+                    },
+                    "hooks": []
+                }
+            },
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -9859,7 +9748,7 @@
             "enum_backing": null,
             "enum_cases": []
         },
-        "CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper": {
+        "CoreX\\Tenancy\\Runtime\\Contracts\\AccountIsolationMapper": {
             "kind": "interface",
             "layer": "spi-implement",
             "since": "1.0",
@@ -9871,7 +9760,7 @@
             "uses": [],
             "doc": [],
             "methods": {
-                "bootstrap": {
+                "context": {
                     "visibility": "public",
                     "static": false,
                     "final": false,
@@ -9879,17 +9768,8 @@
                     "by_reference": false,
                     "parameters": [
                         {
-                            "name": "context",
-                            "type": "CoreX\\Context\\Data\\TenantContext",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "database",
-                            "type": "CoreX\\Context\\Data\\DatabaseConnectionConfig",
+                            "name": "state",
+                            "type": "Tenant\\Data\\Context\\ContextState",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -9897,17 +9777,36 @@
                             "flags": 0
                         }
                     ],
-                    "return": "void",
+                    "return": "?CoreX\\Context\\Data\\TenantContext",
                     "doc": []
                 },
-                "revert": {
+                "selection": {
                     "visibility": "public",
                     "static": false,
                     "final": false,
                     "abstract": true,
                     "by_reference": false,
-                    "parameters": [],
-                    "return": "void",
+                    "parameters": [
+                        {
+                            "name": "account",
+                            "type": "CoreX\\Context\\Data\\AccountRef",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "workspace",
+                            "type": "?CoreX\\Context\\Data\\WorkspaceRef",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
+                            "flags": 0
+                        }
+                    ],
+                    "return": "Tenant\\Data\\Context\\Selection",
                     "doc": []
                 }
             },
@@ -10070,26 +9969,6 @@
                     "return": "self(CoreX\\Tenancy\\Runtime\\Exceptions\\TenantContextUnavailable)",
                     "doc": []
                 },
-                "missingDatabase": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "accountId",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "self(CoreX\\Tenancy\\Runtime\\Exceptions\\TenantContextUnavailable)",
-                    "doc": []
-                },
                 "missingWorkspace": {
                     "visibility": "public",
                     "static": true,
@@ -10111,16 +9990,6 @@
                     "doc": []
                 },
                 "notInitialized": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "self(CoreX\\Tenancy\\Runtime\\Exceptions\\TenantContextUnavailable)",
-                    "doc": []
-                },
-                "runtimePoisoned": {
                     "visibility": "public",
                     "static": true,
                     "final": false,

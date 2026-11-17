@@ -1,90 +1,89 @@
 # axiomasoft/corex-tenancy
 
-Laravel tenancy primitives for CoreX's physical PostgreSQL database-per-account
-profile.
-
-## Support impersonation
-
-Enable the OIDC impersonation lane with `corex-tenancy.oidc.impersonation.enabled`.
-Choose `corex-tenancy.impersonation.profile`: `standard` (default, 60-minute maximum grant),
-`regulated` (30 minutes and approval by a different staff identity), or `dev` (480 minutes).
-Production `dev` requires `corex.acknowledged_dangerous_modes` to contain
-`corex-tenancy.impersonation.profile`. All grants are claimed once atomically and must carry a
-reason. `standard` and `regulated` commit correlated central and tenant audit rows before login;
-`dev` commits central audit only. Any audit failure denies access and leaves the grant consumed.
-The central intent remains if the tenant mirror fails. Hosts may implement
-`ImpersonationGrantStore` and `ImpersonationAuditSink`; a custom sink must preserve committed,
-fail-closed writes. The current scoped `ImpersonatedModelWriteGuard` instance provides
-`allowing()` for a deliberately permitted write.
-
-## Optional wakeup root hints
-
-`corex-tenancy.wakeup.driver` defaults to `local_sweep`. With `axiomasoft/corex-wakeup` installed, a cloud
-deployment may explicitly select `root_registry`; this enables the advisory `root_wakeup_hints`
-table and the `corex:tenancy:wakeup-root-sweep` command. Hints never replace a tenant-local request or
-provide authority to select an account connection.
-
-## Package engine and configuration
-
-CoreX owns the account/domain models, physical tenancy engine and synchronous golden-template
-provisioning. Account identifiers use UUIDv7; account fields are explicit typed columns.
-Signup idempotency is stored in explicit `signup_*` columns, written atomically by the claim SQL.
-A named all-or-nothing CHECK and partial unique index protect the binding. Cleanup commits
-`pool_cleanup` before dropping a stale database and resumes interrupted cleanup from that marker.
-These fields are excluded from model mass assignment. Saved/deleted model events fence the central host cache
-after commit. Positive entries carry a shared generation so late lookups cannot restore revoked mappings;
-account deletion cascades also invalidate them. Changes to any account/domain invalidate all warmed host
-mappings, which are rebuilt on demand. Resolutions inside transactions bypass the shared cache.
-
-Publish configuration with `php artisan vendor:publish --tag=corex-tenancy-config`. All settings,
-including wakeup, use `config/corex-tenancy.php` under `corex-tenancy`. Migrate host overrides from the
-previous `tenancy` key; the old key and model/provider configuration knobs have been removed.
-
-## Template integrity
-
-The internal verifier accepts a ready template only when it has all of the
-following:
-
-- a lowercase SHA-256 `schema_hash` recorded in `root_templates`;
-- a configured Ed25519-signed manifest from a configured trusted key; and
-- a matching canonical, read-only PostgreSQL catalogue hash.
-
-`corex-tenancy.template_integrity.trusted_keys` and
-`corex-tenancy.template_integrity.manifests` are deliberately empty defaults.
-Existing ready rows with a NULL hash are not compatible fallback templates.
-Template integrity metadata is part of the fresh baseline schema.
-
-## Compatibility evidence
-
-The factual compatibility passport, its local proof class, and explicit limits
-are in [PACKAGE.md](PACKAGE.md). It does not extend Composer constraints or
-constitute a publication promise.
+CoreX account/workspace metadata, membership, domain identification and account lifecycle
+orchestration. Isolation is executed by **axiomasoft/tenant**. Physical resources belong to
+the host-selected owner, normally `axiomasoft/tenant-postgres`; CoreX does not switch
+connections, clone databases, run `pg_dump` or execute database deletion.
 
 ## Installation
 
-Install with `composer require axiomasoft/corex-tenancy`. Prepare PostgreSQL root and physical account databases with separate trusted connection configuration. Apply each schema only to its declared owner connection; provider discovery is not permission to migrate a customer database.
+Configure the application's [ecosystem dependency channel](../../docs/architecture/ecosystem-dependencies.md),
+then require `axiomasoft/corex-tenancy:^1.0@dev`. Choose the matching
+`axiomasoft/tenant-laravel` and physical-owner adapter in the host; these are optional
+host dependencies, not a bundled deployment profile. CoreX's provider is discovered
+by Laravel. Publish domain options with `php artisan vendor:publish --tag=corex-tenancy-config`.
 
-## Extension contracts
+Bind the host contracts below before running account operations. Install central
+metadata with `php artisan packman:schema:migrate --scope=central --database=<central>`
+and provision each account's tenant schema through the chosen resource owner.
+Use `--force` for unattended production migration. Installing the package alone
+does not create physical resources or choose trusted tenant mappings.
 
-Applications supply the exported workspace resolution, domain trust/authorization, provisioning and template integrity ports for their deployment. Compose optional wakeup through its declared adapter. Account connection selection must come from authenticated trusted context, never unvalidated request fields.
+## Required host composition
 
-## Failure semantics
+Bind these contracts before invoking tenant operations:
 
-An untrusted or incomplete tenant context must not select an account database. Template provisioning refuses missing/mismatched hashes, manifests and signatures. A failed provisioning claim requires reconciliation of durable state before retry; optional advisory wakeup hints never authorize a connection switch.
+- `Tenant\Contracts\Runtime\TenantRuntime`: the single executor shared by the application.
+  `axiomasoft/tenant-laravel` composes the executor and guarded Laravel facilities.
+- `CoreX\Tenancy\Runtime\Contracts\AccountIsolationMapper`: translates a trusted account
+  and workspace into a Tenant `Selection`, and projects its verified `ContextState`.
+- `CoreX\Tenancy\Provisioning\Contracts\AccountResources`: physical provision, export,
+  archive verification, deletion and unclaimed-pool cleanup.
+- `CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks` and
+  `CoreX\Tenancy\Contracts\TemplateIntegrityVerifier`: the owner's template attestations.
 
-## Typed errors
+There is no permissive default or legacy runtime. Missing bindings fail when required and
+are reported by CoreX configuration diagnostics. The host chooses its Tenant profile,
+resource mappings and facilities; request input is never trusted binding metadata.
+A production physical profile must verify resource reference, incarnation and route
+revision with its physical owner. The synthetic no-I/O profile used in unit tests is
+not a PostgreSQL deployment configuration.
 
-Package error identities use backed enums and a boot compiled kernel registry.
-Error constructors require `ErrorCode`; descriptors keep scoped string wire codes.
-See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
-validated replay and safe mapping.
+`TenantRuntimeManager` implements CoreX's `TenancyManager`. `runFor()` delegates to
+`TenantRuntime::run()`, including nested restoration, leaked-frame detection and poison
+semantics. Manual `initialize()`/`end()` own only frames they opened; they preserve a
+surrounding host middleware frame. A recoverable restore precondition failure retains
+the frame so its resource can be closed and restoration retried. Scoped Laravel services
+are forgotten on entry, workspace changes and restoration.
 
-## Schema installation
+## Physical ownership and receipts
 
-Schema: `root` (Central) and `tenant` (Tenant), baseline v1, PostgreSQL.
+CoreX stores account lifecycle and export metadata. `AccountResources` performs the
+physical effect and returns only after the owner's committed receipt. Pending or unknown
+outcomes are not success; the host retains operation keys and reconciles them at the owner.
+`AccountArchive.reference` is an opaque owner reference; the existing metadata column
+`storage_path` stores it and must not be interpreted as a local path. Formats are recorded
+only when declared by the owner. A prior boolean integrity check does not authorize a
+later deletion: the owner revalidates the current incarnation, archive and admission as
+part of its deletion operation.
 
-Register the package provider, then run `php artisan corex:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `corex:schema:status`.
+The actual Tenant PostgreSQL API is `PostgresLifecycle::claim()`, `requestExport()`,
+`queryExport()`, `requestDelete()`, `queryOperation()` and `reconcile()`. Requests require
+`ProvisionIntent`/`ExportIntent`/`DeleteIntent`, an `OperationKey` and fresh `Admission`.
+CoreX cannot infer those from a database name: the host adapter maps its approved template,
+manifest hash, resource binding, retention policy and durable operation identity.
+`ResourceBindings::resolve()` supplies verified process-local physical access.
 
-### Registered schema scopes
+CoreX's pending-account pool retains signup metadata and claims. Cleanup commits
+`pool_cleanup` before requesting owner deletion and retains the marker on failure; the
+owner independently refuses deletion of a claimed resource. Account activation and
+terminal account deletion are published only after the corresponding owner effect succeeds.
 
-Use `corex:schema:migrate --scope=central --database=<central>` for the control plane and `corex:schema:migrate --scope=tenant --modules --database=<template>` for an account template. Migration waves run all platform Tenant sets on the account connection; enabled modules upgrade through their lifecycle.
+## Host identification and support
+
+Publish `corex-tenancy-config`; account/domain identification, OIDC, membership and
+impersonation remain CoreX policies. Support impersonation is opt-in through
+`corex-tenancy.oidc.impersonation.enabled`. The `standard` and `regulated` profiles enforce
+their audit/approval requirements; production `dev` requires the existing explicit
+`corex.acknowledged_dangerous_modes` acknowledgement. Physical isolation remains Tenant's
+responsibility in every profile.
+
+`corex-tenancy.wakeup.driver=root_registry` optionally supplies advisory account wakeup
+hints when `corex-scheduler` is installed. Hints never authorize a connection or replace
+local durable requests. Native `bootstrappers` configuration has been removed; a nonempty
+old value is rejected. Configure connection/cache/session facilities in the host Tenant
+composition.
+
+`TenantContextInitialized` and `TenantContextEnded` notify explicit CoreX
+`initialize`/`setWorkspace`/`end` calls only. Observe protected `runFor` executions
+through Tenant's observation facilities.

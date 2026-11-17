@@ -13,11 +13,11 @@ use CoreX\Access\Matrix\Contracts\ScopeMapVersions as ScopeMapVersion;
 use CoreX\Context\Contracts\Principal;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Enums\PrincipalType;
-use CoreX\Modules\Contracts\EntityRegistry;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Override;
+use Packman\Modules\Contracts\Entities\EntityRegistry;
 use Psr\Clock\ClockInterface;
 use UnexpectedValueException;
 
@@ -31,7 +31,7 @@ use UnexpectedValueException;
  * NOT decided here (P2.9, D110): it is delegated to {@see ScopePredicate},
  * the single owner shared with the builder path
  * ({@see DefaultScopeResolver}), so the two paths cannot silently diverge.
- * Bound `scoped` (CoreAuthServiceProvider) so the scopeFor() memo below is
+ * Bound `scoped` (AccessServiceProvider) so the scopeFor() memo below is
  * request-scoped, never carried across requests on a reused worker.
  */
 final class DefaultAccessChecker implements AccessChecker

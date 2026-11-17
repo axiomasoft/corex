@@ -6,12 +6,12 @@ use CoreX\Access\Access\Internal\ScopeAvailability;
 use CoreX\Access\Enums\Scope;
 use CoreX\Access\Exceptions\ScopeCapabilityMismatch;
 use CoreX\Access\Tests\Stubs\Project;
-use CoreX\Modules\Data\EntityDefinition;
-use CoreX\Modules\Enums\Capability;
-use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Packman\Modules\Data\Entities\EntityDefinition;
+use Packman\Modules\Enums\Entities\Capability;
+use Packman\Modules\Testing\ArrayEntityRegistry;
 
 // D114 — no capability declared AND no matching physical column: nothing to
 // narrow by, so the letter of §4 п.3 applies literally: normalize to account.

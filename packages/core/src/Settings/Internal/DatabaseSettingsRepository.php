@@ -6,7 +6,6 @@ namespace CoreX\Settings\Internal;
 
 use CoreX\Data\Data\JsonDocument;
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Settings\Contracts\SettingDefaultsProvider;
 use CoreX\Settings\Contracts\SettingsRepository;
 use CoreX\Settings\Data\SettingsScope;
 use CoreX\Settings\Enums\SettingScope;
@@ -19,6 +18,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use Override;
+use Packman\Settings\Contracts\SettingDefaultsProviderInterface as SettingDefaultsProvider;
 
 /**
  * Cascade: user → workspace → account → manifest default

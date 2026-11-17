@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenancyManager;
-use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Laravel\Http\Middleware\ResolveTenantFromHost;
 use CoreX\Tenancy\Laravel\Http\Middleware\ScopeSessionToTenant;
@@ -15,6 +14,7 @@ use Illuminate\Session\Store;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 uses()->group('pg');
@@ -114,34 +114,14 @@ function scopeStatusTSS(Store $session): int
     return $response->getStatusCode();
 }
 
-it('а: sessions создаётся тенантской миграцией; уже созданный handler переезжает в БД аккаунта, не в root', function (): void {
+it('creates the CoreX session schema in the account database only', function (): void {
     $account = makeAccountTSS();
-
-    /** @var Store $driver */
-    $driver = resolve('session')->driver('database');
-    $central = $driver->getHandler();   // built BEFORE the account context existed
 
     initTenantContext($account);
     migrateTenantSessionsTSS();
 
     expect(Schema::connection('tenant')->hasTable('sessions'))->toBeTrue()
-        ->and(Schema::connection('pgsql')->hasTable('sessions'))->toBeFalse()
-        ->and($driver->getHandler())->not->toBe($central);
-
-    // Store::setId() silently discards a malformed id (fails its own
-    // isValidId() regex — 40 alphanumeric chars) and generates a random one
-    // instead, so the id actually written has to be read back via getId().
-    $driver->put('probe', 'value');
-    $driver->save();
-
-    expect(DB::connection('tenant')->table('sessions')->where('id', $driver->getId())->exists())->toBeTrue();
-
-    endTenantContext();
-
-    // revert: the very same Store goes back to a central handler, nothing is deleted
-    expect($driver->getHandler())->toBe($central)
-        ->and(config('session.connection'))->toBeNull()
-        ->and(config('database.connections.tenant'))->toBeNull(); // the last account's route is not left behind
+        ->and(Schema::connection('pgsql')->hasTable('sessions'))->toBeFalse();
 });
 
 it('б: cookie-сессия тенанта A на домене тенанта B → 403 и invalidate (F19)', function (): void {

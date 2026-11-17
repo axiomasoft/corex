@@ -45,7 +45,7 @@ final class WorkspaceScope implements Scope
      * whose `context()` narrows to non-null) is otherwise what Larastan
      * infers from a direct `app(TenancyManager::class)` call, which would
      * misreport the nullsafe access below as dead code even though the
-     * cloud binding ({@see CoreX\Tenancy\Runtime\Internal\DatabaseTenancyManager}) genuinely
+     * cloud binding ({@see CoreX\Tenancy\Runtime\Internal\TenantRuntimeManager}) genuinely
      * returns null outside any tenant.
      */
     private function manager(): TenancyManager

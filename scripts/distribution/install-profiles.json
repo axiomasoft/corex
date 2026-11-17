@@ -18,7 +18,7 @@
         "axiomasoft/corex",
         "axiomasoft/corex-custom-fields",
         "axiomasoft/corex-search",
-        "axiomasoft/corex-transfer",
+        "axiomasoft/corex-import-export",
         "axiomasoft/corex-workflow"
       ],
       "database": "sqlite-single",
@@ -41,10 +41,10 @@
       "id": "worker-only",
       "packages": [
         "axiomasoft/corex",
-        "axiomasoft/corex-wakeup",
+        "axiomasoft/corex-scheduler",
         "axiomasoft/corex-workflow",
         "axiomasoft/corex-tasks",
-        "axiomasoft/corex-tasks-workflow"
+        "axiomasoft/corex-recurring-tasks"
       ],
       "database": "sqlite-single",
       "http": false,

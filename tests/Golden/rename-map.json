@@ -28,9 +28,9 @@
             "to": "CoreX\\Operations\\Errors\\ApiError"
         },
         {
-            "from": "CoreX\\Api\\ApiServiceProvider",
+            "from": "CoreX\\Api\\OperationsServiceProvider",
             "kind": "class",
-            "to": "CoreX\\Operations\\ApiServiceProvider"
+            "to": "CoreX\\Operations\\OperationsServiceProvider"
         },
         {
             "from": "CoreX\\Api\\Commands\\DeliverWebhooks",
@@ -823,9 +823,9 @@
             "to": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata"
         },
         {
-            "from": "CoreX\\Api\\Laravel\\ApiSchemaRegistrar",
+            "from": "CoreX\\Api\\Laravel\\ApiSchemaConnections",
             "kind": "class",
-            "to": "CoreX\\Operations\\Laravel\\ApiSchemaRegistrar"
+            "to": "CoreX\\Operations\\Laravel\\ApiSchemaConnections"
         },
         {
             "from": "CoreX\\Api\\Laravel\\BulkFailureLimit",
@@ -853,9 +853,9 @@
             "to": "CoreX\\Webhooks\\Laravel\\WebhookRegistrar"
         },
         {
-            "from": "CoreX\\Api\\Laravel\\WebhookRouteRegistrar",
+            "from": "CoreX\\Api\\Laravel\\WebhookController",
             "kind": "class",
-            "to": "CoreX\\Webhooks\\Laravel\\WebhookRouteRegistrar"
+            "to": "CoreX\\Webhooks\\Laravel\\WebhookController"
         },
         {
             "from": "CoreX\\Api\\OpenApiDocumentGenerator",
@@ -908,9 +908,9 @@
             "to": "CoreX\\Tools\\ToolSectionCompiler"
         },
         {
-            "from": "CoreX\\Api\\ToolServiceProvider",
+            "from": "CoreX\\Api\\ToolsServiceProvider",
             "kind": "class",
-            "to": "CoreX\\Tools\\ToolServiceProvider"
+            "to": "CoreX\\Tools\\ToolsServiceProvider"
         },
         {
             "from": "CoreX\\Api\\Webhooks\\WebhooksServiceProvider",
@@ -918,9 +918,9 @@
             "to": "CoreX\\Webhooks\\WebhooksServiceProvider"
         },
         {
-            "from": "CoreX\\Attributes\\AttributesServiceProvider",
+            "from": "CoreX\\Attributes\\CustomFieldsServiceProvider",
             "kind": "class",
-            "to": "CoreX\\CustomFields\\AttributesServiceProvider"
+            "to": "CoreX\\CustomFields\\CustomFieldsServiceProvider"
         },
         {
             "from": "CoreX\\Attributes\\Contracts\\AttributeFilter",
@@ -1303,9 +1303,9 @@
             "to": "CoreX\\Access\\Laravel\\ScopeResolver"
         },
         {
-            "from": "CoreX\\Auth\\CoreAuthServiceProvider",
+            "from": "CoreX\\Auth\\AccessServiceProvider",
             "kind": "class",
-            "to": "CoreX\\Access\\CoreAuthServiceProvider"
+            "to": "CoreX\\Access\\AccessServiceProvider"
         },
         {
             "from": "CoreX\\Auth\\Database\\Seeders\\SystemRolesSeeder",
@@ -1465,7 +1465,7 @@
         {
             "from": "CoreX\\Contracts\\ModuleRegistrar",
             "kind": "class",
-            "to": "CoreX\\Modules\\Contracts\\ModuleRegistrar"
+            "to": "Packman\\Modules\\Contracts\\Definition\\ModuleRegistrar"
         },
         {
             "from": "CoreX\\Contracts\\OperationObserver",
@@ -1485,7 +1485,7 @@
         {
             "from": "CoreX\\Contracts\\SettingDefaultsProvider",
             "kind": "class",
-            "to": "CoreX\\Settings\\Contracts\\SettingDefaultsProvider"
+            "to": "Packman\\Settings\\Contracts\\SettingDefaultsProviderInterface"
         },
         {
             "from": "CoreX\\Contracts\\SettingsRepository",
@@ -2025,7 +2025,7 @@
         {
             "from": "CoreX\\Modules\\ModuleDefinition",
             "kind": "class",
-            "to": "CoreX\\Modules\\Contracts\\ModuleDefinition"
+            "to": "Packman\\Modules\\Contracts\\Definition\\ModuleDefinition"
         },
         {
             "from": "CoreX\\Modules\\ModuleDependency",
@@ -2035,7 +2035,7 @@
         {
             "from": "CoreX\\Modules\\ModuleManifest",
             "kind": "class",
-            "to": "CoreX\\Modules\\Data\\ModuleManifest"
+            "to": "Packman\\Modules\\Data\\Lifecycle\\ModuleManifest"
         },
         {
             "from": "CoreX\\Modules\\ModuleRuntimeContext",
@@ -2368,9 +2368,9 @@
             "to": "CoreX\\SearchMeilisearch\\MeilisearchConfigSection"
         },
         {
-            "from": "CoreX\\Search\\Meilisearch\\MeilisearchServiceProvider",
+            "from": "CoreX\\Search\\Meilisearch\\SearchMeilisearchServiceProvider",
             "kind": "class",
-            "to": "CoreX\\SearchMeilisearch\\MeilisearchServiceProvider"
+            "to": "CoreX\\SearchMeilisearch\\SearchMeilisearchServiceProvider"
         },
         {
             "from": "CoreX\\Support\\Config",
@@ -2440,12 +2440,12 @@
         {
             "from": "CoreX\\Support\\PackageRegistrar",
             "kind": "class",
-            "to": "CoreX\\Modules\\Contracts\\PackageRegistrar"
+            "to": "Packman\\Foundation\\Contracts\\PackageRegistrar"
         },
         {
             "from": "CoreX\\Support\\RegistersNothingOnBoot",
             "kind": "class",
-            "to": "CoreX\\Modules\\Laravel\\RegistersNothingOnBoot"
+            "to": "Packman\\Foundation\\Concerns\\RegistersNothingOnBoot"
         },
         {
             "from": "CoreX\\Support\\SecretRef",
@@ -2455,7 +2455,7 @@
         {
             "from": "CoreX\\Support\\ServiceProviderModuleRegistrar",
             "kind": "class",
-            "to": "CoreX\\Modules\\Internal\\ServiceProviderModuleRegistrar"
+            "to": "Packman\\Modules\\Internal\\Registration\\ServiceProviderModuleRegistrar"
         },
         {
             "from": "CoreX\\Support\\Time\\FrozenClock",
@@ -3455,7 +3455,7 @@
         {
             "from": "corex/tasks-workflow",
             "kind": "package",
-            "to": "axiomasoft/corex-tasks-workflow"
+            "to": "axiomasoft/corex-recurring-tasks"
         },
         {
             "from": "corex/tenancy",
@@ -3465,12 +3465,12 @@
         {
             "from": "corex/transfer",
             "kind": "package",
-            "to": "axiomasoft/corex-transfer"
+            "to": "axiomasoft/corex-import-export"
         },
         {
             "from": "corex/wakeup",
             "kind": "package",
-            "to": "axiomasoft/corex-wakeup"
+            "to": "axiomasoft/corex-scheduler"
         },
         {
             "from": "corex/workflow",
@@ -3615,87 +3615,87 @@
         {
             "kind": "class",
             "from": "CoreX\\Modules\\Compiler\\CompiledEntityField",
-            "to": "CoreX\\Modules\\Data\\CompiledEntityField"
+            "to": "Packman\\Modules\\Data\\Compiler\\CompiledEntityField"
         },
         {
             "kind": "class",
             "from": "CoreX\\Modules\\Compiler\\CompiledRegistry",
-            "to": "CoreX\\Modules\\Data\\CompiledRegistry"
+            "to": "Packman\\Modules\\Data\\Compiler\\CompiledRegistry"
         },
         {
             "kind": "class",
             "from": "CoreX\\Modules\\Compiler\\InstalledPackageVersion",
-            "to": "CoreX\\Modules\\Data\\InstalledPackageVersion"
+            "to": "Packman\\Modules\\Data\\Compiler\\InstalledPackageVersion"
         },
         {
             "kind": "class",
             "from": "CoreX\\Modules\\Compiler\\NormalizedExtension",
-            "to": "CoreX\\Modules\\Data\\NormalizedExtension"
+            "to": "Packman\\Modules\\Data\\Compiler\\NormalizedExtension"
         },
         {
             "kind": "class",
             "from": "CoreX\\Modules\\Compiler\\RegistryCompiler",
-            "to": "CoreX\\Modules\\Internal\\Compiler\\RegistryCompiler"
+            "to": "Packman\\Modules\\Internal\\Compiler\\RegistryCompiler"
         },
         {
             "kind": "class",
             "from": "CoreX\\Modules\\Definition\\ModuleDefinition",
-            "to": "CoreX\\Modules\\Contracts\\ModuleDefinition"
+            "to": "Packman\\Modules\\Contracts\\Definition\\ModuleDefinition"
         },
         {
             "kind": "class",
             "from": "CoreX\\Modules\\Definition\\ModuleManifest",
-            "to": "CoreX\\Modules\\Data\\ModuleManifest"
+            "to": "Packman\\Modules\\Data\\Lifecycle\\ModuleManifest"
         },
         {
             "kind": "class",
             "from": "CoreX\\Modules\\Discovery\\ModuleDiscovery",
-            "to": "CoreX\\Modules\\Internal\\Discovery\\ModuleDiscovery"
+            "to": "Packman\\Modules\\Internal\\Discovery\\ModuleDiscovery"
         },
         {
             "kind": "class",
             "from": "CoreX\\Modules\\Extend\\Api",
-            "to": "CoreX\\Modules\\Data\\Api"
+            "to": "Packman\\Modules\\Data\\Extenders\\Api"
         },
         {
             "kind": "class",
             "from": "CoreX\\Modules\\Extend\\Entity",
-            "to": "CoreX\\Modules\\Data\\Entity"
+            "to": "Packman\\Modules\\Data\\Entities\\Entity"
         },
         {
             "kind": "class",
             "from": "CoreX\\Modules\\Extend\\EntityField",
-            "to": "CoreX\\Modules\\Data\\EntityField"
+            "to": "Packman\\Modules\\Data\\Entities\\EntityField"
         },
         {
             "kind": "class",
             "from": "CoreX\\Modules\\Extend\\Permissions",
-            "to": "CoreX\\Modules\\Data\\Permissions"
+            "to": "Packman\\Modules\\Data\\Extenders\\Permissions"
         },
         {
             "kind": "class",
             "from": "CoreX\\Modules\\RegistersNothingOnBoot",
-            "to": "CoreX\\Modules\\Laravel\\RegistersNothingOnBoot"
+            "to": "Packman\\Foundation\\Concerns\\RegistersNothingOnBoot"
         },
         {
             "kind": "class",
             "from": "CoreX\\Modules\\Registry\\ArrayEntityRegistry",
-            "to": "CoreX\\Modules\\Testing\\ArrayEntityRegistry"
+            "to": "Packman\\Modules\\Testing\\ArrayEntityRegistry"
         },
         {
             "kind": "class",
             "from": "CoreX\\Modules\\Registry\\CompiledModule",
-            "to": "CoreX\\Modules\\Data\\CompiledModule"
+            "to": "Packman\\Modules\\Data\\Compiler\\CompiledModule"
         },
         {
             "kind": "class",
             "from": "CoreX\\Modules\\Registry\\EntityDefinition",
-            "to": "CoreX\\Modules\\Data\\EntityDefinition"
+            "to": "Packman\\Modules\\Data\\Entities\\EntityDefinition"
         },
         {
             "kind": "class",
             "from": "CoreX\\Modules\\Registry\\FieldDefinition",
-            "to": "CoreX\\Modules\\Data\\FieldDefinition"
+            "to": "Packman\\Modules\\Data\\Entities\\FieldDefinition"
         },
         {
             "kind": "class",
@@ -3830,7 +3830,7 @@
         {
             "kind": "class",
             "from": "CoreX\\Modules\\Events\\ManifestListeners",
-            "to": "CoreX\\Modules\\Internal\\Events\\ManifestListeners"
+            "to": "Packman\\Modules\\Internal\\Events\\ManifestListeners"
         },
         {
             "kind": "class",
@@ -4786,199 +4786,199 @@
             "from": "CoreX\\Modules\\Commands\\CompileModulesCommand",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Commands\\CompileModulesCommand"
+            "to": "Packman\\Modules\\Internal\\Commands\\CompileModulesCommand"
         },
         {
             "from": "CoreX\\Modules\\Commands\\ExplainModuleCommand",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Commands\\ExplainModuleCommand"
+            "to": "Packman\\Modules\\Internal\\Commands\\ExplainModuleCommand"
         },
         {
             "from": "CoreX\\Modules\\Compiler\\CompilationValidator",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Compiler\\CompilationValidator"
+            "to": "Packman\\Modules\\Internal\\Compiler\\CompilationValidator"
         },
         {
             "from": "CoreX\\Modules\\Compiler\\CompiledSettingDefault",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Compiler\\CompiledSettingDefault"
+            "to": "Packman\\Modules\\Internal\\Compiler\\CompiledSettingDefault"
         },
         {
             "from": "CoreX\\Modules\\Compiler\\ExtensionReplacement",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Data\\ExtensionReplacement"
+            "to": "Packman\\Modules\\Data\\Compiler\\ExtensionReplacement"
         },
         {
             "from": "CoreX\\Modules\\Compiler\\FieldCastMap",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Compiler\\FieldCastMap"
+            "to": "Packman\\Modules\\Internal\\Compiler\\FieldCastMap"
         },
         {
             "from": "CoreX\\Modules\\Compiler\\InstalledPackages",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Compiler\\InstalledPackages"
+            "to": "Packman\\Modules\\Internal\\Compiler\\InstalledPackages"
         },
         {
             "from": "CoreX\\Modules\\Compiler\\PipelineStages",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Compiler\\PipelineStages"
+            "to": "Packman\\Modules\\Internal\\Compiler\\PipelineStages"
         },
         {
             "from": "CoreX\\Modules\\Definition\\ModuleDependency",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Definition\\ModuleDependency"
+            "to": "Packman\\Modules\\Internal\\Definition\\ModuleDependency"
         },
         {
             "from": "CoreX\\Modules\\ModuleDependency",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Definition\\ModuleDependency"
+            "to": "Packman\\Modules\\Internal\\Definition\\ModuleDependency"
         },
         {
             "from": "CoreX\\Modules\\Definition\\ModuleRuntimeContext",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Data\\ModuleRuntimeContext"
+            "to": "Packman\\Modules\\Data\\Lifecycle\\ModuleRuntimeContext"
         },
         {
             "from": "CoreX\\Modules\\ModuleRuntimeContext",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Data\\ModuleRuntimeContext"
+            "to": "Packman\\Modules\\Data\\Lifecycle\\ModuleRuntimeContext"
         },
         {
             "from": "CoreX\\Modules\\Definition\\ModuleStatus",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Data\\ModuleStatus"
+            "to": "Packman\\Modules\\Data\\Lifecycle\\ModuleStatus"
         },
         {
             "from": "CoreX\\Modules\\ModuleStatus",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Data\\ModuleStatus"
+            "to": "Packman\\Modules\\Data\\Lifecycle\\ModuleStatus"
         },
         {
             "from": "CoreX\\Modules\\Extend\\Extender",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Contracts\\Extender"
+            "to": "Packman\\Modules\\Contracts\\Compiler\\Extender"
         },
         {
             "from": "CoreX\\Modules\\Extend\\Filament",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Extend\\Filament"
+            "to": "Packman\\Modules\\Internal\\Extend\\Filament"
         },
         {
             "from": "CoreX\\Modules\\Extend\\Menu",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Extend\\Menu"
+            "to": "Packman\\Modules\\Internal\\Extend\\Menu"
         },
         {
             "from": "CoreX\\Modules\\Extend\\Routes",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Extend\\Routes"
+            "to": "Packman\\Modules\\Internal\\Extend\\Routes"
         },
         {
             "from": "CoreX\\Modules\\Extend\\Workflow",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Extend\\Workflow"
+            "to": "Packman\\Modules\\Internal\\Extend\\Workflow"
         },
         {
             "from": "CoreX\\Modules\\Gate\\AllowAllActivationGate",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Gate\\AllowAllActivationGate"
+            "to": "Packman\\Modules\\Internal\\Gate\\AllowAllActivationGate"
         },
         {
             "from": "CoreX\\Modules\\Gate\\ModuleActivationDecision",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Gate\\ModuleActivationDecision"
+            "to": "Packman\\Modules\\Internal\\Gate\\ModuleActivationDecision"
         },
         {
             "from": "CoreX\\Modules\\ModuleActivationDecision",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Gate\\ModuleActivationDecision"
+            "to": "Packman\\Modules\\Internal\\Gate\\ModuleActivationDecision"
         },
         {
             "from": "CoreX\\Modules\\Lifecycle\\DatabaseModuleLifecycle",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Lifecycle\\DatabaseModuleLifecycle"
+            "to": "Packman\\Modules\\Internal\\Lifecycle\\DatabaseModuleLifecycle"
         },
         {
             "from": "CoreX\\Modules\\Lifecycle\\DatabaseModuleStateReader",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Lifecycle\\DatabaseModuleStateReader"
+            "to": "Packman\\Modules\\Internal\\Lifecycle\\DatabaseModuleStateReader"
         },
         {
             "from": "CoreX\\Modules\\Lifecycle\\DatabaseRecordsRegistrar",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Lifecycle\\DatabaseRecordsRegistrar"
+            "to": "Packman\\Modules\\Internal\\Lifecycle\\DatabaseRecordsRegistrar"
         },
         {
             "from": "CoreX\\Modules\\Registry\\ArrayModuleStateReader",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Registry\\ArrayModuleStateReader"
+            "to": "Packman\\Modules\\Internal\\Registry\\ArrayModuleStateReader"
         },
         {
             "from": "CoreX\\Modules\\Registry\\CompiledModuleRegistry",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Registry\\CompiledModuleRegistry"
+            "to": "Packman\\Modules\\Internal\\Registry\\CompiledModuleRegistry"
         },
         {
             "from": "CoreX\\Modules\\Registry\\RepositoryModuleRegistryCache",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Registry\\RepositoryModuleRegistryCache"
+            "to": "Packman\\Modules\\Internal\\Registry\\RepositoryModuleRegistryCache"
         },
         {
             "from": "CoreX\\Modules\\Settings\\CompiledSettingDefaultsProvider",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Settings\\CompiledSettingDefaultsProvider"
+            "to": "Packman\\Modules\\Internal\\Settings\\CompiledSettingDefaultsProvider"
         },
         {
             "from": "CoreX\\Modules\\DefaultSettingDefinition",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Settings\\DefaultSettingDefinition"
+            "to": "Packman\\Modules\\Internal\\Settings\\DefaultSettingDefinition"
         },
         {
             "from": "CoreX\\Modules\\Settings\\DefaultSettingDefinition",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Settings\\DefaultSettingDefinition"
+            "to": "Packman\\Modules\\Internal\\Settings\\DefaultSettingDefinition"
         },
         {
             "from": "CoreX\\Modules\\Support\\ModulesConfigSection",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Support\\ModulesConfigSection"
+            "to": "Packman\\Modules\\Internal\\Support\\ModulesConfigSection"
         },
         {
             "from": "CoreX\\Modules\\Support\\ModulesOptions",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Modules\\Internal\\Support\\ModulesOptions"
+            "to": "Packman\\Modules\\Internal\\Support\\ModulesOptions"
         },
         {
             "from": "CoreX\\Notifications\\Commands\\SweepNotificationDeliveries",
@@ -5341,10 +5341,10 @@
             "to": "CoreX\\Storage\\Exceptions\\StorageOperationFailed"
         },
         {
-            "from": "CoreX\\TasksWorkflow\\TaskWorkflowIntegration",
+            "from": "CoreX\\RecurringTasks\\TaskWorkflowIntegration",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\TasksWorkflow\\Internal\\TaskWorkflowIntegration"
+            "to": "CoreX\\RecurringTasks\\Internal\\TaskWorkflowIntegration"
         },
         {
             "from": "CoreX\\Tasks\\Models\\Sprint",
@@ -6265,16 +6265,16 @@
             "to": "CoreX\\Tools\\Internal\\ToolSectionCompiler"
         },
         {
-            "from": "CoreX\\Wakeup\\Commands\\SweepWakeups",
+            "from": "CoreX\\Scheduler\\Commands\\SweepWakeups",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Wakeup\\Internal\\Commands\\SweepWakeups"
+            "to": "CoreX\\Scheduler\\Internal\\Commands\\SweepWakeups"
         },
         {
-            "from": "CoreX\\Wakeup\\Commands\\ValidateWakeupStamps",
+            "from": "CoreX\\Scheduler\\Commands\\ValidateWakeupStamps",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "CoreX\\Wakeup\\Internal\\Commands\\ValidateWakeupStamps"
+            "to": "CoreX\\Scheduler\\Internal\\Commands\\ValidateWakeupStamps"
         },
         {
             "from": "CoreX\\Api\\Commands\\DeliverWebhooks",

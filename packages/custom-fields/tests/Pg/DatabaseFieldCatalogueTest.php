@@ -11,10 +11,10 @@ use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
 use CoreX\CustomFields\Tests\Pg\DatabaseFieldCataloguePgTestCase;
 use CoreX\CustomFields\Tests\Support\PgTestSupport;
-use CoreX\Database\Contracts\SchemaSets;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Contracts\Migration\SchemaSets;
 
 uses(DatabaseFieldCataloguePgTestCase::class)->group('pg');
 

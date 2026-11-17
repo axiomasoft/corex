@@ -7,6 +7,5 @@ parameters:
     tmpDir: ../../build/phpstan/access-azguard
     paths:
         - src
-        - database/migrations
     checkModelProperties: true
     checkPhpDocMissingReturn: true

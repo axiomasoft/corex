@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use CoreX\Intl\IntlServiceProvider;
-use CoreX\Modules\Data\Entity;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use Flex\Crm\Tests\RegistryMoneyModel;
+use Packman\Modules\Data\Entities\Entity;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Modules\Internal\Compiler\RegistryCompiler;
 
 it('compiles a consumer money field using the intl cast registration', function (): void {
     $this->app->register(IntlServiceProvider::class);

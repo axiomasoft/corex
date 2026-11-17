@@ -12,7 +12,7 @@
 
 | Вопрос | Ось Composer | Ось CoreX |
 |:--|:--|:--|
-| Как пакет устанавливается и обнаруживается | `type` (`library`, `corex-module`) | — |
+| Как пакет устанавливается и обнаруживается | `type` (`library`, `packman-module`) | — |
 | Какая это ступень релиза | версия и суффикс, `minimum-stability` | — |
 | Какую роль пакет играет в архитектуре уровня 0 | — | `extra.corex.package-type` |
 | Насколько зрела публичная поверхность | — | `extra.corex.stability` |
@@ -77,25 +77,25 @@
 | `packages/access` | axiomasoft/corex-access | library | capability | stable |
 | `packages/access-azguard` | axiomasoft/corex-access-azguard | library | integration | unreleased |
 | `packages/core` | axiomasoft/corex | library | foundation | stable |
-| `packages/custom-fields` | axiomasoft/corex-custom-fields | corex-module | capability | stable |
-| `packages/intl` | axiomasoft/corex-intl | corex-module | capability | stable |
-| `packages/media` | axiomasoft/corex-media | corex-module | capability | stable |
-| `packages/notifications` | axiomasoft/corex-notifications | corex-module | capability | stable |
+| `packages/custom-fields` | axiomasoft/corex-custom-fields | packman-module | capability | stable |
+| `packages/intl` | axiomasoft/corex-intl | packman-module | capability | stable |
+| `packages/media` | axiomasoft/corex-media | packman-module | capability | stable |
+| `packages/notifications` | axiomasoft/corex-notifications | packman-module | capability | stable |
 | `packages/operations` | axiomasoft/corex-operations | library | capability | stable |
-| `packages/panels` | axiomasoft/corex-panels | corex-module | capability | stable |
+| `packages/panels` | axiomasoft/corex-panels | packman-module | capability | stable |
 | `packages/recurrence` | axiomasoft/corex-recurrence | library | capability | stable |
-| `packages/search` | axiomasoft/corex-search | corex-module | capability | stable |
-| `packages/search-intl` | axiomasoft/corex-search-intl | corex-module | integration | stable |
-| `packages/search-meilisearch` | axiomasoft/corex-search-meilisearch | corex-module | integration | stable |
-| `packages/tasks` | axiomasoft/corex-tasks | corex-module | capability | stable |
-| `packages/tasks-workflow` | axiomasoft/corex-tasks-workflow | corex-module | integration | stable |
+| `packages/search` | axiomasoft/corex-search | packman-module | capability | stable |
+| `packages/search-intl` | axiomasoft/corex-search-intl | packman-module | integration | stable |
+| `packages/search-meilisearch` | axiomasoft/corex-search-meilisearch | packman-module | integration | stable |
+| `packages/tasks` | axiomasoft/corex-tasks | packman-module | capability | stable |
+| `packages/recurring-tasks` | axiomasoft/corex-recurring-tasks | packman-module | integration | stable |
 | `packages/tenancy` | axiomasoft/corex-tenancy | library | capability | stable |
 | `packages/tools` | axiomasoft/corex-tools | library | capability | stable |
-| `packages/transfer` | axiomasoft/corex-transfer | corex-module | capability | stable |
-| `packages/wakeup` | axiomasoft/corex-wakeup | corex-module | capability | stable |
+| `packages/import-export` | axiomasoft/corex-import-export | packman-module | capability | stable |
+| `packages/scheduler` | axiomasoft/corex-scheduler | packman-module | capability | stable |
 | `packages/webhooks` | axiomasoft/corex-webhooks | library | capability | stable |
-| `packages/workflow` | axiomasoft/corex-workflow | corex-module | capability | stable |
-| `products/flex-crm` | flex/crm | corex-module | product | experimental |
+| `packages/workflow` | axiomasoft/corex-workflow | packman-module | capability | stable |
+| `products/flex-crm` | flex/crm | packman-module | product | experimental |
 
 Source-derived surface: [public-api](../reference/public-api.md).
 

@@ -6,11 +6,11 @@ namespace CoreX\Operations\Testing;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Context\Data\TenantContext;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\CompiledModule;
-use CoreX\Modules\Data\CompiledRegistry;
 use LogicException;
+use Packman\Context\Contracts\ContextScopeInterface;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Compiler\CompiledModule;
+use Packman\Modules\Data\Compiler\CompiledRegistry;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class ModuleFixture implements ModuleRegistry
@@ -32,14 +32,14 @@ final class ModuleFixture implements ModuleRegistry
         throw new LogicException('Not used.');
     }
 
-    public function active(TenantContext $ctx): array
+    public function active(ContextScopeInterface $ctx): array
     {
         return [];
     }
 
-    public function isActive(string $name, TenantContext $ctx): bool
+    public function isActive(string $name, ContextScopeInterface $ctx): bool
     {
-        $this->visitedAccounts[] = $ctx->account->id;
+        $this->visitedAccounts[] = $ctx->id();
 
         return $this->enabled && $name === 'example/notes';
     }

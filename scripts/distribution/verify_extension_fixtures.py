@@ -13,6 +13,10 @@ import sys
 import tempfile
 from pathlib import Path
 
+# Also support the test harness loading this script by file path.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from ecosystem_repositories import is_corex_package, snapshot_repositories
+
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURES = (
     {
@@ -31,7 +35,7 @@ FIXTURES = (
         "id": "custom-transfer-codec",
         "package": "thirdparty/custom-transfer-codec",
         "class": r"ThirdParty\Transfer\Module",
-        "forbidden": r"CoreX\Transfer\Internal\Codecs\NdjsonCodec",
+        "forbidden": r"CoreX\ImportExport\Internal\Codecs\NdjsonCodec",
     },
     {
         "id": "custom-panel-provider",
@@ -89,7 +93,7 @@ def write_consumer(consumer: Path, fixture: Path, repository: Path, *, drop_core
     source = fixture_composer(fixture)
     requirements = dict(source["require"])
     if drop_corex:
-        requirements = {name: constraint for name, constraint in requirements.items() if not name.startswith("corex/")}
+        requirements = {name: constraint for name, constraint in requirements.items() if not is_corex_package(name)}
     target = consumer / "fixture"
     shutil.copytree(fixture, target)
     (target / "composer.json").write_text(json.dumps({**source, "require": requirements}, indent=4) + "\n", encoding="utf-8")
@@ -100,7 +104,8 @@ def write_consumer(consumer: Path, fixture: Path, repository: Path, *, drop_core
         "repositories": [
             {"type": "path", "url": "fixture", "options": {"symlink": False}},
             {"type": "composer", "url": str(repository)},
-            {"type": "composer", "url": "https://repo.packagist.org", "exclude": ["corex/*"]},
+            *snapshot_repositories(ROOT),
+            {"type": "composer", "url": "https://repo.packagist.org", "exclude": ["axiomasoft/corex", "axiomasoft/corex-*", "corex/*"]},
             {"packagist.org": False},
         ],
         "minimum-stability": "dev",

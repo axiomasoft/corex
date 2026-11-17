@@ -2,6 +2,7 @@
 # Automatic Composer extension loading is disabled so source/path mirrors
 # cannot register the same core rules twice or inject strict rules into tests.
 includes:
+    - vendor/axiomasoft/packman-modules/packages/modules/extension.neon
     - packages/core/extension.neon
     - packages/tenancy/extension.neon
     - vendor/composer/pcre/extension.neon
@@ -9,3 +10,8 @@ includes:
     - vendor/nesbot/carbon/extension.neon
     - vendor/pestphp/pest/extension.neon
     - vendor/phpstan/phpstan-strict-rules/rules.neon
+
+parameters:
+    packmanModules:
+        systemTableNamespaces:
+            - CoreX\

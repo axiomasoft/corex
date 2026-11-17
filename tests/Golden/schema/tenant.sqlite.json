@@ -1,43 +1,6 @@
 {
     "driver": "sqlite",
     "tables": {
-        "aut_azguard_role_links": {
-            "columns": {
-                "azguard_role_id": {
-                    "type": "integer",
-                    "nullable": false,
-                    "default": null
-                },
-                "role_id": {
-                    "type": "varchar",
-                    "nullable": false,
-                    "default": null
-                }
-            },
-            "indexes": [
-                {
-                    "name": "aut_azguard_role_links_azguard_role_id_uq",
-                    "kind": "uq",
-                    "columns": [
-                        "azguard_role_id"
-                    ],
-                    "predicate": null,
-                    "method": "btree"
-                },
-                {
-                    "name": "sqlite_autoindex_aut_azguard_role_links_1",
-                    "kind": "pk",
-                    "columns": [
-                        "role_id"
-                    ],
-                    "predicate": null,
-                    "method": "btree"
-                }
-            ],
-            "foreign_keys": [],
-            "checks": [],
-            "triggers": []
-        },
         "corex_export_manifests": {
             "columns": {
                 "capture_attempt": {
@@ -3280,6 +3243,11 @@
         },
         "med_conversions": {
             "columns": {
+                "blob_id": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
                 "created_at": {
                     "type": "datetime",
                     "nullable": true,
@@ -3305,11 +3273,6 @@
                     "nullable": true,
                     "default": null
                 },
-                "object_key": {
-                    "type": "varchar",
-                    "nullable": true,
-                    "default": null
-                },
                 "profile_digest": {
                     "type": "varchar",
                     "nullable": false,
@@ -3318,6 +3281,11 @@
                 "profile_key": {
                     "type": "varchar",
                     "nullable": false,
+                    "default": null
+                },
+                "sha256": {
+                    "type": "varchar",
+                    "nullable": true,
                     "default": null
                 },
                 "size_bytes": {
@@ -3387,6 +3355,16 @@
         },
         "med_files": {
             "columns": {
+                "account_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "blob_id": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
                 "created_at": {
                     "type": "datetime",
                     "nullable": true,
@@ -3408,11 +3386,6 @@
                     "default": null
                 },
                 "mime_type": {
-                    "type": "varchar",
-                    "nullable": false,
-                    "default": null
-                },
-                "object_key": {
                     "type": "varchar",
                     "nullable": false,
                     "default": null
@@ -3494,11 +3467,6 @@
         },
         "med_operations": {
             "columns": {
-                "attempt_object_key": {
-                    "type": "varchar",
-                    "nullable": true,
-                    "default": null
-                },
                 "attempts": {
                     "type": "integer",
                     "nullable": false,

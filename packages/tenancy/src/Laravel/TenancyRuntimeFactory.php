@@ -7,21 +7,10 @@ namespace CoreX\Tenancy\Laravel;
 use Closure;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Context\Contracts\AccountConnectionResolver;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\WorkspaceRef;
-use CoreX\Tenancy\Account\Contracts\AccountRead;
-use CoreX\Tenancy\Laravel\Support\TenancyOptions;
-use CoreX\Tenancy\Runtime\Contracts\TenantBootstrapper;
-use CoreX\Tenancy\Runtime\Internal\DatabaseTenancyManager;
-use CoreX\Tenancy\Runtime\Internal\FrameworkConfig;
-use CoreX\Tenancy\Runtime\Internal\TenantFacilitiesValidator;
 use CoreX\Tenancy\Workspace\Internal\Models\Workspace;
 use Illuminate\Container\Container;
-use Illuminate\Contracts\Config\Repository;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Foundation\Application;
-use Psr\Log\LoggerInterface;
 
 /**
  * Builds the tenant runtime pieces whose construction is more than one expression, so the registrar
@@ -31,41 +20,6 @@ use Psr\Log\LoggerInterface;
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class TenancyRuntimeFactory
 {
-    /**
-     * The facility configuration (cache/session drivers and stores) is checked before the first
-     * switch, when the manager is first resolved. Bootstrappers are built eagerly and never depend
-     * on the manager, so the graph stays acyclic.
-     */
-    public static function manager(Application $app): DatabaseTenancyManager
-    {
-        $options = $app->make(TenancyOptions::class);
-        new TenantFacilitiesValidator(config: $app->make(FrameworkConfig::class), options: $options)->assertValid();
-
-        $bootstrappers = [];
-
-        foreach ($options->bootstrappers as $class) {
-            /** @var TenantBootstrapper $bootstrapper */
-            $bootstrapper = $app->make($class);
-            $bootstrappers[] = $bootstrapper;
-        }
-
-        return new DatabaseTenancyManager(
-            bootstrappers: $bootstrappers,
-            accounts: $app->make(AccountRead::class),
-            connections: $app->make(AccountConnectionResolver::class),
-            container: $app,
-            events: $app->make(Dispatcher::class),
-            centralConnection: $options->centralConnection,
-            logger: $app->make(LoggerInterface::class),
-        );
-    }
-
-    /** The framework's runtime configuration, resolved from the container on every access. */
-    public static function frameworkConfig(): FrameworkConfig
-    {
-        return new FrameworkConfig(static fn (): Repository => Container::getInstance()->make('config'));
-    }
-
     /**
      * The workspace of a queued job, looked up in the account database after it was entered.
      *

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Testing\Stubs\Lifecycle;
 
-use CoreX\Modules\Contracts\ModuleDefinition;
-use CoreX\Modules\Data\ModuleManifest;
+use Packman\Modules\Contracts\Definition\ModuleDefinition;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
 
 /**
  * Migrations path has a second file that always throws — exercises AC-7

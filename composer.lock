@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ff7f1ab6f501c3e734bbb9a2889082af",
+    "content-hash": "eacecc0d71ee3c6606f25824f7c409e8",
     "packages": [
         {
             "name": "axiomasoft/corex",
@@ -12,9 +12,12 @@
             "dist": {
                 "type": "path",
                 "url": "packages/core",
-                "reference": "1ee237d351806ff9a4403e8d662583a37667416f"
+                "reference": "a7454dcda3052c1768e722d7df2c8d9a242ebc1c"
             },
             "require": {
+                "axiomasoft/packman": "^0.1@dev",
+                "axiomasoft/packman-modules": "^0.1@dev",
+                "axiomasoft/packman-schema": "^0.1@dev",
                 "ext-ctype": "*",
                 "ext-mbstring": "*",
                 "illuminate/auth": "^13.0",
@@ -118,7 +121,7 @@
                     "email": "dv.vostrikov@gmail.com"
                 }
             ],
-            "description": "CoreX kernel — base model (ULID), optional multi-tenancy, entity registry, settings, audit log, and money for any Laravel application.",
+            "description": "CoreX application foundation — tenant context, settings, audit and messaging on Packman modules and schema.",
             "keywords": [
                 "audit",
                 "entity-registry",
@@ -138,10 +141,13 @@
             "dist": {
                 "type": "path",
                 "url": "packages/custom-fields",
-                "reference": "b83417a4d3e5b001d27d82de0f1854f508423465"
+                "reference": "204bcbfe24f1b42d860f25e0c3f2f5684da98ad6"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/packman": "^0.1@dev",
+                "axiomasoft/packman-modules": "^0.1@dev",
+                "axiomasoft/packman-schema": "^0.1@dev",
                 "ext-filter": "*",
                 "ext-mbstring": "*",
                 "illuminate/contracts": "^13.0",
@@ -159,7 +165,7 @@
             "suggest": {
                 "axiomasoft/corex": "Provides EntityRegistry and ModuleRegistry for dynamic field definitions; without it SchemaOperations stays unavailable and the static catalogue remains usable."
             },
-            "type": "corex-module",
+            "type": "packman-module",
             "extra": {
                 "corex": {
                     "schema-version": 1,
@@ -168,7 +174,7 @@
                 },
                 "laravel": {
                     "providers": [
-                        "CoreX\\CustomFields\\AttributesServiceProvider"
+                        "CoreX\\CustomFields\\CustomFieldsServiceProvider"
                     ]
                 },
                 "branch-alias": {
@@ -217,15 +223,90 @@
             }
         },
         {
+            "name": "axiomasoft/corex-import-export",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "packages/import-export",
+                "reference": "d9cc4b9deb2afddf7a36fee44dba8fb90a9334b9"
+            },
+            "require": {
+                "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/packman-schema": "^0.1@dev",
+                "illuminate/database": "^13.0",
+                "illuminate/support": "^13.0",
+                "php": "^8.4",
+                "psr/clock": "^1.0"
+            },
+            "require-dev": {
+                "illuminate/contracts": "^13.0",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5"
+            },
+            "type": "packman-module",
+            "extra": {
+                "corex": {
+                    "schema-version": 1,
+                    "package-type": "capability",
+                    "stability": "stable"
+                },
+                "laravel": {
+                    "providers": [
+                        "CoreX\\ImportExport\\ImportExportServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\ImportExport\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\ImportExport\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg"
+                ],
+                "test:pg": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=pg"
+                ],
+                "test:coverage": [
+                    "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80"
+                ],
+                "analyse": [
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/import-export/phpstan.neon --memory-limit=2G --no-progress"
+                ],
+                "lint:check": [
+                    "../../vendor/bin/pint --test"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Bounded CSV/NDJSON import and export of application records for CoreX.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "axiomasoft/corex-intl",
             "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/intl",
-                "reference": "a3ed4931d24a2cfd9ea80ab404d934eae8fe0a80"
+                "reference": "45f0c1b8f3efdc288ab3f5a5401da313b1c1ef16"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/packman": "^0.1@dev",
+                "axiomasoft/packman-modules": "^0.1@dev",
+                "axiomasoft/packman-schema": "^0.1@dev",
                 "brick/math": "^0.14|^0.15",
                 "brick/money": "^0.9 || ^0.10",
                 "ext-intl": "*",
@@ -243,11 +324,10 @@
                 "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2"
             },
-            "type": "corex-module",
+            "type": "packman-module",
             "extra": {
                 "corex": {
                     "schema-version": 1,
-                    "module": "CoreX\\Intl\\IntlModule",
                     "package-type": "capability",
                     "stability": "stable"
                 },
@@ -258,6 +338,9 @@
                 },
                 "branch-alias": {
                     "dev-main": "1.0.x-dev"
+                },
+                "packman": {
+                    "module": "CoreX\\Intl\\IntlModule"
                 }
             },
             "autoload": {
@@ -301,10 +384,15 @@
             "dist": {
                 "type": "path",
                 "url": "packages/media",
-                "reference": "da09e4cd99d3349bc393a438acb4eb6b0017960b"
+                "reference": "0f4ada4d84d0cda6482902d65e1f71bf4d3947f9"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/packman": "^0.1@dev",
+                "axiomasoft/packman-modules": "^0.1@dev",
+                "axiomasoft/packman-schema": "^0.1@dev",
+                "axiomasoft/vaulter-core": "^1.0@dev",
+                "axiomasoft/vaulter-media": "^1.0@dev",
                 "laravel/framework": "^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0"
@@ -321,11 +409,10 @@
             "suggest": {
                 "ext-gd": "Enables the optional bounded PNG/JPEG thumbnail driver."
             },
-            "type": "corex-module",
+            "type": "packman-module",
             "extra": {
                 "corex": {
                     "schema-version": 1,
-                    "module": "CoreX\\Media\\MediaModule",
                     "package-type": "capability",
                     "stability": "stable"
                 },
@@ -336,6 +423,9 @@
                 },
                 "branch-alias": {
                     "dev-main": "1.0.x-dev"
+                },
+                "packman": {
+                    "module": "CoreX\\Media\\MediaModule"
                 }
             },
             "autoload": {
@@ -379,16 +469,19 @@
             "dist": {
                 "type": "path",
                 "url": "packages/notifications",
-                "reference": "aecadd7c33c8dc8925890ccfb5269f13a7fa308f"
+                "reference": "e8519de5a662a1bb753f22d19c54e0432ccd34a5"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/packman": "^0.1@dev",
+                "axiomasoft/packman-modules": "^0.1@dev",
+                "axiomasoft/packman-schema": "^0.1@dev",
                 "laravel/framework": "^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0"
             },
             "require-dev": {
-                "axiomasoft/corex-wakeup": "^1.0@dev",
+                "axiomasoft/corex-scheduler": "^1.0@dev",
                 "ext-pdo": "*",
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
@@ -397,11 +490,10 @@
                 "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2"
             },
-            "type": "corex-module",
+            "type": "packman-module",
             "extra": {
                 "corex": {
                     "schema-version": 1,
-                    "module": "CoreX\\Notifications\\NotificationsModule",
                     "package-type": "capability",
                     "stability": "stable"
                 },
@@ -412,6 +504,9 @@
                 },
                 "branch-alias": {
                     "dev-main": "1.0.x-dev"
+                },
+                "packman": {
+                    "module": "CoreX\\Notifications\\NotificationsModule"
                 }
             },
             "autoload": {
@@ -455,10 +550,13 @@
             "dist": {
                 "type": "path",
                 "url": "packages/operations",
-                "reference": "b9d3e843f513689ed209ba48ea0cd658033f9231"
+                "reference": "bee681b6d72590eaf767ea5ce38652395de4eb11"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/packman": "^0.1@dev",
+                "axiomasoft/packman-modules": "^0.1@dev",
+                "axiomasoft/packman-schema": "^0.1@dev",
                 "ext-filter": "*",
                 "ext-mbstring": "*",
                 "illuminate/auth": "^13.0",
@@ -473,7 +571,7 @@
                 "symfony/http-kernel": "^7.2|^8.0"
             },
             "require-dev": {
-                "axiomasoft/corex-transfer": "^1.0@dev",
+                "axiomasoft/corex-import-export": "^1.0@dev",
                 "axiomasoft/corex-webhooks": "^1.0@dev",
                 "ext-curl": "*",
                 "ext-openssl": "*",
@@ -488,7 +586,7 @@
                 "phpunit/phpunit": "^12.0|^13.0"
             },
             "suggest": {
-                "axiomasoft/corex-transfer": "Optional bounded import/export adapter for durable bulk operations",
+                "axiomasoft/corex-import-export": "Optional bounded import/export adapter for durable bulk operations",
                 "ext-curl": "Optional webhook transport; missing curl returns capability_unavailable.",
                 "opis/json-schema": "2.4.1 — bounded offline tool-schema/1 validation adapter"
             },
@@ -509,10 +607,7 @@
             "autoload": {
                 "psr-4": {
                     "CoreX\\Operations\\": "src/"
-                },
-                "files": [
-                    "src/Invocation/Internal/deprecated-aliases.php"
-                ]
+                }
             },
             "autoload-dev": {
                 "psr-4": {
@@ -547,16 +642,19 @@
             "dist": {
                 "type": "path",
                 "url": "packages/panels",
-                "reference": "7a9d290994a96bfec08a77a0969a8bcdceeb2857"
+                "reference": "2df061c888ca2c307a3ef657a785f67eef806d60"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/packman-panels": "^0.1@dev",
                 "illuminate/contracts": "^13.0",
                 "illuminate/support": "^13.0",
                 "php": "^8.4",
                 "psr/clock": "^1.0"
             },
             "require-dev": {
+                "axiomasoft/packman": "^0.1@dev",
+                "axiomasoft/packman-schema": "^0.1@dev",
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
                 "mockery/mockery": "^1.6",
@@ -564,12 +662,11 @@
                 "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2"
             },
-            "type": "corex-module",
+            "type": "library",
             "extra": {
                 "corex": {
                     "schema-version": 1,
-                    "module": "CoreX\\Panels\\PanelsModule",
-                    "package-type": "capability",
+                    "package-type": "integration",
                     "stability": "stable"
                 },
                 "laravel": {
@@ -608,7 +705,7 @@
             "license": [
                 "MIT"
             ],
-            "description": "Headless panel descriptors and current-context access catalogue for CoreX modules.",
+            "description": "Trusted CoreX context integration for Packman panels and saved views.",
             "transport-options": {
                 "relative": true
             }
@@ -673,15 +770,177 @@
             }
         },
         {
+            "name": "axiomasoft/corex-recurring-tasks",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "packages/recurring-tasks",
+                "reference": "3cb5a4096e751ba6a030afce859acd03b38337c4"
+            },
+            "require": {
+                "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/corex-recurrence": "^1.0@dev",
+                "axiomasoft/corex-tasks": "^1.0@dev",
+                "axiomasoft/corex-workflow": "^1.0@dev",
+                "axiomasoft/packman-modules": "^0.1@dev",
+                "axiomasoft/packman-schema": "^0.1@dev",
+                "ext-bcmath": "*",
+                "illuminate/contracts": "^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/support": "^13.0",
+                "php": "^8.4"
+            },
+            "require-dev": {
+                "axiomasoft/corex-scheduler": "^1.0@dev",
+                "larastan/larastan": "^3.12",
+                "laravel/pint": "^1.32",
+                "mockery/mockery": "^1.6",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5",
+                "pestphp/pest": "^5.2",
+                "phpunit/phpunit": "^13.3"
+            },
+            "type": "packman-module",
+            "extra": {
+                "corex": {
+                    "schema-version": 1,
+                    "package-type": "integration",
+                    "stability": "stable"
+                },
+                "laravel": {
+                    "providers": [
+                        "CoreX\\RecurringTasks\\RecurringTasksServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "1.0.x-dev"
+                },
+                "packman": {
+                    "module": "CoreX\\RecurringTasks\\Internal\\TaskWorkflowIntegration"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\RecurringTasks\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\RecurringTasks\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "pest"
+                ],
+                "test:coverage": [
+                    "XDEBUG_MODE=coverage pest --coverage --min=80"
+                ],
+                "analyse": [
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/recurring-tasks/phpstan.neon --memory-limit=2G --no-progress"
+                ],
+                "lint:check": [
+                    "../../vendor/bin/pint --test"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Recurring task materialization with durable scheduling and optional workflow completion capture.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "axiomasoft/corex-scheduler",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "packages/scheduler",
+                "reference": "8b43632b3769cfd2d66716da39b16c42f3da4366"
+            },
+            "require": {
+                "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/packman": "^0.1@dev",
+                "axiomasoft/packman-modules": "^0.1@dev",
+                "axiomasoft/packman-schema": "^0.1@dev",
+                "illuminate/console": "^13.0",
+                "illuminate/contracts": "^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/support": "^13.0",
+                "php": "^8.4",
+                "psr/clock": "^1.0"
+            },
+            "require-dev": {
+                "ext-pdo": "*",
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5"
+            },
+            "type": "packman-module",
+            "extra": {
+                "corex": {
+                    "schema-version": 1,
+                    "package-type": "capability",
+                    "stability": "stable"
+                },
+                "laravel": {
+                    "providers": [
+                        "CoreX\\Scheduler\\SchedulerServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "1.0.x-dev"
+                },
+                "packman": {
+                    "module": "CoreX\\Scheduler\\SchedulerModule"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\Scheduler\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\Scheduler\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg"
+                ],
+                "test:pg": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=pg"
+                ],
+                "test:coverage": [
+                    "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg --coverage --min=80"
+                ],
+                "analyse": [
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/scheduler/phpstan.neon --memory-limit=2G --no-progress"
+                ],
+                "lint:check": [
+                    "../../vendor/bin/pint --test"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Durable tenant-local scheduling of one-shot work for CoreX.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "axiomasoft/corex-search",
             "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/search",
-                "reference": "3c0742a99efa64af2eb9a526f90cffc1e53eabb0"
+                "reference": "83946158b6e987e043a9ca7e8b80f169b5639b18"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/packman-schema": "^0.1@dev",
                 "ext-openssl": "*",
                 "illuminate/contracts": "^13.0",
                 "illuminate/database": "^13.0",
@@ -693,7 +952,7 @@
                 "orchestra/testbench": "^11.3",
                 "orchestra/testbench-core": "^11.5"
             },
-            "type": "corex-module",
+            "type": "packman-module",
             "extra": {
                 "corex": {
                     "schema-version": 1,
@@ -750,7 +1009,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-intl",
-                "reference": "50c8e44cba98c19f852243367fcf20adc428182e"
+                "reference": "1e8626f8234d3f8cb73b1b4153aa968297252d2d"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -760,13 +1019,14 @@
                 "php": "^8.4"
             },
             "require-dev": {
+                "axiomasoft/packman-schema": "^0.1@dev",
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
                 "orchestra/testbench": "^11.3",
                 "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2"
             },
-            "type": "corex-module",
+            "type": "packman-module",
             "extra": {
                 "corex": {
                     "schema-version": 1,
@@ -817,7 +1077,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-meilisearch",
-                "reference": "c6945fe6246a58e7c19b5f7d55dbb06376b71c18"
+                "reference": "e399401d443a4b013148f76f4ad4ed17d8291176"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -833,7 +1093,7 @@
                 "orchestra/testbench-core": "^11.5",
                 "phpunit/phpunit": "^13.3"
             },
-            "type": "corex-module",
+            "type": "packman-module",
             "extra": {
                 "corex": {
                     "schema-version": 1,
@@ -842,7 +1102,7 @@
                 },
                 "laravel": {
                     "providers": [
-                        "CoreX\\SearchMeilisearch\\MeilisearchServiceProvider"
+                        "CoreX\\SearchMeilisearch\\SearchMeilisearchServiceProvider"
                     ]
                 },
                 "branch-alias": {
@@ -890,10 +1150,12 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tasks",
-                "reference": "c029fb8f979031fbd2635b42d3b8f69c57f94d8a"
+                "reference": "b48fd50d683fdf495dd929ed0ad88903a8f508f6"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/packman-modules": "^0.1@dev",
+                "axiomasoft/packman-schema": "^0.1@dev",
                 "ext-mbstring": "*",
                 "laravel/framework": "^13.0",
                 "php": "^8.4",
@@ -907,11 +1169,10 @@
                 "orchestra/testbench-core": "^11.5",
                 "pestphp/pest": "^5.2"
             },
-            "type": "corex-module",
+            "type": "packman-module",
             "extra": {
                 "corex": {
                     "schema-version": 1,
-                    "module": "CoreX\\Tasks\\TasksModule",
                     "package-type": "capability",
                     "stability": "stable"
                 },
@@ -922,6 +1183,9 @@
                 },
                 "branch-alias": {
                     "dev-main": "1.0.x-dev"
+                },
+                "packman": {
+                    "module": "CoreX\\Tasks\\TasksModule"
                 }
             },
             "autoload": {
@@ -976,93 +1240,18 @@
             }
         },
         {
-            "name": "axiomasoft/corex-tasks-workflow",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "packages/tasks-workflow",
-                "reference": "f570c4741e33dd13810f2a713f2c9963fd2241ab"
-            },
-            "require": {
-                "axiomasoft/corex": "^1.0@dev",
-                "axiomasoft/corex-recurrence": "^1.0@dev",
-                "axiomasoft/corex-tasks": "^1.0@dev",
-                "axiomasoft/corex-workflow": "^1.0@dev",
-                "ext-bcmath": "*",
-                "illuminate/contracts": "^13.0",
-                "illuminate/database": "^13.0",
-                "illuminate/support": "^13.0",
-                "php": "^8.4"
-            },
-            "require-dev": {
-                "axiomasoft/corex-wakeup": "^1.0@dev",
-                "larastan/larastan": "^3.12",
-                "laravel/pint": "^1.32",
-                "mockery/mockery": "^1.6",
-                "orchestra/testbench": "^11.3",
-                "orchestra/testbench-core": "^11.5",
-                "pestphp/pest": "^5.2",
-                "phpunit/phpunit": "^13.3"
-            },
-            "type": "corex-module",
-            "extra": {
-                "corex": {
-                    "schema-version": 1,
-                    "module": "CoreX\\TasksWorkflow\\Internal\\TaskWorkflowIntegration",
-                    "package-type": "integration",
-                    "stability": "stable"
-                },
-                "laravel": {
-                    "providers": [
-                        "CoreX\\TasksWorkflow\\TasksWorkflowServiceProvider"
-                    ]
-                },
-                "branch-alias": {
-                    "dev-main": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "CoreX\\TasksWorkflow\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "CoreX\\TasksWorkflow\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "pest"
-                ],
-                "test:coverage": [
-                    "XDEBUG_MODE=coverage pest --coverage --min=80"
-                ],
-                "analyse": [
-                    "cd ../.. && vendor/bin/phpstan analyse -c packages/tasks-workflow/phpstan.neon --memory-limit=2G --no-progress"
-                ],
-                "lint:check": [
-                    "../../vendor/bin/pint --test"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "Recurrence-to-task materialization for CoreX with durable wakeup and optional workflow capture.",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
             "name": "axiomasoft/corex-tenancy",
             "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/tenancy",
-                "reference": "6fb95b89561bdc3aa992d4907e366e8eaa15f74c"
+                "reference": "84497acadd9cf5cb16d07294b9368427bc9b9cfa"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/packman": "^0.1@dev",
+                "axiomasoft/packman-schema": "^0.1@dev",
+                "axiomasoft/tenant": "^1.0@dev",
                 "ext-ctype": "*",
                 "ext-filter": "*",
                 "ext-mbstring": "*",
@@ -1078,7 +1267,8 @@
                 "symfony/http-foundation": "^7.2|^8.0"
             },
             "require-dev": {
-                "axiomasoft/corex-wakeup": "^1.0@dev",
+                "axiomasoft/corex-scheduler": "^1.0@dev",
+                "axiomasoft/tenant-laravel": "^1.0@dev",
                 "ext-pdo": "*",
                 "ext-redis": "*",
                 "ext-tokenizer": "*",
@@ -1096,7 +1286,9 @@
                 "symfony/process": "^7.2|^8.0"
             },
             "suggest": {
-                "axiomasoft/corex-wakeup": "Install to opt into root_registry wakeup hints; boxed and local_sweep profiles do not require it.",
+                "axiomasoft/corex-scheduler": "Install to opt into root_registry wakeup hints; boxed and local_sweep profiles do not require it.",
+                "axiomasoft/tenant-laravel": "Compose the single host TenantRuntime and guarded Laravel facilities.",
+                "axiomasoft/tenant-postgres": "Verified PostgreSQL resource binding and physical provisioning owner.",
                 "ext-redis": "Optional Redis account menu cache integration; its conformance tests require this extension.",
                 "league/flysystem-aws-s3-v3": "Install the qualified native S3 adapter to explicitly construct optional ObjectTenantStorage."
             },
@@ -1154,7 +1346,7 @@
                     "email": "dv.vostrikov@gmail.com"
                 }
             ],
-            "description": "CoreX physical DB-per-account tenancy — root-schema control plane (B-11, D13).",
+            "description": "CoreX account and workspace lifecycle with external Tenant runtime and host-owned physical resources.",
             "keywords": [
                 "laravel",
                 "multi-tenancy",
@@ -1165,160 +1357,17 @@
             }
         },
         {
-            "name": "axiomasoft/corex-transfer",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "packages/transfer",
-                "reference": "0f338b192ba3047e57063ae150392c60419cae94"
-            },
-            "require": {
-                "axiomasoft/corex": "^1.0@dev",
-                "illuminate/database": "^13.0",
-                "illuminate/support": "^13.0",
-                "php": "^8.4",
-                "psr/clock": "^1.0"
-            },
-            "require-dev": {
-                "illuminate/contracts": "^13.0",
-                "orchestra/testbench": "^11.3",
-                "orchestra/testbench-core": "^11.5"
-            },
-            "type": "corex-module",
-            "extra": {
-                "corex": {
-                    "schema-version": 1,
-                    "package-type": "capability",
-                    "stability": "stable"
-                },
-                "laravel": {
-                    "providers": [
-                        "CoreX\\Transfer\\TransferServiceProvider"
-                    ]
-                },
-                "branch-alias": {
-                    "dev-main": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "CoreX\\Transfer\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "CoreX\\Transfer\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg"
-                ],
-                "test:pg": [
-                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=pg"
-                ],
-                "test:coverage": [
-                    "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80"
-                ],
-                "analyse": [
-                    "cd ../.. && vendor/bin/phpstan analyse -c packages/transfer/phpstan.neon --memory-limit=2G --no-progress"
-                ],
-                "lint:check": [
-                    "../../vendor/bin/pint --test"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "Bounded import and export primitives for CoreX.",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "axiomasoft/corex-wakeup",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "packages/wakeup",
-                "reference": "5dadbb4c107c8661c1e72890e6896f02d1580858"
-            },
-            "require": {
-                "axiomasoft/corex": "^1.0@dev",
-                "illuminate/console": "^13.0",
-                "illuminate/contracts": "^13.0",
-                "illuminate/database": "^13.0",
-                "illuminate/support": "^13.0",
-                "php": "^8.4",
-                "psr/clock": "^1.0"
-            },
-            "require-dev": {
-                "ext-pdo": "*",
-                "orchestra/testbench": "^11.3",
-                "orchestra/testbench-core": "^11.5"
-            },
-            "type": "corex-module",
-            "extra": {
-                "corex": {
-                    "schema-version": 1,
-                    "module": "CoreX\\Wakeup\\WakeupModule",
-                    "package-type": "capability",
-                    "stability": "stable"
-                },
-                "laravel": {
-                    "providers": [
-                        "CoreX\\Wakeup\\WakeupServiceProvider"
-                    ]
-                },
-                "branch-alias": {
-                    "dev-main": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "CoreX\\Wakeup\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "CoreX\\Wakeup\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg"
-                ],
-                "test:pg": [
-                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=pg"
-                ],
-                "test:coverage": [
-                    "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg --coverage --min=80"
-                ],
-                "analyse": [
-                    "cd ../.. && vendor/bin/phpstan analyse -c packages/wakeup/phpstan.neon --memory-limit=2G --no-progress"
-                ],
-                "lint:check": [
-                    "../../vendor/bin/pint --test"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "Durable local wakeup requests for CoreX modules.",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
             "name": "axiomasoft/corex-workflow",
             "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/workflow",
-                "reference": "be9a15f613e5ae72006227d1f0b80c89b9bf5913"
+                "reference": "57dbe4d4da7f63cb6ad7609cfb8c1123678641ca"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/packman-modules": "^0.1@dev",
+                "axiomasoft/packman-schema": "^0.1@dev",
                 "illuminate/contracts": "^13.0",
                 "illuminate/database": "^13.0",
                 "illuminate/support": "^13.0",
@@ -1326,14 +1375,14 @@
                 "psr/clock": "^1.0"
             },
             "require-dev": {
+                "axiomasoft/packman": "^0.1@dev",
                 "orchestra/testbench": "^11.3",
                 "orchestra/testbench-core": "^11.5"
             },
-            "type": "corex-module",
+            "type": "packman-module",
             "extra": {
                 "corex": {
                     "schema-version": 1,
-                    "module": "CoreX\\Workflow\\WorkflowModule",
                     "package-type": "capability",
                     "stability": "stable"
                 },
@@ -1344,6 +1393,9 @@
                 },
                 "branch-alias": {
                     "dev-main": "1.0.x-dev"
+                },
+                "packman": {
+                    "module": "CoreX\\Workflow\\WorkflowModule"
                 }
             },
             "autoload": {
@@ -1376,6 +1428,472 @@
             "description": "Optional durable workflow engine binding for CoreX modules.",
             "transport-options": {
                 "relative": true
+            }
+        },
+        {
+            "name": "axiomasoft/packman",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/axiomasoft/packman.git",
+                "reference": "366fc104f22b388607f77d506ae5e36cd0e99666"
+            },
+            "require": {
+                "php": "^8.4",
+                "psr/clock": "^1.0"
+            },
+            "suggest": {
+                "illuminate/console": "Optional Laravel Artisan console commands (`packman:doctor`, `packman:config:validate`).",
+                "illuminate/contracts": "Optional Laravel container, event dispatcher, config, and validation bindings.",
+                "illuminate/database": "Optional schema status checks in Laravel applications.",
+                "illuminate/support": "Optional PackmanServiceProvider auto-discovery and Laravel adapters."
+            },
+            "type": "library",
+            "extra": {
+                "packman": {
+                    "schema-version": 1,
+                    "package-type": "kernel",
+                    "stability": "stable",
+                    "error-prefix": "packman",
+                    "owns": [
+                        "Attributes",
+                        "Config",
+                        "Context",
+                        "Data",
+                        "Doctor",
+                        "Errors",
+                        "Events",
+                        "Features",
+                        "Foundation",
+                        "Settings"
+                    ]
+                },
+                "laravel": {
+                    "providers": [
+                        "Packman\\PackmanServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Packman\\": "packages/core/src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Vostrikov",
+                    "email": "dv.vostrikov@gmail.com"
+                }
+            ],
+            "description": "Packman unified ecosystem kernel — attributes, foundation registrars, context contracts, JsonDocument, configuration options/compiler/cache, RFC 9457 error registry, doctor diagnostics, domain events, features, and settings contracts.",
+            "keywords": [
+                "attributes",
+                "config",
+                "doctor",
+                "errors",
+                "kernel",
+                "laravel",
+                "packman",
+                "php"
+            ]
+        },
+        {
+            "name": "axiomasoft/packman-modules",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/axiomasoft/packman.git",
+                "reference": "366fc104f22b388607f77d506ae5e36cd0e99666"
+            },
+            "require": {
+                "axiomasoft/packman": "^0.1|^1.0@dev",
+                "axiomasoft/packman-schema": "^0.1|^1.0@dev",
+                "illuminate/console": "^12.0|^13.0",
+                "illuminate/container": "^12.0|^13.0",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/database": "^12.0|^13.0",
+                "illuminate/events": "^12.0|^13.0",
+                "illuminate/queue": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.4",
+                "psr/clock": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "packman": {
+                    "error-prefix": "modules"
+                },
+                "laravel": {
+                    "providers": [
+                        "Packman\\Modules\\ModulesServiceProvider"
+                    ]
+                },
+                "phpstan": {
+                    "includes": [
+                        "packages/modules/extension.neon"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Packman\\Modules\\": "packages/modules/src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Universal Packman Composer-discovered DB-backed platform module and plugin compiler, lifecycle FSM, schema ownership claims, and PHPStan boundary rules."
+        },
+        {
+            "name": "axiomasoft/packman-panels",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/axiomasoft/packman.git",
+                "reference": "366fc104f22b388607f77d506ae5e36cd0e99666"
+            },
+            "require": {
+                "axiomasoft/packman": "^0.1|^1.0@dev",
+                "axiomasoft/packman-schema": "^0.1|^1.0@dev",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/database": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.4",
+                "psr/clock": "^1.0"
+            },
+            "suggest": {
+                "axiomasoft/packman-modules": "Optional module and entity registry integration for ModulePanelCatalogue and EntityViewSchemaProvider.",
+                "axiomasoft/packman-plugins": "Optional extension plugin integration for WithPanels providers."
+            },
+            "type": "library",
+            "extra": {
+                "packman": {
+                    "error-prefix": "panels"
+                },
+                "laravel": {
+                    "providers": [
+                        "Packman\\Panels\\Laravel\\PanelsServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Packman\\Panels\\": "packages/panels/src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Universal Packman headless panel descriptors, two-phase PanelRegistry/PanelRecipe builder, slot/form data projection, admission evaluation, and SQL saved views."
+        },
+        {
+            "name": "axiomasoft/packman-plugins",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/axiomasoft/packman.git",
+                "reference": "366fc104f22b388607f77d506ae5e36cd0e99666"
+            },
+            "require": {
+                "axiomasoft/packman": "^0.1|^1.0@dev",
+                "illuminate/console": "^12.0|^13.0",
+                "illuminate/container": "^12.0|^13.0",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.4"
+            },
+            "suggest": {
+                "axiomasoft/packman-schema": "Optional schema ownership integration for plugins declaring owned schema nouns."
+            },
+            "type": "library",
+            "extra": {
+                "packman": {
+                    "error-prefix": "plugins"
+                },
+                "laravel": {
+                    "providers": [
+                        "Packman\\Plugins\\Laravel\\PluginsServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Packman\\Plugins\\": "packages/plugins/src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Universal Packman intra-package plugin graph compiler, capabilities, typed slots, and immutable contribution registry."
+        },
+        {
+            "name": "axiomasoft/packman-schema",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/axiomasoft/packman.git",
+                "reference": "366fc104f22b388607f77d506ae5e36cd0e99666"
+            },
+            "require": {
+                "axiomasoft/packman": "^0.1|^1.0@dev",
+                "illuminate/console": "^12.0|^13.0",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/database": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.4",
+                "psr/clock": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "packman": {
+                    "error-prefix": "schema"
+                },
+                "laravel": {
+                    "providers": [
+                        "Packman\\Schema\\Laravel\\SchemaServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Packman\\Schema\\": "packages/schema/src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Universal Packman schema governance, schema sets, table ownership, prefix fingerprinting, PostgreSQL constraint naming, and step compiler."
+        },
+        {
+            "name": "axiomasoft/tenant",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/axiomasoft/tenant.git",
+                "reference": "6089b4c3d288b28e1ba8ce7e88f37c4f0a100cbe"
+            },
+            "require": {
+                "axiomasoft/packman": "^0.1",
+                "ext-intl": "*",
+                "php": ">=8.4 <8.6"
+            },
+            "type": "library",
+            "extra": {
+                "packman": {
+                    "schema-version": 1,
+                    "package-type": "domain",
+                    "stability": "stable",
+                    "error-prefix": "tenant",
+                    "owns": [
+                        "Attributes",
+                        "Composition",
+                        "Contracts",
+                        "Data",
+                        "Enums",
+                        "Errors",
+                        "Exceptions",
+                        "Extensions",
+                        "Internal",
+                        "Runtime"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Tenant\\": "packages/tenant/src/"
+                },
+                "files": [
+                    "packages/tenant/src/aliases.php"
+                ]
+            },
+            "description": "Portable isolation context and scoped execution contracts."
+        },
+        {
+            "name": "axiomasoft/vaulter-core",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/axiomasoft/vaulter.git",
+                "reference": "56de17dfcee26aa047761bca4d1b0ba5f2c2d866"
+            },
+            "require": {
+                "axiomasoft/packman": "^0.1",
+                "axiomasoft/packman-plugins": "^0.1",
+                "axiomasoft/packman-schema": "^0.1",
+                "illuminate/console": "^13.0",
+                "illuminate/contracts": "^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/http": "^13.0",
+                "illuminate/routing": "^13.0",
+                "illuminate/support": "^13.0",
+                "illuminate/validation": "^13.0",
+                "php": ">=8.4 <8.6",
+                "psr/http-message": "^1.1|^2.0",
+                "psr/log": "^3.0",
+                "staudenmeir/laravel-cte": "^1.12"
+            },
+            "replace": {
+                "axioma-studio/vaulter-core": "self.version"
+            },
+            "suggest": {
+                "axiomasoft/packman-testkit": "Testing kit (`Packman\\Testkit\\*`) powering core test suites.",
+                "axiomasoft/vaulter-documents": "Document-node behaviour: document types and codecs, revisions, comments and export. Required for Vaulter::registerHandler()/registerExporter() and the document REST surface.",
+                "axiomasoft/vaulter-drive": "File/folder tree behaviour + resumable uploads: StorageManager, the DriveHandle factory, PurgeTrash/SweepUploads. Required for Vaulter::for()/forStorage() and the Drive REST surface.",
+                "axiomasoft/vaulter-filament": "Filament admin UI for documents, folders and permissions.",
+                "axiomasoft/vaulter-media": "Content-addressed file/blob layer (CAS): the concrete ContentStore/StorageDriver/BlobStore engine behind the Contracts\\Cas seam. Required for Drive file upload/download/versioning.",
+                "opis/json-schema": "Testing kit: the OpenAPI contract check (VAULTER_OPENAPI_VALIDATE=1).",
+                "orchestra/testbench": "Testing kit: the base of every suite and of FreshApplication; the kit is loaded by tests only.",
+                "symfony/yaml": "Testing kit: reads openapi/vaulter-v1.yaml for the contract check."
+            },
+            "type": "library",
+            "extra": {
+                "packman": {
+                    "schema-version": 1,
+                    "package-type": "foundation",
+                    "stability": "stable",
+                    "error-prefix": "vaulter",
+                    "owns": [
+                        "Attributes",
+                        "Configuration",
+                        "Console",
+                        "Contracts",
+                        "Data",
+                        "Database",
+                        "Doctor",
+                        "Errors",
+                        "Events",
+                        "Exceptions",
+                        "Http",
+                        "Idempotency",
+                        "Internal",
+                        "Laravel",
+                        "Models",
+                        "Modules",
+                        "Observability",
+                        "Operations",
+                        "Providers",
+                        "Schema",
+                        "Security",
+                        "Support",
+                        "Tenancy",
+                        "Testing",
+                        "ValueObjects"
+                    ]
+                },
+                "laravel": {
+                    "providers": [
+                        "Vaulter\\VaulterServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Vaulter\\": "packages/core/src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Vostrikov",
+                    "email": "dv.vostrikov@gmail.com"
+                }
+            ],
+            "description": "Vaulter kernel: module registry, operation pipeline, idempotency, events and outbox, problem details, tenancy and diagnostics. Install axiomasoft/vaulter for the full product.",
+            "homepage": "https://github.com/axiomasoft/vaulter",
+            "keywords": [
+                "idempotency",
+                "kernel",
+                "laravel",
+                "modules",
+                "outbox",
+                "tenancy"
+            ],
+            "support": {
+                "issues": "https://github.com/axiomasoft/vaulter/issues",
+                "source": "https://github.com/axiomasoft/vaulter"
+            }
+        },
+        {
+            "name": "axiomasoft/vaulter-media",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/axiomasoft/vaulter.git",
+                "reference": "56de17dfcee26aa047761bca4d1b0ba5f2c2d866"
+            },
+            "require": {
+                "axiomasoft/packman": "^0.1",
+                "axiomasoft/vaulter-core": "self.version",
+                "php": ">=8.4 <8.6"
+            },
+            "replace": {
+                "axioma-studio/vaulter-media": "self.version"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Vaulter\\Media\\VaulterMediaServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Vaulter\\Media\\": "packages/media/src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Vostrikov",
+                    "email": "dv.vostrikov@gmail.com"
+                }
+            ],
+            "description": "Content-addressed file/blob layer (CAS) for Vaulter — sha256 dedup, race-free commit, two-phase GC over Flysystem.",
+            "homepage": "https://github.com/axiomasoft/vaulter",
+            "keywords": [
+                "blob",
+                "cas",
+                "content-addressed",
+                "dedup",
+                "laravel",
+                "storage",
+                "vaulter"
+            ],
+            "support": {
+                "issues": "https://github.com/axiomasoft/vaulter/issues",
+                "source": "https://github.com/axiomasoft/vaulter"
             }
         },
         {
@@ -2020,11 +2538,13 @@
             "dist": {
                 "type": "path",
                 "url": "products/flex-crm",
-                "reference": "0e1e8b346e2ab5d1e5aab2d6e37a8aa282523bc1"
+                "reference": "313ec65859d84cfa7072953dc0344ce1924be463"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/corex-intl": "^1.0@dev",
+                "axiomasoft/packman-modules": "^0.1@dev",
+                "axiomasoft/packman-schema": "^0.1@dev",
                 "brick/money": "^0.9 || ^0.10",
                 "ext-filter": "*",
                 "ext-mbstring": "*",
@@ -2044,11 +2564,10 @@
             "suggest": {
                 "axiomasoft/corex-operations": "Serves the CRM API operations declared by CrmModule; handlers depend only on the kernel CoreX\\Invocation contract."
             },
-            "type": "corex-module",
+            "type": "packman-module",
             "extra": {
                 "corex": {
                     "schema-version": 1,
-                    "module": "Flex\\Crm\\CrmModule",
                     "package-type": "product",
                     "stability": "experimental"
                 },
@@ -2059,6 +2578,9 @@
                 },
                 "branch-alias": {
                     "dev-main": "1.0.x-dev"
+                },
+                "packman": {
+                    "module": "Flex\\Crm\\CrmModule"
                 }
             },
             "autoload": {
@@ -4951,6 +5473,66 @@
                 "source": "https://github.com/rlanvin/php-rrule/tree/v3.0.0"
             },
             "time": "2026-07-29T06:25:26+00:00"
+        },
+        {
+            "name": "staudenmeir/laravel-cte",
+            "version": "v1.13.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/staudenmeir/laravel-cte.git",
+                "reference": "cf59f3b842e411cb22d7446ad40c92e4b5143bbe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/staudenmeir/laravel-cte/zipball/cf59f3b842e411cb22d7446ad40c92e4b5143bbe",
+                "reference": "cf59f3b842e411cb22d7446ad40c92e4b5143bbe",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^13.0",
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "laravel/framework": "^13.0",
+                "orchestra/testbench-core": "^11.0",
+                "phpstan/phpstan": "^2.0",
+                "phpunit/phpunit": "^12.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Staudenmeir\\LaravelCte\\DatabaseServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Staudenmeir\\LaravelCte\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonas Staudenmeir",
+                    "email": "mail@jonas-staudenmeir.de"
+                }
+            ],
+            "description": "Laravel queries with common table expressions",
+            "support": {
+                "issues": "https://github.com/staudenmeir/laravel-cte/issues",
+                "source": "https://github.com/staudenmeir/laravel-cte/tree/v1.13.0"
+            },
+            "funding": [
+                {
+                    "url": "https://paypal.me/JonasStaudenmeir",
+                    "type": "custom"
+                }
+            ],
+            "time": "2026-02-28T20:58:05+00:00"
         },
         {
             "name": "symfony/clock",
@@ -7957,29 +8539,78 @@
             "time": "2026-10-06T22:19:35+00:00"
         },
         {
-            "name": "axioma-studio/azguard-core",
-            "version": "0.3.0",
+            "name": "axiomasoft/azguard",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/azguard-private.git",
-                "reference": "253cbf4cce0226545cd96ca8c6bcbefe329b1403"
+                "reference": "457eed3a07e0a25eae934fd35f532cde3d69fa86"
             },
             "require": {
-                "illuminate/console": "^11.0|^12.0|^13.0",
-                "illuminate/contracts": "^11.0|^12.0|^13.0",
-                "illuminate/database": "^11.0|^12.0|^13.0",
-                "illuminate/filesystem": "^11.0|^12.0|^13.0",
-                "illuminate/http": "^11.0|^12.0|^13.0",
-                "illuminate/queue": "^11.0|^12.0|^13.0",
-                "illuminate/routing": "^11.0|^12.0|^13.0",
-                "illuminate/support": "^11.0|^12.0|^13.0",
-                "php": "^8.3"
+                "axiomasoft/packman": "^0.1",
+                "axiomasoft/packman-panels": "^0.1",
+                "axiomasoft/packman-plugins": "^0.1",
+                "axiomasoft/packman-schema": "^0.1",
+                "illuminate/auth": "^13.0",
+                "illuminate/console": "^13.0",
+                "illuminate/contracts": "^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/filesystem": "^13.0",
+                "illuminate/http": "^13.0",
+                "illuminate/log": "^13.0",
+                "illuminate/queue": "^13.0",
+                "illuminate/routing": "^13.0",
+                "illuminate/support": "^13.0",
+                "php": "^8.4"
+            },
+            "suggest": {
+                "dragonmantank/cron-expression": "Required to validate cron expressions and run Laravel scheduled maintenance without laravel/framework."
             },
             "type": "library",
             "extra": {
+                "branch-alias": {
+                    "dev-main": "2.0.x-dev"
+                },
                 "laravel": {
                     "providers": [
                         "AzGuard\\AzGuardServiceProvider"
+                    ]
+                },
+                "packman": {
+                    "schema-version": 1,
+                    "package-type": "capability",
+                    "stability": "stable",
+                    "error-prefix": "azguard",
+                    "owns": [
+                        "Attributes",
+                        "Authorization",
+                        "Catalog",
+                        "Changes",
+                        "Concerns",
+                        "Configuration",
+                        "Context",
+                        "Contracts",
+                        "Diagnostics",
+                        "Directories",
+                        "Errors",
+                        "Events",
+                        "Exceptions",
+                        "Extensions",
+                        "Facades",
+                        "Kernel",
+                        "Laravel",
+                        "Panels",
+                        "Permissions",
+                        "Plugins",
+                        "Policies",
+                        "Registrars",
+                        "Roles",
+                        "Schema",
+                        "Sources",
+                        "Storage",
+                        "Support",
+                        "Tenancy",
+                        "Testing"
                     ]
                 }
             },
@@ -7987,6 +8618,32 @@
                 "psr-4": {
                     "AzGuard\\": "packages/core/src/"
                 }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Vostrikov",
+                    "email": "dv.vostrikov@gmail.com"
+                }
+            ],
+            "description": "Panel-based authorization for Laravel: permission sources, explicit policy authority, scoped assignments",
+            "homepage": "https://github.com/axiomasoft/azguard",
+            "keywords": [
+                "access-control",
+                "authorization",
+                "gate",
+                "laravel",
+                "permissions",
+                "rbac",
+                "roles"
+            ],
+            "support": {
+                "email": "dv.vostrikov@gmail.com",
+                "issues": "https://github.com/axiomasoft/azguard/issues",
+                "security": "https://github.com/axiomasoft/azguard-private/blob/main/SECURITY.md",
+                "source": "https://github.com/axiomasoft/azguard"
             }
         },
         {
@@ -7995,10 +8652,13 @@
             "dist": {
                 "type": "path",
                 "url": "packages/access",
-                "reference": "3786f77fe6d6eab4c0e5ca676be74078481dc53c"
+                "reference": "9db9fc3cc603cca4817f7b86e635cbb11c582828"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/packman": "^0.1@dev",
+                "axiomasoft/packman-modules": "^0.1@dev",
+                "axiomasoft/packman-schema": "^0.1@dev",
                 "ext-mbstring": "*",
                 "illuminate/auth": "^13.0",
                 "illuminate/contracts": "^13.0",
@@ -8029,7 +8689,7 @@
                 },
                 "laravel": {
                     "providers": [
-                        "CoreX\\Access\\CoreAuthServiceProvider"
+                        "CoreX\\Access\\AccessServiceProvider"
                     ]
                 },
                 "branch-alias": {
@@ -8039,10 +8699,7 @@
             "autoload": {
                 "psr-4": {
                     "CoreX\\Access\\": "src/"
-                },
-                "files": [
-                    "src/Internal/deprecated-aliases.php"
-                ]
+                }
             },
             "autoload-dev": {
                 "psr-4": {
@@ -8093,17 +8750,18 @@
             "dist": {
                 "type": "path",
                 "url": "packages/access-azguard",
-                "reference": "0f9b5f4d2745c1b69f1ad0a3f87116baa445dafd"
+                "reference": "855eadb8cc310565f3837e48470050fa14099ee7"
             },
             "require": {
-                "axioma-studio/azguard-core": "^0.3",
+                "axiomasoft/azguard": "^2.0@dev",
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/corex-access": "^1.0@dev",
+                "axiomasoft/packman": "^0.1@dev",
+                "axiomasoft/packman-modules": "^0.1@dev",
                 "illuminate/contracts": "^13.0",
                 "illuminate/database": "^13.0",
                 "illuminate/support": "^13.0",
-                "php": "^8.4",
-                "psr/clock": "^1.0"
+                "php": "^8.4"
             },
             "require-dev": {
                 "larastan/larastan": "^3.12",
@@ -8117,9 +8775,9 @@
             "type": "library",
             "extra": {
                 "corex": {
-                    "schema-version": 1,
                     "package-type": "integration",
-                    "stability": "unreleased"
+                    "stability": "unreleased",
+                    "schema-version": 1
                 },
                 "laravel": {
                     "providers": [
@@ -8157,7 +8815,7 @@
             "license": [
                 "MIT"
             ],
-            "description": "Optional AzGuard integration for the CoreX Access permission matrix.",
+            "description": "CoreX authorization and query visibility adapter for AzGuard 2.",
             "transport-options": {
                 "relative": true
             }
@@ -8205,11 +8863,12 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tools",
-                "reference": "e0aea594be55b91828f2b9c9b5d87ea32d8da0ea"
+                "reference": "b5296f87d51de308d461195ef3680a2f596b9bd4"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/corex-operations": "^1.0@dev",
+                "axiomasoft/packman-modules": "^0.1@dev",
                 "illuminate/auth": "^13.0",
                 "illuminate/console": "^13.0",
                 "illuminate/contracts": "^13.0",
@@ -8221,7 +8880,9 @@
                 "symfony/http-kernel": "^7.2|^8.0"
             },
             "require-dev": {
-                "axiomasoft/corex-transfer": "^1.0@dev",
+                "axiomasoft/corex-import-export": "^1.0@dev",
+                "axiomasoft/packman": "^0.1@dev",
+                "axiomasoft/packman-schema": "^0.1@dev",
                 "ext-curl": "*",
                 "ext-openssl": "*",
                 "ext-pcntl": "*",
@@ -8237,7 +8898,7 @@
                 "symfony/process": "^7.2|^8.0"
             },
             "suggest": {
-                "axiomasoft/corex-transfer": "Optional bounded import/export adapter for durable bulk operations",
+                "axiomasoft/corex-import-export": "Optional bounded import/export adapter for durable bulk operations",
                 "ext-curl": "Optional webhook transport; missing curl returns capability_unavailable.",
                 "opis/json-schema": "2.4.1 — bounded offline tool-schema/1 validation adapter"
             },
@@ -8253,7 +8914,7 @@
                 },
                 "laravel": {
                     "providers": [
-                        "CoreX\\Tools\\ToolServiceProvider"
+                        "CoreX\\Tools\\ToolsServiceProvider"
                     ]
                 }
             },
@@ -8295,11 +8956,13 @@
             "dist": {
                 "type": "path",
                 "url": "packages/webhooks",
-                "reference": "0afaa94df91d55dd188b2a9e5866ce1c660cd5bd"
+                "reference": "f4fb3814c2d8cf4e916e3cba5fbe9f1e1eb4d875"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/corex-operations": "^1.0@dev",
+                "axiomasoft/packman": "^0.1@dev",
+                "axiomasoft/packman-schema": "^0.1@dev",
                 "ext-filter": "*",
                 "illuminate/auth": "^13.0",
                 "illuminate/console": "^13.0",
@@ -8312,7 +8975,8 @@
                 "psr/clock": "^1.0"
             },
             "require-dev": {
-                "axiomasoft/corex-transfer": "^1.0@dev",
+                "axiomasoft/corex-import-export": "^1.0@dev",
+                "axiomasoft/packman-modules": "^0.1@dev",
                 "ext-curl": "*",
                 "ext-openssl": "*",
                 "ext-pcntl": "*",
@@ -8326,7 +8990,7 @@
                 "phpunit/phpunit": "^12.0|^13.0"
             },
             "suggest": {
-                "axiomasoft/corex-transfer": "Optional bounded import/export adapter for durable bulk operations",
+                "axiomasoft/corex-import-export": "Optional bounded import/export adapter for durable bulk operations",
                 "ext-curl": "Optional webhook transport; missing curl returns capability_unavailable.",
                 "opis/json-schema": "2.4.1 — bounded offline tool-schema/1 validation adapter"
             },
@@ -8377,6 +9041,70 @@
             "transport-options": {
                 "relative": true
             }
+        },
+        {
+            "name": "axiomasoft/tenant-laravel",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/axiomasoft/tenant.git",
+                "reference": "6089b4c3d288b28e1ba8ce7e88f37c4f0a100cbe"
+            },
+            "require": {
+                "axiomasoft/packman": "^0.1",
+                "axiomasoft/tenant": "^1.0",
+                "ext-intl": "*",
+                "ext-posix": "*",
+                "illuminate/cache": "^12.0 || ^13.0",
+                "illuminate/database": "^12.0 || ^13.0",
+                "illuminate/events": "^12.0 || ^13.0",
+                "illuminate/filesystem": "^12.0 || ^13.0",
+                "illuminate/http": "^12.0 || ^13.0",
+                "illuminate/queue": "^12.0 || ^13.0",
+                "illuminate/session": "^12.0 || ^13.0",
+                "illuminate/support": "^12.0 || ^13.0",
+                "laravel/framework": "^12.0 || ^13.0",
+                "league/flysystem-local": "^3.0",
+                "php": ">=8.4 <8.6"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Tenant\\Laravel\\TenantServiceProvider"
+                    ]
+                },
+                "packman": {
+                    "schema-version": 1,
+                    "package-type": "addon",
+                    "stability": "stable",
+                    "error-prefix": "tenant",
+                    "owns": [
+                        "Codec",
+                        "Configuration",
+                        "Contracts",
+                        "Data",
+                        "Diagnostics",
+                        "Http",
+                        "Internal",
+                        "Laravel",
+                        "Queue",
+                        "Registrars"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Tenant\\Laravel\\": "packages/tenant-laravel/src/"
+                },
+                "files": [
+                    "packages/tenant-laravel/src/aliases.php"
+                ]
+            },
+            "description": "Guarded Laravel facilities for the Tenant runtime."
         },
         {
             "name": "brianium/paratest",
@@ -15475,27 +16203,37 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "axiomasoft/azguard": 20,
         "axiomasoft/corex": 20,
         "axiomasoft/corex-access": 20,
         "axiomasoft/corex-access-azguard": 20,
         "axiomasoft/corex-custom-fields": 20,
+        "axiomasoft/corex-import-export": 20,
         "axiomasoft/corex-intl": 20,
         "axiomasoft/corex-media": 20,
         "axiomasoft/corex-notifications": 20,
         "axiomasoft/corex-operations": 20,
         "axiomasoft/corex-panels": 20,
         "axiomasoft/corex-recurrence": 20,
+        "axiomasoft/corex-recurring-tasks": 20,
+        "axiomasoft/corex-scheduler": 20,
         "axiomasoft/corex-search": 20,
         "axiomasoft/corex-search-intl": 20,
         "axiomasoft/corex-search-meilisearch": 20,
         "axiomasoft/corex-tasks": 20,
-        "axiomasoft/corex-tasks-workflow": 20,
         "axiomasoft/corex-tenancy": 20,
         "axiomasoft/corex-tools": 20,
-        "axiomasoft/corex-transfer": 20,
-        "axiomasoft/corex-wakeup": 20,
         "axiomasoft/corex-webhooks": 20,
         "axiomasoft/corex-workflow": 20,
+        "axiomasoft/packman": 20,
+        "axiomasoft/packman-modules": 20,
+        "axiomasoft/packman-panels": 20,
+        "axiomasoft/packman-plugins": 20,
+        "axiomasoft/packman-schema": 20,
+        "axiomasoft/tenant": 20,
+        "axiomasoft/tenant-laravel": 20,
+        "axiomasoft/vaulter-core": 20,
+        "axiomasoft/vaulter-media": 20,
         "flex/crm": 20
     },
     "prefer-stable": true,

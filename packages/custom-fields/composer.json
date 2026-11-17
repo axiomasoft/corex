@@ -1,7 +1,7 @@
 {
     "name": "axiomasoft/corex-custom-fields",
     "description": "Typed attribute ports and safe schema-operation bridge for CoreX.",
-    "type": "corex-module",
+    "type": "packman-module",
     "license": "MIT",
     "require": {
         "ext-filter": "*",
@@ -11,7 +11,10 @@
         "illuminate/contracts": "^13.0",
         "illuminate/database": "^13.0",
         "illuminate/support": "^13.0",
-        "psr/clock": "^1.0"
+        "psr/clock": "^1.0",
+        "axiomasoft/packman": "^0.1@dev",
+        "axiomasoft/packman-modules": "^0.1@dev",
+        "axiomasoft/packman-schema": "^0.1@dev"
     },
     "suggest": {
         "axiomasoft/corex": "Provides EntityRegistry and ModuleRegistry for dynamic field definitions; without it SchemaOperations stays unavailable and the static catalogue remains usable."
@@ -37,7 +40,7 @@
         },
         "laravel": {
             "providers": [
-                "CoreX\\CustomFields\\AttributesServiceProvider"
+                "CoreX\\CustomFields\\CustomFieldsServiceProvider"
             ]
         },
         "branch-alias": {

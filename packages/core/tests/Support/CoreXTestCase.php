@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Testing;
 
 use CoreX\CoreServiceProvider;
-use CoreX\Database\Testing\MigratesSchemaSets;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Packman\Schema\Testing\MigratesSchemaSets;
 
 /**
  * Dev-only Testbench base for the core suite and the monorepo root.

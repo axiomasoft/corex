@@ -1,4 +1,4 @@
-# CoreX API
+# CoreX Operations
 
 An optional operation boundary for Laravel modules. A module declares supported operations;
 the platform dispatches only those operations and checks installed module activation against
@@ -11,14 +11,14 @@ single declaration authority. `ApiProfile` and the five `api/v1` snapshot files
 are deterministic code projections; account activation and actor authorization
 remain live per invocation. GraphQL is outside this contract.
 
-Requires PHP 8.4+ and Laravel 13, `axiomasoft/corex` and `axiomasoft/corex`. Physical tenancy is
+Requires PHP 8.4+ and Laravel 13 and `axiomasoft/corex`. Physical tenancy is
 provided separately by the application; this package has no dependency on an identity product,
 role engine, application user class or a particular tenancy implementation.
 
 ## Explicit installation
 
 Install `axiomasoft/corex-operations` together with the compatible `axiomasoft/corex` operation-declaration version.
-Add `CoreX\Operations\ApiServiceProvider::class` to the application's provider list. The Composer
+Add `CoreX\Operations\OperationsServiceProvider::class` to the application's provider list. The Composer
 package deliberately has **no** `extra.laravel.providers` entry. Once this provider is
 installed, package routes are enabled by default under `/api`. Set `routes.enabled` to
 `false` before keeping a handwritten mount. Prefix and extra middleware come from
@@ -75,7 +75,7 @@ Api::operation(
 )
 ```
 
-Compile with the existing `corex:modules:compile` command. The compiler clones declarations,
+Compile with the existing `modules:compile` command. The compiler clones declarations,
 stamps manifest ownership, rejects invalid paths/versions, duplicate version-scoped operation IDs,
 and equivalent method/path templates. Equally specific overlapping routes are rejected;
 equivalent templates across methods must use the same parameter names. Old compiled resource rows rehydrate with defaults;
@@ -232,7 +232,7 @@ catalogue as a tenant's authorization listing. This package does not ship a clie
 
 ## Tool catalogue and policy
 
-Register `CoreX\Tools\ToolServiceProvider::class` alongside `ApiServiceProvider` when exposing the
+Register `CoreX\Tools\ToolsServiceProvider::class` alongside `OperationsServiceProvider` when exposing the
 optional tool surface. It binds `Contracts\ToolCatalogue` and `Contracts\ToolPolicy` only; no routes,
 migrations or network calls are installed.
 
@@ -287,7 +287,7 @@ Boxed installations may use two connection names to the same database. Payloads 
 choose either connection. Table ownership and retention are recorded in
 [table-ownership.md](../../docs/architecture/table-ownership.md).
 
-Run `php artisan corex:schema:migrate --scope=dedicated` for the configured budget connection and `php artisan corex:schema:migrate --scope=tenant --database=<tenant>` to apply the
+Run `php artisan packman:schema:migrate --scope=dedicated` for the configured budget connection and `php artisan packman:schema:migrate --scope=tenant --database=<tenant>` to apply the
 migrations explicitly to their owning databases using the host's migration procedure.
 Provider boot never runs DDL. Configure a host-owned `scope_hmac_secret` and stable
 `installation_id`, and set `corex-operations.cost.enabled=true`. The shipped activation flag is
@@ -314,7 +314,7 @@ store unavailability is an infrastructure error. Host body/rate/concurrency caps
 
 ## Durable bulk operations
 
-`axiomasoft/corex-transfer` is optional (`suggest`), and owns all import/export reads, mapping, writes
+`axiomasoft/corex-import-export` is optional (`suggest`), and owns all import/export reads, mapping, writes
 and result storage. Bind `Contracts\BulkTransferFactory` explicitly in installed application
 code. It creates a transfer job atomically and idempotently using the bulk operation id,
 and returns a `Data\BulkTransferSession` with public transfer ports and the current token.
@@ -344,7 +344,7 @@ a new attempt and captures a new complete snapshot; it never resumes across snap
 Only sealed parts with verified tenant, current field policy and matching hashes may be emitted.
 
 The qualified transfer maxima are 1 GiB/source, 1 MiB/record, 256 fields, depth 32,
-500 rows/batch, 1000 errors, 30 seconds and 128 MiB. Time/memory failure rolls back the
+500 rows/batch, 1000 errors, 30 seconds and a default 128 MiB total process budget (host configurable up to 1024 MiB). Time/memory failure rolls back the
 current transactional batch and preserves its checkpoint. Cancellation is checked around
 batch boundaries. A single source/target call is not preemptible; worker timeout and process
 memory limits remain host backstops. Database rollback cannot undo network effects;
@@ -435,7 +435,7 @@ requires PostgreSQL `*_test` after isolation preflight; never count a missing/sk
 The API has no package `test:pg` script: its declared PG lane is the root Pest configuration
 restricted to `packages/operations/tests/Feature --group=pg`, with explicit `PGSQL_*` test settings.
 Several earlier PG proofs are untagged and require those settings during the full API suite too.
-Transfer additionally provides `composer --working-dir=packages/transfer test:pg`.
+Transfer additionally provides `composer --working-dir=packages/import-export test:pg`.
 Real principal/workspace membership isolation is verified in the owning tenancy suite.
 From the monorepo root, `tests/Feature/OperationContractTest.php` covers real
 routes and exposed tools, `tests/Arch/ApiContractTest.php` guards the one-authority

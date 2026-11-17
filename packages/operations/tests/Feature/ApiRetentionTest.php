@@ -11,15 +11,13 @@ use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
-use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Operations\Bulk\Internal\BulkRetention;
 use CoreX\Operations\Cost\Contracts\BudgetReservation;
 use CoreX\Operations\Cost\Data\BudgetScope;
 use CoreX\Operations\Cost\Data\EstimatedCost;
 use CoreX\Operations\Cost\Internal\BudgetRetention;
 use CoreX\Operations\Cost\Internal\SqlOperationBudget;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Laravel\Commands\PruneApiOperations;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Tests\TestCase;
@@ -32,6 +30,8 @@ use Illuminate\Database\Connection;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use Packman\Schema\Contracts\Migration\SchemaSets;
 use PHPUnit\Framework\Attributes\Group;
 
 final class ApiRetentionTest extends TestCase
@@ -371,10 +371,10 @@ final class ApiRetentionTest extends TestCase
 
     private function migrate(string $directory): void
     {
-        $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(ApiSchemaConnections::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
-        $this->migrateSchemaSets(["axiomasoft/corex-operations:{$directory}"], $directory === 'budget' ? null : resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(["axiomasoft/corex-operations:{$directory}"], $directory === 'budget' ? null : resolve(ApiSchemaConnections::class)->tenant()->getName());
     }
 
     private function configure(string $name, string $driver, string $database): void
@@ -396,7 +396,7 @@ final class ApiRetentionTest extends TestCase
         string $tenantDriver,
         string $tenantDatabase,
     ): void {
-        $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(ApiSchemaConnections::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [

@@ -8,7 +8,6 @@ use Closure;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Data\SecretRef;
-use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
@@ -23,6 +22,7 @@ use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Internal\DefaultOperationInvoker;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Connection;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Psr\Clock\ClockInterface;
 
 /** Test composition using the engine's production invocation and budget implementations. */

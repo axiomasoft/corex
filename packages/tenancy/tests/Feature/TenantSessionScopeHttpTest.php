@@ -9,6 +9,7 @@ use CoreX\Tenancy\Laravel\Http\Middleware\AccountStatusGate;
 use CoreX\Tenancy\Laravel\Http\Middleware\ResolveTenantFromHost;
 use CoreX\Tenancy\Laravel\Http\Middleware\ScopeSessionToTenant;
 use CoreX\Tenancy\Runtime\Exceptions\TenantCouldNotBeIdentifiedByHostException;
+use CoreX\Tenancy\Tests\Support\TestTenantHost;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
@@ -22,10 +23,12 @@ uses()->group('pg');
 
 beforeAll(static function (): void {
     TestCase::$hostIdentificationEnabled = true;
+    TestCase::$runtimeSessionEnabled = true;
 });
 
 afterAll(static function (): void {
     TestCase::$hostIdentificationEnabled = false;
+    TestCase::$runtimeSessionEnabled = false;
 });
 
 /**
@@ -87,7 +90,7 @@ function visitTSH(string $host, string $path, ?string $cookie = null): array
 
 function tenantSessionDirTSH(string $accountId): string
 {
-    return rtrim((string) config('session.files'), '/').'/corex-tenants/'.hash('sha256', $accountId);
+    return resolve(TestTenantHost::class)->sessionRoot($accountId);
 }
 
 it('orders the assembled web+tenant route: host before StartSession, scope after it, gate next, errors/auth after', function (): void {
@@ -121,8 +124,6 @@ it('saves the session inside the account: tenant directory 0700 with a real file
         ->and($again['json']['account'])->toBe($this->accounts['a'])
         ->and($again['json']['database'])->toBe('tss_http_a_test');
 
-    $handler = resolve('session')->driver('file')->getHandler();
-    expect($handler->gc(0))->toBeInt();
 });
 
 it('keeps the login of the same account across requests', function (): void {

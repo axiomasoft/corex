@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Tests\Support;
 
-use CoreX\Context\Data\TenantContext;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\Api;
-use CoreX\Modules\Data\CompiledModule;
-use CoreX\Modules\Data\CompiledRegistry;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Modules\Internal\Compiler\RegistryCompiler;
+use Packman\Context\Contracts\ContextScopeInterface;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Compiler\CompiledModule;
+use Packman\Modules\Data\Compiler\CompiledRegistry;
+use Packman\Modules\Data\Extenders\Api;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Modules\Internal\Compiler\RegistryCompiler;
 
 /** Selected P3–P6 archive cohort contributions for CONTRIB qualification. */
 final class ArchiveToolModule implements ModuleRegistry
@@ -106,12 +106,12 @@ final class ArchiveToolModule implements ModuleRegistry
         return $this->all()[0];
     }
 
-    public function active(TenantContext $ctx): array
+    public function active(ContextScopeInterface $ctx): array
     {
         return $this->enabled ? $this->all() : [];
     }
 
-    public function isActive(string $name, TenantContext $ctx): bool
+    public function isActive(string $name, ContextScopeInterface $ctx): bool
     {
         $this->visitedAccounts[] = $ctx->account->id;
 

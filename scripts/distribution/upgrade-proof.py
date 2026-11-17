@@ -18,6 +18,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import quote
 
+# Also support the test harness loading this script by file path.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from ecosystem_repositories import snapshot_repositories
+
 ROOT = Path(__file__).resolve().parents[2]
 BASELINES_PATH = ROOT / "build/distribution/release-baselines.json"
 RECEIPT_PATH = ROOT / "build/distribution/upgrade-receipt.json"
@@ -325,7 +329,7 @@ def fail_command(cell: str, completed: subprocess.CompletedProcess[str]) -> None
 def write_consumer(consumer: Path, packages: dict[str, str], repository: Path, candidate: Path | None) -> None:
     composer = load_json(consumer / "composer.json")
     require = dict(composer.get("require", {}))
-    require["laravel/framework"] = "^12.0"
+    require["laravel/framework"] = "^13.0" if candidate is not None else "^12.0"
     require.update(packages)
     composer["require"] = dict(sorted(require.items()))
     repositories = []
@@ -333,7 +337,8 @@ def write_consumer(consumer: Path, packages: dict[str, str], repository: Path, c
         repositories.append({"type": "composer", "url": str(candidate)})
     repositories.extend([
         {"type": "composer", "url": str(repository)},
-        {"type": "composer", "url": "https://repo.packagist.org", "exclude": ["corex/*", "axioma-studio/*"]},
+        *snapshot_repositories(ROOT),
+        {"type": "composer", "url": "https://repo.packagist.org", "exclude": ["axiomasoft/corex", "axiomasoft/corex-*", "corex/*", "axioma-studio/*"]},
         {"packagist.org": False},
     ])
     composer["repositories"] = repositories

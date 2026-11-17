@@ -6,9 +6,9 @@ namespace CoreX\Workflow;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Modules\Contracts\ModuleDefinition;
-use CoreX\Modules\Data\ModuleManifest;
 use Override;
+use Packman\Modules\Contracts\Definition\ModuleDefinition;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class WorkflowModule extends ModuleDefinition

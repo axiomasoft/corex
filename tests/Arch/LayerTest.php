@@ -144,10 +144,10 @@ test('foundation packages carry no flex product literals', function () use ($fou
     // Whole-file allowance, by filename, for history that must not be rewritten.
     $allowedFile = [
         // CHANGELOG entries record the `flex/modules` → `axiomasoft/corex` and
-        // `flex:modules:*` → `corex:modules:*` renames themselves (P2.0/P3.3).
+        // `flex:modules:*` → `modules:*` renames themselves (P2.0/P3.3).
         // Scrubbing the old names would make the changelog false.
         'CHANGELOG.md',
-        'corex-modules-CHANGELOG.md',
+        'packman-modules-CHANGELOG.md',
     ];
 
     $offenders = [];

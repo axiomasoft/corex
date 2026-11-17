@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Golden\Support;
 
-use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Database\Contracts\SchemaSets;
-use CoreX\Database\Data\SchemaSet;
-use CoreX\Database\Enums\SchemaScope;
-use CoreX\Database\Internal\TaggedSchemaSets;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use Packman\Schema\Contracts\Migration\SchemaSets;
+use Packman\Schema\Data\Migration\SchemaSet;
+use Packman\Schema\Enums\SchemaScope;
 use RuntimeException;
 
 /**
@@ -37,7 +36,7 @@ trait SchemaEnvironment
             'tenant' => ['connection' => 'schema_golden', 'driver' => $driver, 'database' => $config['database']],
             'budget' => ['connection' => 'schema_budget', 'driver' => $driver, 'database' => $config['database']],
         ]]);
-        app()->forgetInstance(ApiSchemaRegistrar::class);
+        app()->forgetInstance(ApiSchemaConnections::class);
         app()->forgetInstance(SchemaSets::class);
         app()->forgetInstance(SchemaMigrator::class);
 
@@ -82,7 +81,7 @@ trait SchemaEnvironment
     public function useSchemaSelection(array $selection): void
     {
         $provider = new SchemaSelectionProvider($selection);
-        app()->instance(SchemaSets::class, new TaggedSchemaSets([$provider]));
+        app()->instance(SchemaSets::class, $provider);
         app()->forgetInstance(SchemaMigrator::class);
     }
 

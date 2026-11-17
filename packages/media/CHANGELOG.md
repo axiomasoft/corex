@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — Vaulter byte ownership
+
+- Breaking: originals and conversions use Vaulter `BlobStore` and `BlobPins`; CoreX owns references and never physically deletes bytes. Pins and reference publication/retirement share one `VaulterDatabase` transaction and exact connection.
+- Replace private object keys with opaque blob ids in the unreleased schema baseline. Failed commit/pin/publication rolls back owner metadata; purge releases references for Vaulter GC.
+- Conversion and purge coordination DTOs are private implementation details. Add public `readConversion()` with current parent authorization and profile checks. Recover expired claims using a new fencing epoch, and supersede work for obsolete driver profiles. Public media failures move from Internal to Exceptions.
+
+## Unreleased — Packman runtime
+
+- Breaking: module declarations and schema registrations use Packman contracts directly; module lifecycle and schema execution are owned by Packman.
+
 ## Unreleased — Laravel 13 platform (P09.9, D132)
 
 - Require Laravel 13 and PHP 8.4+; support PHP 8.4–8.5. Laravel 12 support is removed. Testbench uses the Laravel 13 family; package versions and runtime contracts are unchanged.
@@ -15,7 +25,7 @@
 
 ## Unreleased — thin providers and registrars (P05.2)
 
-- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `packman:schema:migrate`; migration publishing is removed.
 
 - `MediaServiceProvider` delegates to `MediaBindingsRegistrar`; the thumbnail driver is built by `GdThumbnailDriverFactory` from the current options.
 

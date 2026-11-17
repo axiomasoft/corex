@@ -8,7 +8,7 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\ProvisionParams;
 use CoreX\Tenancy\Account\Laravel\AccountTemplateSnapshot;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
-use CoreX\Tenancy\Provisioning\Contracts\TemplateDatabaseCloner;
+use CoreX\Tenancy\Provisioning\Contracts\AccountResources;
 use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks as TemplateIntegrityVerifier;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,7 +16,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-/** Synchronous, idempotent golden-template clone; never runs migrations or seeders. */
+/** Delegates synchronous, idempotent materialization to the physical owner. */
 final class CreateDatabaseFromTemplate implements ShouldQueue
 {
     use Dispatchable;
@@ -32,8 +32,8 @@ final class CreateDatabaseFromTemplate implements ShouldQueue
     public function handle(
         TemplateIntegrityVerifier $templateIntegrityVerifier,
         TenancyOptions $options,
-        TemplateDatabaseCloner $manager,
-    ): bool {
+        AccountResources $resources,
+    ): true {
         $snapshot = AccountTemplateSnapshot::capture(account: $this->account, centralConnection: $options->centralConnection);
 
         $templateIntegrityVerifier->verifyCurrent(
@@ -41,14 +41,14 @@ final class CreateDatabaseFromTemplate implements ShouldQueue
             clusterId: $snapshot->clusterId,
         );
 
-        $name = $snapshot->databaseName;
-
-        if ($manager->databaseExists($name)) {
+        if ($resources->exists($this->account)) {
             $templateIntegrityVerifier->verifyAccount($snapshot);
 
             return true;
         }
 
-        return $manager->createForAccount($this->account);
+        $resources->provision($this->account, $this->params);
+
+        return true;
     }
 }

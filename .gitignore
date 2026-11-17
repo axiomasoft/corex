@@ -20,6 +20,7 @@ __pycache__/
 /.agents/
 /.claude/
 /.codex/
+**/.codex/
 /.cursor/
 **/.cursor/
 /.grok/

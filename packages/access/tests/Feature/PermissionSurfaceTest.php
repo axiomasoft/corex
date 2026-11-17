@@ -9,13 +9,13 @@ use CoreX\Access\Matrix\Internal\ActiveEntityFilter;
 use CoreX\Access\Tests\Stubs\FakeModuleRegistry;
 use CoreX\Access\Tests\Stubs\Project;
 use CoreX\Context\Internal\SingleAccountResolver;
-use CoreX\Modules\Data\EntityDefinition;
-use CoreX\Modules\Data\Permissions;
-use CoreX\Modules\Enums\Capability;
-use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Packman\Modules\Data\Entities\EntityDefinition;
+use Packman\Modules\Data\Extenders\Permissions;
+use Packman\Modules\Enums\Entities\Capability;
+use Packman\Modules\Testing\ArrayEntityRegistry;
 
 function makeSurface(ArrayEntityRegistry $registry, FakeModuleRegistry $modules): PermissionSurface
 {

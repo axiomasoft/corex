@@ -9,7 +9,7 @@ run() {
         echo "Unknown package: $dir" >&2
         return 2
     fi
-    composer --working-dir="$dir" update --no-interaction --no-progress --quiet || result=$?
+    python3 scripts/composer-with-snapshots.py --working-dir="$dir" update --no-interaction --no-progress --quiet || result=$?
     (( result == 0 )) || return "$result"
     vendor/bin/composer-dependency-analyser \
         --composer-json="$dir/composer.json" \

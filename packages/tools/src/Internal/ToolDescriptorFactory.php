@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Tools\Internal;
 
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Modules\Data\Api;
 use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
 use CoreX\Tools\Data\ToolDescriptor;
 use LogicException;
+use Packman\Modules\Data\Extenders\Api;
 
 final class ToolDescriptorFactory
 {

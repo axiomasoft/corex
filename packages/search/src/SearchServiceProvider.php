@@ -7,7 +7,6 @@ namespace CoreX\Search;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
-use CoreX\Database\Contracts\SchemaSetProvider;
 use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Search\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Search\Internal\SearchManager;
@@ -19,6 +18,7 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Packman\Schema\Contracts\Migration\SchemaSetProvider;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class SearchServiceProvider extends ServiceProvider

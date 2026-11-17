@@ -4,16 +4,6 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\TenantContext;
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Modules\Internal\Compiler\RegistryCompiler;
-use CoreX\Modules\Internal\Lifecycle\DatabaseModuleStateReader;
-use CoreX\Modules\Internal\Registry\CompiledModuleRegistry;
-use CoreX\Modules\Internal\Registry\RepositoryModuleRegistryCache;
-use CoreX\Modules\Internal\Settings\DefaultSettingDefinition;
-use CoreX\Modules\Internal\Support\ModulesOptions;
-use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Settings\Contracts\SettingDefaultsProvider;
 use CoreX\Settings\Contracts\SettingsRepository;
 use CoreX\Settings\Data\SettingsScope;
 use CoreX\Settings\Events\SettingChanged;
@@ -27,6 +17,16 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Modules\Internal\Compiler\RegistryCompiler;
+use Packman\Modules\Internal\Lifecycle\DatabaseModuleStateReader;
+use Packman\Modules\Internal\Registry\CompiledModuleRegistry;
+use Packman\Modules\Internal\Registry\RepositoryModuleRegistryCache;
+use Packman\Modules\Internal\Settings\DefaultSettingDefinition;
+use Packman\Modules\Internal\Support\ModulesOptions;
+use Packman\Modules\ModulesServiceProvider;
+use Packman\Settings\Contracts\SettingDefaultsProviderInterface as SettingDefaultsProvider;
 
 uses()->group('pg');
 
@@ -241,7 +241,7 @@ it('resolves a manifest-declared DefaultSettingDefinition through the container-
             stateReader: app()->make(DatabaseModuleStateReader::class, ['connection' => SETTINGS_TEST_CONNECTION]),
             cache: new RepositoryModuleRegistryCache(
                 Cache::store(),
-                ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'corex.modules']]),
+                ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'modules']]),
             ),
             versionResolver: static fn (TenantContext $ctx): int => 0,
         ));

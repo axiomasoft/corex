@@ -11,7 +11,13 @@ if (! is_array($lock) || ! is_array($lock['packages'] ?? null) || ! is_array($lo
     exit(2);
 }
 
-$tools = ['phpstan/phpstan', 'phpstan/phpstan-strict-rules', 'larastan/larastan'];
+$tools = json_decode((string) file_get_contents(__DIR__.'/composer-toolchain.json'), true, flags: JSON_THROW_ON_ERROR);
+
+if (! is_array($tools) || ! array_is_list($tools) || $tools === []) {
+    fwrite(STDERR, "Invalid reviewed Composer toolchain inventory\n");
+    exit(2);
+}
+
 $versions = [];
 foreach (array_merge($lock['packages'], $lock['packages-dev']) as $package) {
     if (! is_array($package) || ! is_string($package['name'] ?? null) || ! is_string($package['version'] ?? null)) {
@@ -24,6 +30,11 @@ foreach (array_merge($lock['packages'], $lock['packages-dev']) as $package) {
 $command = ['composer', 'update', '--prefer-dist', '--no-interaction', '--no-progress'];
 
 foreach ($tools as $tool) {
+    if (! is_string($tool) || $tool === '') {
+        fwrite(STDERR, "Invalid reviewed Composer toolchain identity\n");
+        exit(2);
+    }
+
     if (! isset($versions[$tool])) {
         fwrite(STDERR, "CI toolchain missing from composer.lock: {$tool}\n");
         exit(2);

@@ -27,11 +27,11 @@ use CoreX\Intl\Locale\Internal\RequestLocaleScope;
 use CoreX\Intl\Locale\Laravel\LocalePortBindings;
 use CoreX\Intl\Translation\Contracts\TranslationReader;
 use CoreX\Intl\Translation\Internal\LaravelTranslationReader;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 use Psr\Clock\ClockInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]

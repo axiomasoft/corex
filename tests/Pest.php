@@ -12,7 +12,7 @@ uses(TestCase::class, RefreshDatabase::class)->in('Feature');
 uses(TestCase::class)->in('Unit');
 uses(CoreXTestCase::class)->in('../packages/core/tests/Unit', '../packages/core/tests/Storage', '../packages/core/tests/Views', '../packages/core/tests/Feature', '../packages/core/tests/Pg');
 uses(TestCase::class)->in('../packages/core/tests/Modules');
-uses(CoreX\TasksWorkflow\Tests\TestCase::class, RefreshDatabase::class)->in('../packages/tasks-workflow/tests/Feature');
+uses(CoreX\RecurringTasks\Tests\TestCase::class, RefreshDatabase::class)->in('../packages/recurring-tasks/tests/Feature');
 uses(CoreX\Intl\Tests\TestCase::class, RefreshDatabase::class)->in('../packages/intl/tests/Locale', '../packages/intl/tests/Money', '../packages/intl/tests/Reference');
 uses(PgTestCase::class)->group('pg')->in('../packages/intl/tests/Pg');
 

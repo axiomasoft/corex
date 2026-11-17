@@ -7,13 +7,8 @@ namespace CoreX\Tools\Tests\Feature;
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
 use CoreX\Invocation\Data\InvocationMetadata;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\Api;
-use CoreX\Modules\Data\ModuleManifest;
-use CoreX\Modules\Internal\Compiler\RegistryCompiler;
-use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
+use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Operations\Testing\CatalogueModuleFixture;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
@@ -28,16 +23,21 @@ use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\Tests\Support\ToolGuardFixture;
 use CoreX\Tools\Tests\Support\ToolPolicyFixture;
 use CoreX\Tools\Tests\TestCase;
-use CoreX\Tools\ToolServiceProvider;
+use CoreX\Tools\ToolsServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Extenders\Api;
+use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Modules\Internal\Compiler\RegistryCompiler;
+use Packman\Modules\ModulesServiceProvider;
 
 final class ToolGuardConcurrencyTest extends TestCase
 {
     protected function getPackageProviders($app): array
     {
-        return [ApiServiceProvider::class, ToolServiceProvider::class, CoreServiceProvider::class, ModulesServiceProvider::class];
+        return [OperationsServiceProvider::class, ToolsServiceProvider::class, CoreServiceProvider::class, ModulesServiceProvider::class];
     }
 
     protected function setUp(): void

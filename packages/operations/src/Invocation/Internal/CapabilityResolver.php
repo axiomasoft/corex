@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Operations\Invocation\Internal;
 
 use CoreX\Invocation\Contracts\RequestContext;
-use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
@@ -18,6 +17,7 @@ use CoreX\Operations\Versioning\Contracts\ApiProfiles as ApiProfileFactory;
 use CoreX\Operations\Versioning\Data\ApiProfile;
 use CoreX\Operations\Versioning\Data\EffectiveCapability;
 use Illuminate\Http\Request;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 /** Live capability view. Payload tenant, workspace and actor fields are ignored. */
 final readonly class CapabilityResolver implements EffectiveCapabilities

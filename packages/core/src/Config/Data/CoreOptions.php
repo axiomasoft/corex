@@ -14,8 +14,8 @@ use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Departments\Contracts\DepartmentRepository;
 use CoreX\Features\Contracts\FeatureFlags;
 use CoreX\Messaging\Enums\PubSubDriver;
-use CoreX\Settings\Contracts\SettingDefaultsProvider;
 use CoreX\Settings\Contracts\SettingsRepository;
+use Packman\Settings\Contracts\SettingDefaultsProviderInterface as SettingDefaultsProvider;
 
 #[Api(since: '1.0')]
 final readonly class CoreOptions

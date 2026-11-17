@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Notifications\Digest\Internal;
 
 use CoreX\Notifications\Delivery\Data\RecipientReference;
+use CoreX\Notifications\Digest\Contracts\DigestBuilder;
+use CoreX\Notifications\Digest\Data\DigestWindow;
 use CoreX\Notifications\Inbox\Data\NotificationContext;
 use CoreX\Notifications\Preferences\Contracts\PreferenceRepository;
 use Illuminate\Database\ConnectionInterface;
@@ -18,6 +20,7 @@ final readonly class DigestWakeupHandler
         private ConnectionInterface $connection,
         private PreferenceRepository $preferences,
         private ClockInterface $clock,
+        private DigestBuilder $digests,
     ) {}
 
     public function __invoke(DigestTick $tick): void
@@ -59,6 +62,14 @@ final readonly class DigestWakeupHandler
                     $notificationIds[] = $item->id;
                 }
             }
+
+            // Freeze the next bounded batch atomically with this decision. A retry
+            // sees the terminal run and cannot create a second continuation.
+            $this->digests->build($context, new DigestWindow(
+                start: $tick->window->start,
+                end: $tick->window->end,
+                period: $tick->window->period,
+            ));
 
             if ($notificationIds === []) {
                 $this->connection->table('ntf_digest_runs')->where('id', $runId)->update(['state' => 'skipped']);

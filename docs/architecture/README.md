@@ -18,6 +18,7 @@
 | `data-ownership-policy.md` | Владение таблицами и исключения FK | Рядом со статьями DATA-* |
 | `message-policy.md` | Конверт, именование и версии сообщений | Рядом со статьями MSG-* |
 | `extension-policy.md` | Реестры и lifecycle расширений | Рядом со статьями EXT-* |
+| [ecosystem-dependencies.md](ecosystem-dependencies.md) | Зафиксированные внешние зависимости и установка development-снимков | Перед установкой и подготовкой CI |
 | `references.md` | Внешние референсы с конкретным механизмом | При обосновании заимствования |
 | `README.md` | Этот индекс и сводный реестр enforcement | Точка входа после доктрины |
 
@@ -27,8 +28,8 @@
 
 - Каталог `exceptions/` — именованные исключения из статей конституции; каждая запись несёт
   условие снятия.
-- `packages/transfer` — **тумбстоун** ренейма в `axiomasoft/corex-transfer` (D13, статья PKG-009): не
-  входит в тесты, статанализ, CI и split-зеркала.
+- `packages/import-export` — действующий `axiomasoft/corex-import-export`; историческая
+  статья PKG-009 о пустом каталоге отменена.
 
 ## Сводный реестр правил
 
@@ -49,8 +50,8 @@
 | PKG-005 | PKG | `composer package-graph-gate` → allowlist с валидацией guard'а | исполняется |
 | PKG-006 | PKG | `composer package-graph-gate` → R2 плюс ревью `Contracts/` bridge-пакета | исполняется |
 | PKG-007 | PKG | `composer test:arch` → «foundation packages carry no flex product literals» | исполняется |
-| PKG-008 | PKG | `composer test:packages` (цикл по 20 живым пакетам) | исполняется |
-| PKG-009 | PKG | нет — свойство проверяется отсутствием пути в `composer.json` и `phpstan.neon` | объявлено, фаза P1 |
+| PKG-008 | PKG | `composer test:packages` (пакеты и продукты с `phpunit.xml`) | исполняется |
+| PKG-009 | PKG | Историческая статья о пустом каталоге | отменена |
 | STR-002 | STR | `composer module-layout-gate`; ревью принадлежности use case | исполняется (структурная часть) |
 | STR-003 | STR | `composer module-layout-gate` → R0–R3 | исполняется, ratchet-baseline |
 | STR-004 | STR | нет — ревью | объявлено, фаза P1 |

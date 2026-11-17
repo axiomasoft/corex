@@ -4,9 +4,9 @@
 declare(strict_types=1);
 
 use AzGuard\AzGuardServiceProvider;
-use CoreX\Database\Contracts\SchemaSets;
-use CoreX\Operations\ApiServiceProvider;
+use CoreX\Operations\OperationsServiceProvider;
 use Orchestra\Testbench\Foundation\Application;
+use Packman\Schema\Contracts\Migration\SchemaSets;
 
 /**
  * Shipped schema S1–S9. Tokenization never executes a migration or connects to a database.
@@ -869,7 +869,7 @@ final class SchemaGate
     public static function manifest(string $root): array
     {
         require_once $root.'/vendor/autoload.php';
-        $providers = [AzGuardServiceProvider::class, ApiServiceProvider::class];
+        $providers = [AzGuardServiceProvider::class, OperationsServiceProvider::class];
         foreach (array_merge(self::files($root.'/packages/*/composer.json'), self::files($root.'/products/*/composer.json')) as $composer) {
             /** @var array{extra?: array{laravel?: array{providers?: list<class-string>}}} $data */
             $data = json_decode((string) file_get_contents($composer), true, flags: JSON_THROW_ON_ERROR);
@@ -896,12 +896,19 @@ final class SchemaGate
             'axiomasoft/corex-access-azguard' => '04', 'axiomasoft/corex-operations' => '05', 'axiomasoft/corex-webhooks' => '06',
             'axiomasoft/corex-panels' => '07', 'axiomasoft/corex-custom-fields' => '08', 'axiomasoft/corex-intl' => '09',
             'axiomasoft/corex-media' => '10', 'axiomasoft/corex-notifications' => '11', 'axiomasoft/corex-search' => '12',
-            'axiomasoft/corex-transfer' => '13', 'axiomasoft/corex-wakeup' => '14', 'axiomasoft/corex-workflow' => '15',
-            'axiomasoft/corex-tasks' => '16', 'axiomasoft/corex-tasks-workflow' => '17', 'flex/crm' => '50'];
+            'axiomasoft/corex-import-export' => '13', 'axiomasoft/corex-scheduler' => '14', 'axiomasoft/corex-workflow' => '15',
+            'axiomasoft/corex-tasks' => '16', 'axiomasoft/corex-recurring-tasks' => '17', 'flex/crm' => '50'];
         $sets = [];
 
         try {
             foreach (self::sets($app)->all() as $set) {
+                // External packages own and validate their migrations. The CoreX gate
+                // checks only schemas shipped by this repository, even when a bridge
+                // registers an upstream provider in the same application.
+                if (str_starts_with($set->path, $root.'/vendor/') && ! isset($codes[$set->package])) {
+                    continue;
+                }
+
                 if (! isset($codes[$set->package]) || ! str_starts_with($set->path, $root.'/')) {
                     throw new RuntimeException('Unmapped schema package/path: '.$set->id());
                 }

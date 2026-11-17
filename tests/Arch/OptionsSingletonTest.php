@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Arch;
 
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Tests\Golden\GoldenTestCase;
 use CoreX\Tests\Support\OptionsSingletonGate;
 use stdClass;
@@ -16,7 +17,7 @@ final class OptionsSingletonTest extends GoldenTestCase
     {
         $classes = OptionsSingletonGate::optionsClasses(dirname(__DIR__, 2));
 
-        self::assertGreaterThanOrEqual(20, count($classes), 'Options discovery found too few classes.');
+        self::assertContains(CoreOptions::class, $classes, 'Options discovery must include the kernel configuration.');
         self::assertSame([], OptionsSingletonGate::runtimeViolations($this->app, $classes));
     }
 

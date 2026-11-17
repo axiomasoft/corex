@@ -1,13 +1,18 @@
 {
     "name": "axiomasoft/corex-media",
     "description": "Tenant-scoped private media lifecycle primitives for CoreX.",
-    "type": "corex-module",
+    "type": "packman-module",
     "license": "MIT",
     "require": {
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
         "laravel/framework": "^13.0",
-        "psr/clock": "^1.0"
+        "psr/clock": "^1.0",
+        "axiomasoft/packman": "^0.1@dev",
+        "axiomasoft/packman-modules": "^0.1@dev",
+        "axiomasoft/packman-schema": "^0.1@dev",
+        "axiomasoft/vaulter-core": "^1.0@dev",
+        "axiomasoft/vaulter-media": "^1.0@dev"
     },
     "require-dev": {
         "ext-pdo": "*",
@@ -34,7 +39,6 @@
     "extra": {
         "corex": {
             "schema-version": 1,
-            "module": "CoreX\\Media\\MediaModule",
             "package-type": "capability",
             "stability": "stable"
         },
@@ -45,6 +49,9 @@
         },
         "branch-alias": {
             "dev-main": "1.0.x-dev"
+        },
+        "packman": {
+            "module": "CoreX\\Media\\MediaModule"
         }
     },
     "repositories": [

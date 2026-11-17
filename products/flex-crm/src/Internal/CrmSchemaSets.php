@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Internal;
 
-use CoreX\Database\Contracts\SchemaSetProvider;
-use CoreX\Database\Data\SchemaSet;
-use CoreX\Database\Enums\SchemaLifecycle;
-use CoreX\Database\Enums\SchemaScope;
+use Packman\Schema\Contracts\Migration\SchemaSetProvider;
+use Packman\Schema\Data\Migration\SchemaSet;
+use Packman\Schema\Enums\SchemaLifecycle;
+use Packman\Schema\Enums\SchemaScope;
 
 /** @internal */
 final readonly class CrmSchemaSets implements SchemaSetProvider

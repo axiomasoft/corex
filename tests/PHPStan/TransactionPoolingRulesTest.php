@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\PHPStan;
 
-use CoreX\Modules\PHPStan\Rules\NoEvalRule;
-use CoreX\Modules\PHPStan\Rules\NoListenNotifyRule;
-use CoreX\Modules\PHPStan\Rules\NoSessionAdvisoryLockRule;
-use CoreX\Modules\PHPStan\Rules\NoSetWithoutLocalRule;
-use CoreX\Modules\PHPStan\Rules\NoSqlPrepareRule;
-use CoreX\Modules\PHPStan\Rules\NoTempTableRule;
+use Packman\Modules\PHPStan\Rules\Pooling\NoEvalRule;
+use Packman\Modules\PHPStan\Rules\Pooling\NoListenNotifyRule;
+use Packman\Modules\PHPStan\Rules\Pooling\NoSessionAdvisoryLockRule;
+use Packman\Modules\PHPStan\Rules\Pooling\NoSetWithoutLocalRule;
+use Packman\Modules\PHPStan\Rules\Pooling\NoSqlPrepareRule;
+use Packman\Modules\PHPStan\Rules\Pooling\NoTempTableRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 

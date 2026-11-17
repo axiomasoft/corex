@@ -1845,6 +1845,491 @@
             "foreign_keys": [],
             "checks": [],
             "triggers": []
+        },
+        "v_idempotency_keys": {
+            "columns": {
+                "actor_id": {
+                    "type": "character varying(191)",
+                    "nullable": true,
+                    "default": null
+                },
+                "actor_kind": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                },
+                "auth_scope_id": {
+                    "type": "character varying(191)",
+                    "nullable": true,
+                    "default": null
+                },
+                "auth_scope_kind": {
+                    "type": "character varying(32)",
+                    "nullable": true,
+                    "default": null
+                },
+                "codec_version": {
+                    "type": "smallint",
+                    "nullable": true,
+                    "default": null
+                },
+                "completed_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": false,
+                    "default": null
+                },
+                "expires_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": false,
+                    "default": null
+                },
+                "http_code": {
+                    "type": "smallint",
+                    "nullable": true,
+                    "default": null
+                },
+                "id": {
+                    "type": "character(26)",
+                    "nullable": false,
+                    "default": null
+                },
+                "idempotency_key": {
+                    "type": "character varying(344)",
+                    "nullable": false,
+                    "default": null
+                },
+                "operation": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "receipt_body": {
+                    "type": "json",
+                    "nullable": true,
+                    "default": null
+                },
+                "receipt_headers": {
+                    "type": "json",
+                    "nullable": true,
+                    "default": null
+                },
+                "receipt_kind": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "request_hash": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "resource_id": {
+                    "type": "character varying(191)",
+                    "nullable": true,
+                    "default": null
+                },
+                "resource_kind": {
+                    "type": "character varying(32)",
+                    "nullable": true,
+                    "default": null
+                },
+                "scope_digest": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_id": {
+                    "type": "character varying(191)",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_kind": {
+                    "type": "character varying(32)",
+                    "nullable": false,
+                    "default": null
+                },
+                "status": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                },
+                "tenant_id": {
+                    "type": "character varying(191)",
+                    "nullable": true,
+                    "default": null
+                },
+                "tenant_kind": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "v_idempotency_keys_expires_idx",
+                    "kind": "ix",
+                    "columns": [
+                        "expires_at"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_idempotency_keys_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_idempotency_keys_scope_unique",
+                    "kind": "uq",
+                    "columns": [
+                        "scope_digest"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
+        "v_outbox": {
+            "columns": {
+                "aggregate_id": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "aggregate_type": {
+                    "type": "character varying(32)",
+                    "nullable": true,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": false,
+                    "default": null
+                },
+                "event_id": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "external": {
+                    "type": "boolean",
+                    "nullable": false,
+                    "default": null
+                },
+                "outbox_seq": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "nextval('v_outbox_outbox_seq_seq'::regclass)"
+                },
+                "payload": {
+                    "type": "json",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_id": {
+                    "type": "character varying(191)",
+                    "nullable": true,
+                    "default": null
+                },
+                "scope_kind": {
+                    "type": "character varying(32)",
+                    "nullable": false,
+                    "default": null
+                },
+                "sequence": {
+                    "type": "bigint",
+                    "nullable": true,
+                    "default": null
+                },
+                "staged_at": {
+                    "type": "timestamp(6) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "tenant_id": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "type": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "v_outbox_created_idx",
+                    "kind": "ix",
+                    "columns": [
+                        "created_at"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_outbox_event_id_unique",
+                    "kind": "uq",
+                    "columns": [
+                        "event_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_outbox_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "outbox_seq"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_outbox_staged_idx",
+                    "kind": "ix",
+                    "columns": [
+                        "staged_at"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_outbox_tenant_id_index",
+                    "kind": "ix",
+                    "columns": [
+                        "tenant_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
+        "v_outbox_consumers": {
+            "columns": {
+                "activation_seq": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "consumer_id": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "delivery_class": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                },
+                "gaps": {
+                    "type": "json",
+                    "nullable": false,
+                    "default": null
+                },
+                "lease_expires_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "lease_generation": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'0'::bigint"
+                },
+                "lease_owner": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "paused_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "reconciled_through_seq": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "state": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "v_outbox_consumers_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "consumer_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
+        "v_outbox_deliveries": {
+            "columns": {
+                "attempts": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "0"
+                },
+                "consumer_id": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "continuation": {
+                    "type": "character varying(191)",
+                    "nullable": true,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "done_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "event_id": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "last_error": {
+                    "type": "text",
+                    "nullable": true,
+                    "default": null
+                },
+                "lease_expires_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "lease_generation": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'0'::bigint"
+                },
+                "lease_owner": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "next_attempt_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": false,
+                    "default": null
+                },
+                "outbox_seq": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "state": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "v_outbox_deliveries_due_idx",
+                    "kind": "ix",
+                    "columns": [
+                        "consumer_id",
+                        "state",
+                        "next_attempt_at"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_outbox_deliveries_lease_idx",
+                    "kind": "ix",
+                    "columns": [
+                        "state",
+                        "lease_expires_at"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_outbox_deliveries_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "event_id",
+                        "consumer_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_outbox_deliveries_seq_idx",
+                    "kind": "ix",
+                    "columns": [
+                        "outbox_seq"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
         }
     },
     "enum_types": []

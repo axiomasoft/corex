@@ -8,7 +8,6 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\RuntimeConfigCheck;
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Notifications\Delivery\Contracts\NotificationChannelDriver;
 use CoreX\Notifications\Delivery\Contracts\RecipientResolver;
 use CoreX\Notifications\Delivery\Internal\ChannelDrivers;
@@ -31,6 +30,7 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 use Psr\Clock\ClockInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]

@@ -769,6 +769,30 @@
             "retryable": false
         },
         {
+            "category": "conflict",
+            "code": "recurring-tasks.materialization_conflict",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-recurring-tasks",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "recurring-tasks.stale_materialization",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-recurring-tasks",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unsupported",
+            "code": "recurring-tasks.unsupported_materialization",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-recurring-tasks",
+            "path": null,
+            "retryable": false
+        },
+        {
             "category": "internal",
             "code": "search.invalid_search_configuration",
             "detail_keys": [],
@@ -805,30 +829,6 @@
             "code": "tasks.tasks_module_disabled",
             "detail_keys": [],
             "owner": "axiomasoft/corex-tasks",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "conflict",
-            "code": "tasks-workflow.materialization_conflict",
-            "detail_keys": [],
-            "owner": "axiomasoft/corex-tasks-workflow",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "conflict",
-            "code": "tasks-workflow.stale_materialization",
-            "detail_keys": [],
-            "owner": "axiomasoft/corex-tasks-workflow",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "unsupported",
-            "code": "tasks-workflow.unsupported_materialization",
-            "detail_keys": [],
-            "owner": "axiomasoft/corex-tasks-workflow",
             "path": null,
             "retryable": false
         },
@@ -1187,7 +1187,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "axiomasoft/corex-operations"
+                    "x-packman-module": "axiomasoft/corex-operations"
                 }
             },
             "/bulk-operations/{id}": {
@@ -1217,7 +1217,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "axiomasoft/corex-operations"
+                    "x-packman-module": "axiomasoft/corex-operations"
                 }
             },
             "/bulk-operations/{id}/cancel": {
@@ -1247,7 +1247,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "axiomasoft/corex-operations"
+                    "x-packman-module": "axiomasoft/corex-operations"
                 }
             },
             "/bulk-operations/{id}/failures": {
@@ -1277,7 +1277,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "axiomasoft/corex-operations"
+                    "x-packman-module": "axiomasoft/corex-operations"
                 }
             },
             "/bulk-operations/{id}/result": {
@@ -1307,7 +1307,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "axiomasoft/corex-operations"
+                    "x-packman-module": "axiomasoft/corex-operations"
                 }
             },
             "/webhook-deliveries": {
@@ -1337,7 +1337,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "axiomasoft/corex-operations"
+                    "x-packman-module": "axiomasoft/corex-operations"
                 }
             },
             "/webhook-deliveries/replay": {
@@ -1367,7 +1367,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "axiomasoft/corex-operations"
+                    "x-packman-module": "axiomasoft/corex-operations"
                 }
             },
             "/webhook-deliveries/{id}": {
@@ -1397,7 +1397,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "axiomasoft/corex-operations"
+                    "x-packman-module": "axiomasoft/corex-operations"
                 }
             },
             "/webhook-deliveries/{id}/attempts": {
@@ -1427,7 +1427,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "axiomasoft/corex-operations"
+                    "x-packman-module": "axiomasoft/corex-operations"
                 }
             },
             "/webhook-deliveries/{id}/replay": {
@@ -1457,7 +1457,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "axiomasoft/corex-operations"
+                    "x-packman-module": "axiomasoft/corex-operations"
                 }
             },
             "/webhook-subscriptions": {
@@ -1487,7 +1487,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "axiomasoft/corex-operations"
+                    "x-packman-module": "axiomasoft/corex-operations"
                 },
                 "post": {
                     "operationId": "webhook-subscriptions.create",
@@ -1515,7 +1515,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "axiomasoft/corex-operations"
+                    "x-packman-module": "axiomasoft/corex-operations"
                 }
             },
             "/webhook-subscriptions/{id}": {
@@ -1545,7 +1545,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "axiomasoft/corex-operations"
+                    "x-packman-module": "axiomasoft/corex-operations"
                 }
             },
             "/webhook-subscriptions/{id}/disable": {
@@ -1575,7 +1575,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "axiomasoft/corex-operations"
+                    "x-packman-module": "axiomasoft/corex-operations"
                 }
             }
         },

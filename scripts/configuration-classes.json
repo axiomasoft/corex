@@ -2,16 +2,7 @@
     "schema": "configuration-classes/v1",
     "note": "Carried registry columns (owner, secret, mode, reloadable, validation, deprecated_aliases, notes) per key. Generated columns: key set, type, default (config files) and typed_options_field (Options reflection). Edit here, then run scripts/configuration-reference.php --write.",
     "options": {
-        "corex-access-azguard": [
-            {
-                "class": "CoreX\\AccessAzguard\\Internal\\AccessAzguardOptions"
-            }
-        ],
         "corex": [
-            {
-                "class": "CoreX\\Modules\\Internal\\Support\\ModulesOptions",
-                "prefix": "modules"
-            },
             {
                 "class": "CoreX\\Config\\Data\\CoreOptions"
             }
@@ -54,11 +45,6 @@
                 "class": "CoreX\\Operations\\Laravel\\Support\\ApiOptions"
             }
         ],
-        "corex-panels": [
-            {
-                "class": "CoreX\\Panels\\Internal\\PanelsOptions"
-            }
-        ],
         "corex-search": [
             {
                 "class": "CoreX\\Search\\Internal\\SearchOptions"
@@ -74,24 +60,19 @@
                 "class": "CoreX\\SearchMeilisearch\\Internal\\MeilisearchOptions"
             }
         ],
-        "corex-tasks-workflow": [
-            {
-                "class": "CoreX\\TasksWorkflow\\Internal\\TasksWorkflowOptions"
-            }
-        ],
         "corex-tenancy": [
             {
                 "class": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions"
             }
         ],
-        "corex-transfer": [
+        "corex-import-export": [
             {
-                "class": "CoreX\\Transfer\\Internal\\TransferOptions"
+                "class": "CoreX\\ImportExport\\Internal\\ImportExportOptions"
             }
         ],
-        "corex-wakeup": [
+        "corex-scheduler": [
             {
-                "class": "CoreX\\Wakeup\\Internal\\WakeupOptions"
+                "class": "CoreX\\Scheduler\\Internal\\SchedulerOptions"
             }
         ],
         "corex-webhooks": [
@@ -103,45 +84,14 @@
             {
                 "class": "CoreX\\Workflow\\Internal\\WorkflowOptions"
             }
+        ],
+        "corex-recurring-tasks": [
+            {
+                "class": "CoreX\\RecurringTasks\\Internal\\RecurringTasksOptions"
+            }
         ]
     },
     "rows": {
-        "corex-access-azguard.azguard_pins.column_names.morph_type": {
-            "owner": "axiomasoft/corex-access-azguard",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "boot",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex-access-azguard.azguard_pins.models.role": {
-            "owner": "axiomasoft/corex-access-azguard",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "boot",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex-access-azguard.azguard_pins.table_names.roles": {
-            "owner": "axiomasoft/corex-access-azguard",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "boot",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex-access-azguard.bind_permission_layer": {
-            "owner": "axiomasoft/corex-access-azguard",
-            "secret": "no",
-            "mode": "deployment",
-            "reloadable": "no",
-            "validation": "boot",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
         "corex-access.cache.store": {
             "owner": "axiomasoft/corex-access",
             "secret": "no",
@@ -835,15 +785,6 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-panels.provider_tag": {
-            "owner": "axiomasoft/corex-panels",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
         "corex-search-intl.enabled": {
             "owner": "axiomasoft/corex-search-intl",
             "secret": "no",
@@ -916,8 +857,8 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-tasks-workflow.completion_capture.definition_ref": {
-            "owner": "axiomasoft/corex-tasks-workflow",
+        "corex-recurring-tasks.completion_capture.definition_ref": {
+            "owner": "axiomasoft/corex-recurring-tasks",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
@@ -925,8 +866,8 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-tasks-workflow.completion_capture.enabled": {
-            "owner": "axiomasoft/corex-tasks-workflow",
+        "corex-recurring-tasks.completion_capture.enabled": {
+            "owner": "axiomasoft/corex-recurring-tasks",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
@@ -934,8 +875,8 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-tasks-workflow.completion_capture.version_ref": {
-            "owner": "axiomasoft/corex-tasks-workflow",
+        "corex-recurring-tasks.completion_capture.version_ref": {
+            "owner": "axiomasoft/corex-recurring-tasks",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
@@ -943,8 +884,8 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-tasks-workflow.wakeup.accept_legacy_unstamped": {
-            "owner": "axiomasoft/corex-tasks-workflow",
+        "corex-recurring-tasks.wakeup.accept_legacy_unstamped": {
+            "owner": "axiomasoft/corex-recurring-tasks",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
@@ -952,8 +893,8 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-tasks-workflow.wakeup.enabled": {
-            "owner": "axiomasoft/corex-tasks-workflow",
+        "corex-recurring-tasks.wakeup.enabled": {
+            "owner": "axiomasoft/corex-recurring-tasks",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
@@ -961,8 +902,8 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-tasks-workflow.wakeup.handler": {
-            "owner": "axiomasoft/corex-tasks-workflow",
+        "corex-recurring-tasks.wakeup.handler": {
+            "owner": "axiomasoft/corex-recurring-tasks",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
@@ -970,8 +911,8 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-tasks-workflow.wakeup.handler_kind": {
-            "owner": "axiomasoft/corex-tasks-workflow",
+        "corex-recurring-tasks.wakeup.handler_kind": {
+            "owner": "axiomasoft/corex-recurring-tasks",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
@@ -979,8 +920,8 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-tasks-workflow.wakeup.handler_version": {
-            "owner": "axiomasoft/corex-tasks-workflow",
+        "corex-recurring-tasks.wakeup.handler_version": {
+            "owner": "axiomasoft/corex-recurring-tasks",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
@@ -1015,8 +956,8 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-transfer.limits.batch_rows": {
-            "owner": "axiomasoft/corex-transfer",
+        "corex-import-export.limits.batch_rows": {
+            "owner": "axiomasoft/corex-import-export",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
@@ -1024,8 +965,8 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-transfer.limits.max_fields": {
-            "owner": "axiomasoft/corex-transfer",
+        "corex-import-export.limits.max_fields": {
+            "owner": "axiomasoft/corex-import-export",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
@@ -1033,8 +974,8 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-transfer.limits.max_record_bytes": {
-            "owner": "axiomasoft/corex-transfer",
+        "corex-import-export.limits.max_record_bytes": {
+            "owner": "axiomasoft/corex-import-export",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
@@ -1042,8 +983,8 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-wakeup.handlers": {
-            "owner": "axiomasoft/corex-wakeup",
+        "corex-scheduler.handlers": {
+            "owner": "axiomasoft/corex-scheduler",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
@@ -1051,8 +992,8 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-wakeup.lease_seconds": {
-            "owner": "axiomasoft/corex-wakeup",
+        "corex-scheduler.lease_seconds": {
+            "owner": "axiomasoft/corex-scheduler",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
@@ -1060,8 +1001,8 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-wakeup.max_attempts": {
-            "owner": "axiomasoft/corex-wakeup",
+        "corex-scheduler.max_attempts": {
+            "owner": "axiomasoft/corex-scheduler",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
@@ -1321,42 +1262,6 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex.modules.cache.prefix": {
-            "owner": "axiomasoft/corex",
-            "secret": "no",
-            "mode": "deployment",
-            "reloadable": "no",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex.modules.cache.store": {
-            "owner": "axiomasoft/corex",
-            "secret": "no",
-            "mode": "deployment",
-            "reloadable": "no",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex.modules.cache.ttl": {
-            "owner": "axiomasoft/corex",
-            "secret": "no",
-            "mode": "deployment",
-            "reloadable": "no",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex.modules.connection": {
-            "owner": "axiomasoft/corex",
-            "secret": "no",
-            "mode": "deployment",
-            "reloadable": "no",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
         "corex.pubsub.driver": {
             "owner": "axiomasoft/corex",
             "secret": "no",
@@ -1467,33 +1372,6 @@
         },
         "corex.views.connection": {
             "owner": "axiomasoft/corex",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex-tenancy.bootstrappers": {
-            "owner": "axiomasoft/corex-tenancy",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex-tenancy.cache_prefix": {
-            "owner": "axiomasoft/corex-tenancy",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex-tenancy.cache_stores": {
-            "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
@@ -1780,24 +1658,6 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-tenancy.template_integrity.manifests": {
-            "owner": "axiomasoft/corex-tenancy",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": "undeclared-read"
-        },
-        "corex-tenancy.template_integrity.trusted_keys": {
-            "owner": "axiomasoft/corex-tenancy",
-            "secret": "yes",
-            "mode": "secret",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": "undeclared-read"
-        },
         "corex-tenancy.trial_days": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
@@ -1815,6 +1675,15 @@
             "validation": "use-site",
             "deprecated_aliases": "",
             "notes": ""
+        },
+        "corex-import-export.limits.max_memory_mib": {
+            "owner": "axiomasoft/corex-import-export",
+            "secret": "no",
+            "mode": "deployment",
+            "reloadable": "no",
+            "validation": "1..1024 MiB at boot",
+            "deprecated_aliases": "",
+            "notes": "Total worker process budget; default 128 MiB. Process supervisor and PHP memory_limit remain host backstops."
         }
     },
     "external": {
@@ -1857,10 +1726,6 @@
         }
     },
     "options_field_overrides": {
-        "corex-access-azguard.azguard_pins.column_names.morph_type": "AccessAzguardOptions::$morphType",
-        "corex-access-azguard.azguard_pins.models.role": "AccessAzguardOptions::$roleModel",
-        "corex-access-azguard.azguard_pins.table_names.roles": "AccessAzguardOptions::$rolesTable",
-        "corex-access-azguard.bind_permission_layer": "AccessAzguardOptions::$bindPermissionLayer",
         "corex-custom-fields.definitions": "CustomFieldsOptions::$composition",
         "corex-custom-fields.drivers.ddl": "CustomFieldsOptions::$composition",
         "corex-custom-fields.drivers.eav": "CustomFieldsOptions::$composition",
@@ -1889,6 +1754,7 @@
         "corex-tenancy.oidc.impersonation.enabled": "TenancyOptions::$impersonation",
         "corex-tenancy.impersonation.profile": "TenancyOptions::$impersonation",
         "corex-tenancy.platform_domain": "TenancyOptions::$lifecycle",
-        "corex-tenancy.trial_days": "TenancyOptions::$lifecycle"
+        "corex-tenancy.trial_days": "TenancyOptions::$lifecycle",
+        "corex-import-export.limits.max_memory_mib": "ImportExportOptions::$limitsMaxMemoryMiB"
     }
 }

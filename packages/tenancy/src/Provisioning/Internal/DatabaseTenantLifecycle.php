@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Provisioning\Internal;
 
-use Closure;
 use CoreX\Context\Contracts\TenantDatabaseLifecycle;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Tenancy\Account\Events\AccountPurged;
 use CoreX\Tenancy\Account\Events\ExportReady;
+use CoreX\Tenancy\Provisioning\Contracts\AccountResources;
+use CoreX\Tenancy\Provisioning\Data\AccountArchive;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
@@ -16,38 +17,19 @@ use Illuminate\Support\Str;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
-/**
- * `export()`/`drop()` on the physical account database (B-11 §5.1/§7.3,
- * D13/AC-7, P2.12). `drop()` mirrors the `DROP DATABASE IF EXISTS` pattern
- * already used by {@see PendingPool::clearPending()}.
- *
- * The host supplies a writer that returns a durable archive path and size.
- * Every writer must supply a verifier binding readable bytes, size, content
- * digest and tenant ownership to a trusted durable archive manifest. Size
- * alone never authorizes ready or DROP, including local archives.
- */
+/** CoreX account export metadata; physical effects and archive integrity belong to AccountResources. */
 final readonly class DatabaseTenantLifecycle implements TenantDatabaseLifecycle
 {
-    /**
-     * @param  Closure(AccountRef, string):array{storage_path: string, size_bytes: int}|null  $writer
-     * @param  (Closure(string, int): bool)|null  $verifier
-     */
     public function __construct(
         private string $centralConnection,
         private ConnectionResolverInterface $connections,
         private ClockInterface $clock,
         private Dispatcher $events,
-        private ?Closure $writer = null,
-        private ?Closure $verifier = null,
+        private AccountResources $resources,
     ) {}
 
     public function export(AccountRef $account, string $kind): string
     {
-        if ($this->writer === null) {
-            throw new RuntimeException('No tenant export writer configured; refusing to create a ready export.');
-        }
-        $this->archiveVerifier();
-
         $exportId = (string) Str::uuid7();
 
         $this->db()->table('root_account_exports')->insert([
@@ -55,7 +37,7 @@ final readonly class DatabaseTenantLifecycle implements TenantDatabaseLifecycle
             'account_id' => $account->id,
             'kind' => $kind,
             'status' => 'pending',
-            'formats' => json_encode(['pg_dump', 'csv'], JSON_THROW_ON_ERROR),
+            'formats' => json_encode([], JSON_THROW_ON_ERROR),
             'purge_after' => $this->clock->now()->modify('+30 days'),
             'url_expires_at' => $this->clock->now()->modify('+14 days'),
             'created_at' => $this->clock->now(),
@@ -66,16 +48,16 @@ final readonly class DatabaseTenantLifecycle implements TenantDatabaseLifecycle
             ->where('id', $exportId)
             ->update(['status' => 'running', 'updated_at' => $this->clock->now()]);
 
-        $writer = $this->writer;
-        $result = $writer($account, $exportId);
-        $this->verifyArchive(path: $result['storage_path'], size: $result['size_bytes']);
+        $archive = $this->resources->export($account, $exportId, $kind);
+        $this->verifyArchive($account, $archive);
 
         $this->db()->table('root_account_exports')
             ->where('id', $exportId)
             ->update([
                 'status' => 'ready',
-                'storage_path' => $result['storage_path'],
-                'size_bytes' => $result['size_bytes'],
+                'formats' => json_encode($archive->formats, JSON_THROW_ON_ERROR),
+                'storage_path' => $archive->reference,
+                'size_bytes' => $archive->sizeBytes,
                 'updated_at' => $this->clock->now(),
             ]);
 
@@ -97,34 +79,18 @@ final readonly class DatabaseTenantLifecycle implements TenantDatabaseLifecycle
             );
         }
 
-        $this->verifyArchive(path: DatabaseValue::text($latestExport->storage_path), size: DatabaseValue::integer($latestExport->size_bytes));
-
-        $dbName = $this->db()->table('root_accounts')
-            ->where('id', $account->id)
-            ->value('db_name');
-
-        if (! is_string($dbName) || preg_match('/\Aacc_[a-zA-Z0-9_]+\z/D', $dbName) !== 1) {
-            throw new RuntimeException('Invalid account database name; refusing DROP.');
-        }
-
-        $this->db()->statement('DROP DATABASE IF EXISTS "'.$dbName.'"');
+        $archive = new AccountArchive(DatabaseValue::text($latestExport->storage_path), DatabaseValue::integer($latestExport->size_bytes));
+        $this->verifyArchive($account, $archive);
+        $this->resources->drop($account, $archive);
 
         $this->events->dispatch(new AccountPurged($account));
     }
 
-    private function verifyArchive(string $path, int $size): void
+    private function verifyArchive(AccountRef $account, AccountArchive $archive): void
     {
-        $verifier = $this->archiveVerifier();
-        $verified = $path !== '' && $size > 0 && $verifier($path, $size);
-
-        if (! $verified) {
-            throw new RuntimeException('Tenant export archive is unavailable or has an invalid size; refusing ready/DROP.');
+        if (! $this->resources->verifyArchive($account, $archive)) {
+            throw new RuntimeException('The physical owner did not verify this account archive; refusing ready or deletion.');
         }
-    }
-
-    private function archiveVerifier(): Closure
-    {
-        return $this->verifier ?? throw new RuntimeException('A qualified tenant archive integrity verifier is required; refusing ready/DROP.');
     }
 
     private function db(): Connection

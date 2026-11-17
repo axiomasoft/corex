@@ -6,10 +6,10 @@ namespace CoreX\Operations\Versioning\Contracts;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Modules\Data\CompiledRegistry;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\Versioning\Data\ApiProfile;
 use CoreX\Operations\Versioning\Data\EffectiveCapability;
+use Packman\Modules\Data\Compiler\CompiledRegistry;
 
 /** Call port for the methods consumed across the owning module boundary. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

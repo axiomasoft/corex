@@ -6,9 +6,7 @@ namespace CoreX\Notifications;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Database\Contracts\SchemaSetProvider;
 use CoreX\Errors\Laravel\ProblemDefinitions;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Notifications\Delivery\Internal\Commands\SweepNotificationDeliveries;
 use CoreX\Notifications\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Notifications\Internal\NotificationsSchemaSets;
@@ -16,6 +14,8 @@ use CoreX\Notifications\Laravel\NotificationsBindingsRegistrar;
 use CoreX\Notifications\Laravel\NotificationsDigestRegistrar;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
+use Packman\Schema\Contracts\Migration\SchemaSetProvider;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class NotificationsServiceProvider extends ServiceProvider

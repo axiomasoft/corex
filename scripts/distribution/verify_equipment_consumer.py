@@ -13,6 +13,10 @@ import sys
 import tempfile
 from pathlib import Path
 
+# Also support the test harness loading this script by file path.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from ecosystem_repositories import is_corex_package, snapshot_repositories
+
 ROOT = Path(__file__).resolve().parents[2]
 APP = ROOT / "fixtures" / "consumers" / "equipment-registry"
 RECEIPT = ROOT / "build" / "distribution" / "consumer-receipt.json"
@@ -52,7 +56,8 @@ def prepare_install(source: Path, destination: Path, repository: Path) -> None:
     composer = json.loads((destination / "composer.json").read_text(encoding="utf-8"))
     composer["repositories"] = [
         {"type": "composer", "url": str(repository)},
-        {"type": "composer", "url": "https://repo.packagist.org", "exclude": ["corex/*"]},
+        *snapshot_repositories(ROOT),
+        {"type": "composer", "url": "https://repo.packagist.org", "exclude": ["axiomasoft/corex", "axiomasoft/corex-*", "corex/*"]},
         {"packagist.org": False},
     ]
     composer["config"] = {"allow-plugins": True, "secure-http": False, "preferred-install": "dist", "sort-packages": True}
@@ -131,7 +136,7 @@ def prove(candidate: Path) -> dict:
         "vocabulary": "clean",
         "autoload_workspace": False,
         "worker_restart": result,
-        "lower_level_packages": sorted(name for name in committed["require"] if name.startswith("corex/")),
+        "lower_level_packages": sorted(name for name in committed["require"] if is_corex_package(name)),
     }
 
 

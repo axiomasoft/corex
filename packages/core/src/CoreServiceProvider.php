@@ -18,20 +18,22 @@ use CoreX\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Errors\Laravel\ErrorsRegistrar;
 use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Features\Laravel\FeaturesRegistrar;
+use CoreX\Foundation\Laravel\PackmanRegistrar;
 use CoreX\Messaging\Internal\Commands\PruneOutboxMessages;
 use CoreX\Messaging\Internal\Commands\RelayOutbox;
 use CoreX\Messaging\Internal\Commands\ShowDeliveryHealth;
 use CoreX\Messaging\Internal\PrunePubSubMessages;
 use CoreX\Messaging\Laravel\MessagingRegistrar;
-use CoreX\Modules\Contracts\PackageRegistrar;
-use CoreX\Modules\Laravel\CoreModulesRegistrar;
-use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Observability\Laravel\ObservabilityRegistrar;
 use CoreX\Settings\Laravel\SettingsRegistrar;
 use CoreX\Storage\Laravel\StorageRegistrar;
 use CoreX\Time\Laravel\TimeRegistrar;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
+use Packman\Modules\ModulesServiceProvider;
+use Packman\PackmanServiceProvider;
+use Packman\Schema\Laravel\SchemaServiceProvider;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class CoreServiceProvider extends ServiceProvider
@@ -51,7 +53,7 @@ final class CoreServiceProvider extends ServiceProvider
         DepartmentsRegistrar::class,
         StorageRegistrar::class,
         TimeRegistrar::class,
-        CoreModulesRegistrar::class,
+        PackmanRegistrar::class,
     ];
 
     #[Override]
@@ -64,6 +66,9 @@ final class CoreServiceProvider extends ServiceProvider
         foreach (self::REGISTRARS as $registrar) {
             (new $registrar)->register($this->app);
         }
+
+        $this->app->register(PackmanServiceProvider::class);
+        $this->app->register(SchemaServiceProvider::class);
 
         // After the kernel bindings: module-aware services (settings defaults, registries) refine them.
         $this->app->register(ModulesServiceProvider::class);

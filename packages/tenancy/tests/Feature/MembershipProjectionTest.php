@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Tenancy\Account\Contracts\AccountRead;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Contracts\CentralApiClient;
@@ -26,6 +25,7 @@ use Illuminate\Session\Store;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 beforeEach(function (): void {

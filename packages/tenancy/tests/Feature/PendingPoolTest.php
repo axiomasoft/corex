@@ -5,8 +5,9 @@ declare(strict_types=1);
 use CoreX\Tenancy\Account\Internal\DatabaseTenantProvisioner;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Account\Internal\PendingPool;
+use CoreX\Tenancy\Provisioning\Contracts\AccountResources;
 use CoreX\Tenancy\Provisioning\Exceptions\TemplateIntegrityException;
-use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
+use CoreX\Tenancy\Tests\Support\TestTemplateIntegrity as TemplateIntegrityVerifier;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
@@ -137,6 +138,7 @@ function pendingPool(): PendingPool
     $templateIntegrityVerifier = resolve(TemplateIntegrityVerifier::class);
 
     return new PendingPool(
+        resources: resolve(AccountResources::class),
         connections: resolve(ConnectionResolverInterface::class),
         centralConnection: 'pgsql',
         provisioner: new DatabaseTenantProvisioner(

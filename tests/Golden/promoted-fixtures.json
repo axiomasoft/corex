@@ -43,7 +43,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Modules\\Contracts\\ModuleRegistry"
+            "Packman\\Modules\\Contracts\\Registry\\ModuleRegistry"
         ],
         "internal": false,
         "kind": "class",
@@ -396,7 +396,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Modules\\Contracts\\ModuleRegistry"
+            "Packman\\Modules\\Contracts\\Registry\\ModuleRegistry"
         ],
         "internal": false,
         "kind": "class",

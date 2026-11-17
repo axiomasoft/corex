@@ -6,10 +6,10 @@ namespace CoreX\Operations\Testing;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Context\Data\TenantContext;
-use CoreX\Modules\Contracts\ModuleRegistry;
-use CoreX\Modules\Data\CompiledModule;
-use CoreX\Modules\Data\CompiledRegistry;
+use Packman\Context\Contracts\ContextScopeInterface;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Compiler\CompiledModule;
+use Packman\Modules\Data\Compiler\CompiledRegistry;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class CatalogueModuleFixture implements ModuleRegistry
@@ -43,14 +43,14 @@ final class CatalogueModuleFixture implements ModuleRegistry
         return $this->all()[0];
     }
 
-    public function active(TenantContext $ctx): array
+    public function active(ContextScopeInterface $ctx): array
     {
         return $this->enabled ? $this->all() : [];
     }
 
-    public function isActive(string $name, TenantContext $ctx): bool
+    public function isActive(string $name, ContextScopeInterface $ctx): bool
     {
-        $this->visitedAccounts[] = $ctx->account->id;
+        $this->visitedAccounts[] = $ctx->id();
         $this->epochReads[] = $this->epoch;
 
         return $this->enabled && $name === 'example/notes';
@@ -59,11 +59,6 @@ final class CatalogueModuleFixture implements ModuleRegistry
     public function compiled(): CompiledRegistry
     {
         return $this->registry;
-    }
-
-    public function flush(): void
-    {
-        // Simulates worker registry flush after redeploy.
     }
 
     public function bumpEpoch(): void

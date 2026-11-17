@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Settings\Internal;
 
-use CoreX\Settings\Contracts\SettingDefaultsProvider;
 use Override;
+use Packman\Settings\Contracts\SettingDefaultsProviderInterface as SettingDefaultsProvider;
 
 /**
  * Boxed-default: no manifest registry wired in — every key is undeclared

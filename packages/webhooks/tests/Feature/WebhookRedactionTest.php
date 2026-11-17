@@ -7,9 +7,7 @@ namespace CoreX\Webhooks\Tests\Feature;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Data\DataScope;
-use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Database\Contracts\SchemaSets;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Pagination\Contracts\CursorKeyring;
 use CoreX\Operations\Pagination\Internal\SignedCursorCodec;
 use CoreX\Operations\Testing\ContextFixture;
@@ -21,6 +19,8 @@ use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use Packman\Schema\Contracts\Migration\SchemaSets;
 
 final class WebhookRedactionTest extends TestCase
 {
@@ -31,7 +31,7 @@ final class WebhookRedactionTest extends TestCase
         $this->selectSchema();
         $connection = DB::connection('api_tenant');
 
-        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
         $clock = new FrozenClock(new DateTimeImmutable('2026-09-26T17:00:00.000000+00:00'));
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
@@ -111,7 +111,7 @@ final class WebhookRedactionTest extends TestCase
 
     private function selectSchema(): void
     {
-        $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(ApiSchemaConnections::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [

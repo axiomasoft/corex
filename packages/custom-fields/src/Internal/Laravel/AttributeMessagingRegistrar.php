@@ -8,9 +8,9 @@ use CoreX\CustomFields\Internal\Integration\AttributeMessageContractRegistry;
 use CoreX\CustomFields\Internal\Integration\AttributeMessageTranslator;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
-use CoreX\Modules\Contracts\PackageRegistrar;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Foundation\Contracts\PackageRegistrar;
 
 /** @internal Composition of the package's message contract and translator. */
 final class AttributeMessagingRegistrar implements PackageRegistrar

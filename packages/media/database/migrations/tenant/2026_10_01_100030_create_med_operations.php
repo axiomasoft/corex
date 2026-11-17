@@ -27,7 +27,6 @@ return new class extends Migration
             $table->unsignedBigInteger('attempts')->default(0);
             $table->timestamp('next_attempt_at')->nullable();
             $table->timestamp('lease_until')->nullable();
-            $table->string('attempt_object_key')->nullable();
             $table->timestamps();
             $table->foreign('file_id', 'med_operations_file_id_fk')->references('id')->on('med_files')->restrictOnDelete();
             $table->index(['state', 'next_attempt_at'], 'med_operations_state_next_attempt_at_ix');
