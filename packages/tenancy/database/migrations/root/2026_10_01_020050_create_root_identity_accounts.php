@@ -2,16 +2,20 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('root_identity_accounts', function (Blueprint $table): void {
+        $this->create('root_identity_accounts', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'root_identity_accounts_pk');
             $table->uuid('identity_id');
@@ -27,8 +31,6 @@ return new class extends Migration
             $table->unique(['identity_id', 'account_id'], 'root_identity_accounts_identity_id_account_id_uq');
         });
 
-        Schema::getConnection()->statement('ALTER TABLE root_identity_accounts RENAME CONSTRAINT root_identity_accounts_pkey TO root_identity_accounts_pk');
-
         DB::statement("ALTER TABLE root_identity_accounts ADD CONSTRAINT root_identity_accounts_status_ck CHECK (status IN ('invited','active','blocked'))");
         DB::statement("ALTER TABLE root_identity_accounts ADD CONSTRAINT root_identity_accounts_sync_status_ck CHECK (sync_status IN ('pending','synced','failed'))");
 
@@ -38,6 +40,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('root_identity_accounts');
+        $this->drop('root_identity_accounts');
     }
 };

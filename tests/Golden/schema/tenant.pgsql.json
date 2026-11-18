@@ -1200,7 +1200,7 @@
                     "nulls_not_distinct": false
                 },
                 {
-                    "name": "corex_search_dirty_pkey",
+                    "name": "corex_search_dirty_pk",
                     "kind": "pk",
                     "columns": [
                         "sequence"

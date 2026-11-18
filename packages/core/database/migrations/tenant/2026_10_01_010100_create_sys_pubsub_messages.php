@@ -2,15 +2,19 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('sys_pubsub_messages', function (Blueprint $table): void {
+        $this->create('sys_pubsub_messages', function (Blueprint $table): void {
             $table->bigInteger('id', autoIncrement: true);
             $table->primary(['id'], 'sys_pubsub_messages_pk');
             $table->string('channel', 190);
@@ -19,12 +23,10 @@ return new class extends Migration
 
             $table->index(['channel', 'id'], 'sys_pubsub_messages_channel_id_ix');
         });
-
-        Schema::getConnection()->statement('ALTER TABLE sys_pubsub_messages RENAME CONSTRAINT sys_pubsub_messages_pkey TO sys_pubsub_messages_pk');
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('sys_pubsub_messages');
+        $this->drop('sys_pubsub_messages');
     }
 };

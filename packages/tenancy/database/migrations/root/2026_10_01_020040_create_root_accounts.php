@@ -2,16 +2,20 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('root_accounts', function (Blueprint $table): void {
+        $this->create('root_accounts', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'root_accounts_pk');
             $table->string('slug', 63)->nullable();
@@ -42,8 +46,6 @@ return new class extends Migration
             $table->foreign('owner_identity_id', 'root_accounts_owner_identity_id_fk')->references('id')->on('root_identities')->restrictOnDelete();
         });
 
-        Schema::getConnection()->statement('ALTER TABLE root_accounts RENAME CONSTRAINT root_accounts_pkey TO root_accounts_pk');
-
         DB::statement("ALTER TABLE root_accounts ADD CONSTRAINT root_accounts_status_ck CHECK (status IN ('pending','provisioning','trial','active','suspended','grace','exporting','deleted'))");
         DB::statement("ALTER TABLE root_accounts ADD CONSTRAINT root_accounts_slug_or_pending_ck CHECK (status IN ('pending','provisioning') OR slug IS NOT NULL)");
         DB::statement("ALTER TABLE root_accounts ADD CONSTRAINT root_accounts_owner_or_pending_ck CHECK (status IN ('pending','provisioning') OR owner_identity_id IS NOT NULL)");
@@ -63,6 +65,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('root_accounts');
+        $this->drop('root_accounts');
     }
 };

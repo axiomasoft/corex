@@ -2,15 +2,19 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('sys_wakeup_requests', function (Blueprint $table): void {
+        $this->create('sys_wakeup_requests', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'sys_wakeup_requests_pk');
             $table->string('workspace_scope_key', 255);
@@ -34,14 +38,10 @@ return new class extends Migration
             $table->unique(['workspace_scope_key', 'request_key'], 'sys_wakeup_requests_workspace_scope_key_request_key_uq');
             $table->index(['status', 'retry_at', 'fire_at'], 'sys_wakeup_requests_scan_ix');
         });
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE sys_wakeup_requests RENAME CONSTRAINT sys_wakeup_requests_pkey TO sys_wakeup_requests_pk');
-        }
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('sys_wakeup_requests');
+        $this->drop('sys_wakeup_requests');
     }
 };

@@ -2,18 +2,22 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
         DB::statement('CREATE EXTENSION IF NOT EXISTS ltree');
 
-        Schema::create('wsp_workspaces', function (Blueprint $table): void {
+        $this->create('wsp_workspaces', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'wsp_workspaces_pk');
             $table->uuid('parent_id')->nullable();
@@ -26,8 +30,6 @@ return new class extends Migration
             $table->timestampTz('updated_at', precision: 6)->useCurrent();
             $table->timestampTz('deleted_at', precision: 6)->nullable();
         });
-
-        Schema::getConnection()->statement('ALTER TABLE wsp_workspaces RENAME CONSTRAINT wsp_workspaces_pkey TO wsp_workspaces_pk');
 
         // Self-referencing FK added AFTER the blueprint's own inline
         // ->primary() has run (Schema::create() would otherwise try to add
@@ -47,6 +49,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('wsp_workspaces');
+        $this->drop('wsp_workspaces');
     }
 };

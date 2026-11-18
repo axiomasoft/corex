@@ -92,6 +92,12 @@
 | corex-operations.routes.enabled | axiomasoft/corex-operations | bool | true | no | deployment | no | unobserved | ApiOptions::$routesEnabled |  |  |
 | corex-operations.routes.middleware | axiomasoft/corex-operations | array | [] | no | deployment | no | unobserved | ApiOptions::$routeMiddleware |  |  |
 | corex-operations.routes.prefix | axiomasoft/corex-operations | string | api | no | deployment | no | unobserved | ApiOptions::$routePrefix |  |  |
+| corex-operations.schema.budget.connection | axiomasoft/corex-operations | null | null | no | deployment | no | use-site | ApiOptions::$(registrar-read) |  |  |
+| corex-operations.schema.budget.database | axiomasoft/corex-operations | null | null | no | deployment | no | use-site | ApiOptions::$(registrar-read) |  |  |
+| corex-operations.schema.budget.driver | axiomasoft/corex-operations | null | null | no | deployment | no | use-site | ApiOptions::$(registrar-read) |  |  |
+| corex-operations.schema.tenant.connection | axiomasoft/corex-operations | null | null | no | deployment | no | use-site | ApiOptions::$(registrar-read) |  |  |
+| corex-operations.schema.tenant.database | axiomasoft/corex-operations | null | null | no | deployment | no | use-site | ApiOptions::$(registrar-read) |  |  |
+| corex-operations.schema.tenant.driver | axiomasoft/corex-operations | null | null | no | deployment | no | use-site | ApiOptions::$(registrar-read) |  |  |
 | corex-operations.versions | axiomasoft/corex-operations | array | unobserved | no | product-policy | unobserved | unobserved | ApiOptions::$versions |  |  |
 | corex-recurring-tasks.completion_capture.definition_ref | axiomasoft/corex-recurring-tasks | string | task-completion/1 | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$completionCaptureDefinitionRef |  |  |
 | corex-recurring-tasks.completion_capture.enabled | axiomasoft/corex-recurring-tasks | bool | false | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$completionCaptureEnabled |  |  |

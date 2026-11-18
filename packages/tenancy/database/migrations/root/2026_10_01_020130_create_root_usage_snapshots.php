@@ -2,15 +2,19 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('root_usage_snapshots', function (Blueprint $table): void {
+        $this->create('root_usage_snapshots', function (Blueprint $table): void {
             $table->uuid('account_id');
             $table->string('metric', 64);
             $table->date('period');
@@ -21,12 +25,10 @@ return new class extends Migration
             $table->primary(['account_id', 'metric', 'period'], 'root_usage_snapshots_pk');
             $table->foreign('account_id', 'root_usage_snapshots_account_id_fk')->references('id')->on('root_accounts')->cascadeOnDelete();
         });
-
-        Schema::getConnection()->statement('ALTER TABLE root_usage_snapshots RENAME CONSTRAINT root_usage_snapshots_pkey TO root_usage_snapshots_pk');
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('root_usage_snapshots');
+        $this->drop('root_usage_snapshots');
     }
 };

@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('corex_task_operations', function (Blueprint $table): void {
+        $this->create('corex_task_operations', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'corex_task_operations_pk');
             $table->string('request_key', 128);
@@ -22,10 +27,6 @@ return new class extends Migration
             $table->timestampTz('created_at')->useCurrent();
             $table->unique(['request_key'], 'corex_task_operations_request_key_uq');
         });
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE corex_task_operations RENAME CONSTRAINT corex_task_operations_pkey TO corex_task_operations_pk');
-        }
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {
             DB::statement('ALTER TABLE corex_task_operations ADD CONSTRAINT corex_task_operations_kind_ck CHECK (kind IN (\'createProject\',\'createSprint\',\'recordTime\',\'materialize\',\'completionCapture\'))');
@@ -40,7 +41,6 @@ return new class extends Migration
 
             DB::statement('CREATE TRIGGER corex_task_operations_restore_epoch_ck BEFORE INSERT ON corex_task_operations BEGIN SELECT CASE WHEN length(NEW.restore_epoch) = 64 AND NEW.restore_epoch NOT GLOB \'*[^a-f0-9]*\' THEN 0 ELSE RAISE(ABORT, \'invalid restore_epoch\') END; END');
         }
-
     }
 
     public function down(): void
@@ -49,7 +49,6 @@ return new class extends Migration
             throw new LogicException('Task operation receipts require an approved retention receipt before removal.');
         }
 
-        Schema::dropIfExists('corex_task_operations');
-
+        $this->drop('corex_task_operations');
     }
 };

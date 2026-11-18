@@ -14,7 +14,7 @@ PSR-4 пути внутри монорепозитория владельца. �
 
 | Владелец | Пакеты | Source reference |
 |---|---|---|
-| Packman | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `3dcc7d7cb5ad036a642e9ac07cb1843076c9b4eb` |
+| Packman | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `db7a873640a9b1390320253736c976bd30e6bf83` |
 | AzGuard | `azguard` | `457eed3a07e0a25eae934fd35f532cde3d69fa86` |
 | Tenant | `tenant`, `tenant-laravel` | `6089b4c3d288b28e1ba8ce7e88f37c4f0a100cbe` |
 | Vaulter | `vaulter-core`, `vaulter-media` | `56de17dfcee26aa047761bca4d1b0ba5f2c2d866` |
@@ -141,18 +141,10 @@ Packman пишет `resources/contracts/php-api.json`. CoreX `composer php-api` 
 проверяет полную типовую границу и справочник публичного API. Error URN использует
 `urn:packman:problem:`; доменные коды CoreX сохраняют собственные префиксы.
 
-В указанном Packman commit table-write gate считает любой `sys_*` внешней системной
-таблицей. Это расходится с каталогом CoreX, где префикс не определяет владельца.
-`scripts/patches/packman-table-ownership.patch` добавляет точное сопоставление
-`gates.table_owners[table]` с текущим Composer-пакетом. Неизвестные таблицы и чужие
-владельцы по-прежнему запрещены; DATA-003 независимо проверяет реальные записи.
-`scripts/patch-packman-devtools.py` применяется через Composer `post-autoload-dump`,
-проверяет source reference и SHA-256 до/после и отказывается менять неизвестный код.
-Среде разработки нужны Python 3 и `patch`; при `--no-scripts` запустите этот скрипт
-явно. В Git хранится только проверяемый patch, никогда `vendor`.
-
-Этот patch должен быть доставлен вместе с CoreX до его принятия владельцем Packman.
-Для обновления Packman повторно проверяют необходимость patch и обе контрольные суммы.
+Нативный `TableWriteOwnershipGate` в Packman сверяет `gates.table_owners[table]`
+с текущим Composer-пакетом: запись в собственные `sys_*` разрешена только явному
+владельцу из каталога, а неизвестные системные таблицы и чужие владельцы запрещены;
+DATA-003 независимо проверяет реальные записи.
 Все четыре source reference из таблицы должны быть доступны CI через canonical
 GitHub URL либо переданный checkout/bundle. Для каждого локального источника
 добавляйте отдельный `url.file:///.../.insteadOf` в process-local `GIT_CONFIG_COUNT`;

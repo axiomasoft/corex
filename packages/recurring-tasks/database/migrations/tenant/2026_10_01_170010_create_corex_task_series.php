@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('corex_task_series', function (Blueprint $table): void {
+        $this->create('corex_task_series', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'corex_task_series_pk');
             $table->string('series_key', 128);
@@ -24,10 +29,6 @@ return new class extends Migration
             $table->char('restore_epoch', 64);
             $table->unique(['series_key', 'immutable_revision'], 'corex_task_series_series_key_immutable_revision_uq');
         });
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE corex_task_series RENAME CONSTRAINT corex_task_series_pkey TO corex_task_series_pk');
-        }
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {
             DB::statement("ALTER TABLE corex_task_series ADD CONSTRAINT corex_task_series_definition_hash_ck CHECK (definition_hash ~ '^[a-f0-9]{64}$')");
@@ -50,6 +51,6 @@ return new class extends Migration
             }
         }
 
-        Schema::dropIfExists('corex_task_series');
+        $this->drop('corex_task_series');
     }
 };

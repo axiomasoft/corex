@@ -15,7 +15,7 @@ use Packman\Attributes\Internal;
  * @property string $key
  * @property string|null $module
  * @property bool $is_enabled
- * @property array<string, mixed>|null $payload
+ * @property array<array-key, mixed>|bool|float|int|string|null $payload
  *
  * @internal spec: B-10 §2
  */
@@ -33,7 +33,7 @@ final class FeatureFlag extends Model
     {
         return [
             'is_enabled' => 'bool',
-            'payload' => 'array',
+            'payload' => 'json',
         ];
     }
 }

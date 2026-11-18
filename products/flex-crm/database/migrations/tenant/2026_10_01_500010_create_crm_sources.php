@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('crm_sources', function (Blueprint $table): void {
+        $this->create('crm_sources', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'crm_sources_pk');
             $table->uuid('workspace_id')->nullable();
@@ -25,11 +30,6 @@ return new class extends Migration
             $table->foreign(['workspace_id'], 'crm_sources_workspace_id_fk')->references(['id'])->on('wsp_workspaces')->onDelete('cascade')->onUpdate('no action');
             $table->unique([(Schema::getConnection()->getDriverName() === 'pgsql' ? 'workspace_id' : DB::raw("COALESCE(workspace_id, '')")), 'code'], 'crm_sources_workspace_id_code_uq')->nullsNotDistinct();
         });
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE crm_sources RENAME CONSTRAINT crm_sources_pkey TO crm_sources_pk');
-        }
-
     }
 
     public function down(): void

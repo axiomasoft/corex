@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('crm_companies', function (Blueprint $table): void {
+        $this->create('crm_companies', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'crm_companies_pk');
             $table->uuid('workspace_id')->nullable();
@@ -44,10 +49,6 @@ return new class extends Migration
         });
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE crm_companies RENAME CONSTRAINT crm_companies_pkey TO crm_companies_pk');
-        }
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
 
             DB::statement('CREATE INDEX crm_companies_emails_ix ON crm_companies USING gin (emails jsonb_path_ops)');
 
@@ -60,7 +61,6 @@ return new class extends Migration
         DB::statement('CREATE INDEX crm_companies_ws_ix ON crm_companies (workspace_id) WHERE deleted_at IS NULL');
         DB::statement('CREATE INDEX crm_companies_owner_ix ON crm_companies (owner_id) WHERE deleted_at IS NULL');
         DB::statement('CREATE INDEX crm_companies_inn_ix ON crm_companies (inn) WHERE inn IS NOT NULL AND deleted_at IS NULL');
-
     }
 
     public function down(): void

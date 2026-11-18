@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('tsk_task_targets', function (Blueprint $table): void {
+        $this->create('tsk_task_targets', function (Blueprint $table): void {
             $table->uuid('task_id');
             $table->string('entity_type', 64);
             $table->string('entity_id', 64);
@@ -20,10 +25,6 @@ return new class extends Migration
 
             $table->foreign(['task_id'], 'tsk_task_targets_task_id_fk')->references(['id'])->on('tsk_tasks')->onDelete('cascade')->onUpdate('no action');
         });
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE tsk_task_targets RENAME CONSTRAINT tsk_task_targets_pkey TO tsk_task_targets_pk');
-        }
 
         DB::statement('CREATE INDEX "tsk_task_targets_entity_ix" on "tsk_task_targets" ("entity_type", "entity_id")');
     }
@@ -38,6 +39,6 @@ return new class extends Migration
             }
         }
 
-        Schema::dropIfExists('tsk_task_targets');
+        $this->drop('tsk_task_targets');
     }
 };

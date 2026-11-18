@@ -3,21 +3,24 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Connection;
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        $connection = Schema::getConnection();
-        $schema = $connection->getSchemaBuilder();
+        $connection = $this->db();
 
         $subscriptionStatuses = "('active', 'disabled')";
         $deliveryStatuses = "('pending', 'sending', 'retry', 'succeeded', 'dead')";
 
-        $schema->create('sys_api_webhook_subscriptions', function (Blueprint $table): void {
+        $this->create('sys_api_webhook_subscriptions', function (Blueprint $table): void {
             $table->string('id', 64);
             $table->primary(['id'], 'sys_api_webhook_subscriptions_pk');
             $table->unsignedBigInteger('revision');
@@ -41,15 +44,11 @@ return new class extends Migration
             'revision >= 0 AND topic_version >= 0',
             'NEW.revision >= 0 AND NEW.topic_version >= 0',
         );
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE sys_api_webhook_subscriptions RENAME CONSTRAINT sys_api_webhook_subscriptions_pkey TO sys_api_webhook_subscriptions_pk');
-        }
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('sys_api_webhook_subscriptions');
+        $this->drop('sys_api_webhook_subscriptions');
     }
 
     private function addCheck(

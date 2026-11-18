@@ -2,16 +2,20 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('wsp_invitations', function (Blueprint $table): void {
+        $this->create('wsp_invitations', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'wsp_invitations_pk');
             $table->string('email', 255);
@@ -29,8 +33,6 @@ return new class extends Migration
             $table->foreign('invited_by', 'wsp_invitations_invited_by_fk')->references('id')->on('users')->restrictOnDelete();
         });
 
-        Schema::getConnection()->statement('ALTER TABLE wsp_invitations RENAME CONSTRAINT wsp_invitations_pkey TO wsp_invitations_pk');
-
         DB::statement("ALTER TABLE wsp_invitations ADD CONSTRAINT wsp_invitations_status_ck CHECK (status IN ('pending','accepted','revoked','expired'))");
         DB::statement("ALTER TABLE wsp_invitations ALTER COLUMN expires_at SET DEFAULT (now() + interval '7 days')");
 
@@ -41,6 +43,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('wsp_invitations');
+        $this->drop('wsp_invitations');
     }
 };

@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('crm_activities', function (Blueprint $t): void {
+        $this->create('crm_activities', function (Blueprint $t): void {
             $t->uuid('id');
             $t->primary(['id'], 'crm_activities_pk');
             $t->uuid('workspace_id')->nullable();
@@ -39,16 +44,11 @@ return new class extends Migration
         });
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE crm_activities RENAME CONSTRAINT crm_activities_pkey TO crm_activities_pk');
-        }
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
 
             DB::statement('ALTER TABLE crm_activities ADD CONSTRAINT crm_activities_parity_0_ck CHECK (kind IN (\'call\',\'email\',\'meeting\'))');
             DB::statement('ALTER TABLE crm_activities ADD CONSTRAINT crm_activities_parity_1_ck CHECK (status IN (\'planned\',\'done\',\'canceled\',\'missed\'))');
             DB::statement('ALTER TABLE crm_activities ADD CONSTRAINT crm_activities_parity_2_ck CHECK (direction IN (\'in\',\'out\'))');
             DB::statement('ALTER TABLE crm_activities ADD CONSTRAINT crm_activities_parity_3_ck CHECK (kind = \'call\' OR direction IS NULL OR kind = \'email\')');
-
         }
 
         DB::statement('CREATE INDEX crm_activities_kind_ix ON crm_activities (kind, status) WHERE deleted_at IS NULL');

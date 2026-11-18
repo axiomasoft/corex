@@ -2,16 +2,20 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('root_migration_batches', function (Blueprint $table): void {
+        $this->create('root_migration_batches', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'root_migration_batches_pk');
             $table->bigInteger('from_version');
@@ -25,14 +29,12 @@ return new class extends Migration
             $table->timestampTz('updated_at', precision: 6)->useCurrent();
         });
 
-        Schema::getConnection()->statement('ALTER TABLE root_migration_batches RENAME CONSTRAINT root_migration_batches_pkey TO root_migration_batches_pk');
-
         DB::statement("ALTER TABLE root_migration_batches ADD CONSTRAINT root_migration_batches_wave_ck CHECK (wave IN ('internal','canary','p10','p50','all'))");
         DB::statement("ALTER TABLE root_migration_batches ADD CONSTRAINT root_migration_batches_status_ck CHECK (status IN ('created','running','paused','done','failed'))");
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('root_migration_batches');
+        $this->drop('root_migration_batches');
     }
 };

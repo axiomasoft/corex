@@ -2,16 +2,20 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('root_account_exports', function (Blueprint $table): void {
+        $this->create('root_account_exports', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'root_account_exports_pk');
             $table->uuid('account_id');
@@ -28,14 +32,12 @@ return new class extends Migration
             $table->foreign('account_id', 'root_account_exports_account_id_fk')->references('id')->on('root_accounts')->cascadeOnDelete();
         });
 
-        Schema::getConnection()->statement('ALTER TABLE root_account_exports RENAME CONSTRAINT root_account_exports_pkey TO root_account_exports_pk');
-
         DB::statement("ALTER TABLE root_account_exports ADD CONSTRAINT root_account_exports_kind_ck CHECK (kind IN ('offboarding','pre_purge','manual'))");
         DB::statement("ALTER TABLE root_account_exports ADD CONSTRAINT root_account_exports_status_ck CHECK (status IN ('pending','running','ready','failed','purged'))");
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('root_account_exports');
+        $this->drop('root_account_exports');
     }
 };

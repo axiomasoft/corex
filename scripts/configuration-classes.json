@@ -776,6 +776,60 @@
             "deprecated_aliases": "",
             "notes": ""
         },
+        "corex-operations.schema.budget.connection": {
+            "owner": "axiomasoft/corex-operations",
+            "secret": "no",
+            "mode": "deployment",
+            "reloadable": "no",
+            "validation": "use-site",
+            "deprecated_aliases": "",
+            "notes": ""
+        },
+        "corex-operations.schema.budget.database": {
+            "owner": "axiomasoft/corex-operations",
+            "secret": "no",
+            "mode": "deployment",
+            "reloadable": "no",
+            "validation": "use-site",
+            "deprecated_aliases": "",
+            "notes": ""
+        },
+        "corex-operations.schema.budget.driver": {
+            "owner": "axiomasoft/corex-operations",
+            "secret": "no",
+            "mode": "deployment",
+            "reloadable": "no",
+            "validation": "use-site",
+            "deprecated_aliases": "",
+            "notes": ""
+        },
+        "corex-operations.schema.tenant.connection": {
+            "owner": "axiomasoft/corex-operations",
+            "secret": "no",
+            "mode": "deployment",
+            "reloadable": "no",
+            "validation": "use-site",
+            "deprecated_aliases": "",
+            "notes": ""
+        },
+        "corex-operations.schema.tenant.database": {
+            "owner": "axiomasoft/corex-operations",
+            "secret": "no",
+            "mode": "deployment",
+            "reloadable": "no",
+            "validation": "use-site",
+            "deprecated_aliases": "",
+            "notes": ""
+        },
+        "corex-operations.schema.tenant.driver": {
+            "owner": "axiomasoft/corex-operations",
+            "secret": "no",
+            "mode": "deployment",
+            "reloadable": "no",
+            "validation": "use-site",
+            "deprecated_aliases": "",
+            "notes": ""
+        },
         "corex-operations.versions": {
             "owner": "axiomasoft/corex-operations",
             "secret": "no",
@@ -1736,6 +1790,12 @@
         "corex-operations.cursor.current_key_id": "ApiOptions::$cursorKeyId",
         "corex-operations.routes.middleware": "ApiOptions::$routeMiddleware",
         "corex-operations.routes.prefix": "ApiOptions::$routePrefix",
+        "corex-operations.schema.budget.connection": "ApiOptions::$(registrar-read)",
+        "corex-operations.schema.budget.database": "ApiOptions::$(registrar-read)",
+        "corex-operations.schema.budget.driver": "ApiOptions::$(registrar-read)",
+        "corex-operations.schema.tenant.connection": "ApiOptions::$(registrar-read)",
+        "corex-operations.schema.tenant.database": "ApiOptions::$(registrar-read)",
+        "corex-operations.schema.tenant.driver": "ApiOptions::$(registrar-read)",
         "corex-search.postgres.scan_budget": "SearchOptions::$scanBudget",
         "corex-search.postgres.text_search_config": "SearchOptions::$textSearchConfig",
         "corex.bindings.audit_logger": "CoreOptions::$auditLogger",

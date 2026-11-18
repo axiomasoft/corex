@@ -2,21 +2,25 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
 // Tenant-DB migration (B-11 §2.3, D14/D16) — назначение роли принципалу
 // (user/agent/api_key, D101). Cross-package FK (workspace_id → wsp_workspaces,
 // granted_by → users) — отдельной cloud-миграцией (D102): эти таблицы
 // принадлежат axiomasoft/corex-tenancy, отсутствующему в boxed-профиле (AC-28). См.
 // DB_SCHEMA.md §3.5 aut_role_assignments.
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('aut_role_assignments', function (Blueprint $table): void {
+        $this->create('aut_role_assignments', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'aut_role_assignments_pk');
             $table->uuid('role_id');
@@ -37,11 +41,10 @@ return new class extends Migration
         DB::statement('CREATE INDEX aut_role_assignments_principal_ix ON aut_role_assignments (principal_type, principal_id)');
 
         DB::statement("COMMENT ON TABLE aut_role_assignments IS 'twenty roleTarget: агент и api_key — полноправные principal. Права агента при запуске от пользователя = intersection(права инициатора, права роли агента) — enforcement в corex/ai (B-13); здесь только модель'");
-        Schema::getConnection()->statement('ALTER TABLE aut_role_assignments RENAME CONSTRAINT aut_role_assignments_pkey TO aut_role_assignments_pk');
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('aut_role_assignments');
+        $this->drop('aut_role_assignments');
     }
 };

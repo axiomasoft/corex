@@ -55,6 +55,20 @@ return [
         ],
     ],
 
+    /** @var ?array<string, array<string, ?string>> */
+    'schema' => [
+        'budget' => [
+            'connection' => null,
+            'driver' => null,
+            'database' => null,
+        ],
+        'tenant' => [
+            'connection' => null,
+            'driver' => null,
+            'database' => null,
+        ],
+    ],
+
     'discovery' => 'public',
     'capabilities' => [],
 ];

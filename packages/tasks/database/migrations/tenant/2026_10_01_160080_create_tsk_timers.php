@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('tsk_timers', function (Blueprint $table): void {
+        $this->create('tsk_timers', function (Blueprint $table): void {
             $table->uuid('user_id');
             $table->primary(['user_id'], 'tsk_timers_pk');
             $table->uuid('task_id');
@@ -22,11 +27,6 @@ return new class extends Migration
             $table->foreign(['task_id'], 'tsk_timers_task_id_fk')->references(['id'])->on('tsk_tasks')->onDelete('cascade')->onUpdate('no action');
             $table->foreign(['user_id'], 'tsk_timers_user_id_fk')->references(['id'])->on('users')->onDelete('cascade')->onUpdate('no action');
         });
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE tsk_timers RENAME CONSTRAINT tsk_timers_pkey TO tsk_timers_pk');
-        }
-
     }
 
     public function down(): void
@@ -39,6 +39,6 @@ return new class extends Migration
             }
         }
 
-        Schema::dropIfExists('tsk_timers');
+        $this->drop('tsk_timers');
     }
 };

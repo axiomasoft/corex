@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('crm_stages', function (Blueprint $t): void {
+        $this->create('crm_stages', function (Blueprint $t): void {
             $t->uuid('id');
             $t->primary(['id'], 'crm_stages_pk');
             $t->uuid('pipeline_id');
@@ -32,13 +37,8 @@ return new class extends Migration
         });
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE crm_stages RENAME CONSTRAINT crm_stages_pkey TO crm_stages_pk');
-        }
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
             DB::statement('ALTER TABLE crm_stages ADD CONSTRAINT crm_stages_parity_0_ck CHECK (semantic IN (\'open\',\'won\',\'lost\'))');
             DB::statement('ALTER TABLE crm_stages ADD CONSTRAINT crm_stages_parity_1_ck CHECK (probability BETWEEN 0 AND 100)');
-
         }
 
         DB::statement('CREATE INDEX crm_stages_pipeline_ix ON crm_stages (pipeline_id, position) WHERE deleted_at IS NULL');

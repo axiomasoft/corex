@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('tnt_membership_inbox', static function (Blueprint $table): void {
+        $this->create('tnt_membership_inbox', static function (Blueprint $table): void {
             $table->uuid('event_id');
             $table->primary(['event_id'], 'tnt_membership_inbox_pk');
             $table->char('logical_digest', 64);
@@ -21,8 +26,6 @@ return new class extends Migration
             $table->uuid('owner_id')->nullable();
             $table->bigInteger('lease_until')->nullable();
         });
-
-        Schema::getConnection()->statement('ALTER TABLE tnt_membership_inbox RENAME CONSTRAINT tnt_membership_inbox_pkey TO tnt_membership_inbox_pk');
 
         DB::statement("ALTER TABLE tnt_membership_inbox ADD CONSTRAINT tnt_membership_inbox_status_ck CHECK (status IN ('pending', 'acknowledged'))");
         DB::statement('CREATE INDEX tnt_membership_inbox_pending_ix ON tnt_membership_inbox (lease_until, event_id) WHERE status = \'pending\'');
@@ -34,6 +37,6 @@ return new class extends Migration
             throw new RuntimeException('Refusing to drop populated membership inbox mapping.');
         }
 
-        Schema::dropIfExists('tnt_membership_inbox');
+        $this->drop('tnt_membership_inbox');
     }
 };

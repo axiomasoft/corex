@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('crm_deals', function (Blueprint $t): void {
+        $this->create('crm_deals', function (Blueprint $t): void {
             $t->uuid('id');
             $t->primary(['id'], 'crm_deals_pk');
             $t->uuid('workspace_id')->nullable();
@@ -55,10 +60,6 @@ return new class extends Migration
         });
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE crm_deals RENAME CONSTRAINT crm_deals_pkey TO crm_deals_pk');
-        }
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
 
             DB::statement('ALTER TABLE crm_deals ADD CONSTRAINT crm_deals_parity_0_ck CHECK (status IN (\'open\',\'won\',\'lost\'))');
             DB::statement('ALTER TABLE crm_deals ADD CONSTRAINT crm_deals_parity_1_ck CHECK (status <> \'won\' OR won_at IS NOT NULL)');
@@ -66,7 +67,6 @@ return new class extends Migration
             DB::statement('ALTER TABLE crm_deals ADD CONSTRAINT crm_deals_parity_3_ck CHECK (forecast_category IN (\'pipeline\',\'best_case\',\'commit\',\'omitted\'))');
 
             DB::statement('CREATE INDEX crm_deals_search_ix ON crm_deals USING gin (search)');
-
         }
 
         DB::statement('CREATE INDEX crm_deals_close_ix ON crm_deals (close_date) WHERE status = \'open\' AND deleted_at IS NULL');
@@ -75,7 +75,6 @@ return new class extends Migration
         DB::statement('CREATE INDEX crm_deals_owner_ix ON crm_deals (owner_id, status) WHERE deleted_at IS NULL');
         DB::statement('CREATE INDEX crm_deals_kanban_ix ON crm_deals (pipeline_id, stage_id, position) WHERE deleted_at IS NULL');
         DB::statement('CREATE INDEX crm_deals_forecast_ix ON crm_deals (workspace_id, owner_id, pipeline_id, close_date, forecast_category) WHERE status = \'open\' AND close_date IS NOT NULL AND deleted_at IS NULL');
-
     }
 
     public function down(): void

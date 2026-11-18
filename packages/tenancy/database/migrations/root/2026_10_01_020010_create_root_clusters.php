@@ -2,16 +2,20 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('root_clusters', function (Blueprint $table): void {
+        $this->create('root_clusters', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'root_clusters_pk');
             $table->string('name', 64)->unique('root_clusters_name_uq');
@@ -34,8 +38,6 @@ return new class extends Migration
             $table->timestampTz('updated_at', precision: 6)->useCurrent();
         });
 
-        Schema::getConnection()->statement('ALTER TABLE root_clusters RENAME CONSTRAINT root_clusters_pkey TO root_clusters_pk');
-
         DB::statement("ALTER TABLE root_clusters ADD CONSTRAINT root_clusters_status_ck CHECK (status IN ('provisioning','active','draining','readonly','retired'))");
 
         DB::statement("COMMENT ON TABLE root_clusters IS 'PG-ячейки (шарды) парка — capacity/routing control plane (B-11 §2.1)'");
@@ -44,6 +46,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('root_clusters');
+        $this->drop('root_clusters');
     }
 };

@@ -205,6 +205,12 @@ function extractSchemaCreates(string $repoRoot, array $packageDirs, array $confi
 
             $varMap = [];
 
+            if ((($qualityMatchCount = preg_match_all('/\$(\w+)\s*=\s*\'([a-z0-9_]+)\'/', $src, $strVarMatches)) !== false && $qualityMatchCount > 0)) {
+                foreach ($strVarMatches[1] as $i => $varName) {
+                    $varMap[$varName] = $strVarMatches[2][$i];
+                }
+            }
+
             if ((($qualityMatchCount = preg_match_all('/\$(\w+)\s*=\s*Config::(\w+)\(\)/', $src, $varMatches)) !== false && $qualityMatchCount > 0)) {
                 foreach ($varMatches[1] as $i => $varName) {
                     $method = $varMatches[2][$i];
@@ -216,7 +222,7 @@ function extractSchemaCreates(string $repoRoot, array $packageDirs, array $confi
             }
 
             if ((($qualityMatchCount = preg_match_all(
-                '/Schema::create\(\s*(?:\'([^\']+)\'|"([^"]+)"|self::(\w+)|\$(\w+)|Config::(\w+)\(\))\s*,/',
+                '/(?:Schema::|\$this->)create\(\s*(?:\'([^\']+)\'|"([^"]+)"|self::(\w+)|\$(\w+)|Config::(\w+)\(\))\s*,/',
                 $src,
                 $matches,
                 PREG_SET_ORDER,

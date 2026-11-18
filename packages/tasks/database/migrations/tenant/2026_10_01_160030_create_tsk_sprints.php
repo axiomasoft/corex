@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('tsk_sprints', function (Blueprint $table): void {
+        $this->create('tsk_sprints', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'tsk_sprints_pk');
             $table->uuid('project_id');
@@ -27,16 +32,11 @@ return new class extends Migration
         });
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE tsk_sprints RENAME CONSTRAINT tsk_sprints_pkey TO tsk_sprints_pk');
-        }
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
             DB::statement('ALTER TABLE tsk_sprints ADD CONSTRAINT tsk_sprints_dates_ck CHECK (ends_on >= starts_on)');
 
             DB::statement('ALTER TABLE tsk_sprints ADD CONSTRAINT tsk_sprints_status_ck CHECK (status IN (\'planned\',\'active\',\'completed\'))');
             DB::statement('CREATE UNIQUE INDEX tsk_sprints_active_uq ON tsk_sprints (project_id) WHERE status = \'active\'');
         }
-
     }
 
     public function down(): void
@@ -49,6 +49,6 @@ return new class extends Migration
             }
         }
 
-        Schema::dropIfExists('tsk_sprints');
+        $this->drop('tsk_sprints');
     }
 };

@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('crm_pipelines', function (Blueprint $t): void {
+        $this->create('crm_pipelines', function (Blueprint $t): void {
             $t->uuid('id');
             $t->primary(['id'], 'crm_pipelines_pk');
             $t->uuid('workspace_id')->nullable();
@@ -28,10 +33,6 @@ return new class extends Migration
             $t->foreign(['workspace_id'], 'crm_pipelines_workspace_id_fk')->references(['id'])->on('wsp_workspaces')->onDelete('cascade')->onUpdate('no action');
         });
 
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE crm_pipelines RENAME CONSTRAINT crm_pipelines_pkey TO crm_pipelines_pk');
-        }
-
         $index = 'CREATE UNIQUE INDEX crm_pipelines_code_uq ON crm_pipelines';
         $index .= Schema::getConnection()->getDriverName() === 'pgsql' ? ' (entity_type, code, workspace_id) NULLS NOT DISTINCT' : " (entity_type, code, COALESCE(workspace_id, ''))";
         $index .= ' WHERE deleted_at IS NULL';
@@ -40,7 +41,6 @@ return new class extends Migration
         $index .= Schema::getConnection()->getDriverName() === 'pgsql' ? ' (entity_type, workspace_id) NULLS NOT DISTINCT' : " (entity_type, COALESCE(workspace_id, ''))";
         $index .= ' WHERE is_default AND deleted_at IS NULL';
         DB::statement($index);
-
     }
 
     public function down(): void

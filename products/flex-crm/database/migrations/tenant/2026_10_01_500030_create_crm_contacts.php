@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('crm_contacts', function (Blueprint $table): void {
+        $this->create('crm_contacts', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'crm_contacts_pk');
             $table->uuid('workspace_id')->nullable();
@@ -42,16 +47,11 @@ return new class extends Migration
         });
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE crm_contacts RENAME CONSTRAINT crm_contacts_pkey TO crm_contacts_pk');
-        }
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
 
             DB::statement('CREATE INDEX crm_contacts_emails_ix ON crm_contacts USING gin (emails jsonb_path_ops)');
 
             DB::statement('CREATE INDEX crm_contacts_phones_ix ON crm_contacts USING gin (phones jsonb_path_ops)');
             DB::statement('CREATE INDEX crm_contacts_search_ix ON crm_contacts USING gin (search)');
-
         }
 
         DB::statement('CREATE INDEX crm_contacts_owner_ix ON crm_contacts (owner_id) WHERE deleted_at IS NULL');

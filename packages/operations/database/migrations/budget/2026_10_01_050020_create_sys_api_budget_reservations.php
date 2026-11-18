@@ -3,18 +3,21 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Connection;
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        $connection = Schema::getConnection();
-        $schema = $connection->getSchemaBuilder();
+        $connection = $this->db();
 
-        $schema->create('sys_api_budget_reservations', function (Blueprint $table): void {
+        $this->create('sys_api_budget_reservations', function (Blueprint $table): void {
             $table->string('id', 64);
             $table->primary(['id'], 'sys_api_budget_reservations_pk');
             $table->json('keys');
@@ -38,15 +41,11 @@ return new class extends Migration
             'jsonb_array_length(keys::jsonb) = 4',
             'json_array_length(NEW.keys) = 4',
         );
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE sys_api_budget_reservations RENAME CONSTRAINT sys_api_budget_reservations_pkey TO sys_api_budget_reservations_pk');
-        }
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('sys_api_budget_reservations');
+        $this->drop('sys_api_budget_reservations');
     }
 
     private function addCheck(

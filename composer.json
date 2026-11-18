@@ -140,7 +140,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "3dcc7d7cb5ad036a642e9ac07cb1843076c9b4eb"
+                    "reference": "db7a873640a9b1390320253736c976bd30e6bf83"
                 },
                 "require": {
                     "php": "^8.4",
@@ -216,7 +216,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "3dcc7d7cb5ad036a642e9ac07cb1843076c9b4eb"
+                    "reference": "db7a873640a9b1390320253736c976bd30e6bf83"
                 },
                 "require": {
                     "php": "^8.4",
@@ -269,7 +269,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "3dcc7d7cb5ad036a642e9ac07cb1843076c9b4eb"
+                    "reference": "db7a873640a9b1390320253736c976bd30e6bf83"
                 },
                 "require": {
                     "php": "^8.4",
@@ -424,7 +424,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "3dcc7d7cb5ad036a642e9ac07cb1843076c9b4eb"
+                    "reference": "db7a873640a9b1390320253736c976bd30e6bf83"
                 },
                 "require": {
                     "php": "^8.4",
@@ -472,7 +472,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "3dcc7d7cb5ad036a642e9ac07cb1843076c9b4eb"
+                    "reference": "db7a873640a9b1390320253736c976bd30e6bf83"
                 },
                 "require": {
                     "php": "^8.4",
@@ -821,7 +821,7 @@
                     "symfony/yaml": "^7.2|^8.0"
                 },
                 "suggest": {
-                    "driftingly/rector-laravel": "Optional upstream Rector ruleset for PackmanRectorSet."
+                    "driftingly/rector-laravel": "Optional Laravel Rector rule sets (^2.0) alongside PackmanRectorSet."
                 },
                 "autoload": {
                     "psr-4": {
@@ -841,7 +841,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "3dcc7d7cb5ad036a642e9ac07cb1843076c9b4eb"
+                    "reference": "db7a873640a9b1390320253736c976bd30e6bf83"
                 }
             }
         },
@@ -890,7 +890,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "3dcc7d7cb5ad036a642e9ac07cb1843076c9b4eb"
+                    "reference": "db7a873640a9b1390320253736c976bd30e6bf83"
                 }
             }
         }
@@ -965,9 +965,6 @@
         "schema-gate": "php scripts/schema-gate.php",
         "mutation:inventory": "python3 scripts/quality/mutation.py --inventory --check",
         "mutation:self-test": "python3 scripts/quality/mutation.py --self-test",
-        "mutation": "python3 scripts/quality/mutation.py",
-        "post-autoload-dump": [
-            "python3 scripts/patch-packman-devtools.py"
-        ]
+        "mutation": "python3 scripts/quality/mutation.py"
     }
 }

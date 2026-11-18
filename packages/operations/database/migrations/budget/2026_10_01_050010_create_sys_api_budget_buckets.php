@@ -3,18 +3,21 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Connection;
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        $connection = Schema::getConnection();
-        $schema = $connection->getSchemaBuilder();
+        $connection = $this->db();
 
-        $schema->create('sys_api_budget_buckets', function (Blueprint $table): void {
+        $this->create('sys_api_budget_buckets', function (Blueprint $table): void {
             $table->char('key', 64);
             $table->primary(['key'], 'sys_api_budget_buckets_pk');
             $table->unsignedBigInteger('capacity');
@@ -28,15 +31,11 @@ return new class extends Migration
             'capacity >= 0 AND refill_rate >= 0',
             'NEW.capacity >= 0 AND NEW.refill_rate >= 0',
         );
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE sys_api_budget_buckets RENAME CONSTRAINT sys_api_budget_buckets_pkey TO sys_api_budget_buckets_pk');
-        }
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('sys_api_budget_buckets');
+        $this->drop('sys_api_budget_buckets');
     }
 
     private function addCheck(

@@ -2,16 +2,20 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table): void {
+        $this->create('users', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'users_pk');
             $table->string('email', 255);
@@ -30,8 +34,6 @@ return new class extends Migration
             $table->timestampTz('deleted_at', precision: 6)->nullable();
         });
 
-        Schema::getConnection()->statement('ALTER TABLE users RENAME CONSTRAINT users_pkey TO users_pk');
-
         // Preserve the existing cross-package integration FK in raw DDL.
         DB::statement('ALTER TABLE users ADD CONSTRAINT users_department_fk FOREIGN KEY (department_id) REFERENCES sys_departments (id) ON DELETE SET NULL');
 
@@ -40,6 +42,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        $this->drop('users');
     }
 };

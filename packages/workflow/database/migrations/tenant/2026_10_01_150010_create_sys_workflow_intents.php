@@ -2,15 +2,19 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('sys_workflow_intents', function (Blueprint $table): void {
+        $this->create('sys_workflow_intents', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'sys_workflow_intents_pk');
             $table->string('request_key', 128)->unique('sys_workflow_intents_request_key_uq');
@@ -31,14 +35,10 @@ return new class extends Migration
             $table->timestamps();
             $table->index(['state', 'updated_at'], 'sys_workflow_intents_state_updated_at_ix');
         });
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE sys_workflow_intents RENAME CONSTRAINT sys_workflow_intents_pkey TO sys_workflow_intents_pk');
-        }
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('sys_workflow_intents');
+        $this->drop('sys_workflow_intents');
     }
 };

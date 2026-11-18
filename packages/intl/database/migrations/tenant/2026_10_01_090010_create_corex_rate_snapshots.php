@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('corex_rate_snapshots', function (Blueprint $table): void {
+        $this->create('corex_rate_snapshots', function (Blueprint $table): void {
             $table->char('id', 26);
             $table->primary(['id'], 'corex_rate_snapshots_pk');
             $table->string('schema_version', 32);
@@ -26,10 +31,6 @@ return new class extends Migration
             $table->char('payload_hash', 64);
             $table->unique(['source', 'publication_id', 'publication_revision', 'base', 'quote', 'valid_on'], 'corex_rate_snapshots_publication_uq');
         });
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE corex_rate_snapshots RENAME CONSTRAINT corex_rate_snapshots_pkey TO corex_rate_snapshots_pk');
-        }
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {
             DB::statement("ALTER TABLE corex_rate_snapshots ADD CONSTRAINT corex_rate_snapshots_payload_hash_ck CHECK (payload_hash ~ '^[a-f0-9]{64}$')");
@@ -48,6 +49,6 @@ return new class extends Migration
             }
         }
 
-        Schema::dropIfExists('corex_rate_snapshots');
+        $this->drop('corex_rate_snapshots');
     }
 };

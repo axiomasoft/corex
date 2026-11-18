@@ -2,15 +2,20 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('med_operations', function (Blueprint $table): void {
+        $this->create('med_operations', function (Blueprint $table): void {
             $table->id();
 
             if (Schema::getConnection()->getDriverName() === 'pgsql') {
@@ -31,14 +36,10 @@ return new class extends Migration
             $table->foreign('file_id', 'med_operations_file_id_fk')->references('id')->on('med_files')->restrictOnDelete();
             $table->index(['state', 'next_attempt_at'], 'med_operations_state_next_attempt_at_ix');
         });
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE med_operations RENAME CONSTRAINT med_operations_pkey TO med_operations_pk');
-        }
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('med_operations');
+        $this->drop('med_operations');
     }
 };

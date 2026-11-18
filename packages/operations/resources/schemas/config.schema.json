@@ -161,6 +161,69 @@
                     },
                     "additionalProperties": false
                 },
+                "schema": {
+                    "type": [
+                        "object",
+                        "null"
+                    ],
+                    "properties": {
+                        "budget": {
+                            "type": "object",
+                            "properties": {
+                                "connection": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "default": null
+                                },
+                                "database": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "default": null
+                                },
+                                "driver": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "default": null
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "tenant": {
+                            "type": "object",
+                            "properties": {
+                                "connection": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "default": null
+                                },
+                                "database": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "default": null
+                                },
+                                "driver": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "default": null
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "additionalProperties": false
+                },
                 "versions": {
                     "type": "array"
                 }

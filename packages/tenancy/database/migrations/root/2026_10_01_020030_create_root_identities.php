@@ -2,16 +2,20 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('root_identities', function (Blueprint $table): void {
+        $this->create('root_identities', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'root_identities_pk');
             $table->string('email', 255);
@@ -29,13 +33,11 @@ return new class extends Migration
             $table->timestampTz('deleted_at', precision: 6)->nullable();
         });
 
-        Schema::getConnection()->statement('ALTER TABLE root_identities RENAME CONSTRAINT root_identities_pkey TO root_identities_pk');
-
         DB::statement('CREATE UNIQUE INDEX root_identities_email_uq ON root_identities (lower(email)) WHERE deleted_at IS NULL');
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('root_identities');
+        $this->drop('root_identities');
     }
 };

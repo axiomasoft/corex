@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('corex_rate_batches', function (Blueprint $table): void {
+        $this->create('corex_rate_batches', function (Blueprint $table): void {
             $table->char('id', 26);
             $table->primary(['id'], 'corex_rate_batches_pk');
             $table->char('operation_key', 64)->unique('corex_rate_batches_operation_key_uq');
@@ -22,10 +27,6 @@ return new class extends Migration
             $table->string('state', 16);
             $table->timestampTz('created_at');
         });
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE corex_rate_batches RENAME CONSTRAINT corex_rate_batches_pkey TO corex_rate_batches_pk');
-        }
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {
             DB::statement("ALTER TABLE corex_rate_batches ADD CONSTRAINT corex_rate_batches_operation_key_ck CHECK (operation_key ~ '^[a-f0-9]{64}$')");
@@ -49,6 +50,6 @@ return new class extends Migration
             }
         }
 
-        Schema::dropIfExists('corex_rate_batches');
+        $this->drop('corex_rate_batches');
     }
 };

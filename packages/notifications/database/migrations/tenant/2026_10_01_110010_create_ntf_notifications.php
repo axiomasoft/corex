@@ -2,16 +2,20 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('ntf_notifications', function (Blueprint $table): void {
+        $this->create('ntf_notifications', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'ntf_notifications_pk');
             $table->string('recipient_kind', 64);
@@ -30,10 +34,6 @@ return new class extends Migration
             $table->unique(['recipient_kind', 'recipient_id', 'request_key'], 'ntf_notifications_recipient_kind_recipient_id_request_key_uq');
             $table->index(['recipient_kind', 'recipient_id', 'read_at', 'id'], 'ntf_notifications_scan_ix');
         });
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE ntf_notifications RENAME CONSTRAINT ntf_notifications_pkey TO ntf_notifications_pk');
-        }
     }
 
     public function down(): void
@@ -42,7 +42,6 @@ return new class extends Migration
             throw new RuntimeException('MigrationRollbackDenied: ntf_notifications contains durable notification state.');
         }
 
-        Schema::dropIfExists('ntf_notifications');
-
+        $this->drop('ntf_notifications');
     }
 };

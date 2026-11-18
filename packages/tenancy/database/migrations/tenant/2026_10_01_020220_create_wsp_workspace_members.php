@@ -2,16 +2,20 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('wsp_workspace_members', function (Blueprint $table): void {
+        $this->create('wsp_workspace_members', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'wsp_workspace_members_pk');
             $table->uuid('workspace_id');
@@ -27,8 +31,6 @@ return new class extends Migration
             $table->unique(['workspace_id', 'user_id'], 'wsp_workspace_members_workspace_id_user_id_uq');
         });
 
-        Schema::getConnection()->statement('ALTER TABLE wsp_workspace_members RENAME CONSTRAINT wsp_workspace_members_pkey TO wsp_workspace_members_pk');
-
         DB::statement("ALTER TABLE wsp_workspace_members ADD CONSTRAINT wsp_workspace_members_status_ck CHECK (status IN ('active','suspended'))");
 
         DB::statement('CREATE INDEX wsp_workspace_members_user_ix ON wsp_workspace_members (user_id)');
@@ -39,6 +41,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('wsp_workspace_members');
+        $this->drop('wsp_workspace_members');
     }
 };

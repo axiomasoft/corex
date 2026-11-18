@@ -2,17 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
 // Tenant-DB authorization roles; bridge role links live in the bridge package.
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('aut_roles', function (Blueprint $table): void {
+        $this->create('aut_roles', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'aut_roles_pk');
             $table->string('slug', 64);
@@ -33,11 +37,10 @@ return new class extends Migration
         DB::statement('CREATE UNIQUE INDEX aut_roles_slug_uq ON aut_roles (slug) WHERE deleted_at IS NULL');
 
         DB::statement("COMMENT ON COLUMN aut_roles.is_system IS 'Системная роль: матрица read-only в UI, обновляется релизами; кастомизация = клонировать и править клон (Б24-модель)'");
-        Schema::getConnection()->statement('ALTER TABLE aut_roles RENAME CONSTRAINT aut_roles_pkey TO aut_roles_pk');
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('aut_roles');
+        $this->drop('aut_roles');
     }
 };

@@ -2,20 +2,24 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
 // Tenant-DB migration (B-11 §2.3, D14/D16) — UI-матрица role × entity ×
 // action × scope, источник истины компилятора (DatabaseRoleMatrixCompiler,
 // P2.8). entity_key — handle EntityRegistry (логическая связь, без FK —
 // EntityRegistry не персистентен). См. DB_SCHEMA.md §3.5 aut_role_matrix.
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('aut_role_matrix', function (Blueprint $table): void {
+        $this->create('aut_role_matrix', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'aut_role_matrix_pk');
             $table->uuid('role_id');
@@ -38,11 +42,10 @@ return new class extends Migration
         DB::statement('CREATE INDEX aut_role_matrix_entity_ix ON aut_role_matrix (entity_key)');
 
         DB::statement("COMMENT ON TABLE aut_role_matrix IS 'Семантика (Б24, R-08 §2.6): несколько ролей → max-scope-wins по базовым строкам; контекстная строка (context_type NOT NULL) СИЛЬНЕЕ базовой для записей своего контекста, включая сужение — так реализуются «стадийные права». Отсутствие строки = none'");
-        Schema::getConnection()->statement('ALTER TABLE aut_role_matrix RENAME CONSTRAINT aut_role_matrix_pkey TO aut_role_matrix_pk');
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('aut_role_matrix');
+        $this->drop('aut_role_matrix');
     }
 };

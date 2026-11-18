@@ -2,18 +2,22 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
         $table = 'sys_department_user';
 
-        Schema::create($table, function (Blueprint $table): void {
+        $this->create($table, function (Blueprint $table): void {
             $table->uuid('department_id');
             $table->foreign(['department_id'], 'sys_department_user_department_fk')->references('id')->on('sys_departments')->cascadeOnDelete();
             $table->uuid('user_id');
@@ -25,14 +29,12 @@ return new class extends Migration
             $table->primary(['department_id', 'user_id'], 'sys_department_user_pk');
         });
 
-        Schema::getConnection()->statement('ALTER TABLE sys_department_user RENAME CONSTRAINT sys_department_user_pkey TO sys_department_user_pk');
-
         DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_department_user_role_ck CHECK (role IN ('member','head','deputy'))");
         DB::statement("CREATE UNIQUE INDEX sys_department_user_primary_uq ON {$table} (user_id) WHERE is_primary");
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('sys_department_user');
+        $this->drop('sys_department_user');
     }
 };

@@ -2,15 +2,19 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('sys_api_idempotency', function (Blueprint $table): void {
+        $this->create('sys_api_idempotency', function (Blueprint $table): void {
             $table->char('scope_hash', 64);
             $table->char('key_hash', 64);
             $table->char('request_fingerprint', 64);
@@ -26,12 +30,10 @@ return new class extends Migration
             $table->unique(['scope_hash', 'key_hash'], 'sys_api_idempotency_scope_key_uq');
             $table->index(['state', 'expires_at'], 'sys_api_idempotency_retention_ix');
         });
-
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('sys_api_idempotency');
-
+        $this->drop('sys_api_idempotency');
     }
 };

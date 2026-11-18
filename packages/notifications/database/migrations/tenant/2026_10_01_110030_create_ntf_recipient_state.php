@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('ntf_recipient_state', function (Blueprint $table): void {
+        $this->create('ntf_recipient_state', function (Blueprint $table): void {
             $table->string('kind', 64);
             $table->string('id', 128);
             $table->decimal('preference_revision', 20, 0);
             $table->primary(['kind', 'id'], 'ntf_recipient_state_pk');
         });
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE ntf_recipient_state RENAME CONSTRAINT ntf_recipient_state_pkey TO ntf_recipient_state_pk');
-        }
     }
 
     public function down(): void
@@ -29,7 +29,6 @@ return new class extends Migration
             throw new RuntimeException('MigrationRollbackDenied: ntf_recipient_state contains durable recipient state.');
         }
 
-        Schema::dropIfExists('ntf_recipient_state');
-
+        $this->drop('ntf_recipient_state');
     }
 };

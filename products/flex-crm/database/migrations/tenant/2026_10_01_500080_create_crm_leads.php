@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('crm_leads', function (Blueprint $t): void {
+        $this->create('crm_leads', function (Blueprint $t): void {
             $t->uuid('id');
             $t->primary(['id'], 'crm_leads_pk');
             $t->uuid('workspace_id')->nullable();
@@ -56,16 +61,10 @@ return new class extends Migration
         });
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE crm_leads RENAME CONSTRAINT crm_leads_pkey TO crm_leads_pk');
-        }
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
 
             DB::statement('ALTER TABLE crm_leads ADD CONSTRAINT crm_leads_parity_0_ck CHECK (status IN (\'open\',\'converted\',\'junk\'))');
             DB::statement('ALTER TABLE crm_leads ADD CONSTRAINT crm_leads_parity_1_ck CHECK (status <> \'converted\' OR converted_at IS NOT NULL)');
-
         }
-
     }
 
     public function down(): void

@@ -2,20 +2,24 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
         DB::statement('CREATE EXTENSION IF NOT EXISTS ltree');
 
         $table = 'sys_departments';
 
-        Schema::create($table, function (Blueprint $table): void {
+        $this->create($table, function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'sys_departments_pk');
             $table->uuid('workspace_id');
@@ -28,8 +32,6 @@ return new class extends Migration
             $table->timestampTz('updated_at', precision: 6)->useCurrent();
         });
 
-        Schema::getConnection()->statement('ALTER TABLE sys_departments RENAME CONSTRAINT sys_departments_pkey TO sys_departments_pk');
-
         // Add the self-reference after the primary key exists.
         DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_departments_parent_fk FOREIGN KEY (parent_id) REFERENCES {$table} (id) ON DELETE RESTRICT");
         DB::statement("ALTER TABLE {$table} ADD COLUMN path ltree NOT NULL");
@@ -40,6 +42,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('sys_departments');
+        $this->drop('sys_departments');
     }
 };

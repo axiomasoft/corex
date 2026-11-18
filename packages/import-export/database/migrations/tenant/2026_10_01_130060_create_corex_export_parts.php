@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('corex_export_parts', function (Blueprint $table): void {
+        $this->create('corex_export_parts', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'corex_export_parts_pk');
             $table->uuid('manifest_id');
@@ -24,10 +29,6 @@ return new class extends Migration
             $table->unique(['manifest_id', 'part_no'], 'corex_export_parts_manifest_id_part_no_uq');
             $table->foreign('manifest_id', 'corex_export_parts_manifest_id_fk')->references('id')->on('corex_export_manifests')->restrictOnDelete();
         });
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE corex_export_parts RENAME CONSTRAINT corex_export_parts_pkey TO corex_export_parts_pk');
-        }
     }
 
     public function down(): void
@@ -38,6 +39,6 @@ return new class extends Migration
             }
         }
 
-        Schema::dropIfExists('corex_export_parts');
+        $this->drop('corex_export_parts');
     }
 };

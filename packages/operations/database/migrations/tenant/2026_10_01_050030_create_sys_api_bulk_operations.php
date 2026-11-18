@@ -3,21 +3,24 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Connection;
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        $connection = Schema::getConnection();
-        $schema = $connection->getSchemaBuilder();
+        $connection = $this->db();
 
         $statuses = "('pending', 'running', 'cancelling', 'cancelled', 'completed', 'failed', 'expired')";
         $terminalStatuses = "('cancelled', 'completed', 'failed')";
 
-        $schema->create('sys_api_bulk_operations', function (Blueprint $table): void {
+        $this->create('sys_api_bulk_operations', function (Blueprint $table): void {
             $table->string('id', 64);
             $table->primary(['id'], 'sys_api_bulk_operations_pk');
             $table->string('major', 32);
@@ -61,15 +64,11 @@ return new class extends Migration
             'revision >= 0 AND attempt >= 0',
             'NEW.revision >= 0 AND NEW.attempt >= 0',
         );
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE sys_api_bulk_operations RENAME CONSTRAINT sys_api_bulk_operations_pkey TO sys_api_bulk_operations_pk');
-        }
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('sys_api_bulk_operations');
+        $this->drop('sys_api_bulk_operations');
     }
 
     private function addCheck(

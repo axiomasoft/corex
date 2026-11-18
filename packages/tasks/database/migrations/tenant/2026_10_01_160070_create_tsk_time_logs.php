@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('tsk_time_logs', function (Blueprint $table): void {
+        $this->create('tsk_time_logs', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'tsk_time_logs_pk');
             $table->uuid('task_id');
@@ -28,13 +33,8 @@ return new class extends Migration
         });
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE tsk_time_logs RENAME CONSTRAINT tsk_time_logs_pkey TO tsk_time_logs_pk');
-        }
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
             DB::statement('ALTER TABLE tsk_time_logs ADD CONSTRAINT tsk_time_logs_minutes_ck CHECK (minutes > 0)');
             DB::statement('ALTER TABLE tsk_time_logs ADD CONSTRAINT tsk_time_logs_source_ck CHECK (source IN (\'manual\',\'timer\'))');
-
         }
 
         DB::statement('CREATE INDEX "tsk_time_logs_user_ix" on "tsk_time_logs" ("user_id", "spent_on")');
@@ -51,6 +51,6 @@ return new class extends Migration
             }
         }
 
-        Schema::dropIfExists('tsk_time_logs');
+        $this->drop('tsk_time_logs');
     }
 };

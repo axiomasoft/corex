@@ -2,16 +2,20 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('root_oauth_clients', function (Blueprint $table): void {
+        $this->create('root_oauth_clients', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'root_oauth_clients_pk');
             $table->string('client_id', 64)->unique('root_oauth_clients_client_id_uq');
@@ -25,13 +29,11 @@ return new class extends Migration
             $table->timestampTz('deleted_at', precision: 6)->nullable();
         });
 
-        Schema::getConnection()->statement('ALTER TABLE root_oauth_clients RENAME CONSTRAINT root_oauth_clients_pkey TO root_oauth_clients_pk');
-
         DB::statement("COMMENT ON COLUMN root_oauth_clients.redirect_patterns IS 'wildcard покрывает платформенные поддомены; custom-домены валидируются точным матчем по root_domains(verified)'");
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('root_oauth_clients');
+        $this->drop('root_oauth_clients');
     }
 };

@@ -2,17 +2,22 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
         $tableName = 'sys_outbox_messages';
 
-        Schema::create($tableName, function (Blueprint $table): void {
+        $this->create($tableName, function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'sys_outbox_messages_pk');
             $table->string('name', 160);
@@ -40,8 +45,6 @@ return new class extends Migration
             $table->timestampTz('updated_at', precision: 6)->useCurrent();
         });
 
-        Schema::getConnection()->statement('ALTER TABLE sys_outbox_messages RENAME CONSTRAINT sys_outbox_messages_pkey TO sys_outbox_messages_pk');
-
         $wrappedTable = Schema::getConnection()->getQueryGrammar()->wrapTable($tableName);
 
         Schema::getConnection()->statement(
@@ -67,6 +70,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('sys_outbox_messages');
+        $this->drop('sys_outbox_messages');
     }
 };

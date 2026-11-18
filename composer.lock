@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f4ad4ed696b9e09fe8a35e0bc05ecea7",
+    "content-hash": "7a20f5b0a015f2a5e55a8180f36c3450",
     "packages": [
         {
             "name": "axiomasoft/corex",
@@ -1701,7 +1701,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "3dcc7d7cb5ad036a642e9ac07cb1843076c9b4eb"
+                "reference": "db7a873640a9b1390320253736c976bd30e6bf83"
             },
             "require": {
                 "php": "^8.4",
@@ -1774,7 +1774,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "3dcc7d7cb5ad036a642e9ac07cb1843076c9b4eb"
+                "reference": "db7a873640a9b1390320253736c976bd30e6bf83"
             },
             "require": {
                 "axiomasoft/packman": "^0.1|^1.0@dev",
@@ -1824,7 +1824,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "3dcc7d7cb5ad036a642e9ac07cb1843076c9b4eb"
+                "reference": "db7a873640a9b1390320253736c976bd30e6bf83"
             },
             "require": {
                 "axiomasoft/packman": "^0.1|^1.0@dev",
@@ -1869,7 +1869,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "3dcc7d7cb5ad036a642e9ac07cb1843076c9b4eb"
+                "reference": "db7a873640a9b1390320253736c976bd30e6bf83"
             },
             "require": {
                 "axiomasoft/packman": "^0.1|^1.0@dev",
@@ -1912,7 +1912,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "3dcc7d7cb5ad036a642e9ac07cb1843076c9b4eb"
+                "reference": "db7a873640a9b1390320253736c976bd30e6bf83"
             },
             "require": {
                 "axiomasoft/packman": "^0.1|^1.0@dev",
@@ -9392,7 +9392,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "3dcc7d7cb5ad036a642e9ac07cb1843076c9b4eb"
+                "reference": "db7a873640a9b1390320253736c976bd30e6bf83"
             },
             "require": {
                 "axiomasoft/packman": "^0.1|^1.0@dev",
@@ -9409,7 +9409,7 @@
                 "symfony/yaml": "^7.2|^8.0"
             },
             "suggest": {
-                "driftingly/rector-laravel": "Optional upstream Rector ruleset for PackmanRectorSet."
+                "driftingly/rector-laravel": "Optional Laravel Rector rule sets (^2.0) alongside PackmanRectorSet."
             },
             "bin": [
                 "packages/devtools/bin/packman"
@@ -9440,7 +9440,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "3dcc7d7cb5ad036a642e9ac07cb1843076c9b4eb"
+                "reference": "db7a873640a9b1390320253736c976bd30e6bf83"
             },
             "require": {
                 "axiomasoft/packman": "^0.1|^1.0@dev",

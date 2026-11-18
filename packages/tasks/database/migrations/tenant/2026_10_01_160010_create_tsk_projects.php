@@ -2,16 +2,21 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('tsk_projects', function (Blueprint $table): void {
+        $this->create('tsk_projects', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'tsk_projects_pk');
             $table->uuid('workspace_id')->nullable();
@@ -32,16 +37,11 @@ return new class extends Migration
         });
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE tsk_projects RENAME CONSTRAINT tsk_projects_pkey TO tsk_projects_pk');
-        }
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
 
             DB::statement('ALTER TABLE tsk_projects ADD CONSTRAINT tsk_projects_status_ck CHECK (status IN (\'active\',\'archived\'))');
 
             DB::statement('CREATE INDEX tsk_projects_ws_ix ON tsk_projects (workspace_id, status) WHERE deleted_at IS NULL');
         }
-
     }
 
     public function down(): void
@@ -54,6 +54,6 @@ return new class extends Migration
             }
         }
 
-        Schema::dropIfExists('tsk_projects');
+        $this->drop('tsk_projects');
     }
 };

@@ -10,6 +10,8 @@ use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\Tests\TestCase;
 use CoreX\Operations\Versioning\Internal\ApiProfileFactory;
 use InvalidArgumentException;
+use Opis\JsonSchema\Helper;
+use Opis\JsonSchema\Validator;
 use Packman\Config\Exceptions\InvalidConfiguration;
 use Packman\Errors\Enums\UnavailabilityReason;
 use Packman\Modules\Data\Compiler\CompiledRegistry;
@@ -109,6 +111,35 @@ final class ApiProfileTest extends TestCase
         $this->assertTrue($options->requirePhysicalTenancy);
         $this->assertSame('v1', $options->defaultMajor);
         $this->assertArrayNotHasKey('primary', $options->publicProjection());
+    }
+
+    public function test_config_schema_validates_explicit_budget_and_tenant_schema_connections(): void
+    {
+        $schemaPath = dirname(__DIR__, 2).'/resources/schemas/config.schema.json';
+        $schema = json_decode((string) file_get_contents($schemaPath), false, 512, JSON_THROW_ON_ERROR);
+        $shipped = require dirname(__DIR__, 2).'/config/corex-operations.php';
+        $validator = new Validator;
+
+        $this->assertTrue($validator->validate(Helper::toJSON(['corex-operations' => $shipped]), $schema)->isValid());
+
+        $configured = $shipped;
+        $configured['schema'] = [
+            'budget' => ['connection' => 'api_budget', 'driver' => 'pgsql', 'database' => 'corex_budget_test'],
+            'tenant' => ['connection' => 'api_tenant', 'driver' => 'pgsql', 'database' => 'corex_tenant_test'],
+        ];
+        $this->assertTrue($validator->validate(Helper::toJSON(['corex-operations' => $configured]), $schema)->isValid());
+
+        $nullSchema = $shipped;
+        $nullSchema['schema'] = null;
+        $this->assertTrue($validator->validate(Helper::toJSON(['corex-operations' => $nullSchema]), $schema)->isValid());
+
+        $unknownScope = $configured;
+        $unknownScope['schema']['unknown'] = ['connection' => 'x', 'driver' => 'pgsql', 'database' => 'x'];
+        $this->assertFalse($validator->validate(Helper::toJSON(['corex-operations' => $unknownScope]), $schema)->isValid());
+
+        $invalidField = $configured;
+        $invalidField['schema']['budget']['connection'] = 123;
+        $this->assertFalse($validator->validate(Helper::toJSON(['corex-operations' => $invalidField]), $schema)->isValid());
     }
 
     private function expectInvalid(callable $callback): void

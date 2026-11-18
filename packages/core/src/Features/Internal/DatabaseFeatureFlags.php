@@ -90,7 +90,7 @@ final readonly class DatabaseFeatureFlags implements FeatureFlags
                 'key' => $def->key,
                 'module' => $def->module,
                 'is_enabled' => $def->default,
-                'payload' => JsonDocuments::optionalArray($def->payload),
+                'payload' => $def->payload === null ? null : JsonDocuments::decode(JsonDocuments::capture($def->payload)),
             ],
         );
     }

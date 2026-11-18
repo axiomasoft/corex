@@ -251,3 +251,24 @@ it('define() is atomic under a racing second define() for the same key (UNIQUE(k
     expect(FeatureFlag::on(FEATURE_FLAGS_TEST_CONNECTION)->where('key', 'crm.lead_mode')->count())->toBe(1)
         ->and($flags->active('crm.lead_mode'))->toBeTrue();
 });
+
+it('round-trips scalar and map JSON payloads on PostgreSQL jsonb', function (): void {
+    $flags = featureFlags();
+    $cases = [
+        'crm.int' => 42,
+        'crm.bool' => true,
+        'crm.str' => 'beta',
+        'crm.null' => null,
+        'crm.map' => ['tier' => 'pro'],
+    ];
+
+    foreach ($cases as $key => $payload) {
+        $flags->define(new FeatureFlagDefinition(
+            key: $key,
+            default: true,
+            payload: $payload === null ? JsonDocuments::capture(null) : JsonDocuments::capture($payload),
+        ));
+
+        expect(JsonDocuments::decode($flags->value($key)))->toBe($payload);
+    }
+});

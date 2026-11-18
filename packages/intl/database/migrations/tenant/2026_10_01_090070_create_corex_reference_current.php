@@ -2,25 +2,26 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('corex_reference_current', function (Blueprint $table): void {
+        $this->create('corex_reference_current', function (Blueprint $table): void {
             $table->string('dataset_key', 128);
             $table->primary(['dataset_key'], 'corex_reference_current_pk');
             $table->string('snapshot_id', 128);
             $table->decimal('generation', total: 20, places: 0)->default(0);
         });
-
-        if (Schema::getConnection()->getDriverName() === 'pgsql') {
-            Schema::getConnection()->statement('ALTER TABLE corex_reference_current RENAME CONSTRAINT corex_reference_current_pkey TO corex_reference_current_pk');
-        }
 
         if (Schema::getConnection()->getDriverName() === 'pgsql') {
             DB::statement('ALTER TABLE corex_reference_current ADD CONSTRAINT corex_reference_current_snapshot_fk FOREIGN KEY (snapshot_id) REFERENCES corex_reference_datasets (snapshot_id) ON DELETE RESTRICT');
@@ -40,6 +41,6 @@ return new class extends Migration
             }
         }
 
-        Schema::dropIfExists('corex_reference_current');
+        $this->drop('corex_reference_current');
     }
 };

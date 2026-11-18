@@ -2,16 +2,20 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('root_idp_sessions', function (Blueprint $table): void {
+        $this->create('root_idp_sessions', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'root_idp_sessions_pk');
             $table->uuid('identity_id');
@@ -26,13 +30,11 @@ return new class extends Migration
             $table->foreign('identity_id', 'root_idp_sessions_identity_id_fk')->references('id')->on('root_identities')->cascadeOnDelete();
         });
 
-        Schema::getConnection()->statement('ALTER TABLE root_idp_sessions RENAME CONSTRAINT root_idp_sessions_pkey TO root_idp_sessions_pk');
-
         DB::statement('CREATE INDEX root_idp_sessions_identity_ix ON root_idp_sessions (identity_id) WHERE revoked_at IS NULL');
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('root_idp_sessions');
+        $this->drop('root_idp_sessions');
     }
 };

@@ -159,7 +159,7 @@ $foreignKeyTargets = static function (string $source) use ($literalModelTables):
  * @return list<string>
  */
 $createdTables = static function (string $source): array {
-    preg_match_all('/Schema::create\(\s*([\'"])(.+?)\1/', $source, $matches);
+    preg_match_all('/(?:Schema::|\$this->)create\(\s*([\'"])(.+?)\1/', $source, $matches);
 
     return $matches[2];
 };

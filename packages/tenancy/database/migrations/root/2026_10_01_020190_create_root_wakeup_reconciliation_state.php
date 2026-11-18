@@ -2,15 +2,19 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Packman\Schema\Laravel\PackmanMigration;
 
-return new class extends Migration
+return new class extends PackmanMigration
 {
+    protected function hasTables(): bool
+    {
+        return false;
+    }
+
     public function up(): void
     {
-        Schema::create('root_wakeup_reconciliation_state', function (Blueprint $table): void {
+        $this->create('root_wakeup_reconciliation_state', function (Blueprint $table): void {
             $table->string('name', 64);
             $table->primary(['name'], 'root_wakeup_reconciliation_state_pk');
             $table->uuid('cursor_account_id')->nullable();
@@ -19,12 +23,10 @@ return new class extends Migration
             $table->timestampTz('created_at', precision: 6)->useCurrent();
             $table->timestampTz('updated_at', precision: 6)->useCurrent();
         });
-
-        Schema::getConnection()->statement('ALTER TABLE root_wakeup_reconciliation_state RENAME CONSTRAINT root_wakeup_reconciliation_state_pkey TO root_wakeup_reconciliation_state_pk');
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('root_wakeup_reconciliation_state');
+        $this->drop('root_wakeup_reconciliation_state');
     }
 };
