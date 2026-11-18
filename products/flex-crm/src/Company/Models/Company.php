@@ -13,6 +13,7 @@ use Flex\Crm\Deal\Models\Deal;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Override;
+use Packman\Attributes\Internal;
 
 /**
  * @property string $id
@@ -32,6 +33,7 @@ use Override;
  * @property string|null $search
  * @property string|null $owner_id
  */
+#[Internal]
 final class Company extends BaseModel
 {
     use HasActivities;

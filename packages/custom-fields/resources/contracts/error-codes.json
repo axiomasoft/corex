@@ -1,0 +1,61 @@
+{
+    "schema": "packman-error-codes/1",
+    "package": "axiomasoft/corex-custom-fields",
+    "codes": [
+        {
+            "package": "axiomasoft/corex-custom-fields",
+            "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+            "case": "AttributeSchemaConflict",
+            "code": "custom-fields.attribute_schema_conflict",
+            "type": "urn:packman:problem:custom-fields.attribute_schema_conflict",
+            "status": 409,
+            "title": "Attribute schema conflict.",
+            "retryable": true,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex-custom-fields",
+            "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+            "case": "AttributeSchemaRetryExhausted",
+            "code": "custom-fields.attribute_schema_retry_exhausted",
+            "type": "urn:packman:problem:custom-fields.attribute_schema_retry_exhausted",
+            "status": 409,
+            "title": "Attribute schema retry exhausted.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex-custom-fields",
+            "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+            "case": "AttributesAccessDenied",
+            "code": "custom-fields.attributes_access_denied",
+            "type": "urn:packman:problem:custom-fields.attributes_access_denied",
+            "status": 403,
+            "title": "Attributes access denied.",
+            "retryable": false,
+            "category": "authorization"
+        },
+        {
+            "package": "axiomasoft/corex-custom-fields",
+            "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+            "case": "AttributesEngineUnavailable",
+            "code": "custom-fields.attributes_engine_unavailable",
+            "type": "urn:packman:problem:custom-fields.attributes_engine_unavailable",
+            "status": 503,
+            "title": "Attributes engine unavailable.",
+            "retryable": false,
+            "category": "unavailable"
+        },
+        {
+            "package": "axiomasoft/corex-custom-fields",
+            "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+            "case": "InvalidAttributeTables",
+            "code": "custom-fields.invalid_attribute_tables",
+            "type": "urn:packman:problem:custom-fields.invalid_attribute_tables",
+            "status": 500,
+            "title": "Invalid attribute tables.",
+            "retryable": false,
+            "category": "internal"
+        }
+    ]
+}

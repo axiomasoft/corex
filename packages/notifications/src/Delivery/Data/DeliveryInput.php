@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Delivery\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Data\Data\JsonDocument;
 use CoreX\Notifications\Inbox\Data\NotificationContext;
+use Packman\Attributes\Api;
 
 #[Api(since: '1.0')]
 final readonly class DeliveryInput

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Audit\Enums;
 
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 
 /**
  * Who performed an audited change (sys_audit_log CHECK constraint).

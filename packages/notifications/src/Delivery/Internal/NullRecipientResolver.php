@@ -8,7 +8,9 @@ use CoreX\Notifications\Delivery\Contracts\RecipientResolver;
 use CoreX\Notifications\Delivery\Data\DeliveryTarget;
 use CoreX\Notifications\Delivery\Data\RecipientReference;
 use CoreX\Notifications\Inbox\Data\NotificationContext;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class NullRecipientResolver implements RecipientResolver
 {
     public function resolve(NotificationContext $context, RecipientReference $recipient, string $channel): ?DeliveryTarget

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel\Commands;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\Account\Laravel\MigrationWaveOrchestrator;
 use Illuminate\Console\Command;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Runs one `root_migration_batches` wave (B-11 §5.6, P2.12). `-p`/

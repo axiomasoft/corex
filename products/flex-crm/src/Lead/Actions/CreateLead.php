@@ -9,7 +9,9 @@ use Flex\Crm\Lead\Enums\LeadStatus;
 use Flex\Crm\Lead\Events\LeadCreated;
 use Flex\Crm\Lead\Models\Lead;
 use Illuminate\Validation\ValidationException;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class CreateLead
 {
     public function __construct(private ContextGuard $guard) {}

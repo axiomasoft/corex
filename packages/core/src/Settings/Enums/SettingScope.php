@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Settings\Enums;
 
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 
 /**
  * Settings cascade level: user overrides workspace overrides

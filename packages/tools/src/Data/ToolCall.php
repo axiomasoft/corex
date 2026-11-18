@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Operations\Validation\Data\JsonObject;
+use Packman\Attributes\Api;
 
 /** Typed headless tool invocation request; correlation and proof are untrusted evidence. */
 #[Api(since: '1.0')]

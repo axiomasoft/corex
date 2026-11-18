@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal\Laravel;
 
-use CoreX\Config\Laravel\ConfigurationValidator;
 use CoreX\CustomFields\Internal\Value;
+use Packman\Attributes\Internal;
+use Packman\Config\Laravel\ConfigurationValidator;
 
 /** @internal Package composition type. */
+#[Internal]
 final readonly class AttributeComposition
 {
     private const array ALLOWED_SOURCES = ['static', 'module'];

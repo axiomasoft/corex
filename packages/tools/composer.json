@@ -6,6 +6,9 @@
     "require": {
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/corex-operations": "^1.0@dev",
+        "axiomasoft/packman": "^0.1@dev",
+        "axiomasoft/packman-modules": "^0.1@dev",
         "illuminate/auth": "^13.0",
         "illuminate/console": "^13.0",
         "illuminate/contracts": "^13.0",
@@ -13,13 +16,11 @@
         "illuminate/http": "^13.0",
         "illuminate/support": "^13.0",
         "illuminate/validation": "^13.0",
-        "symfony/http-kernel": "^7.2|^8.0",
-        "axiomasoft/corex-operations": "^1.0@dev",
-        "axiomasoft/packman-modules": "^0.1@dev"
+        "symfony/http-kernel": "^7.2|^8.0"
     },
     "suggest": {
         "axiomasoft/corex-import-export": "Optional bounded import/export adapter for durable bulk operations",
-        "opis/json-schema": "2.4.1 — bounded offline tool-schema/1 validation adapter",
+        "opis/json-schema": "2.4.1 \u2014 bounded offline tool-schema/1 validation adapter",
         "ext-curl": "Optional webhook transport; missing curl returns capability_unavailable."
     },
     "require-dev": {
@@ -89,6 +90,19 @@
         "laravel": {
             "providers": [
                 "CoreX\\Tools\\ToolsServiceProvider"
+            ]
+        },
+        "packman": {
+            "schema-version": 1,
+            "package-type": "capability",
+            "stability": "stable",
+            "profile": "laravel-package",
+            "error-prefix": "tools",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Errors",
+                "Internal"
             ]
         }
     }

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Errors\Data\ErrorDescriptor;
-use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Errors\Tooling\ErrorSourceScanner;
 use CoreX\Tests\Support\SourceScanner;
+use Packman\Errors\Data\ErrorDescriptor;
+use Packman\Errors\Enums\ErrorCategory;
 
 test('ErrorContract package catalogue matches the complete stable fixture', function (): void {
     $root = SourceScanner::repoRoot();
@@ -46,5 +46,5 @@ test('ErrorContract AST gate rejects literals through resolved names', function 
     'alias' => "use CoreX\\Operations\\Errors\\Exceptions\\ApiError as Failure; new Failure('bad', 409, 'probe');",
     'group import' => "use CoreX\\Operations\\Errors\\Exceptions\\{ApiError as Failure}; new Failure(errorCode: 'bad', status: 409, message: 'probe');",
     'FQCN' => "new \\CoreX\\Operations\\Errors\\Exceptions\\ApiError('bad', 409, 'probe');",
-    'descriptor' => "use CoreX\\Errors\\Data\\ErrorDescriptor as Descriptor; new Descriptor(code: 'bad', category: \\CoreX\\Errors\\Enums\\ErrorCategory::Internal);",
+    'descriptor' => "use Packman\\Errors\\Data\\ErrorDescriptor as Descriptor; new Descriptor(code: 'bad', category: \\Packman\\Errors\\Enums\\ErrorCategory::Internal);",
 ]);

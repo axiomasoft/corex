@@ -8,8 +8,10 @@ use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Definition\Data\Operation;
 use Override;
+use Packman\Attributes\Internal;
 
 /** @internal Allows legacy unscoped operations and fails closed once scopes are declared. */
+#[Internal]
 final class DenyClientScopeAuthorizer implements ClientScopeAuthorizer
 {
     #[Override]

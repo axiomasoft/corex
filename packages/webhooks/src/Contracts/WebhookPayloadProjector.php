@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\Contracts\CloudEventCodec;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Webhooks\Data\WebhookTopic;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Installed field allow-list projector: returns only public data for the external CloudEvent.

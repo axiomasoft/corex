@@ -17,8 +17,8 @@ use CoreX\CustomFields\Internal\UnsupportedAttributeCapability;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
-use CoreX\Errors\Enums\ErrorCategory;
-use CoreX\Errors\Enums\UnavailabilityReason;
+use Packman\Errors\Enums\ErrorCategory;
+use Packman\Errors\Enums\UnavailabilityReason;
 
 it('fails closed consistently when an application has not enabled attributes', function (): void {
     $hash = str_repeat('a', 64);

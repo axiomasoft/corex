@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Project\Enums;
 
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 
 #[Api(since: '1.0')]
 enum ProjectStatus: string

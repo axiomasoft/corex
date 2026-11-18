@@ -12,7 +12,9 @@ use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class AttributeWriteGuard
 {
     private const string DENIED_MESSAGE = 'The attribute write is not allowed.';

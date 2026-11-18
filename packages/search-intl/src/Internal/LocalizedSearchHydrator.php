@@ -15,7 +15,9 @@ use CoreX\Search\Data\SearchPage;
 use CoreX\Search\Data\SearchSnapshot;
 use CoreX\SearchIntl\Data\LocalizedFieldBinding;
 use Override;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class LocalizedSearchHydrator implements SearchHydrator
 {
     /**

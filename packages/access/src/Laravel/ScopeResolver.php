@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Access\Laravel;
 
 use CoreX\Access\Data\RecordContext;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\Principal;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * @corex-model-extension Eloquent row-visibility extension on owner_id/workspace_id; retains caller scopes and returns the same Builder.

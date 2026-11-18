@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Config\Laravel\CoreOptionsParser;
 use CoreX\Scheduler\Internal\DangerousModesCheck;
 use CoreX\Scheduler\Internal\SchedulerOptions;
 use CoreX\Scheduler\Tests\Support\OptionsProbeHandler;
+use Packman\Config\Exceptions\InvalidConfiguration;
 
 it('passes on an empty environment with the shipped defaults', function (): void {
     $options = SchedulerOptions::fromArray([]);

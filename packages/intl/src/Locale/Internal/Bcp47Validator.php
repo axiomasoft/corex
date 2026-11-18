@@ -7,7 +7,9 @@ namespace CoreX\Intl\Locale\Internal;
 use CoreX\Intl\Locale\Contracts\LocaleValidation;
 use CoreX\Intl\Locale\Exceptions\InvalidLocaleException;
 use Locale;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class Bcp47Validator implements LocaleValidation
 {
     /**

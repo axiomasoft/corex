@@ -31,6 +31,7 @@ use Illuminate\Contracts\Container\Container;
 use InvalidArgumentException;
 use LogicException;
 use Override;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use RuntimeException;
@@ -38,6 +39,7 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
 /** Guarded headless invocation over compiled tool declarations and owning handlers. */
+#[Internal]
 final readonly class GuardedToolInvoker implements ToolInvoker
 {
     public function __construct(

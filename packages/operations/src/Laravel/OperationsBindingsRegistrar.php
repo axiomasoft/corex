@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
-use CoreX\Config\Contracts\RuntimeConfigCheck;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
@@ -30,10 +27,15 @@ use CoreX\Operations\Invocation\Contracts\RequestContextProvider;
 use CoreX\Operations\Invocation\Internal\CurrentRequestContext;
 use CoreX\Operations\Invocation\Internal\DefaultOperationInvoker;
 use CoreX\Operations\Laravel\Support\ApiOptions;
+use CoreX\Operations\Laravel\Support\OperationsConfigSection;
 use CoreX\Time\Laravel\SystemClock;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Contracts\ConfigReportSectionInterface;
+use Packman\Config\Contracts\RuntimeConfigCheck;
 use Packman\Foundation\Contracts\PackageRegistrar;
 use Packman\Modules\Contracts\Compiler\ManifestSectionCompiler;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
@@ -47,6 +49,7 @@ final class OperationsBindingsRegistrar implements PackageRegistrar
     public function register(Application $app): void
     {
         OperationPortBindings::register($app);
+        $app->tag([OperationsConfigSection::class], ConfigReportSectionInterface::class);
 
         $app->tag([OperationSectionCompiler::class], ManifestSectionCompiler::class);
         $app->singleton(ApiOptions::class, static fn (Application $app): ApiOptions => ApiOptions::fromArray(

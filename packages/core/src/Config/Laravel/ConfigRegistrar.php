@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Config\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
-use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Config\Data\CoreOptions;
 use CoreX\Config\Internal\KernelConfigSection;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Contracts\ConfigReportSectionInterface as ConfigReportSection;
 use Packman\Foundation\Contracts\PackageRegistrar;
 
 /** Composition of the kernel module; the public provider delegates here. */
@@ -32,6 +32,5 @@ final class ConfigRegistrar implements PackageRegistrar
     public function boot(Application $app): void
     {
         $app->make(CoreOptions::class);
-        RuntimeConfigGate::install($app);
     }
 }

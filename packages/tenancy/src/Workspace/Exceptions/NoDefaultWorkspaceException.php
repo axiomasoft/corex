@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Workspace\Exceptions;
 
-use CoreX\Attributes\Api;
-use CoreX\Errors\Data\ErrorDescriptor;
-use CoreX\Errors\Enums\ErrorCategory;
-use CoreX\Errors\Exceptions\CodedException;
 use CoreX\Tenancy\Errors\Enums\TenancyErrorCode;
+use Packman\Attributes\Api;
+use Packman\Errors\Data\ErrorDescriptor;
+use Packman\Errors\Enums\ErrorCategory;
+use Packman\Errors\Exceptions\CodedException;
 
 /**
  * The current user has no default-workspace membership (B-11 §5.4, D132).

@@ -11,6 +11,9 @@
 
 ### Changed
 
+- Unify all 21 CoreX packages and Flex CRM under native Packman governance. Pin Packman runtime, devtools and testkit to the reviewed integration commit; adopt its public attributes, configuration/error contracts and composable schema facets without compatibility aliases. Preserve the redesigned package names and external engine ownership. Native contract manifests and CoreX architecture checks share one verified source tree.
+- Apply a commit/hash-bound development-tool patch so Packman table-write checks honor the exact declared table owner; CoreX DATA-003 still validates that ownership against its schema catalogue.
+
 - Pre-release package redesign: explicit `import-export`, `scheduler` and `recurring-tasks` package identities; matching Laravel provider names; Packman owns panel and saved-view engines and schema. CoreX panels is a trusted-context bridge. The [package map](docs/architecture/package-map.md) documents ownership and dependency directions.
 
 - P16.12: path-bearing Composer/PHPStan/graph-gate/CI/docs/CHANGELOG carriers reconciled to post-P16 physical layout; `extra.corex.public-api` namespaces unchanged (D92). Generated graph report and PHPStan contour regenerated via owners. Mutation P1.24 patches retargeted from `packages/core/src/PubSub/` to `packages/core/src/Messaging/`.
@@ -73,7 +76,7 @@
   `Support/Config.php` снят с allowlist; `RecordRules.php` оставлен с причиной
   `E-FLEX-CRM-SEARCH-LANGUAGE`. Посадка `ConfigCompositionProbe.php` даёт
   exit 1 и `C1`.
-- P7.10: `corex:config:validate` печатает эффективные драйверы и доступность
+- P7.10: `packman:config:validate` печатает эффективные драйверы и доступность
   адаптеров, накапливает нарушения Options и не выводит значения секретов.
 - P7.9: `MediaOptions` связывается в `MediaServiceProvider`; `SqlMediaLibrary` и
   `ConversionCoordinator` читают снимок `corex-media` вместо `config()`.

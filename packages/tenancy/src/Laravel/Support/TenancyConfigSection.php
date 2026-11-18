@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel\Support;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
-use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Messaging\Enums\PubSubDriver;
 use CoreX\Scheduling\Contracts\DueWakeupSweeper;
 use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\Contracts\AccountResources;
 use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks;
 use CoreX\Tenancy\Runtime\Contracts\AccountIsolationMapper;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Contracts\ConfigReportSectionInterface as ConfigReportSection;
 use Tenant\Contracts\Runtime\TenantRuntime;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]

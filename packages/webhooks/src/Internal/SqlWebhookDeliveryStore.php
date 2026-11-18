@@ -19,10 +19,12 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 use InvalidArgumentException;
 use Override;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
 /** @internal Tenant-local webhook delivery rows. Network send stays outside this store. */
+#[Internal]
 final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
 {
     private const string Table = 'sys_api_webhook_deliveries';

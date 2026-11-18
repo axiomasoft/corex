@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Laravel\Commands;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Data\Data\DataScope;
 use CoreX\Operations\Bulk\Internal\BulkRetention;
 use CoreX\Operations\Cost\Internal\BudgetRetention;
 use Illuminate\Console\Command;
+use Packman\Attributes\Internal;
 
 /**
  * Bounded retention pass for bulk results and shared budgets.
@@ -17,7 +16,7 @@ use Illuminate\Console\Command;
  * Tenant rows are pruned only for an already restored scope. The scope payload
  * is not used to open another database.
  */
-#[Spi(kind: SpiKind::Call, since: '1.0')]
+#[Internal]
 final class PruneApiOperations extends Command
 {
     protected $signature = 'corex:operations:prune

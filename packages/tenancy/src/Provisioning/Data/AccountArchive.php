@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Provisioning\Data;
 
-use CoreX\Attributes\Api;
 use InvalidArgumentException;
+use Packman\Attributes\Api;
 
 /** An opaque physical-owner archive reference; it is not itself proof of integrity. */
 #[Api(since: '1.0')]

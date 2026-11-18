@@ -33,9 +33,11 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
 use JsonException;
 use LogicException;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
+#[Internal]
 final readonly class EavAttributeStore implements AttributeStore
 {
     public function __construct(

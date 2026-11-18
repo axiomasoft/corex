@@ -7,6 +7,7 @@ namespace CoreX\Access\Roles\Internal;
 use CoreX\Access\Roles\Internal\Models\Role;
 use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
 use Illuminate\Database\ConnectionResolverInterface;
+use Packman\Attributes\Internal;
 
 /**
  * Customization path for a system role (AC-21): creates an editable,
@@ -17,6 +18,7 @@ use Illuminate\Database\ConnectionResolverInterface;
  * with no capability at all until its (now-editable) matrix is filled in.
  * Cloning `admin`/`employee` is the supported customization path for v1.
  */
+#[Internal]
 final readonly class RoleCloner
 {
     public function __construct(private ConnectionResolverInterface $connections) {}

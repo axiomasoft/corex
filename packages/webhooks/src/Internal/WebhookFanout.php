@@ -12,10 +12,12 @@ use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Enums\WebhookFailureReason;
 use DateInterval;
 use Illuminate\Database\Connection;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
 /** Materializes one delivery per active subscription inside the inbox transaction. */
+#[Internal]
 final readonly class WebhookFanout
 {
     public const string Consumer = 'api.webhooks.v1';

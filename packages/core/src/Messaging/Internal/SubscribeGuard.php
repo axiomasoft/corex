@@ -6,6 +6,7 @@ namespace CoreX\Messaging\Internal;
 
 use CoreX\Messaging\Contracts\WorkerRuntime;
 use LogicException;
+use Packman\Attributes\Internal;
 
 /**
  * Shared `subscribe()` runtime check for the Redis and database-poll
@@ -20,6 +21,7 @@ use LogicException;
  *
  * @internal spec: P1.24, D44, A29, D16
  */
+#[Internal]
 final class SubscribeGuard
 {
     public static function assert(WorkerRuntime $runtime, bool $octaneWorkerOptIn, string $driverClass): void

@@ -11,8 +11,10 @@ use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Exceptions\OutboxRefused;
 use Illuminate\Database\ConnectionInterface;
 use Override;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
+#[Internal]
 final readonly class SqlOutbox implements Outbox
 {
     public function __construct(

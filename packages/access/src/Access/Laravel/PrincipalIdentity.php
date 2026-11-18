@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Access\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\Principal;
 use CoreX\Context\Enums\PrincipalType;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Authentication carrier for user, agent and api_key principals. The morph

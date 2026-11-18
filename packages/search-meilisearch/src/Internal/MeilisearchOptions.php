@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\SearchMeilisearch\Internal;
 
-use CoreX\Config\Data\SecretRef;
-use CoreX\Config\Laravel\ConfigurationValidator;
+use Packman\Attributes\Internal;
+use Packman\Config\Data\SecretRef;
+use Packman\Config\Laravel\ConfigurationValidator;
 
 /**
  * Shape of `corex-search-meilisearch`. Presence of host, index and key is a runtime
@@ -13,6 +14,7 @@ use CoreX\Config\Laravel\ConfigurationValidator;
  *
  * @internal Package composition type: read only by the provider.
  */
+#[Internal]
 final readonly class MeilisearchOptions
 {
     public function __construct(

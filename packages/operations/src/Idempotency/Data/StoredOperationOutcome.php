@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Idempotency\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Data\Data\JsonDocument;
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Errors\Enums\CoreErrorCode;
-use CoreX\Errors\Enums\ErrorCategory;
-use CoreX\Errors\Exceptions\ProblemRegistryException;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Data\OperationResult;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use InvalidArgumentException;
+use Packman\Attributes\Api;
+use Packman\Errors\Contracts\ProblemRegistry;
+use Packman\Errors\Enums\ErrorCategory;
+use Packman\Errors\Exceptions\ProblemRegistryException;
 use ValueError;
 
 /** Canonical transport-neutral operation result persisted for semantic replay. */

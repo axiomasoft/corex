@@ -6,8 +6,10 @@ namespace CoreX\Tenancy\Membership\Internal\Transport;
 
 use CoreX\Tenancy\Membership\Exceptions\CentralUnauthorized;
 use CoreX\Tenancy\Membership\Exceptions\CentralUnavailable;
+use Packman\Attributes\Internal;
 
 /** @internal Supplied local profile; no guessed endpoint or runtime registration. */
+#[Internal]
 final readonly class ChannelBinding
 {
     public function __construct(

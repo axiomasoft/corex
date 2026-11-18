@@ -6,8 +6,10 @@ namespace CoreX\Tasks\Time\Internal;
 
 use CoreX\Tasks\Time\Data\TimeLogReference;
 use CoreX\Tasks\Time\Internal\Models\TimeLog;
+use Packman\Attributes\Internal;
 
 /** @internal */
+#[Internal]
 final class TimeLogReferenceFactory
 {
     public static function fromTimeLog(TimeLog $timeLog): TimeLogReference

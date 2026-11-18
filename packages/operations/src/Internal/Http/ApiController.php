@@ -10,7 +10,9 @@ use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\OperationDispatcher;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class ApiController
 {
     public function __construct(

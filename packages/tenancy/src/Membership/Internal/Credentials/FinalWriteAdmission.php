@@ -14,9 +14,11 @@ use CoreX\Tenancy\Membership\Internal\Timing\Elapsed;
 use CoreX\Tenancy\Membership\Internal\Timing\Lease;
 use CoreX\Tenancy\Membership\Internal\Transport\Value;
 use Illuminate\Database\ConnectionInterface;
+use Packman\Attributes\Internal;
 use Throwable;
 
 /** @internal Final SQL-write boundary for an unregistered membership consumer. */
+#[Internal]
 final readonly class FinalWriteAdmission
 {
     /**

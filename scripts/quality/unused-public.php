@@ -5,13 +5,13 @@ declare(strict_types=1);
 
 namespace CoreX\Quality\UnusedPublic;
 
-use CoreX\Attributes\Api;
-use CoreX\Attributes\Spi;
 use DateTimeImmutable;
 use FilesystemIterator;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Orchestra\Testbench\TestCase;
+use Packman\Attributes\Api;
+use Packman\Attributes\Spi;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
@@ -178,7 +178,10 @@ final class UsageScanner
     private function files(): array
     {
         $files = [];
-        $roots = ['tests', 'config', 'scripts'];
+        // Follow the shared owner's typed callbacks after moving config/errors and
+        // registrar composition out of CoreX. Vendor declarations provide call
+        // evidence, but only packages/products below src are audited as exports.
+        $roots = ['tests', 'config', 'scripts', 'vendor/axiomasoft/packman/packages/core/src'];
         foreach (['packages', 'products'] as $container) {
             $packages = glob($this->root.'/'.$container.'/*', GLOB_ONLYDIR);
             foreach ($packages === false ? [] : $packages as $package) {

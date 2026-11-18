@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Testing;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Invocation\Contracts\RequestContext;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Packman\Modules\Data\Compiler\CompiledRegistry;
 use Packman\Modules\Data\Extenders\Api;
 

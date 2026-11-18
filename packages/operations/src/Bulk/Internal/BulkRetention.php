@@ -14,6 +14,7 @@ use DateTimeImmutable;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /**
@@ -24,6 +25,7 @@ use Psr\Clock\ClockInterface;
  *
  * @internal
  */
+#[Internal]
 final readonly class BulkRetention
 {
     public const int DefaultResultSeconds = 86_400;

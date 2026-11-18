@@ -9,6 +9,7 @@ use CoreX\Context\Laravel\WorkspaceScopeProvider;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Eloquent\Scope;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 
 /**
  * The one place that decides which workspace global scope access wires and
@@ -22,6 +23,7 @@ use InvalidArgumentException;
  *
  * @internal
  */
+#[Internal]
 final readonly class EffectiveWorkspaceScope
 {
     /** @param  class-string|null  $class */

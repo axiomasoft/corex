@@ -14,9 +14,11 @@ use CoreX\Operations\Pagination\Data\CursorPosition;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use InvalidArgumentException;
 use JsonException;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /** `api-cursor/1`: `v1.<base64url(canonical-json)>.<base64url(hmac-sha256)>`. */
+#[Internal]
 final readonly class SignedCursorCodec implements CursorCodec
 {
     private const int FORMAT_VERSION = 1;

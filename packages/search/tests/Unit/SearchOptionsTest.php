@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Search\Internal\SearchOptions;
+use Packman\Config\Exceptions\InvalidConfiguration;
 
 it('passes on an empty environment with the shipped defaults and no secret', function (): void {
     $options = SearchOptions::fromArray([]);

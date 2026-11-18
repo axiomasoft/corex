@@ -1,0 +1,74 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "axiomasoft/corex-media configuration",
+    "type": "object",
+    "properties": {
+        "corex-media": {
+            "type": "object",
+            "properties": {
+                "allowed_mime_types": {
+                    "type": "array"
+                },
+                "conversion": {
+                    "type": "object",
+                    "properties": {
+                        "thumbnail": {
+                            "type": "object",
+                            "properties": {
+                                "max_height": {
+                                    "type": "integer",
+                                    "default": 4096
+                                },
+                                "max_output_bytes": {
+                                    "type": [
+                                        "string",
+                                        "integer",
+                                        "number",
+                                        "boolean",
+                                        "array",
+                                        "object",
+                                        "null"
+                                    ]
+                                },
+                                "max_pixels": {
+                                    "type": "integer",
+                                    "default": 20000000
+                                },
+                                "max_width": {
+                                    "type": "integer",
+                                    "default": 4096
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "conversion_driver_tag": {
+                    "type": "string",
+                    "default": "corex.media.conversion-drivers"
+                },
+                "max_image_pixels": {
+                    "type": "integer",
+                    "default": 20000000
+                },
+                "max_upload_bytes": {
+                    "type": [
+                        "string",
+                        "integer",
+                        "number",
+                        "boolean",
+                        "array",
+                        "object",
+                        "null"
+                    ]
+                },
+                "purposes": {
+                    "type": "array"
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

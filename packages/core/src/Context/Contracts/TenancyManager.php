@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Context\Contracts;
 
 use Closure;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Single point of tenant-context switching (connection/cache/session/queue).

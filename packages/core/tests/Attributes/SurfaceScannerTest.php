@@ -43,7 +43,7 @@ final class SurfaceScannerTest extends TestCase
     {
         $this->source(<<<'SOURCE'
         namespace Demo;
-        use CoreX\Attributes\{Api as PublicApi, Spi, SpiKind};
+        use Packman\Attributes\{Api as PublicApi, Spi, SpiKind};
         throw new \RuntimeException('source must not run');
         #[PublicApi] enum Status: string { case Active = 'active'; }
         #[PublicApi] final readonly class View {
@@ -68,14 +68,14 @@ final class SurfaceScannerTest extends TestCase
     {
         $this->source(<<<'SOURCE'
         namespace Demo;
-        use CoreX\Attributes\Api;
+        use Packman\Attributes\Api;
         #[Api] final class Rejected extends \RuntimeException {}
         #[Api] interface Query {
             /** @throws \RuntimeException */ public function get(): string;
         }
         SOURCE);
         self::assertSame([], $this->scan()->diagnostics);
-        $this->source('namespace Demo; #[\CoreX\Attributes\Api] interface Query { /** @throws UnknownError */ public function get(): string; }');
+        $this->source('namespace Demo; #[\Packman\Attributes\Api] interface Query { /** @throws UnknownError */ public function get(): string; }');
         self::assertContains('API-UNRESOLVED-TYPE', array_column($this->scan()->diagnostics, 'code'));
     }
 
@@ -83,7 +83,7 @@ final class SurfaceScannerTest extends TestCase
     {
         $this->source(<<<'SOURCE'
         namespace Demo;
-        #[\CoreX\Attributes\Api] final readonly class Options {
+        #[\Packman\Attributes\Api] final readonly class Options {
             /** @param class-string<\Psr\Clock\ClockInterface> $clock */
             public function __construct(public string $clock) {}
         }
@@ -92,7 +92,7 @@ final class SurfaceScannerTest extends TestCase
 
         $this->source(<<<'SOURCE'
         namespace Demo;
-        #[\CoreX\Attributes\Api] final readonly class Options {
+        #[\Packman\Attributes\Api] final readonly class Options {
             public function __construct(public \Psr\Clock\ClockInterface $clock) {}
         }
         SOURCE);
@@ -103,7 +103,7 @@ final class SurfaceScannerTest extends TestCase
     {
         $this->source(<<<'SOURCE'
         namespace Demo;
-        use CoreX\Attributes\Api;
+        use Packman\Attributes\Api;
         /**
          * @phpstan-type Leaf null|int|string
          * @phpstan-type Values array<string, Leaf|list<Leaf>>
@@ -117,7 +117,7 @@ final class SurfaceScannerTest extends TestCase
         self::assertSame([], $this->scan()->diagnostics);
         $this->source(<<<'SOURCE'
         namespace Demo;
-        use CoreX\Attributes\Api;
+        use Packman\Attributes\Api;
         /** @phpstan-type Values array<string, \Illuminate\Database\Eloquent\Model> */
         #[Api] final readonly class Types {}
         /** @phpstan-import-type Values from Types */
@@ -131,13 +131,13 @@ final class SurfaceScannerTest extends TestCase
     /** @return iterable<string, array{string, string}> */
     public static function negatives(): iterable
     {
-        $api = 'namespace Demo; use CoreX\\Attributes\\{Api, Spi, SpiKind}; ';
+        $api = 'namespace Demo; use Packman\\Attributes\\{Api, Spi, SpiKind}; ';
         yield 'unclassified' => [$api.'final class Loose {}', 'API-UNCLASSIFIED'];
         yield 'conflicting' => [$api.'#[Api, Spi(SpiKind::Call)] final class Loose {}', 'API-METADATA'];
         yield 'duplicate' => [$api.'#[Api, Api] final class Loose {}', 'API-METADATA'];
         yield 'kind' => [$api."#[Spi(kind: 'call')] interface Driver {}", 'API-METADATA'];
         yield 'version' => [$api."#[Api(since: 'latest')] interface View {}", 'API-METADATA'];
-        yield 'internal' => ['namespace Demo\\Internal; #[\\CoreX\\Attributes\\Api] final class Row {}', 'API-INTERNAL-ANNOTATION'];
+        yield 'internal' => ['namespace Demo\\Internal; #[\\Packman\\Attributes\\Api] final class Row {}', 'API-INTERNAL-ANNOTATION'];
         yield 'mutable' => [$api.'#[Api] class View { public string $id; }', 'API-MUTABLE-DATA'];
         yield 'untyped array' => [$api.'#[Api] final readonly class View { public ?array $rows; }', 'API-UNTYPED-PAYLOAD'];
         yield 'bare list return' => [$api.'#[Api] interface View { /** @return list */ public function rows(): array; }', 'API-UNTYPED-PAYLOAD'];
@@ -177,8 +177,8 @@ final class SurfaceScannerTest extends TestCase
 
     public function test_attributes_scanner_checks_all_import_spellings_and_product_consumers(): void
     {
-        $this->source('namespace Foreign; class Loose {} #[\CoreX\Attributes\Api] interface Port {}', 'foreign');
-        $this->source('namespace Demo; use Foreign\Loose as A; use Foreign\{Loose as B}; #[\CoreX\Attributes\Api] final class Consumer implements \Foreign\Port { public function f(A $a, B $b, \Foreign\Loose $c): void {} }');
+        $this->source('namespace Foreign; class Loose {} #[\Packman\Attributes\Api] interface Port {}', 'foreign');
+        $this->source('namespace Demo; use Foreign\Loose as A; use Foreign\{Loose as B}; #[\Packman\Attributes\Api] final class Consumer implements \Foreign\Port { public function f(A $a, B $b, \Foreign\Loose $c): void {} }');
         $report = $this->scan();
         $imports = array_filter($report->diagnostics, static fn ($d): bool => $d->code === 'API-IMPORT' && str_contains($d->path, 'parameters'));
         self::assertCount(3, $imports);
@@ -192,7 +192,7 @@ final class SurfaceScannerTest extends TestCase
 
     public function test_attributes_scanner_captures_inherited_signature_and_ignores_bodies_and_prose(): void
     {
-        $base = 'namespace Demo; use CoreX\\Attributes\\{Api,Spi,SpiKind}; #[Spi(SpiKind::Implement)] abstract class Base { /** useful prose */ public function run(string $key = "a"): string { return $key; } } #[Api] final class Child extends Base {}';
+        $base = 'namespace Demo; use Packman\\Attributes\\{Api,Spi,SpiKind}; #[Spi(SpiKind::Implement)] abstract class Base { /** useful prose */ public function run(string $key = "a"): string { return $key; } } #[Api] final class Child extends Base {}';
         $this->source($base);
         $first = $this->scan()->manifests;
         self::assertArrayHasKey('run', $first['test/demo']['symbols']['Demo\\Child']['methods']);
@@ -206,7 +206,7 @@ final class SurfaceScannerTest extends TestCase
     {
         $this->source(<<<'SOURCE'
         namespace Demo;
-        use CoreX\Attributes\Api;
+        use Packman\Attributes\Api;
         #[Api] final readonly class Item { public string $id; }
         /**
          * @phpstan-type Items list<array{item: Item}>
@@ -224,9 +224,12 @@ final class SurfaceScannerTest extends TestCase
 
     public function test_attributes_cli_is_deterministic_and_separates_debt_from_parser_errors(): void
     {
-        $this->source('namespace Demo; #[\CoreX\Attributes\Api] enum Flag: string { case On = "on"; } class Loose {}');
+        $this->source('namespace Foreign; #[\Packman\Attributes\Api] enum Flag: string { case On = "on"; }', 'foreign');
+        $this->source('namespace Demo; #[\Packman\Attributes\Api] enum Flag: string { case On = "on"; } class Loose {}');
         self::assertSame(0, $this->cli('--report')->getExitCode());
         self::assertSame(1, $this->cli('--strict')->getExitCode());
+        self::assertSame(1, $this->cli('--write')->getExitCode());
+        $this->source('namespace Demo; #[\Packman\Attributes\Api] enum Flag: string { case On = "on"; }');
         self::assertSame(0, $this->cli('--write')->getExitCode());
         $file = $this->root.'/packages/demo/resources/contracts/php-api.json';
         $bytes = file_get_contents($file);
@@ -236,7 +239,7 @@ final class SurfaceScannerTest extends TestCase
         file_put_contents($file, str_replace('Demo\\\\Flag', 'Demo\\\\Invented', $bytes));
         self::assertSame(1, $this->cli('--check')->getExitCode());
         $this->cli('--write');
-        $this->source('namespace Demo; #[\CoreX\Attributes\Api] enum Flag: string { case On = "changed"; }');
+        $this->source('namespace Demo; #[\Packman\Attributes\Api] enum Flag: string { case On = "changed"; }');
         self::assertSame(1, $this->cli('--check')->getExitCode());
         $this->source('namespace Demo; class {');
         self::assertSame(2, $this->cli('--report')->getExitCode());
@@ -244,7 +247,7 @@ final class SurfaceScannerTest extends TestCase
 
     public function test_attributes_scanner_finds_new_types_without_classmap_and_rejects_duplicate_owner(): void
     {
-        $this->source('namespace Demo; #[\CoreX\Attributes\Api] interface Fresh {}');
+        $this->source('namespace Demo; #[\Packman\Attributes\Api] interface Fresh {}');
         self::assertArrayHasKey('Demo\\Fresh', $this->scan()->owners);
         $this->source('namespace Demo; interface Fresh {}', 'foreign');
         $process = $this->cli('--report');
@@ -254,9 +257,9 @@ final class SurfaceScannerTest extends TestCase
 
     public function test_attributes_imported_alias_retains_its_defining_namespace_and_nested_leak(): void
     {
-        $this->source('namespace Foreign; /** @phpstan-type Rows list<array{row: Internal\\Row}> */ #[\\CoreX\\Attributes\\Api] interface Types {}', 'foreign');
+        $this->source('namespace Foreign; /** @phpstan-type Rows list<array{row: Internal\\Row}> */ #[\\Packman\\Attributes\\Api] interface Types {}', 'foreign');
         $this->source('namespace Foreign\\Internal; final readonly class Row { public string $id; }', 'foreign', 'Row.php');
-        $this->source('namespace Demo; /** @phpstan-import-type Rows from \\Foreign\\Types */ #[\\CoreX\\Attributes\\Api] interface Query { /** @return Rows */ public function rows(): array; }');
+        $this->source('namespace Demo; /** @phpstan-import-type Rows from \\Foreign\\Types */ #[\\Packman\\Attributes\\Api] interface Query { /** @return Rows */ public function rows(): array; }');
         $diagnostics = $this->scan()->diagnostics;
         $leaks = array_filter($diagnostics, static fn ($d): bool => $d->symbol === 'Demo\\Query' && $d->code === 'API-INTERNAL-TYPE');
         self::assertNotEmpty($leaks);
@@ -265,7 +268,7 @@ final class SurfaceScannerTest extends TestCase
 
     public function test_attributes_property_hooks_and_default_changes_are_snapshot_inputs(): void
     {
-        $source = 'namespace Demo; #[\\CoreX\\Attributes\\Spi(\\CoreX\\Attributes\\SpiKind::Implement)] interface Port { public string $name { get; } public function run(string $key = "a"): void; }';
+        $source = 'namespace Demo; #[\\Packman\\Attributes\\Spi(\\Packman\\Attributes\\SpiKind::Implement)] interface Port { public string $name { get; } public function run(string $key = "a"): void; }';
         $this->source($source);
         $first = $this->scan();
         self::assertSame([], $first->diagnostics);
@@ -276,7 +279,7 @@ final class SurfaceScannerTest extends TestCase
 
     public function test_attributes_protected_inheritance_and_inherited_internal_leak(): void
     {
-        $this->source('namespace Demo; use CoreX\\Attributes\\{Api,Spi,SpiKind}; #[Api] abstract class Base { protected function hook(): void {} /** @return \\Foreign\\Internal\\Row */ public function row(): object {} } #[Spi(SpiKind::Implement)] abstract class Driver extends Base {} #[Api] final class Child extends Base {}');
+        $this->source('namespace Demo; use Packman\\Attributes\\{Api,Spi,SpiKind}; #[Api] abstract class Base { protected function hook(): void {} /** @return \\Foreign\\Internal\\Row */ public function row(): object {} } #[Spi(SpiKind::Implement)] abstract class Driver extends Base {} #[Api] final class Child extends Base {}');
         $this->source('namespace Foreign\\Internal; final readonly class Row {}', 'foreign');
         $report = $this->scan();
         self::assertArrayHasKey('hook', $report->manifests['test/demo']['symbols']['Demo\\Driver']['methods']);
@@ -286,14 +289,14 @@ final class SurfaceScannerTest extends TestCase
 
     public function test_attributes_nested_mixed_and_nullable_object_cannot_hide_payloads(): void
     {
-        $this->source('namespace Demo; #[\\CoreX\\Attributes\\Api] final readonly class View { /** @var list<array{data: mixed}> */ public array $rows; public ?object $other; }');
+        $this->source('namespace Demo; #[\\Packman\\Attributes\\Api] final readonly class View { /** @var list<array{data: mixed}> */ public array $rows; public ?object $other; }');
         self::assertGreaterThanOrEqual(2, count(array_filter($this->scan()->diagnostics, static fn ($d): bool => $d->code === 'API-UNTYPED-PAYLOAD')));
     }
 
     public function test_attributes_typed_collection_docs_remain_valid(): void
     {
         foreach (['list<int>', 'non-empty-list<string>', 'non-empty-array<string, int>', 'array{rows: list<string>}', 'list<array{id: int}>', 'iterable<int>'] as $doc) {
-            $this->source('namespace Demo; #[\\CoreX\\Attributes\\Api] interface View { /** @return '.$doc.' */ public function rows(): array; }');
+            $this->source('namespace Demo; #[\\Packman\\Attributes\\Api] interface View { /** @return '.$doc.' */ public function rows(): array; }');
             self::assertSame([], $this->scan()->diagnostics, $doc);
         }
     }
@@ -301,7 +304,7 @@ final class SurfaceScannerTest extends TestCase
     public function test_attributes_configuration_class_strings_and_spi_model_documentation_are_checked(): void
     {
         $this->source('namespace Foreign\\Internal; final class Secret {}', 'foreign');
-        $this->source('namespace Demo; #[\\CoreX\\Attributes\\Spi(\\CoreX\\Attributes\\SpiKind::Call)] interface Extension { public function use(\\Illuminate\\Database\\Eloquent\\Model $model): void; }');
+        $this->source('namespace Demo; #[\\Packman\\Attributes\\Spi(\\Packman\\Attributes\\SpiKind::Call)] interface Extension { public function use(\\Illuminate\\Database\\Eloquent\\Model $model): void; }');
         mkdir($this->root.'/packages/demo/config');
         file_put_contents($this->root.'/packages/demo/config/module.php', '<?php return ["type" => "Foreign\\\\Internal\\\\Secret"];');
         $report = $this->scan();
@@ -312,7 +315,7 @@ final class SurfaceScannerTest extends TestCase
     public function test_attributes_composition_policy_requires_the_exact_existing_edge(): void
     {
         $this->source('namespace Foreign\\Internal; final class Row {}', 'foreign');
-        $this->source('namespace Demo; #[\\CoreX\\Attributes\\Spi(\\CoreX\\Attributes\\SpiKind::Call)] final class Composition { public function build(): void { new \\Foreign\\Internal\\Row; } }');
+        $this->source('namespace Demo; #[\\Packman\\Attributes\\Spi(\\Packman\\Attributes\\SpiKind::Call)] final class Composition { public function build(): void { new \\Foreign\\Internal\\Row; } }');
         mkdir($this->root.'/scripts');
         $edge = ['from' => 'test/demo', 'to' => 'test/foreign', 'import_file' => 'packages/demo/src/Surface.php', 'symbol' => 'Foreign\\Internal\\Row', 'target_file' => 'packages/foreign/src/Surface.php'];
         $config = $this->root.'/scripts/package-graph-gate.json';
@@ -329,7 +332,7 @@ final class SurfaceScannerTest extends TestCase
     {
         $this->source(<<<'SOURCE'
         namespace Foreign;
-        use CoreX\Attributes\{Spi, SpiKind};
+        use Packman\Attributes\{Spi, SpiKind};
         #[Spi(SpiKind::Implement)] class Base {
             public const EXTERNAL = 1;
             public string $externalProperty;
@@ -341,7 +344,7 @@ final class SurfaceScannerTest extends TestCase
         SOURCE, 'foreign');
         $own = <<<'SOURCE'
         namespace Demo;
-        use CoreX\Attributes\{Api, Spi, SpiKind};
+        use Packman\Attributes\{Api, Spi, SpiKind};
         #[Spi(SpiKind::Call)] trait LocalTrait {
             public const LOCAL = 2;
             public string $localProperty;
@@ -383,13 +386,26 @@ final class SurfaceScannerTest extends TestCase
 
     public function test_attributes_public_promoted_property_survives_a_private_constructor(): void
     {
-        $this->source('namespace Demo; #[\CoreX\Attributes\Api] final readonly class View { private function __construct(public string $id) {} }');
+        $this->source('namespace Demo; #[\Packman\Attributes\Api] final readonly class View { private function __construct(public string $id) {} }');
         $report = $this->scan();
         self::assertSame([], $report->diagnostics);
         $view = $report->manifests['test/demo']['symbols']['Demo\\View'];
         self::assertArrayNotHasKey('__construct', $view['methods']);
         self::assertSame('string', $view['properties']['id']['type']);
         self::assertSame('public', $view['properties']['id']['visibility']);
+    }
+
+    public function test_public_packman_value_contracts_are_valid_external_payloads(): void
+    {
+        $this->source('namespace Demo; #[\Packman\Attributes\Api] final readonly class Failure { public function __construct(public \Packman\Errors\Data\ErrorDescriptor $error, public \Packman\Config\Data\SecretRef $secret) {} }');
+        self::assertSame([], $this->scan()->diagnostics);
+    }
+
+    public function test_spi_signatures_cannot_expose_private_types_from_their_own_package(): void
+    {
+        $this->source('namespace Demo; #[\Packman\Attributes\Internal] final class PrivateDriver {} #[\Packman\Attributes\Spi(\Packman\Attributes\SpiKind::Call)] final class Factory { public function make(): PrivateDriver {} }');
+        self::assertContains('API-INTERNAL-TYPE', array_column($this->scan()->diagnostics, 'code'));
+        self::assertNotContains('API-UNCLASSIFIED', array_column($this->scan()->diagnostics, 'code'));
     }
 
     private function cli(string $mode): Process

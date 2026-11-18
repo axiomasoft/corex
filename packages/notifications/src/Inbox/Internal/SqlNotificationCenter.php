@@ -25,8 +25,10 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
 use JsonException;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
+#[Internal]
 final readonly class SqlNotificationCenter implements NotificationCenter
 {
     public function __construct(

@@ -7,7 +7,9 @@ namespace CoreX\Tenancy\Account\Internal;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Tenancy\Account\Contracts\AccountRead;
 use CoreX\Tenancy\Account\Internal\Models\Account;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class SqlAccountRead implements AccountRead
 {
     public function ownerIdentityId(string $accountId, ?string $connectionName = null): ?string

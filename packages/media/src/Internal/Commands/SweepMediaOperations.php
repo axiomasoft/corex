@@ -8,7 +8,9 @@ use CoreX\Media\Internal\Jobs\ConvertMedia;
 use CoreX\Media\Internal\Jobs\PurgeMedia;
 use CoreX\Media\Internal\MediaOperationStore;
 use Illuminate\Console\Command;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class SweepMediaOperations extends Command
 {
     protected $signature = 'corex:media:sweep {--limit=100 : Maximum due operations to dispatch}';

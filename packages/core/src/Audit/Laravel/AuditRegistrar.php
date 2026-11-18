@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Audit\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Audit\Contracts\AuditRetention;
 use CoreX\Audit\Contracts\SynchronousAuditWriter;
@@ -13,13 +11,15 @@ use CoreX\Audit\Internal\AuditObserver;
 use CoreX\Audit\Internal\CurrentActor;
 use CoreX\Audit\Internal\DatabaseSynchronousAuditWriter;
 use CoreX\Config\Data\CoreOptions;
-use CoreX\Config\Laravel\ConfiguredImplementation;
 use CoreX\Context\Contracts\ImpersonationService;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Http\Request;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Laravel\ConfiguredImplementation;
 use Packman\Foundation\Contracts\PackageRegistrar;
 
 /** Composition of the kernel module; the public provider delegates here. */

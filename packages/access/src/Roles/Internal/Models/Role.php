@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Override;
+use Packman\Attributes\Internal;
 
 /**
  * `aut_roles` — native authorization role.
@@ -25,6 +26,7 @@ use Override;
  * @property Carbon $updated_at
  * @property ?Carbon $deleted_at
  */
+#[Internal]
 final class Role extends BaseModel
 {
     use SystemRoleImmutable;

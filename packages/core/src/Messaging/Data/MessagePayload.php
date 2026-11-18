@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Messaging\Exceptions\InvalidMessage;
+use Packman\Attributes\Api;
 
 /**
  * Канонизованный payload сообщения: ограниченная карта объектов из null, bool, int,

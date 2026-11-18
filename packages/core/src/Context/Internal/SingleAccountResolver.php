@@ -7,6 +7,7 @@ namespace CoreX\Context\Internal;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use Packman\Attributes\Internal;
 
 /**
  * Boxed-install stub: a deterministic constant TenantContext, no config
@@ -15,6 +16,7 @@ use CoreX\Context\Data\TenantContext;
  *
  * @internal spec: D10
  */
+#[Internal]
 final class SingleAccountResolver implements TenantContextResolver
 {
     private const string ACCOUNT_ID = '00000000-0000-7000-8000-000000000000';

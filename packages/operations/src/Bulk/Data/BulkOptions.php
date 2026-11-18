@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Data;
 
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 
 /** Immutable durable-bulk activation policy read only by the package registrar. */
 #[Api(since: '1.0')]

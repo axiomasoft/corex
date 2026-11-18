@@ -6,6 +6,7 @@ namespace CoreX\Audit\Internal;
 
 use CoreX\Audit\Contracts\AuditRetention;
 use Illuminate\Console\Command;
+use Packman\Attributes\Internal;
 
 /**
  * Prunes sys_audit_log rows older than the bound AuditRetention boundary.
@@ -21,6 +22,7 @@ use Illuminate\Console\Command;
  *
  * @internal spec: B-10 §7.4 п.8, D12
  */
+#[Internal]
 final class PruneAuditLog extends Command
 {
     protected $signature = 'corex:audit:prune {--database= : Connection to prune (default: the app default)}';

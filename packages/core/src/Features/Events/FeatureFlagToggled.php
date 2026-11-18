@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Features\Events;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\Events\DomainEvent;
 use CoreX\Settings\Data\SettingsScope;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Domain-event shape for a feature-flag state change

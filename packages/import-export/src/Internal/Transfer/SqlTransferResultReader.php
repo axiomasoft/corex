@@ -14,7 +14,9 @@ use CoreX\ImportExport\Internal\SessionRuntime;
 use CoreX\ImportExport\Internal\Value;
 use Illuminate\Database\ConnectionInterface;
 use Override;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class SqlTransferResultReader implements TransferResultReader
 {
     public function __construct(

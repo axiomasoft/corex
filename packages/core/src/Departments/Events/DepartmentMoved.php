@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Departments\Events;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\Events\DomainEvent;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Domain-event shape for a department reparent (`core.department.moved`).

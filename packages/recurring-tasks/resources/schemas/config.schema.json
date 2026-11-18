@@ -1,0 +1,58 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "axiomasoft/corex-recurring-tasks configuration",
+    "type": "object",
+    "properties": {
+        "corex-recurring-tasks": {
+            "type": "object",
+            "properties": {
+                "completion_capture": {
+                    "type": "object",
+                    "properties": {
+                        "definition_ref": {
+                            "type": "string",
+                            "default": "task-completion/1"
+                        },
+                        "enabled": {
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "version_ref": {
+                            "type": "string",
+                            "default": "task-completion/1"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "wakeup": {
+                    "type": "object",
+                    "properties": {
+                        "accept_legacy_unstamped": {
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "enabled": {
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "handler": {
+                            "type": "string",
+                            "default": "CoreX\\RecurringTasks\\Internal\\MaterializationWakeupHandler"
+                        },
+                        "handler_kind": {
+                            "type": "string",
+                            "default": "task-recurrence.materialize"
+                        },
+                        "handler_version": {
+                            "type": "string",
+                            "default": "task-materialization/1"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

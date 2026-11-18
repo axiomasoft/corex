@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Errors\Enums;
 
-use CoreX\Attributes\Api;
-use CoreX\Errors\Contracts\ErrorCode;
+use Packman\Attributes\Api;
+use Packman\Errors\Contracts\ErrorCode;
 
 /** Registered errors owned by the tool runtime and its execution guards. */
 #[Api(since: '1.0')]

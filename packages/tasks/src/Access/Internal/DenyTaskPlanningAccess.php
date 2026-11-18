@@ -10,7 +10,9 @@ use CoreX\Tasks\Planning\Data\PlanningOperation;
 use CoreX\Tasks\Planning\Data\PlanningSubject;
 use CoreX\Tasks\Task\Data\ActorData;
 use Illuminate\Auth\Access\AuthorizationException;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class DenyTaskPlanningAccess implements TaskPlanningAccess
 {
     public function authorize(PlanningOperation $operation, PlanningSubject $subject, ActorData $actor, TenantContext $context): void

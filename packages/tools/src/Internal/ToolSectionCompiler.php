@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Internal;
 
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Compiler\ManifestSectionCompiler;
 use Packman\Modules\Data\Compiler\NormalizedExtension;
 use Packman\Modules\Data\Extenders\Api;
@@ -11,6 +12,7 @@ use Packman\Modules\Data\Lifecycle\ModuleManifest;
 use Packman\Modules\Exceptions\Compiler\CompilationException;
 
 /** @internal Tool declaration compilation. */
+#[Internal]
 final class ToolSectionCompiler implements ManifestSectionCompiler
 {
     public function mode(): string

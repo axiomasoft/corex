@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Enums\PrincipalType;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * The single authenticated-principal concept of the platform: a user, an AI

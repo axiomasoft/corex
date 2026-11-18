@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Validation\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Frozen local policy for tool-schema/1 bounded validation. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

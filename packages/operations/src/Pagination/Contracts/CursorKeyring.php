@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Pagination\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Signing and verifying keys for `api-cursor/1`.

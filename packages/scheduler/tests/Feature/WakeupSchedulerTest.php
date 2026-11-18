@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\TenantContext;
 use CoreX\CoreServiceProvider;
@@ -26,6 +25,7 @@ use CoreX\Time\Laravel\SystemClock;
 use CoreX\Time\Testing\FrozenClock;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Packman\Config\Exceptions\InvalidConfiguration;
 use Psr\Clock\ClockInterface;
 
 uses(TestCase::class);

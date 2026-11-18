@@ -8,9 +8,11 @@ use CoreX\Audit\Contracts\SynchronousAuditWriter;
 use CoreX\Audit\Data\AuditEntry;
 use CoreX\Data\Laravel\JsonDocuments;
 use Illuminate\Database\ConnectionResolverInterface;
+use Packman\Attributes\Internal;
 use RuntimeException;
 
 /** @internal */
+#[Internal]
 final readonly class DatabaseSynchronousAuditWriter implements SynchronousAuditWriter
 {
     public function __construct(private ConnectionResolverInterface $connections) {}

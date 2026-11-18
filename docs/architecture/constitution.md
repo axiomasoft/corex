@@ -395,7 +395,7 @@
   использования
 **Владелец.** config-policy.md
 **Enforcement.** валидация формы Options в `boot()` и runtime-проверки `RuntimeConfigGate` (`php artisan
-  corex:config:validate --production`); `composer config-cache-check` → `tests/Feature/ConfigCacheTest.php`
+  packman:config:validate --production`); `composer config-cache-check` → `tests/Feature/ConfigCacheTest.php`
   (каждый `packages/*/config/*.php` переживает `var_export` → `eval`, приложение загружается из кэша)
 **Исключения.** —
 **Почему.** См. решения и политики, названные во владельце.

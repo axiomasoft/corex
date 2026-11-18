@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Scheduler\Internal;
 
-use CoreX\Config\Laravel\ConfigurationValidator;
 use CoreX\Scheduling\Data\WakeupHandlerDefinition;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
+use Packman\Config\Laravel\ConfigurationValidator;
 
 /** @internal Package composition type: read only by the provider and runtime checks. */
+#[Internal]
 final readonly class SchedulerOptions
 {
     /** @param  list<WakeupHandlerDefinition>  $handlers */

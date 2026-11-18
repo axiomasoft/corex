@@ -10,8 +10,10 @@ use CoreX\Storage\Exceptions\StorageOperationFailed;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\File;
 use Illuminate\Http\UploadedFile;
+use Packman\Attributes\Internal;
 use RuntimeException;
 
+#[Internal]
 final readonly class ScopedFilesystem implements Filesystem
 {
     public function __construct(

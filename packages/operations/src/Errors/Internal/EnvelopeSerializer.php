@@ -6,8 +6,10 @@ namespace CoreX\Operations\Errors\Internal;
 
 use CoreX\Invocation\Data\InvocationMetadata;
 use Illuminate\Http\JsonResponse;
+use Packman\Attributes\Internal;
 
 /** @internal */
+#[Internal]
 final class EnvelopeSerializer
 {
     /** @param array<array-key, mixed> $data */

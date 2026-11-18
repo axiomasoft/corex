@@ -9,6 +9,7 @@ use CoreX\Audit\Data\AuditEntry;
 use CoreX\Config\Data\CoreOptions;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenantContextResolver;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /**
@@ -30,6 +31,7 @@ use Psr\Clock\ClockInterface;
  *
  * @internal spec: B-10 §7.1, P1.7, D12
  */
+#[Internal]
 final readonly class QueuedAuditLogger implements AuditLogger
 {
     public function __construct(

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — Packman governance
+
+- Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.
+
+
 ## Unreleased — package boundaries
 
 - Breaking before release: Rename the public Laravel provider to `CoreX\Access\AccessServiceProvider`.

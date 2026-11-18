@@ -4,7 +4,7 @@
     "symbols": {
         "CoreX\\Media\\Contracts\\ConversionDriver": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -18,7 +18,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -38,17 +38,18 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [],
                     "return": "CoreX\\Media\\Data\\ConversionProfile",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Media\\Contracts\\MediaLibrary": {
             "kind": "interface",
@@ -66,7 +67,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -104,7 +105,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -133,7 +134,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -162,7 +163,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -200,7 +201,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -226,14 +227,14 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
         },
         "CoreX\\Media\\Contracts\\MediaPolicy": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -247,7 +248,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -282,14 +283,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Media\\Contracts\\RelationLookup": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -303,7 +305,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -332,7 +334,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -361,7 +363,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -393,17 +395,14 @@
                         }
                     ],
                     "return": "array",
-                    "doc": {
-                        "@return": [
-                            "list<\\CoreX\\Media\\Data\\AttachmentRef>"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Media\\Data\\AttachmentInput": {
             "kind": "class",
@@ -465,48 +464,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "entityHandle": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "entityId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "fileId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "slot": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -571,48 +529,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "entityHandle": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "entityId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "fileId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "slot": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -668,38 +585,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "profile": {
-                    "flags": 1,
-                    "type": "CoreX\\Media\\Data\\ConversionProfile",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "sourceBytes": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "sourceMimeType": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -764,48 +650,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "bytes": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "height": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "mimeType": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "width": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -908,68 +753,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "key": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "maxHeight": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "maxOutputBytes": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "maxPixels": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "maxWidth": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "version": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1016,28 +800,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "deleted": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "purgePending": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1046,24 +809,39 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [],
             "uses": [],
             "doc": [],
-            "methods": [],
-            "properties": [],
+            "methods": {},
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "Attach": "'attach'",
-                "Delete": "'delete'",
-                "Detach": "'detach'",
-                "Read": "'read'",
-                "Store": "'store'"
-            }
+            "enum_cases": [
+                {
+                    "name": "Store",
+                    "value": "'store'"
+                },
+                {
+                    "name": "Read",
+                    "value": "'read'"
+                },
+                {
+                    "name": "Attach",
+                    "value": "'attach'"
+                },
+                {
+                    "name": "Detach",
+                    "value": "'detach'"
+                },
+                {
+                    "name": "Delete",
+                    "value": "'delete'"
+                }
+            ]
         },
         "CoreX\\Media\\Data\\MediaContext": {
             "kind": "class",
@@ -1116,38 +894,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "actorId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "actorKind": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "tenant": {
-                    "flags": 1,
-                    "type": "CoreX\\Context\\Data\\TenantContext",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1239,78 +986,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "fileId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "height": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "id": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "mimeType": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "profile": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "sizeBytes": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "width": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1393,68 +1069,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "kind": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "mimeType": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "sha256": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "sizeBytes": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "state": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1525,85 +1140,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "\\Closure(): resource $openStream"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "fileId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "\\Closure(): resource $openStream"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "mimeType": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "\\Closure(): resource $openStream"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "openStream": {
-                    "flags": 1,
-                    "type": "Closure",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "\\Closure(): resource $openStream"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "sha256": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "\\Closure(): resource $openStream"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "sizeBytes": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "\\Closure(): resource $openStream"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1656,57 +1196,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (bool | int | string)> $metadata"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "attachment": {
-                    "flags": 1,
-                    "type": "?CoreX\\Media\\Data\\AttachmentInput",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (bool | int | string)> $metadata"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "file": {
-                    "flags": 1,
-                    "type": "?CoreX\\Media\\Data\\MediaFileRef",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (bool | int | string)> $metadata"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "metadata": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (bool | int | string)> $metadata"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1780,58 +1273,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "bytes": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "mimeType": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "originalName": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "size": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "valid": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1887,38 +1329,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "file": {
-                    "flags": 1,
-                    "type": "CoreX\\Media\\Data\\UploadFile",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "purpose": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "requestKey": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1936,8 +1347,8 @@
             "implements": [],
             "uses": [],
             "doc": [],
-            "methods": [],
-            "properties": [],
+            "methods": {},
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1955,8 +1366,8 @@
             "implements": [],
             "uses": [],
             "doc": [],
-            "methods": [],
-            "properties": [],
+            "methods": {},
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1974,15 +1385,15 @@
             "implements": [],
             "uses": [],
             "doc": [],
-            "methods": [],
-            "properties": [],
+            "methods": {},
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
         },
         "CoreX\\Media\\Laravel\\GdThumbnailDriverFactory": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -2009,18 +1420,19 @@
                             "flags": 0
                         }
                     ],
-                    "return": "CoreX\\Media\\Internal\\GdThumbnailDriver",
+                    "return": "CoreX\\Media\\Contracts\\ConversionDriver",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Media\\Laravel\\MediaBindingsRegistrar": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -2073,14 +1485,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Media\\Laravel\\UploadedFileSource": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -2111,14 +1524,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Media\\MediaModule": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -2126,8 +1540,12 @@
             "extends": [
                 "Packman\\Modules\\Contracts\\Definition\\ModuleDefinition"
             ],
-            "implements": [],
-            "uses": [],
+            "implements": [
+                "Packman\\Extensions\\Contracts\\Persistence\\WithSchema"
+            ],
+            "uses": [
+                "Packman\\Extensions\\Concerns\\Persistence\\OwnsSchema"
+            ],
             "doc": [],
             "methods": {
                 "manifest": {
@@ -2139,16 +1557,37 @@
                     "parameters": [],
                     "return": "Packman\\Modules\\Data\\Lifecycle\\ModuleManifest",
                     "doc": []
+                },
+                "schemaSetProviders": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "array",
+                    "doc": []
+                },
+                "tablePrefix": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "string",
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Media\\MediaServiceProvider": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -2181,10 +1620,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         }
     }
 }

@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Operations\Definition\Internal;
 
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use Packman\Attributes\Internal;
 use Packman\Modules\Data\Extenders\Api;
 
 /** Canonical operation-contract/1 hash. Excludes activation, host and time. */
+#[Internal]
 final class OperationContractHasher
 {
     public static function hash(Api $api, string $registryFingerprint): string

@@ -10,6 +10,7 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
+use Packman\Attributes\Internal;
 
 /**
  * Boxed-install default: a single constant account context, no tenant
@@ -19,6 +20,7 @@ use CoreX\Context\Data\WorkspaceRef;
  *
  * @internal spec: D10, B-11 §6.1 L892–907
  */
+#[Internal]
 final readonly class NullTenancyManager implements TenancyManager
 {
     public function __construct(

@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal;
 
+use Packman\Attributes\Internal;
 use Packman\Schema\Contracts\Migration\SchemaSetProvider;
 use Packman\Schema\Data\Migration\SchemaSet;
 use Packman\Schema\Enums\SchemaScope;
 
 /** @internal */
+#[Internal]
 final readonly class CustomFieldsSchemaSets implements SchemaSetProvider
 {
     public function sets(): array

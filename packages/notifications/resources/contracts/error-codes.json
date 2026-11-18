@@ -1,0 +1,28 @@
+{
+    "schema": "packman-error-codes/1",
+    "package": "axiomasoft/corex-notifications",
+    "codes": [
+        {
+            "package": "axiomasoft/corex-notifications",
+            "enum": "CoreX\\Notifications\\Errors\\Enums\\NotificationsErrorCode",
+            "case": "NotificationAccessDenied",
+            "code": "notifications.notification_access_denied",
+            "type": "urn:packman:problem:notifications.notification_access_denied",
+            "status": 403,
+            "title": "Notification access denied.",
+            "retryable": false,
+            "category": "authorization"
+        },
+        {
+            "package": "axiomasoft/corex-notifications",
+            "enum": "CoreX\\Notifications\\Errors\\Enums\\NotificationsErrorCode",
+            "case": "NotificationOperationConflict",
+            "code": "notifications.notification_operation_conflict",
+            "type": "urn:packman:problem:notifications.notification_operation_conflict",
+            "status": 409,
+            "title": "Notification operation conflict.",
+            "retryable": false,
+            "category": "conflict"
+        }
+    ]
+}

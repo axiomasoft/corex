@@ -10,7 +10,9 @@ use CoreX\Intl\Locale\Exceptions\InvalidLocaleException;
 use CoreX\Intl\Territory\Data\AddressQuery;
 use CoreX\Intl\Territory\Data\SuggestionLimits;
 use CoreX\Intl\Territory\Data\SuggestionResult;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class AddressSuggestGuard
 {
     public function __construct(private Bcp47Validator $locales) {}

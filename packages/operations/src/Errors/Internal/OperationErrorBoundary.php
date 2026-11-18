@@ -11,9 +11,11 @@ use CoreX\Operations\Invocation\Laravel\InvocationMetadataFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Packman\Attributes\Internal;
 use Throwable;
 
 /** Application opts into placing this first, before trusted tenancy/auth/workspace middleware. */
+#[Internal]
 final readonly class OperationErrorBoundary
 {
     public function __construct(

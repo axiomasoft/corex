@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Access\Roles\Data;
 
 use CoreX\Access\Enums\Scope;
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 
 #[Api(since: '1.0')]
 final readonly class RoleMatrixEntry

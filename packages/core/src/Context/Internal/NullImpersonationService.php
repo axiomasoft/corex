@@ -8,6 +8,7 @@ use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Data\ImpersonationState;
 use LogicException;
 use Override;
+use Packman\Attributes\Internal;
 
 /**
  * Boxed-install default: impersonation does not exist there at all (B-11
@@ -17,6 +18,7 @@ use Override;
  *
  * @internal spec: B-11 §6.1, D10
  */
+#[Internal]
 final class NullImpersonationService implements ImpersonationService
 {
     #[Override]

@@ -14,9 +14,11 @@ use CoreX\Tenancy\Provisioning\Exceptions\ClaimUnavailable;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\QueryException;
+use Packman\Attributes\Internal;
 use stdClass;
 
 /** @internal */
+#[Internal]
 final readonly class ClaimAccountSignup implements ProvisioningClaim
 {
     private const string SignupKeyIndex = 'root_accounts_signup_key_uq';

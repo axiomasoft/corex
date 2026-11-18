@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
-use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
 use CoreX\Operations\Errors\Internal\ErrorMapper;
 use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
 use CoreX\Operations\Idempotency\Internal\IdempotentOperationInvoker;
-use CoreX\Operations\Idempotency\Internal\SqlIdempotencyStore;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Connection;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Errors\Contracts\ProblemRegistry;
 use Packman\Foundation\Contracts\PackageRegistrar;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
@@ -39,7 +38,7 @@ final class IdempotencyRegistrar implements PackageRegistrar
                 errors: $app->make(ErrorMapper::class),
                 problems: $app->make(ProblemRegistry::class),
             ));
-        $app->scoped(IdempotencyStore::class, static fn (Application $app): SqlIdempotencyStore => (new IdempotencyStoreFactory)->make($app));
+        $app->scoped(IdempotencyStore::class, static fn (Application $app): IdempotencyStore => (new IdempotencyStoreFactory)->make($app));
     }
 
     #[Override]

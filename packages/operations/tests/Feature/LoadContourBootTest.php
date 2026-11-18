@@ -41,7 +41,8 @@ final class LoadContourBootTest extends TestCase
         self::assertArrayNotHasKey('public-api', $composer['extra']['corex']);
         $surface = json_decode((string) file_get_contents(dirname(__DIR__, 2).'/resources/contracts/php-api.json'), true, flags: JSON_THROW_ON_ERROR);
         self::assertArrayHasKey(OperationsServiceProvider::class, $surface['symbols']);
-        self::assertSame('spi-call', $surface['symbols'][OperationsServiceProvider::class]['layer']);
+        self::assertSame('spi', $surface['symbols'][OperationsServiceProvider::class]['layer']);
+        self::assertSame('call', $surface['symbols'][OperationsServiceProvider::class]['spi_kind']);
         self::assertSame(['ext-filter', 'ext-mbstring', 'php', 'axiomasoft/corex', 'illuminate/auth', 'illuminate/console', 'illuminate/contracts', 'illuminate/database', 'illuminate/http', 'illuminate/support', 'illuminate/validation', 'psr/clock', 'symfony/http-kernel', 'axiomasoft/packman', 'axiomasoft/packman-modules', 'axiomasoft/packman-schema'], array_keys($require));
         self::assertSame('^13.0', $require['illuminate/http']);
         self::assertSame('^13.0', $require['illuminate/support']);

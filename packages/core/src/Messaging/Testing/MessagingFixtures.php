@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Testing;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Contracts\Outbox;
@@ -16,6 +14,8 @@ use CoreX\Messaging\Internal\NullTraceContextBridge;
 use CoreX\Messaging\Internal\SqlInbox;
 use CoreX\Messaging\Internal\SqlOutbox;
 use Illuminate\Database\ConnectionInterface;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Psr\Clock\ClockInterface;
 
 /** The same implementations, exposed through contracts for consumer tests. */

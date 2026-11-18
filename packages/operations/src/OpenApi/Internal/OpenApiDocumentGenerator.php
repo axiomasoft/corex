@@ -9,8 +9,10 @@ use CoreX\Operations\Definition\Contracts\OperationRegistry;
 use CoreX\Operations\Definition\Contracts\SchemaContributor;
 use CoreX\Operations\OpenApi\Contracts\OpenApiDocuments;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 
 /** Build-time installed-code projection; not a public endpoint or a grant of access. */
+#[Internal]
 final readonly class OpenApiDocumentGenerator implements OpenApiDocuments
 {
     public function __construct(

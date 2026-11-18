@@ -11,6 +11,7 @@ use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use LogicException;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /**
@@ -21,6 +22,7 @@ use Psr\Clock\ClockInterface;
  * `root_idp_sessions` are not created here (that is the AS's job); this
  * controller only ever revokes.
  */
+#[Internal]
 final readonly class LogoutController
 {
     public function __construct(

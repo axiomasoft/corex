@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\SearchIntl;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\SearchIntl\Contracts\SavedViewLabelReader;
 use CoreX\SearchIntl\Internal\LocalizedFieldProjector;
 use CoreX\SearchIntl\Internal\SearchIntlOptions;
@@ -14,6 +12,8 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class SearchIntlServiceProvider extends ServiceProvider

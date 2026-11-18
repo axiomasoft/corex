@@ -8,8 +8,10 @@ use CoreX\Data\Data\DataScope;
 use CoreX\Webhooks\Contracts\WebhookEgressPolicy;
 use CoreX\Webhooks\Data\WebhookDestination;
 use Override;
+use Packman\Attributes\Internal;
 
 /** @internal Host restrictions are opt-in; the separate URL policy always enforces public IPs. */
+#[Internal]
 final readonly class PermitPublicEgressPolicy implements WebhookEgressPolicy
 {
     #[Override]

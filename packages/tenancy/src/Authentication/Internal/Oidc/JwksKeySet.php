@@ -9,6 +9,7 @@ use Firebase\JWT\JWK;
 use Firebase\JWT\Key;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Http\Client\Factory as HttpFactory;
+use Packman\Attributes\Internal;
 
 /**
  * JWKS fetch/cache WITHOUT `Firebase\JWT\CachedKeySet` (D130 — no PSR-6 in
@@ -20,6 +21,7 @@ use Illuminate\Http\Client\Factory as HttpFactory;
  *
  * @internal
  */
+#[Internal]
 final readonly class JwksKeySet
 {
     private const string CACHE_KEY_PREFIX = 'corex_tenancy_oidc_jwks:';

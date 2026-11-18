@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\RecurringTasks\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Recurrence\Data\ExpansionCursor;
 use CoreX\Tasks\Task\Data\TaskReference;
+use Packman\Attributes\Api;
 
 #[Api(since: '1.0')]
 final readonly class MaterializationReceipt

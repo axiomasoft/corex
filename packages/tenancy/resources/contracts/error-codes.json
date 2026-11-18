@@ -1,0 +1,204 @@
+{
+    "schema": "packman-error-codes/1",
+    "package": "axiomasoft/corex-tenancy",
+    "codes": [
+        {
+            "package": "axiomasoft/corex-tenancy",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "case": "CentralProtocolViolation",
+            "code": "tenancy.central_protocol_violation",
+            "type": "urn:packman:problem:tenancy.central_protocol_violation",
+            "status": 500,
+            "title": "Central protocol violation.",
+            "retryable": false,
+            "category": "internal"
+        },
+        {
+            "package": "axiomasoft/corex-tenancy",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "case": "CentralUnauthorized",
+            "code": "tenancy.central_unauthorized",
+            "type": "urn:packman:problem:tenancy.central_unauthorized",
+            "status": 403,
+            "title": "Central unauthorized.",
+            "retryable": false,
+            "category": "authorization"
+        },
+        {
+            "package": "axiomasoft/corex-tenancy",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "case": "CentralUnavailable",
+            "code": "tenancy.central_unavailable",
+            "type": "urn:packman:problem:tenancy.central_unavailable",
+            "status": 503,
+            "title": "Central unavailable.",
+            "retryable": true,
+            "category": "unavailable"
+        },
+        {
+            "package": "axiomasoft/corex-tenancy",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "case": "ClaimConflict",
+            "code": "tenancy.claim_conflict",
+            "type": "urn:packman:problem:tenancy.claim_conflict",
+            "status": 409,
+            "title": "Claim conflict.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex-tenancy",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "case": "ClaimUnavailable",
+            "code": "tenancy.claim_unavailable",
+            "type": "urn:packman:problem:tenancy.claim_unavailable",
+            "status": 503,
+            "title": "Claim unavailable.",
+            "retryable": true,
+            "category": "unavailable"
+        },
+        {
+            "package": "axiomasoft/corex-tenancy",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "case": "ContextUnavailable",
+            "code": "tenancy.context_unavailable",
+            "type": "urn:packman:problem:tenancy.context_unavailable",
+            "status": 503,
+            "title": "Tenant context unavailable.",
+            "retryable": false,
+            "category": "unavailable"
+        },
+        {
+            "package": "axiomasoft/corex-tenancy",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "case": "CredentialIssuanceDenied",
+            "code": "tenancy.credential_issuance_denied",
+            "type": "urn:packman:problem:tenancy.credential_issuance_denied",
+            "status": 403,
+            "title": "Credential issuance denied.",
+            "retryable": false,
+            "category": "authorization"
+        },
+        {
+            "package": "axiomasoft/corex-tenancy",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "case": "DomainTrustDenied",
+            "code": "tenancy.domain_trust_denied",
+            "type": "urn:packman:problem:tenancy.domain_trust_denied",
+            "status": 403,
+            "title": "Domain trust denied.",
+            "retryable": false,
+            "category": "authorization"
+        },
+        {
+            "package": "axiomasoft/corex-tenancy",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "case": "DomainTrustDisabled",
+            "code": "tenancy.domain_trust_disabled",
+            "type": "urn:packman:problem:tenancy.domain_trust_disabled",
+            "status": 503,
+            "title": "Domain trust disabled.",
+            "retryable": false,
+            "category": "unavailable"
+        },
+        {
+            "package": "axiomasoft/corex-tenancy",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "case": "InboxConflict",
+            "code": "tenancy.inbox_conflict",
+            "type": "urn:packman:problem:tenancy.inbox_conflict",
+            "status": 409,
+            "title": "Inbox conflict.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex-tenancy",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "case": "InvitationNotAcceptableException",
+            "code": "tenancy.invitation_not_acceptable_exception",
+            "type": "urn:packman:problem:tenancy.invitation_not_acceptable_exception",
+            "status": 409,
+            "title": "Invitation not acceptable exception.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex-tenancy",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "case": "NoDefaultWorkspaceException",
+            "code": "tenancy.no_default_workspace_exception",
+            "type": "urn:packman:problem:tenancy.no_default_workspace_exception",
+            "status": 404,
+            "title": "No default workspace exception.",
+            "retryable": false,
+            "category": "not_found"
+        },
+        {
+            "package": "axiomasoft/corex-tenancy",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "case": "OidcAuthenticationException",
+            "code": "tenancy.oidc_authentication_exception",
+            "type": "urn:packman:problem:tenancy.oidc_authentication_exception",
+            "status": 401,
+            "title": "Oidc authentication exception.",
+            "retryable": false,
+            "category": "authentication"
+        },
+        {
+            "package": "axiomasoft/corex-tenancy",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "case": "PairStoreViolation",
+            "code": "tenancy.pair_store_violation",
+            "type": "urn:packman:problem:tenancy.pair_store_violation",
+            "status": 500,
+            "title": "Pair store violation.",
+            "retryable": false,
+            "category": "internal"
+        },
+        {
+            "package": "axiomasoft/corex-tenancy",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "case": "ProjectionDenied",
+            "code": "tenancy.projection_denied",
+            "type": "urn:packman:problem:tenancy.projection_denied",
+            "status": 403,
+            "title": "Projection denied.",
+            "retryable": false,
+            "category": "authorization"
+        },
+        {
+            "package": "axiomasoft/corex-tenancy",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "case": "RevokeUncertain",
+            "code": "tenancy.revoke_uncertain",
+            "type": "urn:packman:problem:tenancy.revoke_uncertain",
+            "status": 503,
+            "title": "Revoke uncertain.",
+            "retryable": true,
+            "category": "unavailable"
+        },
+        {
+            "package": "axiomasoft/corex-tenancy",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "case": "TemplateIntegrityException",
+            "code": "tenancy.template_integrity_exception",
+            "type": "urn:packman:problem:tenancy.template_integrity_exception",
+            "status": 500,
+            "title": "Template integrity exception.",
+            "retryable": false,
+            "category": "internal"
+        },
+        {
+            "package": "axiomasoft/corex-tenancy",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "case": "TenantCouldNotBeIdentifiedByHostException",
+            "code": "tenancy.tenant_could_not_be_identified_by_host_exception",
+            "type": "urn:packman:problem:tenancy.tenant_could_not_be_identified_by_host_exception",
+            "status": 404,
+            "title": "Tenant could not be identified by host exception.",
+            "retryable": false,
+            "category": "not_found"
+        }
+    ]
+}

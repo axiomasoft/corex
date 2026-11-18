@@ -6,9 +6,9 @@ namespace CoreX\Access\Contracts;
 
 use CoreX\Access\Data\RecordContext;
 use CoreX\Access\Enums\Scope;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\Principal;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Two-phase permission check (B-11 §5.5): allowed() is the capability gate

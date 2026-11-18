@@ -21,8 +21,10 @@ use CoreX\Media\Internal\Support\MediaOptions;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
+#[Internal]
 final readonly class SqlMediaLibrary implements MediaLibrary
 {
     public function __construct(

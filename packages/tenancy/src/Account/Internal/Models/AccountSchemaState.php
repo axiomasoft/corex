@@ -8,6 +8,7 @@ use Carbon\CarbonImmutable;
 use CoreX\Tenancy\Provisioning\Laravel\MigrationBatchRelations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Packman\Attributes\Internal;
 
 /**
  * `root_account_schema_state` — single source of truth for "which tenant
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property CarbonImmutable $created_at
  * @property CarbonImmutable $updated_at
  */
+#[Internal]
 final class AccountSchemaState extends Model
 {
     protected $table = 'root_account_schema_state';

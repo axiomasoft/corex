@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Data\Data\DataScope;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Восстанавливает рантайм-контекст из durable-скоупа.

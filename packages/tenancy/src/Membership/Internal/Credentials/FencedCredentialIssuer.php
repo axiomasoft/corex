@@ -9,8 +9,10 @@ use CoreX\Tenancy\Membership\Exceptions\CredentialIssuanceDenied;
 use CoreX\Tenancy\Membership\Internal\Persistence\PairStore;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\QueryException;
+use Packman\Attributes\Internal;
 
 /** @internal Disposable reference issuer; no auth driver or runtime binding uses it. */
+#[Internal]
 final readonly class FencedCredentialIssuer
 {
     public function __construct(

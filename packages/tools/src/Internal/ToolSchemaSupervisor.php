@@ -13,8 +13,10 @@ use CoreX\Tools\Contracts\ToolSchemaValidator;
 use CoreX\Tools\Errors\Enums\ToolsErrorCode;
 use JsonException;
 use Override;
+use Packman\Attributes\Internal;
 
 /** Subprocess supervisor enforcing validation-only memory and deadline bounds. */
+#[Internal]
 final readonly class ToolSchemaSupervisor implements ToolSchemaValidator
 {
     private const int WORKER_STARTUP_MS = 5_000;

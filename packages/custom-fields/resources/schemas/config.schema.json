@@ -1,0 +1,51 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "axiomasoft/corex-custom-fields configuration",
+    "type": "object",
+    "properties": {
+        "corex-custom-fields": {
+            "type": "object",
+            "properties": {
+                "definitions": {
+                    "type": [
+                        "array",
+                        "object"
+                    ]
+                },
+                "drivers": {
+                    "type": "object",
+                    "properties": {
+                        "ddl": {
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "eav": {
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "jsonb": {
+                            "type": "boolean",
+                            "default": true
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "sources": {
+                    "type": "array"
+                },
+                "storage_by_entity": {
+                    "type": [
+                        "array",
+                        "object"
+                    ]
+                },
+                "storage_driver": {
+                    "type": "string",
+                    "default": "jsonb"
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

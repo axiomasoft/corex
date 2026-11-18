@@ -10,12 +10,14 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Packman\Attributes\Internal;
 
 /**
  * @property string $id
  * @property int $minutes
  * @property DateTimeInterface $spent_on
  */
+#[Internal]
 final class TimeLog extends Model
 {
     use HasUuids;

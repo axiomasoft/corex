@@ -7,8 +7,10 @@ namespace CoreX\Tenancy\Membership\Internal\Transport;
 use CoreX\Tenancy\Membership\Enums\MembershipEventKind;
 use CoreX\Tenancy\Membership\Enums\MembershipReason;
 use DateTimeImmutable;
+use Packman\Attributes\Internal;
 
 /** @internal Trigger data only: no active state, positive lease or grant method. */
+#[Internal]
 final readonly class MembershipTrigger
 {
     public function __construct(

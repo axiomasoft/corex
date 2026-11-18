@@ -8,7 +8,9 @@ use Flex\Crm\Contact\Models\Contact;
 use Flex\Crm\Lead\Models\Lead;
 use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
 use Illuminate\Foundation\Events\Dispatchable;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class LeadConverted implements ShouldDispatchAfterCommit
 {
     use Dispatchable;

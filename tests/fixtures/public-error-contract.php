@@ -1,7 +1,6 @@
 <?php
 
 declare(strict_types=1);
-
 use CoreX\Access\Errors\Enums\AccessErrorCode;
 use CoreX\CustomFields\Errors\Enums\CustomFieldsErrorCode;
 use CoreX\Errors\Enums\CoreErrorCode;
@@ -16,2049 +15,1928 @@ use CoreX\Tasks\Errors\Enums\TasksErrorCode;
 use CoreX\Tenancy\Errors\Enums\TenancyErrorCode;
 use CoreX\Tools\Errors\Enums\ToolsErrorCode;
 use CoreX\Webhooks\Errors\Enums\WebhooksErrorCode;
+use Packman\Modules\Enums\ModuleErrorCode;
 
 return [
     'schema' => 'corex-public-error-contract/2',
     'contracts' => [
-        0 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.not_found',
             'category' => 'not_found',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        1 => [
+        [
             'owner' => 'axiomasoft/corex-webhooks',
             'code' => 'webhooks.unknown_message_contract',
             'category' => 'validation',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        2 => [
+        [
             'owner' => 'axiomasoft/corex-webhooks',
             'code' => 'webhooks.webhook_subscription_cap',
             'category' => 'validation',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        3 => [
+        [
             'owner' => 'axiomasoft/corex-webhooks',
             'code' => 'webhooks.webhook_endpoint_changed',
             'category' => 'conflict',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        4 => [
+        [
             'owner' => 'axiomasoft/corex-webhooks',
             'code' => 'webhooks.webhook_replay_expired',
             'category' => 'conflict',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        5 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.account_unavailable',
             'category' => 'authorization',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        6 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.access_denied',
             'category' => 'authorization',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        7 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.authentication_required',
             'category' => 'authentication',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        8 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.catalogue_limit',
             'category' => 'authorization',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        9 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.conflict',
             'category' => 'conflict',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        10 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.context_required',
             'category' => 'authorization',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        11 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.cursor_invalid',
             'category' => 'validation',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        12 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.forbidden',
             'category' => 'authorization',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        13 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.idempotency_conflict',
             'category' => 'conflict',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        14 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.idempotency_contract_mismatch',
             'category' => 'conflict',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        15 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.idempotency_in_progress',
             'category' => 'conflict',
             'retryable' => true,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        16 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.idempotency_key_forbidden',
             'category' => 'validation',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        17 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.idempotency_key_invalid',
             'category' => 'validation',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        18 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.idempotency_key_required',
             'category' => 'validation',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        19 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.idempotency_not_supported',
             'category' => 'validation',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        20 => [
+        [
             'owner' => 'axiomasoft/corex',
             'code' => 'core.internal_error',
             'category' => 'internal',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        21 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.invalid_request',
             'category' => 'validation',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        22 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.module_unavailable',
             'category' => 'not_found',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        23 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.operation_not_found',
             'category' => 'not_found',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        24 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.operation_unsupported',
             'category' => 'not_found',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        25 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.ordering_version_unsupported',
             'category' => 'validation',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        26 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.rate_limited',
             'category' => 'rate_limit',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        27 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.reconciliation_required',
             'category' => 'conflict',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        28 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.request_rejected',
             'category' => 'validation',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        29 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.resource_not_found',
             'category' => 'not_found',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        30 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.scope_required',
             'category' => 'authorization',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        31 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'code' => 'operations.validation_failed',
             'category' => 'validation',
             'retryable' => false,
             'path' => null,
             'detail_keys' => [
-                0 => '*',
+                '*',
             ],
             'declaration' => 'registered-enum',
         ],
-        32 => [
+        [
             'owner' => 'axiomasoft/corex-custom-fields',
             'code' => 'custom-fields.attribute_schema_conflict',
             'category' => 'conflict',
             'retryable' => false,
             'path' => null,
             'detail_keys' => [
-                0 => 'reason',
+                'reason',
             ],
             'declaration' => 'registered-enum',
         ],
-        33 => [
+        [
             'owner' => 'axiomasoft/corex-custom-fields',
             'code' => 'custom-fields.attribute_schema_conflict',
             'category' => 'conflict',
             'retryable' => true,
             'path' => null,
             'detail_keys' => [
-                0 => 'reason',
+                'reason',
             ],
             'declaration' => 'registered-enum',
         ],
-        34 => [
+        [
             'owner' => 'axiomasoft/corex-custom-fields',
             'code' => 'custom-fields.attribute_schema_retry_exhausted',
             'category' => 'conflict',
             'retryable' => false,
             'path' => null,
             'detail_keys' => [
-                0 => 'reason',
+                'reason',
             ],
             'declaration' => 'registered-enum',
         ],
-        35 => [
+        [
             'owner' => 'axiomasoft/corex-custom-fields',
             'code' => 'custom-fields.attributes_access_denied',
             'category' => 'authorization',
             'retryable' => false,
             'path' => null,
             'detail_keys' => [
-                0 => 'reason',
+                'reason',
             ],
             'declaration' => 'registered-enum',
         ],
-        36 => [
+        [
             'owner' => 'axiomasoft/corex-custom-fields',
             'code' => 'custom-fields.attributes_engine_unavailable',
             'category' => 'unavailable',
             'retryable' => false,
             'path' => null,
             'detail_keys' => [
-                0 => 'reason',
+                'reason',
             ],
             'declaration' => 'registered-enum',
         ],
-        37 => [
-            'owner' => 'axiomasoft/corex',
-            'code' => 'core.schema_duplicate_migration',
+        [
+            'owner' => 'axiomasoft/packman',
+            'code' => 'packman.schema_duplicate_migration',
             'category' => 'internal',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        38 => [
-            'owner' => 'axiomasoft/corex',
-            'code' => 'core.schema_duplicate_set',
+        [
+            'owner' => 'axiomasoft/packman',
+            'code' => 'packman.schema_duplicate_set',
             'category' => 'internal',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        39 => [
-            'owner' => 'axiomasoft/corex',
-            'code' => 'core.schema_invalid_set',
+        [
+            'owner' => 'axiomasoft/packman',
+            'code' => 'packman.schema_invalid_set',
             'category' => 'internal',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        40 => [
-            'owner' => 'axiomasoft/corex',
-            'code' => 'core.schema_unknown_set',
-            'category' => 'internal',
+        [
+            'owner' => 'axiomasoft/packman',
+            'code' => 'packman.schema_unknown_set',
+            'category' => 'not_found',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
-        41 => [
-            'owner' => 'axiomasoft/corex',
-            'code' => 'core.schema_unsupported_driver',
-            'category' => 'internal',
+        [
+            'owner' => 'axiomasoft/packman',
+            'code' => 'packman.schema_unsupported_driver',
+            'category' => 'unsupported',
             'retryable' => false,
             'path' => null,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
             'declaration' => 'registered-enum',
         ],
     ],
     'dynamic_adapters' => [
-        0 => [
+        [
             'owner' => 'axiomasoft/corex-webhooks',
             'source' => 'packages/webhooks/src/Internal/WebhookTopicCatalogue.php',
             'adapter' => 'declared-webhook-topic-admission',
-            'sha256' => '44e31386ef70529fa90311281cd0910339f533dae3289ffddaadda7fbccc2bc2',
+            'sha256' => '128a7ce3c3edac8add5500e57cc6e1996f9ad6c025788ca9c6d7480b28d274e7',
         ],
-        1 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'source' => 'packages/operations/src/Errors/Exceptions/ApiError.php',
             'adapter' => 'api-error-instance-descriptor',
-            'sha256' => '92e64077729fa9a6f59e4e5271e850e5500e100bbae47b18402e94ccdb93e8e7',
+            'sha256' => '2494f5c0a39a2fd7603695134bc174791ba81a7cbe81d339c608e8bc0ec57bc7',
         ],
-        2 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'source' => 'packages/operations/src/Idempotency/Data/StoredOperationOutcome.php',
             'adapter' => 'stored-api-error-outcome',
-            'sha256' => '8ff021104628318e1b5c976136a52750dc21d8cf67d3b838ff8d6c56f5781bc4',
+            'sha256' => 'c740713238368aa44d94b47aaf8a1ad63004ba1a10021410ce14122ccf6b4afc',
         ],
-        3 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'source' => 'packages/operations/src/Invocation/Internal/DefaultOperationInvoker.php',
             'adapter' => 'field-path-api-error',
-            'sha256' => '7f0049702507c63f82b35e35af15ceff52f5355df3d009e997ddc0ab8b01bda6',
+            'sha256' => '0c1649758325f17bcb02ce184445468d9375c34d79cae08cd70fd6018c80a2c1',
         ],
-        4 => [
+        [
             'owner' => 'axiomasoft/corex-operations',
             'source' => 'packages/operations/src/Errors/Internal/ErrorMapper.php',
             'adapter' => 'descriptor-and-framework-status-map',
-            'sha256' => '429d09e600deb98255958327c1cef0803807794d9b486a1fb035ad829200046b',
+            'sha256' => 'bc2397d11600078c63112dba0375752074a5107081302cf21ec8a52046c21148',
         ],
     ],
     'definitions' => [
-        0 => [
+        [
             'code' => 'access.scope_capability_mismatch',
             'enum' => AccessErrorCode::class,
-            'type' => 'urn:corex:problem:access.scope_capability_mismatch',
+            'type' => 'urn:packman:problem:access.scope_capability_mismatch',
             'status' => 422,
             'title' => 'Scope capability mismatch.',
             'category' => 'unsupported',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        1 => [
+        [
             'code' => 'core.central_context_exception',
             'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.central_context_exception',
+            'type' => 'urn:packman:problem:core.central_context_exception',
             'status' => 403,
             'title' => 'Central context exception.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        2 => [
-            'code' => 'core.compilation_exception',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.compilation_exception',
-            'status' => 500,
-            'title' => 'Compilation exception.',
-            'category' => 'internal',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        3 => [
+        [
             'code' => 'core.cross_workspace_move_exception',
             'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.cross_workspace_move_exception',
+            'type' => 'urn:packman:problem:core.cross_workspace_move_exception',
             'status' => 409,
             'title' => 'Cross workspace move exception.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        4 => [
+        [
             'code' => 'core.department_cycle_exception',
             'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.department_cycle_exception',
+            'type' => 'urn:packman:problem:core.department_cycle_exception',
             'status' => 409,
             'title' => 'Department cycle exception.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        5 => [
-            'code' => 'core.duplicate_code',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.duplicate_code',
-            'status' => 500,
-            'title' => 'Duplicate code.',
-            'category' => 'internal',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        6 => [
-            'code' => 'core.duplicate_type',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.duplicate_type',
-            'status' => 500,
-            'title' => 'Duplicate type.',
-            'category' => 'internal',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        7 => [
-            'code' => 'core.entity_not_found',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.entity_not_found',
-            'status' => 404,
-            'title' => 'Entity not found.',
-            'category' => 'not_found',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        8 => [
-            'code' => 'core.foreign_prefix',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.foreign_prefix',
-            'status' => 500,
-            'title' => 'Foreign prefix.',
-            'category' => 'internal',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        9 => [
-            'code' => 'core.has_enabled_dependents_exception',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.has_enabled_dependents_exception',
-            'status' => 409,
-            'title' => 'Has enabled dependents exception.',
-            'category' => 'conflict',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        10 => [
+        [
             'code' => 'core.impersonation_restricted_exception',
             'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.impersonation_restricted_exception',
+            'type' => 'urn:packman:problem:core.impersonation_restricted_exception',
             'status' => 403,
             'title' => 'Impersonation restricted exception.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        11 => [
+        [
             'code' => 'core.inbox_refused',
             'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.inbox_refused',
+            'type' => 'urn:packman:problem:core.inbox_refused',
             'status' => 409,
             'title' => 'Inbox refused.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        12 => [
+        [
             'code' => 'core.internal_error',
             'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.internal_error',
+            'type' => 'urn:packman:problem:core.internal_error',
             'status' => 500,
             'title' => 'Internal error.',
             'category' => 'internal',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        13 => [
-            'code' => 'core.invalid_configuration',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.invalid_configuration',
-            'status' => 500,
-            'title' => 'Invalid configuration.',
-            'category' => 'internal',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        14 => [
-            'code' => 'core.invalid_definition',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.invalid_definition',
-            'status' => 500,
-            'title' => 'Invalid definition.',
-            'category' => 'internal',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        15 => [
-            'code' => 'core.invalid_manifest_exception',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.invalid_manifest_exception',
-            'status' => 422,
-            'title' => 'Invalid manifest exception.',
-            'category' => 'validation',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        16 => [
+        [
             'code' => 'core.invalid_message',
             'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.invalid_message',
+            'type' => 'urn:packman:problem:core.invalid_message',
             'status' => 422,
             'title' => 'Invalid message.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        17 => [
-            'code' => 'core.invalid_registry_point',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.invalid_registry_point',
-            'status' => 422,
-            'title' => 'Invalid registry point.',
-            'category' => 'validation',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        18 => [
+        [
             'code' => 'core.invalid_scope_payload',
             'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.invalid_scope_payload',
+            'type' => 'urn:packman:problem:core.invalid_scope_payload',
             'status' => 422,
             'title' => 'Invalid scope payload.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        19 => [
-            'code' => 'core.invalid_state_transition_exception',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.invalid_state_transition_exception',
-            'status' => 409,
-            'title' => 'Invalid state transition exception.',
-            'category' => 'conflict',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        20 => [
-            'code' => 'core.invalid_status',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.invalid_status',
-            'status' => 500,
-            'title' => 'Invalid status.',
-            'category' => 'internal',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        21 => [
-            'code' => 'core.missing_dependency_exception',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.missing_dependency_exception',
-            'status' => 409,
-            'title' => 'Missing dependency exception.',
-            'category' => 'conflict',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        22 => [
-            'code' => 'core.module_enable_failed_exception',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.module_enable_failed_exception',
-            'status' => 500,
-            'title' => 'Module enable failed exception.',
-            'category' => 'internal',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        23 => [
-            'code' => 'core.module_not_found',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.module_not_found',
-            'status' => 404,
-            'title' => 'Module not found.',
-            'category' => 'not_found',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        24 => [
-            'code' => 'core.module_upgrade_failed_exception',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.module_upgrade_failed_exception',
-            'status' => 500,
-            'title' => 'Module upgrade failed exception.',
-            'category' => 'internal',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        25 => [
+        [
             'code' => 'core.outbox_lease_lost',
             'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.outbox_lease_lost',
+            'type' => 'urn:packman:problem:core.outbox_lease_lost',
             'status' => 409,
             'title' => 'Outbox lease lost.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        26 => [
+        [
             'code' => 'core.outbox_refused',
             'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.outbox_refused',
+            'type' => 'urn:packman:problem:core.outbox_refused',
             'status' => 409,
             'title' => 'Outbox refused.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        27 => [
-            'code' => 'core.registry_frozen',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.registry_frozen',
-            'status' => 500,
-            'title' => 'Registry frozen.',
-            'category' => 'internal',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        28 => [
-            'code' => 'core.registry_input_unavailable',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.registry_input_unavailable',
-            'status' => 503,
-            'title' => 'Registry input unavailable.',
-            'category' => 'unavailable',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        29 => [
-            'code' => 'core.schema_duplicate_migration',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.schema_duplicate_migration',
-            'status' => 500,
-            'title' => 'Duplicate schema migration.',
-            'category' => 'internal',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        30 => [
-            'code' => 'core.schema_duplicate_set',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.schema_duplicate_set',
-            'status' => 500,
-            'title' => 'Duplicate schema set.',
-            'category' => 'internal',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        31 => [
-            'code' => 'core.schema_invalid_set',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.schema_invalid_set',
-            'status' => 500,
-            'title' => 'Invalid schema set.',
-            'category' => 'internal',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        32 => [
-            'code' => 'core.schema_unknown_set',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.schema_unknown_set',
-            'status' => 500,
-            'title' => 'Unknown schema set.',
-            'category' => 'internal',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        33 => [
-            'code' => 'core.schema_unsupported_driver',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.schema_unsupported_driver',
-            'status' => 500,
-            'title' => 'Unsupported schema driver.',
-            'category' => 'internal',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        34 => [
+        [
             'code' => 'core.scope_context_mismatch',
             'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.scope_context_mismatch',
+            'type' => 'urn:packman:problem:core.scope_context_mismatch',
             'status' => 403,
             'title' => 'Scope context mismatch.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        35 => [
+        [
             'code' => 'core.setting_value_too_large_exception',
             'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.setting_value_too_large_exception',
+            'type' => 'urn:packman:problem:core.setting_value_too_large_exception',
             'status' => 422,
             'title' => 'Setting value too large exception.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        36 => [
-            'code' => 'core.stale_registry_revision',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.stale_registry_revision',
-            'status' => 409,
-            'title' => 'Stale registry revision.',
-            'category' => 'conflict',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        37 => [
+        [
             'code' => 'core.storage_capability_unavailable',
             'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.storage_capability_unavailable',
+            'type' => 'urn:packman:problem:core.storage_capability_unavailable',
             'status' => 503,
             'title' => 'Storage capability unavailable.',
             'category' => 'unavailable',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        38 => [
+        [
             'code' => 'core.storage_operation_failed',
             'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.storage_operation_failed',
+            'type' => 'urn:packman:problem:core.storage_operation_failed',
             'status' => 503,
             'title' => 'Storage operation failed.',
             'category' => 'unavailable',
             'retryable' => true,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        39 => [
-            'code' => 'core.unknown_code',
-            'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.unknown_code',
-            'status' => 500,
-            'title' => 'Unknown code.',
-            'category' => 'internal',
-            'retryable' => false,
-            'detail_keys' => [
-            ],
-        ],
-        40 => [
+        [
             'code' => 'core.unknown_message_contract',
             'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.unknown_message_contract',
+            'type' => 'urn:packman:problem:core.unknown_message_contract',
             'status' => 422,
             'title' => 'Unknown message contract.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        41 => [
+        [
             'code' => 'core.unsupported_scope_exception',
             'enum' => CoreErrorCode::class,
-            'type' => 'urn:corex:problem:core.unsupported_scope_exception',
+            'type' => 'urn:packman:problem:core.unsupported_scope_exception',
             'status' => 422,
             'title' => 'Unsupported scope exception.',
             'category' => 'unsupported',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        42 => [
+        [
             'code' => 'custom-fields.attribute_schema_conflict',
             'enum' => CustomFieldsErrorCode::class,
-            'type' => 'urn:corex:problem:custom-fields.attribute_schema_conflict',
+            'type' => 'urn:packman:problem:custom-fields.attribute_schema_conflict',
             'status' => 409,
             'title' => 'Attribute schema conflict.',
             'category' => 'conflict',
             'retryable' => true,
             'detail_keys' => [
-                0 => 'reason',
+                'reason',
             ],
         ],
-        43 => [
+        [
             'code' => 'custom-fields.attribute_schema_retry_exhausted',
             'enum' => CustomFieldsErrorCode::class,
-            'type' => 'urn:corex:problem:custom-fields.attribute_schema_retry_exhausted',
+            'type' => 'urn:packman:problem:custom-fields.attribute_schema_retry_exhausted',
             'status' => 409,
             'title' => 'Attribute schema retry exhausted.',
             'category' => 'conflict',
             'retryable' => false,
             'detail_keys' => [
-                0 => 'reason',
+                'reason',
             ],
         ],
-        44 => [
+        [
             'code' => 'custom-fields.attributes_access_denied',
             'enum' => CustomFieldsErrorCode::class,
-            'type' => 'urn:corex:problem:custom-fields.attributes_access_denied',
+            'type' => 'urn:packman:problem:custom-fields.attributes_access_denied',
             'status' => 403,
             'title' => 'Attributes access denied.',
             'category' => 'authorization',
             'retryable' => false,
             'detail_keys' => [
-                0 => 'reason',
+                'reason',
             ],
         ],
-        45 => [
+        [
             'code' => 'custom-fields.attributes_engine_unavailable',
             'enum' => CustomFieldsErrorCode::class,
-            'type' => 'urn:corex:problem:custom-fields.attributes_engine_unavailable',
+            'type' => 'urn:packman:problem:custom-fields.attributes_engine_unavailable',
             'status' => 503,
             'title' => 'Attributes engine unavailable.',
             'category' => 'unavailable',
             'retryable' => false,
             'detail_keys' => [
-                0 => 'reason',
+                'reason',
             ],
         ],
-        46 => [
+        [
             'code' => 'custom-fields.invalid_attribute_tables',
             'enum' => CustomFieldsErrorCode::class,
-            'type' => 'urn:corex:problem:custom-fields.invalid_attribute_tables',
+            'type' => 'urn:packman:problem:custom-fields.invalid_attribute_tables',
             'status' => 500,
             'title' => 'Invalid attribute tables.',
             'category' => 'internal',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        47 => [
+        [
             'code' => 'intl.access_denied_exception',
             'enum' => IntlErrorCode::class,
-            'type' => 'urn:corex:problem:intl.access_denied_exception',
+            'type' => 'urn:packman:problem:intl.access_denied_exception',
             'status' => 403,
             'title' => 'Access denied exception.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        48 => [
+        [
             'code' => 'intl.invalid_locale_exception',
             'enum' => IntlErrorCode::class,
-            'type' => 'urn:corex:problem:intl.invalid_locale_exception',
+            'type' => 'urn:packman:problem:intl.invalid_locale_exception',
             'status' => 422,
             'title' => 'Invalid locale exception.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        49 => [
+        [
             'code' => 'intl.invalid_rate_exception',
             'enum' => IntlErrorCode::class,
-            'type' => 'urn:corex:problem:intl.invalid_rate_exception',
+            'type' => 'urn:packman:problem:intl.invalid_rate_exception',
             'status' => 422,
             'title' => 'Invalid rate exception.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        50 => [
+        [
             'code' => 'intl.operation_conflict_exception',
             'enum' => IntlErrorCode::class,
-            'type' => 'urn:corex:problem:intl.operation_conflict_exception',
+            'type' => 'urn:packman:problem:intl.operation_conflict_exception',
             'status' => 409,
             'title' => 'Operation conflict exception.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        51 => [
+        [
             'code' => 'intl.schema_mismatch_exception',
             'enum' => IntlErrorCode::class,
-            'type' => 'urn:corex:problem:intl.schema_mismatch_exception',
+            'type' => 'urn:packman:problem:intl.schema_mismatch_exception',
             'status' => 409,
             'title' => 'Schema mismatch exception.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        52 => [
+        [
             'code' => 'intl.snapshot_expired_exception',
             'enum' => IntlErrorCode::class,
-            'type' => 'urn:corex:problem:intl.snapshot_expired_exception',
+            'type' => 'urn:packman:problem:intl.snapshot_expired_exception',
             'status' => 404,
             'title' => 'Snapshot expired exception.',
             'category' => 'not_found',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        53 => [
+        [
             'code' => 'intl.unsupported_formatting_exception',
             'enum' => IntlErrorCode::class,
-            'type' => 'urn:corex:problem:intl.unsupported_formatting_exception',
+            'type' => 'urn:packman:problem:intl.unsupported_formatting_exception',
             'status' => 422,
             'title' => 'Unsupported formatting exception.',
             'category' => 'unsupported',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        54 => [
+        [
+            'code' => 'modules.compilation_failed',
+            'enum' => ModuleErrorCode::class,
+            'type' => 'urn:packman:problem:modules.compilation_failed',
+            'status' => 500,
+            'title' => 'Module registry compilation failed.',
+            'category' => 'internal',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'modules.enable_failed',
+            'enum' => ModuleErrorCode::class,
+            'type' => 'urn:packman:problem:modules.enable_failed',
+            'status' => 500,
+            'title' => 'Enabling module failed.',
+            'category' => 'internal',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'modules.entity_not_found',
+            'enum' => ModuleErrorCode::class,
+            'type' => 'urn:packman:problem:modules.entity_not_found',
+            'status' => 404,
+            'title' => 'Module entity not found.',
+            'category' => 'not_found',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'modules.has_enabled_dependents',
+            'enum' => ModuleErrorCode::class,
+            'type' => 'urn:packman:problem:modules.has_enabled_dependents',
+            'status' => 409,
+            'title' => 'Module has enabled dependents.',
+            'category' => 'conflict',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'modules.invalid_manifest',
+            'enum' => ModuleErrorCode::class,
+            'type' => 'urn:packman:problem:modules.invalid_manifest',
+            'status' => 422,
+            'title' => 'Invalid module manifest.',
+            'category' => 'validation',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'modules.invalid_registry_point',
+            'enum' => ModuleErrorCode::class,
+            'type' => 'urn:packman:problem:modules.invalid_registry_point',
+            'status' => 422,
+            'title' => 'Invalid module registry point.',
+            'category' => 'validation',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'modules.invalid_state_transition',
+            'enum' => ModuleErrorCode::class,
+            'type' => 'urn:packman:problem:modules.invalid_state_transition',
+            'status' => 409,
+            'title' => 'Invalid module lifecycle transition.',
+            'category' => 'conflict',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'modules.missing_dependency',
+            'enum' => ModuleErrorCode::class,
+            'type' => 'urn:packman:problem:modules.missing_dependency',
+            'status' => 409,
+            'title' => 'Missing required module dependency.',
+            'category' => 'conflict',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'modules.module_not_found',
+            'enum' => ModuleErrorCode::class,
+            'type' => 'urn:packman:problem:modules.module_not_found',
+            'status' => 404,
+            'title' => 'Module not found.',
+            'category' => 'not_found',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'modules.registry_frozen',
+            'enum' => ModuleErrorCode::class,
+            'type' => 'urn:packman:problem:modules.registry_frozen',
+            'status' => 500,
+            'title' => 'Entity registry is frozen.',
+            'category' => 'internal',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'modules.registry_input_unavailable',
+            'enum' => ModuleErrorCode::class,
+            'type' => 'urn:packman:problem:modules.registry_input_unavailable',
+            'status' => 503,
+            'title' => 'Compiled module registry is unavailable.',
+            'category' => 'unavailable',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'modules.stale_registry_revision',
+            'enum' => ModuleErrorCode::class,
+            'type' => 'urn:packman:problem:modules.stale_registry_revision',
+            'status' => 409,
+            'title' => 'Stale module registry revision.',
+            'category' => 'conflict',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'modules.upgrade_failed',
+            'enum' => ModuleErrorCode::class,
+            'type' => 'urn:packman:problem:modules.upgrade_failed',
+            'status' => 500,
+            'title' => 'Upgrading module failed.',
+            'category' => 'internal',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
             'code' => 'notifications.notification_access_denied',
             'enum' => NotificationsErrorCode::class,
-            'type' => 'urn:corex:problem:notifications.notification_access_denied',
+            'type' => 'urn:packman:problem:notifications.notification_access_denied',
             'status' => 403,
             'title' => 'Notification access denied.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        55 => [
+        [
             'code' => 'notifications.notification_operation_conflict',
             'enum' => NotificationsErrorCode::class,
-            'type' => 'urn:corex:problem:notifications.notification_operation_conflict',
+            'type' => 'urn:packman:problem:notifications.notification_operation_conflict',
             'status' => 409,
             'title' => 'Notification operation conflict.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        56 => [
+        [
             'code' => 'operations.access_denied',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.access_denied',
+            'type' => 'urn:packman:problem:operations.access_denied',
             'status' => 403,
             'title' => 'Access denied.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        57 => [
+        [
             'code' => 'operations.account_unavailable',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.account_unavailable',
+            'type' => 'urn:packman:problem:operations.account_unavailable',
             'status' => 403,
             'title' => 'Account unavailable.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        58 => [
+        [
             'code' => 'operations.authentication_required',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.authentication_required',
+            'type' => 'urn:packman:problem:operations.authentication_required',
             'status' => 401,
             'title' => 'Authentication required.',
             'category' => 'authentication',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        59 => [
+        [
             'code' => 'operations.budget_rate_limited',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.budget_rate_limited',
+            'type' => 'urn:packman:problem:operations.budget_rate_limited',
             'status' => 429,
             'title' => 'Budget rate limited.',
             'category' => 'rate_limit',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        60 => [
+        [
             'code' => 'operations.budget_store_unavailable',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.budget_store_unavailable',
+            'type' => 'urn:packman:problem:operations.budget_store_unavailable',
             'status' => 500,
             'title' => 'Budget store unavailable.',
             'category' => 'internal',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        61 => [
+        [
             'code' => 'operations.bulk_not_ready',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.bulk_not_ready',
+            'type' => 'urn:packman:problem:operations.bulk_not_ready',
             'status' => 409,
             'title' => 'Bulk result is not ready.',
             'category' => 'conflict',
             'retryable' => true,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        62 => [
+        [
             'code' => 'operations.bulk_reconciliation_required',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.bulk_reconciliation_required',
+            'type' => 'urn:packman:problem:operations.bulk_reconciliation_required',
             'status' => 409,
             'title' => 'Bulk reconciliation is required.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        63 => [
+        [
             'code' => 'operations.bulk_result_expired',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.bulk_result_expired',
+            'type' => 'urn:packman:problem:operations.bulk_result_expired',
             'status' => 410,
             'title' => 'Bulk result has expired.',
             'category' => 'not_found',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        64 => [
+        [
             'code' => 'operations.capability_unavailable',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.capability_unavailable',
+            'type' => 'urn:packman:problem:operations.capability_unavailable',
             'status' => 503,
             'title' => 'Capability unavailable.',
             'category' => 'unavailable',
             'retryable' => false,
             'detail_keys' => [
-                0 => 'reason',
+                'reason',
             ],
         ],
-        65 => [
+        [
             'code' => 'operations.catalogue_limit',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.catalogue_limit',
+            'type' => 'urn:packman:problem:operations.catalogue_limit',
             'status' => 403,
             'title' => 'Catalogue limit.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        66 => [
+        [
             'code' => 'operations.conflict',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.conflict',
+            'type' => 'urn:packman:problem:operations.conflict',
             'status' => 409,
             'title' => 'Conflict.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        67 => [
+        [
             'code' => 'operations.context_required',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.context_required',
+            'type' => 'urn:packman:problem:operations.context_required',
             'status' => 403,
             'title' => 'Context required.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        68 => [
+        [
             'code' => 'operations.cursor_invalid',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.cursor_invalid',
+            'type' => 'urn:packman:problem:operations.cursor_invalid',
             'status' => 422,
             'title' => 'Cursor invalid.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        69 => [
+        [
             'code' => 'operations.forbidden',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.forbidden',
+            'type' => 'urn:packman:problem:operations.forbidden',
             'status' => 403,
             'title' => 'Forbidden.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        70 => [
+        [
             'code' => 'operations.idempotency_conflict',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.idempotency_conflict',
+            'type' => 'urn:packman:problem:operations.idempotency_conflict',
             'status' => 409,
             'title' => 'Idempotency conflict.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        71 => [
+        [
             'code' => 'operations.idempotency_contract_mismatch',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.idempotency_contract_mismatch',
+            'type' => 'urn:packman:problem:operations.idempotency_contract_mismatch',
             'status' => 409,
             'title' => 'Idempotency contract mismatch.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        72 => [
+        [
             'code' => 'operations.idempotency_in_progress',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.idempotency_in_progress',
+            'type' => 'urn:packman:problem:operations.idempotency_in_progress',
             'status' => 409,
             'title' => 'Idempotency in progress.',
             'category' => 'conflict',
             'retryable' => true,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        73 => [
+        [
             'code' => 'operations.idempotency_key_forbidden',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.idempotency_key_forbidden',
+            'type' => 'urn:packman:problem:operations.idempotency_key_forbidden',
             'status' => 422,
             'title' => 'Idempotency key forbidden.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        74 => [
+        [
             'code' => 'operations.idempotency_key_invalid',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.idempotency_key_invalid',
+            'type' => 'urn:packman:problem:operations.idempotency_key_invalid',
             'status' => 422,
             'title' => 'Idempotency key invalid.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        75 => [
+        [
             'code' => 'operations.idempotency_key_required',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.idempotency_key_required',
+            'type' => 'urn:packman:problem:operations.idempotency_key_required',
             'status' => 422,
             'title' => 'Idempotency key required.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        76 => [
+        [
             'code' => 'operations.idempotency_not_supported',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.idempotency_not_supported',
+            'type' => 'urn:packman:problem:operations.idempotency_not_supported',
             'status' => 422,
             'title' => 'Idempotency not supported.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        77 => [
+        [
             'code' => 'operations.input_envelope_invalid',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.input_envelope_invalid',
+            'type' => 'urn:packman:problem:operations.input_envelope_invalid',
             'status' => 422,
             'title' => 'Input envelope is invalid.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        78 => [
+        [
             'code' => 'operations.invalid_request',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.invalid_request',
+            'type' => 'urn:packman:problem:operations.invalid_request',
             'status' => 422,
             'title' => 'Invalid request.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        79 => [
+        [
             'code' => 'operations.module_unavailable',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.module_unavailable',
+            'type' => 'urn:packman:problem:operations.module_unavailable',
             'status' => 404,
             'title' => 'Module unavailable.',
             'category' => 'not_found',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        80 => [
+        [
             'code' => 'operations.not_found',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.not_found',
+            'type' => 'urn:packman:problem:operations.not_found',
             'status' => 404,
             'title' => 'Not found.',
             'category' => 'not_found',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        81 => [
+        [
             'code' => 'operations.operation_not_found',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.operation_not_found',
+            'type' => 'urn:packman:problem:operations.operation_not_found',
             'status' => 404,
             'title' => 'Operation not found.',
             'category' => 'not_found',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        82 => [
+        [
             'code' => 'operations.operation_unsupported',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.operation_unsupported',
+            'type' => 'urn:packman:problem:operations.operation_unsupported',
             'status' => 404,
             'title' => 'Operation unsupported.',
             'category' => 'not_found',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        83 => [
+        [
             'code' => 'operations.ordering_version_unsupported',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.ordering_version_unsupported',
+            'type' => 'urn:packman:problem:operations.ordering_version_unsupported',
             'status' => 422,
             'title' => 'Ordering version unsupported.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        84 => [
+        [
             'code' => 'operations.rate_limited',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.rate_limited',
+            'type' => 'urn:packman:problem:operations.rate_limited',
             'status' => 429,
             'title' => 'Rate limited.',
             'category' => 'rate_limit',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        85 => [
+        [
             'code' => 'operations.reconciliation_required',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.reconciliation_required',
+            'type' => 'urn:packman:problem:operations.reconciliation_required',
             'status' => 409,
             'title' => 'Reconciliation required.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        86 => [
+        [
             'code' => 'operations.request_rejected',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.request_rejected',
+            'type' => 'urn:packman:problem:operations.request_rejected',
             'status' => 422,
             'title' => 'Request rejected.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        87 => [
+        [
             'code' => 'operations.resource_not_found',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.resource_not_found',
+            'type' => 'urn:packman:problem:operations.resource_not_found',
             'status' => 404,
             'title' => 'Resource not found.',
             'category' => 'not_found',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        88 => [
+        [
             'code' => 'operations.scope_required',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.scope_required',
+            'type' => 'urn:packman:problem:operations.scope_required',
             'status' => 403,
             'title' => 'Scope required.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        89 => [
+        [
             'code' => 'operations.undeclared_fields',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.undeclared_fields',
+            'type' => 'urn:packman:problem:operations.undeclared_fields',
             'status' => 422,
             'title' => 'Input contains undeclared fields.',
             'category' => 'validation',
             'retryable' => false,
             'detail_keys' => [
-                0 => 'fields',
+                'fields',
             ],
         ],
-        90 => [
+        [
             'code' => 'operations.unknown_message_contract',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.unknown_message_contract',
+            'type' => 'urn:packman:problem:operations.unknown_message_contract',
             'status' => 422,
             'title' => 'Unknown message contract.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        91 => [
+        [
             'code' => 'operations.unsupported_media_type',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.unsupported_media_type',
+            'type' => 'urn:packman:problem:operations.unsupported_media_type',
             'status' => 415,
             'title' => 'Unsupported media type.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        92 => [
+        [
             'code' => 'operations.validation_failed',
             'enum' => OperationsErrorCode::class,
-            'type' => 'urn:corex:problem:operations.validation_failed',
+            'type' => 'urn:packman:problem:operations.validation_failed',
             'status' => 422,
             'title' => 'Validation failed.',
             'category' => 'validation',
             'retryable' => false,
             'detail_keys' => [
-                0 => '*',
+                '*',
             ],
         ],
-        93 => [
+        [
+            'code' => 'packman.duplicate_code',
+            'enum' => Packman\Errors\Enums\CoreErrorCode::class,
+            'type' => 'urn:packman:problem:packman.duplicate_code',
+            'status' => 500,
+            'title' => 'Duplicate error code.',
+            'category' => 'internal',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'packman.duplicate_type',
+            'enum' => Packman\Errors\Enums\CoreErrorCode::class,
+            'type' => 'urn:packman:problem:packman.duplicate_type',
+            'status' => 500,
+            'title' => 'Duplicate problem type.',
+            'category' => 'internal',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'packman.foreign_prefix',
+            'enum' => Packman\Errors\Enums\CoreErrorCode::class,
+            'type' => 'urn:packman:problem:packman.foreign_prefix',
+            'status' => 500,
+            'title' => 'Foreign error prefix.',
+            'category' => 'internal',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'packman.internal_error',
+            'enum' => Packman\Errors\Enums\CoreErrorCode::class,
+            'type' => 'urn:packman:problem:packman.internal_error',
+            'status' => 500,
+            'title' => 'Internal error.',
+            'category' => 'internal',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'packman.invalid_configuration',
+            'enum' => Packman\Errors\Enums\CoreErrorCode::class,
+            'type' => 'urn:packman:problem:packman.invalid_configuration',
+            'status' => 500,
+            'title' => 'Invalid configuration.',
+            'category' => 'internal',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'packman.invalid_definition',
+            'enum' => Packman\Errors\Enums\CoreErrorCode::class,
+            'type' => 'urn:packman:problem:packman.invalid_definition',
+            'status' => 500,
+            'title' => 'Invalid error definition.',
+            'category' => 'internal',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'packman.invalid_scope_payload',
+            'enum' => Packman\Errors\Enums\CoreErrorCode::class,
+            'type' => 'urn:packman:problem:packman.invalid_scope_payload',
+            'status' => 422,
+            'title' => 'Invalid scope payload.',
+            'category' => 'validation',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'packman.invalid_status',
+            'enum' => Packman\Errors\Enums\CoreErrorCode::class,
+            'type' => 'urn:packman:problem:packman.invalid_status',
+            'status' => 500,
+            'title' => 'Invalid error status.',
+            'category' => 'internal',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'packman.registry_frozen',
+            'enum' => Packman\Errors\Enums\CoreErrorCode::class,
+            'type' => 'urn:packman:problem:packman.registry_frozen',
+            'status' => 500,
+            'title' => 'Problem registry is frozen.',
+            'category' => 'internal',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'packman.schema_duplicate_migration',
+            'enum' => Packman\Errors\Enums\CoreErrorCode::class,
+            'type' => 'urn:packman:problem:packman.schema_duplicate_migration',
+            'status' => 500,
+            'title' => 'Duplicate schema migration.',
+            'category' => 'internal',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'packman.schema_duplicate_set',
+            'enum' => Packman\Errors\Enums\CoreErrorCode::class,
+            'type' => 'urn:packman:problem:packman.schema_duplicate_set',
+            'status' => 500,
+            'title' => 'Duplicate schema set.',
+            'category' => 'internal',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'packman.schema_invalid_set',
+            'enum' => Packman\Errors\Enums\CoreErrorCode::class,
+            'type' => 'urn:packman:problem:packman.schema_invalid_set',
+            'status' => 500,
+            'title' => 'Schema set is invalid.',
+            'category' => 'internal',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'packman.schema_unknown_set',
+            'enum' => Packman\Errors\Enums\CoreErrorCode::class,
+            'type' => 'urn:packman:problem:packman.schema_unknown_set',
+            'status' => 404,
+            'title' => 'Unknown schema set.',
+            'category' => 'not_found',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'packman.schema_unsupported_driver',
+            'enum' => Packman\Errors\Enums\CoreErrorCode::class,
+            'type' => 'urn:packman:problem:packman.schema_unsupported_driver',
+            'status' => 422,
+            'title' => 'Unsupported database driver.',
+            'category' => 'unsupported',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'packman.scope_unavailable',
+            'enum' => Packman\Errors\Enums\CoreErrorCode::class,
+            'type' => 'urn:packman:problem:packman.scope_unavailable',
+            'status' => 409,
+            'title' => 'Scope context unavailable.',
+            'category' => 'conflict',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'packman.unknown_code',
+            'enum' => Packman\Errors\Enums\CoreErrorCode::class,
+            'type' => 'urn:packman:problem:packman.unknown_code',
+            'status' => 500,
+            'title' => 'Unknown error code.',
+            'category' => 'internal',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
+            'code' => 'packman.unsupported_scope',
+            'enum' => Packman\Errors\Enums\CoreErrorCode::class,
+            'type' => 'urn:packman:problem:packman.unsupported_scope',
+            'status' => 422,
+            'title' => 'Unsupported scope.',
+            'category' => 'unsupported',
+            'retryable' => false,
+            'detail_keys' => [],
+        ],
+        [
             'code' => 'recurrence.stale_cursor_exception',
             'enum' => RecurrenceErrorCode::class,
-            'type' => 'urn:corex:problem:recurrence.stale_cursor_exception',
+            'type' => 'urn:packman:problem:recurrence.stale_cursor_exception',
             'status' => 409,
             'title' => 'Stale cursor exception.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        94 => [
+        [
             'code' => 'recurrence.unsupported_environment_exception',
             'enum' => RecurrenceErrorCode::class,
-            'type' => 'urn:corex:problem:recurrence.unsupported_environment_exception',
+            'type' => 'urn:packman:problem:recurrence.unsupported_environment_exception',
             'status' => 422,
             'title' => 'Unsupported environment exception.',
             'category' => 'unsupported',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        95 => [
+        [
             'code' => 'recurring-tasks.materialization_conflict',
             'enum' => RecurringTasksErrorCode::class,
-            'type' => 'urn:corex:problem:recurring-tasks.materialization_conflict',
+            'type' => 'urn:packman:problem:recurring-tasks.materialization_conflict',
             'status' => 409,
             'title' => 'Materialization conflict.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        96 => [
+        [
             'code' => 'recurring-tasks.stale_materialization',
             'enum' => RecurringTasksErrorCode::class,
-            'type' => 'urn:corex:problem:recurring-tasks.stale_materialization',
+            'type' => 'urn:packman:problem:recurring-tasks.stale_materialization',
             'status' => 409,
             'title' => 'Stale materialization.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        97 => [
+        [
             'code' => 'recurring-tasks.unsupported_materialization',
             'enum' => RecurringTasksErrorCode::class,
-            'type' => 'urn:corex:problem:recurring-tasks.unsupported_materialization',
+            'type' => 'urn:packman:problem:recurring-tasks.unsupported_materialization',
             'status' => 422,
             'title' => 'Unsupported materialization.',
             'category' => 'unsupported',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        98 => [
+        [
             'code' => 'search-meilisearch.invalid_meilisearch_configuration',
             'enum' => SearchMeilisearchErrorCode::class,
-            'type' => 'urn:corex:problem:search-meilisearch.invalid_meilisearch_configuration',
+            'type' => 'urn:packman:problem:search-meilisearch.invalid_meilisearch_configuration',
             'status' => 500,
             'title' => 'Invalid meilisearch configuration.',
             'category' => 'internal',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        99 => [
+        [
             'code' => 'search.invalid_search_configuration',
             'enum' => SearchErrorCode::class,
-            'type' => 'urn:corex:problem:search.invalid_search_configuration',
+            'type' => 'urn:packman:problem:search.invalid_search_configuration',
             'status' => 500,
             'title' => 'Invalid search configuration.',
             'category' => 'internal',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        100 => [
+        [
             'code' => 'tasks.invalid_planning_draft',
             'enum' => TasksErrorCode::class,
-            'type' => 'urn:corex:problem:tasks.invalid_planning_draft',
+            'type' => 'urn:packman:problem:tasks.invalid_planning_draft',
             'status' => 422,
             'title' => 'Invalid planning draft.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        101 => [
+        [
             'code' => 'tasks.planning_conflict',
             'enum' => TasksErrorCode::class,
-            'type' => 'urn:corex:problem:tasks.planning_conflict',
+            'type' => 'urn:packman:problem:tasks.planning_conflict',
             'status' => 409,
             'title' => 'Planning conflict.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        102 => [
+        [
             'code' => 'tasks.tasks_module_disabled',
             'enum' => TasksErrorCode::class,
-            'type' => 'urn:corex:problem:tasks.tasks_module_disabled',
+            'type' => 'urn:packman:problem:tasks.tasks_module_disabled',
             'status' => 503,
             'title' => 'Tasks module disabled.',
             'category' => 'unavailable',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        103 => [
+        [
             'code' => 'tenancy.central_protocol_violation',
             'enum' => TenancyErrorCode::class,
-            'type' => 'urn:corex:problem:tenancy.central_protocol_violation',
+            'type' => 'urn:packman:problem:tenancy.central_protocol_violation',
             'status' => 500,
             'title' => 'Central protocol violation.',
             'category' => 'internal',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        104 => [
+        [
             'code' => 'tenancy.central_unauthorized',
             'enum' => TenancyErrorCode::class,
-            'type' => 'urn:corex:problem:tenancy.central_unauthorized',
+            'type' => 'urn:packman:problem:tenancy.central_unauthorized',
             'status' => 403,
             'title' => 'Central unauthorized.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        105 => [
+        [
             'code' => 'tenancy.central_unavailable',
             'enum' => TenancyErrorCode::class,
-            'type' => 'urn:corex:problem:tenancy.central_unavailable',
+            'type' => 'urn:packman:problem:tenancy.central_unavailable',
             'status' => 503,
             'title' => 'Central unavailable.',
             'category' => 'unavailable',
             'retryable' => true,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        106 => [
+        [
             'code' => 'tenancy.claim_conflict',
             'enum' => TenancyErrorCode::class,
-            'type' => 'urn:corex:problem:tenancy.claim_conflict',
+            'type' => 'urn:packman:problem:tenancy.claim_conflict',
             'status' => 409,
             'title' => 'Claim conflict.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        107 => [
+        [
             'code' => 'tenancy.claim_unavailable',
             'enum' => TenancyErrorCode::class,
-            'type' => 'urn:corex:problem:tenancy.claim_unavailable',
+            'type' => 'urn:packman:problem:tenancy.claim_unavailable',
             'status' => 503,
             'title' => 'Claim unavailable.',
             'category' => 'unavailable',
             'retryable' => true,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        108 => [
+        [
             'code' => 'tenancy.context_unavailable',
             'enum' => TenancyErrorCode::class,
-            'type' => 'urn:corex:problem:tenancy.context_unavailable',
+            'type' => 'urn:packman:problem:tenancy.context_unavailable',
             'status' => 503,
             'title' => 'Tenant context unavailable.',
             'category' => 'unavailable',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        109 => [
+        [
             'code' => 'tenancy.credential_issuance_denied',
             'enum' => TenancyErrorCode::class,
-            'type' => 'urn:corex:problem:tenancy.credential_issuance_denied',
+            'type' => 'urn:packman:problem:tenancy.credential_issuance_denied',
             'status' => 403,
             'title' => 'Credential issuance denied.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        110 => [
+        [
             'code' => 'tenancy.domain_trust_denied',
             'enum' => TenancyErrorCode::class,
-            'type' => 'urn:corex:problem:tenancy.domain_trust_denied',
+            'type' => 'urn:packman:problem:tenancy.domain_trust_denied',
             'status' => 403,
             'title' => 'Domain trust denied.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        111 => [
+        [
             'code' => 'tenancy.domain_trust_disabled',
             'enum' => TenancyErrorCode::class,
-            'type' => 'urn:corex:problem:tenancy.domain_trust_disabled',
+            'type' => 'urn:packman:problem:tenancy.domain_trust_disabled',
             'status' => 503,
             'title' => 'Domain trust disabled.',
             'category' => 'unavailable',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        112 => [
+        [
             'code' => 'tenancy.inbox_conflict',
             'enum' => TenancyErrorCode::class,
-            'type' => 'urn:corex:problem:tenancy.inbox_conflict',
+            'type' => 'urn:packman:problem:tenancy.inbox_conflict',
             'status' => 409,
             'title' => 'Inbox conflict.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        113 => [
+        [
             'code' => 'tenancy.invitation_not_acceptable_exception',
             'enum' => TenancyErrorCode::class,
-            'type' => 'urn:corex:problem:tenancy.invitation_not_acceptable_exception',
+            'type' => 'urn:packman:problem:tenancy.invitation_not_acceptable_exception',
             'status' => 409,
             'title' => 'Invitation not acceptable exception.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        114 => [
+        [
             'code' => 'tenancy.no_default_workspace_exception',
             'enum' => TenancyErrorCode::class,
-            'type' => 'urn:corex:problem:tenancy.no_default_workspace_exception',
+            'type' => 'urn:packman:problem:tenancy.no_default_workspace_exception',
             'status' => 404,
             'title' => 'No default workspace exception.',
             'category' => 'not_found',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        115 => [
+        [
             'code' => 'tenancy.oidc_authentication_exception',
             'enum' => TenancyErrorCode::class,
-            'type' => 'urn:corex:problem:tenancy.oidc_authentication_exception',
+            'type' => 'urn:packman:problem:tenancy.oidc_authentication_exception',
             'status' => 401,
             'title' => 'Oidc authentication exception.',
             'category' => 'authentication',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        116 => [
+        [
             'code' => 'tenancy.pair_store_violation',
             'enum' => TenancyErrorCode::class,
-            'type' => 'urn:corex:problem:tenancy.pair_store_violation',
+            'type' => 'urn:packman:problem:tenancy.pair_store_violation',
             'status' => 500,
             'title' => 'Pair store violation.',
             'category' => 'internal',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        117 => [
+        [
             'code' => 'tenancy.projection_denied',
             'enum' => TenancyErrorCode::class,
-            'type' => 'urn:corex:problem:tenancy.projection_denied',
+            'type' => 'urn:packman:problem:tenancy.projection_denied',
             'status' => 403,
             'title' => 'Projection denied.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        118 => [
+        [
             'code' => 'tenancy.revoke_uncertain',
             'enum' => TenancyErrorCode::class,
-            'type' => 'urn:corex:problem:tenancy.revoke_uncertain',
+            'type' => 'urn:packman:problem:tenancy.revoke_uncertain',
             'status' => 503,
             'title' => 'Revoke uncertain.',
             'category' => 'unavailable',
             'retryable' => true,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        119 => [
+        [
             'code' => 'tenancy.template_integrity_exception',
             'enum' => TenancyErrorCode::class,
-            'type' => 'urn:corex:problem:tenancy.template_integrity_exception',
+            'type' => 'urn:packman:problem:tenancy.template_integrity_exception',
             'status' => 500,
             'title' => 'Template integrity exception.',
             'category' => 'internal',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        120 => [
+        [
             'code' => 'tenancy.tenant_could_not_be_identified_by_host_exception',
             'enum' => TenancyErrorCode::class,
-            'type' => 'urn:corex:problem:tenancy.tenant_could_not_be_identified_by_host_exception',
+            'type' => 'urn:packman:problem:tenancy.tenant_could_not_be_identified_by_host_exception',
             'status' => 404,
             'title' => 'Tenant could not be identified by host exception.',
             'category' => 'not_found',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        121 => [
+        [
             'code' => 'tools.approval_invalid',
             'enum' => ToolsErrorCode::class,
-            'type' => 'urn:corex:problem:tools.approval_invalid',
+            'type' => 'urn:packman:problem:tools.approval_invalid',
             'status' => 403,
             'title' => 'Tool approval is invalid.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        122 => [
+        [
             'code' => 'tools.approval_required',
             'enum' => ToolsErrorCode::class,
-            'type' => 'urn:corex:problem:tools.approval_required',
+            'type' => 'urn:packman:problem:tools.approval_required',
             'status' => 403,
             'title' => 'Tool approval is required.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        123 => [
+        [
             'code' => 'tools.forbidden',
             'enum' => ToolsErrorCode::class,
-            'type' => 'urn:corex:problem:tools.forbidden',
+            'type' => 'urn:packman:problem:tools.forbidden',
             'status' => 403,
             'title' => 'Tool invocation is forbidden.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        124 => [
+        [
             'code' => 'tools.idempotency_conflict',
             'enum' => ToolsErrorCode::class,
-            'type' => 'urn:corex:problem:tools.idempotency_conflict',
+            'type' => 'urn:packman:problem:tools.idempotency_conflict',
             'status' => 409,
             'title' => 'Tool idempotency conflict.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        125 => [
+        [
             'code' => 'tools.input_invalid',
             'enum' => ToolsErrorCode::class,
-            'type' => 'urn:corex:problem:tools.input_invalid',
+            'type' => 'urn:packman:problem:tools.input_invalid',
             'status' => 422,
             'title' => 'Tool input is invalid.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        126 => [
+        [
             'code' => 'tools.internal_error',
             'enum' => ToolsErrorCode::class,
-            'type' => 'urn:corex:problem:tools.internal_error',
+            'type' => 'urn:packman:problem:tools.internal_error',
             'status' => 500,
             'title' => 'Internal tool error.',
             'category' => 'internal',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        127 => [
+        [
             'code' => 'tools.output_contract_failed',
             'enum' => ToolsErrorCode::class,
-            'type' => 'urn:corex:problem:tools.output_contract_failed',
+            'type' => 'urn:packman:problem:tools.output_contract_failed',
             'status' => 500,
             'title' => 'Tool output contract failed.',
             'category' => 'internal',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        128 => [
+        [
             'code' => 'tools.rate_limited',
             'enum' => ToolsErrorCode::class,
-            'type' => 'urn:corex:problem:tools.rate_limited',
+            'type' => 'urn:packman:problem:tools.rate_limited',
             'status' => 429,
             'title' => 'Tool rate limit exceeded.',
             'category' => 'rate_limit',
             'retryable' => true,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        129 => [
+        [
             'code' => 'tools.schema_limit',
             'enum' => ToolsErrorCode::class,
-            'type' => 'urn:corex:problem:tools.schema_limit',
+            'type' => 'urn:packman:problem:tools.schema_limit',
             'status' => 422,
             'title' => 'Tool schema limit exceeded.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        130 => [
+        [
             'code' => 'tools.schema_unavailable',
             'enum' => ToolsErrorCode::class,
-            'type' => 'urn:corex:problem:tools.schema_unavailable',
+            'type' => 'urn:packman:problem:tools.schema_unavailable',
             'status' => 503,
             'title' => 'Tool schema is unavailable.',
             'category' => 'unavailable',
             'retryable' => true,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        131 => [
+        [
             'code' => 'tools.tool_revision_conflict',
             'enum' => ToolsErrorCode::class,
-            'type' => 'urn:corex:problem:tools.tool_revision_conflict',
+            'type' => 'urn:packman:problem:tools.tool_revision_conflict',
             'status' => 409,
             'title' => 'Tool revision conflict.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        132 => [
+        [
             'code' => 'tools.tool_unavailable',
             'enum' => ToolsErrorCode::class,
-            'type' => 'urn:corex:problem:tools.tool_unavailable',
+            'type' => 'urn:packman:problem:tools.tool_unavailable',
             'status' => 404,
             'title' => 'Tool is unavailable.',
             'category' => 'not_found',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        133 => [
+        [
             'code' => 'tools.unknown_effect',
             'enum' => ToolsErrorCode::class,
-            'type' => 'urn:corex:problem:tools.unknown_effect',
+            'type' => 'urn:packman:problem:tools.unknown_effect',
             'status' => 500,
             'title' => 'Tool effect outcome is unknown.',
             'category' => 'internal',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        134 => [
+        [
             'code' => 'webhooks.unknown_message_contract',
             'enum' => WebhooksErrorCode::class,
-            'type' => 'urn:corex:problem:webhooks.unknown_message_contract',
+            'type' => 'urn:packman:problem:webhooks.unknown_message_contract',
             'status' => 422,
             'title' => 'Unknown message contract.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        135 => [
+        [
             'code' => 'webhooks.unknown_message_schema',
             'enum' => WebhooksErrorCode::class,
-            'type' => 'urn:corex:problem:webhooks.unknown_message_schema',
+            'type' => 'urn:packman:problem:webhooks.unknown_message_schema',
             'status' => 422,
             'title' => 'Unknown message schema.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        136 => [
+        [
             'code' => 'webhooks.webhook_egress_denied',
             'enum' => WebhooksErrorCode::class,
-            'type' => 'urn:corex:problem:webhooks.webhook_egress_denied',
+            'type' => 'urn:packman:problem:webhooks.webhook_egress_denied',
             'status' => 422,
             'title' => 'Webhook destination is denied by tenant egress policy.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        137 => [
+        [
             'code' => 'webhooks.webhook_endpoint_changed',
             'enum' => WebhooksErrorCode::class,
-            'type' => 'urn:corex:problem:webhooks.webhook_endpoint_changed',
+            'type' => 'urn:packman:problem:webhooks.webhook_endpoint_changed',
             'status' => 409,
             'title' => 'Webhook endpoint changed.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        138 => [
+        [
             'code' => 'webhooks.webhook_payload_too_large',
             'enum' => WebhooksErrorCode::class,
-            'type' => 'urn:corex:problem:webhooks.webhook_payload_too_large',
+            'type' => 'urn:packman:problem:webhooks.webhook_payload_too_large',
             'status' => 422,
             'title' => 'Webhook payload is too large.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        139 => [
+        [
             'code' => 'webhooks.webhook_replay_expired',
             'enum' => WebhooksErrorCode::class,
-            'type' => 'urn:corex:problem:webhooks.webhook_replay_expired',
+            'type' => 'urn:packman:problem:webhooks.webhook_replay_expired',
             'status' => 409,
             'title' => 'Webhook replay expired.',
             'category' => 'conflict',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        140 => [
+        [
             'code' => 'webhooks.webhook_secret_denied',
             'enum' => WebhooksErrorCode::class,
-            'type' => 'urn:corex:problem:webhooks.webhook_secret_denied',
+            'type' => 'urn:packman:problem:webhooks.webhook_secret_denied',
             'status' => 403,
             'title' => 'Webhook secret denied.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        141 => [
+        [
             'code' => 'webhooks.webhook_sensitive_denied',
             'enum' => WebhooksErrorCode::class,
-            'type' => 'urn:corex:problem:webhooks.webhook_sensitive_denied',
+            'type' => 'urn:packman:problem:webhooks.webhook_sensitive_denied',
             'status' => 403,
             'title' => 'Webhook sensitive denied.',
             'category' => 'authorization',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
-        142 => [
+        [
             'code' => 'webhooks.webhook_subscription_cap',
             'enum' => WebhooksErrorCode::class,
-            'type' => 'urn:corex:problem:webhooks.webhook_subscription_cap',
+            'type' => 'urn:packman:problem:webhooks.webhook_subscription_cap',
             'status' => 422,
             'title' => 'Webhook subscription cap.',
             'category' => 'validation',
             'retryable' => false,
-            'detail_keys' => [
-            ],
+            'detail_keys' => [],
         ],
     ],
 ];

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\RecurringTasks\Internal;
 
-use CoreX\Config\Laravel\ConfigurationValidator;
 use CoreX\Scheduling\Data\WakeupHandlerDefinition;
+use Packman\Attributes\Internal;
+use Packman\Config\Laravel\ConfigurationValidator;
 
 /** @internal Package composition type: read only by the provider, registrars and runtime checks. */
+#[Internal]
 final readonly class RecurringTasksOptions
 {
     public function __construct(

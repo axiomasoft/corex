@@ -8,8 +8,10 @@ use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Exceptions\InboxRefused;
 use Illuminate\Database\ConnectionInterface;
 use Override;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
+#[Internal]
 final readonly class SqlInbox implements Inbox
 {
     public function __construct(

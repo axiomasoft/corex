@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Versioning\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use Packman\Attributes\Api;
 
 /** Immutable code projection. It has no register, replace, or freeze API. */
 #[Api(since: '1.0')]

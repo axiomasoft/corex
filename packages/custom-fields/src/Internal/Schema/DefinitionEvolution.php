@@ -11,7 +11,9 @@ use CoreX\CustomFields\Internal\Values\AttributeValueTransformerRegistry;
 use DateInterval;
 use DateTimeImmutable;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class DefinitionEvolution
 {
     public function __construct(private AttributeValueTransformerRegistry $transformers) {}

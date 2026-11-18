@@ -8,8 +8,10 @@ use Illuminate\Validation\ValidationException;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
+use Packman\Attributes\Internal;
 
 /** @internal International input is explicit: no inferred country/consumer locale. */
+#[Internal]
 final class Channels
 {
     /**

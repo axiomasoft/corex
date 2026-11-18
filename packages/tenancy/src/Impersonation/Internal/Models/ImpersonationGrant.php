@@ -6,6 +6,7 @@ namespace CoreX\Tenancy\Impersonation\Internal\Models;
 
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
+use Packman\Attributes\Internal;
 
 /**
  * `root_impersonation_grants` — thin Eloquent read model. The registrar
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property CarbonImmutable $created_at
  * @property CarbonImmutable $updated_at
  */
+#[Internal]
 final class ImpersonationGrant extends Model
 {
     protected $table = 'root_impersonation_grants';

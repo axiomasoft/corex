@@ -9,8 +9,10 @@ use CoreX\Scheduler\Internal\WakeupHandlerRegistry;
 use Illuminate\Console\Command;
 use Illuminate\Database\Connection;
 use JsonException;
+use Packman\Attributes\Internal;
 
 /** @internal Operator command; its CLI signature is the supported surface. */
+#[Internal]
 final class ValidateWakeupStamps extends Command
 {
     protected $signature = 'corex:scheduler:validate-stamps {--limit=1000 : Maximum pending or running requests to inspect}';

@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel\Commands;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\Account\Internal\PendingPool;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\Internal\DatabaseValue;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Packman\Attributes\Internal;
 
 /**
  * Keeps `root_clusters.pending_pool_size` pre-cloned account databases
@@ -18,7 +17,7 @@ use Illuminate\Support\Facades\DB;
  * cluster up to its own `pending_pool_size` (steady-state/cron usage);
  * `--count=N` overrides with an explicit number (ad hoc seeding).
  */
-#[Spi(kind: SpiKind::Call, since: '1.0')]
+#[Internal]
 final class PendingCreateCommand extends Command
 {
     protected $signature = 'corex:tenancy:pending-create {--count=} {--cluster=}';

@@ -6,8 +6,8 @@ declare(strict_types=1);
 namespace CoreX\Tooling\AttributesArchitecture;
 
 use CoreX\Attributes\Tooling\SurfaceScanner;
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\CustomFields\Internal\Laravel\AttributeComposition;
+use Packman\Config\Exceptions\InvalidConfiguration;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;

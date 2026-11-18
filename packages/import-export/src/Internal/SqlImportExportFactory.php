@@ -32,8 +32,10 @@ use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Str;
 use Override;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
+#[Internal]
 final readonly class SqlImportExportFactory implements ImportExportFactory
 {
     public function __construct(

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Data;
 
-use CoreX\Attributes\Api;
 use DateTimeImmutable;
+use Packman\Attributes\Api;
 
 /**
  * Snapshot of an active impersonation session — resolved from the claimed

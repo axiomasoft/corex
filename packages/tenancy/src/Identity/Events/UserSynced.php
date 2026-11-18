@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Identity\Events;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Messaging\Events\DomainEvent;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Fired from inside the target account's tenant context (B-11 §3.2) — the

@@ -11,7 +11,9 @@ use CoreX\Search\Internal\Postgres\PostgresSearchProvider;
 use CoreX\Search\Internal\Query\SearchCursorCodec;
 use Illuminate\Support\Manager;
 use Override;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class SearchManager extends Manager
 {
     #[Override]

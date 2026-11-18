@@ -12,8 +12,10 @@ use CoreX\Operations\Errors\Exceptions\ApiError;
 use DateTimeImmutable;
 use DateTimeZone;
 use Illuminate\Http\JsonResponse;
+use Packman\Attributes\Internal;
 
 /** Projects async Location and deprecation headers from the operation descriptor. */
+#[Internal]
 final class HttpOperationResponder
 {
     public function project(?Operation $operation, JsonResponse $response): JsonResponse

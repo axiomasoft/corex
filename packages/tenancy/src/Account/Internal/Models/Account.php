@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Override;
+use Packman\Attributes\Internal;
 
 /**
  * `root_accounts` is a physical DB-per-account tenant on the central connection.
@@ -37,6 +38,7 @@ use Override;
  * @property CarbonImmutable $updated_at
  * @property ?CarbonImmutable $deleted_at
  */
+#[Internal]
 final class Account extends Model
 {
     use HasUuids;

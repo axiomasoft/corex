@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
@@ -38,6 +36,8 @@ use Illuminate\Routing\Router;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Packman\Foundation\Contracts\PackageRegistrar;
 use RuntimeException;
 

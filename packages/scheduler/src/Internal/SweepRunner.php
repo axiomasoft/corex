@@ -18,10 +18,12 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 use Throwable;
 
+#[Internal]
 final readonly class SweepRunner implements DueWakeupSweeper
 {
     /** @param list<DueWakeupSource> $dueSources */

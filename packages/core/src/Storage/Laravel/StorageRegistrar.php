@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Storage\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Config\Data\CoreOptions;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Storage\Contracts\TenantStorage;
@@ -13,6 +11,8 @@ use CoreX\Storage\Internal\LocalTenantStorage;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\FilesystemManager;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Packman\Foundation\Contracts\PackageRegistrar;
 
 /** Composition of the kernel module; the public provider delegates here. */

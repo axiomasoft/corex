@@ -9,8 +9,10 @@ use CoreX\Operations\Validation\Data\JsonObject;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolDescriptor;
 use Override;
+use Packman\Attributes\Internal;
 
 /** Default deny-all tool policy; consumer adapters may replace the binding. */
+#[Internal]
 final class DenyToolPolicy implements ToolPolicy
 {
     #[Override]

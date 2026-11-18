@@ -8,8 +8,8 @@ use CoreX\Access\Roles\Data\RoleMatrixEntry;
 use CoreX\Access\Roles\Data\RoleView;
 use CoreX\Access\Roles\Internal\Models\Role;
 use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Eloquent storage adapter for matrix compilation; rows leave their owner as scalar views. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

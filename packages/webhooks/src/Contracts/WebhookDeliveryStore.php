@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Data\Data\DataScope;
 use CoreX\Webhooks\Data\WebhookDelivery;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface WebhookDeliveryStore

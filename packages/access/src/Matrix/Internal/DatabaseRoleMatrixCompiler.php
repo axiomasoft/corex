@@ -12,8 +12,10 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use LogicException;
 use Override;
+use Packman\Attributes\Internal;
 
 /** Native matrix compilation; listeners share the transaction and can veto it. */
+#[Internal]
 final readonly class DatabaseRoleMatrixCompiler implements RoleMatrixCompiler
 {
     public function __construct(

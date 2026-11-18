@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Enums;
 
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 
 /**
  * The five operations B-11 §5.9 п.3 forbids under an impersonated session

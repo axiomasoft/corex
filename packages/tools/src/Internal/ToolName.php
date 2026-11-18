@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Tools\Internal;
 
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 
 /** Canonical tool-name/1 projection and validation. */
+#[Internal]
 final class ToolName
 {
     private const string CANONICAL_PATTERN = '/^[a-z][a-z0-9]*\.[a-z][a-z0-9_]*$/';

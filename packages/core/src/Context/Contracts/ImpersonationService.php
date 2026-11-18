@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Data\ImpersonationState;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Support impersonation (B-11 §5.9, AC-31). Boxed installs bind

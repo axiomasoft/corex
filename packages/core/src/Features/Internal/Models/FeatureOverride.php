@@ -6,6 +6,7 @@ namespace CoreX\Features\Internal\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Packman\Attributes\Internal;
 
 /**
  * Workspace/user/department override of a {@see FeatureFlag}
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @internal spec: B-10 §2
  */
+#[Internal]
 final class FeatureOverride extends Model
 {
     use HasUuids;

@@ -8,6 +8,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Packman\Attributes\Internal;
 
 /**
  * Tenant-DB projection of `root_identities` (B-11 §2.2, full denorm D4/C6).
@@ -28,6 +29,7 @@ use Illuminate\Support\Carbon;
  * @property ?Carbon $synced_at
  * @property ?CarbonImmutable $identity_source_updated_at
  */
+#[Internal]
 final class User extends Model
 {
     use SoftDeletes;

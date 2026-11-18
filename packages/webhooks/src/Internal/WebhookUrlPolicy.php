@@ -10,8 +10,10 @@ use CoreX\Webhooks\Data\WebhookDestination;
 use CoreX\Webhooks\Data\WebhookSignedHeaders;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 use RuntimeException;
 
+#[Internal]
 final readonly class WebhookUrlPolicy
 {
     private const int MAX_DNS_RECORDS = 64;

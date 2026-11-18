@@ -46,6 +46,10 @@ Workflow. Новый механизм требует отдельного арх
 CoreX не копирует compiler, registry или lifecycle и не сохраняет BC aliases.
 Адаптеры CoreX связывают Packman с account-контекстом, аудитом и feature flags.
 Рабочие пакеты используют только публичные API/SPI Packman.
+Общие attributes, configuration validation и problem registry также принадлежат
+Packman; CoreX добавляет доменные Options и error definitions. Модули объявляют
+схему через `WithSchema`/`OwnsSchema`, и provider регистрирует результат
+`schemaSetProviders()`. ServiceProvider содержит не более 80 строк.
 В текущем upstream некоторые constructor DTO и compiler test seams ещё находятся
 в `Internal`; проверки компиляции могут использовать их как временную тестовую
 границу, но production-код CoreX от них не зависит.

@@ -10,7 +10,9 @@ use Flex\Crm\ApiShared\CrmIdentifier;
 use Flex\Crm\Contact\Actions\CreateContact;
 use Flex\Crm\Contact\Data\ContactData;
 use Flex\Crm\Internal\Value;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class CreateContactOperation implements OperationHandler
 {
     public function __construct(private CreateContact $createContact) {}

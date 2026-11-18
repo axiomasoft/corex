@@ -7,7 +7,9 @@ namespace CoreX\Tasks\Time\Internal\Models;
 use CoreX\Tasks\Task\Laravel\TaskRelations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class Timer extends Model
 {
     protected $table = 'tsk_timers';

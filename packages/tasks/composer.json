@@ -1,6 +1,6 @@
 {
     "name": "axiomasoft/corex-tasks",
-    "description": "CoreX Tasks module — workspace projects, stages and tasks for DB-per-account applications.",
+    "description": "CoreX Tasks module \u2014 workspace projects, stages and tasks for DB-per-account applications.",
     "type": "packman-module",
     "license": "MIT",
     "keywords": [
@@ -17,13 +17,14 @@
         }
     ],
     "require": {
-        "ext-mbstring": "*",
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
-        "laravel/framework": "^13.0",
-        "psr/clock": "^1.0",
+        "axiomasoft/packman": "^0.1@dev",
         "axiomasoft/packman-modules": "^0.1@dev",
-        "axiomasoft/packman-schema": "^0.1@dev"
+        "axiomasoft/packman-schema": "^0.1@dev",
+        "ext-mbstring": "*",
+        "laravel/framework": "^13.0",
+        "psr/clock": "^1.0"
     },
     "require-dev": {
         "larastan/larastan": "^3.12",
@@ -58,7 +59,22 @@
             "dev-main": "1.0.x-dev"
         },
         "packman": {
-            "module": "CoreX\\Tasks\\TasksModule"
+            "module": "CoreX\\Tasks\\TasksModule",
+            "schema-version": 1,
+            "package-type": "capability",
+            "stability": "stable",
+            "profile": "modular-platform",
+            "error-prefix": "tasks",
+            "owns": [
+                "Access",
+                "Errors",
+                "Internal",
+                "Planning",
+                "Project",
+                "Sprint",
+                "Task",
+                "Time"
+            ]
         }
     },
     "repositories": [

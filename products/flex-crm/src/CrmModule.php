@@ -18,19 +18,27 @@ use Flex\Crm\Contact\Models\Contact;
 use Flex\Crm\Deal\Models\Deal;
 use Flex\Crm\Deal\Models\Pipeline;
 use Flex\Crm\Deal\Models\Stage;
+use Flex\Crm\Internal\CrmSchemaSets;
 use Flex\Crm\Lead\Models\Lead;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Extensions\Concerns\Persistence\OwnsSchema;
+use Packman\Extensions\Contracts\Persistence\WithSchema;
 use Packman\Modules\Contracts\Definition\ModuleDefinition;
 use Packman\Modules\Data\Entities\Entity;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 
-final class CrmModule extends ModuleDefinition
+#[Spi(kind: SpiKind::Call, since: '1.0')]
+final class CrmModule extends ModuleDefinition implements WithSchema
 {
+    use OwnsSchema;
+
     #[Override]
     public function manifest(): ModuleManifest
     {
-        return ModuleManifest::make('flex/crm')->title('CRM')->tablePrefix('crm')->extends([
+        return ModuleManifest::make('flex/crm')->title('CRM')->tablePrefix($this->tablePrefix())->extends([
             Entity::make(Pipeline::class)->handle('crm.pipeline')->table('crm_pipelines')->label(singular: 'Pipeline', plural: 'Pipelines')->titleAttribute('name'),
             Entity::make(Stage::class)->handle('crm.stage')->table('crm_stages')->label(singular: 'Stage', plural: 'Stages')->titleAttribute('name'),
             Entity::make(Deal::class)->handle('crm.deal')->table('crm_deals')->label(singular: 'Deal', plural: 'Deals')->titleAttribute('title')->auditable(),
@@ -121,5 +129,16 @@ final class CrmModule extends ModuleDefinition
             'owner_id' => ['nullable'],
             'account_level' => ['sometimes', 'boolean:strict'],
         ];
+    }
+
+    public function tablePrefix(): string
+    {
+        return 'crm';
+    }
+
+    /** @return list<class-string> */
+    public function schemaSetProviders(): array
+    {
+        return [CrmSchemaSets::class];
     }
 }

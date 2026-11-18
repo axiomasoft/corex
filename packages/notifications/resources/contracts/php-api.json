@@ -4,7 +4,7 @@
     "symbols": {
         "CoreX\\Notifications\\Delivery\\Contracts\\DeliveryExecution": {
             "kind": "interface",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -18,7 +18,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -35,14 +35,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Notifications\\Delivery\\Contracts\\NotificationChannelDriver": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -56,7 +57,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [],
                     "return": "CoreX\\Notifications\\Delivery\\Data\\ChannelDescriptor",
@@ -66,7 +67,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -86,7 +87,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -103,14 +104,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Notifications\\Delivery\\Contracts\\RecipientResolver": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -124,7 +126,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -159,10 +161,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Notifications\\Delivery\\Data\\ChannelDescriptor": {
             "kind": "class",
@@ -242,68 +245,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "dedupScope": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "dedupWindowSeconds": {
-                    "flags": 1,
-                    "type": "?int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "key": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "supportsIdempotency": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "supportsReconciliation": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "version": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -440,128 +382,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "attempts": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "channel": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "deliveryKey": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "digestRunId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "driverVersion": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "epoch": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "message": {
-                    "flags": 1,
-                    "type": "CoreX\\Data\\Data\\JsonDocument",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "messageHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "notificationId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "policyVersion": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "templateVersion": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -671,98 +492,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "attemptEpoch": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "context": {
-                    "flags": 1,
-                    "type": "CoreX\\Notifications\\Inbox\\Data\\NotificationContext",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "deliveryKey": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "driverVersion": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "message": {
-                    "flags": 1,
-                    "type": "CoreX\\Data\\Data\\JsonDocument",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "messageSha256": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "policyVersion": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "target": {
-                    "flags": 1,
-                    "type": "CoreX\\Notifications\\Delivery\\Data\\DeliveryTarget",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "templateVersion": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -827,48 +557,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "kind": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "providerRef": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "reason": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "retryAfter": {
-                    "flags": 1,
-                    "type": "?int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -915,28 +604,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "channel": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "reference": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -983,35 +651,14 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "kind": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
         },
         "CoreX\\Notifications\\Delivery\\Laravel\\DeliveryPortBindings": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -1042,14 +689,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Notifications\\Digest\\Contracts\\DigestBuilder": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -1063,7 +711,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -1089,10 +737,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Notifications\\Digest\\Data\\DigestRef": {
             "kind": "class",
@@ -1154,48 +803,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "batchSequence": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "recipient": {
-                    "flags": 1,
-                    "type": "CoreX\\Notifications\\Delivery\\Data\\RecipientReference",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "window": {
-                    "flags": 1,
-                    "type": "CoreX\\Notifications\\Digest\\Data\\DigestWindow",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1251,38 +859,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "end": {
-                    "flags": 1,
-                    "type": "DateTimeImmutable",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "period": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "start": {
-                    "flags": 1,
-                    "type": "DateTimeImmutable",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1291,12 +868,12 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Errors\\Contracts\\ErrorCode"
+                "Packman\\Errors\\Contracts\\ErrorCode"
             ],
             "uses": [],
             "doc": [],
@@ -1312,13 +889,19 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "NotificationAccessDenied": "'notifications.notification_access_denied'",
-                "NotificationOperationConflict": "'notifications.notification_operation_conflict'"
-            }
+            "enum_cases": [
+                {
+                    "name": "NotificationAccessDenied",
+                    "value": "'notifications.notification_access_denied'"
+                },
+                {
+                    "name": "NotificationOperationConflict",
+                    "value": "'notifications.notification_operation_conflict'"
+                }
+            ]
         },
         "CoreX\\Notifications\\Inbox\\Contracts\\NotificationCenter": {
             "kind": "interface",
@@ -1336,7 +919,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -1365,7 +948,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -1388,17 +971,13 @@
                         }
                     ],
                     "return": "array",
-                    "doc": {
-                        "@return": [
-                            "list<\\CoreX\\Notifications\\Inbox\\Data\\NotificationRef>"
-                        ]
-                    }
+                    "doc": []
                 },
                 "markRead": {
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -1427,7 +1006,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -1456,7 +1035,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -1473,14 +1052,14 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
         },
         "CoreX\\Notifications\\Inbox\\Contracts\\NotificationPolicy": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -1494,7 +1073,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -1529,10 +1108,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Notifications\\Inbox\\Data\\CancelResult": {
             "kind": "class",
@@ -1573,43 +1153,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $alreadyDispatched"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "alreadyDispatched": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $alreadyDispatched"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "cancelled": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $alreadyDispatched"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1656,28 +1203,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "handle": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1724,28 +1250,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "before": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "limit": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1754,23 +1259,35 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [],
             "uses": [],
             "doc": [],
-            "methods": [],
-            "properties": [],
+            "methods": {},
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "Cancel": "'cancel'",
-                "Notify": "'notify'",
-                "Preference": "'preference'",
-                "Read": "'read'"
-            }
+            "enum_cases": [
+                {
+                    "name": "Notify",
+                    "value": "'notify'"
+                },
+                {
+                    "name": "Read",
+                    "value": "'read'"
+                },
+                {
+                    "name": "Cancel",
+                    "value": "'cancel'"
+                },
+                {
+                    "name": "Preference",
+                    "value": "'preference'"
+                }
+            ]
         },
         "CoreX\\Notifications\\Inbox\\Data\\NotificationContext": {
             "kind": "class",
@@ -1823,38 +1340,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "actorId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "actorKind": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "tenant": {
-                    "flags": 1,
-                    "type": "CoreX\\Context\\Data\\TenantContext",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1937,68 +1423,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "eventType": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "payload": {
-                    "flags": 1,
-                    "type": "CoreX\\Data\\Data\\JsonDocument",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "recipient": {
-                    "flags": 1,
-                    "type": "CoreX\\Notifications\\Delivery\\Data\\RecipientReference",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "related": {
-                    "flags": 1,
-                    "type": "?CoreX\\Notifications\\Inbox\\Data\\EntityReference",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "requestKey": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "templateKey": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2090,78 +1515,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "cancelledAt": {
-                    "flags": 1,
-                    "type": "?DateTimeImmutable",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "eventType": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "readAt": {
-                    "flags": 1,
-                    "type": "?DateTimeImmutable",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "recipient": {
-                    "flags": 1,
-                    "type": "CoreX\\Notifications\\Delivery\\Data\\RecipientReference",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "related": {
-                    "flags": 1,
-                    "type": "?CoreX\\Notifications\\Inbox\\Data\\EntityReference",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "revision": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2217,51 +1571,20 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "notificationId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "recipient": {
-                    "flags": 1,
-                    "type": "CoreX\\Notifications\\Delivery\\Data\\RecipientReference",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "related": {
-                    "flags": 1,
-                    "type": "?CoreX\\Notifications\\Inbox\\Data\\EntityReference",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
         },
         "CoreX\\Notifications\\Inbox\\Exceptions\\NotificationAccessDenied": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [
-                "CoreX\\Errors\\Exceptions\\CodedException"
+                "Packman\\Errors\\Exceptions\\CodedException"
             ],
             "implements": [],
             "uses": [],
@@ -2274,24 +1597,25 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                    "return": "Packman\\Errors\\Data\\ErrorDescriptor",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Notifications\\Inbox\\Exceptions\\NotificationOperationConflict": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [
-                "CoreX\\Errors\\Exceptions\\CodedException"
+                "Packman\\Errors\\Exceptions\\CodedException"
             ],
             "implements": [],
             "uses": [],
@@ -2304,18 +1628,19 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                    "return": "Packman\\Errors\\Data\\ErrorDescriptor",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Notifications\\Laravel\\NotificationsBindingsRegistrar": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -2368,14 +1693,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Notifications\\Laravel\\NotificationsDigestRegistrar": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -2428,14 +1754,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Notifications\\NotificationsModule": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -2443,8 +1770,12 @@
             "extends": [
                 "Packman\\Modules\\Contracts\\Definition\\ModuleDefinition"
             ],
-            "implements": [],
-            "uses": [],
+            "implements": [
+                "Packman\\Extensions\\Contracts\\Persistence\\WithSchema"
+            ],
+            "uses": [
+                "Packman\\Extensions\\Concerns\\Persistence\\OwnsSchema"
+            ],
             "doc": [],
             "methods": {
                 "manifest": {
@@ -2456,16 +1787,37 @@
                     "parameters": [],
                     "return": "Packman\\Modules\\Data\\Lifecycle\\ModuleManifest",
                     "doc": []
+                },
+                "schemaSetProviders": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "array",
+                    "doc": []
+                },
+                "tablePrefix": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "string",
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Notifications\\NotificationsServiceProvider": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -2498,14 +1850,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Notifications\\Preferences\\Contracts\\PreferenceRepository": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -2519,7 +1872,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -2548,7 +1901,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -2574,10 +1927,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Notifications\\Preferences\\Data\\NotificationPreference": {
             "kind": "class",
@@ -2627,57 +1981,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $channels"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "channels": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $channels"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "digest": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $channels"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "version": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $channels"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2739,71 +2046,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $channels"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "channels": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $channels"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "digest": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $channels"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "eventType": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $channels"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "expectedVersion": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $channels"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []

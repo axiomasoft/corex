@@ -12,12 +12,14 @@ use Flex\Crm\Deal\Models\Deal;
 use Flex\Crm\Deal\Models\Pipeline;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Validation\ValidationException;
+use Packman\Attributes\Internal;
 use RuntimeException;
 
 /**
  * Creates a deal at the pipeline's first stage. The transaction is the
  * use-case boundary.
  */
+#[Internal]
 final readonly class CreateDeal
 {
     public function __construct(private ContextGuard $guard) {}

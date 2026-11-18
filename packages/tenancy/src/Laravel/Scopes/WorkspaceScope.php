@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel\Scopes;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenancyManager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * @corex-model-extension Eloquent global scope on nullable workspace_id; preserves unrelated scopes and relations.

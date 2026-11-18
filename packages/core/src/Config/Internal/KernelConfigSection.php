@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Config\Internal;
 
-use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Config\Laravel\CoreOptionsParser;
 use CoreX\Messaging\Enums\PubSubDriver;
 use CoreX\Messaging\Laravel\PubSubAdapters;
+use Packman\Attributes\Internal;
+use Packman\Config\Contracts\ConfigReportSectionInterface as ConfigReportSection;
 
 /** @internal Configuration report composition. */
+#[Internal]
 final class KernelConfigSection implements ConfigReportSection
 {
     public function order(): int
@@ -36,7 +38,18 @@ final class KernelConfigSection implements ConfigReportSection
     {
         $driver = config('corex.pubsub.driver');
 
-        return ['driver pubsub.driver='.$this->scalar($driver)];
+        $lines = ['driver pubsub.driver='.$this->scalar($driver)];
+        $acknowledged = config('corex.acknowledged_dangerous_modes', []);
+
+        if (is_array($acknowledged)) {
+            foreach ($acknowledged as $path) {
+                if (is_string($path) && $path !== '') {
+                    $lines[] = 'WARNING [dangerous-mode-acknowledged] '.$path;
+                }
+            }
+        }
+
+        return $lines;
     }
 
     public function adapters(): array

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Enums;
 
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 
 /**
  * Kind of an authenticated principal. A strict subset of the audit

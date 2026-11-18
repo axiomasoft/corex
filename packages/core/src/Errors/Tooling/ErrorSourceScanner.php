@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Errors\Tooling;
 
-use CoreX\Errors\Contracts\ErrorCode;
-use CoreX\Errors\Contracts\ProblemDefinitionProvider;
-use CoreX\Errors\Contracts\ProblemRegistry;
-use CoreX\Errors\Data\ErrorDescriptor;
-use CoreX\Errors\Exceptions\ProblemRegistryException;
-use CoreX\Errors\Internal\CompiledProblemRegistry;
-use CoreX\Errors\Internal\ProblemContribution;
+use CoreX\Errors\Laravel\ErrorCatalogueFactory;
 use FilesystemIterator;
+use Packman\Attributes\Internal;
+use Packman\Errors\Contracts\ErrorCode;
+use Packman\Errors\Contracts\ProblemRegistry;
+use Packman\Errors\Data\ErrorDescriptor;
+use Packman\Errors\Exceptions\ProblemRegistryException;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\New_;
@@ -30,6 +29,7 @@ use RuntimeException;
 use SplFileInfo;
 
 /** @internal AST checks share PHP's resolved names, including aliases and group imports. */
+#[Internal]
 final class ErrorSourceScanner
 {
     /** @return list<string> */
@@ -117,41 +117,8 @@ final class ErrorSourceScanner
         return $diagnostics;
     }
 
-    public function catalogue(string $repository): CompiledProblemRegistry
+    public function catalogue(string $repository): ProblemRegistry
     {
-        $contributions = [];
-        $paths = glob($repository.'/packages/*/src/Errors/Internal/PackageProblemDefinitions.php');
-
-        if ($paths === false) {
-            throw new RuntimeException('Cannot enumerate error contributions.');
-        }
-        foreach ($paths as $path) {
-            $manifestPath = dirname($path, 4).'/composer.json';
-            $manifest = json_decode((string) file_get_contents($manifestPath), true, flags: JSON_THROW_ON_ERROR);
-            $autoload = is_array($manifest) ? ($manifest['autoload'] ?? null) : null;
-            $prefixes = is_array($autoload) ? ($autoload['psr-4'] ?? null) : null;
-
-            if (! is_array($manifest) || ! is_string($manifest['name'] ?? null) || ! is_array($prefixes)) {
-                throw new RuntimeException('Invalid error owner manifest.');
-            }
-            $owner = $manifest['name'] === 'axiomasoft/corex' ? 'core' : preg_replace('~^[^/]+/corex-~', '', $manifest['name']);
-
-            if ($owner === null) {
-                throw new RuntimeException('Cannot resolve error owner.');
-            }
-            foreach ($prefixes as $prefix => $directory) {
-                if (! is_string($prefix)) {
-                    throw new RuntimeException('Invalid error namespace.');
-                }
-                $class = $prefix.'Errors\\Internal\\PackageProblemDefinitions';
-
-                if (! is_a($class, ProblemDefinitionProvider::class, true)) {
-                    continue;
-                }
-                $contributions[] = new ProblemContribution(owner: $owner, provider: new $class, package: $manifest['name'], sourceRoots: [dirname($manifestPath).'/src']);
-            }
-        }
-
-        return new CompiledProblemRegistry($contributions);
+        return (new ErrorCatalogueFactory)->make($repository);
     }
 }

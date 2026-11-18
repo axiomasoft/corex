@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Settings\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Config\Data\CoreOptions;
-use CoreX\Config\Laravel\ConfiguredImplementation;
 use CoreX\Settings\Contracts\SettingsRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Laravel\ConfiguredImplementation;
 use Packman\Foundation\Contracts\PackageRegistrar;
 use Packman\Settings\Contracts\SettingDefaultsProviderInterface as SettingDefaultsProvider;
 

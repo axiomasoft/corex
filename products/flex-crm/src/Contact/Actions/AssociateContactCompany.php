@@ -11,7 +11,9 @@ use Flex\Crm\Contact\Models\ContactCompany;
 use Flex\Crm\Context\ContextGuard;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Validation\ValidationException;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class AssociateContactCompany
 {
     public function __construct(private ContextGuard $guard) {}

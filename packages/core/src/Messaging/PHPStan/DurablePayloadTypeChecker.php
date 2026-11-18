@@ -6,6 +6,7 @@ namespace CoreX\Messaging\PHPStan;
 
 use CoreX\Messaging\Contracts\DurablePayload;
 use CoreX\Messaging\PHPStan\Rules\DurablePayloadRule;
+use Packman\Attributes\Internal;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\RuleErrorBuilder;
@@ -14,6 +15,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 
+#[Internal]
 final class DurablePayloadTypeChecker
 {
     /**

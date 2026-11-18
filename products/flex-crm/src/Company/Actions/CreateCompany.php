@@ -9,7 +9,9 @@ use Flex\Crm\Company\Events\CompanyCreated;
 use Flex\Crm\Company\Models\Company;
 use Flex\Crm\Context\ContextGuard;
 use Illuminate\Validation\ValidationException;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class CreateCompany
 {
     public function __construct(private ContextGuard $guard) {}

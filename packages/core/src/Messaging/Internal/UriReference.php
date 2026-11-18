@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Internal;
 
+use Packman\Attributes\Internal;
+
 /** RFC 3986 generic syntax; not network reachability or scheme policy. */
+#[Internal]
 final class UriReference
 {
     private const string Pattern = <<<'REGEX'

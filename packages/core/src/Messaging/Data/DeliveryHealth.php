@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Data;
 
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 
 /**
  * Здоровье доставки: вход для таксономии наблюдаемости P12.

@@ -4,7 +4,7 @@
     "symbols": {
         "CoreX\\Recurrence\\Contracts\\RecurrenceExpander": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -18,7 +18,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -62,10 +62,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Recurrence\\Data\\DateStart": {
             "kind": "class",
@@ -118,38 +119,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "nominalStart": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "tzid": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "valueType": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -196,28 +166,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "end": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "start": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -288,85 +237,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array{scanned?: int, emitted?: int} $resumePosition"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "libraryVersion": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array{scanned?: int, emitted?: int} $resumePosition"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "resumePosition": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array{scanned?: int, emitted?: int} $resumePosition"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "setHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array{scanned?: int, emitted?: int} $resumePosition"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "tzdbVersion": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array{scanned?: int, emitted?: int} $resumePosition"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "windowHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array{scanned?: int, emitted?: int} $resumePosition"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -458,78 +332,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "candidateSteps": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "emitted": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "exceptionCount": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "memoryMiB": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "rangeDays": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "ruleBytes": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "wallSeconds": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -576,28 +379,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "end": {
-                    "flags": 1,
-                    "type": "DateTimeImmutable",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "start": {
-                    "flags": 1,
-                    "type": "DateTimeImmutable",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -707,98 +489,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "definitionHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "effectiveDateOrInstant": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "key": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "nominal": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "offset": {
-                    "flags": 1,
-                    "type": "?int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "originalRecurrenceId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "tzdbVersion": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "tzid": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "valueType": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -887,113 +578,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\Occurrence> $occurrences"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "completeThrough": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\Occurrence> $occurrences"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "definitionHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\Occurrence> $occurrences"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "emitted": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\Occurrence> $occurrences"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "nextCursor": {
-                    "flags": 1,
-                    "type": "?CoreX\\Recurrence\\Data\\ExpansionCursor",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\Occurrence> $occurrences"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "occurrences": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\Occurrence> $occurrences"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "scanned": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\Occurrence> $occurrences"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "status": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\Occurrence> $occurrences"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1049,38 +637,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "cancelled": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "effectiveStart": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "originalRecurrenceId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1196,13 +753,7 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\RecurrenceOverride> $overrides",
-                            "list<string> $exdates",
-                            "list<string> $rdates"
-                        ]
-                    }
+                    "doc": []
                 },
                 "create": {
                     "visibility": "public",
@@ -1284,178 +835,11 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\Recurrence\\Data\\RecurrenceSet)",
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\RecurrenceOverride> $overrides",
-                            "list<string> $exdates",
-                            "list<string> $rdates"
-                        ]
-                    }
+                    "return": "self",
+                    "doc": []
                 }
             },
-            "properties": {
-                "definitionHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\RecurrenceOverride> $overrides",
-                            "list<string> $exdates",
-                            "list<string> $rdates"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "exdates": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\RecurrenceOverride> $overrides",
-                            "list<string> $exdates",
-                            "list<string> $rdates"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "immutableRevision": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\RecurrenceOverride> $overrides",
-                            "list<string> $exdates",
-                            "list<string> $rdates"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "overrides": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\RecurrenceOverride> $overrides",
-                            "list<string> $exdates",
-                            "list<string> $rdates"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "rdates": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\RecurrenceOverride> $overrides",
-                            "list<string> $exdates",
-                            "list<string> $rdates"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "rrule": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\RecurrenceOverride> $overrides",
-                            "list<string> $exdates",
-                            "list<string> $rdates"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "schemaVersion": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\RecurrenceOverride> $overrides",
-                            "list<string> $exdates",
-                            "list<string> $rdates"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "seriesId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\RecurrenceOverride> $overrides",
-                            "list<string> $exdates",
-                            "list<string> $rdates"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "start": {
-                    "flags": 1,
-                    "type": "CoreX\\Recurrence\\Data\\DateStart",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\RecurrenceOverride> $overrides",
-                            "list<string> $exdates",
-                            "list<string> $rdates"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "tzdbVersion": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Recurrence\\Data\\RecurrenceOverride> $overrides",
-                            "list<string> $exdates",
-                            "list<string> $rdates"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1511,38 +895,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "end": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "start": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "valueType": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1551,12 +904,12 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Errors\\Contracts\\ErrorCode"
+                "Packman\\Errors\\Contracts\\ErrorCode"
             ],
             "uses": [],
             "doc": [],
@@ -1572,13 +925,19 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "StaleCursorException": "'recurrence.stale_cursor_exception'",
-                "UnsupportedEnvironmentException": "'recurrence.unsupported_environment_exception'"
-            }
+            "enum_cases": [
+                {
+                    "name": "StaleCursorException",
+                    "value": "'recurrence.stale_cursor_exception'"
+                },
+                {
+                    "name": "UnsupportedEnvironmentException",
+                    "value": "'recurrence.unsupported_environment_exception'"
+                }
+            ]
         },
         "CoreX\\Recurrence\\Exceptions\\StaleCursorException": {
             "kind": "class",
@@ -1591,7 +950,7 @@
                 "InvalidArgumentException"
             ],
             "implements": [
-                "CoreX\\Errors\\Contracts\\DescribesError"
+                "Packman\\Errors\\Contracts\\DescribesError"
             ],
             "uses": [],
             "doc": [],
@@ -1603,11 +962,11 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                    "return": "Packman\\Errors\\Data\\ErrorDescriptor",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1620,7 +979,7 @@
             "readonly": false,
             "abstract": false,
             "extends": [
-                "CoreX\\Errors\\Exceptions\\CodedException"
+                "Packman\\Errors\\Exceptions\\CodedException"
             ],
             "implements": [],
             "uses": [],
@@ -1633,18 +992,18 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                    "return": "Packman\\Errors\\Data\\ErrorDescriptor",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
         },
         "CoreX\\Recurrence\\Laravel\\RecurrenceFactory": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -1665,14 +1024,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Recurrence\\RecurrenceServiceProvider": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -1695,10 +1055,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         }
     }
 }

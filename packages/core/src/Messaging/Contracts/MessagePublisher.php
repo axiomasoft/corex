@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\Data\MessageEnvelope;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Назначение публикации арендованного сообщения.

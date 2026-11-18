@@ -6,8 +6,8 @@ namespace CoreX\Intl\Currency\Laravel;
 
 use Brick\Math\RoundingMode;
 use Brick\Money\Context;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class ConversionPolicy

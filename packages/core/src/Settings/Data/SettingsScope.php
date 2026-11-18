@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Settings\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Settings\Enums\SettingScope;
+use Packman\Attributes\Api;
 
 /**
  * Addresses one cascade level of a setting/feature-flag override read or

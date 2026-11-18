@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Definition\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Idempotency\Data\IdempotencyScope;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use Illuminate\Database\Connection;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class OperationFingerprint

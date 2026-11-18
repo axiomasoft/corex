@@ -6,8 +6,10 @@ namespace CoreX\Tasks\Task\Internal;
 
 use CoreX\Tasks\Task\Data\TaskView;
 use CoreX\Tasks\Task\Internal\Models\Task;
+use Packman\Attributes\Internal;
 
 /** @internal Capture explicitly selected scalar fields from the locked model. */
+#[Internal]
 final class TaskSnapshot
 {
     public static function fromTask(Task $task): TaskView

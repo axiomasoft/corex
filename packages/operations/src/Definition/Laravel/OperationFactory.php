@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Definition\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Operations\Definition\Data\Operation;
@@ -15,6 +13,8 @@ use CoreX\Operations\Definition\Internal\OperationContractHasher;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Invocation\Enums\InputEnvelope;
 use LogicException;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Packman\Modules\Data\Extenders\Api;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]

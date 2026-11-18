@@ -9,6 +9,7 @@ use Flex\Crm\Context\Models\Concerns\HasActivities;
 use Flex\Crm\Context\Models\Concerns\HasCrmContext;
 use Flex\Crm\Lead\Enums\LeadStatus;
 use Illuminate\Support\Carbon;
+use Packman\Attributes\Internal;
 
 /**
  * @property string $id
@@ -29,6 +30,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $converted_deal_id
  * @property Carbon|null $converted_at
  */
+#[Internal]
 final class Lead extends BaseModel
 {
     use HasActivities;

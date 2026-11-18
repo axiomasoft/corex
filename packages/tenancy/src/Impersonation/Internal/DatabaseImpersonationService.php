@@ -23,6 +23,7 @@ use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Session\Session;
 use Override;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use Throwable;
 
@@ -37,6 +38,7 @@ use Throwable;
  *
  * @internal spec: B-11 §5.9, D139/D140/D143/D144/D146
  */
+#[Internal]
 final class DatabaseImpersonationService implements ImpersonationService
 {
     private const string SESSION_GRANT_ID = 'corex.impersonation.grant_id';

@@ -15,10 +15,12 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\Connection;
 use Override;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use stdClass;
 use Throwable;
 
+#[Internal]
 final readonly class SqlOutboxRelay implements OutboxRelay
 {
     public function __construct(

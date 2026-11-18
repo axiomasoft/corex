@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Attributes\Tooling;
 
+use Packman\Attributes\Internal;
 use RuntimeException;
 
 /** @internal One source-derived result shared by CLI, documentation and graph consumers. */
+#[Internal]
 final readonly class SurfaceReport
 {
     /**

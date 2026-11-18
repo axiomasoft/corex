@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Internal;
 
-use CoreX\Config\Data\SecretRef;
 use CoreX\Webhooks\Contracts\WebhookSigner;
 use CoreX\Webhooks\Data\WebhookSignedHeaders;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
+use Packman\Config\Data\SecretRef;
 
+#[Internal]
 final readonly class HmacWebhookSigner implements WebhookSigner
 {
     private const string SECRET_PREFIX = 'whsec_';

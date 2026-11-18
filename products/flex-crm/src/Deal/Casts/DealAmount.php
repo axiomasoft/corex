@@ -9,8 +9,10 @@ use CoreX\Intl\Money\Laravel\MoneyCast;
 use Flex\Crm\Internal\Value;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
+use Packman\Attributes\Internal;
 
 /** @implements CastsAttributes<Money|null, mixed> */
+#[Internal]
 final class DealAmount implements CastsAttributes
 {
     /** @param array<string, mixed> $attributes */

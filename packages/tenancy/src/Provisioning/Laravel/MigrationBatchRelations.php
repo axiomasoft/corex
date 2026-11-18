@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Provisioning\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\Provisioning\Internal\Models\MigrationBatch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * @corex-model-extension Exact MigrationBatch Eloquent relationship composition.
@@ -19,7 +19,7 @@ final class MigrationBatchRelations
 {
     /** @template TModel of Model
      * @param  TModel  $model
-     * @return BelongsTo<MigrationBatch, TModel>
+     * @return BelongsTo<covariant Model, TModel>
      */
     public static function belongsTo(Model $model, ?string $foreignKey = null, ?string $ownerKey = null, ?string $relation = null): BelongsTo
     {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Account\Internal\Lifecycle;
 
+use Packman\Attributes\Internal;
 use RuntimeException;
 
 /**
@@ -21,6 +22,7 @@ use RuntimeException;
  *
  * @internal spec: B-11 §5.1, P2.12
  */
+#[Internal]
 final class AccountLifecycleFsm
 {
     /**

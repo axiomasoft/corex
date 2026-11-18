@@ -10,6 +10,7 @@ use CoreX\Tenancy\Runtime\Exceptions\TenantCouldNotBeIdentifiedByHostException;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Database\ConnectionResolverInterface;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 
 /**
  * Resolves `Request::getHost()` to an account id through `root_domains` (verified, not deleted)
@@ -17,6 +18,7 @@ use InvalidArgumentException;
  * domain nor a slug, so it is unreachable by host). Positive entries are fenced by a
  * shared generation; the explicit host store lives outside the tenant cache stores.
  */
+#[Internal]
 final readonly class HostAccountResolver
 {
     public function __construct(

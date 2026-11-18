@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Membership\Internal\Credentials;
 
+use Packman\Attributes\Internal;
+
 /** @internal Reference response seam; it is deliberately not a Laravel auth guard. */
+#[Internal]
 final class CredentialCookieQueue
 {
     /** @var list<array{name: string, value: string}> */

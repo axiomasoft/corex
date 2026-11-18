@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Audit\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Audit\Internal\AuditObserver;
 use Illuminate\Database\Eloquent\Model;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** @corex-model-extension Registers created/updated/deleted/restored/forceDeleted audit hooks; no extra columns. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

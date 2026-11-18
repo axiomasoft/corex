@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Invocation\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Handler of one API operation. Kernel-owned so product modules can ship

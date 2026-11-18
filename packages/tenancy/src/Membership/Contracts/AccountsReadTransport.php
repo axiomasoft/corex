@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Membership\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\Membership\Data\AccountsQuery;
 use CoreX\Tenancy\Membership\Data\AvailableAccounts;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface AccountsReadTransport

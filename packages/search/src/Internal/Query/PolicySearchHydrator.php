@@ -13,7 +13,9 @@ use CoreX\Search\Data\CandidatePage;
 use CoreX\Search\Data\CurrentSearchRecord;
 use CoreX\Search\Data\SearchPage;
 use CoreX\Search\Data\SearchSnapshot;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class PolicySearchHydrator implements SearchHydrator
 {
     /**

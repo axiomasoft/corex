@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Events;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Messaging\Internal\DomainEventDefaults;
 use DateTimeImmutable;
 use Illuminate\Support\Str;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Canonical base for ecosystem domain events (eventId/occurredAt/tenant/

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Search\Tests\Unit;
 
-use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\CoreServiceProvider;
 use CoreX\Search\Internal\Support\SearchConfigSection;
 use CoreX\Search\SearchServiceProvider;
 use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase;
+use Packman\Config\Contracts\ConfigReportSectionInterface as ConfigReportSection;
 
 final class ConfigReportSectionTest extends TestCase
 {
@@ -25,11 +25,11 @@ final class ConfigReportSectionTest extends TestCase
         self::assertCount(1, $owned);
         self::assertSame(50, $owned[0]->order());
         config(['corex-search.cursor_secret' => 'a-private-section-secret']);
-        self::assertSame(0, Artisan::call('corex:config:validate'));
+        self::assertSame(0, Artisan::call('packman:config:validate'));
         self::assertStringContainsString('secret corex-search.cursor_secret=present', Artisan::output());
         self::assertStringNotContainsString('a-private-section-secret', Artisan::output());
         config(['corex-search.cursor_secret' => null]);
-        self::assertSame(0, Artisan::call('corex:config:validate'));
+        self::assertSame(0, Artisan::call('packman:config:validate'));
         self::assertStringContainsString('secret corex-search.cursor_secret=absent', Artisan::output());
     }
 }

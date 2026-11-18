@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Membership\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\Membership\Data\MembershipSnapshot;
 use CoreX\Tenancy\Membership\Enums\MembershipState;
 use CoreX\Tenancy\Membership\Exceptions\CentralProtocolViolation;
 use CoreX\Tenancy\Membership\Internal\Transport\CentralValue;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class MembershipSnapshotFactory

@@ -10,8 +10,10 @@ use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\RequestContextProvider;
 use Illuminate\Contracts\Container\Container;
 use Override;
+use Packman\Attributes\Internal;
 
 /** @internal Holds no request state; reads the active Laravel request on every call. */
+#[Internal]
 final readonly class CurrentRequestContext implements RequestContextProvider
 {
     public function __construct(private Container $container) {}

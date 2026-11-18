@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Cost\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
-use CoreX\Config\Data\SecretRef;
-use CoreX\Config\Laravel\ConfigurationValidator;
 use CoreX\Operations\Cost\Data\CostOptions;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Data\SecretRef;
+use Packman\Config\Laravel\ConfigurationValidator;
 
 /** Immutable cost-control activation policy read only by the package registrar. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

@@ -5,9 +5,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tooling\PackageGraph;
 
-use CoreX\Attributes\Tooling\SurfaceReport;
 use CoreX\Attributes\Tooling\SurfaceScanner;
 use FilesystemIterator;
+use Packman\DevTools\Generators\Contracts\ApiManifestGenerator;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -196,8 +196,12 @@ foreach ($surface->diagnostics as $diagnostic) {
         $surface->owners[$diagnostic->symbol] ?? '', $diagnostic->code.' '.$diagnostic->message);
 }
 $surfaceArtifacts = ['docs/reference/public-api.md' => $surface->documentation()];
-foreach ($surface->manifests as $package => $manifest) {
-    $surfaceArtifacts[$surface->packagePaths[$package].'/resources/contracts/php-api.json'] = SurfaceReport::encode($manifest);
+$contractPackages = [];
+foreach ($surface->packagePaths as $package => $path) {
+    $contractPackages[] = ['name' => $package, 'path' => $path];
+}
+foreach ((new ApiManifestGenerator)->sync($repoRoot, $contractPackages, false)['diagnostics'] as $diagnostic) {
+    $violations[] = violation('R4b', 'resources/contracts/php-api.json', 1, '', '', 'API-STALE '.$diagnostic);
 }
 foreach ($surfaceArtifacts as $relativeFile => $bytes) {
     $path = $repoRoot.'/'.$relativeFile;

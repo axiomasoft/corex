@@ -10,6 +10,7 @@ use CoreX\Audit\Data\AuditEntry;
 use CoreX\Config\Data\CoreOptions;
 use CoreX\Data\Laravel\JsonDocuments;
 use Illuminate\Database\Eloquent\Model;
+use Packman\Attributes\Internal;
 use Stringable;
 
 /**
@@ -25,6 +26,7 @@ use Stringable;
  *
  * @internal spec: B-10 §4.4, D22
  */
+#[Internal]
 final readonly class AuditObserver
 {
     /**

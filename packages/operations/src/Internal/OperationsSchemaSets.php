@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace CoreX\Operations\Internal;
 
 use CoreX\Operations\Laravel\ApiSchemaConnections;
+use Packman\Attributes\Internal;
 use Packman\Schema\Contracts\Migration\SchemaSetProvider;
 use Packman\Schema\Data\Migration\SchemaSet;
 use Packman\Schema\Enums\SchemaScope;
 
 /** @internal */
+#[Internal]
 final readonly class OperationsSchemaSets implements SchemaSetProvider
 {
     public function __construct(private ApiSchemaConnections $schema) {}

@@ -16,10 +16,12 @@ use DateInterval;
 use DateTimeImmutable;
 use Exception;
 use Illuminate\Database\ConnectionInterface;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 use Throwable;
 
+#[Internal]
 final readonly class SchemaOperationWorker
 {
     public function __construct(

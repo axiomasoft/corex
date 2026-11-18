@@ -18,8 +18,10 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 use InvalidArgumentException;
 use Override;
+use Packman\Attributes\Internal;
 use stdClass;
 
+#[Internal]
 final readonly class SqlGeographyProvider implements GeographyProvider
 {
     public function __construct(

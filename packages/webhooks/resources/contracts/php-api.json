@@ -4,7 +4,7 @@
     "symbols": {
         "CoreX\\Webhooks\\Contracts\\WebhookDeliveryStore": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -18,7 +18,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -47,7 +47,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -70,21 +70,18 @@
                         }
                     ],
                     "return": "array",
-                    "doc": {
-                        "@return": [
-                            "list<\\CoreX\\Webhooks\\Data\\WebhookDelivery>"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Webhooks\\Contracts\\WebhookEgressPolicy": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -98,7 +95,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -124,14 +121,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Webhooks\\Contracts\\WebhookHttpTransport": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -145,7 +143,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -162,14 +160,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Webhooks\\Contracts\\WebhookPayloadProjector": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -177,17 +176,13 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@phpstan-import-type": [
-                    "EventData from CloudEventCodec"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "project": {
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -210,21 +205,18 @@
                         }
                     ],
                     "return": "array",
-                    "doc": {
-                        "@return": [
-                            "array<string, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string)>)>)>)>)>)>)>)>"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Webhooks\\Contracts\\WebhookSigner": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -238,7 +230,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -279,21 +271,18 @@
                         }
                     ],
                     "return": "CoreX\\Webhooks\\Data\\WebhookSignedHeaders",
-                    "doc": {
-                        "@param": [
-                            "list<string> $secretRefs"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Webhooks\\Contracts\\WebhookSubscriptionStore": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -307,7 +296,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -354,7 +343,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -392,7 +381,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -421,7 +410,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -489,17 +478,14 @@
                         }
                     ],
                     "return": "CoreX\\Webhooks\\Data\\WebhookSubscription",
-                    "doc": {
-                        "@param": [
-                            "list<string> $keyRefs"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Webhooks\\Data\\ValidatedWebhookRequest": {
             "kind": "class",
@@ -576,56 +562,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array{webhook-id: string, webhook-timestamp: string, webhook-signature: string} $signatureHeaders"
-                        ]
-                    }
+                    "doc": []
                 }
             },
             "properties": {
-                "address": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array{webhook-id: string, webhook-timestamp: string, webhook-signature: string} $signatureHeaders"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "body": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array{webhook-id: string, webhook-timestamp: string, webhook-signature: string} $signatureHeaders"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "canonicalHost": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array{webhook-id: string, webhook-timestamp: string, webhook-signature: string} $signatureHeaders"
-                        ]
-                    },
-                    "hooks": []
-                },
                 "signatureHeaders": {
                     "flags": 1,
                     "type": "array",
@@ -633,39 +573,7 @@
                     "visibility": "public",
                     "static": false,
                     "default": null,
-                    "doc": {
-                        "@var": [
-                            "array{webhook-id: string, webhook-timestamp: string, webhook-signature: string}"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "timeoutSeconds": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array{webhook-id: string, webhook-timestamp: string, webhook-signature: string} $signatureHeaders"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "url": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array{webhook-id: string, webhook-timestamp: string, webhook-signature: string} $signatureHeaders"
-                        ]
-                    },
+                    "doc": [],
                     "hooks": []
                 }
             },
@@ -883,309 +791,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "attempt": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "body": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "bodyHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "createdAt": {
-                    "flags": 1,
-                    "type": "DateTimeImmutable",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "endpointSnapshot": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "eventId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "expiresAt": {
-                    "flags": 1,
-                    "type": "DateTimeImmutable",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "finishedAt": {
-                    "flags": 1,
-                    "type": "?DateTimeImmutable",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "lastError": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "leaseOwner": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "leaseUntil": {
-                    "flags": 1,
-                    "type": "?DateTimeImmutable",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "major": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "nextAttemptAt": {
-                    "flags": 1,
-                    "type": "DateTimeImmutable",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "replayCount": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "scope": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "status": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "subscriptionId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "subscriptionRevision": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "topic": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "topicVersion": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $scope"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1266,52 +875,11 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\Webhooks\\Data\\WebhookDestination)",
+                    "return": "self",
                     "doc": []
                 }
             },
-            "properties": {
-                "host": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "path": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "port": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "scheme": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1376,48 +944,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "durationMs": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "errorCode": {
-                    "flags": 1,
-                    "type": "?CoreX\\Webhooks\\Enums\\WebhookFailureReason",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "retryAfter": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "status": {
-                    "flags": 1,
-                    "type": "?int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1542,193 +1069,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $projectors",
-                            "list<\\CoreX\\Webhooks\\Data\\WebhookTopic> $topics",
-                            "list<string> $organizationDeniedCidrs"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "bodyRetentionSeconds": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $projectors",
-                            "list<\\CoreX\\Webhooks\\Data\\WebhookTopic> $topics",
-                            "list<string> $organizationDeniedCidrs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "deliveryEnabled": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $projectors",
-                            "list<\\CoreX\\Webhooks\\Data\\WebhookTopic> $topics",
-                            "list<string> $organizationDeniedCidrs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "historyRetentionSeconds": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $projectors",
-                            "list<\\CoreX\\Webhooks\\Data\\WebhookTopic> $topics",
-                            "list<string> $organizationDeniedCidrs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "leaseSeconds": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $projectors",
-                            "list<\\CoreX\\Webhooks\\Data\\WebhookTopic> $topics",
-                            "list<string> $organizationDeniedCidrs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "maxAttempts": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $projectors",
-                            "list<\\CoreX\\Webhooks\\Data\\WebhookTopic> $topics",
-                            "list<string> $organizationDeniedCidrs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "organizationDeniedCidrs": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $projectors",
-                            "list<\\CoreX\\Webhooks\\Data\\WebhookTopic> $topics",
-                            "list<string> $organizationDeniedCidrs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "projectors": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $projectors",
-                            "list<\\CoreX\\Webhooks\\Data\\WebhookTopic> $topics",
-                            "list<string> $organizationDeniedCidrs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "replayHorizonSeconds": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $projectors",
-                            "list<\\CoreX\\Webhooks\\Data\\WebhookTopic> $topics",
-                            "list<string> $organizationDeniedCidrs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "retryHorizonSeconds": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $projectors",
-                            "list<\\CoreX\\Webhooks\\Data\\WebhookTopic> $topics",
-                            "list<string> $organizationDeniedCidrs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "topics": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $projectors",
-                            "list<\\CoreX\\Webhooks\\Data\\WebhookTopic> $topics",
-                            "list<string> $organizationDeniedCidrs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "workerReady": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $projectors",
-                            "list<\\CoreX\\Webhooks\\Data\\WebhookTopic> $topics",
-                            "list<string> $organizationDeniedCidrs"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1781,11 +1125,7 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $signatures"
-                        ]
-                    }
+                    "doc": []
                 },
                 "toArray": {
                     "visibility": "public",
@@ -1795,57 +1135,10 @@
                     "by_reference": false,
                     "parameters": [],
                     "return": "array",
-                    "doc": {
-                        "@return": [
-                            "array{webhook-id: string, webhook-timestamp: string, webhook-signature: string}"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $signatures"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "signatures": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $signatures"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "timestamp": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $signatures"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1970,169 +1263,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $keyRefs"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "createdAt": {
-                    "flags": 1,
-                    "type": "DateTimeImmutable",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $keyRefs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "endpointUrl": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $keyRefs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $keyRefs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "keyRefs": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $keyRefs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "major": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $keyRefs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "maxPiiClass": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $keyRefs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "revision": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $keyRefs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "status": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $keyRefs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "topic": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $keyRefs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "topicVersion": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $keyRefs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "updatedAt": {
-                    "flags": 1,
-                    "type": "DateTimeImmutable",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $keyRefs"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2221,11 +1355,7 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $schema"
-                        ]
-                    }
+                    "doc": []
                 },
                 "id": {
                     "visibility": "public",
@@ -2268,115 +1398,15 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "major": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $schema"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "name": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $schema"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "piiClass": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $schema"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "projectorService": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $schema"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "schema": {
-                    "flags": 1,
+            "properties": {},
+            "constants": [
+                {
+                    "name": "CLASSES",
                     "type": "array",
-                    "readonly": true,
                     "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $schema"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "schemaHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $schema"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "version": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $schema"
-                        ]
-                    },
-                    "hooks": []
+                    "final": false
                 }
-            },
-            "constants": {
-                "CLASSES": {
-                    "type": "array",
-                    "value": "['none', 'pseudonymous', 'personal', 'restricted', 'secret']",
-                    "visibility": "public",
-                    "final": false,
-                    "doc": []
-                }
-            },
+            ],
             "enum_backing": null,
             "enum_cases": []
         },
@@ -2384,7 +1414,7 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
@@ -2409,7 +1439,7 @@
                             "flags": 0
                         }
                     ],
-                    "return": "?self(CoreX\\Webhooks\\Enums\\WebhookFailureReason)",
+                    "return": "?self",
                     "doc": []
                 },
                 "isPermanent": {
@@ -2433,42 +1463,102 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "AckUnknown": "'ack_unknown'",
-                "AddressNotAllowed": "'address_not_allowed'",
-                "DnsUnavailable": "'dns_unavailable'",
-                "EgressDenied": "'egress_denied'",
-                "EndpointChanged": "'webhook_endpoint_changed'",
-                "EndpointGone": "'endpoint_gone'",
-                "Http408": "'http_408'",
-                "Http425": "'http_425'",
-                "Http429": "'http_429'",
-                "Http5xx": "'http_5xx'",
-                "HttpPermanent": "'http_permanent'",
-                "NetworkFailure": "'network_failure'",
-                "PayloadTooLarge": "'payload_too_large'",
-                "RedirectForbidden": "'redirect_forbidden'",
-                "RetryExhausted": "'retry_exhausted'",
-                "RetryHorizonExhausted": "'retry_horizon_exhausted'",
-                "SigningUnavailable": "'signing_unavailable'",
-                "TopicUnavailable": "'topic_unavailable'",
-                "TransportFailure": "'transport_failure'",
-                "UrlForbidden": "'url_forbidden'"
-            }
+            "enum_cases": [
+                {
+                    "name": "EndpointChanged",
+                    "value": "'webhook_endpoint_changed'"
+                },
+                {
+                    "name": "AckUnknown",
+                    "value": "'ack_unknown'"
+                },
+                {
+                    "name": "EndpointGone",
+                    "value": "'endpoint_gone'"
+                },
+                {
+                    "name": "RedirectForbidden",
+                    "value": "'redirect_forbidden'"
+                },
+                {
+                    "name": "HttpPermanent",
+                    "value": "'http_permanent'"
+                },
+                {
+                    "name": "UrlForbidden",
+                    "value": "'url_forbidden'"
+                },
+                {
+                    "name": "AddressNotAllowed",
+                    "value": "'address_not_allowed'"
+                },
+                {
+                    "name": "EgressDenied",
+                    "value": "'egress_denied'"
+                },
+                {
+                    "name": "TopicUnavailable",
+                    "value": "'topic_unavailable'"
+                },
+                {
+                    "name": "PayloadTooLarge",
+                    "value": "'payload_too_large'"
+                },
+                {
+                    "name": "Http429",
+                    "value": "'http_429'"
+                },
+                {
+                    "name": "Http5xx",
+                    "value": "'http_5xx'"
+                },
+                {
+                    "name": "Http408",
+                    "value": "'http_408'"
+                },
+                {
+                    "name": "Http425",
+                    "value": "'http_425'"
+                },
+                {
+                    "name": "DnsUnavailable",
+                    "value": "'dns_unavailable'"
+                },
+                {
+                    "name": "NetworkFailure",
+                    "value": "'network_failure'"
+                },
+                {
+                    "name": "TransportFailure",
+                    "value": "'transport_failure'"
+                },
+                {
+                    "name": "SigningUnavailable",
+                    "value": "'signing_unavailable'"
+                },
+                {
+                    "name": "RetryExhausted",
+                    "value": "'retry_exhausted'"
+                },
+                {
+                    "name": "RetryHorizonExhausted",
+                    "value": "'retry_horizon_exhausted'"
+                }
+            ]
         },
         "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode": {
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Errors\\Contracts\\ErrorCode"
+                "Packman\\Errors\\Contracts\\ErrorCode"
             ],
             "uses": [],
             "doc": [],
@@ -2484,24 +1574,51 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "UnknownMessageContract": "'webhooks.unknown_message_contract'",
-                "UnknownMessageSchema": "'webhooks.unknown_message_schema'",
-                "WebhookEgressDenied": "'webhooks.webhook_egress_denied'",
-                "WebhookEndpointChanged": "'webhooks.webhook_endpoint_changed'",
-                "WebhookPayloadTooLarge": "'webhooks.webhook_payload_too_large'",
-                "WebhookReplayExpired": "'webhooks.webhook_replay_expired'",
-                "WebhookSecretDenied": "'webhooks.webhook_secret_denied'",
-                "WebhookSensitiveDenied": "'webhooks.webhook_sensitive_denied'",
-                "WebhookSubscriptionCap": "'webhooks.webhook_subscription_cap'"
-            }
+            "enum_cases": [
+                {
+                    "name": "UnknownMessageContract",
+                    "value": "'webhooks.unknown_message_contract'"
+                },
+                {
+                    "name": "UnknownMessageSchema",
+                    "value": "'webhooks.unknown_message_schema'"
+                },
+                {
+                    "name": "WebhookEgressDenied",
+                    "value": "'webhooks.webhook_egress_denied'"
+                },
+                {
+                    "name": "WebhookEndpointChanged",
+                    "value": "'webhooks.webhook_endpoint_changed'"
+                },
+                {
+                    "name": "WebhookPayloadTooLarge",
+                    "value": "'webhooks.webhook_payload_too_large'"
+                },
+                {
+                    "name": "WebhookReplayExpired",
+                    "value": "'webhooks.webhook_replay_expired'"
+                },
+                {
+                    "name": "WebhookSecretDenied",
+                    "value": "'webhooks.webhook_secret_denied'"
+                },
+                {
+                    "name": "WebhookSensitiveDenied",
+                    "value": "'webhooks.webhook_sensitive_denied'"
+                },
+                {
+                    "name": "WebhookSubscriptionCap",
+                    "value": "'webhooks.webhook_subscription_cap'"
+                }
+            ]
         },
         "CoreX\\Webhooks\\Laravel\\WebhookBindingsRegistrar": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -2554,14 +1671,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Webhooks\\Laravel\\WebhookController": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": true,
@@ -2630,14 +1748,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Webhooks\\Laravel\\WebhookHttpRegistrar": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -2690,14 +1809,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Webhooks\\Laravel\\WebhookOptionsParser": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -2725,21 +1845,18 @@
                         }
                     ],
                     "return": "CoreX\\Webhooks\\Data\\WebhookOptions",
-                    "doc": {
-                        "@param": [
-                            "array<array-key, mixed> $config"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Webhooks\\WebhooksServiceProvider": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -2772,10 +1889,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         }
     }
 }

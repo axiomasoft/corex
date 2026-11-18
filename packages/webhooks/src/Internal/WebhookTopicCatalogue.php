@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Internal;
 
-use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Operations\Errors\Exceptions\ApiError;
@@ -12,8 +11,11 @@ use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Data\WebhookTopic;
 use CoreX\Webhooks\Errors\Enums\WebhooksErrorCode;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
+use Packman\Errors\Enums\ErrorCategory;
 
 /** Immutable projection of explicit topic mappings onto the declared message registry. */
+#[Internal]
 final readonly class WebhookTopicCatalogue
 {
     /** @var array<string, WebhookTopic> */

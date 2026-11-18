@@ -10,6 +10,7 @@ use CoreX\Media\Data\MediaContext;
 use CoreX\Media\Exceptions\MediaOperationConflict;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\DatabaseManager;
+use Packman\Attributes\Internal;
 use Vaulter\Database\VaulterDatabase;
 use Vaulter\Media\Contracts\Cas\BlobPins;
 use Vaulter\Media\Contracts\Cas\BlobStore;
@@ -17,6 +18,7 @@ use Vaulter\Media\Data\Snapshots\BlobSnapshot;
 use Vaulter\Media\ValueObjects\Cas\BlobScope;
 
 /** CoreX owns reference rows; Vaulter owns every byte and its liveness pins. */
+#[Internal]
 final readonly class MediaBlobs
 {
     public function __construct(private VaulterDatabase $database, private DatabaseManager $connections, private BlobStore $store, private BlobPins $pins, private TenantContextResolver $tenants) {}

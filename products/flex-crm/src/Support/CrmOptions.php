@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Support;
 
-use CoreX\Config\Laravel\ConfigurationValidator;
+use Packman\Attributes\Internal;
+use Packman\Config\Laravel\ConfigurationValidator;
 
 /** @internal Package composition type for flex-crm config (D38 / P16.8). */
+#[Internal]
 final readonly class CrmOptions
 {
     public function __construct(

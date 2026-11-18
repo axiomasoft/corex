@@ -6,6 +6,7 @@ namespace CoreX\Workflow\Internal;
 
 use CoreX\Workflow\Data\TriggerRequest;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 use Packman\Modules\Data\Compiler\ExtensionStamp;
 
 /**
@@ -13,6 +14,7 @@ use Packman\Modules\Data\Compiler\ExtensionStamp;
  *
  * `registryFingerprint` is stored provenance and is not part of the replay hash.
  */
+#[Internal]
 final class WorkflowDefinitionStamp
 {
     public const string SCHEMA = 'workflow-definition/1';

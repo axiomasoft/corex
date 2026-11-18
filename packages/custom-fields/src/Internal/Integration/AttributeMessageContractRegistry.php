@@ -8,8 +8,10 @@ use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Data\MessageContract;
 use InvalidArgumentException;
 use Override;
+use Packman\Attributes\Internal;
 
 /** Adds this package's contracts through the public registry port. */
+#[Internal]
 final readonly class AttributeMessageContractRegistry implements MessageContractRegistry
 {
     /** @var array<string, MessageContract> */

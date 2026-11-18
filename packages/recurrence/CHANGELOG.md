@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — Packman governance
+
+- Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.
+
+
 ## Unreleased — kernel audit repairs (2026-10-08)
 
 - Resume with page emission/candidate budgets, checkpoint only processed candidates, and bound replay by the same wall and memory limits without a second lookahead traversal.

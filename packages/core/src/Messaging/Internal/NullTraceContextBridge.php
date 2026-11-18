@@ -7,7 +7,9 @@ namespace CoreX\Messaging\Internal;
 use Closure;
 use CoreX\Messaging\Contracts\TraceContextBridge;
 use CoreX\Observability\Data\OperationContext;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class NullTraceContextBridge implements TraceContextBridge
 {
     public function inject(array $metadata): array

@@ -8,8 +8,10 @@ use CoreX\Search\Data\SearchSnapshot;
 use Illuminate\Contracts\Database\Query\Expression;
 use Illuminate\Database\Grammar;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 
 /** @internal Dynamic identifiers come from the validated schema; user text stays bound. */
+#[Internal]
 final readonly class SearchTextExpression implements Expression
 {
     public function __construct(private SearchSnapshot $schema, private string $configuration)

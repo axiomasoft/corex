@@ -18,6 +18,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use Override;
+use Packman\Attributes\Internal;
 use Packman\Settings\Contracts\SettingDefaultsProviderInterface as SettingDefaultsProvider;
 
 /**
@@ -37,6 +38,7 @@ use Packman\Settings\Contracts\SettingDefaultsProviderInterface as SettingDefaul
  *
  * @internal spec: B-10 §3.1, P1.7 (Scope Excluded), D38, P1.6, D12
  */
+#[Internal]
 final readonly class DatabaseSettingsRepository implements SettingsRepository
 {
     private const int MAX_VALUE_BYTES = 65536;

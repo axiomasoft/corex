@@ -7,6 +7,7 @@ namespace CoreX\Access\Access\Internal;
 use CoreX\Context\Contracts\Principal;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Query\Builder;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /**
@@ -19,6 +20,7 @@ use Psr\Clock\ClockInterface;
  * `AccessChecker` contract for this was rejected (Code Guidance if-then #5)
  * — this lookup is not part of that contract's spec'd shape.
  */
+#[Internal]
 final readonly class DirectGrantLookup
 {
     public function __construct(

@@ -9,6 +9,7 @@ use CoreX\Context\Data\TenantContext;
 use CoreX\Time\Laravel\SystemClock;
 use DateTimeImmutable;
 use Illuminate\Container\Container;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /**
@@ -17,6 +18,7 @@ use Psr\Clock\ClockInterface;
  *
  * @internal Composition helper of the messaging module.
  */
+#[Internal]
 final class DomainEventDefaults
 {
     public static function tenant(): TenantContext

@@ -1,13 +1,14 @@
 {
     "name": "axiomasoft/corex-search-meilisearch",
     "description": "Optional Meilisearch candidate adapter for axiomasoft/corex-search.",
-    "type": "packman-module",
+    "type": "library",
     "license": "MIT",
     "require": {
-        "ext-filter": "*",
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
         "axiomasoft/corex-search": "^1.0@dev",
+        "axiomasoft/packman": "^0.1@dev",
+        "ext-filter": "*",
         "illuminate/contracts": "^13.0",
         "illuminate/support": "^13.0",
         "meilisearch/meilisearch-php": ">=1.16.1-stable <=1.16.1-stable"
@@ -35,6 +36,19 @@
         },
         "branch-alias": {
             "dev-main": "1.0.x-dev"
+        },
+        "packman": {
+            "schema-version": 1,
+            "package-type": "integration",
+            "stability": "stable",
+            "profile": "laravel-package",
+            "error-prefix": "search-meilisearch",
+            "owns": [
+                "Errors",
+                "Exceptions",
+                "Internal",
+                "Laravel"
+            ]
         }
     },
     "repositories": [

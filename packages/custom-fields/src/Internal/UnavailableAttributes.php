@@ -25,7 +25,9 @@ use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class UnavailableAttributes implements AttributeFilter, AttributeStore, FieldCatalogue, SchemaOperations
 {
     public function snapshot(DataScope $scope, string $entity): FieldSnapshot

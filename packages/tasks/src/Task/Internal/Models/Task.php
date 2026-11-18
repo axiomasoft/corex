@@ -14,6 +14,7 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Packman\Attributes\Internal;
 
 /**
  * @property string $id
@@ -40,6 +41,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read Model|null $project
  * @property-read Stage|null $stage
  */
+#[Internal]
 final class Task extends BaseModel
 {
     protected $table = 'tsk_tasks';

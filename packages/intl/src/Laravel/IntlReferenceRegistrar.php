@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Intl\Internal\IntlOptions;
 use CoreX\Intl\Territory\Contracts\DatasetImporter;
@@ -17,6 +15,8 @@ use CoreX\Intl\Territory\Internal\Reference\SqlGeographyProvider;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Connection;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Packman\Foundation\Contracts\PackageRegistrar;
 use Psr\Clock\ClockInterface;
 

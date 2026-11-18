@@ -8,7 +8,6 @@ use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Definition\Data\Operation;
@@ -26,8 +25,11 @@ use DateTimeInterface;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
+use Packman\Errors\Enums\ErrorCategory;
 
 /** @internal Public-safe tenant webhook management and history projection. */
+#[Internal]
 final readonly class WebhookManagement
 {
     private const string DeliveryOrdering = 'webhook-deliveries.created.v1';
@@ -319,6 +321,7 @@ final readonly class WebhookManagement
 }
 
 /** @internal Metadata-only handler class for the shared P13 cursor registry. */
+#[Internal]
 final class WebhookCursorOperationHandler implements OperationHandler
 {
     public function handle(RequestContext $context, array $input, array $parameters): array

@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Membership\Internal\Transport;
 
 use CoreX\Tenancy\Membership\Exceptions\CentralUnauthorized;
+use Packman\Attributes\Internal;
 
 /** @internal Injected trusted keys only: never retrieves message-directed keys. */
+#[Internal]
 final readonly class JwsVerifier
 {
     /** @param array<string, array{pem: string, purpose: string}> $keys */

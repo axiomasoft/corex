@@ -15,8 +15,10 @@ use CoreX\Media\Data\MediaSubject;
 use CoreX\Media\Exceptions\MediaAccessDenied;
 use CoreX\Media\Exceptions\MediaOperationConflict;
 use Illuminate\Database\ConnectionInterface;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
+#[Internal]
 final readonly class SqlRelationLookup implements RelationLookup
 {
     public function __construct(private ConnectionInterface $connection, private MediaPolicy $policy, private ClockInterface $clock, private MediaBlobs $blobs) {}

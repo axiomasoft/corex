@@ -6,8 +6,10 @@ namespace CoreX\Webhooks\Internal;
 
 use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
 use CoreX\Webhooks\Data\WebhookTopic;
+use Packman\Attributes\Internal;
 
 /** @internal Installed-code webhook document, independent of tenant activation. */
+#[Internal]
 final readonly class WebhookSnapshotSection implements ContractSnapshotSection
 {
     /** @var list<string> */

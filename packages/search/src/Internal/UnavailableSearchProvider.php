@@ -9,7 +9,9 @@ use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Data\CandidatePage;
 use CoreX\Search\Data\SearchCapabilities;
 use CoreX\Search\Data\SearchQuery;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class UnavailableSearchProvider implements SearchProvider
 {
     public function capabilities(): SearchCapabilities

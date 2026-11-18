@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Task\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Tasks\Task\Enums\TaskStatus;
+use Packman\Attributes\Api;
 
 #[Api(since: '1.0')]
 final readonly class TaskCompletionCandidate

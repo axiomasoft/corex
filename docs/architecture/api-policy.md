@@ -12,7 +12,9 @@
 `#[Api(since: '1.0')]` или `#[Spi(kind: SpiKind::Implement|Call, since: '1.0')]`.
 Метка не наследуется; разрешена ровно одна. `since` обозначает введённую версию,
 а не доказательство опубликованного релиза. `@api`, имя каталога и generated JSON
-не разрешают импорт. В `Internal` метки запрещены; там сохраняется `@internal`.
+не разрешают импорт. Атрибуты принадлежат `Packman\Attributes`. Каждый тип в `Internal`
+явно помечается `#[Internal]`; одновременно `Api`/`Spi` запрещены. Метка `Internal`
+также обозначает private implementation вне одноимённого каталога.
 
 | Слой | Поддерживаемый способ использования |
 |:--|:--|
@@ -23,11 +25,15 @@
 
 `composer php-api` запускает `scripts/php-api.php --strict --check`: исходная классификация,
 замыкание native/PHPDoc типов, immutable DTO, imports и свежесть снимков проверяются вместе.
-Модели, Collection и foreign Internal не входят в Api payload. Model extension SPI допускается
+Модели и Collection не входят в Api payload. Типы `Internal` не входят ни в одну
+публичную или SPI-сигнатуру, включая типы собственного пакета. Model extension SPI допускается
 только в документированной Laravel-поверхности. Product проверяется как потребитель.
 
 `packages/<name>/resources/contracts/php-api.json` и [public-api](../reference/public-api.md)
-генерируются одним сканером. Граф пакетов читает тот же source owner index: R4 проверяет
+генерируются из одной исходной классификации: Packman владеет JSON serialization,
+CoreX — полным графом типов и Markdown-справочником. Native JSON хранит `layer: spi`
+и отдельный `spi_kind`; внешние inherited members не копируются. CoreX продолжает
+проверять унаследованные контракты в source graph. Граф пакетов читает тот же source owner index: R4 проверяет
 конкретный символ, R4b — классификацию и свежесть снимков. R1/R2/R3/R5 остаются независимыми.
 `@internal` не обеспечивает межпакетную границу при общем корне `CoreX`; её обеспечивает граф.
 

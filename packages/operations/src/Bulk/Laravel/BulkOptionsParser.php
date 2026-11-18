@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
-use CoreX\Config\Laravel\ConfigurationValidator;
 use CoreX\Operations\Bulk\Data\BulkOptions;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Laravel\ConfigurationValidator;
 
 /** Immutable durable-bulk activation policy read only by the package registrar. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

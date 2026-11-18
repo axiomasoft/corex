@@ -7,9 +7,9 @@ namespace CoreX\AccessAzguard\Contracts;
 use AzGuard\Kernel\Identity\AccessScope;
 use AzGuard\Kernel\Identity\SubjectRef;
 use CoreX\Access\Data\RecordContext;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\Principal;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Host identity mapping only; permission decisions remain with AzGuard. */
 #[Spi(kind: SpiKind::Implement, since: '1.0')]

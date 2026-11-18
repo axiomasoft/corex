@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Departments\Data;
 
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 
 /**
  * Read-model returned by `DepartmentRepository` implementations.

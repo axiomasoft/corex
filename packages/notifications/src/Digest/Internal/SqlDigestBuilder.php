@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Digest\Internal;
 
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Notifications\Delivery\Data\RecipientReference;
 use CoreX\Notifications\Digest\Contracts\DigestBuilder;
@@ -18,8 +17,11 @@ use CoreX\Scheduling\Data\WakeupWindow;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
+use Packman\Attributes\Internal;
+use Packman\Config\Exceptions\InvalidConfiguration;
 use Psr\Clock\ClockInterface;
 
+#[Internal]
 final readonly class SqlDigestBuilder implements DigestBuilder
 {
     public function __construct(

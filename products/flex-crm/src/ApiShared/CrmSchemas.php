@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Flex\Crm\ApiShared;
 
+use Packman\Attributes\Internal;
+
 /** JSON Schema for the existing bounded operation payloads. */
+#[Internal]
 final class CrmSchemas
 {
     /** @return array<string, mixed> */

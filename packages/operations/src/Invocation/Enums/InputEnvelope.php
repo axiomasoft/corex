@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Invocation\Enums;
 
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 
 /** Input shape; rejecting undeclared fields remains an invariant of dispatch. */
 #[Api(since: '1.0')]

@@ -18,7 +18,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -35,14 +35,14 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
         },
         "CoreX\\Tools\\Contracts\\ToolExecutionGuard": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -56,7 +56,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -97,17 +97,14 @@
                         }
                     ],
                     "return": "CoreX\\Tools\\Data\\ToolResult",
-                    "doc": {
-                        "@param": [
-                            "\\Closure(): \\CoreX\\Tools\\Data\\ToolResult $effect"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Tools\\Contracts\\ToolInvoker": {
             "kind": "interface",
@@ -125,7 +122,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -151,14 +148,14 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
         },
         "CoreX\\Tools\\Contracts\\ToolPolicy": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -172,7 +169,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -201,7 +198,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -236,14 +233,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Tools\\Contracts\\ToolRequestContext": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -259,7 +257,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [],
                     "return": "?string",
@@ -269,21 +267,22 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [],
                     "return": "string",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Tools\\Contracts\\ToolSchemaValidator": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -297,7 +296,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -326,7 +325,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -352,10 +351,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Tools\\Data\\ToolCall": {
             "kind": "class",
@@ -444,78 +444,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "arguments": {
-                    "flags": 1,
-                    "type": "CoreX\\Operations\\Validation\\Data\\JsonObject",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "clientProof": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "code": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "expectedContractHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "operationKey": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "requestId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "toolVersion": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -559,43 +488,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tools\\Data\\ToolDescriptor> $descriptors"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "descriptors": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tools\\Data\\ToolDescriptor> $descriptors"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "revision": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tools\\Data\\ToolDescriptor> $descriptors"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -759,167 +655,15 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "ability": {
-                    "flags": 1,
+            "properties": {},
+            "constants": [
+                {
+                    "name": "SCHEMA_PROFILE",
                     "type": "string",
-                    "readonly": true,
                     "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "availability": {
-                    "flags": 1,
-                    "type": "CoreX\\Data\\Data\\JsonDocument",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "code": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "contractHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "description": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "idempotency": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "inputSchema": {
-                    "flags": 1,
-                    "type": "CoreX\\Operations\\Validation\\Data\\JsonObject",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "module": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "operationRef": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "outputSchema": {
-                    "flags": 1,
-                    "type": "CoreX\\Operations\\Validation\\Data\\JsonObject",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "schemaProfile": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "sideEffect": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "title": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "toolVersion": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "wireName": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
+                    "final": false
                 }
-            },
-            "constants": {
-                "SCHEMA_PROFILE": {
-                    "type": "string",
-                    "value": "'tool-schema/1'",
-                    "visibility": "public",
-                    "final": false,
-                    "doc": []
-                }
-            },
+            ],
             "enum_backing": null,
             "enum_cases": []
         },
@@ -927,22 +671,31 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [],
             "uses": [],
             "doc": [],
-            "methods": [],
-            "properties": [],
+            "methods": {},
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "Committed": "'committed'",
-                "NotExecuted": "'not-executed'",
-                "Unknown": "'unknown'"
-            }
+            "enum_cases": [
+                {
+                    "name": "NotExecuted",
+                    "value": "'not-executed'"
+                },
+                {
+                    "name": "Committed",
+                    "value": "'committed'"
+                },
+                {
+                    "name": "Unknown",
+                    "value": "'unknown'"
+                }
+            ]
         },
         "CoreX\\Tools\\Data\\ToolResult": {
             "kind": "class",
@@ -1022,68 +775,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "errorCode": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "metadata": {
-                    "flags": 1,
-                    "type": "CoreX\\Data\\Data\\JsonDocument",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "operationKey": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "outcome": {
-                    "flags": 1,
-                    "type": "CoreX\\Tools\\Data\\ToolOutcome",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "replayed": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "structuredData": {
-                    "flags": 1,
-                    "type": "?CoreX\\Operations\\Validation\\Data\\JsonObject",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1092,12 +784,12 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Errors\\Contracts\\ErrorCode"
+                "Packman\\Errors\\Contracts\\ErrorCode"
             ],
             "uses": [],
             "doc": [],
@@ -1113,28 +805,67 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "ApprovalInvalid": "'tools.approval_invalid'",
-                "ApprovalRequired": "'tools.approval_required'",
-                "Forbidden": "'tools.forbidden'",
-                "IdempotencyConflict": "'tools.idempotency_conflict'",
-                "InputInvalid": "'tools.input_invalid'",
-                "InternalError": "'tools.internal_error'",
-                "OutputContractFailed": "'tools.output_contract_failed'",
-                "RateLimited": "'tools.rate_limited'",
-                "SchemaLimit": "'tools.schema_limit'",
-                "SchemaUnavailable": "'tools.schema_unavailable'",
-                "ToolRevisionConflict": "'tools.tool_revision_conflict'",
-                "ToolUnavailable": "'tools.tool_unavailable'",
-                "UnknownEffect": "'tools.unknown_effect'"
-            }
+            "enum_cases": [
+                {
+                    "name": "ToolUnavailable",
+                    "value": "'tools.tool_unavailable'"
+                },
+                {
+                    "name": "ToolRevisionConflict",
+                    "value": "'tools.tool_revision_conflict'"
+                },
+                {
+                    "name": "InputInvalid",
+                    "value": "'tools.input_invalid'"
+                },
+                {
+                    "name": "SchemaUnavailable",
+                    "value": "'tools.schema_unavailable'"
+                },
+                {
+                    "name": "SchemaLimit",
+                    "value": "'tools.schema_limit'"
+                },
+                {
+                    "name": "OutputContractFailed",
+                    "value": "'tools.output_contract_failed'"
+                },
+                {
+                    "name": "RateLimited",
+                    "value": "'tools.rate_limited'"
+                },
+                {
+                    "name": "InternalError",
+                    "value": "'tools.internal_error'"
+                },
+                {
+                    "name": "ApprovalRequired",
+                    "value": "'tools.approval_required'"
+                },
+                {
+                    "name": "ApprovalInvalid",
+                    "value": "'tools.approval_invalid'"
+                },
+                {
+                    "name": "Forbidden",
+                    "value": "'tools.forbidden'"
+                },
+                {
+                    "name": "IdempotencyConflict",
+                    "value": "'tools.idempotency_conflict'"
+                },
+                {
+                    "name": "UnknownEffect",
+                    "value": "'tools.unknown_effect'"
+                }
+            ]
         },
         "CoreX\\Tools\\ToolsServiceProvider": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -1157,10 +888,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         }
     }
 }

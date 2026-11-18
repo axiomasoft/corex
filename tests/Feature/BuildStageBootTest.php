@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Tests\Feature;
 
 use CoreX\Config\Data\CoreOptions;
-use CoreX\Config\Exceptions\InvalidConfiguration;
-use CoreX\Config\Laravel\RuntimeConfigGate;
 use CoreX\Notifications\Internal\NotificationsOptions;
 use CoreX\Scheduler\Internal\SchedulerOptions;
 use CoreX\Tests\Golden\GoldenTestCase;
@@ -14,6 +12,8 @@ use CoreX\Workflow\Internal\WorkflowOptions;
 use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Support\Facades\Artisan;
 use Override;
+use Packman\Config\Exceptions\InvalidConfiguration;
+use Packman\Config\Laravel\RuntimeConfigGate;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 
@@ -73,7 +73,7 @@ final class BuildStageBootTest extends GoldenTestCase
         $this->startCommand('queue:work');
         RuntimeConfigGate::assert($this->app);
 
-        self::assertSame(0, Artisan::call('corex:config:validate'));
+        self::assertSame(0, Artisan::call('packman:config:validate'));
         self::assertStringContainsString('WARNING [dangerous-mode-acknowledged] '.self::WORKFLOW_MODE, Artisan::output());
     }
 
@@ -118,7 +118,7 @@ final class BuildStageBootTest extends GoldenTestCase
         $this->declareTenancyHostConfiguration();
         config(['corex-operations.require_physical_tenancy' => false]);
 
-        self::assertSame(0, Artisan::call('corex:config:validate'));
+        self::assertSame(0, Artisan::call('packman:config:validate'));
         self::assertStringContainsString('NOTICE [opt-out] corex-operations.require_physical_tenancy=false', Artisan::output());
     }
 

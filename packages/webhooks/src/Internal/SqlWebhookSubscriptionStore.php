@@ -7,7 +7,6 @@ namespace CoreX\Webhooks\Internal;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Data\Data\DataScope;
-use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
@@ -21,10 +20,13 @@ use DateTimeInterface;
 use Illuminate\Database\Connection;
 use InvalidArgumentException;
 use Override;
+use Packman\Attributes\Internal;
+use Packman\Errors\Enums\ErrorCategory;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
 /** @internal Tenant-local webhook subscription authority. */
+#[Internal]
 final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionStore
 {
     public const int CAP = 100;

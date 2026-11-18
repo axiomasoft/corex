@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Settings\Internal;
 
 use Override;
+use Packman\Attributes\Internal;
 use Packman\Settings\Contracts\SettingDefaultsProviderInterface as SettingDefaultsProvider;
 
 /**
@@ -13,6 +14,7 @@ use Packman\Settings\Contracts\SettingDefaultsProviderInterface as SettingDefaul
  *
  * @internal spec: D10
  */
+#[Internal]
 final class NullSettingDefaultsProvider implements SettingDefaultsProvider
 {
     #[Override]

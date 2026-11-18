@@ -14,7 +14,7 @@ PSR-4 пути внутри монорепозитория владельца. �
 
 | Владелец | Пакеты | Source reference |
 |---|---|---|
-| Packman | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins` | `366fc104f22b388607f77d506ae5e36cd0e99666` |
+| Packman | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `3dcc7d7cb5ad036a642e9ac07cb1843076c9b4eb` |
 | AzGuard | `azguard` | `457eed3a07e0a25eae934fd35f532cde3d69fa86` |
 | Tenant | `tenant`, `tenant-laravel` | `6089b4c3d288b28e1ba8ce7e88f37c4f0a100cbe` |
 | Vaulter | `vaulter-core`, `vaulter-media` | `56de17dfcee26aa047761bca4d1b0ba5f2c2d866` |
@@ -84,6 +84,8 @@ wrapper добавляет `@dev` только достижимым по `requir
 пакеты из остальных optional-интеграций не устанавливаются.
 При `update` PHPStan, strict rules и Larastan получают точные версии из root lock,
 если входят в граф зависимостей пакета; тот же список инструментов использует root CI.
+Packman devtools/testkit также входят в reviewed toolchain; wrapper добавляет их
+точные версии только когда они достижимы, без установки лишних dev-зависимостей.
 
 Рядом с исходным манифестом создаются игнорируемые `.composer-snapshots.json` и
 `.composer-snapshots.lock`. Исходные `composer.json`/`composer.lock` не переписываются;
@@ -114,3 +116,44 @@ Composer-канал автоматически. Проверки consumer fixtur
 проверяют API адаптера и его интеграционные тесты. Перед публикацией CoreX каждый
 используемый source reference должен быть доступен целевой среде; локальный patch
 нужно доставить отдельно или заменить доступным проверенным upstream commit.
+
+## Общие проверки Packman
+
+`packman-devtools` и `packman-testkit` устанавливаются только для разработки.
+`packman.json` перечисляет 21 пакет и `products/flex-crm`; `extra.packman` хранит
+таксономию и error-prefix. `extra.corex` остаётся входом предметных гейтов CoreX.
+Модули с lifecycle сохраняют `type: packman-module` и `extra.packman.module`.
+Локальные профили в `schemas/profiles/` уточняют Composer type и лимит 80 строк
+для модулей и продукта; они не отключают проверки поверхности.
+
+```bash
+scripts/php84 vendor/bin/packman gate
+scripts/php84 vendor/bin/packman php-api --check
+scripts/php84 vendor/bin/packman error-codes --check
+scripts/php84 vendor/bin/packman config-schema --check
+```
+
+Все проверки запускаются последовательно. Архитектурные negative tests временно
+меняют исходники: во время `composer test` нельзя запускать Rector, PHPStan,
+Packman или другой source/API/graph scanner.
+
+Packman пишет `resources/contracts/php-api.json`. CoreX `composer php-api` дополнительно
+проверяет полную типовую границу и справочник публичного API. Error URN использует
+`urn:packman:problem:`; доменные коды CoreX сохраняют собственные префиксы.
+
+В указанном Packman commit table-write gate считает любой `sys_*` внешней системной
+таблицей. Это расходится с каталогом CoreX, где префикс не определяет владельца.
+`scripts/patches/packman-table-ownership.patch` добавляет точное сопоставление
+`gates.table_owners[table]` с текущим Composer-пакетом. Неизвестные таблицы и чужие
+владельцы по-прежнему запрещены; DATA-003 независимо проверяет реальные записи.
+`scripts/patch-packman-devtools.py` применяется через Composer `post-autoload-dump`,
+проверяет source reference и SHA-256 до/после и отказывается менять неизвестный код.
+Среде разработки нужны Python 3 и `patch`; при `--no-scripts` запустите этот скрипт
+явно. В Git хранится только проверяемый patch, никогда `vendor`.
+
+Этот patch должен быть доставлен вместе с CoreX до его принятия владельцем Packman.
+Для обновления Packman повторно проверяют необходимость patch и обе контрольные суммы.
+Все четыре source reference из таблицы должны быть доступны CI через canonical
+GitHub URL либо переданный checkout/bundle. Для каждого локального источника
+добавляйте отдельный `url.file:///.../.insteadOf` в process-local `GIT_CONFIG_COUNT`;
+не меняйте sibling checkout, глобальную конфигурацию Git или Composer source URLs.

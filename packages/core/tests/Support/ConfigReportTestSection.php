@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Testing;
 
-use CoreX\Config\Contracts\ConfigReportSection;
+use Packman\Config\Contracts\ConfigReportSectionInterface as ConfigReportSection;
 
 final class ConfigReportTestSection implements ConfigReportSection
 {

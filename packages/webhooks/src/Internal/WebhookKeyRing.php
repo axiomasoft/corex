@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Internal;
 
-use CoreX\Config\Data\SecretRef;
 use InvalidArgumentException;
 use LogicException;
+use Packman\Attributes\Internal;
+use Packman\Config\Data\SecretRef;
 use SensitiveParameter;
 
+#[Internal]
 final class WebhookKeyRing
 {
     /**

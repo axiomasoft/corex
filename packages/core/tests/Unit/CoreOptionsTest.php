@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\SecretRef;
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Config\Laravel\CoreOptionsParser;
+use Packman\Config\Data\SecretRef;
+use Packman\Config\Exceptions\InvalidConfiguration;
 
 it('resolves settings cache ttl by key existence', function (array $config, ?int $expected): void {
     expect(CoreOptionsParser::fromArray($config)->settingsCacheTtl)->toBe($expected);

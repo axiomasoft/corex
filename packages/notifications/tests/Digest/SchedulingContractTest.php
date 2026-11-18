@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 require_once __DIR__.'/../Support/SchedulingDigestFixtures.php';
 
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Notifications\Digest\Internal\NotificationDigestDueSource;
 use CoreX\Notifications\Digest\Internal\SqlDigestBuilder;
 use CoreX\Notifications\Tests\TestCase;
 use CoreX\Scheduling\Contracts\DueWakeupSource;
 use CoreX\Scheduling\Data\WakeupHandlerDefinition;
 use Illuminate\Support\Facades\DB;
+use Packman\Config\Exceptions\InvalidConfiguration;
 use Psr\Clock\ClockInterface;
 
 uses(TestCase::class);

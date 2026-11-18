@@ -17,9 +17,11 @@ use CoreX\AccessAzguard\Contracts\AccessContextMapper;
 use CoreX\AccessAzguard\Exceptions\ScopeProjectionNotSupported;
 use CoreX\Context\Contracts\Principal;
 use Illuminate\Database\Eloquent\Builder;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Entities\EntityRegistry;
 
 /** @internal AzGuard owns both scalar decisions and exact query filtering. */
+#[Internal]
 final readonly class AzGuardAccessChecker implements AccessChecker, ScopeResolver
 {
     public function __construct(

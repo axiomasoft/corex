@@ -11,7 +11,9 @@ use CoreX\Tasks\Task\Data\EntityReference;
 use CoreX\Tasks\Task\Data\MoveTaskToStageData;
 use CoreX\Tasks\Task\Data\TaskDraft;
 use Illuminate\Auth\Access\AuthorizationException;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class DenyTaskAccess implements TaskAccess
 {
     public function authorizeCreate(TaskDraft $draft, TenantContext $context): void

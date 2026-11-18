@@ -8,8 +8,10 @@ use CoreX\Tenancy\Membership\Exceptions\InboxConflict;
 use CoreX\Tenancy\Membership\Internal\DatabaseValue;
 use CoreX\Tenancy\Membership\Internal\Transport\MembershipTrigger;
 use Illuminate\Database\ConnectionInterface;
+use Packman\Attributes\Internal;
 
 /** @internal Unregistered durable trigger reference; a trigger never grants membership. */
+#[Internal]
 final readonly class DurableInbox
 {
     private const string ReferenceTable = 'membership_trigger_inbox';

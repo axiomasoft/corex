@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Data\AccountRef;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Physical DB-per-account drop/export (B-11 §5.1/§7.3, D13/AC-7). Lives in

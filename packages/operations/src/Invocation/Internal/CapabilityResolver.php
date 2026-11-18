@@ -17,9 +17,11 @@ use CoreX\Operations\Versioning\Contracts\ApiProfiles as ApiProfileFactory;
 use CoreX\Operations\Versioning\Data\ApiProfile;
 use CoreX\Operations\Versioning\Data\EffectiveCapability;
 use Illuminate\Http\Request;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 /** Live capability view. Payload tenant, workspace and actor fields are ignored. */
+#[Internal]
 final readonly class CapabilityResolver implements EffectiveCapabilities
 {
     public function __construct(

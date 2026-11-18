@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Enums;
 
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 
 /**
  * Row-visibility scope compiled from the role matrix (B-11 §5.5). Several

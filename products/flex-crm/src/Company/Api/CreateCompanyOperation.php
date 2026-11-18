@@ -10,7 +10,9 @@ use Flex\Crm\ApiShared\CrmIdentifier;
 use Flex\Crm\Company\Actions\CreateCompany;
 use Flex\Crm\Company\Data\CompanyData;
 use Flex\Crm\Internal\Value;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class CreateCompanyOperation implements OperationHandler
 {
     public function __construct(private CreateCompany $createCompany) {}

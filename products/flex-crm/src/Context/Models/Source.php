@@ -7,7 +7,9 @@ namespace Flex\Crm\Context\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Override;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class Source extends Model
 {
     use HasUuids;

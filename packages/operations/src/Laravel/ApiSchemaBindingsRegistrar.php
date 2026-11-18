@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Packman\Foundation\Contracts\PackageRegistrar;
 
 /** Binds the explicit budget and tenant schema identities. */

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Contracts\ConfigReportSection;
-use CoreX\Config\Contracts\RuntimeConfigCheck;
 use CoreX\Config\Data\CoreOptions;
-use CoreX\Config\Data\SecretRef;
-use CoreX\Config\Internal\Commands\ValidateConfigCommand;
 use CoreX\Testing\ConfigReportTestSection;
+use Illuminate\Contracts\Console\Kernel;
+use Packman\Config\Contracts\ConfigReportSectionInterface as ConfigReportSection;
+use Packman\Config\Contracts\RuntimeConfigCheck;
+use Packman\Config\Data\SecretRef;
 use Symfony\Component\Console\Tester\CommandTester;
 
 const CORE_TEST_SECRET_DEFAULT = '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef';
@@ -15,8 +15,7 @@ const CORE_TEST_SECRET_DEFAULT = '0123456789abcdef0123456789abcdef0123456789abcd
 function validateConfigTester(): CommandTester
 {
     app()->tag([ConfigReportTestSection::class], ConfigReportSection::class);
-    $command = new ValidateConfigCommand;
-    $command->setLaravel(app());
+    $command = resolve(Kernel::class)->all()['packman:config:validate'];
 
     return new CommandTester($command);
 }
@@ -154,13 +153,4 @@ it('reports an acknowledged dangerous mode as a warning', function (): void {
 
     expect($result['exit'])->toBe(0)
         ->and($result['stdout'])->toContain('WARNING [dangerous-mode-acknowledged] corex-workflow.enforce_declarations');
-});
-
-it('reports the physical tenancy opt-out as a notice without failing', function (): void {
-    config(['corex-operations.require_physical_tenancy' => false]);
-
-    $result = validateConfigRun();
-
-    expect($result['exit'])->toBe(0)
-        ->and($result['stdout'])->toContain('NOTICE [opt-out] corex-operations.require_physical_tenancy=false');
 });

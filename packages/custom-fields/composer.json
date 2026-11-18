@@ -1,7 +1,7 @@
 {
     "name": "axiomasoft/corex-custom-fields",
     "description": "Typed attribute ports and safe schema-operation bridge for CoreX.",
-    "type": "packman-module",
+    "type": "library",
     "license": "MIT",
     "require": {
         "ext-filter": "*",
@@ -45,6 +45,20 @@
         },
         "branch-alias": {
             "dev-main": "1.0.x-dev"
+        },
+        "packman": {
+            "schema-version": 1,
+            "package-type": "capability",
+            "stability": "stable",
+            "profile": "laravel-package",
+            "error-prefix": "custom-fields",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Errors",
+                "Exceptions",
+                "Internal"
+            ]
         }
     },
     "repositories": [

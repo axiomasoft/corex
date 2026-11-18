@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
-use CoreX\Config\Contracts\RuntimeConfigCheck;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Contracts\TenantContextRestorer;
@@ -29,6 +26,9 @@ use Illuminate\Database\DatabaseManager;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Queue\QueueManager;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Contracts\RuntimeConfigCheck;
 use Packman\Foundation\Contracts\PackageRegistrar;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]

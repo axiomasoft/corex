@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Membership\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Tenancy\Membership\Exceptions\CentralProtocolViolation;
 use CoreX\Tenancy\Membership\Internal\Transport\CentralValue;
 use DateTimeImmutable;
+use Packman\Attributes\Api;
 
 #[Api(since: '1.0')]
 final readonly class RevokeMembershipReceipt

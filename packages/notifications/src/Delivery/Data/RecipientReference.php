@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Delivery\Data;
 
-use CoreX\Attributes\Api;
 use InvalidArgumentException;
+use Packman\Attributes\Api;
 
 #[Api(since: '1.0')]
 final readonly class RecipientReference

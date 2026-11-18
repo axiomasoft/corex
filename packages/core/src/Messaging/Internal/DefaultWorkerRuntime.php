@@ -8,6 +8,7 @@ use Closure;
 use CoreX\Messaging\Contracts\WorkerRuntime;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Attributes\Internal;
 
 /**
  * Production `WorkerRuntime`: Octane detection via `app()->bound(...)` on the
@@ -18,6 +19,7 @@ use Override;
  *
  * @internal spec: Implementation Rules, P1.24
  */
+#[Internal]
 final readonly class DefaultWorkerRuntime implements WorkerRuntime
 {
     /** @param  Closure(): Application  $application  resolves the running application at call time. */

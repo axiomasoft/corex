@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Media\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Media\Data\UploadFile;
 use CoreX\Media\Internal\Support\MediaOptions;
 use Illuminate\Http\UploadedFile;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Captures the framework upload before it enters the scalar media command contract. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

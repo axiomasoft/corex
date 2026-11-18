@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Internal;
 
-use CoreX\Config\Contracts\RuntimeConfigCheck;
 use Override;
+use Packman\Attributes\Internal;
+use Packman\Config\Contracts\RuntimeConfigCheck;
 
 /** The idempotency store derives its key hash from `app.key`; production must not start without it. */
+#[Internal]
 final readonly class AppKeyCheck implements RuntimeConfigCheck
 {
     public function __construct(private mixed $appKey) {}

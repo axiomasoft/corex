@@ -22,7 +22,9 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class UpdateTask implements UpdateTaskCommand
 {
     public function __construct(

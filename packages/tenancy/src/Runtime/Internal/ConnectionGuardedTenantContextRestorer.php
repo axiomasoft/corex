@@ -10,6 +10,7 @@ use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Data\Data\DataScope;
 use Illuminate\Database\DatabaseManager;
 use Override;
+use Packman\Attributes\Internal;
 
 /**
  * Semantic restore stays with the core-owned {@see TenantContextRestorer} binding.
@@ -18,6 +19,7 @@ use Override;
  *
  * @internal
  */
+#[Internal]
 final readonly class ConnectionGuardedTenantContextRestorer implements TenantContextRestorer
 {
     public function __construct(

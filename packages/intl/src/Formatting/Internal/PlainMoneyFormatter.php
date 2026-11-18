@@ -13,8 +13,10 @@ use CoreX\Intl\Locale\Data\LocaleResolution;
 use Locale;
 use NumberFormatter;
 use Override;
+use Packman\Attributes\Internal;
 use Throwable;
 
+#[Internal]
 final readonly class PlainMoneyFormatter implements MoneyFormatter
 {
     public function __construct(

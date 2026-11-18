@@ -10,8 +10,10 @@ use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use DateTimeImmutable;
+use Packman\Attributes\Internal;
 
 /** @internal Typed bulk result projection. It does not read transfer tables itself. */
+#[Internal]
 final readonly class BulkResultReader
 {
     /**

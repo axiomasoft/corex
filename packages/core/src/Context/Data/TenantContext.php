@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Data;
 
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 use Packman\Context\Contracts\ContextScopeInterface;
 
 /**

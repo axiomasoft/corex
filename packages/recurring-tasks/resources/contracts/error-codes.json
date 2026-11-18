@@ -1,0 +1,39 @@
+{
+    "schema": "packman-error-codes/1",
+    "package": "axiomasoft/corex-recurring-tasks",
+    "codes": [
+        {
+            "package": "axiomasoft/corex-recurring-tasks",
+            "enum": "CoreX\\RecurringTasks\\Errors\\Enums\\RecurringTasksErrorCode",
+            "case": "MaterializationConflict",
+            "code": "recurring-tasks.materialization_conflict",
+            "type": "urn:packman:problem:recurring-tasks.materialization_conflict",
+            "status": 409,
+            "title": "Materialization conflict.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex-recurring-tasks",
+            "enum": "CoreX\\RecurringTasks\\Errors\\Enums\\RecurringTasksErrorCode",
+            "case": "StaleMaterialization",
+            "code": "recurring-tasks.stale_materialization",
+            "type": "urn:packman:problem:recurring-tasks.stale_materialization",
+            "status": 409,
+            "title": "Stale materialization.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex-recurring-tasks",
+            "enum": "CoreX\\RecurringTasks\\Errors\\Enums\\RecurringTasksErrorCode",
+            "case": "UnsupportedMaterialization",
+            "code": "recurring-tasks.unsupported_materialization",
+            "type": "urn:packman:problem:recurring-tasks.unsupported_materialization",
+            "status": 422,
+            "title": "Unsupported materialization.",
+            "retryable": false,
+            "category": "unsupported"
+        }
+    ]
+}

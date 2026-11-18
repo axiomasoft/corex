@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\SearchMeilisearch\Internal\MeilisearchOptions;
+use Packman\Config\Exceptions\InvalidConfiguration;
 
 it('passes on an empty environment because presence is a runtime requirement of the driver', function (): void {
     $options = MeilisearchOptions::fromArray([]);

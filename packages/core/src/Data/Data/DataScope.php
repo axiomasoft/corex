@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Data\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Messaging\Contracts\DurablePayload;
 use InvalidArgumentException;
+use Packman\Attributes\Api;
 
 /**
  * Область данных, пересекающая durable-границу: очередь, wakeup-запрос, чекпойнт

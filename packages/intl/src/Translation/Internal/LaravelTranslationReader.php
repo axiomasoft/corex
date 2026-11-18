@@ -11,7 +11,9 @@ use CoreX\Intl\Translation\Data\LocalizedText;
 use CoreX\Intl\Translation\Data\TranslationResult;
 use Illuminate\Contracts\Translation\Translator;
 use Override;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class LaravelTranslationReader implements TranslationReader
 {
     public function __construct(

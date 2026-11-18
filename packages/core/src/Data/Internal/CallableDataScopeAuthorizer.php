@@ -8,7 +8,9 @@ use Closure;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\DataScopeAccessDecision;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class CallableDataScopeAuthorizer implements DataScopeAuthorizer
 {
     /**

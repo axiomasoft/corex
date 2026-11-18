@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel\Support;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use Illuminate\Container\Container;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Framework-created Eloquent models resolve their central configuration through this bridge. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

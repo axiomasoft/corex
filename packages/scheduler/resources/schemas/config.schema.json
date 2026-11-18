@@ -1,0 +1,28 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "axiomasoft/corex-scheduler configuration",
+    "type": "object",
+    "properties": {
+        "corex-scheduler": {
+            "type": "object",
+            "properties": {
+                "handlers": {
+                    "type": [
+                        "array",
+                        "object"
+                    ]
+                },
+                "lease_seconds": {
+                    "type": "integer",
+                    "default": 60
+                },
+                "max_attempts": {
+                    "type": "integer",
+                    "default": 5
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

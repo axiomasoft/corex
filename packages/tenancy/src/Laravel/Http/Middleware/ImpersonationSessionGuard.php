@@ -6,13 +6,13 @@ namespace CoreX\Tenancy\Laravel\Http\Middleware;
 
 use Carbon\CarbonImmutable;
 use Closure;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use RuntimeException;
 
 /**

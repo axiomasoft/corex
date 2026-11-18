@@ -13,6 +13,7 @@ use DateTimeImmutable;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use UnexpectedValueException;
 
@@ -25,6 +26,7 @@ use UnexpectedValueException;
  *
  * @internal
  */
+#[Internal]
 final readonly class WebhookRetention
 {
     public const int DefaultBodySeconds = 604_800;

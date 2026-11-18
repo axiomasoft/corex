@@ -12,6 +12,7 @@ use Illuminate\Cache\Lock;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Contracts\Cache\Repository;
+use Packman\Attributes\Internal;
 use UnexpectedValueException;
 
 /**
@@ -22,6 +23,7 @@ use UnexpectedValueException;
  * relying on a cache-store prefix bootstrapper: `axiomasoft/corex-access` runs in boxed installs too,
  * where no such bootstrapper is wired.
  */
+#[Internal]
 final readonly class ScopeMapVersion implements ScopeMapVersions
 {
     public function __construct(

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\ImportExport;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\ImportExport\Internal\ImportExportBindings;
 use CoreX\ImportExport\Internal\ImportExportOptions;
 use CoreX\ImportExport\Internal\ImportExportSchemaSets;
@@ -13,6 +11,8 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Packman\Schema\Contracts\Migration\SchemaSetProvider;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]

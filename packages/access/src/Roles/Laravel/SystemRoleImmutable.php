@@ -6,10 +6,10 @@ namespace CoreX\Access\Roles\Laravel;
 
 use Closure;
 use CoreX\Access\Roles\Internal\SystemRoleMutationScope;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Container\Container;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * @corex-model-extension Exact Role/RoleMatrixRow saving(), deleting(), affectsSystemRole() hooks.

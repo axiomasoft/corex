@@ -7,8 +7,10 @@ namespace CoreX\Notifications\Digest\Internal;
 use Closure;
 use CoreX\Scheduling\Contracts\DueWakeupHandler;
 use CoreX\Scheduling\Data\WakeupDelivery;
+use Packman\Attributes\Internal;
 use RuntimeException;
 
+#[Internal]
 final readonly class DigestWakeupAdapter implements DueWakeupHandler
 {
     /** @param Closure(DigestTick):void $handle */

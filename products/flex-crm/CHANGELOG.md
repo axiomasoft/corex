@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — Packman governance
+
+- Declare product ownership and lifecycle metadata in `extra.packman`, export the module/provider SPI, and explicitly classify implementation types as Internal. Compose the module schema through Packman `WithSchema` / `OwnsSchema` and use shared configuration/error contracts.
+
 ## Unreleased — Packman runtime
 
 - Breaking: module declarations and schema registrations use Packman contracts directly; module lifecycle and schema execution are owned by Packman.

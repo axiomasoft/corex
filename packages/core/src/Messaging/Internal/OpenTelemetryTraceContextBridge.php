@@ -8,11 +8,13 @@ use Closure;
 use CoreX\Messaging\Contracts\TraceContextBridge;
 use CoreX\Observability\Contracts\TracePropagation as OpenTelemetryBridge;
 use CoreX\Observability\Data\OperationContext;
+use Packman\Attributes\Internal;
 
 /**
  * Messaging binding for the Foundation OpenTelemetry adapter.
  * SDK names stay in {@see OpenTelemetryBridge}.
  */
+#[Internal]
 final readonly class OpenTelemetryTraceContextBridge implements TraceContextBridge
 {
     public function __construct(

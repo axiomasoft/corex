@@ -9,6 +9,7 @@ use CoreX\Tenancy\Identity\Laravel\UserRelations;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Packman\Attributes\Internal;
 
 /**
  * `wsp_workspace_members` — fast admission flag for the resolver (403
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property CarbonImmutable $created_at
  * @property CarbonImmutable $updated_at
  */
+#[Internal]
 final class WorkspaceMember extends Model
 {
     use HasUuids;

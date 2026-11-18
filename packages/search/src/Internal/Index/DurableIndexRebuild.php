@@ -7,8 +7,10 @@ namespace CoreX\Search\Internal\Index;
 use CoreX\Search\Internal\Value;
 use Illuminate\Database\ConnectionInterface;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
+#[Internal]
 final readonly class DurableIndexRebuild
 {
     public function __construct(private ConnectionInterface $connection, private readonly ClockInterface $clock) {}

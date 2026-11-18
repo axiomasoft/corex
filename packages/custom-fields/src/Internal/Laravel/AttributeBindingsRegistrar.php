@@ -12,9 +12,11 @@ use CoreX\CustomFields\Internal\Query\SchemaAttributeFilter;
 use CoreX\CustomFields\Internal\UnavailableAttributes;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Attributes\Internal;
 use Packman\Foundation\Contracts\PackageRegistrar;
 
 /** @internal Scoped attribute services of the package. */
+#[Internal]
 final class AttributeBindingsRegistrar implements PackageRegistrar
 {
     #[Override]

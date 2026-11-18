@@ -15,8 +15,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Packman\Attributes\Internal;
 
 /** Delegates synchronous, idempotent materialization to the physical owner. */
+#[Internal]
 final class CreateDatabaseFromTemplate implements ShouldQueue
 {
     use Dispatchable;

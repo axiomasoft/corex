@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Laravel\Http\Middleware;
 
 use Closure;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Tenancy\Account\Contracts\AccountRead;
@@ -14,6 +12,8 @@ use CoreX\Tenancy\Laravel\Support\StatusGatePolicy;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * B-11 §5.1 access rules, status read from the current {@see AccountRef}; the owner identity is

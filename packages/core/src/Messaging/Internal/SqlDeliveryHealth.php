@@ -8,8 +8,10 @@ use CoreX\Messaging\Data\DeliveryHealth;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\ConnectionInterface;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
+#[Internal]
 final readonly class SqlDeliveryHealth
 {
     public function __construct(

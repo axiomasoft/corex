@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Data;
 
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 
 /**
  * Contextual override key for the role matrix (pipeline/stage, B-11 §5.5) —

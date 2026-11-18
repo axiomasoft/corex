@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Foundation\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Audit\Internal\ModuleAuditHook;
 use CoreX\Foundation\Internal\PackmanActorResolver;
 use CoreX\Foundation\Internal\PackmanContextResolver;
 use CoreX\Foundation\Internal\PackmanFeatureFlags;
 use Illuminate\Contracts\Foundation\Application;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Packman\Context\Contracts\ActorResolverInterface;
 use Packman\Context\Contracts\ContextResolverInterface;
 use Packman\Features\Contracts\FeatureFlagsInterface;

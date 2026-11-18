@@ -10,9 +10,11 @@ use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Attributes\Internal;
 use Packman\Foundation\Contracts\PackageRegistrar;
 
 /** @internal Composition of the package's message contract and translator. */
+#[Internal]
 final class AttributeMessagingRegistrar implements PackageRegistrar
 {
     #[Override]

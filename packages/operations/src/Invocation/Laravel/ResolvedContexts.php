@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Invocation\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\Principal;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Internal\ResolvedContext;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Build the engine's request context through its public contract. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

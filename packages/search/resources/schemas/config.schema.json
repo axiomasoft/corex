@@ -1,0 +1,39 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "axiomasoft/corex-search configuration",
+    "type": "object",
+    "properties": {
+        "corex-search": {
+            "type": "object",
+            "properties": {
+                "cursor_secret": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null
+                },
+                "driver": {
+                    "type": "string",
+                    "default": "null"
+                },
+                "postgres": {
+                    "type": "object",
+                    "properties": {
+                        "scan_budget": {
+                            "type": "integer",
+                            "default": 1000
+                        },
+                        "text_search_config": {
+                            "type": "string",
+                            "default": "simple"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

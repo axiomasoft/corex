@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\ImportExport\Data;
 
-use CoreX\Attributes\Api;
 use DateTimeImmutable;
 use InvalidArgumentException;
+use Packman\Attributes\Api;
 
 /** @phpstan-import-type JsonMap from SourceRow */
 #[Api(since: '1.0')]

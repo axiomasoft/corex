@@ -10,6 +10,7 @@ use CoreX\Tenancy\Workspace\Exceptions\InvitationNotAcceptableException;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Packman\Attributes\Internal;
 
 /**
  * `wsp_invitations` — invitation into a workspace (or the account, when
@@ -29,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property CarbonImmutable $created_at
  * @property CarbonImmutable $updated_at
  */
+#[Internal]
 final class Invitation extends Model
 {
     use HasUuids;

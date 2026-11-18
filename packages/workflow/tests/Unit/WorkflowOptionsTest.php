@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Config\Laravel\CoreOptionsParser;
 use CoreX\Workflow\Internal\DangerousModesCheck;
 use CoreX\Workflow\Internal\WorkflowOptions;
+use Packman\Config\Exceptions\InvalidConfiguration;
 
 it('passes on an empty environment with the shipped default', function (): void {
     expect(WorkflowOptions::fromArray([])->enforceDeclarations)->toBeTrue()

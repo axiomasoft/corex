@@ -1,15 +1,16 @@
 {
     "name": "axiomasoft/corex-import-export",
     "description": "Bounded CSV/NDJSON import and export of application records for CoreX.",
-    "type": "packman-module",
+    "type": "library",
     "license": "MIT",
     "require": {
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/packman": "^0.1@dev",
+        "axiomasoft/packman-schema": "^0.1@dev",
         "illuminate/database": "^13.0",
         "illuminate/support": "^13.0",
-        "psr/clock": "^1.0",
-        "axiomasoft/packman-schema": "^0.1@dev"
+        "psr/clock": "^1.0"
     },
     "autoload": {
         "psr-4": {
@@ -34,6 +35,19 @@
         },
         "branch-alias": {
             "dev-main": "1.0.x-dev"
+        },
+        "packman": {
+            "schema-version": 1,
+            "package-type": "capability",
+            "stability": "stable",
+            "profile": "laravel-package",
+            "error-prefix": "import-export",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Exceptions",
+                "Internal"
+            ]
         }
     },
     "repositories": [

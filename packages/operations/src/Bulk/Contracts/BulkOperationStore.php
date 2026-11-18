@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Data\Data\DataScope;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface BulkOperationStore

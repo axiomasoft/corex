@@ -5,10 +5,10 @@ declare(strict_types=1);
 require_once __DIR__.'/../Support/SchedulingDigestFixtures.php';
 require_once __DIR__.'/../../../scheduler/tests/Support/PackageBridge.php';
 
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Notifications\Digest\Internal\DigestWakeupAdapter;
 use CoreX\Notifications\Tests\EnabledSchedulingCase;
 use CoreX\Scheduling\Contracts\WakeupScheduler;
+use Packman\Config\Exceptions\InvalidConfiguration;
 
 uses(EnabledSchedulingCase::class);
 

@@ -7,6 +7,7 @@ namespace CoreX\Tenancy\Authentication\Internal\Oidc;
 use CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Http\Client\Factory as HttpFactory;
+use Packman\Attributes\Internal;
 
 /**
  * `GET {issuer}/.well-known/openid-configuration` (D123/D129 — endpoints
@@ -17,6 +18,7 @@ use Illuminate\Http\Client\Factory as HttpFactory;
  *
  * @internal
  */
+#[Internal]
 final readonly class OidcDiscovery
 {
     private const string CACHE_KEY_PREFIX = 'corex_tenancy_oidc_discovery:';

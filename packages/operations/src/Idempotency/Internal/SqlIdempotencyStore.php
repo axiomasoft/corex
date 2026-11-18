@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Idempotency\Internal;
 
-use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
 use CoreX\Operations\Idempotency\Data\IdempotencyAttempt;
@@ -17,10 +16,13 @@ use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Override;
+use Packman\Attributes\Internal;
+use Packman\Config\Data\SecretRef;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
 /** @internal */
+#[Internal]
 final readonly class SqlIdempotencyStore implements IdempotencyStore
 {
     private const string Table = 'sys_api_idempotency';

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Provisioning\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\ProvisionParams;
 use CoreX\Tenancy\Provisioning\Data\AccountArchive;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Required host adapter to the single physical resource owner (for example tenant-postgres).

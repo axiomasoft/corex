@@ -6,9 +6,11 @@ namespace CoreX\Tenancy\Membership\Internal\Transport;
 
 use CoreX\Tenancy\Membership\Exceptions\CentralProtocolViolation;
 use DateTimeImmutable;
+use Packman\Attributes\Internal;
 use Throwable;
 
 /** @internal */
+#[Internal]
 final class CentralValue
 {
     public static function uuid(string $value, string $field): string

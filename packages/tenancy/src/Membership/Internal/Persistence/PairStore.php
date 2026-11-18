@@ -11,8 +11,10 @@ use CoreX\Tenancy\Membership\Exceptions\PairStoreViolation;
 use CoreX\Tenancy\Membership\Internal\DatabaseValue;
 use CoreX\Tenancy\Membership\Internal\Transport\Value;
 use Illuminate\Database\ConnectionInterface;
+use Packman\Attributes\Internal;
 
 /** @internal Disposable PostgreSQL reference store; it is deliberately unregistered. */
+#[Internal]
 final readonly class PairStore
 {
     private const string ReferenceTable = 'membership_pair_references';

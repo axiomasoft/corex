@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\DomainTrust\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\DomainTrust\Internal\Models\Domain;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * @corex-model-extension Exact Domain Eloquent relationship composition.
@@ -19,7 +19,7 @@ final class DomainRelations
 {
     /** @template TModel of Model
      * @param  TModel  $model
-     * @return HasMany<Domain, TModel>
+     * @return HasMany<covariant Model, TModel>
      */
     public static function hasMany(Model $model, ?string $foreignKey = null, ?string $localKey = null): HasMany
     {

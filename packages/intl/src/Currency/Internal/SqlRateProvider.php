@@ -11,7 +11,9 @@ use DateTimeImmutable;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 use Override;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class SqlRateProvider implements RateProvider
 {
     public function __construct(

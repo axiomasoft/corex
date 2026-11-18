@@ -8,9 +8,11 @@ use Closure;
 use CoreX\Scheduling\Contracts\DueWakeupHandler;
 use CoreX\Scheduling\Data\WakeupHandlerDefinition;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 use Packman\Modules\Data\Compiler\ExtensionStamp;
 use RuntimeException;
 
+#[Internal]
 final readonly class WakeupHandlerRegistry
 {
     public const string Schema = 'wakeup-payload/2';

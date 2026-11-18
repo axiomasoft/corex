@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use Illuminate\Database\ConnectionInterface;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Explicit consumer-owned cleanup; inbox marks are otherwise retained indefinitely. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

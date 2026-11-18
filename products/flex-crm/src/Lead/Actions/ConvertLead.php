@@ -20,12 +20,14 @@ use Flex\Crm\Lead\Models\Lead;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Packman\Attributes\Internal;
 
 /**
  * Converts a lead into a Contact (+ optional Company, + optional Deal in the
  * given pipeline). Composite use-case: composes the create-* Actions inside one
  * transaction rather than via an orchestration service.
  */
+#[Internal]
 final readonly class ConvertLead
 {
     public function __construct(

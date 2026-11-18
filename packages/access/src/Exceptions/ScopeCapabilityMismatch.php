@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Access\Exceptions;
 
 use CoreX\Access\Errors\Enums\AccessErrorCode;
-use CoreX\Attributes\Api;
-use CoreX\Errors\Data\ErrorDescriptor;
-use CoreX\Errors\Enums\ErrorCategory;
-use CoreX\Errors\Exceptions\CodedException;
+use Packman\Attributes\Api;
+use Packman\Errors\Data\ErrorDescriptor;
+use Packman\Errors\Enums\ErrorCategory;
+use Packman\Errors\Exceptions\CodedException;
 
 /**
  * An entity's matrix row names a scope (own/dept/dept_tree/workspace) whose

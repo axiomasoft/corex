@@ -10,6 +10,7 @@ use CoreX\Messaging\Contracts\PubSub;
 use CoreX\Messaging\Contracts\WorkerRuntime;
 use Illuminate\Contracts\Redis\Factory as RedisFactory;
 use Override;
+use Packman\Attributes\Internal;
 
 /**
  * Cloud-default driver — `illuminate/redis` PUBLISH/SUBSCRIBE. Never
@@ -21,6 +22,7 @@ use Override;
  *
  * @internal spec: B-10 §6.1, D44
  */
+#[Internal]
 final readonly class RedisPubSub implements PubSub
 {
     public function __construct(

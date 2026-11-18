@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — Packman governance
+
+- Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.
+- Describe module schema ownership through Packman `WithSchema` / `OwnsSchema`; the existing provider remains the registration boundary.
+
+
 ## Unreleased — package boundaries
 
 - Breaking before release: Rename the package to `axiomasoft/corex-recurring-tasks`, namespace to `CoreX\RecurringTasks`, provider to `RecurringTasksServiceProvider`, config and error codes to `recurring-tasks`. The package materializes recurrence occurrences into tasks; workflow capture remains a separate integration.

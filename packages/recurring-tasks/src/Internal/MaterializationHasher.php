@@ -9,7 +9,9 @@ use CoreX\RecurringTasks\Data\MaterializationWindow;
 use CoreX\RecurringTasks\Data\SeriesReference;
 use CoreX\RecurringTasks\Exceptions\StaleMaterialization;
 use CoreX\RecurringTasks\Exceptions\UnsupportedMaterialization;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class MaterializationHasher
 {
     public const string HANDLER_VERSION = 'task-materialization/1';

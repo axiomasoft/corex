@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Digest\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Notifications\Delivery\Data\RecipientReference;
+use Packman\Attributes\Api;
 
 #[Api(since: '1.0')]
 final readonly class DigestRef

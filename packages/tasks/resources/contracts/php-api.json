@@ -4,7 +4,7 @@
     "symbols": {
         "CoreX\\Tasks\\Access\\Contracts\\TaskAccess": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -18,7 +18,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -47,7 +47,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -76,7 +76,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -111,14 +111,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Tasks\\Access\\Contracts\\TaskModuleContext": {
             "kind": "interface",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -132,21 +133,22 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [],
                     "return": "CoreX\\Context\\Data\\TenantContext",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Tasks\\Access\\Contracts\\TaskMutationAccess": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -160,7 +162,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -198,7 +200,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -233,14 +235,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Tasks\\Access\\Contracts\\TaskPlanningAccess": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -254,7 +257,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -298,10 +301,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Tasks\\Access\\Exceptions\\TasksModuleDisabled": {
             "kind": "class",
@@ -314,7 +318,7 @@
                 "DomainException"
             ],
             "implements": [
-                "CoreX\\Errors\\Contracts\\DescribesError"
+                "Packman\\Errors\\Contracts\\DescribesError"
             ],
             "uses": [],
             "doc": [],
@@ -326,7 +330,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                    "return": "Packman\\Errors\\Data\\ErrorDescriptor",
                     "doc": []
                 },
                 "forCurrentAccount": {
@@ -336,11 +340,11 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "self(CoreX\\Tasks\\Access\\Exceptions\\TasksModuleDisabled)",
+                    "return": "self",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -349,12 +353,12 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Errors\\Contracts\\ErrorCode"
+                "Packman\\Errors\\Contracts\\ErrorCode"
             ],
             "uses": [],
             "doc": [],
@@ -370,18 +374,88 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "InvalidPlanningDraft": "'tasks.invalid_planning_draft'",
-                "PlanningConflict": "'tasks.planning_conflict'",
-                "TasksModuleDisabled": "'tasks.tasks_module_disabled'"
-            }
+            "enum_cases": [
+                {
+                    "name": "InvalidPlanningDraft",
+                    "value": "'tasks.invalid_planning_draft'"
+                },
+                {
+                    "name": "PlanningConflict",
+                    "value": "'tasks.planning_conflict'"
+                },
+                {
+                    "name": "TasksModuleDisabled",
+                    "value": "'tasks.tasks_module_disabled'"
+                }
+            ]
+        },
+        "CoreX\\Tasks\\Laravel\\TasksRegistrar": {
+            "kind": "class",
+            "layer": "spi",
+            "since": "1.0",
+            "final": true,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [
+                "Packman\\Foundation\\Contracts\\PackageRegistrar"
+            ],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "boot": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "app",
+                            "type": "Illuminate\\Contracts\\Foundation\\Application",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "void",
+                    "doc": []
+                },
+                "register": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "app",
+                            "type": "Illuminate\\Contracts\\Foundation\\Application",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "void",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Tasks\\Planning\\Contracts\\TaskOperationReceipts": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -395,7 +469,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -424,7 +498,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -483,21 +557,18 @@
                         }
                     ],
                     "return": "void",
-                    "doc": {
-                        "@param": [
-                            "array<string, mixed> $resultRef"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Tasks\\Planning\\Contracts\\TaskPlanningCommand": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -511,7 +582,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -540,7 +611,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -569,7 +640,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -595,31 +666,41 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Tasks\\Planning\\Data\\PlanningOperation": {
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [],
             "uses": [],
             "doc": [],
-            "methods": [],
-            "properties": [],
+            "methods": {},
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "CreateProject": "'createProject'",
-                "CreateSprint": "'createSprint'",
-                "RecordTime": "'recordTime'"
-            }
+            "enum_cases": [
+                {
+                    "name": "CreateProject",
+                    "value": "'createProject'"
+                },
+                {
+                    "name": "CreateSprint",
+                    "value": "'createSprint'"
+                },
+                {
+                    "name": "RecordTime",
+                    "value": "'recordTime'"
+                }
+            ]
         },
         "CoreX\\Tasks\\Planning\\Data\\PlanningSubject": {
             "kind": "class",
@@ -681,48 +762,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "projectId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "taskId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "userId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "workspaceId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -769,28 +809,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "payloadHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "requestKey": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -799,24 +818,39 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [],
             "uses": [],
             "doc": [],
-            "methods": [],
-            "properties": [],
+            "methods": {},
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "CompletionCapture": "'completionCapture'",
-                "CreateProject": "'createProject'",
-                "CreateSprint": "'createSprint'",
-                "Materialize": "'materialize'",
-                "RecordTime": "'recordTime'"
-            }
+            "enum_cases": [
+                {
+                    "name": "CreateProject",
+                    "value": "'createProject'"
+                },
+                {
+                    "name": "CreateSprint",
+                    "value": "'createSprint'"
+                },
+                {
+                    "name": "RecordTime",
+                    "value": "'recordTime'"
+                },
+                {
+                    "name": "Materialize",
+                    "value": "'materialize'"
+                },
+                {
+                    "name": "CompletionCapture",
+                    "value": "'completionCapture'"
+                }
+            ]
         },
         "CoreX\\Tasks\\Planning\\Data\\TaskOperationReceipt": {
             "kind": "class",
@@ -869,38 +903,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "payloadHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "requestKey": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "resultRef": {
-                    "flags": 1,
-                    "type": "CoreX\\Data\\Data\\JsonDocument",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -916,7 +919,7 @@
                 "DomainException"
             ],
             "implements": [
-                "CoreX\\Errors\\Contracts\\DescribesError"
+                "Packman\\Errors\\Contracts\\DescribesError"
             ],
             "uses": [],
             "doc": [],
@@ -928,7 +931,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                    "return": "Packman\\Errors\\Data\\ErrorDescriptor",
                     "doc": []
                 },
                 "forField": {
@@ -957,11 +960,11 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\Tasks\\Planning\\Exceptions\\InvalidPlanningDraft)",
+                    "return": "self",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -977,7 +980,7 @@
                 "DomainException"
             ],
             "implements": [
-                "CoreX\\Errors\\Contracts\\DescribesError"
+                "Packman\\Errors\\Contracts\\DescribesError"
             ],
             "uses": [],
             "doc": [],
@@ -989,7 +992,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                    "return": "Packman\\Errors\\Data\\ErrorDescriptor",
                     "doc": []
                 },
                 "forRequestKey": {
@@ -1009,18 +1012,18 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\Tasks\\Planning\\Exceptions\\PlanningConflict)",
+                    "return": "self",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
         },
         "CoreX\\Tasks\\Planning\\Laravel\\PlanningCommand": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": true,
@@ -1158,10 +1161,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Tasks\\Project\\Contracts\\ProjectRead": {
             "kind": "interface",
@@ -1179,7 +1183,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -1205,7 +1209,7 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1261,38 +1265,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "actor": {
-                    "flags": 1,
-                    "type": "CoreX\\Tasks\\Task\\Data\\ActorData",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "name": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "workspaceId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1364,12 +1337,8 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\Tasks\\Project\\Data\\ProjectReference)",
-                    "doc": {
-                        "@param": [
-                            "array{id: string, type: string, display: string} $stored"
-                        ]
-                    }
+                    "return": "self",
+                    "doc": []
                 },
                 "toArray": {
                     "visibility": "public",
@@ -1379,54 +1348,18 @@
                     "by_reference": false,
                     "parameters": [],
                     "return": "array",
-                    "doc": {
-                        "@return": [
-                            "array{id: string, type: string, display: string}"
-                        ]
-                    }
-                }
-            },
-            "properties": {
-                "display": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "type": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
-            "constants": {
-                "TYPE": {
-                    "type": "string",
-                    "value": "'tsk.project'",
-                    "visibility": "public",
-                    "final": false,
                     "doc": []
                 }
             },
+            "properties": {},
+            "constants": [
+                {
+                    "name": "TYPE",
+                    "type": "string",
+                    "visibility": "public",
+                    "final": false
+                }
+            ],
             "enum_backing": null,
             "enum_cases": []
         },
@@ -1472,28 +1405,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "workspaceId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1502,25 +1414,31 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [],
             "uses": [],
             "doc": [],
-            "methods": [],
-            "properties": [],
+            "methods": {},
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "Active": "'active'",
-                "Archived": "'archived'"
-            }
+            "enum_cases": [
+                {
+                    "name": "Active",
+                    "value": "'active'"
+                },
+                {
+                    "name": "Archived",
+                    "value": "'archived'"
+                }
+            ]
         },
         "CoreX\\Tasks\\Project\\Laravel\\ProjectRelations": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -1528,11 +1446,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@corex-model-extension": [
-                    "laravel-model"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "belongsTo": {
                     "visibility": "public",
@@ -1579,23 +1493,14 @@
                         }
                     ],
                     "return": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
-                    "doc": {
-                        "@param": [
-                            "\\Illuminate\\Database\\Eloquent\\Model $model"
-                        ],
-                        "@return": [
-                            "\\Illuminate\\Database\\Eloquent\\Relations\\BelongsTo<\\CoreX\\Tasks\\Project\\Internal\\Models\\Project, \\Illuminate\\Database\\Eloquent\\Model>"
-                        ],
-                        "@template": [
-                            "TModel of \\Illuminate\\Database\\Eloquent\\Model"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Tasks\\Sprint\\Contracts\\SprintRead": {
             "kind": "interface",
@@ -1613,7 +1518,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -1639,7 +1544,7 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1713,58 +1618,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "actor": {
-                    "flags": 1,
-                    "type": "CoreX\\Tasks\\Task\\Data\\ActorData",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "endDate": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "name": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "projectId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "startDate": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1836,12 +1690,8 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\Tasks\\Sprint\\Data\\SprintReference)",
-                    "doc": {
-                        "@param": [
-                            "array{id: string, type: string, display: string} $stored"
-                        ]
-                    }
+                    "return": "self",
+                    "doc": []
                 },
                 "toArray": {
                     "visibility": "public",
@@ -1851,54 +1701,18 @@
                     "by_reference": false,
                     "parameters": [],
                     "return": "array",
-                    "doc": {
-                        "@return": [
-                            "array{id: string, type: string, display: string}"
-                        ]
-                    }
-                }
-            },
-            "properties": {
-                "display": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "type": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
-            "constants": {
-                "TYPE": {
-                    "type": "string",
-                    "value": "'tsk.sprint'",
-                    "visibility": "public",
-                    "final": false,
                     "doc": []
                 }
             },
+            "properties": {},
+            "constants": [
+                {
+                    "name": "TYPE",
+                    "type": "string",
+                    "visibility": "public",
+                    "final": false
+                }
+            ],
             "enum_backing": null,
             "enum_cases": []
         },
@@ -1944,28 +1758,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "projectId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1974,26 +1767,35 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [],
             "uses": [],
             "doc": [],
-            "methods": [],
-            "properties": [],
+            "methods": {},
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "Active": "'active'",
-                "Completed": "'completed'",
-                "Planned": "'planned'"
-            }
+            "enum_cases": [
+                {
+                    "name": "Planned",
+                    "value": "'planned'"
+                },
+                {
+                    "name": "Active",
+                    "value": "'active'"
+                },
+                {
+                    "name": "Completed",
+                    "value": "'completed'"
+                }
+            ]
         },
         "CoreX\\Tasks\\Sprint\\Laravel\\SprintRelations": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -2001,11 +1803,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@corex-model-extension": [
-                    "laravel-model"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "belongsTo": {
                     "visibility": "public",
@@ -2052,17 +1850,7 @@
                         }
                     ],
                     "return": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
-                    "doc": {
-                        "@param": [
-                            "\\Illuminate\\Database\\Eloquent\\Model $model"
-                        ],
-                        "@return": [
-                            "\\Illuminate\\Database\\Eloquent\\Relations\\BelongsTo<\\CoreX\\Tasks\\Sprint\\Internal\\Models\\Sprint, \\Illuminate\\Database\\Eloquent\\Model>"
-                        ],
-                        "@template": [
-                            "TModel of \\Illuminate\\Database\\Eloquent\\Model"
-                        ]
-                    }
+                    "doc": []
                 },
                 "hasMany": {
                     "visibility": "public",
@@ -2100,23 +1888,14 @@
                         }
                     ],
                     "return": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
-                    "doc": {
-                        "@param": [
-                            "\\Illuminate\\Database\\Eloquent\\Model $model"
-                        ],
-                        "@return": [
-                            "\\Illuminate\\Database\\Eloquent\\Relations\\HasMany<\\CoreX\\Tasks\\Sprint\\Internal\\Models\\Sprint, \\Illuminate\\Database\\Eloquent\\Model>"
-                        ],
-                        "@template": [
-                            "TModel of \\Illuminate\\Database\\Eloquent\\Model"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Tasks\\Task\\Contracts\\CompleteTaskCommand": {
             "kind": "interface",
@@ -2134,7 +1913,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -2151,7 +1930,7 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2172,7 +1951,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -2189,7 +1968,7 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2210,7 +1989,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -2227,14 +2006,14 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
         },
         "CoreX\\Tasks\\Task\\Contracts\\TaskCompletionCapture": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -2248,7 +2027,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -2265,10 +2044,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Tasks\\Task\\Contracts\\UpdateTaskCommand": {
             "kind": "interface",
@@ -2286,7 +2066,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -2303,7 +2083,7 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2366,45 +2146,10 @@
                     "by_reference": false,
                     "parameters": [],
                     "return": "array",
-                    "doc": {
-                        "@return": [
-                            "array{type: string, id: ?string, context: \\CoreX\\Data\\Data\\JsonDocument}"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "context": {
-                    "flags": 1,
-                    "type": "CoreX\\Data\\Data\\JsonDocument",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "id": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "type": {
-                    "flags": 1,
-                    "type": "CoreX\\Audit\\Enums\\ActorType",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2451,28 +2196,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "actor": {
-                    "flags": 1,
-                    "type": "CoreX\\Tasks\\Task\\Data\\ActorData",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "taskId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2519,28 +2243,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "type": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2596,38 +2299,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "actor": {
-                    "flags": 1,
-                    "type": "CoreX\\Tasks\\Task\\Data\\ActorData",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "stageId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "taskId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2689,71 +2361,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $name"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $name"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "isFinal": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $name"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "name": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $name"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "projectId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $name"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2818,48 +2429,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "previousStatus": {
-                    "flags": 1,
-                    "type": "CoreX\\Tasks\\Task\\Enums\\TaskStatus",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "status": {
-                    "flags": 1,
-                    "type": "CoreX\\Tasks\\Task\\Enums\\TaskStatus",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "statusChanged": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "taskId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -3020,225 +2590,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\EntityReference> $targets"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "actor": {
-                    "flags": 1,
-                    "type": "CoreX\\Tasks\\Task\\Data\\ActorData",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\EntityReference> $targets"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "assigneeId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\EntityReference> $targets"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "authorId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\EntityReference> $targets"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "description": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\EntityReference> $targets"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "dueAt": {
-                    "flags": 1,
-                    "type": "?DateTimeImmutable",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\EntityReference> $targets"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "estimateMinutes": {
-                    "flags": 1,
-                    "type": "?int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\EntityReference> $targets"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "parentId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\EntityReference> $targets"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "priority": {
-                    "flags": 1,
-                    "type": "CoreX\\Tasks\\Task\\Enums\\TaskPriority",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\EntityReference> $targets"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "projectId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\EntityReference> $targets"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "sprintId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\EntityReference> $targets"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "stageId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\EntityReference> $targets"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "startsAt": {
-                    "flags": 1,
-                    "type": "?DateTimeImmutable",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\EntityReference> $targets"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "targets": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\EntityReference> $targets"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "title": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\EntityReference> $targets"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "workspaceId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\EntityReference> $targets"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -3294,47 +2649,15 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "display": {
-                    "flags": 1,
+            "properties": {},
+            "constants": [
+                {
+                    "name": "TYPE",
                     "type": "string",
-                    "readonly": true,
                     "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "type": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
+                    "final": false
                 }
-            },
-            "constants": {
-                "TYPE": {
-                    "type": "string",
-                    "value": "'tsk.task'",
-                    "visibility": "public",
-                    "final": false,
-                    "doc": []
-                }
-            },
+            ],
             "enum_backing": null,
             "enum_cases": []
         },
@@ -3443,98 +2766,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "assigneeId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "authorId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "projectId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "requiresAcceptance": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "stageId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "status": {
-                    "flags": 1,
-                    "type": "CoreX\\Tasks\\Task\\Enums\\TaskStatus",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "title": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "workspaceId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -3659,11 +2891,7 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $provided"
-                        ]
-                    }
+                    "doc": []
                 },
                 "fields": {
                     "visibility": "public",
@@ -3673,11 +2901,7 @@
                     "by_reference": false,
                     "parameters": [],
                     "return": "array",
-                    "doc": {
-                        "@return": [
-                            "list<string>"
-                        ]
-                    }
+                    "doc": []
                 },
                 "has": {
                     "visibility": "public",
@@ -3700,162 +2924,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "actor": {
-                    "flags": 1,
-                    "type": "CoreX\\Tasks\\Task\\Data\\ActorData",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $provided"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "assigneeId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $provided"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "description": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $provided"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "dueAt": {
-                    "flags": 1,
-                    "type": "?DateTimeImmutable",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $provided"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "estimateMinutes": {
-                    "flags": 1,
-                    "type": "?int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $provided"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "priority": {
-                    "flags": 1,
-                    "type": "?CoreX\\Tasks\\Task\\Enums\\TaskPriority",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $provided"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "projectId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $provided"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "provided": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $provided"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "startsAt": {
-                    "flags": 1,
-                    "type": "?DateTimeImmutable",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $provided"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "taskId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $provided"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "title": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $provided"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -3864,51 +2933,81 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [],
             "uses": [],
             "doc": [],
-            "methods": [],
-            "properties": [],
+            "methods": {},
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "High": "'high'",
-                "Low": "'low'",
-                "Normal": "'normal'",
-                "Urgent": "'urgent'"
-            }
+            "enum_cases": [
+                {
+                    "name": "Low",
+                    "value": "'low'"
+                },
+                {
+                    "name": "Normal",
+                    "value": "'normal'"
+                },
+                {
+                    "name": "High",
+                    "value": "'high'"
+                },
+                {
+                    "name": "Urgent",
+                    "value": "'urgent'"
+                }
+            ]
         },
         "CoreX\\Tasks\\Task\\Enums\\TaskStatus": {
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [],
             "uses": [],
             "doc": [],
-            "methods": [],
-            "properties": [],
+            "methods": {},
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "Cancelled": "'cancelled'",
-                "Done": "'done'",
-                "InProgress": "'in_progress'",
-                "Open": "'open'",
-                "Review": "'review'",
-                "Waiting": "'waiting'"
-            }
+            "enum_cases": [
+                {
+                    "name": "Open",
+                    "value": "'open'"
+                },
+                {
+                    "name": "InProgress",
+                    "value": "'in_progress'"
+                },
+                {
+                    "name": "Waiting",
+                    "value": "'waiting'"
+                },
+                {
+                    "name": "Review",
+                    "value": "'review'"
+                },
+                {
+                    "name": "Done",
+                    "value": "'done'"
+                },
+                {
+                    "name": "Cancelled",
+                    "value": "'cancelled'"
+                }
+            ]
         },
         "CoreX\\Tasks\\Task\\Events\\TaskCompleted": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": true,
@@ -3941,25 +3040,15 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "task": {
-                    "flags": 65,
-                    "type": "CoreX\\Tasks\\Task\\Data\\TaskView",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Tasks\\Task\\Events\\TaskCreated": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": true,
@@ -3992,25 +3081,15 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "task": {
-                    "flags": 65,
-                    "type": "CoreX\\Tasks\\Task\\Data\\TaskView",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Tasks\\Task\\Events\\TaskMovedToStage": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": true,
@@ -4052,35 +3131,15 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "stage": {
-                    "flags": 65,
-                    "type": "CoreX\\Tasks\\Task\\Data\\StageView",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "task": {
-                    "flags": 65,
-                    "type": "CoreX\\Tasks\\Task\\Data\\TaskView",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Tasks\\Task\\Events\\TaskUpdated": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": true,
@@ -4119,50 +3178,18 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $changed"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "changed": {
-                    "flags": 65,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $changed"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "task": {
-                    "flags": 65,
-                    "type": "CoreX\\Tasks\\Task\\Data\\TaskView",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $changed"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Tasks\\Task\\Laravel\\StageRelations": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -4170,11 +3197,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@corex-model-extension": [
-                    "laravel-model"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "hasMany": {
                     "visibility": "public",
@@ -4212,27 +3235,18 @@
                         }
                     ],
                     "return": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
-                    "doc": {
-                        "@param": [
-                            "\\Illuminate\\Database\\Eloquent\\Model $model"
-                        ],
-                        "@return": [
-                            "\\Illuminate\\Database\\Eloquent\\Relations\\HasMany<\\CoreX\\Tasks\\Task\\Internal\\Models\\Stage, \\Illuminate\\Database\\Eloquent\\Model>"
-                        ],
-                        "@template": [
-                            "TModel of \\Illuminate\\Database\\Eloquent\\Model"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Tasks\\Task\\Laravel\\TaskPortBindings": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -4263,14 +3277,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Tasks\\Task\\Laravel\\TaskRelations": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -4278,11 +3293,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@corex-model-extension": [
-                    "laravel-model"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "belongsTo": {
                     "visibility": "public",
@@ -4329,17 +3340,7 @@
                         }
                     ],
                     "return": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
-                    "doc": {
-                        "@param": [
-                            "\\Illuminate\\Database\\Eloquent\\Model $model"
-                        ],
-                        "@return": [
-                            "\\Illuminate\\Database\\Eloquent\\Relations\\BelongsTo<\\CoreX\\Tasks\\Task\\Internal\\Models\\Task, \\Illuminate\\Database\\Eloquent\\Model>"
-                        ],
-                        "@template": [
-                            "TModel of \\Illuminate\\Database\\Eloquent\\Model"
-                        ]
-                    }
+                    "doc": []
                 },
                 "hasMany": {
                     "visibility": "public",
@@ -4377,27 +3378,18 @@
                         }
                     ],
                     "return": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
-                    "doc": {
-                        "@param": [
-                            "\\Illuminate\\Database\\Eloquent\\Model $model"
-                        ],
-                        "@return": [
-                            "\\Illuminate\\Database\\Eloquent\\Relations\\HasMany<\\CoreX\\Tasks\\Task\\Internal\\Models\\Task, \\Illuminate\\Database\\Eloquent\\Model>"
-                        ],
-                        "@template": [
-                            "TModel of \\Illuminate\\Database\\Eloquent\\Model"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Tasks\\TasksModule": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -4405,8 +3397,12 @@
             "extends": [
                 "Packman\\Modules\\Contracts\\Definition\\ModuleDefinition"
             ],
-            "implements": [],
-            "uses": [],
+            "implements": [
+                "Packman\\Extensions\\Contracts\\Persistence\\WithSchema"
+            ],
+            "uses": [
+                "Packman\\Extensions\\Concerns\\Persistence\\OwnsSchema"
+            ],
             "doc": [],
             "methods": {
                 "manifest": {
@@ -4418,24 +3414,44 @@
                     "parameters": [],
                     "return": "Packman\\Modules\\Data\\Lifecycle\\ModuleManifest",
                     "doc": []
-                }
-            },
-            "properties": [],
-            "constants": {
-                "NAME": {
-                    "type": "string",
-                    "value": "'axiomasoft/corex-tasks'",
+                },
+                "schemaSetProviders": {
                     "visibility": "public",
+                    "static": false,
                     "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "array",
+                    "doc": []
+                },
+                "tablePrefix": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "string",
                     "doc": []
                 }
             },
+            "properties": {},
+            "constants": [
+                {
+                    "name": "NAME",
+                    "type": "string",
+                    "visibility": "public",
+                    "final": false
+                }
+            ],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Tasks\\TasksServiceProvider": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -4444,19 +3460,11 @@
                 "Illuminate\\Support\\ServiceProvider"
             ],
             "implements": [],
-            "uses": [],
+            "uses": [
+                "Packman\\Foundation\\Concerns\\RegistersPackageRegistrars"
+            ],
             "doc": [],
             "methods": {
-                "boot": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "void",
-                    "doc": []
-                },
                 "register": {
                     "visibility": "public",
                     "static": false,
@@ -4468,10 +3476,18 @@
                     "doc": []
                 }
             },
-            "properties": [],
-            "constants": [],
+            "properties": {},
+            "constants": [
+                {
+                    "name": "REGISTRARS",
+                    "type": "array",
+                    "visibility": "protected",
+                    "final": false
+                }
+            ],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Tasks\\Time\\Data\\TimeLogDraft": {
             "kind": "class",
@@ -4560,78 +3576,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "actor": {
-                    "flags": 1,
-                    "type": "CoreX\\Tasks\\Task\\Data\\ActorData",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "comment": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "minutes": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "source": {
-                    "flags": 1,
-                    "type": "CoreX\\Tasks\\Time\\Enums\\TimeLogSource",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "spentOn": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "taskId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "userId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -4703,12 +3648,8 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\Tasks\\Time\\Data\\TimeLogReference)",
-                    "doc": {
-                        "@param": [
-                            "array{id: string, type: string, display: string} $stored"
-                        ]
-                    }
+                    "return": "self",
+                    "doc": []
                 },
                 "toArray": {
                     "visibility": "public",
@@ -4718,54 +3659,18 @@
                     "by_reference": false,
                     "parameters": [],
                     "return": "array",
-                    "doc": {
-                        "@return": [
-                            "array{id: string, type: string, display: string}"
-                        ]
-                    }
-                }
-            },
-            "properties": {
-                "display": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "type": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
-            "constants": {
-                "TYPE": {
-                    "type": "string",
-                    "value": "'tsk.time-log'",
-                    "visibility": "public",
-                    "final": false,
                     "doc": []
                 }
             },
+            "properties": {},
+            "constants": [
+                {
+                    "name": "TYPE",
+                    "type": "string",
+                    "visibility": "public",
+                    "final": false
+                }
+            ],
             "enum_backing": null,
             "enum_cases": []
         },
@@ -4773,25 +3678,31 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [],
             "uses": [],
             "doc": [],
-            "methods": [],
-            "properties": [],
+            "methods": {},
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "Manual": "'manual'",
-                "Timer": "'timer'"
-            }
+            "enum_cases": [
+                {
+                    "name": "Manual",
+                    "value": "'manual'"
+                },
+                {
+                    "name": "Timer",
+                    "value": "'timer'"
+                }
+            ]
         },
         "CoreX\\Tasks\\Time\\Laravel\\TimeLogRelations": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -4799,11 +3710,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@corex-model-extension": [
-                    "laravel-model"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "hasMany": {
                     "visibility": "public",
@@ -4841,23 +3748,14 @@
                         }
                     ],
                     "return": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
-                    "doc": {
-                        "@param": [
-                            "\\Illuminate\\Database\\Eloquent\\Model $model"
-                        ],
-                        "@return": [
-                            "\\Illuminate\\Database\\Eloquent\\Relations\\HasMany<\\CoreX\\Tasks\\Time\\Internal\\Models\\TimeLog, \\Illuminate\\Database\\Eloquent\\Model>"
-                        ],
-                        "@template": [
-                            "TModel of \\Illuminate\\Database\\Eloquent\\Model"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         }
     }
 }

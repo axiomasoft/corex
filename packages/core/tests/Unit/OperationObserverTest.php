@@ -3,9 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Audit\Enums\ActorType;
-use CoreX\Errors\Data\ErrorDescriptor;
 use CoreX\Errors\Enums\CoreErrorCode;
-use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Observability\Data\OperationCompleted;
 use CoreX\Observability\Data\OperationContext;
 use CoreX\Observability\Data\OperationFailed;
@@ -13,6 +11,8 @@ use CoreX\Observability\Data\OperationStarted;
 use CoreX\Observability\Enums\OperationOutcome;
 use CoreX\Observability\Internal\NullOperationObserver;
 use CoreX\Observability\Internal\PsrLogOperationObserver;
+use Packman\Errors\Data\ErrorDescriptor;
+use Packman\Errors\Enums\ErrorCategory;
 use Psr\Log\AbstractLogger;
 
 it('keeps one context through start and complete', function (): void {

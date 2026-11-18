@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace CoreX\Intl;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
-use CoreX\Config\Contracts\ConfigReportSection;
-use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Intl\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Intl\Internal\IntlConfigSection;
-use CoreX\Intl\Internal\IntlSchemaSets;
 use CoreX\Intl\Laravel\IntlBindingsRegistrar;
 use CoreX\Intl\Laravel\IntlReferenceRegistrar;
 use CoreX\Intl\Money\Laravel\MoneyCast;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Contracts\ConfigReportSectionInterface as ConfigReportSection;
+use Packman\Errors\Laravel\ProblemDefinitions;
 use Packman\Foundation\Contracts\PackageRegistrar;
 use Packman\Modules\Contracts\Compiler\FieldCastRegistry;
 use Packman\Schema\Contracts\Migration\SchemaSetProvider;
@@ -29,7 +28,7 @@ final class IntlServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
-        $this->app->tag([IntlSchemaSets::class], SchemaSetProvider::class);
+        $this->app->tag((new IntlModule)->schemaSetProviders(), SchemaSetProvider::class);
 
         ProblemDefinitions::register(app: $this->app, composerManifest: __DIR__.'/../composer.json', provider: PackageProblemDefinitions::class);
 

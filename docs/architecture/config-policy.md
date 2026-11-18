@@ -48,7 +48,7 @@
    console — на `CommandStarting`), но не при сборке образа: `package:discover`, `config:cache` и другие
    build-команды секретов не требуют. Секрет формой не проверяется — иначе сборка образа потребовала бы
    продовые секреты.
-3. **Deploy-gate** — `php artisan corex:config:validate --production` выполняет те же проверки всегда.
+3. **Deploy-gate** — `php artisan packman:config:validate --production` выполняет те же проверки всегда.
 
 ### Опасные режимы и подтверждение
 
@@ -56,7 +56,7 @@
 (`corex-notifications.digest`, `corex-recurring-tasks.wakeup`, любой `corex-scheduler.handlers.<kind>`).
 В `production` включённый опасный режим останавливает старт (`InvalidConfiguration`), если его точный
 путь не перечислен в `corex.acknowledged_dangerous_modes`. Шаблоны и «подтвердить всё» не
-поддерживаются; подтверждённый режим виден в `corex:config:validate` как предупреждение.
+поддерживаются; подтверждённый режим виден в `packman:config:validate` как предупреждение.
 `corex-operations.require_physical_tenancy = false` в список не входит: это явный opt-out штатного
 boxed-режима, отчёт показывает его как уведомление.
 

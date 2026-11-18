@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Pagination\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Pagination\Contracts\CursorCodec;
 use CoreX\Operations\Pagination\Contracts\OrderingRegistry;
 use CoreX\Operations\Pagination\Data\CursorPage;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class CursorPageBuilder

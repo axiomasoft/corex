@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — Packman governance
+
+- Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.
+- Describe module schema ownership through Packman `WithSchema` / `OwnsSchema`; the existing provider remains the registration boundary.
+
+
 ## Unreleased — package boundaries
 
 - Breaking before release: Rename the package to `axiomasoft/corex-scheduler`, namespace to `CoreX\Scheduler`, provider to `SchedulerServiceProvider`, config to `corex-scheduler`, and sweep command to `corex:scheduler:sweep`. Kernel scheduling contracts keep their wakeup vocabulary for one-shot durable requests.

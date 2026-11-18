@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Unit;
 
-use CoreX\Config\Exceptions\InvalidConfiguration;
-use CoreX\Errors\Enums\UnavailabilityReason;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\Tests\TestCase;
 use CoreX\Operations\Versioning\Internal\ApiProfileFactory;
 use InvalidArgumentException;
+use Packman\Config\Exceptions\InvalidConfiguration;
+use Packman\Errors\Enums\UnavailabilityReason;
 use Packman\Modules\Data\Compiler\CompiledRegistry;
 use Packman\Modules\Data\Extenders\Api;
 

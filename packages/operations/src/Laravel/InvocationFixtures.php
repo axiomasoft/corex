@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Operations\Laravel;
 
 use Closure;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
-use CoreX\Config\Data\SecretRef;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
@@ -22,6 +19,9 @@ use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Internal\DefaultOperationInvoker;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Connection;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Data\SecretRef;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Psr\Clock\ClockInterface;
 

@@ -51,7 +51,19 @@
             "dev-main": "1.0.x-dev"
         },
         "packman": {
-            "module": "CoreX\\Media\\MediaModule"
+            "module": "CoreX\\Media\\MediaModule",
+            "schema-version": 1,
+            "package-type": "capability",
+            "stability": "stable",
+            "profile": "modular-platform",
+            "error-prefix": "media",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Exceptions",
+                "Internal",
+                "Laravel"
+            ]
         }
     },
     "repositories": [

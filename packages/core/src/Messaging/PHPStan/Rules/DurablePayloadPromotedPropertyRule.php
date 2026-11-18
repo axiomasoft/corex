@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\PHPStan\Rules;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\PHPStan\DurablePayloadTypeChecker;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;

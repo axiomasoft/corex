@@ -6,7 +6,9 @@ namespace CoreX\Tasks\Task\Internal\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class TaskWatcher extends Model
 {
     public const UPDATED_AT = null;

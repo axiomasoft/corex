@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Money\Internal;
 
+use Packman\Attributes\Internal;
 use RuntimeException;
 use Stringable;
 
 /** @internal Validate untyped persistence and transport values at the package boundary. */
+#[Internal]
 final class Value
 {
     public static function text(mixed $value): string

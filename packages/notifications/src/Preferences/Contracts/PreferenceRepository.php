@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Preferences\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Notifications\Inbox\Data\NotificationContext;
 use CoreX\Notifications\Preferences\Data\NotificationPreference;
 use CoreX\Notifications\Preferences\Data\PreferenceInput;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface PreferenceRepository

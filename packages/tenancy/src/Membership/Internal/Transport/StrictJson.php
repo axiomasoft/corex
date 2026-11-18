@@ -6,9 +6,11 @@ namespace CoreX\Tenancy\Membership\Internal\Transport;
 
 use CoreX\Tenancy\Membership\Exceptions\CentralProtocolViolation;
 use JsonException;
+use Packman\Attributes\Internal;
 use stdClass;
 
 /** @internal Bounded decoder rejecting duplicate members at every depth. */
+#[Internal]
 final class StrictJson
 {
     private int $offset = 0;

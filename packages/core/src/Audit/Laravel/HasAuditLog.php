@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Audit\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Audit\Contracts\Auditable;
 use CoreX\Audit\Internal\AuditObserver;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * @corex-model-extension Auditable Eloquent models; observes attributes and created/updated/deleted/restored/forceDeleted lifecycle, no extra columns required.

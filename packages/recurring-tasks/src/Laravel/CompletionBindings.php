@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\RecurringTasks\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\RecurringTasks\Internal\CaptureTaskCompletion;
 use CoreX\RecurringTasks\Internal\RecurringTasksOptions;
@@ -14,6 +12,8 @@ use CoreX\Tasks\Task\Contracts\TaskCompletionCapture;
 use CoreX\Workflow\Contracts\WorkflowBinding;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Connection;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Registers the owning package's call ports with their private implementations. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

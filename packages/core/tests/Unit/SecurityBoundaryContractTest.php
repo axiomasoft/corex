@@ -22,9 +22,9 @@ use CoreX\Data\Internal\CallableDataScopeAuthorizer;
 use CoreX\Data\Internal\DenyDataScopeAuthorizer;
 use CoreX\Data\Laravel\SystemDataScopeAuthorization;
 use CoreX\Errors\Enums\CoreErrorCode;
-use CoreX\Errors\Enums\ErrorCategory;
 use DateTimeImmutable;
 use InvalidArgumentException;
+use Packman\Errors\Enums\ErrorCategory;
 use Packman\Schema\Exceptions\SchemaSetException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -211,7 +211,7 @@ final class SecurityBoundaryContractTest extends TestCase
         }
         $error = SchemaSetException::invalidSet(id: 'fixture/package:tenant');
         self::assertSame(\Packman\Errors\Enums\CoreErrorCode::SchemaInvalidSet->value, $error->errorDescriptor()->code);
-        self::assertSame(\Packman\Errors\Enums\ErrorCategory::Internal, $error->errorDescriptor()->category);
+        self::assertSame(ErrorCategory::Internal, $error->errorDescriptor()->category);
         self::assertFalse($error->errorDescriptor()->retryable);
     }
 }

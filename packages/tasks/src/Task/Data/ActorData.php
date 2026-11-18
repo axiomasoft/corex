@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Task\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Data\Data\JsonDocument;
+use Packman\Attributes\Api;
 
 #[Api(since: '1.0')]
 final readonly class ActorData

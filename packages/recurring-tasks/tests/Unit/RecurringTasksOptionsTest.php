@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Config\Laravel\CoreOptionsParser;
 use CoreX\RecurringTasks\Internal\DangerousModesCheck;
 use CoreX\RecurringTasks\Internal\RecurringTasksOptions;
+use Packman\Config\Exceptions\InvalidConfiguration;
 
 it('passes on an empty environment with the shipped defaults', function (): void {
     $options = RecurringTasksOptions::fromArray([]);

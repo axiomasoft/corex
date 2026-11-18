@@ -11,9 +11,11 @@ use CoreX\Notifications\Inbox\Data\NotificationContext;
 use CoreX\Notifications\Preferences\Contracts\PreferenceRepository;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Str;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
+#[Internal]
 final readonly class DigestWakeupHandler
 {
     public function __construct(

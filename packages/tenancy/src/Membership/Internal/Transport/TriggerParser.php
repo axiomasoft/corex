@@ -9,8 +9,10 @@ use CoreX\Tenancy\Membership\Enums\MembershipReason;
 use CoreX\Tenancy\Membership\Exceptions\CentralProtocolViolation;
 use CoreX\Tenancy\Membership\Exceptions\CentralUnauthorized;
 use DateTimeImmutable;
+use Packman\Attributes\Internal;
 
 /** @internal Bounded in-memory conflict fixture; durable inbox belongs to P4.6. */
+#[Internal]
 final class TriggerParser
 {
     /** @var array<string, string> */

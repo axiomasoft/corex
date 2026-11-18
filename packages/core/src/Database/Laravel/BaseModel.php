@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Database\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Audit\Laravel\HasAuditLog;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * @corex-model-extension Eloquent base; UUIDv7 primary key, deleted_at and Auditable opt-in. Subclasses retain Eloquent relations.

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Intl\Internal\IntlOptions;
+use Packman\Config\Exceptions\InvalidConfiguration;
 
 it('passes on an empty environment with the shipped defaults', function (): void {
     $options = IntlOptions::fromArray([]);

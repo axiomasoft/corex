@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\ImportExport\Data;
 
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 
 /**
  * @phpstan-type JsonLevel0 null|bool|int|string

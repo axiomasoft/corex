@@ -13,6 +13,7 @@ use CoreX\Features\Internal\Models\FeatureOverride;
 use CoreX\Settings\Data\SettingsScope;
 use CoreX\Settings\Enums\SettingScope;
 use Override;
+use Packman\Attributes\Internal;
 
 /**
  * Persisted feature flags on `sys_feature_flags`/`sys_feature_overrides`.
@@ -34,6 +35,7 @@ use Override;
  *
  * @internal spec: B-10 §3.1, AC-22, D27, D38, D12
  */
+#[Internal]
 final readonly class DatabaseFeatureFlags implements FeatureFlags
 {
     public function __construct(

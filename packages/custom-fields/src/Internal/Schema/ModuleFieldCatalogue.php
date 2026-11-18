@@ -13,11 +13,13 @@ use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Data\IndexPolicy;
 use CoreX\CustomFields\Internal\Support\Validation;
 use CoreX\Data\Data\DataScope;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Entities\EntityRegistry;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Entities\EntityField;
 use RuntimeException;
 
+#[Internal]
 final readonly class ModuleFieldCatalogue implements FieldCatalogue
 {
     /** @param array<string, bool> $drivers */

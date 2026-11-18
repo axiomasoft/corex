@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\CustomFields\Data\AttributeStoragePolicy;
 use CoreX\CustomFields\Data\FieldSelection;
 use CoreX\CustomFields\Data\RecordSelection;
@@ -13,6 +12,7 @@ use CoreX\CustomFields\Internal\Storage\ResolvingAttributeStore;
 use CoreX\CustomFields\Tests\Support\AttributeCompositionProbe;
 use CoreX\CustomFields\Tests\Support\RecordingAttributeStore;
 use CoreX\Data\Data\RecordRef;
+use Packman\Config\Exceptions\InvalidConfiguration;
 
 it('rejects an entity map that is not jsonb or eav', function (): void {
     expect(fn () => new AttributeStoragePolicy(default: 'jsonb', entities: ['contact' => 'gin']))

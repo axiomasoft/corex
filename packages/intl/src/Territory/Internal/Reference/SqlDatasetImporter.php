@@ -17,8 +17,10 @@ use CoreX\Intl\Territory\Internal\Value;
 use DateTimeZone;
 use Illuminate\Database\Connection;
 use Override;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
+#[Internal]
 final readonly class SqlDatasetImporter implements DatasetImporter
 {
     public function __construct(

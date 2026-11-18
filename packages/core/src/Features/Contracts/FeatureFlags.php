@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Features\Contracts;
 
-use CoreX\Attributes\Api;
 use CoreX\Data\Data\JsonDocument;
 use CoreX\Features\Data\FeatureFlagDefinition;
 use CoreX\Settings\Data\SettingsScope;
+use Packman\Attributes\Api;
 
 /**
  * Per-account feature-flag store with workspace/user/department overrides.

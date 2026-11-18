@@ -14,10 +14,12 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Support\Str;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
 /** CoreX account export metadata; physical effects and archive integrity belong to AccountResources. */
+#[Internal]
 final readonly class DatabaseTenantLifecycle implements TenantDatabaseLifecycle
 {
     public function __construct(

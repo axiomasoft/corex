@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Support;
 
-use CoreX\Errors\Contracts\ErrorCode;
-use CoreX\Errors\Contracts\ProblemDefinitionProvider;
-use CoreX\Errors\Data\ProblemDefinition;
-use CoreX\Errors\Enums\ErrorCategory;
-use CoreX\Errors\Internal\CompiledProblemRegistry;
-use CoreX\Errors\Internal\ProblemContribution;
+use Illuminate\Config\Repository;
+use Illuminate\Container\Container;
+use Illuminate\Foundation\Application;
+use Packman\Errors\Contracts\ErrorCode;
+use Packman\Errors\Contracts\ProblemDefinitionProvider;
+use Packman\Errors\Contracts\ProblemRegistry;
+use Packman\Errors\Data\ProblemDefinition;
+use Packman\Errors\Enums\ErrorCategory;
+use Packman\Errors\Laravel\ProblemDefinitions;
+use Packman\Errors\Laravel\ProblemRegistryFactory;
 
 enum SyntheticErrorCode: string implements ErrorCode
 {
@@ -33,18 +37,30 @@ enum SyntheticErrorCode: string implements ErrorCode
         return self::from('synthetic.'.$category->value);
     }
 
-    public static function registry(): CompiledProblemRegistry
+    public static function registry(): ProblemRegistry
     {
-        return new CompiledProblemRegistry([new ProblemContribution('synthetic', new class implements ProblemDefinitionProvider
+        $provider = new class implements ProblemDefinitionProvider
         {
             public function definitions(): iterable
             {
                 $statuses = [401, 403, 422, 409, 404, 429, 422, 503, 500];
                 foreach (ErrorCategory::cases() as $index => $category) {
                     $code = SyntheticErrorCode::fromCategory($category);
-                    yield new ProblemDefinition($code, 'urn:corex:problem:'.$code->value(), $statuses[$index], 'Safe failure.', $category === ErrorCategory::Unavailable, $category, ['reason']);
+                    yield new ProblemDefinition($code, 'urn:packman:problem:'.$code->value(), $statuses[$index], 'Safe failure.', $category === ErrorCategory::Unavailable, $category, ['reason']);
                 }
             }
-        })]);
+        };
+        $previous = Container::getInstance();
+
+        try {
+            $app = new Application;
+            $app->instance('config', new Repository);
+            $app->instance($provider::class, $provider);
+            ProblemDefinitions::register($app, __DIR__.'/synthetic-error-owner.json', $provider::class);
+
+            return (new ProblemRegistryFactory)->make($app);
+        } finally {
+            Container::setInstance($previous);
+        }
     }
 }

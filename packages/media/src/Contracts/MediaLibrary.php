@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Media\Contracts;
 
-use CoreX\Attributes\Api;
 use CoreX\Media\Data\DeleteResult;
 use CoreX\Media\Data\MediaContext;
 use CoreX\Media\Data\MediaConversionRef;
 use CoreX\Media\Data\MediaFileRef;
 use CoreX\Media\Data\MediaReadRef;
 use CoreX\Media\Data\UploadInput;
+use Packman\Attributes\Api;
 
 #[Api(since: '1.0')]
 interface MediaLibrary

@@ -96,6 +96,32 @@
             "includes": [
                 "extension.neon"
             ]
+        },
+        "packman": {
+            "schema-version": 1,
+            "package-type": "kernel",
+            "stability": "stable",
+            "profile": "laravel-package",
+            "error-prefix": "core",
+            "owns": [
+                "Attributes",
+                "Audit",
+                "Config",
+                "Context",
+                "Data",
+                "Database",
+                "Departments",
+                "Errors",
+                "Features",
+                "Foundation",
+                "Invocation",
+                "Messaging",
+                "Observability",
+                "Scheduling",
+                "Settings",
+                "Storage",
+                "Time"
+            ]
         }
     },
     "minimum-stability": "stable",

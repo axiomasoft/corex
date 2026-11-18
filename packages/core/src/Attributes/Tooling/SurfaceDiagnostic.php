@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Attributes\Tooling;
 
+use Packman\Attributes\Internal;
+
 /** @internal */
+#[Internal]
 final readonly class SurfaceDiagnostic
 {
     public function __construct(

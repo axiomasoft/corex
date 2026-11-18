@@ -89,6 +89,21 @@
             "providers": [
                 "CoreX\\Webhooks\\WebhooksServiceProvider"
             ]
+        },
+        "packman": {
+            "schema-version": 1,
+            "package-type": "capability",
+            "stability": "stable",
+            "profile": "laravel-package",
+            "error-prefix": "webhooks",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Enums",
+                "Errors",
+                "Internal",
+                "Laravel"
+            ]
         }
     }
 }

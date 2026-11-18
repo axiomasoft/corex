@@ -6,7 +6,6 @@ namespace CoreX\Operations\Idempotency\Internal;
 
 use Closure;
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Errors\Enums\CoreErrorCode;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
@@ -27,10 +26,13 @@ use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Data\OperationResult;
 use Illuminate\Database\Connection;
 use Override;
+use Packman\Attributes\Internal;
+use Packman\Errors\Contracts\ProblemRegistry;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Throwable;
 
 /** @internal Adds tenant-transactional idempotency around the shared operation invoker. */
+#[Internal]
 final readonly class IdempotentOperationInvoker implements OperationInvoker
 {
     public function __construct(

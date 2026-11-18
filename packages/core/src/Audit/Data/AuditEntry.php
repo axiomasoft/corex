@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Audit\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Context\Data\ImpersonationState;
 use CoreX\Data\Data\JsonDocument;
 use CoreX\Data\Laravel\JsonDocuments;
 use DateTimeImmutable;
+use Packman\Attributes\Api;
 
 /**
  * One append-only audit record. Built by the caller (HasAuditLog trait or

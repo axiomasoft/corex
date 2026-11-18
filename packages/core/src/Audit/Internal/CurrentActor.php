@@ -10,6 +10,7 @@ use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Data\ImpersonationState;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Http\Request;
+use Packman\Attributes\Internal;
 use Stringable;
 
 /**
@@ -23,6 +24,7 @@ use Stringable;
  *
  * @internal spec: B-10 §3.1, P2, D137/D139
  */
+#[Internal]
 final readonly class CurrentActor
 {
     /** @param  Closure(): ?Request  $request  the request of the running cycle, null in console or without a request. */

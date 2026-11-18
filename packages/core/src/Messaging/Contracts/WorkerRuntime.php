@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Detects whether the current process is eligible to call

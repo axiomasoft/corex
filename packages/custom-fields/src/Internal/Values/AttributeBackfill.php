@@ -16,9 +16,11 @@ use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Builder;
 use InvalidArgumentException;
 use JsonException;
+use Packman\Attributes\Internal;
 use RuntimeException;
 use stdClass;
 
+#[Internal]
 final readonly class AttributeBackfill
 {
     public function __construct(

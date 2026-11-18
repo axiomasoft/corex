@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\CustomFields\Errors\Internal\PackageProblemDefinitions;
 use CoreX\CustomFields\Internal\CustomFieldsSchemaSets;
 use CoreX\CustomFields\Internal\Laravel\AttributeBindingsRegistrar;
 use CoreX\CustomFields\Internal\Laravel\AttributeCompositionRegistrar;
 use CoreX\CustomFields\Internal\Laravel\AttributeMessagingRegistrar;
-use CoreX\Errors\Laravel\ProblemDefinitions;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Errors\Laravel\ProblemDefinitions;
 use Packman\Foundation\Contracts\PackageRegistrar;
 use Packman\Schema\Contracts\Migration\SchemaSetProvider;
 

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Definition\Data;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Data\Data\JsonDocument;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Operations\Definition\Enums\OperationMode;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Invocation\Enums\InputEnvelope;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Immutable runtime projection of one compiled declaration. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

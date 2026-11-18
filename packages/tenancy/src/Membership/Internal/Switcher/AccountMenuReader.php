@@ -9,9 +9,11 @@ use CoreX\Tenancy\Membership\Contracts\AccountMenuCache;
 use CoreX\Tenancy\Membership\Contracts\AccountsReadTransport;
 use CoreX\Tenancy\Membership\Data\AccountsQuery;
 use CoreX\Tenancy\Membership\Exceptions\CentralProtocolViolation;
+use Packman\Attributes\Internal;
 use Throwable;
 
 /** @internal Unregistered local reference; menu output never grants account access. */
+#[Internal]
 final readonly class AccountMenuReader
 {
     public const int CACHE_TTL_SECONDS = 300;

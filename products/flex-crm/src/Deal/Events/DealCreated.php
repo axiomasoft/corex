@@ -7,7 +7,9 @@ namespace Flex\Crm\Deal\Events;
 use Flex\Crm\Deal\Models\Deal;
 use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
 use Illuminate\Foundation\Events\Dispatchable;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class DealCreated implements ShouldDispatchAfterCommit
 {
     use Dispatchable;

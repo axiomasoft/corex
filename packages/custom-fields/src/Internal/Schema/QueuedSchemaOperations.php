@@ -21,7 +21,9 @@ use CoreX\CustomFields\Internal\Value;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
 use Illuminate\Database\ConnectionInterface;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class QueuedSchemaOperations implements SchemaOperations
 {
     public function __construct(

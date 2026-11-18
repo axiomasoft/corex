@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Media\Internal\Support;
 
-use CoreX\Config\Laravel\ConfigurationValidator;
 use CoreX\Media\Internal\Value;
+use Packman\Attributes\Internal;
+use Packman\Config\Laravel\ConfigurationValidator;
 
 /** @internal Package composition type. */
+#[Internal]
 final readonly class MediaOptions
 {
     /**

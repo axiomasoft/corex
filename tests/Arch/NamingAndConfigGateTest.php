@@ -28,7 +28,7 @@ declare(strict_types=1);
 
 namespace CoreX\Settings\Contracts;
 
-#[\CoreX\Attributes\Api]
+#[\Packman\Attributes\Api]
 final class ProbeHelper
 {
 }

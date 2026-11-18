@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Operations\OpenApi\Internal\Commands;
 
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Operations\Definition\Contracts\OperationRegistry;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
@@ -13,10 +12,13 @@ use CoreX\Operations\OpenApi\Internal\ContractSnapshotBuilder;
 use CoreX\Operations\OpenApi\Internal\OpenApiDocumentGenerator;
 use CoreX\Operations\Versioning\Contracts\ApiProfiles as ApiProfileFactory;
 use Illuminate\Console\Command;
+use Packman\Attributes\Internal;
+use Packman\Errors\Contracts\ProblemRegistry;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use RuntimeException;
 
 /** @internal Writes the installed-code v1 contract snapshot. It does not accept tenant state. */
+#[Internal]
 final class WriteApiSnapshots extends Command
 {
     protected $signature = 'corex:operations:snapshot {directory : Destination for the v1 JSON carriers} {--check : Compare without writing} {--fixture= : P12 public-error contract PHP file} {--major=v1}';

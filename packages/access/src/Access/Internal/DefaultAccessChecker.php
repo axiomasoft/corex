@@ -17,6 +17,7 @@ use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Override;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Entities\EntityRegistry;
 use Psr\Clock\ClockInterface;
 use UnexpectedValueException;
@@ -34,6 +35,7 @@ use UnexpectedValueException;
  * Bound `scoped` (AccessServiceProvider) so the scopeFor() memo below is
  * request-scoped, never carried across requests on a reused worker.
  */
+#[Internal]
 final class DefaultAccessChecker implements AccessChecker
 {
     /** @var array<string, Scope> Keyed with every contributing role's ScopeMapVersion — a compile() bump changes the key, i.e. a guaranteed miss. */

@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Config\Data\CoreOptions;
-use CoreX\Config\Laravel\ConfiguredImplementation;
 use CoreX\Context\Contracts\ImpersonationGuard;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenancyManager;
@@ -17,6 +14,9 @@ use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Context\Internal\ImpersonationGuard as ImpersonationGuardImplementation;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Laravel\ConfiguredImplementation;
 use Packman\Foundation\Contracts\PackageRegistrar;
 
 /** Composition of the kernel module; the public provider delegates here. */

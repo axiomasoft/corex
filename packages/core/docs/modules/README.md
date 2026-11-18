@@ -12,6 +12,13 @@ Composer packages; the application selects and activates the installed modules.
   checks current context activation.
 - `Packman\Modules\Contracts\Lifecycle\ModuleLifecycle` owns activation, upgrade and removal.
 - `Packman\Schema\Contracts\Migration\SchemaSetProvider` supplies package-owned schema sets.
+- `Packman\Extensions\Contracts\Persistence\WithSchema` and the `OwnsSchema` concern
+  compose schema declarations into a module. CoreX providers register the module's
+  `schemaSetProviders()` result; `tablePrefix()` also supplies the manifest prefix.
+
+Only packages that declare a lifecycle module use `type: packman-module` and
+`extra.packman.module`. Libraries keep their own schema contributions without inventing
+an empty module. Root `packman.json` governs all 21 packages and product modules.
 
 CoreX's `CoreServiceProvider` registers its Packman adapters. `CoreX\Context\Data\TenantContext`
 implements Packman's context scope; CoreX projects actor, feature flag and entity-audit behavior

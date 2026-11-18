@@ -375,7 +375,7 @@
             },
             {
                 "old": "CoreX\\Data\\ErrorDescriptor",
-                "new": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "new": "Packman\\Errors\\Data\\ErrorDescriptor",
                 "match": "fqcn"
             },
             {
@@ -2060,7 +2060,7 @@
             },
             {
                 "old": "CoreX\\Config\\InvalidConfiguration",
-                "new": "CoreX\\Config\\Exceptions\\InvalidConfiguration",
+                "new": "Packman\\Config\\Exceptions\\InvalidConfiguration",
                 "match": "fqcn"
             },
             {

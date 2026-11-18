@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Media\Tests;
 
-use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\CoreServiceProvider;
 use CoreX\Media\Internal\Support\MediaConfigSection;
 use CoreX\Media\MediaServiceProvider;
 use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase;
+use Packman\Config\Contracts\ConfigReportSectionInterface as ConfigReportSection;
 
 final class ConfigReportSectionTest extends TestCase
 {
@@ -24,7 +24,7 @@ final class ConfigReportSectionTest extends TestCase
         $owned = array_values(array_filter($sections, static fn (ConfigReportSection $section): bool => $section instanceof MediaConfigSection));
         self::assertCount(1, $owned);
         self::assertSame(30, $owned[0]->order());
-        $code = Artisan::call('corex:config:validate');
+        $code = Artisan::call('packman:config:validate');
         self::assertSame(0, $code);
         self::assertStringContainsString('driver pubsub.driver=', Artisan::output());
     }

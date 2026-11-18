@@ -66,7 +66,7 @@ return RectorConfig::configure()
         'CoreX\\CustomFields\\Internal\\Schema\\ModuleFieldCatalogue',
         'CoreX\\CustomFields\\Internal\\Schema\\StaticFieldCatalogue',
         'CoreX\\CustomFields\\Internal\\Values\\AttributeValueTransformerRegistry',
-        'CoreX\\Errors\\Contracts\\ProblemRegistry',
+        'Packman\\Errors\\Contracts\\ProblemRegistry',
         'CoreX\\Errors\\Internal\\CompiledProblemRegistry',
         'CoreX\\Messaging\\Contracts\\MessageContractRegistry',
         'CoreX\\Messaging\\Internal\\ArrayMessageContractRegistry',

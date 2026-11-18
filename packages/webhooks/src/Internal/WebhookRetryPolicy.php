@@ -11,9 +11,11 @@ use CoreX\Webhooks\Data\WebhookOptions;
 use CoreX\Webhooks\Enums\WebhookFailureReason;
 use DateInterval;
 use DateTimeImmutable;
+use Packman\Attributes\Internal;
 use Throwable;
 
 /** @internal Pure finite retry policy; no durable state is changed here. */
+#[Internal]
 final readonly class WebhookRetryPolicy
 {
     private const int MaxRetryAfterSeconds = 86_400;

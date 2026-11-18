@@ -8,6 +8,7 @@ use CoreX\Audit\Enums\ActorType;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Packman\Attributes\Internal;
 
 /**
  * Append-only audit entry (sys_audit_log). No updated_at:
@@ -28,6 +29,7 @@ use Illuminate\Support\Carbon;
  *
  * @internal spec: B-10 §2
  */
+#[Internal]
 final class AuditLog extends Model
 {
     use HasUuids;

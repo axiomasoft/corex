@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Intl\Locale\Internal;
 
 use CoreX\Intl\Locale\Data\LocaleResolution;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class RequestLocaleScope
 {
     /** @var list<LocaleResolution|null> */

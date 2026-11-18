@@ -14,7 +14,9 @@ use CoreX\Tasks\Task\Enums\TaskStatus;
 use CoreX\Workflow\Contracts\WorkflowBinding;
 use CoreX\Workflow\Data\TriggerRequest;
 use Illuminate\Database\Connection;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class CaptureTaskCompletion implements TaskCompletionCapture
 {
     public function __construct(

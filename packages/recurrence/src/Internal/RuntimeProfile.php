@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Recurrence\Internal;
 
 use Composer\InstalledVersions;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class RuntimeProfile
 {
     public static function tzdbVersion(): string

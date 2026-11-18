@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Idempotency\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Operations\Idempotency\Data\IdempotencyAttempt;
 use CoreX\Operations\Idempotency\Data\IdempotencyScope;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Durable tenant-local admission and semantic-outcome store for mutations. */
 #[Spi(kind: SpiKind::Implement, since: '1.0')]

@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — Packman governance
+
+- Factory signatures expose ConversionDriver rather than the private GD implementation.
+- Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.
+- Describe module schema ownership through Packman `WithSchema` / `OwnsSchema`; the existing provider remains the registration boundary.
+
+
 ## Unreleased — Vaulter byte ownership
 
 - Breaking: originals and conversions use Vaulter `BlobStore` and `BlobPins`; CoreX owns references and never physically deletes bytes. Pins and reference publication/retirement share one `VaulterDatabase` transaction and exact connection.

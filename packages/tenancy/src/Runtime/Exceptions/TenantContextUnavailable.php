@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Runtime\Exceptions;
 
-use CoreX\Attributes\Api;
-use CoreX\Errors\Contracts\DescribesError;
-use CoreX\Errors\Data\ErrorDescriptor;
-use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Tenancy\Errors\Enums\TenancyErrorCode;
+use Packman\Attributes\Api;
+use Packman\Errors\Contracts\DescribesError;
+use Packman\Errors\Data\ErrorDescriptor;
+use Packman\Errors\Enums\ErrorCategory;
 use RuntimeException;
 
 /**

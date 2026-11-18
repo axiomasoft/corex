@@ -4,7 +4,7 @@
     "symbols": {
         "CoreX\\CustomFields\\Contracts\\AttributeFilter": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -18,7 +18,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -53,14 +53,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\CustomFields\\Contracts\\AttributeStore": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -74,7 +75,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -112,7 +113,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -150,7 +151,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -194,14 +195,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\CustomFields\\Contracts\\AttributeStoreResolver": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -215,7 +217,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -232,14 +234,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\CustomFields\\Contracts\\FieldCatalogue": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -253,7 +256,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -279,14 +282,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\CustomFields\\Contracts\\SchemaOperations": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -300,7 +304,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -329,7 +333,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -367,7 +371,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -393,14 +397,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\CustomFields\\CustomFieldsServiceProvider": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -433,10 +438,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\CustomFields\\Data\\AttributeDefinition": {
             "kind": "class",
@@ -448,11 +454,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@phpstan-import-type": [
-                    "JsonMap from ValueBag"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "__construct": {
                     "visibility": "public",
@@ -580,14 +582,7 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $constraints",
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $meta",
-                            "list<string> $readKeys",
-                            "list<string> $writeKeys"
-                        ]
-                    }
+                    "doc": []
                 },
                 "canonical": {
                     "visibility": "public",
@@ -597,11 +592,7 @@
                     "by_reference": false,
                     "parameters": [],
                     "return": "array",
-                    "doc": {
-                        "@return": [
-                            "array{constraints: array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>, entity: string, id: string, index: string, key: string, lifecycle: string, meta: array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>, read_keys: list<string>, required: bool, revision: int, searchable: bool, type: string, write_keys: list<string>}"
-                        ]
-                    }
+                    "doc": []
                 },
                 "canonicalList": {
                     "visibility": "public",
@@ -621,14 +612,7 @@
                         }
                     ],
                     "return": "array",
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\CustomFields\\Data\\AttributeDefinition> $definitions"
-                        ],
-                        "@return": [
-                            "list<\\CoreX\\CustomFields\\Data\\AttributeDefinition>"
-                        ]
-                    }
+                    "doc": []
                 },
                 "schemaHash": {
                     "visibility": "public",
@@ -657,11 +641,7 @@
                         }
                     ],
                     "return": "string",
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\CustomFields\\Data\\AttributeDefinition> $definitions"
-                        ]
-                    }
+                    "doc": []
                 },
                 "snapshotRow": {
                     "visibility": "public",
@@ -671,236 +651,10 @@
                     "by_reference": false,
                     "parameters": [],
                     "return": "array",
-                    "doc": {
-                        "@return": [
-                            "array{code: string, constraints: array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>, id: string, index: string, key: string, lifecycle: string, meta: array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>, read_keys: list<string>, required: bool, revision: int, searchable: bool, type: string, write_keys: list<string>}"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "constraints": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $constraints",
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $meta",
-                            "list<string> $readKeys",
-                            "list<string> $writeKeys"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "entity": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $constraints",
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $meta",
-                            "list<string> $readKeys",
-                            "list<string> $writeKeys"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "id": {
-                    "flags": 1,
-                    "type": "CoreX\\CustomFields\\Data\\AttributeId",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $constraints",
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $meta",
-                            "list<string> $readKeys",
-                            "list<string> $writeKeys"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "index": {
-                    "flags": 1,
-                    "type": "CoreX\\CustomFields\\Data\\IndexPolicy",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $constraints",
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $meta",
-                            "list<string> $readKeys",
-                            "list<string> $writeKeys"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "key": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $constraints",
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $meta",
-                            "list<string> $readKeys",
-                            "list<string> $writeKeys"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "lifecycle": {
-                    "flags": 1,
-                    "type": "CoreX\\CustomFields\\Data\\AttributeLifecycle",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $constraints",
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $meta",
-                            "list<string> $readKeys",
-                            "list<string> $writeKeys"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "meta": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $constraints",
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $meta",
-                            "list<string> $readKeys",
-                            "list<string> $writeKeys"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "readKeys": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $constraints",
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $meta",
-                            "list<string> $readKeys",
-                            "list<string> $writeKeys"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "required": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $constraints",
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $meta",
-                            "list<string> $readKeys",
-                            "list<string> $writeKeys"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "revision": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $constraints",
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $meta",
-                            "list<string> $readKeys",
-                            "list<string> $writeKeys"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "searchable": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $constraints",
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $meta",
-                            "list<string> $readKeys",
-                            "list<string> $writeKeys"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "type": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $constraints",
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $meta",
-                            "list<string> $readKeys",
-                            "list<string> $writeKeys"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "writeKeys": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $constraints",
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $meta",
-                            "list<string> $readKeys",
-                            "list<string> $writeKeys"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -944,7 +698,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "self(CoreX\\CustomFields\\Data\\AttributeId)",
+                    "return": "self",
                     "doc": []
                 },
                 "isLegacy": {
@@ -993,7 +747,7 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\CustomFields\\Data\\AttributeId)",
+                    "return": "self",
                     "doc": []
                 },
                 "v7": {
@@ -1013,31 +767,19 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\CustomFields\\Data\\AttributeId)",
+                    "return": "self",
                     "doc": []
                 }
             },
-            "properties": {
-                "value": {
-                    "flags": 1,
+            "properties": {},
+            "constants": [
+                {
+                    "name": "LEGACY_NAMESPACE",
                     "type": "string",
-                    "readonly": true,
                     "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
+                    "final": false
                 }
-            },
-            "constants": {
-                "LEGACY_NAMESPACE": {
-                    "type": "string",
-                    "value": "'c0e1a000-a77e-4000-8000-000000000001'",
-                    "visibility": "public",
-                    "final": false,
-                    "doc": []
-                }
-            },
+            ],
             "enum_backing": null,
             "enum_cases": []
         },
@@ -1045,7 +787,7 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
@@ -1062,7 +804,7 @@
                     "parameters": [
                         {
                             "name": "next",
-                            "type": "self(CoreX\\CustomFields\\Data\\AttributeLifecycle)",
+                            "type": "self",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -1082,7 +824,7 @@
                     "parameters": [
                         {
                             "name": "next",
-                            "type": "self(CoreX\\CustomFields\\Data\\AttributeLifecycle)",
+                            "type": "self",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -1094,16 +836,31 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "Active": "'active'",
-                "Deprecated": "'deprecated'",
-                "Draft": "'draft'",
-                "Migrating": "'migrating'",
-                "Retired": "'retired'"
-            }
+            "enum_cases": [
+                {
+                    "name": "Draft",
+                    "value": "'draft'"
+                },
+                {
+                    "name": "Active",
+                    "value": "'active'"
+                },
+                {
+                    "name": "Deprecated",
+                    "value": "'deprecated'"
+                },
+                {
+                    "name": "Migrating",
+                    "value": "'migrating'"
+                },
+                {
+                    "name": "Retired",
+                    "value": "'retired'"
+                }
+            ]
         },
         "CoreX\\CustomFields\\Data\\AttributeStoragePolicy": {
             "kind": "class",
@@ -1144,11 +901,7 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $entities"
-                        ]
-                    }
+                    "doc": []
                 },
                 "driverFor": {
                     "visibility": "public",
@@ -1171,36 +924,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "default": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $entities"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "entities": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $entities"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1301,88 +1025,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "backfills": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "definitions": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "documents": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "eavRecords": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "eavValues": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "keyReservations": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "schemaOperations": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "writeTokens": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1438,38 +1081,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "payloadHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "recordVersion": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "status": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1484,11 +1096,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@phpstan-import-type": [
-                    "JsonMap from ValueBag"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "__construct": {
                     "visibility": "public",
@@ -1535,71 +1143,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>> $drift"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "drift": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>> $drift"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "entity": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>> $drift"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "schemaHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>> $drift"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "status": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>> $drift"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1634,29 +1181,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $fields"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "fields": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $fields"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1671,11 +1199,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@phpstan-import-type": [
-                    "JsonMap from ValueBag"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "__construct": {
                     "visibility": "public",
@@ -1731,91 +1255,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $driverCapabilities",
-                            "list<array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>> $activeFields"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "activeFields": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $driverCapabilities",
-                            "list<array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>> $activeFields"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "driverCapabilities": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $driverCapabilities",
-                            "list<array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>> $activeFields"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "entity": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $driverCapabilities",
-                            "list<array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>> $activeFields"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "schemaHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $driverCapabilities",
-                            "list<array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>> $activeFields"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "schemaVersion": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $driverCapabilities",
-                            "list<array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>> $activeFields"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1830,11 +1273,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@phpstan-import-type": [
-                    "JsonMap from ValueBag"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "__construct": {
                     "visibility": "public",
@@ -1854,29 +1293,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $tree"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "tree": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $tree"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1891,11 +1311,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@phpstan-import-type": [
-                    "JsonMap from ValueBag"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "__construct": {
                     "visibility": "public",
@@ -1924,43 +1340,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $tree"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "schemaHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $tree"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "tree": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $tree"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1969,22 +1352,31 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [],
             "uses": [],
             "doc": [],
-            "methods": [],
-            "properties": [],
+            "methods": {},
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "ExpressionBtree": "'expression_btree'",
-                "None": "'none'",
-                "Promoted": "'promoted'"
-            }
+            "enum_cases": [
+                {
+                    "name": "None",
+                    "value": "'none'"
+                },
+                {
+                    "name": "ExpressionBtree",
+                    "value": "'expression_btree'"
+                },
+                {
+                    "name": "Promoted",
+                    "value": "'promoted'"
+                }
+            ]
         },
         "CoreX\\CustomFields\\Data\\OperationRef": {
             "kind": "class",
@@ -2019,18 +1411,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2045,11 +1426,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@phpstan-import-type": [
-                    "JsonMap from ValueBag"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "__construct": {
                     "visibility": "public",
@@ -2069,29 +1446,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Data\\Data\\RecordRef> $records"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "records": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Data\\Data\\RecordRef> $records"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2106,11 +1464,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@phpstan-import-type": [
-                    "JsonMap from ValueBag"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "__construct": {
                     "visibility": "public",
@@ -2166,85 +1520,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $definition"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "approvalDigest": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $definition"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "definition": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $definition"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "entity": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $definition"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "expectedSchemaHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $definition"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "kind": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $definition"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2291,28 +1570,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "key": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "payloadHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2377,48 +1635,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "errorCode": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "operation": {
-                    "flags": 1,
-                    "type": "CoreX\\CustomFields\\Data\\OperationRef",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "schemaHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "status": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2433,28 +1650,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@phpstan-type": [
-                    "JsonLevel0 (null | bool | int | string)",
-                    "JsonLevel1 (null | bool | int | string | array<array-key, (null | bool | int | string)>)",
-                    "JsonLevel10 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)",
-                    "JsonLevel11 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)",
-                    "JsonLevel12 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)",
-                    "JsonLevel13 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)",
-                    "JsonLevel14 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)",
-                    "JsonLevel15 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)",
-                    "JsonLevel16 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)",
-                    "JsonLevel2 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)",
-                    "JsonLevel3 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)",
-                    "JsonLevel4 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)",
-                    "JsonLevel5 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)",
-                    "JsonLevel6 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)",
-                    "JsonLevel7 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)",
-                    "JsonLevel8 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)",
-                    "JsonLevel9 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)",
-                    "JsonMap array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "__construct": {
                     "visibility": "public",
@@ -2474,29 +1670,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $values"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "values": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $values"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2511,11 +1688,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@phpstan-import-type": [
-                    "JsonMap from ValueBag"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "__construct": {
                     "visibility": "public",
@@ -2535,29 +1708,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\CustomFields\\Data\\ValueBag> $records"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "records": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\CustomFields\\Data\\ValueBag> $records"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2572,11 +1726,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@phpstan-import-type": [
-                    "JsonMap from ValueBag"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "__construct": {
                     "visibility": "public",
@@ -2605,43 +1755,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $values"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "expectedSchemaHash": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $values"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "values": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $values"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2650,12 +1767,12 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Errors\\Contracts\\ErrorCode"
+                "Packman\\Errors\\Contracts\\ErrorCode"
             ],
             "uses": [],
             "doc": [],
@@ -2671,16 +1788,31 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "AttributeSchemaConflict": "'custom-fields.attribute_schema_conflict'",
-                "AttributeSchemaRetryExhausted": "'custom-fields.attribute_schema_retry_exhausted'",
-                "AttributesAccessDenied": "'custom-fields.attributes_access_denied'",
-                "AttributesEngineUnavailable": "'custom-fields.attributes_engine_unavailable'",
-                "InvalidAttributeTables": "'custom-fields.invalid_attribute_tables'"
-            }
+            "enum_cases": [
+                {
+                    "name": "AttributeSchemaConflict",
+                    "value": "'custom-fields.attribute_schema_conflict'"
+                },
+                {
+                    "name": "AttributeSchemaRetryExhausted",
+                    "value": "'custom-fields.attribute_schema_retry_exhausted'"
+                },
+                {
+                    "name": "AttributesAccessDenied",
+                    "value": "'custom-fields.attributes_access_denied'"
+                },
+                {
+                    "name": "AttributesEngineUnavailable",
+                    "value": "'custom-fields.attributes_engine_unavailable'"
+                },
+                {
+                    "name": "InvalidAttributeTables",
+                    "value": "'custom-fields.invalid_attribute_tables'"
+                }
+            ]
         },
         "CoreX\\CustomFields\\Exceptions\\InvalidAttributeTables": {
             "kind": "class",
@@ -2690,7 +1822,7 @@
             "readonly": false,
             "abstract": false,
             "extends": [
-                "CoreX\\Errors\\Exceptions\\CodedException"
+                "Packman\\Errors\\Exceptions\\CodedException"
             ],
             "implements": [],
             "uses": [],
@@ -2703,7 +1835,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "self(CoreX\\CustomFields\\Exceptions\\InvalidAttributeTables)",
+                    "return": "self",
                     "doc": []
                 },
                 "errorDescriptor": {
@@ -2713,7 +1845,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                    "return": "Packman\\Errors\\Data\\ErrorDescriptor",
                     "doc": []
                 },
                 "invalidIdentifier": {
@@ -2742,11 +1874,11 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\CustomFields\\Exceptions\\InvalidAttributeTables)",
+                    "return": "self",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []

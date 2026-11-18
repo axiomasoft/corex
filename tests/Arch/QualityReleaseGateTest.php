@@ -131,7 +131,7 @@ it('enforces final classes, immutable value DTOs and declaration-resolved named 
     $source = <<<'SOURCE'
 <?php
 namespace CoreX\QualityFixture;
-use CoreX\Attributes\Spi as Extension;
+use Packman\Attributes\Spi as Extension;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 #[Extension(kind: 'extend')]

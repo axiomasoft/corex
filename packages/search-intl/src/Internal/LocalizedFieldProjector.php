@@ -7,7 +7,9 @@ namespace CoreX\SearchIntl\Internal;
 use CoreX\Intl\Locale\Data\LocaleResolution;
 use CoreX\Intl\Translation\Contracts\TranslationReader;
 use CoreX\Intl\Translation\Data\LocalizedText;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class LocalizedFieldProjector
 {
     public function __construct(private TranslationReader $translations) {}

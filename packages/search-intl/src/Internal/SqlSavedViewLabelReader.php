@@ -10,7 +10,9 @@ use CoreX\Intl\Translation\Data\LocalizedText;
 use CoreX\Intl\Translation\Data\TranslationResult;
 use CoreX\SearchIntl\Contracts\SavedViewLabelReader;
 use Override;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class SqlSavedViewLabelReader implements SavedViewLabelReader
 {
     public function __construct(private TranslationReader $translations) {}

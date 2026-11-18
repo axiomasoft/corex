@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Data;
 
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 
 /** Immutable webhook activation policy; it never contains secret material. */
 #[Api(since: '1.0')]

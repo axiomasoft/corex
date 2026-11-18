@@ -16,8 +16,10 @@ use Flex\Crm\Support\CrmOptions;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\ValidationException;
+use Packman\Attributes\Internal;
 
 /** @internal Saving observer: invariant enforcement for direct Eloquent writes. */
+#[Internal]
 final readonly class RecordRules
 {
     public function __construct(

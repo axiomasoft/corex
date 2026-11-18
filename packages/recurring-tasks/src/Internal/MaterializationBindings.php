@@ -9,13 +9,13 @@ use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Recurrence\Contracts\RecurrenceExpander;
 use CoreX\Recurrence\Laravel\RecurrenceFactory;
 use CoreX\RecurringTasks\Contracts\TaskRecurrenceCommand;
-use CoreX\RecurringTasks\RecurringTasksServiceProvider;
 use CoreX\Scheduling\Data\WakeupHandlerDefinition;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
 use CoreX\Tasks\Task\Contracts\CreateTaskCommand;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
+use Packman\Attributes\Internal;
 
 /**
  * Registers the materialization port and, when enabled, its tagged wakeup handler.
@@ -23,6 +23,7 @@ use Illuminate\Database\DatabaseManager;
  *
  * @internal Composition detail of {@see RecurringTasksServiceProvider}.
  */
+#[Internal]
 final class MaterializationBindings
 {
     private const string WAKEUP_HANDLER = 'corex.recurring-tasks.materialization-wakeup-handler';

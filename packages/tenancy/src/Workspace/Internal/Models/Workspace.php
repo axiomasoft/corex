@@ -8,6 +8,7 @@ use Carbon\CarbonImmutable;
 use CoreX\Database\Laravel\BaseModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Packman\Attributes\Internal;
 
 /**
  * `wsp_workspaces` — hierarchy of companies/branches/partners within an
@@ -27,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property CarbonImmutable $updated_at
  * @property ?CarbonImmutable $deleted_at
  */
+#[Internal]
 final class Workspace extends BaseModel
 {
     protected $table = 'wsp_workspaces';

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\AccessAzguard\Exceptions;
 
-use CoreX\Attributes\Api;
 use LogicException;
+use Packman\Attributes\Api;
 
 /** AzGuard policies cannot be represented by the legacy finite Scope enum. */
 #[Api(since: '1.0')]

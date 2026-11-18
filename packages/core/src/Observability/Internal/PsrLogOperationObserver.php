@@ -10,6 +10,7 @@ use CoreX\Observability\Data\OperationContext;
 use CoreX\Observability\Data\OperationFailed;
 use CoreX\Observability\Data\OperationStarted;
 use DateTimeInterface;
+use Packman\Attributes\Internal;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Throwable;
@@ -20,6 +21,7 @@ use Throwable;
  * Account, workspace, actor, correlation, causation and operation ids stay in
  * the log context. They are forbidden as metric labels.
  */
+#[Internal]
 final readonly class PsrLogOperationObserver implements OperationObserver
 {
     public function __construct(

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Errors\Enums;
 
-use CoreX\Attributes\Api;
-use CoreX\Errors\Contracts\ErrorCode;
+use Packman\Attributes\Api;
+use Packman\Errors\Contracts\ErrorCode;
 
 #[Api(since: '1.0')]
 enum OperationsErrorCode: string implements ErrorCode

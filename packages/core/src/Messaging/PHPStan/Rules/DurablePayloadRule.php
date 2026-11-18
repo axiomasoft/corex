@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\PHPStan\Rules;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\Contracts\DurablePayload;
 use CoreX\Messaging\PHPStan\DurablePayloadTypeChecker;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;

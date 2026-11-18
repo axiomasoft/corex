@@ -9,8 +9,10 @@ use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Internal\Support\Validation;
 use CoreX\CustomFields\Internal\Value;
 use CoreX\Data\Data\DataScope;
+use Packman\Attributes\Internal;
 use RuntimeException;
 
+#[Internal]
 final readonly class StaticFieldCatalogue implements FieldCatalogue
 {
     /**

@@ -89,6 +89,29 @@
         },
         "laravel": {
             "providers": []
+        },
+        "packman": {
+            "schema-version": 1,
+            "package-type": "capability",
+            "stability": "stable",
+            "profile": "laravel-package",
+            "error-prefix": "operations",
+            "owns": [
+                "Authorization",
+                "Bulk",
+                "Cost",
+                "Definition",
+                "Errors",
+                "Idempotency",
+                "Internal",
+                "Invocation",
+                "Laravel",
+                "OpenApi",
+                "Pagination",
+                "Testing",
+                "Validation",
+                "Versioning"
+            ]
         }
     }
 }

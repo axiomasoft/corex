@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Webhooks\Internal\WebhookUrlPolicy;
 use InvalidArgumentException;
+use Packman\Attributes\Api;
 
 /** Canonical HTTPS destination shared by URL admission and host egress policies. */
 #[Api(since: '1.0')]

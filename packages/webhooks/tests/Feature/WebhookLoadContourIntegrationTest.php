@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Feature;
 
-use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
@@ -50,6 +49,7 @@ use DateTimeImmutable;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Orchestra\Testbench\TestCase;
+use Packman\Config\Data\SecretRef;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\ModulesServiceProvider;
 use Packman\Schema\Contracts\Migration\SchemaMigrator;

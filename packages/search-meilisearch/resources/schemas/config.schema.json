@@ -1,0 +1,35 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "axiomasoft/corex-search-meilisearch configuration",
+    "type": "object",
+    "properties": {
+        "corex-search-meilisearch": {
+            "type": "object",
+            "properties": {
+                "host": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null
+                },
+                "index_uid": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null
+                },
+                "key": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

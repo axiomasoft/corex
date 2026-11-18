@@ -8,12 +8,14 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
+use Packman\Attributes\Internal;
 
 /**
  * @internal
  *
  * @implements Scope<Model>
  */
+#[Internal]
 final class CrmScope implements Scope
 {
     /** @param Builder<covariant Model> $builder */

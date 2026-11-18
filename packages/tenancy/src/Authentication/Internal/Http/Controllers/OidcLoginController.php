@@ -20,6 +20,7 @@ use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use LogicException;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /**
@@ -40,6 +41,7 @@ use Psr\Clock\ClockInterface;
  * ordinary (non-`imp`) lane is UNCHANGED from P2.22 — its own Validation
  * suite must stay green without edits (D145).
  */
+#[Internal]
 final readonly class OidcLoginController
 {
     public function __construct(

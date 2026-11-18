@@ -8,7 +8,9 @@ use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
 use CoreX\Messaging\Enums\PiiClass;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class AttributeMessageTranslator
 {
     public function __construct(private DataScopeCodec $scopeCodec) {}

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\Attributes\Api;
-use CoreX\Attributes\Spi;
 use CoreX\Search\Internal\SearchManager;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
+use Packman\Attributes\Api;
+use Packman\Attributes\Spi;
 use Packman\Modules\Data\Compiler\InstalledPackageVersion;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 use Packman\Modules\Testing\ExtensionContract;

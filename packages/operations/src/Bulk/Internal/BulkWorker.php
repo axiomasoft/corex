@@ -9,10 +9,12 @@ use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Bulk\Contracts\BulkOperationStore;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use Throwable;
 
 /** @internal One leased bulk step. Observer failures never change the durable outcome. */
+#[Internal]
 final readonly class BulkWorker
 {
     public function __construct(

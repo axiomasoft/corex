@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace CoreX\Intl\Money\Laravel;
 
 use Brick\Money\Money;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Intl\Money\Internal\Value;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * @corex-model-extension Eloquent cast for configured minor-amount and ISO currency columns; no model substitution or relations.

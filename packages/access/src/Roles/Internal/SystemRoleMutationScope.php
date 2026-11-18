@@ -6,6 +6,7 @@ namespace CoreX\Access\Roles\Internal;
 
 use Closure;
 use CoreX\Access\Roles\Laravel\SystemRoleImmutable;
+use Packman\Attributes\Internal;
 
 /**
  * Per-cycle state of the system-role mutation exemption (AC-21). Each model class that
@@ -15,6 +16,7 @@ use CoreX\Access\Roles\Laravel\SystemRoleImmutable;
  *
  * @internal Composition state of the roles module.
  */
+#[Internal]
 final class SystemRoleMutationScope
 {
     /** @var array<string, bool> */

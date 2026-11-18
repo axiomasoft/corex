@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Unit;
 
-use CoreX\Config\Data\SecretRef;
 use CoreX\Webhooks\Internal\WebhookKeyRing;
 use InvalidArgumentException;
 use LogicException;
+use Packman\Config\Data\SecretRef;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

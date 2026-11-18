@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Scheduler\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
-use CoreX\Config\Contracts\RuntimeConfigCheck;
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Scheduler\Internal\DangerousModesCheck;
 use CoreX\Scheduler\Internal\SchedulerOptions;
@@ -24,6 +20,10 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Contracts\RuntimeConfigCheck;
+use Packman\Config\Exceptions\InvalidConfiguration;
 use Packman\Foundation\Contracts\PackageRegistrar;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Psr\Clock\ClockInterface;

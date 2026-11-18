@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal\Query;
 
+use Packman\Attributes\Internal;
+
+#[Internal]
 final readonly class AttributeIndexReceipt
 {
     /**

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Laravel\Http\Middleware;
 
 use Closure;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Tenancy\Runtime\Exceptions\TenantContextUnavailable;
 use Illuminate\Http\Request;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

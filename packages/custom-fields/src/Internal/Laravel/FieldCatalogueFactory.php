@@ -9,10 +9,12 @@ use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Internal\Schema\ModuleFieldCatalogue;
 use CoreX\CustomFields\Internal\Schema\StaticFieldCatalogue;
 use Illuminate\Contracts\Foundation\Application;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Entities\EntityRegistry;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 /** @internal Composition of the FieldCatalogue binding. */
+#[Internal]
 final class FieldCatalogueFactory
 {
     public function make(Application $app): FieldCatalogue

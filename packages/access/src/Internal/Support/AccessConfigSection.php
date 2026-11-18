@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Access\Internal\Support;
 
 use CoreX\Access\Laravel\AuthOptions;
-use CoreX\Config\Contracts\ConfigReportSection;
+use Packman\Attributes\Internal;
+use Packman\Config\Contracts\ConfigReportSectionInterface as ConfigReportSection;
 
 /** @internal Configuration report composition. */
+#[Internal]
 final class AccessConfigSection implements ConfigReportSection
 {
     public function order(): int

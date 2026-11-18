@@ -8,6 +8,7 @@ use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Exceptions\CentralContextException;
+use Packman\Attributes\Internal;
 
 /**
  * Adapts the cloud {@see TenancyManager} to the P1.12
@@ -15,6 +16,7 @@ use CoreX\Context\Exceptions\CentralContextException;
  * whatever context `TenantRuntimeManager::initialize()` last set, throwing
  * when called outside any initialized tenant.
  */
+#[Internal]
 final readonly class TenancyManagerContextResolver implements TenantContextResolver
 {
     public function __construct(

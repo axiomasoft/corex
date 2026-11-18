@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Settings\Contracts;
 
-use CoreX\Attributes\Api;
 use CoreX\Data\Data\JsonDocument;
 use CoreX\Settings\Data\SettingsScope;
+use Packman\Attributes\Api;
 
 /**
  * Hierarchical settings store: user → workspace → account →

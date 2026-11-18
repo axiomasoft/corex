@@ -13,6 +13,7 @@ use CoreX\Context\Contracts\Principal;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Override;
+use Packman\Attributes\Internal;
 
 /**
  * `apply()`'s phase order is a byte-exact mirror of
@@ -25,6 +26,7 @@ use Override;
  *
  * @internal spec: B-11 §3.3/§5.5, P2.9 D110/D114/D116
  */
+#[Internal]
 final readonly class DefaultScopeResolver implements ScopeResolver
 {
     public function __construct(

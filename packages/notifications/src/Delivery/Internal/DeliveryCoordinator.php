@@ -14,8 +14,10 @@ use CoreX\Notifications\Inbox\Contracts\NotificationPolicy;
 use CoreX\Notifications\Inbox\Data\NotificationAction;
 use CoreX\Notifications\Inbox\Data\NotificationContext;
 use CoreX\Notifications\Inbox\Data\NotificationSubject;
+use Packman\Attributes\Internal;
 use Throwable;
 
+#[Internal]
 final readonly class DeliveryCoordinator implements DeliveryExecution
 {
     public function __construct(

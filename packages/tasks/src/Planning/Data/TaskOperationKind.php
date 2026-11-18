@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Planning\Data;
 
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 
 /** Kinds accepted by the tasks-owned durable operation ledger. */
 #[Api(since: '1.0')]

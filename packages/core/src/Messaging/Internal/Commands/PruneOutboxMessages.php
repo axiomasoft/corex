@@ -8,6 +8,7 @@ use CoreX\Config\Data\CoreOptions;
 use DateInterval;
 use Illuminate\Console\Command;
 use Illuminate\Database\ConnectionResolverInterface;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /**
@@ -22,6 +23,7 @@ use Psr\Clock\ClockInterface;
  *
  * @internal spec: P5.15 — console command is not a supported API
  */
+#[Internal]
 final class PruneOutboxMessages extends Command
 {
     protected $signature = 'corex:messaging:prune

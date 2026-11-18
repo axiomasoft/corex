@@ -10,8 +10,10 @@ use CoreX\Search\Data\SearchQuery;
 use CoreX\Search\Data\SearchSnapshot;
 use InvalidArgumentException;
 use JsonException;
+use Packman\Attributes\Internal;
 use RuntimeException;
 
+#[Internal]
 final readonly class SearchCursorCodec
 {
     private const string Cipher = 'aes-256-gcm';

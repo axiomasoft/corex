@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\Account\Contracts\AccountRead;
 use CoreX\Tenancy\Account\Internal\SqlAccountRead;
 use CoreX\Tenancy\Identity\Contracts\MembershipProjection;
 use CoreX\Tenancy\Identity\Internal\Membership\ApplyMembershipProjection;
 use Illuminate\Contracts\Foundation\Application;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Registers the owning package's call ports with their private implementations. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

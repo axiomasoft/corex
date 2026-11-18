@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\ImportExport\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\WriteToken;
 use CoreX\ImportExport\Data\CanonicalRecord;
 use CoreX\ImportExport\Data\ConflictRule;
 use CoreX\ImportExport\Data\ImportDecision;
 use CoreX\ImportExport\Data\TargetResult;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface TransferSink

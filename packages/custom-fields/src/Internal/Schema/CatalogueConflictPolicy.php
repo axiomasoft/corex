@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace CoreX\CustomFields\Internal\Schema;
 
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class CatalogueConflictPolicy
 {
     /**

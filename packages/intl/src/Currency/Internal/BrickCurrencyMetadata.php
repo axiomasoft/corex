@@ -9,8 +9,10 @@ use CoreX\Intl\Currency\Contracts\CurrencyMetadata;
 use CoreX\Intl\Currency\Data\CurrencyInfo;
 use CoreX\Intl\Currency\Exceptions\InvalidRateException;
 use Override;
+use Packman\Attributes\Internal;
 use Throwable;
 
+#[Internal]
 final readonly class BrickCurrencyMetadata implements CurrencyMetadata
 {
     public function __construct(

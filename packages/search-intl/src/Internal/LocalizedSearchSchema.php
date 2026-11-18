@@ -10,7 +10,9 @@ use CoreX\Search\Data\SearchSnapshot;
 use CoreX\SearchIntl\Data\LocalizedFieldBinding;
 use InvalidArgumentException;
 use Override;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class LocalizedSearchSchema implements SearchSchema
 {
     /**

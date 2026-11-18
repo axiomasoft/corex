@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Pagination\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Operations\Pagination\Data\CursorPosition;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 interface CursorCodec

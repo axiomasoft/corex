@@ -13,7 +13,9 @@ use Flex\Crm\Deal\Models\Deal;
 use Flex\Crm\Internal\Value;
 use Flex\Crm\Lead\Models\Lead;
 use Override;
+use Packman\Attributes\Internal;
 
+#[Internal]
 trait HasCrmContext
 {
     public static function bootHasCrmContext(): void

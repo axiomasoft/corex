@@ -40,7 +40,17 @@
             "dev-main": "1.0.x-dev"
         },
         "packman": {
-            "module": "CoreX\\Scheduler\\SchedulerModule"
+            "module": "CoreX\\Scheduler\\SchedulerModule",
+            "schema-version": 1,
+            "package-type": "capability",
+            "stability": "stable",
+            "profile": "modular-platform",
+            "error-prefix": "scheduler",
+            "owns": [
+                "Internal",
+                "Laravel",
+                "Testing"
+            ]
         }
     },
     "repositories": [

@@ -15,8 +15,10 @@ use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\ContextResolver;
 use Illuminate\Http\Request;
 use Override;
+use Packman\Attributes\Internal;
 
 /** @internal Reads trusted state afresh; holds no per-account or per-principal cache. */
+#[Internal]
 final readonly class TrustedContextResolver implements ContextResolver
 {
     public function __construct(

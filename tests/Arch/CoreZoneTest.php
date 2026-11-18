@@ -48,6 +48,7 @@ const CORE_ZONE_ALLOWED = [
 
 /** @var list<string> */
 const CORE_ZONE_COMPOSITION = [
+    'packages/core/src/Foundation/Laravel/ConsoleRegistrar.php',
     'packages/core/src/Foundation/Laravel/PackmanRegistrar.php',
     'packages/core/src/Foundation/Internal/PackmanActorResolver.php',
     'packages/core/src/Foundation/Internal/PackmanContextResolver.php',
@@ -67,6 +68,7 @@ const CORE_ZONE_COMPOSITION = [
     'packages/core/src/Data/Laravel/DataRegistrar.php',
     'packages/core/src/Database/Laravel/DatabaseRegistrar.php',
     'packages/core/src/Departments/Laravel/DepartmentsRegistrar.php',
+    'packages/core/src/Errors/Laravel/ErrorCatalogueFactory.php',
     'packages/core/src/Errors/Laravel/ErrorsRegistrar.php',
     'packages/core/src/Errors/Laravel/ProblemRegistryFactory.php',
     'packages/core/src/Features/Laravel/FeaturesRegistrar.php',

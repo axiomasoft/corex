@@ -6,6 +6,7 @@ namespace CoreX\Tenancy\Authentication\Internal\Oidc;
 
 use CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException;
 use Firebase\JWT\JWT;
+use Packman\Attributes\Internal;
 use Throwable;
 
 /**
@@ -19,6 +20,7 @@ use Throwable;
  *
  * @internal
  */
+#[Internal]
 final readonly class IdTokenVerifier
 {
     /**

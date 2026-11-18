@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Account\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * @corex-model-extension Exact Account Eloquent relationship composition.
@@ -19,7 +19,7 @@ final class AccountRelations
 {
     /** @template TModel of Model
      * @param  TModel  $model
-     * @return BelongsTo<Account, TModel>
+     * @return BelongsTo<covariant Model, TModel>
      */
     public static function belongsTo(Model $model, ?string $foreignKey = null, ?string $ownerKey = null, ?string $relation = null): BelongsTo
     {

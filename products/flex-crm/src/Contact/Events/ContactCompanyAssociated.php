@@ -8,7 +8,9 @@ use Flex\Crm\Contact\Models\ContactCompany;
 use Flex\Crm\Context\Data\Actor;
 use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
 use Illuminate\Foundation\Events\Dispatchable;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class ContactCompanyAssociated implements ShouldDispatchAfterCommit
 {
     use Dispatchable;

@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Packman\Attributes\Internal;
 
 /**
  * One fan-out unit ({@see IdentitySyncer::fanOut()}, AC-16 г) — each account
@@ -17,6 +18,7 @@ use Illuminate\Queue\SerializesModels;
  * `sync_status=failed` without blocking the others (they are independent
  * queue entries, not a single loop).
  */
+#[Internal]
 final class SyncIdentityToAccount implements ShouldQueue
 {
     use Dispatchable;

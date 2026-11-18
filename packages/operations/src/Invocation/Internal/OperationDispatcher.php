@@ -22,10 +22,12 @@ use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Packman\Attributes\Internal;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 use UnexpectedValueException;
 
+#[Internal]
 final readonly class OperationDispatcher implements \CoreX\Operations\Invocation\Contracts\OperationDispatcher
 {
     public function __construct(

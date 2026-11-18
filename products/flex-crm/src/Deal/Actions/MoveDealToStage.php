@@ -11,11 +11,13 @@ use Flex\Crm\Deal\Models\Deal;
 use Flex\Crm\Deal\Models\Stage;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Validation\ValidationException;
+use Packman\Attributes\Internal;
 
 /**
  * Moves a deal to a stage and derives its status from the stage's terminal
  * flags (won/lost), otherwise keeps it open.
  */
+#[Internal]
 final readonly class MoveDealToStage
 {
     public function __construct(private ContextGuard $guard) {}

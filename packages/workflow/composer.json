@@ -6,12 +6,13 @@
     "require": {
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/packman": "^0.1@dev",
+        "axiomasoft/packman-modules": "^0.1@dev",
+        "axiomasoft/packman-schema": "^0.1@dev",
         "illuminate/contracts": "^13.0",
         "illuminate/database": "^13.0",
         "illuminate/support": "^13.0",
-        "psr/clock": "^1.0",
-        "axiomasoft/packman-modules": "^0.1@dev",
-        "axiomasoft/packman-schema": "^0.1@dev"
+        "psr/clock": "^1.0"
     },
     "autoload": {
         "psr-4": {
@@ -38,7 +39,18 @@
             "dev-main": "1.0.x-dev"
         },
         "packman": {
-            "module": "CoreX\\Workflow\\WorkflowModule"
+            "module": "CoreX\\Workflow\\WorkflowModule",
+            "schema-version": 1,
+            "package-type": "capability",
+            "stability": "stable",
+            "profile": "modular-platform",
+            "error-prefix": "workflow",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Internal",
+                "Laravel"
+            ]
         }
     },
     "repositories": [

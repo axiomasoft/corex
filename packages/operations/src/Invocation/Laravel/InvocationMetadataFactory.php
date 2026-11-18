@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Invocation\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Invocation\Data\InvocationMetadata;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class InvocationMetadataFactory

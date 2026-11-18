@@ -1,0 +1,83 @@
+{
+    "schema": "packman-error-codes/1",
+    "package": "axiomasoft/corex-intl",
+    "codes": [
+        {
+            "package": "axiomasoft/corex-intl",
+            "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+            "case": "AccessDeniedException",
+            "code": "intl.access_denied_exception",
+            "type": "urn:packman:problem:intl.access_denied_exception",
+            "status": 403,
+            "title": "Access denied exception.",
+            "retryable": false,
+            "category": "authorization"
+        },
+        {
+            "package": "axiomasoft/corex-intl",
+            "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+            "case": "InvalidLocaleException",
+            "code": "intl.invalid_locale_exception",
+            "type": "urn:packman:problem:intl.invalid_locale_exception",
+            "status": 422,
+            "title": "Invalid locale exception.",
+            "retryable": false,
+            "category": "validation"
+        },
+        {
+            "package": "axiomasoft/corex-intl",
+            "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+            "case": "InvalidRateException",
+            "code": "intl.invalid_rate_exception",
+            "type": "urn:packman:problem:intl.invalid_rate_exception",
+            "status": 422,
+            "title": "Invalid rate exception.",
+            "retryable": false,
+            "category": "validation"
+        },
+        {
+            "package": "axiomasoft/corex-intl",
+            "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+            "case": "OperationConflictException",
+            "code": "intl.operation_conflict_exception",
+            "type": "urn:packman:problem:intl.operation_conflict_exception",
+            "status": 409,
+            "title": "Operation conflict exception.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex-intl",
+            "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+            "case": "SchemaMismatchException",
+            "code": "intl.schema_mismatch_exception",
+            "type": "urn:packman:problem:intl.schema_mismatch_exception",
+            "status": 409,
+            "title": "Schema mismatch exception.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex-intl",
+            "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+            "case": "SnapshotExpiredException",
+            "code": "intl.snapshot_expired_exception",
+            "type": "urn:packman:problem:intl.snapshot_expired_exception",
+            "status": 404,
+            "title": "Snapshot expired exception.",
+            "retryable": false,
+            "category": "not_found"
+        },
+        {
+            "package": "axiomasoft/corex-intl",
+            "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+            "case": "UnsupportedFormattingException",
+            "code": "intl.unsupported_formatting_exception",
+            "type": "urn:packman:problem:intl.unsupported_formatting_exception",
+            "status": 422,
+            "title": "Unsupported formatting exception.",
+            "retryable": false,
+            "category": "unsupported"
+        }
+    ]
+}

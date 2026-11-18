@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Access\Laravel\AuthOptions;
-use CoreX\Config\Exceptions\InvalidConfiguration;
+use Packman\Config\Exceptions\InvalidConfiguration;
 
 it('normalizes an empty workspace scope class to null', function (): void {
     $options = AuthOptions::fromArray([

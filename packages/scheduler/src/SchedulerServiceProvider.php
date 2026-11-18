@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Scheduler;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Scheduler\Internal\Commands\SweepWakeups;
 use CoreX\Scheduler\Internal\Commands\ValidateWakeupStamps;
-use CoreX\Scheduler\Internal\SchedulerSchemaSets;
 use CoreX\Scheduler\Laravel\WakeupBindingsRegistrar;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Packman\Foundation\Contracts\PackageRegistrar;
 use Packman\Schema\Contracts\Migration\SchemaSetProvider;
 
@@ -24,7 +23,7 @@ final class SchedulerServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
-        $this->app->tag([SchedulerSchemaSets::class], SchemaSetProvider::class);
+        $this->app->tag((new SchedulerModule)->schemaSetProviders(), SchemaSetProvider::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-scheduler.php', 'corex-scheduler');
 

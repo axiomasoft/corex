@@ -18,9 +18,11 @@ use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Messaging\Contracts\Outbox;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /** @internal Composition of the AttributeStore binding. */
+#[Internal]
 final class AttributeStoreFactory
 {
     public function make(Application $app): AttributeStore

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Audit\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use DateTimeImmutable;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Retention policy for the append-only audit journal. `olderThan()` returns

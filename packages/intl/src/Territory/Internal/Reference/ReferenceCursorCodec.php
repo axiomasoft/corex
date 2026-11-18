@@ -9,8 +9,10 @@ use CoreX\Intl\Territory\Data\ReferenceCursor;
 use CoreX\Intl\Territory\Internal\Value;
 use InvalidArgumentException;
 use JsonException;
+use Packman\Attributes\Internal;
 use RuntimeException;
 
+#[Internal]
 final readonly class ReferenceCursorCodec
 {
     public function __construct(private string $secret)

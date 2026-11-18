@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Search\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Search\Contracts\SearchDriverRegistry;
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Internal\ManagerDriverRegistry;
 use CoreX\Search\Internal\SearchManager;
 use Illuminate\Contracts\Foundation\Application;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use RuntimeException;
 
 /** Registers the owning package's call ports with their private implementations. */

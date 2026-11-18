@@ -842,6 +842,14 @@ jobs:
       - name: Source API surface report (classification debt is reported)
         run: composer php-api
 
+      # Architecture tests restore temporary source mutations before scanners run.
+      - name: Native Packman monorepo governance and contracts
+        run: |
+          scripts/php84 vendor/bin/packman gate
+          scripts/php84 vendor/bin/packman php-api --check
+          scripts/php84 vendor/bin/packman error-codes --check
+          scripts/php84 vendor/bin/packman config-schema --check
+
       - name: Typed package error registry and literal gate
         run: composer error-registry
 

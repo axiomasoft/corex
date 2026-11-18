@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\ImpersonationGuard;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantDatabaseLifecycle;
@@ -25,6 +23,8 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Connectors\ConnectionFactory;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Packman\Foundation\Concerns\RegistersNothingOnBoot;
 use Packman\Foundation\Contracts\PackageRegistrar;
 use Packman\Schema\Contracts\Migration\SchemaMigrator;

@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Errors\Internal;
 
-use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use Illuminate\Http\JsonResponse;
+use Packman\Attributes\Internal;
+use Packman\Errors\Contracts\ProblemRegistry;
 
 /** @internal RFC 9457 projection of one mapped ApiError. */
+#[Internal]
 final readonly class ProblemDetailsSerializer
 {
     public function __construct(private ProblemRegistry $problems) {}

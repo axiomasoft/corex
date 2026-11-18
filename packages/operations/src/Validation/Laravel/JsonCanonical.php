@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Validation\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use InvalidArgumentException;
 use JsonException;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Lossless canonical JSON encoding with duplicate-key rejection and safe numeric bounds. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

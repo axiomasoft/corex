@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Config\Laravel;
 
 use BackedEnum;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Audit\Contracts\AuditRetention;
 use CoreX\Audit\Internal\NullAuditRetention;
@@ -29,6 +27,9 @@ use CoreX\Settings\Contracts\SettingsRepository;
 use CoreX\Settings\Internal\DatabaseSettingsRepository;
 use CoreX\Settings\Internal\NullSettingDefaultsProvider;
 use DateInterval;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Laravel\ConfigurationValidator;
 use Packman\Settings\Contracts\SettingDefaultsProviderInterface as SettingDefaultsProvider;
 use Throwable;
 

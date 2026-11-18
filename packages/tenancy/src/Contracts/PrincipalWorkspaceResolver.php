@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Data\WorkspaceRef;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Membership lookup on the already initialized account connection; no authentication or connection switching. */
 #[Spi(kind: SpiKind::Implement, since: '1.0')]

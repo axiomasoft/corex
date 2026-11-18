@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Tools\Internal;
 
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use Packman\Attributes\Internal;
 use Packman\Modules\Data\Extenders\Api;
 
 /** Deterministic contract hash for one compiled tool declaration. */
+#[Internal]
 final class ToolContractHasher
 {
     public static function hash(Api $api): string

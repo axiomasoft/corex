@@ -20,10 +20,12 @@ use CoreX\Operations\Definition\Enums\OperationMode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Data\OperationResult;
+use Packman\Attributes\Internal;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
 /** @internal Admission and settlement inside the shared operation invocation seam. */
+#[Internal]
 final readonly class BudgetAdmission implements BudgetExecution
 {
     /** @var Closure(OperationInvocation):CostInput */

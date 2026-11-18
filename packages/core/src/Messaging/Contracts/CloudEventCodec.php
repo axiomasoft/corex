@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Contracts;
 
-use CoreX\Attributes\Api;
 use CoreX\Messaging\Data\MessageEnvelope;
+use Packman\Attributes\Api;
 
 /**
  * CloudEvents 1.0 structured JSON with internal and external profiles.

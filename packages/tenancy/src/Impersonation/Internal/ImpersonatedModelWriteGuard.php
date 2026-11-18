@@ -10,6 +10,7 @@ use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Exceptions\ImpersonationRestrictedException;
 use CoreX\Tenancy\Impersonation\Internal\Models\ImpersonationGrant;
 use Illuminate\Database\Eloquent\Model;
+use Packman\Attributes\Internal;
 
 /**
  * L2 — Eloquent layer of the read-only invariant (D141/D142): global
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @internal spec: B-11 §5.9, D141/D142
  */
+#[Internal]
 final class ImpersonatedModelWriteGuard
 {
     /**

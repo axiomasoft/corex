@@ -13,9 +13,11 @@ use CoreX\Data\Data\JsonDocument;
 use CoreX\Tenancy\Impersonation\Contracts\ImpersonationAuditSink;
 use CoreX\Tenancy\Impersonation\Data\ImpersonationAuditEvent;
 use Illuminate\Database\ConnectionResolverInterface;
+use Packman\Attributes\Internal;
 use RuntimeException;
 
 /** @internal */
+#[Internal]
 final readonly class DualImpersonationAuditSink implements ImpersonationAuditSink
 {
     /** @param Closure(): string $id */

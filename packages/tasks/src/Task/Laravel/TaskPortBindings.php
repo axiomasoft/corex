@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Task\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Tasks\Access\Contracts\TaskModuleContext;
 use CoreX\Tasks\Access\Internal\TaskModuleGuard;
 use CoreX\Tasks\Project\Contracts\ProjectRead;
@@ -13,6 +11,8 @@ use CoreX\Tasks\Project\Internal\SqlProjectRead;
 use CoreX\Tasks\Sprint\Contracts\SprintRead;
 use CoreX\Tasks\Sprint\Internal\SqlSprintRead;
 use Illuminate\Contracts\Foundation\Application;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Registers the owning package's call ports with their private implementations. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

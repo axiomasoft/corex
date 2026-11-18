@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Internal;
 
-use CoreX\Errors\Contracts\DescribesError;
-use CoreX\Errors\Data\ErrorDescriptor;
-use CoreX\Errors\Enums\ErrorCategory;
-use CoreX\Errors\Enums\UnavailabilityReason;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
+use Packman\Attributes\Internal;
+use Packman\Errors\Contracts\DescribesError;
+use Packman\Errors\Data\ErrorDescriptor;
+use Packman\Errors\Enums\ErrorCategory;
+use Packman\Errors\Enums\UnavailabilityReason;
 use RuntimeException;
 
 /** @internal Fail-closed before a transfer bulk row exists. */
+#[Internal]
 final class TransferCapabilityUnavailable extends RuntimeException implements DescribesError
 {
     public function __construct()

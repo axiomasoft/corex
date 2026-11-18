@@ -1,0 +1,42 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "axiomasoft/corex-notifications configuration",
+    "type": "object",
+    "properties": {
+        "corex-notifications": {
+            "type": "object",
+            "properties": {
+                "delivery": {
+                    "type": "object",
+                    "properties": {
+                        "claim_seconds": {
+                            "type": "integer",
+                            "default": 60
+                        },
+                        "max_attempts": {
+                            "type": "integer",
+                            "default": 5
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "digest": {
+                    "type": "object",
+                    "properties": {
+                        "accept_legacy_unstamped": {
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "enabled": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

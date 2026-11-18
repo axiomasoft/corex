@@ -17,8 +17,10 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 use RRule\RSet;
 
+#[Internal]
 final class RRuleRecurrenceExpander implements RecurrenceExpander
 {
     public function expand(RecurrenceSet $set, RecurrenceWindow $window, ExpansionLimits $limits, ?ExpansionCursor $after = null): OccurrencePage

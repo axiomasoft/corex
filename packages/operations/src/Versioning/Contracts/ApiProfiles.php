@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Versioning\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\Versioning\Data\ApiProfile;
 use CoreX\Operations\Versioning\Data\EffectiveCapability;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Packman\Modules\Data\Compiler\CompiledRegistry;
 
 /** Call port for the methods consumed across the owning module boundary. */

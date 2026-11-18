@@ -1,0 +1,19 @@
+{
+    "profile": "modular-platform",
+    "composer_type": "packman-module",
+    "allow_laravel_required": true,
+    "allowed_directories": [
+        "Contracts",
+        "Data",
+        "Enums",
+        "Events",
+        "Exceptions",
+        "Internal",
+        "Laravel",
+        "Testing"
+    ],
+    "provider_max_lines": 80,
+    "require_php_api_manifest": true,
+    "require_readme": true,
+    "require_changelog": true
+}

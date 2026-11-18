@@ -9,9 +9,11 @@ use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\Data\Data\DataScope;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 use RuntimeException;
 use Throwable;
 
+#[Internal]
 final readonly class CachedFieldCatalogue implements FieldCatalogue
 {
     public function __construct(

@@ -14,6 +14,7 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Override;
+use Packman\Attributes\Internal;
 use RuntimeException;
 
 /**
@@ -25,6 +26,7 @@ use RuntimeException;
  *
  * @internal spec: B-10 §2/§3.1/§5.7, D12
  */
+#[Internal]
 final readonly class DatabaseDepartmentRepository implements DepartmentRepository
 {
     public function __construct(

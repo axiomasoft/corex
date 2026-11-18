@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace CoreX\Operations\Tests\Feature;
 
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Errors\Contracts\ProblemRegistry;
-use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Data\StoredOperationOutcome;
 use CoreX\Operations\Tests\TestCase;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use Packman\Errors\Contracts\ProblemRegistry;
+use Packman\Errors\Enums\ErrorCategory;
 use TypeError;
 
 final class StoredOperationOutcomeTest extends TestCase

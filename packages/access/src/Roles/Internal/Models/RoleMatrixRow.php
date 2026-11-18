@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Override;
+use Packman\Attributes\Internal;
 
 /**
  * `aut_role_matrix` — one row of role × entity × action × scope[, context]
@@ -29,6 +30,7 @@ use Override;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
+#[Internal]
 final class RoleMatrixRow extends Model
 {
     use HasUuids;

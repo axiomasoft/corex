@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Tasks\Planning\Laravel;
 
 use Closure;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Tasks\Access\Contracts\TaskModuleContext as TaskModuleGuard;
@@ -41,6 +39,8 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class PlanningCommand implements TaskPlanningCommand

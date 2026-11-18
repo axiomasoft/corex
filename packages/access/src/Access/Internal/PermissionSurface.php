@@ -7,6 +7,7 @@ namespace CoreX\Access\Access\Internal;
 use CoreX\Access\Enums\Scope;
 use CoreX\Access\Exceptions\ScopeCapabilityMismatch;
 use CoreX\Access\Matrix\Contracts\EntityActivity as ActiveEntityFilter;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Extenders\Permissions;
 
@@ -28,6 +29,7 @@ use Packman\Modules\Data\Extenders\Permissions;
  *
  * @internal spec: B-11 §4 п.2/п.3, P2.21 D112/D113
  */
+#[Internal]
 final readonly class PermissionSurface
 {
     public function __construct(

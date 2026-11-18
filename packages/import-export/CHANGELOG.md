@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — Packman governance
+
+- Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.
+
+
 ## Unreleased — package boundaries
 
 - Add `ImportExportFactory::openImport()` / `openExport()` and typed session handles. The package owns initial job persistence, idempotent reopen and executor composition; callers use exported ports without importing internals or writing private tables.

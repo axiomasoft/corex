@@ -6,10 +6,7 @@ namespace CoreX\Operations\Errors\Internal;
 
 use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Errors\Contracts\DescribesError;
-use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Errors\Enums\CoreErrorCode;
-use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Operations\Errors\Contracts\ErrorMapping;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
@@ -18,10 +15,15 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
+use Packman\Attributes\Internal;
+use Packman\Errors\Contracts\DescribesError;
+use Packman\Errors\Contracts\ProblemRegistry;
+use Packman\Errors\Enums\ErrorCategory;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
 /** @internal Shares safe normalization between dispatch and the surrounding middleware pipeline. */
+#[Internal]
 final readonly class ErrorMapper implements ErrorMapping
 {
     public function __construct(

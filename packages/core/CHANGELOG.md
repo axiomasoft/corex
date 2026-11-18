@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — Packman governance
+
+- Remove 25 unused generic/module/schema error identities now owned by Packman; retain only emitted CoreX domain identities.
+
+- Reject own-package Internal types in public/SPI signatures as well as foreign Internal types; recognize explicitly private implementation classes outside Internal namespaces.
+- Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.
+- Remove duplicate generic attributes, configuration helpers and error-registry machinery. Use Packman error URNs and `packman:config:validate`; retain CoreX domain options, errors, context and audit adapters. Native Packman writes API manifests while the CoreX scanner retains whole-graph checks.
+- Delegate provider composition to focused registrars and keep service providers within 80 lines.
+
+
 ## Unreleased — Packman runtime
 
 - Breaking before release: remove unused deprecated `CoreOptionsParser::current()`; resolve the shared `CoreOptions` instance from the container.
@@ -74,7 +84,7 @@
 
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
-- Removed the static `CoreX\Config\Internal\Config` holder: `CoreOptions` is a lazy shared singleton read once at boot (`app(CoreOptions::class)` in migrations and tests; call `forgetInstance(CoreOptions::class)` after writing `corex` config in a booted test). Added `CoreOptions::$acknowledgedDangerousModes` (`corex.acknowledged_dangerous_modes`, exact config paths only), the `RuntimeConfigCheck` SPI and `RuntimeConfigGate`: checks run when the HTTP application finishes booting or a console command starts, except build commands. `corex:config:validate` runs them too, accepts `--production`, lists acknowledged dangerous modes as warnings and reports the `corex-operations.require_physical_tenancy=false` opt-out as a notice. `CoreOptionsParser::current()` is deprecated and returns the shared `CoreOptions`.
+- Removed the static `CoreX\Config\Internal\Config` holder: `CoreOptions` is a lazy shared singleton read once at boot (`app(CoreOptions::class)` in migrations and tests; call `forgetInstance(CoreOptions::class)` after writing `corex` config in a booted test). Added `CoreOptions::$acknowledgedDangerousModes` (`corex.acknowledged_dangerous_modes`, exact config paths only), the `RuntimeConfigCheck` SPI and `RuntimeConfigGate`: checks run when the HTTP application finishes booting or a console command starts, except build commands. `packman:config:validate` runs them too, accepts `--production`, lists acknowledged dangerous modes as warnings and reports the `corex-operations.require_physical_tenancy=false` opt-out as a notice. `CoreOptionsParser::current()` is deprecated and returns the shared `CoreOptions`.
 
 ## Unreleased — CI ownership and test isolation repair (P10.2)
 
@@ -103,7 +113,7 @@
 
 ## Unreleased — source API metadata (PLAN3.P04.1)
 
-- Add final readonly `CoreX\Attributes\Api` and `Spi` metadata and the `SpiKind` backed enum.
+- Add final readonly `Packman\Attributes\Api` and `Spi` metadata and the `SpiKind` backed enum.
 - Add a source-only API/SPI tooling scanner and deterministic `php-api/1` manifests, with nested PHPDoc, named-parameter and inheritance diagnostics.
 - The report command exposes classification debt; existing namespace/package gates remain required until the strict cutover. Parser dependencies remain development-only.
 

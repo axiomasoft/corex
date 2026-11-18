@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Panels\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Enums\PrincipalType;
 use CoreX\Invocation\Contracts\RequestContext;
 use InvalidArgumentException;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Packman\Panels\Data\Panel\PanelContext;
 use Packman\Panels\SavedViews\Data\ViewContext;
 

@@ -11,10 +11,12 @@ use CoreX\Tasks\Planning\Data\TaskOperationReceipt;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 use Override;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use UnexpectedValueException;
 
 /** @internal SQL representation of the tasks-owned operation ledger. */
+#[Internal]
 final readonly class DatabaseTaskOperationReceipts implements TaskOperationReceipts
 {
     public function __construct(private ClockInterface $clock) {}

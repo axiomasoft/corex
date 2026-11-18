@@ -6,8 +6,10 @@ namespace CoreX\ImportExport\Internal;
 
 use CoreX\Data\Data\DataScope;
 use CoreX\ImportExport\Exceptions\SessionUnavailable;
+use Packman\Attributes\Internal;
 
 /** Durable session metadata lives inside the package-owned source manifest. */
+#[Internal]
 final class SessionIdentity
 {
     public static function scopeHash(DataScope $scope): string

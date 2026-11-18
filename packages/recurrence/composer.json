@@ -5,9 +5,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.4",
-        "rlanvin/php-rrule": "^3.0",
         "axiomasoft/corex": "^1.0@dev",
-        "laravel/framework": "^13.0"
+        "axiomasoft/packman": "^0.1@dev",
+        "laravel/framework": "^13.0",
+        "rlanvin/php-rrule": "^3.0"
     },
     "autoload": {
         "psr-4": {
@@ -38,6 +39,21 @@
         "laravel": {
             "providers": [
                 "CoreX\\Recurrence\\RecurrenceServiceProvider"
+            ]
+        },
+        "packman": {
+            "schema-version": 1,
+            "package-type": "capability",
+            "stability": "stable",
+            "profile": "laravel-package",
+            "error-prefix": "recurrence",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Errors",
+                "Exceptions",
+                "Internal",
+                "Laravel"
             ]
         }
     },

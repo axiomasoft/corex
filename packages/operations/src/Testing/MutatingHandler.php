@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Testing;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Invocation\Contracts\RequestContext;
 use Illuminate\Database\ConnectionResolverInterface;
 use InvalidArgumentException;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Psr\Clock\ClockInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]

@@ -7,7 +7,9 @@ namespace CoreX\Data\Internal;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\DataScopeAccessDecision;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class AllowAllDataScopeAuthorizer implements DataScopeAuthorizer
 {
     public function authorize(

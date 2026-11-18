@@ -16,9 +16,11 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 use stdClass;
 
 /** @internal Durable materialization receipts and occurrence rows. */
+#[Internal]
 final readonly class MaterializationStore
 {
     public function __construct(private Connection $connection, private TaskOperationReceipts $receipts) {}

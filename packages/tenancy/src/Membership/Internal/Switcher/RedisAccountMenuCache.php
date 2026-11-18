@@ -15,9 +15,11 @@ use CoreX\Tenancy\Membership\Internal\Transport\StrictJson;
 use DateTimeImmutable;
 use DateTimeZone;
 use Illuminate\Contracts\Cache\Repository;
+use Packman\Attributes\Internal;
 use Throwable;
 
 /** @internal Explicitly composed display cache; it is never an authority source. */
+#[Internal]
 final readonly class RedisAccountMenuCache implements AccountMenuCache
 {
     /** @param Closure(AccountsQuery):?string $versionReader */

@@ -14,7 +14,9 @@ use CoreX\Notifications\Preferences\Data\PreferenceInput;
 use CoreX\Settings\Contracts\SettingsRepository;
 use CoreX\Settings\Data\SettingsScope;
 use Illuminate\Database\ConnectionInterface;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class SettingsPreferenceRepository implements PreferenceRepository
 {
     private const string NAMESPACE = 'corex.notifications';

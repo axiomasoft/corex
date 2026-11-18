@@ -6,6 +6,7 @@ namespace CoreX\Features\Internal\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Packman\Attributes\Internal;
 
 /**
  * Per-account feature-flag default (sys_feature_flags).
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @internal spec: B-10 §2
  */
+#[Internal]
 final class FeatureFlag extends Model
 {
     use HasUuids;

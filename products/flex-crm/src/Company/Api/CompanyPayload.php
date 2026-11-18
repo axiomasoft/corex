@@ -6,7 +6,9 @@ namespace Flex\Crm\Company\Api;
 
 use Flex\Crm\Company\Models\Company;
 use Flex\Crm\Internal\Value;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class CompanyPayload
 {
     /** @return array<string, mixed> */

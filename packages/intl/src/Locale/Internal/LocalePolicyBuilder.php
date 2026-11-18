@@ -7,8 +7,10 @@ namespace CoreX\Intl\Locale\Internal;
 use CoreX\Intl\Locale\Data\LocalePolicy;
 use InvalidArgumentException;
 use JsonException;
+use Packman\Attributes\Internal;
 use RuntimeException;
 
+#[Internal]
 final class LocalePolicyBuilder
 {
     /**

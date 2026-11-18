@@ -6,7 +6,9 @@ namespace Flex\Crm\Context\Models\Concerns;
 
 use Flex\Crm\Activity\Models\Activity;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Packman\Attributes\Internal;
 
+#[Internal]
 trait HasActivities
 {
     /** @return BelongsToMany<Activity, $this> */

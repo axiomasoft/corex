@@ -6,6 +6,7 @@ namespace CoreX\Tenancy\Provisioning\Internal\Models;
 
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
+use Packman\Attributes\Internal;
 
 /**
  * `root_migration_batches` — a wave of tenant-schema migrations targeting
@@ -22,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property CarbonImmutable $created_at
  * @property CarbonImmutable $updated_at
  */
+#[Internal]
 final class MigrationBatch extends Model
 {
     protected $table = 'root_migration_batches';

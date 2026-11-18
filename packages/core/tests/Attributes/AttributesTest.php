@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Attributes\Api;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
+use Packman\Attributes\Api;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 it('Attributes expose immutable metadata and backed kind roundtrips', function (): void {
     expect(new Api)->since->toBe('1.0');

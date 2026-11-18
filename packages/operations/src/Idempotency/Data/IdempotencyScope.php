@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Idempotency\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Context\Enums\PrincipalType;
 use InvalidArgumentException;
+use Packman\Attributes\Api;
 
 /**
  * Tenant-local identity included in an idempotency key's collision domain.

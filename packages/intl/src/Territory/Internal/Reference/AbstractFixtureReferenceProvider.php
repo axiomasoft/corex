@@ -14,7 +14,9 @@ use CoreX\Intl\Territory\Data\ReferenceCursor;
 use CoreX\Intl\Territory\Data\ReferenceIdentity;
 use CoreX\Intl\Territory\Data\ReferencePage;
 use CoreX\Intl\Territory\Internal\Value;
+use Packman\Attributes\Internal;
 
+#[Internal]
 abstract class AbstractFixtureReferenceProvider implements GeographyProvider
 {
     /** @var list<array<string, mixed>> */

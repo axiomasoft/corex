@@ -12,10 +12,12 @@ use CoreX\CustomFields\Internal\UnavailableAttributes;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Entities\EntityRegistry;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 /** @internal Composition of the SchemaOperations binding. */
+#[Internal]
 final class SchemaOperationsFactory
 {
     public function make(Application $app): SchemaOperations

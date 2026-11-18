@@ -10,11 +10,13 @@ use CoreX\Context\Data\ProvisionParams;
 use CoreX\Tenancy\Account\Internal\Jobs\CreateDatabaseFromTemplate;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks;
+use Packman\Attributes\Internal;
 
 /**
  * Persists verified provisioning parameters, then requests a committed host resource.
  * Replays require the physical owner to verify the existing account resource.
  */
+#[Internal]
 final readonly class DatabaseTenantProvisioner implements TenantDatabaseProvisioner
 {
     public function __construct(

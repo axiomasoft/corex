@@ -17,6 +17,7 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Query\Builder;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use Throwable;
 
@@ -31,6 +32,7 @@ use Throwable;
  * `sync_status=failed` (AC-16 г): retried later by `corex:tenancy:reconcile-identities`,
  * never left to throw across the whole fan-out.
  */
+#[Internal]
 final readonly class DatabaseIdentitySyncer implements IdentityPasswordRehasher, IdentitySyncer
 {
     public function __construct(

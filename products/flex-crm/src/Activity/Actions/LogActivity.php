@@ -15,7 +15,9 @@ use Flex\Crm\Lead\Models\Lead;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\ValidationException;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class LogActivity
 {
     public function __construct(private ContextGuard $guard) {}

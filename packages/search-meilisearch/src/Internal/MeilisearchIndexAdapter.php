@@ -11,7 +11,9 @@ use CoreX\Search\Data\IndexSubmission;
 use CoreX\Search\Data\IndexSwap;
 use InvalidArgumentException;
 use Meilisearch\Client;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class MeilisearchIndexAdapter implements IndexDriver
 {
     public function __construct(private Client $client, private string $indexPrefix)

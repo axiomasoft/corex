@@ -1,0 +1,139 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "axiomasoft/corex-intl configuration",
+    "type": "object",
+    "properties": {
+        "corex-intl": {
+            "type": "object",
+            "properties": {
+                "formatting": {
+                    "type": "object",
+                    "properties": {
+                        "icu_enabled": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "array",
+                                "object",
+                                "null"
+                            ]
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "locale": {
+                    "type": "object",
+                    "properties": {
+                        "allow_parent": {
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "app_tag": {
+                            "type": "string",
+                            "default": "en"
+                        },
+                        "explicit_fallback_tags": {
+                            "type": "array"
+                        },
+                        "max_supported_tags": {
+                            "type": "integer",
+                            "default": 100
+                        },
+                        "max_tag_length": {
+                            "type": "integer",
+                            "default": 128
+                        },
+                        "settings_key": {
+                            "type": "string",
+                            "default": "locale"
+                        },
+                        "settings_namespace": {
+                            "type": "string",
+                            "default": "intl"
+                        },
+                        "supported_tags": {
+                            "type": "array"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "money": {
+                    "type": "object",
+                    "properties": {
+                        "batch_limit": {
+                            "type": "integer",
+                            "default": 1000
+                        },
+                        "default_source": {
+                            "type": "string",
+                            "default": "manual"
+                        },
+                        "metadata_version": {
+                            "type": "string",
+                            "default": "brick/1"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "reference": {
+                    "type": "object",
+                    "properties": {
+                        "cursor_secret": {
+                            "type": "string",
+                            "default": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+                        },
+                        "dataset_key": {
+                            "type": "string",
+                            "default": "geography"
+                        },
+                        "providers": {
+                            "type": "object",
+                            "properties": {
+                                "boxes": {
+                                    "type": "object",
+                                    "properties": {
+                                        "fixture": {
+                                            "type": [
+                                                "string",
+                                                "integer",
+                                                "number",
+                                                "boolean",
+                                                "array",
+                                                "object",
+                                                "null"
+                                            ]
+                                        }
+                                    },
+                                    "additionalProperties": false
+                                },
+                                "compact": {
+                                    "type": "object",
+                                    "properties": {
+                                        "fixture": {
+                                            "type": [
+                                                "string",
+                                                "integer",
+                                                "number",
+                                                "boolean",
+                                                "array",
+                                                "object",
+                                                "null"
+                                            ]
+                                        }
+                                    },
+                                    "additionalProperties": false
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

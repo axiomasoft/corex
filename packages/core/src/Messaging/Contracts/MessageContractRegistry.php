@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Exceptions\UnknownMessageContract;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Реестр объявленных контрактов сообщений (MSG-002).

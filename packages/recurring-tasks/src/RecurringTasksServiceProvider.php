@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace CoreX\RecurringTasks;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
-use CoreX\Config\Contracts\RuntimeConfigCheck;
-use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\RecurringTasks\Errors\Internal\PackageProblemDefinitions;
 use CoreX\RecurringTasks\Internal\DangerousModesCheck;
 use CoreX\RecurringTasks\Internal\MaterializationBindings;
 use CoreX\RecurringTasks\Internal\RecurringTasksOptions;
-use CoreX\RecurringTasks\Internal\RecurringTasksSchemaSets;
+use CoreX\RecurringTasks\Internal\TaskWorkflowIntegration;
 use CoreX\RecurringTasks\Laravel\CompletionBindings;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Contracts\RuntimeConfigCheck;
+use Packman\Errors\Laravel\ProblemDefinitions;
 use Packman\Schema\Contracts\Migration\SchemaSetProvider;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
@@ -26,7 +26,7 @@ final class RecurringTasksServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
-        $this->app->tag([RecurringTasksSchemaSets::class], SchemaSetProvider::class);
+        $this->app->tag((new TaskWorkflowIntegration)->schemaSetProviders(), SchemaSetProvider::class);
 
         ProblemDefinitions::register(app: $this->app, composerManifest: __DIR__.'/../composer.json', provider: PackageProblemDefinitions::class);
 

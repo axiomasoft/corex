@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Tests\Support;
 
-use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Tools\Errors\Enums\ToolsErrorCode;
+use Packman\Errors\Contracts\ProblemRegistry;
 
 trait AssertsRegisteredToolErrors
 {

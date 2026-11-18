@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Observability\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Audit\Enums\ActorType;
 use InvalidArgumentException;
+use Packman\Attributes\Api;
 
 /**
  * Immutable identity of one long-running operation.

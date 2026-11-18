@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\SearchIntl\Internal;
 
+use Packman\Attributes\Internal;
+
+#[Internal]
 final class TranslationRevision
 {
     /**

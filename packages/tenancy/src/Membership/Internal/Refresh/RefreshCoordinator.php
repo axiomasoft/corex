@@ -6,9 +6,11 @@ namespace CoreX\Tenancy\Membership\Internal\Refresh;
 
 use Closure;
 use CoreX\Tenancy\Membership\Internal\Inbox\DurableInbox;
+use Packman\Attributes\Internal;
 use Throwable;
 
 /** @internal Fetches outside a transaction; only a completed pull acknowledges an inbox row. */
+#[Internal]
 final readonly class RefreshCoordinator
 {
     /** @param Closure(): void $refresh */

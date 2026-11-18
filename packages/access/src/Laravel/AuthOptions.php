@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
-use CoreX\Config\Laravel\ConfigurationValidator;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Laravel\ConfigurationValidator;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class AuthOptions

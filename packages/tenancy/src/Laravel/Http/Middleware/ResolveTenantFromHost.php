@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Laravel\Http\Middleware;
 
 use Closure;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Tenancy\Account\Contracts\AccountRead;
 use CoreX\Tenancy\Runtime\Exceptions\TenantCouldNotBeIdentifiedByHostException;
@@ -18,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Session\SessionManager;
 use Illuminate\Session\Store;
+use Packman\Attributes\Internal;
 
 /**
  * Kernel early-identification (B-11 §5.4 п.1–2). Host is read ONLY from
@@ -30,7 +29,7 @@ use Illuminate\Session\Store;
  * resolved auth guards are dropped on entry and exit, so a request never inherits the previous
  * account's login (nested contexts and jobs do not pass through here).
  */
-#[Spi(kind: SpiKind::Call, since: '1.0')]
+#[Internal]
 final readonly class ResolveTenantFromHost
 {
     public function __construct(

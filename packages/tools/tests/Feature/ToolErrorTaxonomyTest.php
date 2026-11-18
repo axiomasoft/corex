@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Tools\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
-use CoreX\Errors\Contracts\ProblemRegistry;
-use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
@@ -37,6 +35,8 @@ use CoreX\Tools\Tests\Support\CountingHandler;
 use CoreX\Tools\Tests\Support\ToolGuardFixture;
 use CoreX\Tools\Tests\Support\ToolPolicyFixture;
 use CoreX\Tools\Tests\TestCase;
+use Packman\Errors\Contracts\ProblemRegistry;
+use Packman\Errors\Enums\ErrorCategory;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
@@ -88,7 +88,7 @@ final class ToolErrorTaxonomyTest extends TestCase
         foreach (ToolsErrorCode::cases() as $code) {
             $definition = $registry->fromWire($code->value);
             self::assertSame($code, $definition->code);
-            self::assertSame('urn:corex:problem:'.$code->value, $definition->type);
+            self::assertSame('urn:packman:problem:'.$code->value, $definition->type);
             self::assertNotSame('', $definition->title);
             self::assertSame([], $definition->detailKeys);
         }

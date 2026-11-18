@@ -10,7 +10,9 @@ use CoreX\Intl\Territory\Data\AddressQuery;
 use CoreX\Intl\Territory\Data\SuggestionLimits;
 use CoreX\Intl\Territory\Data\SuggestionResult;
 use Override;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class UnsupportedAddressSuggestProvider implements AddressSuggestProvider
 {
     public function __construct(private AddressSuggestGuard $guard) {}

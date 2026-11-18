@@ -15,8 +15,10 @@ use CoreX\Tools\Data\ToolDescriptor;
 use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Data\ToolResult;
 use CoreX\Tools\Errors\Enums\ToolsErrorCode;
+use Packman\Attributes\Internal;
 
 /** Fake in-memory MCP2025-11-25 tools/list and tools/call parity adapter. */
+#[Internal]
 final readonly class McpToolsProjection
 {
     public const string PROFILE = 'mcp-tools-projection/1';

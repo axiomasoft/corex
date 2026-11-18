@@ -7,8 +7,10 @@ namespace CoreX\Operations\Pagination\Internal;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\Pagination\Contracts\CursorKeyring;
 use Override;
+use Packman\Attributes\Internal;
 
 /** Cursor keyring backed by the `cursor` section of the API options. */
+#[Internal]
 final readonly class ConfiguredCursorKeyring implements CursorKeyring
 {
     public function __construct(private ApiOptions $options) {}

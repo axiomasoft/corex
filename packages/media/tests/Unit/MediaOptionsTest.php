@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Media\Internal\Support\MediaOptions;
+use Packman\Config\Exceptions\InvalidConfiguration;
 
 it('rejects a non-positive max upload bytes limit', function (int $bytes): void {
     try {

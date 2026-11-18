@@ -7,10 +7,17 @@ namespace CoreX\Notifications\Tests;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Override;
+use Packman\Modules\ModulesServiceProvider;
 use RuntimeException;
 
 abstract class PgTestCase extends TestCase
 {
+    #[Override]
+    protected function getPackageProviders($app): array
+    {
+        return [...parent::getPackageProviders($app), ModulesServiceProvider::class];
+    }
+
     /** @param Application $app */
     #[Override]
     protected function defineEnvironment($app): void

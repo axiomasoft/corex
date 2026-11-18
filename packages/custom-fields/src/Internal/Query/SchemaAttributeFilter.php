@@ -12,7 +12,9 @@ use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class SchemaAttributeFilter implements AttributeFilter
 {
     public function __construct(private DataScopeAuthorizer $authorizer) {}

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Testing;
 
-use CoreX\Errors\Contracts\ErrorCode;
+use Packman\Errors\Contracts\ErrorCode;
 
 enum DescriptorFixtureCode: string implements ErrorCode
 {

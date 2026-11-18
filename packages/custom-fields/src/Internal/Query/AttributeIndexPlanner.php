@@ -15,9 +15,11 @@ use CoreX\CustomFields\Internal\Value;
 use CoreX\Data\Data\DataScope;
 use Illuminate\Database\ConnectionInterface;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
+#[Internal]
 final readonly class AttributeIndexPlanner
 {
     public function __construct(

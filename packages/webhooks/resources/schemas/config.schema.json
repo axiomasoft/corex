@@ -1,0 +1,64 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "axiomasoft/corex-webhooks configuration",
+    "type": "object",
+    "properties": {
+        "corex-webhooks": {
+            "type": "object",
+            "properties": {
+                "body_retention_seconds": {
+                    "type": "integer",
+                    "default": 604800
+                },
+                "delivery_enabled": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "history_retention_seconds": {
+                    "type": "integer",
+                    "default": 2592000
+                },
+                "lease_seconds": {
+                    "type": "integer",
+                    "default": 30
+                },
+                "max_attempts": {
+                    "type": "integer",
+                    "default": 12
+                },
+                "organization_denied_cidrs": {
+                    "type": [
+                        "array",
+                        "object"
+                    ]
+                },
+                "projectors": {
+                    "type": [
+                        "array",
+                        "object"
+                    ]
+                },
+                "replay_horizon_seconds": {
+                    "type": "integer",
+                    "default": 604800
+                },
+                "retry_horizon_seconds": {
+                    "type": "integer",
+                    "default": 259200
+                },
+                "topics": {
+                    "type": [
+                        "array",
+                        "object"
+                    ]
+                },
+                "worker_ready": {
+                    "type": "boolean",
+                    "default": false
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

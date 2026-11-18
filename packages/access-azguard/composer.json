@@ -46,6 +46,18 @@
         },
         "branch-alias": {
             "dev-main": "1.0.x-dev"
+        },
+        "packman": {
+            "schema-version": 1,
+            "package-type": "integration",
+            "stability": "unreleased",
+            "profile": "laravel-package",
+            "error-prefix": "access-azguard",
+            "owns": [
+                "Contracts",
+                "Exceptions",
+                "Internal"
+            ]
         }
     },
     "repositories": [

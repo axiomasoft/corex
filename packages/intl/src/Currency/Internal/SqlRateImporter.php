@@ -19,8 +19,10 @@ use DateTimeZone;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 use Override;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
+#[Internal]
 final readonly class SqlRateImporter implements RateImporter
 {
     public function __construct(

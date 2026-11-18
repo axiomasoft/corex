@@ -11,7 +11,6 @@ use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Definition\Data\Operation;
@@ -27,9 +26,12 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
+use Packman\Attributes\Internal;
+use Packman\Errors\Enums\ErrorCategory;
 use Psr\Clock\ClockInterface;
 
 /** @internal Authorized same-delivery replay with finite cycles and range selection. */
+#[Internal]
 final readonly class WebhookReplay
 {
     private const string RangeOrdering = 'webhook-replay-range.created.v1';
@@ -167,7 +169,7 @@ final readonly class WebhookReplay
             ],
         );
 
-        return compact('selected', 'requeued', 'skipped', 'conflicts', 'next');
+        return ['selected' => $selected, 'requeued' => $requeued, 'skipped' => $skipped, 'conflicts' => $conflicts, 'next' => $next];
     }
 
     /** @return array<string, mixed> */
@@ -379,6 +381,7 @@ final readonly class WebhookReplay
 }
 
 /** @internal Metadata-only handler class for the shared P13 cursor registry. */
+#[Internal]
 final class WebhookReplayCursorOperationHandler implements OperationHandler
 {
     public function handle(RequestContext $context, array $input, array $parameters): array

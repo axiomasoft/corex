@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Territory\Internal\Reference;
 
+use Packman\Attributes\Internal;
+
+#[Internal]
 final class BoxesReferenceProvider extends AbstractFixtureReferenceProvider
 {
     public function __construct(

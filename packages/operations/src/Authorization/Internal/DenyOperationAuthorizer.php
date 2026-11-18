@@ -8,8 +8,10 @@ use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Definition\Data\Operation;
 use Override;
+use Packman\Attributes\Internal;
 
 /** @internal */
+#[Internal]
 final class DenyOperationAuthorizer implements OperationAuthorizer
 {
     #[Override]

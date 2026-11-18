@@ -10,7 +10,9 @@ use Flex\Crm\Contact\Events\ContactCreated;
 use Flex\Crm\Contact\Models\Contact;
 use Flex\Crm\Context\ContextGuard;
 use Illuminate\Validation\ValidationException;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class CreateContact
 {
     public function __construct(private ContextGuard $guard) {}

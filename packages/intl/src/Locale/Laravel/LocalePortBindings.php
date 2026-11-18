@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Locale\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Intl\Locale\Contracts\LocaleValidation;
 use CoreX\Intl\Locale\Internal\Bcp47Validator;
 use Illuminate\Contracts\Foundation\Application;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Registers the owning package's call ports with their private implementations. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

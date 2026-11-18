@@ -7,10 +7,12 @@ namespace CoreX\Tools\Internal;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Operations\Definition\Contracts\OperationDefinitionValidator;
 use JsonException;
+use Packman\Attributes\Internal;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Exceptions\Compiler\CompilationException;
 
 /** @internal Validates compiled tool declarations without depending on tool runtime. */
+#[Internal]
 final class ApiToolValidator
 {
     private const string OPERATION_HANDLER = OperationHandler::class;

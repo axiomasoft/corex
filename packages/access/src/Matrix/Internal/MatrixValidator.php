@@ -12,6 +12,7 @@ use CoreX\Context\Enums\PrincipalType;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Entities\EntityRegistry;
 use Packman\Modules\Enums\Entities\Capability;
 
@@ -30,6 +31,7 @@ use Packman\Modules\Enums\Entities\Capability;
  *    request time; this surfaces the same condition earlier, at
  *    matrix-authoring time.
  */
+#[Internal]
 final readonly class MatrixValidator
 {
     private const array OWNER_DEGRADED_SCOPES = [

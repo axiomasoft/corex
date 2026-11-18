@@ -7,6 +7,7 @@ namespace CoreX\Messaging\Internal;
 use Closure;
 use CoreX\Messaging\Contracts\PubSub;
 use Override;
+use Packman\Attributes\Internal;
 
 /**
  * Sync in-memory driver (tests, boxed-minimum without Redis/DB polling).
@@ -15,6 +16,7 @@ use Override;
  * other two drivers enforce. `publish()` calls registered handlers inline,
  * in the same process, in registration order.
  */
+#[Internal]
 final class NullPubSub implements PubSub
 {
     /** @var array<string, list<Closure(array<string, mixed>): void>> */

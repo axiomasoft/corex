@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Override;
+use Packman\Attributes\Internal;
 
 /**
  * @property string $id
@@ -21,6 +22,7 @@ use Override;
  * @property ?string $label
  * @property bool $is_primary
  */
+#[Internal]
 final class ContactCompany extends Pivot
 {
     use HasUuids;

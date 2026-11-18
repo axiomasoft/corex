@@ -6,8 +6,10 @@ namespace CoreX\Operations\Invocation\Internal;
 
 use Illuminate\Http\Request;
 use Override;
+use Packman\Attributes\Internal;
 
 /** @internal */
+#[Internal]
 final class QueryEnvelopeReader implements InputEnvelopeReader
 {
     #[Override]

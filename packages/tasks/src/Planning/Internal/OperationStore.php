@@ -12,8 +12,10 @@ use CoreX\Tasks\Planning\Data\TaskOperationKind;
 use CoreX\Tasks\Planning\Exceptions\PlanningConflict;
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
+use Packman\Attributes\Internal;
 
 /** @internal Durable planning operation receipts. */
+#[Internal]
 final readonly class OperationStore
 {
     public function __construct(

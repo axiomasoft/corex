@@ -28,7 +28,9 @@ use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Str;
 use JsonException;
 use Override;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class DatabaseExportRunner implements ExportRunner
 {
     public function __construct(

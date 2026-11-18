@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Definition\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Operations\Definition\Enums\ResourceIdFormat;
 use InvalidArgumentException;
+use Packman\Attributes\Api;
 use Stringable;
 
 #[Api(since: '1.0')]

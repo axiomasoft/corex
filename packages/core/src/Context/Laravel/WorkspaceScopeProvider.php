@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * @corex-model-extension Names the Eloquent global scope for workspace-scoped models; adds no columns or relations.

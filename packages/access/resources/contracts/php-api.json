@@ -4,7 +4,7 @@
     "symbols": {
         "CoreX\\Access\\AccessServiceProvider": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -37,22 +37,23 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Access\\Access\\Laravel\\PrincipalIdentity": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": true,
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Context\\Contracts\\Principal",
-                "Illuminate\\Contracts\\Auth\\Authenticatable"
+                "Illuminate\\Contracts\\Auth\\Authenticatable",
+                "CoreX\\Context\\Contracts\\Principal"
             ],
             "uses": [],
             "doc": [],
@@ -112,7 +113,7 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\Access\\Access\\Laravel\\PrincipalIdentity)",
+                    "return": "self",
                     "doc": []
                 },
                 "getAuthIdentifier": {
@@ -226,14 +227,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Access\\Contracts\\AccessChecker": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -247,7 +249,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -285,7 +287,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -323,7 +325,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -367,14 +369,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Access\\Contracts\\RoleMatrixCompiler": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -388,7 +391,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -408,17 +411,18 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [],
                     "return": "void",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Access\\Data\\RecordContext": {
             "kind": "class",
@@ -462,28 +466,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "type": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -492,7 +475,7 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
@@ -511,28 +494,46 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "Account": "'account'",
-                "Dept": "'dept'",
-                "DeptTree": "'dept_tree'",
-                "None": "'none'",
-                "Own": "'own'",
-                "Workspace": "'workspace'"
-            }
+            "enum_cases": [
+                {
+                    "name": "None",
+                    "value": "'none'"
+                },
+                {
+                    "name": "Own",
+                    "value": "'own'"
+                },
+                {
+                    "name": "Dept",
+                    "value": "'dept'"
+                },
+                {
+                    "name": "DeptTree",
+                    "value": "'dept_tree'"
+                },
+                {
+                    "name": "Workspace",
+                    "value": "'workspace'"
+                },
+                {
+                    "name": "Account",
+                    "value": "'account'"
+                }
+            ]
         },
         "CoreX\\Access\\Errors\\Enums\\AccessErrorCode": {
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Errors\\Contracts\\ErrorCode"
+                "Packman\\Errors\\Contracts\\ErrorCode"
             ],
             "uses": [],
             "doc": [],
@@ -548,12 +549,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "ScopeCapabilityMismatch": "'access.scope_capability_mismatch'"
-            }
+            "enum_cases": [
+                {
+                    "name": "ScopeCapabilityMismatch",
+                    "value": "'access.scope_capability_mismatch'"
+                }
+            ]
         },
         "CoreX\\Access\\Exceptions\\ScopeCapabilityMismatch": {
             "kind": "class",
@@ -563,7 +567,7 @@
             "readonly": false,
             "abstract": false,
             "extends": [
-                "CoreX\\Errors\\Exceptions\\CodedException"
+                "Packman\\Errors\\Exceptions\\CodedException"
             ],
             "implements": [],
             "uses": [],
@@ -576,7 +580,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                    "return": "Packman\\Errors\\Data\\ErrorDescriptor",
                     "doc": []
                 },
                 "forScope": {
@@ -623,18 +627,18 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\Access\\Exceptions\\ScopeCapabilityMismatch)",
+                    "return": "self",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
         },
         "CoreX\\Access\\Identity\\Laravel\\PrincipalUserProvider": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": true,
@@ -702,11 +706,7 @@
                         }
                     ],
                     "return": "void",
-                    "doc": {
-                        "@param": [
-                            "array<array-key, mixed> $credentials"
-                        ]
-                    }
+                    "doc": []
                 },
                 "retrieveByCredentials": {
                     "visibility": "public",
@@ -726,11 +726,7 @@
                         }
                     ],
                     "return": "?Illuminate\\Contracts\\Auth\\Authenticatable",
-                    "doc": {
-                        "@param": [
-                            "array<array-key, mixed> $credentials"
-                        ]
-                    }
+                    "doc": []
                 },
                 "retrieveById": {
                     "visibility": "public",
@@ -837,21 +833,18 @@
                         }
                     ],
                     "return": "bool",
-                    "doc": {
-                        "@param": [
-                            "array<array-key, mixed> $credentials"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Access\\Laravel\\AccessBindingsRegistrar": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -904,14 +897,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Access\\Laravel\\AccessIntegrationRegistrar": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -964,14 +958,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Access\\Laravel\\AuthOptions": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": true,
@@ -1053,11 +1048,7 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $identityColumns"
-                        ]
-                    }
+                    "doc": []
                 },
                 "fromArray": {
                     "visibility": "public",
@@ -1076,121 +1067,19 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\Access\\Laravel\\AuthOptions)",
-                    "doc": {
-                        "@param": [
-                            "array<array-key, mixed> $config"
-                        ]
-                    }
+                    "return": "self",
+                    "doc": []
                 }
             },
-            "properties": {
-                "cacheStore": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $identityColumns"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "identityColumns": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $identityColumns"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "identityConnection": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $identityColumns"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "identityEnabled": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $identityColumns"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "identityTable": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $identityColumns"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "panel": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $identityColumns"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "workspaceScopeClass": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $identityColumns"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Access\\Laravel\\ScopeResolver": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -1198,17 +1087,13 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@corex-model-extension": [
-                    "laravel-model"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "apply": {
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -1258,24 +1143,18 @@
                         }
                     ],
                     "return": "Illuminate\\Database\\Eloquent\\Builder",
-                    "doc": {
-                        "@param": [
-                            "\\Illuminate\\Database\\Eloquent\\Builder<\\Illuminate\\Database\\Eloquent\\Model> $q"
-                        ],
-                        "@return": [
-                            "\\Illuminate\\Database\\Eloquent\\Builder<\\Illuminate\\Database\\Eloquent\\Model>"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Access\\Matrix\\Contracts\\EntityActivity": {
             "kind": "interface",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -1289,7 +1168,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -1306,14 +1185,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Access\\Matrix\\Contracts\\ScopeMapVersions": {
             "kind": "interface",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -1327,7 +1207,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -1344,10 +1224,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Access\\Matrix\\Events\\RoleMatrixCompiled": {
             "kind": "class",
@@ -1382,25 +1263,14 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "roleId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
         },
         "CoreX\\Access\\Matrix\\Laravel\\MatrixPortBindings": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -1431,10 +1301,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Access\\Roles\\Data\\RoleMatrixEntry": {
             "kind": "class",
@@ -1487,38 +1358,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "action": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "entityKey": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "scope": {
-                    "flags": 1,
-                    "type": "CoreX\\Access\\Enums\\Scope",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1571,64 +1411,17 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $assignableTo"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "assignableTo": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $assignableTo"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $assignableTo"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "slug": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $assignableTo"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
         },
         "CoreX\\Access\\Roles\\Laravel\\RoleMatrixData": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -1656,11 +1449,7 @@
                         }
                     ],
                     "return": "array",
-                    "doc": {
-                        "@return": [
-                            "list<\\CoreX\\Access\\Roles\\Data\\RoleMatrixEntry>"
-                        ]
-                    }
+                    "doc": []
                 },
                 "role": {
                     "visibility": "public",
@@ -1690,21 +1479,18 @@
                     "by_reference": false,
                     "parameters": [],
                     "return": "array",
-                    "doc": {
-                        "@return": [
-                            "list<string>"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Access\\Roles\\Laravel\\SystemRoleImmutable": {
             "kind": "trait",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -1712,12 +1498,28 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@corex-model-extension": [
-                    "laravel-model"
-                ]
-            },
+            "doc": [],
             "methods": {
+                "affectsSystemRole": {
+                    "visibility": "protected",
+                    "static": false,
+                    "final": false,
+                    "abstract": true,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "bool",
+                    "doc": []
+                },
+                "bootSystemRoleImmutable": {
+                    "visibility": "protected",
+                    "static": true,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "void",
+                    "doc": []
+                },
                 "withSystemMutationAllowed": {
                     "visibility": "public",
                     "static": true,
@@ -1736,23 +1538,14 @@
                         }
                     ],
                     "return": "mixed",
-                    "doc": {
-                        "@param": [
-                            "callable(): mixed $callback"
-                        ],
-                        "@return": [
-                            "mixed"
-                        ],
-                        "@template": [
-                            "T"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         }
     }
 }

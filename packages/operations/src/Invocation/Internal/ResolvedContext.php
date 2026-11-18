@@ -9,8 +9,10 @@ use CoreX\Context\Data\TenantContext;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Invocation\Data\InvocationMetadata;
 use Override;
+use Packman\Attributes\Internal;
 
 /** @internal */
+#[Internal]
 final readonly class ResolvedContext implements RequestContext
 {
     public function __construct(

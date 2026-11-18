@@ -6,7 +6,9 @@ namespace CoreX\Media\Internal;
 
 use CoreX\Media\Contracts\ConversionDriver;
 use CoreX\Media\Exceptions\MediaOperationConflict;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class ConversionProfiles
 {
     /** @var array<string, ConversionDriver> */

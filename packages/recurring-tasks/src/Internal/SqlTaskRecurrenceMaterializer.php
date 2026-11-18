@@ -35,8 +35,10 @@ use DateTimeImmutable;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Connection;
 use Override;
+use Packman\Attributes\Internal;
 use stdClass;
 
+#[Internal]
 final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
 {
     private const string VERSION = MaterializationHasher::HANDLER_VERSION;

@@ -21,9 +21,11 @@ use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Data\OperationResult;
 use Illuminate\Contracts\Container\Container;
 use LogicException;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 /** Transport-neutral activation, authorization and exactly-once handler call. */
+#[Internal]
 final readonly class DefaultOperationInvoker implements OperationInvoker
 {
     public function __construct(

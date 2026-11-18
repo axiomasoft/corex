@@ -5,10 +5,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tooling\Quality;
 
-use CoreX\Attributes\Spi;
 use FilesystemIterator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
+use Packman\Attributes\Spi;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;

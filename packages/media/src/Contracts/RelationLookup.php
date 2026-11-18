@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Media\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Media\Data\AttachmentInput;
 use CoreX\Media\Data\AttachmentRef;
 use CoreX\Media\Data\MediaContext;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface RelationLookup

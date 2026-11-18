@@ -7,6 +7,7 @@ namespace CoreX\Context\Internal;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Enums\ImpersonationRestrictedAction;
 use CoreX\Context\Exceptions\ImpersonationRestrictedException;
+use Packman\Attributes\Internal;
 
 /**
  * L3 — semantic layer of the read-only invariant (D141): the assert point
@@ -18,6 +19,7 @@ use CoreX\Context\Exceptions\ImpersonationRestrictedException;
  *
  * @internal spec: B-11 §5.9 п.3, D141
  */
+#[Internal]
 final readonly class ImpersonationGuard implements \CoreX\Context\Contracts\ImpersonationGuard
 {
     public function __construct(

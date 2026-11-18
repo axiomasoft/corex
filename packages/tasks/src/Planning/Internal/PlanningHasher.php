@@ -10,8 +10,10 @@ use CoreX\Tasks\Project\Data\ProjectDraft;
 use CoreX\Tasks\Sprint\Data\SprintDraft;
 use CoreX\Tasks\Task\Data\ActorData;
 use CoreX\Tasks\Time\Data\TimeLogDraft;
+use Packman\Attributes\Internal;
 
 /** @internal Canonical payload digests for planning operations. */
+#[Internal]
 final class PlanningHasher
 {
     public static function project(ProjectDraft $draft, TenantContext $context): string

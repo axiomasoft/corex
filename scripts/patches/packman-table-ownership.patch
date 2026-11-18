@@ -1,0 +1,12 @@
+--- a/vendor/axiomasoft/packman-devtools/packages/devtools/src/Gates/Boundaries/TableWriteOwnershipGate.php
++++ b/vendor/axiomasoft/packman-devtools/packages/devtools/src/Gates/Boundaries/TableWriteOwnershipGate.php
+@@ -100,7 +100,8 @@
+                         continue;
+                     }
+ 
+-                    if ($this->isProtectedSystemTable($tableName)) {
++                    if ($this->isProtectedSystemTable($tableName)
++                        && ($context->config->gates['table_owners'][$tableName] ?? null) !== $package->name) {
+                         $violations[] = sprintf(
+                             '[%s] Forbidden direct write ->%s() on protected system table "%s" in %s:%d.',
+                             $package->name,

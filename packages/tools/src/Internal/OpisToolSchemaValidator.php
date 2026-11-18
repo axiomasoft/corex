@@ -14,8 +14,10 @@ use CoreX\Operations\Validation\Laravel\SchemaProfile;
 use InvalidArgumentException;
 use Opis\JsonSchema\Errors\ValidationError;
 use Opis\JsonSchema\Validator;
+use Packman\Attributes\Internal;
 
 /** Qualified Opis adapter for offline tool-schema/1 validation. */
+#[Internal]
 final class OpisToolSchemaValidator
 {
     public static function isAvailable(): bool

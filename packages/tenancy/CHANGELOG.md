@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — Packman governance
+
+- Eloquent relation adapters expose covariant Model contracts; middleware and Artisan handlers are explicitly Internal.
+- Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.
+- Delegate provider composition to focused registrars and keep service providers within 80 lines.
+
+
 ## Unreleased — external Tenant ownership
 
 - Remove inactive native cache/template options and bootstrapper/factory seams; manual context notifications remain distinct from protected Tenant runtime observations.

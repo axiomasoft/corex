@@ -5,8 +5,8 @@ declare(strict_types=1);
 use CoreX\CustomFields\Internal\SchemaOperationConflict;
 use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\CustomFields\Internal\UnsupportedAttributeCapability;
-use CoreX\Errors\Enums\ErrorCategory;
-use CoreX\Errors\Enums\UnavailabilityReason;
+use Packman\Errors\Enums\ErrorCategory;
+use Packman\Errors\Enums\UnavailabilityReason;
 
 it('describes an unavailable attributes engine without parsing the message', function (): void {
     $error = new UnsupportedAttributeCapability;

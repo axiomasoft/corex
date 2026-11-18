@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel\Commands;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\Account\Internal\PendingPool;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Date;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 
 /**
  * Discards stale pending resources through their owner and deletes the account metadata
@@ -17,7 +16,7 @@ use InvalidArgumentException;
  * (`--template-version`) and/or whose `created_at` is older than
  * `--older-than` (e.g. `24h`, `7d`, `30m`, `45s`).
  */
-#[Spi(kind: SpiKind::Call, since: '1.0')]
+#[Internal]
 final class PendingClearCommand extends Command
 {
     protected $signature = 'corex:tenancy:pending-clear {--older-than=} {--template-version=}';

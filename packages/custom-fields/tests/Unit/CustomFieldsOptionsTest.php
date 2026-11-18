@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\CustomFields\Internal\CustomFieldsOptions;
+use Packman\Config\Exceptions\InvalidConfiguration;
 
 it('passes on an empty environment with the shipped composition', function (): void {
     $options = CustomFieldsOptions::fromArray([]);

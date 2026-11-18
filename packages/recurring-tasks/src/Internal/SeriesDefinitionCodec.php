@@ -15,7 +15,9 @@ use CoreX\Tasks\Task\Data\TaskReference;
 use CoreX\Tasks\Task\Enums\TaskPriority;
 use DateTimeImmutable;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class SeriesDefinitionCodec
 {
     /** @return array{set: RecurrenceSet, template: TaskDraft, actor: ActorData} */

@@ -12,6 +12,7 @@ use CoreX\Tasks\Task\Laravel\TaskRelations;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Packman\Attributes\Internal;
 
 /**
  * @property string $id
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property DateTimeInterface|null $created_at
  * @property DateTimeInterface|null $updated_at
  */
+#[Internal]
 final class Project extends BaseModel
 {
     protected $table = 'tsk_projects';

@@ -18,8 +18,10 @@ use CoreX\Tasks\Task\Internal\TaskSnapshot;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Validation\ValidationException;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
+#[Internal]
 final readonly class CompleteTask implements CompleteTaskCommand
 {
     public function __construct(

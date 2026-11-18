@@ -1,13 +1,14 @@
 {
     "name": "axiomasoft/corex-search-intl",
     "description": "Optional localized projection glue between axiomasoft/corex-intl and axiomasoft/corex-search.",
-    "type": "packman-module",
+    "type": "library",
     "license": "MIT",
     "require": {
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
         "axiomasoft/corex-intl": "^1.0@dev",
         "axiomasoft/corex-search": "^1.0@dev",
+        "axiomasoft/packman": "^0.1@dev",
         "illuminate/support": "^13.0"
     },
     "require-dev": {
@@ -41,6 +42,18 @@
         },
         "branch-alias": {
             "dev-main": "1.0.x-dev"
+        },
+        "packman": {
+            "schema-version": 1,
+            "package-type": "integration",
+            "stability": "stable",
+            "profile": "laravel-package",
+            "error-prefix": "search-intl",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Internal"
+            ]
         }
     },
     "repositories": [

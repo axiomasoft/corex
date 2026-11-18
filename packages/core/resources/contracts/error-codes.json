@@ -1,0 +1,182 @@
+{
+    "schema": "packman-error-codes/1",
+    "package": "axiomasoft/corex",
+    "codes": [
+        {
+            "package": "axiomasoft/corex",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "case": "CentralContextException",
+            "code": "core.central_context_exception",
+            "type": "urn:packman:problem:core.central_context_exception",
+            "status": 403,
+            "title": "Central context exception.",
+            "retryable": false,
+            "category": "authorization"
+        },
+        {
+            "package": "axiomasoft/corex",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "case": "CrossWorkspaceMoveException",
+            "code": "core.cross_workspace_move_exception",
+            "type": "urn:packman:problem:core.cross_workspace_move_exception",
+            "status": 409,
+            "title": "Cross workspace move exception.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "case": "DepartmentCycleException",
+            "code": "core.department_cycle_exception",
+            "type": "urn:packman:problem:core.department_cycle_exception",
+            "status": 409,
+            "title": "Department cycle exception.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "case": "ImpersonationRestrictedException",
+            "code": "core.impersonation_restricted_exception",
+            "type": "urn:packman:problem:core.impersonation_restricted_exception",
+            "status": 403,
+            "title": "Impersonation restricted exception.",
+            "retryable": false,
+            "category": "authorization"
+        },
+        {
+            "package": "axiomasoft/corex",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "case": "InboxRefused",
+            "code": "core.inbox_refused",
+            "type": "urn:packman:problem:core.inbox_refused",
+            "status": 409,
+            "title": "Inbox refused.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "case": "InternalError",
+            "code": "core.internal_error",
+            "type": "urn:packman:problem:core.internal_error",
+            "status": 500,
+            "title": "Internal error.",
+            "retryable": false,
+            "category": "internal"
+        },
+        {
+            "package": "axiomasoft/corex",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "case": "InvalidMessage",
+            "code": "core.invalid_message",
+            "type": "urn:packman:problem:core.invalid_message",
+            "status": 422,
+            "title": "Invalid message.",
+            "retryable": false,
+            "category": "validation"
+        },
+        {
+            "package": "axiomasoft/corex",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "case": "InvalidScopePayload",
+            "code": "core.invalid_scope_payload",
+            "type": "urn:packman:problem:core.invalid_scope_payload",
+            "status": 422,
+            "title": "Invalid scope payload.",
+            "retryable": false,
+            "category": "validation"
+        },
+        {
+            "package": "axiomasoft/corex",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "case": "OutboxLeaseLost",
+            "code": "core.outbox_lease_lost",
+            "type": "urn:packman:problem:core.outbox_lease_lost",
+            "status": 409,
+            "title": "Outbox lease lost.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "case": "OutboxRefused",
+            "code": "core.outbox_refused",
+            "type": "urn:packman:problem:core.outbox_refused",
+            "status": 409,
+            "title": "Outbox refused.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "case": "ScopeContextMismatch",
+            "code": "core.scope_context_mismatch",
+            "type": "urn:packman:problem:core.scope_context_mismatch",
+            "status": 403,
+            "title": "Scope context mismatch.",
+            "retryable": false,
+            "category": "authorization"
+        },
+        {
+            "package": "axiomasoft/corex",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "case": "SettingValueTooLargeException",
+            "code": "core.setting_value_too_large_exception",
+            "type": "urn:packman:problem:core.setting_value_too_large_exception",
+            "status": 422,
+            "title": "Setting value too large exception.",
+            "retryable": false,
+            "category": "validation"
+        },
+        {
+            "package": "axiomasoft/corex",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "case": "StorageCapabilityUnavailable",
+            "code": "core.storage_capability_unavailable",
+            "type": "urn:packman:problem:core.storage_capability_unavailable",
+            "status": 503,
+            "title": "Storage capability unavailable.",
+            "retryable": false,
+            "category": "unavailable"
+        },
+        {
+            "package": "axiomasoft/corex",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "case": "StorageOperationFailed",
+            "code": "core.storage_operation_failed",
+            "type": "urn:packman:problem:core.storage_operation_failed",
+            "status": 503,
+            "title": "Storage operation failed.",
+            "retryable": true,
+            "category": "unavailable"
+        },
+        {
+            "package": "axiomasoft/corex",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "case": "UnknownMessageContract",
+            "code": "core.unknown_message_contract",
+            "type": "urn:packman:problem:core.unknown_message_contract",
+            "status": 422,
+            "title": "Unknown message contract.",
+            "retryable": false,
+            "category": "validation"
+        },
+        {
+            "package": "axiomasoft/corex",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "case": "UnsupportedScopeException",
+            "code": "core.unsupported_scope_exception",
+            "type": "urn:packman:problem:core.unsupported_scope_exception",
+            "status": 422,
+            "title": "Unsupported scope exception.",
+            "retryable": false,
+            "category": "unsupported"
+        }
+    ]
+}

@@ -9,8 +9,10 @@ use CoreX\Operations\Errors\Contracts\ResponseSerializer;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use Illuminate\Http\JsonResponse;
 use Override;
+use Packman\Attributes\Internal;
 
 /** @internal HTTP projection. The invoker stays transport-neutral. */
+#[Internal]
 final readonly class HttpResponseSerializer implements ResponseSerializer
 {
     public function __construct(

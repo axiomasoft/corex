@@ -13,7 +13,9 @@ use CoreX\Search\Data\SearchCapabilities;
 use CoreX\Search\Data\SearchQuery;
 use InvalidArgumentException;
 use Meilisearch\Client;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class MeilisearchSearchProvider implements SearchProvider
 {
     public function __construct(

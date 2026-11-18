@@ -7,6 +7,7 @@ namespace CoreX\Departments\Internal\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Packman\Attributes\Internal;
 
 /**
  * Department hierarchy row (`sys_departments`). `path` is ltree —
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @internal spec: B-10 §2, P2.9
  */
+#[Internal]
 final class Department extends Model
 {
     use HasUuids;

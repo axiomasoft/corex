@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use CoreX\Errors\Contracts\DescribesError;
-use CoreX\Errors\Contracts\ErrorCode;
-use CoreX\Errors\Data\ErrorDescriptor;
-use CoreX\Errors\Enums\ErrorCategory;
-use CoreX\Errors\Enums\UnavailabilityReason;
 use CoreX\Testing\DescriptorFixtureCode;
+use Packman\Errors\Contracts\DescribesError;
+use Packman\Errors\Contracts\ErrorCode;
+use Packman\Errors\Data\ErrorDescriptor;
+use Packman\Errors\Enums\ErrorCategory;
+use Packman\Errors\Enums\UnavailabilityReason;
 
 test('error category exposes the nine stable values', function (): void {
     expect(array_map(

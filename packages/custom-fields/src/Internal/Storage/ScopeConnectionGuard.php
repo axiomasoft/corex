@@ -7,7 +7,9 @@ namespace CoreX\CustomFields\Internal\Storage;
 use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\Data\Data\DataScope;
 use Illuminate\Database\ConnectionInterface;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class ScopeConnectionGuard
 {
     public function __construct(private ConnectionInterface $connection) {}

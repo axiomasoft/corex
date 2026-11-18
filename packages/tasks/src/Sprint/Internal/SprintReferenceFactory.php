@@ -6,8 +6,10 @@ namespace CoreX\Tasks\Sprint\Internal;
 
 use CoreX\Tasks\Sprint\Data\SprintReference;
 use CoreX\Tasks\Sprint\Internal\Models\Sprint;
+use Packman\Attributes\Internal;
 
 /** @internal */
+#[Internal]
 final class SprintReferenceFactory
 {
     public static function fromSprint(Sprint $sprint): SprintReference

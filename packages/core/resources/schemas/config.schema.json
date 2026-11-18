@@ -1,0 +1,277 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "axiomasoft/corex configuration",
+    "type": "object",
+    "properties": {
+        "corex": {
+            "type": "object",
+            "properties": {
+                "acknowledged_dangerous_modes": {
+                    "type": [
+                        "array",
+                        "object"
+                    ]
+                },
+                "audit": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "default": true
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "bindings": {
+                    "type": "object",
+                    "properties": {
+                        "audit_logger": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "array",
+                                "object",
+                                "null"
+                            ]
+                        },
+                        "audit_retention": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "array",
+                                "object",
+                                "null"
+                            ]
+                        },
+                        "data_scope_authorizer": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "array",
+                                "object",
+                                "null"
+                            ]
+                        },
+                        "departments": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "array",
+                                "object",
+                                "null"
+                            ]
+                        },
+                        "feature_flags": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "array",
+                                "object",
+                                "null"
+                            ]
+                        },
+                        "setting_defaults": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "array",
+                                "object",
+                                "null"
+                            ]
+                        },
+                        "settings": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "array",
+                                "object",
+                                "null"
+                            ]
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "messaging": {
+                    "type": "object",
+                    "properties": {
+                        "backoff_cap_seconds": {
+                            "type": "integer",
+                            "default": 300
+                        },
+                        "batch_size": {
+                            "type": "integer",
+                            "default": 100
+                        },
+                        "dead_retention": {
+                            "type": "string",
+                            "default": "90 days"
+                        },
+                        "inbox_retention": {
+                            "type": [
+                                "string",
+                                "null"
+                            ],
+                            "default": null
+                        },
+                        "lease_seconds": {
+                            "type": "integer",
+                            "default": 120
+                        },
+                        "max_attempts": {
+                            "type": "integer",
+                            "default": 8
+                        },
+                        "outbox_retention": {
+                            "type": "string",
+                            "default": "14 days"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "pubsub": {
+                    "type": "object",
+                    "properties": {
+                        "driver": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "array",
+                                "object",
+                                "null"
+                            ]
+                        },
+                        "octane_worker_opt_in": {
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "poll_interval_microseconds": {
+                            "type": "integer",
+                            "default": 50000
+                        },
+                        "retention": {
+                            "type": "string",
+                            "default": "30 days"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "settings": {
+                    "type": "object",
+                    "properties": {
+                        "cache_prefix": {
+                            "type": "string",
+                            "default": "corex.settings"
+                        },
+                        "cache_store": {
+                            "type": "string",
+                            "default": "array"
+                        },
+                        "cache_ttl": {
+                            "type": "integer",
+                            "default": 3600
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "storage": {
+                    "type": "object",
+                    "properties": {
+                        "durable_root": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "array",
+                                "object",
+                                "null"
+                            ]
+                        },
+                        "ephemeral_root": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "array",
+                                "object",
+                                "null"
+                            ]
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "tenant_context": {
+                    "type": "object",
+                    "properties": {
+                        "impersonation": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "array",
+                                "object",
+                                "null"
+                            ]
+                        },
+                        "manager": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "array",
+                                "object",
+                                "null"
+                            ]
+                        },
+                        "resolver": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "array",
+                                "object",
+                                "null"
+                            ]
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "views": {
+                    "type": "object",
+                    "properties": {
+                        "connection": {
+                            "type": [
+                                "string",
+                                "null"
+                            ],
+                            "default": null
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

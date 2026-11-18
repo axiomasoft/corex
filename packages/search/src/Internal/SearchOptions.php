@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Search\Internal;
 
-use CoreX\Config\Data\SecretRef;
-use CoreX\Config\Laravel\ConfigurationValidator;
+use Packman\Attributes\Internal;
+use Packman\Config\Data\SecretRef;
+use Packman\Config\Laravel\ConfigurationValidator;
 
 /** @internal Package composition type: read only by the provider. */
+#[Internal]
 final readonly class SearchOptions
 {
     public function __construct(

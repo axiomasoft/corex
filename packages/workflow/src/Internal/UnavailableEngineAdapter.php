@@ -11,7 +11,9 @@ use CoreX\Workflow\Data\StartResult;
 use CoreX\Workflow\Data\TransitionRequest;
 use CoreX\Workflow\Data\TransitionResult;
 use CoreX\Workflow\Data\TriggerRequest;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class UnavailableEngineAdapter implements EngineAdapter
 {
     public function start(TriggerRequest $request): StartResult

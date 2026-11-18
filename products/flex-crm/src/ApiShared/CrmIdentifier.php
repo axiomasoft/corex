@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Flex\Crm\ApiShared;
 
 use Illuminate\Validation\ValidationException;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class CrmIdentifier
 {
     public static function fromPath(string $value): string

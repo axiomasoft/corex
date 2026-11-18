@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Task\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Tasks\Task\Internal\Models\Task;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * @corex-model-extension Exact Task Eloquent relationship composition.
@@ -20,7 +20,7 @@ final class TaskRelations
 {
     /** @template TModel of Model
      * @param  TModel  $model
-     * @return HasMany<Task, TModel>
+     * @return HasMany<covariant Model, TModel>
      */
     public static function hasMany(Model $model, ?string $foreignKey = null, ?string $localKey = null): HasMany
     {
@@ -31,7 +31,7 @@ final class TaskRelations
 
     /** @template TModel of Model
      * @param  TModel  $model
-     * @return BelongsTo<Task, TModel>
+     * @return BelongsTo<covariant Model, TModel>
      */
     public static function belongsTo(Model $model, ?string $foreignKey = null, ?string $ownerKey = null, ?string $relation = null): BelongsTo
     {

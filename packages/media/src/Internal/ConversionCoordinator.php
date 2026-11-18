@@ -11,9 +11,11 @@ use CoreX\Media\Data\MediaConversionRef;
 use CoreX\Media\Exceptions\MediaOperationConflict;
 use CoreX\Media\Internal\Support\MediaOptions;
 use Illuminate\Database\ConnectionInterface;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use Throwable;
 
+#[Internal]
 final readonly class ConversionCoordinator
 {
     public function __construct(

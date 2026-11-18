@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Workflow\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Workflow\Contracts\EngineAdapter;
+use CoreX\Workflow\Contracts\WorkflowBinding;
 use CoreX\Workflow\Internal\SqlWorkflowBinding;
 use CoreX\Workflow\Internal\UnavailableEngineAdapter;
 use CoreX\Workflow\Internal\WorkflowOptions;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Psr\Clock\ClockInterface;
 
@@ -20,7 +21,7 @@ use Psr\Clock\ClockInterface;
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class WorkflowBindingFactory
 {
-    public function make(Application $app): SqlWorkflowBinding
+    public function make(Application $app): WorkflowBinding
     {
         $engine = $app->bound(EngineAdapter::class)
             ? $app->make(EngineAdapter::class)

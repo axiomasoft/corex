@@ -8,6 +8,7 @@ use Closure;
 use CoreX\Access\AccessServiceProvider;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Entities\EntityRegistry;
 use Packman\Modules\Enums\Entities\Capability;
 
@@ -34,6 +35,7 @@ use Packman\Modules\Enums\Entities\Capability;
  *
  * @internal spec: B-11 §5.4 п.5, P2.9 D115
  */
+#[Internal]
 final class WorkspaceScopeWiring
 {
     /**

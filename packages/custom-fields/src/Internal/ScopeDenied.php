@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace CoreX\CustomFields\Internal;
 
 use CoreX\CustomFields\Errors\Enums\CustomFieldsErrorCode;
-use CoreX\Errors\Contracts\DescribesError;
-use CoreX\Errors\Data\ErrorDescriptor;
-use CoreX\Errors\Enums\ErrorCategory;
-use CoreX\Errors\Enums\UnavailabilityReason;
+use Packman\Attributes\Internal;
+use Packman\Errors\Contracts\DescribesError;
+use Packman\Errors\Data\ErrorDescriptor;
+use Packman\Errors\Enums\ErrorCategory;
+use Packman\Errors\Enums\UnavailabilityReason;
 use RuntimeException;
 use Throwable;
 
+#[Internal]
 final class ScopeDenied extends RuntimeException implements DescribesError
 {
     public function __construct(

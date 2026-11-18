@@ -1,3 +1,8 @@
+
+## Unreleased — Packman governance
+
+- Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.
+
 ## Unreleased — invocation contract in the kernel (audit 2026-10-08 P-02)
 
 ## Unreleased — package boundaries

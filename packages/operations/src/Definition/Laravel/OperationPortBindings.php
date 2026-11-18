@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Definition\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Operations\Definition\Contracts\OperationRegistry;
 use CoreX\Operations\Errors\Contracts\ErrorMapping;
 use CoreX\Operations\Errors\Internal\ErrorMapper;
@@ -17,6 +15,8 @@ use CoreX\Operations\OpenApi\Internal\OpenApiDocumentGenerator;
 use CoreX\Operations\Versioning\Contracts\ApiProfiles;
 use CoreX\Operations\Versioning\Internal\ApiProfileFactory;
 use Illuminate\Contracts\Foundation\Application;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Registers the owning package's call ports with their private implementations. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

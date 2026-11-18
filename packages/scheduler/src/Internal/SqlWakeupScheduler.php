@@ -17,9 +17,11 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
 use JsonException;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
+#[Internal]
 final readonly class SqlWakeupScheduler implements WakeupScheduler
 {
     /**

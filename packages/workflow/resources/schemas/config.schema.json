@@ -1,0 +1,18 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "axiomasoft/corex-workflow configuration",
+    "type": "object",
+    "properties": {
+        "corex-workflow": {
+            "type": "object",
+            "properties": {
+                "enforce_declarations": {
+                    "type": "boolean",
+                    "default": true
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

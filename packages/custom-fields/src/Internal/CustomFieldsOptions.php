@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace CoreX\CustomFields\Internal;
 
 use CoreX\CustomFields\Internal\Laravel\AttributeComposition;
+use Packman\Attributes\Internal;
 
 /**
  * Shape of `corex-custom-fields`.
  *
  * @internal Package composition type: read only by the provider and registrars.
  */
+#[Internal]
 final readonly class CustomFieldsOptions
 {
     public function __construct(

@@ -1,17 +1,18 @@
 {
     "name": "axiomasoft/corex-search",
     "description": "Typed, policy-hydrated search boundary for CoreX.",
-    "type": "packman-module",
+    "type": "library",
     "license": "MIT",
     "require": {
-        "ext-openssl": "*",
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/packman": "^0.1@dev",
+        "axiomasoft/packman-schema": "^0.1@dev",
+        "ext-openssl": "*",
         "illuminate/contracts": "^13.0",
         "illuminate/database": "^13.0",
         "illuminate/support": "^13.0",
-        "psr/clock": "^1.0",
-        "axiomasoft/packman-schema": "^0.1@dev"
+        "psr/clock": "^1.0"
     },
     "autoload": {
         "psr-4": {
@@ -36,6 +37,22 @@
         },
         "branch-alias": {
             "dev-main": "1.0.x-dev"
+        },
+        "packman": {
+            "schema-version": 1,
+            "package-type": "capability",
+            "stability": "stable",
+            "profile": "laravel-package",
+            "error-prefix": "search",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Errors",
+                "Exceptions",
+                "Internal",
+                "Laravel",
+                "Testing"
+            ]
         }
     },
     "repositories": [

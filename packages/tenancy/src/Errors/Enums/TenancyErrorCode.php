@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Errors\Enums;
 
-use CoreX\Attributes\Api;
-use CoreX\Errors\Contracts\ErrorCode;
+use Packman\Attributes\Api;
+use Packman\Errors\Contracts\ErrorCode;
 
 #[Api(since: '1.0')]
 enum TenancyErrorCode: string implements ErrorCode

@@ -14,6 +14,7 @@ use Illuminate\Contracts\Queue\Job;
 use Illuminate\Queue\Events\JobAttempted;
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Jobs\SyncJob;
+use Packman\Attributes\Internal;
 
 /**
  * Per-job tenant context. `processing` enters the account named by the job payload
@@ -23,6 +24,7 @@ use Illuminate\Queue\Jobs\SyncJob;
  * workspace, while an async job always starts and ends central. A job whose account is
  * missing fails instead of running on the previous database.
  */
+#[Internal]
 final class QueueTenantContext
 {
     /** @var list<array{job: Job, previous: ?TenantContext}> */

@@ -12,6 +12,7 @@ use Flex\Crm\Context\Models\Concerns\HasCrmContext;
 use Flex\Crm\Deal\Models\Deal;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Override;
+use Packman\Attributes\Internal;
 
 /**
  * @property string $id
@@ -29,6 +30,7 @@ use Override;
  * @property string|null $job_title
  * @property string|null $owner_id
  */
+#[Internal]
 final class Contact extends BaseModel
 {
     use HasActivities;

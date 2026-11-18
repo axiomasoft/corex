@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Errors\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use Illuminate\Http\JsonResponse;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface ResponseSerializer

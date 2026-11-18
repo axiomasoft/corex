@@ -6,8 +6,10 @@ namespace CoreX\Operations\Errors\Internal;
 
 use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Errors\Exceptions\ApiError;
+use Packman\Attributes\Internal;
 
 /** @internal Response metadata and headers. */
+#[Internal]
 final class ErrorWire
 {
     /** @return array<string, string> */

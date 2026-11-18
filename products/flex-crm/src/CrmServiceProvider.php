@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Flex\Crm;
 
-use Flex\Crm\Internal\CrmSchemaSets;
 use Flex\Crm\Internal\Value;
 use Flex\Crm\Support\CrmOptions;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\ServiceProvider;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Packman\Schema\Contracts\Migration\SchemaSetProvider;
 
+#[Spi(kind: SpiKind::Call, since: '1.0')]
 final class CrmServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->tag([CrmSchemaSets::class], SchemaSetProvider::class);
+        $this->app->tag((new CrmModule)->schemaSetProviders(), SchemaSetProvider::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/flex-crm.php', 'flex-crm');
 

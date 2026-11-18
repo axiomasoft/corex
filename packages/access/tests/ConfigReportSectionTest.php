@@ -6,10 +6,10 @@ namespace CoreX\Access\Tests;
 
 use CoreX\Access\AccessServiceProvider;
 use CoreX\Access\Internal\Support\AccessConfigSection;
-use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\CoreServiceProvider;
 use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase;
+use Packman\Config\Contracts\ConfigReportSectionInterface as ConfigReportSection;
 use Packman\Modules\ModulesServiceProvider;
 
 final class ConfigReportSectionTest extends TestCase
@@ -25,7 +25,7 @@ final class ConfigReportSectionTest extends TestCase
         $owned = array_values(array_filter($sections, static fn (ConfigReportSection $section): bool => $section instanceof AccessConfigSection));
         self::assertCount(1, $owned);
         self::assertSame(20, $owned[0]->order());
-        $code = Artisan::call('corex:config:validate');
+        $code = Artisan::call('packman:config:validate');
         self::assertSame(0, $code);
         self::assertStringContainsString('driver pubsub.driver=', Artisan::output());
     }

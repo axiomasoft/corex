@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Authorization\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
 use CoreX\Operations\Definition\Data\Operation;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class DeclaredFieldAuthorizer implements OperationFieldAuthorizer

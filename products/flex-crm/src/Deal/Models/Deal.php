@@ -15,6 +15,7 @@ use Flex\Crm\Deal\Enums\DealStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
+use Packman\Attributes\Internal;
 
 /**
  * @property string $id
@@ -34,6 +35,7 @@ use Illuminate\Support\Carbon;
  * @property array<string, string> $created_by
  * @property string|null $company_id
  */
+#[Internal]
 final class Deal extends BaseModel
 {
     use HasActivities;

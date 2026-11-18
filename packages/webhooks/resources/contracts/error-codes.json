@@ -1,0 +1,105 @@
+{
+    "schema": "packman-error-codes/1",
+    "package": "axiomasoft/corex-webhooks",
+    "codes": [
+        {
+            "package": "axiomasoft/corex-webhooks",
+            "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+            "case": "UnknownMessageContract",
+            "code": "webhooks.unknown_message_contract",
+            "type": "urn:packman:problem:webhooks.unknown_message_contract",
+            "status": 422,
+            "title": "Unknown message contract.",
+            "retryable": false,
+            "category": "validation"
+        },
+        {
+            "package": "axiomasoft/corex-webhooks",
+            "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+            "case": "UnknownMessageSchema",
+            "code": "webhooks.unknown_message_schema",
+            "type": "urn:packman:problem:webhooks.unknown_message_schema",
+            "status": 422,
+            "title": "Unknown message schema.",
+            "retryable": false,
+            "category": "validation"
+        },
+        {
+            "package": "axiomasoft/corex-webhooks",
+            "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+            "case": "WebhookEgressDenied",
+            "code": "webhooks.webhook_egress_denied",
+            "type": "urn:packman:problem:webhooks.webhook_egress_denied",
+            "status": 422,
+            "title": "Webhook destination is denied by tenant egress policy.",
+            "retryable": false,
+            "category": "validation"
+        },
+        {
+            "package": "axiomasoft/corex-webhooks",
+            "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+            "case": "WebhookEndpointChanged",
+            "code": "webhooks.webhook_endpoint_changed",
+            "type": "urn:packman:problem:webhooks.webhook_endpoint_changed",
+            "status": 409,
+            "title": "Webhook endpoint changed.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex-webhooks",
+            "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+            "case": "WebhookPayloadTooLarge",
+            "code": "webhooks.webhook_payload_too_large",
+            "type": "urn:packman:problem:webhooks.webhook_payload_too_large",
+            "status": 422,
+            "title": "Webhook payload is too large.",
+            "retryable": false,
+            "category": "validation"
+        },
+        {
+            "package": "axiomasoft/corex-webhooks",
+            "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+            "case": "WebhookReplayExpired",
+            "code": "webhooks.webhook_replay_expired",
+            "type": "urn:packman:problem:webhooks.webhook_replay_expired",
+            "status": 409,
+            "title": "Webhook replay expired.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex-webhooks",
+            "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+            "case": "WebhookSecretDenied",
+            "code": "webhooks.webhook_secret_denied",
+            "type": "urn:packman:problem:webhooks.webhook_secret_denied",
+            "status": 403,
+            "title": "Webhook secret denied.",
+            "retryable": false,
+            "category": "authorization"
+        },
+        {
+            "package": "axiomasoft/corex-webhooks",
+            "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+            "case": "WebhookSensitiveDenied",
+            "code": "webhooks.webhook_sensitive_denied",
+            "type": "urn:packman:problem:webhooks.webhook_sensitive_denied",
+            "status": 403,
+            "title": "Webhook sensitive denied.",
+            "retryable": false,
+            "category": "authorization"
+        },
+        {
+            "package": "axiomasoft/corex-webhooks",
+            "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+            "case": "WebhookSubscriptionCap",
+            "code": "webhooks.webhook_subscription_cap",
+            "type": "urn:packman:problem:webhooks.webhook_subscription_cap",
+            "status": 422,
+            "title": "Webhook subscription cap.",
+            "retryable": false,
+            "category": "validation"
+        }
+    ]
+}

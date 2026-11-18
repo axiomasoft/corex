@@ -19,9 +19,11 @@ use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
 use DateInterval;
 use DateTimeImmutable;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /** @internal Delegates one bulk batch to public transfer ports. */
+#[Internal]
 final readonly class TransferBulkExecutor
 {
     public function __construct(

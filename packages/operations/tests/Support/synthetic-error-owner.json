@@ -1,0 +1,13 @@
+{
+    "name": "fixture/synthetic",
+    "autoload": {
+        "psr-4": {
+            "": "./"
+        }
+    },
+    "extra": {
+        "packman": {
+            "error-prefix": "synthetic"
+        }
+    }
+}

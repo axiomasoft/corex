@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace CoreX\Observability\Internal;
 
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 
 /**
  * Closed metric dimensions. Account, workspace, actor, correlation, causation
  * and operation ids are forbidden labels.
  */
+#[Internal]
 final readonly class MetricAttributes
 {
     /** @var list<string> */

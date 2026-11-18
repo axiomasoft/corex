@@ -17,10 +17,12 @@ use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Database\ConnectionResolverInterface;
+use Packman\Attributes\Internal;
 use RuntimeException;
 use Throwable;
 
 /** @internal */
+#[Internal]
 final readonly class ApplyMembershipProjection implements MembershipProjection
 {
     public function __construct(

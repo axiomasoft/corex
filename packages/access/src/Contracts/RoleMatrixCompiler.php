@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Publishes a native role matrix for one role inside a tenant transaction.

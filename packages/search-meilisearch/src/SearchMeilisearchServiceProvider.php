@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\SearchMeilisearch;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
-use CoreX\Config\Contracts\ConfigReportSection;
-use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Search\Contracts\SearchDriverRegistry;
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\SearchServiceProvider;
@@ -19,6 +15,10 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Contracts\ConfigReportSectionInterface as ConfigReportSection;
+use Packman\Errors\Laravel\ProblemDefinitions;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class SearchMeilisearchServiceProvider extends ServiceProvider

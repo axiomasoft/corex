@@ -16,11 +16,13 @@ use CoreX\Webhooks\Data\WebhookDestination;
 use CoreX\Webhooks\Data\WebhookHttpResult;
 use CoreX\Webhooks\Enums\WebhookFailureReason;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 use Throwable;
 
 /** @internal Performs one network delivery after the durable claim transaction commits. */
+#[Internal]
 final readonly class WebhookDeliveryWorker
 {
     public function __construct(

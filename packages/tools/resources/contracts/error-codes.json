@@ -1,0 +1,149 @@
+{
+    "schema": "packman-error-codes/1",
+    "package": "axiomasoft/corex-tools",
+    "codes": [
+        {
+            "package": "axiomasoft/corex-tools",
+            "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+            "case": "ApprovalInvalid",
+            "code": "tools.approval_invalid",
+            "type": "urn:packman:problem:tools.approval_invalid",
+            "status": 403,
+            "title": "Tool approval is invalid.",
+            "retryable": false,
+            "category": "authorization"
+        },
+        {
+            "package": "axiomasoft/corex-tools",
+            "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+            "case": "ApprovalRequired",
+            "code": "tools.approval_required",
+            "type": "urn:packman:problem:tools.approval_required",
+            "status": 403,
+            "title": "Tool approval is required.",
+            "retryable": false,
+            "category": "authorization"
+        },
+        {
+            "package": "axiomasoft/corex-tools",
+            "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+            "case": "Forbidden",
+            "code": "tools.forbidden",
+            "type": "urn:packman:problem:tools.forbidden",
+            "status": 403,
+            "title": "Tool invocation is forbidden.",
+            "retryable": false,
+            "category": "authorization"
+        },
+        {
+            "package": "axiomasoft/corex-tools",
+            "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+            "case": "IdempotencyConflict",
+            "code": "tools.idempotency_conflict",
+            "type": "urn:packman:problem:tools.idempotency_conflict",
+            "status": 409,
+            "title": "Tool idempotency conflict.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex-tools",
+            "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+            "case": "InputInvalid",
+            "code": "tools.input_invalid",
+            "type": "urn:packman:problem:tools.input_invalid",
+            "status": 422,
+            "title": "Tool input is invalid.",
+            "retryable": false,
+            "category": "validation"
+        },
+        {
+            "package": "axiomasoft/corex-tools",
+            "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+            "case": "InternalError",
+            "code": "tools.internal_error",
+            "type": "urn:packman:problem:tools.internal_error",
+            "status": 500,
+            "title": "Internal tool error.",
+            "retryable": false,
+            "category": "internal"
+        },
+        {
+            "package": "axiomasoft/corex-tools",
+            "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+            "case": "OutputContractFailed",
+            "code": "tools.output_contract_failed",
+            "type": "urn:packman:problem:tools.output_contract_failed",
+            "status": 500,
+            "title": "Tool output contract failed.",
+            "retryable": false,
+            "category": "internal"
+        },
+        {
+            "package": "axiomasoft/corex-tools",
+            "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+            "case": "RateLimited",
+            "code": "tools.rate_limited",
+            "type": "urn:packman:problem:tools.rate_limited",
+            "status": 429,
+            "title": "Tool rate limit exceeded.",
+            "retryable": true,
+            "category": "rate_limit"
+        },
+        {
+            "package": "axiomasoft/corex-tools",
+            "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+            "case": "SchemaLimit",
+            "code": "tools.schema_limit",
+            "type": "urn:packman:problem:tools.schema_limit",
+            "status": 422,
+            "title": "Tool schema limit exceeded.",
+            "retryable": false,
+            "category": "validation"
+        },
+        {
+            "package": "axiomasoft/corex-tools",
+            "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+            "case": "SchemaUnavailable",
+            "code": "tools.schema_unavailable",
+            "type": "urn:packman:problem:tools.schema_unavailable",
+            "status": 503,
+            "title": "Tool schema is unavailable.",
+            "retryable": true,
+            "category": "unavailable"
+        },
+        {
+            "package": "axiomasoft/corex-tools",
+            "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+            "case": "ToolRevisionConflict",
+            "code": "tools.tool_revision_conflict",
+            "type": "urn:packman:problem:tools.tool_revision_conflict",
+            "status": 409,
+            "title": "Tool revision conflict.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex-tools",
+            "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+            "case": "ToolUnavailable",
+            "code": "tools.tool_unavailable",
+            "type": "urn:packman:problem:tools.tool_unavailable",
+            "status": 404,
+            "title": "Tool is unavailable.",
+            "retryable": false,
+            "category": "not_found"
+        },
+        {
+            "package": "axiomasoft/corex-tools",
+            "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+            "case": "UnknownEffect",
+            "code": "tools.unknown_effect",
+            "type": "urn:packman:problem:tools.unknown_effect",
+            "status": 500,
+            "title": "Tool effect outcome is unknown.",
+            "retryable": false,
+            "category": "internal"
+        }
+    ]
+}

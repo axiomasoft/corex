@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\SearchIntl\Internal\SearchIntlOptions;
+use Packman\Config\Exceptions\InvalidConfiguration;
 
 it('is disabled on an empty environment', function (): void {
     expect(SearchIntlOptions::fromArray([])->enabled)->toBeFalse();

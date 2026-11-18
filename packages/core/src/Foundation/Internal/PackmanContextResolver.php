@@ -7,9 +7,11 @@ namespace CoreX\Foundation\Internal;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Exceptions\CentralContextException;
+use Packman\Attributes\Internal;
 use Packman\Context\Contracts\ContextResolverInterface;
 
 /** Adapts CoreX's account context without capturing request-local state. */
+#[Internal]
 final readonly class PackmanContextResolver implements ContextResolverInterface
 {
     public function __construct(private TenantContextResolver $resolver) {}

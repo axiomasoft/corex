@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Tools;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
-use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Tools\Contracts\ToolCatalogue;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Contracts\ToolInvoker;
@@ -21,6 +18,9 @@ use CoreX\Tools\Internal\ToolSchemaSupervisor;
 use CoreX\Tools\Internal\ToolSectionCompiler;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Errors\Laravel\ProblemDefinitions;
 use Packman\Modules\Contracts\Compiler\ManifestSectionCompiler;
 
 /** Explicit tool surface; no routes, migrations or auto-discovery. */

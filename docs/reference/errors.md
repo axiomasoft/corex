@@ -1,7 +1,7 @@
 # Typed package errors
 
 Error identities are package owned backed enums implementing
-`CoreX\Errors\Contracts\ErrorCode`. The wire value is `<package-slug>.<code>`;
+`Packman\Errors\Contracts\ErrorCode`. The wire value is `<package-slug>.<code>`;
 the kernel owns `core.*`. `ErrorDescriptor::code` and `ApiError::errorCode` remain
 strings on the wire, while their constructors require an `ErrorCode` object.
 Unscoped constructor strings and compatibility aliases are unsupported.
@@ -35,7 +35,7 @@ is idempotent; introducing a new contribution after compilation fails. The publi
 | `assertOccurrence(ErrorDescriptor, ?int)` | Checks category, retryability, detail keys and status projection |
 
 Definitions have a safe default title, a default status in 400–599, category,
-retryability, allowed detail keys, and `urn:corex:problem:<scoped-code>` as their type.
+retryability, allowed detail keys, and `urn:packman:problem:<scoped-code>` as their type.
 Occurrences retain their bounded details and RFC 6901 path. A retryable definition
 can also have a terminal occurrence; this never schedules a retry. Status remains an
 occurrence projection: validation statuses may differ within their category, and an

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Scheduler\Testing;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Scheduler\Internal\WakeupHandlerRegistry;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Identifies existing bindings without exposing internal names to consumer tests. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

@@ -27,6 +27,7 @@ use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
@@ -48,6 +49,7 @@ use RuntimeException;
  *
  * @internal
  */
+#[Internal]
 final readonly class AccountLifecycle
 {
     public function __construct(

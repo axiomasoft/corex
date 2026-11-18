@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Errors\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Operations\Errors\Exceptions\ApiError;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Throwable;
 
 /** Call port for the methods consumed across the owning module boundary. */

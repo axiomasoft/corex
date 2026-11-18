@@ -10,7 +10,9 @@ use CoreX\Intl\Locale\Data\LocalePolicy;
 use CoreX\Intl\Locale\Data\LocaleResolution;
 use CoreX\Intl\Locale\Exceptions\InvalidLocaleException;
 use Override;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class DefaultLocaleResolver implements LocaleResolver
 {
     public function __construct(

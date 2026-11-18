@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Access\Extend\Internal;
 
 use CoreX\Access\Contracts\RoleMatrixCompiler;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Entities\EntityRegistry;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Events\Lifecycle\ModuleDisabled;
@@ -28,6 +29,7 @@ use Packman\Modules\Events\Lifecycle\ModuleEnabled;
  *
  * @internal spec: B-11 §4 п.2/п.4, P2.21 D112/D113, AC-27
  */
+#[Internal]
 final readonly class PermissionsMerger
 {
     public function __construct(

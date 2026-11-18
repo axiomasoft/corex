@@ -8,6 +8,7 @@ use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Exceptions\UnknownMessageContract;
 use Override;
+use Packman\Attributes\Internal;
 
 /**
  * Неизменяемый реестр контрактов, собираемый в composition root.
@@ -17,6 +18,7 @@ use Override;
  * (collecting → compiled → frozen, отпечаток) вводится в P11; здесь достаточно
  * неизменяемости после сборки.
  */
+#[Internal]
 final readonly class ArrayMessageContractRegistry implements MessageContractRegistry
 {
     /** @var array<string, MessageContract> */

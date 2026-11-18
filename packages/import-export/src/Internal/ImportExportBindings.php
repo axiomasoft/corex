@@ -11,9 +11,11 @@ use CoreX\ImportExport\Data\TransferLimits;
 use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /** Composes the public session factory with the package-owned executors. */
+#[Internal]
 final class ImportExportBindings
 {
     public static function register(Application $app): void

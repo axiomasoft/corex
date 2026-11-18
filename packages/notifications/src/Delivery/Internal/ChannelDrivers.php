@@ -6,7 +6,9 @@ namespace CoreX\Notifications\Delivery\Internal;
 
 use CoreX\Notifications\Delivery\Contracts\NotificationChannelDriver;
 use CoreX\Notifications\Inbox\Exceptions\NotificationOperationConflict;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class ChannelDrivers
 {
     /** @var array<string, NotificationChannelDriver> */

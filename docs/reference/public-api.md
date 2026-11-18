@@ -10,9 +10,6 @@ Attributes own membership. Members belong to this package; direct extends/implem
 
 | Symbol | Layer | Since |
 |:--|:--|:--|
-| `CoreX\Attributes\Api` | api | 1.0 |
-| `CoreX\Attributes\Spi` | api | 1.0 |
-| `CoreX\Attributes\SpiKind` | api | 1.0 |
 | `CoreX\Audit\Contracts\AuditLogger` | spi-implement | 1.0 |
 | `CoreX\Audit\Contracts\AuditRetention` | spi-implement | 1.0 |
 | `CoreX\Audit\Contracts\Auditable` | spi-implement | 1.0 |
@@ -24,16 +21,9 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Audit\Laravel\AuditRegistration` | spi-call | 1.0 |
 | `CoreX\Audit\Laravel\AuditWriteExemption` | spi-call | 1.0 |
 | `CoreX\Audit\Laravel\HasAuditLog` | spi-call | 1.0 |
-| `CoreX\Config\Contracts\ConfigReportSection` | spi-implement | 1.0 |
-| `CoreX\Config\Contracts\RuntimeConfigCheck` | spi-implement | 1.0 |
 | `CoreX\Config\Data\CoreOptions` | api | 1.0 |
-| `CoreX\Config\Data\SecretRef` | api | 1.0 |
-| `CoreX\Config\Exceptions\InvalidConfiguration` | api | 1.0 |
 | `CoreX\Config\Laravel\ConfigRegistrar` | spi-call | 1.0 |
-| `CoreX\Config\Laravel\ConfigurationValidator` | spi-call | 1.0 |
-| `CoreX\Config\Laravel\ConfiguredImplementation` | spi-call | 1.0 |
 | `CoreX\Config\Laravel\CoreOptionsParser` | spi-call | 1.0 |
-| `CoreX\Config\Laravel\RuntimeConfigGate` | spi-call | 1.0 |
 | `CoreX\Context\Contracts\AccountConnectionResolver` | spi-implement | 1.0 |
 | `CoreX\Context\Contracts\IdentityPasswordRehasher` | spi-implement | 1.0 |
 | `CoreX\Context\Contracts\ImpersonationGuard` | spi-call | 1.0 |
@@ -78,24 +68,12 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Departments\Exceptions\DepartmentCycleException` | api | 1.0 |
 | `CoreX\Departments\Laravel\DepartmentQueries` | spi-call | 1.0 |
 | `CoreX\Departments\Laravel\DepartmentsRegistrar` | spi-call | 1.0 |
-| `CoreX\Errors\Contracts\DescribesError` | spi-implement | 1.0 |
-| `CoreX\Errors\Contracts\ErrorCode` | spi-implement | 1.0 |
-| `CoreX\Errors\Contracts\ProblemDefinitionProvider` | spi-implement | 1.0 |
-| `CoreX\Errors\Contracts\ProblemRegistry` | api | 1.0 |
-| `CoreX\Errors\Data\ErrorDescriptor` | api | 1.0 |
-| `CoreX\Errors\Data\ProblemDefinition` | api | 1.0 |
 | `CoreX\Errors\Enums\CoreErrorCode` | api | 1.0 |
-| `CoreX\Errors\Enums\ErrorCategory` | api | 1.0 |
-| `CoreX\Errors\Enums\UnavailabilityReason` | api | 1.0 |
-| `CoreX\Errors\Exceptions\CodedException` | spi-implement | 1.0 |
-| `CoreX\Errors\Exceptions\ProblemRegistryException` | api | 1.0 |
-| `CoreX\Errors\Laravel\ErrorsRegistrar` | spi-call | 1.0 |
-| `CoreX\Errors\Laravel\ProblemDefinitions` | spi-call | 1.0 |
-| `CoreX\Errors\Laravel\ProblemRegistryFactory` | spi-call | 1.0 |
 | `CoreX\Features\Contracts\FeatureFlags` | api | 1.0 |
 | `CoreX\Features\Data\FeatureFlagDefinition` | api | 1.0 |
 | `CoreX\Features\Events\FeatureFlagToggled` | spi-call | 1.0 |
 | `CoreX\Features\Laravel\FeaturesRegistrar` | spi-call | 1.0 |
+| `CoreX\Foundation\Laravel\ConsoleRegistrar` | spi-call | 1.0 |
 | `CoreX\Foundation\Laravel\PackmanRegistrar` | spi-call | 1.0 |
 | `CoreX\Invocation\Contracts\OperationHandler` | spi-implement | 1.0 |
 | `CoreX\Invocation\Contracts\RequestContext` | spi-implement | 1.0 |
@@ -485,7 +463,6 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Operations\Invocation\Laravel\ResolvedContexts` | spi-call | 1.0 |
 | `CoreX\Operations\Laravel\ApiSchemaBindingsRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Laravel\ApiSchemaConnections` | spi-call | 1.0 |
-| `CoreX\Operations\Laravel\Commands\PruneApiOperations` | spi-call | 1.0 |
 | `CoreX\Operations\Laravel\HttpRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Laravel\IdempotencyRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Laravel\IdempotencyStoreFactory` | spi-call | 1.0 |
@@ -660,6 +637,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Tasks\Access\Contracts\TaskPlanningAccess` | spi-implement | 1.0 |
 | `CoreX\Tasks\Access\Exceptions\TasksModuleDisabled` | api | 1.0 |
 | `CoreX\Tasks\Errors\Enums\TasksErrorCode` | api | 1.0 |
+| `CoreX\Tasks\Laravel\TasksRegistrar` | spi-call | 1.0 |
 | `CoreX\Tasks\Planning\Contracts\TaskOperationReceipts` | spi-implement | 1.0 |
 | `CoreX\Tasks\Planning\Contracts\TaskPlanningCommand` | spi-implement | 1.0 |
 | `CoreX\Tasks\Planning\Data\PlanningOperation` | api | 1.0 |
@@ -767,8 +745,6 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Tenancy\Impersonation\Events\ImpersonationStarted` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\AuthenticationRegistrar` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\Commands\IdentitiesReconcileCommand` | spi-call | 1.0 |
-| `CoreX\Tenancy\Laravel\Commands\PendingClearCommand` | spi-call | 1.0 |
-| `CoreX\Tenancy\Laravel\Commands\PendingCreateCommand` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\Commands\TenantsMigrateCommand` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\ConsoleRegistrar` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\DomainTrustRegistrar` | spi-call | 1.0 |
@@ -780,7 +756,6 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Tenancy\Laravel\Http\Middleware\EnforceSessionLifetime` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\Http\Middleware\ImpersonationSessionGuard` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\Http\Middleware\RequireActiveMembership` | spi-call | 1.0 |
-| `CoreX\Tenancy\Laravel\Http\Middleware\ResolveTenantFromHost` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\Http\Middleware\ResolveWorkspace` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\Http\Middleware\ScopeSessionToTenant` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\IdentityRegistrar` | spi-call | 1.0 |

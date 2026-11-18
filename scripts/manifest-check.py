@@ -21,6 +21,8 @@ ILLUMINATE = '^13.0'
 # package repositories and lockfile; other prerelease dependencies remain forbidden.
 ALLOWED_PRERELEASE = {
     'axiomasoft/packman': '^0.1@dev',
+    'axiomasoft/packman-devtools': '^0.1@dev',
+    'axiomasoft/packman-testkit': '^0.1@dev',
     'axiomasoft/packman-modules': '^0.1@dev',
     'axiomasoft/packman-schema': '^0.1@dev',
     'axiomasoft/packman-panels': '^0.1@dev',

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Internal;
 
-use CoreX\Config\Contracts\ConfigReportSection;
+use Packman\Attributes\Internal;
+use Packman\Config\Contracts\ConfigReportSectionInterface as ConfigReportSection;
 
 /** @internal Configuration report composition. */
+#[Internal]
 final class IntlConfigSection implements ConfigReportSection
 {
     public function order(): int

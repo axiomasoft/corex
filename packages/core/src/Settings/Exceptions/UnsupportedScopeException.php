@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Settings\Exceptions;
 
-use CoreX\Attributes\Api;
-use CoreX\Errors\Data\ErrorDescriptor;
 use CoreX\Errors\Enums\CoreErrorCode;
-use CoreX\Errors\Enums\ErrorCategory;
-use CoreX\Errors\Exceptions\CodedException;
 use CoreX\Settings\Enums\SettingScope;
+use Packman\Attributes\Api;
+use Packman\Errors\Data\ErrorDescriptor;
+use Packman\Errors\Enums\ErrorCategory;
+use Packman\Errors\Exceptions\CodedException;
 
 /**
  * `sys_settings`'s CHECK constraint accepts only account/workspace/user —

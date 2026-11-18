@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Operations\Tests\Feature;
 
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Errors\Contracts\ProblemRegistry;
-use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Errors\Contracts\ResponseSerializer;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
@@ -16,6 +14,8 @@ use CoreX\Operations\Errors\Internal\ProblemDetailsSerializer;
 use CoreX\Operations\Errors\Internal\RetryAfterPolicy;
 use CoreX\Operations\Tests\Support\SyntheticErrorCode;
 use CoreX\Operations\Tests\TestCase;
+use Packman\Errors\Contracts\ProblemRegistry;
+use Packman\Errors\Enums\ErrorCategory;
 use PHPUnit\Framework\Attributes\DataProvider;
 use RuntimeException;
 

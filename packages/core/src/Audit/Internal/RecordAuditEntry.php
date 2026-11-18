@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /**
@@ -30,6 +31,7 @@ use Psr\Clock\ClockInterface;
  *
  * @internal spec: B-10 §7.1, P1.6, P1.7, D12
  */
+#[Internal]
 final class RecordAuditEntry implements ShouldQueueAfterCommit
 {
     use Dispatchable;

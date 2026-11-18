@@ -7,8 +7,10 @@ namespace CoreX\CustomFields\Internal\Storage;
 use CoreX\CustomFields\Contracts\AttributeStore;
 use CoreX\CustomFields\Contracts\AttributeStoreResolver;
 use CoreX\CustomFields\Data\AttributeStoragePolicy;
+use Packman\Attributes\Internal;
 use RuntimeException;
 
+#[Internal]
 final readonly class ConfiguredAttributeStoreResolver implements AttributeStoreResolver
 {
     public function __construct(

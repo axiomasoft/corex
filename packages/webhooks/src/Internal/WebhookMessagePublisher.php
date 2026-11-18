@@ -7,8 +7,10 @@ namespace CoreX\Webhooks\Internal;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Data\MessageEnvelope;
 use Override;
+use Packman\Attributes\Internal;
 
 /** Durable webhook acceptance, then the existing publisher. Lossy bindings are not an acknowledgement. */
+#[Internal]
 final readonly class WebhookMessagePublisher implements DurableMessagePublisher
 {
     public function __construct(

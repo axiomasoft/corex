@@ -1,0 +1,17 @@
+{
+    "schema": "packman-error-codes/1",
+    "package": "axiomasoft/corex-search-meilisearch",
+    "codes": [
+        {
+            "package": "axiomasoft/corex-search-meilisearch",
+            "enum": "CoreX\\SearchMeilisearch\\Errors\\Enums\\SearchMeilisearchErrorCode",
+            "case": "InvalidMeilisearchConfiguration",
+            "code": "search-meilisearch.invalid_meilisearch_configuration",
+            "type": "urn:packman:problem:search-meilisearch.invalid_meilisearch_configuration",
+            "status": 500,
+            "title": "Invalid meilisearch configuration.",
+            "retryable": false,
+            "category": "internal"
+        }
+    ]
+}

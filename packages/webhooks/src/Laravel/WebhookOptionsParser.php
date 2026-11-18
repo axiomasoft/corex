@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
-use CoreX\Config\Laravel\ConfigurationValidator;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Webhooks\Data\WebhookOptions;
 use CoreX\Webhooks\Data\WebhookTopic;
 use InvalidArgumentException;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Laravel\ConfigurationValidator;
 
 /** Immutable webhook activation policy; it never contains secret material. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

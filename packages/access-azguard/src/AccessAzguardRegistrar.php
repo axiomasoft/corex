@@ -9,9 +9,9 @@ use CoreX\Access\Laravel\ScopeResolver;
 use CoreX\AccessAzguard\Contracts\AccessContextMapper;
 use CoreX\AccessAzguard\Internal\AzGuardAccessChecker;
 use CoreX\AccessAzguard\Internal\CoreXAccessContextMapper;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use Illuminate\Contracts\Foundation\Application;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Packman\Foundation\Contracts\PackageRegistrar;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]

@@ -7,8 +7,10 @@ namespace CoreX\Operations\Bulk\Internal;
 use CoreX\Data\Data\DataScope;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 
 /** @internal Cursor page of safe bulk failure records. Limit 100 is mandatory. */
+#[Internal]
 final readonly class BulkFailureReader
 {
     public const int MAX_LIMIT = 100;

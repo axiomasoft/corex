@@ -1,0 +1,91 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "axiomasoft/corex-access configuration",
+    "type": "object",
+    "properties": {
+        "corex-access": {
+            "type": "object",
+            "properties": {
+                "cache": {
+                    "type": "object",
+                    "properties": {
+                        "store": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "null"
+                            ],
+                            "default": null
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "identity": {
+                    "type": "object",
+                    "properties": {
+                        "columns": {
+                            "type": "object",
+                            "properties": {
+                                "active": {
+                                    "type": "string",
+                                    "default": "is_active"
+                                },
+                                "deleted_at": {
+                                    "type": "string",
+                                    "default": "deleted_at"
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "default": "email"
+                                },
+                                "id": {
+                                    "type": "string",
+                                    "default": "id"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "default": "password_hash"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "connection": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "null"
+                            ],
+                            "default": null
+                        },
+                        "enabled": {
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "table": {
+                            "type": "string",
+                            "default": "users"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "panel": {
+                    "type": "string",
+                    "default": "app"
+                },
+                "workspace_scope_class": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

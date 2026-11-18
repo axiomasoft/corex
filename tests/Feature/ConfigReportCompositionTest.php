@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Artisan;
 
 final class ConfigReportCompositionTest extends GoldenTestCase
 {
+    public function test_operations_reports_its_physical_tenancy_opt_out(): void
+    {
+        $this->declareTenancyHostConfiguration();
+        config(['corex-operations.require_physical_tenancy' => false]);
+        self::assertSame(0, Artisan::call('packman:config:validate'));
+        self::assertStringContainsString('NOTICE [opt-out] corex-operations.require_physical_tenancy=false', Artisan::output());
+    }
+
     public function test_package_sections_preserve_the_complete_report(): void
     {
         $this->declareTenancyHostConfiguration();
@@ -22,7 +30,7 @@ final class ConfigReportCompositionTest extends GoldenTestCase
             'corex-search-meilisearch.key' => 'test-only-meilisearch-key',
         ]);
 
-        self::assertSame(0, Artisan::call('corex:config:validate'));
+        self::assertSame(0, Artisan::call('packman:config:validate'));
         self::assertSame(<<<'REPORT'
 driver pubsub.driver=redis
 driver corex-tenancy.wakeup.driver=root_registry

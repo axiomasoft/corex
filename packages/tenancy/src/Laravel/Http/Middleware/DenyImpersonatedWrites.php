@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Laravel\Http\Middleware;
 
 use Closure;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Tenancy\Laravel\Support\StatusGatePolicy;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * L1 — HTTP layer of the read-only invariant (D141, research/12 §2): an

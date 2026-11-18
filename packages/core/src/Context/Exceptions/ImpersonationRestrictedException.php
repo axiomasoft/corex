@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Exceptions;
 
-use CoreX\Attributes\Api;
 use CoreX\Context\Enums\ImpersonationRestrictedAction;
-use CoreX\Errors\Data\ErrorDescriptor;
 use CoreX\Errors\Enums\CoreErrorCode;
-use CoreX\Errors\Enums\ErrorCategory;
-use CoreX\Errors\Exceptions\CodedException;
+use Packman\Attributes\Api;
+use Packman\Errors\Data\ErrorDescriptor;
+use Packman\Errors\Enums\ErrorCategory;
+use Packman\Errors\Exceptions\CodedException;
 
 /**
  * Thrown by any of the three read-only-invariant layers (D141) when an

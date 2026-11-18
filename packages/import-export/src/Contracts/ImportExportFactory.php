@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\ImportExport\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Data\Data\DataScope;
 use CoreX\ImportExport\Data\ConflictRule;
 use CoreX\ImportExport\Data\Export\ExportCursor;
@@ -14,6 +12,8 @@ use CoreX\ImportExport\Data\ExportSession;
 use CoreX\ImportExport\Data\ImportSession;
 use CoreX\ImportExport\Data\MappingSnapshot;
 use CoreX\ImportExport\Data\TransferRef;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Opens idempotent sessions using package-owned persistence and executors. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

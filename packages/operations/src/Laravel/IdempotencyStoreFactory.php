@@ -4,23 +4,24 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
-use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
 use CoreX\Operations\Idempotency\Internal\SqlIdempotencyStore;
 use CoreX\Operations\Laravel\Support\ApiOptions;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Connection;
 use InvalidArgumentException;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Data\SecretRef;
 use Psr\Clock\ClockInterface;
 
 /** Builds the idempotency store; the key hash secret derives from `app.key`. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class IdempotencyStoreFactory
 {
-    public function make(Application $app): SqlIdempotencyStore
+    public function make(Application $app): IdempotencyStore
     {
         $secret = $app->make(Repository::class)->get('app.key');
 

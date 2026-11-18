@@ -7,11 +7,13 @@ namespace CoreX\Audit\Internal;
 use CoreX\Audit\Laravel\AuditRegistration;
 use CoreX\Audit\Laravel\HasAuditLog;
 use Illuminate\Database\Eloquent\Model;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Entities\EntityRegistry;
 use Packman\Modules\Contracts\Entities\EntityRegistryHook;
 use Packman\Modules\Enums\Entities\Capability;
 
 /** Connects CoreX auditing to Packman's projected module entities. */
+#[Internal]
 final readonly class ModuleAuditHook implements EntityRegistryHook
 {
     public function wire(EntityRegistry $registry): void

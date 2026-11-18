@@ -1,6 +1,6 @@
 {
     "name": "flex/crm",
-    "description": "CoreX CRM module — pipelines, stages and deals on axiomasoft/corex (ULID, tenancy, money).",
+    "description": "CoreX CRM module \u2014 pipelines, stages and deals on axiomasoft/corex (ULID, tenancy, money).",
     "type": "packman-module",
     "license": "MIT",
     "keywords": [
@@ -17,16 +17,17 @@
         }
     ],
     "require": {
-        "ext-filter": "*",
-        "ext-mbstring": "*",
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
         "axiomasoft/corex-intl": "^1.0@dev",
-        "brick/money": "^0.9 || ^0.10",
-        "giggsey/libphonenumber-for-php-lite": "^9.0",
-        "laravel/framework": "^13.0",
+        "axiomasoft/packman": "^0.1@dev",
         "axiomasoft/packman-modules": "^0.1@dev",
-        "axiomasoft/packman-schema": "^0.1@dev"
+        "axiomasoft/packman-schema": "^0.1@dev",
+        "brick/money": "^0.9 || ^0.10",
+        "ext-filter": "*",
+        "ext-mbstring": "*",
+        "giggsey/libphonenumber-for-php-lite": "^9.0",
+        "laravel/framework": "^13.0"
     },
     "require-dev": {
         "axiomasoft/corex-operations": "^1.0@dev",
@@ -65,7 +66,23 @@
             "dev-main": "1.0.x-dev"
         },
         "packman": {
-            "module": "Flex\\Crm\\CrmModule"
+            "module": "Flex\\Crm\\CrmModule",
+            "schema-version": 1,
+            "package-type": "product",
+            "stability": "experimental",
+            "profile": "product",
+            "error-prefix": "crm",
+            "owns": [
+                "Activity",
+                "ApiShared",
+                "Company",
+                "Contact",
+                "Context",
+                "Deal",
+                "Internal",
+                "Lead",
+                "Support"
+            ]
         }
     },
     "repositories": [

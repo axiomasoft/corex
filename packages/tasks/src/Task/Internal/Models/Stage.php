@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Packman\Attributes\Internal;
 
 /**
  * @property bool $is_final
@@ -20,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string|null $color
  * @property TaskStatus|null $auto_status
  */
+#[Internal]
 final class Stage extends Model
 {
     use HasUuids;

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Planning\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Tasks\Planning\Data\TaskOperationKind;
 use CoreX\Tasks\Planning\Data\TaskOperationReceipt;
 use Illuminate\Database\Connection;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Tasks-owned ledger port. The supplied connection preserves the caller's transaction. */
 #[Spi(kind: SpiKind::Implement, since: '1.0')]

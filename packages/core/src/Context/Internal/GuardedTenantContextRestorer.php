@@ -10,12 +10,14 @@ use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Data\Data\DataScope;
 use Override;
+use Packman\Attributes\Internal;
 
 /**
  * Реализация по умолчанию: контекст процесса уже установлен вызывающей стороной
  * (sweeper, bootstrapper очереди, boxed-резолвер), а restore() доказывает, что он
  * совпадает со скоупом. Расхождение — отказ, а не молчаливая работа в чужом аккаунте.
  */
+#[Internal]
 final readonly class GuardedTenantContextRestorer implements TenantContextRestorer
 {
     public function __construct(private TenantContextResolver $resolver) {}

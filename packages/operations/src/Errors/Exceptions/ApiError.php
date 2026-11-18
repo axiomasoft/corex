@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Errors\Exceptions;
 
-use CoreX\Attributes\Api;
 use CoreX\Data\Data\JsonDocument;
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Errors\Contracts\DescribesError;
-use CoreX\Errors\Contracts\ErrorCode;
-use CoreX\Errors\Data\ErrorDescriptor;
-use CoreX\Errors\Enums\ErrorCategory;
-use CoreX\Errors\Exceptions\CodedException;
+use Packman\Attributes\Api;
+use Packman\Errors\Contracts\DescribesError;
+use Packman\Errors\Contracts\ErrorCode;
+use Packman\Errors\Data\ErrorDescriptor;
+use Packman\Errors\Enums\ErrorCategory;
+use Packman\Errors\Exceptions\CodedException;
 
 /** Explicit public error. Never pass database or infrastructure exception messages here. */
 #[Api(since: '1.0')]

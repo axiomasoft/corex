@@ -13,6 +13,7 @@ use CoreX\Storage\Exceptions\StorageOperationFailed;
 use CoreX\Storage\Laravel\ScopedFilesystemFactory;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemManager;
+use Packman\Attributes\Internal;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -25,6 +26,7 @@ use SplFileInfo;
  *
  * @internal
  */
+#[Internal]
 final readonly class ContextTenantStorage implements TenantStorage
 {
     public function __construct(

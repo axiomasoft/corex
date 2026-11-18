@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — Packman governance
+
+- Move the physical-tenancy opt-out report into the operations configuration section; expose IdempotencyStore from its factory and keep Artisan handler classes private.
+- Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.
+
+
 ## Unreleased — package boundaries
 
 - Remove the obsolete empty `CatalogueModuleFixture::flush()` test hook; current Packman `ModuleRegistry` has no flush method.

@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Internal;
 
-use CoreX\Config\Contracts\RuntimeConfigCheck;
 use CoreX\Config\Data\CoreOptions;
 use CoreX\Tenancy\Impersonation\Enums\ImpersonationProfile;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Override;
+use Packman\Attributes\Internal;
+use Packman\Config\Contracts\RuntimeConfigCheck;
 
 /** @internal */
+#[Internal]
 final readonly class DangerousModesCheck implements RuntimeConfigCheck
 {
     public function __construct(private TenancyOptions $options, private CoreOptions $core) {}

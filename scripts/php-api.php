@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace CoreX\Attributes\Tooling;
 
+use Packman\DevTools\Generators\Contracts\ApiManifestGenerator;
 use RuntimeException;
 use Throwable;
 
@@ -50,8 +51,15 @@ try {
 
     if (isset($options['write']) || isset($options['check'])) {
         $artifacts = ['docs/reference/public-api.md' => $report->documentation()];
-        foreach ($report->manifests as $package => $manifest) {
-            $artifacts[$report->packagePaths[$package].'/resources/contracts/php-api.json'] = SurfaceReport::encode($manifest);
+        $packages = [];
+        foreach ($report->packagePaths as $package => $path) {
+            $packages[] = ['name' => $package, 'path' => $path];
+        }
+        // Packman owns the serialized contract. CoreX keeps its stronger whole-graph
+        // diagnostics and source documentation in addition to the native checks.
+        $sync = (new ApiManifestGenerator)->sync($root, $packages, isset($options['write']));
+        foreach ($sync['diagnostics'] as $diagnostic) {
+            $stale[] = $diagnostic;
         }
         foreach ($artifacts as $relativeFile => $bytes) {
             $file = $root.'/'.$relativeFile;

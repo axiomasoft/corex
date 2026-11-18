@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Access\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Tasks\Task\Data\ActorData;
 use CoreX\Tasks\Task\Data\EntityReference;
 use CoreX\Tasks\Task\Data\MoveTaskToStageData;
 use CoreX\Tasks\Task\Data\TaskDraft;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface TaskAccess

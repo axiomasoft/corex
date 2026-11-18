@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
@@ -30,6 +29,7 @@ use Illuminate\Database\Connection;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
+use Packman\Config\Data\SecretRef;
 use Packman\Schema\Contracts\Migration\SchemaMigrator;
 use Packman\Schema\Contracts\Migration\SchemaSets;
 use PHPUnit\Framework\Attributes\Group;

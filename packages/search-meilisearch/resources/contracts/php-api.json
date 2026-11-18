@@ -6,12 +6,12 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Errors\\Contracts\\ErrorCode"
+                "Packman\\Errors\\Contracts\\ErrorCode"
             ],
             "uses": [],
             "doc": [],
@@ -27,12 +27,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "InvalidMeilisearchConfiguration": "'search-meilisearch.invalid_meilisearch_configuration'"
-            }
+            "enum_cases": [
+                {
+                    "name": "InvalidMeilisearchConfiguration",
+                    "value": "'search-meilisearch.invalid_meilisearch_configuration'"
+                }
+            ]
         },
         "CoreX\\SearchMeilisearch\\Exceptions\\InvalidMeilisearchConfiguration": {
             "kind": "class",
@@ -42,7 +45,7 @@
             "readonly": false,
             "abstract": false,
             "extends": [
-                "CoreX\\Errors\\Exceptions\\CodedException"
+                "Packman\\Errors\\Exceptions\\CodedException"
             ],
             "implements": [],
             "uses": [],
@@ -55,7 +58,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                    "return": "Packman\\Errors\\Data\\ErrorDescriptor",
                     "doc": []
                 },
                 "invalidHost": {
@@ -65,7 +68,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "self(CoreX\\SearchMeilisearch\\Exceptions\\InvalidMeilisearchConfiguration)",
+                    "return": "self",
                     "doc": []
                 },
                 "invalidIndexUid": {
@@ -75,7 +78,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "self(CoreX\\SearchMeilisearch\\Exceptions\\InvalidMeilisearchConfiguration)",
+                    "return": "self",
                     "doc": []
                 },
                 "invalidKey": {
@@ -85,7 +88,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "self(CoreX\\SearchMeilisearch\\Exceptions\\InvalidMeilisearchConfiguration)",
+                    "return": "self",
                     "doc": []
                 },
                 "missingSdk": {
@@ -95,18 +98,18 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "self(CoreX\\SearchMeilisearch\\Exceptions\\InvalidMeilisearchConfiguration)",
+                    "return": "self",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
         },
         "CoreX\\SearchMeilisearch\\Laravel\\MeilisearchProviderFactory": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -137,14 +140,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\SearchMeilisearch\\SearchMeilisearchServiceProvider": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -177,10 +181,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         }
     }
 }

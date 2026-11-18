@@ -8,6 +8,7 @@ use CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException;
 use Illuminate\Http\Client\Factory as HttpFactory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Packman\Attributes\Internal;
 use SensitiveParameter;
 
 /**
@@ -20,6 +21,7 @@ use SensitiveParameter;
  *
  * @internal
  */
+#[Internal]
 final readonly class OidcClient
 {
     public const string SESSION_STATE_KEY = 'corex_tenancy_oidc.state';

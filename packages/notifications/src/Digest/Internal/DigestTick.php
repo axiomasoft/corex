@@ -6,7 +6,9 @@ namespace CoreX\Notifications\Digest\Internal;
 
 use CoreX\Context\Data\TenantContext;
 use CoreX\Scheduling\Data\WakeupWindow;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class DigestTick
 {
     public function __construct(public TenantContext $tenant, public WakeupWindow $window, public string $requestKey) {}

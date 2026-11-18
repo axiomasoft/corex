@@ -4,7 +4,7 @@
     "symbols": {
         "CoreX\\Search\\Contracts\\IndexDriver": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -18,7 +18,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -38,7 +38,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -58,7 +58,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -75,14 +75,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Search\\Contracts\\SearchDocuments": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -96,7 +97,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -131,14 +132,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Search\\Contracts\\SearchDriverRegistry": {
             "kind": "interface",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -152,7 +154,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -175,21 +177,18 @@
                         }
                     ],
                     "return": "void",
-                    "doc": {
-                        "@param": [
-                            "\\Closure(\\Illuminate\\Contracts\\Foundation\\Application): \\CoreX\\Search\\Contracts\\SearchProvider $factory"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Search\\Contracts\\SearchHydrator": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -203,7 +202,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -238,14 +237,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Search\\Contracts\\SearchProvider": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -259,7 +259,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [],
                     "return": "CoreX\\Search\\Data\\SearchCapabilities",
@@ -269,7 +269,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -295,14 +295,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Search\\Contracts\\SearchSchema": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -316,7 +317,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -342,10 +343,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\Search\\Data\\Candidate": {
             "kind": "class",
@@ -380,18 +382,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "record": {
-                    "flags": 1,
-                    "type": "CoreX\\Data\\Data\\RecordRef",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -444,57 +435,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Search\\Data\\Candidate> $candidates"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "candidates": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Search\\Data\\Candidate> $candidates"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "nextAfterId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Search\\Data\\Candidate> $candidates"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "truncated": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Search\\Data\\Candidate> $candidates"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -556,71 +500,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $fields"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "fields": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $fields"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "record": {
-                    "flags": 1,
-                    "type": "CoreX\\Data\\Data\\RecordRef",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $fields"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "revision": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $fields"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "schemaHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (scalar | null)> $fields"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -664,43 +547,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (scalar | null)>> $documents"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "documents": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (scalar | null)>> $documents"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "next": {
-                    "flags": 1,
-                    "type": "?CoreX\\Search\\Data\\DocumentCursor",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (scalar | null)>> $documents"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -738,18 +588,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "value": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -793,43 +632,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (scalar | null)>> $documents"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "documents": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (scalar | null)>> $documents"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "generation": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (scalar | null)>> $documents"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -900,85 +706,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (scalar | null)>> $records"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "claimEpoch": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (scalar | null)>> $records"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "generation": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (scalar | null)>> $records"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "laneKey": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (scalar | null)>> $records"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "records": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (scalar | null)>> $records"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "restoreEpoch": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (scalar | null)>> $records"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1025,28 +756,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "errorCode": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "status": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1093,28 +803,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "generation": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "taskId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1161,28 +850,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "fromGeneration": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "toGeneration": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1247,48 +915,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "facets": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "fullText": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "highlights": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "typoTolerance": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1332,43 +959,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $values"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "field": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $values"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "values": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $values"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1421,57 +1015,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (scalar | null)>> $records"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "nextAfterId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (scalar | null)>> $records"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "records": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (scalar | null)>> $records"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "truncated": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<array<string, (scalar | null)>> $records"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1560,113 +1107,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Search\\Data\\SearchFilter> $filters"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "afterId": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Search\\Data\\SearchFilter> $filters"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "entity": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Search\\Data\\SearchFilter> $filters"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "filters": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Search\\Data\\SearchFilter> $filters"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "limit": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Search\\Data\\SearchFilter> $filters"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "scanBudget": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Search\\Data\\SearchFilter> $filters"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "schemaHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Search\\Data\\SearchFilter> $filters"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "text": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Search\\Data\\SearchFilter> $filters"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1755,129 +1199,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $filterColumns",
-                            "list<string> $resultColumns",
-                            "list<string> $searchableColumns"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "entity": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $filterColumns",
-                            "list<string> $resultColumns",
-                            "list<string> $searchableColumns"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "filterColumns": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $filterColumns",
-                            "list<string> $resultColumns",
-                            "list<string> $searchableColumns"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "idColumn": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $filterColumns",
-                            "list<string> $resultColumns",
-                            "list<string> $searchableColumns"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "resultColumns": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $filterColumns",
-                            "list<string> $resultColumns",
-                            "list<string> $searchableColumns"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "schemaHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $filterColumns",
-                            "list<string> $resultColumns",
-                            "list<string> $searchableColumns"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "searchableColumns": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $filterColumns",
-                            "list<string> $resultColumns",
-                            "list<string> $searchableColumns"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "table": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, string> $filterColumns",
-                            "list<string> $resultColumns",
-                            "list<string> $searchableColumns"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1886,12 +1211,12 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Errors\\Contracts\\ErrorCode"
+                "Packman\\Errors\\Contracts\\ErrorCode"
             ],
             "uses": [],
             "doc": [],
@@ -1907,12 +1232,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "InvalidSearchConfiguration": "'search.invalid_search_configuration'"
-            }
+            "enum_cases": [
+                {
+                    "name": "InvalidSearchConfiguration",
+                    "value": "'search.invalid_search_configuration'"
+                }
+            ]
         },
         "CoreX\\Search\\Exceptions\\InvalidSearchConfiguration": {
             "kind": "class",
@@ -1922,7 +1250,7 @@
             "readonly": false,
             "abstract": false,
             "extends": [
-                "CoreX\\Errors\\Exceptions\\CodedException"
+                "Packman\\Errors\\Exceptions\\CodedException"
             ],
             "implements": [],
             "uses": [],
@@ -1935,7 +1263,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                    "return": "Packman\\Errors\\Data\\ErrorDescriptor",
                     "doc": []
                 },
                 "missingDatabase": {
@@ -1945,7 +1273,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "self(CoreX\\Search\\Exceptions\\InvalidSearchConfiguration)",
+                    "return": "self",
                     "doc": []
                 },
                 "missingDriver": {
@@ -1955,7 +1283,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "self(CoreX\\Search\\Exceptions\\InvalidSearchConfiguration)",
+                    "return": "self",
                     "doc": []
                 },
                 "missingSchemaBinding": {
@@ -1965,7 +1293,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "self(CoreX\\Search\\Exceptions\\InvalidSearchConfiguration)",
+                    "return": "self",
                     "doc": []
                 },
                 "weakCursorSecret": {
@@ -1975,18 +1303,18 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "self(CoreX\\Search\\Exceptions\\InvalidSearchConfiguration)",
+                    "return": "self",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
         },
         "CoreX\\Search\\Laravel\\SearchPortBindings": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -2017,14 +1345,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Search\\SearchServiceProvider": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -2057,14 +1386,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\Search\\Testing\\SearchFixtures": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -2101,17 +1431,14 @@
                         }
                     ],
                     "return": "CoreX\\Search\\Contracts\\SearchHydrator",
-                    "doc": {
-                        "@param": [
-                            "\\Closure(\\CoreX\\Data\\Data\\DataScope, \\CoreX\\Data\\Data\\RecordRef, \\CoreX\\Search\\Data\\SearchSnapshot): ?\\CoreX\\Search\\Data\\CurrentSearchRecord $loadCurrent"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         }
     }
 }

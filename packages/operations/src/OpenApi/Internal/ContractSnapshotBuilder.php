@@ -5,15 +5,17 @@ declare(strict_types=1);
 namespace CoreX\Operations\OpenApi\Internal;
 
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Operations\Definition\Contracts\OperationRegistry;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Operations\Versioning\Data\ApiProfile;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
+use Packman\Errors\Contracts\ProblemRegistry;
 
 /** @internal Installed-code v1 snapshot. It does not record tenant activation. */
+#[Internal]
 final readonly class ContractSnapshotBuilder
 {
     public const array FILES = ['errors.json', 'openapi.json', 'operations.json', 'manifest.json'];

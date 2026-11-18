@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Packman\Attributes\Internal;
 
 /**
  * `aut_role_assignments` — a role granted to a principal (user/agent/api_key,
@@ -27,6 +28,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
+#[Internal]
 final class RoleAssignment extends Model
 {
     use HasUuids;

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Departments\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Departments\Internal\Models\Department;
 use Illuminate\Database\Query\Builder;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Composable hierarchy reads for access predicates. Eloquent scopes are applied before exposing the SQL query; no concrete model leaves this module. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

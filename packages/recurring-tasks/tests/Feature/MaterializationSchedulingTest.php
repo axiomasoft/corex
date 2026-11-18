@@ -7,7 +7,6 @@ namespace CoreX\RecurringTasks\Tests\Feature;
 require_once __DIR__.'/../../../scheduler/tests/Support/PackageBridge.php';
 
 use CoreX\Audit\Enums\ActorType;
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\WriteToken;
@@ -30,6 +29,7 @@ use CoreX\Tasks\Task\Data\TaskDraft;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Packman\Config\Exceptions\InvalidConfiguration;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Compiler\CompiledRegistry;
 use PHPUnit\Framework\Attributes\DataProvider;

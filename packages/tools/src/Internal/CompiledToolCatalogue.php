@@ -13,9 +13,11 @@ use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCatalogueView;
 use CoreX\Tools\Data\ToolDescriptor;
 use Override;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 /** Fresh current-policy catalogue projection over the compiled API slice. */
+#[Internal]
 final readonly class CompiledToolCatalogue implements ToolCatalogue
 {
     public const int MAX_DESCRIPTORS = 1000;

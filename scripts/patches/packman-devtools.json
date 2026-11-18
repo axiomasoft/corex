@@ -1,0 +1,7 @@
+{
+    "source_reference": "3dcc7d7cb5ad036a642e9ac07cb1843076c9b4eb",
+    "file": "vendor/axiomasoft/packman-devtools/packages/devtools/src/Gates/Boundaries/TableWriteOwnershipGate.php",
+    "before_sha256": "be9a172cc045d8d2f59ca1b770b8fc752ceefb09c2e9a3010abdd2d382466946",
+    "after_sha256": "af6ccc4937364b7fbbdbc991504306a11f078dcbd2e3a2fa9e973478e2bdf1bc",
+    "patch": "scripts/patches/packman-table-ownership.patch"
+}

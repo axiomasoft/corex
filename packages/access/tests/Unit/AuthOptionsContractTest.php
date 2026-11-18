@@ -7,8 +7,8 @@ namespace CoreX\Access\Tests\Unit;
 use CoreX\Access\Exceptions\ScopeCapabilityMismatch;
 use CoreX\Access\Internal\Support\AccessConfigSection;
 use CoreX\Access\Laravel\AuthOptions;
-use CoreX\Config\Exceptions\InvalidConfiguration;
-use CoreX\Errors\Enums\ErrorCategory;
+use Packman\Config\Exceptions\InvalidConfiguration;
+use Packman\Errors\Enums\ErrorCategory;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

@@ -1,0 +1,422 @@
+{
+    "schema_version": 1,
+    "name": "corex/monorepo",
+    "profile": "modular-platform",
+    "php": ">=8.4 <8.6",
+    "phpstan_level": "max",
+    "provider_max_lines": 80,
+    "packages": [
+        {
+            "name": "axiomasoft/corex-access",
+            "path": "packages/access",
+            "namespace": "CoreX\\Access\\",
+            "profile": "laravel-package",
+            "layer": "L2",
+            "type": "capability",
+            "owns": [
+                "Access",
+                "Contracts",
+                "Data",
+                "Enums",
+                "Errors",
+                "Exceptions",
+                "Extend",
+                "Identity",
+                "Internal",
+                "Laravel",
+                "Matrix",
+                "Roles"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-access-azguard",
+            "path": "packages/access-azguard",
+            "namespace": "CoreX\\AccessAzguard\\",
+            "profile": "laravel-package",
+            "layer": "L3",
+            "type": "integration",
+            "owns": [
+                "Contracts",
+                "Exceptions",
+                "Internal"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex",
+            "path": "packages/core",
+            "namespace": "CoreX\\",
+            "profile": "laravel-package",
+            "layer": "L1",
+            "type": "kernel",
+            "owns": [
+                "Attributes",
+                "Audit",
+                "Config",
+                "Context",
+                "Data",
+                "Database",
+                "Departments",
+                "Errors",
+                "Features",
+                "Foundation",
+                "Invocation",
+                "Messaging",
+                "Observability",
+                "Scheduling",
+                "Settings",
+                "Storage",
+                "Time"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-custom-fields",
+            "path": "packages/custom-fields",
+            "namespace": "CoreX\\CustomFields\\",
+            "profile": "laravel-package",
+            "layer": "L2",
+            "type": "capability",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Errors",
+                "Exceptions",
+                "Internal"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-import-export",
+            "path": "packages/import-export",
+            "namespace": "CoreX\\ImportExport\\",
+            "profile": "laravel-package",
+            "layer": "L2",
+            "type": "capability",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Exceptions",
+                "Internal"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-intl",
+            "path": "packages/intl",
+            "namespace": "CoreX\\Intl\\",
+            "profile": "modular-platform",
+            "layer": "L2",
+            "type": "capability",
+            "owns": [
+                "Currency",
+                "Errors",
+                "Formatting",
+                "Internal",
+                "Laravel",
+                "Locale",
+                "Money",
+                "Territory",
+                "Translation"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-media",
+            "path": "packages/media",
+            "namespace": "CoreX\\Media\\",
+            "profile": "modular-platform",
+            "layer": "L2",
+            "type": "capability",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Exceptions",
+                "Internal",
+                "Laravel"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-notifications",
+            "path": "packages/notifications",
+            "namespace": "CoreX\\Notifications\\",
+            "profile": "modular-platform",
+            "layer": "L2",
+            "type": "capability",
+            "owns": [
+                "Delivery",
+                "Digest",
+                "Errors",
+                "Inbox",
+                "Internal",
+                "Laravel",
+                "Preferences"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-operations",
+            "path": "packages/operations",
+            "namespace": "CoreX\\Operations\\",
+            "profile": "laravel-package",
+            "layer": "L2",
+            "type": "capability",
+            "owns": [
+                "Authorization",
+                "Bulk",
+                "Cost",
+                "Definition",
+                "Errors",
+                "Idempotency",
+                "Internal",
+                "Invocation",
+                "Laravel",
+                "OpenApi",
+                "Pagination",
+                "Testing",
+                "Validation",
+                "Versioning"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-panels",
+            "path": "packages/panels",
+            "namespace": "CoreX\\Panels\\",
+            "profile": "laravel-package",
+            "layer": "L3",
+            "type": "integration",
+            "owns": [
+                "Laravel"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-recurrence",
+            "path": "packages/recurrence",
+            "namespace": "CoreX\\Recurrence\\",
+            "profile": "laravel-package",
+            "layer": "L2",
+            "type": "capability",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Errors",
+                "Exceptions",
+                "Internal",
+                "Laravel"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-recurring-tasks",
+            "path": "packages/recurring-tasks",
+            "namespace": "CoreX\\RecurringTasks\\",
+            "profile": "modular-platform",
+            "layer": "L3",
+            "type": "integration",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Errors",
+                "Exceptions",
+                "Internal",
+                "Laravel"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-scheduler",
+            "path": "packages/scheduler",
+            "namespace": "CoreX\\Scheduler\\",
+            "profile": "modular-platform",
+            "layer": "L2",
+            "type": "capability",
+            "owns": [
+                "Internal",
+                "Laravel",
+                "Testing"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-search",
+            "path": "packages/search",
+            "namespace": "CoreX\\Search\\",
+            "profile": "laravel-package",
+            "layer": "L2",
+            "type": "capability",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Errors",
+                "Exceptions",
+                "Internal",
+                "Laravel",
+                "Testing"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-search-intl",
+            "path": "packages/search-intl",
+            "namespace": "CoreX\\SearchIntl\\",
+            "profile": "laravel-package",
+            "layer": "L3",
+            "type": "integration",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Internal"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-search-meilisearch",
+            "path": "packages/search-meilisearch",
+            "namespace": "CoreX\\SearchMeilisearch\\",
+            "profile": "laravel-package",
+            "layer": "L3",
+            "type": "integration",
+            "owns": [
+                "Errors",
+                "Exceptions",
+                "Internal",
+                "Laravel"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-tasks",
+            "path": "packages/tasks",
+            "namespace": "CoreX\\Tasks\\",
+            "profile": "modular-platform",
+            "layer": "L2",
+            "type": "capability",
+            "owns": [
+                "Access",
+                "Errors",
+                "Internal",
+                "Planning",
+                "Project",
+                "Sprint",
+                "Task",
+                "Time"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-tenancy",
+            "path": "packages/tenancy",
+            "namespace": "CoreX\\Tenancy\\",
+            "profile": "laravel-package",
+            "layer": "L2",
+            "type": "capability",
+            "owns": [
+                "Account",
+                "Authentication",
+                "Contracts",
+                "DomainTrust",
+                "Errors",
+                "Identity",
+                "Impersonation",
+                "Integration",
+                "Internal",
+                "Laravel",
+                "Membership",
+                "Provisioning",
+                "Runtime",
+                "Workspace"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-tools",
+            "path": "packages/tools",
+            "namespace": "CoreX\\Tools\\",
+            "profile": "laravel-package",
+            "layer": "L2",
+            "type": "capability",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Errors",
+                "Internal"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-webhooks",
+            "path": "packages/webhooks",
+            "namespace": "CoreX\\Webhooks\\",
+            "profile": "laravel-package",
+            "layer": "L2",
+            "type": "capability",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Enums",
+                "Errors",
+                "Internal",
+                "Laravel"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-workflow",
+            "path": "packages/workflow",
+            "namespace": "CoreX\\Workflow\\",
+            "profile": "modular-platform",
+            "layer": "L2",
+            "type": "capability",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Internal",
+                "Laravel"
+            ]
+        },
+        {
+            "name": "flex/crm",
+            "path": "products/flex-crm",
+            "namespace": "Flex\\Crm\\",
+            "profile": "product",
+            "layer": "L4",
+            "type": "product",
+            "owns": [
+                "Activity",
+                "ApiShared",
+                "Company",
+                "Contact",
+                "Context",
+                "Deal",
+                "Internal",
+                "Lead",
+                "Support"
+            ]
+        }
+    ],
+    "gates": {
+        "strict_ownership": true,
+        "provider_size_limit": 80,
+        "disallow_internal_cross_imports": true,
+        "require_api_manifest": true,
+        "error_urn_prefix": "urn:packman:problem:",
+        "table_owners": {
+            "mod_lifecycle_log": "axiomasoft/packman-modules",
+            "mod_modules": "axiomasoft/packman-modules",
+            "mod_records": "axiomasoft/packman-modules",
+            "sys_api_budget_buckets": "axiomasoft/corex-operations",
+            "sys_api_budget_reservations": "axiomasoft/corex-operations",
+            "sys_api_bulk_operations": "axiomasoft/corex-operations",
+            "sys_api_idempotency": "axiomasoft/corex-operations",
+            "sys_api_webhook_attempts": "axiomasoft/corex-webhooks",
+            "sys_api_webhook_deliveries": "axiomasoft/corex-webhooks",
+            "sys_api_webhook_subscriptions": "axiomasoft/corex-webhooks",
+            "sys_attribute_backfills": "axiomasoft/corex-custom-fields",
+            "sys_attribute_definitions": "axiomasoft/corex-custom-fields",
+            "sys_attribute_documents": "axiomasoft/corex-custom-fields",
+            "sys_attribute_eav_records": "axiomasoft/corex-custom-fields",
+            "sys_attribute_eav_values": "axiomasoft/corex-custom-fields",
+            "sys_attribute_key_reservations": "axiomasoft/corex-custom-fields",
+            "sys_attribute_schema_operations": "axiomasoft/corex-custom-fields",
+            "sys_attribute_write_tokens": "axiomasoft/corex-custom-fields",
+            "sys_audit_log": "axiomasoft/corex",
+            "sys_department_user": "axiomasoft/corex",
+            "sys_departments": "axiomasoft/corex",
+            "sys_feature_flags": "axiomasoft/corex",
+            "sys_feature_overrides": "axiomasoft/corex",
+            "sys_inbox_messages": "axiomasoft/corex",
+            "sys_outbox_messages": "axiomasoft/corex",
+            "sys_pubsub_cursors": "axiomasoft/corex",
+            "sys_pubsub_messages": "axiomasoft/corex",
+            "sys_saved_view_scopes": "axiomasoft/packman-panels",
+            "sys_saved_views": "axiomasoft/packman-panels",
+            "sys_settings": "axiomasoft/corex",
+            "sys_wakeup_requests": "axiomasoft/corex-scheduler",
+            "sys_workflow_intents": "axiomasoft/corex-workflow"
+        }
+    }
+}

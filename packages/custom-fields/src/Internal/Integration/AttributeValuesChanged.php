@@ -7,7 +7,9 @@ namespace CoreX\CustomFields\Internal\Integration;
 use CoreX\Data\Data\DataScope;
 use DateTimeImmutable;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class AttributeValuesChanged
 {
     /** @var list<string> */

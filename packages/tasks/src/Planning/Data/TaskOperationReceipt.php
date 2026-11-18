@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Planning\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Data\Data\JsonDocument;
+use Packman\Attributes\Api;
 
 /** Immutable view of a durable operation receipt; no table access escapes the owner. */
 #[Api(since: '1.0')]

@@ -1,0 +1,172 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "axiomasoft/corex-operations configuration",
+    "type": "object",
+    "properties": {
+        "corex-operations": {
+            "type": "object",
+            "properties": {
+                "build": {
+                    "type": "string",
+                    "default": "dev"
+                },
+                "bulk": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "idempotency_retention_seconds": {
+                            "type": "integer",
+                            "default": 86400
+                        },
+                        "lease_seconds": {
+                            "type": "integer",
+                            "default": 30
+                        },
+                        "metadata_retention_seconds": {
+                            "type": "integer",
+                            "default": 2592000
+                        },
+                        "result_retention_seconds": {
+                            "type": "integer",
+                            "default": 86400
+                        },
+                        "retry_seconds": {
+                            "type": "integer",
+                            "default": 5
+                        },
+                        "worker": {
+                            "type": "string",
+                            "default": "api-bulk"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "capabilities": {
+                    "type": [
+                        "array",
+                        "object"
+                    ]
+                },
+                "cost": {
+                    "type": "object",
+                    "properties": {
+                        "capacity": {
+                            "type": "integer",
+                            "default": 10000
+                        },
+                        "enabled": {
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "enforced_levels": {
+                            "type": "array"
+                        },
+                        "installation_id": {
+                            "type": "string",
+                            "default": "corex"
+                        },
+                        "reservation_ttl_seconds": {
+                            "type": "integer",
+                            "default": 3600
+                        },
+                        "restore_rate": {
+                            "type": "integer",
+                            "default": 1000
+                        },
+                        "scope_hmac_secret": {
+                            "type": "string",
+                            "default": ""
+                        },
+                        "terminal_retention_seconds": {
+                            "type": "integer",
+                            "default": 2592000
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "cursor": {
+                    "type": "object",
+                    "properties": {
+                        "current_key_id": {
+                            "type": "string",
+                            "default": "primary"
+                        },
+                        "keyring": {
+                            "type": "object",
+                            "properties": {
+                                "primary": {
+                                    "type": "string",
+                                    "default": ""
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "ttl_seconds": {
+                            "type": "integer",
+                            "default": 3600
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "default_major": {
+                    "type": "string",
+                    "default": "v1"
+                },
+                "discovery": {
+                    "type": "string",
+                    "default": "public"
+                },
+                "idempotency": {
+                    "type": "object",
+                    "properties": {
+                        "lease_seconds": {
+                            "type": "integer",
+                            "default": 30
+                        },
+                        "retention_seconds": {
+                            "type": "integer",
+                            "default": 86400
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "product": {
+                    "type": "string",
+                    "default": "corex"
+                },
+                "require_physical_tenancy": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "routes": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "middleware": {
+                            "type": [
+                                "array",
+                                "object"
+                            ]
+                        },
+                        "prefix": {
+                            "type": "string",
+                            "default": "api"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "versions": {
+                    "type": "array"
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

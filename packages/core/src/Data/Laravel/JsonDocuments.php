@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Data\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Data\Data\JsonDocument;
 use InvalidArgumentException;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Converts raw JSON at integration boundaries without exposing mutable objects in Api records. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

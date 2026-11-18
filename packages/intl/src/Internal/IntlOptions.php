@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Internal;
 
-use CoreX\Config\Data\SecretRef;
-use CoreX\Config\Laravel\ConfigurationValidator;
+use Packman\Attributes\Internal;
+use Packman\Config\Data\SecretRef;
+use Packman\Config\Laravel\ConfigurationValidator;
 
 /**
  * Shape of `corex-intl`. Locale semantics (BCP 47, fallback closure) are checked when the policy is built.
  *
  * @internal Package composition type: read only by the provider and registrars.
  */
+#[Internal]
 final readonly class IntlOptions
 {
     /**

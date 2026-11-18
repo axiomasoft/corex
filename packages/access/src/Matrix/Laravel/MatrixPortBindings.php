@@ -8,9 +8,9 @@ use CoreX\Access\Matrix\Contracts\EntityActivity;
 use CoreX\Access\Matrix\Contracts\ScopeMapVersions;
 use CoreX\Access\Matrix\Internal\ActiveEntityFilter;
 use CoreX\Access\Matrix\Internal\ScopeMapVersion;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use Illuminate\Contracts\Foundation\Application;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Registers the owning package's call ports with their private implementations. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

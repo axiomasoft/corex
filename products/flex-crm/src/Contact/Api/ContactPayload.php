@@ -6,7 +6,9 @@ namespace Flex\Crm\Contact\Api;
 
 use Flex\Crm\Contact\Models\Contact;
 use Flex\Crm\Internal\Value;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class ContactPayload
 {
     /** @return array<string, mixed> */

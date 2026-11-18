@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Laravel;
 
 use Closure;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Tenancy\Workspace\Internal\Models\Workspace;
 use Illuminate\Container\Container;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Builds the tenant runtime pieces whose construction is more than one expression, so the registrar

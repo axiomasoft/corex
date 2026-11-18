@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Laravel\Http\Middleware;
 
 use Closure;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\TenancyServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Pure marker — its only job is to be present in a route's middleware list

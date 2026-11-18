@@ -9,8 +9,10 @@ use CoreX\Context\Data\TenantContext;
 use CoreX\Tasks\Access\Contracts\TaskModuleContext;
 use CoreX\Tasks\Access\Exceptions\TasksModuleDisabled;
 use CoreX\Tasks\TasksModule;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
+#[Internal]
 final readonly class TaskModuleGuard implements TaskModuleContext
 {
     public function __construct(

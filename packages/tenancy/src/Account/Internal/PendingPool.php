@@ -16,6 +16,7 @@ use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
 use LogicException;
+use Packman\Attributes\Internal;
 use RuntimeException;
 use stdClass;
 
@@ -35,6 +36,7 @@ use stdClass;
  * (Scope Excluded) — this class only reserves the row and lays the
  * atomicity invariant for that later transition.
  */
+#[Internal]
 final readonly class PendingPool
 {
     public function __construct(

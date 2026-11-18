@@ -8,6 +8,7 @@ use CoreX\Config\Data\CoreOptions;
 use DateInterval;
 use Illuminate\Console\Command;
 use Illuminate\Database\ConnectionResolverInterface;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /**
@@ -26,6 +27,7 @@ use Psr\Clock\ClockInterface;
  *
  * @internal spec: D44, P1.24, pre-mortem P1R C7
  */
+#[Internal]
 final class PrunePubSubMessages extends Command
 {
     protected $signature = 'corex:messaging:prune-pubsub

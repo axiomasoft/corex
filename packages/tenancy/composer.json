@@ -87,6 +87,29 @@
             "includes": [
                 "extension.neon"
             ]
+        },
+        "packman": {
+            "schema-version": 1,
+            "package-type": "capability",
+            "stability": "stable",
+            "profile": "laravel-package",
+            "error-prefix": "tenancy",
+            "owns": [
+                "Account",
+                "Authentication",
+                "Contracts",
+                "DomainTrust",
+                "Errors",
+                "Identity",
+                "Impersonation",
+                "Integration",
+                "Internal",
+                "Laravel",
+                "Membership",
+                "Provisioning",
+                "Runtime",
+                "Workspace"
+            ]
         }
     },
     "repositories": [

@@ -30,9 +30,11 @@ use CoreX\ImportExport\Internal\Value;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Str;
 use Override;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use Throwable;
 
+#[Internal]
 final readonly class SqlTransferExecutor implements TransferRunner
 {
     public function __construct(

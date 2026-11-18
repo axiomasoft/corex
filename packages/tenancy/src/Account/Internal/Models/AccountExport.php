@@ -7,6 +7,7 @@ namespace CoreX\Tenancy\Account\Internal\Models;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Packman\Attributes\Internal;
 
 /**
  * `root_account_exports` — offboarding/pre-purge/manual data-export
@@ -27,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property CarbonImmutable $created_at
  * @property CarbonImmutable $updated_at
  */
+#[Internal]
 final class AccountExport extends Model
 {
     protected $table = 'root_account_exports';

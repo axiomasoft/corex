@@ -26,9 +26,11 @@ use Illuminate\Http\Client\Factory as HttpFactory;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Str;
+use Packman\Attributes\Internal;
 use Throwable;
 
 /** @internal Unregistered local transport, no default endpoints or authority writer. */
+#[Internal]
 final class StrictTransport implements CentralApiClient
 {
     /** @var array<string, true> */

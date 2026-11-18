@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Feature;
 
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\CoreServiceProvider;
 use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Webhooks\Contracts\WebhookSigner;
 use CoreX\Webhooks\Data\WebhookOptions;
 use CoreX\Webhooks\WebhooksServiceProvider;
 use Orchestra\Testbench\TestCase;
+use Packman\Config\Exceptions\InvalidConfiguration;
 use Packman\Modules\ModulesServiceProvider;
 
 final class WebhookLoadContourBootTest extends TestCase

@@ -7,8 +7,10 @@ namespace CoreX\CustomFields\Internal\Support;
 use CoreX\CustomFields\Data\ValueBag;
 use InvalidArgumentException;
 use JsonException;
+use Packman\Attributes\Internal;
 
 /** @phpstan-import-type JsonMap from ValueBag */
+#[Internal]
 final class Validation
 {
     public static function entity(string $entity): void

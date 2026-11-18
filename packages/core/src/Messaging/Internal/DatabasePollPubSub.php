@@ -12,6 +12,7 @@ use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Support\Sleep;
 use Override;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /**
@@ -41,6 +42,7 @@ use Psr\Clock\ClockInterface;
  *
  * @internal spec: B-10 §6.1, D44, P1.24, Implementation Rules, pre-mortem C7
  */
+#[Internal]
 final readonly class DatabasePollPubSub implements PubSub
 {
     public function __construct(

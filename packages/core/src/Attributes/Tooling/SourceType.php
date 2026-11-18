@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Attributes\Tooling;
 
+use Packman\Attributes\Internal;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 
 /** @internal Source declaration; never instantiated through package runtime boot. */
+#[Internal]
 final readonly class SourceType
 {
     /** @param array<string, string> $imports */

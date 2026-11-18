@@ -6,9 +6,11 @@ namespace CoreX\Tenancy\Membership\Internal\Transport;
 
 use CoreX\Tenancy\Membership\Exceptions\CentralProtocolViolation;
 use DateTimeImmutable;
+use Packman\Attributes\Internal;
 use Throwable;
 
 /** @internal Local wire profile validation, not deployed adoption. */
+#[Internal]
 final class Value
 {
     public static function uuid(string $value): string

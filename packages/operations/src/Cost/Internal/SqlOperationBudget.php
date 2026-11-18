@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Cost\Internal;
 
-use CoreX\Config\Data\SecretRef;
 use CoreX\Operations\Cost\Contracts\BudgetReservation;
 use CoreX\Operations\Cost\Contracts\OperationBudget;
 use CoreX\Operations\Cost\Data\ActualCost;
@@ -19,11 +18,14 @@ use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Override;
+use Packman\Attributes\Internal;
+use Packman\Config\Data\SecretRef;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 /** @internal Shared SQL authority for atomic hierarchical operation budgets. */
+#[Internal]
 final readonly class SqlOperationBudget implements OperationBudget
 {
     private const int MicroUnits = 1_000_000;

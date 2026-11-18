@@ -9,8 +9,10 @@ use CoreX\Context\Data\TenantContext;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Invocation\Data\InvocationMetadata;
 use Override;
+use Packman\Attributes\Internal;
 
 /** @internal Additive wrapper exposing validated tool metadata to handlers. */
+#[Internal]
 final readonly class ToolRequestContext implements \CoreX\Tools\Contracts\ToolRequestContext
 {
     public function __construct(

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Messaging\Contracts;
 
 use Closure;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Cross-process pub/sub. The sole channel for cross-process notifications in

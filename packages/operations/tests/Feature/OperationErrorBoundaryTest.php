@@ -5,10 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Operations\Tests\Feature;
 
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Errors\Contracts\DescribesError;
-use CoreX\Errors\Contracts\ProblemRegistry;
-use CoreX\Errors\Data\ErrorDescriptor;
-use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Errors\Contracts\ResponseSerializer;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
@@ -23,6 +19,10 @@ use CoreX\Operations\Tests\TestCase;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Packman\Errors\Contracts\DescribesError;
+use Packman\Errors\Contracts\ProblemRegistry;
+use Packman\Errors\Data\ErrorDescriptor;
+use Packman\Errors\Enums\ErrorCategory;
 use RuntimeException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -38,7 +38,7 @@ final class OperationErrorBoundaryTest extends TestCase
         $json = $response->getContent();
 
         $this->assertSame([
-            'type' => 'urn:corex:problem:operations.forbidden',
+            'type' => 'urn:packman:problem:operations.forbidden',
             'title' => 'Forbidden.',
             'status' => 403,
             'detail' => 'Operation is not permitted.',
@@ -143,7 +143,7 @@ final class OperationErrorBoundaryTest extends TestCase
 
         $response->assertStatus(500)
             ->assertExactJson([
-                'type' => 'urn:corex:problem:core.internal_error',
+                'type' => 'urn:packman:problem:core.internal_error',
                 'title' => 'Internal error.',
                 'status' => 500,
                 'detail' => 'Operation could not be completed.',
@@ -213,7 +213,7 @@ final class OperationErrorBoundaryTest extends TestCase
 
         $response->assertForbidden()
             ->assertExactJson([
-                'type' => 'urn:corex:problem:operations.forbidden',
+                'type' => 'urn:packman:problem:operations.forbidden',
                 'title' => 'Forbidden.',
                 'status' => 403,
                 'detail' => 'Operation is not permitted.',

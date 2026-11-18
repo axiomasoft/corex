@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Data\Data\RecordRef;
 use InvalidArgumentException;
+use Packman\Attributes\Api;
 
 /** @phpstan-import-type JsonMap from ValueBag */
 #[Api(since: '1.0')]

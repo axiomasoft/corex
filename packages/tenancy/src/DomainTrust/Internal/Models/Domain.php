@@ -10,6 +10,7 @@ use CoreX\Tenancy\Laravel\Support\ResolvesTenancyOptions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Override;
+use Packman\Attributes\Internal;
 
 /**
  * `root_domains` — per-account host registry (central connection, D14).
@@ -29,6 +30,7 @@ use Override;
  * @property CarbonImmutable $updated_at
  * @property ?CarbonImmutable $deleted_at
  */
+#[Internal]
 final class Domain extends Model
 {
     use ResolvesTenancyOptions;

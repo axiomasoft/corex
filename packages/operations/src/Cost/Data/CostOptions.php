@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Cost\Data;
 
-use CoreX\Attributes\Api;
-use CoreX\Config\Data\SecretRef;
+use Packman\Attributes\Api;
+use Packman\Config\Data\SecretRef;
 
 /** Immutable cost-control activation policy read only by the package registrar. */
 #[Api(since: '1.0')]

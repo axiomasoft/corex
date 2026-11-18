@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Testing;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use LogicException;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Packman\Context\Contracts\ContextScopeInterface;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Compiler\CompiledModule;

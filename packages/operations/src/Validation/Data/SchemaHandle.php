@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Validation\Data;
 
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 
 /** Digest-bound admitted schema closure for offline validation. */
 #[Api(since: '1.0')]

@@ -8,8 +8,10 @@ use CoreX\Webhooks\Contracts\WebhookHttpTransport;
 use CoreX\Webhooks\Data\ValidatedWebhookRequest;
 use CoreX\Webhooks\Data\WebhookHttpResult;
 use CoreX\Webhooks\Enums\WebhookFailureReason;
+use Packman\Attributes\Internal;
 use Throwable;
 
+#[Internal]
 final class CurlWebhookTransport implements WebhookHttpTransport
 {
     private const MAX_RESPONSE_BODY_BYTES = 64 * 1024;

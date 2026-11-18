@@ -4,7 +4,7 @@
     "symbols": {
         "CoreX\\ImportExport\\Contracts\\CancellationSignal": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -18,21 +18,22 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [],
                     "return": "bool",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\ImportExport\\Contracts\\ExportRunner": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -46,7 +47,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -84,7 +85,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -128,14 +129,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\ImportExport\\Contracts\\ExportSource": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -149,7 +151,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -193,14 +195,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\ImportExport\\Contracts\\ImportExportFactory": {
             "kind": "interface",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -214,7 +217,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -279,7 +282,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -368,14 +371,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\ImportExport\\Contracts\\RecordMapper": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -389,7 +393,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -415,14 +419,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\ImportExport\\Contracts\\TransferResultReader": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -436,7 +441,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -477,17 +482,13 @@
                         }
                     ],
                     "return": "array",
-                    "doc": {
-                        "@return": [
-                            "array{records: list<array{ordinal: string, code: string, path: ?string}>, next: ?string}"
-                        ]
-                    }
+                    "doc": []
                 },
                 "result": {
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -510,21 +511,18 @@
                         }
                     ],
                     "return": "array",
-                    "doc": {
-                        "@return": [
-                            "array<string, (null | bool | int | string | array<array-key, mixed>)>"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\ImportExport\\Contracts\\TransferRunner": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -538,7 +536,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -573,14 +571,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\ImportExport\\Contracts\\TransferSink": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -594,7 +593,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -641,7 +640,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -670,7 +669,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -705,14 +704,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\ImportExport\\Contracts\\TransferSource": {
             "kind": "interface",
-            "layer": "spi-implement",
+            "layer": "spi",
             "since": "1.0",
             "final": false,
             "readonly": false,
@@ -726,7 +726,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -746,7 +746,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -781,10 +781,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "implement"
         },
         "CoreX\\ImportExport\\Data\\CanonicalRecord": {
             "kind": "class",
@@ -796,11 +797,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@phpstan-import-type": [
-                    "JsonMap from SourceRow"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "__construct": {
                     "visibility": "public",
@@ -874,113 +871,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $values"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "entity": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $values"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "externalId": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $values"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "externalSystem": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $values"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "payloadHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $values"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "sourceRevision": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $values"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "sourceUpdatedAt": {
-                    "flags": 1,
-                    "type": "?DateTimeImmutable",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $values"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "values": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $values"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1018,18 +912,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "kind": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1121,78 +1004,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "cancellation": {
-                    "flags": 1,
-                    "type": "CoreX\\ImportExport\\Contracts\\CancellationSignal",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "cursor": {
-                    "flags": 1,
-                    "type": "CoreX\\ImportExport\\Data\\Export\\ExportCursor",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "manifest": {
-                    "flags": 1,
-                    "type": "CoreX\\ImportExport\\Data\\Export\\ExportManifest",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "results": {
-                    "flags": 1,
-                    "type": "CoreX\\ImportExport\\Contracts\\TransferResultReader",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "runner": {
-                    "flags": 1,
-                    "type": "CoreX\\ImportExport\\Contracts\\ExportRunner",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "token": {
-                    "flags": 1,
-                    "type": "CoreX\\ImportExport\\Data\\StepToken",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "transfer": {
-                    "flags": 1,
-                    "type": "CoreX\\ImportExport\\Data\\TransferRef",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1248,38 +1060,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "manifestHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "partNumber": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "rowOrdinal": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1362,68 +1143,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "partsHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "restoreEpoch": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "roster": {
-                    "flags": 1,
-                    "type": "CoreX\\Data\\Data\\JsonDocument",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "schemaHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "snapshotMode": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1476,57 +1196,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\ImportExport\\Data\\CanonicalRecord> $rows"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "complete": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\ImportExport\\Data\\CanonicalRecord> $rows"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "next": {
-                    "flags": 1,
-                    "type": "?CoreX\\ImportExport\\Data\\Export\\ExportCursor",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\ImportExport\\Data\\CanonicalRecord> $rows"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "rows": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\ImportExport\\Data\\CanonicalRecord> $rows"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1597,85 +1270,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, int> $rowCounts"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "byteLength": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, int> $rowCounts"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "immutableRef": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, int> $rowCounts"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "number": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, int> $rowCounts"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "rowCounts": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, int> $rowCounts"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "sha256": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, int> $rowCounts"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1722,28 +1320,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "reason": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "status": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1817,58 +1394,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "cancellation": {
-                    "flags": 1,
-                    "type": "CoreX\\ImportExport\\Contracts\\CancellationSignal",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "results": {
-                    "flags": 1,
-                    "type": "CoreX\\ImportExport\\Contracts\\TransferResultReader",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "runner": {
-                    "flags": 1,
-                    "type": "CoreX\\ImportExport\\Contracts\\TransferRunner",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "token": {
-                    "flags": 1,
-                    "type": "CoreX\\ImportExport\\Data\\StepToken",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "transfer": {
-                    "flags": 1,
-                    "type": "CoreX\\ImportExport\\Data\\TransferRef",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1924,38 +1450,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "errorCode": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "record": {
-                    "flags": 1,
-                    "type": "?CoreX\\ImportExport\\Data\\CanonicalRecord",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "status": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1970,11 +1465,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@phpstan-import-type": [
-                    "JsonMap from SourceRow"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "__construct": {
                     "visibility": "public",
@@ -2021,71 +1512,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $definition"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "definition": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $definition"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "schemaHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $definition"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "sha256": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $definition"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "version": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $definition"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2100,11 +1530,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@phpstan-import-type": [
-                    "JsonMap from SourceRow"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "__construct": {
                     "visibility": "public",
@@ -2142,57 +1568,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\ImportExport\\Data\\SourceRow> $rows"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "next": {
-                    "flags": 1,
-                    "type": "CoreX\\ImportExport\\Data\\SourceCursor",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\ImportExport\\Data\\SourceRow> $rows"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "remaining": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\ImportExport\\Data\\SourceRow> $rows"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "rows": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\ImportExport\\Data\\SourceRow> $rows"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2248,38 +1627,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "boundaryByteOffset": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "ordinal": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "sourceHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2398,108 +1746,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "delimiter": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "enclosure": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "encoding": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "escape": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "format": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "immutableRef": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "length": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "parserVersion": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "schemaHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "sha256": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2514,28 +1761,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@phpstan-type": [
-                    "JsonLevel0 (null | bool | int | string)",
-                    "JsonLevel1 (null | bool | int | string | array<array-key, (null | bool | int | string)>)",
-                    "JsonLevel10 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)",
-                    "JsonLevel11 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)",
-                    "JsonLevel12 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)",
-                    "JsonLevel13 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)",
-                    "JsonLevel14 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)",
-                    "JsonLevel15 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)",
-                    "JsonLevel16 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)",
-                    "JsonLevel2 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)",
-                    "JsonLevel3 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)",
-                    "JsonLevel4 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)",
-                    "JsonLevel5 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)",
-                    "JsonLevel6 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)",
-                    "JsonLevel7 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)",
-                    "JsonLevel8 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)",
-                    "JsonLevel9 (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)",
-                    "JsonMap array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "__construct": {
                     "visibility": "public",
@@ -2573,57 +1799,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $values"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "ordinal": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $values"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "sourceHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $values"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "values": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $values"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2706,68 +1885,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "checkpointSequence": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "epoch": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "mappingHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "restoreEpoch": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "schemaHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "sourceHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2841,58 +1959,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "errorCode": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "providerTask": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "recordVersion": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "status": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "target": {
-                    "flags": 1,
-                    "type": "?CoreX\\Data\\Data\\RecordRef",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -2993,88 +2060,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "batchRows": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "maxDepth": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "maxErrors": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "maxFields": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "maxFileBytes": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "maxMemoryMiB": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "maxRecordBytes": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "maxRuntimeSeconds": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -3089,11 +2075,7 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@phpstan-import-type": [
-                    "JsonMap from SourceRow"
-                ]
-            },
+            "doc": [],
             "methods": {
                 "__construct": {
                     "visibility": "public",
@@ -3158,106 +2140,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $stats",
-                            "list<string> $gaps"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "checkpointSequence": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $stats",
-                            "list<string> $gaps"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "cursor": {
-                    "flags": 1,
-                    "type": "CoreX\\ImportExport\\Data\\SourceCursor",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $stats",
-                            "list<string> $gaps"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "errorCode": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $stats",
-                            "list<string> $gaps"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "gaps": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $stats",
-                            "list<string> $gaps"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "state": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $stats",
-                            "list<string> $gaps"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "stats": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string | array<array-key, (null | bool | int | string)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)>)> $stats",
-                            "list<string> $gaps"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -3295,25 +2181,14 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
         },
         "CoreX\\ImportExport\\Data\\Validation": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -3359,11 +2234,7 @@
                         }
                     ],
                     "return": "void",
-                    "doc": {
-                        "@param": [
-                            "array<array-key, mixed> $value"
-                        ]
-                    }
+                    "doc": []
                 },
                 "opaque": {
                     "visibility": "public",
@@ -3482,10 +2353,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\ImportExport\\Exceptions\\ExportUnavailable": {
             "kind": "class",
@@ -3500,8 +2372,8 @@
             "implements": [],
             "uses": [],
             "doc": [],
-            "methods": [],
-            "properties": [],
+            "methods": {},
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -3519,8 +2391,8 @@
             "implements": [],
             "uses": [],
             "doc": [],
-            "methods": [],
-            "properties": [],
+            "methods": {},
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -3538,15 +2410,15 @@
             "implements": [],
             "uses": [],
             "doc": [],
-            "methods": [],
-            "properties": [],
+            "methods": {},
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
         },
         "CoreX\\ImportExport\\ImportExportServiceProvider": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -3579,10 +2451,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         }
     }
 }

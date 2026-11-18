@@ -20,10 +20,12 @@ foreach ([
     }
 }
 use JsonException;
+use Packman\Attributes\Internal;
 use RuntimeException;
 use Throwable;
 
 /** Isolated validation-only worker entrypoint for bounded schema admission/validation. */
+#[Internal]
 final class ToolSchemaWorker
 {
     public static function runCli(): void

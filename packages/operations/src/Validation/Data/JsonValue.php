@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Validation\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use InvalidArgumentException;
+use Packman\Attributes\Api;
 
 /** Canonical JSON scalar or structured value for bounded schema validation. */
 #[Api(since: '1.0')]

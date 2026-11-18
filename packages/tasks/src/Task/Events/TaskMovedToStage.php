@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Task\Events;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Tasks\Task\Data\StageView;
 use CoreX\Tasks\Task\Data\TaskView;
 use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class TaskMovedToStage implements ShouldDispatchAfterCommit

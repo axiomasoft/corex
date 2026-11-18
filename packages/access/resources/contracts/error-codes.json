@@ -1,0 +1,17 @@
+{
+    "schema": "packman-error-codes/1",
+    "package": "axiomasoft/corex-access",
+    "codes": [
+        {
+            "package": "axiomasoft/corex-access",
+            "enum": "CoreX\\Access\\Errors\\Enums\\AccessErrorCode",
+            "case": "ScopeCapabilityMismatch",
+            "code": "access.scope_capability_mismatch",
+            "type": "urn:packman:problem:access.scope_capability_mismatch",
+            "status": 422,
+            "title": "Scope capability mismatch.",
+            "retryable": false,
+            "category": "unsupported"
+        }
+    ]
+}

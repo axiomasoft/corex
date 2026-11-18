@@ -9,6 +9,7 @@ use CoreX\Access\Exceptions\ScopeCapabilityMismatch;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Entities\EntityRegistry;
 use Packman\Modules\Enums\Entities\Capability;
 
@@ -29,6 +30,7 @@ use Packman\Modules\Enums\Entities\Capability;
  *
  * @internal spec: B-11 §4 п.3, P2.9 D114
  */
+#[Internal]
 final class ScopeAvailability
 {
     /** @var array<string, Scope> */

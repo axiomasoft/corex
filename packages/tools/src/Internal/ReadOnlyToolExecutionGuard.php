@@ -13,8 +13,10 @@ use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Data\ToolResult;
 use CoreX\Tools\Errors\Enums\ToolsErrorCode;
 use Override;
+use Packman\Attributes\Internal;
 
 /** Default guard: admits read tools only; mutations require a consumer guard. */
+#[Internal]
 final class ReadOnlyToolExecutionGuard implements ToolExecutionGuard
 {
     #[Override]

@@ -8,14 +8,6 @@
         "retryable": false
     },
     {
-        "category": "internal",
-        "code": "core.compilation_exception",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
         "category": "conflict",
         "code": "core.cross_workspace_move_exception",
         "detail_keys": [],
@@ -26,46 +18,6 @@
     {
         "category": "conflict",
         "code": "core.department_cycle_exception",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "internal",
-        "code": "core.duplicate_code",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "internal",
-        "code": "core.duplicate_type",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "not_found",
-        "code": "core.entity_not_found",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "internal",
-        "code": "core.foreign_prefix",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "conflict",
-        "code": "core.has_enabled_dependents_exception",
         "detail_keys": [],
         "owner": "axiomasoft/corex",
         "path": null,
@@ -96,30 +48,6 @@
         "retryable": false
     },
     {
-        "category": "internal",
-        "code": "core.invalid_configuration",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "internal",
-        "code": "core.invalid_definition",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "validation",
-        "code": "core.invalid_manifest_exception",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
         "category": "validation",
         "code": "core.invalid_message",
         "detail_keys": [],
@@ -129,63 +57,7 @@
     },
     {
         "category": "validation",
-        "code": "core.invalid_registry_point",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "validation",
         "code": "core.invalid_scope_payload",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "conflict",
-        "code": "core.invalid_state_transition_exception",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "internal",
-        "code": "core.invalid_status",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "conflict",
-        "code": "core.missing_dependency_exception",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "internal",
-        "code": "core.module_enable_failed_exception",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "not_found",
-        "code": "core.module_not_found",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "internal",
-        "code": "core.module_upgrade_failed_exception",
         "detail_keys": [],
         "owner": "axiomasoft/corex",
         "path": null,
@@ -208,62 +80,6 @@
         "retryable": false
     },
     {
-        "category": "internal",
-        "code": "core.registry_frozen",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "unavailable",
-        "code": "core.registry_input_unavailable",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "internal",
-        "code": "core.schema_duplicate_migration",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "internal",
-        "code": "core.schema_duplicate_set",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "internal",
-        "code": "core.schema_invalid_set",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "internal",
-        "code": "core.schema_unknown_set",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "internal",
-        "code": "core.schema_unsupported_driver",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
         "category": "authorization",
         "code": "core.scope_context_mismatch",
         "detail_keys": [],
@@ -274,14 +90,6 @@
     {
         "category": "validation",
         "code": "core.setting_value_too_large_exception",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "conflict",
-        "code": "core.stale_registry_revision",
         "detail_keys": [],
         "owner": "axiomasoft/corex",
         "path": null,
@@ -302,14 +110,6 @@
         "owner": "axiomasoft/corex",
         "path": null,
         "retryable": true
-    },
-    {
-        "category": "internal",
-        "code": "core.unknown_code",
-        "detail_keys": [],
-        "owner": "axiomasoft/corex",
-        "path": null,
-        "retryable": false
     },
     {
         "category": "validation",
@@ -748,6 +548,246 @@
         "code": "webhooks.webhook_subscription_cap",
         "detail_keys": [],
         "owner": "axiomasoft/corex-webhooks",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.duplicate_code",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.duplicate_type",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.foreign_prefix",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.internal_error",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.invalid_configuration",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.invalid_definition",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "packman.invalid_scope_payload",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.invalid_status",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.registry_frozen",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.schema_duplicate_migration",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.schema_duplicate_set",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.schema_invalid_set",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "packman.schema_unknown_set",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unsupported",
+        "code": "packman.schema_unsupported_driver",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "packman.scope_unavailable",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "packman.unknown_code",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unsupported",
+        "code": "packman.unsupported_scope",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "modules.compilation_failed",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "modules.enable_failed",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "modules.entity_not_found",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "modules.has_enabled_dependents",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "modules.invalid_manifest",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "modules.invalid_registry_point",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "modules.invalid_state_transition",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "modules.missing_dependency",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "not_found",
+        "code": "modules.module_not_found",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "modules.registry_frozen",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unavailable",
+        "code": "modules.registry_input_unavailable",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "modules.stale_registry_revision",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "internal",
+        "code": "modules.upgrade_failed",
+        "detail_keys": [],
+        "owner": "axiomasoft/packman-modules",
         "path": null,
         "retryable": false
     }

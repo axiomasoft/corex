@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use Packman\Config\Exceptions\InvalidConfiguration;
 
 /**
  * @return array{0: array<string, mixed>, 1: array<string, mixed>}

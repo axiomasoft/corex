@@ -7,8 +7,6 @@ namespace CoreX\Access\Identity\Laravel;
 use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Identity\Internal\LowercaseColumn;
 use CoreX\Access\Laravel\AuthOptions;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\IdentityPasswordRehasher;
 use CoreX\Context\Enums\PrincipalType;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -17,6 +15,8 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use SensitiveParameter;
 use stdClass;
 

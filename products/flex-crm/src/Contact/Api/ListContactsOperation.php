@@ -9,7 +9,9 @@ use CoreX\Invocation\Contracts\RequestContext;
 use Flex\Crm\Contact\Models\Contact;
 use Flex\Crm\Context\ContextGuard;
 use Flex\Crm\Internal\Value;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class ListContactsOperation implements OperationHandler
 {
     public function __construct(private ContextGuard $guard) {}

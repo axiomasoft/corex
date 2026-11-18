@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace CoreX\ImportExport\Internal\Codecs;
 
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class CsvCodec
 {
     /** @return list<list<string>> */

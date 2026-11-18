@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Support;
 
-use CoreX\Errors\Contracts\DescribesError;
-use CoreX\Errors\Data\ErrorDescriptor;
+use Packman\Errors\Contracts\DescribesError;
+use Packman\Errors\Data\ErrorDescriptor;
 use RuntimeException;
 
 final class SyntheticPackageFailure extends RuntimeException implements DescribesError

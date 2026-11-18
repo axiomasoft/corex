@@ -6,8 +6,10 @@ namespace CoreX\Intl\Currency\Internal;
 
 use CoreX\Intl\Currency\Data\RateSnapshot;
 use DateTimeImmutable;
+use Packman\Attributes\Internal;
 use stdClass;
 
+#[Internal]
 final class RateSnapshotMapper
 {
     public static function fromRow(stdClass $row): RateSnapshot

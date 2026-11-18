@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace CoreX\Attributes\Tooling;
 
 use Composer\Autoload\ClassLoader;
-use CoreX\Attributes\Api;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use FilesystemIterator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
+use Packman\Attributes\Api;
+use Packman\Attributes\Internal;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use PhpParser\Error;
 use PhpParser\Modifiers;
 use PhpParser\Node;
@@ -64,6 +65,7 @@ use SplFileInfo;
 use Throwable;
 
 /** @internal Parses production source without executing or booting the inspected packages. */
+#[Internal]
 final class SurfaceScanner
 {
     private const string API = Api::class;
@@ -368,14 +370,17 @@ final class SurfaceScanner
     private function classify(SourceType $type): array
     {
         $found = [];
+        $explicitInternal = false;
         foreach ($type->node->attrGroups as $group) {
             foreach ($group->attrs as $attribute) {
+                $explicitInternal = $explicitInternal || strtolower($attribute->name->toString()) === strtolower(Internal::class);
+
                 if (in_array(strtolower($attribute->name->toString()), [strtolower(self::API), strtolower(self::SPI)], true)) {
                     $found[] = $attribute;
                 }
             }
         }
-        $internal = str_contains('\\'.$type->name.'\\', '\\Internal\\') || ($found === [] && (str_contains('\\'.$type->name.'\\', '\\Tooling\\') || str_contains('\\'.$type->name.'\\', '\\PHPStan\\') || str_contains('\\'.$type->name.'\\', '\\Testing\\')));
+        $internal = $explicitInternal || str_contains('\\'.$type->name.'\\', '\\Internal\\') || ($found === [] && (str_contains('\\'.$type->name.'\\', '\\Tooling\\') || str_contains('\\'.$type->name.'\\', '\\PHPStan\\') || str_contains('\\'.$type->name.'\\', '\\Testing\\')));
 
         if ($found === []) {
             if (! $internal && ! $type->product && $type->owner !== '@vendor') {
@@ -927,7 +932,7 @@ final class SurfaceScanner
 
             if ($target === null && ! $this->isNativeType($reference['target'])) {
                 $this->error(type: $type, code: 'API-UNRESOLVED-TYPE', path: $reference['path'], message: $reference['target'], line: $reference['line']);
-            } elseif ($target !== null && $target->owner !== $type->owner && str_contains($target->name, '\\Internal\\') && $marked) {
+            } elseif ($target !== null && (str_contains($target->name, '\\Internal\\') || ($this->metadata[$target->name]['layer'] ?? '') === 'internal') && $marked) {
                 $this->error(type: $type, code: 'API-INTERNAL-TYPE', path: $reference['path'], message: $target->name, line: $reference['line']);
             }
 
@@ -1044,7 +1049,7 @@ final class SurfaceScanner
                 continue;
             }
 
-            if (in_array($targetName, ['stdClass', 'DateTime', 'DateTimeInterface'], true) || ($target !== null && $target->owner === '@vendor' && ! $target->node instanceof Enum_ && ! str_contains($reference['path'], '@throws')) || $this->isModelOrCollection(name: $targetName, visited: []) || ($target !== null && $target->node instanceof Class_ && ! $this->isThrowable(name: $targetName, visited: []) && $target->node->getProperties() !== [] && (! $target->node->isFinal() || ! $target->node->isReadonly()))) {
+            if (in_array($targetName, ['stdClass', 'DateTime', 'DateTimeInterface'], true) || ($target !== null && $target->owner === '@vendor' && ! $target->node instanceof Enum_ && ! $this->isPublicExternalContract($target) && ! str_contains($reference['path'], '@throws')) || $this->isModelOrCollection(name: $targetName, visited: []) || ($target !== null && $target->node instanceof Class_ && ! $this->isThrowable(name: $targetName, visited: []) && $target->node->getProperties() !== [] && (! $target->node->isFinal() || ! $target->node->isReadonly()))) {
                 $this->error(type: $origin, code: 'API-PAYLOAD', path: $next, message: 'Model, collection or mutable object payload: '.$targetName, line: $reference['line']);
             }
 
@@ -1052,6 +1057,23 @@ final class SurfaceScanner
                 $this->walkPayload(origin: $origin, name: $target->name, visited: $visited, path: $next);
             }
         }
+    }
+
+    private function isPublicExternalContract(SourceType $type): bool
+    {
+        if (str_contains($type->name, '\\Internal\\')) {
+            return false;
+        }
+
+        foreach ($type->node->attrGroups as $group) {
+            foreach ($group->attrs as $attribute) {
+                if (in_array($attribute->name->toString(), [self::API, self::SPI], true)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private function isNativeType(string $name): bool

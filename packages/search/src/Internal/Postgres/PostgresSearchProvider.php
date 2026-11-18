@@ -19,7 +19,9 @@ use CoreX\Search\Internal\Value;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Builder;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class PostgresSearchProvider implements SearchProvider
 {
     /** @var list<string> */

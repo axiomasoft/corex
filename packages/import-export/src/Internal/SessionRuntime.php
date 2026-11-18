@@ -9,8 +9,10 @@ use CoreX\Data\Data\DataScope;
 use CoreX\ImportExport\Exceptions\SessionUnavailable;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\DatabaseManager;
+use Packman\Attributes\Internal;
 
 /** A retained session cannot carry database authority across tenant switches. */
+#[Internal]
 final readonly class SessionRuntime
 {
     public function __construct(private DatabaseManager $database, private TenantContextResolver $tenants, private ?string $transferId = null, private ?string $exportRequest = null) {}

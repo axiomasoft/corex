@@ -9,8 +9,10 @@ use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\OpenApi\Contracts\OpenApiDocuments as OpenApiDocumentGenerator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Packman\Attributes\Internal;
 
 /** @internal HTTP projection of the compiled API profile. */
+#[Internal]
 final readonly class DiscoveryController
 {
     public function __construct(

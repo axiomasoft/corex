@@ -14,8 +14,10 @@ use CoreX\Operations\Definition\Enums\OperationMode;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use Packman\Attributes\Internal;
 
 /** Pure declared-recipe estimator. No database, cache, network or handler reflection. */
+#[Internal]
 final readonly class DeclaredCostEstimator implements OperationCostEstimator
 {
     /** @var array<string, int> */

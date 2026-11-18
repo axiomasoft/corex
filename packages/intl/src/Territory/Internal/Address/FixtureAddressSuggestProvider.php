@@ -12,7 +12,9 @@ use CoreX\Intl\Territory\Data\SuggestionResult;
 use CoreX\Intl\Territory\Internal\Value;
 use InvalidArgumentException;
 use Override;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class FixtureAddressSuggestProvider implements AddressSuggestProvider
 {
     /** @var list<array<string, mixed>> */

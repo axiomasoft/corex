@@ -14,6 +14,7 @@ use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Override;
+use Packman\Attributes\Internal;
 
 /**
  * Membership-checked `/w/{slug}` → {@see WorkspaceRef} resolver (B-11 §3.2,
@@ -23,6 +24,7 @@ use Override;
  *
  * @internal
  */
+#[Internal]
 final readonly class DatabaseWorkspaceResolver implements PrincipalWorkspaceResolver, WorkspaceResolver
 {
     public function __construct(private AuthFactory $auth) {}

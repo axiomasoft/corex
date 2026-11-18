@@ -7,7 +7,9 @@ namespace CoreX\Scheduler\Internal\Commands;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Scheduling\Contracts\DueWakeupSweeper;
 use Illuminate\Console\Command;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class SweepWakeups extends Command
 {
     protected $signature = 'corex:scheduler:sweep {--limit=100 : Maximum due requests}';

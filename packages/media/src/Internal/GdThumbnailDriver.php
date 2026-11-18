@@ -9,7 +9,9 @@ use CoreX\Media\Data\ConversionInput;
 use CoreX\Media\Data\ConversionOutput;
 use CoreX\Media\Data\ConversionProfile;
 use CoreX\Media\Exceptions\MediaOperationConflict;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class GdThumbnailDriver implements ConversionDriver
 {
     public function __construct(private ConversionProfile $profile) {}

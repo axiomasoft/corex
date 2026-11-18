@@ -15,9 +15,11 @@ use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Data\StoredOperationOutcome;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use Override;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 /** Re-checks module, client scope, operation and field access before a stored outcome is replayed. */
+#[Internal]
 final readonly class DefaultReplayAuthorizer implements ReplayAuthorizer
 {
     public function __construct(

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Data;
 
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 
 /** Whether the guarded tool effect was executed and its result is known. */
 #[Api(since: '1.0')]

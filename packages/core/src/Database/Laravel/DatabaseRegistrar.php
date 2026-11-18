@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Database\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Database\Internal\CoreSchemaSets;
 use Illuminate\Contracts\Foundation\Application;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Packman\Foundation\Concerns\RegistersNothingOnBoot;
 use Packman\Foundation\Contracts\PackageRegistrar;
 use Packman\Schema\Contracts\Migration\SchemaSetProvider;

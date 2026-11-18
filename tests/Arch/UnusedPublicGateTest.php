@@ -74,7 +74,7 @@ it('resolves typed DI receivers, interface implementations, callable registratio
 it('admits exact documented Api and Spi roots and rejects stale, expired, wildcard and missing roots', function (string $attribute, string $kind): void {
     $class = 'Demo\\Entry';
     unusedPublicFixture([
-        'packages/demo/src/Entry.php' => '<?php namespace Demo; use CoreX\Attributes\\'.$attribute.'; #['.$attribute.'] final class Entry { public function external(): void {} }',
+        'packages/demo/src/Entry.php' => '<?php namespace Demo; use Packman\Attributes\\'.$attribute.'; #['.$attribute.'] final class Entry { public function external(): void {} }',
         'packages/demo/README.md' => 'Applications call Demo\\Entry::external to enter the supported contract.',
     ], function (string $root, Filesystem $files, Closure $run) use ($class, $kind): void {
         $entry = unusedPublicEntrypoint($root, $class, 'external', $kind);
@@ -100,7 +100,7 @@ it('admits exact documented Api and Spi roots and rejects stale, expired, wildca
 
 it('checks every ledger row even when a local call makes the exception unnecessary', function (): void {
     unusedPublicFixture([
-        'packages/demo/src/Entry.php' => '<?php namespace Demo; use CoreX\Attributes\Api; #[Api] final class Entry { public function external(): void {} }',
+        'packages/demo/src/Entry.php' => '<?php namespace Demo; use Packman\Attributes\Api; #[Api] final class Entry { public function external(): void {} }',
         'packages/demo/tests/use.php' => '<?php (new \\Demo\\Entry)->external();',
         'packages/demo/README.md' => 'Applications call Demo\\Entry::external.',
     ], function (string $root, Filesystem $files, Closure $run): void {
@@ -137,7 +137,7 @@ it('checks public anonymous source methods and resolves factory and generic regi
 
 it('binds inherited external roots to the exact marked port method', function (): void {
     unusedPublicFixture([
-        'packages/demo/src/Entry.php' => '<?php namespace Demo; use CoreX\Attributes\Spi; #[Spi] interface Port { public function external(): void; } final class Entry implements Port { public function external(): void {} }',
+        'packages/demo/src/Entry.php' => '<?php namespace Demo; use Packman\Attributes\Spi; #[Spi] interface Port { public function external(): void; } final class Entry implements Port { public function external(): void {} }',
         'packages/demo/README.md' => 'Installed adapters implement Demo\\Port::external; applications call it through Demo\\Port.',
     ], function (string $root, Filesystem $files, Closure $run): void {
         $port = unusedPublicEntrypoint($root, 'Demo\\Port', 'external', 'external-spi');
@@ -157,5 +157,21 @@ it('binds inherited external roots to the exact marked port method', function ()
 it('rejects an absent source contour instead of passing an empty report', function (): void {
     unusedPublicFixture(['packages/demo/README.md' => 'No source declarations.'], function (string $root, Filesystem $files, Closure $run): void {
         expect($run()->getExitCode())->toBe(1)->and($run()->getErrorOutput())->toContain('SOURCE-EMPTY');
+    });
+});
+
+it('follows typed Packman callbacks without exempting unrelated methods or auditing vendor exports', function (): void {
+    unusedPublicFixture([
+        'vendor/axiomasoft/packman/packages/core/src/Dispatch.php' => '<?php namespace Packman\Fixture; #[\Packman\Attributes\Spi] interface Port { public function execute(): void; } final class Dispatch { public function invoke(Port $port): void { $port->execute(); } }',
+        'packages/demo/src/Entry.php' => '<?php namespace Demo; final class Entry implements \Packman\Fixture\Port { public function execute(): void {} } final class Unrelated { public function execute(): void {} }',
+    ], function (string $root, Filesystem $files, Closure $run): void {
+        $result = $run();
+        expect($result->getExitCode())->toBe(1)
+            ->and($result->getErrorOutput())->toContain('UNUSED-PUBLIC Demo\\Unrelated::execute')
+            ->not->toContain('UNUSED-PUBLIC Demo\\Entry::execute')
+            ->not->toContain('UNUSED-PUBLIC Packman\\Fixture\\Dispatch::invoke');
+        $source = $files->get($root.'/packages/demo/src/Entry.php');
+        $files->put($root.'/packages/demo/src/Entry.php', str_replace('final class Unrelated { public function execute(): void {} }', '', $source));
+        expect($run()->getExitCode())->toBe(0);
     });
 });

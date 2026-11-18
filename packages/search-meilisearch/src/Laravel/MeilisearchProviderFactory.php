@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\SearchMeilisearch\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\SearchMeilisearch\Exceptions\InvalidMeilisearchConfiguration;
 use CoreX\SearchMeilisearch\Internal\MeilisearchOptions;
 use CoreX\SearchMeilisearch\Internal\MeilisearchSearchProvider;
 use Illuminate\Contracts\Foundation\Application;
 use Meilisearch\Client;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Creates the "meilisearch" search driver; host, index and key are runtime requirements of the driver. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

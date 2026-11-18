@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Media\Data;
 
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 
 /** Immutable upload bytes and metadata; admission remains in MediaLibrary::store. */
 #[Api(since: '1.0')]

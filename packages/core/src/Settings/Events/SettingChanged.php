@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Settings\Events;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Data\Data\JsonDocument;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Messaging\Events\DomainEvent;
 use CoreX\Settings\Enums\SettingScope;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Fired by `SettingsRepository::set()` ONLY when the stored value actually

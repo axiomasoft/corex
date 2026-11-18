@@ -15,6 +15,7 @@ use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
+use Packman\Attributes\Internal;
 use UnexpectedValueException;
 
 use function data_get;
@@ -35,6 +36,7 @@ use function data_get;
  *
  * @internal spec: B-11 §5.5, P2.9 D107/D108/D109/D110/D117
  */
+#[Internal]
 final readonly class ScopePredicate
 {
     public function __construct(

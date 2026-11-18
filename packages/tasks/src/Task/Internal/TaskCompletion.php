@@ -10,9 +10,11 @@ use CoreX\Tasks\Task\Data\CompleteTaskData;
 use CoreX\Tasks\Task\Enums\TaskStatus;
 use CoreX\Tasks\Task\Internal\Models\Task;
 use Illuminate\Validation\ValidationException;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /** @internal Apply to a locked task; the caller persists it and dispatches after commit. */
+#[Internal]
 final readonly class TaskCompletion
 {
     public function __construct(private TaskMutationAccess $access, private ClockInterface $clock) {}

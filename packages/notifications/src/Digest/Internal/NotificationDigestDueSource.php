@@ -14,7 +14,9 @@ use CoreX\Scheduling\Data\WakeupWindow;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\ConnectionInterface;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class NotificationDigestDueSource implements DueWakeupSource
 {
     public function __construct(

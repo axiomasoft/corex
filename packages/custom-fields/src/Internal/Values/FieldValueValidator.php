@@ -14,7 +14,9 @@ use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
 use DateTimeImmutable;
 use Exception;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class FieldValueValidator
 {
     public function __construct(private FieldCatalogue $catalogue) {}

@@ -9,12 +9,12 @@ use CoreX\Access\Internal\AccessSchemaSets;
 use CoreX\Access\Internal\Support\AccessConfigSection;
 use CoreX\Access\Laravel\AccessBindingsRegistrar;
 use CoreX\Access\Laravel\AccessIntegrationRegistrar;
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
-use CoreX\Config\Contracts\ConfigReportSection;
-use CoreX\Errors\Laravel\ProblemDefinitions;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Contracts\ConfigReportSectionInterface as ConfigReportSection;
+use Packman\Errors\Laravel\ProblemDefinitions;
 use Packman\Foundation\Contracts\PackageRegistrar;
 use Packman\Schema\Contracts\Migration\SchemaSetProvider;
 

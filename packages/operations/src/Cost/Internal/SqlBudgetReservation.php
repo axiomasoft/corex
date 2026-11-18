@@ -8,8 +8,10 @@ use CoreX\Operations\Cost\Contracts\BudgetReservation;
 use CoreX\Operations\Cost\Data\ActualCost;
 use CoreX\Operations\Cost\Data\ThrottleStatus;
 use Override;
+use Packman\Attributes\Internal;
 
 /** @internal */
+#[Internal]
 final readonly class SqlBudgetReservation implements BudgetReservation
 {
     public function __construct(

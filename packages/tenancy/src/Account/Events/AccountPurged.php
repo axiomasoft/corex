@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Account\Events;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Messaging\Events\DomainEvent;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Fired by {@see CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle::drop()} once the account's

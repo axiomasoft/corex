@@ -17,7 +17,9 @@ use CoreX\Scheduling\Data\WakeupDelivery;
 use Illuminate\Container\Container;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class MaterializationWakeupHandler implements DueWakeupHandler
 {
     public function __construct(

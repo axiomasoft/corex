@@ -9,7 +9,9 @@ use CoreX\Invocation\Contracts\RequestContext;
 use Flex\Crm\ApiShared\CrmIdentifier;
 use Flex\Crm\Company\Models\Company;
 use Flex\Crm\Context\ContextGuard;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class ShowCompanyOperation implements OperationHandler
 {
     public function __construct(private ContextGuard $guard) {}

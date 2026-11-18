@@ -10,6 +10,7 @@ use CoreX\Tenancy\Integration\Internal\DatabaseValue;
 use DateTimeImmutable;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\ConnectionResolverInterface;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Throwable;
@@ -20,6 +21,7 @@ use Throwable;
  * Best-effort root routing hint. The tenant request remains authoritative;
  * losing this table merely makes the root process discover work later.
  */
+#[Internal]
 final readonly class RootRegistryWakeupHint implements WakeupScheduleHint
 {
     public function __construct(

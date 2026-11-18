@@ -15,9 +15,11 @@ use DateTimeZone;
 use Exception;
 use JsonException;
 use Override;
+use Packman\Attributes\Internal;
 use stdClass;
 
 /** @phpstan-import-type EventData from CloudEventCodec */
+#[Internal]
 final readonly class JsonCloudEventCodec implements CloudEventCodec
 {
     private const int JsonFlags = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR;

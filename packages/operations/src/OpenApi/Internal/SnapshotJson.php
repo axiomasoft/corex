@@ -7,9 +7,11 @@ namespace CoreX\Operations\OpenApi\Internal;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use InvalidArgumentException;
 use JsonException;
+use Packman\Attributes\Internal;
 use stdClass;
 
 /** @internal Pretty bytes are a deterministic projection of JsonCanonical. */
+#[Internal]
 final class SnapshotJson
 {
     public static function pretty(mixed $value): string

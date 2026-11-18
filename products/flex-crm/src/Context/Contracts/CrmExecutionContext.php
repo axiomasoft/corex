@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Flex\Crm\Context\Contracts;
 
 use Flex\Crm\Context\Data\ExecutionContext;
+use Packman\Attributes\Internal;
 
 /**
  * Application-owned authentication boundary, resolved afresh for every operation.
@@ -13,6 +14,7 @@ use Flex\Crm\Context\Data\ExecutionContext;
  * explicit capability, never inferred from a role name or missing workspace.
  * Throw on missing/revoked authentication. Never deserialize request actor here.
  */
+#[Internal]
 interface CrmExecutionContext
 {
     public function current(): ExecutionContext;

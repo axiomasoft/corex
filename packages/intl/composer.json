@@ -50,7 +50,23 @@
             "dev-main": "1.0.x-dev"
         },
         "packman": {
-            "module": "CoreX\\Intl\\IntlModule"
+            "module": "CoreX\\Intl\\IntlModule",
+            "schema-version": 1,
+            "package-type": "capability",
+            "stability": "stable",
+            "profile": "modular-platform",
+            "error-prefix": "intl",
+            "owns": [
+                "Currency",
+                "Errors",
+                "Formatting",
+                "Internal",
+                "Laravel",
+                "Locale",
+                "Money",
+                "Territory",
+                "Translation"
+            ]
         }
     },
     "repositories": [

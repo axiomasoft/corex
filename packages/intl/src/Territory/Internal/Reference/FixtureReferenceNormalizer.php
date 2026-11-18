@@ -9,7 +9,9 @@ use CoreX\Intl\Territory\Exceptions\SchemaMismatchException;
 use CoreX\Intl\Territory\Internal\Value;
 use DateTimeImmutable;
 use JsonException;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class FixtureReferenceNormalizer
 {
     /**

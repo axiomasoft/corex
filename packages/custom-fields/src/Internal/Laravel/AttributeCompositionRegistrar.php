@@ -9,9 +9,11 @@ use CoreX\CustomFields\Internal\CustomFieldsOptions;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Attributes\Internal;
 use Packman\Foundation\Contracts\PackageRegistrar;
 
 /** @internal Builds validated package configuration once per application. */
+#[Internal]
 final class AttributeCompositionRegistrar implements PackageRegistrar
 {
     #[Override]

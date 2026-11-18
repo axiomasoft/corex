@@ -9,8 +9,10 @@ use CoreX\Operations\Errors\Exceptions\ApiError;
 use Illuminate\Http\Request;
 use JsonException;
 use Override;
+use Packman\Attributes\Internal;
 
 /** @internal */
+#[Internal]
 final class JsonObjectEnvelopeReader implements InputEnvelopeReader
 {
     #[Override]

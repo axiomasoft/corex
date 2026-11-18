@@ -6,7 +6,9 @@ namespace CoreX\ImportExport\Internal\Export;
 
 use CoreX\ImportExport\Data\CanonicalRecord;
 use CoreX\ImportExport\Exceptions\ExportUnavailable;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class CanonicalExportCodec
 {
     /** @param list<CanonicalRecord> $records */

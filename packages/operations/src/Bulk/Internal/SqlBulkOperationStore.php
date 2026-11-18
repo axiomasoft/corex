@@ -21,10 +21,12 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 use InvalidArgumentException;
 use Override;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
 /** @internal Tenant-local durable authority for bulk lifecycle state. */
+#[Internal]
 final readonly class SqlBulkOperationStore implements BulkOperationStore
 {
     private const string Table = 'sys_api_bulk_operations';

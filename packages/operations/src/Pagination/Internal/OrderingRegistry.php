@@ -8,8 +8,10 @@ use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 
 /** Immutable field, direction and type projection. The last key is the unique tie-breaker. */
+#[Internal]
 final readonly class OrderingRegistry implements \CoreX\Operations\Pagination\Contracts\OrderingRegistry
 {
     /**

@@ -8,7 +8,9 @@ use CoreX\Notifications\Delivery\Contracts\NotificationChannelDriver;
 use CoreX\Notifications\Delivery\Data\ChannelDescriptor;
 use CoreX\Notifications\Delivery\Data\DeliveryInput;
 use CoreX\Notifications\Delivery\Data\DeliveryOutcome;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class InAppChannelDriver implements NotificationChannelDriver
 {
     public function descriptor(): ChannelDescriptor

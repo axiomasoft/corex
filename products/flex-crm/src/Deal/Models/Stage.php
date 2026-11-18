@@ -7,6 +7,7 @@ namespace Flex\Crm\Deal\Models;
 use CoreX\Database\Laravel\BaseModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Packman\Attributes\Internal;
 
 /**
  * @property string $id
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $semantic
  * @property list<string> $required_fields
  */
+#[Internal]
 final class Stage extends BaseModel
 {
     protected $table = 'crm_stages';

@@ -10,7 +10,9 @@ use CoreX\Tasks\Task\Data\CompleteTaskData;
 use CoreX\Tasks\Task\Data\TaskView;
 use CoreX\Tasks\Task\Data\UpdateTaskData;
 use Illuminate\Auth\Access\AuthorizationException;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class DenyTaskMutationAccess implements TaskMutationAccess
 {
     public function authorizeUpdate(UpdateTaskData $data, TenantContext $context, TaskView $task): void

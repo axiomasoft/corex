@@ -12,10 +12,12 @@ use CoreX\Storage\Exceptions\StorageCapabilityUnavailable;
 use CoreX\Storage\Exceptions\StorageOperationFailed;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemManager;
+use Packman\Attributes\Internal;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 
+#[Internal]
 final readonly class LocalTenantStorage implements TenantStorage
 {
     public function __construct(private TenantContextResolver $contexts, private FilesystemManager $filesystems, private string $durableRoot, private string $ephemeralRoot) {}

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Messaging\Enums\MessageClass;
 use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Exceptions\InvalidMessage;
 use CoreX\Messaging\Internal\UriReference;
+use Packman\Attributes\Api;
 
 /**
  * Объявление опубликованного контракта сообщения.

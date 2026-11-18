@@ -1,0 +1,281 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "axiomasoft/corex-tenancy configuration",
+    "type": "object",
+    "properties": {
+        "corex-tenancy": {
+            "type": "object",
+            "properties": {
+                "central_connection": {
+                    "type": "string",
+                    "default": "pgsql"
+                },
+                "domain_trust": {
+                    "type": "object",
+                    "properties": {
+                        "challenge_ttl_seconds": {
+                            "type": "integer",
+                            "default": 300
+                        },
+                        "enabled": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "grace_days": {
+                    "type": "integer",
+                    "default": 30
+                },
+                "host_identification": {
+                    "type": "object",
+                    "properties": {
+                        "cache": {
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "cache_store": {
+                            "type": [
+                                "string",
+                                "null"
+                            ],
+                            "default": null
+                        },
+                        "cache_ttl": {
+                            "type": "integer",
+                            "default": 300
+                        },
+                        "enabled": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "impersonation": {
+                    "type": "object",
+                    "properties": {
+                        "profile": {
+                            "type": "string",
+                            "default": "standard"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "oidc": {
+                    "type": "object",
+                    "properties": {
+                        "allowed_algs": {
+                            "type": "array"
+                        },
+                        "client_id": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "null"
+                            ],
+                            "default": null
+                        },
+                        "client_secret": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "null"
+                            ],
+                            "default": null
+                        },
+                        "discovery": {
+                            "type": "object",
+                            "properties": {
+                                "cache_store": {
+                                    "type": [
+                                        "string",
+                                        "integer",
+                                        "number",
+                                        "boolean",
+                                        "null"
+                                    ],
+                                    "default": null
+                                },
+                                "cache_ttl": {
+                                    "type": "integer",
+                                    "default": 3600
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "enabled": {
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "guard": {
+                            "type": "string",
+                            "default": "web"
+                        },
+                        "impersonation": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "default": false
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "issuer": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "null"
+                            ],
+                            "default": null
+                        },
+                        "jwks": {
+                            "type": "object",
+                            "properties": {
+                                "cache_store": {
+                                    "type": [
+                                        "string",
+                                        "integer",
+                                        "number",
+                                        "boolean",
+                                        "null"
+                                    ],
+                                    "default": null
+                                },
+                                "cache_ttl": {
+                                    "type": "integer",
+                                    "default": 3600
+                                },
+                                "refetch_cooldown_seconds": {
+                                    "type": "integer",
+                                    "default": 60
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "leeway_seconds": {
+                            "type": "integer",
+                            "default": 30
+                        },
+                        "max_session_lifetime_minutes": {
+                            "type": "integer",
+                            "default": 720
+                        },
+                        "redirect_uri": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "null"
+                            ],
+                            "default": null
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "platform_domain": {
+                    "type": "string",
+                    "default": "example.test"
+                },
+                "status_gate": {
+                    "type": "object",
+                    "properties": {
+                        "export_route": {
+                            "type": [
+                                "string",
+                                "null"
+                            ],
+                            "default": null
+                        },
+                        "payment_route": {
+                            "type": [
+                                "string",
+                                "null"
+                            ],
+                            "default": null
+                        },
+                        "read_only_methods": {
+                            "type": "array"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "storage": {
+                    "type": "object",
+                    "properties": {
+                        "durable_driver": {
+                            "type": "string",
+                            "default": "local"
+                        },
+                        "durable_root": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "array",
+                                "object",
+                                "null"
+                            ]
+                        },
+                        "ephemeral_root": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "array",
+                                "object",
+                                "null"
+                            ]
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "trial_days": {
+                    "type": "integer",
+                    "default": 14
+                },
+                "wakeup": {
+                    "type": "object",
+                    "properties": {
+                        "driver": {
+                            "type": "string",
+                            "default": "local_sweep"
+                        },
+                        "lease_seconds": {
+                            "type": "integer",
+                            "default": 60
+                        },
+                        "root_connection": {
+                            "type": "string",
+                            "default": "pgsql"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "workspace": {
+                    "type": "object",
+                    "properties": {
+                        "path_segment": {
+                            "type": "string",
+                            "default": "w"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

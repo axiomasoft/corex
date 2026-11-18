@@ -6,6 +6,7 @@ namespace CoreX\Messaging\Internal\Commands;
 
 use CoreX\Messaging\Internal\SqlDeliveryHealth;
 use Illuminate\Console\Command;
+use Packman\Attributes\Internal;
 
 /**
  * Печатает четыре агрегата здоровья outbox и разрез возраста по контракту.
@@ -15,6 +16,7 @@ use Illuminate\Console\Command;
  *
  * @internal spec: P5.15 — console command is not a supported API
  */
+#[Internal]
 final class ShowDeliveryHealth extends Command
 {
     protected $signature = 'corex:messaging:health

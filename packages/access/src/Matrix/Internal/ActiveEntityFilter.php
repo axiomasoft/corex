@@ -6,6 +6,7 @@ namespace CoreX\Access\Matrix\Internal;
 
 use CoreX\Access\Matrix\Contracts\EntityActivity;
 use CoreX\Context\Contracts\TenantContextResolver;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Entities\EntityRegistry;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
@@ -24,6 +25,7 @@ use Packman\Modules\Contracts\Registry\ModuleRegistry;
  * a tenant table), so a resolvable context is an existing precondition, not
  * a new one; boxed installs (`SingleAccountResolver`) never throw here.
  */
+#[Internal]
 final readonly class ActiveEntityFilter implements EntityActivity
 {
     public function __construct(

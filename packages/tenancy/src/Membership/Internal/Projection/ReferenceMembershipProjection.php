@@ -21,8 +21,10 @@ use CoreX\Tenancy\Membership\Internal\Refresh\RefreshCoordinator;
 use CoreX\Tenancy\Membership\Internal\Timing\Lease;
 use CoreX\Tenancy\Membership\Internal\Transport\MembershipTrigger;
 use Illuminate\Database\ConnectionInterface;
+use Packman\Attributes\Internal;
 
 /** @internal Unregistered local composition; it is neither an auth guard nor a runtime projection. */
+#[Internal]
 final readonly class ReferenceMembershipProjection
 {
     public function __construct(

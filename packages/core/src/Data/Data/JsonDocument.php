@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Data\Data;
 
-use CoreX\Attributes\Api;
+use Packman\Attributes\Api;
 
 /** Immutable JSON value. Laravel adapters decode it only at storage/transport boundaries. */
 #[Api(since: '1.0')]

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Contracts;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Owner port for replacing a verified identity password hash. */
 #[Spi(kind: SpiKind::Implement, since: '1.0')]

@@ -11,9 +11,11 @@ use CoreX\Tenancy\Identity\Internal\Models\User;
 use DateTimeImmutable;
 use DomainException;
 use Illuminate\Database\ConnectionResolverInterface;
+use Packman\Attributes\Internal;
 use Throwable;
 
 /** @internal Unregistered management-only reference; never a membership grant. */
+#[Internal]
 final readonly class ManagementIdentityHydrator
 {
     public function __construct(

@@ -1,0 +1,17 @@
+{
+    "schema": "packman-error-codes/1",
+    "package": "axiomasoft/corex-search",
+    "codes": [
+        {
+            "package": "axiomasoft/corex-search",
+            "enum": "CoreX\\Search\\Errors\\Enums\\SearchErrorCode",
+            "case": "InvalidSearchConfiguration",
+            "code": "search.invalid_search_configuration",
+            "type": "urn:packman:problem:search.invalid_search_configuration",
+            "status": 500,
+            "title": "Invalid search configuration.",
+            "retryable": false,
+            "category": "internal"
+        }
+    ]
+}

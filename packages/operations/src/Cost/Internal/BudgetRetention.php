@@ -10,6 +10,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\Connection;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
 /**
@@ -19,6 +20,7 @@ use Psr\Clock\ClockInterface;
  *
  * @internal
  */
+#[Internal]
 final readonly class BudgetRetention
 {
     public const int BatchLimit = 100;

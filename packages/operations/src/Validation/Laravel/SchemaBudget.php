@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Validation\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use InvalidArgumentException;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /** Count schema resources, depth and nodes against tool-schema/1 limits. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

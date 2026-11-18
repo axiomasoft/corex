@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Data\Data\JsonDocument;
 use CoreX\Operations\Validation\Data\JsonObject;
+use Packman\Attributes\Api;
 
 /** Read projection of one compiled tool declaration. Handler refs stay internal. */
 #[Api(since: '1.0')]

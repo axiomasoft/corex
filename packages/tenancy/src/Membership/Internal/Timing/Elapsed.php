@@ -6,8 +6,10 @@ namespace CoreX\Tenancy\Membership\Internal\Timing;
 
 use CoreX\Tenancy\Membership\Data\ClockReading;
 use LogicException;
+use Packman\Attributes\Internal;
 
 /** @internal Conservative elapsed calculation for one controlled local domain. */
+#[Internal]
 final class Elapsed
 {
     public static function upperBoundSeconds(ClockReading $started, ClockReading $observed): int

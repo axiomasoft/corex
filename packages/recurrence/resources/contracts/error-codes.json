@@ -1,0 +1,28 @@
+{
+    "schema": "packman-error-codes/1",
+    "package": "axiomasoft/corex-recurrence",
+    "codes": [
+        {
+            "package": "axiomasoft/corex-recurrence",
+            "enum": "CoreX\\Recurrence\\Errors\\Enums\\RecurrenceErrorCode",
+            "case": "StaleCursorException",
+            "code": "recurrence.stale_cursor_exception",
+            "type": "urn:packman:problem:recurrence.stale_cursor_exception",
+            "status": 409,
+            "title": "Stale cursor exception.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex-recurrence",
+            "enum": "CoreX\\Recurrence\\Errors\\Enums\\RecurrenceErrorCode",
+            "case": "UnsupportedEnvironmentException",
+            "code": "recurrence.unsupported_environment_exception",
+            "type": "urn:packman:problem:recurrence.unsupported_environment_exception",
+            "status": 422,
+            "title": "Unsupported environment exception.",
+            "retryable": false,
+            "category": "unsupported"
+        }
+    ]
+}

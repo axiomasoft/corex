@@ -15,9 +15,11 @@ use CoreX\Storage\Laravel\ScopedFilesystemFactory;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemManager;
 use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
+use Packman\Attributes\Internal;
 
 /** Explicitly constructed with trusted server configuration; never auto-bound.  * @internal
  */
+#[Internal]
 final readonly class ObjectTenantStorage implements TenantStorage
 {
     /** @var array<string, mixed> */

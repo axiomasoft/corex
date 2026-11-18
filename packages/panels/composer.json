@@ -6,10 +6,11 @@
     "require": {
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/packman": "^0.1@dev",
+        "axiomasoft/packman-panels": "^0.1@dev",
         "illuminate/contracts": "^13.0",
         "illuminate/support": "^13.0",
-        "psr/clock": "^1.0",
-        "axiomasoft/packman-panels": "^0.1@dev"
+        "psr/clock": "^1.0"
     },
     "require-dev": {
         "larastan/larastan": "^3.12",
@@ -44,6 +45,16 @@
         },
         "branch-alias": {
             "dev-main": "1.0.x-dev"
+        },
+        "packman": {
+            "schema-version": 1,
+            "package-type": "integration",
+            "stability": "stable",
+            "profile": "laravel-package",
+            "error-prefix": "panels",
+            "owns": [
+                "Laravel"
+            ]
         }
     },
     "repositories": [

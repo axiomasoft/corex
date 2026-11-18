@@ -18,7 +18,7 @@
                     "visibility": "public",
                     "static": false,
                     "final": false,
-                    "abstract": true,
+                    "abstract": false,
                     "by_reference": false,
                     "parameters": [
                         {
@@ -62,7 +62,7 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -178,155 +178,10 @@
                         }
                     ],
                     "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\TaskReference> $taskRefs"
-                        ]
-                    }
+                    "doc": []
                 }
             },
-            "properties": {
-                "committedPrefix": {
-                    "flags": 1,
-                    "type": "?string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\TaskReference> $taskRefs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "conflict": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\TaskReference> $taskRefs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "created": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\TaskReference> $taskRefs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "cursor": {
-                    "flags": 1,
-                    "type": "?CoreX\\Recurrence\\Data\\ExpansionCursor",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\TaskReference> $taskRefs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "noop": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\TaskReference> $taskRefs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "pageDigest": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\TaskReference> $taskRefs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "retired": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\TaskReference> $taskRefs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "taskRefs": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\TaskReference> $taskRefs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "unknown": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\TaskReference> $taskRefs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "version": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<\\CoreX\\Tasks\\Task\\Data\\TaskReference> $taskRefs"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -400,58 +255,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "aheadDays": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "end": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "maxSeconds": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "pageLimit": {
-                    "flags": 1,
-                    "type": "int",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "start": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -507,38 +311,7 @@
                     "doc": []
                 }
             },
-            "properties": {
-                "definitionHash": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "id": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                },
-                "immutableRevision": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": [],
-                    "hooks": []
-                }
-            },
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -547,12 +320,12 @@
             "kind": "enum",
             "layer": "api",
             "since": "1.0",
-            "final": false,
+            "final": true,
             "readonly": false,
             "abstract": false,
             "extends": [],
             "implements": [
-                "CoreX\\Errors\\Contracts\\ErrorCode"
+                "Packman\\Errors\\Contracts\\ErrorCode"
             ],
             "uses": [],
             "doc": [],
@@ -568,14 +341,23 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": "string",
-            "enum_cases": {
-                "MaterializationConflict": "'recurring-tasks.materialization_conflict'",
-                "StaleMaterialization": "'recurring-tasks.stale_materialization'",
-                "UnsupportedMaterialization": "'recurring-tasks.unsupported_materialization'"
-            }
+            "enum_cases": [
+                {
+                    "name": "MaterializationConflict",
+                    "value": "'recurring-tasks.materialization_conflict'"
+                },
+                {
+                    "name": "StaleMaterialization",
+                    "value": "'recurring-tasks.stale_materialization'"
+                },
+                {
+                    "name": "UnsupportedMaterialization",
+                    "value": "'recurring-tasks.unsupported_materialization'"
+                }
+            ]
         },
         "CoreX\\RecurringTasks\\Exceptions\\MaterializationConflict": {
             "kind": "class",
@@ -585,7 +367,7 @@
             "readonly": false,
             "abstract": false,
             "extends": [
-                "CoreX\\Errors\\Exceptions\\CodedException"
+                "Packman\\Errors\\Exceptions\\CodedException"
             ],
             "implements": [],
             "uses": [],
@@ -598,7 +380,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                    "return": "Packman\\Errors\\Data\\ErrorDescriptor",
                     "doc": []
                 },
                 "forGeneration": {
@@ -618,7 +400,7 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\RecurringTasks\\Exceptions\\MaterializationConflict)",
+                    "return": "self",
                     "doc": []
                 },
                 "forOperationKey": {
@@ -638,11 +420,11 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\RecurringTasks\\Exceptions\\MaterializationConflict)",
+                    "return": "self",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -655,7 +437,7 @@
             "readonly": false,
             "abstract": false,
             "extends": [
-                "CoreX\\Errors\\Exceptions\\CodedException"
+                "Packman\\Errors\\Exceptions\\CodedException"
             ],
             "implements": [],
             "uses": [],
@@ -678,7 +460,7 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\RecurringTasks\\Exceptions\\StaleMaterialization)",
+                    "return": "self",
                     "doc": []
                 },
                 "errorDescriptor": {
@@ -688,7 +470,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                    "return": "Packman\\Errors\\Data\\ErrorDescriptor",
                     "doc": []
                 },
                 "restoreEpoch": {
@@ -708,7 +490,7 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\RecurringTasks\\Exceptions\\StaleMaterialization)",
+                    "return": "self",
                     "doc": []
                 },
                 "revision": {
@@ -746,11 +528,11 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\RecurringTasks\\Exceptions\\StaleMaterialization)",
+                    "return": "self",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -763,7 +545,7 @@
             "readonly": false,
             "abstract": false,
             "extends": [
-                "CoreX\\Errors\\Exceptions\\CodedException"
+                "Packman\\Errors\\Exceptions\\CodedException"
             ],
             "implements": [],
             "uses": [],
@@ -786,7 +568,7 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\RecurringTasks\\Exceptions\\UnsupportedMaterialization)",
+                    "return": "self",
                     "doc": []
                 },
                 "errorDescriptor": {
@@ -796,7 +578,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                    "return": "Packman\\Errors\\Data\\ErrorDescriptor",
                     "doc": []
                 },
                 "expansion": {
@@ -816,18 +598,18 @@
                             "flags": 0
                         }
                     ],
-                    "return": "self(CoreX\\RecurringTasks\\Exceptions\\UnsupportedMaterialization)",
+                    "return": "self",
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
         },
         "CoreX\\RecurringTasks\\Laravel\\CompletionBindings": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -858,14 +640,15 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         },
         "CoreX\\RecurringTasks\\RecurringTasksServiceProvider": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "spi",
             "since": "1.0",
             "final": true,
             "readonly": false,
@@ -898,10 +681,11 @@
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {},
             "constants": [],
             "enum_backing": null,
-            "enum_cases": []
+            "enum_cases": [],
+            "spi_kind": "call"
         }
     }
 }

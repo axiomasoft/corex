@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — Packman governance
+
+- Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.
+
+
 ## Unreleased — package boundaries
 
 - Breaking before release: Replace the duplicate panel catalogue, saved-view storage and schema with `axiomasoft/packman-panels`. CoreX retains its provider bridge and `PanelContexts` trusted user-context projection. Panel/SavedViews consumers now use Packman public types and `packman-panels` configuration; the sole table owner is `axiomasoft/packman-panels:tenant`. Remove duplicate engine tests and cover actual CoreX-to-Packman composition through public contracts.

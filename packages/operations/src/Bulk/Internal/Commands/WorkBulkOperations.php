@@ -7,8 +7,10 @@ namespace CoreX\Operations\Bulk\Internal\Commands;
 use CoreX\Data\Data\DataScope;
 use CoreX\Operations\Bulk\Internal\BulkWorker;
 use Illuminate\Console\Command;
+use Packman\Attributes\Internal;
 
 /** @internal Runs one leased bulk step in the already restored tenant. */
+#[Internal]
 final class WorkBulkOperations extends Command
 {
     protected $signature = 'corex:operations:bulk-work {--worker=api-bulk : Lease owner for one bounded step}';

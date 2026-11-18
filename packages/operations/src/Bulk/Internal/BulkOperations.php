@@ -13,9 +13,11 @@ use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
 use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
 use Illuminate\Http\JsonResponse;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface as PsrClock;
 
 /** @internal HTTP projection of the durable bulk contract. Possession of an id is not authority. */
+#[Internal]
 final readonly class BulkOperations
 {
     public function __construct(

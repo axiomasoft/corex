@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Task\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Tasks\Task\Internal\Models\Stage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * @corex-model-extension Exact Stage Eloquent relationship composition.
@@ -19,7 +19,7 @@ final class StageRelations
 {
     /** @template TModel of Model
      * @param  TModel  $model
-     * @return HasMany<Stage, TModel>
+     * @return HasMany<covariant Model, TModel>
      */
     public static function hasMany(Model $model, ?string $foreignKey = null, ?string $localKey = null): HasMany
     {

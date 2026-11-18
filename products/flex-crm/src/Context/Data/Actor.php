@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Flex\Crm\Context\Data;
 
 use Illuminate\Validation\ValidationException;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class Actor
 {
     public function __construct(public string $source, public string $id, public string $name)

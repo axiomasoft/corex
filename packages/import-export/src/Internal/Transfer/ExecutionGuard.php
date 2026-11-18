@@ -7,7 +7,9 @@ namespace CoreX\ImportExport\Internal\Transfer;
 use Closure;
 use CoreX\ImportExport\Data\SourceCursor;
 use CoreX\ImportExport\Data\TransferLimits;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class ExecutionGuard
 {
     /**

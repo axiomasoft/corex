@@ -10,7 +10,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class DeliverNotification implements ShouldQueue
 {
     use Dispatchable;

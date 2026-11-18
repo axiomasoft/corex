@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
-use CoreX\Config\Contracts\RuntimeConfigCheck;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Notifications\Delivery\Contracts\NotificationChannelDriver;
 use CoreX\Notifications\Delivery\Contracts\RecipientResolver;
@@ -30,6 +27,9 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Contracts\RuntimeConfigCheck;
 use Packman\Foundation\Contracts\PackageRegistrar;
 use Psr\Clock\ClockInterface;
 

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use InvalidArgumentException;
+use Packman\Attributes\Api;
 
 /** Immutable projection of one declared message contract onto a webhook topic. */
 #[Api(since: '1.0')]

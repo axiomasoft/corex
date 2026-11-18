@@ -4,17 +4,18 @@
     "type": "packman-module",
     "license": "MIT",
     "require": {
-        "ext-bcmath": "*",
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
         "axiomasoft/corex-recurrence": "^1.0@dev",
         "axiomasoft/corex-tasks": "^1.0@dev",
         "axiomasoft/corex-workflow": "^1.0@dev",
+        "axiomasoft/packman": "^0.1@dev",
+        "axiomasoft/packman-modules": "^0.1@dev",
+        "axiomasoft/packman-schema": "^0.1@dev",
+        "ext-bcmath": "*",
         "illuminate/contracts": "^13.0",
         "illuminate/database": "^13.0",
-        "illuminate/support": "^13.0",
-        "axiomasoft/packman-modules": "^0.1@dev",
-        "axiomasoft/packman-schema": "^0.1@dev"
+        "illuminate/support": "^13.0"
     },
     "require-dev": {
         "axiomasoft/corex-scheduler": "^1.0@dev",
@@ -51,7 +52,20 @@
             "dev-main": "1.0.x-dev"
         },
         "packman": {
-            "module": "CoreX\\RecurringTasks\\Internal\\TaskWorkflowIntegration"
+            "module": "CoreX\\RecurringTasks\\Internal\\TaskWorkflowIntegration",
+            "schema-version": 1,
+            "package-type": "integration",
+            "stability": "stable",
+            "profile": "modular-platform",
+            "error-prefix": "recurring-tasks",
+            "owns": [
+                "Contracts",
+                "Data",
+                "Errors",
+                "Exceptions",
+                "Internal",
+                "Laravel"
+            ]
         }
     },
     "repositories": [

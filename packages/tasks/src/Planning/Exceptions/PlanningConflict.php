@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Planning\Exceptions;
 
-use CoreX\Attributes\Api;
-use CoreX\Errors\Contracts\DescribesError;
-use CoreX\Errors\Data\ErrorDescriptor;
-use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Tasks\Errors\Enums\TasksErrorCode;
 use DomainException;
+use Packman\Attributes\Api;
+use Packman\Errors\Contracts\DescribesError;
+use Packman\Errors\Data\ErrorDescriptor;
+use Packman\Errors\Enums\ErrorCategory;
 
 #[Api(since: '1.0')]
 final class PlanningConflict extends DomainException implements DescribesError

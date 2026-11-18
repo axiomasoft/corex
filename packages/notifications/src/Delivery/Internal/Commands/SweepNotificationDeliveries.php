@@ -7,7 +7,9 @@ namespace CoreX\Notifications\Delivery\Internal\Commands;
 use CoreX\Notifications\Delivery\Internal\DeliveryStore;
 use CoreX\Notifications\Delivery\Internal\Jobs\DeliverNotification;
 use Illuminate\Console\Command;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class SweepNotificationDeliveries extends Command
 {
     protected $signature = 'corex:notifications:sweep {--limit=100 : Maximum due deliveries to dispatch}';

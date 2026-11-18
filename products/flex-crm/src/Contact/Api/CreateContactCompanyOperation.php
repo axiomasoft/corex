@@ -9,7 +9,9 @@ use CoreX\Invocation\Contracts\RequestContext;
 use Flex\Crm\ApiShared\CrmIdentifier;
 use Flex\Crm\Contact\Actions\AssociateContactCompany;
 use Flex\Crm\Internal\Value;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class CreateContactCompanyOperation implements OperationHandler
 {
     public function __construct(private AssociateContactCompany $associateContactCompany) {}

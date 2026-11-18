@@ -11,6 +11,7 @@ use CoreX\Messaging\Exceptions\OutboxLeaseLost;
 use Illuminate\Console\Command;
 use Illuminate\Support\Sleep;
 use Illuminate\Support\Str;
+use Packman\Attributes\Internal;
 use Throwable;
 
 /**
@@ -25,6 +26,7 @@ use Throwable;
  *
  * @internal spec: P5.15 — console command is not a supported API
  */
+#[Internal]
 final class RelayOutbox extends Command
 {
     protected $signature = 'corex:messaging:relay

@@ -9,6 +9,7 @@ use Flex\Crm\Activity\Enums\ActivityType;
 use Flex\Crm\Context\Models\Concerns\HasCrmContext;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Packman\Attributes\Internal;
 
 /**
  * Polymorphic activity timeline entry attached to any CRM entity (lead, contact,
@@ -25,6 +26,7 @@ use Illuminate\Support\Carbon;
  * @property array<string, mixed>|null $metadata
  * @property Carbon|null $occurred_at
  */
+#[Internal]
 final class Activity extends BaseModel
 {
     use HasCrmContext;

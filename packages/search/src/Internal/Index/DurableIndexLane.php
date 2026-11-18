@@ -8,8 +8,10 @@ use CoreX\Search\Data\IndexClaim;
 use CoreX\Search\Internal\Value;
 use Illuminate\Database\ConnectionInterface;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
+#[Internal]
 final readonly class DurableIndexLane
 {
     public function __construct(private ConnectionInterface $connection, private readonly ClockInterface $clock) {}

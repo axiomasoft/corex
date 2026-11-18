@@ -4,6 +4,7 @@ Baseline changes require an intentional surface change under PLAN3.D40.
 
 | Дата | Решение | Слои | Причина |
 |:--|:--|:--|:--|
+| 2026-11-17 | Owner-authorized Packman/CoreX unification before external use | php-surface, wire | Direct Packman attributes/config/error contracts replace duplicate CoreX types; schema facets and focused registrars compose the existing runtime. Remove 25 unused CoreX generic/module/schema error identities and register 30 Packman/core-module-owned identities; the 118 retained domain definitions are unchanged. Five schema error contracts move to Packman ownership and all problem URNs use its canonical prefix. Routes, events and database schema remain unchanged. |
 | 2026-11-17 | Unreleased ecosystem redesign authorized by owner | php-surface, events, wire, schema | Packman owns module/schema/panel engines; Tenant owns isolation; AzGuard v2 owns delegated authorization. Explicit import-export, scheduler and recurring-tasks names; public import/export sessions and host resource contracts replace private-table and embedded-engine coupling. Breaking changes are intentional before first use. |
 | 2026-10-05 | PLAN3.D95 / PLAN3.D64; owner-authorized P07.6 corrections | php-surface | Record only the existing additive Internal HostAccountResolver::generationKey(): string method from repair commit 32e1817c. No source API change in this rebaseline; routes/events/wire preserved. |
 | 2026-09-28 | PLAN3.D40 | all | initial baseline P01.2 |

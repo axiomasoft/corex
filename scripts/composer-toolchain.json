@@ -1,5 +1,7 @@
 [
     "phpstan/phpstan",
     "phpstan/phpstan-strict-rules",
-    "larastan/larastan"
+    "larastan/larastan",
+    "axiomasoft/packman-devtools",
+    "axiomasoft/packman-testkit"
 ]

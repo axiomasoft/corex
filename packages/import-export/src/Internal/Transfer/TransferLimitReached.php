@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace CoreX\ImportExport\Internal\Transfer;
 
 use CoreX\ImportExport\Data\SourceCursor;
+use Packman\Attributes\Internal;
 use RuntimeException;
 
+#[Internal]
 final class TransferLimitReached extends RuntimeException
 {
     /**

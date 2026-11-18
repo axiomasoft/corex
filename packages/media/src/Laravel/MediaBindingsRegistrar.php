@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Media\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Media\Contracts\ConversionDriver;
 use CoreX\Media\Contracts\MediaLibrary;
@@ -24,6 +22,8 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 use Packman\Foundation\Contracts\PackageRegistrar;
 use Psr\Clock\ClockInterface;
 use Vaulter\Database\VaulterDatabase;
@@ -47,7 +47,7 @@ final class MediaBindingsRegistrar implements PackageRegistrar
         $app->scoped(MediaOperationStore::class, static fn (Application $app): MediaOperationStore => new MediaOperationStore(connection: $app->make(DatabaseManager::class)->connection(), clock: $app->make(ClockInterface::class), blobs: $app->make(MediaBlobs::class)));
 
         if (extension_loaded('gd')) {
-            $app->singleton(GdThumbnailDriver::class, static fn (Application $app): GdThumbnailDriver => (new GdThumbnailDriverFactory)->make($app));
+            $app->singleton(GdThumbnailDriver::class, static fn (Application $app): ConversionDriver => (new GdThumbnailDriverFactory)->make($app));
             $app->tag(GdThumbnailDriver::class, $options->conversionDriverTag);
         }
 

@@ -19,11 +19,13 @@ use CoreX\Data\Data\DataScope;
 use Illuminate\Database\ConnectionInterface;
 use InvalidArgumentException;
 use JsonException;
+use Packman\Attributes\Internal;
 use RuntimeException;
 use stdClass;
 use ValueError;
 
 /** @phpstan-import-type JsonMap from ValueBag */
+#[Internal]
 final readonly class DatabaseFieldCatalogue implements FieldCatalogue
 {
     /** @param array<string, bool> $drivers */

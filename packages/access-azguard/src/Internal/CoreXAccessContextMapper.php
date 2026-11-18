@@ -12,8 +12,10 @@ use CoreX\Access\Data\RecordContext;
 use CoreX\AccessAzguard\Contracts\AccessContextMapper;
 use CoreX\Context\Contracts\Principal;
 use CoreX\Context\Contracts\TenancyManager;
+use Packman\Attributes\Internal;
 
 /** @internal Maps trusted CoreX identity, without reading authorization tables. */
+#[Internal]
 final readonly class CoreXAccessContextMapper implements AccessContextMapper
 {
     public function __construct(private TenancyManager $tenancy) {}

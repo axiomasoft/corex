@@ -12,8 +12,10 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Builder;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
+#[Internal]
 final readonly class MediaOperationStore
 {
     public function __construct(private ConnectionInterface $connection, private ClockInterface $clock, private MediaBlobs $blobs) {}

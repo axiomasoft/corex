@@ -8,7 +8,9 @@ use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Exceptions\InvalidScopePayload;
 use Override;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class ArrayDataScopeCodec implements DataScopeCodec
 {
     /**

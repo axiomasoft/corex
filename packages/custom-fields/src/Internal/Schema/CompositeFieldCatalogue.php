@@ -10,8 +10,10 @@ use CoreX\CustomFields\Internal\Support\Validation;
 use CoreX\CustomFields\Internal\Value;
 use CoreX\Data\Data\DataScope;
 use InvalidArgumentException;
+use Packman\Attributes\Internal;
 use RuntimeException;
 
+#[Internal]
 final readonly class CompositeFieldCatalogue implements FieldCatalogue
 {
     /** @param array<string, FieldCatalogue> $sources Ordered from lower to higher precedence. */

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Features\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Data\Data\JsonDocument;
 use CoreX\Data\Laravel\JsonDocuments;
+use Packman\Attributes\Api;
 
 /**
  * ModuleManifest-declared feature-flag default. `FeatureFlags::define()` is

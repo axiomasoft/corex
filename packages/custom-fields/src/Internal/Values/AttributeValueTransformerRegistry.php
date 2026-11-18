@@ -7,8 +7,10 @@ namespace CoreX\CustomFields\Internal\Values;
 use Closure;
 use InvalidArgumentException;
 use JsonException;
+use Packman\Attributes\Internal;
 use RuntimeException;
 
+#[Internal]
 final readonly class AttributeValueTransformerRegistry
 {
     /**

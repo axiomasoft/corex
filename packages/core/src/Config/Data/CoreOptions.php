@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Config\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Audit\Contracts\AuditRetention;
 use CoreX\Context\Contracts\ImpersonationService;
@@ -15,6 +14,7 @@ use CoreX\Departments\Contracts\DepartmentRepository;
 use CoreX\Features\Contracts\FeatureFlags;
 use CoreX\Messaging\Enums\PubSubDriver;
 use CoreX\Settings\Contracts\SettingsRepository;
+use Packman\Attributes\Api;
 use Packman\Settings\Contracts\SettingDefaultsProviderInterface as SettingDefaultsProvider;
 
 #[Api(since: '1.0')]

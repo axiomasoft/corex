@@ -7,8 +7,10 @@ namespace CoreX\Webhooks\Internal\Commands;
 use CoreX\Data\Data\DataScope;
 use CoreX\Webhooks\Internal\WebhookRetention;
 use Illuminate\Console\Command;
+use Packman\Attributes\Internal;
 
 /** @internal Bounded retention for an already restored trusted tenant scope. */
+#[Internal]
 final class PruneWebhooks extends Command
 {
     protected $signature = 'corex:webhooks:prune {--max=100 : Maximum rows in this pass}';

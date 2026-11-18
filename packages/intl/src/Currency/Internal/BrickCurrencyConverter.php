@@ -11,7 +11,9 @@ use CoreX\Intl\Currency\Exceptions\InvalidRateException;
 use CoreX\Intl\Currency\Laravel\ConversionPolicy;
 use CoreX\Intl\Currency\Laravel\ConversionReceipt;
 use Override;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class BrickCurrencyConverter implements CurrencyConverter
 {
     #[Override]

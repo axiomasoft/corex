@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
 use InvalidArgumentException;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class ApiSchemaConnections
@@ -96,6 +96,6 @@ final readonly class ApiSchemaConnections
             throw new InvalidArgumentException(sprintf('The corex-operations.schema.%s connection, driver and database must be non-empty strings.', $scope));
         }
 
-        return compact('connection', 'driver', 'database');
+        return ['connection' => $connection, 'driver' => $driver, 'database' => $database];
     }
 }

@@ -1,0 +1,39 @@
+{
+    "schema": "packman-error-codes/1",
+    "package": "axiomasoft/corex-tasks",
+    "codes": [
+        {
+            "package": "axiomasoft/corex-tasks",
+            "enum": "CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode",
+            "case": "InvalidPlanningDraft",
+            "code": "tasks.invalid_planning_draft",
+            "type": "urn:packman:problem:tasks.invalid_planning_draft",
+            "status": 422,
+            "title": "Invalid planning draft.",
+            "retryable": false,
+            "category": "validation"
+        },
+        {
+            "package": "axiomasoft/corex-tasks",
+            "enum": "CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode",
+            "case": "PlanningConflict",
+            "code": "tasks.planning_conflict",
+            "type": "urn:packman:problem:tasks.planning_conflict",
+            "status": 409,
+            "title": "Planning conflict.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex-tasks",
+            "enum": "CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode",
+            "case": "TasksModuleDisabled",
+            "code": "tasks.tasks_module_disabled",
+            "type": "urn:packman:problem:tasks.tasks_module_disabled",
+            "status": 503,
+            "title": "Tasks module disabled.",
+            "retryable": false,
+            "category": "unavailable"
+        }
+    ]
+}

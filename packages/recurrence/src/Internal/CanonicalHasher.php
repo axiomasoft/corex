@@ -7,7 +7,9 @@ namespace CoreX\Recurrence\Internal;
 use CoreX\Recurrence\Data\DateStart;
 use CoreX\Recurrence\Data\RecurrenceOverride;
 use CoreX\Recurrence\Data\RecurrenceWindow;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final class CanonicalHasher
 {
     /**

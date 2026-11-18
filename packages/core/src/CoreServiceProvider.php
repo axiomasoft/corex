@@ -4,25 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
-use CoreX\Audit\Internal\PruneAuditLog;
 use CoreX\Audit\Laravel\AuditRegistrar;
-use CoreX\Config\Internal\Commands\ValidateConfigCommand;
 use CoreX\Config\Laravel\ConfigRegistrar;
 use CoreX\Context\Laravel\ContextRegistrar;
 use CoreX\Data\Laravel\DataRegistrar;
 use CoreX\Database\Laravel\DatabaseRegistrar;
 use CoreX\Departments\Laravel\DepartmentsRegistrar;
 use CoreX\Errors\Internal\PackageProblemDefinitions;
-use CoreX\Errors\Laravel\ErrorsRegistrar;
-use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Features\Laravel\FeaturesRegistrar;
+use CoreX\Foundation\Laravel\ConsoleRegistrar;
 use CoreX\Foundation\Laravel\PackmanRegistrar;
-use CoreX\Messaging\Internal\Commands\PruneOutboxMessages;
-use CoreX\Messaging\Internal\Commands\RelayOutbox;
-use CoreX\Messaging\Internal\Commands\ShowDeliveryHealth;
-use CoreX\Messaging\Internal\PrunePubSubMessages;
 use CoreX\Messaging\Laravel\MessagingRegistrar;
 use CoreX\Observability\Laravel\ObservabilityRegistrar;
 use CoreX\Settings\Laravel\SettingsRegistrar;
@@ -30,6 +21,10 @@ use CoreX\Storage\Laravel\StorageRegistrar;
 use CoreX\Time\Laravel\TimeRegistrar;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Errors\Laravel\ProblemDefinitions;
+use Packman\Foundation\Concerns\RegistersPackageRegistrars;
 use Packman\Foundation\Contracts\PackageRegistrar;
 use Packman\Modules\ModulesServiceProvider;
 use Packman\PackmanServiceProvider;
@@ -38,9 +33,10 @@ use Packman\Schema\Laravel\SchemaServiceProvider;
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class CoreServiceProvider extends ServiceProvider
 {
+    use RegistersPackageRegistrars;
+
     /** @var list<class-string<PackageRegistrar>> */
-    private const array REGISTRARS = [
-        ErrorsRegistrar::class,
+    protected const array REGISTRARS = [
         ObservabilityRegistrar::class,
         ConfigRegistrar::class,
         ContextRegistrar::class,
@@ -54,6 +50,7 @@ final class CoreServiceProvider extends ServiceProvider
         StorageRegistrar::class,
         TimeRegistrar::class,
         PackmanRegistrar::class,
+        ConsoleRegistrar::class,
     ];
 
     #[Override]
@@ -63,9 +60,7 @@ final class CoreServiceProvider extends ServiceProvider
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex.php', 'corex');
 
-        foreach (self::REGISTRARS as $registrar) {
-            (new $registrar)->register($this->app);
-        }
+        $this->registerPackageRegistrars();
 
         $this->app->register(PackmanServiceProvider::class);
         $this->app->register(SchemaServiceProvider::class);
@@ -76,20 +71,7 @@ final class CoreServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        foreach (self::REGISTRARS as $registrar) {
-            (new $registrar)->boot($this->app);
-        }
-
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                PruneAuditLog::class,
-                PrunePubSubMessages::class,
-                PruneOutboxMessages::class,
-                RelayOutbox::class,
-                ShowDeliveryHealth::class,
-                ValidateConfigCommand::class,
-            ]);
-        }
+        $this->bootPackageRegistrars();
 
         $this->publishes([
             __DIR__.'/../config/corex.php' => config_path('corex.php'),

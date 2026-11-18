@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Impersonation\Data;
 
-use CoreX\Attributes\Api;
 use CoreX\Tenancy\Impersonation\Enums\ImpersonationProfile;
 use DateTimeImmutable;
+use Packman\Attributes\Api;
 
 #[Api(since: '1.0')]
 final readonly class GrantClaim

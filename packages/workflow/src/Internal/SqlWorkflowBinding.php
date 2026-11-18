@@ -17,11 +17,13 @@ use CoreX\Workflow\Data\TriggerRequest;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Compiler\ExtensionStamp;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 
+#[Internal]
 final readonly class SqlWorkflowBinding implements WorkflowBinding
 {
     public function __construct(

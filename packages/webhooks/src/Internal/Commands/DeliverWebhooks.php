@@ -7,8 +7,10 @@ namespace CoreX\Webhooks\Internal\Commands;
 use CoreX\Data\Data\DataScope;
 use CoreX\Webhooks\Internal\WebhookDeliveryWorker;
 use Illuminate\Console\Command;
+use Packman\Attributes\Internal;
 
 /** @internal Runs a bounded delivery loop for the already restored tenant. */
+#[Internal]
 final class DeliverWebhooks extends Command
 {
     protected $signature = 'corex:webhooks:deliver

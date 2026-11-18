@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Exceptions;
 
-use CoreX\Attributes\Api;
 use CoreX\CustomFields\Errors\Enums\CustomFieldsErrorCode;
-use CoreX\Errors\Data\ErrorDescriptor;
-use CoreX\Errors\Enums\ErrorCategory;
-use CoreX\Errors\Exceptions\CodedException;
+use Packman\Attributes\Api;
+use Packman\Errors\Data\ErrorDescriptor;
+use Packman\Errors\Enums\ErrorCategory;
+use Packman\Errors\Exceptions\CodedException;
 
 #[Api(since: '1.0')]
 final class InvalidAttributeTables extends CodedException

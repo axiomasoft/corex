@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Data\Laravel;
 
-use CoreX\Attributes\Spi;
-use CoreX\Attributes\SpiKind;
 use CoreX\Config\Data\CoreOptions;
-use CoreX\Config\Laravel\ConfiguredImplementation;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
+use Packman\Config\Laravel\ConfiguredImplementation;
 use Packman\Foundation\Contracts\PackageRegistrar;
 
 /** Composition of the kernel module; the public provider delegates here. */

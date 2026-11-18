@@ -10,9 +10,11 @@ use CoreX\Tenancy\Impersonation\Data\GrantClaim;
 use DateTimeImmutable;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Query\Builder;
+use Packman\Attributes\Internal;
 use RuntimeException;
 
 /** @internal */
+#[Internal]
 final readonly class DatabaseImpersonationGrantStore implements ImpersonationGrantStore
 {
     public function __construct(private ConnectionResolverInterface $connections, private string $centralConnection) {}

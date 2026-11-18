@@ -15,6 +15,7 @@ use CoreX\Tenancy\Runtime\Events\TenantContextInitialized;
 use CoreX\Tenancy\Runtime\Exceptions\TenantContextUnavailable;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Events\Dispatcher;
+use Packman\Attributes\Internal;
 use Tenant\Contracts\Runtime\TenantRuntime;
 use Tenant\Data\Context\Purpose;
 use Tenant\Data\Context\Selection;
@@ -22,6 +23,7 @@ use Tenant\Data\Runtime\FrameToken;
 use Throwable;
 
 /** @internal Platform projection only: Tenant owns transition, restoration and poison semantics. */
+#[Internal]
 final class TenantRuntimeManager implements TenancyManager
 {
     private ?FrameToken $frame = null;

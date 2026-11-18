@@ -15,8 +15,10 @@ use CoreX\Tenancy\DomainTrust\Data\IssuedDomainChallenge;
 use CoreX\Tenancy\DomainTrust\Enums\DomainTrustOperation;
 use CoreX\Tenancy\DomainTrust\Exceptions\DomainTrustDenied;
 use DateInterval;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
+#[Internal]
 final readonly class DomainTrustCoordinator
 {
     public function __construct(

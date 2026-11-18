@@ -2,23 +2,22 @@
 
 declare(strict_types=1);
 
-use CoreX\Errors\Contracts\ProblemDefinitionProvider;
-use CoreX\Errors\Contracts\ProblemRegistry;
-use CoreX\Errors\Data\ErrorDescriptor;
-use CoreX\Errors\Data\ProblemDefinition;
 use CoreX\Errors\Enums\CoreErrorCode;
-use CoreX\Errors\Enums\ErrorCategory;
-use CoreX\Errors\Exceptions\ProblemRegistryException;
-use CoreX\Errors\Internal\CompiledProblemRegistry;
 use CoreX\Errors\Internal\PackageProblemDefinitions;
-use CoreX\Errors\Internal\ProblemContribution;
-use CoreX\Errors\Laravel\ProblemDefinitions;
+use CoreX\Testing\ProblemRegistryFixture;
+use Packman\Errors\Contracts\ProblemDefinitionProvider;
+use Packman\Errors\Contracts\ProblemRegistry;
+use Packman\Errors\Data\ErrorDescriptor;
+use Packman\Errors\Data\ProblemDefinition;
+use Packman\Errors\Enums\ErrorCategory;
+use Packman\Errors\Exceptions\ProblemRegistryException;
+use Packman\Errors\Laravel\ProblemDefinitions;
 
 test('ProblemRegistry boots with the isolated kernel and freezes its catalogue', function (): void {
     $registry = resolve(ProblemRegistry::class);
-    expect($registry->get(CoreErrorCode::InternalError)->type)->toBe('urn:corex:problem:core.internal_error')
+    expect($registry->get(CoreErrorCode::InternalError)->type)->toBe('urn:packman:problem:core.internal_error')
         ->and($registry)->toBe(resolve(ProblemRegistry::class))
-        ->and(array_filter($registry->all(), static fn (ProblemDefinition $row): bool => ! str_starts_with($row->code->value(), 'core.')))->toBe([]);
+        ->and($registry->get(Packman\Errors\Enums\CoreErrorCode::InternalError)->type)->toBe('urn:packman:problem:packman.internal_error');
     ProblemDefinitions::register($this->app, dirname(__DIR__, 2).'/composer.json', PackageProblemDefinitions::class);
     expect(fn () => ProblemDefinitions::register($this->app, dirname(__DIR__, 2).'/composer.json', 'CoreX\\Errors\\Internal\\LateProvider'))
         ->toThrow(ProblemRegistryException::class, 'ERROR-REGISTRY-FROZEN');
@@ -36,20 +35,20 @@ test('ProblemRegistry rejects invalid boot contributions with typed diagnostics'
     };
 
     try {
-        new CompiledProblemRegistry([new ProblemContribution($owner, $provider)]);
+        ProblemRegistryFixture::compile($owner, $provider);
         $this->fail('Invalid boot contribution was accepted.');
     } catch (ProblemRegistryException $error) {
         expect($error->getMessage())->toStartWith($failure)
             ->and($error->errorDescriptor()->category)->toBe(ErrorCategory::Internal)
-            ->and($error->errorDescriptor()->code)->toStartWith('core.');
+            ->and($error->errorDescriptor()->code)->toStartWith('packman.');
     }
 })->with(function (): array {
-    $valid = new ProblemDefinition(CoreErrorCode::InternalError, 'urn:corex:problem:core.internal_error', 500, 'Safe failure.', false, ErrorCategory::Internal);
+    $valid = new ProblemDefinition(CoreErrorCode::InternalError, 'urn:packman:problem:core.internal_error', 500, 'Safe failure.', false, ErrorCategory::Internal);
 
     return [
         'duplicate code' => ['ERROR-DUPLICATE-CODE', [$valid, $valid], 'core'],
         'foreign prefix' => ['ERROR-FOREIGN-PREFIX', [$valid], 'foreign'],
-        'duplicate URI' => ['ERROR-DUPLICATE-TYPE', [$valid, new ProblemDefinition(CoreErrorCode::UnknownCode, $valid->type, 500, 'Safe failure.', false, ErrorCategory::Internal)], 'core'],
+        'duplicate URI' => ['ERROR-DUPLICATE-TYPE', [$valid, new ProblemDefinition(CoreErrorCode::OutboxRefused, $valid->type, 500, 'Safe failure.', false, ErrorCategory::Internal)], 'core'],
         'invalid status' => ['ERROR-INVALID-STATUS', [new ProblemDefinition(CoreErrorCode::InternalError, $valid->type, 200, 'Safe failure.', false, ErrorCategory::Internal)], 'core'],
         'invalid URI' => ['ERROR-INVALID-DEFINITION', [new ProblemDefinition(CoreErrorCode::InternalError, 'relative', 500, 'Safe failure.', false, ErrorCategory::Internal)], 'core'],
     ];

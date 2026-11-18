@@ -13,9 +13,11 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 /** @internal Mandatory package admission; consumer adapters can only narrow it. */
+#[Internal]
 final readonly class ContextGuard
 {
     public function __construct(

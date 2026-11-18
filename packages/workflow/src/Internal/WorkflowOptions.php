@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Workflow\Internal;
 
-use CoreX\Config\Laravel\ConfigurationValidator;
+use Packman\Attributes\Internal;
+use Packman\Config\Laravel\ConfigurationValidator;
 
 /** @internal Package composition type: read only by the provider and runtime checks. */
+#[Internal]
 final readonly class WorkflowOptions
 {
     public function __construct(

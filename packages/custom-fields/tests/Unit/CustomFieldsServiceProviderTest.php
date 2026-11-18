@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Tests\Unit;
 
-use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\CoreServiceProvider;
 use CoreX\CustomFields\Contracts\AttributeFilter;
 use CoreX\CustomFields\Contracts\AttributeStore;
@@ -21,6 +20,7 @@ use CoreX\Data\Internal\DenyDataScopeAuthorizer;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use Orchestra\Testbench\TestCase;
 use Override;
+use Packman\Config\Exceptions\InvalidConfiguration;
 
 final class CustomFieldsServiceProviderTest extends TestCase
 {

@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace CoreX\Operations\Definition\Internal;
 
 use JsonException;
+use Packman\Attributes\Internal;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Exceptions\Compiler\CompilationException;
 
 /** @internal Validates serializable declarations without depending on an API runtime. */
+#[Internal]
 final class ApiOperationValidator
 {
     public static function validate(Api $api): void

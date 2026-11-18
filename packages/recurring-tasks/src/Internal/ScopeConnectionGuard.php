@@ -7,7 +7,9 @@ namespace CoreX\RecurringTasks\Internal;
 use CoreX\Data\Data\DataScope;
 use CoreX\RecurringTasks\Exceptions\UnsupportedMaterialization;
 use Illuminate\Database\Connection;
+use Packman\Attributes\Internal;
 
+#[Internal]
 final readonly class ScopeConnectionGuard
 {
     public function __construct(private Connection $connection) {}

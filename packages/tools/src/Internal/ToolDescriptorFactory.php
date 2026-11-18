@@ -8,8 +8,10 @@ use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
 use CoreX\Tools\Data\ToolDescriptor;
 use LogicException;
+use Packman\Attributes\Internal;
 use Packman\Modules\Data\Extenders\Api;
 
+#[Internal]
 final class ToolDescriptorFactory
 {
     public static function fromDeclaration(Api $api): ToolDescriptor

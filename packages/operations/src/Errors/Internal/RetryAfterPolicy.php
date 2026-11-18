@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Errors\Internal;
 
+use Packman\Attributes\Internal;
+
 /** @internal Closed duration names. A retryable flag is not a duration. */
+#[Internal]
 final class RetryAfterPolicy
 {
     public const string RATE_LIMIT = 'rate_limit';

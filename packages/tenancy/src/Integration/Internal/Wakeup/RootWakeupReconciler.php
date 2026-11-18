@@ -14,6 +14,7 @@ use DateTimeImmutable;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Query\Builder;
+use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 use Throwable;
@@ -24,6 +25,7 @@ use Throwable;
  * Claims one root hint at a time and invokes the existing tenant-local
  * sweeper through TenancyManager. It never constructs a tenant DSN itself.
  */
+#[Internal]
 final readonly class RootWakeupReconciler
 {
     public function __construct(

@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Membership\Internal\Transport;
 
 use CoreX\Tenancy\Membership\Exceptions\CentralUnauthorized;
+use Packman\Attributes\Internal;
 use stdClass;
 
 /** @internal Local RFC9068/RFC8705 claim cross-check; not AS qualification. */
+#[Internal]
 final readonly class AccessTokenValidator
 {
     public function __construct(private JwsVerifier $verifier) {}
