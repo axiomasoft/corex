@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0ffe5822ba402c440ce64d5128f9d0ed",
+    "content-hash": "fee3a1e833d2fbbcc5bccc66193b4a27",
     "packages": [
         {
             "name": "axiomasoft/corex",
@@ -1699,7 +1699,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "aad1d32b2e4bbbced293d916578cf4e51c8e3e26"
+                "reference": "dcae633b636f25bd2ca1a6e35a0120ebdf8677a1"
             },
             "require": {
                 "php": "^8.4",
@@ -1772,7 +1772,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "aad1d32b2e4bbbced293d916578cf4e51c8e3e26"
+                "reference": "dcae633b636f25bd2ca1a6e35a0120ebdf8677a1"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -1822,7 +1822,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "aad1d32b2e4bbbced293d916578cf4e51c8e3e26"
+                "reference": "dcae633b636f25bd2ca1a6e35a0120ebdf8677a1"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -1867,7 +1867,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "aad1d32b2e4bbbced293d916578cf4e51c8e3e26"
+                "reference": "dcae633b636f25bd2ca1a6e35a0120ebdf8677a1"
             },
             "require": {
                 "axiomasoft/packman": "^0.1.1",
@@ -1913,7 +1913,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "aad1d32b2e4bbbced293d916578cf4e51c8e3e26"
+                "reference": "dcae633b636f25bd2ca1a6e35a0120ebdf8677a1"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -2001,7 +2001,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/vaulter.git",
-                "reference": "fc217f9e517720fa40cb8fa2fdf6c77a1ee6b775"
+                "reference": "dcbc761fca527af074f6d75f4ce0e32d0629cfe3"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -2111,7 +2111,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/vaulter.git",
-                "reference": "fc217f9e517720fa40cb8fa2fdf6c77a1ee6b775"
+                "reference": "dcbc761fca527af074f6d75f4ce0e32d0629cfe3"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -9421,7 +9421,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "aad1d32b2e4bbbced293d916578cf4e51c8e3e26"
+                "reference": "dcae633b636f25bd2ca1a6e35a0120ebdf8677a1"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -9469,7 +9469,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "aad1d32b2e4bbbced293d916578cf4e51c8e3e26"
+                "reference": "dcae633b636f25bd2ca1a6e35a0120ebdf8677a1"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
