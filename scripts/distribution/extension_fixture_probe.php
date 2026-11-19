@@ -5,8 +5,6 @@ declare(strict_types=1);
 use CoreX\Search\Internal\SearchManager;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
-use Packman\Attributes\Api;
-use Packman\Attributes\Spi;
 use Packman\Modules\Data\Compiler\InstalledPackageVersion;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 use Packman\Modules\Testing\ExtensionContract;
@@ -114,17 +112,15 @@ function allowedSymbols(string $vendor): array
         $install = $package['install-path'] ?? '';
         assert(is_string($install));
         $root = $vendor.'/composer/'.$install;
-        foreach (phpFiles($root) as $file) {
-            foreach (declaredSymbols($file) as $symbol) {
-                if (! (class_exists($symbol) || interface_exists($symbol) || trait_exists($symbol) || enum_exists($symbol))) {
-                    continue;
-                }
-                $reflection = new ReflectionClass($symbol);
+        $manifest = json_decode((string) file_get_contents($root.'/resources/contracts/php-api.json'), true, flags: JSON_THROW_ON_ERROR);
 
-                if ($reflection->getAttributes(Api::class) !== []
-                    || $reflection->getAttributes(Spi::class) !== []) {
-                    $queue[] = $symbol;
-                }
+        if (($manifest['schema'] ?? null) !== 'php-api/1' || ($manifest['package'] ?? null) !== $package['name'] || ! is_array($manifest['symbols'] ?? null)) {
+            fail('public-import', ['invalid public API manifest for '.$package['name']]);
+        }
+
+        foreach ($manifest['symbols'] as $symbol => $metadata) {
+            if (in_array($metadata['layer'] ?? null, ['api', 'spi'], true)) {
+                $queue[] = $symbol;
             }
         }
     }
@@ -296,28 +292,6 @@ function importedSymbols(string $file): array
     }
 
     return $uses;
-}
-
-/** @return list<string> */
-function declaredSymbols(string $file): array
-{
-    $code = (string) file_get_contents($file);
-
-    if (preg_match('/^namespace\s+([A-Za-z0-9_\\\\]+);/m', $code, $namespace) !== 1) {
-        return [];
-    }
-
-    if (preg_match_all('/^(?:final\s+|abstract\s+|readonly\s+)*(?:class|interface|trait|enum)\s+([A-Za-z0-9_]+)/m', $code, $matches) < 1) {
-        return [];
-    }
-
-    return array_map(static fn (string $name): string => $namespace[1].'\\'.$name, $matches[1]);
-}
-
-/** @param  list<string>  $prefixes */
-function covered(string $symbol, array $prefixes): bool
-{
-    return array_any($prefixes, fn ($prefix) => $symbol === $prefix || str_starts_with($symbol, $prefix.'\\'));
 }
 
 /** @return list<string> */
