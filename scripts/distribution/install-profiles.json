@@ -16,6 +16,7 @@
       "id": "modular-single",
       "packages": [
         "axiomasoft/corex",
+        "axiomasoft/corex-access",
         "axiomasoft/corex-custom-fields",
         "axiomasoft/corex-search",
         "axiomasoft/corex-import-export",

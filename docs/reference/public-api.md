@@ -78,6 +78,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Invocation\Contracts\OperationHandler` | spi-implement | 1.0 |
 | `CoreX\Invocation\Contracts\RequestContext` | spi-implement | 1.0 |
 | `CoreX\Invocation\Data\InvocationMetadata` | api | 1.0 |
+| `CoreX\Invocation\OperationDefinitionValidator` | spi-call | 1.0 |
 | `CoreX\Messaging\Contracts\Cancellable` | spi-implement | 1.0 |
 | `CoreX\Messaging\Contracts\CloudEventCodec` | api | 1.0 |
 | `CoreX\Messaging\Contracts\DurableMessagePublisher` | spi-implement | 1.0 |
@@ -174,19 +175,10 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Access\Matrix\Laravel\MatrixPortBindings` | spi-call | 1.0 |
 | `CoreX\Access\Roles\Data\RoleMatrixEntry` | api | 1.0 |
 | `CoreX\Access\Roles\Data\RoleView` | api | 1.0 |
+| `CoreX\Access\Roles\DirectGrants` | api | 1.0 |
 | `CoreX\Access\Roles\Laravel\RoleMatrixData` | spi-call | 1.0 |
 | `CoreX\Access\Roles\Laravel\SystemRoleImmutable` | spi-call | 1.0 |
-
-## axiomasoft/corex-access-azguard
-
-[Member manifest](../../packages/access-azguard/resources/contracts/php-api.json)
-
-| Symbol | Layer | Since |
-|:--|:--|:--|
-| `CoreX\AccessAzguard\AccessAzguardRegistrar` | spi-call | 1.0 |
-| `CoreX\AccessAzguard\AccessAzguardServiceProvider` | spi-call | 1.0 |
-| `CoreX\AccessAzguard\Contracts\AccessContextMapper` | spi-implement | 1.0 |
-| `CoreX\AccessAzguard\Exceptions\ScopeProjectionNotSupported` | api | 1.0 |
+| `CoreX\Access\Roles\RoleManager` | api | 1.0 |
 
 ## axiomasoft/corex-custom-fields
 

@@ -11,25 +11,22 @@ it('rejects suppressed debt, incomplete analysis scopes and nonzero completed ce
     $files = new Filesystem;
 
     try {
-        foreach (['scripts/quality', 'tests/Support', 'tests/Golden', 'tests/fixtures/extension-contract', 'packages/core/src', 'packages/core/database/migrations/tenant', 'packages/access-azguard/src', 'packages/access-azguard/database/migrations/tenant'] as $dir) {
+        foreach (['scripts/quality', 'tests/Support', 'tests/Golden', 'tests/fixtures/extension-contract', 'packages/core/src', 'packages/core/database/migrations/tenant', 'packages/access/src', 'packages/access/database/migrations/tenant'] as $dir) {
             $files->makeDirectory($fixture.'/'.$dir, 0755, true);
         }
         $files->put($fixture.'/tests/fixtures/extension-contract/fixture-adapter.php', '<?php');
         $files->copy($root.'/phpstan-extensions.neon', $fixture.'/phpstan-extensions.neon');
-        foreach (['.', 'packages/core', 'packages/access-azguard'] as $dir) {
+        foreach (['.', 'packages/core', 'packages/access'] as $dir) {
             $config = file_get_contents($root.'/'.$dir.'/phpstan.neon');
 
-            if ($dir === 'packages/access-azguard') {
-                $config = str_replace('        - src', "        - src\n        - database/migrations", $config);
-            }
             $files->put($fixture.'/'.$dir.'/phpstan.neon', $config);
 
             if (str_contains($config, '    - phpstan-baseline.neon')) {
                 $files->put($fixture.'/'.$dir.'/phpstan-baseline.neon', "parameters:\n    ignoreErrors: []\n");
             }
         }
-        $files->put($fixture.'/scripts/quality-ceilings.json', json_encode(['phpstan' => ['root' => 0, 'core' => 0, 'access-azguard' => 0, 'access' => 30]], JSON_THROW_ON_ERROR));
-        $files->put($fixture.'/scripts/schema-sets.json', json_encode(['sets' => [['path' => 'packages/core/database/migrations/tenant'], ['path' => 'packages/access-azguard/database/migrations/tenant']]], JSON_THROW_ON_ERROR));
+        $files->put($fixture.'/scripts/quality-ceilings.json', json_encode(['phpstan' => ['root' => 0, 'core' => 0, 'access' => 0, 'tenancy' => 30]], JSON_THROW_ON_ERROR));
+        $files->put($fixture.'/scripts/schema-sets.json', json_encode(['sets' => [['path' => 'packages/core/database/migrations/tenant'], ['path' => 'packages/access/database/migrations/tenant']]], JSON_THROW_ON_ERROR));
         // The package config includes this additional existing support path.
         $files->makeDirectory($fixture.'/packages/core/tests/Support', 0755, true);
         $files->put($fixture.'/packages/core/tests/Support/CoreXTestCase.php', '<?php');
@@ -59,7 +56,7 @@ it('rejects suppressed debt, incomplete analysis scopes and nonzero completed ce
         $files->put($fixture.'/packages/core/phpstan-baseline.neon', "parameters:\n    ignoreErrors:\n        - '#ignored#'\n");
         expect($run()->getExitCode())->toBe(1);
         $files->put($fixture.'/packages/core/phpstan-baseline.neon', "parameters:\n    ignoreErrors: []\n");
-        $files->put($fixture.'/scripts/quality-ceilings.json', json_encode(['phpstan' => ['root' => 0, 'core' => 1, 'access-azguard' => 0]], JSON_THROW_ON_ERROR));
+        $files->put($fixture.'/scripts/quality-ceilings.json', json_encode(['phpstan' => ['root' => 0, 'core' => 1, 'access' => 0]], JSON_THROW_ON_ERROR));
         expect($run()->getExitCode())->toBe(1)
             ->and($run()->getErrorOutput())->toContain('core: ceiling must be zero');
     } finally {
@@ -71,7 +68,7 @@ it('admits schema-free security packages while retaining every source and migrat
     $root = dirname(__DIR__, 2);
     $fixture = sys_get_temp_dir().'/corex-security-quality-'.bin2hex(random_bytes(8));
     $files = new Filesystem;
-    $packages = ['core', 'access-azguard', 'access', 'tenancy', 'operations', 'tools', 'webhooks'];
+    $packages = ['core', 'access', 'tenancy', 'operations', 'tools', 'webhooks'];
 
     try {
         foreach (['scripts/quality', 'tests/Support', 'tests/Golden'] as $dir) {

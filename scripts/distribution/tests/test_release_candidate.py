@@ -30,7 +30,6 @@ class ReleaseCandidateTest(unittest.TestCase):
         self.write('LICENSE', 'fixture license\n')
         self.write_package('alpha', 'axiomasoft/corex-alpha', {'axiomasoft/corex-beta': '@dev', 'vendor/exact': '1.2.3'})
         self.write_package('beta', 'axiomasoft/corex-beta', {})
-        self.write_package('access-azguard', 'axiomasoft/corex-access-azguard', {}, stability='unreleased')
         self.write_package('flex-crm', 'flex/crm', {'axiomasoft/corex-alpha': '@dev'}, package_type='product')
         self.git('add', '-A')
         self.git('commit', '-qm', 'fixture')
@@ -46,7 +45,6 @@ class ReleaseCandidateTest(unittest.TestCase):
             },
             'excluded': [
                 {'path': 'products/flex-crm', 'reason': 'flex-product-consumer'},
-                {'path': 'packages/access-azguard', 'reason': 'unreleased'},
             ],
         }
 

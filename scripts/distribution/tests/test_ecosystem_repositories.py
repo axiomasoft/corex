@@ -30,6 +30,19 @@ class EcosystemRepositoriesTest(unittest.TestCase):
         self.assertEqual(snapshot_repositories(ROOT), expected)
         self.assertNotIn(str(ROOT), json.dumps(snapshot_repositories(ROOT)))
 
+    def test_modular_host_requires_access_and_resolves_its_authorization_engine_from_the_reviewed_source(self):
+        profiles = json.loads((SCRIPTS / "install-profiles.json").read_text())["profiles"]
+        packages = next(row["packages"] for row in profiles if row["id"] == "modular-single")
+        access = json.loads((ROOT / "packages/access/composer.json").read_text())
+        self.assertIn(access["name"], packages)
+        self.assertNotIn("axiomasoft/azguard", packages)
+        self.assertIn("axiomasoft/azguard", access["require"])
+        source = next(r["package"]["source"] for r in snapshot_repositories(ROOT)
+                      if r["package"]["name"] == "axiomasoft/azguard")
+        lock = json.loads((ROOT / "composer.lock").read_text())
+        dependency = next(p for p in lock["packages"] + lock["packages-dev"] if p["name"] == "axiomasoft/azguard")
+        self.assertEqual(dependency["source"], source)
+
     def test_rejects_local_or_unpinned_sources_and_candidate_shadowing(self):
         template = snapshot_repositories(ROOT)[0]
         for source, name in [

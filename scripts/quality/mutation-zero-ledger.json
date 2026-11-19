@@ -1,13 +1,17 @@
 {
   "confirmation": null,
   "files": {
-    "packages/access-azguard/src/Contracts/AccessContextMapper.php": {
+    "packages/access/src/Access/Internal/MatrixCell.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "3bc55393e70c7f766fde5c3b7e257ba2111ffd410db7a5befaa90f6d8d118dde"
+      "sha256": "2599517c7e032a9a4b8dad0db892221475fb429e5784155f32f1f18975fcd885"
+    },
+    "packages/access/src/Access/Internal/MatrixPermission.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "96a88df34b727eb9dd2ea4cf15d90223ca1e321fba3abc1aa0a3b2d84694b044"
     },
     "packages/access/src/Contracts/AccessChecker.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "66eafa7a076198d9db7a215c3ffaa2f8b8372a0e426f96d82f30e095b3dae1c5"
+      "sha256": "899db5062b12e669ad898b06c8ebe9d1eba01d353fb3217d3f65209e6f13c101"
     },
     "packages/access/src/Contracts/RoleMatrixCompiler.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -15,11 +19,11 @@
     },
     "packages/access/src/Data/RecordContext.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "3832e604f354be350c14537ff2097693000ce365214d865e65f70b857fb7df53"
+      "sha256": "f4b286fc073209265e737689a604dc00ccee3f70bb495d01f3950a18c740d807"
     },
     "packages/access/src/Laravel/ScopeResolver.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "3b461b9b076f483ddf5d25e0fef9c7f4010c6332baf1691f6232e72aa94d580a"
+      "sha256": "e0edaec26e7b4b4739d6c955858f2d1696ab073dbc73bce7f7907b8ba5e0c8c0"
     },
     "packages/access/src/Matrix/Contracts/EntityActivity.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -40,6 +44,10 @@
     "packages/access/src/Roles/Data/RoleView.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "cf26f8735cc8d534ba96b2fbcf4ff805ffcdadf0fb44b364f9600d6cef694bcf"
+    },
+    "packages/access/src/Roles/DirectGrants.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "e220b775314e7cc82ae3ad5f9b72e5c7ebc1c829ed43b6c4de34a0cb05246198"
     },
     "packages/core/src/Audit/Contracts/AuditLogger.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -1331,7 +1339,7 @@
     },
     "products/flex-crm/src/Context/Contracts/CrmExecutionContext.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "185aefab654e00d75243c8f50622dcb17dfab5c173512049ec4fd731d4764997"
+      "sha256": "0a6d00e32bb450027d5bef81df0a337dc7ccffde6dec8560abf33559f86e232b"
     },
     "products/flex-crm/src/Deal/Enums/DealStatus.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",

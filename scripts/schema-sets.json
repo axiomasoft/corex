@@ -3,7 +3,6 @@
         "axiomasoft/corex": "01",
         "axiomasoft/corex-tenancy": "02",
         "axiomasoft/corex-access": "03",
-        "axiomasoft/corex-access-azguard": "04",
         "axiomasoft/corex-operations": "05",
         "axiomasoft/corex-webhooks": "06",
         "axiomasoft/corex-panels": "07",

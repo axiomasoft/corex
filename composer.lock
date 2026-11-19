@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "65b6ddb63ad26c5a61fb34c334d9f293",
+    "content-hash": "e2062e14b4273f01f86c378da1ed87b4",
     "packages": [
         {
             "name": "axiomasoft/corex",
@@ -1699,7 +1699,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "976eac386e0159f11ca20881283d7cccd649487f"
+                "reference": "dce317211459a9d04c60cd1df735d53687e47e26"
             },
             "require": {
                 "php": "^8.4",
@@ -1772,7 +1772,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "976eac386e0159f11ca20881283d7cccd649487f"
+                "reference": "dce317211459a9d04c60cd1df735d53687e47e26"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -1822,7 +1822,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "976eac386e0159f11ca20881283d7cccd649487f"
+                "reference": "dce317211459a9d04c60cd1df735d53687e47e26"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -1867,7 +1867,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "976eac386e0159f11ca20881283d7cccd649487f"
+                "reference": "dce317211459a9d04c60cd1df735d53687e47e26"
             },
             "require": {
                 "axiomasoft/packman": "^0.1.1",
@@ -1913,7 +1913,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "976eac386e0159f11ca20881283d7cccd649487f"
+                "reference": "dce317211459a9d04c60cd1df735d53687e47e26"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -2832,13 +2832,13 @@
             "dist": {
                 "type": "path",
                 "url": "products/flex-crm",
-                "reference": "47f457382713ba2ce3fc5a97b3449c5021d45972"
+                "reference": "b88eacd97f7635acbee2385687116ddce19f5291"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/corex-intl": "^1.0@dev",
                 "axiomasoft/packman": "^0.1",
-                "axiomasoft/packman-modules": "^0.1.1",
+                "axiomasoft/packman-modules": "^0.1.2",
                 "axiomasoft/packman-schema": "^0.1",
                 "brick/money": "^0.9 || ^0.10",
                 "ext-filter": "*",
@@ -8963,9 +8963,10 @@
             "dist": {
                 "type": "path",
                 "url": "packages/access",
-                "reference": "532da2115bd3036be174e1876be3e8400ac1bfbc"
+                "reference": "38c32f3753ac1f060c22b56220e945c34b6d5898"
             },
             "require": {
+                "axiomasoft/azguard": "^2.0@dev",
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-modules": "^0.1.1",
@@ -9065,101 +9066,13 @@
                     "email": "dv.vostrikov@gmail.com"
                 }
             ],
-            "description": "CoreX native authorization, tenant-boundary access checks, role matrices and direct grants.",
+            "description": "CoreX authorization, record visibility, role matrices and direct grants on AzGuard.",
             "keywords": [
                 "authorization",
                 "laravel",
                 "multi-tenancy",
                 "rbac"
             ],
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "axiomasoft/corex-access-azguard",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "packages/access-azguard",
-                "reference": "0f4cacdce5ef2ec0d8c0a8d9b6f7def4ab4ecef4"
-            },
-            "require": {
-                "axiomasoft/azguard": "^2.0@dev",
-                "axiomasoft/corex": "^1.0@dev",
-                "axiomasoft/corex-access": "^1.0@dev",
-                "axiomasoft/packman": "^0.1",
-                "axiomasoft/packman-modules": "^0.1.1",
-                "illuminate/contracts": "^13.0",
-                "illuminate/database": "^13.0",
-                "illuminate/support": "^13.0",
-                "php": "^8.4"
-            },
-            "require-dev": {
-                "larastan/larastan": "^3.12",
-                "laravel/pint": "^1.32",
-                "mockery/mockery": "^1.6",
-                "orchestra/testbench": "^11.3",
-                "orchestra/testbench-core": "^11.5",
-                "pestphp/pest": "^5.2",
-                "symfony/process": "^7.2|^8.0"
-            },
-            "type": "library",
-            "extra": {
-                "corex": {
-                    "package-type": "integration",
-                    "stability": "unreleased",
-                    "schema-version": 1
-                },
-                "laravel": {
-                    "providers": [
-                        "CoreX\\AccessAzguard\\AccessAzguardServiceProvider"
-                    ]
-                },
-                "branch-alias": {
-                    "dev-main": "1.0.x-dev"
-                },
-                "packman": {
-                    "schema-version": 1,
-                    "package-type": "integration",
-                    "stability": "unreleased",
-                    "profile": "laravel-package",
-                    "error-prefix": "access-azguard",
-                    "owns": [
-                        "Contracts",
-                        "Exceptions",
-                        "Internal"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "CoreX\\AccessAzguard\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "CoreX\\AccessAzguard\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "../../vendor/bin/pest --test-directory=packages/access-azguard/tests --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg"
-                ],
-                "test:pg": [
-                    "../../vendor/bin/pest --test-directory=packages/access-azguard/tests --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=pg"
-                ],
-                "analyse": [
-                    "cd ../.. && vendor/bin/phpstan analyse -c packages/access-azguard/phpstan.neon --memory-limit=2G --no-progress"
-                ],
-                "lint:check": [
-                    "../../vendor/bin/pint --test"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "CoreX authorization and query visibility adapter for AzGuard 2.",
             "transport-options": {
                 "relative": true
             }
@@ -9421,7 +9334,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "976eac386e0159f11ca20881283d7cccd649487f"
+                "reference": "dce317211459a9d04c60cd1df735d53687e47e26"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -9469,7 +9382,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "976eac386e0159f11ca20881283d7cccd649487f"
+                "reference": "dce317211459a9d04c60cd1df735d53687e47e26"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -16744,7 +16657,6 @@
         "axiomasoft/azguard": 20,
         "axiomasoft/corex": 20,
         "axiomasoft/corex-access": 20,
-        "axiomasoft/corex-access-azguard": 20,
         "axiomasoft/corex-custom-fields": 20,
         "axiomasoft/corex-import-export": 20,
         "axiomasoft/corex-intl": 20,

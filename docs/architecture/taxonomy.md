@@ -75,7 +75,6 @@
 | Путь | Composer name | Composer type | Package type | Stability |
 |:--|:--|:--|:--|:--|
 | `packages/access` | axiomasoft/corex-access | library | capability | stable |
-| `packages/access-azguard` | axiomasoft/corex-access-azguard | library | integration | unreleased |
 | `packages/core` | axiomasoft/corex | library | foundation | stable |
 | `packages/custom-fields` | axiomasoft/corex-custom-fields | packman-module | capability | stable |
 | `packages/intl` | axiomasoft/corex-intl | packman-module | capability | stable |

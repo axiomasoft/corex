@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Flex\Crm\Context\Data;
 
 use CoreX\Context\Data\TenantContext;
-use Packman\Attributes\Internal;
+use Packman\Attributes\Api;
 
-#[Internal]
+#[Api(since: '1.0')]
 final readonly class ExecutionContext
 {
     public function __construct(

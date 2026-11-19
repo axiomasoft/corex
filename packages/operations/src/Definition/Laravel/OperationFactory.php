@@ -6,9 +6,9 @@ namespace CoreX\Operations\Definition\Laravel;
 
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Invocation\Contracts\OperationHandler;
+use CoreX\Invocation\OperationDefinitionValidator;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
-use CoreX\Operations\Definition\Internal\ApiOperationValidator;
 use CoreX\Operations\Definition\Internal\OperationContractHasher;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Invocation\Enums\InputEnvelope;
@@ -22,7 +22,7 @@ final class OperationFactory
 {
     public static function fromDeclaration(Api $api, string $registryFingerprint = ''): Operation
     {
-        ApiOperationValidator::validate($api);
+        OperationDefinitionValidator::validate($api);
 
         if ($api->declaringModule === null || ! is_string($api->handler) || ! is_a($api->handler, OperationHandler::class, true)) {
             throw new LogicException('API operation must have compiled ownership and implement OperationHandler.');

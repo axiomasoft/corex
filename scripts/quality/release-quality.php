@@ -89,10 +89,10 @@ function disablesRule(mixed $value): bool
 /** @return list<string> */
 function check(string $root, string $stage): array
 {
-    $cohort = ['root' => '.', 'core' => 'packages/core', 'access-azguard' => 'packages/access-azguard'];
+    $cohort = ['root' => '.', 'core' => 'packages/core', 'access' => 'packages/access'];
 
     if ($stage !== 'foundation') {
-        foreach (['access', 'tenancy', 'operations', 'tools', 'webhooks'] as $package) {
+        foreach (['tenancy', 'operations', 'tools', 'webhooks'] as $package) {
             $cohort[$package] = 'packages/'.$package;
         }
     }

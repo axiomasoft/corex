@@ -2,28 +2,67 @@
     "schema": "unused-public-entrypoints/1",
     "entries": [
         {
-            "symbol": "CoreX\\AccessAzguard\\AccessAzguardRegistrar::boot",
-            "source": "packages/access-azguard/src/AccessAzguardRegistrar.php",
-            "source_sha256": "f739fb2ee87079552741da5e7a158b4dd704ff5bda506ac6b66eb69feb054fe8",
+            "symbol": "CoreX\\Access\\Access\\Internal\\DirectGrantLookup::__construct",
+            "source": "packages/access/src/Access/Internal/DirectGrantLookup.php",
+            "source_sha256": "c37ddd80d6ac87e09fd2aab50e22721c4b81611c0b146f02d9e346d885bc6086",
             "kind": "framework",
-            "reason": "This concrete adapter implements PackageRegistrar, which requires the exact boot method even when that half of the lifecycle is empty. Its other lifecycle hook is explicitly composed by the owning provider.",
+            "reason": "MatrixPermissions receives the direct grant lookup through Laravel constructor injection.",
             "root": {
-                "path": "vendor/axiomasoft/packman/packages/core/src/Foundation/Contracts/PackageRegistrar.php",
-                "anchor": "public function boot(Application $app): void;",
-                "sha256": "86d27bd56d00131464fde6f2ba236ee51836776ec801419262ded9559d8101cd"
+                "path": "packages/access/src/Access/Internal/MatrixPermissions.php",
+                "anchor": "private readonly DirectGrantLookup $directGrants",
+                "sha256": "2f074701fec6f93f2ab748d2d407191f97b64f45038fac8e2d263212612f98a7"
             },
             "expires": null
         },
         {
-            "symbol": "CoreX\\Access\\Access\\Internal\\DirectGrantLookup::__construct",
-            "source": "packages/access/src/Access/Internal/DirectGrantLookup.php",
-            "source_sha256": "05f8be4a9ae24dd7129bcbb437aa22c7bf85913eae40deb9590dc8bebcb60648",
+            "symbol": "CoreX\\Access\\Access\\Internal\\MatrixPanel::panel",
+            "source": "packages/access/src/Access/Internal/MatrixPanel.php",
+            "source_sha256": "593c328476e8dc4fabbfd673ba300c418f5359b5967bb295a6b6d537ee149ae2",
             "kind": "framework",
-            "reason": "The registered DefaultAccessChecker receives this concrete grant lookup through constructor injection; no explicit new expression is required by Laravel's container.",
+            "reason": "AzGuard invokes the registered panel provider to assemble the CoreX policy and permission.",
             "root": {
-                "path": "packages/access/src/Access/Internal/DefaultAccessChecker.php",
-                "anchor": "private readonly DirectGrantLookup $directGrants",
-                "sha256": "509c7591664e66e2f9229cd4f01844023d9cf5be7b1f4899229214c79ffabdb6"
+                "path": "vendor/axiomasoft/azguard/packages/core/src/Panels/Internal/PanelRegistry.php",
+                "anchor": "$this->provider($providerClass)->panel($builder)",
+                "sha256": "fdba5f2f8d22e1353a663241a80b9cfc7647767fd61c6012434582777b6b4cac"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Access\\Access\\Internal\\MatrixPolicy::__construct",
+            "source": "packages/access/src/Access/Internal/MatrixPolicy.php",
+            "source_sha256": "2b60de5ade3d7de6f9b77a93ceb10f6b99402ded58d3b38b47e0124879855110",
+            "kind": "framework",
+            "reason": "AzGuard resolves the CoreX panel policy through the container before invoking its bound decision method.",
+            "root": {
+                "path": "vendor/axiomasoft/azguard/packages/core/src/Policies/Internal/PolicyDecider.php",
+                "anchor": "$policy = $this->container->make($class)",
+                "sha256": "245fd4eec12d3ba9d2682e9834227a942a2e98d270fef9703a9441d96a9e6fc3"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Access\\Access\\Internal\\MatrixPolicy::evaluate",
+            "source": "packages/access/src/Access/Internal/MatrixPolicy.php",
+            "source_sha256": "2b60de5ade3d7de6f9b77a93ceb10f6b99402ded58d3b38b47e0124879855110",
+            "kind": "framework",
+            "reason": "AzGuard invokes the decision callback selected from the policy registered by the CoreX matrix panel.",
+            "root": {
+                "path": "vendor/axiomasoft/azguard/packages/core/src/Policies/Internal/PolicyDecider.php",
+                "anchor": "$this->invoker->invoke(callback: $callback, inputs: $inputs)",
+                "sha256": "245fd4eec12d3ba9d2682e9834227a942a2e98d270fef9703a9441d96a9e6fc3"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Access\\Access\\Internal\\MatrixSubject::newModelQuery",
+            "source": "packages/access/src/Access/Internal/MatrixSubject.php",
+            "source_sha256": "540a2e82e2a14bb09a975dd1de91de1c5ec22283c5883094dd94b26c3896412c",
+            "kind": "framework",
+            "reason": "Eloquent invokes this override for model queries. CoreX rejects persistence of its in-memory subject identity.",
+            "root": {
+                "path": "vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php",
+                "anchor": "$this->registerGlobalScopes($this->newModelQuery())",
+                "sha256": "1970585898bc1a01b1cc6d606169bdaebf9e0395851fcdb17c9574b124b6c80f"
             },
             "expires": null
         },
@@ -139,8 +178,8 @@
             "reason": "Laravel's event dispatcher invokes this exact invokable listener registered for module lifecycle permission-surface recompilation.",
             "root": {
                 "path": "packages/access/src/Laravel/AccessIntegrationRegistrar.php",
-                "anchor": "Event::listen(ModuleEnabled::class, PermissionsMerger::class)",
-                "sha256": "0af411262206b1e26eb6ffd4bb253b803b4a5f4e055efc2dd70787fee49a2033"
+                "anchor": "->listen(ModuleEnabled::class, PermissionsMerger::class)",
+                "sha256": "b08aa795cb68a839519b5bf9308139d55cabc13f15879542efc94dc9fa2883e4"
             },
             "expires": null
         },
@@ -199,7 +238,7 @@
         {
             "symbol": "CoreX\\Access\\Roles\\Internal\\Models\\RoleAssignment::role",
             "source": "packages/access/src/Roles/Internal/Models/RoleAssignment.php",
-            "source_sha256": "f02bda592e68293a066504b64abd1ad493b1387b7d8cba2f6a0279d93329fa6d",
+            "source_sha256": "fd02bca6424e18af72e0f9d1b286edea5ae8d3b135b2a18f0b66f58621e6f1de",
             "kind": "framework",
             "reason": "Eloquent resolves the exact relationship CoreX\\Access\\Roles\\Internal\\Models\\RoleAssignment::role by its property/relationship name. Its declared BelongsTo return type identifies a relationship; HasAttributes::getRelationshipFromMethod supplies the framework call root. Other public methods on this model receive no exemption.",
             "root": {
@@ -296,7 +335,7 @@
             "root": {
                 "path": "packages/core/src/Foundation/Laravel/ConsoleRegistrar.php",
                 "anchor": "PruneAuditLog::class,",
-                "sha256": "96807a4120856ddd5e90905dc6835ecf59aa1bd4e6e7a8fd72d37017e89ec40f"
+                "sha256": "9e48baee58ea92011c625e4eafa2c4a982c244d293b9b233eaf1c68fd104d5b0"
             },
             "expires": null
         },
@@ -472,7 +511,7 @@
         {
             "symbol": "CoreX\\Foundation\\Internal\\PackmanActorResolver::current",
             "source": "packages/core/src/Foundation/Internal/PackmanActorResolver.php",
-            "source_sha256": "7f1d865b21a960e0ea9835cd9ca928116615f4dd550603acae81d17d17b1a9f3",
+            "source_sha256": "579b0e16edcc19c19cea77dd5bd66ca34743790bb3ba446f7c2344f64183e2b6",
             "kind": "framework",
             "reason": "Foundation binds this adapter to ActorResolverInterface; Packman lifecycle asks the current actor when producing audited module transitions.",
             "root": {
@@ -626,6 +665,58 @@
             "expires": null
         },
         {
+            "symbol": "CoreX\\Invocation\\Internal\\OperationSectionCompiler::compile",
+            "source": "packages/core/src/Invocation/Internal/OperationSectionCompiler.php",
+            "source_sha256": "08ba6ce7de2bbb2858a5fc0a591a89cc4d2612b339e091288ec677b28ae8e362",
+            "kind": "framework",
+            "reason": "The kernel tags this exact ManifestSectionCompiler; Packman invokes its compile method while ordering, normalizing and compiling registered manifest sections.",
+            "root": {
+                "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
+                "anchor": "$section->compile(",
+                "sha256": "974ca8ed284310eb3e1eb6bfdb02572876a5b1fb8b18f4ab54f9dbf4376d1df0"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Invocation\\Internal\\OperationSectionCompiler::mode",
+            "source": "packages/core/src/Invocation/Internal/OperationSectionCompiler.php",
+            "source_sha256": "08ba6ce7de2bbb2858a5fc0a591a89cc4d2612b339e091288ec677b28ae8e362",
+            "kind": "framework",
+            "reason": "The kernel tags this exact ManifestSectionCompiler; Packman invokes its mode method while ordering, normalizing and compiling registered manifest sections.",
+            "root": {
+                "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
+                "anchor": "$section->mode()",
+                "sha256": "974ca8ed284310eb3e1eb6bfdb02572876a5b1fb8b18f4ab54f9dbf4376d1df0"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Invocation\\Internal\\OperationSectionCompiler::normalize",
+            "source": "packages/core/src/Invocation/Internal/OperationSectionCompiler.php",
+            "source_sha256": "08ba6ce7de2bbb2858a5fc0a591a89cc4d2612b339e091288ec677b28ae8e362",
+            "kind": "framework",
+            "reason": "The kernel tags this exact ManifestSectionCompiler; Packman invokes its normalize method while ordering, normalizing and compiling registered manifest sections.",
+            "root": {
+                "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
+                "anchor": "->normalize(manifest: $manifest",
+                "sha256": "974ca8ed284310eb3e1eb6bfdb02572876a5b1fb8b18f4ab54f9dbf4376d1df0"
+            },
+            "expires": null
+        },
+        {
+            "symbol": "CoreX\\Invocation\\Internal\\OperationSectionCompiler::phase",
+            "source": "packages/core/src/Invocation/Internal/OperationSectionCompiler.php",
+            "source_sha256": "08ba6ce7de2bbb2858a5fc0a591a89cc4d2612b339e091288ec677b28ae8e362",
+            "kind": "framework",
+            "reason": "The kernel tags this exact ManifestSectionCompiler; Packman invokes its phase method while ordering, normalizing and compiling registered manifest sections.",
+            "root": {
+                "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
+                "anchor": "$a->phase()",
+                "sha256": "974ca8ed284310eb3e1eb6bfdb02572876a5b1fb8b18f4ab54f9dbf4376d1df0"
+            },
+            "expires": null
+        },
+        {
             "symbol": "CoreX\\Media\\Internal\\Commands\\SweepMediaOperations::handle",
             "source": "packages/media/src/Internal/Commands/SweepMediaOperations.php",
             "source_sha256": "8ca853e8e7b406a10c3f603826b632f1e1ccbe28dfcdd9ac6da1298cc0bf0fa5",
@@ -633,8 +724,8 @@
             "reason": "Laravel invokes CoreX\\Media\\Internal\\Commands\\SweepMediaOperations::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
                 "path": "packages/media/src/MediaServiceProvider.php",
-                "anchor": "$this->commands([SweepMediaOperations::class]);",
-                "sha256": "201eba9294e6de2b963eff37aa27b0ff847c150247fe10e114aa21d254753e4a"
+                "anchor": "->resolveCommands([SweepMediaOperations::class])",
+                "sha256": "ba09763fc475c8df0cb0cd57b6ac8f3906a19c40bb4ef1fcd9825b013f40bd4d"
             },
             "expires": null
         },
@@ -751,7 +842,7 @@
             "root": {
                 "path": "packages/core/src/Foundation/Laravel/ConsoleRegistrar.php",
                 "anchor": "PruneOutboxMessages::class,",
-                "sha256": "96807a4120856ddd5e90905dc6835ecf59aa1bd4e6e7a8fd72d37017e89ec40f"
+                "sha256": "9e48baee58ea92011c625e4eafa2c4a982c244d293b9b233eaf1c68fd104d5b0"
             },
             "expires": null
         },
@@ -764,7 +855,7 @@
             "root": {
                 "path": "packages/core/src/Foundation/Laravel/ConsoleRegistrar.php",
                 "anchor": "RelayOutbox::class,",
-                "sha256": "96807a4120856ddd5e90905dc6835ecf59aa1bd4e6e7a8fd72d37017e89ec40f"
+                "sha256": "9e48baee58ea92011c625e4eafa2c4a982c244d293b9b233eaf1c68fd104d5b0"
             },
             "expires": null
         },
@@ -777,7 +868,7 @@
             "root": {
                 "path": "packages/core/src/Foundation/Laravel/ConsoleRegistrar.php",
                 "anchor": "ShowDeliveryHealth::class,",
-                "sha256": "96807a4120856ddd5e90905dc6835ecf59aa1bd4e6e7a8fd72d37017e89ec40f"
+                "sha256": "9e48baee58ea92011c625e4eafa2c4a982c244d293b9b233eaf1c68fd104d5b0"
             },
             "expires": null
         },
@@ -803,7 +894,7 @@
             "root": {
                 "path": "packages/core/src/Foundation/Laravel/ConsoleRegistrar.php",
                 "anchor": "PrunePubSubMessages::class,",
-                "sha256": "96807a4120856ddd5e90905dc6835ecf59aa1bd4e6e7a8fd72d37017e89ec40f"
+                "sha256": "9e48baee58ea92011c625e4eafa2c4a982c244d293b9b233eaf1c68fd104d5b0"
             },
             "expires": null
         },
@@ -880,8 +971,8 @@
             "reason": "Laravel invokes CoreX\\Notifications\\Delivery\\Internal\\Commands\\SweepNotificationDeliveries::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
                 "path": "packages/notifications/src/NotificationsServiceProvider.php",
-                "anchor": "$this->commands([SweepNotificationDeliveries::class]);",
-                "sha256": "016c59a7301116f0c17de4e309990413986633ceedea717e12d69bfb3f051137"
+                "anchor": "->resolveCommands([SweepNotificationDeliveries::class])",
+                "sha256": "da249a6262c583df449b4e5e072f41175cec066c49b3c414a3b687f46ecf8c3f"
             },
             "expires": null
         },
@@ -998,7 +1089,7 @@
             "root": {
                 "path": "packages/operations/src/OperationsServiceProvider.php",
                 "anchor": "$commands[] = WorkBulkOperations::class;",
-                "sha256": "721080246934c8cb91c21e541333ef4e75e7a4c7e66c4b4246202a32c94ddb87"
+                "sha256": "50dabd5d5196f61a6d82fb4b9b42bf678bcf0cc9668b125931a63138b09b842b"
             },
             "expires": null
         },
@@ -1070,7 +1161,7 @@
         {
             "symbol": "CoreX\\Operations\\Definition\\Contracts\\OperationDefinitionValidator::validateRoutePair",
             "source": "packages/operations/src/Definition/Contracts/OperationDefinitionValidator.php",
-            "source_sha256": "c71d666bfe2253eda23a37366323b3198131432a344db61f63677e2d7f74933f",
+            "source_sha256": "b5b47df85068a52414e7c9826449d181e441b3df89099af768551b3391360293",
             "kind": "external-spi",
             "reason": "Host tooling validates two independently supplied operation declarations for conflicting routes before publishing their API catalogue.",
             "root": {
@@ -1090,58 +1181,6 @@
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\Definition\\Data\\ResourceId::__toString`",
                 "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
-            },
-            "expires": null
-        },
-        {
-            "symbol": "CoreX\\Operations\\Definition\\Internal\\OperationSectionCompiler::compile",
-            "source": "packages/operations/src/Definition/Internal/OperationSectionCompiler.php",
-            "source_sha256": "d649a2dc5c8e3b4d8cfd0777e906012b72c7edfe44eb167792a20172d0d45d41",
-            "kind": "framework",
-            "reason": "The operation/tool package tags this exact ManifestSectionCompiler; Packman invokes its compile method while ordering, normalizing and compiling registered manifest sections.",
-            "root": {
-                "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
-                "anchor": "$section->compile(",
-                "sha256": "54f121659613cf46530cc5301c1a58d946bf21e4ce2fa83fd20aff145a64f674"
-            },
-            "expires": null
-        },
-        {
-            "symbol": "CoreX\\Operations\\Definition\\Internal\\OperationSectionCompiler::mode",
-            "source": "packages/operations/src/Definition/Internal/OperationSectionCompiler.php",
-            "source_sha256": "d649a2dc5c8e3b4d8cfd0777e906012b72c7edfe44eb167792a20172d0d45d41",
-            "kind": "framework",
-            "reason": "The operation/tool package tags this exact ManifestSectionCompiler; Packman invokes its mode method while ordering, normalizing and compiling registered manifest sections.",
-            "root": {
-                "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
-                "anchor": "$section->mode()",
-                "sha256": "54f121659613cf46530cc5301c1a58d946bf21e4ce2fa83fd20aff145a64f674"
-            },
-            "expires": null
-        },
-        {
-            "symbol": "CoreX\\Operations\\Definition\\Internal\\OperationSectionCompiler::normalize",
-            "source": "packages/operations/src/Definition/Internal/OperationSectionCompiler.php",
-            "source_sha256": "d649a2dc5c8e3b4d8cfd0777e906012b72c7edfe44eb167792a20172d0d45d41",
-            "kind": "framework",
-            "reason": "The operation/tool package tags this exact ManifestSectionCompiler; Packman invokes its normalize method while ordering, normalizing and compiling registered manifest sections.",
-            "root": {
-                "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
-                "anchor": "->normalize(manifest: $manifest",
-                "sha256": "54f121659613cf46530cc5301c1a58d946bf21e4ce2fa83fd20aff145a64f674"
-            },
-            "expires": null
-        },
-        {
-            "symbol": "CoreX\\Operations\\Definition\\Internal\\OperationSectionCompiler::phase",
-            "source": "packages/operations/src/Definition/Internal/OperationSectionCompiler.php",
-            "source_sha256": "d649a2dc5c8e3b4d8cfd0777e906012b72c7edfe44eb167792a20172d0d45d41",
-            "kind": "framework",
-            "reason": "The operation/tool package tags this exact ManifestSectionCompiler; Packman invokes its phase method while ordering, normalizing and compiling registered manifest sections.",
-            "root": {
-                "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
-                "anchor": "$a->phase()",
-                "sha256": "54f121659613cf46530cc5301c1a58d946bf21e4ce2fa83fd20aff145a64f674"
             },
             "expires": null
         },
@@ -1245,14 +1284,14 @@
             "root": {
                 "path": "packages/operations/src/OperationsServiceProvider.php",
                 "anchor": "$commands = [WriteApiSnapshots::class, PruneApiOperations::class];",
-                "sha256": "721080246934c8cb91c21e541333ef4e75e7a4c7e66c4b4246202a32c94ddb87"
+                "sha256": "50dabd5d5196f61a6d82fb4b9b42bf678bcf0cc9668b125931a63138b09b842b"
             },
             "expires": null
         },
         {
             "symbol": "CoreX\\Operations\\OperationsServiceProvider::boot",
             "source": "packages/operations/src/OperationsServiceProvider.php",
-            "source_sha256": "721080246934c8cb91c21e541333ef4e75e7a4c7e66c4b4246202a32c94ddb87",
+            "source_sha256": "50dabd5d5196f61a6d82fb4b9b42bf678bcf0cc9668b125931a63138b09b842b",
             "kind": "external-spi",
             "reason": "Laravel host composition registers this provider/registrar and invokes its boot hook to install the package bindings and routes.",
             "root": {
@@ -1265,7 +1304,7 @@
         {
             "symbol": "CoreX\\Operations\\OperationsServiceProvider::register",
             "source": "packages/operations/src/OperationsServiceProvider.php",
-            "source_sha256": "721080246934c8cb91c21e541333ef4e75e7a4c7e66c4b4246202a32c94ddb87",
+            "source_sha256": "50dabd5d5196f61a6d82fb4b9b42bf678bcf0cc9668b125931a63138b09b842b",
             "kind": "external-spi",
             "reason": "Laravel host composition registers this provider/registrar and invokes its register hook to install the package bindings and routes.",
             "root": {
@@ -1310,7 +1349,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Laravel/ModulesBootRegistrar.php",
                 "anchor": "$registry->all()",
-                "sha256": "8e4121f950a6bc5dbcc293a52425dda1c38a36418ebe1fcdd203c25d07d064c4"
+                "sha256": "444604bc422d7d415625ffd9eb45a2d30786e93bae6b4427d2e00467a978ccef"
             },
             "expires": null
         },
@@ -1465,8 +1504,8 @@
             "reason": "Laravel invokes CoreX\\Scheduler\\Internal\\Commands\\SweepWakeups::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
                 "path": "packages/scheduler/src/SchedulerServiceProvider.php",
-                "anchor": "$this->commands([SweepWakeups::class, ValidateWakeupStamps::class]);",
-                "sha256": "cc11c9b8007de4876defba20577dcf8e6fab4a8a5be2735f4da612bd4a3796bf"
+                "anchor": "->resolveCommands([SweepWakeups::class, ValidateWakeupStamps::class])",
+                "sha256": "c3a24704180a6d424cdca0a246962ad4141632e5a2e32d81e94505063ed360a0"
             },
             "expires": null
         },
@@ -1478,8 +1517,8 @@
             "reason": "Laravel invokes CoreX\\Scheduler\\Internal\\Commands\\ValidateWakeupStamps::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
                 "path": "packages/scheduler/src/SchedulerServiceProvider.php",
-                "anchor": "$this->commands([SweepWakeups::class, ValidateWakeupStamps::class]);",
-                "sha256": "cc11c9b8007de4876defba20577dcf8e6fab4a8a5be2735f4da612bd4a3796bf"
+                "anchor": "->resolveCommands([SweepWakeups::class, ValidateWakeupStamps::class])",
+                "sha256": "c3a24704180a6d424cdca0a246962ad4141632e5a2e32d81e94505063ed360a0"
             },
             "expires": null
         },
@@ -2323,8 +2362,8 @@
             "reason": "Laravel invokes CoreX\\Tenancy\\Integration\\Internal\\Wakeup\\SweepRootWakeups::handle through Command::execute after this exact command-class registration. The framework uses the handle method via Container::call (vendor/laravel/framework/src/Illuminate/Console/Command.php).",
             "root": {
                 "path": "packages/tenancy/src/Laravel/WakeupRegistrar.php",
-                "anchor": "$artisan->resolveCommands([SweepRootWakeups::class]);",
-                "sha256": "9a40bfb4306b3c508a97fe104a5ee1d19de7498a96f757f0f1317d79b5b8fc5f"
+                "anchor": "->resolveCommands([SweepRootWakeups::class])",
+                "sha256": "d88a92c25c1902b5c42f96a7b27a9c6b03bf69d18341f7642f12752edcfed710"
             },
             "expires": null
         },
@@ -2396,7 +2435,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\ConsoleRegistrar::register",
             "source": "packages/tenancy/src/Laravel/ConsoleRegistrar.php",
-            "source_sha256": "ef27faa3e052fa9a35a660a21323c1e76ed4483bd29b36a9fa1e3fd8a3d99fec",
+            "source_sha256": "3e1e2026488d54de34708436b31635ec62e0b6569528e0e8b4763600df2ff5ac",
             "kind": "framework",
             "reason": "TenancyServiceProvider explicitly constructs this registrar and dispatches its register lifecycle hook; the method fulfills PackageRegistrar.",
             "root": {
@@ -2578,7 +2617,7 @@
         {
             "symbol": "CoreX\\Tenancy\\Laravel\\WakeupRegistrar::register",
             "source": "packages/tenancy/src/Laravel/WakeupRegistrar.php",
-            "source_sha256": "9a40bfb4306b3c508a97fe104a5ee1d19de7498a96f757f0f1317d79b5b8fc5f",
+            "source_sha256": "d88a92c25c1902b5c42f96a7b27a9c6b03bf69d18341f7642f12752edcfed710",
             "kind": "framework",
             "reason": "TenancyServiceProvider explicitly constructs this registrar and dispatches its register lifecycle hook; the method fulfills PackageRegistrar.",
             "root": {
@@ -2922,7 +2961,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "$section->compile(",
-                "sha256": "54f121659613cf46530cc5301c1a58d946bf21e4ce2fa83fd20aff145a64f674"
+                "sha256": "974ca8ed284310eb3e1eb6bfdb02572876a5b1fb8b18f4ab54f9dbf4376d1df0"
             },
             "expires": null
         },
@@ -2935,7 +2974,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "$section->mode()",
-                "sha256": "54f121659613cf46530cc5301c1a58d946bf21e4ce2fa83fd20aff145a64f674"
+                "sha256": "974ca8ed284310eb3e1eb6bfdb02572876a5b1fb8b18f4ab54f9dbf4376d1df0"
             },
             "expires": null
         },
@@ -2948,7 +2987,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "->normalize(manifest: $manifest",
-                "sha256": "54f121659613cf46530cc5301c1a58d946bf21e4ce2fa83fd20aff145a64f674"
+                "sha256": "974ca8ed284310eb3e1eb6bfdb02572876a5b1fb8b18f4ab54f9dbf4376d1df0"
             },
             "expires": null
         },
@@ -2961,7 +3000,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "$a->phase()",
-                "sha256": "54f121659613cf46530cc5301c1a58d946bf21e4ce2fa83fd20aff145a64f674"
+                "sha256": "974ca8ed284310eb3e1eb6bfdb02572876a5b1fb8b18f4ab54f9dbf4376d1df0"
             },
             "expires": null
         },
@@ -2987,7 +3026,7 @@
             "root": {
                 "path": "packages/webhooks/src/WebhooksServiceProvider.php",
                 "anchor": "$commands[] = DeliverWebhooks::class;",
-                "sha256": "439c793aa684c6191a01a60cd97fd8ae41f709342d4fb05eb3e99d4bd5f62bc8"
+                "sha256": "4f5be26a8ecb9392bdaf4b8783fb2f86cb8527622bff78d5387c3adf5bfa07d9"
             },
             "expires": null
         },
@@ -3000,7 +3039,7 @@
             "root": {
                 "path": "packages/webhooks/src/WebhooksServiceProvider.php",
                 "anchor": "$commands = [PruneWebhooks::class];",
-                "sha256": "439c793aa684c6191a01a60cd97fd8ae41f709342d4fb05eb3e99d4bd5f62bc8"
+                "sha256": "4f5be26a8ecb9392bdaf4b8783fb2f86cb8527622bff78d5387c3adf5bfa07d9"
             },
             "expires": null
         },

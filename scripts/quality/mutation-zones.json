@@ -2,10 +2,16 @@
   "fragments": [
     {
       "files": [
-        "packages/access/src/Access/Internal/DefaultAccessChecker.php",
-        "packages/access/src/Access/Internal/DefaultScopeResolver.php",
+        "packages/access/src/Access/Internal/CoreXAccessContextMapper.php",
         "packages/access/src/Access/Internal/DirectGrantLookup.php",
         "packages/access/src/Access/Internal/EffectiveWorkspaceScope.php",
+        "packages/access/src/Access/Internal/MatrixCell.php",
+        "packages/access/src/Access/Internal/MatrixPanel.php",
+        "packages/access/src/Access/Internal/MatrixPermission.php",
+        "packages/access/src/Access/Internal/MatrixPermissions.php",
+        "packages/access/src/Access/Internal/MatrixPolicy.php",
+        "packages/access/src/Access/Internal/MatrixSubject.php",
+        "packages/access/src/Access/Internal/PanelAccessChecker.php",
         "packages/access/src/Access/Internal/PermissionSurface.php",
         "packages/access/src/Access/Internal/ScopeAvailability.php",
         "packages/access/src/Access/Internal/ScopePredicate.php",
@@ -38,27 +44,19 @@
         "packages/access/src/Matrix/Laravel/MatrixPortBindings.php",
         "packages/access/src/Roles/Data/RoleMatrixEntry.php",
         "packages/access/src/Roles/Data/RoleView.php",
+        "packages/access/src/Roles/DirectGrants.php",
+        "packages/access/src/Roles/Internal/DatabaseDirectGrants.php",
+        "packages/access/src/Roles/Internal/DatabaseRoleManager.php",
         "packages/access/src/Roles/Internal/Models/Role.php",
         "packages/access/src/Roles/Internal/Models/RoleAssignment.php",
         "packages/access/src/Roles/Internal/Models/RoleMatrixRow.php",
         "packages/access/src/Roles/Internal/RoleCloner.php",
         "packages/access/src/Roles/Internal/SystemRoleMutationScope.php",
         "packages/access/src/Roles/Laravel/RoleMatrixData.php",
-        "packages/access/src/Roles/Laravel/SystemRoleImmutable.php"
+        "packages/access/src/Roles/Laravel/SystemRoleImmutable.php",
+        "packages/access/src/Roles/RoleManager.php"
       ],
       "package": "access",
-      "zone": "security"
-    },
-    {
-      "files": [
-        "packages/access-azguard/src/AccessAzguardRegistrar.php",
-        "packages/access-azguard/src/AccessAzguardServiceProvider.php",
-        "packages/access-azguard/src/Contracts/AccessContextMapper.php",
-        "packages/access-azguard/src/Exceptions/ScopeProjectionNotSupported.php",
-        "packages/access-azguard/src/Internal/AzGuardAccessChecker.php",
-        "packages/access-azguard/src/Internal/CoreXAccessContextMapper.php"
-      ],
-      "package": "access-azguard",
       "zone": "security"
     },
     {
@@ -176,6 +174,8 @@
         "packages/core/src/Invocation/Contracts/OperationHandler.php",
         "packages/core/src/Invocation/Contracts/RequestContext.php",
         "packages/core/src/Invocation/Data/InvocationMetadata.php",
+        "packages/core/src/Invocation/Internal/OperationSectionCompiler.php",
+        "packages/core/src/Invocation/OperationDefinitionValidator.php",
         "packages/core/src/Observability/Contracts/OperationObserver.php",
         "packages/core/src/Observability/Contracts/TracePropagation.php",
         "packages/core/src/Observability/Data/OperationCompleted.php",
@@ -732,11 +732,9 @@
         "packages/operations/src/Definition/Data/ResourceId.php",
         "packages/operations/src/Definition/Enums/OperationMode.php",
         "packages/operations/src/Definition/Enums/ResourceIdFormat.php",
-        "packages/operations/src/Definition/Internal/ApiOperationValidator.php",
         "packages/operations/src/Definition/Internal/DeclaredSchemaContributor.php",
         "packages/operations/src/Definition/Internal/OperationContractHasher.php",
         "packages/operations/src/Definition/Internal/OperationRegistry.php",
-        "packages/operations/src/Definition/Internal/OperationSectionCompiler.php",
         "packages/operations/src/Definition/Laravel/OperationFactory.php",
         "packages/operations/src/Definition/Laravel/OperationFingerprint.php",
         "packages/operations/src/Definition/Laravel/OperationPortBindings.php",

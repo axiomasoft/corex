@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Flex\Crm\Context\Contracts;
 
 use Flex\Crm\Context\Data\ExecutionContext;
-use Packman\Attributes\Internal;
+use Packman\Attributes\Spi;
+use Packman\Attributes\SpiKind;
 
 /**
  * Application-owned authentication boundary, resolved afresh for every operation.
@@ -14,7 +15,7 @@ use Packman\Attributes\Internal;
  * explicit capability, never inferred from a role name or missing workspace.
  * Throw on missing/revoked authentication. Never deserialize request actor here.
  */
-#[Internal]
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface CrmExecutionContext
 {
     public function current(): ExecutionContext;

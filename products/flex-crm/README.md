@@ -37,8 +37,10 @@ app(LogActivity::class)->handle($contact, ActivityType::Call, 'Intro call');
 
 ## Зависимости
 
-`axiomasoft/corex`, `axiomasoft/corex` и `illuminate/*`. Без AzGuard; Laravel 13.
-Авторизация — забота потребителя / `axiomasoft/corex-access`.
+`composer require flex/crm` устанавливает CRM и компиляцию деклараций для Laravel 13.
+Для прав и фильтрации записей приложение может подключить `axiomasoft/corex-access`.
+Для HTTP-исполнения объявленных операций подключите `axiomasoft/corex-operations`
+и зарегистрируйте его `OperationsServiceProvider`.
 
 ## Установка и lifecycle
 
@@ -66,8 +68,24 @@ composer --working-dir=products/flex-crm analyse
 Company/contact fields follow approved storage, including JSON channels and PostgreSQL GIN indexes;
 legacy `custom_fields` on those two models are not part of that contract.
 
-## Schema installation
+## Контекст операций
 
-Register the package provider, then run `php artisan packman:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `packman:schema:status`.
+Привяжите `Flex\Crm\Context\Contracts\CrmExecutionContext` к реализации хоста.
+Для каждого вызова `current()` она подтверждает актёра и допуск к текущему аккаунту,
+затем возвращает `Flex\Crm\Context\Data\ExecutionContext` с tenant-контекстом,
+именем соединения, `Actor` и идентификатором действующего пользователя. Для доступа
+ко всему аккаунту требуется явно подтверждённое разрешение. При отсутствии допуска
+реализация отклоняет вызов.
 
-Схема: набор(ы) `tenant`, baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.
+## Хранение данных
+
+До миграции CRM подготовьте tenant-соединение. Владельцем схемы пользователей,
+рабочих пространств и членства может быть `axiomasoft/corex-tenancy` или приложение
+с эквивалентной схемой. CRM использует UUID в `users.id` и `wsp_workspaces.id`,
+проверяет активное членство через `wsp_workspace_members` и создаёт внешние ключи к
+уже существующим таблицам.
+
+1. Выполните миграции владельца таблиц пользователей, пространств и членства в целевой tenant-БД.
+2. Выполните `php artisan modules:compile` и включите `flex/crm` через `ModuleLifecycle::enable()`.
+   Для подготовки шаблона выполните `php artisan packman:schema:migrate --scope=tenant --modules --database=tenant`.
+3. Проверьте журнал через `php artisan packman:schema:status`.

@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Operations\Definition\Internal;
+namespace CoreX\Invocation\Internal;
 
+use CoreX\Invocation\OperationDefinitionValidator;
 use Packman\Attributes\Internal;
 use Packman\Modules\Contracts\Compiler\ManifestSectionCompiler;
 use Packman\Modules\Data\Compiler\NormalizedExtension;
@@ -32,7 +33,7 @@ final class OperationSectionCompiler implements ManifestSectionCompiler
         $operations = [];
 
         foreach ($declarations as $api) {
-            ApiOperationValidator::validate($api);
+            OperationDefinitionValidator::validate($api);
             $id = $api->version.':'.$api->operationId;
             $path = $api->version.':'.$api->method.':'.preg_replace('/\{[a-zA-Z_][a-zA-Z0-9_]*\}/', '{}', $api->path);
 
@@ -41,13 +42,12 @@ final class OperationSectionCompiler implements ManifestSectionCompiler
             }
 
             foreach ($operations as $other) {
-                ApiOperationValidator::validateRoutePair(first: $api, second: $other);
+                OperationDefinitionValidator::validateRoutePair(first: $api, second: $other);
             }
 
             $ids[$id] = true;
             $paths[$path] = true;
             $operations[] = $api;
-
         }
     }
 

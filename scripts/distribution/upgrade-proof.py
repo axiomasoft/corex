@@ -614,12 +614,9 @@ def prove(path: Path, only: str | None, candidate_path: Path | None = None) -> d
         candidate = candidate_path if candidate_path is not None else profiles.build_candidate(root / "candidate", extensions)
         binding = extensions.candidate_binding(candidate)
         repository = root / "repository"
-        profiles.extension_module().materialize_repository(candidate, repository)
-        profiles.merge_sealed_providers(repository)
-        profiles.merge_azguard(repository)
+        extensions.materialize_repository(candidate, repository)
         baseline_repo = root / "baselines"
         stage_baseline_repository(rows, baseline_repo)
-        profiles.merge_sealed_providers(baseline_repo)
         results = [prove_row(row, baseline_repo, repository, profiles) for row in selected]
     complete = only is None and len(results) == len(rows)
     return {

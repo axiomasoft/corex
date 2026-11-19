@@ -1,44 +1,5 @@
 {
-    "CoreX\\AccessAzguard\\AccessAzguardRegistrar": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "Packman\\Foundation\\Contracts\\PackageRegistrar"
-        ],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "boot": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "app",
-                        "type": "Illuminate\\Contracts\\Foundation\\Application",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": false
-            },
-            "register": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "app",
-                        "type": "Illuminate\\Contracts\\Foundation\\Application",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\AccessAzguard\\AccessAzguardServiceProvider": {
+    "CoreX\\Access\\AccessServiceProvider": {
         "abstract": false,
         "constants": [],
         "final": true,
@@ -46,6 +7,11 @@
         "internal": false,
         "kind": "class",
         "methods": {
+            "boot": {
+                "params": [],
+                "return": "void",
+                "static": false
+            },
             "register": {
                 "params": [],
                 "return": "void",
@@ -56,240 +22,11 @@
         "properties": [],
         "readonly": false
     },
-    "CoreX\\AccessAzguard\\Contracts\\AccessContextMapper": {
+    "CoreX\\Access\\Access\\Internal\\CoreXAccessContextMapper": {
         "abstract": false,
         "constants": [],
-        "final": false,
+        "final": true,
         "interfaces": [],
-        "internal": false,
-        "kind": "interface",
-        "methods": {
-            "scope": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "context",
-                        "type": "?CoreX\\Access\\Data\\RecordContext",
-                        "variadic": false
-                    }
-                ],
-                "return": "?AzGuard\\Kernel\\Identity\\AccessScope",
-                "static": false
-            },
-            "subject": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "principal",
-                        "type": "CoreX\\Context\\Contracts\\Principal",
-                        "variadic": false
-                    }
-                ],
-                "return": "AzGuard\\Kernel\\Identity\\SubjectRef",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\AccessAzguard\\Exceptions\\ScopeProjectionNotSupported": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "Stringable",
-            "Throwable"
-        ],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [],
-                "return": "",
-                "static": false
-            }
-        },
-        "parent": "LogicException",
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\AccessAzguard\\Internal\\AzGuardAccessChecker": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "CoreX\\Access\\Contracts\\AccessChecker",
-            "CoreX\\Access\\Laravel\\ScopeResolver"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "azguard",
-                        "type": "AzGuard\\AzGuard",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "contexts",
-                        "type": "CoreX\\AccessAzguard\\Contracts\\AccessContextMapper",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "options",
-                        "type": "CoreX\\Access\\Laravel\\AuthOptions",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "entities",
-                        "type": "Packman\\Modules\\Contracts\\Entities\\EntityRegistry",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "activity",
-                        "type": "CoreX\\Access\\Matrix\\Contracts\\EntityActivity",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "allowed": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "p",
-                        "type": "CoreX\\Context\\Contracts\\Principal",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "entityKey",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "action",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "bool",
-                "static": false
-            },
-            "apply": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "q",
-                        "type": "Illuminate\\Database\\Eloquent\\Builder",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "p",
-                        "type": "CoreX\\Context\\Contracts\\Principal",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "entityKey",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "action",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "ctx",
-                        "type": "?CoreX\\Access\\Data\\RecordContext",
-                        "variadic": false
-                    }
-                ],
-                "return": "Illuminate\\Database\\Eloquent\\Builder",
-                "static": false
-            },
-            "canOnRecord": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "p",
-                        "type": "CoreX\\Context\\Contracts\\Principal",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "action",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "record",
-                        "type": "object",
-                        "variadic": false
-                    }
-                ],
-                "return": "bool",
-                "static": false
-            },
-            "scopeFor": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "p",
-                        "type": "CoreX\\Context\\Contracts\\Principal",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "entityKey",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "action",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "ctx",
-                        "type": "?CoreX\\Access\\Data\\RecordContext",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Access\\Enums\\Scope",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": true
-    },
-    "CoreX\\AccessAzguard\\Internal\\CoreXAccessContextMapper": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "CoreX\\AccessAzguard\\Contracts\\AccessContextMapper"
-        ],
         "internal": true,
         "kind": "class",
         "methods": {
@@ -328,277 +65,6 @@
                     }
                 ],
                 "return": "AzGuard\\Kernel\\Identity\\SubjectRef",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": true
-    },
-    "CoreX\\Access\\AccessServiceProvider": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "boot": {
-                "params": [],
-                "return": "void",
-                "static": false
-            },
-            "register": {
-                "params": [],
-                "return": "void",
-                "static": false
-            }
-        },
-        "parent": "Illuminate\\Support\\ServiceProvider",
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\Access\\Access\\Internal\\DefaultAccessChecker": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "CoreX\\Access\\Contracts\\AccessChecker"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "entities",
-                        "type": "Packman\\Modules\\Contracts\\Entities\\EntityRegistry",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "tenancyManager",
-                        "type": "CoreX\\Context\\Contracts\\TenancyManager",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "scopeMapVersion",
-                        "type": "CoreX\\Access\\Matrix\\Contracts\\ScopeMapVersions",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "scopePredicate",
-                        "type": "CoreX\\Access\\Access\\Internal\\ScopePredicate",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "directGrants",
-                        "type": "CoreX\\Access\\Access\\Internal\\DirectGrantLookup",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "options",
-                        "type": "CoreX\\Access\\Laravel\\AuthOptions",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "connections",
-                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "clock",
-                        "type": "Psr\\Clock\\ClockInterface",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "activity",
-                        "type": "CoreX\\Access\\Matrix\\Contracts\\EntityActivity",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "allowed": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "p",
-                        "type": "CoreX\\Context\\Contracts\\Principal",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "entityKey",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "action",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "bool",
-                "static": false
-            },
-            "canOnRecord": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "p",
-                        "type": "CoreX\\Context\\Contracts\\Principal",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "action",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "record",
-                        "type": "object",
-                        "variadic": false
-                    }
-                ],
-                "return": "bool",
-                "static": false
-            },
-            "scopeFor": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "p",
-                        "type": "CoreX\\Context\\Contracts\\Principal",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "entityKey",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "action",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "ctx",
-                        "type": "?CoreX\\Access\\Data\\RecordContext",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Access\\Enums\\Scope",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\Access\\Access\\Internal\\DefaultScopeResolver": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "CoreX\\Access\\Laravel\\ScopeResolver"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "accessChecker",
-                        "type": "CoreX\\Access\\Contracts\\AccessChecker",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "predicate",
-                        "type": "CoreX\\Access\\Access\\Internal\\ScopePredicate",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "availability",
-                        "type": "CoreX\\Access\\Access\\Internal\\ScopeAvailability",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "directGrants",
-                        "type": "CoreX\\Access\\Access\\Internal\\DirectGrantLookup",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "options",
-                        "type": "CoreX\\Access\\Laravel\\AuthOptions",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "activity",
-                        "type": "CoreX\\Access\\Matrix\\Contracts\\EntityActivity",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "apply": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "q",
-                        "type": "Illuminate\\Database\\Eloquent\\Builder",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "p",
-                        "type": "CoreX\\Context\\Contracts\\Principal",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "entityKey",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "action",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "ctx",
-                        "type": "?CoreX\\Access\\Data\\RecordContext",
-                        "variadic": false
-                    }
-                ],
-                "return": "Illuminate\\Database\\Eloquent\\Builder",
                 "static": false
             }
         },
@@ -703,6 +169,592 @@
                 "type": "?string"
             }
         },
+        "readonly": true
+    },
+    "CoreX\\Access\\Access\\Internal\\MatrixCell": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entity",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "action",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "AzGuard\\Kernel\\Identity\\AccessScope",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "action": {
+                "name": "action",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "entity": {
+                "name": "entity",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "principal": {
+                "name": "principal",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Context\\Contracts\\Principal"
+            },
+            "scope": {
+                "name": "scope",
+                "readonly": true,
+                "static": false,
+                "type": "AzGuard\\Kernel\\Identity\\AccessScope"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Access\\Access\\Internal\\MatrixPanel": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "getId": {
+                "params": [],
+                "return": "string",
+                "static": true
+            },
+            "panel": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "panel",
+                        "type": "AzGuard\\Panels\\PanelBuilder",
+                        "variadic": false
+                    }
+                ],
+                "return": "AzGuard\\Panels\\PanelBuilder",
+                "static": false
+            }
+        },
+        "parent": "AzGuard\\Panels\\PanelProvider",
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Access\\Access\\Internal\\MatrixPermission": {
+        "abstract": false,
+        "constants": {
+            "Evaluate": {
+                "type": "CoreX\\Access\\Access\\Internal\\MatrixPermission",
+                "value": {
+                    "enum": "CoreX\\Access\\Access\\Internal\\MatrixPermission",
+                    "case": "Evaluate",
+                    "value": "matrix.evaluate"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "UnitEnum"
+        ],
+        "internal": true,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Access\\Access\\Internal\\MatrixPermissions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "tenancyManager",
+                        "type": "CoreX\\Context\\Contracts\\TenancyManager",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "scopeMapVersion",
+                        "type": "CoreX\\Access\\Matrix\\Contracts\\ScopeMapVersions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "availability",
+                        "type": "CoreX\\Access\\Access\\Internal\\ScopeAvailability",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "directGrants",
+                        "type": "CoreX\\Access\\Access\\Internal\\DirectGrantLookup",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Access\\Laravel\\AuthOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "activity",
+                        "type": "CoreX\\Access\\Matrix\\Contracts\\EntityActivity",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "allowed": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "p",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entityKey",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "action",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            },
+            "directlyGranted": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entity",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "action",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            },
+            "scope": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entity",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "action",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "context",
+                        "type": "?CoreX\\Access\\Data\\RecordContext",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Access\\Enums\\Scope",
+                "static": false
+            },
+            "scopeFor": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "p",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entityKey",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "action",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "ctx",
+                        "type": "?CoreX\\Access\\Data\\RecordContext",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Access\\Enums\\Scope",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Access\\Access\\Internal\\MatrixPolicy": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "permissions",
+                        "type": "CoreX\\Access\\Access\\Internal\\MatrixPermissions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "contexts",
+                        "type": "CoreX\\Access\\Access\\Internal\\CoreXAccessContextMapper",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "evaluate": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "AzGuard\\Kernel\\Decision\\AccessRequest",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Access\\Access\\Internal\\MatrixSubject": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "ArrayAccess",
+            "Illuminate\\Contracts\\Broadcasting\\HasBroadcastChannel",
+            "Illuminate\\Contracts\\Queue\\QueueableEntity",
+            "Illuminate\\Contracts\\Routing\\UrlRoutable",
+            "Illuminate\\Contracts\\Support\\Arrayable",
+            "Illuminate\\Contracts\\Support\\CanBeEscapedWhenCastToString",
+            "Illuminate\\Contracts\\Support\\Jsonable",
+            "JsonSerializable",
+            "Stringable"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "fromPrincipal": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            },
+            "getMorphClass": {
+                "params": [],
+                "return": "string",
+                "static": false
+            },
+            "newModelQuery": {
+                "params": [],
+                "return": "never",
+                "static": false
+            }
+        },
+        "parent": "Illuminate\\Database\\Eloquent\\Model",
+        "properties": {
+            "incrementing": {
+                "name": "incrementing",
+                "readonly": false,
+                "static": false,
+                "type": ""
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Access\\Access\\Internal\\PanelAccessChecker": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Access\\Contracts\\AccessChecker",
+            "CoreX\\Access\\Laravel\\ScopeResolver"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "authorization",
+                        "type": "AzGuard\\AzGuard",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "contexts",
+                        "type": "CoreX\\Access\\Access\\Internal\\CoreXAccessContextMapper",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Access\\Laravel\\AuthOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entities",
+                        "type": "Packman\\Modules\\Contracts\\Entities\\EntityRegistry",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "activity",
+                        "type": "CoreX\\Access\\Matrix\\Contracts\\EntityActivity",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "matrix",
+                        "type": "CoreX\\Access\\Access\\Internal\\MatrixPermissions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "predicate",
+                        "type": "CoreX\\Access\\Access\\Internal\\ScopePredicate",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "allowed": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "p",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entityKey",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "action",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            },
+            "apply": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "q",
+                        "type": "Illuminate\\Database\\Eloquent\\Builder",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "p",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entityKey",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "action",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "ctx",
+                        "type": "?CoreX\\Access\\Data\\RecordContext",
+                        "variadic": false
+                    }
+                ],
+                "return": "Illuminate\\Database\\Eloquent\\Builder",
+                "static": false
+            },
+            "canOnRecord": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "p",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "action",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "record",
+                        "type": "object",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
         "readonly": true
     },
     "CoreX\\Access\\Access\\Internal\\PermissionSurface": {
@@ -1082,37 +1134,6 @@
                     }
                 ],
                 "return": "bool",
-                "static": false
-            },
-            "scopeFor": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "p",
-                        "type": "CoreX\\Context\\Contracts\\Principal",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "entityKey",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "action",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "ctx",
-                        "type": "?CoreX\\Access\\Data\\RecordContext",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Access\\Enums\\Scope",
                 "static": false
             }
         },
@@ -1868,6 +1889,13 @@
                         "name": "identityColumns",
                         "type": "array",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": [],
+                        "name": "policyPanels",
+                        "type": "array",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -1923,6 +1951,12 @@
                 "readonly": true,
                 "static": false,
                 "type": "string"
+            },
+            "policyPanels": {
+                "name": "policyPanels",
+                "readonly": true,
+                "static": false,
+                "type": "array"
             },
             "workspaceScopeClass": {
                 "name": "workspaceScopeClass",
@@ -2427,6 +2461,326 @@
         },
         "readonly": true
     },
+    "CoreX\\Access\\Roles\\DirectGrants": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "grant": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entityKey",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "action",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "expiresAt",
+                        "type": "?DateTimeImmutable",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "revoke": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entityKey",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "action",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Access\\Roles\\Internal\\DatabaseDirectGrants": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Access\\Roles\\DirectGrants"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Access\\Laravel\\AuthOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "grant": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entityKey",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "action",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "expiresAt",
+                        "type": "?DateTimeImmutable",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "revoke": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entityKey",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "action",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Access\\Roles\\Internal\\DatabaseRoleManager": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Access\\Roles\\RoleManager"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "compiler",
+                        "type": "CoreX\\Access\\Contracts\\RoleMatrixCompiler",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "assign": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "roleId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "workspaceId",
+                        "type": "?string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "expiresAt",
+                        "type": "?DateTimeImmutable",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "create": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "slug",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": [
+                            {
+                                "enum": "CoreX\\Context\\Enums\\PrincipalType",
+                                "case": "User",
+                                "value": "user"
+                            }
+                        ],
+                        "name": "assignableTo",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": false
+            },
+            "setScope": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "roleId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entityKey",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "action",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Access\\Enums\\Scope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "context",
+                        "type": "?CoreX\\Access\\Data\\RecordContext",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "unassign": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "roleId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "workspaceId",
+                        "type": "?string",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\Access\\Roles\\Internal\\Models\\Role": {
         "abstract": false,
         "constants": [],
@@ -2800,6 +3154,144 @@
                 ],
                 "return": "mixed",
                 "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Access\\Roles\\RoleManager": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "assign": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "roleId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "workspaceId",
+                        "type": "?string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "expiresAt",
+                        "type": "?DateTimeImmutable",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "create": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "slug",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": [
+                            {
+                                "enum": "CoreX\\Context\\Enums\\PrincipalType",
+                                "case": "User",
+                                "value": "user"
+                            }
+                        ],
+                        "name": "assignableTo",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": false
+            },
+            "setScope": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "roleId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entityKey",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "action",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Access\\Enums\\Scope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "context",
+                        "type": "?CoreX\\Access\\Data\\RecordContext",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "unassign": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "roleId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "principal",
+                        "type": "CoreX\\Context\\Contracts\\Principal",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "workspaceId",
+                        "type": "?string",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
             }
         },
         "parent": null,
@@ -14307,6 +14799,18 @@
         "internal": true,
         "kind": "class",
         "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "actor",
+                        "type": "Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
             "current": {
                 "params": [],
                 "return": "Packman\\Context\\Data\\ActorRef",
@@ -22877,6 +23381,128 @@
             }
         },
         "readonly": true
+    },
+    "CoreX\\Invocation\\Internal\\OperationSectionCompiler": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "Packman\\Modules\\Contracts\\Compiler\\ManifestSectionCompiler"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "compile": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "declarations",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "all",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "mode": {
+                "params": [],
+                "return": "string",
+                "static": false
+            },
+            "normalize": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "manifest",
+                        "type": "Packman\\Modules\\Data\\Lifecycle\\ModuleManifest",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "api",
+                        "type": "Packman\\Modules\\Data\\Extenders\\Api",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "ownerVersion",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "phase": {
+                "params": [],
+                "return": "int",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Invocation\\OperationDefinitionValidator": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "assertJsonValue": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": true
+            },
+            "validate": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "api",
+                        "type": "Packman\\Modules\\Data\\Extenders\\Api",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": true
+            },
+            "validateRoutePair": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "first",
+                        "type": "Packman\\Modules\\Data\\Extenders\\Api",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "second",
+                        "type": "Packman\\Modules\\Data\\Extenders\\Api",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\Media\\Contracts\\ConversionDriver": {
         "abstract": false,
@@ -38494,61 +39120,6 @@
         },
         "readonly": false
     },
-    "CoreX\\Operations\\Definition\\Internal\\ApiOperationValidator": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "assertJsonValue": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "value",
-                        "type": "mixed",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": true
-            },
-            "validate": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "api",
-                        "type": "Packman\\Modules\\Data\\Extenders\\Api",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": true
-            },
-            "validateRoutePair": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "first",
-                        "type": "Packman\\Modules\\Data\\Extenders\\Api",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "second",
-                        "type": "Packman\\Modules\\Data\\Extenders\\Api",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": true
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
     "CoreX\\Operations\\Definition\\Internal\\DeclaredSchemaContributor": {
         "abstract": false,
         "constants": [],
@@ -38669,73 +39240,6 @@
         "parent": null,
         "properties": [],
         "readonly": true
-    },
-    "CoreX\\Operations\\Definition\\Internal\\OperationSectionCompiler": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "Packman\\Modules\\Contracts\\Compiler\\ManifestSectionCompiler"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "compile": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "declarations",
-                        "type": "array",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "all",
-                        "type": "array",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": false
-            },
-            "mode": {
-                "params": [],
-                "return": "string",
-                "static": false
-            },
-            "normalize": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "manifest",
-                        "type": "Packman\\Modules\\Data\\Lifecycle\\ModuleManifest",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "api",
-                        "type": "Packman\\Modules\\Data\\Extenders\\Api",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "ownerVersion",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "array",
-                "static": false
-            },
-            "phase": {
-                "params": [],
-                "return": "int",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
     },
     "CoreX\\Operations\\Definition\\Laravel\\OperationFactory": {
         "abstract": false,

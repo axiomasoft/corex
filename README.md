@@ -10,8 +10,7 @@ FlexStore) без переписывания фундамента. Моноре�
 
 | Пакет | Назначение | Документация |
 |---|---|---|
-| `axiomasoft/corex-access-azguard` | CoreX context adaptation for AzGuard authorization and query visibility. | [access-azguard](packages/access-azguard/README.md) |
-| `axiomasoft/corex-access` | Native tenant authorization, role matrices, direct grants and record scopes. | [access](packages/access/README.md) |
+| `axiomasoft/corex-access` | Проверка прав, ролевые матрицы, прямые разрешения и видимость записей для текущего контекста. | [access](packages/access/README.md) |
 | `axiomasoft/corex` | CoreX application foundation — tenant context, settings, audit and messaging on Packman modules and schema. | [core](packages/core/README.md) |
 | `axiomasoft/corex-custom-fields` | Typed attribute ports and safe schema-operation bridge for CoreX. | [custom-fields](packages/custom-fields/README.md) |
 | `axiomasoft/corex-intl` | Typed locale, money/rate snapshots, and offline geography reference utilities for CoreX. | [intl](packages/intl/README.md) |

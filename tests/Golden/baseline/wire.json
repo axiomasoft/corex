@@ -1,6 +1,358 @@
 {
     "errors": [
         {
+            "category": "conflict",
+            "code": "azguard.ambiguous_panel",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "azguard.change_cancelled",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "azguard.conflicting_panel",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unavailable",
+            "code": "azguard.consistency",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": true
+        },
+        {
+            "category": "validation",
+            "code": "azguard.context_not_accepted",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "azguard.context_required",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "rate_limit",
+            "code": "azguard.decision_set_too_large",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "azguard.default_panel_conflict",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "azguard.definition",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "azguard.directory_scan_limit",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "azguard.duplicate_panel",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "azguard.duplicate_permission",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "azguard.duplicate_policy_binding",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "azguard.duplicate_role",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "azguard.invalid_change_fields",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "azguard.invalid_configuration",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "azguard.invalid_context",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "azguard.invalid_identity",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "azguard.invalid_panel_id",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "azguard.invalid_permission_key",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "azguard.invalid_policy_structure",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "azguard.invalid_role_key",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "azguard.invalid_source_contribution",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "azguard.missing_permission_check",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "azguard.panel_not_resolved",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "azguard.panel_not_writable",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "azguard.permission_not_grantable",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "azguard.plugin_conflict",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "azguard.prefix_conflict",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unavailable",
+            "code": "azguard.recursion_detected",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": true
+        },
+        {
+            "category": "conflict",
+            "code": "azguard.registry_frozen",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "azguard.role_not_grantable",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "azguard.stale_selection",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": true
+        },
+        {
+            "category": "conflict",
+            "code": "azguard.storage_mismatch",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "azguard.subject_not_accepted",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "azguard.tenant_mismatch",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "azguard.tenant_required",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "azguard.unknown_panel",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "azguard.unknown_permission",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "azguard.unknown_role",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "azguard.unknown_source",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unsupported",
+            "code": "azguard.unsupported_direct_write",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unsupported",
+            "code": "azguard.visibility_not_supported",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "azguard.writer_conflict",
+            "detail_keys": [],
+            "owner": "axiomasoft/azguard",
+            "path": null,
+            "retryable": false
+        },
+        {
             "category": "authorization",
             "code": "core.central_context_exception",
             "detail_keys": [],

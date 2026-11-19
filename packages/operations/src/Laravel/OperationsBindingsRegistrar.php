@@ -16,7 +16,6 @@ use CoreX\Operations\Authorization\Laravel\DeclaredFieldAuthorizer;
 use CoreX\Operations\Cost\Data\CostOptions;
 use CoreX\Operations\Definition\Contracts\SchemaContributor;
 use CoreX\Operations\Definition\Internal\DeclaredSchemaContributor;
-use CoreX\Operations\Definition\Internal\OperationSectionCompiler;
 use CoreX\Operations\Definition\Laravel\OperationPortBindings;
 use CoreX\Operations\Errors\Contracts\ResponseSerializer;
 use CoreX\Operations\Errors\Internal\HttpResponseSerializer;
@@ -37,7 +36,6 @@ use Packman\Attributes\SpiKind;
 use Packman\Config\Contracts\ConfigReportSectionInterface;
 use Packman\Config\Contracts\RuntimeConfigCheck;
 use Packman\Foundation\Contracts\PackageRegistrar;
-use Packman\Modules\Contracts\Compiler\ManifestSectionCompiler;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Psr\Clock\ClockInterface;
 
@@ -51,7 +49,6 @@ final class OperationsBindingsRegistrar implements PackageRegistrar
         OperationPortBindings::register($app);
         $app->tag([OperationsConfigSection::class], ConfigReportSectionInterface::class);
 
-        $app->tag([OperationSectionCompiler::class], ManifestSectionCompiler::class);
         $app->singleton(ApiOptions::class, static fn (Application $app): ApiOptions => ApiOptions::fromArray(
             (array) $app->make(Repository::class)->get('corex-operations', []),
         ));

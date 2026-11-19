@@ -35,8 +35,11 @@ ALLOWED_PRERELEASE = {
     'axiomasoft/vaulter-core': '^1.0@dev',
     'axiomasoft/vaulter-media': '^1.0@dev',
 }
-# The AzGuard bridge stays outside the release set until its upstream is published.
-UNRELEASED = {'axiomasoft/corex-access-azguard'}
+# Check unreleased declarations against the same exclusions used to assemble distributions.
+def unreleased_packages() -> set[str]:
+    policy = json.loads((ROOT / 'scripts/distribution/release-1.0-policy.json').read_text(encoding='utf-8'))
+    return {Path(item['path']).name for item in policy['excluded'] if item['reason'] == 'unreleased'}
+
 VALID_STABILITY = {'stable', 'experimental', 'internal', 'deprecated', 'unreleased'}
 STACK = {
     'pestphp/pest': '^5.2',
@@ -57,6 +60,7 @@ def pinned(constraint: str | None, version: str) -> bool:
 
 
 def main() -> int:
+    excluded = unreleased_packages()
     packages = {}
     for manifest in sorted([*ROOT.glob('packages/*/composer.json'), *ROOT.glob('products/*/composer.json')]):
         data = load(manifest)
@@ -102,10 +106,12 @@ def main() -> int:
         stability = data.get('extra', {}).get('corex', {}).get('stability')
         if not is_root and stability not in VALID_STABILITY:
             bad('stability', f'unknown extra.corex.stability={stability!r}')
-        if stability == 'unreleased' and data.get('name') not in UNRELEASED:
-            bad('stability', f'stability=unreleased is reserved for {sorted(UNRELEASED)}')
+        if stability == 'unreleased' and label not in excluded:
+            bad('stability', 'unreleased package must be excluded by the release policy')
 
         packman_constraints = dict(PACKMAN_CONSTRAINTS)
+        if label == 'flex-crm':
+            packman_constraints['axiomasoft/packman-modules'] = '^0.1.2'
         if label in {'access', 'tenancy'}:
             packman_constraints['axiomasoft/packman-schema'] = '^0.1.1'
         for name, constraint in sorted(requires.items()):

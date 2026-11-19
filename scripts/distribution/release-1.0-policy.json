@@ -122,10 +122,6 @@
     {
       "path": "products/flex-crm",
       "reason": "flex-product-consumer"
-    },
-    {
-      "path": "packages/access-azguard",
-      "reason": "unreleased"
     }
   ]
 }

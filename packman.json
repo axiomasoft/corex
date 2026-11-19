@@ -29,19 +29,6 @@
             ]
         },
         {
-            "name": "axiomasoft/corex-access-azguard",
-            "path": "packages/access-azguard",
-            "namespace": "CoreX\\AccessAzguard\\",
-            "profile": "laravel-package",
-            "layer": "L3",
-            "type": "integration",
-            "owns": [
-                "Contracts",
-                "Exceptions",
-                "Internal"
-            ]
-        },
-        {
             "name": "axiomasoft/corex",
             "path": "packages/core",
             "namespace": "CoreX\\",

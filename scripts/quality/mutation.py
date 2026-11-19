@@ -24,7 +24,7 @@ GROUPS = {'killed': 'killedCount', 'escaped': 'escapedCount', 'timeouted': 'time
           'errored': 'errorCount', 'uncovered': 'notCoveredCount', 'syntaxErrors': 'syntaxErrorCount',
           'killedByStaticAnalysis': 'killedByStaticAnalysisCount', 'ignored': 'ignoredCount'}
 STATS = {'totalMutantsCount', 'skippedCount', 'msi', 'mutationCodeCoverage', 'coveredCodeMsi', *GROUPS.values()}
-SECURITY_PACKAGES = {'access', 'access-azguard', 'tenancy', 'tools', 'webhooks'}
+SECURITY_PACKAGES = {'access', 'tenancy', 'tools', 'webhooks'}
 MESSAGING_PACKAGES = {'scheduler', 'workflow', 'recurring-tasks', 'import-export'}
 SECURITY_CORE = ('Context/', 'Tenancy/', 'Database/', 'Data/', 'Foundation/Internal/PackmanActorResolver.php',
                  'Foundation/Internal/PackmanContextResolver.php', 'Foundation/Internal/PackmanFeatureFlags.php')

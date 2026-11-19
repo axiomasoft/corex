@@ -2,7 +2,6 @@
     "schema": "corex-quality-ceilings/1",
     "phpstan": {
         "access": 0,
-        "access-azguard": 0,
         "core": 0,
         "custom-fields": 0,
         "flex-crm": 0,
@@ -27,7 +26,6 @@
     },
     "dependencies": {
         "access": 0,
-        "access-azguard": 0,
         "core": 0,
         "custom-fields": 0,
         "flex-crm": 0,

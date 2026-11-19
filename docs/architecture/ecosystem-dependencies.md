@@ -16,7 +16,7 @@ PSR-4 пути внутри монорепозитория владельца. �
 
 | Владелец | Пакеты | Source reference |
 |---|---|---|
-| Packman (`0.1.2`) | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `976eac386e0159f11ca20881283d7cccd649487f` |
+| Packman (`0.1.2`) | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `dce317211459a9d04c60cd1df735d53687e47e26` |
 | AzGuard | `azguard` | `68709d166ec2b91f7dce3975eadccd4539906bc0` |
 | Tenant | `tenant`, `tenant-laravel` | `1c68f87ccfaa5e6786f6559cb4ba2cb09abab5fd` |
 | Vaulter | `vaulter-core`, `vaulter-media` | `ae15f37db7da7ce0cf7368c912e567068b2106b6` |
@@ -31,6 +31,10 @@ remote `main`. AzGuard source URL указывает на `axiomasoft/azguard-pr
 При работе с локальными монорепозиториями владельцев до публикации commits в
 remote GitHub чистый CI не сможет получить их только по `composer.lock`.
 Локальный успешный install из доступного checkout/cache не доказывает remote install.
+
+Для авторизации приложению достаточно потребовать `axiomasoft/corex-access`: Composer
+установит движок транзитивно по закреплённому снимку. Работайте через CoreX
+`AccessChecker` для проверки разрешения и `ScopeResolver` для ограничения выборки.
 
 ## Разработка в монорепозитории
 

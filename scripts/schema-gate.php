@@ -3,7 +3,6 @@
 
 declare(strict_types=1);
 
-use AzGuard\AzGuardServiceProvider;
 use CoreX\Operations\OperationsServiceProvider;
 use Orchestra\Testbench\Foundation\Application;
 use Packman\Schema\Contracts\Migration\SchemaSets;
@@ -869,7 +868,7 @@ final class SchemaGate
     public static function manifest(string $root): array
     {
         require_once $root.'/vendor/autoload.php';
-        $providers = [AzGuardServiceProvider::class, OperationsServiceProvider::class];
+        $providers = [OperationsServiceProvider::class];
         foreach (array_merge(self::files($root.'/packages/*/composer.json'), self::files($root.'/products/*/composer.json')) as $composer) {
             /** @var array{extra?: array{laravel?: array{providers?: list<class-string>}}} $data */
             $data = json_decode((string) file_get_contents($composer), true, flags: JSON_THROW_ON_ERROR);
@@ -893,7 +892,7 @@ final class SchemaGate
         };
         $app = $resolver::create(options: ['extra' => ['providers' => $providers, 'dont-discover' => ['*']]]);
         $codes = ['axiomasoft/corex' => '01', 'axiomasoft/corex-tenancy' => '02', 'axiomasoft/corex-access' => '03',
-            'axiomasoft/corex-access-azguard' => '04', 'axiomasoft/corex-operations' => '05', 'axiomasoft/corex-webhooks' => '06',
+            'axiomasoft/corex-operations' => '05', 'axiomasoft/corex-webhooks' => '06',
             'axiomasoft/corex-panels' => '07', 'axiomasoft/corex-custom-fields' => '08', 'axiomasoft/corex-intl' => '09',
             'axiomasoft/corex-media' => '10', 'axiomasoft/corex-notifications' => '11', 'axiomasoft/corex-search' => '12',
             'axiomasoft/corex-import-export' => '13', 'axiomasoft/corex-scheduler' => '14', 'axiomasoft/corex-workflow' => '15',

@@ -9,6 +9,7 @@ use CoreX\Audit\Internal\ModuleAuditHook;
 use CoreX\Foundation\Internal\PackmanActorResolver;
 use CoreX\Foundation\Internal\PackmanContextResolver;
 use CoreX\Foundation\Internal\PackmanFeatureFlags;
+use CoreX\Invocation\Internal\OperationSectionCompiler;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
@@ -19,6 +20,7 @@ use Packman\Context\Contracts\ContextResolverInterface;
 use Packman\Features\Contracts\FeatureFlagsInterface;
 use Packman\Foundation\Concerns\RegistersNothingOnBoot;
 use Packman\Foundation\Contracts\PackageRegistrar;
+use Packman\Modules\Contracts\Compiler\ManifestSectionCompiler;
 use Packman\Modules\Contracts\Definition\ModuleDiscovery;
 use Packman\Modules\Contracts\Entities\EntityRegistryHook;
 
@@ -50,5 +52,6 @@ final class PackmanRegistrar implements PackageRegistrar
         ));
         $app->singleton(FeatureFlagsInterface::class, PackmanFeatureFlags::class);
         $app->tag([ModuleAuditHook::class], EntityRegistryHook::class);
+        $app->tag([OperationSectionCompiler::class], ManifestSectionCompiler::class);
     }
 }

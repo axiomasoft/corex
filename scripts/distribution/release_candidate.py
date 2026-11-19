@@ -101,9 +101,8 @@ def load_policy(path: Path = POLICY_PATH) -> dict[str, Any]:
     excluded = policy.get('excluded')
     if excluded != [
         {'path': 'products/flex-crm', 'reason': 'flex-product-consumer'},
-        {'path': 'packages/access-azguard', 'reason': 'unreleased'},
     ]:
-        raise CandidateError('policy exclusions must preserve FlexCRM and the unreleased AzGuard bridge')
+        raise CandidateError('policy must exclude the FlexCRM product')
     return policy
 
 

@@ -42,7 +42,7 @@ source: git commit fb9acbe6826be0f1786bea5da4efa5a4a605fe43
 
 До ветки в репо было два понятия «аутентифицированный субъект»: `CoreX\Access\Contracts\Principal`
 (`principalType(): PrincipalType`, `principalId(): string`; реализует `PrincipalIdentity`, на нём
-работают AccessChecker, ScopeResolver, grant-lookup и access-azguard) и
+работают AccessChecker, ScopeResolver, grant-lookup и проверка записей) и
 `CoreX\Operations\Authorization\Contracts\Principal` (`id(): string`; реализуют только хостовые
 `PrincipalResolver` и тестовые fixtures). Первая версия переноса сделала второе ядерным типом
 (`CoreX\Invocation\Contracts\Principal`), и в ядре появился дубль. Исправлено так:
@@ -62,7 +62,7 @@ source: git commit fb9acbe6826be0f1786bea5da4efa5a4a605fe43
 Почему форма access, а не `id()`:
 - identity в платформе — пара (type, id): grants, morph-тип `PrincipalIdentity`, DB-ограничения
   access. Один `id()` неоднозначен между user/agent/api_key.
-- у формы access больше реализаций и потребителей (access, access-azguard, seeders, pg-тесты);
+- у формы access больше реализаций и потребителей (access, seeders, pg-тесты);
   у `id()` в репо только тестовые fixtures.
 
 Отвергнутые варианты:

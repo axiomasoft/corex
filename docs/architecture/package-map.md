@@ -55,7 +55,6 @@ flowchart TB
         tools[tools]
         webhooks[webhooks]
         panels[panels: контекст для Packman Panels]
-        accessaz[access-azguard]
     end
     product[Приложение / продукт] --> modules
     product --> adapters
@@ -71,8 +70,7 @@ flowchart TB
     webhooks --> operations
     panels --> core
     panels --> packman
-    accessaz --> azguard
-    accessaz --> access
+    access --> azguard
     tenancy --> tenant
     media --> vaulter
     product --> chatom
@@ -90,8 +88,7 @@ flowchart TB
 | Имя | PHP namespace | Ответственность |
 |---|---|---|
 | `corex` | `CoreX` | Общие прикладные контракты и адаптация Packman |
-| `access` | `CoreX\Access` | Контракты доступа и нативная матрица для самостоятельного профиля |
-| `access-azguard` | `CoreX\AccessAzguard` | Выбор AzGuard 2 владельцем решений и фильтрации записей |
+| `access` | `CoreX\Access` | Проверка доступа и видимости записей по контексту CoreX |
 | `custom-fields` | `CoreX\CustomFields` | Типизированные пользовательские поля, хранение, фильтры и операции их схемы |
 | `intl` | `CoreX\Intl` | Локали, переводы, форматирование, валюты и географические справочники |
 | `media` | `CoreX\Media` | Приватные ссылки и связи, policy и преобразования; байты и GC — Vaulter |
@@ -132,8 +129,8 @@ flowchart TB
   Слово `attributes` также используется для PHP-атрибутов API/SPI и создавало бы неоднозначность.
 - `panels` адаптирует доверенный контекст CoreX. Дескрипторы, admission и saved views
   принадлежат Packman Panels. Rendering и оболочка принадлежат UI-фреймворку или хосту.
-- `access` может работать самостоятельно. При установке `access-azguard` решения принимает
-  AzGuard, а нативная матрица не зеркалируется в его таблицы и не участвует в verdict.
+- `access` устанавливает движок авторизации как зависимость Composer. Приложение
+  вызывает контракты CoreX для проверки прав и ограничения выборок.
 
 ## Правила расширения и именования
 
@@ -193,7 +190,7 @@ reader: для продолжения не требуется конструир
 | Владелец | Что адаптирует CoreX | Подтверждённая публичная граница | Состояние |
 |---|---|---|---|
 | Packman | Контекст, аудит и feature flags модулей; участие пакетов в lifecycle | `Packman\Modules`, `Packman\Schema`, `Packman\Panels` | Используется; второго loader/schema executor нет |
-| AzGuard 2 | Principal/account/workspace, активность CoreX entity | `PanelAccess::decide()`, `Visibility::visibleTo()`, `AccessRequest` | `corex-access-azguard` использует современный API, без mirror таблиц |
+| AzGuard 2 | Principal/account/workspace, активность CoreX entity | `PanelAccess::decide()`, `Visibility::visibleTo()`, `AccessRequest` | `corex-access` вызывает публичные контракты движка |
 | Tenant | Account/workspace → verified isolation selection; account lifecycle → resource owner | `TenantRuntime`, `Selection`, `ContextState`; `PostgresLifecycle`, `ResourceBindings` для physical host | `corex-tenancy` использует внешний runtime; host mapper и resource adapters обязательны |
 | Chatom | Entity → conversation space/channel, host visibility, tenant key, события в поиске/уведомлениях | `Spaces`, `Channels`, `Messages`, `Spaces\Contracts\TenantContext`, `SearchProjectionSink` | Host composition через [Chatom recipe](chatom-host-composition.md); отдельный пустой bridge-пакет не нужен |
 | Vaulter | Entity attachment/reference → blob/document, policy/context, удержание байтов владельцем ссылки | `BlobStore`, `BlobPins`, `FileOperations`, `DocumentType`, `PermissionDriver` | `corex-media` использует BlobStore/BlobPins и общий VaulterDatabase transaction; отдельный wrapper-пакет не нужен |
