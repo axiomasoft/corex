@@ -20,6 +20,14 @@ use Packman\Attributes\Internal;
 #[Internal]
 final class OpisToolSchemaValidator
 {
+    private readonly ?Validator $validator;
+
+    public function __construct()
+    {
+        // Load the parser and its vocabularies during worker startup, before the request deadline.
+        $this->validator = self::isAvailable() ? new Validator(max_errors: SchemaProfile::MAX_ERRORS, stop_at_first_error: false) : null;
+    }
+
     public static function isAvailable(): bool
     {
         return class_exists(Validator::class);
@@ -31,7 +39,7 @@ final class OpisToolSchemaValidator
             throw new InvalidArgumentException('Unsupported schema profile: '.$profile);
         }
 
-        if (! self::isAvailable()) {
+        if ($this->validator === null) {
             throw ToolSchemaFailure::unavailable();
         }
 
@@ -53,7 +61,7 @@ final class OpisToolSchemaValidator
 
     public function validate(SchemaHandle $schema, JsonValue $value): SchemaValidation
     {
-        if (! self::isAvailable()) {
+        if ($this->validator === null) {
             throw ToolSchemaFailure::unavailable();
         }
 
@@ -71,8 +79,7 @@ final class OpisToolSchemaValidator
             throw new InvalidArgumentException('Invalid admitted schema root.');
         }
 
-        $validator = new Validator(max_errors: SchemaProfile::MAX_ERRORS, stop_at_first_error: false);
-        $result = $validator->validate(json_decode($value->canonicalJson, false, 512, JSON_THROW_ON_ERROR), $rootSchema);
+        $result = $this->validator->validate(json_decode($value->canonicalJson, false, 512, JSON_THROW_ON_ERROR), $rootSchema);
 
         if ($result->isValid()) {
             return new SchemaValidation(valid: true, errors: []);

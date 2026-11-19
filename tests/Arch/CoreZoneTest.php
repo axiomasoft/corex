@@ -451,6 +451,12 @@ test('R-Z2 planting in ActorType names the file and symbol', function (): void {
 test('R-Z0 planting of an unclassified error file names the path', function (): void {
     $relative = 'packages/core/src/Errors/Data/UnclassifiedError.php';
     $absolute = SourceScanner::repoRoot().'/'.$relative;
+    $directory = dirname($absolute);
+    $createdDirectory = ! is_dir($directory);
+
+    if ($createdDirectory) {
+        mkdir($directory);
+    }
     $contents = <<<'PHP'
 <?php
 
@@ -477,6 +483,10 @@ PHP;
     } finally {
         if (is_file($absolute)) {
             unlink($absolute);
+        }
+
+        if ($createdDirectory) {
+            rmdir($directory);
         }
     }
 });
