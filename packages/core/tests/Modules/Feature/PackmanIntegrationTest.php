@@ -5,6 +5,7 @@ declare(strict_types=1);
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Foundation\Internal\PackmanFeatureFlags;
 use CoreX\Foundation\Laravel\PackmanRegistrar;
+use CoreX\Tests\Stubs\Lifecycle\StubBaseModule;
 use CoreX\Tests\Stubs\StubModuleDefinition;
 use Illuminate\Filesystem\Filesystem;
 use Packman\Context\Contracts\ContextResolverInterface;
@@ -47,6 +48,8 @@ it('discovers and compiles corex-module packages via extra.corex.module while pr
         ['corex', 'plugin'],
         ['packman', 'module'],
         ['packman', 'plugin'],
+        ['module'],
+        ['plugin'],
     ]);
 
     $files = new Filesystem;
@@ -73,6 +76,12 @@ it('discovers and compiles corex-module packages via extra.corex.module while pr
                         ],
                     ],
                 ],
+                [
+                    'name' => 'corex/stub-base',
+                    'version' => '1.0.0',
+                    'type' => 'module',
+                    'extra' => ['module' => StubBaseModule::class],
+                ],
             ],
         ], JSON_THROW_ON_ERROR));
 
@@ -81,7 +90,7 @@ it('discovers and compiles corex-module packages via extra.corex.module while pr
 
         $manifests = resolve(ModuleDiscovery::class)->discover();
         expect(array_map(static fn ($manifest): string => $manifest->composerName, $manifests))
-            ->toBe(['corex/stub-module']);
+            ->toEqualCanonicalizing(['corex/stub-module', 'corex/stub-base']);
 
         $this->artisan('modules:compile')->assertExitCode(0);
         expect(is_file($sandbox.'/bootstrap/cache/modules.php'))->toBeTrue()

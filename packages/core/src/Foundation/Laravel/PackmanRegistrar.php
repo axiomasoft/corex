@@ -27,29 +27,11 @@ final class PackmanRegistrar implements PackageRegistrar
     use RegistersNothingOnBoot;
 
     /** @var list<string> */
-    private const array DEFAULT_PACKAGE_TYPES = [
-        'corex-module',
-        'corex-plugin',
-        'packman-module',
-        'packman-plugin',
-        'module',
-        'plugin',
-    ];
-
-    /** @var list<string> */
     private const array UPSTREAM_PACKAGE_TYPES = [
         'packman-module',
         'packman-plugin',
         'module',
         'plugin',
-    ];
-
-    /** @var list<list<string>> */
-    private const array DEFAULT_EXTRA_KEYS = [
-        ['corex', 'module'],
-        ['corex', 'plugin'],
-        ['packman', 'module'],
-        ['packman', 'plugin'],
     ];
 
     /** @var list<list<string>> */
@@ -67,13 +49,13 @@ final class PackmanRegistrar implements PackageRegistrar
         $packageTypes = $config->get('modules.package_types');
 
         if ($packageTypes === null || $packageTypes === self::UPSTREAM_PACKAGE_TYPES) {
-            $config->set('modules.package_types', self::DEFAULT_PACKAGE_TYPES);
+            $config->set('modules.package_types', ['corex-module', 'corex-plugin', ...self::UPSTREAM_PACKAGE_TYPES]);
         }
 
         $extraKeys = $config->get('modules.extra_keys');
 
         if ($extraKeys === null || $extraKeys === self::UPSTREAM_EXTRA_KEYS) {
-            $config->set('modules.extra_keys', self::DEFAULT_EXTRA_KEYS);
+            $config->set('modules.extra_keys', [['corex', 'module'], ['corex', 'plugin'], ...self::UPSTREAM_EXTRA_KEYS]);
         }
 
         $app->singleton(ContextResolverInterface::class, PackmanContextResolver::class);
