@@ -27,10 +27,10 @@ use CoreX\Tools\ToolsServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 use Packman\Modules\ModulesServiceProvider;
 
 final class ToolGuardConcurrencyTest extends TestCase
@@ -67,7 +67,7 @@ final class ToolGuardConcurrencyTest extends TestCase
 
     public function test_equal_key_requests_replay_under_row_lock_without_duplicate_effects(): void
     {
-        $registry = resolve(RegistryCompiler::class)->compile([
+        $registry = resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
                 Api::tool(
                     code: 'notes.create',

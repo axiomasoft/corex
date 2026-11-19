@@ -10,7 +10,7 @@
         "axiomasoft/corex-tasks": "^1.0@dev",
         "axiomasoft/corex-workflow": "^1.0@dev",
         "axiomasoft/packman": "^0.1",
-        "axiomasoft/packman-modules": "^0.1",
+        "axiomasoft/packman-modules": "^0.1.1",
         "axiomasoft/packman-schema": "^0.1",
         "ext-bcmath": "*",
         "illuminate/contracts": "^13.0",

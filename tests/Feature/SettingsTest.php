@@ -17,13 +17,13 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
+use Packman\Modules\Data\Settings\DefaultSettingDefinition;
 use Packman\Modules\Internal\Lifecycle\DatabaseModuleStateReader;
 use Packman\Modules\Internal\Registry\CompiledModuleRegistry;
 use Packman\Modules\Internal\Registry\RepositoryModuleRegistryCache;
-use Packman\Modules\Internal\Settings\DefaultSettingDefinition;
 use Packman\Modules\Internal\Support\ModulesOptions;
 use Packman\Modules\ModulesServiceProvider;
 use Packman\Settings\Contracts\SettingDefaultsProviderInterface as SettingDefaultsProvider;
@@ -231,7 +231,7 @@ it('resolves a manifest-declared DefaultSettingDefinition through the container-
             DefaultSettingDefinition::make('theme', 'manifest-default')->sensitive(),
         ]);
 
-    $compiled = (new RegistryCompiler)->compile([$manifest]);
+    $compiled = resolve(ModuleCompilation::class)->compile([$manifest]);
     $path = sys_get_temp_dir().'/corex_modules_settings_test_'.bin2hex(random_bytes(4)).'.php';
     CompiledModuleRegistry::writeAtomic($path, [], $compiled);
 

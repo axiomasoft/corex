@@ -1,7 +1,7 @@
 # Зависимости экосистемы
 
 CoreX использует публичные контракты Packman, Tenant, AzGuard и Vaulter.
-Пакеты `axiomasoft/packman*` зафиксированы на версии `^0.1` (`0.1.0`), а для
+Пакеты `axiomasoft/packman*` зафиксированы на версии `^0.1` (`0.1.1`), а для
 Tenant (`^1.0@dev`), AzGuard (`^2.0@dev`) и Vaulter (`^1.0@dev`) проверяются
 development-снимки владельцев. Ограничения в Composer не утверждают, что эти
 источники доступны без авторизации.
@@ -15,12 +15,12 @@ PSR-4 пути внутри монорепозитория владельца. �
 
 | Владелец | Пакеты | Source reference |
 |---|---|---|
-| Packman (`0.1.0`) | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `7bce48a5061b256ffec2ed786d94ed33da63109e` |
-| AzGuard | `azguard` | `bfa228c252ff6148fcb8496248692eb785c5663f` |
-| Tenant | `tenant`, `tenant-laravel` | `2bda06ff47ea3e2127dbfade1b3dee59e1102238` |
-| Vaulter | `vaulter-core`, `vaulter-media` | `ebb75a8adcf6b8ae38324afc17ef9e1f2d447ff3` |
+| Packman (`0.1.1`) | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `4159f3286afd39de3d815ca61b5320d10026f07b` |
+| AzGuard | `azguard` | `74886a7f2c5fac7a17c9f9adf871ec2ace96830e` |
+| Tenant | `tenant`, `tenant-laravel` | `3c39875b7a3b5f20889a5158cb63c860433875f2` |
+| Vaulter | `vaulter-core`, `vaulter-media` | `a9fb9982bfa605eeefb3e93a0b09d0b014fff710` |
 
-Все имена в таблице имеют префикс `axiomasoft/`. Packman зафиксирован на `0.1.0`,
+Все имена в таблице имеют префикс `axiomasoft/`. Packman зафиксирован на `0.1.1`,
 а остальные снимки используют `dev-main` и числовой branch alias владельца; это
 метаданные разрешения, а не доказательство, что commit находится в опубликованном
 remote `main`. AzGuard source URL указывает на `axiomasoft/azguard-private`; среде
@@ -45,7 +45,7 @@ CoreX-пакеты и продукт устанавливаются из отн�
 локальный репозиторий. Проверить commit можно без изменения checkout:
 
 ```bash
-git -C /absolute/path/vaulter cat-file -e ebb75a8adcf6b8ae38324afc17ef9e1f2d447ff3^{commit}
+git -C /absolute/path/vaulter cat-file -e a9fb9982bfa605eeefb3e93a0b09d0b014fff710^{commit}
 ```
 
 Для локальной установки можно направить только Vaulter source URL на этот checkout

@@ -45,7 +45,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Packman\Config\Data\SecretRef;
 use Packman\Errors\Contracts\ProblemRegistry;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use PDO;
 use RuntimeException;
 
@@ -91,7 +91,7 @@ final class IdempotentInvocationTest extends TestCase
         $this->inner = new EffectInvokerFixture($this->connection);
         $this->authorizer = new ReplayAuthorizerFixture;
         $this->operationAuthorizer = new OperationAuthorizerFixture;
-        $this->modules = new ModuleFixture(resolve(RegistryCompiler::class)->compile([], installedPackages: []));
+        $this->modules = new ModuleFixture(resolve(ModuleCompilation::class)->compile([], installedPackages: []));
     }
 
     protected function tearDown(): void

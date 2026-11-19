@@ -19,11 +19,11 @@ use Flex\Crm\Tests\Support\TestContext;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 
 it('declares and dispatches company, contact and association operations through the platform boundary', function (): void {
-    $compiled = resolve(RegistryCompiler::class)->compile(manifests: [(new CrmModule)->manifest()], installedPackages: []);
+    $compiled = resolve(ModuleCompilation::class)->compile(manifests: [(new CrmModule)->manifest()], installedPackages: []);
     $registry = Mockery::mock(ModuleRegistry::class);
     $registry->shouldReceive('compiled')->andReturn($compiled);
     $registry->shouldReceive('isActive')->with('flex/crm', Mockery::type(TenantContext::class))->andReturn(true);

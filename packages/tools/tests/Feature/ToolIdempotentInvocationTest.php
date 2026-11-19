@@ -48,10 +48,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 use Packman\Modules\ModulesServiceProvider;
 use Packman\Schema\Contracts\Migration\SchemaMigrator;
 
@@ -104,7 +104,7 @@ final class ToolIdempotentInvocationTest extends TestCase
         $this->principal = new IdentityFixture;
         $this->authorizer = new ToolIdempotentInvocationReplayAuthorizerFixture;
         $this->operationAuthorizer = new ToolIdempotentInvocationOperationAuthorizerFixture;
-        $this->modules = new ModuleFixture(resolve(RegistryCompiler::class)->compile([], installedPackages: []));
+        $this->modules = new ModuleFixture(resolve(ModuleCompilation::class)->compile([], installedPackages: []));
     }
 
     protected function tearDown(): void
@@ -117,7 +117,7 @@ final class ToolIdempotentInvocationTest extends TestCase
     public function test_http_key_and_exposed_tool_operation_key_share_one_effect(): void
     {
         $schema = ['type' => 'object'];
-        $registry = resolve(RegistryCompiler::class)->compile([
+        $registry = resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
                 Api::operation('notes.create', 'POST', '/notes', ToolIdempotentInvocationIdempotentHttpHandler::class, 'notes.write', $schema, $schema, ['name' => ['required', 'string']])
                     ->asCommand()->idempotency('required')->effect('tenant_transactional'),

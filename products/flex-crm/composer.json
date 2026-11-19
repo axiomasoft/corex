@@ -21,7 +21,7 @@
         "axiomasoft/corex": "^1.0@dev",
         "axiomasoft/corex-intl": "^1.0@dev",
         "axiomasoft/packman": "^0.1",
-        "axiomasoft/packman-modules": "^0.1",
+        "axiomasoft/packman-modules": "^0.1.1",
         "axiomasoft/packman-schema": "^0.1",
         "brick/money": "^0.9 || ^0.10",
         "ext-filter": "*",

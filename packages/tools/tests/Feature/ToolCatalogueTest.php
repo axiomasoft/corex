@@ -26,11 +26,11 @@ use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\Tests\Support\ToolPolicyFixture;
 use CoreX\Tools\Tests\TestCase;
 use CoreX\Tools\ToolsServiceProvider;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Compiler\CompiledRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 use Packman\Modules\ModulesServiceProvider;
 
 final class ToolCatalogueTest extends TestCase
@@ -79,7 +79,7 @@ final class ToolCatalogueTest extends TestCase
     /** @param  list<Api>  $declarations */
     private function compile(array $declarations): CompiledRegistry
     {
-        return resolve(RegistryCompiler::class)->compile([
+        return resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends($declarations),
         ], installedPackages: []);
     }

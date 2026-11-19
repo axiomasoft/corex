@@ -37,10 +37,10 @@ use CoreX\Tools\Tests\Support\ToolPolicyFixture;
 use CoreX\Tools\Tests\TestCase;
 use Packman\Errors\Contracts\ProblemRegistry;
 use Packman\Errors\Enums\ErrorCategory;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 use PHPUnit\Framework\Attributes\DataProvider;
 use RuntimeException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
@@ -60,7 +60,7 @@ final class ToolErrorTaxonomyTest extends TestCase
         parent::setUp();
         CountingHandler::$calls = 0;
         $schema = ['type' => 'object', 'additionalProperties' => true];
-        $compiled = resolve(RegistryCompiler::class)->compile([
+        $compiled = resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
                 Api::tool('notes.read', CountingHandler::class, 'notes.read', $schema, $schema, 'read', 'read-only')->titled('Read', 'Read'),
                 Api::operation('notes.read', 'POST', '/notes', CountingHandler::class, 'notes.read', $schema, $schema),
@@ -199,7 +199,7 @@ final class ToolErrorTaxonomyTest extends TestCase
     {
         $schema = ['type' => 'object'];
         $declaration = Api::tool('notes.write', CountingHandler::class, 'notes.write', $schema, $schema, 'write', 'provider-key')->titled('Write', 'Write');
-        $compiled = resolve(RegistryCompiler::class)->compile([ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$declaration])], installedPackages: []);
+        $compiled = resolve(ModuleCompilation::class)->compile([ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$declaration])], installedPackages: []);
         $descriptor = ToolDescriptorFactory::fromDeclaration($compiled->api[0]);
         $call = new ToolCall(code: 'notes.write', toolVersion: 'v1', expectedContractHash: $descriptor->contractHash, arguments: JsonObjectFactory::fromArray(['name' => 'alpha']), requestId: 'guard-taxonomy', operationKey: 'guard-key');
         $called = false;
@@ -218,7 +218,7 @@ final class ToolErrorTaxonomyTest extends TestCase
     {
         $schema = ['type' => 'object'];
         $declaration = Api::tool('notes.provider', CountingHandler::class, 'notes.write', $schema, $schema, 'write', 'provider-key')->titled('Provider', 'Provider');
-        $compiled = resolve(RegistryCompiler::class)->compile([ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$declaration])], installedPackages: []);
+        $compiled = resolve(ModuleCompilation::class)->compile([ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$declaration])], installedPackages: []);
         $descriptor = ToolDescriptorFactory::fromDeclaration($compiled->api[0]);
         $call = new ToolCall(code: 'notes.provider', toolVersion: 'v1', expectedContractHash: $descriptor->contractHash, arguments: JsonObjectFactory::fromArray(['name' => 'alpha']), requestId: 'provider-taxonomy', operationKey: 'provider-key');
         $guard = new ToolGuardFixture;

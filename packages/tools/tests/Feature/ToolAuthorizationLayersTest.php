@@ -42,10 +42,10 @@ use CoreX\Tools\ToolsServiceProvider;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Orchestra\Testbench\TestCase;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 use Packman\Modules\ModulesServiceProvider;
 
 final class ToolAuthorizationLayersTest extends TestCase
@@ -144,7 +144,7 @@ final class ToolAuthorizationLayersTest extends TestCase
                 'secret' => 'secret',
             ],
         );
-        $registry = resolve(RegistryCompiler::class)->compile([
+        $registry = resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$operation, $tool]),
         ], installedPackages: []);
 

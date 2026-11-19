@@ -22,10 +22,10 @@ use CoreX\Operations\Testing\NoteHandler;
 use CoreX\Operations\Tests\TestCase;
 use Packman\Errors\Contracts\ProblemRegistry;
 use Packman\Errors\Enums\ErrorCategory;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 final class InputEnvelopeTest extends TestCase
@@ -41,7 +41,7 @@ final class InputEnvelopeTest extends TestCase
                 responseSchema: ['type' => 'object'], rules: ['title' => ['required', 'string']],
             );
         }
-        $registry = $this->app->make(RegistryCompiler::class)->compile([
+        $registry = $this->app->make(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends($declarations),
         ], installedPackages: []);
         foreach ($registry->api as $declaration) {

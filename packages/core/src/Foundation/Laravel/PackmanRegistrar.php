@@ -18,6 +18,7 @@ use Packman\Context\Contracts\ContextResolverInterface;
 use Packman\Features\Contracts\FeatureFlagsInterface;
 use Packman\Foundation\Concerns\RegistersNothingOnBoot;
 use Packman\Foundation\Contracts\PackageRegistrar;
+use Packman\Modules\Contracts\Definition\ModuleDiscovery;
 use Packman\Modules\Contracts\Entities\EntityRegistryHook;
 
 /** CoreX's domain adapters for the Packman module runtime. */
@@ -26,36 +27,20 @@ final class PackmanRegistrar implements PackageRegistrar
 {
     use RegistersNothingOnBoot;
 
-    /** @var list<string> */
-    private const array UPSTREAM_PACKAGE_TYPES = [
-        'packman-module',
-        'packman-plugin',
-        'module',
-        'plugin',
-    ];
-
-    /** @var list<list<string>> */
-    private const array UPSTREAM_EXTRA_KEYS = [
-        ['packman', 'module'],
-        ['packman', 'plugin'],
-        ['module'],
-        ['plugin'],
-    ];
-
     #[Override]
     public function register(Application $app): void
     {
         $config = $app->make(Repository::class);
         $packageTypes = $config->get('modules.package_types');
 
-        if ($packageTypes === null || $packageTypes === self::UPSTREAM_PACKAGE_TYPES) {
-            $config->set('modules.package_types', ['corex-module', 'corex-plugin', ...self::UPSTREAM_PACKAGE_TYPES]);
+        if ($packageTypes === null || $packageTypes === ModuleDiscovery::DEFAULT_PACKAGE_TYPES) {
+            $config->set('modules.package_types', ['corex-module', 'corex-plugin', ...ModuleDiscovery::DEFAULT_PACKAGE_TYPES]);
         }
 
         $extraKeys = $config->get('modules.extra_keys');
 
-        if ($extraKeys === null || $extraKeys === self::UPSTREAM_EXTRA_KEYS) {
-            $config->set('modules.extra_keys', [['corex', 'module'], ['corex', 'plugin'], ...self::UPSTREAM_EXTRA_KEYS]);
+        if ($extraKeys === null || $extraKeys === ModuleDiscovery::DEFAULT_EXTRA_KEYS) {
+            $config->set('modules.extra_keys', [['corex', 'module'], ['corex', 'plugin'], ...ModuleDiscovery::DEFAULT_EXTRA_KEYS]);
         }
 
         $app->singleton(ContextResolverInterface::class, PackmanContextResolver::class);

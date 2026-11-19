@@ -8,7 +8,7 @@
         "axiomasoft/corex": "^1.0@dev",
         "axiomasoft/corex-operations": "^1.0@dev",
         "axiomasoft/packman": "^0.1",
-        "axiomasoft/packman-modules": "^0.1",
+        "axiomasoft/packman-modules": "^0.1.1",
         "illuminate/auth": "^13.0",
         "illuminate/console": "^13.0",
         "illuminate/contracts": "^13.0",

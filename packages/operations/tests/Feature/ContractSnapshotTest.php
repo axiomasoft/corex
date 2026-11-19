@@ -9,12 +9,12 @@ use CoreX\Operations\OpenApi\Internal\ContractSnapshotBuilder;
 use CoreX\Operations\Testing\ModuleFixture;
 use CoreX\Operations\Testing\NoteHandler;
 use CoreX\Operations\Tests\TestCase;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Compiler\CompiledRegistry;
 use Packman\Modules\Data\Compiler\InstalledPackageVersion;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 
 final class ContractSnapshotTest extends TestCase
 {
@@ -110,7 +110,7 @@ final class ContractSnapshotTest extends TestCase
             $declarations = array_reverse($declarations);
         }
 
-        return resolve(RegistryCompiler::class)->compile([
+        return resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends($declarations),
         ], installedPackages: [], installedVersions: [
             'axiomasoft/corex' => new InstalledPackageVersion('axiomasoft/corex', '1.0.0', 'p13-fixture'),

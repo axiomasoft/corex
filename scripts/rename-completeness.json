@@ -725,7 +725,7 @@
             },
             {
                 "old": "CoreX\\Modules\\DefaultSettingDefinition",
-                "new": "Packman\\Modules\\Internal\\Settings\\DefaultSettingDefinition",
+                "new": "Packman\\Modules\\Data\\Settings\\DefaultSettingDefinition",
                 "match": "fqcn"
             },
             {
@@ -740,7 +740,7 @@
             },
             {
                 "old": "CoreX\\Modules\\ModuleDependency",
-                "new": "Packman\\Modules\\Internal\\Definition\\ModuleDependency",
+                "new": "Packman\\Modules\\Data\\Lifecycle\\ModuleDependency",
                 "match": "fqcn"
             },
             {
@@ -2285,7 +2285,7 @@
             },
             {
                 "old": "CoreX\\Modules\\Compiler\\CompiledSettingDefault",
-                "new": "Packman\\Modules\\Internal\\Compiler\\CompiledSettingDefault",
+                "new": "Packman\\Modules\\Data\\Compiler\\CompiledSettingDefault",
                 "match": "fqcn"
             },
             {
@@ -2310,7 +2310,7 @@
             },
             {
                 "old": "CoreX\\Modules\\Definition\\ModuleDependency",
-                "new": "Packman\\Modules\\Internal\\Definition\\ModuleDependency",
+                "new": "Packman\\Modules\\Data\\Lifecycle\\ModuleDependency",
                 "match": "fqcn"
             },
             {
@@ -2330,22 +2330,22 @@
             },
             {
                 "old": "CoreX\\Modules\\Extend\\Filament",
-                "new": "Packman\\Modules\\Internal\\Extend\\Filament",
+                "new": "Packman\\Modules\\Data\\Extenders\\Filament",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Extend\\Menu",
-                "new": "Packman\\Modules\\Internal\\Extend\\Menu",
+                "new": "Packman\\Modules\\Data\\Extenders\\Menu",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Extend\\Routes",
-                "new": "Packman\\Modules\\Internal\\Extend\\Routes",
+                "new": "Packman\\Modules\\Data\\Extenders\\Routes",
                 "match": "fqcn"
             },
             {
                 "old": "CoreX\\Modules\\Extend\\Workflow",
-                "new": "Packman\\Modules\\Internal\\Extend\\Workflow",
+                "new": "Packman\\Modules\\Data\\Extenders\\Workflow",
                 "match": "fqcn"
             },
             {
@@ -2395,7 +2395,7 @@
             },
             {
                 "old": "CoreX\\Modules\\Settings\\DefaultSettingDefinition",
-                "new": "Packman\\Modules\\Internal\\Settings\\DefaultSettingDefinition",
+                "new": "Packman\\Modules\\Data\\Settings\\DefaultSettingDefinition",
                 "match": "fqcn"
             },
             {

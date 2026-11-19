@@ -12,7 +12,7 @@
         "illuminate/support": "^13.0",
         "axiomasoft/azguard": "^2.0@dev",
         "axiomasoft/packman": "^0.1",
-        "axiomasoft/packman-modules": "^0.1"
+        "axiomasoft/packman-modules": "^0.1.1"
     },
     "require-dev": {
         "larastan/larastan": "^3.12",

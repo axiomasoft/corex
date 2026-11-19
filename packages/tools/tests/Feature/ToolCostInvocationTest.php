@@ -48,10 +48,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
 use Packman\Config\Data\SecretRef;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 use Packman\Modules\ModulesServiceProvider;
 use Packman\Schema\Contracts\Migration\SchemaMigrator;
 use Packman\Schema\Contracts\Migration\SchemaSets;
@@ -102,7 +102,7 @@ final class ToolCostInvocationTest extends TestCase
     public function test_http_and_exposed_tool_share_cost_metadata_without_scope_keys(): void
     {
         $schema = $this->schema();
-        $registry = resolve(RegistryCompiler::class)->compile([
+        $registry = resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
                 Api::operation('notes.read', 'GET', '/notes', ToolCostInvocationCostInvocationHandler::class, 'notes.read', $schema, $schema)
                     ->cost(['base' => 2]),

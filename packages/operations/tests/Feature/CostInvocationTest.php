@@ -52,10 +52,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Packman\Config\Data\SecretRef;
 use Packman\Errors\Contracts\ProblemRegistry;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 use RuntimeException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Throwable;
@@ -189,7 +189,7 @@ final class CostInvocationTest extends TestCase
     public function test_http_rate_limit_keeps_retry_after_and_store_failure_has_no_retry_header(): void
     {
         $schema = $this->schema();
-        $registry = resolve(RegistryCompiler::class)->compile([
+        $registry = resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
                 Api::operation('notes.read', 'GET', '/notes', CostInvocationHandler::class, 'notes.read', $schema, $schema),
             ]),
@@ -292,7 +292,7 @@ final class CostInvocationTest extends TestCase
 
     private function modules(): ModuleFixture
     {
-        return new ModuleFixture(resolve(RegistryCompiler::class)->compile([], installedPackages: []));
+        return new ModuleFixture(resolve(ModuleCompilation::class)->compile([], installedPackages: []));
     }
 
     private function operationAuthorizer(): OperationAuthorizer

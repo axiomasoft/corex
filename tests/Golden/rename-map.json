@@ -4804,7 +4804,7 @@
             "from": "CoreX\\Modules\\Compiler\\CompiledSettingDefault",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "Packman\\Modules\\Internal\\Compiler\\CompiledSettingDefault"
+            "to": "Packman\\Modules\\Data\\Compiler\\CompiledSettingDefault"
         },
         {
             "from": "CoreX\\Modules\\Compiler\\ExtensionReplacement",
@@ -4834,13 +4834,13 @@
             "from": "CoreX\\Modules\\Definition\\ModuleDependency",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "Packman\\Modules\\Internal\\Definition\\ModuleDependency"
+            "to": "Packman\\Modules\\Data\\Lifecycle\\ModuleDependency"
         },
         {
             "from": "CoreX\\Modules\\ModuleDependency",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "Packman\\Modules\\Internal\\Definition\\ModuleDependency"
+            "to": "Packman\\Modules\\Data\\Lifecycle\\ModuleDependency"
         },
         {
             "from": "CoreX\\Modules\\Definition\\ModuleRuntimeContext",
@@ -4876,25 +4876,25 @@
             "from": "CoreX\\Modules\\Extend\\Filament",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "Packman\\Modules\\Internal\\Extend\\Filament"
+            "to": "Packman\\Modules\\Data\\Extenders\\Filament"
         },
         {
             "from": "CoreX\\Modules\\Extend\\Menu",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "Packman\\Modules\\Internal\\Extend\\Menu"
+            "to": "Packman\\Modules\\Data\\Extenders\\Menu"
         },
         {
             "from": "CoreX\\Modules\\Extend\\Routes",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "Packman\\Modules\\Internal\\Extend\\Routes"
+            "to": "Packman\\Modules\\Data\\Extenders\\Routes"
         },
         {
             "from": "CoreX\\Modules\\Extend\\Workflow",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "Packman\\Modules\\Internal\\Extend\\Workflow"
+            "to": "Packman\\Modules\\Data\\Extenders\\Workflow"
         },
         {
             "from": "CoreX\\Modules\\Gate\\AllowAllActivationGate",
@@ -4960,13 +4960,13 @@
             "from": "CoreX\\Modules\\DefaultSettingDefinition",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "Packman\\Modules\\Internal\\Settings\\DefaultSettingDefinition"
+            "to": "Packman\\Modules\\Data\\Settings\\DefaultSettingDefinition"
         },
         {
             "from": "CoreX\\Modules\\Settings\\DefaultSettingDefinition",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "Packman\\Modules\\Internal\\Settings\\DefaultSettingDefinition"
+            "to": "Packman\\Modules\\Data\\Settings\\DefaultSettingDefinition"
         },
         {
             "from": "CoreX\\Modules\\Support\\ModulesConfigSection",

@@ -54,7 +54,7 @@
         "league/flysystem-aws-s3-v3": "3.35.3",
         "laravel/octane": "2.21.0",
         "axiomasoft/packman": "^0.1",
-        "axiomasoft/packman-modules": "^0.1",
+        "axiomasoft/packman-modules": "^0.1.1",
         "axiomasoft/packman-schema": "^0.1",
         "axiomasoft/azguard": "^2.0@dev",
         "axiomasoft/packman-panels": "^0.1",
@@ -136,11 +136,11 @@
             "type": "package",
             "package": {
                 "name": "axiomasoft/packman",
-                "version": "0.1.0",
+                "version": "0.1.1",
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "7bce48a5061b256ffec2ed786d94ed33da63109e"
+                    "reference": "4159f3286afd39de3d815ca61b5320d10026f07b"
                 },
                 "require": {
                     "php": "^8.4",
@@ -186,9 +186,7 @@
                         "Packman\\": "packages/core/src/"
                     }
                 },
-                "license": [
-                    "MIT"
-                ],
+                "license": "MIT",
                 "authors": [
                     {
                         "name": "Dmitry Vostrikov",
@@ -197,14 +195,14 @@
                 ],
                 "description": "Packman unified ecosystem kernel — attributes, foundation registrars, context contracts, JsonDocument, configuration options/compiler/cache, RFC 9457 error registry, doctor diagnostics, domain events, features, and settings contracts.",
                 "keywords": [
+                    "packman",
+                    "php",
+                    "kernel",
                     "attributes",
                     "config",
-                    "doctor",
                     "errors",
-                    "kernel",
-                    "laravel",
-                    "packman",
-                    "php"
+                    "doctor",
+                    "laravel"
                 ]
             }
         },
@@ -212,11 +210,11 @@
             "type": "package",
             "package": {
                 "name": "axiomasoft/packman-modules",
-                "version": "0.1.0",
+                "version": "0.1.1",
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "7bce48a5061b256ffec2ed786d94ed33da63109e"
+                    "reference": "4159f3286afd39de3d815ca61b5320d10026f07b"
                 },
                 "require": {
                     "php": "^8.4",
@@ -255,9 +253,7 @@
                         "Packman\\Modules\\": "packages/modules/src/"
                     }
                 },
-                "license": [
-                    "MIT"
-                ],
+                "license": "MIT",
                 "description": "Universal Packman Composer-discovered DB-backed platform module and plugin compiler, lifecycle FSM, schema ownership claims, and PHPStan boundary rules."
             }
         },
@@ -265,11 +261,11 @@
             "type": "package",
             "package": {
                 "name": "axiomasoft/packman-schema",
-                "version": "0.1.0",
+                "version": "0.1.1",
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "7bce48a5061b256ffec2ed786d94ed33da63109e"
+                    "reference": "4159f3286afd39de3d815ca61b5320d10026f07b"
                 },
                 "require": {
                     "php": "^8.4",
@@ -299,9 +295,7 @@
                         "Packman\\Schema\\": "packages/schema/src/"
                     }
                 },
-                "license": [
-                    "MIT"
-                ],
+                "license": "MIT",
                 "description": "Universal Packman schema governance, schema sets, table ownership, prefix fingerprinting, PostgreSQL constraint naming, and step compiler."
             }
         },
@@ -313,12 +307,13 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/azguard-private.git",
-                    "reference": "bfa228c252ff6148fcb8496248692eb785c5663f"
+                    "reference": "74886a7f2c5fac7a17c9f9adf871ec2ace96830e"
                 },
                 "require": {
+                    "php": "^8.4",
                     "axiomasoft/packman": "^0.1",
                     "axiomasoft/packman-panels": "^0.1",
-                    "axiomasoft/packman-plugins": "^0.1",
+                    "axiomasoft/packman-plugins": "^0.1.1",
                     "axiomasoft/packman-schema": "^0.1",
                     "illuminate/auth": "^13.0",
                     "illuminate/console": "^13.0",
@@ -329,8 +324,7 @@
                     "illuminate/log": "^13.0",
                     "illuminate/queue": "^13.0",
                     "illuminate/routing": "^13.0",
-                    "illuminate/support": "^13.0",
-                    "php": "^8.4"
+                    "illuminate/support": "^13.0"
                 },
                 "suggest": {
                     "dragonmantank/cron-expression": "Required to validate cron expressions and run Laravel scheduled maintenance without laravel/framework."
@@ -388,9 +382,7 @@
                         "AzGuard\\": "packages/core/src/"
                     }
                 },
-                "license": [
-                    "MIT"
-                ],
+                "license": "MIT",
                 "authors": [
                     {
                         "name": "Dmitry Vostrikov",
@@ -400,13 +392,13 @@
                 "description": "Panel-based authorization for Laravel: permission sources, explicit policy authority, scoped assignments",
                 "homepage": "https://github.com/axiomasoft/azguard",
                 "keywords": [
-                    "access-control",
-                    "authorization",
-                    "gate",
                     "laravel",
+                    "authorization",
                     "permissions",
+                    "roles",
                     "rbac",
-                    "roles"
+                    "access-control",
+                    "gate"
                 ],
                 "support": {
                     "email": "dv.vostrikov@gmail.com",
@@ -420,11 +412,11 @@
             "type": "package",
             "package": {
                 "name": "axiomasoft/packman-panels",
-                "version": "0.1.0",
+                "version": "0.1.1",
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "7bce48a5061b256ffec2ed786d94ed33da63109e"
+                    "reference": "4159f3286afd39de3d815ca61b5320d10026f07b"
                 },
                 "require": {
                     "php": "^8.4",
@@ -458,9 +450,7 @@
                         "Packman\\Panels\\": "packages/panels/src/"
                     }
                 },
-                "license": [
-                    "MIT"
-                ],
+                "license": "MIT",
                 "description": "Universal Packman headless panel descriptors, two-phase PanelRegistry/PanelRecipe builder, slot/form data projection, admission evaluation, and SQL saved views."
             }
         },
@@ -468,11 +458,11 @@
             "type": "package",
             "package": {
                 "name": "axiomasoft/packman-plugins",
-                "version": "0.1.0",
+                "version": "0.1.1",
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "7bce48a5061b256ffec2ed786d94ed33da63109e"
+                    "reference": "4159f3286afd39de3d815ca61b5320d10026f07b"
                 },
                 "require": {
                     "php": "^8.4",
@@ -504,9 +494,7 @@
                         "Packman\\Plugins\\": "packages/plugins/src/"
                     }
                 },
-                "license": [
-                    "MIT"
-                ],
+                "license": "MIT",
                 "description": "Universal Packman intra-package plugin graph compiler, capabilities, typed slots, and immutable contribution registry."
             }
         },
@@ -523,10 +511,10 @@
                 },
                 "autoload": {
                     "psr-4": {
-                        "Tenant\\": "packages/tenant/src/"
+                        "Tenant\\": "packages/core/src/"
                     },
                     "files": [
-                        "packages/tenant/src/aliases.php"
+                        "packages/core/src/aliases.php"
                     ]
                 },
                 "extra": {
@@ -556,7 +544,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/tenant.git",
-                    "reference": "2bda06ff47ea3e2127dbfade1b3dee59e1102238"
+                    "reference": "3c39875b7a3b5f20889a5158cb63c860433875f2"
                 }
             }
         },
@@ -585,10 +573,10 @@
                 },
                 "autoload": {
                     "psr-4": {
-                        "Tenant\\Laravel\\": "packages/tenant-laravel/src/"
+                        "Tenant\\Laravel\\": "packages/laravel/src/"
                     },
                     "files": [
-                        "packages/tenant-laravel/src/aliases.php"
+                        "packages/laravel/src/aliases.php"
                     ]
                 },
                 "extra": {
@@ -623,7 +611,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/tenant.git",
-                    "reference": "2bda06ff47ea3e2127dbfade1b3dee59e1102238"
+                    "reference": "3c39875b7a3b5f20889a5158cb63c860433875f2"
                 }
             }
         },
@@ -659,7 +647,7 @@
                 "require": {
                     "php": ">=8.4 <8.6",
                     "axiomasoft/packman": "^0.1",
-                    "axiomasoft/packman-plugins": "^0.1",
+                    "axiomasoft/packman-plugins": "^0.1.1",
                     "axiomasoft/packman-schema": "^0.1",
                     "illuminate/console": "^13.0",
                     "illuminate/contracts": "^13.0",
@@ -734,7 +722,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/vaulter.git",
-                    "reference": "ebb75a8adcf6b8ae38324afc17ef9e1f2d447ff3"
+                    "reference": "a9fb9982bfa605eeefb3e93a0b09d0b014fff710"
                 }
             }
         },
@@ -820,7 +808,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/vaulter.git",
-                    "reference": "ebb75a8adcf6b8ae38324afc17ef9e1f2d447ff3"
+                    "reference": "a9fb9982bfa605eeefb3e93a0b09d0b014fff710"
                 }
             }
         },
@@ -865,11 +853,11 @@
                         "dev-main": "0.1.x-dev"
                     }
                 },
-                "version": "0.1.0",
+                "version": "0.1.1",
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "7bce48a5061b256ffec2ed786d94ed33da63109e"
+                    "reference": "4159f3286afd39de3d815ca61b5320d10026f07b"
                 }
             }
         },
@@ -914,11 +902,11 @@
                         "dev-main": "0.1.x-dev"
                     }
                 },
-                "version": "0.1.0",
+                "version": "0.1.1",
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "7bce48a5061b256ffec2ed786d94ed33da63109e"
+                    "reference": "4159f3286afd39de3d815ca61b5320d10026f07b"
                 }
             }
         }

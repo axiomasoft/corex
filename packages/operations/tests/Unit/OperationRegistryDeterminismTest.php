@@ -6,10 +6,10 @@ namespace CoreX\Operations\Tests\Unit;
 
 use CoreX\Operations\Testing\StubOperationHandler;
 use CoreX\Operations\Tests\TestCase;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 use Packman\Modules\Exceptions\Compiler\CompilationException;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 
 uses(TestCase::class);
 
@@ -27,6 +27,6 @@ it('rejects duplicate normalized route identity and names both owners', function
     $alpha = ModuleManifest::make('example/alpha')->title('A')->tablePrefix('aaa')->extends([$operation()]);
     $beta = ModuleManifest::make('example/beta')->title('B')->tablePrefix('bbb')->extends([$operation()]);
 
-    expect(fn () => resolve(RegistryCompiler::class)->compile([$alpha, $beta], []))
+    expect(fn () => resolve(ModuleCompilation::class)->compile([$alpha, $beta], []))
         ->toThrow(CompilationException::class, 'Duplicate identity [api.operation:v1:notes.show]');
 });

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace CoreX\Tools\Tests\Support;
 
 use Packman\Context\Contracts\ContextScopeInterface;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Compiler\CompiledModule;
 use Packman\Modules\Data\Compiler\CompiledRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 
 /** Selected P3–P6 archive cohort contributions for CONTRIB qualification. */
 final class ArchiveToolModule implements ModuleRegistry
@@ -31,7 +31,7 @@ final class ArchiveToolModule implements ModuleRegistry
         $input = self::inputSchema();
         $output = self::outputSchema();
 
-        return resolve(RegistryCompiler::class)->compile([
+        return resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make(self::COMPOSER_NAME)
                 ->title('Archive tools')
                 ->tablePrefix('arc')

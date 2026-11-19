@@ -12,8 +12,8 @@ use Flex\Crm\CrmServiceProvider;
 use Illuminate\Foundation\Application;
 use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 use Packman\Modules\ModulesServiceProvider;
 use Packman\Schema\Testing\MigratesSchemaSets;
 
@@ -47,7 +47,7 @@ abstract class CrmTestCase extends Orchestra
     {
         // Supply the deploy-time compiled artifact before the runtime morph-map projection.
         $app->booted(static function (Application $app): void {
-            $compiled = $app->make(RegistryCompiler::class)->compile(manifests: [(new CrmModule)->manifest()], installedPackages: []);
+            $compiled = $app->make(ModuleCompilation::class)->compile(manifests: [(new CrmModule)->manifest()], installedPackages: []);
             $registry = Mockery::mock(ModuleRegistry::class);
             $registry->shouldReceive('compiled')->andReturn($compiled);
             $registry->shouldReceive('isActive')->andReturn(true);

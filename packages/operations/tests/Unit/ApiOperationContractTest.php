@@ -10,10 +10,10 @@ use CoreX\Operations\Definition\Laravel\OperationFactory;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Testing\StubOperationHandler;
 use CoreX\Operations\Tests\TestCase;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 use Packman\Modules\Exceptions\Compiler\CompilationException;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 
 uses(TestCase::class);
 
@@ -22,7 +22,7 @@ $schema = static fn (): array => ['type' => 'object', 'additionalProperties' => 
 $operation = (static fn (string $method = 'GET', string $id = 'notes.list'): Api => Api::operation($id, $method, '/notes', StubOperationHandler::class, 'notes.read', $schema(), $schema()));
 
 $compile = static function (Api $api): Api {
-    $compiled = resolve(RegistryCompiler::class)->compile([
+    $compiled = resolve(ModuleCompilation::class)->compile([
         ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$api]),
     ], installedPackages: []);
 
@@ -96,7 +96,7 @@ it('projects the same contract hash when declaration order is reversed', functio
     )->fields(read: ['id', 'name'], write: ['name']);
 
     $compile = static function (array $extenders): array {
-        $compiled = resolve(RegistryCompiler::class)->compile([
+        $compiled = resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends($extenders),
         ], installedPackages: []);
 
@@ -125,7 +125,7 @@ it('projects the same contract hash when declaration order is reversed', functio
 });
 
 it('reuses tagged compiler contributions across repeated compilations', function (): void {
-    $compiler = resolve(RegistryCompiler::class);
+    $compiler = resolve(ModuleCompilation::class);
     $manifest = ModuleManifest::make('example/repeat')->title('Repeat')->tablePrefix('rpt')->extends([
         Api::operation('repeat.read', 'GET', '/repeat', StubOperationHandler::class, 'repeat.read', ['type' => 'object'], ['type' => 'object']),
     ]);

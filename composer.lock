@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "deb020e40d78848c758bb7a0a60c13e3",
+    "content-hash": "6b7561f3b339b5e5b70701da86c33120",
     "packages": [
         {
             "name": "axiomasoft/corex",
@@ -12,11 +12,11 @@
             "dist": {
                 "type": "path",
                 "url": "packages/core",
-                "reference": "03367daf0685fcf90785bc71e62dbaa8b4bcec71"
+                "reference": "8a6290fdb1321792b53da0b9a41baac5aa770ff8"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
-                "axiomasoft/packman-modules": "^0.1",
+                "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
                 "ext-ctype": "*",
                 "ext-mbstring": "*",
@@ -167,12 +167,12 @@
             "dist": {
                 "type": "path",
                 "url": "packages/custom-fields",
-                "reference": "a3c630cac5e97422ea1f9017f87ad2e8e382e7fc"
+                "reference": "940458141adf013b9264e1119b5e955f846567e8"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/packman": "^0.1",
-                "axiomasoft/packman-modules": "^0.1",
+                "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
                 "ext-filter": "*",
                 "ext-mbstring": "*",
@@ -354,12 +354,12 @@
             "dist": {
                 "type": "path",
                 "url": "packages/intl",
-                "reference": "42f01e1e2ef5b2a750029ee9081fdff433e9ce1e"
+                "reference": "838e5f25948c8de70054717f074504626f304b32"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/packman": "^0.1",
-                "axiomasoft/packman-modules": "^0.1",
+                "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
                 "brick/math": "^0.14|^0.15",
                 "brick/money": "^0.9 || ^0.10",
@@ -454,12 +454,12 @@
             "dist": {
                 "type": "path",
                 "url": "packages/media",
-                "reference": "67cf4d72e5bfa2576290926aedd88377614ebb78"
+                "reference": "db13c90cdf3d91fb0449cf83e375d7708486cff9"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/packman": "^0.1",
-                "axiomasoft/packman-modules": "^0.1",
+                "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
                 "axiomasoft/vaulter-core": "^1.0@dev",
                 "axiomasoft/vaulter-media": "^1.0@dev",
@@ -551,12 +551,12 @@
             "dist": {
                 "type": "path",
                 "url": "packages/notifications",
-                "reference": "f3149d91176c2b877dcbfcd97a863647ce92bd8d"
+                "reference": "8ad335e59a0472d17070c763c5202ce25171e4ea"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/packman": "^0.1",
-                "axiomasoft/packman-modules": "^0.1",
+                "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
                 "laravel/framework": "^13.0",
                 "php": "^8.4",
@@ -646,12 +646,12 @@
             "dist": {
                 "type": "path",
                 "url": "packages/operations",
-                "reference": "88847e3dd1d9a63a87e091961aa550f7e32e756b"
+                "reference": "66456745ff7696d0b37dea862c76a7beb99e7f59"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/packman": "^0.1",
-                "axiomasoft/packman-modules": "^0.1",
+                "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
                 "ext-filter": "*",
                 "ext-mbstring": "*",
@@ -920,7 +920,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/recurring-tasks",
-                "reference": "5e5239acbd7e54e0bdd4b3c65094eec8c63b3ba4"
+                "reference": "af2a393dbb2ee8631d8b157c1bd7ce5162b51c9c"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -928,7 +928,7 @@
                 "axiomasoft/corex-tasks": "^1.0@dev",
                 "axiomasoft/corex-workflow": "^1.0@dev",
                 "axiomasoft/packman": "^0.1",
-                "axiomasoft/packman-modules": "^0.1",
+                "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
                 "ext-bcmath": "*",
                 "illuminate/contracts": "^13.0",
@@ -1016,12 +1016,12 @@
             "dist": {
                 "type": "path",
                 "url": "packages/scheduler",
-                "reference": "2ef7fa9121a396c49c61fe68395aa4d43626621b"
+                "reference": "0645016ace8cae61a79ed008367ed79f493147b9"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/packman": "^0.1",
-                "axiomasoft/packman-modules": "^0.1",
+                "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
                 "illuminate/console": "^13.0",
                 "illuminate/contracts": "^13.0",
@@ -1363,12 +1363,12 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tasks",
-                "reference": "040c7ac0c77ae47c5d9f93bbbb9ab360410398ce"
+                "reference": "0178f1a8b05f9ae3d5b9932a39f0e059048c7573"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/packman": "^0.1",
-                "axiomasoft/packman-modules": "^0.1",
+                "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
                 "ext-mbstring": "*",
                 "laravel/framework": "^13.0",
@@ -1614,12 +1614,12 @@
             "dist": {
                 "type": "path",
                 "url": "packages/workflow",
-                "reference": "67e1993c8808267b36235beafde8c0482fe45e03"
+                "reference": "689ac6b0f39008633a16cd752d4857be605e1ec0"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/packman": "^0.1",
-                "axiomasoft/packman-modules": "^0.1",
+                "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
                 "illuminate/contracts": "^13.0",
                 "illuminate/database": "^13.0",
@@ -1695,11 +1695,11 @@
         },
         {
             "name": "axiomasoft/packman",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "7bce48a5061b256ffec2ed786d94ed33da63109e"
+                "reference": "4159f3286afd39de3d815ca61b5320d10026f07b"
             },
             "require": {
                 "php": "^8.4",
@@ -1768,11 +1768,11 @@
         },
         {
             "name": "axiomasoft/packman-modules",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "7bce48a5061b256ffec2ed786d94ed33da63109e"
+                "reference": "4159f3286afd39de3d815ca61b5320d10026f07b"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -1818,11 +1818,11 @@
         },
         {
             "name": "axiomasoft/packman-panels",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "7bce48a5061b256ffec2ed786d94ed33da63109e"
+                "reference": "4159f3286afd39de3d815ca61b5320d10026f07b"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -1863,11 +1863,11 @@
         },
         {
             "name": "axiomasoft/packman-plugins",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "7bce48a5061b256ffec2ed786d94ed33da63109e"
+                "reference": "4159f3286afd39de3d815ca61b5320d10026f07b"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -1906,11 +1906,11 @@
         },
         {
             "name": "axiomasoft/packman-schema",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "7bce48a5061b256ffec2ed786d94ed33da63109e"
+                "reference": "4159f3286afd39de3d815ca61b5320d10026f07b"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -1951,7 +1951,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/tenant.git",
-                "reference": "2bda06ff47ea3e2127dbfade1b3dee59e1102238"
+                "reference": "3c39875b7a3b5f20889a5158cb63c860433875f2"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -1984,10 +1984,10 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Tenant\\": "packages/tenant/src/"
+                    "Tenant\\": "packages/core/src/"
                 },
                 "files": [
-                    "packages/tenant/src/aliases.php"
+                    "packages/core/src/aliases.php"
                 ]
             },
             "description": "Portable isolation context and scoped execution contracts."
@@ -1998,11 +1998,11 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/vaulter.git",
-                "reference": "ebb75a8adcf6b8ae38324afc17ef9e1f2d447ff3"
+                "reference": "a9fb9982bfa605eeefb3e93a0b09d0b014fff710"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
-                "axiomasoft/packman-plugins": "^0.1",
+                "axiomasoft/packman-plugins": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
                 "illuminate/console": "^13.0",
                 "illuminate/contracts": "^13.0",
@@ -2108,7 +2108,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/vaulter.git",
-                "reference": "ebb75a8adcf6b8ae38324afc17ef9e1f2d447ff3"
+                "reference": "a9fb9982bfa605eeefb3e93a0b09d0b014fff710"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -2829,13 +2829,13 @@
             "dist": {
                 "type": "path",
                 "url": "products/flex-crm",
-                "reference": "b3f33a18f7d3f664c0815780437edafd07d03f66"
+                "reference": "47f457382713ba2ce3fc5a97b3449c5021d45972"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/corex-intl": "^1.0@dev",
                 "axiomasoft/packman": "^0.1",
-                "axiomasoft/packman-modules": "^0.1",
+                "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
                 "brick/money": "^0.9 || ^0.10",
                 "ext-filter": "*",
@@ -8852,12 +8852,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/azguard-private.git",
-                "reference": "bfa228c252ff6148fcb8496248692eb785c5663f"
+                "reference": "74886a7f2c5fac7a17c9f9adf871ec2ace96830e"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-panels": "^0.1",
-                "axiomasoft/packman-plugins": "^0.1",
+                "axiomasoft/packman-plugins": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
                 "illuminate/auth": "^13.0",
                 "illuminate/console": "^13.0",
@@ -8960,12 +8960,12 @@
             "dist": {
                 "type": "path",
                 "url": "packages/access",
-                "reference": "ca7edcbcbb054438c1929768be102c918564e9fb"
+                "reference": "6e90f64fcee665aa781a1c9cab31effd9f6ff087"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/packman": "^0.1",
-                "axiomasoft/packman-modules": "^0.1",
+                "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
                 "ext-mbstring": "*",
                 "illuminate/auth": "^13.0",
@@ -9079,14 +9079,14 @@
             "dist": {
                 "type": "path",
                 "url": "packages/access-azguard",
-                "reference": "9862b16bbc469fdbeec1e50a1d4e5e5f8b86d4d4"
+                "reference": "0f4cacdce5ef2ec0d8c0a8d9b6f7def4ab4ecef4"
             },
             "require": {
                 "axiomasoft/azguard": "^2.0@dev",
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/corex-access": "^1.0@dev",
                 "axiomasoft/packman": "^0.1",
-                "axiomasoft/packman-modules": "^0.1",
+                "axiomasoft/packman-modules": "^0.1.1",
                 "illuminate/contracts": "^13.0",
                 "illuminate/database": "^13.0",
                 "illuminate/support": "^13.0",
@@ -9204,13 +9204,13 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tools",
-                "reference": "9799b86f1dcbe7ace39e811500ca6f043167b3d3"
+                "reference": "ee97637372d9884166f8031d6690855fd374a3e4"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
                 "axiomasoft/corex-operations": "^1.0@dev",
                 "axiomasoft/packman": "^0.1",
-                "axiomasoft/packman-modules": "^0.1",
+                "axiomasoft/packman-modules": "^0.1.1",
                 "illuminate/auth": "^13.0",
                 "illuminate/console": "^13.0",
                 "illuminate/contracts": "^13.0",
@@ -9310,7 +9310,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/webhooks",
-                "reference": "13fbf8442a5012de4e6c7c2ac7581d0d94fbaa51"
+                "reference": "54018a36a489b1b7ff698aebfb1005a994eb440d"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -9330,7 +9330,7 @@
             },
             "require-dev": {
                 "axiomasoft/corex-import-export": "^1.0@dev",
-                "axiomasoft/packman-modules": "^0.1",
+                "axiomasoft/packman-modules": "^0.1.1",
                 "ext-curl": "*",
                 "ext-openssl": "*",
                 "ext-pcntl": "*",
@@ -9413,11 +9413,11 @@
         },
         {
             "name": "axiomasoft/packman-devtools",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "7bce48a5061b256ffec2ed786d94ed33da63109e"
+                "reference": "4159f3286afd39de3d815ca61b5320d10026f07b"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -9461,11 +9461,11 @@
         },
         {
             "name": "axiomasoft/packman-testkit",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/packman.git",
-                "reference": "7bce48a5061b256ffec2ed786d94ed33da63109e"
+                "reference": "4159f3286afd39de3d815ca61b5320d10026f07b"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -9513,7 +9513,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/tenant.git",
-                "reference": "2bda06ff47ea3e2127dbfade1b3dee59e1102238"
+                "reference": "3c39875b7a3b5f20889a5158cb63c860433875f2"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -9563,10 +9563,10 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Tenant\\Laravel\\": "packages/tenant-laravel/src/"
+                    "Tenant\\Laravel\\": "packages/laravel/src/"
                 },
                 "files": [
-                    "packages/tenant-laravel/src/aliases.php"
+                    "packages/laravel/src/aliases.php"
                 ]
             },
             "description": "Guarded Laravel facilities for the Tenant runtime."

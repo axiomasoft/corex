@@ -123,7 +123,7 @@
             "source": "packages/access/src/Enums/Scope.php",
             "source_sha256": "f9853d862995f0c114c8b8f902245428c9cc085fa20446869a7afb7205b35006",
             "kind": "external-api",
-            "reason": "Host native role-matrix tools compare Scope values using the documented none\u2192own\u2192department\u2192workspace\u2192account ordering.",
+            "reason": "Host native role-matrix tools compare Scope values using the documented none→own→department→workspace→account ordering.",
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Access\\Enums\\Scope::weight`",
@@ -478,7 +478,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Lifecycle/DatabaseModuleLifecycle.php",
                 "anchor": "$this->actorResolver?->current()",
-                "sha256": "b997bd9a5e7add6c32a476184268f2a26610962a0ab5b804f43498cfba4ee815"
+                "sha256": "4b143fb4b4af1f84bf67222e4c17ab2a138c35efb1f23b2e37e844168a05f16a"
             },
             "expires": null
         },
@@ -491,7 +491,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Lifecycle/DatabaseModuleLifecycle.php",
                 "anchor": "$flags->define($definition)",
-                "sha256": "b997bd9a5e7add6c32a476184268f2a26610962a0ab5b804f43498cfba4ee815"
+                "sha256": "4b143fb4b4af1f84bf67222e4c17ab2a138c35efb1f23b2e37e844168a05f16a"
             },
             "expires": null
         },
@@ -569,7 +569,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Discovery/ModuleDiscovery.php",
                 "anchor": "$module->manifest()",
-                "sha256": "7b9bbce7a082f5dcf417775e6c926327f41225961d20579b4b4bbd3fc11a4d1b"
+                "sha256": "b33662054f08737c8c05a94145e400855aaad193bc2cc20e9a0e46a4d6f4d51d"
             },
             "expires": null
         },
@@ -985,7 +985,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Discovery/ModuleDiscovery.php",
                 "anchor": "$module->manifest()",
-                "sha256": "7b9bbce7a082f5dcf417775e6c926327f41225961d20579b4b4bbd3fc11a4d1b"
+                "sha256": "b33662054f08737c8c05a94145e400855aaad193bc2cc20e9a0e46a4d6f4d51d"
             },
             "expires": null
         },
@@ -1102,7 +1102,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "$section->compile(",
-                "sha256": "3546bedcb3030f7f6ea7a3e762c4409c0279bbdacaa59e16a2e1b54ee809f489"
+                "sha256": "54f121659613cf46530cc5301c1a58d946bf21e4ce2fa83fd20aff145a64f674"
             },
             "expires": null
         },
@@ -1115,7 +1115,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "$section->mode()",
-                "sha256": "3546bedcb3030f7f6ea7a3e762c4409c0279bbdacaa59e16a2e1b54ee809f489"
+                "sha256": "54f121659613cf46530cc5301c1a58d946bf21e4ce2fa83fd20aff145a64f674"
             },
             "expires": null
         },
@@ -1128,7 +1128,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "->normalize(manifest: $manifest",
-                "sha256": "3546bedcb3030f7f6ea7a3e762c4409c0279bbdacaa59e16a2e1b54ee809f489"
+                "sha256": "54f121659613cf46530cc5301c1a58d946bf21e4ce2fa83fd20aff145a64f674"
             },
             "expires": null
         },
@@ -1141,7 +1141,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "$a->phase()",
-                "sha256": "3546bedcb3030f7f6ea7a3e762c4409c0279bbdacaa59e16a2e1b54ee809f489"
+                "sha256": "54f121659613cf46530cc5301c1a58d946bf21e4ce2fa83fd20aff145a64f674"
             },
             "expires": null
         },
@@ -1453,7 +1453,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Discovery/ModuleDiscovery.php",
                 "anchor": "$module->manifest()",
-                "sha256": "7b9bbce7a082f5dcf417775e6c926327f41225961d20579b4b4bbd3fc11a4d1b"
+                "sha256": "b33662054f08737c8c05a94145e400855aaad193bc2cc20e9a0e46a4d6f4d51d"
             },
             "expires": null
         },
@@ -2922,7 +2922,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "$section->compile(",
-                "sha256": "3546bedcb3030f7f6ea7a3e762c4409c0279bbdacaa59e16a2e1b54ee809f489"
+                "sha256": "54f121659613cf46530cc5301c1a58d946bf21e4ce2fa83fd20aff145a64f674"
             },
             "expires": null
         },
@@ -2935,7 +2935,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "$section->mode()",
-                "sha256": "3546bedcb3030f7f6ea7a3e762c4409c0279bbdacaa59e16a2e1b54ee809f489"
+                "sha256": "54f121659613cf46530cc5301c1a58d946bf21e4ce2fa83fd20aff145a64f674"
             },
             "expires": null
         },
@@ -2948,7 +2948,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "->normalize(manifest: $manifest",
-                "sha256": "3546bedcb3030f7f6ea7a3e762c4409c0279bbdacaa59e16a2e1b54ee809f489"
+                "sha256": "54f121659613cf46530cc5301c1a58d946bf21e4ce2fa83fd20aff145a64f674"
             },
             "expires": null
         },
@@ -2961,7 +2961,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Compiler/RegistryCompiler.php",
                 "anchor": "$a->phase()",
-                "sha256": "3546bedcb3030f7f6ea7a3e762c4409c0279bbdacaa59e16a2e1b54ee809f489"
+                "sha256": "54f121659613cf46530cc5301c1a58d946bf21e4ce2fa83fd20aff145a64f674"
             },
             "expires": null
         },
@@ -3091,7 +3091,7 @@
             "root": {
                 "path": "vendor/axiomasoft/packman-modules/packages/modules/src/Internal/Discovery/ModuleDiscovery.php",
                 "anchor": "$module->manifest()",
-                "sha256": "7b9bbce7a082f5dcf417775e6c926327f41225961d20579b4b4bbd3fc11a4d1b"
+                "sha256": "b33662054f08737c8c05a94145e400855aaad193bc2cc20e9a0e46a4d6f4d51d"
             },
             "expires": null
         },

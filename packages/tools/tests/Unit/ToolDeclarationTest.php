@@ -8,11 +8,11 @@ use CoreX\Operations\Testing\StubOperationHandler;
 use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\Tests\Support\BootsToolStack;
 use Orchestra\Testbench\TestCase;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Data\Compiler\CompiledRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 use Packman\Modules\Exceptions\Compiler\CompilationException;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 use stdClass;
 
 uses(TestCase::class, BootsToolStack::class);
@@ -42,7 +42,7 @@ it('compiles explicit tool declarations into the existing API slice (DESC-01)', 
             )->titled('Create note', 'Creates a note'),
         ]);
 
-    $compiled = resolve(RegistryCompiler::class)->compile([$manifest], installedPackages: []);
+    $compiled = resolve(ModuleCompilation::class)->compile([$manifest], installedPackages: []);
     $tool = collect($compiled->api)->first(fn (Api $api): bool => $api->mode === 'tool');
 
     expect($tool)->not->toBeNull()
@@ -71,7 +71,7 @@ it('does not expose unannotated operations as tools (DESC-02)', function () use 
             ),
         ]);
 
-    $compiled = resolve(RegistryCompiler::class)->compile([$manifest], installedPackages: []);
+    $compiled = resolve(ModuleCompilation::class)->compile([$manifest], installedPackages: []);
 
     expect(collect($compiled->api)->contains(fn (Api $api): bool => $api->mode === 'tool'))->toBeFalse();
 });
@@ -82,10 +82,10 @@ it('keeps stable tool tuple and contract hash across declaration order (DESC-03)
     $second = Api::tool('beta.second', StubOperationHandler::class, 'beta.read', $objectSchema(), $objectSchema(), 'read', 'read-only')
         ->titled('Second', 'Second tool');
 
-    $forward = resolve(RegistryCompiler::class)->compile([
+    $forward = resolve(ModuleCompilation::class)->compile([
         ModuleManifest::make('example/alpha')->title('Alpha')->tablePrefix('alp')->extends([$first, $second]),
     ], installedPackages: []);
-    $reverse = resolve(RegistryCompiler::class)->compile([
+    $reverse = resolve(ModuleCompilation::class)->compile([
         ModuleManifest::make('example/alpha')->title('Alpha')->tablePrefix('alp')->extends([$second, $first]),
     ], installedPackages: []);
 
@@ -96,13 +96,13 @@ it('keeps stable tool tuple and contract hash across declaration order (DESC-03)
 });
 
 it('rejects invalid canonical namespaces and wire collisions (DESC-04)', function () use ($objectSchema): void {
-    expect(fn () => resolve(RegistryCompiler::class)->compile([
+    expect(fn () => resolve(ModuleCompilation::class)->compile([
         ModuleManifest::make('example/bad')->title('Bad')->tablePrefix('bad')->extends([
             Api::tool('bad_namespace.create', StubOperationHandler::class, 'bad.read', $objectSchema(), $objectSchema(), 'read', 'read-only'),
         ]),
     ], installedPackages: []))->toThrow(CompilationException::class);
 
-    expect(fn () => resolve(RegistryCompiler::class)->compile([
+    expect(fn () => resolve(ModuleCompilation::class)->compile([
         ModuleManifest::make('example/bad')->title('Bad')->tablePrefix('bad')->extends([
             Api::tool('bad.create', StubOperationHandler::class, 'bad.read', $objectSchema(), $objectSchema(), 'read', 'read-only'),
             Api::tool('bad.create', StubOperationHandler::class, 'bad.read', $objectSchema(), $objectSchema(), 'read', 'read-only', toolVersion: 'v1'),
@@ -113,21 +113,21 @@ it('rejects invalid canonical namespaces and wire collisions (DESC-04)', functio
 it('rejects duplicate tuples, foreign operation refs and invalid handlers (DESC-05)', function () use ($objectSchema): void {
     $operation = Api::operation('notes.list', 'GET', '/notes', StubOperationHandler::class, 'notes.read', $objectSchema(), $objectSchema());
 
-    expect(fn () => resolve(RegistryCompiler::class)->compile([
+    expect(fn () => resolve(ModuleCompilation::class)->compile([
         ModuleManifest::make('example/dup')->title('Dup')->tablePrefix('dup')->extends([
             Api::tool('dup.read', StubOperationHandler::class, 'dup.read', $objectSchema(), $objectSchema(), 'read', 'read-only'),
             Api::tool('dup.read', StubOperationHandler::class, 'dup.read', $objectSchema(), $objectSchema(), 'read', 'read-only'),
         ]),
     ], installedPackages: []))->toThrow(CompilationException::class);
 
-    expect(fn () => resolve(RegistryCompiler::class)->compile([
+    expect(fn () => resolve(ModuleCompilation::class)->compile([
         ModuleManifest::make('example/expose')->title('Expose')->tablePrefix('exp')->extends([
             $operation,
             Api::exposeTool('foreign.list', 'v1', 'exp.read', 'v1', 'read', 'read-only', $objectSchema(), $objectSchema(), ['name' => 'name']),
         ]),
     ], installedPackages: []))->toThrow(CompilationException::class);
 
-    expect(fn () => resolve(RegistryCompiler::class)->compile([
+    expect(fn () => resolve(ModuleCompilation::class)->compile([
         ModuleManifest::make('example/handler')->title('Handler')->tablePrefix('hdl')->extends([
             Api::tool('hdl.read', stdClass::class, 'hdl.read', $objectSchema(), $objectSchema(), 'read', 'read-only'),
         ]),
@@ -140,7 +140,7 @@ it('compiles exposeTool against a same-module operation without adding HTTP rout
         Api::exposeTool('notes.list', 'v1', 'notes.list', 'v1', 'read', 'read-only', $objectSchema(), $objectSchema(), ['name' => 'name']),
     ]);
 
-    $compiled = resolve(RegistryCompiler::class)->compile([$manifest], installedPackages: []);
+    $compiled = resolve(ModuleCompilation::class)->compile([$manifest], installedPackages: []);
     $tools = collect($compiled->api)->where('mode', 'tool')->values();
     $operations = collect($compiled->api)->where('mode', 'operation')->values();
 

@@ -36,10 +36,10 @@ use CoreX\Tools\Data\ToolResult;
 use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\ToolsServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 use Packman\Schema\Contracts\Migration\SchemaMigrator;
 
 final class OperationContractTest extends TestCase
@@ -83,7 +83,7 @@ final class OperationContractTest extends TestCase
             ->asAsyncCommand()->idempotency('required')->effect('tenant_transactional');
         $tool = Api::exposeTool('notes.create', 'v1', 'notes.create', 'v1', 'write', 'domain-key', $input, $output, ['title' => 'title']);
         $asyncTool = Api::exposeTool('notes.export', 'v1', 'notes.export', 'v1', 'write', 'domain-key', $asyncInput, $asyncOutput, ['format' => 'format']);
-        $this->modules = new ModuleFixture(resolve(RegistryCompiler::class)->compile([
+        $this->modules = new ModuleFixture(resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$query, $command, $async, $tool, $asyncTool]),
         ], installedPackages: []));
         $this->tenants = new ContextFixture;

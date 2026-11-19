@@ -43,11 +43,11 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use LogicException;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Compiler\CompiledRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 use Packman\Modules\ModulesServiceProvider;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
@@ -141,7 +141,7 @@ final class ToolInvocationTest extends TestCase
     /** @param  list<Api>  $declarations */
     private function compile(array $declarations): CompiledRegistry
     {
-        return resolve(RegistryCompiler::class)->compile([
+        return resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends($declarations),
         ], installedPackages: []);
     }

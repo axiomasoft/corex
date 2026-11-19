@@ -28,12 +28,12 @@ use CoreX\Operations\Testing\NoteHandler;
 use CoreX\Operations\Tests\TestCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Compiler\CompiledRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 use Packman\Modules\Exceptions\Compiler\CompilationException;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 final class PlatformTest extends TestCase
@@ -81,7 +81,7 @@ final class PlatformTest extends TestCase
     /** @param list<Api> $declarations */
     private function compile(array $declarations): CompiledRegistry
     {
-        return resolve(RegistryCompiler::class)->compile([
+        return resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends($declarations),
         ], installedPackages: []);
     }

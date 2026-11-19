@@ -39,10 +39,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use InvalidArgumentException;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 
 final class AuthorizationLayersTest extends TestCase
 {
@@ -114,7 +114,7 @@ final class AuthorizationLayersTest extends TestCase
                 read: ['/id', '/title', '/owner', '/account', '/items'],
                 write: ['/title', '/owner', '/resource_id', '/claimed_account'],
             );
-        $registry = resolve(RegistryCompiler::class)->compile([
+        $registry = resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([$operation]),
         ], installedPackages: []);
 

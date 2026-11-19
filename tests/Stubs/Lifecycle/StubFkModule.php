@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Tests\Stubs\Lifecycle;
 
 use Packman\Modules\Contracts\Definition\ModuleDefinition;
+use Packman\Modules\Data\Lifecycle\ModuleDependency;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
-use Packman\Modules\Internal\Definition\ModuleDependency;
 
 /**
  * Purge/D41 fixture. Owns two tables with a REAL foreign key (stf_children →

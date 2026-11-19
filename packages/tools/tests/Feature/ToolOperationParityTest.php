@@ -34,10 +34,10 @@ use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\ToolsServiceProvider;
 use Illuminate\Http\Request;
 use Orchestra\Testbench\TestCase;
+use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
-use Packman\Modules\Internal\Compiler\RegistryCompiler;
 use Packman\Modules\ModulesServiceProvider;
 
 final class ToolOperationParityTest extends TestCase
@@ -66,7 +66,7 @@ final class ToolOperationParityTest extends TestCase
     {
         parent::setUp();
         $schema = $this->schema(['title' => ['type' => 'string'], 'id' => ['type' => 'string'], 'actor' => ['type' => 'string'], 'account' => ['type' => 'string'], 'workspace' => ['type' => ['string', 'null']]]);
-        $this->modules = new ModuleFixture(resolve(RegistryCompiler::class)->compile([
+        $this->modules = new ModuleFixture(resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([
                 Api::operation('notes.create', 'POST', '/notes', NoteHandler::class, 'notes.read', $schema, $schema, ['title' => ['required', 'string']]),
                 Api::exposeTool('notes.create', 'v1', 'notes.create', 'v1', 'read', 'read-only', $schema, $schema, ['title' => 'title']),
