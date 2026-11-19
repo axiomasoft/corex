@@ -8571,7 +8571,28 @@
                     "doc": []
                 }
             },
-            "properties": {},
+            "properties": {
+                "id": {
+                    "flags": 1,
+                    "type": "?string",
+                    "readonly": true,
+                    "visibility": "public",
+                    "static": false,
+                    "default": null,
+                    "doc": [],
+                    "hooks": []
+                },
+                "type": {
+                    "flags": 1,
+                    "type": "CoreX\\Settings\\Enums\\SettingScope",
+                    "readonly": true,
+                    "visibility": "public",
+                    "static": false,
+                    "default": null,
+                    "doc": [],
+                    "hooks": []
+                }
+            },
             "constants": [],
             "enum_backing": null,
             "enum_cases": []

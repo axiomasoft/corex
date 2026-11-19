@@ -160,7 +160,7 @@
         {
             "symbol": "CoreX\\Access\\Internal\\AccessSchemaSets::sets",
             "source": "packages/access/src/Internal/AccessSchemaSets.php",
-            "source_sha256": "87ff6098bf3b648974ee548c84e4de74044179e81ba9334cc71594cdedd1c2f3",
+            "source_sha256": "ad116b858083e381e72b6d5044031a36fbe0b70f7d9aca302350f11b47463f1e",
             "kind": "framework",
             "reason": "The package provider tags this exact SchemaSetProvider; Packman TaggedSchemaSets invokes sets() to collect the owner schema declarations.",
             "root": {

@@ -36,7 +36,11 @@ final class ToolSchemaWorkerTest extends TestCase
         try {
             copy(__DIR__.'/../../src/Internal/ToolSchemaWorker.php', $worker);
             $process = new Process([PHP_BINARY, $worker, $vendorDir.'/autoload.php']);
-            $process->setInput('{"action":"admit","schema":"{}","profile":"'.SchemaProfile::TOOL_SCHEMA_V1.'"}');
+            $process->setInput(json_encode([
+                'action' => 'admit',
+                'schema' => '{"type":"object"}',
+                'profile' => SchemaProfile::TOOL_SCHEMA_V1,
+            ], JSON_THROW_ON_ERROR));
             $process->mustRun();
             $frames = explode("\n", $process->getOutput(), 2);
             self::assertSame('ready', $frames[0]);
