@@ -724,7 +724,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/vaulter.git",
-                    "reference": "ae15f37db7da7ce0cf7368c912e567068b2106b6"
+                    "reference": "9c76f96b53430dae697aaf02f0369337e10ceed5"
                 }
             }
         },
@@ -810,7 +810,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/vaulter.git",
-                    "reference": "ae15f37db7da7ce0cf7368c912e567068b2106b6"
+                    "reference": "9c76f96b53430dae697aaf02f0369337e10ceed5"
                 }
             }
         },

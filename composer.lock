@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e2062e14b4273f01f86c378da1ed87b4",
+    "content-hash": "10c5b17f067482d665bf8f2a2c245d3a",
     "packages": [
         {
             "name": "axiomasoft/corex",
@@ -2001,7 +2001,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/vaulter.git",
-                "reference": "ae15f37db7da7ce0cf7368c912e567068b2106b6"
+                "reference": "9c76f96b53430dae697aaf02f0369337e10ceed5"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -2111,7 +2111,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/vaulter.git",
-                "reference": "ae15f37db7da7ce0cf7368c912e567068b2106b6"
+                "reference": "9c76f96b53430dae697aaf02f0369337e10ceed5"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
