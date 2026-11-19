@@ -139,7 +139,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "dce317211459a9d04c60cd1df735d53687e47e26"
+                    "reference": "d4eaf2ad01d22a822368765d154ae51ff70981f2"
                 },
                 "require": {
                     "php": "^8.4",
@@ -213,7 +213,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "dce317211459a9d04c60cd1df735d53687e47e26"
+                    "reference": "d4eaf2ad01d22a822368765d154ae51ff70981f2"
                 },
                 "require": {
                     "php": "^8.4",
@@ -264,7 +264,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "dce317211459a9d04c60cd1df735d53687e47e26"
+                    "reference": "d4eaf2ad01d22a822368765d154ae51ff70981f2"
                 },
                 "require": {
                     "php": "^8.4",
@@ -415,7 +415,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "dce317211459a9d04c60cd1df735d53687e47e26"
+                    "reference": "d4eaf2ad01d22a822368765d154ae51ff70981f2"
                 },
                 "require": {
                     "php": "^8.4",
@@ -461,7 +461,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "dce317211459a9d04c60cd1df735d53687e47e26"
+                    "reference": "d4eaf2ad01d22a822368765d154ae51ff70981f2"
                 },
                 "require": {
                     "php": "^8.4",
@@ -724,7 +724,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/vaulter.git",
-                    "reference": "9c76f96b53430dae697aaf02f0369337e10ceed5"
+                    "reference": "b230f6e27b53c92145fa81be2fdeb89ea5c8ae03"
                 }
             }
         },
@@ -810,7 +810,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/vaulter.git",
-                    "reference": "9c76f96b53430dae697aaf02f0369337e10ceed5"
+                    "reference": "b230f6e27b53c92145fa81be2fdeb89ea5c8ae03"
                 }
             }
         },
@@ -859,7 +859,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "dce317211459a9d04c60cd1df735d53687e47e26"
+                    "reference": "d4eaf2ad01d22a822368765d154ae51ff70981f2"
                 }
             }
         },
@@ -908,7 +908,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/packman.git",
-                    "reference": "dce317211459a9d04c60cd1df735d53687e47e26"
+                    "reference": "d4eaf2ad01d22a822368765d154ae51ff70981f2"
                 }
             }
         }
