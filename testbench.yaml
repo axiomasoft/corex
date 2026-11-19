@@ -1,0 +1,5 @@
+# Keep the static-analysis host aligned with extra.laravel.dont-discover in composer.json.
+dont-discover:
+  - axiomasoft/tenant-laravel
+  - axiomasoft/vaulter-core
+  - axiomasoft/vaulter-media

@@ -45,7 +45,7 @@ it('keeps migration bytes untouched by Pint and Rector with working negative con
         $rector = $files->get($root.'/rector.php');
         $files->put($fixture.'/rector.php', $rector);
         $run = static function (array $command) use ($fixture): Process {
-            $process = new Process($command, $fixture, ['PAO_DISABLE' => '1'], timeout: 120);
+            $process = new Process($command, $fixture, ['PAO_DISABLE' => '1', 'TMPDIR' => $fixture], timeout: 120);
             $process->run();
 
             return $process;
