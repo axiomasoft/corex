@@ -43,7 +43,7 @@ The built-in matrix handles permissions by default. A host can explicitly assign
 'policy_panels' => ['crm.company.view' => 'review'],
 ```
 
-The registered `review` panel then owns the capability check, record decision and SQL visibility for that permission. The host policy must support exact query filtering to serve listings. Its denial is final. A similarly named panel has no effect without the exact mapping. CoreX maps principal, tenant and workspace internally.
+The registered `review` panel then owns the capability check, record decision and SQL visibility for that permission. The host policy must support exact query filtering to serve listings. Models that declare their own tenant boundary need an explicit policy with exact SQL filtering to appear in lists. Its denial is final. A similarly named panel has no effect without the exact mapping. CoreX maps principal, tenant and workspace internally.
 
 ## Identity provider
 

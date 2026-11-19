@@ -6,6 +6,7 @@ namespace CoreX\Access\Access\Internal;
 
 use AzGuard\AzGuard;
 use AzGuard\Contracts\Scopes\ProvidesAccessScope;
+use AzGuard\Exceptions\Authorization\VisibilityNotSupportedException;
 use AzGuard\Kernel\Decision\AccessRequest;
 use AzGuard\Kernel\Identity\PermissionKey;
 use AzGuard\Kernel\Identity\SubjectRef;
@@ -74,6 +75,11 @@ final readonly class PanelAccessChecker implements AccessChecker, ScopeResolver
             $q->getQuery()->whereRaw('1 = 0');
 
             return $q;
+        }
+
+        // A model-defined tenant boundary needs its owning panel to provide an exact SQL mapping.
+        if ($q->getModel() instanceof ProvidesAccessScope) {
+            throw new VisibilityNotSupportedException('resource_owner_adapter', $q->getModel()::class);
         }
 
         if ($this->matrix->directlyGranted($p, $entityKey, $action)) {
