@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Access\Access\Internal\MatrixPermissions;
 use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Enums\Scope;
@@ -64,7 +65,7 @@ it('resolves allowed()/scopeFor() for an agent principal with no users row', fun
     $checker = resolve(AccessChecker::class);
 
     expect($checker->allowed($identity, 'crm.deal', 'read'))->toBeTrue()
-        ->and($checker->scopeFor($identity, 'crm.deal', 'read'))->toBe(Scope::Workspace);
+        ->and(resolve(MatrixPermissions::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe(Scope::Workspace);
 });
 
 it('resolves allowed() for an api_key principal with no users row', function (): void {
@@ -90,7 +91,7 @@ it('degrades own/dept/dept_tree to none for an agent principal, but leaves works
 
     $identity = new PrincipalIdentity(PrincipalType::Agent, $agentId);
 
-    expect(resolve(AccessChecker::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe(Scope::None);
+    expect(resolve(MatrixPermissions::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe(Scope::None);
 })->with([Scope::Own, Scope::Dept, Scope::DeptTree]);
 
 it('leaves workspace and account scope untouched for an agent principal', function (Scope $undegraded): void {
@@ -102,7 +103,7 @@ it('leaves workspace and account scope untouched for an agent principal', functi
 
     $identity = new PrincipalIdentity(PrincipalType::Agent, $agentId);
 
-    expect(resolve(AccessChecker::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe($undegraded);
+    expect(resolve(MatrixPermissions::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe($undegraded);
 })->with([Scope::Workspace, Scope::Account]);
 
 // AC-26 — an expired assignment is excluded from both capability and scope without any manual pruning.
@@ -123,7 +124,7 @@ it('excludes an expired assignment from allowed() and scopeFor()', function (): 
     $checker = resolve(AccessChecker::class);
 
     expect($checker->allowed($identity, 'crm.deal', 'read'))->toBeFalse()
-        ->and($checker->scopeFor($identity, 'crm.deal', 'read'))->toBe(Scope::None);
+        ->and(resolve(MatrixPermissions::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe(Scope::None);
 });
 
 it('honours a not-yet-expired assignment in allowed() and scopeFor()', function (): void {
@@ -143,5 +144,5 @@ it('honours a not-yet-expired assignment in allowed() and scopeFor()', function 
     $checker = resolve(AccessChecker::class);
 
     expect($checker->allowed($identity, 'crm.deal', 'read'))->toBeTrue()
-        ->and($checker->scopeFor($identity, 'crm.deal', 'read'))->toBe(Scope::Account);
+        ->and(resolve(MatrixPermissions::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe(Scope::Account);
 });

@@ -86,10 +86,7 @@ it('matches DB_SCHEMA §3.5 aut_role_matrix column-by-column', function (): void
         ->and(autColumn('aut_role_matrix', 'context_type'))->toMatchArray(['data_type' => 'character varying', 'is_nullable' => 'YES'])
         ->and(autColumn('aut_role_matrix', 'context_id'))->toMatchArray(['data_type' => 'uuid', 'is_nullable' => 'YES']);
 
-    $actionCheck = autConstraintDef('aut_role_matrix_action_ck');
-    foreach (['read', 'add', 'update', 'delete', 'export', 'import'] as $action) {
-        expect($actionCheck)->toContain("'{$action}'");
-    }
+    expect(autConstraintDef('aut_role_matrix_action_ck'))->toContain('^[a-z][a-z0-9_-]*$');
 
     $scopeCheck = autConstraintDef('aut_role_matrix_scope_ck');
     foreach (['none', 'own', 'dept', 'dept_tree', 'workspace', 'account'] as $scope) {

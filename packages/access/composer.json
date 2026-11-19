@@ -1,6 +1,6 @@
 {
     "name": "axiomasoft/corex-access",
-    "description": "CoreX native authorization, tenant-boundary access checks, role matrices and direct grants.",
+    "description": "CoreX authorization, record visibility, role matrices and direct grants on AzGuard.",
     "type": "library",
     "license": "MIT",
     "keywords": [
@@ -19,6 +19,7 @@
         "ext-mbstring": "*",
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/azguard": "^2.0@dev",
         "illuminate/auth": "^13.0",
         "illuminate/contracts": "^13.0",
         "illuminate/database": "^13.0",

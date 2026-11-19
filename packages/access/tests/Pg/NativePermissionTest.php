@@ -2,13 +2,16 @@
 
 declare(strict_types=1);
 
+use CoreX\Access\Access\Internal\MatrixPermissions;
 use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Enums\Scope;
 use CoreX\Access\Laravel\ScopeResolver;
+use CoreX\Access\Roles\DirectGrants;
 use CoreX\Access\Roles\Internal\Models\Role;
 use CoreX\Access\Roles\Internal\Models\RoleAssignment;
 use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
+use CoreX\Access\Roles\RoleManager;
 use CoreX\Access\Tests\Stubs\Deal;
 use CoreX\Access\Tests\Stubs\FakeModuleRegistry;
 use CoreX\Context\Enums\PrincipalType;
@@ -54,7 +57,7 @@ it('honours an active native direct grant on capability, record and builder path
     $checker = resolve(AccessChecker::class);
 
     expect($checker->allowed($principal, 'crm.deal', 'read'))->toBeTrue()
-        ->and($checker->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::None)
+        ->and(resolve(MatrixPermissions::class)->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::None)
         ->and($checker->canOnRecord($principal, 'read', $record))->toBeTrue()
         ->and(resolve(ScopeResolver::class)->apply(Deal::query(), $principal, 'crm.deal', 'read')->pluck('id')->all())->toBe([$record->id]);
 });
@@ -92,10 +95,38 @@ it('denies all four access paths for an inactive entity even with a matrix row a
 
     expect(DB::table('aut_direct_grants')->where('permission_key', "app.{$entityKey}.read")->exists())->toBeTrue()
         ->and($checker->allowed($principal, $entityKey, 'read'))->toBeFalse()
-        ->and($checker->scopeFor($principal, $entityKey, 'read'))->toBe(Scope::None)
+        ->and(resolve(MatrixPermissions::class)->scopeFor($principal, $entityKey, 'read'))->toBe(Scope::None)
         ->and($checker->canOnRecord($principal, 'read', $recordForCheck))->toBeFalse()
         ->and(resolve(ScopeResolver::class)->apply(Deal::query(), $principal, $entityKey, 'read')->pluck('id')->all())->toBeEmpty();
 })->with([
     'registered entity with disabled module' => [true],
     'unknown entity key' => [false],
 ]);
+
+it('expires role assignments and direct grants at the supplied instant in a non-UTC tenant connection', function (): void {
+    DB::statement("SET TIME ZONE 'Europe/Astrakhan'");
+
+    try {
+        $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+        $past = $now->modify('-60 seconds');
+        $future = $now->modify('+60 seconds');
+        $user = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
+        $roles = resolve(RoleManager::class);
+        $role = $roles->create('sales', 'Sales');
+        $roles->setScope($role, 'crm.deal', 'view', Scope::Account);
+        $access = resolve(AccessChecker::class);
+
+        $roles->assign($role, $user, expiresAt: $past);
+        expect($access->allowed($user, 'crm.deal', 'view'))->toBeFalse();
+        $roles->assign($role, $user, expiresAt: $future);
+        expect($access->allowed($user, 'crm.deal', 'view'))->toBeTrue();
+
+        $grants = resolve(DirectGrants::class);
+        $grants->grant($user, 'crm.deal', 'update', $past);
+        expect($access->allowed($user, 'crm.deal', 'update'))->toBeFalse();
+        $grants->grant($user, 'crm.deal', 'update', $future);
+        expect($access->allowed($user, 'crm.deal', 'update'))->toBeTrue();
+    } finally {
+        DB::statement('RESET TIME ZONE');
+    }
+});

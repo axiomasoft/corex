@@ -8,11 +8,11 @@ use CoreX\Access\Access\Internal\EffectiveWorkspaceScope;
 use CoreX\Access\Access\Internal\WorkspaceScopeWiring;
 use CoreX\Access\Extend\Internal\PermissionsMerger;
 use CoreX\Access\Identity\Laravel\PrincipalUserProvider;
+use Illuminate\Auth\AuthManager;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Event;
 use InvalidArgumentException;
 use Override;
 use Packman\Attributes\Spi;
@@ -39,8 +39,8 @@ final class AccessIntegrationRegistrar implements PackageRegistrar
             make: static fn (string $class): Scope => self::workspaceScope(app: $app, class: $class),
         );
 
-        Event::listen(ModuleEnabled::class, PermissionsMerger::class);
-        Event::listen(ModuleDisabled::class, PermissionsMerger::class);
+        $app->make(Dispatcher::class)->listen(ModuleEnabled::class, PermissionsMerger::class);
+        $app->make(Dispatcher::class)->listen(ModuleDisabled::class, PermissionsMerger::class);
     }
 
     /** @return Scope<Model> */
@@ -67,7 +67,7 @@ final class AccessIntegrationRegistrar implements PackageRegistrar
             return;
         }
 
-        Auth::provider('corex-principal', static fn (): PrincipalUserProvider => new PrincipalUserProvider(
+        $app->make(AuthManager::class)->provider('corex-principal', static fn (): PrincipalUserProvider => new PrincipalUserProvider(
             options: $app->make(AuthOptions::class),
         ));
     }

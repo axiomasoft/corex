@@ -20,22 +20,7 @@ use UnexpectedValueException;
 
 use function data_get;
 
-/**
- * Single owner of the six-scope semantics (B-11 §5.5, D110): before this
- * class, `own`/`dept`/`dept_tree`/`workspace`/`account`/`none` were compiled
- * twice — once as a Builder WHERE (this class) and once as a per-record
- * check (the old `DefaultAccessChecker::matchesScope()`). Two copies of one
- * security semantic diverge not "if" but "when"; {@see DefaultAccessChecker}
- * now delegates its record check into {@see matches()} instead of carrying
- * its own copy, and a parity test asserts `applyTo()` and `matches()` agree
- * for every scope × PrincipalType (packages/access/tests/Pg/ScopeResolverTest.php).
- *
- * Depends on `TenancyManager`/`Schema`/`DB`/config only — never on
- * `AccessChecker` (that would cycle: AccessChecker → ScopeResolver →
- * AccessChecker, Code Guidance).
- *
- * @internal spec: B-11 §5.5, P2.9 D107/D108/D109/D110/D117
- */
+/** Applies CoreX matrix scope to a record or its Eloquent query in the active tenant. */
 #[Internal]
 final readonly class ScopePredicate
 {

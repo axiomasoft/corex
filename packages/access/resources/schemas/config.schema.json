@@ -76,6 +76,12 @@
                     "type": "string",
                     "default": "app"
                 },
+                "policy_panels": {
+                    "type": [
+                        "array",
+                        "object"
+                    ]
+                },
                 "workspace_scope_class": {
                     "type": [
                         "string",

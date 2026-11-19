@@ -3,16 +3,14 @@
 declare(strict_types=1);
 
 use AzGuard\Exceptions\Authorization\VisibilityNotSupportedException;
+use CoreX\Access\Access\Internal\CoreXAccessContextMapper;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Data\RecordContext;
-use CoreX\Access\Enums\Scope;
 use CoreX\Access\Laravel\ScopeResolver;
-use CoreX\AccessAzguard\Exceptions\ScopeProjectionNotSupported;
-use CoreX\AccessAzguard\Internal\CoreXAccessContextMapper;
-use CoreX\AccessAzguard\Tests\Stubs\Project;
-use CoreX\AccessAzguard\Tests\Stubs\ProjectPolicy;
-use CoreX\AccessAzguard\Tests\Stubs\ScopedProject;
-use CoreX\AccessAzguard\Tests\Stubs\User;
+use CoreX\Access\Tests\Authorization\Project;
+use CoreX\Access\Tests\Authorization\ProjectPolicy;
+use CoreX\Access\Tests\Authorization\ScopedProject;
+use CoreX\Access\Tests\Authorization\User;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
@@ -21,7 +19,7 @@ use Packman\Modules\Contracts\Entities\EntityRegistry;
 use Packman\Modules\Data\Entities\EntityDefinition;
 use Packman\Modules\Testing\ArrayEntityRegistry;
 
-it('uses one AzGuard policy for record checks and SQL visibility without mirrored role tables', function (): void {
+it('uses one AzGuard policy for record checks and SQL visibility for a permission owned by the host panel', function (): void {
     $user = User::query()->create();
     $own = Project::query()->create(['owner_id' => $user->getKey()]);
     $other = Project::query()->create(['owner_id' => 999]);
@@ -31,8 +29,7 @@ it('uses one AzGuard policy for record checks and SQL visibility without mirrore
         ->and($checker->canOnRecord($user, 'view', $other))->toBeFalse();
     $query = Project::query();
     expect(resolve(ScopeResolver::class)->apply($query, $user, 'test.project', 'view'))->toBe($query)
-        ->and($query->pluck('id')->all())->toBe([$own->getKey()])
-        ->and($this->app['db']->connection()->getSchemaBuilder()->hasTable('aut_azguard_role_links'))->toBeFalse();
+        ->and($query->pluck('id')->all())->toBe([$own->getKey()]);
 });
 
 it('preserves caller constraints and rejects entity mismatches', function (): void {
@@ -51,14 +48,6 @@ it('denies missing trusted context instead of falling back to global access', fu
     Project::query()->create(['owner_id' => $user->getKey()]);
     expect(resolve(AccessChecker::class)->allowed($user, 'test.project', 'view'))->toBeFalse()
         ->and(resolve(ScopeResolver::class)->apply(Project::query(), $user, 'test.project', 'view')->count())->toBe(0);
-});
-
-it('does not claim a broad finite scope for an arbitrary AzGuard policy', function (): void {
-    $user = User::query()->create();
-    expect(fn () => resolve(AccessChecker::class)->scopeFor($user, 'test.project', 'view'))
-        ->toThrow(ScopeProjectionNotSupported::class);
-    expect(resolve(AccessChecker::class)->scopeFor($user, 'inactive', 'view'))->toBe(Scope::None)
-        ->and(resolve(AccessChecker::class)->allowed($user, 'inactive', 'view'))->toBeFalse();
 });
 
 it('maps account workspace principal and explicit record contexts without caching the account', function (): void {

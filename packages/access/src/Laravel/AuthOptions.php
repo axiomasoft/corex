@@ -13,6 +13,7 @@ final readonly class AuthOptions
 {
     /**
      * @param  array<string, string>  $identityColumns
+     * @param  array<string, string>  $policyPanels
      */
     public function __construct(
         public string $panel,
@@ -22,6 +23,7 @@ final readonly class AuthOptions
         public ?string $identityConnection,
         public string $identityTable,
         public array $identityColumns,
+        public array $policyPanels = [],
     ) {}
 
     /** @param  array<array-key, mixed>  $config */
@@ -79,6 +81,21 @@ final readonly class AuthOptions
             }
         }
 
+        $policyPanels = [];
+        $configured = $config['policy_panels'] ?? [];
+
+        if (! is_array($configured)) {
+            $violations->add('policy_panels', 'must map permission keys to panel IDs');
+        } else {
+            foreach ($configured as $permission => $owner) {
+                if (! is_string($permission) || trim($permission) === '' || ! is_string($owner) || trim($owner) === '') {
+                    $violations->add('policy_panels', 'must map permission keys to panel IDs');
+
+                    continue;
+                }
+                $policyPanels[$permission] = $owner;
+            }
+        }
         $violations->failIfAny();
 
         return new self(
@@ -89,6 +106,7 @@ final readonly class AuthOptions
             identityConnection: $identityConnection,
             identityTable: $identityTable,
             identityColumns: $identityColumns,
+            policyPanels: $policyPanels,
         );
     }
 

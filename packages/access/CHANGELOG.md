@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — CoreX authorization
+
+- Install `axiomasoft/corex-access` to check actions, authorize individual records and filter Eloquent queries. CoreX registers its AzGuard policy for the role matrix and direct grants during Laravel discovery.
+- Manage role scopes and assignments through `RoleManager` and direct grants through `DirectGrants`. An application can delegate an individual permission to a declared policy panel through `corex-access.policy_panels`.
+
 ## Unreleased — Packman governance
 
 - Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.
@@ -50,7 +55,7 @@
 
 - Schema delivery now uses tagged `SchemaSetProvider` declarations and `packman:schema:migrate`; migration publishing is removed.
 
-- Breaking before 1.0: access evaluates its own role matrix and direct grants; AzGuard integration moved to the optional `corex-access-azguard` package.
+- Access introduced product-owned role matrix and direct grant evaluation.
 - Added `aut_direct_grants` and the `RoleMatrixCompiled` event. Compilation dispatches synchronously in the tenant transaction and invalidates scope versions after commit.
 - Removed `aut_roles.azguard_role_id`, `RoleView::azguardRoleId`, `RoleMatrixData::bindAzGuardRole`, and AzGuard options. Access checks deny inactive entities before reading cached scopes or grants.
 

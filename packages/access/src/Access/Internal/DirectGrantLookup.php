@@ -10,16 +10,7 @@ use Illuminate\Database\Query\Builder;
 use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
-/**
- * Whether a principal holds an active native direct grant for one compiled
- * permission key. Extracted out of `DefaultAccessChecker` (D110): both the
- * record path (`canOnRecord()`) and the new builder path
- * (`DefaultScopeResolver::apply()`) treat an active direct grant as a full
- * bypass of the scope predicate, so the query lives once here rather than
- * risking the two copies drifting. Adding a 4th method to the public
- * `AccessChecker` contract for this was rejected (Code Guidance if-then #5)
- * — this lookup is not part of that contract's spec'd shape.
- */
+/** Finds an active direct grant for the exact principal type, ID and permission in the tenant connection. */
 #[Internal]
 final readonly class DirectGrantLookup
 {
@@ -30,7 +21,7 @@ final readonly class DirectGrantLookup
 
     public function hasActive(Principal $p, string $key): bool
     {
-        $now = $this->clock->now();
+        $now = $this->clock->now()->format('Y-m-d H:i:s.uP');
 
         return $this->connections->connection()->table('aut_direct_grants')
             ->where('principal_type', $p->principalType()->value)

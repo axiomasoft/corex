@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Access;
 
+use AzGuard\AzGuardServiceProvider;
+use CoreX\Access\Access\Internal\MatrixPanel;
 use CoreX\Access\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Access\Internal\AccessSchemaSets;
 use CoreX\Access\Internal\Support\AccessConfigSection;
@@ -27,6 +29,8 @@ final class AccessServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->register(AzGuardServiceProvider::class);
+        $this->app->register(MatrixPanel::class);
         $this->app->tag([AccessSchemaSets::class], SchemaSetProvider::class);
 
         ProblemDefinitions::register(app: $this->app, composerManifest: __DIR__.'/../composer.json', provider: PackageProblemDefinitions::class);

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\AccessAzguard\Tests\Stubs;
+namespace CoreX\Access\Tests\Authorization;
 
 use AzGuard\Contracts\Authorization\EvaluationContext;
 use AzGuard\Contracts\Authorization\FiltersAccessQueries;

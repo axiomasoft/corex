@@ -1,20 +1,49 @@
 # axiomasoft/corex-access
 
-Native authorization for CoreX. The package owns tenant role matrices, role assignments, direct grants and scope checks. It works without an external authorization engine.
+Install `axiomasoft/corex-access` to check permissions and constrain Eloquent queries in a CoreX application. Laravel discovers its provider and the package registers its authorization panel. A host supplies a CoreX principal and uses the current account context for each decision.
 
-## Authorization
+## Check records and list visible rows
 
-`AccessChecker::allowed()` checks an active role assignment in the current workspace with a non-`none` matrix row, then an active `aut_direct_grants` row. Unknown or inactive entities always deny. Direct grants must match the principal type, UUID and `{panel}.{entity_key}.{action}` permission key; expired or revoked grants deny.
+```php
+use CoreX\Access\Contracts\AccessChecker;
+use CoreX\Access\Laravel\ScopeResolver;
 
-`scopeFor()` computes the effective role scope. `canOnRecord()` and `ScopeResolver::apply()` share the scope predicate and deny inactive entities before consulting direct grants. An active direct grant bypasses the record scope predicate. Scope normalization rejects a missing capability when the backing table has its corresponding column.
+$canView = app(AccessChecker::class)->canOnRecord($principal, 'view', $company);
+$visible = app(ScopeResolver::class)->apply(
+    Company::query()->where('archived', false), $principal, 'crm.company', 'view',
+)->get();
+```
 
-`RoleMatrixCompiler::compile()` publishes `RoleMatrixCompiled` synchronously on the tenant connection. A listener failure rolls back the transaction; the scope map version changes only after commit. The optional bridge listens to this event.
+`AccessChecker::allowed($principal, 'crm.company', 'view')` checks the entity-level permission. Use `canOnRecord()` for a particular record. An unknown or inactive entity and a missing trusted account context deny access. Both operations use the same registered model and entity handle. The query retains caller-supplied constraints.
 
-The package publishes tenant migrations for `aut_roles`, `aut_role_assignments`, `aut_role_matrix` and `aut_direct_grants`. The consuming application assembles these in its tenant schema. It may additionally publish the separate cloud FK migrations when the dependent tables exist.
+## Manage roles and direct grants
 
-## Extension contracts
+```php
+use CoreX\Access\Enums\Scope;
+use CoreX\Access\Roles\DirectGrants;
+use CoreX\Access\Roles\RoleManager;
 
-Consumers bind `CoreX\Access\Matrix\Contracts\EntityActivity` to decide whether an entity is active and may implement `CoreX\Access\Contracts\RoleMatrixCompiler` when using another compiler. The default bindings are installed by `AccessServiceProvider`.
+$roles = app(RoleManager::class);
+$role = $roles->create('account-manager', 'Account manager');
+$roles->setScope($role, 'crm.company', 'view', Scope::Own);
+$roles->assign($role, $principal);
+
+$grants = app(DirectGrants::class);
+$grants->grant($principal, 'crm.company', 'view', now()->addHour()->toDateTimeImmutable());
+$grants->revoke($principal, 'crm.company', 'view');
+```
+
+On the current tenant connection, a matching direct grant gives entity-wide access until expiry or revocation. Role assignments may be workspace-specific and expire. Matrix cells support ownership, departments and their descendants, workspace, account and contextual overrides. Matrix compilation emits `RoleMatrixCompiled` inside the transaction and invalidates the scope version after commit.
+
+## Host policies
+
+The built-in matrix handles permissions by default. A host can explicitly assign an entity/action to a policy panel in `config/corex-access.php`:
+
+```php
+'policy_panels' => ['crm.company.view' => 'review'],
+```
+
+The registered `review` panel then owns the capability check, record decision and SQL visibility for that permission. The host policy must support exact query filtering to serve listings. Its denial is final. A similarly named panel has no effect without the exact mapping. CoreX maps principal, tenant and workspace internally.
 
 ## Identity provider
 

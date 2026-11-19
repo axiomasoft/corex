@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Laravel;
 
-use CoreX\Access\Access\Internal\DefaultAccessChecker;
-use CoreX\Access\Access\Internal\DefaultScopeResolver;
 use CoreX\Access\Access\Internal\EffectiveWorkspaceScope;
+use CoreX\Access\Access\Internal\MatrixPermissions;
+use CoreX\Access\Access\Internal\PanelAccessChecker;
 use CoreX\Access\Access\Internal\ScopeAvailability;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Contracts\RoleMatrixCompiler;
 use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
 use CoreX\Access\Matrix\Laravel\MatrixPortBindings;
+use CoreX\Access\Roles\DirectGrants;
+use CoreX\Access\Roles\Internal\DatabaseDirectGrants;
+use CoreX\Access\Roles\Internal\DatabaseRoleManager;
 use CoreX\Access\Roles\Internal\SystemRoleMutationScope;
+use CoreX\Access\Roles\RoleManager;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
@@ -36,22 +40,14 @@ final class AccessBindingsRegistrar implements PackageRegistrar
             container: $app,
         ));
 
-        // scoped(), not singleton() — DefaultAccessChecker's scopeFor() memo
-        // must not survive across requests on a reused worker (Octane).
-        $app->scoped(AccessChecker::class, DefaultAccessChecker::class);
-
-        // scoped() for the same reason: ScopeAvailability's per-(entity_key,
-        // scope) memo (P2.9 D114) must not survive a reused Octane worker
-        // either, and DefaultScopeResolver is resolved once per listing
-        // query — binding it keeps that one ScopeAvailability instance (and
-        // its memo) shared across every apply() call within one request.
+        $app->scoped(MatrixPermissions::class);
+        $app->scoped(PanelAccessChecker::class);
+        $app->alias(PanelAccessChecker::class, AccessChecker::class);
+        $app->alias(PanelAccessChecker::class, ScopeResolver::class);
         $app->scoped(ScopeAvailability::class);
         $app->scoped(SystemRoleMutationScope::class);
-        $app->scoped(ScopeResolver::class, DefaultScopeResolver::class);
-
-        // P2.21: PermissionsMerger's lifecycle listener needs this resolved
-        // through the interface — nothing bound it before (P2.8/P2.9 always
-        // constructed DatabaseRoleMatrixCompiler directly).
+        $app->bind(RoleManager::class, DatabaseRoleManager::class);
+        $app->bind(DirectGrants::class, DatabaseDirectGrants::class);
         $app->bind(RoleMatrixCompiler::class, DatabaseRoleMatrixCompiler::class);
 
     }

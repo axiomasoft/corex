@@ -2,19 +2,15 @@
 
 declare(strict_types=1);
 
-namespace CoreX\AccessAzguard\Tests;
+namespace CoreX\Access\Tests\Authorization;
 
 use AzGuard\AzGuardServiceProvider;
-use CoreX\Access\Contracts\AccessChecker;
-use CoreX\Access\Laravel\AuthOptions;
-use CoreX\Access\Laravel\ScopeResolver;
+use CoreX\Access\AccessServiceProvider;
 use CoreX\Access\Matrix\Contracts\EntityActivity;
-use CoreX\AccessAzguard\AccessAzguardServiceProvider;
-use CoreX\AccessAzguard\Tests\Stubs\BridgePanel;
-use CoreX\AccessAzguard\Tests\Stubs\Project;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\CoreServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -23,22 +19,21 @@ use Packman\Modules\Data\Entities\EntityDefinition;
 use Packman\Modules\Testing\ArrayEntityRegistry;
 use RuntimeException;
 
-abstract class TestCase extends Orchestra
+abstract class PolicyTestCase extends Orchestra
 {
     protected function getPackageProviders($app): array
     {
-        return [AzGuardServiceProvider::class, BridgePanel::class, AccessAzguardServiceProvider::class];
+        return [AzGuardServiceProvider::class, BridgePanel::class, AccessServiceProvider::class];
     }
 
     protected function defineEnvironment($app): void
     {
+        $app->register(CoreServiceProvider::class);
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', ['driver' => 'sqlite', 'database' => ':memory:', 'prefix' => '']);
         $app['config']->set('cache.default', 'array');
         $app['config']->set('azguard.cache.namespace', 'corex-bridge-test');
-        $app->instance(AuthOptions::class, AuthOptions::fromArray([]));
-        $app->bind(AccessChecker::class, static fn () => Mockery::mock(AccessChecker::class));
-        $app->bind(ScopeResolver::class, static fn () => Mockery::mock(ScopeResolver::class));
+        $app['config']->set('corex-access.policy_panels', ['test.project.view' => 'app']);
         $registry = new ArrayEntityRegistry;
         $registry->register(new EntityDefinition('test.project', Project::class, 'projects', 'test', 'Project', 'Projects', [], [], null));
         $app->instance(EntityRegistry::class, $registry);

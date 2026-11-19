@@ -2,21 +2,20 @@
 
 declare(strict_types=1);
 
-namespace CoreX\AccessAzguard\Internal;
+namespace CoreX\Access\Access\Internal;
 
 use AzGuard\Kernel\Identity\AccessScope;
 use AzGuard\Kernel\Identity\AssignmentScopeRef;
 use AzGuard\Kernel\Identity\SubjectRef;
 use AzGuard\Kernel\Identity\TenantRef;
 use CoreX\Access\Data\RecordContext;
-use CoreX\AccessAzguard\Contracts\AccessContextMapper;
 use CoreX\Context\Contracts\Principal;
 use CoreX\Context\Contracts\TenancyManager;
 use Packman\Attributes\Internal;
 
 /** @internal Maps trusted CoreX identity, without reading authorization tables. */
 #[Internal]
-final readonly class CoreXAccessContextMapper implements AccessContextMapper
+final readonly class CoreXAccessContextMapper
 {
     public function __construct(private TenancyManager $tenancy) {}
 

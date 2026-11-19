@@ -24,7 +24,7 @@ return new class extends PackmanMigration
             $table->primary(['id'], 'aut_role_matrix_pk');
             $table->uuid('role_id');
             $table->string('entity_key', 64);
-            $table->string('action', 16);
+            $table->string('action', 120);
             $table->string('scope', 16);
             $table->string('context_type', 32)->nullable();
             $table->uuid('context_id')->nullable();
@@ -34,7 +34,7 @@ return new class extends PackmanMigration
             $table->foreign('role_id', 'aut_role_matrix_role_id_fk')->references('id')->on('aut_roles')->cascadeOnDelete();
         });
 
-        DB::statement("ALTER TABLE aut_role_matrix ADD CONSTRAINT aut_role_matrix_action_ck CHECK (action IN ('read','add','update','delete','export','import'))");
+        DB::statement("ALTER TABLE aut_role_matrix ADD CONSTRAINT aut_role_matrix_action_ck CHECK (action ~ '^[a-z][a-z0-9_-]*$')");
         DB::statement("ALTER TABLE aut_role_matrix ADD CONSTRAINT aut_role_matrix_scope_ck CHECK (scope IN ('none','own','dept','dept_tree','workspace','account'))");
         DB::statement('ALTER TABLE aut_role_matrix ADD CONSTRAINT aut_role_matrix_context_ck CHECK ((context_type IS NULL) = (context_id IS NULL))');
         DB::statement('ALTER TABLE aut_role_matrix ADD CONSTRAINT aut_role_matrix_uq UNIQUE NULLS NOT DISTINCT (role_id, entity_key, action, context_type, context_id)');

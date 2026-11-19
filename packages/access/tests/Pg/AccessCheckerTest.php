@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Access\Access\Internal\MatrixPermissions;
 use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Data\RecordContext;
@@ -63,9 +64,9 @@ it('recomputes scope after replacing an assignment with an equally versioned rol
     RoleMatrixRow::query()->create(['role_id' => $narrow->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'own']);
     $assignment = RoleAssignment::query()->create(['role_id' => $broad->id, 'principal_type' => 'user', 'principal_id' => $principal->principalId()]);
     $checker = resolve(AccessChecker::class);
-    expect($checker->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Account);
+    expect(resolve(MatrixPermissions::class)->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Account);
     $assignment->update(['role_id' => $narrow->id]);
-    expect($checker->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Own);
+    expect(resolve(MatrixPermissions::class)->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Own);
 });
 
 it('does not reuse scope memo when a connection switch exposes identical role IDs in another tenant', function (): void {
@@ -80,7 +81,7 @@ it('does not reuse scope memo when a connection switch exposes identical role ID
     });
     app()->instance(TenancyManager::class, $manager);
     $checker = resolve(AccessChecker::class);
-    expect($checker->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Account);
+    expect(resolve(MatrixPermissions::class)->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Account);
 
     // Two independent schemas in corex_test stand in for two tenant DBs;
     // role IDs and version counters intentionally coincide.
@@ -96,7 +97,7 @@ it('does not reuse scope memo when a connection switch exposes identical role ID
         DB::connection('scope_other')->table('aut_role_matrix')->update(['scope' => 'own']);
         $context = new TenantContext(new AccountRef('account-b', 'b', 'active', [], []), null);
         DB::setDefaultConnection('scope_other');
-        expect($checker->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Own);
+        expect(resolve(MatrixPermissions::class)->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Own);
     } finally {
         DB::setDefaultConnection('pgsql');
         DB::purge('scope_other');
@@ -117,7 +118,7 @@ it('excludes deleted broad roles when a live narrow role still grants access', f
         }
     }
     expect(resolve(AccessChecker::class)->allowed($principal, 'crm.deal', 'read'))->toBeTrue()
-        ->and(resolve(AccessChecker::class)->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Own);
+        ->and(resolve(MatrixPermissions::class)->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Own);
 });
 
 beforeEach(function (): void {
@@ -204,7 +205,7 @@ it('resolves each of the six scope values from a single matching matrix row', fu
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
 
-    expect(resolve(AccessChecker::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe($scope);
+    expect(resolve(MatrixPermissions::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe($scope);
 })->with(fn () => Scope::cases());
 
 // B-11 §5.5 — several roles resolve to the MAX weight of their base rows.
@@ -220,7 +221,7 @@ it('resolves the max weight across multiple roles held by the same principal', f
 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
 
-    expect(resolve(AccessChecker::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe(Scope::Workspace);
+    expect(resolve(MatrixPermissions::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe(Scope::Workspace);
 });
 
 // B-11 §5.5 — a context row REPLACES the base row for its own context, including narrowing it to none.
@@ -236,9 +237,9 @@ it('lets a context row override, and narrow, the base scope for its own context 
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
     $checker = resolve(AccessChecker::class);
 
-    expect($checker->scopeFor($identity, 'crm.deal', 'read'))->toBe(Scope::Account)
-        ->and($checker->scopeFor($identity, 'crm.deal', 'read', new RecordContext('stage', $stageId)))->toBe(Scope::None)
-        ->and($checker->scopeFor($identity, 'crm.deal', 'read', new RecordContext('stage', (string) Str::uuid7())))->toBe(Scope::Account);
+    expect(resolve(MatrixPermissions::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe(Scope::Account)
+        ->and(resolve(MatrixPermissions::class)->scopeFor($identity, 'crm.deal', 'read', new RecordContext('stage', $stageId)))->toBe(Scope::None)
+        ->and(resolve(MatrixPermissions::class)->scopeFor($identity, 'crm.deal', 'read', new RecordContext('stage', (string) Str::uuid7())))->toBe(Scope::Account);
 });
 
 it('grants canOnRecord for own scope only when the record belongs to the principal', function (): void {
@@ -330,7 +331,7 @@ it('grants department scopes only for real same-department and descendant record
         ->keys()
         ->all();
 
-    expect($checker->scopeFor($identity, 'crm.deal', 'read'))->toBe($scope)
+    expect(resolve(MatrixPermissions::class)->scopeFor($identity, 'crm.deal', 'read'))->toBe($scope)
         ->and($grantedLabels)->toBe($expectedLabels)
         ->and($checker->canOnRecord($identity, 'read', $records['sibling']))->toBeFalse()
         ->and($checker->canOnRecord($identity, 'read', $records['null_owner']))->toBeFalse();

@@ -15,6 +15,7 @@
         </testsuite>
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
+            <directory>tests/Authorization</directory>
         </testsuite>
 
         <!-- PG-only DDL (jsonb/CHECK/UNIQUE NULLS NOT DISTINCT/COMMENT ON,

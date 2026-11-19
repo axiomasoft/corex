@@ -14,6 +14,9 @@ return [
     */
     'panel' => env('COREX_ACCESS_PANEL', 'app'),
 
+    // Permissions whose record checks and listing queries belong to an explicit host panel.
+    'policy_panels' => [],
+
     /*
     |--------------------------------------------------------------------------
     | Scope-map cache store

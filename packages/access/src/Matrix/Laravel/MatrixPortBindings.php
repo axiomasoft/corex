@@ -18,7 +18,7 @@ final class MatrixPortBindings
 {
     public static function register(Application $app): void
     {
-        $app->bind(EntityActivity::class, static fn (Application $app): EntityActivity => $app->make(ActiveEntityFilter::class));
+        $app->bindIf(EntityActivity::class, static fn (Application $app): EntityActivity => $app->make(ActiveEntityFilter::class));
         $app->bind(ScopeMapVersions::class, static fn (Application $app): ScopeMapVersions => $app->make(ScopeMapVersion::class));
     }
 }

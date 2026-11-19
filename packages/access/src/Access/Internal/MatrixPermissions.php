@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Access\Internal;
 
-use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Data\RecordContext;
 use CoreX\Access\Enums\Scope;
 use CoreX\Access\Laravel\AuthOptions;
@@ -16,36 +15,21 @@ use CoreX\Context\Enums\PrincipalType;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
-use Override;
 use Packman\Attributes\Internal;
-use Packman\Modules\Contracts\Entities\EntityRegistry;
 use Psr\Clock\ClockInterface;
 use UnexpectedValueException;
 
-/**
- * Two-phase AccessChecker. Permissions come from the native role matrix and
- * direct grants. Fail-closed throughout: an unresolved or inactive entity,
- * absent role row or missing department table never widens to "the whole
- * scope" — it denies.
- *
- * The scope predicate itself (own/dept/dept_tree/workspace/account/none) is
- * NOT decided here (P2.9, D110): it is delegated to {@see ScopePredicate},
- * the single owner shared with the builder path
- * ({@see DefaultScopeResolver}), so the two paths cannot silently diverge.
- * Bound `scoped` (AccessServiceProvider) so the scopeFor() memo below is
- * request-scoped, never carried across requests on a reused worker.
- */
+/** Product role assignments and direct grants inside the current tenant connection. */
 #[Internal]
-final class DefaultAccessChecker implements AccessChecker
+final class MatrixPermissions
 {
     /** @var array<string, Scope> Keyed with every contributing role's ScopeMapVersion — a compile() bump changes the key, i.e. a guaranteed miss. */
     private array $scopeMemo = [];
 
     public function __construct(
-        private readonly EntityRegistry $entities,
         private readonly TenancyManager $tenancyManager,
         private readonly ScopeMapVersion $scopeMapVersion,
-        private readonly ScopePredicate $scopePredicate,
+        private readonly ScopeAvailability $availability,
         private readonly DirectGrantLookup $directGrants,
         private readonly AuthOptions $options,
         private readonly ConnectionResolverInterface $connections,
@@ -53,7 +37,6 @@ final class DefaultAccessChecker implements AccessChecker
         private readonly EntityActivity $activity,
     ) {}
 
-    #[Override]
     public function allowed(Principal $p, string $entityKey, string $action): bool
     {
         if (! $this->activity->isActive($entityKey)) {
@@ -70,7 +53,6 @@ final class DefaultAccessChecker implements AccessChecker
         return $this->directGrants->hasActive(p: $p, key: "{$this->panel()}.{$entityKey}.{$action}");
     }
 
-    #[Override]
     public function scopeFor(Principal $p, string $entityKey, string $action, ?RecordContext $ctx = null): Scope
     {
         if (! $this->activity->isActive($entityKey)) {
@@ -111,31 +93,14 @@ final class DefaultAccessChecker implements AccessChecker
         return $this->scopeMemo[$memoKey] = $effective;
     }
 
-    #[Override]
-    public function canOnRecord(Principal $p, string $action, object $record): bool
+    public function scope(Principal $principal, string $entity, string $action, ?RecordContext $context = null): Scope
     {
-        $entity = $this->entities->forModel($record::class);
+        return $this->availability->normalize($entity, $this->scopeFor($principal, $entity, $action, $context));
+    }
 
-        if ($entity === null) {
-            return false;
-        }
-
-        if (! $this->activity->isActive($entity->handle)) {
-            return false;
-        }
-
-        $key = "{$this->panel()}.{$entity->handle}.{$action}";
-
-        if ($this->directGrants->hasActive(p: $p, key: $key)) {
-            return true;
-        }
-
-        return $this->allowed(p: $p, entityKey: $entity->handle, action: $action)
-            && $this->scopePredicate->matches(
-                scope: new ScopeAvailability(entities: $this->entities, connections: $this->connections)->normalize(entityKey: $entity->handle, scope: $this->scopeFor(p: $p, entityKey: $entity->handle, action: $action)),
-                record: $record,
-                p: $p,
-            );
+    public function directlyGranted(Principal $principal, string $entity, string $action): bool
+    {
+        return $this->directGrants->hasActive($principal, $this->panel().'.'.$entity.'.'.$action);
     }
 
     /** @return list<string> */
@@ -144,7 +109,7 @@ final class DefaultAccessChecker implements AccessChecker
         $workspaceId = $this->tenancyManager->context()?->workspace?->id;
 
         $connection = $this->connections->connection();
-        $now = $this->clock->now();
+        $now = $this->clock->now()->format('Y-m-d H:i:s.uP');
 
         $values = $connection->table('aut_role_assignments')
             ->whereIn('role_id', $connection->table('aut_roles')->select('id')->whereNull('deleted_at'))
