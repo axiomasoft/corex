@@ -1,6 +1,6 @@
 {
     "name": "flex/crm",
-    "description": "CoreX CRM module \u2014 pipelines, stages and deals on axiomasoft/corex (ULID, tenancy, money).",
+    "description": "CoreX CRM module — pipelines, stages and deals on axiomasoft/corex (ULID, tenancy, money).",
     "type": "packman-module",
     "license": "MIT",
     "keywords": [
@@ -20,9 +20,9 @@
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
         "axiomasoft/corex-intl": "^1.0@dev",
-        "axiomasoft/packman": "^0.1@dev",
-        "axiomasoft/packman-modules": "^0.1@dev",
-        "axiomasoft/packman-schema": "^0.1@dev",
+        "axiomasoft/packman": "^0.1",
+        "axiomasoft/packman-modules": "^0.1",
+        "axiomasoft/packman-schema": "^0.1",
         "brick/money": "^0.9 || ^0.10",
         "ext-filter": "*",
         "ext-mbstring": "*",

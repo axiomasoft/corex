@@ -17,16 +17,18 @@ ALIAS = '1.0.x-dev'
 MONO_CONSTRAINT = '^1.0@dev'
 PHP = '^8.4'
 ILLUMINATE = '^13.0'
-# Unreleased ecosystem dependencies are fixed to reviewed commits in the root
-# package repositories and lockfile; other prerelease dependencies remain forbidden.
+# Packman packages are pinned to ^0.1 (0.1.0) in the root package repositories
+# and lockfile; unreleased ecosystem dependencies remain fixed to reviewed commits.
+PACKMAN_CONSTRAINTS = {
+    'axiomasoft/packman': '^0.1',
+    'axiomasoft/packman-devtools': '^0.1',
+    'axiomasoft/packman-testkit': '^0.1',
+    'axiomasoft/packman-modules': '^0.1',
+    'axiomasoft/packman-schema': '^0.1',
+    'axiomasoft/packman-panels': '^0.1',
+    'axiomasoft/packman-plugins': '^0.1',
+}
 ALLOWED_PRERELEASE = {
-    'axiomasoft/packman': '^0.1@dev',
-    'axiomasoft/packman-devtools': '^0.1@dev',
-    'axiomasoft/packman-testkit': '^0.1@dev',
-    'axiomasoft/packman-modules': '^0.1@dev',
-    'axiomasoft/packman-schema': '^0.1@dev',
-    'axiomasoft/packman-panels': '^0.1@dev',
-    'axiomasoft/packman-plugins': '^0.1@dev',
     'axiomasoft/azguard': '^2.0@dev',
     'axiomasoft/tenant': '^1.0@dev',
     'axiomasoft/tenant-laravel': '^1.0@dev',
@@ -110,6 +112,8 @@ def main() -> int:
                 bad('illuminate', f'{name}={constraint!r}, expected {ILLUMINATE!r}')
             elif name in STACK and constraint != STACK[name]:
                 bad('stack', f'{name}={constraint!r}, expected {STACK[name]!r}')
+            elif name in PACKMAN_CONSTRAINTS and not pinned(constraint, PACKMAN_CONSTRAINTS[name]):
+                bad('packman', f'{name}={constraint!r}, expected {PACKMAN_CONSTRAINTS[name]!r}')
             elif name not in mono and name not in ALLOWED_PRERELEASE and re.search(r'@(dev|alpha|beta|RC)|dev-|-alpha|-beta', constraint):
                 bad('prerelease', f'{name}={constraint!r}')
             elif name in ALLOWED_PRERELEASE and not pinned(constraint, ALLOWED_PRERELEASE[name]):
@@ -136,13 +140,15 @@ def main() -> int:
     }
     lock = load(ROOT / 'composer.lock')
     locked_packages = {package['name']: package for package in lock.get('packages', []) + lock.get('packages-dev', [])}
-    for name in ALLOWED_PRERELEASE:
+    for name in (*PACKMAN_CONSTRAINTS, *ALLOWED_PRERELEASE):
         source = repository_packages.get(name, {}).get('source', {})
         reference = source.get('reference', '')
         if source.get('type') != 'git' or not re.fullmatch(r'[0-9a-f]{40}', reference):
             violations.append(f'ROOT: ecosystem-pin: {name} must have an exact Git commit')
         elif locked_packages.get(name, {}).get('source') != source:
             violations.append(f'ROOT: ecosystem-pin: {name} lockfile differs from reviewed repository source')
+        elif name in PACKMAN_CONSTRAINTS and (repository_packages.get(name, {}).get('version') != '0.1.0' or locked_packages.get(name, {}).get('version') != '0.1.0'):
+            violations.append(f'ROOT: ecosystem-pin: {name} must be pinned to version 0.1.0')
 
     for line in violations:
         print(line)

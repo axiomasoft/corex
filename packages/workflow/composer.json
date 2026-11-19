@@ -6,9 +6,9 @@
     "require": {
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
-        "axiomasoft/packman": "^0.1@dev",
-        "axiomasoft/packman-modules": "^0.1@dev",
-        "axiomasoft/packman-schema": "^0.1@dev",
+        "axiomasoft/packman": "^0.1",
+        "axiomasoft/packman-modules": "^0.1",
+        "axiomasoft/packman-schema": "^0.1",
         "illuminate/contracts": "^13.0",
         "illuminate/database": "^13.0",
         "illuminate/support": "^13.0",
@@ -69,7 +69,6 @@
     },
     "require-dev": {
         "orchestra/testbench": "^11.3",
-        "orchestra/testbench-core": "^11.5",
-        "axiomasoft/packman": "^0.1@dev"
+        "orchestra/testbench-core": "^11.5"
     }
 }

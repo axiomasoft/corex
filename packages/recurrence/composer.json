@@ -6,7 +6,7 @@
     "require": {
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
-        "axiomasoft/packman": "^0.1@dev",
+        "axiomasoft/packman": "^0.1",
         "laravel/framework": "^13.0",
         "rlanvin/php-rrule": "^3.0"
     },

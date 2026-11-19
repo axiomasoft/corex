@@ -6,8 +6,8 @@
     "require": {
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
-        "axiomasoft/packman-modules": "^0.1@dev",
-        "axiomasoft/packman-panels": "^0.1@dev"
+        "axiomasoft/packman-modules": "^0.1",
+        "axiomasoft/packman-panels": "^0.1"
     },
     "autoload": {
         "psr-4": {

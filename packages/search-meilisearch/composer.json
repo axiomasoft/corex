@@ -7,7 +7,7 @@
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
         "axiomasoft/corex-search": "^1.0@dev",
-        "axiomasoft/packman": "^0.1@dev",
+        "axiomasoft/packman": "^0.1",
         "ext-filter": "*",
         "illuminate/contracts": "^13.0",
         "illuminate/support": "^13.0",

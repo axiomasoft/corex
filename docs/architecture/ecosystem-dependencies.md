@@ -1,9 +1,10 @@
 # Зависимости экосистемы
 
 CoreX использует публичные контракты Packman, Tenant, AzGuard и Vaulter.
-Текущая ветка интеграции проверяет development-снимки этих владельцев. Ограничения
-`^0.1@dev`, `^1.0@dev` и `^2.0@dev` в Composer не утверждают, что стабильные версии
-уже опубликованы или что эти источники доступны без авторизации.
+Пакеты `axiomasoft/packman*` зафиксированы на версии `^0.1` (`0.1.0`), а для
+Tenant (`^1.0@dev`), AzGuard (`^2.0@dev`) и Vaulter (`^1.0@dev`) проверяются
+development-снимки владельцев. Ограничения в Composer не утверждают, что эти
+источники доступны без авторизации.
 
 ## Зафиксированные исходники
 
@@ -14,20 +15,19 @@ PSR-4 пути внутри монорепозитория владельца. �
 
 | Владелец | Пакеты | Source reference |
 |---|---|---|
-| Packman | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `db7a873640a9b1390320253736c976bd30e6bf83` |
-| AzGuard | `azguard` | `457eed3a07e0a25eae934fd35f532cde3d69fa86` |
-| Tenant | `tenant`, `tenant-laravel` | `6089b4c3d288b28e1ba8ce7e88f37c4f0a100cbe` |
-| Vaulter | `vaulter-core`, `vaulter-media` | `56de17dfcee26aa047761bca4d1b0ba5f2c2d866` |
+| Packman (`0.1.0`) | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `7bce48a5061b256ffec2ed786d94ed33da63109e` |
+| AzGuard | `azguard` | `bfa228c252ff6148fcb8496248692eb785c5663f` |
+| Tenant | `tenant`, `tenant-laravel` | `2bda06ff47ea3e2127dbfade1b3dee59e1102238` |
+| Vaulter | `vaulter-core`, `vaulter-media` | `ebb75a8adcf6b8ae38324afc17ef9e1f2d447ff3` |
 
-Все имена в таблице имеют префикс `axiomasoft/`. Снимки используют `dev-main` и
-числовой branch alias владельца; это метаданные разрешения, а не доказательство,
-что commit находится в опубликованном `main`. AzGuard source URL указывает на
-`axiomasoft/azguard-private`; среде установки нужен доступ к этому репозиторию.
+Все имена в таблице имеют префикс `axiomasoft/`. Packman зафиксирован на `0.1.0`,
+а остальные снимки используют `dev-main` и числовой branch alias владельца; это
+метаданные разрешения, а не доказательство, что commit находится в опубликованном
+remote `main`. AzGuard source URL указывает на `axiomasoft/azguard-private`; среде
+установки нужен доступ к этому репозиторию.
 
-Vaulter commit — локальная ветка `corex-integration-fix` отдельного checkout
-`vaulter-corex-integration`. Она исправляет совместимость с Packman contracts,
-регистрацию модулей, конфигурацию и запуск media CAS. **Commit ещё не опубликован
-в указанном GitHub source.** Чистый CI не сможет получить его только по `composer.lock`.
+При работе с локальными монорепозиториями владельцев до публикации commits в
+remote GitHub чистый CI не сможет получить их только по `composer.lock`.
 Локальный успешный install из доступного checkout/cache не доказывает remote install.
 
 ## Разработка в монорепозитории
@@ -40,12 +40,12 @@ scripts/php84 composer install --prefer-source
 ```
 
 CoreX-пакеты и продукт устанавливаются из относительных `packages/*` и `products/*`.
-Внешние снимки не зависят от соседних директорий. Для неопубликованного Vaulter
+Внешние снимки не зависят от соседних директорий. Для локального checkout Vaulter
 нужен переданный checkout с указанным commit или Git bundle, развёрнутый в отдельный
 локальный репозиторий. Проверить commit можно без изменения checkout:
 
 ```bash
-git -C /absolute/path/vaulter-corex-integration cat-file -e 56de17dfcee26aa047761bca4d1b0ba5f2c2d866^{commit}
+git -C /absolute/path/vaulter cat-file -e ebb75a8adcf6b8ae38324afc17ef9e1f2d447ff3^{commit}
 ```
 
 Для локальной установки можно направить только Vaulter source URL на этот checkout
@@ -54,7 +54,7 @@ git -C /absolute/path/vaulter-corex-integration cat-file -e 56de17dfcee26aa04776
 ```bash
 env \
   GIT_CONFIG_COUNT=1 \
-  GIT_CONFIG_KEY_0=url.file:///absolute/path/vaulter-corex-integration/.insteadOf \
+  GIT_CONFIG_KEY_0=url.file:///absolute/path/vaulter/.insteadOf \
   GIT_CONFIG_VALUE_0=https://github.com/axiomasoft/vaulter.git \
   scripts/php84 composer install --prefer-source
 ```

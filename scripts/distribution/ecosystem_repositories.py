@@ -84,11 +84,12 @@ def with_snapshot_requirements(manifest: dict, root: Path, bindings: list[dict])
         if package is None:
             continue
         if name in reviewed:
-            section = "require-dev" if name in effective.get("require-dev", {}) else "require"
-            requirements = effective.setdefault(section, {})
-            constraint = requirements.get(name, package["version"])
-            # Retain version bounds; only this exact reviewed owner gains dev stability.
-            requirements[name] = re.sub(r"@(stable|RC|beta|alpha|dev)\b", "", constraint) + "@dev"
+            if re.search(r"(?:^dev-|-dev$|@(?:dev|alpha|beta|RC)\b|-(?:alpha|beta|RC))", str(package.get("version", "")), re.IGNORECASE):
+                section = "require-dev" if name in effective.get("require-dev", {}) else "require"
+                requirements = effective.setdefault(section, {})
+                constraint = requirements.get(name, package["version"])
+                # Retain version bounds; only this exact reviewed owner gains dev stability.
+                requirements[name] = re.sub(r"@(stable|RC|beta|alpha|dev)\b", "", constraint) + "@dev"
         pending.extend(package.get("require", {}))
     return effective
 

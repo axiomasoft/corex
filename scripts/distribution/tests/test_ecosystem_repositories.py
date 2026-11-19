@@ -83,7 +83,8 @@ class EcosystemRepositoriesTest(unittest.TestCase):
         original = json.loads(path.read_text())
         effective, _ = module.source_manifest(ROOT, path, original)
         self.assertEqual(effective["minimum-stability"], "stable")
-        self.assertEqual(effective["require"]["axiomasoft/packman-plugins"], "dev-main@dev")
+        self.assertEqual(effective["require"]["axiomasoft/packman"], "^0.1")
+        self.assertNotIn("axiomasoft/packman-plugins", effective["require"])
         self.assertEqual(effective["require"]["axiomasoft/vaulter-media"], original["require"]["axiomasoft/vaulter-media"])
         self.assertNotIn("axiomasoft/azguard", effective["require"])
         self.assertNotIn("axiomasoft/tenant", effective["require"])
@@ -95,7 +96,7 @@ class EcosystemRepositoriesTest(unittest.TestCase):
         self.assertEqual(module.locked_summary({"installed": [
             {"name": "axiomasoft/corex", "version": "1.0.0"},
             {"name": "axiomasoft/corex-media", "version": "1.0.0"},
-            {"name": "axiomasoft/packman", "version": "dev-main"},
+            {"name": "axiomasoft/packman", "version": "0.1.0"},
         ]}), ["axiomasoft/corex-media:1.0.0", "axiomasoft/corex:1.0.0"])
         with tempfile.TemporaryDirectory() as temporary:
             consumer = Path(temporary)

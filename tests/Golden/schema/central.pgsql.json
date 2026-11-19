@@ -1846,6 +1846,317 @@
             "checks": [],
             "triggers": []
         },
+        "v_blob_references": {
+            "columns": {
+                "blob_id": {
+                    "type": "character(26)",
+                    "nullable": false,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "id": {
+                    "type": "character(26)",
+                    "nullable": false,
+                    "default": null
+                },
+                "owner_type": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "reference_key": {
+                    "type": "character varying(191)",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "v_blob_references_blob_id_index",
+                    "kind": "ix",
+                    "columns": [
+                        "blob_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_blob_references_owner_idx",
+                    "kind": "ix",
+                    "columns": [
+                        "owner_type",
+                        "reference_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_blob_references_pin_uniq",
+                    "kind": "uq",
+                    "columns": [
+                        "blob_id",
+                        "owner_type",
+                        "reference_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_blob_references_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "v_blob_references_blob_fk",
+                    "columns": [
+                        "blob_id"
+                    ],
+                    "references": "v_blobs(id)",
+                    "on_delete": "RESTRICT",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [],
+            "triggers": []
+        },
+        "v_blobs": {
+            "columns": {
+                "chunked": {
+                    "type": "boolean",
+                    "nullable": false,
+                    "default": "false"
+                },
+                "committed_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "crc32c": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "dedup_scope": {
+                    "type": "character varying(8)",
+                    "nullable": false,
+                    "default": "'tenant'::character varying"
+                },
+                "delete_after_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "disk": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": "'default'::character varying"
+                },
+                "encryption_key_id": {
+                    "type": "character(26)",
+                    "nullable": true,
+                    "default": null
+                },
+                "etag": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "first_seen_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "hash_algo": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": "'sha256'::character varying"
+                },
+                "id": {
+                    "type": "character(26)",
+                    "nullable": false,
+                    "default": null
+                },
+                "integrity_checked_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "integrity_failed_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "md5": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "quarantined_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "ref_count": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'0'::bigint"
+                },
+                "scope_key": {
+                    "type": "character varying(191)",
+                    "nullable": false,
+                    "default": null
+                },
+                "sha256": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "size_bytes": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "status": {
+                    "type": "character varying(12)",
+                    "nullable": false,
+                    "default": "'pending'::character varying"
+                },
+                "storage_id": {
+                    "type": "character(26)",
+                    "nullable": true,
+                    "default": null
+                },
+                "storage_key": {
+                    "type": "character varying(255)",
+                    "nullable": false,
+                    "default": null
+                },
+                "storage_version": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "tenant_id": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "v_blobs_encryption_key_id_index",
+                    "kind": "ix",
+                    "columns": [
+                        "encryption_key_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_blobs_gc_idx",
+                    "kind": "ix",
+                    "columns": [
+                        "status",
+                        "ref_count",
+                        "delete_after_at"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_blobs_integrity_idx",
+                    "kind": "ix",
+                    "columns": [
+                        "integrity_checked_at"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_blobs_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_blobs_scope_sha_uniq",
+                    "kind": "uq",
+                    "columns": [
+                        "scope_key",
+                        "sha256"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_blobs_size_bytes_index",
+                    "kind": "ix",
+                    "columns": [
+                        "size_bytes"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_blobs_storage_id_index",
+                    "kind": "ix",
+                    "columns": [
+                        "storage_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_blobs_storage_key_uniq",
+                    "kind": "uq",
+                    "columns": [
+                        "storage_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "v_blobs_tenant_id_index",
+                    "kind": "ix",
+                    "columns": [
+                        "tenant_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
         "v_idempotency_keys": {
             "columns": {
                 "actor_id": {

@@ -1,6 +1,6 @@
 {
     "name": "axiomasoft/corex-tasks",
-    "description": "CoreX Tasks module \u2014 workspace projects, stages and tasks for DB-per-account applications.",
+    "description": "CoreX Tasks module — workspace projects, stages and tasks for DB-per-account applications.",
     "type": "packman-module",
     "license": "MIT",
     "keywords": [
@@ -19,9 +19,9 @@
     "require": {
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
-        "axiomasoft/packman": "^0.1@dev",
-        "axiomasoft/packman-modules": "^0.1@dev",
-        "axiomasoft/packman-schema": "^0.1@dev",
+        "axiomasoft/packman": "^0.1",
+        "axiomasoft/packman-modules": "^0.1",
+        "axiomasoft/packman-schema": "^0.1",
         "ext-mbstring": "*",
         "laravel/framework": "^13.0",
         "psr/clock": "^1.0"

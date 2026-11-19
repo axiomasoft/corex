@@ -1193,6 +1193,42 @@
             "retryable": false
         },
         {
+            "category": "internal",
+            "code": "plugins.invalid_graph",
+            "detail_keys": [],
+            "owner": "axiomasoft/packman-plugins",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unsupported",
+            "code": "plugins.missing_extension",
+            "detail_keys": [],
+            "owner": "axiomasoft/packman-plugins",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "plugins.registry_frozen",
+            "detail_keys": [],
+            "owner": "axiomasoft/packman-plugins",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unsupported",
+            "code": "plugins.unsupported_contribution",
+            "detail_keys": [
+                "kind",
+                "key",
+                "reason"
+            ],
+            "owner": "axiomasoft/packman-plugins",
+            "path": null,
+            "retryable": false
+        },
+        {
             "category": "authentication",
             "code": "vaulter.actor_required",
             "detail_keys": [],
@@ -1437,6 +1473,14 @@
             "owner": "axiomasoft/vaulter-core",
             "path": null,
             "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "media.blob_unavailable",
+            "detail_keys": [],
+            "owner": "axiomasoft/vaulter-media",
+            "path": null,
+            "retryable": true
         }
     ],
     "openapi": {
