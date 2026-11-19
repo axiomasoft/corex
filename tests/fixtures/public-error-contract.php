@@ -445,6 +445,16 @@ return [
     ],
     'definitions' => [
         [
+            'code' => 'access.exact_visibility_unavailable',
+            'enum' => AccessErrorCode::class,
+            'type' => 'urn:packman:problem:access.exact_visibility_unavailable',
+            'status' => 422,
+            'title' => 'Exact visibility is unavailable.',
+            'category' => 'unsupported',
+            'retryable' => false,
+            'detail_keys' => ['reason', 'component'],
+        ],
+        [
             'code' => 'access.scope_capability_mismatch',
             'enum' => AccessErrorCode::class,
             'type' => 'urn:packman:problem:access.scope_capability_mismatch',
