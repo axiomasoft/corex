@@ -482,6 +482,17 @@
         },
         {
             "category": "unsupported",
+            "code": "access.exact_visibility_unavailable",
+            "detail_keys": [
+                "reason",
+                "component"
+            ],
+            "owner": "axiomasoft/corex-access",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unsupported",
             "code": "access.scope_capability_mismatch",
             "detail_keys": [],
             "owner": "axiomasoft/corex-access",

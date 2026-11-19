@@ -1330,6 +1330,14 @@
     "CoreX\\Access\\Errors\\Enums\\AccessErrorCode": {
         "abstract": false,
         "constants": {
+            "ExactVisibilityUnavailable": {
+                "type": "CoreX\\Access\\Errors\\Enums\\AccessErrorCode",
+                "value": {
+                    "enum": "CoreX\\Access\\Errors\\Enums\\AccessErrorCode",
+                    "case": "ExactVisibilityUnavailable",
+                    "value": "access.exact_visibility_unavailable"
+                }
+            },
             "ScopeCapabilityMismatch": {
                 "type": "CoreX\\Access\\Errors\\Enums\\AccessErrorCode",
                 "value": {
@@ -1418,6 +1426,67 @@
         },
         "parent": null,
         "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Access\\Exceptions\\ExactVisibilityUnavailable": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "Packman\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "reason",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "component",
+                        "type": "?string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "previous",
+                        "type": "?Throwable",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "Packman\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "Packman\\Errors\\Exceptions\\CodedException",
+        "properties": {
+            "component": {
+                "name": "component",
+                "readonly": true,
+                "static": false,
+                "type": "?string"
+            },
+            "reason": {
+                "name": "reason",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
         "readonly": false
     },
     "CoreX\\Access\\Exceptions\\ScopeCapabilityMismatch": {
@@ -2623,12 +2692,12 @@
         "properties": [],
         "readonly": true
     },
-    "CoreX\\Access\\Roles\\Internal\\DatabaseRoleManager": {
+    "CoreX\\Access\\Roles\\Internal\\DatabaseRoleAdministration": {
         "abstract": false,
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Access\\Roles\\RoleManager"
+            "CoreX\\Access\\Roles\\RoleAdministration"
         ],
         "internal": true,
         "kind": "class",
@@ -3160,7 +3229,7 @@
         "properties": [],
         "readonly": false
     },
-    "CoreX\\Access\\Roles\\RoleManager": {
+    "CoreX\\Access\\Roles\\RoleAdministration": {
         "abstract": false,
         "constants": [],
         "final": false,

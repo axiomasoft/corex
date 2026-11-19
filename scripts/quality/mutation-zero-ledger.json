@@ -23,7 +23,7 @@
     },
     "packages/access/src/Laravel/ScopeResolver.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "e0edaec26e7b4b4739d6c955858f2d1696ab073dbc73bce7f7907b8ba5e0c8c0"
+      "sha256": "5307e87447f17abb4de614f47814d4952fdd1db6e8884ebe6539cb0f5da79998"
     },
     "packages/access/src/Matrix/Contracts/EntityActivity.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",

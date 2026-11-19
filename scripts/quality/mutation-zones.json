@@ -24,6 +24,7 @@
         "packages/access/src/Enums/Scope.php",
         "packages/access/src/Errors/Enums/AccessErrorCode.php",
         "packages/access/src/Errors/Internal/PackageProblemDefinitions.php",
+        "packages/access/src/Exceptions/ExactVisibilityUnavailable.php",
         "packages/access/src/Exceptions/ScopeCapabilityMismatch.php",
         "packages/access/src/Extend/Internal/PermissionsMerger.php",
         "packages/access/src/Identity/Internal/LowercaseColumn.php",
@@ -46,7 +47,7 @@
         "packages/access/src/Roles/Data/RoleView.php",
         "packages/access/src/Roles/DirectGrants.php",
         "packages/access/src/Roles/Internal/DatabaseDirectGrants.php",
-        "packages/access/src/Roles/Internal/DatabaseRoleManager.php",
+        "packages/access/src/Roles/Internal/DatabaseRoleAdministration.php",
         "packages/access/src/Roles/Internal/Models/Role.php",
         "packages/access/src/Roles/Internal/Models/RoleAssignment.php",
         "packages/access/src/Roles/Internal/Models/RoleMatrixRow.php",
@@ -54,7 +55,7 @@
         "packages/access/src/Roles/Internal/SystemRoleMutationScope.php",
         "packages/access/src/Roles/Laravel/RoleMatrixData.php",
         "packages/access/src/Roles/Laravel/SystemRoleImmutable.php",
-        "packages/access/src/Roles/RoleManager.php"
+        "packages/access/src/Roles/RoleAdministration.php"
       ],
       "package": "access",
       "zone": "security"

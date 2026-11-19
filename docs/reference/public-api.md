@@ -163,6 +163,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Access\Data\RecordContext` | api | 1.0 |
 | `CoreX\Access\Enums\Scope` | api | 1.0 |
 | `CoreX\Access\Errors\Enums\AccessErrorCode` | api | 1.0 |
+| `CoreX\Access\Exceptions\ExactVisibilityUnavailable` | api | 1.0 |
 | `CoreX\Access\Exceptions\ScopeCapabilityMismatch` | api | 1.0 |
 | `CoreX\Access\Identity\Laravel\PrincipalUserProvider` | spi-call | 1.0 |
 | `CoreX\Access\Laravel\AccessBindingsRegistrar` | spi-call | 1.0 |
@@ -178,7 +179,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Access\Roles\DirectGrants` | api | 1.0 |
 | `CoreX\Access\Roles\Laravel\RoleMatrixData` | spi-call | 1.0 |
 | `CoreX\Access\Roles\Laravel\SystemRoleImmutable` | spi-call | 1.0 |
-| `CoreX\Access\Roles\RoleManager` | api | 1.0 |
+| `CoreX\Access\Roles\RoleAdministration` | api | 1.0 |
 
 ## axiomasoft/corex-custom-fields
 

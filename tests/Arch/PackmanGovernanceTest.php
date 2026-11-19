@@ -31,7 +31,7 @@ final class PackmanGovernanceTest extends TestCase
         }
         sort($actual);
         sort($expected);
-        self::assertCount(22, $actual);
+        self::assertNotEmpty($expected);
         self::assertSame($expected, $actual);
     }
 

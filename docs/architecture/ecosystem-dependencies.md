@@ -126,7 +126,7 @@ Composer-канал автоматически. Проверки consumer fixtur
 ## Общие проверки Packman
 
 `packman-devtools` и `packman-testkit` устанавливаются только для разработки.
-`packman.json` перечисляет 21 пакет и `products/flex-crm`; `extra.packman` хранит
+`packman.json` перечисляет 20 пакетов и `products/flex-crm`; `extra.packman` хранит
 таксономию и error-prefix. `extra.corex` остаётся входом предметных гейтов CoreX.
 Модули с lifecycle сохраняют `type: packman-module` и `extra.packman.module`.
 Локальные профили в `schemas/profiles/` уточняют Composer type и лимит 80 строк

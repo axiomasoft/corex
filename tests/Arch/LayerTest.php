@@ -36,8 +36,17 @@ ksort($foundationNamespaces);
 $foundationPackages = array_keys($foundationNamespaces);
 
 test('foundation package discovery covers the monorepo', function () use ($foundationPackages): void {
+    $catalogue = json_decode(file_get_contents(SourceScanner::repoRoot().'/packman.json'), true, flags: JSON_THROW_ON_ERROR);
+    $expected = [];
+    foreach ($catalogue['packages'] as $package) {
+        if (str_starts_with($package['path'], 'packages/')) {
+            $expected[] = basename($package['path']);
+        }
+    }
+    sort($expected);
+
     expect($foundationPackages)->toContain('core', 'tenancy', 'access', 'tasks', 'operations', 'tools', 'webhooks', 'recurrence')
-        ->and(count($foundationPackages))->toBeGreaterThanOrEqual(21);
+        ->and($foundationPackages)->toBe($expected);
 });
 
 // (1) Foundation ↛ Thematic: no corex/* source may import a Flex\* namespace.
