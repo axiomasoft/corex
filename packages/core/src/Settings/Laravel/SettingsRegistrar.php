@@ -22,16 +22,19 @@ final class SettingsRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
-        $app->extend(SettingDefaultsProvider::class, static function (SettingDefaultsProvider $defaults, Application $app): SettingDefaultsProvider {
-            $implementation = $app->make(CoreOptions::class)->settingDefaultsProvider;
-
-            return $implementation === NullSettingDefaultsProvider::class
-                ? $defaults
-                : ConfiguredImplementation::resolve(app: $app, contract: SettingDefaultsProvider::class, implementation: $implementation);
-        });
+        $app->extend(SettingDefaultsProvider::class, self::resolveDefaults(...));
         $app->singleton(SettingsRepository::class, static fn (Application $app): SettingsRepository => ConfiguredImplementation::resolve(app: $app, contract: SettingsRepository::class, implementation: $app->make(CoreOptions::class)->settingsRepository));
     }
 
     #[Override]
     public function boot(Application $app): void {}
+
+    private static function resolveDefaults(SettingDefaultsProvider $defaults, Application $app): SettingDefaultsProvider
+    {
+        $implementation = $app->make(CoreOptions::class)->settingDefaultsProvider;
+
+        return $implementation === NullSettingDefaultsProvider::class
+            ? $defaults
+            : ConfiguredImplementation::resolve(app: $app, contract: SettingDefaultsProvider::class, implementation: $implementation);
+    }
 }
