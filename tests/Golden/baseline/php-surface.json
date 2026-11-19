@@ -75062,6 +75062,11 @@
         "internal": true,
         "kind": "class",
         "methods": {
+            "__construct": {
+                "params": [],
+                "return": "",
+                "static": false
+            },
             "admit": {
                 "params": [
                     {
@@ -75106,7 +75111,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Tools\\Internal\\ReadOnlyToolExecutionGuard": {
         "abstract": false,
