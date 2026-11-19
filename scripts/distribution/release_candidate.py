@@ -17,6 +17,9 @@ from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 from typing import Any
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from ecosystem_repositories import is_corex_package
+
 ROOT = Path(__file__).resolve().parents[2]
 POLICY_PATH = Path(__file__).with_name('release-1.0-policy.json')
 FIXED_TIME = (1980, 1, 1, 0, 0, 0)
@@ -98,9 +101,9 @@ def load_policy(path: Path = POLICY_PATH) -> dict[str, Any]:
     excluded = policy.get('excluded')
     if excluded != [
         {'path': 'products/flex-crm', 'reason': 'flex-product-consumer'},
-        {'path': 'packages/import-export', 'reason': 'tombstone'},
+        {'path': 'packages/access-azguard', 'reason': 'unreleased'},
     ]:
-        raise CandidateError('policy exclusions must preserve FlexCRM and the import-export tombstone')
+        raise CandidateError('policy exclusions must preserve FlexCRM and the unreleased AzGuard bridge')
     return policy
 
 
@@ -146,12 +149,21 @@ def validate_corex_metadata(package: PackageSource) -> None:
 
 
 def derive_cohort(packages: list[PackageSource], policy: dict[str, Any]) -> list[PackageSource]:
-    live_corex = sorted((package for package in packages if package.name.startswith('corex/')), key=lambda row: row.name)
-    foreign = sorted(package.path for package in packages if not package.name.startswith('corex/'))
-    if foreign != ['products/flex-crm']:
-        raise CandidateError(f'unexpected non-CoreX package set: {foreign}')
-    if any(package.path == 'packages/import-export' for package in packages):
-        raise CandidateError('packages/import-export tombstone unexpectedly exists')
+    excluded = {row['path']: row['reason'] for row in policy['excluded']}
+    live_corex = []
+    for package in packages:
+        reason = excluded.get(package.path)
+        if reason == 'flex-product-consumer' and package.name == 'flex/crm':
+            continue
+        if (reason == 'unreleased' and is_corex_package(package.name)
+                and package.composer.get('extra', {}).get('corex', {}).get('stability') == 'unreleased'):
+            continue
+        if reason or not is_corex_package(package.name):
+            raise CandidateError(f'unexpected package or exclusion: {package.path} ({package.name})')
+        live_corex.append(package)
+    if set(excluded) != {package.path for package in packages if package.path in excluded}:
+        raise CandidateError('excluded package missing from source')
+    live_corex.sort(key=lambda row: row.name)
     paths = {package.path for package in live_corex}
     policy_paths = set(policy['channels'])
     if paths != policy_paths:
@@ -406,7 +418,7 @@ def validate_archive(
         if composer.get('name') != package['name']:
             raise CandidateError(f"{package['name']}: archive identity mismatch")
         for dependency, constraint in composer.get('require', {}).items():
-            if dependency.startswith('corex/'):
+            if is_corex_package(dependency):
                 if dependency not in cohort_names:
                     raise CandidateError(f"{package['name']}: dependency gap: {dependency}")
                 version_parts = version.split('.')

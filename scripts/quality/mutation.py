@@ -26,9 +26,10 @@ GROUPS = {'killed': 'killedCount', 'escaped': 'escapedCount', 'timeouted': 'time
 STATS = {'totalMutantsCount', 'skippedCount', 'msi', 'mutationCodeCoverage', 'coveredCodeMsi', *GROUPS.values()}
 SECURITY_PACKAGES = {'access', 'access-azguard', 'tenancy', 'tools', 'webhooks'}
 MESSAGING_PACKAGES = {'scheduler', 'workflow', 'recurring-tasks', 'import-export'}
-SECURITY_CORE = ('Context/', 'Tenancy/', 'Database/', 'Data/', 'Modules/Internal/Gate/')
-ANCHORS = ('Modules/Internal/Gate/AllowAllActivationGate.php',
-           'Modules/Internal/Gate/ModuleActivationDecision.php', 'Modules/Contracts/ModuleActivationGate.php',
+SECURITY_CORE = ('Context/', 'Tenancy/', 'Database/', 'Data/', 'Foundation/Internal/PackmanActorResolver.php',
+                 'Foundation/Internal/PackmanContextResolver.php', 'Foundation/Internal/PackmanFeatureFlags.php')
+ANCHORS = ('Foundation/Internal/PackmanActorResolver.php', 'Foundation/Internal/PackmanContextResolver.php',
+           'Foundation/Internal/PackmanFeatureFlags.php',
            'Data/Contracts/DataScopeAuthorizer.php', 'Data/Internal/AllowAllDataScopeAuthorizer.php',
            'Data/Internal/DenyDataScopeAuthorizer.php', 'Data/Internal/CallableDataScopeAuthorizer.php',
            'Data/Laravel/SystemDataScopeAuthorization.php')
@@ -85,7 +86,7 @@ def expected_zone(path):
         if package in SECURITY_PACKAGES:
             return 'security'
         if package == 'core':
-            if relative.startswith(SECURITY_CORE) or relative == 'Modules/Contracts/ModuleActivationGate.php':
+            if relative.startswith(SECURITY_CORE):
                 return 'security'
             if relative.startswith('Messaging/'):
                 return 'messaging'

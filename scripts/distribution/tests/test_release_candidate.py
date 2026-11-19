@@ -28,9 +28,10 @@ class ReleaseCandidateTest(unittest.TestCase):
         self.git('config', 'user.email', 'candidate@example.test')
         self.git('config', 'user.name', 'Candidate Test')
         self.write('LICENSE', 'fixture license\n')
-        self.write_package('alpha', 'corex/alpha', {'corex/beta': '@dev', 'vendor/exact': '1.2.3'})
-        self.write_package('beta', 'corex/beta', {})
-        self.write_package('flex-crm', 'flex/crm', {'corex/alpha': '@dev'}, package_type='product')
+        self.write_package('alpha', 'axiomasoft/corex-alpha', {'axiomasoft/corex-beta': '@dev', 'vendor/exact': '1.2.3'})
+        self.write_package('beta', 'axiomasoft/corex-beta', {})
+        self.write_package('access-azguard', 'axiomasoft/corex-access-azguard', {}, stability='unreleased')
+        self.write_package('flex-crm', 'flex/crm', {'axiomasoft/corex-alpha': '@dev'}, package_type='product')
         self.git('add', '-A')
         self.git('commit', '-qm', 'fixture')
         self.commit = self.git('rev-parse', 'HEAD').strip()
@@ -45,7 +46,7 @@ class ReleaseCandidateTest(unittest.TestCase):
             },
             'excluded': [
                 {'path': 'products/flex-crm', 'reason': 'flex-product-consumer'},
-                {'path': 'packages/import-export', 'reason': 'tombstone'},
+                {'path': 'packages/access-azguard', 'reason': 'unreleased'},
             ],
         }
 
@@ -67,6 +68,7 @@ class ReleaseCandidateTest(unittest.TestCase):
         requires: dict[str, str],
         *,
         package_type: str = 'capability',
+        stability: str = 'experimental',
     ) -> None:
         composer = {
             'name': name,
@@ -77,7 +79,7 @@ class ReleaseCandidateTest(unittest.TestCase):
                 'corex': {
                     'schema-version': 1,
                     'package-type': package_type,
-                    'stability': 'experimental',
+                    'stability': stability,
                 },
             },
         }
@@ -107,14 +109,14 @@ class ReleaseCandidateTest(unittest.TestCase):
         second, _ = self.build('second')
 
         self.assertEqual(MODULE.output_files(first), MODULE.output_files(second))
-        self.assertEqual(['corex/alpha', 'corex/beta'], [row['name'] for row in candidate['packages']])
-        alpha = first / 'artifacts/corex-alpha-1.0.0.zip'
+        self.assertEqual(['axiomasoft/corex-alpha', 'axiomasoft/corex-beta'], [row['name'] for row in candidate['packages']])
+        alpha = first / 'artifacts/axiomasoft-corex-alpha-1.0.0.zip'
         with zipfile.ZipFile(alpha) as archive:
             self.assertNotIn('tests/Excluded.php', archive.namelist())
             composer = json.loads(archive.read('composer.json'))
         self.assertNotIn('version', composer)
         self.assertNotIn('repositories', composer)
-        self.assertEqual('^1.0', composer['require']['corex/beta'])
+        self.assertEqual('^1.0', composer['require']['axiomasoft/corex-beta'])
         self.assertEqual('>=1.2.3 <=1.2.3', composer['require']['vendor/exact'])
         MODULE.verify_candidate(first / 'candidate.json', self.root, self.policy, composer_checks=False)
 
@@ -135,7 +137,7 @@ class ReleaseCandidateTest(unittest.TestCase):
     def test_verify_rejects_extra_package(self) -> None:
         output, candidate = self.build()
         extra = copy.deepcopy(candidate['packages'][0])
-        extra['name'] = 'corex/gamma'
+        extra['name'] = 'axiomasoft/corex-gamma'
         extra['path'] = 'packages/gamma'
         candidate['packages'].append(extra)
         candidate['packages'].sort(key=lambda row: row['name'])
@@ -154,7 +156,7 @@ class ReleaseCandidateTest(unittest.TestCase):
 
     def test_verify_rejects_forbidden_archive_member(self) -> None:
         output, candidate = self.build()
-        archive = output / 'artifacts/corex-alpha-1.0.0.zip'
+        archive = output / 'artifacts/axiomasoft-corex-alpha-1.0.0.zip'
         with zipfile.ZipFile(archive, 'a') as target:
             target.writestr('tests/Leak.php', '<?php\n')
         candidate['packages'][0]['archive_sha256'] = MODULE.sha256_path(archive)
@@ -165,13 +167,13 @@ class ReleaseCandidateTest(unittest.TestCase):
 
     def test_dependency_gap_is_rejected(self) -> None:
         output, candidate = self.build()
-        original = output / 'artifacts/corex-alpha-1.0.0.zip'
+        original = output / 'artifacts/axiomasoft-corex-alpha-1.0.0.zip'
         tree = {}
         with zipfile.ZipFile(original) as source:
             for name in source.namelist():
                 tree[name] = {'bytes': source.read(name), 'mode': '100644'}
         composer = json.loads(tree['composer.json']['bytes'])
-        composer['require']['corex/missing'] = '^1.0'
+        composer['require']['axiomasoft/corex-missing'] = '^1.0'
         tree['composer.json']['bytes'] = MODULE.pretty_json(composer)
         archive = output / 'gap.zip'
         archive_sha = MODULE.write_archive(archive, tree)
@@ -180,12 +182,12 @@ class ReleaseCandidateTest(unittest.TestCase):
         row['composer_sha256'] = MODULE.sha256_bytes(tree['composer.json']['bytes'])
         row['tree_sha256'] = MODULE.sha256_bytes(MODULE.canonical_json(MODULE.tree_map(tree)))
 
-        with self.assertRaisesRegex(MODULE.CandidateError, 'dependency gap: corex/missing'):
+        with self.assertRaisesRegex(MODULE.CandidateError, 'dependency gap: axiomasoft/corex-missing'):
             MODULE.validate_archive(
                 archive,
                 row,
                 '1.0.0',
-                {'corex/alpha', 'corex/beta'},
+                {'axiomasoft/corex-alpha', 'axiomasoft/corex-beta'},
                 self.policy,
                 self.root,
             )
@@ -201,7 +203,7 @@ class ReleaseCandidateTest(unittest.TestCase):
 
     def test_verify_rejects_one_byte_archive_drift(self) -> None:
         output, _ = self.build()
-        archive = output / 'artifacts/corex-alpha-1.0.0.zip'
+        archive = output / 'artifacts/axiomasoft-corex-alpha-1.0.0.zip'
         archive.write_bytes(archive.read_bytes() + b'!')
 
         with self.assertRaisesRegex(MODULE.CandidateError, 'archive digest mismatch'):

@@ -10,7 +10,10 @@
     "PACKAGE.md",
     "CHANGELOG.md",
     "UPGRADE.md",
-    "LICENSE"
+    "LICENSE",
+    "extension.neon",
+    "routes/",
+    "database/seeders/"
   ],
   "forbidden_segments": [
     "vendor",
@@ -28,7 +31,10 @@
     "README.md",
     "PACKAGE.md",
     "CHANGELOG.md",
-    "UPGRADE.md"
+    "UPGRADE.md",
+    "extension.neon",
+    "routes/",
+    "database/seeders/"
   ],
   "channels": {
     "packages/access": {
@@ -50,10 +56,6 @@
     "packages/media": {
       "distribution": "public",
       "mirror": "axiomasoft/corex-media"
-    },
-    "packages/core": {
-      "distribution": "public",
-      "mirror": "axiomasoft/packman-modules"
     },
     "packages/notifications": {
       "distribution": "public",
@@ -106,6 +108,14 @@
     "packages/workflow": {
       "distribution": "public",
       "mirror": "axiomasoft/corex-workflow"
+    },
+    "packages/tools": {
+      "distribution": "private",
+      "mirror": "axiomasoft/corex-tools"
+    },
+    "packages/webhooks": {
+      "distribution": "private",
+      "mirror": "axiomasoft/corex-webhooks"
     }
   },
   "excluded": [
@@ -114,8 +124,8 @@
       "reason": "flex-product-consumer"
     },
     {
-      "path": "packages/import-export",
-      "reason": "tombstone"
+      "path": "packages/access-azguard",
+      "reason": "unreleased"
     }
   ]
 }
