@@ -1684,7 +1684,7 @@
             "enum_cases": [],
             "spi_kind": "call"
         },
-        "CoreX\\Access\\Roles\\RoleManager": {
+        "CoreX\\Access\\Roles\\RoleAdministration": {
             "kind": "interface",
             "layer": "api",
             "since": "1.0",

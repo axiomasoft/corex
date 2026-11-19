@@ -3,7 +3,7 @@
 ## Unreleased — CoreX authorization
 
 - Install `axiomasoft/corex-access` to check actions, authorize individual records and filter Eloquent queries. CoreX registers its AzGuard policy for the role matrix and direct grants during Laravel discovery.
-- Manage role scopes and assignments through `RoleManager` and direct grants through `DirectGrants`. An application can delegate an individual permission to a declared policy panel through `corex-access.policy_panels`.
+- Manage role scopes and assignments through `RoleAdministration` and direct grants through `DirectGrants`. An application can delegate an individual permission to a declared policy panel through `corex-access.policy_panels`.
 
 ## Unreleased — Packman governance
 

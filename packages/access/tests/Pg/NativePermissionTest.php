@@ -12,7 +12,7 @@ use CoreX\Access\Roles\DirectGrants;
 use CoreX\Access\Roles\Internal\Models\Role;
 use CoreX\Access\Roles\Internal\Models\RoleAssignment;
 use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
-use CoreX\Access\Roles\RoleManager;
+use CoreX\Access\Roles\RoleAdministration;
 use CoreX\Access\Tests\Authorization\ScopedProject;
 use CoreX\Access\Tests\Stubs\Deal;
 use CoreX\Access\Tests\Stubs\FakeModuleRegistry;
@@ -136,7 +136,7 @@ it('expires role assignments and direct grants at the supplied instant in a non-
         $past = $now->modify('-60 seconds');
         $future = $now->modify('+60 seconds');
         $user = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
-        $roles = resolve(RoleManager::class);
+        $roles = resolve(RoleAdministration::class);
         $role = $roles->create('sales', 'Sales');
         $roles->setScope($role, 'crm.deal', 'view', Scope::Account);
         $access = resolve(AccessChecker::class);

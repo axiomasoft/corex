@@ -9,7 +9,7 @@ use CoreX\Access\Laravel\ScopeResolver;
 use CoreX\Access\Matrix\Events\RoleMatrixCompiled;
 use CoreX\Access\Roles\DirectGrants;
 use CoreX\Access\Roles\Internal\Models\Role;
-use CoreX\Access\Roles\RoleManager;
+use CoreX\Access\Roles\RoleAdministration;
 use CoreX\Access\Tests\Stubs\Deal;
 use CoreX\Access\Tests\Stubs\FakeModuleRegistry;
 use CoreX\Context\Enums\PrincipalType;
@@ -37,7 +37,7 @@ beforeEach(function (): void {
 });
 
 it('sets exactly the access that the public role and direct grant operations describe', function (): void {
-    $roles = resolve(RoleManager::class);
+    $roles = resolve(RoleAdministration::class);
     $grants = resolve(DirectGrants::class);
     $access = resolve(AccessChecker::class);
     $user = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
@@ -73,7 +73,7 @@ it('sets exactly the access that the public role and direct grant operations des
 });
 
 it('keeps assignment boundaries and rolls back a scope change if compilation is rejected', function (): void {
-    $roles = resolve(RoleManager::class);
+    $roles = resolve(RoleAdministration::class);
     $role = $roles->create('editor', 'Editor');
     $user = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
     $agent = new PrincipalIdentity(PrincipalType::Agent, $user->principalId());
@@ -98,7 +98,7 @@ it('preserves the system role mutation guard on public scope writes', function (
     $role = Role::withSystemMutationAllowed(static fn (): Role => Role::query()->create([
         'slug' => 'admin', 'name' => 'Admin', 'is_system' => true, 'assignable_to' => ['user'],
     ]));
-    expect(fn () => resolve(RoleManager::class)->setScope($role->id, 'crm.deal', 'read', Scope::Account))
+    expect(fn () => resolve(RoleAdministration::class)->setScope($role->id, 'crm.deal', 'read', Scope::Account))
         ->toThrow(AuthorizationException::class)
         ->and(DB::table('aut_role_matrix')->count())->toBe(0);
 });

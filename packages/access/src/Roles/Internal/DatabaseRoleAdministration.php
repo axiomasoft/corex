@@ -10,7 +10,7 @@ use CoreX\Access\Enums\Scope;
 use CoreX\Access\Roles\Internal\Models\Role;
 use CoreX\Access\Roles\Internal\Models\RoleAssignment;
 use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
-use CoreX\Access\Roles\RoleManager;
+use CoreX\Access\Roles\RoleAdministration;
 use CoreX\Context\Contracts\Principal;
 use CoreX\Context\Enums\PrincipalType;
 use DateTimeImmutable;
@@ -23,7 +23,7 @@ use Packman\Attributes\Internal;
 
 /** Manages roles in the current tenant database. */
 #[Internal]
-final readonly class DatabaseRoleManager implements RoleManager
+final readonly class DatabaseRoleAdministration implements RoleAdministration
 {
     public function __construct(
         private ConnectionResolverInterface $connections,

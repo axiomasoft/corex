@@ -13,7 +13,7 @@ use Packman\Attributes\Api;
 
 /** Manages roles and assignments in the current tenant database. */
 #[Api(since: '1.0')]
-interface RoleManager
+interface RoleAdministration
 {
     /** @param list<PrincipalType> $assignableTo */
     public function create(string $slug, string $name, array $assignableTo = [PrincipalType::User]): string;

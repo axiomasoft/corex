@@ -21,9 +21,9 @@ $visible = app(ScopeResolver::class)->apply(
 ```php
 use CoreX\Access\Enums\Scope;
 use CoreX\Access\Roles\DirectGrants;
-use CoreX\Access\Roles\RoleManager;
+use CoreX\Access\Roles\RoleAdministration;
 
-$roles = app(RoleManager::class);
+$roles = app(RoleAdministration::class);
 $role = $roles->create('account-manager', 'Account manager');
 $roles->setScope($role, 'crm.company', 'view', Scope::Own);
 $roles->assign($role, $principal);

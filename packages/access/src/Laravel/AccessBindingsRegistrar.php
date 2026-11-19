@@ -14,9 +14,9 @@ use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
 use CoreX\Access\Matrix\Laravel\MatrixPortBindings;
 use CoreX\Access\Roles\DirectGrants;
 use CoreX\Access\Roles\Internal\DatabaseDirectGrants;
-use CoreX\Access\Roles\Internal\DatabaseRoleManager;
+use CoreX\Access\Roles\Internal\DatabaseRoleAdministration;
 use CoreX\Access\Roles\Internal\SystemRoleMutationScope;
-use CoreX\Access\Roles\RoleManager;
+use CoreX\Access\Roles\RoleAdministration;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
@@ -46,7 +46,7 @@ final class AccessBindingsRegistrar implements PackageRegistrar
         $app->alias(PanelAccessChecker::class, ScopeResolver::class);
         $app->scoped(ScopeAvailability::class);
         $app->scoped(SystemRoleMutationScope::class);
-        $app->bind(RoleManager::class, DatabaseRoleManager::class);
+        $app->bind(RoleAdministration::class, DatabaseRoleAdministration::class);
         $app->bind(DirectGrants::class, DatabaseDirectGrants::class);
         $app->bind(RoleMatrixCompiler::class, DatabaseRoleMatrixCompiler::class);
 
