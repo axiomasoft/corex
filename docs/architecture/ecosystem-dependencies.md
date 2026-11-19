@@ -16,7 +16,7 @@ PSR-4 пути внутри монорепозитория владельца. �
 
 | Владелец | Пакеты | Source reference |
 |---|---|---|
-| Packman (`0.1.1`) | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `dcae633b636f25bd2ca1a6e35a0120ebdf8677a1` |
+| Packman (`0.1.1`) | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `b2fea80d85b1787f0a74d22c0f2563fd411ad132` |
 | AzGuard | `azguard` | `c6667eca964d40d50b4f3e154cafd2f42415f694` |
 | Tenant | `tenant`, `tenant-laravel` | `8d1b62c245f5547d870f124a995bb20af3ab51be` |
 | Vaulter | `vaulter-core`, `vaulter-media` | `dcbc761fca527af074f6d75f4ce0e32d0629cfe3` |
