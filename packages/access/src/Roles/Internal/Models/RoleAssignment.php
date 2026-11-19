@@ -35,6 +35,8 @@ final class RoleAssignment extends Model
 
     protected $table = 'aut_role_assignments';
 
+    protected $dateFormat = 'Y-m-d H:i:s.uP';
+
     /** @var list<string> */
     protected $fillable = [
         'role_id',
