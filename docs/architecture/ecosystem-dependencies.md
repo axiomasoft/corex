@@ -17,9 +17,9 @@ PSR-4 пути внутри монорепозитория владельца. �
 | Владелец | Пакеты | Source reference |
 |---|---|---|
 | Packman (`0.1.1`) | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `b2fea80d85b1787f0a74d22c0f2563fd411ad132` |
-| AzGuard | `azguard` | `c6667eca964d40d50b4f3e154cafd2f42415f694` |
+| AzGuard | `azguard` | `1718b337ac237a260c2876ecd5fafa5867c9a9b3` |
 | Tenant | `tenant`, `tenant-laravel` | `8d1b62c245f5547d870f124a995bb20af3ab51be` |
-| Vaulter | `vaulter-core`, `vaulter-media` | `dcbc761fca527af074f6d75f4ce0e32d0629cfe3` |
+| Vaulter | `vaulter-core`, `vaulter-media` | `f28c91f366e791f5db20a1a914260c42b413a97c` |
 
 Все имена в таблице имеют префикс `axiomasoft/`. Packman зафиксирован на `0.1.1`,
 а остальные снимки используют `dev-main` и числовой branch alias владельца; это
@@ -46,7 +46,7 @@ CoreX-пакеты и продукт устанавливаются из отн�
 локальный репозиторий. Проверить commit можно без изменения checkout:
 
 ```bash
-git -C /absolute/path/vaulter cat-file -e dcbc761fca527af074f6d75f4ce0e32d0629cfe3^{commit}
+git -C /absolute/path/vaulter cat-file -e f28c91f366e791f5db20a1a914260c42b413a97c^{commit}
 ```
 
 Для локальной установки можно направить только Vaulter source URL на этот checkout

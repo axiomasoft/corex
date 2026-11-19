@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d6267eab806c48ca69830d9d774b7c66",
+    "content-hash": "4a1009c204f96ab266fe1dac293ed722",
     "packages": [
         {
             "name": "axiomasoft/corex",
@@ -2001,7 +2001,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/vaulter.git",
-                "reference": "dcbc761fca527af074f6d75f4ce0e32d0629cfe3"
+                "reference": "f28c91f366e791f5db20a1a914260c42b413a97c"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -2111,7 +2111,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/vaulter.git",
-                "reference": "dcbc761fca527af074f6d75f4ce0e32d0629cfe3"
+                "reference": "f28c91f366e791f5db20a1a914260c42b413a97c"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -8855,7 +8855,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/axiomasoft/azguard-private.git",
-                "reference": "c6667eca964d40d50b4f3e154cafd2f42415f694"
+                "reference": "1718b337ac237a260c2876ecd5fafa5867c9a9b3"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",

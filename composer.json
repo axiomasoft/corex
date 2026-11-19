@@ -307,7 +307,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/azguard-private.git",
-                    "reference": "c6667eca964d40d50b4f3e154cafd2f42415f694"
+                    "reference": "1718b337ac237a260c2876ecd5fafa5867c9a9b3"
                 },
                 "require": {
                     "php": "^8.4",
@@ -725,7 +725,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/vaulter.git",
-                    "reference": "dcbc761fca527af074f6d75f4ce0e32d0629cfe3"
+                    "reference": "f28c91f366e791f5db20a1a914260c42b413a97c"
                 }
             }
         },
@@ -811,7 +811,7 @@
                 "source": {
                     "type": "git",
                     "url": "https://github.com/axiomasoft/vaulter.git",
-                    "reference": "dcbc761fca527af074f6d75f4ce0e32d0629cfe3"
+                    "reference": "f28c91f366e791f5db20a1a914260c42b413a97c"
                 }
             }
         },
