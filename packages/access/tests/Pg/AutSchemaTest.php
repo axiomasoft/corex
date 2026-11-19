@@ -133,8 +133,6 @@ it('matches DB_SCHEMA §3.5 aut_role_assignments column-by-column', function ():
 // D102 — cross-package FK live only in the cloud migration.
 it('adds both cross-package FKs only via the tenant-cloud migration', function (): void {
     $this->resetPgSchema();
-    $this->migrateFixtures();
-    $this->migrateAutSchema();
     $this->migrateCloudFks();
 
     $workspaceFk = DB::selectOne("select confrelid::regclass::text as target from pg_constraint where conname = 'aut_role_assignments_workspace_fk'");

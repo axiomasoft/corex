@@ -53,6 +53,13 @@ basename во всём репозитории.
 что lifecycle: journal, DDL и `mod_records` claims сохраняются одной транзакцией
 под lifecycle graph lock. Если явная Module-выборка устанавливается в новую базу,
 мигратор добавляет prerequisite `axiomasoft/packman-modules:tenant` для registry/claims.
+
+Набор `axiomasoft/corex-tenancy:tenant` добавляет внешние ключи к таблицам
+подразделений, поэтому сначала мигрирует `axiomasoft/corex:tenant`.
+Для `axiomasoft/corex-access:tenant-cloud` нужны оба набора владельцев таблиц,
+`axiomasoft/corex-access:tenant` и `axiomasoft/corex-tenancy:tenant`.
+Их можно установить одним выбором облачного набора. В приложении без пакета
+Tenancy остаётся доступен базовый `axiomasoft/corex-access:tenant`.
 В template clone должны переноситься и Laravel journal, и `mod_records`; последующий
 `enable` использует уже сохранённые claims. Владение старых таблиц без claims нельзя
 восстановить по имени или префиксу. SQLite-наборы сохраняют самостоятельный путь

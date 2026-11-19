@@ -26,7 +26,7 @@
         "psr/clock": "^1.0",
         "axiomasoft/packman": "^0.1",
         "axiomasoft/packman-modules": "^0.1.1",
-        "axiomasoft/packman-schema": "^0.1"
+        "axiomasoft/packman-schema": "^0.1.1"
     },
     "require-dev": {
         "larastan/larastan": "^3.12",

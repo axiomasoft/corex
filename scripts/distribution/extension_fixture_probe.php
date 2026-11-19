@@ -114,11 +114,17 @@ function allowedSymbols(string $vendor): array
         $root = $vendor.'/composer/'.$install;
         $manifest = json_decode((string) file_get_contents($root.'/resources/contracts/php-api.json'), true, flags: JSON_THROW_ON_ERROR);
 
-        if (($manifest['schema'] ?? null) !== 'php-api/1' || ($manifest['package'] ?? null) !== $package['name'] || ! is_array($manifest['symbols'] ?? null)) {
-            fail('public-import', ['invalid public API manifest for '.$package['name']]);
+        $name = $package['name'] ?? null;
+
+        if (! is_string($name) || ! is_array($manifest) || ($manifest['schema'] ?? null) !== 'php-api/1' || ($manifest['package'] ?? null) !== $name || ! is_array($manifest['symbols'] ?? null)) {
+            fail('public-import', ['invalid public API manifest for '.$root]);
         }
 
         foreach ($manifest['symbols'] as $symbol => $metadata) {
+            if (! is_string($symbol) || ! is_array($metadata)) {
+                fail('public-import', ['invalid public symbol in '.$name]);
+            }
+
             if (in_array($metadata['layer'] ?? null, ['api', 'spi'], true)) {
                 $queue[] = $symbol;
             }

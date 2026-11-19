@@ -32,6 +32,7 @@
             ],
             "lifecycle": "platform",
             "requires": [],
+            "prerequisiteSets": [],
             "connection": null
         },
         {
@@ -48,6 +49,10 @@
             "requires": [
                 "axiomasoft/corex-tenancy"
             ],
+            "prerequisiteSets": [
+                "axiomasoft/corex-access:tenant",
+                "axiomasoft/corex-tenancy:tenant"
+            ],
             "connection": null
         },
         {
@@ -62,6 +67,7 @@
             ],
             "lifecycle": "platform",
             "requires": [],
+            "prerequisiteSets": [],
             "connection": null
         },
         {
@@ -77,6 +83,7 @@
             ],
             "lifecycle": "platform",
             "requires": [],
+            "prerequisiteSets": [],
             "connection": null
         },
         {
@@ -92,6 +99,7 @@
             ],
             "lifecycle": "module",
             "requires": [],
+            "prerequisiteSets": [],
             "connection": null
         },
         {
@@ -107,6 +115,7 @@
             ],
             "lifecycle": "module",
             "requires": [],
+            "prerequisiteSets": [],
             "connection": null
         },
         {
@@ -122,6 +131,7 @@
             ],
             "lifecycle": "module",
             "requires": [],
+            "prerequisiteSets": [],
             "connection": null
         },
         {
@@ -137,6 +147,7 @@
             ],
             "lifecycle": "platform",
             "requires": [],
+            "prerequisiteSets": [],
             "connection": "schema_budget"
         },
         {
@@ -152,6 +163,7 @@
             ],
             "lifecycle": "platform",
             "requires": [],
+            "prerequisiteSets": [],
             "connection": null
         },
         {
@@ -167,6 +179,7 @@
             ],
             "lifecycle": "module",
             "requires": [],
+            "prerequisiteSets": [],
             "connection": null
         },
         {
@@ -182,6 +195,7 @@
             ],
             "lifecycle": "module",
             "requires": [],
+            "prerequisiteSets": [],
             "connection": null
         },
         {
@@ -197,6 +211,7 @@
             ],
             "lifecycle": "platform",
             "requires": [],
+            "prerequisiteSets": [],
             "connection": null
         },
         {
@@ -212,6 +227,7 @@
             ],
             "lifecycle": "module",
             "requires": [],
+            "prerequisiteSets": [],
             "connection": null
         },
         {
@@ -226,6 +242,7 @@
             ],
             "lifecycle": "platform",
             "requires": [],
+            "prerequisiteSets": [],
             "connection": null
         },
         {
@@ -240,6 +257,9 @@
             ],
             "lifecycle": "platform",
             "requires": [],
+            "prerequisiteSets": [
+                "axiomasoft/corex:tenant"
+            ],
             "connection": null
         },
         {
@@ -255,6 +275,7 @@
             ],
             "lifecycle": "platform",
             "requires": [],
+            "prerequisiteSets": [],
             "connection": null
         },
         {
@@ -270,6 +291,7 @@
             ],
             "lifecycle": "module",
             "requires": [],
+            "prerequisiteSets": [],
             "connection": null
         },
         {
@@ -284,6 +306,7 @@
             ],
             "lifecycle": "platform",
             "requires": [],
+            "prerequisiteSets": [],
             "connection": null
         },
         {
@@ -299,6 +322,7 @@
             ],
             "lifecycle": "module",
             "requires": [],
+            "prerequisiteSets": [],
             "connection": null
         }
     ]

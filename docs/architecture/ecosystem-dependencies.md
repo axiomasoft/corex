@@ -16,10 +16,10 @@ PSR-4 пути внутри монорепозитория владельца. �
 
 | Владелец | Пакеты | Source reference |
 |---|---|---|
-| Packman (`0.1.1`) | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `e17543752eeea73170072919930c5d372cff5c08` |
-| AzGuard | `azguard` | `74886a7f2c5fac7a17c9f9adf871ec2ace96830e` |
-| Tenant | `tenant`, `tenant-laravel` | `3c39875b7a3b5f20889a5158cb63c860433875f2` |
-| Vaulter | `vaulter-core`, `vaulter-media` | `a9fb9982bfa605eeefb3e93a0b09d0b014fff710` |
+| Packman (`0.1.1`) | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `cf9172877d0b2ac1716f6d9fe11b481aafcbf2c3` |
+| AzGuard | `azguard` | `c6667eca964d40d50b4f3e154cafd2f42415f694` |
+| Tenant | `tenant`, `tenant-laravel` | `8d1b62c245f5547d870f124a995bb20af3ab51be` |
+| Vaulter | `vaulter-core`, `vaulter-media` | `fc217f9e517720fa40cb8fa2fdf6c77a1ee6b775` |
 
 Все имена в таблице имеют префикс `axiomasoft/`. Packman зафиксирован на `0.1.1`,
 а остальные снимки используют `dev-main` и числовой branch alias владельца; это
@@ -46,7 +46,7 @@ CoreX-пакеты и продукт устанавливаются из отн�
 локальный репозиторий. Проверить commit можно без изменения checkout:
 
 ```bash
-git -C /absolute/path/vaulter cat-file -e a9fb9982bfa605eeefb3e93a0b09d0b014fff710^{commit}
+git -C /absolute/path/vaulter cat-file -e fc217f9e517720fa40cb8fa2fdf6c77a1ee6b775^{commit}
 ```
 
 Для локальной установки можно направить только Vaulter source URL на этот checkout

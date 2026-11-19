@@ -12,6 +12,6 @@ final class FixtureTenantSchemaSets implements SchemaSetProvider
 {
     public function sets(): array
     {
-        return [new SchemaSet('axiomasoft/corex-tenancy', 'fixture', SchemaScope::Tenant, dirname(__DIR__).'/database/migrations/pg', 1)];
+        return [new SchemaSet('axiomasoft/corex-tenancy', 'tenant', SchemaScope::Tenant, dirname(__DIR__).'/database/migrations/pg', 1)];
     }
 }

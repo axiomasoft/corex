@@ -8,17 +8,6 @@ use CoreX\Operations\Validation\Data\JsonObject;
 use CoreX\Operations\Validation\Data\JsonValue;
 use CoreX\Operations\Validation\Data\SchemaHandle;
 use CoreX\Tools\Errors\Enums\ToolsErrorCode;
-
-foreach ([
-    __DIR__.'/../../vendor/autoload.php',
-    __DIR__.'/../../../../vendor/autoload.php',
-] as $autoload) {
-    if (is_file($autoload)) {
-        require_once $autoload;
-
-        break;
-    }
-}
 use JsonException;
 use Packman\Attributes\Internal;
 use RuntimeException;
@@ -131,5 +120,13 @@ final class ToolSchemaWorker
 }
 
 if (PHP_SAPI === 'cli' && isset($argv[0]) && realpath($argv[0]) === __FILE__) {
+    foreach ([$argv[1] ?? '', __DIR__.'/../../vendor/autoload.php', __DIR__.'/../../../../vendor/autoload.php'] as $autoload) {
+        if (is_file($autoload)) {
+            require_once $autoload;
+
+            break;
+        }
+    }
+
     ToolSchemaWorker::runCli();
 }

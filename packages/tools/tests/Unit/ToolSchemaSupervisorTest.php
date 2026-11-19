@@ -40,7 +40,7 @@ final class ToolSchemaSupervisorTest extends TestCase
         $fixture = realpath(__DIR__.'/../Stubs/schema-worker.php');
         $wrapper = $this->directory.'/php-worker';
         $code = '#!'.PHP_BINARY."\n<?php\n";
-        $code .= '$args = array_slice($argv, 1);'."\n";
+        $code .= '$args = array_slice($argv, 1, -1);'."\n";
         $code .= '$args[count($args) - 1] = '.var_export($fixture, true).";\n";
         $code .= '$args[] = '.var_export($mode, true).";\n";
         $code .= '$args[] = '.var_export($this->directory.'/pid', true).";\n";

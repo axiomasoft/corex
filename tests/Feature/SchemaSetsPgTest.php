@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Access\Internal\AccessSchemaSets;
 use CoreX\Audit\Data\AuditEntry;
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Audit\Internal\QueuedAuditLogger;
@@ -26,6 +27,19 @@ beforeEach(function (): void {
     DB::connection('pgsql')->statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::connection('pgsql')->statement('CREATE SCHEMA public');
     DB::purge('pgsql');
+});
+
+it('migrates the access cloud constraints and their transitive tenant prerequisites from an empty schema', function (): void {
+    app()->instance(SchemaSets::class, new TaggedSchemaSets([new AccessSchemaSets, new TenancySchemaSets, new CoreSchemaSets]));
+    app()->forgetInstance(SchemaMigrator::class);
+
+    $this->migrateSchemaSets(['axiomasoft/corex-access:tenant-cloud'], 'pgsql');
+
+    $constraint = DB::connection('pgsql')->selectOne("select confrelid::regclass::text as target from pg_constraint where conname = 'aut_role_assignments_workspace_fk'");
+    expect($constraint?->target)->toBe('wsp_workspaces')
+        ->and(Schema::connection('pgsql')->hasTable('sys_department_user'))->toBeTrue()
+        ->and(Schema::connection('pgsql')->hasTable('root_accounts'))->toBeFalse()
+        ->and(resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-access:tenant-cloud'], 'pgsql'))->toBe([]);
 });
 
 it('migrates the domain and upstream module platform sets with distinct ownership', function (): void {

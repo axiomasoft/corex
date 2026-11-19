@@ -105,6 +105,9 @@ def main() -> int:
         if stability == 'unreleased' and data.get('name') not in UNRELEASED:
             bad('stability', f'stability=unreleased is reserved for {sorted(UNRELEASED)}')
 
+        packman_constraints = dict(PACKMAN_CONSTRAINTS)
+        if label in {'access', 'tenancy'}:
+            packman_constraints['axiomasoft/packman-schema'] = '^0.1.1'
         for name, constraint in sorted(requires.items()):
             if name in mono and constraint != MONO_CONSTRAINT:
                 bad('mono-constraint', f'{name}={constraint!r}, expected {MONO_CONSTRAINT!r}')
@@ -112,8 +115,8 @@ def main() -> int:
                 bad('illuminate', f'{name}={constraint!r}, expected {ILLUMINATE!r}')
             elif name in STACK and constraint != STACK[name]:
                 bad('stack', f'{name}={constraint!r}, expected {STACK[name]!r}')
-            elif name in PACKMAN_CONSTRAINTS and not pinned(constraint, PACKMAN_CONSTRAINTS[name]):
-                bad('packman', f'{name}={constraint!r}, expected {PACKMAN_CONSTRAINTS[name]!r}')
+            elif name in packman_constraints and not pinned(constraint, packman_constraints[name]):
+                bad('packman', f'{name}={constraint!r}, expected {packman_constraints[name]!r}')
             elif name not in mono and name not in ALLOWED_PRERELEASE and re.search(r'@(dev|alpha|beta|RC)|dev-|-alpha|-beta', constraint):
                 bad('prerelease', f'{name}={constraint!r}')
             elif name in ALLOWED_PRERELEASE and not pinned(constraint, ALLOWED_PRERELEASE[name]):

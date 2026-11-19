@@ -730,7 +730,7 @@
             },
             {
                 "old": "CoreX\\Modules\\ModuleActivationDecision",
-                "new": "Packman\\Modules\\Internal\\Gate\\ModuleActivationDecision",
+                "new": "Packman\\Modules\\Data\\Lifecycle\\ModuleActivationDecision",
                 "match": "fqcn"
             },
             {
@@ -2355,7 +2355,7 @@
             },
             {
                 "old": "CoreX\\Modules\\Gate\\ModuleActivationDecision",
-                "new": "Packman\\Modules\\Internal\\Gate\\ModuleActivationDecision",
+                "new": "Packman\\Modules\\Data\\Lifecycle\\ModuleActivationDecision",
                 "match": "fqcn"
             },
             {

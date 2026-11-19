@@ -4906,13 +4906,13 @@
             "from": "CoreX\\Modules\\Gate\\ModuleActivationDecision",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "Packman\\Modules\\Internal\\Gate\\ModuleActivationDecision"
+            "to": "Packman\\Modules\\Data\\Lifecycle\\ModuleActivationDecision"
         },
         {
             "from": "CoreX\\Modules\\ModuleActivationDecision",
             "kind": "identifier",
             "reason": "PLAN3.D57 feature-module move",
-            "to": "Packman\\Modules\\Internal\\Gate\\ModuleActivationDecision"
+            "to": "Packman\\Modules\\Data\\Lifecycle\\ModuleActivationDecision"
         },
         {
             "from": "CoreX\\Modules\\Lifecycle\\DatabaseModuleLifecycle",

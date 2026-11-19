@@ -30,7 +30,7 @@
         "psr/log": "^3.0",
         "symfony/http-foundation": "^7.2|^8.0",
         "axiomasoft/packman": "^0.1",
-        "axiomasoft/packman-schema": "^0.1",
+        "axiomasoft/packman-schema": "^0.1.1",
         "axiomasoft/tenant": "^1.0@dev"
     },
     "require-dev": {

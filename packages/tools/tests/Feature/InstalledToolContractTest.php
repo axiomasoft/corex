@@ -172,7 +172,7 @@ final class InstalledToolContractTest extends TestCase
                 requestId: 'req-archive-read',
             ),
         );
-        self::assertSame(ToolOutcome::Committed, $readResult->outcome);
+        self::assertSame(ToolOutcome::Committed, $readResult->outcome, $readResult->errorCode ?? '');
 
         $writeDescriptor = $this->archiveDescriptor('maintenance.export_account');
         $writeCall = new ToolCall(
@@ -194,7 +194,7 @@ final class InstalledToolContractTest extends TestCase
         $guard->approvedProofDigest = $guard->bindingDigest($writeDescriptor, $this->context(), $writeCall);
         $this->app->forgetInstance(ToolInvoker::class);
         $approved = $this->app->make(ToolInvoker::class)->invoke($this->context(), $writeCall);
-        self::assertSame(ToolOutcome::Committed, $approved->outcome);
+        self::assertSame(ToolOutcome::Committed, $approved->outcome, $approved->errorCode ?? '');
 
         $this->tenants->initialize($this->account('B'));
         $foreign = $this->app->make(ToolInvoker::class)->invoke(

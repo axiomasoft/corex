@@ -19,7 +19,7 @@ final readonly class TenancySchemaSets implements SchemaSetProvider
 
         return [
             new SchemaSet(package: 'axiomasoft/corex-tenancy', name: 'root', scope: SchemaScope::Central, path: $root.'/root', version: 1),
-            new SchemaSet(package: 'axiomasoft/corex-tenancy', name: 'tenant', scope: SchemaScope::Tenant, path: $root.'/tenant', version: 1),
+            new SchemaSet(package: 'axiomasoft/corex-tenancy', name: 'tenant', scope: SchemaScope::Tenant, path: $root.'/tenant', version: 1, prerequisiteSets: ['axiomasoft/corex:tenant']),
         ];
     }
 }

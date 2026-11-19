@@ -12,7 +12,7 @@ use Packman\Schema\Contracts\Migration\SchemaSets;
  * Shipped schema S1–S9. Tokenization never executes a migration or connects to a database.
  * The manifest is projected from the actual Testbench registry only for --write-sets/--check.
  *
- * @phpstan-type SchemaManifest array{packages: array<string, string>, sets: list<array{id: string, package: string, name: string, scope: string, path: string, version: int, drivers: list<string>, lifecycle: string, requires: list<string>, connection: ?string}>}
+ * @phpstan-type SchemaManifest array{packages: array<string, string>, sets: list<array{id: string, package: string, name: string, scope: string, path: string, version: int, drivers: list<string>, lifecycle: string, requires: list<string>, prerequisiteSets: list<string>, connection: ?string}>}
  * @phpstan-type SchemaHit array{code: string, file: string, line: int, message: string}
  * @phpstan-type SchemaCall array{name: string, args: list<string>, offset: int, end: int, line: int, method: bool}
  */
@@ -914,7 +914,7 @@ final class SchemaGate
                 }
                 $sets[] = ['id' => $set->id(), 'package' => $set->package, 'name' => $set->name, 'scope' => $set->scope->value,
                     'path' => substr($set->path, strlen($root) + 1), 'version' => $set->version, 'drivers' => $set->drivers,
-                    'lifecycle' => $set->lifecycle->value, 'requires' => $set->requires, 'connection' => $set->connection];
+                    'lifecycle' => $set->lifecycle->value, 'requires' => $set->requires, 'prerequisiteSets' => $set->prerequisiteSets, 'connection' => $set->connection];
             }
         } finally {
             $app->flush();

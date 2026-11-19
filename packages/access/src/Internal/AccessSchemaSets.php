@@ -19,7 +19,7 @@ final readonly class AccessSchemaSets implements SchemaSetProvider
 
         return [
             new SchemaSet(package: 'axiomasoft/corex-access', name: 'tenant', scope: SchemaScope::Tenant, path: $root.'/tenant', version: 1),
-            new SchemaSet(package: 'axiomasoft/corex-access', name: 'tenant-cloud', scope: SchemaScope::Tenant, path: $root.'/tenant-cloud', version: 1, requires: ['axiomasoft/corex-tenancy']),
+            new SchemaSet(package: 'axiomasoft/corex-access', name: 'tenant-cloud', scope: SchemaScope::Tenant, path: $root.'/tenant-cloud', version: 1, requires: ['axiomasoft/corex-tenancy'], prerequisiteSets: ['axiomasoft/corex-access:tenant', 'axiomasoft/corex-tenancy:tenant']),
         ];
     }
 }

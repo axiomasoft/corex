@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Internal;
 
+use Composer\Autoload\ClassLoader;
 use CoreX\Operations\Validation\Data\JsonObject;
 use CoreX\Operations\Validation\Data\JsonValue;
 use CoreX\Operations\Validation\Data\SchemaHandle;
@@ -123,6 +124,19 @@ final readonly class ToolSchemaSupervisor implements ToolSchemaValidator
         return array_all($validation['errors'], fn ($error) => ! (! is_array($error) || ! is_string($error['code'] ?? null) || ! is_string($error['pointer'] ?? null)));
     }
 
+    private function workerAutoload(): string
+    {
+        foreach (ClassLoader::getRegisteredLoaders() as $directory => $loader) {
+            $file = $loader->findFile(self::class);
+
+            if ($file !== false && realpath($file) === __FILE__) {
+                return $directory.'/autoload.php';
+            }
+        }
+
+        throw ToolSchemaFailure::unavailable();
+    }
+
     /**
      * @param  array<string, mixed>  $request
      * @return array<array-key, mixed>
@@ -133,6 +147,7 @@ final readonly class ToolSchemaSupervisor implements ToolSchemaValidator
             $this->phpBinary ?? PHP_BINARY,
             '-d', 'memory_limit='.intdiv(SchemaProfile::WORKER_MEMORY_BYTES, 1024 * 1024).'M',
             __DIR__.'/ToolSchemaWorker.php',
+            $this->workerAutoload(),
         ];
         // A failed spawn is a typed startup failure even when a host observes suppressed warnings.
         set_error_handler(static function (): never {
