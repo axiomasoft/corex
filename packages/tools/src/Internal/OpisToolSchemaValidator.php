@@ -18,9 +18,9 @@ use Packman\Attributes\Internal;
 
 /** Qualified Opis adapter for offline tool-schema/1 validation. */
 #[Internal]
-final class OpisToolSchemaValidator
+final readonly class OpisToolSchemaValidator
 {
-    private readonly ?Validator $validator;
+    private ?Validator $validator;
 
     public function __construct()
     {
