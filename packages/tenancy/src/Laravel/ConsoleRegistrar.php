@@ -8,7 +8,8 @@ use CoreX\Tenancy\Laravel\Commands\IdentitiesReconcileCommand;
 use CoreX\Tenancy\Laravel\Commands\PendingClearCommand;
 use CoreX\Tenancy\Laravel\Commands\PendingCreateCommand;
 use CoreX\Tenancy\Laravel\Commands\TenantsMigrateCommand;
-use Illuminate\Console\Application as Artisan;
+use Illuminate\Console\Events\ArtisanStarting;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
 use Packman\Attributes\Spi;
@@ -28,16 +29,11 @@ final class ConsoleRegistrar implements PackageRegistrar
             return;
         }
 
-        Artisan::starting(self::registerCommands(...));
-    }
-
-    private static function registerCommands(Artisan $artisan): void
-    {
-        $artisan->resolveCommands([
+        $app->make(Dispatcher::class)->listen(ArtisanStarting::class, static fn (ArtisanStarting $event) => $event->artisan->resolveCommands([
             PendingCreateCommand::class,
             PendingClearCommand::class,
             IdentitiesReconcileCommand::class,
             TenantsMigrateCommand::class,
-        ]);
+        ]));
     }
 }

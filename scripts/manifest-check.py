@@ -17,7 +17,7 @@ ALIAS = '1.0.x-dev'
 MONO_CONSTRAINT = '^1.0@dev'
 PHP = '^8.4'
 ILLUMINATE = '^13.0'
-# Packman packages are pinned to ^0.1 (0.1.1) in the root package repositories
+# Packman packages are pinned to ^0.1 (0.1.2) in the root package repositories
 # and lockfile; unreleased ecosystem dependencies remain fixed to reviewed commits.
 PACKMAN_CONSTRAINTS = {
     'axiomasoft/packman': '^0.1',
@@ -150,8 +150,8 @@ def main() -> int:
             violations.append(f'ROOT: ecosystem-pin: {name} must have an exact Git commit')
         elif locked_packages.get(name, {}).get('source') != source:
             violations.append(f'ROOT: ecosystem-pin: {name} lockfile differs from reviewed repository source')
-        elif name in PACKMAN_CONSTRAINTS and (repository_packages.get(name, {}).get('version') != '0.1.1' or locked_packages.get(name, {}).get('version') != '0.1.1'):
-            violations.append(f'ROOT: ecosystem-pin: {name} must be pinned to version 0.1.1')
+        elif name in PACKMAN_CONSTRAINTS and (repository_packages.get(name, {}).get('version') != '0.1.2' or locked_packages.get(name, {}).get('version') != '0.1.2'):
+            violations.append(f'ROOT: ecosystem-pin: {name} must be pinned to version 0.1.2')
 
     for line in violations:
         print(line)

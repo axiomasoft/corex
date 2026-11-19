@@ -11,7 +11,8 @@ use CoreX\Tenancy\Integration\Internal\Wakeup\RootRegistryWakeupHint;
 use CoreX\Tenancy\Integration\Internal\Wakeup\RootWakeupReconciler;
 use CoreX\Tenancy\Integration\Internal\Wakeup\SweepRootWakeups;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
-use Illuminate\Console\Application as Artisan;
+use Illuminate\Console\Events\ArtisanStarting;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionResolverInterface;
 use Override;
@@ -58,11 +59,6 @@ final class WakeupRegistrar implements PackageRegistrar
             return;
         }
 
-        Artisan::starting(self::registerCommands(...));
-    }
-
-    private static function registerCommands(Artisan $artisan): void
-    {
-        $artisan->resolveCommands([SweepRootWakeups::class]);
+        $app->make(Dispatcher::class)->listen(ArtisanStarting::class, static fn (ArtisanStarting $event) => $event->artisan->resolveCommands([SweepRootWakeups::class]));
     }
 }

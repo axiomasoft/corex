@@ -7,6 +7,8 @@ namespace CoreX\Media;
 use CoreX\Media\Internal\Commands\SweepMediaOperations;
 use CoreX\Media\Internal\Support\MediaConfigSection;
 use CoreX\Media\Laravel\MediaBindingsRegistrar;
+use Illuminate\Console\Events\ArtisanStarting;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\ServiceProvider;
 use Override;
 use Packman\Attributes\Spi;
@@ -39,7 +41,7 @@ final class MediaServiceProvider extends ServiceProvider
         }
 
         if ($this->app->runningInConsole()) {
-            $this->commands([SweepMediaOperations::class]);
+            $this->app->make(Dispatcher::class)->listen(ArtisanStarting::class, static fn (ArtisanStarting $event) => $event->artisan->resolveCommands([SweepMediaOperations::class]));
         }
     }
 

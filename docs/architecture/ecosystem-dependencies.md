@@ -1,7 +1,7 @@
 # Зависимости экосистемы
 
 CoreX использует публичные контракты Packman, Tenant, AzGuard и Vaulter.
-Packman зафиксирован на версии `0.1.1`. Для `packman-modules` CoreX требует
+Версия снимка Packman в корневом Composer-репозитории — `0.1.2`. Для `packman-modules` CoreX требует
 `^0.1.1`, чтобы использовать публичный контракт компиляции. Для
 Tenant (`^1.0@dev`), AzGuard (`^2.0@dev`) и Vaulter (`^1.0@dev`) проверяются
 development-снимки владельцев. Ограничения в Composer не утверждают, что эти
@@ -16,16 +16,17 @@ PSR-4 пути внутри монорепозитория владельца. �
 
 | Владелец | Пакеты | Source reference |
 |---|---|---|
-| Packman (`0.1.1`) | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `b2fea80d85b1787f0a74d22c0f2563fd411ad132` |
-| AzGuard | `azguard` | `1718b337ac237a260c2876ecd5fafa5867c9a9b3` |
-| Tenant | `tenant`, `tenant-laravel` | `8d1b62c245f5547d870f124a995bb20af3ab51be` |
-| Vaulter | `vaulter-core`, `vaulter-media` | `f28c91f366e791f5db20a1a914260c42b413a97c` |
+| Packman (`0.1.2`) | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `976eac386e0159f11ca20881283d7cccd649487f` |
+| AzGuard | `azguard` | `68709d166ec2b91f7dce3975eadccd4539906bc0` |
+| Tenant | `tenant`, `tenant-laravel` | `1c68f87ccfaa5e6786f6559cb4ba2cb09abab5fd` |
+| Vaulter | `vaulter-core`, `vaulter-media` | `ae15f37db7da7ce0cf7368c912e567068b2106b6` |
 
-Все имена в таблице имеют префикс `axiomasoft/`. Packman зафиксирован на `0.1.1`,
+Все имена в таблице имеют префикс `axiomasoft/`. Packman зафиксирован на `0.1.2`,
 а остальные снимки используют `dev-main` и числовой branch alias владельца; это
 метаданные разрешения, а не доказательство, что commit находится в опубликованном
 remote `main`. AzGuard source URL указывает на `axiomasoft/azguard-private`; среде
-установки нужен доступ к этому репозиторию.
+установки нужен доступ к этому репозиторию. Проверенный commit AzGuard доступен
+в [PR #131](https://github.com/axiomasoft/azguard-private/pull/131) для защищённой ветки.
 
 При работе с локальными монорепозиториями владельцев до публикации commits в
 remote GitHub чистый CI не сможет получить их только по `composer.lock`.
@@ -46,7 +47,7 @@ CoreX-пакеты и продукт устанавливаются из отн�
 локальный репозиторий. Проверить commit можно без изменения checkout:
 
 ```bash
-git -C /absolute/path/vaulter cat-file -e f28c91f366e791f5db20a1a914260c42b413a97c^{commit}
+git -C /absolute/path/vaulter cat-file -e ae15f37db7da7ce0cf7368c912e567068b2106b6^{commit}
 ```
 
 Для локальной установки можно направить только Vaulter source URL на этот checkout

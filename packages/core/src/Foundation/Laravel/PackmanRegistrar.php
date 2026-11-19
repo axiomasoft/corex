@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Foundation\Laravel;
 
+use CoreX\Audit\Internal\CurrentActor;
 use CoreX\Audit\Internal\ModuleAuditHook;
 use CoreX\Foundation\Internal\PackmanActorResolver;
 use CoreX\Foundation\Internal\PackmanContextResolver;
@@ -44,7 +45,9 @@ final class PackmanRegistrar implements PackageRegistrar
         }
 
         $app->singleton(ContextResolverInterface::class, PackmanContextResolver::class);
-        $app->singleton(ActorResolverInterface::class, PackmanActorResolver::class);
+        $app->scoped(ActorResolverInterface::class, static fn (Application $app): PackmanActorResolver => new PackmanActorResolver(
+            static fn (): CurrentActor => $app->make(CurrentActor::class),
+        ));
         $app->singleton(FeatureFlagsInterface::class, PackmanFeatureFlags::class);
         $app->tag([ModuleAuditHook::class], EntityRegistryHook::class);
     }

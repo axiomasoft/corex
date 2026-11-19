@@ -9,7 +9,8 @@ use CoreX\Messaging\Internal\Commands\PruneOutboxMessages;
 use CoreX\Messaging\Internal\Commands\RelayOutbox;
 use CoreX\Messaging\Internal\Commands\ShowDeliveryHealth;
 use CoreX\Messaging\Internal\PrunePubSubMessages;
-use Illuminate\Console\Application as Artisan;
+use Illuminate\Console\Events\ArtisanStarting;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
 use Packman\Attributes\Spi;
@@ -29,17 +30,12 @@ final class ConsoleRegistrar implements PackageRegistrar
             return;
         }
 
-        Artisan::starting(self::registerCommands(...));
-    }
-
-    private static function registerCommands(Artisan $artisan): void
-    {
-        $artisan->resolveCommands([
+        $app->make(Dispatcher::class)->listen(ArtisanStarting::class, static fn (ArtisanStarting $event) => $event->artisan->resolveCommands([
             PruneAuditLog::class,
             PrunePubSubMessages::class,
             PruneOutboxMessages::class,
             RelayOutbox::class,
             ShowDeliveryHealth::class,
-        ]);
+        ]));
     }
 }

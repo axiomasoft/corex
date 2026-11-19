@@ -17,6 +17,8 @@ use CoreX\Operations\Laravel\IdempotencyRegistrar;
 use CoreX\Operations\Laravel\OperationsBindingsRegistrar;
 use CoreX\Operations\Laravel\PaginationRegistrar;
 use CoreX\Operations\OpenApi\Internal\Commands\WriteApiSnapshots;
+use Illuminate\Console\Events\ArtisanStarting;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\ServiceProvider;
 use Override;
 use Packman\Attributes\Spi;
@@ -63,7 +65,7 @@ final class OperationsServiceProvider extends ServiceProvider
                 $commands[] = WorkBulkOperations::class;
             }
 
-            $this->commands($commands);
+            $this->app->make(Dispatcher::class)->listen(ArtisanStarting::class, static fn (ArtisanStarting $event) => $event->artisan->resolveCommands($commands));
         }
 
         foreach (self::REGISTRARS as $registrar) {

@@ -8,6 +8,8 @@ use CoreX\Notifications\Delivery\Internal\Commands\SweepNotificationDeliveries;
 use CoreX\Notifications\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Notifications\Laravel\NotificationsBindingsRegistrar;
 use CoreX\Notifications\Laravel\NotificationsDigestRegistrar;
+use Illuminate\Console\Events\ArtisanStarting;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\ServiceProvider;
 use Override;
 use Packman\Attributes\Spi;
@@ -36,7 +38,7 @@ final class NotificationsServiceProvider extends ServiceProvider
         }
 
         if ($this->app->runningInConsole()) {
-            $this->commands([SweepNotificationDeliveries::class]);
+            $this->app->make(Dispatcher::class)->listen(ArtisanStarting::class, static fn (ArtisanStarting $event) => $event->artisan->resolveCommands([SweepNotificationDeliveries::class]));
         }
     }
 

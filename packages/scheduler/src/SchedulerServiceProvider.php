@@ -7,6 +7,8 @@ namespace CoreX\Scheduler;
 use CoreX\Scheduler\Internal\Commands\SweepWakeups;
 use CoreX\Scheduler\Internal\Commands\ValidateWakeupStamps;
 use CoreX\Scheduler\Laravel\WakeupBindingsRegistrar;
+use Illuminate\Console\Events\ArtisanStarting;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\ServiceProvider;
 use Override;
 use Packman\Attributes\Spi;
@@ -32,7 +34,7 @@ final class SchedulerServiceProvider extends ServiceProvider
         }
 
         if ($this->app->runningInConsole()) {
-            $this->commands([SweepWakeups::class, ValidateWakeupStamps::class]);
+            $this->app->make(Dispatcher::class)->listen(ArtisanStarting::class, static fn (ArtisanStarting $event) => $event->artisan->resolveCommands([SweepWakeups::class, ValidateWakeupStamps::class]));
         }
     }
 

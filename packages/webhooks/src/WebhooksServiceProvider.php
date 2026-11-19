@@ -12,6 +12,8 @@ use CoreX\Webhooks\Internal\Commands\PruneWebhooks;
 use CoreX\Webhooks\Internal\WebhookSnapshotSection;
 use CoreX\Webhooks\Internal\WebhooksSchemaSets;
 use CoreX\Webhooks\Laravel\WebhookBindingsRegistrar;
+use Illuminate\Console\Events\ArtisanStarting;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\ServiceProvider;
 use Override;
 use Packman\Attributes\Spi;
@@ -46,7 +48,7 @@ final class WebhooksServiceProvider extends ServiceProvider
                 $commands[] = DeliverWebhooks::class;
             }
 
-            $this->commands($commands);
+            $this->app->make(Dispatcher::class)->listen(ArtisanStarting::class, static fn (ArtisanStarting $event) => $event->artisan->resolveCommands($commands));
         }
 
         $this->publishes([__DIR__.'/../config/corex-webhooks.php' => config_path('corex-webhooks.php')], 'corex-webhooks-config');
