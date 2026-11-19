@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tools\Tests\Unit;
 
+use Composer\Autoload\ClassLoader;
 use CoreX\Operations\Validation\Laravel\SchemaProfile;
 use CoreX\Tools\Errors\Enums\ToolsErrorCode;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -22,6 +23,30 @@ final class ToolSchemaWorkerTest extends TestCase
         self::assertSame(0, $worker->getExitCode());
         self::assertSame('', $worker->getErrorOutput());
         self::assertSame("ready\n".json_encode(['ok' => false, 'error' => ToolsErrorCode::SchemaLimit->value], JSON_THROW_ON_ERROR), $worker->getOutput());
+    }
+
+    public function test_split_worker_bootstraps_the_supplied_host_autoloader(): void
+    {
+        $temporary = sys_get_temp_dir().'/corex-split-worker-'.bin2hex(random_bytes(8));
+        mkdir($temporary, 0700);
+        $worker = $temporary.'/ToolSchemaWorker.php';
+        $vendorDir = array_key_first(ClassLoader::getRegisteredLoaders());
+        self::assertIsString($vendorDir);
+
+        try {
+            copy(__DIR__.'/../../src/Internal/ToolSchemaWorker.php', $worker);
+            $process = new Process([PHP_BINARY, $worker, $vendorDir.'/autoload.php']);
+            $process->setInput('{"action":"admit","schema":"{}","profile":"'.SchemaProfile::TOOL_SCHEMA_V1.'"}');
+            $process->mustRun();
+            $frames = explode("\n", $process->getOutput(), 2);
+            self::assertSame('ready', $frames[0]);
+            $response = json_decode($frames[1], true, flags: JSON_THROW_ON_ERROR);
+            self::assertTrue($response['ok']);
+            self::assertSame(64, strlen($response['handle']['digest']));
+        } finally {
+            unlink($worker);
+            rmdir($temporary);
+        }
     }
 
     public static function malformedRequests(): array
