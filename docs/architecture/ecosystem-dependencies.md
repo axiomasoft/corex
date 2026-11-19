@@ -1,7 +1,8 @@
 # Зависимости экосистемы
 
 CoreX использует публичные контракты Packman, Tenant, AzGuard и Vaulter.
-Пакеты `axiomasoft/packman*` зафиксированы на версии `^0.1` (`0.1.1`), а для
+Packman зафиксирован на версии `0.1.1`. Для `packman-modules` CoreX требует
+`^0.1.1`, чтобы использовать публичный контракт компиляции. Для
 Tenant (`^1.0@dev`), AzGuard (`^2.0@dev`) и Vaulter (`^1.0@dev`) проверяются
 development-снимки владельцев. Ограничения в Composer не утверждают, что эти
 источники доступны без авторизации.
@@ -15,7 +16,7 @@ PSR-4 пути внутри монорепозитория владельца. �
 
 | Владелец | Пакеты | Source reference |
 |---|---|---|
-| Packman (`0.1.1`) | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `4159f3286afd39de3d815ca61b5320d10026f07b` |
+| Packman (`0.1.1`) | `packman`, `packman-modules`, `packman-schema`, `packman-panels`, `packman-plugins`, `packman-devtools`, `packman-testkit` | `2a2e4507c137a4baa17dacf21133e00646125e45` |
 | AzGuard | `azguard` | `74886a7f2c5fac7a17c9f9adf871ec2ace96830e` |
 | Tenant | `tenant`, `tenant-laravel` | `3c39875b7a3b5f20889a5158cb63c860433875f2` |
 | Vaulter | `vaulter-core`, `vaulter-media` | `a9fb9982bfa605eeefb3e93a0b09d0b014fff710` |
