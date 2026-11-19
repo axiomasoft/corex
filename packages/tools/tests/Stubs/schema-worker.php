@@ -9,7 +9,7 @@ file_put_contents($argv[2], (string) getmypid());
 
 if ($mode === 'slow-start') {
     time_nanosleep(0, 300_000_000);
-    require __DIR__.'/../../src/Internal/ToolSchemaWorker.php';
+    require $argv[3];
     ToolSchemaWorker::runCli();
     exit;
 }

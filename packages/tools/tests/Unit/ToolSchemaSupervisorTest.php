@@ -44,6 +44,7 @@ final class ToolSchemaSupervisorTest extends TestCase
         $code .= '$args[count($args) - 1] = '.var_export($fixture, true).";\n";
         $code .= '$args[] = '.var_export($mode, true).";\n";
         $code .= '$args[] = '.var_export($this->directory.'/pid', true).";\n";
+        $code .= '$args[] = end($argv);'."\n";
         $code .= 'pcntl_exec(PHP_BINARY, $args);'."\nexit(1);\n";
         file_put_contents($wrapper, $code);
         chmod($wrapper, 0700);
