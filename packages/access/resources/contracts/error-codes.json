@@ -5,6 +5,17 @@
         {
             "package": "axiomasoft/corex-access",
             "enum": "CoreX\\Access\\Errors\\Enums\\AccessErrorCode",
+            "case": "ExactVisibilityUnavailable",
+            "code": "access.exact_visibility_unavailable",
+            "type": "urn:packman:problem:access.exact_visibility_unavailable",
+            "status": 422,
+            "title": "Exact visibility is unavailable.",
+            "retryable": false,
+            "category": "unsupported"
+        },
+        {
+            "package": "axiomasoft/corex-access",
+            "enum": "CoreX\\Access\\Errors\\Enums\\AccessErrorCode",
             "case": "ScopeCapabilityMismatch",
             "code": "access.scope_capability_mismatch",
             "type": "urn:packman:problem:access.scope_capability_mismatch",

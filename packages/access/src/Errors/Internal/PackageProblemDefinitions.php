@@ -16,6 +16,7 @@ final class PackageProblemDefinitions implements ProblemDefinitionProvider
 {
     public function definitions(): iterable
     {
+        yield new ProblemDefinition(code: AccessErrorCode::ExactVisibilityUnavailable, type: 'urn:packman:problem:access.exact_visibility_unavailable', defaultStatus: 422, title: 'Exact visibility is unavailable.', retryable: false, category: ErrorCategory::Unsupported, detailKeys: ['reason', 'component']);
         yield new ProblemDefinition(code: AccessErrorCode::ScopeCapabilityMismatch, type: 'urn:packman:problem:access.scope_capability_mismatch', defaultStatus: 422, title: 'Scope capability mismatch.', retryable: false, category: ErrorCategory::Unsupported, detailKeys: []);
     }
 }

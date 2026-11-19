@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use AzGuard\Exceptions\Authorization\VisibilityNotSupportedException;
 use CoreX\Access\Access\Internal\MatrixPermissions;
 use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Enums\Scope;
+use CoreX\Access\Exceptions\ExactVisibilityUnavailable;
 use CoreX\Access\Laravel\ScopeResolver;
 use CoreX\Access\Roles\DirectGrants;
 use CoreX\Access\Roles\Internal\Models\Role;
@@ -84,7 +84,7 @@ it('does not broaden a model-defined tenant boundary into an unrestricted matrix
 
     expect($checker->allowed($user, 'crm.project', 'read'))->toBeTrue()
         ->and($checker->canOnRecord($user, 'read', $foreign))->toBeFalse()
-        ->and(fn () => $resolver->apply(ScopedProject::query(), $user, 'crm.project', 'read'))->toThrow(VisibilityNotSupportedException::class);
+        ->and(fn () => $resolver->apply(ScopedProject::query(), $user, 'crm.project', 'read'))->toThrow(ExactVisibilityUnavailable::class);
 });
 
 it('denies expired and revoked native direct grants', function (string $expiresAt, string $revokedAt): void {

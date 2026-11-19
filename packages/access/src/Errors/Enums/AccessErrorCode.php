@@ -10,6 +10,7 @@ use Packman\Errors\Contracts\ErrorCode;
 #[Api(since: '1.0')]
 enum AccessErrorCode: string implements ErrorCode
 {
+    case ExactVisibilityUnavailable = 'access.exact_visibility_unavailable';
     case ScopeCapabilityMismatch = 'access.scope_capability_mismatch';
 
     public function value(): string

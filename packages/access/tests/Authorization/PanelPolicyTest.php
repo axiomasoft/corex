@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use AzGuard\Exceptions\Authorization\VisibilityNotSupportedException;
 use CoreX\Access\Access\Internal\CoreXAccessContextMapper;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Data\RecordContext;
+use CoreX\Access\Exceptions\ExactVisibilityUnavailable;
 use CoreX\Access\Laravel\ScopeResolver;
 use CoreX\Access\Tests\Authorization\Project;
 use CoreX\Access\Tests\Authorization\ProjectPolicy;
@@ -81,7 +81,10 @@ it('retains tenant and workspace boundaries even when the policy allows every re
             ->and($checker->canOnRecord($user, 'view', new ScopedProject(['workspace_id' => 'foreign'])))->toBeFalse();
         // A model without an exact tenant query mapping must never get an unfiltered list.
         expect(fn () => resolve(ScopeResolver::class)->apply(ScopedProject::query(), $user, 'test.project', 'view'))
-            ->toThrow(VisibilityNotSupportedException::class);
+            ->toThrow(function (ExactVisibilityUnavailable $exception): void {
+                expect($exception->errorDescriptor()->code)->toBe('access.exact_visibility_unavailable')
+                    ->and($exception->getPrevious())->toBeInstanceOf(Throwable::class);
+            });
     } finally {
         ProjectPolicy::$allowEverything = false;
     }

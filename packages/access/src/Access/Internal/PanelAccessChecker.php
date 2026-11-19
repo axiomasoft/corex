@@ -12,6 +12,7 @@ use AzGuard\Kernel\Identity\PermissionKey;
 use AzGuard\Kernel\Identity\SubjectRef;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Data\RecordContext;
+use CoreX\Access\Exceptions\ExactVisibilityUnavailable;
 use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Laravel\ScopeResolver;
 use CoreX\Access\Matrix\Contracts\EntityActivity;
@@ -68,7 +69,11 @@ final readonly class PanelAccessChecker implements AccessChecker, ScopeResolver
         if ($owner !== null) {
             $panel = $this->authorization->panel($owner);
 
-            return $panel->visibility()->visibleTo($panel->definition(), $q, $this->contexts->subject($p), PermissionKey::of($owner, $permission)->full(), $scope);
+            try {
+                return $panel->visibility()->visibleTo($panel->definition(), $q, $this->contexts->subject($p), PermissionKey::of($owner, $permission)->full(), $scope);
+            } catch (VisibilityNotSupportedException $exception) {
+                throw new ExactVisibilityUnavailable($exception->reason, $exception->component, $exception);
+            }
         }
 
         if (! $this->decide($p, $entityKey, $action)) {
@@ -79,7 +84,7 @@ final readonly class PanelAccessChecker implements AccessChecker, ScopeResolver
 
         // A model-defined tenant boundary needs its owning panel to provide an exact SQL mapping.
         if ($q->getModel() instanceof ProvidesAccessScope) {
-            throw new VisibilityNotSupportedException('resource_owner_adapter', $q->getModel()::class);
+            throw new ExactVisibilityUnavailable('resource_owner_adapter', $q->getModel()::class);
         }
 
         if ($this->matrix->directlyGranted($p, $entityKey, $action)) {
