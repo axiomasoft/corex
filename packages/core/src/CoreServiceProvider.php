@@ -65,7 +65,6 @@ final class CoreServiceProvider extends ServiceProvider
         $this->app->register(PackmanServiceProvider::class);
         $this->app->register(SchemaServiceProvider::class);
 
-        // After the kernel bindings: module-aware services (settings defaults, registries) refine them.
         $this->app->register(ModulesServiceProvider::class);
     }
 

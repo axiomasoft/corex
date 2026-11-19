@@ -6,6 +6,7 @@ namespace CoreX\Settings\Laravel;
 
 use CoreX\Config\Data\CoreOptions;
 use CoreX\Settings\Contracts\SettingsRepository;
+use CoreX\Settings\Internal\NullSettingDefaultsProvider;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
 use Packman\Attributes\Spi;
@@ -21,7 +22,13 @@ final class SettingsRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
-        $app->singleton(SettingDefaultsProvider::class, static fn (Application $app): SettingDefaultsProvider => ConfiguredImplementation::resolve(app: $app, contract: SettingDefaultsProvider::class, implementation: $app->make(CoreOptions::class)->settingDefaultsProvider));
+        $app->extend(SettingDefaultsProvider::class, static function (SettingDefaultsProvider $defaults, Application $app): SettingDefaultsProvider {
+            $implementation = $app->make(CoreOptions::class)->settingDefaultsProvider;
+
+            return $implementation === NullSettingDefaultsProvider::class
+                ? $defaults
+                : ConfiguredImplementation::resolve(app: $app, contract: SettingDefaultsProvider::class, implementation: $implementation);
+        });
         $app->singleton(SettingsRepository::class, static fn (Application $app): SettingsRepository => ConfiguredImplementation::resolve(app: $app, contract: SettingsRepository::class, implementation: $app->make(CoreOptions::class)->settingsRepository));
     }
 

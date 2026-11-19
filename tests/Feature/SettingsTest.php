@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Context\Data\TenantContext;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Settings\Contracts\SettingsRepository;
 use CoreX\Settings\Data\SettingsScope;
@@ -13,7 +13,6 @@ use CoreX\Settings\Internal\DatabaseSettingsRepository;
 use CoreX\Tests\Stubs\StubSettingDefaultsProvider;
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
@@ -21,11 +20,6 @@ use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 use Packman\Modules\Data\Settings\DefaultSettingDefinition;
-use Packman\Modules\Internal\Lifecycle\DatabaseModuleStateReader;
-use Packman\Modules\Internal\Registry\CompiledModuleRegistry;
-use Packman\Modules\Internal\Registry\RepositoryModuleRegistryCache;
-use Packman\Modules\Internal\Support\ModulesOptions;
-use Packman\Modules\ModulesServiceProvider;
 use Packman\Settings\Contracts\SettingDefaultsProviderInterface as SettingDefaultsProvider;
 
 uses()->group('pg');
@@ -217,13 +211,7 @@ it('rejects a value over the 64KB quota', function (): void {
         ->toThrow(SettingValueTooLargeException::class);
 });
 
-it('resolves a manifest-declared DefaultSettingDefinition through the container-bound SettingDefaultsProvider once axiomasoft/corex is registered (P1.25, A68, test в)', function (): void {
-    // Registering axiomasoft/corex must rebind the boxed Null default
-    // (CoreServiceProvider::register()) to CompiledSettingDefaultsProvider —
-    // reading the manifest default without any row in sys_settings is
-    // exactly the wiring gap A68/Pending Work-P1 left open.
-    $this->app->register(ModulesServiceProvider::class);
-
+it('resolves manifest setting defaults and sensitivity through the CoreX container', function (): void {
     $manifest = ModuleManifest::make('corex/stub-settings')
         ->title('Stub Settings')
         ->tablePrefix('sst')
@@ -232,37 +220,28 @@ it('resolves a manifest-declared DefaultSettingDefinition through the container-
         ]);
 
     $compiled = resolve(ModuleCompilation::class)->compile([$manifest]);
-    $path = sys_get_temp_dir().'/corex_modules_settings_test_'.bin2hex(random_bytes(4)).'.php';
-    CompiledModuleRegistry::writeAtomic($path, [], $compiled);
+    $registry = Mockery::mock(ModuleRegistry::class);
+    $registry->shouldReceive('compiled')->andReturn($compiled);
+    $this->app->instance(ModuleRegistry::class, $registry);
 
-    try {
-        $this->app->instance(ModuleRegistry::class, new CompiledModuleRegistry(
-            cachePath: $path,
-            stateReader: app()->make(DatabaseModuleStateReader::class, ['connection' => SETTINGS_TEST_CONNECTION]),
-            cache: new RepositoryModuleRegistryCache(
-                Cache::store(),
-                ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'modules']]),
-            ),
-            versionResolver: static fn (TenantContext $ctx): int => 0,
-        ));
+    /** @var SettingDefaultsProvider $defaults */
+    $defaults = $this->app->make(SettingDefaultsProvider::class);
 
-        // Pulled straight from the container (not hand-built) — the seam the
-        // mutation-check pins: reverting ModulesServiceProvider's rebind to
-        // NullSettingDefaultsProvider makes this resolve to Null instead.
-        /** @var SettingDefaultsProvider $defaults */
-        $defaults = $this->app->make(SettingDefaultsProvider::class);
+    expect($defaults->defaultFor('sst', 'theme'))->toBe('manifest-default')
+        ->and($defaults->isSensitive('sst', 'theme'))->toBeTrue()
+        ->and($defaults->defaultFor('sst', 'missing'))->toBeNull();
 
-        expect($defaults->defaultFor('sst', 'theme'))->toBe('manifest-default')
-            ->and($defaults->isSensitive('sst', 'theme'))->toBeTrue()
-            ->and($defaults->defaultFor('sst', 'missing'))->toBeNull();
+    $repository = app()->make(DatabaseSettingsRepository::class, ['defaults' => $defaults, 'connection' => SETTINGS_TEST_CONNECTION]);
 
-        // sys_settings carries no row for it — the manifest default alone
-        // reaches SettingsRepository::get().
-        $repository = app()->make(DatabaseSettingsRepository::class, ['defaults' => $defaults, 'connection' => SETTINGS_TEST_CONNECTION]);
+    expect(JsonDocuments::decode($repository->get('sst', 'theme')))->toBe('manifest-default')
+        ->and(settingsPg()->table('sys_settings')->where('namespace', 'sst')->where('key', 'theme')->exists())->toBeFalse();
+});
 
-        expect(JsonDocuments::decode($repository->get('sst', 'theme')))->toBe('manifest-default')
-            ->and(settingsPg()->table('sys_settings')->where('namespace', 'sst')->where('key', 'theme')->exists())->toBeFalse();
-    } finally {
-        unlink($path);
-    }
+it('uses the host-configured defaults provider ahead of the module defaults', function (): void {
+    config(['corex.bindings.setting_defaults' => StubSettingDefaultsProvider::class]);
+    $this->app->forgetInstance(CoreOptions::class);
+    $defaults = new StubSettingDefaultsProvider(['sst.theme' => 'host'], ['sst.theme']);
+    $this->app->instance(StubSettingDefaultsProvider::class, $defaults);
+
+    expect($this->app->make(SettingDefaultsProvider::class))->toBe($defaults);
 });

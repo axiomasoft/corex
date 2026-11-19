@@ -55,7 +55,7 @@ composer lint:check
 
 ## Installation
 
-Install with `composer require axiomasoft/corex-tasks` from the approved CoreX channel and register the module through Packman Modules. Enable it for the trusted tenant so module lifecycle applies its owned schema. Bind the three task access ports before invoking writes; their default implementations deny commands.
+Install with `composer require axiomasoft/corex-tasks` from the approved CoreX channel and register the module through Packman Modules. Prepare the tenant database with UUID primary keys in `users.id` and `wsp_workspaces.id` before enabling Tasks. CoreX Tenancy provides these tables in `axiomasoft/corex-tenancy:tenant`. A standalone host can supply the same columns through its own migrations. Enabling Tasks then applies the module’s owned schema. Bind the three task access ports before invoking writes; their default implementations deny commands.
 
 ## Завершение и чтение задачи
 
