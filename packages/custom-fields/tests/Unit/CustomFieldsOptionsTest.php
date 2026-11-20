@@ -5,18 +5,9 @@ declare(strict_types=1);
 use CoreX\CustomFields\Internal\CustomFieldsOptions;
 use Packman\Config\Exceptions\InvalidConfiguration;
 
-it('passes on an empty environment with the shipped composition', function (): void {
-    $options = CustomFieldsOptions::fromArray([]);
-
-    expect($options->composition->storageDriver)->toBe('jsonb')
-        ->and($options->composition->sources)->toBe(['static']);
-});
-
-it('rejects an unsupported storage composition', function (): void {
-    try {
-        CustomFieldsOptions::fromArray(['storage_driver' => 'redis']);
-        $this->fail('Invalid configuration was accepted.');
-    } catch (InvalidConfiguration $exception) {
-        expect($exception->violations)->toBe(['storage_driver: must be jsonb or eav']);
-    }
+it('validates the dynamic DDL setting and rejects ambiguous ownership configuration', function (): void {
+    expect(CustomFieldsOptions::fromArray([])->ddl)->toBeTrue()
+        ->and(CustomFieldsOptions::fromArray(['ddl' => false])->ddl)->toBeFalse()
+        ->and(fn () => CustomFieldsOptions::fromArray(['ddl' => null]))->toThrow(InvalidConfiguration::class)
+        ->and(fn () => CustomFieldsOptions::fromArray(['per_field_driver' => []]))->toThrow(InvalidConfiguration::class);
 });

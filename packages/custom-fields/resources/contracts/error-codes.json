@@ -5,57 +5,79 @@
         {
             "package": "axiomasoft/corex-custom-fields",
             "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
-            "case": "AttributeSchemaConflict",
-            "code": "custom-fields.attribute_schema_conflict",
-            "type": "urn:packman:problem:custom-fields.attribute_schema_conflict",
-            "status": 409,
-            "title": "Attribute schema conflict.",
-            "retryable": true,
-            "category": "conflict"
-        },
-        {
-            "package": "axiomasoft/corex-custom-fields",
-            "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
-            "case": "AttributeSchemaRetryExhausted",
-            "code": "custom-fields.attribute_schema_retry_exhausted",
-            "type": "urn:packman:problem:custom-fields.attribute_schema_retry_exhausted",
-            "status": 409,
-            "title": "Attribute schema retry exhausted.",
-            "retryable": false,
-            "category": "conflict"
-        },
-        {
-            "package": "axiomasoft/corex-custom-fields",
-            "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
-            "case": "AttributesAccessDenied",
-            "code": "custom-fields.attributes_access_denied",
-            "type": "urn:packman:problem:custom-fields.attributes_access_denied",
+            "case": "AccessDenied",
+            "code": "custom-fields.access_denied",
+            "type": "urn:packman:problem:custom-fields.access_denied",
             "status": 403,
-            "title": "Attributes access denied.",
+            "title": "Access denied.",
             "retryable": false,
             "category": "authorization"
         },
         {
             "package": "axiomasoft/corex-custom-fields",
             "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
-            "case": "AttributesEngineUnavailable",
-            "code": "custom-fields.attributes_engine_unavailable",
-            "type": "urn:packman:problem:custom-fields.attributes_engine_unavailable",
+            "case": "ClaimLost",
+            "code": "custom-fields.claim_lost",
+            "type": "urn:packman:problem:custom-fields.claim_lost",
+            "status": 409,
+            "title": "Claim lost.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex-custom-fields",
+            "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+            "case": "DocumentRevisionMismatch",
+            "code": "custom-fields.document_revision_mismatch",
+            "type": "urn:packman:problem:custom-fields.document_revision_mismatch",
+            "status": 409,
+            "title": "Document revision mismatch.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex-custom-fields",
+            "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+            "case": "FieldTypeUnavailable",
+            "code": "custom-fields.field_type_unavailable",
+            "type": "urn:packman:problem:custom-fields.field_type_unavailable",
             "status": 503,
-            "title": "Attributes engine unavailable.",
+            "title": "Field type unavailable.",
             "retryable": false,
             "category": "unavailable"
         },
         {
             "package": "axiomasoft/corex-custom-fields",
             "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
-            "case": "InvalidAttributeTables",
-            "code": "custom-fields.invalid_attribute_tables",
-            "type": "urn:packman:problem:custom-fields.invalid_attribute_tables",
-            "status": 500,
-            "title": "Invalid attribute tables.",
+            "case": "IdempotencyConflict",
+            "code": "custom-fields.idempotency_conflict",
+            "type": "urn:packman:problem:custom-fields.idempotency_conflict",
+            "status": 409,
+            "title": "Idempotency conflict.",
             "retryable": false,
-            "category": "internal"
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex-custom-fields",
+            "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+            "case": "InvalidFieldValue",
+            "code": "custom-fields.invalid_field_value",
+            "type": "urn:packman:problem:custom-fields.invalid_field_value",
+            "status": 422,
+            "title": "Invalid field value.",
+            "retryable": false,
+            "category": "validation"
+        },
+        {
+            "package": "axiomasoft/corex-custom-fields",
+            "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+            "case": "SchemaRevisionMismatch",
+            "code": "custom-fields.schema_revision_mismatch",
+            "type": "urn:packman:problem:custom-fields.schema_revision_mismatch",
+            "status": 409,
+            "title": "Schema revision mismatch.",
+            "retryable": false,
+            "category": "conflict"
         }
     ]
 }

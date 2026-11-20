@@ -49,9 +49,14 @@ abstract class PgTestCase extends Orchestra
 
     protected function defineDatabaseMigrations(): void
     {
+        $verified = DB::selectOne('SELECT current_database() AS db')->db;
+
+        if ($verified !== (getenv('PGSQL_DATABASE') ?: 'corex_test') || ! str_ends_with($verified, '_test')) {
+            throw new RuntimeException('The connected test database differs from the requested database.');
+        }
         DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
         DB::statement('CREATE SCHEMA public');
         DB::purge('pgsql');
-        $this->migrateSchemaSets(['axiomasoft/corex-custom-fields:tenant'], DB::getDefaultConnection());
+        $this->migrateSchemaSets(['axiomasoft/corex:tenant', 'axiomasoft/corex-custom-fields:tenant'], DB::getDefaultConnection());
     }
 }

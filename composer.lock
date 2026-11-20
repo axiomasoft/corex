@@ -167,7 +167,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/custom-fields",
-                "reference": "f32e3a82a9abdf592fb891003484a64da84af2eb"
+                "reference": "7f05046b94f12fe9bd3b62321f7f096b954cff58"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -187,9 +187,6 @@
                 "orchestra/testbench": "^11.3",
                 "orchestra/testbench-core": "^11.5",
                 "symfony/process": "^7.2|^8.0"
-            },
-            "suggest": {
-                "axiomasoft/corex": "Provides EntityRegistry and ModuleRegistry for dynamic field definitions; without it SchemaOperations stays unavailable and the static catalogue remains usable."
             },
             "type": "library",
             "extra": {
@@ -213,11 +210,13 @@
                     "profile": "laravel-package",
                     "error-prefix": "custom-fields",
                     "owns": [
-                        "Contracts",
-                        "Data",
                         "Errors",
-                        "Exceptions",
-                        "Internal"
+                        "Internal",
+                        "Laravel",
+                        "Query",
+                        "Schemas",
+                        "Types",
+                        "Values"
                     ]
                 }
             },
@@ -257,7 +256,7 @@
             "license": [
                 "MIT"
             ],
-            "description": "Typed attribute ports and safe schema-operation bridge for CoreX.",
+            "description": "Versioned custom field schemas, typed values and PostgreSQL storage for CoreX.",
             "transport-options": {
                 "relative": true
             }
@@ -551,7 +550,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/notifications",
-                "reference": "258f769dbff901d85993ca44c4cb73092b77f878"
+                "reference": "03e60b7f05d35c0c76389ffe2675e964149c1d66"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -601,7 +600,8 @@
                         "Inbox",
                         "Internal",
                         "Laravel",
-                        "Preferences"
+                        "Preferences",
+                        "Runtime"
                     ]
                 }
             },
@@ -646,7 +646,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/operations",
-                "reference": "3eb7bdab7d4f735ba8d534a7ee04d9e3b4d14188"
+                "reference": "f17e7d217771dc2937276801aa77cf0284b58854"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -735,10 +735,13 @@
             },
             "scripts": {
                 "test": [
-                    "pest"
+                    "pest --exclude-group=pg"
+                ],
+                "test:pg": [
+                    "pest --group=pg"
                 ],
                 "test:coverage": [
-                    "pest --coverage --min=80"
+                    "pest --exclude-group=pg --coverage --min=80"
                 ],
                 "analyse": [
                     "cd ../.. && vendor/bin/phpstan analyse -c packages/operations/phpstan.neon --memory-limit=2G --no-progress"
@@ -1614,7 +1617,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/workflow",
-                "reference": "4f1f555dfb5426e5441bdf570cb89e11af04fe53"
+                "reference": "562fe83f8ca0c23d6f4e5aec1a45c9e8f2ce6f95"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1656,6 +1659,8 @@
                     "owns": [
                         "Contracts",
                         "Data",
+                        "Enums",
+                        "Execution",
                         "Internal",
                         "Laravel"
                     ]

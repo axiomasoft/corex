@@ -75,7 +75,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Access\\Access\\Laravel\\PrincipalIdentity::fromPrincipal`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -88,7 +88,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Access\\Access\\Laravel\\PrincipalIdentity::getAuthIdentifierName`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -101,7 +101,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Access\\Access\\Laravel\\PrincipalIdentity::getAuthPasswordName`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -114,7 +114,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Access\\Access\\Laravel\\PrincipalIdentity::getMorphClass`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -127,7 +127,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Access\\Access\\Laravel\\PrincipalIdentity::getRememberToken`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -140,7 +140,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Access\\Access\\Laravel\\PrincipalIdentity::getRememberTokenName`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -153,7 +153,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Access\\Access\\Laravel\\PrincipalIdentity::setRememberToken`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -166,7 +166,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Access\\Enums\\Scope::weight`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -374,7 +374,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Audit\\Laravel\\HasAuditLog::bootHasAuditLog`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -387,33 +387,20 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Context\\Exceptions\\ScopeContextMismatch::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
         {
-            "symbol": "CoreX\\CustomFields\\Data\\AttributeLifecycle::assertTransition",
-            "source": "packages/custom-fields/src/Data/AttributeLifecycle.php",
-            "source_sha256": "ddc6c022eab26d7ae40340d97a261ef60f1e2466c5e758dfd9837894ecd44402",
+            "symbol": "CoreX\\CustomFields\\Errors\\Exceptions\\FieldFailure::errorDescriptor",
+            "source": "packages/custom-fields/src/Errors/Exceptions/FieldFailure.php",
+            "source_sha256": "3e04e9ba479aa408abbd53b8dc901144737b12dd0e84da30e5446caf6c004385",
             "kind": "external-api",
-            "reason": "Host custom-field administration validates lifecycle transitions before asking its repository to persist an attribute state change.",
+            "reason": "Laravel error adapters obtain the stable code, category and retryability through DescribesError.",
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
-                "anchor": "`CoreX\\CustomFields\\Data\\AttributeLifecycle::assertTransition`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
-            },
-            "expires": null
-        },
-        {
-            "symbol": "CoreX\\CustomFields\\Exceptions\\InvalidAttributeTables::errorDescriptor",
-            "source": "packages/custom-fields/src/Exceptions/InvalidAttributeTables.php",
-            "source_sha256": "dbcfb444bf7b14ebf8ff2146f782df253ee46f94cc5a2b4b593fa62bfdd150e1",
-            "kind": "external-api",
-            "reason": "Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message.",
-            "root": {
-                "path": "docs/reference/public-entrypoints.md",
-                "anchor": "`CoreX\\CustomFields\\Exceptions\\InvalidAttributeTables::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "anchor": "`CoreX\\CustomFields\\Errors\\Exceptions\\FieldFailure::errorDescriptor`",
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -439,7 +426,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Data\\Exceptions\\InvalidScopePayload::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -452,7 +439,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Departments\\Exceptions\\CrossWorkspaceMoveException::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -465,7 +452,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Departments\\Exceptions\\DepartmentCycleException::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -478,7 +465,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Features\\Data\\FeatureFlagDefinition::make`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -491,7 +478,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Features\\Data\\FeatureFlagDefinition::module`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -504,7 +491,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Features\\Data\\FeatureFlagDefinition::payload`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -556,7 +543,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Intl\\Currency\\Exceptions\\InvalidRateException::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -569,7 +556,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Intl\\Currency\\Exceptions\\SnapshotExpiredException::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -582,7 +569,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Intl\\Formatting\\Exceptions\\UnsupportedFormattingException::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -621,7 +608,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Intl\\Locale\\Exceptions\\InvalidLocaleException::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -634,7 +621,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Intl\\Territory\\Exceptions\\AccessDeniedException::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -647,7 +634,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Intl\\Territory\\Exceptions\\OperationConflictException::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -660,7 +647,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Intl\\Territory\\Exceptions\\SchemaMismatchException::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -751,7 +738,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\Contracts\\Cancellable::cancel`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -764,7 +751,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\Contracts\\Cancellable::isCancelled`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -777,7 +764,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\Exceptions\\InboxRefused::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -790,7 +777,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\Exceptions\\InvalidMessage::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -803,7 +790,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\Exceptions\\OutboxLeaseLost::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -816,7 +803,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\Exceptions\\OutboxRefused::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -829,7 +816,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\Exceptions\\UnknownMessageContract::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -881,7 +868,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\Internal\\OpenTelemetryTraceContextBridge::linkedConsumer` through `CoreX\\Messaging\\Contracts\\TraceContextBridge::linkedConsumer`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -907,7 +894,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\PHPStan\\Rules\\DurablePayloadPromotedPropertyRule::getNodeType`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -920,7 +907,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\PHPStan\\Rules\\DurablePayloadPromotedPropertyRule::processNode`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -933,7 +920,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\PHPStan\\Rules\\DurablePayloadRule::getNodeType`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -946,7 +933,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Messaging\\PHPStan\\Rules\\DurablePayloadRule::processNode`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -959,7 +946,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Notifications\\Delivery\\Contracts\\NotificationChannelDriver::reconcile`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -985,7 +972,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Notifications\\Delivery\\Internal\\InAppChannelDriver::reconcile` through `CoreX\\Notifications\\Delivery\\Contracts\\NotificationChannelDriver::reconcile`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1037,7 +1024,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Notifications\\Inbox\\Exceptions\\NotificationAccessDenied::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1050,7 +1037,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Notifications\\Inbox\\Exceptions\\NotificationOperationConflict::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1102,7 +1089,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\Bulk\\Internal\\TransferCapabilityUnavailable::errorDescriptor` through `Packman\\Errors\\Contracts\\DescribesError::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1128,7 +1115,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\Bulk\\Laravel\\BulkRouteRegistrar::register`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1141,7 +1128,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\Cost\\Exceptions\\BudgetRateLimited::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1154,7 +1141,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\Cost\\Exceptions\\BudgetStoreUnavailable::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1167,7 +1154,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\Definition\\Contracts\\OperationDefinitionValidator::validateRoutePair`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1180,7 +1167,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\Definition\\Data\\ResourceId::__toString`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1297,7 +1284,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\OperationsServiceProvider::boot`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1310,7 +1297,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\OperationsServiceProvider::register`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1323,7 +1310,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\Testing\\CatalogueModuleFixture::active`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1336,7 +1323,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\Testing\\ModuleFixture::active`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1362,7 +1349,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Operations\\Validation\\Laravel\\JsonValueFactory::fromDecoded`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1375,7 +1362,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Recurrence\\Data\\DateWindow::__construct`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1388,7 +1375,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Recurrence\\Data\\InstantWindow::__construct`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1401,7 +1388,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Recurrence\\Exceptions\\StaleCursorException::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1414,7 +1401,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Recurrence\\Exceptions\\UnsupportedEnvironmentException::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1427,7 +1414,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\RecurringTasks\\Exceptions\\MaterializationConflict::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1440,7 +1427,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\RecurringTasks\\Exceptions\\StaleMaterialization::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1453,7 +1440,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\RecurringTasks\\Exceptions\\UnsupportedMaterialization::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1466,7 +1453,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\RecurringTasks\\Internal\\CaptureTaskCompletion::capture` through `CoreX\\Tasks\\Task\\Contracts\\TaskCompletionCapture::capture`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1544,7 +1531,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\SearchMeilisearch\\Exceptions\\InvalidMeilisearchConfiguration::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1557,7 +1544,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\SearchMeilisearch\\Internal\\MeilisearchSearchProvider::capabilities` through `CoreX\\Search\\Contracts\\SearchProvider::capabilities`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1570,7 +1557,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Search\\Contracts\\SearchDocuments::page`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1583,7 +1570,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Search\\Exceptions\\InvalidSearchConfiguration::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1596,7 +1583,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Search\\Internal\\Postgres\\PostgresSearchProvider::capabilities` through `CoreX\\Search\\Contracts\\SearchProvider::capabilities`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1648,7 +1635,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Settings\\Data\\SettingsScope::account`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1661,7 +1648,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Settings\\Exceptions\\SettingValueTooLargeException::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1674,7 +1661,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Settings\\Exceptions\\UnsupportedScopeException::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1687,7 +1674,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Storage\\Exceptions\\StorageCapabilityUnavailable::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1700,7 +1687,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Storage\\Exceptions\\StorageOperationFailed::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1713,7 +1700,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tasks\\Access\\Exceptions\\TasksModuleDisabled::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1739,7 +1726,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tasks\\Planning\\Exceptions\\InvalidPlanningDraft::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1752,7 +1739,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tasks\\Planning\\Exceptions\\PlanningConflict::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -1843,7 +1830,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tasks\\Task\\Contracts\\TaskCompletionCapture::capture`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2038,7 +2025,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Account\\Events\\AccountPurged::name`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2051,7 +2038,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Account\\Events\\AccountSuspended::name`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2064,7 +2051,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Account\\Events\\ExportReady::name`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2077,7 +2064,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Account\\Events\\GraceStarted::name`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2090,7 +2077,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Account\\Events\\TrialStarted::name`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2168,7 +2155,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Authentication\\Exceptions\\OidcAuthenticationException::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2181,7 +2168,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Authentication\\Exceptions\\OidcAuthenticationException::render`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2194,7 +2181,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\DomainTrust\\Data\\NormalizedHost::__toString`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2207,7 +2194,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\DomainTrust\\Exceptions\\DomainTrustDenied::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2220,7 +2207,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\DomainTrust\\Exceptions\\DomainTrustDisabled::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2298,7 +2285,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Identity\\Events\\UserSynced::name`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2337,7 +2324,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Impersonation\\Events\\ImpersonationEnded::name`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2350,7 +2337,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Impersonation\\Events\\ImpersonationStarted::name`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2389,7 +2376,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Laravel\\Commands\\IdentitiesReconcileCommand::handle`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2428,7 +2415,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Laravel\\Commands\\TenantsMigrateCommand::handle`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2519,7 +2506,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Laravel\\Http\\Middleware\\AllowImpersonatedWrites::handle`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2532,7 +2519,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Laravel\\Http\\Middleware\\DenyImpersonatedWrites::handle`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2545,7 +2532,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Laravel\\Http\\Middleware\\EnforceSessionLifetime::handle`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2558,7 +2545,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ImpersonationSessionGuard::handle`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2610,7 +2597,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Laravel\\Scopes\\WorkspaceScope::apply`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2649,7 +2636,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Membership\\Events\\MembershipGranted::__construct`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2662,7 +2649,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Membership\\Exceptions\\CentralProtocolViolation::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2675,7 +2662,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Membership\\Exceptions\\CentralUnauthorized::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2688,7 +2675,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Membership\\Exceptions\\CentralUnavailable::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2701,7 +2688,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Membership\\Exceptions\\CredentialIssuanceDenied::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2714,7 +2701,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Membership\\Exceptions\\InboxConflict::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2727,7 +2714,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Membership\\Exceptions\\PairStoreViolation::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2740,7 +2727,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Membership\\Exceptions\\ProjectionDenied::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2753,7 +2740,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Membership\\Exceptions\\RevokeUncertain::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2766,7 +2753,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Provisioning\\Exceptions\\ClaimConflict::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2779,7 +2766,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Provisioning\\Exceptions\\ClaimUnavailable::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2792,7 +2779,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Provisioning\\Exceptions\\TemplateIntegrityException::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2805,7 +2792,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Runtime\\Exceptions\\TenantContextUnavailable::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2818,7 +2805,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Runtime\\Exceptions\\TenantCouldNotBeIdentifiedByHostException::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2831,7 +2818,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Workspace\\Exceptions\\InvitationNotAcceptableException::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -2844,7 +2831,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Tenancy\\Workspace\\Exceptions\\NoDefaultWorkspaceException::errorDescriptor`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -3013,7 +3000,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Webhooks\\Contracts\\WebhookDeliveryStore::forEvent`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -3052,7 +3039,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Webhooks\\Internal\\SqlWebhookDeliveryStore::forEvent` through `CoreX\\Webhooks\\Contracts\\WebhookDeliveryStore::forEvent`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -3091,7 +3078,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Workflow\\Contracts\\EngineAdapter::start`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },
@@ -3104,7 +3091,7 @@
             "root": {
                 "path": "docs/reference/public-entrypoints.md",
                 "anchor": "`CoreX\\Workflow\\Internal\\UnavailableEngineAdapter::start` through `CoreX\\Workflow\\Contracts\\EngineAdapter::start`",
-                "sha256": "6eb43c9e34f0ebeb1c59f4a8a70d60c4628437331d738cf064f9730b2bd635ee"
+                "sha256": "7202113c917266c08834c94410f20e8f5bd842b990b44a3944abc342bf0f5737"
             },
             "expires": null
         },

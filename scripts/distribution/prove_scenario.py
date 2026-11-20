@@ -170,9 +170,14 @@ def prove(candidate: Path | None, case: str, evidence: Path, php: str, *, varian
     if not (fixture / "case.json").is_file():
         raise ScenarioError(f"{case} is required from stage {phases[case]} and its fixture is missing")
     spec = load_json(fixture / "case.json")
+    profiles = profile_module()
     fixtures = [fixture.relative_to(ROOT), STAGES.relative_to(ROOT)]
     if spec.get("host_support") or any(row.get("host_support") for row in spec.get("variants", {}).values()):
         fixtures.append(SUPPORT.relative_to(ROOT))
+    for item in [spec, *spec.get("variants", {}).values()]:
+        extension = item.get("profile", {}).get("extension_fixture")
+        if extension is not None:
+            fixtures.append(profiles.extension_source(extension))
     if git_bytes(ROOT, "status", "--porcelain=v1", "--untracked-files=all", "--", *map(str, fixtures)):
         raise ScenarioError(f"scenario source is dirty: {case}")
     if spec["id"] != case:
@@ -181,7 +186,6 @@ def prove(candidate: Path | None, case: str, evidence: Path, php: str, *, varian
     if variant is not None and (variants is None or variant not in variants):
         raise ScenarioError(f"unknown scenario variant: {variant}")
     evidence.mkdir(parents=True, exist_ok=False)
-    profiles = profile_module()
     interpreter = profiles.interpreter_for(php, profiles.interpreters())
     with tempfile.TemporaryDirectory(prefix=f"corex-scenario-{case}-") as temporary:
         root = Path(temporary)
@@ -201,9 +205,10 @@ def prove(candidate: Path | None, case: str, evidence: Path, php: str, *, varian
                 directory = evidence / name
                 directory.mkdir()
                 variant_spec = {**spec, **variants[name], "variant": name}
-                receipt["variants"][name] = prove_variant(
-                    variant_spec, fixture, directory, root / name, repository, binding, names, profiles, interpreter, postgres,
-                )
+                with tempfile.TemporaryDirectory(prefix="consumer-", dir=root) as consumer:
+                    receipt["variants"][name] = prove_variant(
+                        variant_spec, fixture, directory, Path(consumer), repository, binding, names, profiles, interpreter, postgres,
+                    )
             receipt.update({"assertions": sum(row["assertions"] for row in receipt["variants"].values()), "exit_code": 0})
         finally:
             write_json(evidence / "receipt.json", receipt)
@@ -254,6 +259,8 @@ def prove_variant(spec: dict, fixture: Path, evidence: Path, root: Path, reposit
                 for row in load_json(consumer / "composer.lock")["packages"] if row["name"] in prerequisite_names
             }
             receipt.update(assert_dist_install(consumer, repository, declared, ROOT))
+            if extension := profile.get("extension_fixture"):
+                receipt["extension"] = profiles.assert_fixture_extension(consumer, extension)
             witnesses = run_actions(spec, consumer, fixture, runtime, evidence, receipt["processes"])
             receipt.update({
                 "assertions": sum(report["assertions"] for report in witnesses.values()),

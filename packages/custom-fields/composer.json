@@ -1,6 +1,6 @@
 {
     "name": "axiomasoft/corex-custom-fields",
-    "description": "Typed attribute ports and safe schema-operation bridge for CoreX.",
+    "description": "Versioned custom field schemas, typed values and PostgreSQL storage for CoreX.",
     "type": "library",
     "license": "MIT",
     "require": {
@@ -15,9 +15,6 @@
         "axiomasoft/packman": "^0.1",
         "axiomasoft/packman-modules": "^0.1.1",
         "axiomasoft/packman-schema": "^0.1"
-    },
-    "suggest": {
-        "axiomasoft/corex": "Provides EntityRegistry and ModuleRegistry for dynamic field definitions; without it SchemaOperations stays unavailable and the static catalogue remains usable."
     },
     "autoload": {
         "psr-4": {
@@ -53,11 +50,13 @@
             "profile": "laravel-package",
             "error-prefix": "custom-fields",
             "owns": [
-                "Contracts",
-                "Data",
                 "Errors",
-                "Exceptions",
-                "Internal"
+                "Internal",
+                "Laravel",
+                "Query",
+                "Schemas",
+                "Types",
+                "Values"
             ]
         }
     },

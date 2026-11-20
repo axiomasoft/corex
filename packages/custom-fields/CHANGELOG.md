@@ -1,12 +1,9 @@
 # Changelog
 
-## Unreleased — CoreX 2.0 fact envelope
+## Unreleased — Versioned custom fields
 
-- Append `attributes.values.changed.v1` in envelope v2 through the exact field mutation connection. The envelope includes the verified scope, record subject and operation lineage. The v1 payload schema is shipped with Custom Fields.
-
-## Unreleased — CoreX 2.0 field scope
-
-- `AttributeStore` uses `CoreX\Data\Data\FieldSelection` for explicit field selection. `FilterPlan` carries the field-use evidence produced for the verified scope.
+- Use FieldSchemas and FieldCatalogue to publish and discover declared and runtime fields. FieldValues persists typed UUID-addressed slots in PostgreSQL and emits fields.values.changed.v2 with the receipt. Schema requests and switches produce their respective v2 facts.
+- FieldFilter compiles authorized typed operators. Package types and external codecs share a versioned registry. The schema worker owns backfill and concurrent DDL.
 
 ## Unreleased — Packman governance
 

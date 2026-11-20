@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\CustomFields\Schemas\Internal;
+
+use CoreX\CustomFields\Errors\Enums\CustomFieldsErrorCode;
+use CoreX\CustomFields\Errors\Exceptions\FieldFailure;
+use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\EntityHandle;
+use CoreX\Data\Data\FieldSelection;
+use CoreX\Data\Data\RecordRef;
+use CoreX\Data\Enums\FieldUse;
+use Packman\Attributes\Internal;
+
+#[Internal]
+final readonly class SchemaAccess
+{
+    public function __construct(private DataScopeAuthorizer $policy) {}
+
+    public function manage(DataScope $scope, EntityHandle $entity, FieldUse $use = FieldUse::Write): void
+    {
+        if (! $this->policy->authorize($scope, new RecordRef('fields.schema', $entity->value), new FieldSelection([]), $use)->allowed) {
+            throw new FieldFailure(CustomFieldsErrorCode::AccessDenied);
+        }
+    }
+}

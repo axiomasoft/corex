@@ -6,9 +6,8 @@ namespace CoreX\CustomFields;
 
 use CoreX\CustomFields\Errors\Internal\PackageProblemDefinitions;
 use CoreX\CustomFields\Internal\CustomFieldsSchemaSets;
-use CoreX\CustomFields\Internal\Laravel\AttributeBindingsRegistrar;
-use CoreX\CustomFields\Internal\Laravel\AttributeCompositionRegistrar;
-use CoreX\CustomFields\Internal\Laravel\AttributeMessagingRegistrar;
+use CoreX\CustomFields\Laravel\FieldBindingsRegistrar;
+use CoreX\CustomFields\Schemas\Laravel\FieldSchemaRegistrar;
 use Illuminate\Support\ServiceProvider;
 use Override;
 use Packman\Attributes\Spi;
@@ -22,9 +21,8 @@ final class CustomFieldsServiceProvider extends ServiceProvider
 {
     /** @var list<class-string<PackageRegistrar>> */
     private const array REGISTRARS = [
-        AttributeMessagingRegistrar::class,
-        AttributeCompositionRegistrar::class,
-        AttributeBindingsRegistrar::class,
+        FieldBindingsRegistrar::class,
+        FieldSchemaRegistrar::class,
     ];
 
     #[Override]

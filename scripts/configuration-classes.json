@@ -204,68 +204,14 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-custom-fields.definitions": {
+        "corex-custom-fields.ddl": {
             "owner": "axiomasoft/corex-custom-fields",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
-            "validation": "unobserved",
+            "validation": "boot",
             "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex-custom-fields.drivers.ddl": {
-            "owner": "axiomasoft/corex-custom-fields",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex-custom-fields.drivers.eav": {
-            "owner": "axiomasoft/corex-custom-fields",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex-custom-fields.drivers.jsonb": {
-            "owner": "axiomasoft/corex-custom-fields",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex-custom-fields.sources": {
-            "owner": "axiomasoft/corex-custom-fields",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex-custom-fields.storage_by_entity": {
-            "owner": "axiomasoft/corex-custom-fields",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex-custom-fields.storage_driver": {
-            "owner": "axiomasoft/corex-custom-fields",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
+            "notes": "Enables verified direct PostgreSQL index DDL."
         },
         "corex-intl.formatting.icu_enabled": {
             "owner": "axiomasoft/corex-intl",
@@ -1811,13 +1757,7 @@
         }
     },
     "options_field_overrides": {
-        "corex-custom-fields.definitions": "CustomFieldsOptions::$composition",
-        "corex-custom-fields.drivers.ddl": "CustomFieldsOptions::$composition",
-        "corex-custom-fields.drivers.eav": "CustomFieldsOptions::$composition",
-        "corex-custom-fields.drivers.jsonb": "CustomFieldsOptions::$composition",
-        "corex-custom-fields.sources": "CustomFieldsOptions::$composition",
-        "corex-custom-fields.storage_by_entity": "CustomFieldsOptions::$composition",
-        "corex-custom-fields.storage_driver": "CustomFieldsOptions::$composition",
+        "corex-custom-fields.ddl": "CustomFieldsOptions::$ddl",
         "corex-operations.cursor.current_key_id": "ApiOptions::$cursorKeyId",
         "corex-operations.routes.middleware": "ApiOptions::$routeMiddleware",
         "corex-operations.routes.prefix": "ApiOptions::$routePrefix",

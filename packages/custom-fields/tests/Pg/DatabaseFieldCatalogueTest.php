@@ -2,137 +2,77 @@
 
 declare(strict_types=1);
 
-use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\CustomFields\Data\AttributeDefinition;
-use CoreX\CustomFields\Data\AttributeId;
-use CoreX\CustomFields\Data\AttributeLifecycle;
-use CoreX\CustomFields\Data\IndexPolicy;
-use CoreX\CustomFields\Internal\Schema\DatabaseFieldCatalogue;
-use CoreX\CustomFields\Tests\Pg\DatabaseFieldCataloguePgTestCase;
-use CoreX\CustomFields\Tests\Support\PgTestSupport;
-use Illuminate\Database\QueryException;
+use CoreX\CustomFields\Errors\Exceptions\FieldFailure;
+use CoreX\CustomFields\Schemas\Data\FieldSchemaChange;
+use CoreX\CustomFields\Schemas\Internal\DatabaseFieldCatalogue;
+use CoreX\CustomFields\Schemas\Internal\SchemaConflict;
+use CoreX\CustomFields\Tests\Pg\SchemaPgTestCase;
+use CoreX\Data\Contracts\FieldUsePolicy;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\EntityHandle;
+use CoreX\Data\Data\FieldUsePlan;
+use CoreX\Data\Data\FieldUseRequest;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use Packman\Schema\Contracts\Migration\SchemaSets;
 
-uses(DatabaseFieldCataloguePgTestCase::class)->group('pg');
+uses(SchemaPgTestCase::class)->group('pg');
 
-function databaseCatalogue(): DatabaseFieldCatalogue
-{
-    $connection = DB::connection();
-
-    return new DatabaseFieldCatalogue(
-        connection: $connection,
-        tables: PgTestSupport::tables(),
-        current: jsonbCurrent(),
-        drivers: ['jsonb' => true, 'eav' => true],
-    );
-}
-
-function databaseDefinition(
-    string $id = '018f0b5d-0000-7000-8000-000000000001',
-    int $revision = 1,
-    string $key = 'website',
-    AttributeLifecycle $lifecycle = AttributeLifecycle::Active,
-    array $readKeys = [],
-): AttributeDefinition {
-    return new AttributeDefinition(
-        id: AttributeId::v7($id),
-        entity: 'contact',
-        key: $key,
-        revision: $revision,
-        type: 'text',
-        lifecycle: $lifecycle,
-        required: false,
-        searchable: true,
-        constraints: ['max' => 255],
-        readKeys: $readKeys,
-        writeKeys: [],
-        index: IndexPolicy::None,
-    );
-}
-
-it('migrates and rolls back the three owned catalogue tables on an empty database', function (): void {
-
-    expect(Schema::hasTable('sys_attribute_definitions'))->toBeTrue()
-        ->and(Schema::hasTable('sys_attribute_key_reservations'))->toBeTrue()
-        ->and(Schema::hasTable('sys_attribute_backfills'))->toBeTrue();
-
-    $this->artisan('migrate:rollback', [
-        '--database' => 'pgsql',
-        '--path' => resolve(SchemaSets::class)->get('axiomasoft/corex-custom-fields:tenant')->path,
-        '--realpath' => true,
-        '--step' => 3,
-    ])->assertSuccessful();
-
-    expect(Schema::hasTable('sys_attribute_definitions'))->toBeFalse()
-        ->and(Schema::hasTable('sys_attribute_key_reservations'))->toBeFalse()
-        ->and(Schema::hasTable('sys_attribute_backfills'))->toBeFalse();
-
-    $this->migrateSchemaSets(['axiomasoft/corex-custom-fields:tenant'], 'pgsql');
+it('unifies declared and runtime fields with immutable code ownership and retired identity', function (): void {
+    $schema = $this->catalogue->snapshot($this->scope, $this->entity);
+    expect($schema->field('serial')->id->value)->toBe($this->declared->id->value)
+        ->and(fn () => $this->schemas->plan($this->scope, FieldSchemaChange::retire($this->entity, $this->declared->id), $schema->revision))->toThrow(SchemaConflict::class);
+    $extra = $this->field('location', 'text');
+    expect($this->drain($this->admit(FieldSchemaChange::add($extra)))->state)->toBe('completed')
+        ->and($this->drain($this->admit(FieldSchemaChange::retire($this->entity, $extra->id)))->state)->toBe('completed')
+        ->and(fn () => $this->admit(FieldSchemaChange::add($extra)))->toThrow(SchemaConflict::class, 'retired-field-identity')
+        ->and(DB::table('sys_attribute_definitions')->where('field_id', $extra->id->value)->count())->toBe(2);
+    $tables = DB::select("SELECT relname FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname=current_schema() AND c.relkind='r' AND (relname LIKE 'sys_attribute_%' OR relname='sys_field_schema_heads')");
+    expect(array_column($tables, 'relname'))->toHaveCount(7)->not->toContain('sys_attribute_eav_values', 'sys_attribute_eav_records');
 });
 
-it('retains immutable revisions and projects only the latest revision', function (): void {
-    $catalogue = databaseCatalogue();
-    $first = databaseDefinition();
-    $second = databaseDefinition(revision: 2);
-
-    $catalogue->publish(jsonbScope(), $first, ['website' => 'current']);
-    $catalogue->publish(jsonbScope(), $second, ['website' => 'current']);
-
-    $snapshot = $catalogue->snapshot(jsonbScope(), 'contact');
-
-    expect(DB::table('sys_attribute_definitions')->count())->toBe(2)
-        ->and(DB::table('sys_attribute_key_reservations')->count())->toBe(1)
-        ->and($snapshot->activeFields)->toHaveCount(1)
-        ->and($snapshot->activeFields[0]['revision'])->toBe(2)
-        ->and($snapshot->driverCapabilities)->toBe(['jsonb' => true, 'eav' => true]);
+it('holds the old machine-key reservation through switch and then allows a fresh UUID to use it', function (): void {
+    $field = $this->field('old_key', 'int');
+    expect($this->drain($this->admit(FieldSchemaChange::add($field)))->state)->toBe('completed');
+    $op = $this->admit(FieldSchemaChange::rename($this->entity, $field->id, 'new_key'));
+    $this->step();
+    $this->step();
+    $this->step();
+    expect($this->schemas->inspect($this->scope, $op)->state)->toBe('switched')
+        ->and(DB::table('sys_attribute_key_reservations')->where('machine_key', 'old_key')->value('field_id'))->toBe($field->id->value)
+        ->and(fn () => $this->catalogue->snapshot($this->scope, $this->entity)->field('old_key'))->toThrow(InvalidArgumentException::class);
+    expect($this->drain($op)->state)->toBe('completed');
+    $fresh = $this->field('old_key', 'text');
+    expect($this->drain($this->admit(FieldSchemaChange::add($fresh)))->state)->toBe('completed')
+        ->and($this->catalogue->snapshot($this->scope, $this->entity)->field('old_key')->id)->toEqual($fresh->id);
 });
 
-it('rolls back definition publication when another id owns the current key', function (): void {
-    $catalogue = databaseCatalogue();
-    $catalogue->publish(jsonbScope(), databaseDefinition(), ['website' => 'current']);
-    $contender = databaseDefinition(id: '018f0b5d-0000-7000-8000-000000000002');
-
-    expect(fn (): mixed => $catalogue->publish(jsonbScope(), $contender, ['website' => 'current']))
-        ->toThrow(QueryException::class);
-
-    expect(DB::table('sys_attribute_definitions')->count())->toBe(1)
-        ->and(DB::table('sys_attribute_key_reservations')->value('attribute_id'))
-        ->toBe('018f0b5d-0000-7000-8000-000000000001');
+it('rejects conflicting names and code-owner impersonation without publishing another revision', function (): void {
+    $field = $this->field('other', 'int');
+    expect($this->drain($this->admit(FieldSchemaChange::add($field)))->state)->toBe('completed');
+    $base = $this->catalogue->snapshot($this->scope, $this->entity)->revision;
+    expect(fn () => $this->schemas->plan($this->scope, FieldSchemaChange::rename($this->entity, $field->id, 'serial'), $base))->toThrow(SchemaConflict::class, 'machine-key-conflict')
+        ->and(fn () => $this->schemas->plan($this->scope, FieldSchemaChange::add($this->field('forged', 'int', 'vendor/fixture')), $base))->toThrow(SchemaConflict::class, 'runtime-field-owner-conflict')
+        ->and($this->catalogue->snapshot($this->scope, $this->entity)->revision)->toEqual($base);
 });
 
-it('replaces the complete reservation set in the same transaction as a revision', function (): void {
-    $catalogue = databaseCatalogue();
-    $catalogue->publish(jsonbScope(), databaseDefinition(), ['website' => 'current']);
-    $migrating = databaseDefinition(
-        revision: 2,
-        key: 'site_url',
-        lifecycle: AttributeLifecycle::Migrating,
-        readKeys: ['website'],
-    );
-
-    $catalogue->publish(jsonbScope(), $migrating, ['website' => 'alias', 'site_url' => 'current']);
-
-    expect(DB::table('sys_attribute_key_reservations')->orderBy('key')->pluck('role', 'key')->all())
-        ->toBe(['site_url' => 'current', 'website' => 'alias'])
-        ->and(DB::table('sys_attribute_key_reservations')->pluck('current_revision')->unique()->all())
-        ->toBe([2]);
+it('requires a converter pinned to a real registered version for representation changes', function (): void {
+    $old = $this->field('historical', 'text');
+    expect($this->drain($this->admit(FieldSchemaChange::add($old)))->state)->toBe('completed');
+    $new = $this->field('historical', 'int', id: $old->id);
+    expect(fn () => $this->admit(FieldSchemaChange::revise($new)))->toThrow(SchemaConflict::class, 'versioned-converter-required')
+        ->and(fn () => $this->admit(FieldSchemaChange::revise($new, 'fixture.missing', 2)))->toThrow(FieldFailure::class)
+        ->and($this->catalogue->snapshot($this->scope, $this->entity)->field('historical')->type->value)->toBe('text');
 });
 
-it('rejects duplicate immutable revisions without changing reservations', function (): void {
-    $catalogue = databaseCatalogue();
-    $definition = databaseDefinition();
-    $catalogue->publish(jsonbScope(), $definition, ['website' => 'current']);
-
-    expect(fn (): mixed => $catalogue->publish(jsonbScope(), $definition, ['website' => 'current']))
-        ->toThrow(QueryException::class);
-
-    expect(DB::table('sys_attribute_definitions')->count())->toBe(1)
-        ->and(DB::table('sys_attribute_key_reservations')->count())->toBe(1);
-});
-
-it('checks the tenant connection before reading definitions', function (): void {
-    expect(fn (): mixed => databaseCatalogue()->snapshot(jsonbScope('pgsql:another_test'), 'contact'))
-        ->toThrow(ScopeContextMismatch::class);
+it('declines catalogue access for unregistered entities and omits fields with denied uses', function (): void {
+    expect(fn () => $this->catalogue->snapshot($this->scope, new EntityHandle('foreign.entity')))->toThrow(FieldFailure::class);
+    $schema = $this->catalogue->snapshot($this->scope, $this->entity);
+    $this->app->instance(FieldUsePolicy::class, new class implements FieldUsePolicy
+    {
+        public function plan(DataScope $scope, EntityHandle $entity, FieldUseRequest $request): FieldUsePlan
+        {
+            return FieldUsePlan::denied();
+        }
+    });
+    $hidden = $this->app->make(DatabaseFieldCatalogue::class)->snapshot($this->scope, $this->entity);
+    expect($hidden->fields)->toBe([])->and($hidden->revision)->toEqual($schema->revision)->and($hidden->mappingDigest)->toBe($schema->mappingDigest);
 });

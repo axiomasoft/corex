@@ -4,6 +4,7 @@ Baseline changes require an intentional surface change under PLAN3.D40.
 
 | Дата | Решение | Слои | Причина |
 |:--|:--|:--|:--|
+| 2026-11-21 | CoreX 2.0, этап 3 | php-surface, events, wire, schema | Новые контракты Custom Fields, три sealed facts, коды ошибок, JSONB-слоты, revisions и head. PostgreSQL tenant schema содержит семь таблиц владельца. |
 | 2026-11-21 | CoreX 2.0, этап 2 | php-surface, events, schema | Снимки фиксируют Messaging Envelope v2, явные транзакционные подключения, typed receipts и объявления контрактов. Tenant schema отражает scoped identity, атомарный inbox/outbox, доставку Notifications/Webhooks, Workflow intents и сохранение результата Media. PostgreSQL 18 записал каталог, PostgreSQL 16 проверил те же определения. |
 | 2026-11-20 | CoreX 2.0, этап 1 | php-surface, wire, schema | Снимки фиксируют доверенный scope v3, named grants, typed field use и ошибки допуска. Tenant schema хранит scope для Scheduler, digest runs и очереди schema operations. Access допускает отдельные действия для каждого способа использования поля. |
 | 2026-11-20 | CoreX 2.0, этап 0 | schema | Свежая PostgreSQL-установка исходных миграций даёт `aut_role_matrix.action` длиной 120 с проверкой грамматики действия и шесть центральных таблиц закреплённого AzGuard. Снимки фиксируют фактическую схему. Artisan-проверка повторной миграции завершается до сравнения снимка. |

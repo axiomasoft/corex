@@ -1,55 +1,31 @@
-# axiomasoft/corex-custom-fields
+# CoreX Custom Fields
 
-Typed PostgreSQL attribute-store, filter, and schema-operation ports for CoreX.
-
-`axiomasoft/corex-custom-fields` is a neutral owned engine. It reads active scalar declarations from the existing
-`EntityRegistry`/`ModuleRegistry`; it never creates a second field registry or product dependency.
-Its only tables are additive `sys_attribute_*` tables.
-
-The application selects either `jsonb` or `eav` storage. Both drivers enforce a trusted `DataScope`,
-including the physical `pgsql:<database>` identity, authorization callback, record version and write
-token. Reads and writes always validate the active field snapshot and all fifteen supported scalar
-types when `axiomasoft/corex` is installed and both registries are bound.
-
-`axiomasoft/corex` is a required dependency. If its entity/module registries have not been bound,
-`FieldCatalogue`, `AttributeStore`, and `SchemaOperations` resolve to `UnavailableAttributes`.
-Dynamic attribute fields remain unavailable until the host completes that composition.
-
-Schema requests persist an idempotent operation only. They do not execute SQL in the request path.
-A trusted asynchronous worker invokes `SchemaOperationWorker` with a fresh `DataScope`; it claims
-the operation transactionally, executes PostgreSQL concurrent index DDL outside that transaction,
-checks the catalog, preserves a 30-day retirement grace period before a managed-index drop, and
-denies stale restore epochs. The application is responsible for dispatching that worker from its
-queue or console boundary; it must never be called from HTTP handling.
+Custom Fields provides versioned definitions, typed values and field-use policy checks for an entity such as equipment. It stores each record's values in a PostgreSQL JSONB document.
 
 ## Installation
 
-Install with `composer require axiomasoft/corex-custom-fields` through the configured CoreX channel. Provide a trusted PostgreSQL tenant connection and apply the package-owned `sys_attribute_*` migrations before enabling writes. Bind the module/entity registries when dynamic attribute definitions are required; without them the package reports its unavailable state.
+Install the package with Core, configure the host's trusted scope and policy bindings, then migrate the package's tenant schema set. A standalone installation requires no Search package.
 
 ## Configuration
 
-`corex-custom-fields.storage_driver` defaults to `jsonb`; select `eav` when needed. Use
-`corex-custom-fields.storage_by_entity` to map individual entities to either driver. The application
-controls these settings and the `drivers` enablement map. `sources` selects definition sources
-(`static` by default), while `definitions` maps entities to lists of field definitions.
+`corex-custom-fields.ddl` defaults to `true`. Set it to `false` to disable concurrent index DDL. When DDL is enabled, the host's `AccountConnectionResolver` must verify a direct PostgreSQL writer, the current physical scope, and the managed PostgreSQL schema.
 
-Package-owned `sys_attribute_*` table names are literal in the migrations and composed into an
-immutable `AttributeTables` object at provider registration. Host configuration does not rename
-these tables; explicit storage composition can still use the validated `AttributeTables` DTO.
+## Values
 
-## Extension contracts
+Resolve FieldCatalogue to get the effective schema for an EntityHandle. A FieldDefinition has a stable UUID. A rename changes the machine key while retaining that identity. Use the schema revision and the current document revision to construct a FieldPatch. SetField accepts FieldInput, including explicit JSON null. RemoveField erases the slot. DocumentRevision::absent() is the expectation for a new document. FieldValues::update verifies each field and the record, commits one document revision, and returns a durable receipt. Use the patch's token method with the same scope, record and operation key when retrying the same request.
 
-Use the exported `FieldCatalogue`, `AttributeStoreResolver`, `AttributeStore`, `AttributeFilter` and `SchemaOperations` ports. The host supplies its trusted scope and authorization callback. Replace the definition source through the catalogue boundary; storage implementations and worker internals are not extension points.
+FieldValues::read and readMany take Core's FieldSelection of field UUIDs and return authorized snapshots. FieldFilter::compile checks the capability, current filter grant and schema revision before producing a typed predicate. A field-use grant carries its own policy witness.
 
-## Typed errors
+## Extending Custom Fields
 
-Package error identities use backed enums and a boot compiled kernel registry.
-Error constructors require `ErrorCode`; descriptors keep scoped string wire codes.
-See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
-validated replay and safe mapping.
+Extensions register FieldType, optional FieldConverterProvider, and DeclaredFields implementations as Laravel services tagged by their respective interface names. Each type declares its codec identity and version, normalization, supported uses and operators. Builtin decimal and money use exact amounts encoded as strings.
 
-## Schema installation
+## Schema changes
 
-Register the package provider, then run `php artisan packman:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `packman:schema:status`.
+A runtime change is planned against the current schema revision and applied by immutable plan reference, digest and operation key. The schema worker stages pending slots, backfills existing documents, verifies, switches the head, and drains old mappings before cleanup. Run `corex:custom-fields:work --limit=1` in the verified worker scope to process one bounded phase or batch.
 
-Схема: набор(ы) `tenant`, baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.
+A value update emits fields.values.changed.v2. An admitted schema operation emits fields.schema.requested.v2 and its published head emits fields.schema.changed.v2. These facts carry field IDs, refs or digests. Outbox append and the corresponding owner mutation share the caller's transaction.
+
+## Failure and recovery
+
+Inspect the operation reference for its phase, blockers and historical conversion failures. A failed conversion blocks the switch. After correcting the source value, retry the immutable plan using the current claim generation. A change to the plan's inputs requires a new plan. Index work waits for a verified direct writer and checks the physical index before acknowledging a reclaimed operation.

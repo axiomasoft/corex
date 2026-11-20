@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 namespace Equipment\Registry;
 
-use CoreX\CustomFields\Data\AttributeDefinition;
-use CoreX\CustomFields\Data\AttributeId;
-use CoreX\CustomFields\Data\AttributeLifecycle;
-use CoreX\CustomFields\Data\IndexPolicy;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\EntityHandle;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
-use CoreX\Database\Laravel\BaseModel;
 use CoreX\ImportExport\Contracts\RecordMapper;
 use CoreX\ImportExport\Contracts\TransferSink;
 use CoreX\ImportExport\Contracts\TransferSource;
@@ -53,7 +49,7 @@ final class Smoke
             ->description('Tracks equipment, inspection attributes and maintenance work.')
             ->tablePrefix('eq')
             ->extends([
-                Entity::make(BaseModel::class)->handle('eq.equipment')->table('eq_equipment')->workflowable()->fields([new FieldDefinition('name', 'string')]),
+                Entity::make(Equipment::class)->handle(Equipment::Handle)->table('eq_equipment')->customFields()->workflowable()->fields([new FieldDefinition('name', 'string')]),
                 Workflow::stepType(MaintenanceActivity::class),
             ]);
     }
@@ -71,6 +67,22 @@ final class Smoke
     public static function bind(SearchProvider $provider): void
     {
         self::$bound = $provider;
+    }
+
+    public static function fieldFixture(): array
+    {
+        return [
+            'owner' => 'equipment/registry',
+            'entity' => Equipment::Handle,
+            'model' => Equipment::class,
+            'fields' => [
+                ['id' => DeclaredEquipmentFields::Serial, 'key' => 'serial', 'type' => 'text', 'input' => 'pump-1', 'expected' => 'pump-1'],
+                ['id' => DeclaredEquipmentFields::Hours, 'key' => 'hours', 'type' => 'int', 'input' => 12, 'expected' => 12],
+            ],
+            'filter_key' => 'serial',
+            'filter_operand' => 'pump-1',
+            'encoded_operand' => 'pump-1',
+        ];
     }
 
     public static function prove(): void
@@ -97,7 +109,7 @@ final class Smoke
             throw new RuntimeException('Maintenance activity identity was not stable.');
         }
 
-        $definitions = self::attributes();
+        $definitions = (new DeclaredEquipmentFields)->fields(new EntityHandle(Equipment::Handle));
         $provider = $provider instanceof IndexDriver ? $provider : new MemoryDriver;
         $scope = new DataScope(deploymentId: 'fixture-deployment', accountId: 'account-1', workspaceId: null, bindingId: 'fixture-binding', bindingGeneration: 1, accountIncarnation: 'fixture-incarnation', restoreEpoch: hash('sha256', 'equipment-epoch'), principalKind: 'user', principalId: 'actor-1');
         $submission = $provider->submit(new IndexBatch('generation-1', [
@@ -118,7 +130,7 @@ final class Smoke
 
         return [
             'serial' => 'pump-1',
-            'attribute' => $definitions[0]->key,
+            'attribute' => $definitions[0]->machineKey,
             'found' => $page->candidates[0]->record->id,
             'imported' => $imported['applied'],
             'failed' => $imported['failed'],
@@ -172,42 +184,6 @@ final class Smoke
         }
 
         return $decoded;
-    }
-
-    /** @return list<AttributeDefinition> */
-    private static function attributes(): array
-    {
-        $rows = [
-            ['id' => '01900000-0000-7000-8000-000000000001', 'key' => 'serial', 'type' => 'string'],
-            ['id' => '01900000-0000-7000-8000-000000000002', 'key' => 'hours', 'type' => 'integer'],
-        ];
-        $definitions = [];
-
-        foreach ($rows as $row) {
-            $definitions[] = new AttributeDefinition(
-                id: AttributeId::v7($row['id']),
-                entity: 'equipment',
-                key: $row['key'],
-                revision: 1,
-                type: $row['type'],
-                lifecycle: AttributeLifecycle::Active,
-                required: true,
-                searchable: false,
-                constraints: [],
-                readKeys: ['inspect'],
-                writeKeys: ['inspect'],
-                index: IndexPolicy::None,
-            );
-        }
-
-        $canonical = AttributeDefinition::canonicalList($definitions);
-        $reversed = AttributeDefinition::canonicalList(array_reverse($definitions));
-
-        if (AttributeDefinition::schemaHash('equipment', $canonical) !== AttributeDefinition::schemaHash('equipment', $reversed)) {
-            throw new RuntimeException('Attribute compilation changed when the scalar source order was reversed.');
-        }
-
-        return $canonical;
     }
 
     /** @return array{applied: int, failed: string} */

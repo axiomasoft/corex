@@ -1,0 +1,5 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+
+Schema::create('sys_attribute_eav_values', static function (): void {});

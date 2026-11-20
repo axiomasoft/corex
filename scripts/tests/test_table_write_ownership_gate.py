@@ -24,7 +24,9 @@ class TableWriteOwnershipTest(unittest.TestCase):
             (root / "vendor").symlink_to(ROOT / "vendor", target_is_directory=True)
             (root / "docs/architecture").mkdir(parents=True)
             (root / "docs/architecture/table-ownership.md").write_text(
-                "| sys_settings | axiomasoft/corex | tenant | axiomasoft/corex |\n")
+                "| sys_settings | axiomasoft/corex | tenant | axiomasoft/corex |\n"
+                "| sys_attribute_documents | axiomasoft/corex-custom-fields | tenant | axiomasoft/corex-custom-fields |\n"
+                "| sys_field_schema_heads | axiomasoft/corex-custom-fields | tenant | axiomasoft/corex-custom-fields |\n")
             sources = {"core": OPTIONS, package: body} if package != "core" else {"core": OPTIONS + body}
             if extra:
                 sources.update(extra)
@@ -127,47 +129,36 @@ class Command {
         self.assertEqual(1, code, output)
         self.assertIn("dynamic table name on write", output)
 
-    def test_attribute_tables_promoted_defaults_resolve(self):
-        source = r'''namespace CoreX\CustomFields\Data;
-class AttributeTables { public function __construct(public string $definitions = 'sys_settings') {} }'''
-        body = r'''namespace Demo; class Writer {
-public function __construct(private \CoreX\CustomFields\Data\AttributeTables $tables) {}
-public function write() { $this->db->table($this->tables->definitions)->delete(); }}'''
-        code, output = self.run_gate(body, package="core", extra={"custom-fields": source})
+    def test_fields_resolves_the_literal_document_and_head_writes(self):
+        body = """namespace Demo; class Writer {
+public function write() {
+    $this->db->table('sys_attribute_documents')->delete();
+    $this->db->table('sys_field_schema_heads')->delete();
+}}"""
+        code, output = self.run_gate(body, package="custom-fields")
         self.assertEqual(0, code, output)
+        self.assertIn("2 statically resolved writes", output)
 
-    def test_literal_attribute_tables_binding_resolves_exact_class(self):
-        source = r'''namespace CoreX\CustomFields\Data;
-class AttributeTables { public function __construct(public string $documents) {} }
-function bind() { return new AttributeTables(documents: 'sys_settings'); }'''
-        body = r'''namespace Demo; class Writer {
-public function __construct(private \CoreX\CustomFields\Data\AttributeTables $tables) {}
-public function write() { $this->db->table($this->tables->documents)->delete(); }}'''
-        code, output = self.run_gate(body, package="core", extra={"custom-fields": source})
-        self.assertEqual(0, code, output)
-        code, output = self.run_gate(body, extra={"custom-fields": source})
+    def test_foreign_package_cannot_write_the_fields_schema_head(self):
+        code, output = self.run_gate("""namespace Demo; class Writer {
+public function write() { $this->db->table('sys_field_schema_heads')->delete(); }}""")
+        self.assertEqual(1, code, output)
+        self.assertIn("owned by axiomasoft/corex-custom-fields", output)
+
+    def test_fields_cannot_write_a_foreign_literal_table(self):
+        code, output = self.run_gate("""namespace Demo; class Writer {
+public function write() { $this->db->table('sys_settings')->delete(); }}""", package="custom-fields")
         self.assertEqual(1, code, output)
         self.assertIn("owned by axiomasoft/corex", output)
 
-    def test_unrelated_attribute_tables_binding_does_not_resolve(self):
-        source = r'''namespace Other;
-class AttributeTables { public function __construct(public string $documents) {} }
-function bind() { return new AttributeTables(documents: 'sys_settings'); }'''
-        body = r'''namespace Demo; class Writer {
-public function __construct(private \CoreX\CustomFields\Data\AttributeTables $tables) {}
-public function write() { $this->db->table($this->tables->documents)->delete(); }}'''
-        code, output = self.run_gate(body, package="core", extra={"custom-fields": source})
-        self.assertEqual(1, code, output)
-        self.assertIn("dynamic table name on write", output)
-
-    def test_dynamic_attribute_tables_binding_does_not_use_literal_default(self):
-        source = r'''namespace CoreX\CustomFields\Data;
-class AttributeTables { public function __construct(public string $documents = 'sys_settings') {} }
-function bind($table) { return new AttributeTables(documents: $table); }'''
-        body = r'''namespace Demo; class Writer {
-public function __construct(private \CoreX\CustomFields\Data\AttributeTables $tables) {}
-public function write() { $this->db->table($this->tables->documents)->delete(); }}'''
-        code, output = self.run_gate(body, package="core", extra={"custom-fields": source})
+    def test_fields_table_cannot_be_selected_from_an_options_object(self):
+        body = """namespace Demo;
+class FieldTables { public function __construct(public string $documents = 'sys_attribute_documents') {} }
+class Writer {
+    public function __construct(private FieldTables $tables) {}
+    public function write() { $this->db->table($this->tables->documents)->delete(); }
+}"""
+        code, output = self.run_gate(body, package="custom-fields")
         self.assertEqual(1, code, output)
         self.assertIn("dynamic table name on write", output)
 

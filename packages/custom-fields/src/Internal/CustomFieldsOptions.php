@@ -4,24 +4,26 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal;
 
-use CoreX\CustomFields\Internal\Laravel\AttributeComposition;
 use Packman\Attributes\Internal;
+use Packman\Config\Laravel\ConfigurationValidator;
 
-/**
- * Shape of `corex-custom-fields`.
- *
- * @internal Package composition type: read only by the provider and registrars.
- */
 #[Internal]
 final readonly class CustomFieldsOptions
 {
-    public function __construct(
-        public AttributeComposition $composition,
-    ) {}
+    private function __construct(public bool $ddl) {}
 
-    /** @param  array<array-key, mixed>  $config */
+    /** @param array<array-key,mixed> $config */
     public static function fromArray(array $config): self
     {
-        return new self(AttributeComposition::fromArray($config));
+        $validator = new ConfigurationValidator;
+        $validator->rejectUnknownKeys($config, ['ddl'], 'corex-custom-fields');
+        $enabled = array_key_exists('ddl', $config) ? $config['ddl'] : true;
+
+        if (! is_bool($enabled)) {
+            $validator->add('corex-custom-fields.ddl', 'expected a boolean');
+        }
+        $validator->failIfAny();
+
+        return new self($enabled === true);
     }
 }

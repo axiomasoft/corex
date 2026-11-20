@@ -1,5 +1,5 @@
 <?php
 
-namespace CoreX\CustomFields\Internal\Integration;
+namespace CoreX\CustomFields\Schemas\Internal;
 
 use CoreX\Search\Contracts\SearchProvider;

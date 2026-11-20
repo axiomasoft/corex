@@ -63,11 +63,13 @@
             "layer": "L2",
             "type": "capability",
             "owns": [
-                "Contracts",
-                "Data",
                 "Errors",
-                "Exceptions",
-                "Internal"
+                "Internal",
+                "Laravel",
+                "Query",
+                "Schemas",
+                "Types",
+                "Values"
             ]
         },
         {
@@ -388,8 +390,6 @@
             "sys_attribute_backfills": "axiomasoft/corex-custom-fields",
             "sys_attribute_definitions": "axiomasoft/corex-custom-fields",
             "sys_attribute_documents": "axiomasoft/corex-custom-fields",
-            "sys_attribute_eav_records": "axiomasoft/corex-custom-fields",
-            "sys_attribute_eav_values": "axiomasoft/corex-custom-fields",
             "sys_attribute_key_reservations": "axiomasoft/corex-custom-fields",
             "sys_attribute_schema_operations": "axiomasoft/corex-custom-fields",
             "sys_attribute_write_tokens": "axiomasoft/corex-custom-fields",
@@ -398,6 +398,7 @@
             "sys_departments": "axiomasoft/corex",
             "sys_feature_flags": "axiomasoft/corex",
             "sys_feature_overrides": "axiomasoft/corex",
+            "sys_field_schema_heads": "axiomasoft/corex-custom-fields",
             "sys_inbox_messages": "axiomasoft/corex",
             "sys_outbox_messages": "axiomasoft/corex",
             "sys_pubsub_cursors": "axiomasoft/corex",

@@ -1,5 +1,5 @@
 <?php
 
-namespace CoreX\CustomFields\Internal\Values;
+namespace CoreX\CustomFields\Values\Internal;
 
-$driver = config('corex-custom-fields.storage_driver');
+$ddl = config('corex-custom-fields.ddl');

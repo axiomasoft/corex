@@ -33,5 +33,9 @@ it('rejects each planted architecture violation for its own reason', function (s
     ['search-import.php.fixture', 'A1 search import'],
     ['runtime-config.php.fixture', 'A2 runtime config()'],
     ['foreign-ddl.php.fixture', 'A3 foreign DDL users'],
+    ['dynamic-ddl.php.fixture', 'A3 dynamic DDL target'],
+    ['retired-eav.php.fixture', 'A3 foreign DDL sys_attribute_eav_values'],
     ['per-field-driver.json', 'A4'],
+    ['non-boolean-ddl.json', 'A4'],
+    ['concurrent-index.php.fixture', 'A6 concurrent index DDL outside the owner executor'],
 ]);

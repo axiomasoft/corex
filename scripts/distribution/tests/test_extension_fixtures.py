@@ -32,6 +32,30 @@ class ExtensionFixtureTest(unittest.TestCase):
             self.assertEqual(composer["name"], spec["package"])
             self.assertFalse(any(MODULE.is_corex_package(name) and constraint not in {"^2.0", "^2.0@dev"} for name, constraint in composer["require"].items()))
 
+    def test_field_witness_requires_typed_result_sealed_fact_and_distinct_databases(self) -> None:
+        fixture = {"entity": "cas.equipment", "values": {"inspection_code": "A-42"},
+                   "filter_operand": "inspection:A-42"}
+        databases = {"COREX_SCENARIO_DB_A": "owner_test", "COREX_SCENARIO_DB_CONTROL": "control_test"}
+        witness = {
+            **fixture, "fact": "fields.values.changed.v2", "sealed": True, "denied_filter": True,
+            "schema_revision": "revision", "message_id": "fact", "policy_witness": "grant",
+            "pid": 9, "php": "8.4.27", "field_ids": ["id"],
+            "owner": {"database": "owner_test", "session": 10, "oid": "20", "backend": "PostgreSQL 16.14"},
+            "control": {"database": "control_test", "session": 11, "oid": "21", "backend": "PostgreSQL 16.14"},
+        }
+        MODULE.validate_field_witness(witness, databases, fixture)
+        for changes in (
+            {"fact": "fields.values.changed.v1"},
+            {"sealed": False},
+            {"pid": 0},
+            {"field_ids": []},
+            {"values": {"inspection_code": "inspection:A-42"}},
+            {"control": {**witness["control"], "session": 10}},
+            {"control": {**witness["control"], "oid": "20"}},
+        ):
+            with self.subTest(changes=changes), self.assertRaises(SystemExit):
+                MODULE.validate_field_witness({**witness, **changes}, databases, fixture)
+
     def test_workspace_detector_sees_monorepo_paths(self) -> None:
         self.assertTrue(MODULE.autoload_contains_workspace(str(ROOT / "vendor/autoload.php"), ROOT))
         self.assertFalse(MODULE.autoload_contains_workspace("/tmp/consumer/vendor/autoload.php", ROOT))

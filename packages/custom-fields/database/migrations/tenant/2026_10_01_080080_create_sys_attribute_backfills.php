@@ -15,24 +15,17 @@ return new class extends PackmanMigration
     public function up(): void
     {
         $this->create('sys_attribute_backfills', function (Blueprint $table): void {
-            $table->uuid('id');
-            $table->primary(['id'], 'sys_attribute_backfills_pk');
-            $table->uuid('attribute_id');
-            $table->unsignedBigInteger('from_revision');
-            $table->unsignedBigInteger('to_revision');
-            $table->string('entity', 128);
-            $table->string('source_key', 128);
-            $table->string('target_key', 128);
-            $table->string('status', 16);
+            $table->uuid('operation_id');
+            $table->string('partition_id', 320);
+            $table->string('kind', 16);
+            $table->string('record_id', 128)->nullable();
+            $table->char('seen_revision', 64)->nullable();
             $table->string('cursor_record_id', 128)->nullable();
-            $table->unsignedBigInteger('attempted')->default(0);
-            $table->unsignedBigInteger('changed')->default(0);
-            $table->unsignedBigInteger('failed')->default(0);
-            $table->char('source_digest', 64)->nullable();
-            $table->char('target_digest', 64)->nullable();
-            $table->text('error')->nullable();
-            $table->timestampsTz();
-            $table->index(['attribute_id', 'to_revision'], 'sys_attribute_backfills_attribute_id_to_revision_ix');
+            $table->string('upper_record_id', 128)->nullable();
+            $table->boolean('exhausted')->default(false);
+            $table->string('error_code', 128)->nullable();
+            $table->primary(['operation_id', 'partition_id'], 'sys_attribute_backfills_pk');
+            $table->index(['operation_id', 'kind', 'record_id'], 'sys_attribute_backfills_pending_ix');
         });
     }
 

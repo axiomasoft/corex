@@ -6,42 +6,9 @@
         "corex-custom-fields": {
             "type": "object",
             "properties": {
-                "definitions": {
-                    "type": [
-                        "array",
-                        "object"
-                    ]
-                },
-                "drivers": {
-                    "type": "object",
-                    "properties": {
-                        "ddl": {
-                            "type": "boolean",
-                            "default": true
-                        },
-                        "eav": {
-                            "type": "boolean",
-                            "default": true
-                        },
-                        "jsonb": {
-                            "type": "boolean",
-                            "default": true
-                        }
-                    },
-                    "additionalProperties": false
-                },
-                "sources": {
-                    "type": "array"
-                },
-                "storage_by_entity": {
-                    "type": [
-                        "array",
-                        "object"
-                    ]
-                },
-                "storage_driver": {
-                    "type": "string",
-                    "default": "jsonb"
+                "ddl": {
+                    "type": "boolean",
+                    "default": true
                 }
             },
             "additionalProperties": false

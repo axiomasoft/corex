@@ -413,33 +413,97 @@
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "0428fb6227413896ee3034891e9c1d5816c68224a39f49fcd95ecb1600b904b0"
     },
-    "packages/custom-fields/src/Contracts/AttributeFilter.php": {
+    "packages/custom-fields/src/Query/Contracts/FieldFilter.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "37732d1ab634a404badd2535d298e9278657b251a1bab7d3d6c46d59182bb0d8"
+      "sha256": "289e0d9892f23c10c26517edb4d2595554583cdb7857c0e70f5e50166f85067d"
     },
-    "packages/custom-fields/src/Contracts/AttributeStore.php": {
+    "packages/custom-fields/src/Query/Data/FilterPlan.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "9d11d2995dfbb00342658c9f8dd1feb921eae6cb8505fc33f3196d78c5b94ea7"
+      "sha256": "dd7884fbb56b6dde837a6ab174cd04b94601a6e29562386c78dc24ef2fc52eec"
     },
-    "packages/custom-fields/src/Contracts/AttributeStoreResolver.php": {
+    "packages/custom-fields/src/Schemas/Contracts/DeclaredFields.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "3635ab651e158e75fe3fb408ef24da1e8d424eb0c83a52fa1edf79b2f639539b"
+      "sha256": "0902f334767e6381325a8e3820364eca9ecee264b87a571fa1f5663bc6aa514f"
     },
-    "packages/custom-fields/src/Contracts/FieldCatalogue.php": {
+    "packages/custom-fields/src/Schemas/Contracts/FieldCatalogue.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "0ebc7ecc1de5004fefaf4555c6befd1b2147b40d6e1f9d80e1a3c2465d115ab7"
+      "sha256": "540a14865345f4c0484bd6067f47aa637fcc18389c3b022aaa7ba72517259d0d"
     },
-    "packages/custom-fields/src/Contracts/SchemaOperations.php": {
+    "packages/custom-fields/src/Schemas/Contracts/FieldSchemaDependencies.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "06a55479871b69d14ae571ed77f61c84753f81fc1f24a54e7e7d9e04627c76d2"
+      "sha256": "f8e0eeadcad7ad41556bca207f2cacf0ae0b99779fe0b2c63003ecd9460af9f9"
     },
-    "packages/custom-fields/src/Data/IndexPolicy.php": {
+    "packages/custom-fields/src/Schemas/Contracts/FieldSchemas.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "3fc5933f996c28a9d1b40bce5b5685b42a8d7d287485eea3f9ea1d299c2dbe17"
+      "sha256": "1bcf0fcb0e78dd02611f0a006702f283915348d4eb3388e4ff5a64ea66fcf3a5"
     },
-    "packages/custom-fields/src/Internal/Query/AttributeIndexReceipt.php": {
+    "packages/custom-fields/src/Schemas/Contracts/SchemaFacts.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "7330f0ca540856ec4463b6fc3163754e51a9cb3fbe86ffb8c97b30d1c5ba3143"
+      "sha256": "3224b06781feee85a4d13a1754a03ffab73c7c81e5dc7a1f5992ec6ff34f51d3"
+    },
+    "packages/custom-fields/src/Schemas/Contracts/SchemaHeads.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "3c97afdd6e2ef2a16268e74a559108b037d4ce50f08bf8c9b90cc07f4bd75156"
+    },
+    "packages/custom-fields/src/Schemas/Data/LockedFieldMapping.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "634d1b258f611fc43f6130f4e55c590668ced58822b895c7ca491a937d8a032d"
+    },
+    "packages/custom-fields/src/Schemas/Data/SchemaOperationStatus.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "583165bd45a3e15e29199c9312e189f7922100930a5f3d8b09df050eafe310ca"
+    },
+    "packages/custom-fields/src/Types/Contracts/FieldCodec.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "0eda5700a47dd2945e612704d9584622bebf9157459cc505d0f6cfac3000f676"
+    },
+    "packages/custom-fields/src/Types/Contracts/FieldConversions.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "894271bfc11eec32b81bc17a1ae3ea6984057c047cdd89d89978d8f2011a8d6b"
+    },
+    "packages/custom-fields/src/Types/Contracts/FieldConverterProvider.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "4b226873f22d7a45a514d75916ed489b2e3bfa80b04579f316096d47e9e33856"
+    },
+    "packages/custom-fields/src/Types/Contracts/FieldType.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "2a5a5cc98b055d6a7811ccd26d28d12daffc1c5538671064128e81f6cf4b8b83"
+    },
+    "packages/custom-fields/src/Types/Contracts/FieldTypes.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "bab93ed1665e745ad692cfc9c6365b4b9d965a35b21fc024137ad67efdf9db66"
+    },
+    "packages/custom-fields/src/Types/Contracts/FieldValueConverter.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "b5ca83731e26253485c7da737bda289f688cd64253c396539997b628b8a6b8a7"
+    },
+    "packages/custom-fields/src/Types/Enums/FieldOperator.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "8fc388b8223f5dce31fdcbaae84d433e6cf20b234437e79e64315111b2fcb3c1"
+    },
+    "packages/custom-fields/src/Values/Contracts/FieldValues.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "4dcdec387520a884faba6ad8d26eb5197a555b66cc63cc1ab42b183962b7b0de"
+    },
+    "packages/custom-fields/src/Values/Data/FieldValueBatch.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "151e7dc2721a6829bb051025c6bdcf680773981e334304abdee80428d64cd3f1"
+    },
+    "packages/custom-fields/src/Values/Data/FieldValueSnapshot.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "4f707cce388f5576b6c19abfca10363eb11a071e7451a7f7fdb736d90e1ba6d2"
+    },
+    "packages/custom-fields/src/Values/Data/FieldWriteReceipt.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "18f53dce6804beebdede930899da98afcd48b21cbff643663541d203da56081f"
+    },
+    "packages/custom-fields/src/Values/Data/RemoveField.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "5003354cce57035f94c4e2a9246d1a31102c6ac8235e8113a2f25e7557ad0fa5"
+    },
+    "packages/custom-fields/src/Values/Data/SetField.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "444ded76d1165d9d2ee9a43ca3ab0afe06783d45a90a9b2a56b41582f9bab7a8"
     },
     "packages/import-export/src/Contracts/CancellationSignal.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",

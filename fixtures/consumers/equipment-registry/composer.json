@@ -1,7 +1,7 @@
 {
     "name": "equipment/registry",
     "description": "Independent equipment registry on the public CoreX contracts.",
-    "type": "project",
+    "type": "packman-module",
     "license": "MIT",
     "require": {
         "php": "^8.4",
@@ -22,5 +22,15 @@
     "config": {
         "allow-plugins": true,
         "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Equipment\\Registry\\FixtureServiceProvider"
+            ]
+        },
+        "packman": {
+            "module": "Equipment\\Registry\\RegisteredModule"
+        }
     }
 }

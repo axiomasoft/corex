@@ -15,14 +15,14 @@ return new class extends PackmanMigration
     public function up(): void
     {
         $this->create('sys_attribute_key_reservations', function (Blueprint $table): void {
+            $table->string('account_id', 128);
+            $table->string('account_incarnation', 128);
+            $table->string('workspace_scope', 140);
             $table->string('entity', 128);
-            $table->string('key', 128);
-            $table->uuid('attribute_id');
-            $table->unsignedBigInteger('current_revision');
-            $table->string('role', 16);
-            $table->timestampsTz();
-            $table->primary(['entity', 'key'], 'sys_attribute_key_reservations_pk');
-            $table->index(['attribute_id', 'current_revision'], 'sys_attribute_key_reservations_attribute_id_current_revision_ix');
+            $table->string('machine_key', 128);
+            $table->uuid('field_id');
+            $table->uuid('operation_id')->nullable();
+            $table->primary(['account_id', 'account_incarnation', 'workspace_scope', 'entity', 'machine_key'], 'sys_attribute_key_reservations_pk');
         });
     }
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import importlib.util
 import json
@@ -30,7 +31,8 @@ FIXTURES = (
         "id": "custom-attribute-source",
         "package": "thirdparty/custom-attribute-source",
         "class": r"ThirdParty\Attributes\Module",
-        "forbidden": r"CoreX\CustomFields\Internal\UnavailableAttributes",
+        "field_proof": True,
+        "forbidden": r"CoreX\CustomFields\Values\Internal\JsonbFieldValues",
     },
     {
         "id": "custom-transfer-codec",
@@ -90,13 +92,15 @@ def materialize_repository(candidate: Path, destination: Path) -> None:
     shutil.copytree(candidate / "artifacts", destination / "artifacts")
 
 
-def write_consumer(consumer: Path, fixture: Path, repository: Path, *, drop_corex: bool) -> None:
+def write_consumer(
+    consumer: Path, fixture: Path, repository: Path, *, drop_corex: bool, field_proof: bool = False,
+) -> None:
     source = fixture_composer(fixture)
     requirements = dict(source["require"])
     if drop_corex:
         requirements = {name: constraint for name, constraint in requirements.items() if not is_corex_package(name)}
     target = consumer / "fixture"
-    shutil.copytree(fixture, target)
+    shutil.copytree(fixture, target, ignore=shutil.ignore_patterns("vendor", "composer.lock"))
     (target / "composer.json").write_text(json.dumps({**source, "require": requirements}, indent=4) + "\n", encoding="utf-8")
     composer = {
         "name": "corex/extension-fixture-consumer",
@@ -110,6 +114,8 @@ def write_consumer(consumer: Path, fixture: Path, repository: Path, *, drop_core
         "prefer-stable": True,
         "config": {"allow-plugins": True, "secure-http": False, "preferred-install": "dist"},
     }
+    if field_proof:
+        composer["require"]["laravel/framework"] = "^13.0"
     (consumer / "composer.json").write_text(json.dumps(composer, indent=4) + "\n", encoding="utf-8")
 
 
@@ -117,7 +123,24 @@ def run(command: list[str], cwd: Path, env: dict[str, str]) -> subprocess.Comple
     return subprocess.run(command, cwd=cwd, env=env, text=True, capture_output=True, check=False)
 
 
-def composer_env(home: Path) -> dict[str, str]:
+def profile_proof_module():
+    script = ROOT / "scripts/distribution/profile-proof.py"
+    spec = importlib.util.spec_from_file_location("field_fixture_profile_proof", script)
+    if spec is None or spec.loader is None:
+        raise SystemExit("distribution profile verifier is unavailable")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def composer_env(home: Path, php: str | None = None) -> dict[str, str]:
+    if php is not None:
+        profiles = profile_proof_module()
+        interpreter = profiles.interpreter_for(php, profiles.interpreters())
+        env = profiles.composer_env(home, home.parent / "composer-cache", Path(interpreter["binary"]))
+        env["COREX_FIXTURE_PHP_VERSION"] = ".".join(map(str, interpreter["version"]))
+        return env
     env = os.environ.copy()
     env.update({
         "COMPOSER_HOME": str(home),
@@ -128,10 +151,85 @@ def composer_env(home: Path) -> dict[str, str]:
 
 
 def install(consumer: Path, env: dict[str, str]) -> subprocess.CompletedProcess[str]:
-    return run(["composer", "update", "--no-dev", "--no-interaction", "--no-progress", "--prefer-dist"], consumer, env)
+    if php := env.get("COREX_FIXTURE_PHP_VERSION"):
+        manifest = consumer / "composer.json"
+        composer = json.loads(manifest.read_text(encoding="utf-8"))
+        composer["config"]["platform"] = {"php": php}
+        manifest.write_text(json.dumps(composer, indent=4) + "\n", encoding="utf-8")
+    command = profile_proof_module().composer_command(
+        "update", "--no-dev", "--no-interaction", "--no-progress", "--prefer-dist",
+    )
+    return run(command, consumer, env)
 
 
-def prove(consumer: Path, fixture: dict, workspace: Path) -> dict:
+def validate_field_witness(witness: dict, databases: dict[str, str], fixture: dict) -> None:
+    if (witness.get("fact") != "fields.values.changed.v2" or witness.get("sealed") is not True
+            or witness.get("denied_filter") is not True or not witness.get("schema_revision")
+            or not witness.get("message_id") or not witness.get("policy_witness")
+            or witness.get("entity") != fixture["entity"] or witness.get("values") != fixture["values"]
+            or witness.get("filter_operand") != fixture["filter_operand"]):
+        raise SystemExit(f"{fixture['entity']}: installed field contract proof is incomplete")
+    pid = witness.get("pid")
+    ids = witness.get("field_ids")
+    if (type(pid) is not int or pid < 1 or not isinstance(witness.get("php"), str)
+            or not isinstance(ids, list) or not all(isinstance(value, str) for value in ids)
+            or len(set(ids)) != len(ids) or len(ids) != len(fixture["values"])):
+        raise SystemExit(f"{fixture['entity']}: field proof process or field identities are incomplete")
+    owner = witness.get("owner")
+    control = witness.get("control")
+    if (not isinstance(owner, dict) or not isinstance(control, dict)
+            or owner.get("database") != databases["COREX_SCENARIO_DB_A"]
+            or control.get("database") != databases["COREX_SCENARIO_DB_CONTROL"]
+            or not owner.get("session") or not control.get("session") or owner["session"] == control["session"]
+            or not owner.get("oid") or not control.get("oid") or owner["oid"] == control["oid"]
+            or not str(owner.get("backend", "")).startswith("PostgreSQL ")
+            or not str(control.get("backend", "")).startswith("PostgreSQL ")):
+        raise SystemExit(f"{fixture['entity']}: field proof did not use both isolated databases")
+
+
+def field_phase(consumer: Path, command: list[str], env: dict[str, str], fixture: dict, phase: str) -> dict:
+    completed = run([*command, phase], consumer, env)
+    if completed.returncode:
+        raise SystemExit(completed.stderr or completed.stdout or f"{fixture['entity']}: {phase} phase failed")
+    try:
+        witness = json.loads(completed.stdout)
+    except json.JSONDecodeError as error:
+        raise SystemExit(f"{fixture['entity']}: invalid {phase} witness: {completed.stdout.strip()}") from error
+    if not isinstance(witness, dict) or witness.get("phase") != phase:
+        raise SystemExit(f"{fixture['entity']}: missing {phase} phase witness")
+    witness["exit_code"] = completed.returncode
+    witness["stdout_sha256"] = hashlib.sha256(completed.stdout.encode()).hexdigest()
+    return witness
+
+
+def run_field_proof(
+    consumer: Path, probe: Path, fixture: dict, env: dict[str, str], postgres: int | None, php: str | None,
+) -> dict:
+    profiles = profile_proof_module()
+    profile = {"database": "postgres-isolated", "database_roles": ["control", "a"], "default_database": "a"}
+    for path in ("bootstrap/cache", "storage/logs", "storage/framework/views"):
+        (consumer / path).mkdir(parents=True, exist_ok=True)
+    with profiles.isolated_scenario_databases(profile, postgres) as databases:
+        runtime = {
+            **env, **databases, "APP_ENV": "testing",
+            "APP_KEY": "base64:" + base64.b64encode(os.urandom(32)).decode("ascii"),
+        }
+        command = ["php", str(probe), fixture["class"]]
+        compiled = field_phase(consumer, command, runtime, fixture, "compile")
+        witness = field_phase(consumer, command, runtime, fixture, "exercise")
+        validate_field_witness(witness, databases, fixture)
+        compiler_pid = compiled.get("pid")
+        if type(compiler_pid) is not int or compiler_pid < 1 or compiler_pid == witness["pid"]:
+            raise SystemExit(f"{fixture['entity']}: module compilation requires a separate process")
+        if compiled.get("php") != witness.get("php") or (
+            php is not None and not str(witness.get("php", "")).startswith(php + ".")
+        ):
+            raise SystemExit(f"{fixture['entity']}: installed field proof did not use PHP {php}")
+        witness["compiler"] = compiled
+        return witness
+
+
+def prove(consumer: Path, fixture: dict, workspace: Path, env: dict[str, str]) -> dict:
     vendor = consumer / "vendor"
     autoload = (vendor / "composer" / "autoload_psr4.php").read_text(encoding="utf-8")
     if autoload_contains_workspace(autoload, workspace):
@@ -144,17 +242,18 @@ def prove(consumer: Path, fixture: dict, workspace: Path) -> dict:
         "--package", fixture["package"],
         "--forbidden", fixture["forbidden"],
         "--workspace", str(workspace.resolve()),
-    ], consumer, os.environ.copy())
+    ], consumer, env)
     if completed.returncode != 0:
         raise SystemExit(completed.stderr or completed.stdout or f"{fixture['id']} probe failed")
     return json.loads(completed.stdout)
 
 
-def missing_dependency_is_red(fixture: Path, repository: Path, home: Path, workspace: Path, spec: dict) -> str:
+def missing_dependency_is_red(
+    fixture: Path, repository: Path, env: dict[str, str], workspace: Path, spec: dict,
+) -> str:
     with tempfile.TemporaryDirectory(prefix="corex-extension-missing-") as temporary:
         consumer = Path(temporary)
         write_consumer(consumer, fixture, repository, drop_corex=True)
-        env = composer_env(home)
         completed = install(consumer, env)
         if completed.returncode != 0:
             return "composer-rejected"
@@ -166,7 +265,7 @@ def missing_dependency_is_red(fixture: Path, repository: Path, home: Path, works
             "--package", spec["package"],
             "--forbidden", spec["forbidden"],
             "--workspace", str(workspace.resolve()),
-        ], consumer, os.environ.copy())
+        ], consumer, env)
         if probed.returncode == 0:
             raise SystemExit(f"{spec['id']}: missing candidate dependency was accepted")
         return "probe-rejected"
@@ -181,7 +280,10 @@ def selected_fixtures(only: str | None) -> tuple[dict, ...]:
     return chosen
 
 
-def verify(candidate: Path, workspace: Path = ROOT, only: str | None = None) -> dict:
+def verify(
+    candidate: Path, workspace: Path = ROOT, only: str | None = None,
+    *, php: str | None = None, postgres: int | None = None,
+) -> dict:
     candidate = candidate_directory(candidate)
     binding = candidate_binding(candidate)
     rows = []
@@ -191,17 +293,25 @@ def verify(candidate: Path, workspace: Path = ROOT, only: str | None = None) -> 
         materialize_repository(candidate, repository)
         home = root / "composer-home"
         home.mkdir()
+        env = composer_env(home, php)
         for spec in selected_fixtures(only):
             fixture = workspace / "fixtures/extensions" / spec["id"]
             assert_source_autoload(fixture, workspace)
             consumer = root / spec["id"]
-            write_consumer(consumer, fixture, repository, drop_corex=False)
-            installed = install(consumer, composer_env(home))
+            write_consumer(consumer, fixture, repository, drop_corex=False, field_proof=spec.get("field_proof", False))
+            installed = install(consumer, env)
             if installed.returncode != 0:
                 raise SystemExit(installed.stderr or installed.stdout or f"{spec['id']} install failed")
-            proof = prove(consumer, spec, workspace)
+            proof = prove(consumer, spec, workspace, env)
             proof.update(assert_dist_install(consumer, repository, list(fixture_composer(fixture)["require"]), workspace))
-            proof["missing_dependency"] = missing_dependency_is_red(fixture, repository, home, workspace, spec)
+            if spec.get("field_proof"):
+                proof["installed_fields"] = run_field_proof(
+                    consumer, consumer / "vendor" / spec["package"] / "bin/field-proof.php",
+                    {**spec, "entity": "cas.equipment", "values": {"serial": "pump-1", "hours": 12, "inspection_code": "A-42"},
+                     "filter_operand": "inspection:A-42"},
+                    env, postgres, php,
+                )
+            proof["missing_dependency"] = missing_dependency_is_red(fixture, repository, env, workspace, spec)
             proof["id"] = spec["id"]
             rows.append(proof)
     receipt = {
@@ -253,14 +363,16 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--candidate", type=Path)
     parser.add_argument("--only")
+    parser.add_argument("--php", choices=("8.4", "8.5"))
+    parser.add_argument("--postgres", type=int, choices=(16, 18))
     parser.add_argument("--receipt", type=Path)
     args = parser.parse_args()
     if args.candidate:
-        receipt = verify(args.candidate, only=args.only)
+        receipt = verify(args.candidate, only=args.only, php=args.php, postgres=args.postgres)
     else:
         with tempfile.TemporaryDirectory(prefix="corex-extension-candidate-") as temporary:
             candidate = build_candidate(ROOT, Path(temporary) / "candidate")
-            receipt = verify(candidate, only=args.only)
+            receipt = verify(candidate, only=args.only, php=args.php, postgres=args.postgres)
     if args.receipt:
         args.receipt.parent.mkdir(parents=True, exist_ok=True)
         args.receipt.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n")

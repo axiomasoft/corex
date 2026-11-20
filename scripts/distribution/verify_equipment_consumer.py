@@ -5,7 +5,6 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
-import os
 import re
 import shutil
 import subprocess
@@ -16,7 +15,7 @@ from pathlib import Path
 # Also support the test harness loading this script by file path.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from ecosystem_repositories import is_corex_package
-from consumer_repository import assert_dist_install, repositories
+from consumer_repository import assert_dist_install
 
 ROOT = Path(__file__).resolve().parents[2]
 APP = ROOT / "fixtures" / "consumers" / "equipment-registry"
@@ -53,14 +52,11 @@ def flex_dependency_fails(composer: dict) -> bool:
 
 
 def prepare_install(source: Path, destination: Path, repository: Path) -> None:
-    shutil.copytree(source, destination, ignore=shutil.ignore_patterns("vendor"))
-    composer = json.loads((destination / "composer.json").read_text(encoding="utf-8"))
-    composer["repositories"] = repositories(repository, ROOT)
-    composer["config"] = {"allow-plugins": True, "secure-http": False, "preferred-install": "dist", "sort-packages": True}
-    (destination / "composer.json").write_text(json.dumps(composer, indent=4) + "\n", encoding="utf-8")
+    extensions = load_extension_verifier()
+    extensions.write_consumer(destination, source, repository, drop_corex=False, field_proof=True)
 
 
-def prove(candidate: Path | None) -> dict:
+def prove(candidate: Path | None, *, php: str | None = None, postgres: int | None = None) -> dict:
     hits = banned_hits(APP)
     if hits:
         raise SystemExit(f"forbidden vocabulary: {hits}")
@@ -82,7 +78,8 @@ def prove(candidate: Path | None) -> dict:
         home.mkdir()
         install_root = root / "app"
         prepare_install(APP, install_root, repository)
-        installed = extensions.install(install_root, extensions.composer_env(home))
+        env = extensions.composer_env(home, php)
+        installed = extensions.install(install_root, env)
         if installed.returncode != 0:
             raise SystemExit(installed.stderr or installed.stdout or "equipment install failed")
         installed_dist = assert_dist_install(install_root, repository, list(committed["require"]), ROOT)
@@ -92,20 +89,19 @@ def prove(candidate: Path | None) -> dict:
         probe = extensions.run([
             "php", str(PROBE),
             "--vendor", str(install_root / "vendor"),
-            "--fixture", str(install_root),
+            "--fixture", str(install_root / "vendor" / PACKAGE),
             "--class", r"Equipment\Registry\Smoke",
             "--package", PACKAGE,
             "--forbidden", FORBIDDEN,
             "--workspace", str(ROOT.resolve()),
-        ], install_root, os.environ.copy())
+        ], install_root, env)
         if probe.returncode != 0:
             raise SystemExit(probe.stderr or probe.stdout or "equipment probe failed")
         contract = json.loads(probe.stdout)
         database = root / "equipment.sqlite"
-        env = os.environ.copy()
         for mode in ("schedule", "worker", "read"):
             completed = subprocess.run(
-                ["php", "bin/smoke.php", mode, str(database)],
+                ["php", str(install_root / "vendor" / PACKAGE / "bin/smoke.php"), mode, str(database)],
                 cwd=install_root,
                 env=env,
                 text=True,
@@ -116,6 +112,14 @@ def prove(candidate: Path | None) -> dict:
                 raise SystemExit(completed.stderr or completed.stdout or f"{mode} failed")
             if mode == "read":
                 result = json.loads(completed.stdout)
+        field_probe = install_root / "field-proof.php"
+        shutil.copyfile(ROOT / "fixtures/extensions/custom-attribute-source/bin/field-proof.php", field_probe)
+        fields = extensions.run_field_proof(
+            install_root, field_probe,
+            {"class": r"Equipment\Registry\Smoke", "entity": "eq.equipment", "values": {"serial": "pump-1", "hours": 12},
+             "filter_operand": "pump-1"},
+            env, postgres, php,
+        )
     if result["maintenance"] != "completed" or result["imported"] != 1 or result["failed"] != "missing-serial":
         raise SystemExit(f"worker restart lost the equipment result: {result}")
     return {
@@ -131,6 +135,7 @@ def prove(candidate: Path | None) -> dict:
         "vocabulary": "clean",
         "autoload_workspace": False,
         "worker_restart": result,
+        "installed_fields": fields,
         "lower_level_packages": sorted(name for name in committed["require"] if is_corex_package(name)),
     }
 
@@ -138,9 +143,11 @@ def prove(candidate: Path | None) -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--candidate", type=Path)
+    parser.add_argument("--php", choices=("8.4", "8.5"))
+    parser.add_argument("--postgres", type=int, choices=(16, 18))
     parser.add_argument("--receipt", type=Path, default=RECEIPT)
     args = parser.parse_args()
-    receipt = prove(args.candidate)
+    receipt = prove(args.candidate, php=args.php, postgres=args.postgres)
     args.receipt.parent.mkdir(parents=True, exist_ok=True)
     args.receipt.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps({"result": receipt["result"], "receipt": str(args.receipt)}))

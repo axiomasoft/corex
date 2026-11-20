@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\CustomFields\Contracts\FieldCatalogue;
-use CoreX\CustomFields\Data\AttributeId;
-use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
-use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Internal\CallableDataScopeAuthorizer;
 use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Illuminate\Database\ConnectionInterface;
@@ -30,12 +26,6 @@ function jsonbCurrent(): CallerWorkScopeFixture
     return new CallerWorkScopeFixture(jsonbContext(), static fn (): ConnectionInterface => DB::connection(), jsonbScope());
 }
 
-/** @param list<string> $codes */
-function jsonbSelection(string $entity, array $codes): FieldSelection
-{
-    return new FieldSelection(array_map(static fn (string $code): string => AttributeId::legacy($entity, $code)->value, $codes));
-}
-
 function jsonbAuthorizer(?Closure $authorize = null): DataScopeAuthorizer
 {
     if ($authorize === null) {
@@ -43,19 +33,4 @@ function jsonbAuthorizer(?Closure $authorize = null): DataScopeAuthorizer
     }
 
     return new CallableDataScopeAuthorizer($authorize);
-}
-
-function schemaCatalogue(string $entity, string $schemaHash): FieldCatalogue
-{
-    $snapshot = new FieldSnapshot($entity, $schemaHash, $schemaHash, [], []);
-
-    return new readonly class($snapshot) implements FieldCatalogue
-    {
-        public function __construct(private FieldSnapshot $snapshot) {}
-
-        public function snapshot(DataScope $scope, string $entity): FieldSnapshot
-        {
-            return $this->snapshot;
-        }
-    };
 }

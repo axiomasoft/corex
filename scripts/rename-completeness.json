@@ -3332,6 +3332,51 @@
         ],
         "namespaces": [
             {
+                "old": "CoreX\\CustomFields\\Contracts",
+                "match": "prefix",
+                "kind": "retired"
+            },
+            {
+                "old": "CoreX\\CustomFields\\Data",
+                "match": "prefix",
+                "kind": "retired"
+            },
+            {
+                "old": "CoreX\\CustomFields\\Exceptions",
+                "match": "prefix",
+                "kind": "retired"
+            },
+            {
+                "old": "CoreX\\CustomFields\\Internal\\Integration",
+                "match": "prefix",
+                "kind": "retired"
+            },
+            {
+                "old": "CoreX\\CustomFields\\Internal\\Laravel",
+                "match": "prefix",
+                "kind": "retired"
+            },
+            {
+                "old": "CoreX\\CustomFields\\Internal\\Query",
+                "match": "prefix",
+                "kind": "retired"
+            },
+            {
+                "old": "CoreX\\CustomFields\\Internal\\Schema",
+                "match": "prefix",
+                "kind": "retired"
+            },
+            {
+                "old": "CoreX\\CustomFields\\Internal\\Storage",
+                "match": "prefix",
+                "kind": "retired"
+            },
+            {
+                "old": "CoreX\\CustomFields\\Internal\\Values",
+                "match": "prefix",
+                "kind": "retired"
+            },
+            {
                 "old": "CoreX\\Api",
                 "new": "—",
                 "match": "prefix"

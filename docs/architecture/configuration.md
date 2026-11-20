@@ -24,13 +24,7 @@
 | corex-access.panel | axiomasoft/corex-access | unobserved | unobserved | no | deployment | no | use-site | AuthOptions::$panel |  |  |
 | corex-access.policy_panels | axiomasoft/corex-access | array | [] | no | product-policy | no | boot | AuthOptions::$policyPanels |  | Map of permission keys to AzGuard panel IDs. |
 | corex-access.workspace_scope_class | axiomasoft/corex-access | null | null | no | product-policy | unobserved | boot | AuthOptions::$workspaceScopeClass |  |  |
-| corex-custom-fields.definitions | axiomasoft/corex-custom-fields | array | [] | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$composition |  |  |
-| corex-custom-fields.drivers.ddl | axiomasoft/corex-custom-fields | bool | true | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$composition |  |  |
-| corex-custom-fields.drivers.eav | axiomasoft/corex-custom-fields | bool | true | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$composition |  |  |
-| corex-custom-fields.drivers.jsonb | axiomasoft/corex-custom-fields | bool | true | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$composition |  |  |
-| corex-custom-fields.sources | axiomasoft/corex-custom-fields | array | unobserved | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$composition |  |  |
-| corex-custom-fields.storage_by_entity | axiomasoft/corex-custom-fields | array | [] | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$composition |  |  |
-| corex-custom-fields.storage_driver | axiomasoft/corex-custom-fields | string | jsonb | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$composition |  |  |
+| corex-custom-fields.ddl | axiomasoft/corex-custom-fields | bool | true | no | product-policy | unobserved | boot | CustomFieldsOptions::$ddl |  | Enables verified direct PostgreSQL index DDL. |
 | corex-import-export.limits.batch_rows | axiomasoft/corex-import-export | int | 500 | no | product-policy | unobserved | unobserved | ImportExportOptions::$limitsBatchRows |  |  |
 | corex-import-export.limits.max_fields | axiomasoft/corex-import-export | int | 256 | no | product-policy | unobserved | unobserved | ImportExportOptions::$limitsMaxFields |  |  |
 | corex-import-export.limits.max_memory_mib | axiomasoft/corex-import-export | int | 128 | no | deployment | no | 1..1024 MiB at boot | ImportExportOptions::$limitsMaxMemoryMiB |  | Total worker process budget; default 128 MiB. Process supervisor and PHP memory_limit remain host backstops. |

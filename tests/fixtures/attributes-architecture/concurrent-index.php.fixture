@@ -1,0 +1,3 @@
+<?php
+
+$connection->statement('CREATE INDEX CONCURRENTLY probe ON sys_attribute_documents (record_id)');

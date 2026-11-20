@@ -13,7 +13,7 @@ CoreX 2.0 перевыпускает 20 пакетов на общей Composer-
 | 0 | §§11.1, 11.3, 15.3 · Новые Composer constraints, branch aliases и разрешение path repositories. CoreX schema sets версии 2, с прежними IDs и scopes. | Детерминированная split-сборка, standalone consumers, реестр и установщик schema sets. |
 | 1 | §§12.1–12.3, 14.1–14.2 · `DataScopeFactory` выдаёт scope v3 от текущего principal. `StoredWorkRunner` сверяет proof владельца и immutable reference. Хост хранит допуск, tickets и использованные epochs вне tenant backup. `DataScopeAuthorizer` проверяет typed use. Scheduler сохраняет scope, версию обработчика и digest запроса. | `worker-scope` проверяет A→B→A, вложенные jobs, root sweep и очистку контекста. `binding-restore` проверяет rebind, restore и ожидание активных tickets. `workspace-sweep` проверяет W1/W2, рестарт после claim и rollback на просроченном token. |
 | 2 | §§12.1–12.3, 13.5, 14.2–14.3 · Envelope v2 с подтверждённым происхождением, явная connection у Inbox/Outbox и Workflow capture. Notifications возвращает typed page и exact/unavailable count. Webhook replay имеет собственный effect key. Внешний control store хранит provider evidence. | Same-connection rollback и дедупликация на PostgreSQL, отзыв доступа к related record, потеря подтверждения у провайдера и сверка исходного effect key. |
-| 3 | Custom Fields (§13.1–13.2) · `FieldValues`, `FieldSchemas`, `FieldCatalogue` и `FieldFilter` с типизированными DTO. JSONB вместо EAV, события Fields v2. | Объявление внешнего типа, write/read/filter, effective revision и публикация события после commit. |
+| 3 | Custom Fields (§§13.1–13.2, 13.5) · `FieldValues`, `FieldSchemas`, `FieldCatalogue`, `FieldFilter` и версионированный `FieldType`. Слоты JSONB по FieldId и storage revision. Три факта Fields v2. | Установленный `vendor.type`, scoped write/read/filter, backfill с конкурентной записью, смена head и восстановление CIC на PostgreSQL. |
 | 4–5 | Search и Search Intl (§§13.3–13.5) · Прикладной `Search::query()`, отдельные SPI projection, candidate и index, новая cursor grammar. Fields подключаются мостом. | Драйверы PostgreSQL и Meilisearch, ACL фильтрации и полей, смена поколения и независимый install Search. |
 | 6 | Tasks, Recurring Tasks, Workflow (§14.3) · Typed capture admission и scoped receipts, `TaskPlanning` и `transition()`. Completion contributor живёт в Tasks Workflow. | Три установочных состава, первый Done, повторный Done после reopen, конфликт и rollback. |
 | 7 | Access/Core, Media и Bulk (§§14.1, 14.4–14.5) · FQCN `PrincipalIdentity` и scanner tooling, Packman discovery, scoped lifecycle, `MediaAttachments`, durable `requestConversion()` и host SPI `BulkExecutor`. | Fencing и lifecycle blockers, readiness обязательных интеграций, standalone Operations и host-адаптер Import/Export. |
@@ -26,6 +26,10 @@ Equipment Registry, публичный Laravel consumer, Octane, пять extens
 Production FlexCRM и Equipment deployments, частные расширения для Search, Workflow, Custom Fields, Panels и Import/Export, внешние REST/MCP клиенты, webhook consumers и конфигурации реальных worker недоступны в базовом checkout. Их владельцы сверяют соответствующие API/SPI с установленной версией и повторяют сценарии со своими декларациями. Packman Panels подтверждает SavedViews, хост Tenancy — physical tenant binding, Vaulter — CAS blobs и pins, AzGuard — решения авторизации. Результаты входят в release evidence до production cutover.
 
 ## Доказательства конкретных изменений
+
+Custom Fields регистрирует версии codec и определения через Tagged-провайдеры. Хост, которому нужен concurrent DDL, подтверждает прямой PostgreSQL writer и управляемую схему через `AccountConnectionResolver`. Опции `corex_fields_ddl_transport=direct-v1` и `corex_fields_ddl_namespace` проверяются вместе с текущим физическим scope. `corex:custom-fields:work` выполняет одну ограниченную фазу по умолчанию. Владелец удерживает session advisory lock до записи результата под актуальным claim. В конфигурации PHPStan зафиксированы ровно два срабатывания правила для pooled connections в `PostgresDdlExecutor.php`.
+
+Стабильные коды Custom Fields сериализуются по грамматике закреплённого Packman. Именам плана `schema-revision-mismatch`, `field-type-unavailable`, `idempotency-conflict` и `claim-lost` в публичном каталоге соответствуют `custom-fields.schema_revision_mismatch`, `custom-fields.field_type_unavailable`, `custom-fields.idempotency_conflict` и `custom-fields.claim_lost`.
 
 ```bash
 python3 scripts/distribution/compare_contracts.py \
@@ -192,15 +196,11 @@ Diff содержит SHA и digest каждого прочитанного но
     ],
     "changes": [
       "13cf04003ddc521b562ba5525b2e9960b031d6976ca3154842b9e313cd309724",
-      "280683d4f27611b91597502e3640a2d0ebe110f26d74a4d46eaf0a5cbcf27d10",
       "382f4b68cc46fae0cbe80875af622ad1a039ef39564911b97a77d1832a174ed1",
-      "3f2c8c1dee7d5171c5d78d928e33f275bf8790cae630c1681983469113a05516",
       "5b3e88417d9c36026df48ed0366ae29de50cc45f8875146585cf90ab144fc489",
       "6357b84f14bd7d630d21668f99e2b9b6d189916f404264cbd0c9567c79b10178",
-      "68b2c46a3d603788495322b9ec3e5612596491b6bec3e462125b787471201e7d",
       "8a5864442e4e6294f875b559a74fbea6ef03ea3a663b1a5e1e825bc303356b0e",
       "8cf1cb3dc0ba637e512acc5c3ac735b9c200075452a00379ba8afcffc1d11048",
-      "99f7202a914152d6dcc233d902f47389ba496138cebae2b40ed170c48f005d39",
       "9c2b56ff186608c693d3a5344bb1d58cb1cb18eee02754ca7a92a113db838ced",
       "c4451213b09f3af3d9e7de7401e78f5920a3c9a1f9283e312c6ed7027a94d0e5",
       "f8ce0f1c705ceb7cd05cdf9f2f7aa3231ea7b98df713ad98fba322f93dc72011"
@@ -316,18 +316,6 @@ Diff содержит SHA и digest каждого прочитанного но
     ]
   },
   {
-    "id": "attribute-fact-publication",
-    "plan": "§§12.1–12.2 and stage 2 — Custom Fields appends on the same connection with explicit causation",
-    "tests": [
-      "packages/custom-fields/tests/Pg/AttributeOutboxTest.php",
-      "packages/custom-fields/tests/Unit/AttributeMessageTranslatorTest.php"
-    ],
-    "changes": [
-      "1a85ea66f9a5cf1ea45b743a2860586b6f2b2a3d9919b94f7b8b343ceef93184",
-      "657acb0209e5b8ee967aba5337e47e5286dbfbe86b31a222fe74919cd43ec4aa"
-    ]
-  },
-  {
     "id": "notification-receipt-visibility",
     "plan": "§§12.2–12.3, 13.5, 14.2 — common visibility, typed counts and provider reconciliation",
     "tests": [
@@ -402,6 +390,105 @@ Diff содержит SHA и digest каждого прочитанного но
       "cc2bcd81eec5a6f4cb4e7cbd95d8f68ae8ba0b6a072ab0e07ff4eb24e53c81b0",
       "e1bb364c9b4d40fc7ad6ff593eedc7fd789fee194bf6dc99a2eb3e68513b17cf",
       "fcb6ab4614cde9b5288f404bc36871f9ca4fed6a7a30d94a1eca339df9d4fc69"
+    ]
+  },
+  {
+    "id": "canonical-field-values-and-types",
+    "plan": "§§11.4, 13.1–13.2, 13.5 — typed FieldValues, versioned codecs and canonical JSONB",
+    "tests": [
+      "packages/custom-fields/tests/Pg/AttributeWriteAuthorizationTest.php",
+      "tests/Distribution/fixtures/scenarios/field-write/probe.php",
+      "fixtures/extensions/custom-attribute-source/src/InspectionCodeType.php"
+    ],
+    "changes": [
+      "0626ef68b18a67c99141b0859519a7f7b0bd9ddbbb2c70b02f485384cd6e4d01",
+      "07e78ea2b43409fee5ea0cc27059d07a95617990d0ecc5cbfa111da02d79e64a",
+      "0ef64f931147de22d9c8bc86281403556ad99bc61bbc94f7d34a001adf82f334",
+      "15a85dc8583d5754de88246ce4513aafd27b52dea74858fb30f1fbac31bd471d",
+      "1ba9bbb1615eb31da877120bdcefc7632e2ace541c58b472a3f92de68017bd5a",
+      "1c3bd7f3d8c04417af4b3f7ffe82d9bc0be618db701880ab3a445fd0ce921ec1",
+      "25fe1ea2e95f33b89fb1cec3bf454a680ee32718a9ff65b6ed9fb8d91ef73037",
+      "2bd0d05c575008c85fe96129e6bbb19d3f03b403eef2a7aa97c3e0d22bb9406a",
+      "330ea3b96aae7de60c8644df1d26629112464b2315f10a9aa8966e8b25adbdce",
+      "34ffbac89d031477c857579088aa02a5bc28fc61e4dcb4265a7c7d74c9ab544c",
+      "385345daa35a97528e8bfa05807523b5275475538259847a5f6cf5108d47c8cb",
+      "3c4251015fdc453790d55f5727fad800ec73f2f1291ace423e19622b11fb916e",
+      "453b22192886b0958d876c269748a265be280e1dbaa0d6b831aaced7c5cf7349",
+      "4a0a6d0e606e33951d98b7fd988620d4a98346d46593ac15ea4621f6e4f5793d",
+      "50279add35d3dfb71fa35735dba18ea8427cf58849c5949d3d4cd4c079ca4232",
+      "54cef4b7687593b706bc71fc558ba1da13dbd590810ab9fce84c5013a38adec3",
+      "57aaca837c9551966a7c3518c53425b7b615344824c093daa2f1f17e034c5abb",
+      "57eee1bd975fc83d4d0a836d7737cefb6e3e809cfd57480e09108da5c8d5a528",
+      "593733ebbe22f58fda5dc92d2c8e5d4a92886b11535ea8ed0f3ff3907d35d25f",
+      "5b7d329554740f33469adec7fd685d7e5167cc68b5fb73c268f9f6e553da0b71",
+      "61f92504b86f83f17dc927095b79dddc5fc5a8a785adcba0e5deec5f0d407a86",
+      "62cb85ad11c91161a6393102504b2a3fe3b12b4c25e1bf5ca40e2077f7c5fe7f",
+      "6563732dfad04cb943f877f2a1156783a30cb4cc8e6261e0c23815bffa025706",
+      "6a0841758e43736ac3e7e2e36e13e507c859247ececb7389541ec9956adff06a",
+      "6c36f7eae93222269938a48dba877e3bba8fdba572b3d13677a21cbd660d3ac6",
+      "6e39ac49b421fac4b925e144cc583e2e94cc9ae72e6f5d7ca4b65c46a8b4951d",
+      "6f97d0bf1ef61637c86c352a1d13a740976a2ed4ac14f2e0fb1512bfee9fa122",
+      "716be78b1d940b76b9c6db72862a474fd57ce1706981fad38bd30f1e6afc678d",
+      "76246a2f940dd1a85992a3eee7164ce73a297873261bbfd9df5ee2b7f8d2536e",
+      "773e36e3acdefb1ff9651733625b2fb480e8cc95ff7ff57842f18f559988f47e",
+      "795f7118f6c593d63bab9c48b62effcf76855d686b06e4935b203463fbd321cf",
+      "7c224e3cd6dc945c081cc3fd281c3679fe464c00a01d08983c3c76799837ae23",
+      "849fb4650ff6504e23398aa81b7b53fca5b1c4c8fadd576b66dfbf54c111dab3",
+      "8cc6c45a1a064b63da1239489f221072dcb795efac30aa17db0eb0dd6d119578",
+      "8fc603e12d2cd60bffd437cdd6bc8a45e353045e106e3df14f5b71eaf3e7ff79",
+      "91b5cf13ceb6f2c4f9f4b43cc328eac215671bac14d691f1775a51a8b287c3e1",
+      "94d50e54de34b0ac580cf44d26999738729ddf1706ad8bc95bef4d32e5065100",
+      "9c80d513be38df81eaa95dc22b397b799f7f79010ecc5f33a0f6abf3b8d2a660",
+      "9dba704f04f08877f9bf3758f6f709641ae822221b2f50470636de276cc4512c",
+      "a5b1d1213a8772d246fd4b3871a665746ee107719af66881a7631e5645c29471",
+      "abf91cf6ba8a2b39f1a2f41c4c639230a21164a148a0f3e2673acc738ed0e877",
+      "ac6ba44ee8b680e36666bd848dce5f27bb8d19002b947aea50b62f8909a6ffc5",
+      "acece56feadb775d5f79f3bfc85395e3f231c3238aaf15652c40c86fae3d5564",
+      "b7874d6e03c633502d79acce13b15fb8f968e049915639ff155656bcfd24ff40",
+      "bd3ca261e78e43c980fdef35451a0a877147f375a9f5008f1d91831e3486407f",
+      "c2ca66365282f4f7181fe7a232801c9630d3b10d52a5a4753bfab6383f481831",
+      "c525ea6d162a017a917b3e39d083eb777e4997afe4992be8a8a8c4221fd247a1",
+      "d94360967cd1c1a882658ee3f4000e7cafed33cfd5e89a969379edc26a1d1510",
+      "dbf4e4d20a95632db532066944c3f4dc465bbb3d34191df11ce76526d1fe38a3",
+      "e35fe261d9fdc57295c2b0c61393fc08700be700a3cecc6288c4ffcc57b34ba0",
+      "f10424d5cfe4b60d965a0f8beee614c16cd306c1f0f3bce98669413095531e9c",
+      "fefa62953d960941c08b4a5604fff58edea472c667f6551820392615420b5f9c",
+      "ff529121082ef2b2d73eb1b1865f9478c09cba7ae7fa0289fb822aa81ce496b3"
+    ]
+  },
+  {
+    "id": "field-schema-operations",
+    "plan": "§§13.1–13.2, 13.5 — immutable plans, scoped schema heads and PostgreSQL claim recovery",
+    "tests": [
+      "tests/Distribution/fixtures/scenarios/field-write/probe.php",
+      "tests/Distribution/fixtures/scenarios/ddl-claim/probe.php",
+      "tests/Golden/SchemaGoldenTest.php"
+    ],
+    "changes": [
+      "2f0268e66776f4595ef60ee66a2b4997f68cf66c5abcb402f99a84926a7f65bd",
+      "407b750edb19d6f16b20ba3fc2062f66e9b99bfbde6f9baf89d9a50331104c44",
+      "51c41a255b9b9dc0e8fcde2c6c571021f0a8af5be55f4f1c4015c6aa866b0458",
+      "5783124881d448f1b9c0d2ee3562ebe5fe19d976fc9d53e56e905d29764e3804",
+      "5cfa285bbaec5525b0fdc71c719b6177b49113cc8c1f0df738ebc28c091b260b",
+      "681cac7ceb8a435edfc63c5d1b07cb827f165905d348f813fa0cfd20d68d9182",
+      "809d0bebfe8db145389cca4cb0c83349852d8ef482f849907c40b6ac3d985ea8",
+      "88092a1aca1a7aa47fa6a44b6bebcf6b911ebd24d7d1766dfd03b68edd9b34f9",
+      "c3939a6d3090effffd37b4678068d947cbf0e9e42a46ad12c72a564251d92fb0",
+      "f03ee5eb3c6976b38e582b85bbaba1eea3e1b799326f71215d5f579efd3190b1",
+      "f0fed5e0cb302f73bd53c5c2274a262df840c5f171215174f981c5e91a12878a",
+      "fb0b2b992bed91e587d4cbdfcdda4d8997171f912b669570d0d7d39267ea485b"
+    ]
+  },
+  {
+    "id": "transactional-fields-v2-facts",
+    "plan": "§§12.1–12.2, 13.2, 13.5 — same-connection, sealed Fields v2 facts",
+    "tests": [
+      "packages/custom-fields/tests/Pg/AttributeOutboxTest.php",
+      "tests/Distribution/fixtures/scenarios/field-write/probe.php"
+    ],
+    "changes": [
+      "71f3f96767795c3ce96613ed5823624d67429d4ce3e8e56933ff44627b7a92f5",
+      "9dade62c59b2d2791db8e464a04a8bde36f0636b87a7b03e37d395a5ece85e7a"
     ]
   }
 ]

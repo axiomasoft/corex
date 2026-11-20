@@ -2,230 +2,130 @@
 
 declare(strict_types=1);
 
-use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\CustomFields\Contracts\AttributeStore;
-use CoreX\CustomFields\Data\AttributeDefinition;
-use CoreX\CustomFields\Data\AttributeId;
-use CoreX\CustomFields\Data\AttributeLifecycle;
-use CoreX\CustomFields\Data\IndexPolicy;
-use CoreX\CustomFields\Data\ValuePatch;
-use CoreX\CustomFields\Internal\Schema\DatabaseFieldCatalogue;
-use CoreX\CustomFields\Internal\Schema\DefinitionEvolution;
-use CoreX\CustomFields\Internal\Values\AttributeBackfill;
-use CoreX\CustomFields\Internal\Values\AttributeValueTransformerRegistry;
-use CoreX\CustomFields\Internal\Values\EavAttributeStore;
-use CoreX\CustomFields\Internal\Values\JsonbAttributeStore;
-use CoreX\CustomFields\Tests\Pg\AttributeBackfillPgTestCase;
-use CoreX\CustomFields\Tests\Support\PgTestSupport;
+use CoreX\CustomFields\Schemas\Data\FieldSchemaChange;
+use CoreX\CustomFields\Schemas\Internal\SchemaConflict;
+use CoreX\CustomFields\Schemas\Internal\SchemaRows;
+use CoreX\CustomFields\Tests\Pg\SchemaPgTestCase;
+use CoreX\CustomFields\Types\Data\FieldInput;
+use CoreX\CustomFields\Values\Contracts\FieldValues;
+use CoreX\CustomFields\Values\Data\DocumentRevision;
+use CoreX\CustomFields\Values\Data\FieldPatch;
+use CoreX\CustomFields\Values\Data\SetField;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\Data\WriteToken;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\DB;
 
-uses(AttributeBackfillPgTestCase::class)->group('pg');
+uses(SchemaPgTestCase::class)->group('pg');
 
-function backfillRegistry(): AttributeValueTransformerRegistry
-{
-    return new AttributeValueTransformerRegistry([
-        'numeric-text' => [
-            'forward' => static fn (mixed $value): int => (int) $value,
-            'reverse' => static fn (mixed $value): string => (string) $value,
-        ],
-    ]);
-}
-
-function backfillCatalogue(): DatabaseFieldCatalogue
-{
-    $connection = DB::connection();
-
-    return new DatabaseFieldCatalogue(
-        connection: $connection,
-        tables: PgTestSupport::tables(),
-        current: jsonbCurrent(),
-        drivers: ['jsonb' => true, 'eav' => true],
-    );
-}
-
-function backfillDefinition(): AttributeDefinition
-{
-    return new AttributeDefinition(
-        id: AttributeId::v7('018f0b5d-0000-7000-8000-000000000030'),
-        entity: 'contact',
-        key: 'legacy_score',
-        revision: 1,
-        type: 'text',
-        lifecycle: AttributeLifecycle::Active,
-        required: false,
-        searchable: true,
-        constraints: [],
-        readKeys: ['legacy_score'],
-        writeKeys: ['legacy_score'],
-        index: IndexPolicy::None,
-    );
-}
-
-function backfillStore(
-    string $engine,
-    DatabaseFieldCatalogue $catalogue,
-    AttributeValueTransformerRegistry $registry,
-): AttributeStore {
-    $arguments = [
-        'connection' => DB::connection(),
-        'current' => jsonbCurrent(),
-        'tables' => PgTestSupport::tables(),
-        'catalogue' => $catalogue,
-        'authorizer' => jsonbAuthorizer(),
-        'transformers' => $registry,
-    ];
-
-    return $engine === 'jsonb'
-        ? new JsonbAttributeStore(...$arguments)
-        : new EavAttributeStore(...$arguments);
-}
-
-/** @return array{DatabaseFieldCatalogue, AttributeDefinition, AttributeDefinition} */
-function seedBackfill(string $engine, AttributeValueTransformerRegistry $registry, array $values): array
-{
-    $catalogue = backfillCatalogue();
-    $active = backfillDefinition();
-    $catalogue->publish(jsonbScope(), $active, ['legacy_score' => 'current']);
-    $store = backfillStore($engine, $catalogue, $registry);
-    foreach ($values as $recordId => $value) {
-        $store->write(
-            jsonbScope(),
-            new RecordRef(entity: 'contact', id: $recordId),
-            new ValuePatch(values: ['legacy_score' => (string) $value]),
-            new WriteToken(operationKey: "{$engine}-{$recordId}", payloadHash: hash('sha256', "{$engine}-{$recordId}"), expectedRecordVersion: 'absent'),
-        );
-    }
-
-    $evolution = new DefinitionEvolution($registry);
-    $expanded = $evolution->expand($active, 'score', 'int', 'numeric-text');
-    $catalogue->publish(jsonbScope(), $expanded, $evolution->reservations($expanded));
-
-    return [$catalogue, $active, $expanded];
-}
-
-it('resumes ordered batches and verifies canonical digests on both engines', function (string $engine, string $operationId): void {
-    $registry = backfillRegistry();
-    [, $active, $expanded] = seedBackfill($engine, $registry, ['record-1' => 7, 'record-2' => 11]);
-    $backfill = new AttributeBackfill(DB::connection(), jsonbCurrent(), PgTestSupport::tables(), $registry, $engine);
-    $backfill->start(jsonbScope(), $operationId, $active, $expanded);
-    $backfill->start(jsonbScope(), $operationId, $active, $expanded);
-
-    $first = $backfill->runBatch(jsonbScope(), $operationId, 1);
-    $second = $backfill->runBatch(jsonbScope(), $operationId, 1);
-    $finished = $backfill->runBatch(jsonbScope(), $operationId, 1);
-    $verified = $backfill->verify(jsonbScope(), $operationId);
-
-    expect($first)->toMatchArray(['status' => 'backfilling', 'attempted' => 1, 'changed' => 1, 'cursor' => 'record-1'])
-        ->and($second)->toMatchArray(['status' => 'backfilling', 'attempted' => 2, 'changed' => 2, 'cursor' => 'record-2'])
-        ->and($finished['status'])->toBe('backfilled')
-        ->and($verified['status'])->toBe('verified')
-        ->and($verified['source_digest'])->toBe($verified['target_digest']);
-
-    if ($engine === 'jsonb') {
-        $stored = DB::table('sys_attribute_documents')->orderBy('record_id')->pluck('values')->map(
-            static fn (string $value): array => json_decode($value, true, flags: JSON_THROW_ON_ERROR),
-        )->all();
-    } else {
-        $stored = DB::table('sys_attribute_eav_values')->where('field', 'score')->orderBy('record_id')->pluck('value')->map(
-            static fn (string $value): mixed => json_decode($value, true, flags: JSON_THROW_ON_ERROR),
-        )->all();
-    }
-
-    expect($engine === 'jsonb' ? array_column($stored, 'score') : $stored)->toBe([7, 11]);
-})->with([
-    'jsonb' => ['jsonb', '018f0b5d-0000-7000-8000-000000000031'],
-    'eav' => ['eav', '018f0b5d-0000-7000-8000-000000000032'],
-]);
-
-it('rolls back a failed batch and resumes it without advancing the cursor', function (): void {
-    $failing = new AttributeValueTransformerRegistry([
-        'numeric-text' => [
-            'forward' => static function (mixed $value): int {
-                if ((int) $value === 13) {
-                    throw new RuntimeException('simulated worker termination');
-                }
-
-                return (int) $value;
-            },
-            'reverse' => static fn (mixed $value): string => (string) $value,
-        ],
-    ]);
-    [, $active, $expanded] = seedBackfill('jsonb', $failing, ['record-1' => 13]);
-    $operationId = '018f0b5d-0000-7000-8000-000000000033';
-    $backfill = new AttributeBackfill(DB::connection(), jsonbCurrent(), PgTestSupport::tables(), $failing, 'jsonb');
-    $backfill->start(jsonbScope(), $operationId, $active, $expanded);
-
-    expect(fn (): mixed => $backfill->runBatch(jsonbScope(), $operationId, 10))
-        ->toThrow(RuntimeException::class, 'simulated worker termination');
-
-    $checkpoint = DB::table('sys_attribute_backfills')->where('id', $operationId)->first();
-    expect($checkpoint->cursor_record_id)->toBeNull()
-        ->and($checkpoint->attempted)->toBe(0)
-        ->and($checkpoint->changed)->toBe(0);
-
-    $resumed = new AttributeBackfill(DB::connection(), jsonbCurrent(), PgTestSupport::tables(), backfillRegistry(), 'jsonb');
-    expect($resumed->runBatch(jsonbScope(), $operationId, 10)['changed'])->toBe(1)
-        ->and($resumed->runBatch(jsonbScope(), $operationId, 10)['status'])->toBe('backfilled')
-        ->and($resumed->verify(jsonbScope(), $operationId)['status'])->toBe('verified');
+it('blocks switch on a failed historical conversion and clears only a corrected source revision', function (): void {
+    $field = $this->field('code', 'text');
+    expect($this->drain($this->admit(FieldSchemaChange::add($field)))->state)->toBe('completed');
+    $doc = [...SchemaRows::logical($this->scope), 'entity' => $this->entity->value, 'record_id' => 'r1'];
+    $original = $this->writeValue($field, 'r1', 'a');
+    $change = $this->field('code', 'text', id: $field->id, constraints: ['minLength' => 4]);
+    $op = $this->admit(FieldSchemaChange::revise($change));
+    $blocked = $this->drain($op);
+    expect([$blocked->state, $blocked->blockers])->toBe(['blocked', ['historical-conversion-failed']])
+        ->and($blocked->failures)->toHaveCount(1)
+        ->and(fn () => $this->schemas->retry($this->scope, $op, $blocked->generation))->toThrow(SchemaConflict::class);
+    $corrected = $this->writeValue($field, 'r1', 'good', $original->valueRevision);
+    $this->schemas->retry($this->scope, $op, $blocked->generation);
+    expect($this->drain($op)->state)->toBe('completed');
+    $row = DB::table('sys_attribute_documents')->where($doc)->sole();
+    expect($row->document_revision)->toBe($corrected->valueRevision->value)
+        ->and(json_decode($row->slots, true, flags: JSON_THROW_ON_ERROR))->toBe([$field->id->value.'@2' => 'good'])
+        ->and(DB::table('sys_outbox_messages')->count())->toBe(6);
 });
 
-it('preserves a concurrent dual write and blocks switch after digest drift', function (): void {
-    $registry = backfillRegistry();
-    [$catalogue, $active, $expanded] = seedBackfill('eav', $registry, []);
-    $store = backfillStore('eav', $catalogue, $registry);
-    $record = new RecordRef(entity: 'contact', id: 'concurrent');
-    $schemaHash = $catalogue->snapshot(jsonbScope(), 'contact')->schemaHash;
-    $store->write(
-        jsonbScope(),
-        $record,
-        new ValuePatch(values: ['score' => 17], expectedSchemaHash: $schemaHash),
-        new WriteToken(operationKey: 'concurrent-write', payloadHash: hash('sha256', 'concurrent-write'), expectedRecordVersion: 'absent'),
-    );
+it('persists a zero-CAS retry when a separate verified writer wins after the source snapshot', function (): void {
+    $field = $this->field('batch', 'text');
+    expect($this->drain($this->admit(FieldSchemaChange::add($field)))->state)->toBe('completed');
+    $entity = $this->entity;
+    $scope = $this->scope;
+    $record = new RecordRef($entity->value, 'race');
+    $values = $this->app->make(FieldValues::class);
+    $schema = $this->catalogue->snapshot($scope, $entity)->revision;
+    $write = function (string $input, DocumentRevision $revision, string $key) use ($values, $record, $scope, $schema, $field) {
+        $patch = new FieldPatch([new SetField($field->id, FieldInput::from($input))], $schema, $revision);
 
-    $operationId = '018f0b5d-0000-7000-8000-000000000034';
-    $backfill = new AttributeBackfill(DB::connection(), jsonbCurrent(), PgTestSupport::tables(), $registry, 'eav');
-    $backfill->start(jsonbScope(), $operationId, $active, $expanded);
-    expect($backfill->runBatch(jsonbScope(), $operationId, 10)['changed'])->toBe(0)
-        ->and($backfill->runBatch(jsonbScope(), $operationId, 10)['status'])->toBe('backfilled');
+        return $values->update($scope, $record, $patch, $patch->token($scope, $record, $key));
+    };
+    $initial = $write('old-value', DocumentRevision::absent(), 'before');
+    $op = $this->admit(FieldSchemaChange::revise($this->field('batch', 'text', id: $field->id, constraints: ['minLength' => 3])));
+    $this->step();
+    $original = DB::getDefaultConnection();
+    config(['database.connections.schema_racer' => config('database.connections.'.$original)]);
+    $pid = DB::selectOne('SELECT pg_backend_pid() AS pid')->pid;
+    $seen = false;
+    $winner = null;
+    DB::listen(function (QueryExecuted $query) use (&$seen, &$winner, $original, $pid, $write, $initial): void {
+        if ($seen || ! str_contains($query->sql, ' AS source_value') || $query->connectionName !== $original) {
+            return;
+        }
+        $seen = true;
+        DB::setDefaultConnection('schema_racer');
 
-    DB::table('sys_attribute_eav_values')
-        ->where('entity', 'contact')
-        ->where('record_id', 'concurrent')
-        ->where('field', 'score')
-        ->update(['value' => json_encode(99, JSON_THROW_ON_ERROR)]);
-
-    expect(fn (): mixed => $backfill->verify(jsonbScope(), $operationId))
-        ->toThrow(RuntimeException::class, 'divergent values');
-
-    $receipt = DB::table('sys_attribute_backfills')->where('id', $operationId)->first();
-    expect($receipt->status)->toBe('backfilled')
-        ->and($receipt->source_digest)->not->toBe($receipt->target_digest)
-        ->and($receipt->failed)->toBe(1);
-
-    $evolution = new DefinitionEvolution($registry);
-    expect(fn (): mixed => $evolution->switch(
-        $expanded,
-        $receipt->source_digest,
-        $receipt->source_digest,
-        $receipt->target_digest,
-        new DateTimeImmutable,
-    ))->toThrow(InvalidArgumentException::class, 'digest');
+        try {
+            expect(DB::selectOne('SELECT pg_backend_pid() AS pid')->pid)->not->toBe($pid);
+            $winner = $write('winner-value', $initial->valueRevision, 'after');
+        } finally {
+            DB::setDefaultConnection($original);
+        }
+    });
+    $this->step();
+    $retry = DB::table('sys_attribute_backfills')->where('operation_id', $op->id)->where('kind', 'retry')->sole();
+    $document = DB::table('sys_attribute_documents')->where('record_id', 'race')->sole();
+    expect($seen)->toBeTrue()->and($retry->seen_revision)->toBe($initial->valueRevision->value)
+        ->and($document->document_revision)->toBe($winner->valueRevision->value)
+        ->and(array_values(json_decode($document->slots, true, flags: JSON_THROW_ON_ERROR)))->toBe(['winner-value', 'winner-value']);
+    $this->step();
+    expect(DB::table('sys_attribute_backfills')->where('operation_id', $op->id)->where('kind', 'retry')->count())->toBe(0);
+    expect($this->drain($op)->state)->toBe('completed')->and(DB::table('sys_attribute_documents')->where('record_id', 'race')->value('document_revision'))->toBe($winner->valueRevision->value)
+        ->and(DB::table('sys_outbox_messages')->where('name', 'fields.values.changed')->count())->toBe(2);
 });
 
-it('aborts an unfinished backfill and refuses to resume it', function (): void {
-    $registry = backfillRegistry();
-    [, $active, $expanded] = seedBackfill('jsonb', $registry, ['record-1' => 5]);
-    $operationId = '018f0b5d-0000-7000-8000-000000000035';
-    $backfill = new AttributeBackfill(DB::connection(), jsonbCurrent(), PgTestSupport::tables(), $registry, 'jsonb');
-
-    expect(fn (): mixed => $backfill->start(jsonbScope('another-binding'), $operationId, $active, $expanded))
-        ->toThrow(ScopeContextMismatch::class);
-
-    $backfill->start(jsonbScope(), $operationId, $active, $expanded);
-    $backfill->abort(jsonbScope(), $operationId);
-
-    expect(fn (): mixed => $backfill->runBatch(jsonbScope(), $operationId))
-        ->toThrow(RuntimeException::class, 'cannot resume');
+it('resumes slow verification and bounded contraction without revisiting an acknowledged prefix at switch', function (): void {
+    $field = $this->field('volume', 'text');
+    expect($this->drain($this->admit(FieldSchemaChange::add($field)))->state)->toBe('completed');
+    for ($i = 0; $i < 56; $i++) {
+        $this->writeValue($field, sprintf('r%03d', $i), 'original');
+    }
+    $op = $this->admit(FieldSchemaChange::revise($this->field('volume', 'text', id: $field->id, constraints: ['minLength' => 2])));
+    $job = fn () => DB::table('sys_attribute_schema_operations')->where('id', $op->id)->sole();
+    for ($attempt = 0; $attempt < 8 && $job()->phase !== 'verify'; $attempt++) {
+        $this->step();
+    }
+    expect($job()->phase)->toBe('verify');
+    $reads = 0;
+    $expired = false;
+    DB::listen(function (QueryExecuted $query) use (&$reads, &$expired): void {
+        if (str_contains($query->sql, ' AS matches')) {
+            $reads++;
+            $this->clock->offset += $expired ? 31 : 1;
+        }
+    });
+    $this->step();
+    $progress = fn () => DB::table('sys_attribute_backfills')->where('operation_id', $op->id)->where('partition_id', 'verify')->sole();
+    $prefix = $progress()->cursor_record_id;
+    expect($prefix)->toBe('r014')->and($job()->phase)->toBe('verify');
+    $expired = true;
+    $this->step();
+    expect($progress()->cursor_record_id)->toBe($prefix)->and($job()->phase)->toBe('verify');
+    $expired = false;
+    // A newly inserted key behind the verified prefix is covered by the dual-write rule.
+    $this->writeValue($field, 'a-new', 'both');
+    for ($attempt = 0; $attempt < 5 && $job()->phase === 'verify'; $attempt++) {
+        $this->step();
+    }
+    expect($job()->phase)->toBe('switch')->and($progress()->exhausted)->toBeTrue()
+        ->and($reads)->toBe(57);
+    $this->step();
+    expect($job()->state)->toBe('switched')->and($reads)->toBe(57);
+    $before = DB::table('sys_attribute_documents')->whereRaw('jsonb_exists(slots, ?)', [$field->id->value.'@1'])->count();
+    $this->step();
+    expect($job()->state)->toBe('contracting')->and($before)->toBe(57)
+        ->and(DB::table('sys_attribute_documents')->whereRaw('jsonb_exists(slots, ?)', [$field->id->value.'@1'])->count())->toBe(7);
+    $this->step();
+    expect($job()->state)->toBe('completed')->and(DB::table('sys_attribute_documents')->whereRaw('jsonb_exists(slots, ?)', [$field->id->value.'@2'])->count())->toBe(57)
+        ->and(DB::table('sys_attribute_documents')->whereRaw('jsonb_exists(slots, ?)', [$field->id->value.'@1'])->exists())->toBeFalse();
 });

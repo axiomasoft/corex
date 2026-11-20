@@ -3,129 +3,131 @@
 declare(strict_types=1);
 
 use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\CustomFields\Contracts\AttributeStore;
-use CoreX\CustomFields\Contracts\FieldCatalogue;
-use CoreX\CustomFields\Data\FieldSnapshot;
-use CoreX\CustomFields\Data\ValuePatch;
-use CoreX\CustomFields\Internal\InvalidAttributeValue;
-use CoreX\CustomFields\Internal\Values\EavAttributeStore;
-use CoreX\CustomFields\Internal\Values\JsonbAttributeStore;
+use CoreX\CustomFields\Errors\Exceptions\FieldFailure;
+use CoreX\CustomFields\Query\Contracts\FieldFilter;
+use CoreX\CustomFields\Query\Data\FilterNode;
+use CoreX\CustomFields\Schemas\Data\FieldId;
 use CoreX\CustomFields\Tests\PgTestCase;
-use CoreX\CustomFields\Tests\Support\PgTestSupport;
+use CoreX\CustomFields\Tests\Support\ValueFixture;
+use CoreX\CustomFields\Types\Data\FieldInput;
+use CoreX\CustomFields\Types\Enums\FieldOperator;
+use CoreX\CustomFields\Values\Contracts\FieldValues;
+use CoreX\CustomFields\Values\Data\DocumentRevision;
+use CoreX\CustomFields\Values\Data\FieldPatch;
+use CoreX\CustomFields\Values\Data\RecordSelection;
+use CoreX\CustomFields\Values\Data\RemoveField;
+use CoreX\CustomFields\Values\Data\SetField;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Data\Data\WriteToken;
 use CoreX\Data\Enums\FieldUse;
 use Illuminate\Support\Facades\DB;
 
 uses(PgTestCase::class)->group('pg');
 
-function p106PgStore(
-    string $engine,
-    FieldCatalogue $catalogue,
-    DataScopeAuthorizer $authorizer,
-): AttributeStore {
-    $arguments = [
-        'connection' => DB::connection(),
-        'current' => jsonbCurrent(),
-        'tables' => PgTestSupport::tables(),
-        'catalogue' => $catalogue,
-        'authorizer' => $authorizer,
-    ];
+it('reauthorizes field and record eligibility before serving old tokens and filters unavailable batch entries', function (): void {
+    $fixture = new ValueFixture;
+    $fixture->bind($this->app);
+    $revoked = false;
+    $this->app->instance(DataScopeAuthorizer::class, jsonbAuthorizer(static function ($scope, RecordRef $record, FieldSelection $fields, FieldUse $use) use (&$revoked): bool {
+        return $record->id !== 'hidden' && ! ($revoked && $fields->fields !== [] && $use === FieldUse::Write);
+    }));
+    $values = $this->app->make(FieldValues::class);
+    $record = new RecordRef('cas.equipment', 'open');
+    $scope = jsonbScope();
+    $patch = $fixture->patch('allowed');
+    $token = $patch->token($scope, $record, 'first');
+    $values->update($scope, $record, $patch, $token);
+    $revoked = true;
+    expect(fn () => $values->update($scope, $record, $patch, $token))->toThrow(FieldFailure::class, 'access-denied');
+    $batch = $values->readMany($scope, new RecordSelection([$record, new RecordRef('cas.equipment', 'hidden')]), new FieldSelection([$fixture->field->id->value]));
+    expect($batch->items)->toHaveCount(1)->and($batch->rejections)->toBe([['position' => 1, 'reason' => 'unavailable']])
+        ->and($batch->items[0]->values[$fixture->field->id->value]->document->canonicalJson)->toBe('"allowed"')
+        ->and(DB::table('sys_outbox_messages')->count())->toBe(1);
+});
 
-    return $engine === 'jsonb'
-        ? new JsonbAttributeStore(...$arguments)
-        : new EavAttributeStore(...$arguments);
-}
+it('projects each authorized value of a visible record and conceals denied and unknown selections alike', function (): void {
+    $fixture = new ValueFixture;
+    $fixture->bind($this->app);
+    $hidden = $fixture->schema->field('secondary')->id;
+    $missing = '01900000-0000-7000-8000-000000000003';
+    $this->app->instance(DataScopeAuthorizer::class, jsonbAuthorizer(static fn ($scope, $record, FieldSelection $fields, FieldUse $use): bool => $use !== FieldUse::Read || ! in_array($hidden->value, $fields->fields, true)));
+    $record = new RecordRef('cas.equipment', 'visible');
+    $scope = jsonbScope();
+    $values = $this->app->make(FieldValues::class);
+    $entry = $fixture->patch('visible')->operations[0];
+    $patch = new FieldPatch([$entry, new SetField($hidden, FieldInput::from('hidden'))],
+        $fixture->schema->revision, DocumentRevision::absent());
+    $values->update($scope, $record, $patch, $patch->token($scope, $record, 'both'));
+    $visible = $values->read($scope, $record, new FieldSelection([$fixture->field->id->value, $hidden->value, $missing]));
+    expect(array_keys($visible->values))->toBe([$fixture->field->id->value])
+        ->and($values->read($scope, $record, new FieldSelection([$missing]))->values)->toBe([])
+        ->and($values->read($scope, $record, new FieldSelection([$hidden->value]))->values)->toBe([]);
+});
 
-function p106AssertNoMutation(): void
-{
-    expect(DB::table('sys_attribute_documents')->count())->toBe(0)
-        ->and(DB::table('sys_attribute_eav_values')->count())->toBe(0)
-        ->and(DB::table('sys_attribute_eav_records')->count())->toBe(0)
-        ->and(DB::table('sys_attribute_write_tokens')->count())->toBe(0);
-}
+it('denies a record before its head, document or token is read', function (): void {
+    $fixture = new ValueFixture;
+    $fixture->bind($this->app);
+    $this->app->instance(DataScopeAuthorizer::class, jsonbAuthorizer(static fn ($scope, $record, $fields, $use): bool => $use !== FieldUse::Read));
+    $scope = jsonbScope();
+    $ref = new RecordRef('cas.equipment', 'closed');
+    $patch = $fixture->patch('v');
+    DB::connection()->enableQueryLog();
+    expect(fn () => $this->app->make(FieldValues::class)->update($scope, $ref, $patch, $patch->token($scope, $ref, 'token')))->toThrow(FieldFailure::class, 'access-denied');
+    expect(DB::connection()->getQueryLog())->toBe([]);
+});
 
-it('denies each engine atomically before database mutation', function (string $engine): void {
-    $actions = [];
-    $authorizer = jsonbAuthorizer(function (
-        $scope,
-        RecordRef $record,
-        FieldSelection $fields,
-        FieldUse $use,
-    ) use (&$actions): bool {
-        $actions[] = [$use, $fields->fields];
+it('rejects a stale physical scope before record admission or any owner SQL', function (): void {
+    $fixture = new ValueFixture;
+    $fixture->bind($this->app);
+    $scope = jsonbScope('other-binding');
+    $ref = new RecordRef('cas.equipment', 'target');
+    $patch = $fixture->patch('v');
+    $calls = 0;
+    $this->app->instance(DataScopeAuthorizer::class, jsonbAuthorizer(static function () use (&$calls): bool {
+        $calls++;
 
-        return $use !== FieldUse::Write;
-    });
-    $catalogue = PgTestSupport::catalogue('contact', [
-        ['code' => 'email', 'id' => '018d5f56-6f83-7a36-b0ac-6eabce87c10b', 'type' => 'email'],
-        ['code' => 'status', 'id' => '018d5f56-6f83-7a36-b0ac-6eabce87c10c', 'type' => 'text'],
-    ]);
+        return true;
+    }));
+    DB::connection()->enableQueryLog();
+    expect(fn () => $this->app->make(FieldValues::class)->update($scope, $ref, $patch, $patch->token($scope, $ref, 'wrong-binding')))
+        ->toThrow(ScopeContextMismatch::class)
+        ->and($calls)->toBe(0)->and(DB::connection()->getQueryLog())->toBe([]);
+});
 
-    expect(fn (): mixed => p106PgStore($engine, $catalogue, $authorizer)->write(
-        jsonbScope(),
-        new RecordRef('contact', 'guarded-'.$engine),
-        new ValuePatch(['email' => 'owner@example.test', 'status' => 'open']),
-        new WriteToken('guarded-'.$engine, hash('sha256', $engine), 'absent'),
-    ))->toThrow(InvalidAttributeValue::class, 'The attribute write is not allowed.');
+it('returns the same write failure for a hidden UUID and an unknown UUID', function (): void {
+    $fixture = new ValueFixture;
+    $fixture->bind($this->app);
+    $denied = $fixture->schema->field('secondary')->id;
+    $this->app->instance(DataScopeAuthorizer::class, jsonbAuthorizer(static fn ($scope, $ref, FieldSelection $selection): bool => ! in_array($denied->value, $selection->fields, true)));
+    $scope = jsonbScope();
+    $ref = new RecordRef('cas.equipment', 'target');
+    $values = $this->app->make(FieldValues::class);
+    foreach ([$denied, new FieldId('01900000-0000-7000-8000-000000000003')] as $field) {
+        $patch = new FieldPatch([new RemoveField($field)], $fixture->schema->revision, DocumentRevision::absent());
+        expect(fn () => $values->update($scope, $ref, $patch, $patch->token($scope, $ref, 'same')))->toThrow(FieldFailure::class, 'access-denied');
+    }
+    expect(DB::table('sys_attribute_write_tokens')->count())->toBe(0);
+});
 
-    expect($actions)->toBe([
-        [FieldUse::Read, []],
-        [FieldUse::Read, ['018d5f56-6f83-7a36-b0ac-6eabce87c10b']],
-        [FieldUse::Write, ['018d5f56-6f83-7a36-b0ac-6eabce87c10b']],
-    ]);
-    p106AssertNoMutation();
-})->with(['jsonb', 'eav']);
-
-it('checks the tenant connection before catalogue or database mutation', function (string $engine): void {
-    $counter = (object) ['calls' => 0];
-    $catalogue = new readonly class($counter) implements FieldCatalogue
-    {
-        public function __construct(private object $counter) {}
-
-        public function snapshot(DataScope $scope, string $entity): FieldSnapshot
-        {
-            $this->counter->calls++;
-
-            return PgTestSupport::catalogue($entity, [['code' => 'email', 'type' => 'email']])
-                ->snapshot($scope, $entity);
-        }
-    };
-
-    expect(fn (): mixed => p106PgStore($engine, $catalogue, jsonbAuthorizer())->write(
-        jsonbScope(bindingId: 'another-binding'),
-        new RecordRef('contact', 'wrong-tenant-'.$engine),
-        new ValuePatch(['email' => 'owner@example.test']),
-        new WriteToken('wrong-tenant-'.$engine, hash('sha256', 'wrong-'.$engine), 'absent'),
-    ))->toThrow(ScopeContextMismatch::class);
-
-    expect($counter->calls)->toBe(0);
-    p106AssertNoMutation();
-})->with(['jsonb', 'eav']);
-
-it('rejects stale schema and invalid batch constraints without partial writes', function (string $engine): void {
-    $catalogue = PgTestSupport::catalogue('contact', [
-        ['code' => 'email', 'id' => '018d5f56-6f83-7a36-b0ac-6eabce87c10b', 'type' => 'email'],
-        ['code' => 'status', 'id' => '018d5f56-6f83-7a36-b0ac-6eabce87c10c', 'type' => 'text', 'constraints' => ['enum' => ['open', 'closed']]],
-    ]);
-    $store = p106PgStore($engine, $catalogue, jsonbAuthorizer());
-
-    expect(fn (): mixed => $store->write(
-        jsonbScope(),
-        new RecordRef('contact', 'stale-'.$engine),
-        new ValuePatch(['email' => 'owner@example.test'], expectedSchemaHash: str_repeat('b', 64)),
-        new WriteToken('stale-'.$engine, hash('sha256', 'stale-'.$engine), 'absent'),
-    ))->toThrow(InvalidAttributeValue::class, 'The attribute write is not allowed.');
-
-    expect(fn (): mixed => $store->write(
-        jsonbScope(),
-        new RecordRef('contact', 'constraints-'.$engine),
-        new ValuePatch(['email' => 'owner@example.test', 'status' => 'pending']),
-        new WriteToken('constraints-'.$engine, hash('sha256', 'constraints-'.$engine), 'absent'),
-    ))->toThrow(InvalidAttributeValue::class, 'The attribute write is not allowed.');
-
-    p106AssertNoMutation();
-})->with(['jsonb', 'eav']);
+it('checks the current referenced record on read, filter, and an exact write replay', function (): void {
+    $fixture = new ValueFixture('reference', ['target' => 'cas.person']);
+    $fixture->bind($this->app);
+    $allow = true;
+    $this->app->instance(DataScopeAuthorizer::class, jsonbAuthorizer(static function ($scope, RecordRef $record) use (&$allow): bool {
+        return $record->entity !== 'cas.person' || $allow;
+    }));
+    $scope = jsonbScope();
+    $ref = new RecordRef('cas.equipment', 'asset');
+    $target = ['entity' => 'cas.person', 'id' => 'owner'];
+    $patch = $fixture->patch($target);
+    $token = $patch->token($scope, $ref, 'assign');
+    $values = $this->app->make(FieldValues::class);
+    $values->update($scope, $ref, $patch, $token);
+    $allow = false;
+    $node = new FilterNode($fixture->field->id, FieldOperator::Eq, FieldInput::from($target));
+    expect($values->read($scope, $ref, new FieldSelection([$fixture->field->id->value]))->values)->toBe([])
+        ->and(fn () => $values->update($scope, $ref, $patch, $token))->toThrow(FieldFailure::class, 'access-denied')
+        ->and(fn () => $this->app->make(FieldFilter::class)->compile($scope, $fixture->schema, $node))->toThrow(FieldFailure::class, 'access-denied')
+        ->and(DB::table('sys_outbox_messages')->count())->toBe(1);
+});

@@ -1,7 +1,7 @@
 {
     "name": "thirdparty/custom-attribute-source",
-    "description": "Standalone attribute definition source compiled from fixture-owned scalars.",
-    "type": "library",
+    "description": "Standalone equipment field declarations and versioned inspection-code codec.",
+    "type": "packman-module",
     "license": "MIT",
     "require": {
         "php": "^8.4",
@@ -14,5 +14,15 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ThirdParty\\Attributes\\FixtureServiceProvider"
+            ]
+        },
+        "packman": {
+            "module": "ThirdParty\\Attributes\\RegisteredModule"
+        }
+    }
 }

@@ -46,3 +46,13 @@ and lookups in `provider-journal.sqlite` under the individual proof directory.
 Its receipt identifies the journal, while each Laravel worker reports its own
 provisioned PostgreSQL session. Named barriers establish the order of revocation,
 provider commit, lost responses, worker termination, and recovery.
+
+Stage 3 adds `field-write` and `ddl-claim` on the same PHP 8.4 and 8.5 and
+PostgreSQL 16 and 18 lanes. Both install the candidate archives with the committed
+`custom-attribute-source` extension fixture and compile the Packman catalogue before
+the first worker boots. `field-write` observes the contested write token and pauses
+a real backfill conversion while an independent session commits a newer document.
+`ddl-claim` records PostgreSQL's concurrent index progress or the committed index
+before the owner acknowledgement. The receipt includes the index identity and the
+actual acknowledgement count. Use `--variant interrupted`, `--variant lost-ack`,
+or `--variant stale-ack` to isolate a race during diagnosis.

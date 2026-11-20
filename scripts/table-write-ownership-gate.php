@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Config\Data\CoreOptions;
-use CoreX\CustomFields\Data\AttributeTables;
 use Illuminate\Support\Str;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -110,12 +109,6 @@ foreach ($files as $file => $owner) {
             }
 
             if ($parent instanceof Node\Arg && $parent->name instanceof Node\Identifier) {
-                $new = $parent->getAttribute('parent');
-
-                if ($new instanceof Expr\New_ && $new->class instanceof Node\Name && $new->class->getLast() === 'AttributeTables') {
-                    $tableDefaults[$owner][$parent->name->toString()] = $choice->right->value;
-                }
-
                 break;
             }
         }
@@ -143,7 +136,6 @@ foreach ($files as $file => $owner) {
 $optionOwners = [
     CoreOptions::class => 'axiomasoft/corex',
     AuthOptions::class => 'axiomasoft/corex-access',
-    AttributeTables::class => 'axiomasoft/corex-custom-fields',
 ];
 $typedDefaults = [];
 foreach ($optionOwners as $type => $owner) {

@@ -9,6 +9,9 @@ use App\Scenario\BoxedWorkspaces;
 use App\Scenario\CloudTopology;
 use App\Scenario\ExpiringWakeup;
 use App\Scenario\ExternalControlStore;
+use App\Scenario\FieldBackfillBarrier;
+use App\Scenario\FieldScenarioPolicy;
+use App\Scenario\FieldScenarioRoute;
 use App\Scenario\FixtureBrokerReceipt;
 use App\Scenario\FixtureNotificationDriver;
 use App\Scenario\FixtureNotificationPolicy;
@@ -29,6 +32,7 @@ use App\Scenario\ScenarioPrincipalAuthority;
 use App\Scenario\ScenarioSearchSchema;
 use App\Scenario\ScenarioWakeup;
 use App\Scenario\WorkspaceTaskAccess;
+use CoreX\Context\Contracts\AccountConnectionResolver;
 use CoreX\Context\Contracts\ControlStoreIsolation;
 use CoreX\Context\Contracts\NamedWorkPrincipal;
 use CoreX\Context\Contracts\PhysicalBindingVerifier;
@@ -37,7 +41,9 @@ use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Contracts\WorkPrincipalAuthority;
 use CoreX\Context\Contracts\WorkScopeDirectory;
+use CoreX\CustomFields\Types\Contracts\FieldConverterProvider;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\Contracts\FieldUsePolicy;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Data\MessageContract;
@@ -144,13 +150,25 @@ final class ScenarioServiceProvider extends ServiceProvider
             });
         }
 
-        if (in_array($case, ['workspace-sweep', 'notification-visibility', 'provider-unknown'], true)) {
+        if (in_array($case, ['workspace-sweep', 'notification-visibility', 'provider-unknown', 'field-write', 'ddl-claim'], true)) {
             $this->app->singleton(ScenarioClock::class);
             $this->app->alias(ScenarioClock::class, ClockInterface::class);
             $this->app->singleton(BoxedWorkspaces::class);
             foreach ([WorkScopeDirectory::class, TenancyManager::class, TenantContextResolver::class] as $contract) {
                 $this->app->alias(BoxedWorkspaces::class, $contract);
             }
+        }
+
+        if ($case === 'ddl-claim') {
+            $this->app->scoped(AccountConnectionResolver::class, FieldScenarioRoute::class);
+        }
+
+        if (in_array($case, ['field-write', 'ddl-claim'], true)) {
+            $this->app->scoped(FieldUsePolicy::class, FieldScenarioPolicy::class);
+        }
+
+        if ($case === 'field-write' && getenv('COREX_SCENARIO_PAUSE_BACKFILL') === '1') {
+            $this->app->extend('ThirdParty\\Attributes\\InspectionCodeConverterProvider', static fn (FieldConverterProvider $provider): FieldBackfillBarrier => new FieldBackfillBarrier($provider));
         }
 
         if (in_array($case, ['notification-visibility', 'provider-unknown'], true)) {

@@ -15,11 +15,14 @@ return new class extends PackmanMigration
     public function up(): void
     {
         $this->create('sys_attribute_documents', function (Blueprint $table): void {
+            $table->string('account_id', 128);
+            $table->string('account_incarnation', 128);
+            $table->string('workspace_scope', 140);
             $table->string('entity', 128);
             $table->string('record_id', 128);
-            $table->jsonb('values');
-            $table->string('record_version', 64);
-            $table->primary(['entity', 'record_id'], 'sys_attribute_documents_pk');
+            $table->jsonb('slots');
+            $table->char('document_revision', 64);
+            $table->primary(['account_id', 'account_incarnation', 'workspace_scope', 'entity', 'record_id'], 'sys_attribute_documents_pk');
         });
     }
 

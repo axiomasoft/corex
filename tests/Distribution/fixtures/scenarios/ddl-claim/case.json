@@ -1,0 +1,406 @@
+{
+  "id": "ddl-claim",
+  "laravel": 13,
+  "host_support": true,
+  "timeout_seconds": 145,
+  "distinct_connections": true,
+  "profile": {
+    "id": "boxed-ddl-claim",
+    "database": "postgres-isolated",
+    "database_roles": [
+      "control",
+      "a"
+    ],
+    "default_database": "a",
+    "http": true,
+    "packages": [
+      "axiomasoft/corex",
+      "axiomasoft/corex-custom-fields"
+    ],
+    "extension_fixture": {
+      "id": "custom-attribute-source",
+      "version": "1.0.0"
+    },
+    "forbid": [
+      {
+        "package": "axiomasoft/corex-tenancy",
+        "name": "Tenancy"
+      },
+      {
+        "package": "axiomasoft/corex-search",
+        "name": "Search"
+      }
+    ]
+  },
+  "variants": {
+    "interrupted": {
+      "processes": {
+        "produce": [
+          "php",
+          "{fixture}/probe.php",
+          "produce"
+        ],
+        "snapshot": [
+          "php",
+          "{fixture}/probe.php",
+          "snapshot"
+        ],
+        "worker-a": [
+          "php",
+          "{fixture}/probe.php",
+          "worker-a"
+        ],
+        "progress": [
+          "php",
+          "{fixture}/probe.php",
+          "progress"
+        ],
+        "stop-backend": [
+          "php",
+          "{fixture}/probe.php",
+          "stop-backend"
+        ],
+        "successor": [
+          "php",
+          "{fixture}/probe.php",
+          "successor"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "produce"
+        },
+        {
+          "action": "await",
+          "name": "ddl-plan",
+          "process": "produce"
+        },
+        {
+          "action": "release",
+          "name": "ddl-plan"
+        },
+        {
+          "action": "complete",
+          "name": "produce"
+        },
+        {
+          "action": "start",
+          "name": "snapshot"
+        },
+        {
+          "action": "await",
+          "name": "old-snapshot",
+          "process": "snapshot"
+        },
+        {
+          "action": "start",
+          "name": "worker-a"
+        },
+        {
+          "action": "await",
+          "name": "ddl-worker-enter",
+          "process": "worker-a"
+        },
+        {
+          "action": "release",
+          "name": "ddl-worker-enter"
+        },
+        {
+          "action": "start",
+          "name": "progress"
+        },
+        {
+          "action": "await",
+          "name": "cic-witness",
+          "process": "progress"
+        },
+        {
+          "action": "terminate",
+          "name": "worker-a",
+          "barrier": "ddl-worker-enter"
+        },
+        {
+          "action": "start",
+          "name": "stop-backend"
+        },
+        {
+          "action": "complete",
+          "name": "stop-backend"
+        },
+        {
+          "action": "release",
+          "name": "cic-witness"
+        },
+        {
+          "action": "complete",
+          "name": "progress"
+        },
+        {
+          "action": "release",
+          "name": "old-snapshot"
+        },
+        {
+          "action": "complete",
+          "name": "snapshot"
+        },
+        {
+          "action": "start",
+          "name": "successor"
+        },
+        {
+          "action": "complete",
+          "name": "successor"
+        }
+      ]
+    },
+    "lost-ack": {
+      "processes": {
+        "produce": [
+          "php",
+          "{fixture}/probe.php",
+          "produce"
+        ],
+        "worker-a": [
+          "php",
+          "{fixture}/probe.php",
+          "worker-a"
+        ],
+        "successor": [
+          "php",
+          "{fixture}/probe.php",
+          "successor"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "produce"
+        },
+        {
+          "action": "await",
+          "name": "ddl-plan",
+          "process": "produce"
+        },
+        {
+          "action": "release",
+          "name": "ddl-plan"
+        },
+        {
+          "action": "complete",
+          "name": "produce"
+        },
+        {
+          "action": "start",
+          "name": "worker-a"
+        },
+        {
+          "action": "await",
+          "name": "ddl-worker-enter",
+          "process": "worker-a"
+        },
+        {
+          "action": "release",
+          "name": "ddl-worker-enter"
+        },
+        {
+          "action": "await",
+          "name": "ddl-before-ack",
+          "process": "worker-a"
+        },
+        {
+          "action": "terminate",
+          "name": "worker-a",
+          "barrier": "ddl-before-ack"
+        },
+        {
+          "action": "start",
+          "name": "successor"
+        },
+        {
+          "action": "complete",
+          "name": "successor"
+        }
+      ]
+    },
+    "stale-ack": {
+      "processes": {
+        "produce": [
+          "php",
+          "{fixture}/probe.php",
+          "produce"
+        ],
+        "worker-a": [
+          "php",
+          "{fixture}/probe.php",
+          "worker-a"
+        ],
+        "successor": [
+          "php",
+          "{fixture}/probe.php",
+          "successor"
+        ],
+        "stale-observer": [
+          "php",
+          "{fixture}/probe.php",
+          "stale-observer"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "produce"
+        },
+        {
+          "action": "await",
+          "name": "ddl-plan",
+          "process": "produce"
+        },
+        {
+          "action": "release",
+          "name": "ddl-plan"
+        },
+        {
+          "action": "complete",
+          "name": "produce"
+        },
+        {
+          "action": "start",
+          "name": "worker-a"
+        },
+        {
+          "action": "await",
+          "name": "ddl-worker-enter",
+          "process": "worker-a"
+        },
+        {
+          "action": "release",
+          "name": "ddl-worker-enter"
+        },
+        {
+          "action": "await",
+          "name": "ddl-before-ack",
+          "process": "worker-a"
+        },
+        {
+          "action": "start",
+          "name": "successor"
+        },
+        {
+          "action": "await",
+          "name": "ddl-new-claim",
+          "process": "successor"
+        },
+        {
+          "action": "release",
+          "name": "ddl-before-ack"
+        },
+        {
+          "action": "complete",
+          "name": "worker-a"
+        },
+        {
+          "action": "start",
+          "name": "stale-observer"
+        },
+        {
+          "action": "complete",
+          "name": "stale-observer"
+        },
+        {
+          "action": "release",
+          "name": "ddl-new-claim"
+        },
+        {
+          "action": "complete",
+          "name": "successor"
+        }
+      ]
+    },
+    "wrong-definition": {
+      "processes": {
+        "produce": [
+          "php",
+          "{fixture}/probe.php",
+          "produce"
+        ],
+        "negative": [
+          "php",
+          "{fixture}/probe.php",
+          "negative"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "produce"
+        },
+        {
+          "action": "await",
+          "name": "ddl-plan",
+          "process": "produce"
+        },
+        {
+          "action": "release",
+          "name": "ddl-plan"
+        },
+        {
+          "action": "complete",
+          "name": "produce"
+        },
+        {
+          "action": "start",
+          "name": "negative"
+        },
+        {
+          "action": "complete",
+          "name": "negative"
+        }
+      ]
+    },
+    "unattested": {
+      "processes": {
+        "produce": [
+          "php",
+          "{fixture}/probe.php",
+          "produce"
+        ],
+        "negative": [
+          "php",
+          "{fixture}/probe.php",
+          "negative"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "produce"
+        },
+        {
+          "action": "await",
+          "name": "ddl-plan",
+          "process": "produce"
+        },
+        {
+          "action": "release",
+          "name": "ddl-plan"
+        },
+        {
+          "action": "complete",
+          "name": "produce"
+        },
+        {
+          "action": "start",
+          "name": "negative",
+          "environment": {
+            "COREX_SCENARIO_DDL_UNATTESTED": "1"
+          }
+        },
+        {
+          "action": "complete",
+          "name": "negative"
+        }
+      ]
+    }
+  }
+}

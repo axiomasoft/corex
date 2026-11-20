@@ -88,10 +88,18 @@ final class ScenarioPrincipalAuthority implements WorkPrincipalAuthority
 
     private function assertService(TenantContext $context, string $service): void
     {
-        if ($context->workspace !== null || $service !== 'corex.scheduler-sweep'
-            || ! $this->database->connection()->table('scenario_service_grants')->where('service', $service)
-                ->where('account', $context->id())->exists()) {
-            throw new ScopeContextMismatch('The fixed root service has no grant on this account.');
+        $connection = $this->database->connection();
+        $granted = match ($service) {
+            'corex.scheduler-sweep' => $context->workspace === null && $connection->table('scenario_service_grants')
+                ->where('service', $service)->where('account', $context->id())->exists(),
+            FieldScenario::WORKER => in_array(getenv('COREX_SCENARIO_CASE'), ['field-write', 'ddl-claim'], true)
+                && $context->workspace !== null && $connection->table('scenario_field_worker_grants')
+                    ->where('service', $service)->where('account_id', $context->id())->where('workspace_id', $context->workspace->id)->exists(),
+            default => false,
+        };
+
+        if (! $granted) {
+            throw new ScopeContextMismatch('The named service has no grant in this scope.');
         }
     }
 

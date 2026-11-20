@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import shutil
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -75,6 +77,26 @@ class ProfileProofTest(unittest.TestCase):
         with self.assertRaises(MODULE.ProfileError) as caught:
             MODULE.expand_packages({"packages": ["corex/missing-package"]}, set(self.composers))
         self.assertIn("missing package: corex/missing-package", str(caught.exception))
+
+    def test_extension_is_loaded_from_a_committed_copy_and_rejects_drift(self) -> None:
+        with tempfile.TemporaryDirectory() as work:
+            consumer = Path(work)
+            extension = {"id": "custom-attribute-source", "version": "1.0.0"}
+            (consumer / "composer.json").write_text(json.dumps({"require": {}, "repositories": []}))
+            MODULE.install_extension_source(consumer, ROOT, extension)
+            name = "thirdparty/custom-attribute-source"
+            source = consumer / "scenario-extension"
+            installed = consumer / "vendor" / name
+            shutil.copytree(source, installed)
+            (consumer / "composer.lock").write_text(json.dumps({"packages": [{
+                "name": name, "version": "1.0.0", "dist": {"type": "path", "url": "scenario-extension"},
+            }]}))
+            proof = MODULE.assert_fixture_extension(consumer, extension)
+            self.assertEqual(name, proof["name"])
+            self.assertEqual(64, len(proof["source_sha256"]))
+            (installed / "composer.json").write_text("{}")
+            with self.assertRaisesRegex(MODULE.ProfileError, "does not match the committed source copy"):
+                MODULE.assert_fixture_extension(consumer, extension)
 
     def test_undeclared_skip_names_the_cell(self) -> None:
         with self.assertRaises(MODULE.ProfileError) as caught:

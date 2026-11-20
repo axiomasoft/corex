@@ -11,3 +11,9 @@ parameters:
         - database/migrations
     checkModelProperties: true
     checkPhpDocMissingReturn: true
+    ignoreErrors:
+        # CIC spans transactions on the attested direct writer. Keep the pooling rule everywhere else.
+        -
+            identifier: modules.sessionAdvisoryLock
+            path: src/Schemas/Internal/PostgresDdlExecutor.php
+            count: 2

@@ -16,8 +16,7 @@ This catalogue records reviewed methods whose legitimate callers lie outside the
 | `CoreX\Access\Enums\Scope::weight` | Host native role-matrix tools compare Scope values using the documented none→own→department→workspace→account ordering. |
 | `CoreX\Audit\Laravel\HasAuditLog::bootHasAuditLog` | Eloquent boots this trait on consumer models and registers the audit observer before model lifecycle events are emitted. |
 | `CoreX\Context\Exceptions\ScopeContextMismatch::errorDescriptor` | Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message. |
-| `CoreX\CustomFields\Data\AttributeLifecycle::assertTransition` | Host custom-field administration validates lifecycle transitions before asking its repository to persist an attribute state change. |
-| `CoreX\CustomFields\Exceptions\InvalidAttributeTables::errorDescriptor` | Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message. |
+| `CoreX\CustomFields\Errors\Exceptions\FieldFailure::errorDescriptor` | Laravel error adapters obtain the stable code, category and retryability through DescribesError. |
 | `CoreX\Data\Exceptions\InvalidScopePayload::errorDescriptor` | Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message. |
 | `CoreX\Departments\Exceptions\CrossWorkspaceMoveException::errorDescriptor` | Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message. |
 | `CoreX\Departments\Exceptions\DepartmentCycleException::errorDescriptor` | Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message. |

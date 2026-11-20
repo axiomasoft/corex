@@ -6334,99 +6334,60 @@
         },
         "sys_attribute_backfills": {
             "columns": {
-                "attempted": {
-                    "type": "bigint",
-                    "nullable": false,
-                    "default": "'0'::bigint"
-                },
-                "attribute_id": {
-                    "type": "uuid",
-                    "nullable": false,
-                    "default": null
-                },
-                "changed": {
-                    "type": "bigint",
-                    "nullable": false,
-                    "default": "'0'::bigint"
-                },
-                "created_at": {
-                    "type": "timestamp(0) with time zone",
-                    "nullable": true,
-                    "default": null
-                },
                 "cursor_record_id": {
                     "type": "character varying(128)",
                     "nullable": true,
                     "default": null
                 },
-                "entity": {
+                "error_code": {
                     "type": "character varying(128)",
-                    "nullable": false,
-                    "default": null
-                },
-                "error": {
-                    "type": "text",
                     "nullable": true,
                     "default": null
                 },
-                "failed": {
-                    "type": "bigint",
+                "exhausted": {
+                    "type": "boolean",
                     "nullable": false,
-                    "default": "'0'::bigint"
+                    "default": "false"
                 },
-                "from_revision": {
-                    "type": "bigint",
-                    "nullable": false,
-                    "default": null
-                },
-                "id": {
-                    "type": "uuid",
-                    "nullable": false,
-                    "default": null
-                },
-                "source_digest": {
-                    "type": "character(64)",
-                    "nullable": true,
-                    "default": null
-                },
-                "source_key": {
-                    "type": "character varying(128)",
-                    "nullable": false,
-                    "default": null
-                },
-                "status": {
+                "kind": {
                     "type": "character varying(16)",
                     "nullable": false,
                     "default": null
                 },
-                "target_digest": {
+                "operation_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "partition_id": {
+                    "type": "character varying(320)",
+                    "nullable": false,
+                    "default": null
+                },
+                "record_id": {
+                    "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                },
+                "seen_revision": {
                     "type": "character(64)",
                     "nullable": true,
                     "default": null
                 },
-                "target_key": {
+                "upper_record_id": {
                     "type": "character varying(128)",
-                    "nullable": false,
-                    "default": null
-                },
-                "to_revision": {
-                    "type": "bigint",
-                    "nullable": false,
-                    "default": null
-                },
-                "updated_at": {
-                    "type": "timestamp(0) with time zone",
                     "nullable": true,
                     "default": null
                 }
             },
             "indexes": [
                 {
-                    "name": "sys_attribute_backfills_attribute_id_to_revision_ix",
+                    "name": "sys_attribute_backfills_pending_ix",
                     "kind": "ix",
                     "columns": [
-                        "attribute_id",
-                        "to_revision"
+                        "operation_id",
+                        "kind",
+                        "record_id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -6436,7 +6397,8 @@
                     "name": "sys_attribute_backfills_pk",
                     "kind": "pk",
                     "columns": [
-                        "id"
+                        "operation_id",
+                        "partition_id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -6449,22 +6411,22 @@
         },
         "sys_attribute_definitions": {
             "columns": {
-                "attribute_id": {
-                    "type": "uuid",
+                "account_id": {
+                    "type": "character varying(128)",
                     "nullable": false,
                     "default": null
                 },
-                "constraints": {
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "definition": {
                     "type": "jsonb",
                     "nullable": false,
                     "default": null
                 },
-                "created_at": {
-                    "type": "timestamp(0) with time zone",
-                    "nullable": false,
-                    "default": "CURRENT_TIMESTAMP"
-                },
-                "definition_hash": {
+                "definition_digest": {
                     "type": "character(64)",
                     "nullable": false,
                     "default": null
@@ -6474,33 +6436,18 @@
                     "nullable": false,
                     "default": null
                 },
-                "index_policy": {
-                    "type": "jsonb",
+                "field_id": {
+                    "type": "uuid",
                     "nullable": false,
                     "default": null
                 },
-                "key": {
-                    "type": "character varying(128)",
+                "owner": {
+                    "type": "character varying(191)",
                     "nullable": false,
                     "default": null
                 },
-                "lifecycle": {
+                "provenance": {
                     "type": "character varying(16)",
-                    "nullable": false,
-                    "default": null
-                },
-                "meta": {
-                    "type": "jsonb",
-                    "nullable": false,
-                    "default": null
-                },
-                "read_keys": {
-                    "type": "jsonb",
-                    "nullable": false,
-                    "default": null
-                },
-                "required": {
-                    "type": "boolean",
                     "nullable": false,
                     "default": null
                 },
@@ -6509,40 +6456,27 @@
                     "nullable": false,
                     "default": null
                 },
-                "searchable": {
-                    "type": "boolean",
+                "storage_revision": {
+                    "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
-                "type": {
-                    "type": "character varying(64)",
-                    "nullable": false,
-                    "default": null
-                },
-                "write_keys": {
-                    "type": "jsonb",
+                "workspace_scope": {
+                    "type": "character varying(140)",
                     "nullable": false,
                     "default": null
                 }
             },
             "indexes": [
                 {
-                    "name": "sys_attribute_definitions_entity_attribute_id_revision_ix",
-                    "kind": "ix",
-                    "columns": [
-                        "entity",
-                        "attribute_id",
-                        "revision"
-                    ],
-                    "predicate": null,
-                    "method": "btree",
-                    "nulls_not_distinct": false
-                },
-                {
                     "name": "sys_attribute_definitions_pk",
                     "kind": "pk",
                     "columns": [
-                        "attribute_id",
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "entity",
+                        "field_id",
                         "revision"
                     ],
                     "predicate": null,
@@ -6556,6 +6490,21 @@
         },
         "sys_attribute_documents": {
             "columns": {
+                "account_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "document_revision": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
                 "entity": {
                     "type": "character varying(128)",
                     "nullable": false,
@@ -6566,13 +6515,13 @@
                     "nullable": false,
                     "default": null
                 },
-                "record_version": {
-                    "type": "character varying(64)",
+                "slots": {
+                    "type": "jsonb",
                     "nullable": false,
                     "default": null
                 },
-                "values": {
-                    "type": "jsonb",
+                "workspace_scope": {
+                    "type": "character varying(140)",
                     "nullable": false,
                     "default": null
                 }
@@ -6582,84 +6531,11 @@
                     "name": "sys_attribute_documents_pk",
                     "kind": "pk",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
                         "entity",
                         "record_id"
-                    ],
-                    "predicate": null,
-                    "method": "btree",
-                    "nulls_not_distinct": false
-                }
-            ],
-            "foreign_keys": [],
-            "checks": [],
-            "triggers": []
-        },
-        "sys_attribute_eav_records": {
-            "columns": {
-                "entity": {
-                    "type": "character varying(128)",
-                    "nullable": false,
-                    "default": null
-                },
-                "record_id": {
-                    "type": "character varying(128)",
-                    "nullable": false,
-                    "default": null
-                },
-                "record_version": {
-                    "type": "character varying(64)",
-                    "nullable": false,
-                    "default": null
-                }
-            },
-            "indexes": [
-                {
-                    "name": "sys_attribute_eav_records_pk",
-                    "kind": "pk",
-                    "columns": [
-                        "entity",
-                        "record_id"
-                    ],
-                    "predicate": null,
-                    "method": "btree",
-                    "nulls_not_distinct": false
-                }
-            ],
-            "foreign_keys": [],
-            "checks": [],
-            "triggers": []
-        },
-        "sys_attribute_eav_values": {
-            "columns": {
-                "entity": {
-                    "type": "character varying(128)",
-                    "nullable": false,
-                    "default": null
-                },
-                "field": {
-                    "type": "character varying(128)",
-                    "nullable": false,
-                    "default": null
-                },
-                "record_id": {
-                    "type": "character varying(128)",
-                    "nullable": false,
-                    "default": null
-                },
-                "value": {
-                    "type": "jsonb",
-                    "nullable": false,
-                    "default": null
-                }
-            },
-            "indexes": [
-                {
-                    "name": "sys_attribute_eav_values_pk",
-                    "kind": "pk",
-                    "columns": [
-                        "entity",
-                        "record_id",
-                        "field"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -6672,18 +6548,13 @@
         },
         "sys_attribute_key_reservations": {
             "columns": {
-                "attribute_id": {
-                    "type": "uuid",
+                "account_id": {
+                    "type": "character varying(128)",
                     "nullable": false,
                     "default": null
                 },
-                "created_at": {
-                    "type": "timestamp(0) with time zone",
-                    "nullable": true,
-                    "default": null
-                },
-                "current_revision": {
-                    "type": "bigint",
+                "account_incarnation": {
+                    "type": "character varying(128)",
                     "nullable": false,
                     "default": null
                 },
@@ -6692,40 +6563,37 @@
                     "nullable": false,
                     "default": null
                 },
-                "key": {
+                "field_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "machine_key": {
                     "type": "character varying(128)",
                     "nullable": false,
                     "default": null
                 },
-                "role": {
-                    "type": "character varying(16)",
-                    "nullable": false,
+                "operation_id": {
+                    "type": "uuid",
+                    "nullable": true,
                     "default": null
                 },
-                "updated_at": {
-                    "type": "timestamp(0) with time zone",
-                    "nullable": true,
+                "workspace_scope": {
+                    "type": "character varying(140)",
+                    "nullable": false,
                     "default": null
                 }
             },
             "indexes": [
                 {
-                    "name": "sys_attribute_key_reservations_attribute_id_current_revision_ix",
-                    "kind": "ix",
-                    "columns": [
-                        "attribute_id",
-                        "current_revision"
-                    ],
-                    "predicate": null,
-                    "method": "btree",
-                    "nulls_not_distinct": false
-                },
-                {
                     "name": "sys_attribute_key_reservations_pk",
                     "kind": "pk",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
                         "entity",
-                        "key"
+                        "machine_key"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -6738,23 +6606,63 @@
         },
         "sys_attribute_schema_operations": {
             "columns": {
-                "approval_digest": {
-                    "type": "character varying(64)",
+                "account_id": {
+                    "type": "character varying(128)",
                     "nullable": false,
                     "default": null
                 },
-                "attempts": {
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "base_revision": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_generation": {
                     "type": "bigint",
                     "nullable": false,
-                    "default": "'0'::bigint"
+                    "default": null
                 },
-                "created_at": {
-                    "type": "timestamp(0) with time zone",
+                "binding_id": {
+                    "type": "character varying(128)",
                     "nullable": false,
-                    "default": "CURRENT_TIMESTAMP"
+                    "default": null
                 },
-                "definition": {
+                "blockers": {
                     "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "cancel_requested": {
+                    "type": "boolean",
+                    "nullable": false,
+                    "default": "false"
+                },
+                "changed_message": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "claim_token": {
+                    "type": "uuid",
+                    "nullable": true,
+                    "default": null
+                },
+                "ddl_intent": {
+                    "type": "jsonb",
+                    "nullable": true,
+                    "default": null
+                },
+                "ddl_receipt": {
+                    "type": "jsonb",
+                    "nullable": true,
+                    "default": null
+                },
+                "deployment_id": {
+                    "type": "character varying(128)",
                     "nullable": false,
                     "default": null
                 },
@@ -6763,64 +6671,116 @@
                     "nullable": false,
                     "default": null
                 },
-                "error_code": {
-                    "type": "character varying(128)",
-                    "nullable": true,
-                    "default": null
-                },
-                "finished_at": {
-                    "type": "timestamp(0) with time zone",
-                    "nullable": true,
-                    "default": null
+                "generation": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'0'::bigint"
                 },
                 "id": {
-                    "type": "character varying(64)",
+                    "type": "uuid",
                     "nullable": false,
                     "default": null
+                },
+                "lease_until": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "next_attempt_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
                 },
                 "operation_key": {
-                    "type": "character varying(128)",
+                    "type": "character varying(200)",
                     "nullable": false,
                     "default": null
                 },
-                "payload_hash": {
-                    "type": "character varying(64)",
+                "phase": {
+                    "type": "character varying(24)",
                     "nullable": false,
                     "default": null
                 },
-                "restore_epoch": {
-                    "type": "character varying(64)",
+                "plan": {
+                    "type": "jsonb",
                     "nullable": false,
                     "default": null
                 },
-                "schema_hash": {
-                    "type": "character varying(64)",
-                    "nullable": false,
-                    "default": null
-                },
-                "scope_hash": {
+                "plan_digest": {
                     "type": "character(64)",
                     "nullable": false,
                     "default": null
                 },
-                "started_at": {
-                    "type": "timestamp(0) with time zone",
+                "requested_message": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "restore_epoch": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_seal": {
+                    "type": "character(64)",
                     "nullable": true,
                     "default": null
                 },
-                "status": {
-                    "type": "character varying(16)",
+                "state": {
+                    "type": "character varying(24)",
+                    "nullable": false,
+                    "default": null
+                },
+                "target_revision": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "workspace_scope": {
+                    "type": "character varying(140)",
                     "nullable": false,
                     "default": null
                 }
             },
             "indexes": [
                 {
-                    "name": "sys_attribute_schema_operations_operation_key_uq",
+                    "name": "sys_attribute_schema_operations_due_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "state",
+                        "next_attempt_at",
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "sys_attribute_schema_operations_key_uq",
                     "kind": "uq",
                     "columns": [
-                        "scope_hash",
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "entity",
                         "operation_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "sys_attribute_schema_operations_lease_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "state",
+                        "lease_until",
+                        "id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -6843,18 +6803,48 @@
         },
         "sys_attribute_write_tokens": {
             "columns": {
+                "account_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "actor_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "actor_kind": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                },
+                "document_revision": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
                 "entity": {
                     "type": "character varying(128)",
                     "nullable": false,
                     "default": null
                 },
-                "operation_key": {
-                    "type": "character varying(128)",
+                "message_id": {
+                    "type": "uuid",
                     "nullable": false,
                     "default": null
                 },
-                "payload_hash": {
-                    "type": "character varying(64)",
+                "operation_key": {
+                    "type": "character varying(191)",
+                    "nullable": false,
+                    "default": null
+                },
+                "receipt_id": {
+                    "type": "uuid",
                     "nullable": false,
                     "default": null
                 },
@@ -6863,8 +6853,18 @@
                     "nullable": false,
                     "default": null
                 },
-                "record_version": {
-                    "type": "character varying(64)",
+                "request_digest": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "schema_revision": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "workspace_scope": {
+                    "type": "character varying(140)",
                     "nullable": false,
                     "default": null
                 }
@@ -6874,6 +6874,13 @@
                     "name": "sys_attribute_write_tokens_pk",
                     "kind": "pk",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "entity",
+                        "actor_kind",
+                        "actor_id",
+                        "record_id",
                         "operation_key"
                     ],
                     "predicate": null,
@@ -7395,6 +7402,78 @@
                     "expression": "((scope_type)::text = ANY ((ARRAY['workspace'::character varying, 'user'::character varying, 'department'::character varying])::text[]))"
                 }
             ],
+            "triggers": []
+        },
+        "sys_field_schema_heads": {
+            "columns": {
+                "account_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "dual_write": {
+                    "type": "jsonb",
+                    "nullable": true,
+                    "default": null
+                },
+                "effective_revision": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "entity": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "manifest_digest": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "mapping": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "mapping_digest": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "pending_plan": {
+                    "type": "uuid",
+                    "nullable": true,
+                    "default": null
+                },
+                "workspace_scope": {
+                    "type": "character varying(140)",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "sys_field_schema_heads_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "entity"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
             "triggers": []
         },
         "sys_inbox_messages": {

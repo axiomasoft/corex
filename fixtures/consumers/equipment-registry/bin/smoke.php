@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Equipment\Registry\Smoke;
 use Illuminate\Foundation\Application;
 
-require dirname(__DIR__).'/vendor/autoload.php';
+require getcwd().'/vendor/autoload.php';
 
 $mode = $argv[1] ?? '';
 $database = $argv[2] ?? '';
@@ -15,7 +15,7 @@ if (! in_array($mode, ['schedule', 'worker', 'read'], true) || $database === '')
     exit(1);
 }
 
-$application = new Application(dirname(__DIR__));
+$application = new Application(getcwd());
 
 if ($application->basePath() === '') {
     fwrite(STDERR, "laravel application did not boot\n");

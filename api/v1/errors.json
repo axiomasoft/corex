@@ -144,51 +144,57 @@
         "retryable": false
     },
     {
-        "category": "conflict",
-        "code": "custom-fields.attribute_schema_conflict",
-        "detail_keys": [
-            "reason"
-        ],
-        "owner": "axiomasoft/corex-custom-fields",
-        "path": null,
-        "retryable": false
-    },
-    {
-        "category": "conflict",
-        "code": "custom-fields.attribute_schema_conflict",
-        "detail_keys": [
-            "reason"
-        ],
-        "owner": "axiomasoft/corex-custom-fields",
-        "path": null,
-        "retryable": true
-    },
-    {
-        "category": "conflict",
-        "code": "custom-fields.attribute_schema_retry_exhausted",
-        "detail_keys": [
-            "reason"
-        ],
-        "owner": "axiomasoft/corex-custom-fields",
-        "path": null,
-        "retryable": false
-    },
-    {
         "category": "authorization",
-        "code": "custom-fields.attributes_access_denied",
-        "detail_keys": [
-            "reason"
-        ],
+        "code": "custom-fields.access_denied",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-custom-fields",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "custom-fields.claim_lost",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-custom-fields",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "custom-fields.document_revision_mismatch",
+        "detail_keys": [],
         "owner": "axiomasoft/corex-custom-fields",
         "path": null,
         "retryable": false
     },
     {
         "category": "unavailable",
-        "code": "custom-fields.attributes_engine_unavailable",
-        "detail_keys": [
-            "reason"
-        ],
+        "code": "custom-fields.field_type_unavailable",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-custom-fields",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "custom-fields.idempotency_conflict",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-custom-fields",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "custom-fields.invalid_field_value",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-custom-fields",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "custom-fields.schema_revision_mismatch",
+        "detail_keys": [],
         "owner": "axiomasoft/corex-custom-fields",
         "path": null,
         "retryable": false

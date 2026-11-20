@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import importlib.util
+import io
 import json
 import os
 import re
@@ -13,6 +14,7 @@ import secrets
 import shutil
 import subprocess
 import sys
+import tarfile
 import tempfile
 from contextlib import contextmanager
 from pathlib import Path
@@ -658,6 +660,9 @@ def install_app(
     packages = list(cell["packages"])
     write_consumer(consumer, packages, laravel, repository, ".".join(map(str, binary["version"])), candidate_version)
     prerequisites = reviewed_prerequisites(consumer, profile.get("prerequisites", []), workspace)
+    extension = profile.get("extension_fixture")
+    if extension is not None:
+        install_extension_source(consumer, workspace, extension)
     if profile.get("product") == "flex/crm":
         shutil.copytree(workspace / "products/flex-crm", consumer / "flex-crm", ignore=shutil.ignore_patterns("vendor", "composer.lock"))
         manifest = load_json(consumer / "composer.json")
@@ -681,6 +686,8 @@ def install_app(
         fail_command(cell["id"], validated)
     assert_dist_install(consumer, repository, packages, workspace)
     assert_prerequisites(consumer, prerequisites)
+    if extension is not None:
+        assert_fixture_extension(consumer, extension)
     example = consumer / ".env.example"
     env_file = consumer / ".env"
     if not env_file.exists() and example.exists():
@@ -696,7 +703,72 @@ def install_app(
     generated = run(["php", "artisan", "key:generate", "--ansi", "--force"], consumer, runtime)
     if generated.returncode != 0:
         fail_command(cell["id"], generated)
+    if extension is not None:
+        compiled = run(["php", "artisan", "modules:compile", "--no-interaction"], consumer, runtime)
+        if compiled.returncode != 0:
+            fail_command(cell["id"], compiled)
     return consumer, runtime, packages
+
+
+def extension_source(specification: dict) -> Path:
+    slug = specification["id"]
+    version = specification["version"]
+    if not re.fullmatch(r"[a-z][a-z0-9-]*", slug) or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", version):
+        raise ProfileError("invalid installed extension fixture identity")
+    return Path("fixtures/extensions") / slug
+
+
+def install_extension_source(consumer: Path, workspace: Path, specification: dict) -> None:
+    source = extension_source(specification)
+    snapshot = subprocess.run(
+        ["git", "archive", "--format=tar", f"HEAD:{source.as_posix()}"],
+        cwd=workspace, check=True, capture_output=True,
+    )
+    target = consumer / "scenario-extension"
+    target.mkdir()
+    with tarfile.open(fileobj=io.BytesIO(snapshot.stdout)) as archive:
+        if any(not (entry.isfile() or entry.isdir()) for entry in archive.getmembers()):
+            raise ProfileError("installed extension fixture contains a symbolic link or special file")
+        archive.extractall(target, filter="data")
+    package = load_json(target / "composer.json")
+    name = f"thirdparty/{specification['id']}"
+    if package["name"] != name:
+        raise ProfileError("installed extension fixture package name differs from its identity")
+    manifest_path = consumer / "composer.json"
+    manifest = load_json(manifest_path)
+    manifest["require"][name] = specification["version"]
+    manifest["repositories"].insert(0, {
+        "type": "path", "url": target.name,
+        "options": {"symlink": False, "versions": {name: specification["version"]}},
+    })
+    manifest_path.write_text(json.dumps(manifest, indent=4) + "\n", encoding="utf-8")
+
+
+def fixture_tree_digest(directory: Path) -> str:
+    entries = []
+    for path in sorted(directory.rglob("*")):
+        if path.is_symlink():
+            raise ProfileError("installed extension fixture must be a physical copy")
+        if path.is_file():
+            entries.append((path.relative_to(directory).as_posix(), hashlib.sha256(path.read_bytes()).hexdigest()))
+    if not entries:
+        raise ProfileError("installed extension fixture has no files")
+    return hashlib.sha256(json.dumps(entries).encode()).hexdigest()
+
+
+def assert_fixture_extension(consumer: Path, specification: dict) -> dict:
+    name = f"thirdparty/{specification['id']}"
+    entries = load_json(consumer / "composer.lock")["packages"]
+    locked = next((entry for entry in entries if entry["name"] == name), {})
+    distribution = locked.get("dist", {})
+    if (locked.get("version") != specification["version"] or distribution.get("type") != "path"
+            or distribution.get("url") != "scenario-extension"):
+        raise ProfileError("installed extension fixture is not locked to the scenario snapshot")
+    installed = consumer / "vendor" / name
+    expected = fixture_tree_digest(consumer / "scenario-extension")
+    if installed.is_symlink() or fixture_tree_digest(installed) != expected:
+        raise ProfileError("installed extension fixture does not match the committed source copy")
+    return {"name": name, "version": locked["version"], "source_sha256": expected}
 
 
 def reviewed_prerequisites(consumer: Path, names: list[str], workspace: Path) -> dict:

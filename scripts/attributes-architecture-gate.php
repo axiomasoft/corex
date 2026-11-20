@@ -6,12 +6,25 @@ declare(strict_types=1);
 namespace CoreX\Tooling\AttributesArchitecture;
 
 use CoreX\Attributes\Tooling\SurfaceScanner;
-use CoreX\CustomFields\Internal\Laravel\AttributeComposition;
+use CoreX\CustomFields\Internal\CustomFieldsOptions;
 use Packman\Config\Exceptions\InvalidConfiguration;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 use Symfony\Component\Process\Process;
+
+const FIELD_TABLES = [
+    'sys_attribute_backfills',
+    'sys_attribute_definitions',
+    'sys_attribute_documents',
+    'sys_attribute_key_reservations',
+    'sys_attribute_schema_operations',
+    'sys_attribute_write_tokens',
+    'sys_field_schema_heads',
+];
+
+const CONCURRENT_INDEX_SQL = '/\b(?:CREATE|DROP)\s+INDEX\s+CONCURRENTLY\b/i';
+const INDEX_EXECUTOR = '/src/Schemas/Internal/PostgresDdlExecutor.php';
 
 // The whole-monorepo AST/ownership graph exceeds PHP's 128 MiB CLI default.
 ini_set('memory_limit', '1G');
@@ -36,7 +49,7 @@ if ($fixture !== null) {
         }
 
         try {
-            AttributeComposition::fromArray($config);
+            CustomFieldsOptions::fromArray($config);
         } catch (InvalidConfiguration $error) {
             $violations[] = 'A4 '.$fixture.': '.$error->getMessage();
         }
@@ -45,52 +58,79 @@ if ($fixture !== null) {
     }
 } else {
     $sources = phpFiles($package.'/src');
-    $count = count($sources);
-
-    if ($count < 44 || $count > 100) {
-        $violations[] = "A0 Profile B source census must be 44–100 PHP files; found {$count}";
-    }
-
-    foreach (['Schema', 'Values', 'Query', 'Storage', 'Integration', 'Laravel'] as $subsystem) {
-        if (! is_dir($package.'/src/Internal/'.$subsystem)) {
+    foreach (['Values', 'Schemas', 'Types', 'Query'] as $subsystem) {
+        if (phpFiles($package.'/src/'.$subsystem) === []) {
             $violations[] = "A0 missing {$subsystem} subsystem";
         }
     }
 
-    foreach (['Engine', 'Registry'] as $legacy) {
-        if (phpFiles($package.'/src/Internal/'.$legacy) !== []) {
-            $violations[] = "A0 legacy Internal/{$legacy} files remain";
+    foreach (['Contracts', 'Data', 'Exceptions', 'Internal/Engine', 'Internal/Registry', 'Internal/Schema', 'Internal/Values',
+        'Internal/Query', 'Internal/Storage', 'Internal/Integration', 'Internal/Laravel'] as $legacy) {
+        if (phpFiles($package.'/src/'.$legacy) !== []) {
+            $violations[] = "A0 legacy {$legacy} files remain";
         }
     }
 
     require $root.'/vendor/autoload.php';
     $surface = (new SurfaceScanner)->scan($root);
     $symbols = $surface->manifests['axiomasoft/corex-custom-fields']['symbols'] ?? [];
-    foreach (['AttributeStore', 'AttributeFilter', 'FieldCatalogue', 'SchemaOperations', 'AttributeStoreResolver'] as $port) {
-        if (! isset($symbols['CoreX\\CustomFields\\Contracts\\'.$port])) {
-            $violations[] = 'A0 missing source API/SPI contract '.$port;
+    foreach ([
+        'Values\\Contracts\\FieldValues' => 'spi-call',
+        'Schemas\\Contracts\\FieldCatalogue' => 'spi-call',
+        'Schemas\\Contracts\\FieldSchemas' => 'spi-call',
+        'Query\\Contracts\\FieldFilter' => 'spi-call',
+        'Schemas\\Contracts\\DeclaredFields' => 'spi-implement',
+        'Types\\Contracts\\FieldCodec' => 'spi-implement',
+        'Types\\Contracts\\FieldType' => 'spi-implement',
+        'Types\\Contracts\\FieldConverterProvider' => 'spi-implement',
+    ] as $port => $layer) {
+        $symbol = $symbols['CoreX\\CustomFields\\'.$port] ?? [];
+
+        if (($symbol['layer'] ?? null) !== $layer || ($symbol['kind'] ?? null) !== 'interface') {
+            $violations[] = "A0 missing {$layer} interface {$port}";
+        }
+    }
+
+    $config = require $package.'/config/corex-custom-fields.php';
+
+    if (! is_array($config)) {
+        $violations[] = 'A4 shipped config must return an array';
+    } else {
+        try {
+            CustomFieldsOptions::fromArray($config);
+        } catch (InvalidConfiguration $error) {
+            $violations[] = 'A4 shipped config: '.$error->getMessage();
         }
     }
 
     foreach ($sources as $file) {
-        scanSource($file, (string) file_get_contents($file), false, $violations);
-
+        $code = (string) file_get_contents($file);
+        scanSource($file, $code, false, $violations);
         $relative = substr($file, strlen($package.'/src/'), -4);
-        $subsystem = strtok($relative, '/');
+        $expected = 'CoreX\\CustomFields\\'.str_replace('/', '\\', $relative);
+        $expected = substr($expected, 0, (int) strrpos($expected, '\\'));
 
-        if (in_array($subsystem, ['Internal', 'Schema', 'Values', 'Query', 'Storage', 'Integration', 'Laravel'], true)) {
-            $namespacePath = $relative;
-            $expected = 'CoreX\\CustomFields\\'.str_replace('/', '\\', $namespacePath);
-            $expected = substr($expected, 0, (int) strrpos($expected, '\\'));
-
-            if (preg_match('/^namespace\s+([^;]+);/m', (string) file_get_contents($file), $match) !== 1 || $match[1] !== $expected) {
-                $violations[] = "A0 namespace/path mismatch: {$file}";
-            }
+        if (preg_match('/^namespace\s+([^;]+);/m', $code, $match) !== 1 || $match[1] !== $expected) {
+            $violations[] = "A0 namespace/path mismatch: {$file}";
         }
     }
+    $executor = $package.INDEX_EXECUTOR;
 
+    if (! is_file($executor) || preg_match(CONCURRENT_INDEX_SQL, (string) file_get_contents($executor)) !== 1) {
+        $violations[] = 'A6 missing concurrent index executor';
+    }
+
+    $tables = [];
     foreach (phpFiles($package.'/database/migrations') as $file) {
-        scanSource($file, (string) file_get_contents($file), true, $violations);
+        $code = (string) file_get_contents($file);
+        scanSource($file, $code, true, $violations);
+        preg_match_all('/(?:\bSchema::|\$this->)create\s*\(\s*[\'\"]([a-z_][a-z0-9_]*)[\'\"]/', $code, $created);
+        array_push($tables, ...$created[1]);
+    }
+    sort($tables);
+
+    if ($tables !== FIELD_TABLES) {
+        $violations[] = 'A3 unexpected clean-install tables: '.implode(', ', $tables);
     }
 
     foreach (['package-graph-gate.php', 'config-composition-gate.php', 'table-ownership-gate.php'] as $script) {
@@ -120,19 +160,23 @@ function scanSource(string $file, string $code, bool $ddl, array &$violations): 
         $violations[] = "A2 runtime config() in {$file}";
     }
 
+    if (preg_match(CONCURRENT_INDEX_SQL, $code) === 1 && $file !== dirname(__DIR__).'/packages/custom-fields'.INDEX_EXECUTOR) {
+        $violations[] = "A6 concurrent index DDL outside the owner executor in {$file}";
+    }
+
     if (! $ddl) {
         return;
     }
 
-    preg_match_all('/\bSchema::(?:create|table|drop|dropIfExists|rename)\s*\(/', $code, $calls);
-    preg_match_all('/\bSchema::(?:create|table|drop|dropIfExists|rename)\s*\(\s*[\'\"](sys_attribute_[a-z0-9_]+|[^\'\"]+)[\'\"]/', $code, $targets);
+    preg_match_all('/(?:\bSchema::|\$this->)(?:create|table|drop|dropIfExists|rename)\s*\(/', $code, $calls);
+    preg_match_all('/(?:\bSchema::|\$this->)(?:create|table|drop|dropIfExists|rename)\s*\(\s*[\'\"]([^\'\"]+)[\'\"]/', $code, $targets);
 
     if (count($calls[0]) !== count($targets[1])) {
         $violations[] = "A3 dynamic DDL target in {$file}";
     }
 
     foreach ($targets[1] as $table) {
-        if (! str_starts_with($table, 'sys_attribute_')) {
+        if (! in_array($table, FIELD_TABLES, true)) {
             $violations[] = "A3 foreign DDL {$table} in {$file}";
         }
     }

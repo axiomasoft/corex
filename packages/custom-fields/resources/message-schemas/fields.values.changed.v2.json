@@ -1,0 +1,30 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:corex:schema:fields.values.changed.v2",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "field_ids",
+        "schema_revision",
+        "value_revision"
+    ],
+    "properties": {
+        "field_ids": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "format": "uuid"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+        },
+        "schema_revision": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+        },
+        "value_revision": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+        }
+    }
+}
