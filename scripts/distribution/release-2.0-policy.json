@@ -1,0 +1,289 @@
+{
+  "schema_version": "corex-release-policy/2",
+  "version": "2.0.0",
+  "source_constraint": "^2.0@dev",
+  "released_constraint": "^2.0",
+  "include": [
+    "composer.json",
+    "src/",
+    "config/",
+    "database/migrations/",
+    "resources/",
+    "README.md",
+    "PACKAGE.md",
+    "CHANGELOG.md",
+    "UPGRADE.md",
+    "LICENSE",
+    "extension.neon",
+    "routes/",
+    "database/seeders/"
+  ],
+  "forbidden_segments": [
+    "vendor",
+    "node_modules",
+    "tests",
+    ".env",
+    "auth.json",
+    ".git",
+    ".plan-cache"
+  ],
+  "required_if_present": [
+    "config/",
+    "database/migrations/",
+    "resources/",
+    "README.md",
+    "PACKAGE.md",
+    "CHANGELOG.md",
+    "UPGRADE.md",
+    "extension.neon",
+    "routes/",
+    "database/seeders/"
+  ],
+  "channels": {
+    "packages/access": {
+      "distribution": "private",
+      "mirror": "axiomasoft/corex-access",
+      "name": "axiomasoft/corex-access",
+      "edges": {
+        "require": [
+          "axiomasoft/corex"
+        ],
+        "require-dev": []
+      }
+    },
+    "packages/custom-fields": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-attributes",
+      "name": "axiomasoft/corex-custom-fields",
+      "edges": {
+        "require": [
+          "axiomasoft/corex"
+        ],
+        "require-dev": []
+      }
+    },
+    "packages/core": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-core",
+      "name": "axiomasoft/corex",
+      "edges": {
+        "require": [],
+        "require-dev": []
+      }
+    },
+    "packages/intl": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-intl",
+      "name": "axiomasoft/corex-intl",
+      "edges": {
+        "require": [
+          "axiomasoft/corex"
+        ],
+        "require-dev": []
+      }
+    },
+    "packages/media": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-media",
+      "name": "axiomasoft/corex-media",
+      "edges": {
+        "require": [
+          "axiomasoft/corex"
+        ],
+        "require-dev": []
+      }
+    },
+    "packages/notifications": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-notifications",
+      "name": "axiomasoft/corex-notifications",
+      "edges": {
+        "require": [
+          "axiomasoft/corex"
+        ],
+        "require-dev": [
+          "axiomasoft/corex-scheduler"
+        ]
+      }
+    },
+    "packages/operations": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-operations",
+      "name": "axiomasoft/corex-operations",
+      "edges": {
+        "require": [
+          "axiomasoft/corex"
+        ],
+        "require-dev": [
+          "axiomasoft/corex-import-export",
+          "axiomasoft/corex-webhooks"
+        ]
+      }
+    },
+    "packages/panels": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-panels",
+      "name": "axiomasoft/corex-panels",
+      "edges": {
+        "require": [
+          "axiomasoft/corex"
+        ],
+        "require-dev": []
+      }
+    },
+    "packages/recurrence": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-recurrence",
+      "name": "axiomasoft/corex-recurrence",
+      "edges": {
+        "require": [
+          "axiomasoft/corex"
+        ],
+        "require-dev": []
+      }
+    },
+    "packages/search": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-search",
+      "name": "axiomasoft/corex-search",
+      "edges": {
+        "require": [
+          "axiomasoft/corex"
+        ],
+        "require-dev": []
+      }
+    },
+    "packages/search-intl": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-search-intl",
+      "name": "axiomasoft/corex-search-intl",
+      "edges": {
+        "require": [
+          "axiomasoft/corex",
+          "axiomasoft/corex-intl",
+          "axiomasoft/corex-search"
+        ],
+        "require-dev": []
+      }
+    },
+    "packages/search-meilisearch": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-search-meilisearch",
+      "name": "axiomasoft/corex-search-meilisearch",
+      "edges": {
+        "require": [
+          "axiomasoft/corex",
+          "axiomasoft/corex-search"
+        ],
+        "require-dev": []
+      }
+    },
+    "packages/tasks": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-tasks",
+      "name": "axiomasoft/corex-tasks",
+      "edges": {
+        "require": [
+          "axiomasoft/corex"
+        ],
+        "require-dev": []
+      }
+    },
+    "packages/recurring-tasks": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-recurring-tasks",
+      "name": "axiomasoft/corex-recurring-tasks",
+      "edges": {
+        "require": [
+          "axiomasoft/corex",
+          "axiomasoft/corex-recurrence",
+          "axiomasoft/corex-tasks",
+          "axiomasoft/corex-workflow"
+        ],
+        "require-dev": [
+          "axiomasoft/corex-scheduler"
+        ]
+      }
+    },
+    "packages/tenancy": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-tenancy",
+      "name": "axiomasoft/corex-tenancy",
+      "edges": {
+        "require": [
+          "axiomasoft/corex"
+        ],
+        "require-dev": [
+          "axiomasoft/corex-scheduler"
+        ]
+      }
+    },
+    "packages/import-export": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-import-export",
+      "name": "axiomasoft/corex-import-export",
+      "edges": {
+        "require": [
+          "axiomasoft/corex"
+        ],
+        "require-dev": []
+      }
+    },
+    "packages/scheduler": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-scheduler",
+      "name": "axiomasoft/corex-scheduler",
+      "edges": {
+        "require": [
+          "axiomasoft/corex"
+        ],
+        "require-dev": []
+      }
+    },
+    "packages/workflow": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-workflow",
+      "name": "axiomasoft/corex-workflow",
+      "edges": {
+        "require": [
+          "axiomasoft/corex"
+        ],
+        "require-dev": []
+      }
+    },
+    "packages/tools": {
+      "distribution": "private",
+      "mirror": "axiomasoft/corex-tools",
+      "name": "axiomasoft/corex-tools",
+      "edges": {
+        "require": [
+          "axiomasoft/corex",
+          "axiomasoft/corex-operations"
+        ],
+        "require-dev": [
+          "axiomasoft/corex-import-export"
+        ]
+      }
+    },
+    "packages/webhooks": {
+      "distribution": "private",
+      "mirror": "axiomasoft/corex-webhooks",
+      "name": "axiomasoft/corex-webhooks",
+      "edges": {
+        "require": [
+          "axiomasoft/corex",
+          "axiomasoft/corex-operations"
+        ],
+        "require-dev": [
+          "axiomasoft/corex-import-export"
+        ]
+      }
+    }
+  },
+  "excluded": [
+    {
+      "path": "products/flex-crm",
+      "reason": "flex-product-consumer"
+    }
+  ]
+}

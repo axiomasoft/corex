@@ -59,7 +59,7 @@ class EcosystemRepositoriesTest(unittest.TestCase):
 
     def test_all_consumer_generators_keep_candidate_first_and_exact_owner_snapshots(self):
         snapshots = snapshot_repositories(ROOT)
-        for filename in ["profile-proof.py", "upgrade-proof.py", "verify_equipment_consumer.py", "verify_extension_fixtures.py"]:
+        for filename in ["profile-proof.py", "verify_equipment_consumer.py", "verify_extension_fixtures.py"]:
             with self.subTest(generator=filename), tempfile.TemporaryDirectory() as temporary:
                 module = load_script(filename)
                 root = Path(temporary)
@@ -71,9 +71,7 @@ class EcosystemRepositoriesTest(unittest.TestCase):
                     consumer.mkdir()
                     (consumer / "composer.json").write_text('{}')
                     if filename == "profile-proof.py":
-                        module.write_consumer(consumer, ["axiomasoft/corex"], 13, repository, "8.4")
-                    elif filename == "upgrade-proof.py":
-                        module.write_consumer(consumer, {"axiomasoft/corex": "1.0.0"}, root / "baseline", repository)
+                        module.write_consumer(consumer, ["axiomasoft/corex"], 13, repository, "8.4", "2.0.0")
                     else:
                         fixture = ROOT / "fixtures/extensions/custom-search-provider"
                         module.write_consumer(consumer, fixture, repository, drop_corex=False)
@@ -106,11 +104,15 @@ class EcosystemRepositoriesTest(unittest.TestCase):
 
     def test_current_package_names_are_in_receipts_and_platform_checks(self):
         module = load_script("profile-proof.py")
-        self.assertEqual(module.locked_summary({"installed": [
-            {"name": "axiomasoft/corex", "version": "1.0.0"},
-            {"name": "axiomasoft/corex-media", "version": "1.0.0"},
-            {"name": "axiomasoft/packman", "version": "0.1.0"},
-        ]}), ["axiomasoft/corex-media:1.0.0", "axiomasoft/corex:1.0.0"])
+        self.assertEqual(module.locked_summary({"locked": [
+            {"name": "axiomasoft/corex", "version": "2.0.0", "direct-dependency": True, "source": None},
+            {"name": "axiomasoft/corex-media", "version": "2.0.0", "direct-dependency": True, "source": None},
+            {"name": "axiomasoft/packman", "version": "0.1.2", "direct-dependency": False, "source": "https://github.com/axiomasoft/packman"},
+            {"name": "flex/crm", "version": "1.0.x-dev", "direct-dependency": True, "source": None},
+            {"name": "laravel/framework", "version": "v13.33.0", "direct-dependency": False, "source": "https://github.com/laravel/framework"},
+        ]}), ["axiomasoft/corex-media:2.0.0", "axiomasoft/corex:2.0.0", "flex/crm:1.0.x-dev", "laravel/framework:v13.33.0"])
+        with self.assertRaisesRegex(module.ProfileError, "did not return the locked package list"):
+            module.locked_summary({"installed": []})
         with tempfile.TemporaryDirectory() as temporary:
             consumer = Path(temporary)
             (consumer / "vendor/composer").mkdir(parents=True)

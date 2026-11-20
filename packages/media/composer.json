@@ -5,7 +5,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.4",
-        "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/corex": "^2.0@dev",
         "laravel/framework": "^13.0",
         "psr/clock": "^1.0",
         "axiomasoft/packman": "^0.1",
@@ -48,7 +48,7 @@
             ]
         },
         "branch-alias": {
-            "dev-main": "1.0.x-dev"
+            "dev-main": "2.0.x-dev"
         },
         "packman": {
             "module": "CoreX\\Media\\MediaModule",
@@ -69,7 +69,13 @@
     "repositories": [
         {
             "type": "path",
-            "url": "../core"
+            "url": "../core",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
         }
     ],
     "minimum-stability": "stable",

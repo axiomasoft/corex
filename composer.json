@@ -11,26 +11,26 @@
     ],
     "require": {
         "php": "^8.4",
-        "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/corex": "^2.0@dev",
         "flex/crm": "^1.0@dev",
-        "axiomasoft/corex-tasks": "^1.0@dev",
-        "axiomasoft/corex-panels": "^1.0@dev",
-        "axiomasoft/corex-media": "^1.0@dev",
-        "axiomasoft/corex-notifications": "^1.0@dev",
-        "axiomasoft/corex-scheduler": "^1.0@dev",
-        "axiomasoft/corex-tenancy": "^1.0@dev",
-        "axiomasoft/corex-operations": "^1.0@dev",
-        "axiomasoft/corex-recurring-tasks": "^1.0@dev",
-        "axiomasoft/corex-intl": "^1.0@dev",
-        "axiomasoft/corex-search-intl": "^1.0@dev",
-        "axiomasoft/corex-custom-fields": "^1.0@dev",
-        "axiomasoft/corex-import-export": "^1.0@dev",
-        "axiomasoft/corex-search-meilisearch": "^1.0@dev",
-        "axiomasoft/corex-recurrence": "^1.0@dev",
-        "axiomasoft/corex-search": "^1.0@dev"
+        "axiomasoft/corex-tasks": "^2.0@dev",
+        "axiomasoft/corex-panels": "^2.0@dev",
+        "axiomasoft/corex-media": "^2.0@dev",
+        "axiomasoft/corex-notifications": "^2.0@dev",
+        "axiomasoft/corex-scheduler": "^2.0@dev",
+        "axiomasoft/corex-tenancy": "^2.0@dev",
+        "axiomasoft/corex-operations": "^2.0@dev",
+        "axiomasoft/corex-recurring-tasks": "^2.0@dev",
+        "axiomasoft/corex-intl": "^2.0@dev",
+        "axiomasoft/corex-search-intl": "^2.0@dev",
+        "axiomasoft/corex-custom-fields": "^2.0@dev",
+        "axiomasoft/corex-import-export": "^2.0@dev",
+        "axiomasoft/corex-search-meilisearch": "^2.0@dev",
+        "axiomasoft/corex-recurrence": "^2.0@dev",
+        "axiomasoft/corex-search": "^2.0@dev"
     },
     "require-dev": {
-        "axiomasoft/corex-workflow": "^1.0@dev",
+        "axiomasoft/corex-workflow": "^2.0@dev",
         "laravel/pint": "^1.32",
         "rector/rector": "^2.6",
         "pestphp/pest": "^5.2",
@@ -41,12 +41,12 @@
         "opis/json-schema": "^2.4.1",
         "open-telemetry/api": "^1.4",
         "open-telemetry/sdk": "^1.4",
-        "axiomasoft/corex-access": "^1.0@dev",
+        "axiomasoft/corex-access": "^2.0@dev",
         "phpstan/extension-installer": "^1.4.3",
         "phpstan/phpstan-strict-rules": "^2.0.12",
         "shipmonk/composer-dependency-analyser": "^1.8.4",
-        "axiomasoft/corex-tools": "^1.0@dev",
-        "axiomasoft/corex-webhooks": "^1.0@dev",
+        "axiomasoft/corex-tools": "^2.0@dev",
+        "axiomasoft/corex-webhooks": "^2.0@dev",
         "webmozart/assert": "^2.4.1",
         "infection/infection": "0.35.6",
         "axiomasoft/corex-infection-pest-adapter": "0.1.0",
@@ -125,11 +125,42 @@
         },
         {
             "type": "path",
-            "url": "packages/*"
+            "url": "packages/*",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex": "2.0.x-dev",
+                    "axiomasoft/corex-access": "2.0.x-dev",
+                    "axiomasoft/corex-custom-fields": "2.0.x-dev",
+                    "axiomasoft/corex-import-export": "2.0.x-dev",
+                    "axiomasoft/corex-intl": "2.0.x-dev",
+                    "axiomasoft/corex-media": "2.0.x-dev",
+                    "axiomasoft/corex-notifications": "2.0.x-dev",
+                    "axiomasoft/corex-operations": "2.0.x-dev",
+                    "axiomasoft/corex-panels": "2.0.x-dev",
+                    "axiomasoft/corex-recurrence": "2.0.x-dev",
+                    "axiomasoft/corex-recurring-tasks": "2.0.x-dev",
+                    "axiomasoft/corex-scheduler": "2.0.x-dev",
+                    "axiomasoft/corex-search": "2.0.x-dev",
+                    "axiomasoft/corex-search-intl": "2.0.x-dev",
+                    "axiomasoft/corex-search-meilisearch": "2.0.x-dev",
+                    "axiomasoft/corex-tasks": "2.0.x-dev",
+                    "axiomasoft/corex-tenancy": "2.0.x-dev",
+                    "axiomasoft/corex-tools": "2.0.x-dev",
+                    "axiomasoft/corex-webhooks": "2.0.x-dev",
+                    "axiomasoft/corex-workflow": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
         },
         {
             "type": "path",
-            "url": "products/*"
+            "url": "products/*",
+            "options": {
+                "versions": {
+                    "flex/crm": "1.0.x-dev"
+                },
+                "reference": "config"
+            }
         },
         {
             "type": "package",
@@ -949,7 +980,7 @@
         "test:hermetic": "PGSQL_HOST=127.0.0.1 PGSQL_PORT=1 PGSQL_DATABASE=corex_test bash scripts/run-root-tests.sh @additional_args",
         "ci:local": "bash scripts/ci-local.sh",
         "gate": "@php vendor/bin/packman gate",
-        "test:pg": "vendor/bin/pest --group=pg",
+        "test:pg": "bash scripts/run-pg-tests.sh @additional_args",
         "test:packages": "bash scripts/run-package-tests.sh @additional_args",
         "test:arch": "vendor/bin/pest --testsuite=Arch",
         "package-graph-gate": "php scripts/package-graph-gate.php",

@@ -18,8 +18,8 @@
     ],
     "require": {
         "php": "^8.4",
-        "axiomasoft/corex": "^1.0@dev",
-        "axiomasoft/corex-intl": "^1.0@dev",
+        "axiomasoft/corex": "^2.0@dev",
+        "axiomasoft/corex-intl": "^2.0@dev",
         "axiomasoft/packman": "^0.1",
         "axiomasoft/packman-modules": "^0.1.2",
         "axiomasoft/packman-schema": "^0.1",
@@ -30,7 +30,7 @@
         "laravel/framework": "^13.0"
     },
     "require-dev": {
-        "axiomasoft/corex-operations": "^1.0@dev",
+        "axiomasoft/corex-operations": "^2.0@dev",
         "larastan/larastan": "^3.12",
         "laravel/pint": "^1.32",
         "mockery/mockery": "^1.6",
@@ -88,15 +88,33 @@
     "repositories": [
         {
             "type": "path",
-            "url": "../../packages/core"
+            "url": "../../packages/core",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
         },
         {
             "type": "path",
-            "url": "../../packages/intl"
+            "url": "../../packages/intl",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex-intl": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
         },
         {
             "type": "path",
-            "url": "../../packages/operations"
+            "url": "../../packages/operations",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex-operations": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
         }
     ],
     "minimum-stability": "stable",

@@ -511,7 +511,7 @@
         {
             "symbol": "CoreX\\Foundation\\Internal\\PackmanActorResolver::current",
             "source": "packages/core/src/Foundation/Internal/PackmanActorResolver.php",
-            "source_sha256": "579b0e16edcc19c19cea77dd5bd66ca34743790bb3ba446f7c2344f64183e2b6",
+            "source_sha256": "d059f6243a3120520207111b7bdbbbcd9e92ca58d408c60f5b90f3d733aace8a",
             "kind": "framework",
             "reason": "Foundation binds this adapter to ActorResolverInterface; Packman lifecycle asks the current actor when producing audited module transitions.",
             "root": {

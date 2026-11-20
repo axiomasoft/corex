@@ -1,657 +1,146 @@
 #!/usr/bin/env python3
-"""Prove upgrade from each cohort package's latest immutable release to the frozen 1.0.0 candidate."""
-
+"""Qualify a fresh 2.x archive installation and the offline stage-0 import."""
 from __future__ import annotations
 
 import argparse
 import hashlib
-import importlib.util
 import json
 import os
-import re
-import shutil
+import sqlite3
 import subprocess
 import sys
 import tempfile
-import zipfile
-from datetime import datetime, timezone
+from contextlib import closing
 from pathlib import Path
-from urllib.parse import quote
 
-# Also support the test harness loading this script by file path.
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-from ecosystem_repositories import snapshot_repositories
+from consumer_repository import assert_dist_install, load_json
+from prove_scenario import profile_module, write_json
+from release_candidate import CandidateError, LEGACY_SOURCE, resolve_commit
+import verify_extension_fixtures as extensions
 
 ROOT = Path(__file__).resolve().parents[2]
-BASELINES_PATH = ROOT / "build/distribution/release-baselines.json"
-RECEIPT_PATH = ROOT / "build/distribution/upgrade-receipt.json"
-VERSION = "1.0.0"
-CACHE = Path(os.environ.get("COREX_UPGRADE_CACHE", "/tmp/corex-upgrade-baselines"))
-COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
-RELATION_RE = re.compile(r'relation "([A-Za-z_][A-Za-z0-9_]*)" does not exist')
-IDENTIFIER_RE = re.compile(r"^[a-z0-9_]+$")
-PROBE = r"""<?php
-declare(strict_types=1);
-
-use Illuminate\Contracts\Console\Kernel;
-use Illuminate\Support\Facades\DB;
-
-$root = $argv[1];
-require $root . '/vendor/autoload.php';
-$app = require $root . '/bootstrap/app.php';
-$app->make(Kernel::class)->bootstrap();
-$tables = [];
-$migrations = null;
-$driver = config('database.default');
-if ($driver === 'pgsql') {
-    $tables = array_map(static fn ($row) => $row->tablename, DB::select("SELECT tablename FROM pg_tables WHERE schemaname = 'public' ORDER BY tablename"));
-} else {
-    $tables = array_map(static fn ($row) => $row->name, DB::select("SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name"));
-}
-if (in_array('migrations', $tables, true)) {
-    $migrations = (int) DB::table('migrations')->count();
-}
-$providers = array_values(array_filter(array_keys($app->getLoadedProviders()), static fn ($name) => str_starts_with($name, 'CoreX\\')));
-sort($providers);
-$config = array_keys(config()->all());
-sort($config);
-echo json_encode(['booted' => true, 'tables' => $tables, 'migrations' => $migrations, 'providers' => $providers, 'config' => $config], JSON_THROW_ON_ERROR);
-"""
+IMPORTER = ROOT / "scripts/migration/corex-v2/tests/rehearse.php"
+WEBHOOKS = "axiomasoft/corex-webhooks"
 
 
 class UpgradeError(RuntimeError):
-    pass
+    """The fresh target or its semantic comparison failed."""
 
 
-def load_json(path: Path) -> dict:
-    return json.loads(path.read_text(encoding="utf-8"))
+def sqlite_rows(database: Path, query: str) -> list[tuple]:
+    with closing(sqlite3.connect(f"{database.resolve().as_uri()}?mode=ro", uri=True)) as connection:
+        return connection.execute(query).fetchall()
 
 
-def profile_module():
-    script = ROOT / "scripts/distribution/profile-proof.py"
-    spec = importlib.util.spec_from_file_location("profile_proof", script)
-    if spec is None or spec.loader is None:
-        raise UpgradeError("missing package: profile-proof")
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = module
-    spec.loader.exec_module(module)
-    return module
+def independent_report(rehearsal: Path) -> dict:
+    source = rehearsal / "source.sqlite"
+    target = rehearsal / "resumed/target.sqlite"
+    source_subscriptions = sqlite_rows(source, "SELECT id, status, topic, endpoint_url FROM sys_api_webhook_subscriptions ORDER BY id")
+    target_subscriptions = sqlite_rows(target, """
+        SELECT id, status, json_extract(subscription_json, '$.topic'),
+               json_extract(subscription_json, '$.endpoint_url')
+        FROM webhook_subscriptions ORDER BY id
+    """)
+    if len(source_subscriptions) != 2 or target_subscriptions != source_subscriptions:
+        raise UpgradeError("subscription identity, status, topic or endpoint changed")
 
+    source_rows = sqlite_rows(source, """
+        SELECT d.id, d.subscription_id, d.event_id, d.status, d.body, d.body_hash, a.outcome
+        FROM sys_api_webhook_deliveries d LEFT JOIN sys_api_webhook_attempts a ON a.delivery_id = d.id
+        ORDER BY d.event_id
+    """)
+    target_rows = sqlite_rows(target, """
+        SELECT d.effect_key, s.id, json_extract(d.delivery_json, '$.delivery.event_id'),
+               json_extract(d.delivery_json, '$.delivery.status'), json_extract(d.delivery_json, '$.delivery.body'),
+               json_extract(d.delivery_json, '$.delivery.body_hash'), json_extract(d.delivery_json, '$.attempts[0].outcome'),
+               d.disposition
+        FROM webhook_deliveries d JOIN webhook_subscriptions s ON d.subscription_id = s.id
+        ORDER BY json_extract(d.delivery_json, '$.delivery.event_id')
+    """)
+    expected = [
+        (hashlib.sha256(f"{subscription}|{event}".encode()).hexdigest()[:32], subscription, event, status,
+         body, body_hash, outcome, "pending" if status == "pending" else "history")
+        for _, subscription, event, status, body, body_hash, outcome in source_rows
+    ]
+    if len(expected) != 3 or target_rows != expected:
+        raise UpgradeError(f"delivery intent, joined identity or recorded effect differs: {target_rows}")
+    blocked = load_json(rehearsal / "unknown/plan.json.blocked.json")
+    if blocked.get("status") != "blocked" or (rehearsal / "unknown/plan.json").exists():
+        raise UpgradeError("unknown provider effect did not block planning")
+    if sqlite_rows(rehearsal / "unknown/target.sqlite", "SELECT count(*) FROM webhook_deliveries") != [(0,)]:
+        raise UpgradeError("unknown provider effect wrote target rows")
 
-def version_key(tag: str) -> tuple:
-    raw = tag[1:] if tag.startswith("v") else tag
-    number, _, pre = raw.partition("-")
-    parts = tuple(int(part) for part in number.split(".") if part != "")
-    return (parts, pre == "", pre)
-
-
-def release_version(tag: str) -> str:
-    return tag[1:] if tag.startswith("v") else tag
-
-
-def assert_candidate(actual: str, expected: str) -> None:
-    if actual != expected:
-        raise UpgradeError("stale candidate")
-
-
-def assert_baseline_digest(actual: str, expected: str) -> None:
-    if actual != expected:
-        raise UpgradeError("wrong baseline digest")
-
-
-def assert_migration_recovery(migrated: bool, recovered: bool) -> None:
-    if not migrated and not recovered:
-        raise UpgradeError("migration fault without forward recovery")
-
-
-def recovery_sql(detail: str) -> str | None:
-    """Disposable forward recovery for a missing cross-package relation or a boxed users key.
-
-    Artisan wraps diagnostic lines mid-word, so the match ignores whitespace.
-    """
-    squashed = re.sub(r"\s+", "", detail)
-    match = re.search(r'relation"([A-Za-z_][A-Za-z0-9_]*)"doesnotexist', squashed)
-    if match:
-        name = match.group(1)
-        return f'CREATE TABLE IF NOT EXISTS "{name}" (id uuid PRIMARY KEY)'
-    duplicate = re.search(r'relation"([A-Za-z_][A-Za-z0-9_]*)"alreadyexists', squashed)
-    if duplicate:
-        name = duplicate.group(1)
-        return f'DROP TABLE IF EXISTS "{name}" CASCADE'
-    if "incompatibletypes:uuidandbigint" in squashed:
-        return (
-            "DROP TABLE IF EXISTS users CASCADE; "
-            "CREATE TABLE users ("
-            "id uuid PRIMARY KEY, "
-            "name varchar(255) NOT NULL DEFAULT '', "
-            "email varchar(255), "
-            "password varchar(255), "
-            "remember_token varchar(100), "
-            "created_at timestamp, "
-            "updated_at timestamp)"
-        )
-    if 'type"ltree"doesnotexist' in squashed:
-        return "CREATE EXTENSION IF NOT EXISTS ltree"
-    return None
-
-
-def assert_baseline_row(row: dict, source_commit: str = "") -> None:
-    classification = row.get("classification")
-    if classification == "new-package":
-        absence = row.get("absence")
-        if row.get("prior_version") or row.get("archive_sha256") or not isinstance(absence, dict) or absence.get("observed") is not True:
-            raise UpgradeError("missing remote absence")
-        if row.get("reason") != "not-applicable/new-package":
-            raise UpgradeError("missing remote absence")
-        return
-    if classification != "upgraded":
-        raise UpgradeError("generic skip")
-    ref = row.get("immutable_ref")
-    channel = row.get("channel")
-    if (not isinstance(ref, str) or not ref or ref == source_commit or COMMIT_RE.fullmatch(ref)
-            or channel == "monorepo-tag"):
-        raise UpgradeError("monorepo tag substitution")
-    if channel != "github-release" or not isinstance(row.get("archive_sha256"), str):
-        raise UpgradeError("wrong baseline digest")
-
-
-def select_latest(releases: list[dict]) -> dict | None:
-    usable = [release for release in releases if release.get("asset")]
-    if not usable:
-        return None
-    return max(usable, key=lambda release: version_key(str(release["tag"])))
-
-
-def cohort_packages(candidate_path: Path) -> list[dict]:
-    return load_json(candidate_path / "candidate.json")["packages"]
-
-
-def gh_json(path: str) -> tuple[int, dict | list | None, str]:
-    completed = subprocess.run(["gh", "api", path], text=True, capture_output=True, check=False)
-    if completed.returncode:
-        detail = (completed.stderr or completed.stdout).strip()
-        if "404" in detail or "Not Found" in detail:
-            return 404, None, detail
-        raise UpgradeError(f"remote baseline query failed: {detail}")
-    return 200, json.loads(completed.stdout), ""
-
-
-def discover_package(package: dict) -> dict:
-    mirror = package["mirror"]
-    status, payload, detail = gh_json(f"repos/{mirror}/releases?per_page=20")
-    if status == 404 or not isinstance(payload, list):
-        return {
-            "package": package["name"],
-            "classification": "new-package",
-            "prior_version": None,
-            "channel": "github-release",
-            "immutable_ref": None,
-            "archive_sha256": None,
-            "archive_url": None,
-            "mirror": mirror,
-            "reason": "not-applicable/new-package",
-            "absence": {"observed": True, "status": status, "mirror": mirror, "detail": detail[:240]},
-        }
-    releases = []
-    for release in payload:
-        if release.get("draft"):
-            continue
-        assets = [asset for asset in release.get("assets", []) if str(asset.get("name", "")).endswith(".zip")]
-        if not assets:
-            continue
-        releases.append({
-            "tag": release["tag_name"],
-            "asset": assets[0]["name"],
-            "api": assets[0]["url"],
-            "url": assets[0].get("browser_download_url"),
-        })
-    archives = []
-    for release in releases:
-        version = release_version(str(release["tag"]))
-        archive = download_asset(mirror, str(release["tag"]), str(release["api"]), CACHE / f"{package['name'].replace('/', '-')}-{version}.zip")
-        archives.append({
-            "version": version,
-            "immutable_ref": str(release["tag"]),
-            "archive_sha256": hashlib.sha256(archive.read_bytes()).hexdigest(),
-            "archive_url": release.get("url"),
-            "asset_api": release["api"],
-            "mirror": mirror,
-        })
-    latest = select_latest(releases)
-    if latest is None:
-        return {
-            "package": package["name"],
-            "classification": "new-package",
-            "prior_version": None,
-            "channel": "github-release",
-            "immutable_ref": None,
-            "archive_sha256": None,
-            "archive_url": None,
-            "mirror": mirror,
-            "reason": "not-applicable/new-package",
-            "absence": {"observed": True, "status": 200, "mirror": mirror, "asset_count": 0},
-        }
-    selected = next(archive for archive in archives if archive["immutable_ref"] == latest["tag"])
     return {
-        "package": package["name"],
-        "classification": "upgraded",
-        "prior_version": selected["version"],
-        "channel": "github-release",
-        "immutable_ref": selected["immutable_ref"],
-        "archive_sha256": selected["archive_sha256"],
-        "archive_url": selected["archive_url"],
-        "asset_api": selected["asset_api"],
-        "mirror": mirror,
-        "reason": "latest published GitHub release asset",
-        "absence": None,
-        "supporting_archives": [archive for archive in archives if archive["immutable_ref"] != selected["immutable_ref"]],
+        "subscriptions": len(source_subscriptions),
+        "deliveries": len(target_rows),
+        "pending": sum(row[-1] == "pending" for row in target_rows),
+        "history": sum(row[-1] == "history" for row in target_rows),
+        "unknown_effect": "blocked",
+        "source_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
+        "target_sha256": hashlib.sha256(target.read_bytes()).hexdigest(),
     }
 
 
-def download_asset(mirror: str, tag: str, api_url: str, destination: Path) -> Path:
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    if destination.is_file():
-        return destination
-    completed = subprocess.run(
-        ["gh", "api", api_url, "-H", "Accept: application/octet-stream"],
-        capture_output=True,
-        check=False,
-    )
-    if completed.returncode or not completed.stdout:
-        raise UpgradeError(f"remote baseline download failed: {mirror}@{tag}")
-    destination.write_bytes(completed.stdout)
-    return destination
-
-
-def discover(path: Path = BASELINES_PATH, *, candidate_path: Path) -> dict:
-    binding = profile_module().extension_module().candidate_binding(candidate_path)
-    rows = [discover_package(package) for package in cohort_packages(candidate_path)]
-    for row in rows:
-        assert_baseline_row(row)
-    document = {
-        "schema_version": "corex-release-baselines/1",
-        **binding,
-        "observed_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "packages": rows,
-    }
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(document, indent=2) + "\n", encoding="utf-8")
-    return document
-
-
-def zip_metadata(archive: Path) -> dict:
-    with zipfile.ZipFile(archive) as bundle:
-        composer = json.loads(bundle.read("composer.json"))
-    composer["version"] = composer.get("version")
-    return composer
-
-
-def stage_archive(package: str, archive_row: dict, artifacts: Path, packages: dict[str, dict]) -> None:
-    version = archive_row["version"] if "version" in archive_row else archive_row["prior_version"]
-    archive = CACHE / f"{package.replace('/', '-')}-{version}.zip"
-    if not archive.is_file():
-        download_asset(archive_row["mirror"], archive_row["immutable_ref"], archive_row["asset_api"], archive)
-    digest = hashlib.sha256(archive.read_bytes()).hexdigest()
-    assert_baseline_digest(digest, archive_row["archive_sha256"])
-    staged = artifacts / archive.name
-    shutil.copyfile(archive, staged)
-    composer = zip_metadata(staged)
-    composer["name"] = package
-    composer["version"] = version
-    composer["dist"] = {"type": "zip", "url": staged.resolve().as_uri()}
-    packages.setdefault(package, {})[version] = composer
-
-
-def stage_baseline_repository(baselines: list[dict], repository: Path) -> None:
-    artifacts = repository / "artifacts"
-    artifacts.mkdir(parents=True, exist_ok=True)
-    packages: dict[str, dict] = {}
-    for row in baselines:
-        if row["classification"] != "upgraded":
-            continue
-        stage_archive(row["package"], row, artifacts, packages)
-        for archive in row.get("supporting_archives") or []:
-            stage_archive(row["package"], archive, artifacts, packages)
-    (repository / "packages.json").write_text(json.dumps({"packages": packages}) + "\n", encoding="utf-8")
-
-
-def run(command: list[str], cwd: Path, env: dict[str, str]) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(command, cwd=cwd, env=env, text=True, capture_output=True, check=False)
-
-
-def fail_command(cell: str, completed: subprocess.CompletedProcess[str]) -> None:
-    detail = (completed.stderr or "") + "\n" + (completed.stdout or "")
-    Path("/tmp/upgrade-cell-failure.txt").write_text(detail, encoding="utf-8")
-    lines = [line.strip() for line in detail.splitlines() if line.strip()]
-    raise UpgradeError(f"{cell}: {' | '.join(lines[-8:])}")
-
-
-def write_consumer(consumer: Path, packages: dict[str, str], repository: Path, candidate: Path | None) -> None:
-    composer = load_json(consumer / "composer.json")
-    require = dict(composer.get("require", {}))
-    require["laravel/framework"] = "^13.0" if candidate is not None else "^12.0"
-    require.update(packages)
-    composer["require"] = dict(sorted(require.items()))
-    repositories = []
-    if candidate is not None:
-        repositories.append({"type": "composer", "url": str(candidate)})
-    repositories.extend([
-        {"type": "composer", "url": str(repository)},
-        *snapshot_repositories(ROOT),
-        {"type": "composer", "url": "https://repo.packagist.org", "exclude": ["axiomasoft/corex", "axiomasoft/corex-*", "corex/*", "axioma-studio/*"]},
-        {"packagist.org": False},
-    ])
-    composer["repositories"] = repositories
-    composer["minimum-stability"] = "dev"
-    composer["prefer-stable"] = True
-    config = dict(composer.get("config", {}))
-    config.update({
-        "allow-plugins": True,
-        "secure-http": False,
-        "preferred-install": "dist",
-        "sort-packages": True,
-        "audit": {"block-insecure": False},
-        "platform": {"php": "8.4.1"},
-    })
-    composer["config"] = config
-    (consumer / "composer.json").write_text(json.dumps(composer, indent=4) + "\n", encoding="utf-8")
-
-
-def configure_application(consumer: Path, database: str | None, env: dict[str, str]) -> None:
-    example = consumer / ".env.example"
-    target = consumer / ".env"
-    target.write_text(example.read_text(encoding="utf-8"), encoding="utf-8")
-    text = target.read_text(encoding="utf-8")
-    if database is None:
-        text = text.replace("DB_CONNECTION=pgsql", "DB_CONNECTION=sqlite")
-        text += "\nDB_DATABASE=database/database.sqlite\n"
-        (consumer / "database").mkdir(exist_ok=True)
-        (consumer / "database/database.sqlite").touch()
-    else:
-        replacements = {
-            "DB_CONNECTION=sqlite": "DB_CONNECTION=pgsql",
-            "DB_HOST=127.0.0.1": "DB_HOST=127.0.0.1",
-            "DB_PORT=3306": "DB_PORT=5434",
-        }
-        for old, new in replacements.items():
-            text = text.replace(old, new)
-        if "DB_CONNECTION=" not in text:
-            text += "\nDB_CONNECTION=pgsql\n"
-        text += f"\nDB_HOST=127.0.0.1\nDB_PORT=5434\nDB_DATABASE={database}\nDB_USERNAME=corex\nDB_PASSWORD=corex\n"
-    target.write_text(text, encoding="utf-8")
-    key = run(["/usr/bin/php8.4", "artisan", "key:generate", "--force", "--no-interaction"], consumer, env)
-    if key.returncode:
-        fail_command(consumer.name, key)
-
-
-def psql(sql: str, database: str = "postgres") -> subprocess.CompletedProcess[str]:
-    environment = os.environ.copy()
-    environment["PGPASSWORD"] = "corex"
-    return run(
-        ["psql", "-h", "127.0.0.1", "-p", "5434", "-U", "corex", "-d", database, "-v", "ON_ERROR_STOP=1", "-c", sql],
-        Path("/"),
-        environment,
-    )
-
-
-def ensure_database(name: str) -> None:
-    if not name.endswith("_test") or not IDENTIFIER_RE.fullmatch(name):
-        raise UpgradeError(f"database name {name}")
-    terminated = psql(
-        "SELECT pg_terminate_backend(pid) FROM pg_stat_activity "
-        f"WHERE datname = '{name}' AND pid <> pg_backend_pid()",
-    )
-    if terminated.returncode:
-        fail_command(name, terminated)
-    dropped = psql(f'DROP DATABASE IF EXISTS "{name}"')
-    if dropped.returncode:
-        fail_command(name, dropped)
-    created = psql(f'CREATE DATABASE "{name}"')
-    if created.returncode:
-        fail_command(name, created)
-
-
-def publish_migrations(package_dir: Path, consumer: Path) -> list[str]:
-    root = package_dir / "database" / "migrations"
-    if not root.is_dir():
-        return []
-    destination = consumer / "database" / "migrations"
-    destination.mkdir(parents=True, exist_ok=True)
-    published = []
-    for source in sorted(root.rglob("*.php")):
-        target = destination / source.name
-        if target.exists():
-            continue
-        shutil.copy2(source, target)
-        published.append(source.name)
-    return published
-
-
-def boot_report(consumer: Path, env: dict[str, str]) -> dict:
-    probe = consumer / "upgrade-probe.php"
-    probe.write_text(PROBE, encoding="utf-8")
-    completed = run(["/usr/bin/php8.4", "upgrade-probe.php", str(consumer)], consumer, env)
-    if completed.returncode:
-        fail_command(consumer.name, completed)
-    return json.loads(completed.stdout)
-
-
-def install_consumer(parent: Path, packages: dict[str, str], baseline_repo: Path, candidate_repo: Path | None, profiles) -> Path:
-    created = run(profiles.composer_command(
-        "create-project", "laravel/laravel:^12.0", "consumer", "--no-install", "--no-scripts", "--no-interaction", "--no-progress",
-    ), parent, profiles.composer_env(parent / "home", parent / "cache", Path("/usr/bin/php8.4")))
-    if created.returncode:
-        fail_command("create-project", created)
-    consumer = parent / "consumer"
-    write_consumer(consumer, packages, baseline_repo, candidate_repo)
-    env = profiles.composer_env(parent / "home", parent / "cache", Path("/usr/bin/php8.4"))
-    updated = run(profiles.composer_command(
-        "update", "--no-dev", "--no-interaction", "--no-progress", "--prefer-dist", "--no-scripts",
-    ), consumer, env)
-    if updated.returncode:
-        fail_command(consumer.name, updated)
-    dumped = run(profiles.composer_command(
-        "dump-autoload", "-o", "--strict-psr", "--no-dev", "--no-interaction", "--no-scripts",
-    ), consumer, env)
-    if dumped.returncode:
-        fail_command(consumer.name, dumped)
-    return consumer
-
-
-def vendor_package(consumer: Path, name: str) -> Path:
-    path = consumer / "vendor" / name
-    if not path.is_dir():
-        raise UpgradeError(f"missing package: {name}")
-    return path
-
-
-def clear_bootstrap(consumer: Path) -> None:
-    cache = consumer / "bootstrap/cache"
-    for filename in ("packages.php", "services.php"):
-        file = cache / filename
-        if file.exists():
-            file.unlink()
-
-
-def publish_installed_migrations(consumer: Path) -> list[str]:
-    vendor = consumer / "vendor/corex"
-    if not vendor.is_dir():
-        return []
-    published = []
-    for package_dir in sorted(path for path in vendor.iterdir() if path.is_dir()):
-        published.extend(publish_migrations(package_dir, consumer))
-    return published
-
-
-def migrate(consumer: Path, env: dict[str, str], cell: str, database: str) -> list[str]:
-    recovered: list[str] = []
-    for _ in range(8):
-        completed = run(["/usr/bin/php8.4", "artisan", "migrate", "--force", "--no-interaction"], consumer, env)
-        if completed.returncode == 0:
-            return recovered
-        detail = (completed.stderr or "") + "\n" + (completed.stdout or "")
-        Path("/tmp/upgrade-cell-failure.txt").write_text(detail, encoding="utf-8")
-        statement = recovery_sql(detail)
-        if statement is None:
-            lines = [line.strip() for line in detail.splitlines() if line.strip()]
-            raise UpgradeError(f"{cell}: migration fault without forward recovery | {' | '.join(lines[-6:])}")
-        applied = psql(statement, database)
-        if applied.returncode:
-            assert_migration_recovery(False, False)
-        recovered.append(statement)
-        print(f"upgrade-proof: {cell} forward recovery", file=sys.stderr)
-    assert_migration_recovery(False, False)
-    return recovered
-
-
-def prove_row(row: dict, baseline_repo: Path, candidate_repo: Path, profiles) -> dict:
-    assert_baseline_row(row)
-    slug = row["package"].replace("/", "_").replace("-", "_")
-    print(f"upgrade-proof: {row['package']}", file=sys.stderr)
-    with tempfile.TemporaryDirectory(prefix=f"corex-upgrade-{slug}-") as temporary:
-        parent = Path(temporary)
-        if row["classification"] == "new-package":
-            consumer = install_consumer(parent, {row["package"]: VERSION}, baseline_repo, candidate_repo, profiles)
-            env = profiles.composer_env(parent / "home", parent / "cache", Path("/usr/bin/php8.4"))
-            configure_application(consumer, None, env)
-            clear_bootstrap(consumer)
-            discovered = run(["/usr/bin/php8.4", "artisan", "package:discover", "--no-interaction"], consumer, env)
-            if discovered.returncode:
-                fail_command(row["package"], discovered)
-            report = boot_report(consumer, env)
-            return {"package": row["package"], "classification": "new-package", "booted": report["booted"]}
-        database = f"corex_p177_{slug}_test"
-        ensure_database(database)
-        consumer = install_consumer(parent, {row["package"]: row["prior_version"]}, baseline_repo, None, profiles)
-        env = profiles.composer_env(parent / "home", parent / "cache", Path("/usr/bin/php8.4"))
-        vendor_package(consumer, row["package"])
-        published = publish_installed_migrations(consumer)
-        configure_application(consumer, database if published else None, env)
-        clear_bootstrap(consumer)
-        discovered = run(["/usr/bin/php8.4", "artisan", "package:discover", "--no-interaction"], consumer, env)
-        if discovered.returncode:
-            fail_command(row["package"], discovered)
-        recovered: list[str] = []
-        if published:
-            recovered.extend(migrate(consumer, env, row["package"], database))
-        before = boot_report(consumer, env)
-        marker = {"package": row["package"], "prior_version": row["prior_version"]}
-        marker_path = consumer / "storage/upgrade-fixture.json"
-        marker_path.write_text(json.dumps(marker, sort_keys=True), encoding="utf-8")
-        marker_digest = hashlib.sha256(marker_path.read_bytes()).hexdigest()
-        before_lock = (consumer / "composer.lock").read_text(encoding="utf-8")
-        write_consumer(consumer, {row["package"]: VERSION}, baseline_repo, candidate_repo)
-        updated = run(profiles.composer_command(
-            "update", "--no-dev", "--no-interaction", "--no-progress", "--prefer-dist", "--no-scripts",
-        ), consumer, env)
-        if updated.returncode:
-            fail_command(row["package"], updated)
-        after_lock = (consumer / "composer.lock").read_text(encoding="utf-8")
-        if hashlib.sha256(marker_path.read_bytes()).hexdigest() != marker_digest:
-            raise UpgradeError(f"{row['package']}: populated fixture changed")
-        vendor_package(consumer, row["package"])
-        publish_installed_migrations(consumer)
-        clear_bootstrap(consumer)
-        dumped = run(profiles.composer_command(
-            "dump-autoload", "-o", "--strict-psr", "--no-dev", "--no-interaction", "--no-scripts",
-        ), consumer, env)
-        if dumped.returncode:
-            fail_command(row["package"], dumped)
-        rediscovered = run(["/usr/bin/php8.4", "artisan", "package:discover", "--no-interaction"], consumer, env)
-        if rediscovered.returncode:
-            fail_command(row["package"], rediscovered)
-        if published:
-            recovered.extend(migrate(consumer, env, row["package"], database))
-        after = boot_report(consumer, env)
-        missing_tables = sorted(set(before["tables"]) - set(after["tables"]))
-        if missing_tables:
-            raise UpgradeError(f"{row['package']}: schema lost {missing_tables[0]}")
-        missing_providers = sorted(set(before["providers"]) - set(after["providers"]))
-        if missing_providers:
-            raise UpgradeError(f"{row['package']}: public provider lost {missing_providers[0]}")
-        missing_config = sorted(set(before["config"]) - set(after["config"]))
-        if missing_config:
-            raise UpgradeError(f"{row['package']}: config lost {missing_config[0]}")
-        if published:
-            recovered.extend(migrate(consumer, env, row["package"], database))
-            rerun = boot_report(consumer, env)
-            if rerun["migrations"] != after["migrations"]:
-                raise UpgradeError(f"{row['package']}: migration rerun is not idempotent")
-        return {
-            "package": row["package"],
-            "classification": "upgraded",
-            "prior_version": row["prior_version"],
-            "immutable_ref": row["immutable_ref"],
-            "archive_sha256": row["archive_sha256"],
-            "tables": after["tables"],
-            "migrations": after["migrations"],
-            "lock_changed": hashlib.sha256(before_lock.encode()).hexdigest() != hashlib.sha256(after_lock.encode()).hexdigest(),
-            "fixture_sha256": marker_digest,
-            "forward_recovery": recovered,
-        }
-
-
-def prove(path: Path, only: str | None, candidate_path: Path | None = None) -> dict:
-    if candidate_path is None:
-        raise UpgradeError("an explicit candidate directory is required")
-    document = load_json(path)
-    # The immutable baseline descriptor remains evidence of remote releases;
-    # the freshly installed dist, not its historical candidate stamp, binds this proof.
-    rows = document["packages"]
-    names = [row["package"] for row in rows]
-    expected = [package["name"] for package in cohort_packages(candidate_path)]
-    if names != expected:
-        raise UpgradeError("generic skip")
-    for row in rows:
-        assert_baseline_row(row)
-    selected = [row for row in rows if only is None or row["package"] == only]
-    if only is not None and not selected:
-        raise UpgradeError(f"missing package: {only}")
+def prove(candidate: Path, baseline: Path, evidence: Path) -> dict:
+    target_binding = extensions.candidate_binding(candidate)
+    source_binding = extensions.candidate_binding(baseline)
+    if source_binding["source_commit"] != LEGACY_SOURCE or source_binding["candidate_version"] != "1.0.0":
+        raise UpgradeError("migration rehearsal requires the frozen 1.0.0 candidate")
+    if not target_binding["candidate_version"].startswith("2.") or target_binding["source_commit"] != resolve_commit(ROOT, "HEAD"):
+        raise UpgradeError("migration rehearsal requires the 2.x candidate checkout")
+    evidence.mkdir(parents=True, exist_ok=False)
     profiles = profile_module()
-    with tempfile.TemporaryDirectory(prefix="corex-upgrade-candidate-") as temporary:
+    interpreter = profiles.interpreter_for("8.4", profiles.interpreters())
+    with tempfile.TemporaryDirectory(prefix="corex-fresh-migration-target-") as temporary:
         root = Path(temporary)
-        extensions = profiles.extension_module()
-        candidate = candidate_path if candidate_path is not None else profiles.build_candidate(root / "candidate", extensions)
-        binding = extensions.candidate_binding(candidate)
         repository = root / "repository"
-        extensions.materialize_repository(candidate, repository)
-        baseline_repo = root / "baselines"
-        stage_baseline_repository(rows, baseline_repo)
-        results = [prove_row(row, baseline_repo, repository, profiles) for row in selected]
-    complete = only is None and len(results) == len(rows)
-    return {
-        "schema_version": "corex-upgrade-receipt/1",
-        "item": "P17.7",
-        "result": "PASS" if complete else "PARTIAL",
-        **binding,
-        "baseline_manifest_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
-        "packages": results,
-        "dod": {"DOD-21": "PASS" if complete else "FAIL", "DOD-22": "PASS" if complete else "FAIL"},
+        extensions.materialize_repository(extensions.candidate_directory(candidate), repository)
+        profile = {"id": "migration-prototype-boot", "database": "sqlite-single", "http": True}
+        cell = {"id": profile["id"], "packages": [WEBHOOKS], "php": "8.4", "laravel": 13}
+        consumer, runtime, declared = profiles.install_app(root / "app", cell, profile, repository, ROOT, interpreter, target_binding["candidate_version"])
+        boot = profiles.boot_app(consumer, runtime, cell["id"])
+        profiles.assert_providers(consumer, boot, cell["id"])
+        lock = assert_dist_install(consumer, repository, declared, ROOT)
+        app_data = {
+            "profile": profile["id"], **lock, "config_cache": True,
+            "providers": sorted(provider for provider in boot["providers"] if provider.startswith("CoreX\\")),
+        }
+        write_json(evidence / "fresh-app.json", app_data)
+    rehearsal = evidence / "import"
+    completed = subprocess.run(
+        [interpreter["binary"], str(IMPORTER), str(rehearsal), target_binding["source_commit"]],
+        cwd=ROOT, env=os.environ.copy(), text=True, capture_output=True, check=False, timeout=120,
+    )
+    (evidence / "import.log").write_text(completed.stdout + completed.stderr, encoding="utf-8")
+    if completed.returncode:
+        raise UpgradeError(f"offline importer failed with exit status {completed.returncode}; see {evidence / 'import.log'}")
+    importer = json.loads(completed.stdout)
+    if (importer["status"] != "verified" or importer["source_artifact"] != source_binding["source_commit"]
+            or importer["target_artifact"] != target_binding["source_commit"] or importer.get("assertions", 0) <= 0):
+        raise UpgradeError("offline import receipt does not match the source and target")
+    semantic = independent_report(rehearsal)
+    write_json(evidence / "semantic-report.json", semantic)
+    receipt = {
+        "schema_version": "corex-offline-migration-proof/1", "result": "PASS",
+        "baseline": source_binding, "candidate": target_binding, "fresh_app": app_data,
+        "importer": importer, "independent_semantics": semantic,
     }
+    write_json(evidence / "receipt.json", receipt)
+    return receipt
 
 
-def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("action", choices=("discover", "prove"))
-    parser.add_argument("--baselines", type=Path, default=BASELINES_PATH)
-    parser.add_argument("--receipt", type=Path, default=RECEIPT_PATH)
-    parser.add_argument("--only")
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--candidate", type=Path, required=True)
-    args = parser.parse_args(argv)
+    parser.add_argument("--baseline", type=Path, required=True)
+    parser.add_argument("--evidence-dir", type=Path, required=True)
+    args = parser.parse_args()
     try:
-        if args.action == "discover":
-            document = discover(args.baselines, candidate_path=args.candidate)
-            print(json.dumps({"result": "PINNED", "packages": len(document["packages"]), "baselines": str(args.baselines)}))
-            return 0
-        receipt = prove(args.baselines, args.only, args.candidate)
-        if args.only is None and any(value != "PASS" for value in receipt["dod"].values()):
-            raise UpgradeError(str(receipt["dod"]))
-    except UpgradeError as error:
-        print(f"upgrade proof denied: {error}", file=sys.stderr)
+        receipt = prove(args.candidate, args.baseline, args.evidence_dir.resolve())
+    except (CandidateError, OSError, KeyError, ValueError, RuntimeError, sqlite3.Error, subprocess.SubprocessError) as error:
+        print(f"offline migration proof denied: {error}", file=sys.stderr)
         return 1
-    args.receipt.parent.mkdir(parents=True, exist_ok=True)
-    args.receipt.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    print(json.dumps({"result": receipt["result"], "packages": len(receipt["packages"]), "receipt": str(args.receipt)}))
+    print(json.dumps({"result": receipt["result"], "receipt": str(args.evidence_dir / "receipt.json")}))
     return 0
 
 

@@ -6,7 +6,7 @@
     "require": {
         "ext-filter": "*",
         "php": "^8.4",
-        "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/corex": "^2.0@dev",
         "illuminate/auth": "^13.0",
         "illuminate/console": "^13.0",
         "illuminate/contracts": "^13.0",
@@ -15,7 +15,7 @@
         "illuminate/support": "^13.0",
         "illuminate/validation": "^13.0",
         "psr/clock": "^1.0",
-        "axiomasoft/corex-operations": "^1.0@dev",
+        "axiomasoft/corex-operations": "^2.0@dev",
         "axiomasoft/packman": "^0.1",
         "axiomasoft/packman-schema": "^0.1"
     },
@@ -30,7 +30,7 @@
         "ext-pcntl": "*",
         "ext-pdo": "*",
         "phpunit/phpunit": "^12.0|^13.0",
-        "axiomasoft/corex-import-export": "^1.0@dev",
+        "axiomasoft/corex-import-export": "^2.0@dev",
         "larastan/larastan": "^3.12",
         "laravel/pint": "^1.32",
         "opis/json-schema": "^2.4.1",
@@ -52,15 +52,33 @@
     "repositories": [
         {
             "type": "path",
-            "url": "../core"
+            "url": "../core",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
         },
         {
             "type": "path",
-            "url": "../operations"
+            "url": "../operations",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex-operations": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
         },
         {
             "type": "path",
-            "url": "../import-export"
+            "url": "../import-export",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex-import-export": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
         }
     ],
     "minimum-stability": "stable",
@@ -83,7 +101,7 @@
             "stability": "stable"
         },
         "branch-alias": {
-            "dev-main": "1.0.x-dev"
+            "dev-main": "2.0.x-dev"
         },
         "laravel": {
             "providers": [

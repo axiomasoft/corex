@@ -1,6 +1,597 @@
 {
     "driver": "pgsql",
     "tables": {
+        "azg_panel_state": {
+            "columns": {
+                "epoch": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'0'::bigint"
+                },
+                "incarnation": {
+                    "type": "character varying(26)",
+                    "nullable": false,
+                    "default": null
+                },
+                "panel": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": false,
+                    "default": null
+                },
+                "version": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'0'::bigint"
+                }
+            },
+            "indexes": [
+                {
+                    "name": "azg_panel_state_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "panel"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
+        "azg_permission_grants": {
+            "columns": {
+                "actor_id": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "actor_reason": {
+                    "type": "text",
+                    "nullable": true,
+                    "default": null
+                },
+                "actor_type": {
+                    "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                },
+                "context_id": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "context_key": {
+                    "type": "character varying(200)",
+                    "nullable": false,
+                    "default": null
+                },
+                "context_type": {
+                    "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "expires_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "id": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "nextval('azg_permission_grants_id_seq'::regclass)"
+                },
+                "meta": {
+                    "type": "json",
+                    "nullable": true,
+                    "default": null
+                },
+                "origin": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": "'manual'::character varying"
+                },
+                "panel": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "permission": {
+                    "type": "character varying(255)",
+                    "nullable": false,
+                    "default": null
+                },
+                "subject_id": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "subject_type": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "tenant_id": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "tenant_key": {
+                    "type": "character varying(200)",
+                    "nullable": false,
+                    "default": null
+                },
+                "tenant_type": {
+                    "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "azg_permission_grants_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "azg_pg_context",
+                    "kind": "ix",
+                    "columns": [
+                        "panel",
+                        "tenant_key",
+                        "context_type",
+                        "context_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "azg_pg_expiry",
+                    "kind": "ix",
+                    "columns": [
+                        "expires_at"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "azg_pg_identity",
+                    "kind": "uq",
+                    "columns": [
+                        "panel",
+                        "tenant_key",
+                        "permission",
+                        "subject_type",
+                        "subject_id",
+                        "context_key",
+                        "origin"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "azg_pg_origin",
+                    "kind": "ix",
+                    "columns": [
+                        "panel",
+                        "tenant_key",
+                        "origin"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "azg_pg_subject",
+                    "kind": "ix",
+                    "columns": [
+                        "panel",
+                        "tenant_key",
+                        "subject_type",
+                        "subject_id",
+                        "context_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [
+                {
+                    "name": "azg_pg_context_pair",
+                    "expression": "((((context_key)::text = 'global'::text) = ((context_type IS NULL) AND (context_id IS NULL))) AND ((context_type IS NULL) = (context_id IS NULL)))"
+                },
+                {
+                    "name": "azg_pg_tenant_pair",
+                    "expression": "((((tenant_key)::text = 'global'::text) = ((tenant_type IS NULL) AND (tenant_id IS NULL))) AND ((tenant_type IS NULL) = (tenant_id IS NULL)))"
+                }
+            ],
+            "triggers": []
+        },
+        "azg_permissions": {
+            "columns": {
+                "created_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "description": {
+                    "type": "text",
+                    "nullable": true,
+                    "default": null
+                },
+                "group": {
+                    "type": "character varying(191)",
+                    "nullable": true,
+                    "default": null
+                },
+                "id": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "nextval('azg_permissions_id_seq'::regclass)"
+                },
+                "label": {
+                    "type": "character varying(191)",
+                    "nullable": true,
+                    "default": null
+                },
+                "meta": {
+                    "type": "json",
+                    "nullable": true,
+                    "default": null
+                },
+                "name": {
+                    "type": "character varying(255)",
+                    "nullable": false,
+                    "default": null
+                },
+                "panel": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "tenant_id": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "tenant_key": {
+                    "type": "character varying(200)",
+                    "nullable": false,
+                    "default": null
+                },
+                "tenant_type": {
+                    "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "azg_permissions_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "azg_pm_identity",
+                    "kind": "uq",
+                    "columns": [
+                        "panel",
+                        "tenant_key",
+                        "name"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [
+                {
+                    "name": "azg_pm_tenant_pair",
+                    "expression": "((((tenant_key)::text = 'global'::text) = ((tenant_type IS NULL) AND (tenant_id IS NULL))) AND ((tenant_type IS NULL) = (tenant_id IS NULL)))"
+                }
+            ],
+            "triggers": []
+        },
+        "azg_role_grants": {
+            "columns": {
+                "actor_id": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "actor_reason": {
+                    "type": "text",
+                    "nullable": true,
+                    "default": null
+                },
+                "actor_type": {
+                    "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                },
+                "context_id": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "context_key": {
+                    "type": "character varying(200)",
+                    "nullable": false,
+                    "default": null
+                },
+                "context_type": {
+                    "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "expires_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "id": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "nextval('azg_role_grants_id_seq'::regclass)"
+                },
+                "meta": {
+                    "type": "json",
+                    "nullable": true,
+                    "default": null
+                },
+                "origin": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": "'manual'::character varying"
+                },
+                "panel": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "role": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "subject_id": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "subject_type": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "tenant_id": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "tenant_key": {
+                    "type": "character varying(200)",
+                    "nullable": false,
+                    "default": null
+                },
+                "tenant_type": {
+                    "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "azg_rg_context",
+                    "kind": "ix",
+                    "columns": [
+                        "panel",
+                        "tenant_key",
+                        "context_type",
+                        "context_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "azg_rg_expiry",
+                    "kind": "ix",
+                    "columns": [
+                        "expires_at"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "azg_rg_identity",
+                    "kind": "uq",
+                    "columns": [
+                        "panel",
+                        "tenant_key",
+                        "role",
+                        "subject_type",
+                        "subject_id",
+                        "context_key",
+                        "origin"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "azg_rg_origin",
+                    "kind": "ix",
+                    "columns": [
+                        "panel",
+                        "tenant_key",
+                        "origin"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "azg_rg_subject",
+                    "kind": "ix",
+                    "columns": [
+                        "panel",
+                        "tenant_key",
+                        "subject_type",
+                        "subject_id",
+                        "context_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "azg_role_grants_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [
+                {
+                    "name": "azg_rg_context_pair",
+                    "expression": "((((context_key)::text = 'global'::text) = ((context_type IS NULL) AND (context_id IS NULL))) AND ((context_type IS NULL) = (context_id IS NULL)))"
+                },
+                {
+                    "name": "azg_rg_tenant_pair",
+                    "expression": "((((tenant_key)::text = 'global'::text) = ((tenant_type IS NULL) AND (tenant_id IS NULL))) AND ((tenant_type IS NULL) = (tenant_id IS NULL)))"
+                }
+            ],
+            "triggers": []
+        },
+        "azg_storage_state": {
+            "columns": {
+                "id": {
+                    "type": "smallint",
+                    "nullable": false,
+                    "default": null
+                },
+                "schema": {
+                    "type": "json",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "azg_storage_state_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [
+                {
+                    "name": "azg_ss_singleton",
+                    "expression": "(id = 1)"
+                }
+            ],
+            "triggers": []
+        },
+        "azg_subject_revisions": {
+            "columns": {
+                "panel": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "revision": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'0'::bigint"
+                },
+                "subject_id": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "subject_type": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "azg_subject_revisions_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "panel",
+                        "subject_type",
+                        "subject_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
         "root_account_events": {
             "columns": {
                 "account_id": {

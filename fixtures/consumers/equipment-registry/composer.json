@@ -5,11 +5,11 @@
     "license": "MIT",
     "require": {
         "php": "^8.4",
-        "axiomasoft/corex-custom-fields": "^1.0",
-        "axiomasoft/corex": "^1.0",
-        "axiomasoft/corex-search": "^1.0",
-        "axiomasoft/corex-import-export": "^1.0",
-        "axiomasoft/corex-workflow": "^1.0",
+        "axiomasoft/corex-custom-fields": "^2.0",
+        "axiomasoft/corex": "^2.0",
+        "axiomasoft/corex-search": "^2.0",
+        "axiomasoft/corex-import-export": "^2.0",
+        "axiomasoft/corex-workflow": "^2.0",
         "laravel/framework": "^13.0"
     },
     "autoload": {

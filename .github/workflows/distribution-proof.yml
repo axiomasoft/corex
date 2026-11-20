@@ -2,95 +2,33 @@ name: Distribution proof
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'composer.*'
+      - 'packages/**'
+      - 'products/**'
+      - 'fixtures/**'
+      - 'tests/Distribution/**'
+      - 'scripts/distribution/**'
+      - 'scripts/migration/**'
+      - '.github/workflows/distribution-proof.yml'
 
 permissions: {}
 
 jobs:
-  extension-fixtures:
+  profiles:
     permissions:
       contents: read
-    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
-    name: External extension fixtures
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        with:
-          php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
-          coverage: none
-          tools: composer
-      - name: Prove five standalone extension fixtures
-        run: python3 scripts/distribution/verify_extension_fixtures.py
-
-  api-clients:
-    permissions:
-      contents: read
-    if: ${{ github.ref == 'refs/heads/main' }}
-    runs-on: ubuntu-latest
-    name: External REST and MCP clients
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-      - name: Prove REST and MCP parity against committed snapshots
-        run: python3 scripts/distribution/verify_api_clients.py
-
-  async-clients:
-    permissions:
-      contents: read
-    if: ${{ github.ref == 'refs/heads/main' }}
-    runs-on: ubuntu-latest
-    name: External bulk and webhook clients
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-      - name: Prove bulk lifecycle and webhook verification
-        run: python3 scripts/distribution/verify_async_clients.py
-
-  equipment-consumer:
-    permissions:
-      contents: read
-    if: ${{ github.ref == 'refs/heads/main' }}
-    runs-on: ubuntu-latest
-    name: Equipment registry consumer
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        with:
-          php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
-          coverage: none
-          tools: composer
-      - name: Prove the equipment registry against the current candidate
-        run: python3 scripts/distribution/verify_equipment_consumer.py
-
-  install-profiles:
-    permissions:
-      contents: read
-    if: ${{ github.ref == 'refs/heads/main' }}
-    runs-on: ubuntu-latest
-    name: Pristine install profiles (${{ matrix.php }} ${{ matrix.mode }})
+    name: Archive profiles (PHP ${{ matrix.php }}, PostgreSQL ${{ matrix.postgres }})
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - php: '8.4'
-            mode: profiles
-          - php: '8.5'
-            mode: edges
+        php: ['8.4', '8.5']
+        postgres: ['16', '18']
     services:
       postgres:
-        image: postgres:18-alpine
+        image: postgres:${{ matrix.postgres }}-alpine
         env:
           POSTGRES_USER: corex
           POSTGRES_PASSWORD: corex
@@ -102,9 +40,18 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+    env:
+      CANDIDATE: ${{ github.workspace }}/build/distribution/candidate
+      EVIDENCE: ${{ github.workspace }}/build/distribution/evidence
+      PHP_VERSION: ${{ matrix.php }}
+      PGSQL_HOST: 127.0.0.1
+      PGSQL_PORT: 5434
+      PGSQL_USERNAME: corex
+      PGSQL_PASSWORD: corex
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
           fetch-depth: 0
       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
@@ -113,57 +60,82 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
           coverage: none
           tools: composer
-      - name: Prove install profiles from the current candidate
-        env:
-          PGSQL_HOST: 127.0.0.1
-          PGSQL_PORT: 5434
-          PROFILE_MODE: ${{ matrix.mode }}
-          PHP_VERSION: ${{ matrix.php }}
-          PGSQL_USERNAME: corex
-          PGSQL_PASSWORD: corex
-        run: python3 scripts/distribution/profile-proof.py --mode "$PROFILE_MODE" --php "$PHP_VERSION" --receipt "$RUNNER_TEMP/profile-receipt.json" --matrix "$RUNNER_TEMP/profile-matrix.json"
+      - name: Build and validate the committed archive repository
+        run: |
+          mkdir -p "$EVIDENCE"
+          python3 scripts/distribution/release_candidate.py build --version 2.0.0 --output "$CANDIDATE" > "$EVIDENCE/candidate-build.json"
+          python3 scripts/distribution/release_candidate.py verify --candidate "$CANDIDATE" > "$EVIDENCE/candidate-verify.json"
+          cp "$CANDIDATE/candidate.json" "$EVIDENCE"
+      - name: Prove isolated archive installations
+        run: |
+          python3 scripts/distribution/profile-proof.py --candidate "$CANDIDATE" --mode all --php "$PHP_VERSION" --receipt "$EVIDENCE/profile-receipt.json" --matrix "$EVIDENCE/profile-matrix.json"
+          python3 scripts/distribution/prove_scenario.py --candidate "$CANDIDATE" --case installed-boot --php "$PHP_VERSION" --evidence-dir "$EVIDENCE/scenario"
+      - name: Prove extension and equipment fixtures
+        if: matrix.php == '8.4' && matrix.postgres == '18'
+        run: |
+          python3 scripts/distribution/verify_extension_fixtures.py --candidate "$CANDIDATE" --receipt "$EVIDENCE/extensions.json"
+          python3 scripts/distribution/verify_equipment_consumer.py --candidate "$CANDIDATE" --receipt "$EVIDENCE/equipment.json"
+      - name: Prove public and Octane installations
+        if: matrix.postgres == '18'
+        run: |
+          python3 scripts/distribution/verify_installed_consumers.py --candidate "$CANDIDATE" --consumer public --php "$PHP_VERSION" --evidence-dir "$EVIDENCE/public-consumer"
+          python3 scripts/distribution/verify_installed_consumers.py --candidate "$CANDIDATE" --consumer octane --php "$PHP_VERSION" --evidence-dir "$EVIDENCE/octane"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: distribution-php${{ matrix.php }}-pg${{ matrix.postgres }}
+          path: ${{ env.EVIDENCE }}
 
-  upgrade-proof:
+  protocol-clients:
     permissions:
       contents: read
-    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
-    name: Supported-version upgrade proof
-    services:
-      postgres:
-        image: postgres:18-alpine
-        env:
-          POSTGRES_USER: corex
-          POSTGRES_PASSWORD: corex
-          POSTGRES_DB: corex_test
-        ports:
-          - 5434:5432
-        options: >-
-          --health-cmd "pg_isready -U corex -d corex_test"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+    name: External protocol clients
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Prove REST, MCP, bulk, and webhook wire contracts
+        run: |
+          python3 scripts/distribution/verify_api_clients.py
+          python3 scripts/distribution/verify_async_clients.py
+
+  offline-migration:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    name: Frozen 1.x baseline and fresh 2.x migration prototype
+    env:
+      BASE_SHA: 1c11e0e35961409631cf68ebb28c7d2cd53ebb91
+      BASE_CHECKOUT: ${{ github.workspace }}/build/distribution/corex-baseline
+      BASE_DIST: ${{ github.workspace }}/build/distribution/corex-baseline-dist
+      CANDIDATE: ${{ github.workspace }}/build/distribution/candidate
+      EVIDENCE: ${{ github.workspace }}/build/distribution/migration-evidence
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
           fetch-depth: 0
       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, sqlite3, sodium, bcmath, curl, intl, zip, gd
           coverage: none
           tools: composer
-      - name: Prove named upgrade failures
-        run: python3 -m unittest scripts.distribution.tests.test_upgrade_proof -q
-      - name: Prove upgrade from pinned baselines
-        env:
-          PGSQL_HOST: 127.0.0.1
-          PGSQL_PORT: 5434
-          PGSQL_USERNAME: corex
-          PGSQL_PASSWORD: corex
-          GH_TOKEN: ${{ github.token }}
+      - name: Build immutable baseline with its original builder
         run: |
-          python3 scripts/distribution/release_candidate.py build --version 1.0.0 --output build/distribution/candidate
-          python3 scripts/distribution/upgrade-proof.py discover --candidate build/distribution/candidate --baselines "$RUNNER_TEMP/release-baselines.json"
-          python3 scripts/distribution/upgrade-proof.py prove --candidate build/distribution/candidate --baselines "$RUNNER_TEMP/release-baselines.json" --receipt "$RUNNER_TEMP/upgrade-receipt.json"
+          git worktree add --detach "$BASE_CHECKOUT" "$BASE_SHA"
+          cd "$BASE_CHECKOUT"
+          python3 scripts/distribution/release_candidate.py build --version 1.0.0 --output "$BASE_DIST"
+          python3 scripts/distribution/release_candidate.py verify --candidate "$BASE_DIST/candidate.json"
+      - name: Run the importer against the frozen fixture and compare semantics
+        run: |
+          python3 scripts/distribution/release_candidate.py build --version 2.0.0 --output "$CANDIDATE"
+          python3 scripts/distribution/upgrade-proof.py --candidate "$CANDIDATE" --baseline "$BASE_DIST" --evidence-dir "$EVIDENCE"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: offline-migration
+          path: ${{ env.EVIDENCE }}

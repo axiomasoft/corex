@@ -38,11 +38,33 @@ class ProfileProofTest(unittest.TestCase):
         self.manifest = json.loads(MODULE.MANIFEST_PATH.read_text(encoding="utf-8"))
         self.composers = composers()
 
-    def test_manifest_has_the_six_profiles(self) -> None:
-        self.assertEqual(
-            [profile["id"] for profile in self.manifest["profiles"]],
-            ["bare-single", "modular-single", "modular-multi", "worker-only", "search-portable", "full-corex"],
-        )
+    def test_declared_profile_ids_must_match_definitions(self) -> None:
+        MODULE.validate_profiles(self.manifest)
+        self.manifest["profiles"].pop()
+        with self.assertRaisesRegex(MODULE.ProfileError, "profile set mismatch"):
+            MODULE.validate_profiles(self.manifest)
+
+    def test_every_owner_has_a_standalone_cell_per_supported_php(self) -> None:
+        cells = MODULE.plan_edges(self.composers, list(AVAILABLE))
+        for owner in self.composers:
+            with self.subTest(owner=owner):
+                actual = {
+                    cell["php"]
+                    for cell in cells
+                    if cell["status"] == "included" and cell["packages"] == [owner] and not cell["prefer_lowest"]
+                }
+                self.assertEqual(actual, {"8.4", "8.5"})
+
+    def test_composition_does_not_count_as_standalone(self) -> None:
+        cells = MODULE.plan_edges(self.composers, list(AVAILABLE))
+        results = [
+            {**cell, "status": "passed", "installed": cell["packages"]}
+            for cell in cells
+            if cell["status"] == "included" and cell["packages"] != ["axiomasoft/corex-search"]
+        ]
+        results.append({"kind": "profile", "status": "passed", "packages": list(self.composers), "installed": list(self.composers)})
+        gaps = MODULE.coverage_gaps(self.composers, results, list(AVAILABLE))
+        self.assertIn("missing edge: axiomasoft/corex-search php8.5/l13", gaps)
 
     def test_missing_profile_names_the_profile(self) -> None:
         with self.assertRaises(MODULE.ProfileError) as caught:

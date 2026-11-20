@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Boot the six P17 installation profiles from the frozen dist candidate."""
+"""Install and boot the declared profiles from a verified CoreX candidate."""
 
 from __future__ import annotations
 
@@ -17,13 +17,13 @@ from pathlib import Path
 
 # Also support the test harness loading this script by file path.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from ecosystem_repositories import is_corex_package, snapshot_repositories
+from ecosystem_repositories import is_corex_package
+from consumer_repository import assert_dist_install, dist_closure, repositories
 
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST_PATH = ROOT / "scripts/distribution/install-profiles.json"
 MATRIX_PATH = ROOT / "build/distribution/profile-matrix.json"
 RECEIPT_PATH = ROOT / "build/distribution/profile-receipt.json"
-VERSION = "1.0.0"
 CARET = re.compile(r"^\^(\d+)\.(\d+)(?:\.(\d+))?$")
 INTERPRETER_MINORS = ("8.3", "8.4", "8.5")
 PROFILE_PHP = "8.4"
@@ -45,6 +45,7 @@ foreach ($installed['packages'] ?? [] as $package) {
     }
 }
 $databases = [];
+$databaseVersions = [];
 $names = getenv('COREX_PG_DATABASES') ?: '';
 if ($names !== '') {
     foreach (explode(',', $names) as $name) {
@@ -53,20 +54,26 @@ if ($names !== '') {
             (string) getenv('PGSQL_USERNAME'),
             (string) getenv('PGSQL_PASSWORD'),
         );
-        $pdo->query('SELECT 1');
+        $server = $pdo->query('SELECT current_database(), version()')->fetch(PDO::FETCH_NUM);
+        if ($server === false || $server[0] !== $name) {
+            throw new RuntimeException('PostgreSQL profile connected to the wrong database.');
+        }
         $databases[] = $name;
+        $databaseVersions[$name] = $server[1];
     }
 }
 $sqlite = getenv('COREX_SQLITE') ?: '';
 if ($sqlite !== '') {
     $pdo = new PDO('sqlite:' . $sqlite);
-    $pdo->query('SELECT 1');
+    $databaseVersions['sqlite'] = $pdo->query('SELECT sqlite_version()')->fetchColumn();
     $databases[] = 'sqlite';
 }
 echo json_encode([
     'packages' => $packages,
     'providers' => array_keys($app->getLoadedProviders()),
     'databases' => $databases,
+    'database_versions' => $databaseVersions,
+    'php' => PHP_VERSION,
     'http_routes' => is_file($root . '/routes/web.php'),
 ], JSON_THROW_ON_ERROR);
 """
@@ -95,6 +102,15 @@ def require_profile(manifest: dict, profile_id: str) -> dict:
     if not matches:
         raise ProfileError(f"missing profile: {profile_id}")
     return matches[0]
+
+
+def validate_profiles(manifest: dict) -> None:
+    expected = manifest.get("required_profiles")
+    actual = [profile["id"] for profile in manifest["profiles"]]
+    if not expected or len(set(expected)) != len(expected) or len(set(actual)) != len(actual):
+        raise ProfileError("profile IDs must be nonempty and unique")
+    if set(actual) != set(expected):
+        raise ProfileError(f"profile set mismatch: expected {sorted(expected)}, defined {sorted(actual)}")
 
 
 def expand_packages(profile: dict, cohort: set[str]) -> list[str]:
@@ -225,16 +241,17 @@ def group_packages(composers: dict[str, dict]) -> list[dict]:
 def interpreters() -> list[dict]:
     found = []
     for minor in INTERPRETER_MINORS:
-        binary = Path(f"/usr/bin/php{minor}")
-        if not binary.is_file():
+        binary = shutil.which(f"php{minor}") or shutil.which("php")
+        if binary is None:
             continue
-        completed = subprocess.run((str(binary), "-r", "echo PHP_VERSION;"), text=True, capture_output=True, check=False)
-        if completed.returncode != 0:
+        completed = subprocess.run((binary, "-r", "echo PHP_VERSION;"), text=True, capture_output=True, check=False)
+        if completed.returncode != 0 or not completed.stdout.startswith(f"{minor}."):
             continue
-        parts = completed.stdout.strip().split(".")
-        found.append({"minor": minor, "binary": str(binary), "version": (int(parts[0]), int(parts[1]), int(parts[2]))})
+        version = re.match(r'^\d+\.\d+\.\d+', completed.stdout)
+        if version is not None:
+            found.append({"minor": minor, "binary": str(Path(binary).resolve()), "version": tuple(map(int, version[0].split(".")))})
     if not found:
-        raise ProfileError("missing interpreter: 8.3")
+        raise ProfileError("missing PHP interpreter")
     return found
 
 
@@ -286,23 +303,21 @@ def plan_profiles(manifest: dict, composers: dict[str, dict], available: list[di
 def plan_edges(composers: dict[str, dict], available: list[dict]) -> list[dict]:
     cells = []
     majors = cohort_laravel_majors(composers)
-    for group in group_packages(composers):
-        packages = group["packages"]
-        matching = []
-        for item in available:
-            if exclusion_reason(packages, composers, None, item["version"]) is None:
-                matching.append(item)
+    for name, composer in sorted(composers.items()):
+        packages = [name]
+        matching = [item for item in available if exclusion_reason(packages, composers, None, item["version"]) is None]
         if not matching:
-            raise ProfileError(f"missing interpreter: {packages[0]}")
+            raise ProfileError(f"missing interpreter: {name}")
         lowest, highest = matching[0], matching[-1]
-        laravel_edges = group["laravel"] or [None]
+        owner_majors = declared_laravel_majors(composer)
+        laravel_edges = owner_majors or [None]
         pairs = [(lowest, laravel_edges[0], "min"), (highest, laravel_edges[-1], "max")]
         if pairs[0][:2] == pairs[1][:2]:
             pairs = [pairs[0]]
         pairs.append((lowest, laravel_edges[0], "prefer-lowest"))
         for item, laravel, kind in pairs:
             cells.append({
-                "id": f"edge-{kind}-php{item['minor']}-l{laravel or 'none'}-{packages[0]}",
+                "id": f"edge-{kind}-php{item['minor']}-l{laravel or 'none'}-{name}",
                 "kind": "edge",
                 "edge": kind,
                 "packages": packages,
@@ -312,28 +327,27 @@ def plan_edges(composers: dict[str, dict], available: list[dict]) -> list[dict]:
                 "status": "included",
             })
         for laravel in majors:
-            if group["laravel"] and laravel not in group["laravel"]:
-                sample = packages[0]
-                constraint = next(iter(illuminate_constraints(composers[sample]).values()))
+            if owner_majors and laravel not in owner_majors:
+                constraint = next(iter(illuminate_constraints(composer).values()))
                 cells.append({
-                    "id": f"edge-excluded-l{laravel}-{sample}",
+                    "id": f"edge-excluded-l{laravel}-{name}",
                     "kind": "edge",
                     "packages": packages,
                     "php": lowest["minor"],
                     "laravel": laravel,
                     "status": "excluded",
-                    "reason": f"{sample} constraint {constraint}",
+                    "reason": f"{name} constraint {constraint}",
                 })
         for item in available:
             reason = exclusion_reason(packages, composers, None, item["version"])
             if reason is None:
                 continue
             cells.append({
-                "id": f"edge-excluded-php{item['minor']}-{packages[0]}",
+                "id": f"edge-excluded-php{item['minor']}-{name}",
                 "kind": "edge",
                 "packages": packages,
                 "php": item["minor"],
-                "laravel": group["laravel"][0] if group["laravel"] else None,
+                "laravel": owner_majors[0] if owner_majors else None,
                 "status": "excluded",
                 "reason": reason,
             })
@@ -344,7 +358,7 @@ def coverage_gaps(composers: dict[str, dict], cells: list[dict], available: list
     gaps = []
     installed_by_cell = []
     for cell in cells:
-        if cell.get("status") != "passed":
+        if cell.get("status") != "passed" or cell.get("kind") != "edge":
             continue
         installed_by_cell.append(cell)
     for name, composer in sorted(composers.items()):
@@ -360,7 +374,7 @@ def coverage_gaps(composers: dict[str, dict], cells: list[dict], available: list
         for php, laravel, prefer in required:
             found = False
             for cell in installed_by_cell:
-                if name not in cell.get("installed", []):
+                if cell["packages"] != [name] or name not in cell.get("installed", []):
                     continue
                 if cell.get("php") != php or bool(cell.get("prefer_lowest")) != prefer:
                     continue
@@ -378,16 +392,13 @@ def run(command: list[str], cwd: Path, env: dict[str, str]) -> subprocess.Comple
     return subprocess.run(command, cwd=cwd, env=env, text=True, capture_output=True, check=False)
 
 
-def composer_binary() -> str:
-    for candidate in ("/usr/bin/composer", "/home/vostrikov/.config/herd-lite/bin/composer"):
-        if Path(candidate).is_file():
-            return candidate
-    raise ProfileError("missing package: composer")
-
-
 def composer_command(*args: str) -> list[str]:
     """Run Composer on PHP 8.4. PHP 8.5 rejects this Composer phar; the app still boots on the cell interpreter."""
-    return ["/usr/bin/php8.4", composer_binary(), *args]
+    composer = shutil.which("composer")
+    if composer is None:
+        raise ProfileError("missing package: composer")
+    php = shutil.which("php8.4")
+    return [php, composer, *args] if php else [composer, *args]
 
 
 def assert_cohort_platform(consumer: Path, version: tuple[int, int, int], cell_id: str) -> None:
@@ -410,7 +421,7 @@ def composer_env(home: Path, cache: Path, binary: Path) -> dict[str, str]:
     env.update({
         "PATH": str(bindir) + os.pathsep + env.get("PATH", ""),
         "COMPOSER_HOME": str(home),
-        "COMPOSER_CACHE_DIR": str(cache),
+        "COMPOSER_CACHE_DIR": os.environ.get("COMPOSER_CACHE_DIR", str(cache)),
         "COMPOSER_NO_INTERACTION": "1",
         "COMPOSER_DISABLE_XDEBUG_WARN": "1",
         "COMPOSER_MEMORY_LIMIT": "-1",
@@ -420,25 +431,19 @@ def composer_env(home: Path, cache: Path, binary: Path) -> dict[str, str]:
 
 def fail_command(cell_id: str, completed: subprocess.CompletedProcess[str]) -> None:
     detail = (completed.stderr or "") + "\n" + (completed.stdout or "")
-    Path("/tmp/profile-cell-failure.txt").write_text(detail, encoding="utf-8")
     lines = [line.strip() for line in detail.splitlines() if line.strip()]
     raise ProfileError(f"{cell_id}: {' | '.join(lines[-8:])}")
 
 
-def write_consumer(consumer: Path, packages: list[str], laravel: int, repository: Path, php_version: str) -> None:
+def write_consumer(consumer: Path, packages: list[str], laravel: int, repository: Path, php_version: str, candidate_version: str) -> None:
     path = consumer / "composer.json"
     composer = load_json(path)
     require = dict(composer.get("require", {}))
     require["laravel/framework"] = f"^{laravel}.0"
     for name in packages:
-        require[name] = VERSION
+        require[name] = candidate_version
     composer["require"] = dict(sorted(require.items()))
-    composer["repositories"] = [
-        {"type": "composer", "url": str(repository)},
-        *snapshot_repositories(ROOT),
-        {"type": "composer", "url": "https://repo.packagist.org", "exclude": ["axiomasoft/corex", "axiomasoft/corex-*", "corex/*", "axioma-studio/*"]},
-        {"packagist.org": False},
-    ]
+    composer["repositories"] = repositories(repository, ROOT)
     composer["minimum-stability"] = "dev"
     composer["prefer-stable"] = True
     config = dict(composer.get("config", {}))
@@ -536,12 +541,14 @@ def configure_database(consumer: Path, profile: dict, cell_id: str) -> dict[str,
             "PGSQL_USERNAME": settings["user"],
             "PGSQL_PASSWORD": settings["password"],
         }
-    else:
+    elif profile.get("database") == "sqlite-single":
         database = consumer / "profile.sqlite"
         database.touch()
         text = set_env(text, "DB_CONNECTION", "sqlite")
         text = set_env(text, "DB_DATABASE", str(database))
         extra["COREX_SQLITE"] = str(database)
+    else:
+        raise ProfileError(f"{cell_id}: unknown database profile {profile.get('database')}")
     env_path.write_text(text, encoding="utf-8")
     if not profile.get("http", True):
         disable_http(consumer, cell_id)
@@ -549,125 +556,161 @@ def configure_database(consumer: Path, profile: dict, cell_id: str) -> dict[str,
 
 
 def locked_summary(payload: dict) -> list[str]:
-    rows = payload.get("installed", payload if isinstance(payload, list) else [])
+    rows = payload.get("locked")
+    if not isinstance(rows, list):
+        raise ProfileError("Composer show --locked did not return the locked package list")
     names = []
     for row in rows:
-        if not isinstance(row, dict):
-            continue
-        name = row.get("name", "")
-        if is_corex_package(name) or name in {"laravel/framework", "illuminate/support"}:
-            names.append(f"{name}:{row.get('version')}")
+        if not isinstance(row, dict) or not isinstance(row.get("name"), str) or not isinstance(row.get("version"), str):
+            raise ProfileError("Composer show --locked returned invalid package metadata")
+        name = row["name"]
+        if is_corex_package(name) or name in {"flex/crm", "laravel/framework", "illuminate/support"}:
+            names.append(f"{name}:{row['version']}")
     return sorted(names)
 
 
-def execute_cell(cell: dict, profile: dict | None, repository: Path, workspace: Path, available: list[dict], extensions) -> dict:
+def install_app(
+    root: Path,
+    cell: dict,
+    profile: dict,
+    repository: Path,
+    workspace: Path,
+    binary: dict,
+    candidate_version: str,
+) -> tuple[Path, dict[str, str], list[str]]:
+    laravel = cell["laravel"] or 13
+    home = root / "home"
+    cache = repository.parent / "composer-cache"
+    home.mkdir(parents=True)
+    cache.mkdir(exist_ok=True)
+    env = composer_env(home, cache, Path(binary["binary"]))
+    created = run(
+        composer_command("create-project", f"laravel/laravel:^{laravel}.0", "consumer", "--no-install", "--no-scripts", "--no-interaction", "--no-progress"),
+        root, env,
+    )
+    if created.returncode != 0:
+        fail_command(cell["id"], created)
+    consumer = root / "consumer"
+    packages = list(cell["packages"])
+    write_consumer(consumer, packages, laravel, repository, ".".join(map(str, binary["version"])), candidate_version)
+    if profile.get("product") == "flex/crm":
+        shutil.copytree(workspace / "products/flex-crm", consumer / "flex-crm", ignore=shutil.ignore_patterns("vendor", "composer.lock"))
+        manifest = load_json(consumer / "composer.json")
+        manifest["require"]["flex/crm"] = "^1.0@dev"
+        manifest["repositories"].append({
+            "type": "path",
+            "url": "flex-crm",
+            "options": {"symlink": False, "versions": {"flex/crm": "1.0.x-dev"}},
+        })
+        (consumer / "composer.json").write_text(json.dumps(manifest, indent=4) + "\n", encoding="utf-8")
+        packages.extend(load_json(consumer / "flex-crm/composer.json")["require"])
+    update = composer_command("update", "--no-dev", "--no-interaction", "--no-progress", "--prefer-dist", "--no-scripts")
+    if cell.get("prefer_lowest"):
+        update.extend(["--prefer-lowest", "--prefer-stable"])
+    installed = run(update, consumer, env)
+    if installed.returncode != 0:
+        fail_command(cell["id"], installed)
+    assert_cohort_platform(consumer, binary["version"], cell["id"])
+    validated = run(composer_command("validate", "--no-check-publish", "--no-interaction"), consumer, env)
+    if validated.returncode:
+        fail_command(cell["id"], validated)
+    assert_dist_install(consumer, repository, packages, workspace)
+    example = consumer / ".env.example"
+    env_file = consumer / ".env"
+    if not env_file.exists() and example.exists():
+        env_file.write_text(example.read_text(encoding="utf-8"), encoding="utf-8")
+    closure = dist_closure(packages, load_json(repository / "packages.json")["packages"])
+    if "axiomasoft/corex-operations" in closure:
+        providers = consumer / "bootstrap/providers.php"
+        contents = providers.read_text(encoding="utf-8")
+        providers.write_text(contents.replace("return [", "return [\n    \\CoreX\\Operations\\OperationsServiceProvider::class,", 1), encoding="utf-8")
+    runtime = {**env, **configure_database(consumer, profile, cell["id"])}
+    generated = run(["php", "artisan", "key:generate", "--ansi", "--force"], consumer, runtime)
+    if generated.returncode != 0:
+        fail_command(cell["id"], generated)
+    return consumer, runtime, packages
+
+
+def boot_app(consumer: Path, runtime: dict, cell_id: str) -> dict:
+    dumped = run(composer_command("dump-autoload", "-o", "--strict-psr", "--no-dev", "--no-interaction", "--no-scripts"), consumer, runtime)
+    if dumped.returncode != 0:
+        fail_command(cell_id, dumped)
+    for cache_name in ("config.php", "packages.php", "services.php"):
+        (consumer / "bootstrap/cache" / cache_name).unlink(missing_ok=True)
+    for command in ("package:discover", "config:cache"):
+        completed = run(["php", "artisan", command, "--no-interaction"], consumer, runtime)
+        if completed.returncode != 0:
+            fail_command(cell_id, completed)
+    probe = consumer / "profile-probe.php"
+    probe.write_text(PROBE, encoding="utf-8")
+    completed = run(["php", str(probe), str(consumer)], consumer, runtime)
+    if completed.returncode != 0:
+        fail_command(cell_id, completed)
+    return json.loads(completed.stdout)
+
+
+def assert_providers(consumer: Path, report: dict, cell_id: str) -> None:
+    packages = load_json(consumer / "vendor/composer/installed.json")["packages"]
+    providers = set(report["providers"])
+    for package in packages:
+        name = package["name"]
+        if not is_corex_package(name) and name != "flex/crm":
+            continue
+        expected = package.get("extra", {}).get("laravel", {}).get("providers", [])
+        if name == "axiomasoft/corex-operations":
+            expected = [r"CoreX\Operations\OperationsServiceProvider"]
+        for provider in expected:
+            if provider not in providers:
+                raise ProfileError(f"{cell_id}: {name} provider {provider} was not loaded")
+
+
+def execute_cell(cell: dict, profile: dict | None, repository: Path, workspace: Path, available: list[dict], candidate_version: str) -> dict:
     binary = interpreter_for(cell["php"], available)
-    laravel = 13 if cell["laravel"] is None else int(cell["laravel"])
+    profile = profile or {"id": cell["id"], "database": "sqlite-single", "http": True}
     prefix = "corex-profile-" + cell["id"].replace("/", "-") + "-"
     with tempfile.TemporaryDirectory(prefix=prefix) as temporary:
-        root = Path(temporary)
-        home = root / "home"
-        cache = root / "cache"
-        home.mkdir()
-        cache.mkdir()
-        env = composer_env(home, cache, Path(binary["binary"]))
-        created = run(
-            composer_command("create-project", f"laravel/laravel:^{laravel}.0", "consumer", "--no-install", "--no-scripts", "--no-interaction", "--no-progress"),
-            root, env,
-        )
-        if created.returncode != 0:
-            fail_command(cell["id"], created)
-        consumer = root / "consumer"
-        write_consumer(consumer, cell["packages"], int(laravel), repository, ".".join(str(part) for part in binary["version"]))
-        update = composer_command("update", "--no-dev", "--no-interaction", "--no-progress", "--prefer-dist", "--no-scripts")
-        if cell.get("prefer_lowest"):
-            update.extend(["--prefer-lowest", "--prefer-stable"])
-        installed = run(update, consumer, env)
-        if installed.returncode != 0:
-            fail_command(cell["id"], installed)
-        assert_cohort_platform(consumer, binary["version"], cell["id"])
-        validated = run(composer_command("validate", "--no-check-publish", "--no-interaction"), consumer, env)
-        if validated.returncode not in {0, 2}:
-            fail_command(cell["id"], validated)
-        dumped = run(composer_command("dump-autoload", "-o", "--strict-psr", "--no-dev", "--no-interaction", "--no-scripts"), consumer, env)
-        if dumped.returncode != 0:
-            fail_command(cell["id"], dumped)
-        autoload = (consumer / "vendor/composer/autoload_psr4.php").read_text(encoding="utf-8")
-        classmap = (consumer / "vendor/composer/autoload_classmap.php").read_text(encoding="utf-8")
-        lock = (consumer / "composer.lock").read_text(encoding="utf-8")
-        assert_no_workspace(autoload + classmap + lock, workspace)
-        if extensions.autoload_contains_workspace(autoload, workspace):
-            raise ProfileError(f"workspace path: {cell['id']}")
-        vendor_root = consumer / "vendor"
-        for path in vendor_root.rglob("*"):
-            if path.is_symlink() and "corex" in path.parts:
-                raise ProfileError(f"workspace path: {cell['id']}")
-        example = consumer / ".env.example"
-        env_file = consumer / ".env"
-        if not env_file.exists() and example.exists():
-            env_file.write_text(example.read_text(encoding="utf-8"), encoding="utf-8")
-        runtime = env.copy()
-        if profile is not None:
-            runtime.update(configure_database(consumer, profile, cell["id"]))
-        for cache_name in ("packages.php", "services.php"):
-            cached = consumer / "bootstrap/cache" / cache_name
-            if cached.exists():
-                cached.unlink()
-        generated = run(["php", "artisan", "key:generate", "--ansi", "--force"], consumer, runtime)
-        if generated.returncode != 0:
-            fail_command(cell["id"], generated)
-        discover = run(["php", "artisan", "package:discover", "--ansi"], consumer, runtime)
-        if discover.returncode != 0:
-            fail_command(cell["id"], discover)
-        probe = consumer / "profile-probe.php"
-        probe.write_text(PROBE, encoding="utf-8")
-        booted = run(["php", str(probe), str(consumer)], consumer, runtime)
-        if booted.returncode != 0:
-            fail_command(cell["id"], booted)
-        report = json.loads(booted.stdout)
-        if profile is not None:
-            assert_profile_clean(profile, report["packages"], http_routes=report["http_routes"])
-            if profile.get("database") == "postgres-two" and len(report["databases"]) != 2:
-                raise ProfileError(f"{profile['id']}: databases")
-            if profile.get("database") == "sqlite-single" and report["databases"] != ["sqlite"]:
-                raise ProfileError(f"{profile['id']}: databases")
-        removed = []
-        if profile is not None and profile.get("remove"):
-            for package in profile["remove"]:
-                removal = run(composer_command("remove", package, "--no-interaction", "--no-progress", "--no-update"), consumer, env)
-                if removal.returncode != 0:
-                    fail_command(cell["id"], removal)
-                removed.append(package)
-            refreshed = run(composer_command("update", "--no-dev", "--no-interaction", "--no-progress", "--prefer-dist", "--no-scripts"), consumer, env)
+        consumer, runtime, packages = install_app(Path(temporary), cell, profile, repository, workspace, binary, candidate_version)
+        report = boot_app(consumer, runtime, cell["id"])
+        assert_providers(consumer, report, cell["id"])
+        initial_dist = assert_dist_install(consumer, repository, packages, workspace)
+        assert_profile_clean(profile, report["packages"], http_routes=report["http_routes"])
+        expected_databases = ["sqlite"] if profile["database"] == "sqlite-single" else runtime["COREX_PG_DATABASES"].split(",")
+        if report["databases"] != expected_databases or report["http_routes"] != profile.get("http", True):
+            raise ProfileError(f"{profile['id']}: database or HTTP profile mismatch")
+        removed = profile.get("remove", [])
+        if removed:
+            removal = run(composer_command("remove", *removed, "--no-interaction", "--no-progress", "--no-update"), consumer, runtime)
+            if removal.returncode != 0:
+                fail_command(cell["id"], removal)
+            refreshed = run(composer_command("update", "--no-dev", "--no-interaction", "--no-progress", "--prefer-dist", "--no-scripts"), consumer, runtime)
             if refreshed.returncode != 0:
                 fail_command(cell["id"], refreshed)
-            redumped = run(composer_command("dump-autoload", "-o", "--strict-psr", "--no-dev", "--no-interaction", "--no-scripts"), consumer, env)
-            if redumped.returncode != 0:
-                fail_command(cell["id"], redumped)
-            for cache_name in ("packages.php", "services.php"):
-                cached = consumer / "bootstrap/cache" / cache_name
-                if cached.exists():
-                    cached.unlink()
-            rediscovered = run(["php", "artisan", "package:discover", "--ansi"], consumer, runtime)
-            if rediscovered.returncode != 0:
-                fail_command(cell["id"], rediscovered)
-            again = run(["php", str(probe), str(consumer)], consumer, runtime)
-            if again.returncode != 0:
-                fail_command(cell["id"], again)
-            report = json.loads(again.stdout)
-            observed = {**profile, "remove_observed": removed}
-            assert_profile_clean(observed, report["packages"], http_routes=report["http_routes"])
-        show = run(composer_command("show", "--locked", "--format=json"), consumer, env)
+            report = boot_app(consumer, runtime, cell["id"])
+            assert_providers(consumer, report, cell["id"])
+            assert_profile_clean({**profile, "remove_observed": removed}, report["packages"], http_routes=report["http_routes"])
+        dist = assert_dist_install(consumer, repository, [name for name in packages if name not in removed], workspace)
+        show = run(composer_command("show", "--locked", "--format=json"), consumer, runtime)
         if show.returncode != 0:
             fail_command(cell["id"], show)
-        shown = json.loads(show.stdout)
+        shown = locked_summary(json.loads(show.stdout))
+        if [entry for entry in shown if is_corex_package(entry.split(":", 1)[0])] != dist["installed"]:
+            raise ProfileError(f"{cell['id']}: Composer show --locked differs from the installed CoreX closure")
+        framework = f"laravel/framework:v{cell['laravel'] or 13}."
+        if not any(entry.startswith(framework) for entry in shown):
+            raise ProfileError(f"{cell['id']}: Composer show --locked is missing the expected Laravel framework")
+        if profile.get("product") == "flex/crm" and "flex/crm:1.0.x-dev" not in shown:
+            raise ProfileError(f"{cell['id']}: independent FlexCRM version line changed")
         cohort_installed = sorted(name for name in report["packages"] if is_corex_package(name))
         return {
             "installed": cohort_installed,
-            "locked": locked_summary(shown),
-            "lock_sha256": hashlib.sha256(lock.encode("utf-8")).hexdigest(),
-            "discovery": discover.stdout.strip().splitlines()[-1:] or [],
+            "locked": shown,
+            "lock_sha256": dist["lock_sha256"],
+            "initial_lock_sha256": initial_dist["lock_sha256"],
+            "providers": sorted(name for name in report["providers"] if name.startswith(("CoreX\\", "Flex\\"))),
             "databases": report["databases"],
+            "database_versions": report["database_versions"],
+            "php_version": report["php"],
+            "config_cache": True,
             "removed": removed,
         }
 
@@ -709,29 +752,41 @@ def select_cells(cells: list[dict], mode: str, only: str | None, php: str | None
 def prove(candidate: Path | None, *, mode: str, only: str | None, php: str | None) -> dict:
     extensions = extension_module()
     available = interpreters()
+    if php is not None:
+        interpreter_for(php, available)
+    elif mode == "all" and only is None:
+        for minor in ("8.4", "8.5"):
+            interpreter_for(minor, available)
     manifest = load_json(MANIFEST_PATH)
+    validate_profiles(manifest)
     with tempfile.TemporaryDirectory(prefix="corex-profile-candidate-") as temporary:
         root = Path(temporary)
-        if candidate is not None and (candidate / "candidate.json").is_file():
-            built = candidate
-        else:
-            built = build_candidate(root / "candidate", extensions)
+        built = extensions.candidate_directory(candidate) if candidate else build_candidate(root / "candidate", extensions)
         binding = extensions.candidate_binding(built)
         repository = root / "repository"
         extensions.materialize_repository(built, repository)
         composers = archive_composers(built)
         profiles = {profile["id"]: profile for profile in manifest["profiles"]}
-        planned = plan_profiles(manifest, composers, available) + plan_edges(composers, available)
+        if only is not None:
+            require_profile(manifest, only)
+        profile_interpreters = [item for item in available if php is None or item["minor"] == php]
+        planned = plan_profiles(manifest, composers, profile_interpreters) + plan_edges(composers, available)
         selected = select_cells(planned, mode, only, php)
+        included = {cell["id"] for cell in selected if cell["status"] == "included"}
+        expected_profiles = {only} if only else set(manifest["required_profiles"])
+        if not included:
+            raise ProfileError("no executable matrix cells selected")
+        if mode != "edges" and {cell["profile"] for cell in selected if cell["kind"] == "profile" and cell["id"] in included} != expected_profiles:
+            raise ProfileError(f"missing executable profile: {sorted(expected_profiles)}")
         results = []
         for cell in selected:
-            assert_cell_closed({**cell, "status": "passed" if cell["status"] == "included" else cell["status"]}) if cell["status"] == "excluded" else None
             if cell["status"] == "excluded":
+                assert_cell_closed(cell)
                 results.append(cell)
                 continue
             print(f"profile-proof: {cell['id']}", file=sys.stderr)
             profile = profiles.get(cell.get("profile", ""))
-            outcome = execute_cell(cell, profile, repository, ROOT, available, extensions)
+            outcome = execute_cell(cell, profile, repository, ROOT, available, binding["candidate_version"])
             finished = {**cell, "status": "passed", **outcome}
             assert_cell_closed(finished)
             results.append(finished)
@@ -741,7 +796,10 @@ def prove(candidate: Path | None, *, mode: str, only: str | None, php: str | Non
                 raise ProfileError(gaps[0])
         for cell in results:
             assert_cell_closed(cell)
+        if {cell["id"] for cell in results if cell["status"] == "passed"} != included:
+            raise ProfileError("executed cell IDs differ from the selected matrix")
         passed_profiles = [cell for cell in results if cell["kind"] == "profile" and cell["status"] == "passed"]
+        portable = [cell for cell in passed_profiles if cell["profile"] == "search-portable"]
         return {
             "schema_version": "corex-profile-receipt/1",
             "item": "P17.6",
@@ -750,9 +808,9 @@ def prove(candidate: Path | None, *, mode: str, only: str | None, php: str | Non
             "mode": mode,
             "matrix": results,
             "dod": {
-                "DOD-14": "PASS" if any(cell.get("profile") == "search-portable" and cell["status"] == "passed" and "axiomasoft/corex-search-meilisearch" not in cell.get("installed", []) for cell in passed_profiles) or mode != "all" else "FAIL",
-                "DOD-15": "PASS" if any(cell.get("profile") == "search-portable" and "axiomasoft/corex-search-intl" in cell.get("removed", []) for cell in passed_profiles) or mode != "all" else "FAIL",
-                "DOD-26": "PASS" if len({cell["profile"] for cell in passed_profiles}) == 6 or mode != "all" else "FAIL",
+                "DOD-14": "NOT_APPLICABLE" if not portable else ("PASS" if all("axiomasoft/corex-search-meilisearch" not in cell["installed"] for cell in portable) else "FAIL"),
+                "DOD-15": "NOT_APPLICABLE" if not portable else ("PASS" if all("axiomasoft/corex-search-intl" in cell["removed"] for cell in portable) else "FAIL"),
+                "DOD-26": "NOT_APPLICABLE" if mode == "edges" else "PASS",
             },
         }
 

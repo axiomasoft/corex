@@ -215,6 +215,54 @@ class ReleaseCandidateTest(unittest.TestCase):
         with self.assertRaises(MODULE.CandidateError):
             MODULE.verify_candidate(output / 'candidate.json', self.root, self.policy, composer_checks=False)
 
+    def commit_v2_policy(self, *, omit_migrations: bool = False) -> dict:
+        self.write_package('alpha', 'axiomasoft/corex-alpha', {'axiomasoft/corex-beta': '^2.0@dev'})
+        self.write('packages/alpha/database/migrations/tenant/001.php', '<?php\n')
+        policy = {
+            **copy.deepcopy(self.policy),
+            'schema_version': MODULE.POLICY_V2,
+            'version': '2.0.0',
+            'source_constraint': '^2.0@dev',
+            'released_constraint': '^2.0',
+        }
+        migration = 'database/migrations/'
+        policy['required_if_present'].append(migration)
+        if not omit_migrations:
+            policy['include'].append(migration)
+        for name, channel in policy['channels'].items():
+            leaf = name.split('/')[-1]
+            channel['name'] = f'axiomasoft/corex-{leaf}'
+            channel['edges'] = {
+                'require': ['axiomasoft/corex-beta'] if leaf == 'alpha' else [],
+                'require-dev': [],
+            }
+        self.write('scripts/distribution/release-2.0-policy.json', json.dumps(policy))
+        self.git('add', '-A')
+        self.git('commit', '-qm', 'fixture 2.0')
+        self.commit = self.git('rev-parse', 'HEAD').strip()
+        return policy
+
+    def test_v2_requires_all_committed_migrations_in_export(self) -> None:
+        policy = self.commit_v2_policy(omit_migrations=True)
+        with self.assertRaisesRegex(MODULE.CandidateError, 'required export path missing: database/migrations/tenant/001.php'):
+            MODULE.build_repository(self.root, self.commit, '2.0.0', self.root / 'candidate', policy, enforce_clean=True)
+
+    def test_v2_verifier_uses_committed_policy_and_reconstructs_candidate(self) -> None:
+        policy = self.commit_v2_policy()
+        output = self.root / 'candidate'
+        manifest = MODULE.build_repository(self.root, self.commit, '2.0.0', output, policy, enforce_clean=True)
+        self.assertIsInstance(manifest['source_timestamp'], int)
+        self.write('scripts/distribution/release-2.0-policy.json', '{}')
+        MODULE.verify_candidate(output / 'candidate.json', self.root, composer_checks=False)
+        with self.assertRaisesRegex(MODULE.CandidateError, 'source is dirty'):
+            MODULE.build_repository(self.root, self.commit, '2.0.0', self.root / 'dirty', policy, enforce_clean=True)
+
+    def test_v2_policy_denies_manifest_edge_drift_before_build(self) -> None:
+        policy = self.commit_v2_policy()
+        policy['channels']['packages/alpha']['edges']['require-dev'].append('axiomasoft/corex-beta')
+        with self.assertRaisesRegex(MODULE.CandidateError, 'require-dev cohort graph mismatch'):
+            MODULE.build_repository(self.root, self.commit, '2.0.0', self.root / 'candidate', policy, enforce_clean=True)
+
 
 if __name__ == '__main__':
     unittest.main()

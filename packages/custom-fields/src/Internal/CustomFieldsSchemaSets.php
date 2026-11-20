@@ -18,7 +18,7 @@ final readonly class CustomFieldsSchemaSets implements SchemaSetProvider
         $root = dirname(__DIR__, 2).'/database/migrations';
 
         return [
-            new SchemaSet(package: 'axiomasoft/corex-custom-fields', name: 'tenant', scope: SchemaScope::Tenant, path: $root.'/tenant', version: 1),
+            new SchemaSet(package: 'axiomasoft/corex-custom-fields', name: 'tenant', scope: SchemaScope::Tenant, path: $root.'/tenant', version: 2),
         ];
     }
 }

@@ -1,0 +1,139 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\OfflineMigration;
+
+use Throwable;
+
+require __DIR__.'/../src/Input.php';
+require __DIR__.'/../src/Database.php';
+require __DIR__.'/../src/SourceSnapshot.php';
+require __DIR__.'/../src/TargetDatabase.php';
+require __DIR__.'/../src/Migration.php';
+
+const Usage = <<<'USAGE'
+Stage 0 Webhooks migration prototype (PHP CLI with SQLite3 and sodium).
+Set COREX_MIGRATION_TRUST_STORE to an external trust file containing Ed25519 public keys.
+
+  corex-migrate plan --source-snapshot SOURCE --target TARGET --profile PROFILE --output PLAN
+  corex-migrate copy --plan PLAN --approval APPROVAL --approve-digest SHA256 [--segment subscriptions|deliveries]
+  corex-migrate verify --plan PLAN
+USAGE;
+
+/**
+ * @param list<string> $args
+ * @param list<string> $required
+ * @param list<string> $optional
+ * @return array<string, string>
+ */
+function arguments(array $args, array $required, array $optional = []): array
+{
+    check(count($args) % 2 === 0, Usage);
+    $out = [];
+    for ($index = 0; $index < count($args); $index += 2) {
+        $key = $args[$index];
+        $value = $args[$index + 1];
+        check(in_array($key, [...$required, ...$optional], true) && ! isset($out[$key])
+            && $value !== '' && ! str_starts_with($value, '--'), 'Invalid or repeated argument ['.$key.'].');
+        $out[$key] = $value;
+    }
+    foreach ($required as $key) {
+        check(isset($out[$key]), "Missing required argument [{$key}].");
+    }
+
+    return $out;
+}
+
+/**
+ * @param array<string, string> $arguments
+ * @param array<string, mixed> $trust
+ * @return array{status: string, plan_id: string, plan_digest: string}
+ */
+function dryRun(array $arguments, array $trust): array
+{
+    $output = $arguments['--output'];
+    check(! file_exists($output) && ! is_link($output), 'Plan output already exists.');
+    try {
+        $migration = new Migration([
+            'source_snapshot' => $arguments['--source-snapshot'],
+            'target' => $arguments['--target'],
+            'profile' => $arguments['--profile'],
+        ], $trust);
+        $plan = $migration->dryRun();
+        publish($output, $plan);
+    } catch (MigrationError $failure) {
+        if ($failure->getCode() === 3) {
+            publish($output.'.blocked.json', ['status' => 'blocked', 'reason' => $failure->getMessage()]);
+        }
+        throw $failure;
+    }
+
+    return ['status' => 'planned', 'plan_id' => $plan['plan_id'], 'plan_digest' => $plan['plan_digest']];
+}
+
+/**
+ * @param array<string, string> $arguments
+ * @param array<string, mixed> $plan
+ * @param array<string, mixed> $trust
+ */
+function approve(array $arguments, array $plan, array $trust): void
+{
+    $digest = shaField($plan, 'plan_digest');
+    $unsignedPlan = $plan;
+    unset($unsignedPlan['plan_digest']);
+    check(hash_equals($digest, digest($unsignedPlan)) && hash_equals($digest, $arguments['--approve-digest']),
+        'Plan and operator approval digests differ.');
+
+    $approval = authenticated(readDocument($arguments['--approval']), 'approval', $trust);
+    exactFields($approval, ['key_id', 'principal', 'plan_digest', 'snapshot_sha256', 'target_deployment', 'profile'], 'approval');
+    $source = objectFields($plan['source'] ?? null, 'Missing approved source metadata.');
+    $target = objectFields($plan['target'] ?? null, 'Missing approved target metadata.');
+    check(hash_equals($digest, field($approval, 'plan_digest'))
+        && field($approval, 'snapshot_sha256') === shaField($source, 'snapshot_sha256')
+        && field($approval, 'target_deployment') === field($target, 'deployment_id')
+        && field($approval, 'profile') === field($plan, 'profile'), 'Approval is for a different plan, snapshot, deployment, or profile.');
+}
+
+/** @param list<string> $argv */
+function run(array $argv): void
+{
+    $command = $argv[1] ?? '--help';
+    if ($command === '--help') {
+        fwrite(STDOUT, Usage.PHP_EOL);
+        return;
+    }
+    $args = array_slice($argv, 2);
+    $arguments = match ($command) {
+        'plan' => arguments($args, ['--source-snapshot', '--target', '--profile', '--output']),
+        'copy' => arguments($args, ['--plan', '--approval', '--approve-digest'], ['--segment']),
+        'verify' => arguments($args, ['--plan']),
+        default => throw new MigrationError('Unknown command.'.PHP_EOL.Usage, 2),
+    };
+    $trustPath = getenv('COREX_MIGRATION_TRUST_STORE');
+    check($trustPath !== false && $trustPath !== '', 'COREX_MIGRATION_TRUST_STORE must point to an external trust file.');
+    $trust = readDocument($trustPath);
+
+    if ($command === 'plan') {
+        $result = dryRun($arguments, $trust);
+    } else {
+        $plan = readDocument($arguments['--plan']);
+        if ($command === 'copy') {
+            approve($arguments, $plan, $trust);
+        }
+        $migration = Migration::fromPlan($plan, $trust);
+        $result = $command === 'copy' ? $migration->copy($arguments['--segment'] ?? null) : $migration->verify();
+    }
+    fwrite(STDOUT, canonical($result).PHP_EOL);
+}
+
+try {
+    run($argv);
+} catch (MigrationError $error) {
+    fwrite(STDERR, $error->getMessage().PHP_EOL);
+    exit($error->getCode());
+} catch (Throwable $error) {
+    fwrite(STDERR, 'Migration failed: '.$error->getMessage().PHP_EOL);
+    exit(2);
+}

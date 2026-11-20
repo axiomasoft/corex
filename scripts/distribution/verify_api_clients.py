@@ -52,7 +52,7 @@ class ProtocolState:
         contract = REST.load_snapshots(snapshots)
         self.command = REST.operation(contract, "notes.create")
         self.query = REST.operation(contract, "webhook-deliveries.list")
-        self.errors = {item["code"]: item for item in contract["errors"] if item["code"] in {"resource_not_found", "access_denied"}}
+        self.errors = {item["code"]: item for item in contract["errors"] if item["code"] in {"operations.resource_not_found", "operations.access_denied"}}
         self.unexpected = unexpected
         self.lock = threading.Lock()
         self.records: dict[str, dict] = {}
@@ -100,13 +100,13 @@ class ProtocolHandler(BaseHTTPRequestHandler):
             self.respond(status, payload, error=error)
             return
         if path == "/notes/missing" and self.command == "GET":
-            status, payload, error = self.error_result("resource_not_found")
+            status, payload, error = self.error_result("operations.resource_not_found")
             self.respond(status, payload, error=error)
             return
         if path == "/mcp" and self.command == "POST":
             self.respond(200, self.mcp(self.read_json()), error=False, content_type="application/json")
             return
-        status, payload, error = self.error_result("resource_not_found")
+        status, payload, error = self.error_result("operations.resource_not_found")
         self.respond(status, payload, error=error)
 
     def page(self, query: str) -> dict:
@@ -121,7 +121,7 @@ class ProtocolHandler(BaseHTTPRequestHandler):
 
     def command_result(self, key: str | None, body: dict) -> tuple[int, dict, bool]:
         if not key:
-            return self.error_result("access_denied")
+            return self.error_result("operations.access_denied")
         with self.state.lock:
             policy = self.state.policy.get(key)
             stored = self.state.records.get(key)
@@ -130,7 +130,7 @@ class ProtocolHandler(BaseHTTPRequestHandler):
                 self.state.records[key] = stored
                 self.state.effects[key] = self.state.effects.get(key, 0) + 1
             if policy == "record":
-                return self.error_result("access_denied")
+                return self.error_result("operations.access_denied")
             data = dict(stored)
             if policy == "field":
                 data.pop("secret", None)
@@ -291,7 +291,7 @@ def prove(snapshots: Path = SNAPSHOTS) -> dict:
             raise SystemExit(policy.stderr or policy.stdout)
         policy_report = json.loads(Path("/tmp/p17-mcp-policy.json").read_text(encoding="utf-8"))
         by_key = {item["key"]: item for item in policy_report["calls"]}
-        if not by_key["idem-uuidv7"]["is_error"] or by_key["idem-uuidv7"]["content"]["code"] != "access_denied":
+        if not by_key["idem-uuidv7"]["is_error"] or by_key["idem-uuidv7"]["content"]["code"] != "operations.access_denied":
             raise SystemExit("record revocation did not deny the MCP replay")
         if by_key["idem-uuid"]["is_error"] or "secret" in by_key["idem-uuid"]["content"]:
             raise SystemExit("field revocation did not prune the MCP replay")
@@ -324,7 +324,7 @@ def prove(snapshots: Path = SNAPSHOTS) -> dict:
         "mcp_contract_hash": parity["contract_hash"],
         "effects": effects,
         "negatives": ["stale-digest", "unexpected-field", "graphql-artifact"],
-        "revocation": {"record": "access_denied", "field": "secret-pruned"},
+        "revocation": {"record": "operations.access_denied", "field": "secret-pruned"},
     }
 
 

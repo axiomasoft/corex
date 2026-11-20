@@ -15,7 +15,8 @@ from pathlib import Path
 
 # Also support the test harness loading this script by file path.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from ecosystem_repositories import is_corex_package, snapshot_repositories
+from ecosystem_repositories import is_corex_package
+from consumer_repository import assert_dist_install, repositories
 
 ROOT = Path(__file__).resolve().parents[2]
 APP = ROOT / "fixtures" / "consumers" / "equipment-registry"
@@ -54,17 +55,12 @@ def flex_dependency_fails(composer: dict) -> bool:
 def prepare_install(source: Path, destination: Path, repository: Path) -> None:
     shutil.copytree(source, destination, ignore=shutil.ignore_patterns("vendor"))
     composer = json.loads((destination / "composer.json").read_text(encoding="utf-8"))
-    composer["repositories"] = [
-        {"type": "composer", "url": str(repository)},
-        *snapshot_repositories(ROOT),
-        {"type": "composer", "url": "https://repo.packagist.org", "exclude": ["axiomasoft/corex", "axiomasoft/corex-*", "corex/*"]},
-        {"packagist.org": False},
-    ]
+    composer["repositories"] = repositories(repository, ROOT)
     composer["config"] = {"allow-plugins": True, "secure-http": False, "preferred-install": "dist", "sort-packages": True}
     (destination / "composer.json").write_text(json.dumps(composer, indent=4) + "\n", encoding="utf-8")
 
 
-def prove(candidate: Path) -> dict:
+def prove(candidate: Path | None) -> dict:
     hits = banned_hits(APP)
     if hits:
         raise SystemExit(f"forbidden vocabulary: {hits}")
@@ -78,10 +74,7 @@ def prove(candidate: Path) -> dict:
     with tempfile.TemporaryDirectory(prefix="corex-equipment-") as temporary:
         root = Path(temporary)
         output = root / "candidate"
-        if (candidate / "candidate.json").is_file():
-            built = candidate
-        else:
-            built = extensions.build_candidate(ROOT, output)
+        built = extensions.candidate_directory(candidate) if candidate else extensions.build_candidate(ROOT, output)
         binding = extensions.candidate_binding(built)
         repository = root / "repository"
         extensions.materialize_repository(built, repository)
@@ -92,6 +85,7 @@ def prove(candidate: Path) -> dict:
         installed = extensions.install(install_root, extensions.composer_env(home))
         if installed.returncode != 0:
             raise SystemExit(installed.stderr or installed.stdout or "equipment install failed")
+        installed_dist = assert_dist_install(install_root, repository, list(committed["require"]), ROOT)
         autoload = (install_root / "vendor/composer/autoload_psr4.php").read_text(encoding="utf-8")
         if extensions.autoload_contains_workspace(autoload, ROOT):
             raise SystemExit("generated autoload records the workspace")
@@ -129,6 +123,7 @@ def prove(candidate: Path) -> dict:
         "item": "P17.5",
         "result": "PASS",
         **binding,
+        **installed_dist,
         "package": PACKAGE,
         "fingerprint": contract["fingerprint"],
         "internal_import": contract["internal_import"],
@@ -145,7 +140,7 @@ def main() -> int:
     parser.add_argument("--candidate", type=Path)
     parser.add_argument("--receipt", type=Path, default=RECEIPT)
     args = parser.parse_args()
-    receipt = prove(args.candidate or Path())
+    receipt = prove(args.candidate)
     args.receipt.parent.mkdir(parents=True, exist_ok=True)
     args.receipt.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps({"result": receipt["result"], "receipt": str(args.receipt)}))

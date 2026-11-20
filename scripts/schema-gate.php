@@ -55,8 +55,10 @@ final class SchemaGate
                 $this->hit('S1', $set['path'], 1, 'registered set has no migration files');
             }
 
-            if ($set['version'] !== 1) {
-                $this->hit('S8', $set['path'], 1, 'baseline set version must be 1');
+            $baselineVersion = str_starts_with($set['path'], 'packages/') ? 2 : 1;
+
+            if ($set['version'] !== $baselineVersion) {
+                $this->hit('S8', $set['path'], 1, 'baseline set version must be '.$baselineVersion);
             }
         }
         foreach (['packages', 'products'] as $area) {

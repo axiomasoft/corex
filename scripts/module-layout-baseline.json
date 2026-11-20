@@ -1,4 +1,8 @@
 {
  "schema": "module-layout-baseline/1",
- "entries": []
+ "entries": [
+  "R3 packages/access/src/Roles/DirectGrants.php",
+  "R3 packages/access/src/Roles/RoleAdministration.php",
+  "R3 packages/core/src/Invocation/OperationDefinitionValidator.php"
+ ]
 }

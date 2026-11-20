@@ -22,7 +22,7 @@
         "ext-session": "*",
         "ext-sodium": "*",
         "php": "^8.4",
-        "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/corex": "^2.0@dev",
         "firebase/php-jwt": "^7.1",
         "laravel/framework": "^13.0",
         "nesbot/carbon": "^3.0",
@@ -37,7 +37,7 @@
         "ext-pdo": "*",
         "ext-tokenizer": "*",
         "phpstan/phpstan": "^2.2.16",
-        "axiomasoft/corex-scheduler": "^1.0@dev",
+        "axiomasoft/corex-scheduler": "^2.0@dev",
         "larastan/larastan": "^3.12",
         "laravel/pint": "^1.32",
         "league/flysystem-aws-s3-v3": "3.35.3",
@@ -81,7 +81,7 @@
             ]
         },
         "branch-alias": {
-            "dev-main": "1.0.x-dev"
+            "dev-main": "2.0.x-dev"
         },
         "phpstan": {
             "includes": [
@@ -115,11 +115,23 @@
     "repositories": [
         {
             "type": "path",
-            "url": "../core"
+            "url": "../core",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
         },
         {
             "type": "path",
-            "url": "../scheduler"
+            "url": "../scheduler",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex-scheduler": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
         }
     ],
     "minimum-stability": "stable",

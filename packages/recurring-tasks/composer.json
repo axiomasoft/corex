@@ -5,10 +5,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.4",
-        "axiomasoft/corex": "^1.0@dev",
-        "axiomasoft/corex-recurrence": "^1.0@dev",
-        "axiomasoft/corex-tasks": "^1.0@dev",
-        "axiomasoft/corex-workflow": "^1.0@dev",
+        "axiomasoft/corex": "^2.0@dev",
+        "axiomasoft/corex-recurrence": "^2.0@dev",
+        "axiomasoft/corex-tasks": "^2.0@dev",
+        "axiomasoft/corex-workflow": "^2.0@dev",
         "axiomasoft/packman": "^0.1",
         "axiomasoft/packman-modules": "^0.1.1",
         "axiomasoft/packman-schema": "^0.1",
@@ -18,7 +18,7 @@
         "illuminate/support": "^13.0"
     },
     "require-dev": {
-        "axiomasoft/corex-scheduler": "^1.0@dev",
+        "axiomasoft/corex-scheduler": "^2.0@dev",
         "larastan/larastan": "^3.12",
         "laravel/pint": "^1.32",
         "mockery/mockery": "^1.6",
@@ -49,7 +49,7 @@
             ]
         },
         "branch-alias": {
-            "dev-main": "1.0.x-dev"
+            "dev-main": "2.0.x-dev"
         },
         "packman": {
             "module": "CoreX\\RecurringTasks\\Internal\\TaskWorkflowIntegration",
@@ -71,23 +71,53 @@
     "repositories": [
         {
             "type": "path",
-            "url": "../core"
+            "url": "../core",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
         },
         {
             "type": "path",
-            "url": "../recurrence"
+            "url": "../recurrence",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex-recurrence": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
         },
         {
             "type": "path",
-            "url": "../tasks"
+            "url": "../tasks",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex-tasks": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
         },
         {
             "type": "path",
-            "url": "../scheduler"
+            "url": "../scheduler",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex-scheduler": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
         },
         {
             "type": "path",
-            "url": "../workflow"
+            "url": "../workflow",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex-workflow": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
         }
     ],
     "minimum-stability": "stable",

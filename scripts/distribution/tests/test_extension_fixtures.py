@@ -30,7 +30,7 @@ class ExtensionFixtureTest(unittest.TestCase):
             MODULE.assert_source_autoload(fixture, ROOT)
             composer = json.loads((fixture / "composer.json").read_text(encoding="utf-8"))
             self.assertEqual(composer["name"], spec["package"])
-            self.assertFalse(any(name.startswith("corex/") and constraint != "^1.0" for name, constraint in composer["require"].items()))
+            self.assertFalse(any(MODULE.is_corex_package(name) and constraint not in {"^2.0", "^2.0@dev"} for name, constraint in composer["require"].items()))
 
     def test_workspace_detector_sees_monorepo_paths(self) -> None:
         self.assertTrue(MODULE.autoload_contains_workspace(str(ROOT / "vendor/autoload.php"), ROOT))

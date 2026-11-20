@@ -17,6 +17,7 @@ use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 use Packman\Context\Contracts\ActorResolverInterface;
 use Packman\Context\Contracts\ContextResolverInterface;
+use Packman\Context\Data\ActorRef;
 use Packman\Features\Contracts\FeatureFlagsInterface;
 use Packman\Foundation\Concerns\RegistersNothingOnBoot;
 use Packman\Foundation\Contracts\PackageRegistrar;
@@ -48,10 +49,15 @@ final class PackmanRegistrar implements PackageRegistrar
 
         $app->singleton(ContextResolverInterface::class, PackmanContextResolver::class);
         $app->scoped(ActorResolverInterface::class, static fn (Application $app): PackmanActorResolver => new PackmanActorResolver(
-            static fn (): CurrentActor => $app->make(CurrentActor::class),
+            static fn (): ActorRef => self::actorRef($app->make(CurrentActor::class)),
         ));
         $app->singleton(FeatureFlagsInterface::class, PackmanFeatureFlags::class);
         $app->tag([ModuleAuditHook::class], EntityRegistryHook::class);
         $app->tag([OperationSectionCompiler::class], ManifestSectionCompiler::class);
+    }
+
+    private static function actorRef(CurrentActor $actor): ActorRef
+    {
+        return new ActorRef(type: $actor->type()->value, id: $actor->id());
     }
 }

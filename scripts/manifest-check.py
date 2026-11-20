@@ -13,8 +13,11 @@ import sys
 from pathlib import Path
 
 ROOT = Path.cwd()
-ALIAS = '1.0.x-dev'
-MONO_CONSTRAINT = '^1.0@dev'
+COREX_ALIAS = '2.0.x-dev'
+COREX_CONSTRAINT = '^2.0@dev'
+PRODUCT_ALIASES = {'flex/crm': '1.0.x-dev'}
+PRODUCT_CONSTRAINTS = {'flex/crm': '^1.0@dev'}
+POLICY_PATH = ROOT / 'scripts/distribution/release-2.0-policy.json'
 PHP = '^8.4'
 ILLUMINATE = '^13.0'
 # Packman packages are pinned to ^0.1 (0.1.2) in the root package repositories
@@ -36,10 +39,6 @@ ALLOWED_PRERELEASE = {
     'axiomasoft/vaulter-media': '^1.0@dev',
 }
 # Check unreleased declarations against the same exclusions used to assemble distributions.
-def unreleased_packages() -> set[str]:
-    policy = json.loads((ROOT / 'scripts/distribution/release-1.0-policy.json').read_text(encoding='utf-8'))
-    return {Path(item['path']).name for item in policy['excluded'] if item['reason'] == 'unreleased'}
-
 VALID_STABILITY = {'stable', 'experimental', 'internal', 'deprecated', 'unreleased'}
 STACK = {
     'pestphp/pest': '^5.2',
@@ -60,12 +59,16 @@ def pinned(constraint: str | None, version: str) -> bool:
 
 
 def main() -> int:
-    excluded = unreleased_packages()
+    policy = load(POLICY_PATH)
+    excluded = {Path(item['path']).name for item in policy['excluded'] if item['reason'] == 'unreleased'}
     packages = {}
     for manifest in sorted([*ROOT.glob('packages/*/composer.json'), *ROOT.glob('products/*/composer.json')]):
         data = load(manifest)
         packages[data['name']] = (manifest.parent.name, data)
     mono = set(packages)
+    corex = {channel['name'] for channel in policy['channels'].values()}
+    aliases = {**dict.fromkeys(corex, COREX_ALIAS), **PRODUCT_ALIASES}
+    mono_constraints = {**dict.fromkeys(corex, COREX_CONSTRAINT), **PRODUCT_CONSTRAINTS}
 
     def direct(data: dict, dev: bool) -> set[str]:
         names = set(data.get('require', {}))
@@ -85,6 +88,10 @@ def main() -> int:
         return seen
 
     violations: list[str] = []
+    if set(aliases) != mono:
+        violations.append(
+            f'ROOT: cohort: missing={sorted(mono - set(aliases))}, extra={sorted(set(aliases) - mono)}'
+        )
     roots = [('ROOT', load(ROOT / 'composer.json'), True)]
     roots += [(packages[n][0], packages[n][1], False) for n in sorted(packages)]
 
@@ -101,8 +108,9 @@ def main() -> int:
             bad('stability', f"minimum-stability={data.get('minimum-stability')!r}")
         if data.get('prefer-stable') is not True:
             bad('stability', 'prefer-stable must be true')
-        if not is_root and data.get('extra', {}).get('branch-alias', {}).get('dev-main') != ALIAS:
-            bad('branch-alias', f'extra.branch-alias.dev-main must be {ALIAS!r}')
+        alias = aliases.get(data.get('name'))
+        if not is_root and data.get('extra', {}).get('branch-alias', {}).get('dev-main') != alias:
+            bad('branch-alias', f'extra.branch-alias.dev-main must be {alias!r}')
         stability = data.get('extra', {}).get('corex', {}).get('stability')
         if not is_root and stability not in VALID_STABILITY:
             bad('stability', f'unknown extra.corex.stability={stability!r}')
@@ -115,8 +123,8 @@ def main() -> int:
         if label in {'access', 'tenancy'}:
             packman_constraints['axiomasoft/packman-schema'] = '^0.1.1'
         for name, constraint in sorted(requires.items()):
-            if name in mono and constraint != MONO_CONSTRAINT:
-                bad('mono-constraint', f'{name}={constraint!r}, expected {MONO_CONSTRAINT!r}')
+            if name in mono and constraint != mono_constraints.get(name):
+                bad('mono-constraint', f'{name}={constraint!r}, expected {mono_constraints.get(name)!r}')
             elif name.startswith('illuminate/') and constraint != ILLUMINATE:
                 bad('illuminate', f'{name}={constraint!r}, expected {ILLUMINATE!r}')
             elif name in STACK and constraint != STACK[name]:
@@ -132,15 +140,25 @@ def main() -> int:
         for name in missing:
             bad('closure', f'transitive monorepo package {name} not required in this root')
 
+        repositories = data.get('repositories', [])
+        if isinstance(repositories, dict):
+            repositories = repositories.values()
+        source = ROOT
         if not is_root:
-            repositories = data.get('repositories', [])
-            if isinstance(repositories, dict):
-                repositories = repositories.values()
-            paths = {r.get('url', '').rstrip('/').split('/')[-1]
-                     for r in repositories if isinstance(r, dict) and r.get('type') == 'path'}
-            for name in sorted(closure(data)):
-                if packages[name][0] not in paths:
-                    bad('path-repo', f'no path repository ../{packages[name][0]} for {name}')
+            source /= 'products' if data['name'] in PRODUCT_ALIASES else 'packages'
+            source /= label
+        bindings = {}
+        for repository in repositories:
+            if not isinstance(repository, dict) or repository.get('type') != 'path':
+                continue
+            for path in source.glob(repository['url']):
+                manifest = path / 'composer.json'
+                if manifest.is_file():
+                    name = load(manifest)['name']
+                    bindings.setdefault(name, repository.get('options', {}).get('versions', {}).get(name))
+        for name in sorted(closure(data)):
+            if bindings.get(name) != aliases.get(name):
+                bad('path-repo', f'{name} must resolve through a path repository at {aliases.get(name)!r}')
 
     repository_packages = {
         repository['package']['name']: repository['package']
@@ -149,6 +167,10 @@ def main() -> int:
     }
     lock = load(ROOT / 'composer.lock')
     locked_packages = {package['name']: package for package in lock.get('packages', []) + lock.get('packages-dev', [])}
+    for name, alias in sorted(aliases.items()):
+        locked = locked_packages.get(name, {})
+        if locked.get('version') != alias or locked.get('dist', {}).get('type') != 'path':
+            violations.append(f'ROOT: locked-cohort: {name} must resolve at {alias!r} from a path repository')
     for name in (*PACKMAN_CONSTRAINTS, *ALLOWED_PRERELEASE):
         source = repository_packages.get(name, {}).get('source', {})
         reference = source.get('reference', '')

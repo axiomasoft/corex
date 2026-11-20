@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c0fee80c08e10bfb08b324197a93113b",
+    "content-hash": "329dd956297386250962c7e72786401c",
     "packages": [
         {
             "name": "axiomasoft/corex",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/core",
-                "reference": "8a6290fdb1321792b53da0b9a41baac5aa770ff8"
+                "reference": "592a6b2b4ecd2b0a4b19326ecf07820e042d3f88"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -73,7 +73,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "phpstan": {
                     "includes": [
@@ -163,14 +163,14 @@
         },
         {
             "name": "axiomasoft/corex-custom-fields",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/custom-fields",
-                "reference": "940458141adf013b9264e1119b5e955f846567e8"
+                "reference": "f32e3a82a9abdf592fb891003484a64da84af2eb"
             },
             "require": {
-                "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
@@ -204,7 +204,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "packman": {
                     "schema-version": 1,
@@ -264,14 +264,14 @@
         },
         {
             "name": "axiomasoft/corex-import-export",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/import-export",
-                "reference": "885523ee277f10a791d1a8188e7503123b2fad31"
+                "reference": "22d9d3c7dd5725329f3143806093af0e8c9db47d"
             },
             "require": {
-                "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-schema": "^0.1",
                 "illuminate/database": "^13.0",
@@ -297,7 +297,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "packman": {
                     "schema-version": 1,
@@ -350,14 +350,14 @@
         },
         {
             "name": "axiomasoft/corex-intl",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/intl",
-                "reference": "838e5f25948c8de70054717f074504626f304b32"
+                "reference": "38980a541aeb1ec68680c98a14705558f767bcff"
             },
             "require": {
-                "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
@@ -391,7 +391,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "packman": {
                     "module": "CoreX\\Intl\\IntlModule",
@@ -450,14 +450,14 @@
         },
         {
             "name": "axiomasoft/corex-media",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/media",
-                "reference": "db13c90cdf3d91fb0449cf83e375d7708486cff9"
+                "reference": "a9e9d9ef45099b8f7c3fd845278921db9e611fcc"
             },
             "require": {
-                "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
@@ -492,7 +492,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "packman": {
                     "module": "CoreX\\Media\\MediaModule",
@@ -547,14 +547,14 @@
         },
         {
             "name": "axiomasoft/corex-notifications",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/notifications",
-                "reference": "8ad335e59a0472d17070c763c5202ce25171e4ea"
+                "reference": "258f769dbff901d85993ca44c4cb73092b77f878"
             },
             "require": {
-                "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
@@ -563,7 +563,7 @@
                 "psr/clock": "^1.0"
             },
             "require-dev": {
-                "axiomasoft/corex-scheduler": "^1.0@dev",
+                "axiomasoft/corex-scheduler": "^2.0@dev",
                 "ext-pdo": "*",
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
@@ -585,7 +585,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "packman": {
                     "module": "CoreX\\Notifications\\NotificationsModule",
@@ -642,14 +642,14 @@
         },
         {
             "name": "axiomasoft/corex-operations",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/operations",
-                "reference": "66456745ff7696d0b37dea862c76a7beb99e7f59"
+                "reference": "3eb7bdab7d4f735ba8d534a7ee04d9e3b4d14188"
             },
             "require": {
-                "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
@@ -667,8 +667,8 @@
                 "symfony/http-kernel": "^7.2|^8.0"
             },
             "require-dev": {
-                "axiomasoft/corex-import-export": "^1.0@dev",
-                "axiomasoft/corex-webhooks": "^1.0@dev",
+                "axiomasoft/corex-import-export": "^2.0@dev",
+                "axiomasoft/corex-webhooks": "^2.0@dev",
                 "ext-curl": "*",
                 "ext-openssl": "*",
                 "ext-pcntl": "*",
@@ -694,7 +694,7 @@
                     "stability": "stable"
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "laravel": {
                     "providers": []
@@ -757,14 +757,14 @@
         },
         {
             "name": "axiomasoft/corex-panels",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/panels",
-                "reference": "47908b7ce399b214f4777e2e853f254314bfd063"
+                "reference": "3bfb9380eba9507412482b7d6a2651ac816c83f2"
             },
             "require": {
-                "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-panels": "^0.1",
                 "illuminate/contracts": "^13.0",
@@ -794,7 +794,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "packman": {
                     "schema-version": 1,
@@ -841,14 +841,14 @@
         },
         {
             "name": "axiomasoft/corex-recurrence",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/recurrence",
-                "reference": "988b848c9d180bd5a2d63034b4d4009b170b3cb8"
+                "reference": "892e96b77c442a3e41d47ab6ab13a446f97fa719"
             },
             "require": {
-                "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "laravel/framework": "^13.0",
                 "php": "^8.4",
@@ -862,7 +862,7 @@
                     "stability": "stable"
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "laravel": {
                     "providers": [
@@ -916,17 +916,17 @@
         },
         {
             "name": "axiomasoft/corex-recurring-tasks",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/recurring-tasks",
-                "reference": "af2a393dbb2ee8631d8b157c1bd7ce5162b51c9c"
+                "reference": "66a9f9a05202e3b58bbd19cef4e627ba2dd5b1d8"
             },
             "require": {
-                "axiomasoft/corex": "^1.0@dev",
-                "axiomasoft/corex-recurrence": "^1.0@dev",
-                "axiomasoft/corex-tasks": "^1.0@dev",
-                "axiomasoft/corex-workflow": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
+                "axiomasoft/corex-recurrence": "^2.0@dev",
+                "axiomasoft/corex-tasks": "^2.0@dev",
+                "axiomasoft/corex-workflow": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
@@ -937,7 +937,7 @@
                 "php": "^8.4"
             },
             "require-dev": {
-                "axiomasoft/corex-scheduler": "^1.0@dev",
+                "axiomasoft/corex-scheduler": "^2.0@dev",
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
                 "mockery/mockery": "^1.6",
@@ -959,7 +959,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "packman": {
                     "module": "CoreX\\RecurringTasks\\Internal\\TaskWorkflowIntegration",
@@ -1012,14 +1012,14 @@
         },
         {
             "name": "axiomasoft/corex-scheduler",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/scheduler",
-                "reference": "0645016ace8cae61a79ed008367ed79f493147b9"
+                "reference": "5a0b7a85457d965cb716d33659b19c996c92c776"
             },
             "require": {
-                "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
@@ -1048,7 +1048,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "packman": {
                     "module": "CoreX\\Scheduler\\SchedulerModule",
@@ -1101,14 +1101,14 @@
         },
         {
             "name": "axiomasoft/corex-search",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/search",
-                "reference": "6889a508c0298ad412b239723e108d21aa22cb03"
+                "reference": "37551a73db60ce48eac7330889e65b3c73f6d520"
             },
             "require": {
-                "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-schema": "^0.1",
                 "ext-openssl": "*",
@@ -1135,7 +1135,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "packman": {
                     "schema-version": 1,
@@ -1191,16 +1191,16 @@
         },
         {
             "name": "axiomasoft/corex-search-intl",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/search-intl",
-                "reference": "c5467d1a3a1f3af6d4b4359ea3c850d48e25f581"
+                "reference": "7d56800bbd8c92bbb8adbc09018a2905d3de1644"
             },
             "require": {
-                "axiomasoft/corex": "^1.0@dev",
-                "axiomasoft/corex-intl": "^1.0@dev",
-                "axiomasoft/corex-search": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
+                "axiomasoft/corex-intl": "^2.0@dev",
+                "axiomasoft/corex-search": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "illuminate/support": "^13.0",
                 "php": "^8.4"
@@ -1226,7 +1226,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "packman": {
                     "schema-version": 1,
@@ -1272,15 +1272,15 @@
         },
         {
             "name": "axiomasoft/corex-search-meilisearch",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/search-meilisearch",
-                "reference": "c5bbbfc73b6283612e96303f5781c3ed3f595921"
+                "reference": "2d745d056d3af7e6109ee587ee037e5c7c352366"
             },
             "require": {
-                "axiomasoft/corex": "^1.0@dev",
-                "axiomasoft/corex-search": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
+                "axiomasoft/corex-search": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "ext-filter": "*",
                 "illuminate/contracts": "^13.0",
@@ -1306,7 +1306,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "packman": {
                     "schema-version": 1,
@@ -1359,14 +1359,14 @@
         },
         {
             "name": "axiomasoft/corex-tasks",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/tasks",
-                "reference": "0178f1a8b05f9ae3d5b9932a39f0e059048c7573"
+                "reference": "62c0076d0fdbf998a2aa7c4da2318b01e04baf24"
             },
             "require": {
-                "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
@@ -1396,7 +1396,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "packman": {
                     "module": "CoreX\\Tasks\\TasksModule",
@@ -1470,14 +1470,14 @@
         },
         {
             "name": "axiomasoft/corex-tenancy",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/tenancy",
-                "reference": "083adf8dd426c6a2b0cb585f10373595059b6a75"
+                "reference": "b4adb12053364418eed70d4877ca0b3afbd55df4"
             },
             "require": {
-                "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-schema": "^0.1.1",
                 "axiomasoft/tenant": "^1.0@dev",
@@ -1496,7 +1496,7 @@
                 "symfony/http-foundation": "^7.2|^8.0"
             },
             "require-dev": {
-                "axiomasoft/corex-scheduler": "^1.0@dev",
+                "axiomasoft/corex-scheduler": "^2.0@dev",
                 "axiomasoft/tenant-laravel": "^1.0@dev",
                 "ext-pdo": "*",
                 "ext-redis": "*",
@@ -1534,7 +1534,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "phpstan": {
                     "includes": [
@@ -1610,14 +1610,14 @@
         },
         {
             "name": "axiomasoft/corex-workflow",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/workflow",
-                "reference": "689ac6b0f39008633a16cd752d4857be605e1ec0"
+                "reference": "4f1f555dfb5426e5441bdf570cb89e11af04fe53"
             },
             "require": {
-                "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
@@ -1644,7 +1644,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "packman": {
                     "module": "CoreX\\Workflow\\WorkflowModule",
@@ -2828,15 +2828,15 @@
         },
         {
             "name": "flex/crm",
-            "version": "dev-main",
+            "version": "1.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "products/flex-crm",
-                "reference": "b88eacd97f7635acbee2385687116ddce19f5291"
+                "reference": "25cff5046547700633fa92ac453b01e5beb1b03b"
             },
             "require": {
-                "axiomasoft/corex": "^1.0@dev",
-                "axiomasoft/corex-intl": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
+                "axiomasoft/corex-intl": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-modules": "^0.1.2",
                 "axiomasoft/packman-schema": "^0.1",
@@ -2848,7 +2848,7 @@
                 "php": "^8.4"
             },
             "require-dev": {
-                "axiomasoft/corex-operations": "^1.0@dev",
+                "axiomasoft/corex-operations": "^2.0@dev",
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",
                 "mockery/mockery": "^1.6",
@@ -8959,15 +8959,15 @@
         },
         {
             "name": "axiomasoft/corex-access",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/access",
-                "reference": "38c32f3753ac1f060c22b56220e945c34b6d5898"
+                "reference": "2c30d788c36069877e2d1a077612d1fa74ee055c"
             },
             "require": {
                 "axiomasoft/azguard": "^2.0@dev",
-                "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1.1",
@@ -9005,7 +9005,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "packman": {
                     "schema-version": 1,
@@ -9116,15 +9116,15 @@
         },
         {
             "name": "axiomasoft/corex-tools",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/tools",
-                "reference": "41ddf25f299c9cee069775c4749d823152196383"
+                "reference": "a60d2f97efe0642c6e371a0f13bd5d54051585b5"
             },
             "require": {
-                "axiomasoft/corex": "^1.0@dev",
-                "axiomasoft/corex-operations": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
+                "axiomasoft/corex-operations": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-modules": "^0.1.1",
                 "composer-runtime-api": "^2.1",
@@ -9139,7 +9139,7 @@
                 "symfony/http-kernel": "^7.2|^8.0"
             },
             "require-dev": {
-                "axiomasoft/corex-import-export": "^1.0@dev",
+                "axiomasoft/corex-import-export": "^2.0@dev",
                 "axiomasoft/packman-schema": "^0.1",
                 "ext-curl": "*",
                 "ext-openssl": "*",
@@ -9168,7 +9168,7 @@
                     "stability": "stable"
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "laravel": {
                     "providers": [
@@ -9223,15 +9223,15 @@
         },
         {
             "name": "axiomasoft/corex-webhooks",
-            "version": "dev-main",
+            "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/webhooks",
-                "reference": "54018a36a489b1b7ff698aebfb1005a994eb440d"
+                "reference": "caa6748e6a0f77a8cfd4be7d2ee00b5b341fac34"
             },
             "require": {
-                "axiomasoft/corex": "^1.0@dev",
-                "axiomasoft/corex-operations": "^1.0@dev",
+                "axiomasoft/corex": "^2.0@dev",
+                "axiomasoft/corex-operations": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-schema": "^0.1",
                 "ext-filter": "*",
@@ -9246,7 +9246,7 @@
                 "psr/clock": "^1.0"
             },
             "require-dev": {
-                "axiomasoft/corex-import-export": "^1.0@dev",
+                "axiomasoft/corex-import-export": "^2.0@dev",
                 "axiomasoft/packman-modules": "^0.1.1",
                 "ext-curl": "*",
                 "ext-openssl": "*",
@@ -9273,7 +9273,7 @@
                     "stability": "stable"
                 },
                 "branch-alias": {
-                    "dev-main": "1.0.x-dev"
+                    "dev-main": "2.0.x-dev"
                 },
                 "laravel": {
                     "providers": [

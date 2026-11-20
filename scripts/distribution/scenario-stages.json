@@ -1,0 +1,21 @@
+{
+  "installed-boot": 0,
+  "binding-restore": 1,
+  "worker-scope": 1,
+  "workspace-sweep": 1,
+  "notification-visibility": 2,
+  "provider-unknown": 2,
+  "ddl-claim": 3,
+  "field-write": 3,
+  "generation": 4,
+  "search-rights": 4,
+  "field-search": 5,
+  "task-lifetime": 6,
+  "bulk-transfer": 7,
+  "lifecycle": 7,
+  "owner-effects": 7,
+  "product": 8,
+  "transport": 8,
+  "migration": 9,
+  "schema-profile": 9
+}

@@ -182,6 +182,15 @@
             "deprecated_aliases": "",
             "notes": ""
         },
+        "corex-access.policy_panels": {
+            "owner": "axiomasoft/corex-access",
+            "secret": "no",
+            "mode": "product-policy",
+            "reloadable": "no",
+            "validation": "boot",
+            "deprecated_aliases": "",
+            "notes": "Map of permission keys to AzGuard panel IDs."
+        },
         "corex-access.workspace_scope_class": {
             "owner": "axiomasoft/corex-access",
             "secret": "no",

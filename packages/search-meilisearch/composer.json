@@ -5,8 +5,8 @@
     "license": "MIT",
     "require": {
         "php": "^8.4",
-        "axiomasoft/corex": "^1.0@dev",
-        "axiomasoft/corex-search": "^1.0@dev",
+        "axiomasoft/corex": "^2.0@dev",
+        "axiomasoft/corex-search": "^2.0@dev",
         "axiomasoft/packman": "^0.1",
         "ext-filter": "*",
         "illuminate/contracts": "^13.0",
@@ -35,7 +35,7 @@
             ]
         },
         "branch-alias": {
-            "dev-main": "1.0.x-dev"
+            "dev-main": "2.0.x-dev"
         },
         "packman": {
             "schema-version": 1,
@@ -54,11 +54,23 @@
     "repositories": [
         {
             "type": "path",
-            "url": "../core"
+            "url": "../core",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
         },
         {
             "type": "path",
-            "url": "../search"
+            "url": "../search",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex-search": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
         }
     ],
     "minimum-stability": "stable",

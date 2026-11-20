@@ -18,7 +18,7 @@ final readonly class ImportExportSchemaSets implements SchemaSetProvider
         $root = dirname(__DIR__, 2).'/database/migrations';
 
         return [
-            new SchemaSet(package: 'axiomasoft/corex-import-export', name: 'tenant', scope: SchemaScope::Tenant, path: $root.'/tenant', version: 1, drivers: ['pgsql', 'sqlite']),
+            new SchemaSet(package: 'axiomasoft/corex-import-export', name: 'tenant', scope: SchemaScope::Tenant, path: $root.'/tenant', version: 2, drivers: ['pgsql', 'sqlite']),
         ];
     }
 }

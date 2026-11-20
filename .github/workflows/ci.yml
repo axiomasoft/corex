@@ -673,12 +673,6 @@ jobs:
       - name: Composer audit (access)
         run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/access audit --locked
 
-      - name: Install access AzGuard bridge dependencies
-        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/access-azguard update --prefer-dist --no-interaction --no-progress
-
-      - name: Composer audit (access AzGuard bridge)
-        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/access-azguard audit --locked
-
       - name: Install remaining standalone package harnesses
         run: |
           for package in media tasks recurring-tasks panels operations tenancy webhooks tools recurrence; do
@@ -982,12 +976,6 @@ jobs:
 
       - name: Composer audit (access)
         run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/access audit --locked
-
-      - name: Install access AzGuard bridge dependencies
-        run: python3 scripts/composer-with-snapshots.py --working-dir=packages/access-azguard update --prefer-dist --no-interaction --no-progress
-
-      - name: Composer audit (access AzGuard bridge)
-        run: env -u COMPOSER_NO_AUDIT python3 scripts/composer-with-snapshots.py --working-dir=packages/access-azguard audit --locked
 
       - name: PHPStan
         run: composer analyse

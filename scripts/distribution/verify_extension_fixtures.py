@@ -15,7 +15,8 @@ from pathlib import Path
 
 # Also support the test harness loading this script by file path.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from ecosystem_repositories import is_corex_package, snapshot_repositories
+from ecosystem_repositories import is_corex_package
+from consumer_repository import assert_dist_install, repositories
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURES = (
@@ -83,7 +84,7 @@ def materialize_repository(candidate: Path, destination: Path) -> None:
         for metadata in versions.values():
             url = metadata["dist"]["url"]
             if "://" not in url:
-                metadata["dist"]["url"] = str((candidate / url).resolve())
+                metadata["dist"]["url"] = str((destination / url).resolve())
     destination.mkdir(parents=True)
     (destination / "packages.json").write_text(json.dumps(packages), encoding="utf-8")
     shutil.copytree(candidate / "artifacts", destination / "artifacts")
@@ -103,10 +104,7 @@ def write_consumer(consumer: Path, fixture: Path, repository: Path, *, drop_core
         "require": {source["name"]: "@dev"},
         "repositories": [
             {"type": "path", "url": "fixture", "options": {"symlink": False}},
-            {"type": "composer", "url": str(repository)},
-            *snapshot_repositories(ROOT),
-            {"type": "composer", "url": "https://repo.packagist.org", "exclude": ["axiomasoft/corex", "axiomasoft/corex-*", "corex/*"]},
-            {"packagist.org": False},
+            *repositories(repository, ROOT),
         ],
         "minimum-stability": "dev",
         "prefer-stable": True,
@@ -184,6 +182,7 @@ def selected_fixtures(only: str | None) -> tuple[dict, ...]:
 
 
 def verify(candidate: Path, workspace: Path = ROOT, only: str | None = None) -> dict:
+    candidate = candidate_directory(candidate)
     binding = candidate_binding(candidate)
     rows = []
     with tempfile.TemporaryDirectory(prefix="corex-extension-fixtures-") as temporary:
@@ -201,6 +200,7 @@ def verify(candidate: Path, workspace: Path = ROOT, only: str | None = None) -> 
             if installed.returncode != 0:
                 raise SystemExit(installed.stderr or installed.stdout or f"{spec['id']} install failed")
             proof = prove(consumer, spec, workspace)
+            proof.update(assert_dist_install(consumer, repository, list(fixture_composer(fixture)["require"]), workspace))
             proof["missing_dependency"] = missing_dependency_is_red(fixture, repository, home, workspace, spec)
             proof["id"] = spec["id"]
             rows.append(proof)
@@ -227,19 +227,25 @@ def release_candidate_module():
     return module
 
 
+def candidate_directory(path: Path) -> Path:
+    return path.parent if path.name == "candidate.json" else path
+
+
 def candidate_binding(directory: Path) -> dict:
     """Validate dist bytes before binding a proof to its actual candidate."""
     module = release_candidate_module()
-    path = directory / "candidate.json"
+    path = candidate_directory(directory) / "candidate.json"
     document = module.verify_candidate(path, ROOT, composer_checks=False)
     return {"source_commit": document["source_commit"],
+            "candidate_version": document["version"],
             "candidate_sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
 
 
 def build_candidate(root: Path, output: Path) -> Path:
     module = release_candidate_module()
     source = module.resolve_commit(root, 'HEAD')
-    module.build_repository(root, source, '1.0.0', output, module.load_policy(), enforce_clean=True)
+    policy = module.source_policy(root, source)
+    module.build_repository(root, source, module.approved_version(policy), output, policy, enforce_clean=True)
     return output
 
 

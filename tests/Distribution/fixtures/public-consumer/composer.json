@@ -1,10 +1,11 @@
 {
   "name": "corex/distribution-proof-consumer",
   "type": "project",
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "prefer-stable": true,
   "require": {
-    "axiomasoft/corex-tasks": "0.1.0-p4.3",
-    "illuminate/contracts": "^12.0"
+    "php": "^8.4",
+    "axiomasoft/corex-tasks": "^2.0",
+    "illuminate/contracts": "^13.0"
   }
 }

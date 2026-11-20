@@ -43,7 +43,7 @@ final class SchemaGoldenTest extends GoldenTestCase
         $this->assertSchemaNames($catalogue);
         $command = $this->artisan('packman:schema:migrate', ['--scope' => $scope->value, '--modules' => true, ...($override === null ? [] : ['--database' => $override])]);
         self::assertInstanceOf(PendingCommand::class, $command);
-        $command->expectsOutput('Nothing to migrate.')->assertSuccessful();
+        $command->expectsOutput('Nothing to migrate.')->assertSuccessful()->run();
         $this->assertSchemaGolden($catalogue, __DIR__.'/schema/'.$scope->value.'.pgsql.json');
     }
 

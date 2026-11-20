@@ -327,7 +327,7 @@ test('the central and tenant runners use disjoint registered schema scopes', fun
     $byName = [];
     foreach ($sets->sets() as $set) {
         $byName[$set->name] = $set->scope->value;
-        expect($set->version)->toBe(1)->and($set->drivers)->toBe(['pgsql']);
+        expect($set->version)->toBe(2)->and($set->drivers)->toBe(['pgsql']);
     }
     expect($byName)->toBe(['root' => 'central', 'tenant' => 'tenant'])
         ->and(preg_match('/\$this->loadMigrationsFrom\s*\(/', $provider))->toBe(0);

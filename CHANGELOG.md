@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- CoreX 2.0 получает независимое сравнение контрактов, проверку установок из 20 split-архивов и автономный прототип переноса Webhooks с подписанным планом и транзакционными checkpoint. [Решение о совместимости](docs/architecture/corex-2.md).
+
 ### Removed
 
 - Audit 2026-10-08 (owner decision): Roave BC diff removed — `composer bc-check`, `scripts/bc-check.sh`, `scripts/bc/**` (accepted base, approved-deltas list and its plan-decision binding), the `backward-compatibility` CI job, `tests/Arch/PhpApiBcTest.php` and the `roave/backward-compatibility-check` dev dependency. Public surface stays guarded by `composer php-api` snapshots, golden php-surface + REBASELINE and package CHANGELOGs.
@@ -11,6 +15,7 @@
 
 ### Changed
 
+- Двадцать пакетов CoreX переходят на общую Composer-линию 2.x и наборы схем CoreX версии 2. FlexCRM сохраняет собственную версию.
 - Unify all 21 CoreX packages and Flex CRM under native Packman governance. Pin Packman runtime, devtools and testkit to the reviewed integration commit; adopt its public attributes, configuration/error contracts and composable schema facets without compatibility aliases. Preserve the redesigned package names and external engine ownership. Native contract manifests and CoreX architecture checks share one verified source tree.
 - Apply a commit/hash-bound development-tool patch so Packman table-write checks honor the exact declared table owner; CoreX DATA-003 still validates that ownership against its schema catalogue.
 
@@ -23,6 +28,7 @@
 
 ### Fixed
 
+- Search регистрирует фабрики драйверов через bindable-замыкание для Laravel 13.0. Внешние фабрики по-прежнему могут быть статическими.
 - Consumer distribution probes inherit exact portable owner snapshots, preserve candidate precedence and record current CoreX package names. Removed the machine-local AzGuard 0.2 archive substitution. Standalone CI and source audits use a shared generated-manifest installer, admit only reachable reviewed development snapshots and preserve the root analysis toolchain pins. Installation documentation now names the unpublished Vaulter compatibility patch and its source-delivery requirement.
 
 - P5.16: PostgreSQL-миграции messaging создают outbox/inbox по настроенным именам таблиц; цели raw partial indexes безопасно экранируются грамматикой соединения.

@@ -5,7 +5,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.4",
-        "axiomasoft/corex": "^1.0@dev",
+        "axiomasoft/corex": "^2.0@dev",
         "laravel/framework": "^13.0",
         "psr/clock": "^1.0",
         "axiomasoft/packman": "^0.1",
@@ -13,7 +13,7 @@
         "axiomasoft/packman-schema": "^0.1"
     },
     "require-dev": {
-        "axiomasoft/corex-scheduler": "^1.0@dev",
+        "axiomasoft/corex-scheduler": "^2.0@dev",
         "ext-pdo": "*",
         "larastan/larastan": "^3.12",
         "laravel/pint": "^1.32",
@@ -44,7 +44,7 @@
             ]
         },
         "branch-alias": {
-            "dev-main": "1.0.x-dev"
+            "dev-main": "2.0.x-dev"
         },
         "packman": {
             "module": "CoreX\\Notifications\\NotificationsModule",
@@ -67,11 +67,23 @@
     "repositories": [
         {
             "type": "path",
-            "url": "../core"
+            "url": "../core",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
         },
         {
             "type": "path",
-            "url": "../scheduler"
+            "url": "../scheduler",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex-scheduler": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
         }
     ],
     "minimum-stability": "stable",

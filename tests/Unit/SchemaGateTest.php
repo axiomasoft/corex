@@ -7,7 +7,7 @@ use Illuminate\Filesystem\Filesystem;
 require_once dirname(__DIR__, 2).'/scripts/schema-gate.php';
 
 /** @return list<array{code: string, file: string, line: int, message: string}> */
-function schemaGateProbe(string $source, string $filename = '2026_10_01_010010_create_sys_gate_probe.php', int $version = 1, string $scope = 'tenant', string $catalogue = 'sys_gate_probe', array $allowlist = []): array
+function schemaGateProbe(string $source, string $filename = '2026_10_01_010010_create_sys_gate_probe.php', int $version = 2, string $scope = 'tenant', string $catalogue = 'sys_gate_probe', array $allowlist = []): array
 {
     $root = sys_get_temp_dir().'/corex-schema-gate-'.bin2hex(random_bytes(12));
     $path = 'packages/core/database/migrations/tenant';
@@ -41,7 +41,7 @@ it('rejects each schema rule with its own diagnostic code', function (string $co
         filename: match ($code) {
             'S1' => 'unregistered.php', 'S2' => '2026_10_01_020010_create_sys_gate_probe.php', default => '2026_10_01_010010_create_sys_gate_probe.php',
         },
-        version: $code === 'S8' ? 2 : 1, catalogue: $code === 'S9' ? 'other_table' : 'sys_gate_probe');
+        version: $code === 'S8' ? 1 : 2, catalogue: $code === 'S9' ? 'other_table' : 'sys_gate_probe');
     expect(array_values(array_unique(array_column($hits, 'code'))))->toBe([$code]);
     foreach ($hits as $hit) {
         expect($hit['line'])->toBeGreaterThan(0)->and($hit['file'])->toContain('packages/core/database/migrations/tenant');

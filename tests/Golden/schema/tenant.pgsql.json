@@ -202,7 +202,7 @@
         "aut_role_matrix": {
             "columns": {
                 "action": {
-                    "type": "character varying(16)",
+                    "type": "character varying(120)",
                     "nullable": false,
                     "default": null
                 },
@@ -299,7 +299,7 @@
             "checks": [
                 {
                     "name": "aut_role_matrix_action_ck",
-                    "expression": "((action)::text = ANY ((ARRAY['read'::character varying, 'add'::character varying, 'update'::character varying, 'delete'::character varying, 'export'::character varying, 'import'::character varying])::text[]))"
+                    "expression": "((action)::text ~ '^[a-z][a-z0-9_-]*$'::text)"
                 },
                 {
                     "name": "aut_role_matrix_context_ck",

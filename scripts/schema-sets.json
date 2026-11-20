@@ -25,7 +25,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/access/database/migrations/tenant",
-            "version": 1,
+            "version": 2,
             "drivers": [
                 "pgsql"
             ],
@@ -40,7 +40,7 @@
             "name": "tenant-cloud",
             "scope": "tenant",
             "path": "packages/access/database/migrations/tenant-cloud",
-            "version": 1,
+            "version": 2,
             "drivers": [
                 "pgsql"
             ],
@@ -60,7 +60,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/custom-fields/database/migrations/tenant",
-            "version": 1,
+            "version": 2,
             "drivers": [
                 "pgsql"
             ],
@@ -75,7 +75,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/import-export/database/migrations/tenant",
-            "version": 1,
+            "version": 2,
             "drivers": [
                 "pgsql",
                 "sqlite"
@@ -91,7 +91,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/intl/database/migrations/tenant",
-            "version": 1,
+            "version": 2,
             "drivers": [
                 "pgsql",
                 "sqlite"
@@ -107,7 +107,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/media/database/migrations/tenant",
-            "version": 1,
+            "version": 2,
             "drivers": [
                 "pgsql",
                 "sqlite"
@@ -123,7 +123,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/notifications/database/migrations/tenant",
-            "version": 1,
+            "version": 2,
             "drivers": [
                 "pgsql",
                 "sqlite"
@@ -139,7 +139,7 @@
             "name": "budget",
             "scope": "dedicated",
             "path": "packages/operations/database/migrations/budget",
-            "version": 1,
+            "version": 2,
             "drivers": [
                 "pgsql",
                 "sqlite"
@@ -155,7 +155,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/operations/database/migrations/tenant",
-            "version": 1,
+            "version": 2,
             "drivers": [
                 "pgsql",
                 "sqlite"
@@ -171,7 +171,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/recurring-tasks/database/migrations/tenant",
-            "version": 1,
+            "version": 2,
             "drivers": [
                 "pgsql",
                 "sqlite"
@@ -187,7 +187,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/scheduler/database/migrations/tenant",
-            "version": 1,
+            "version": 2,
             "drivers": [
                 "pgsql",
                 "sqlite"
@@ -203,7 +203,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/search/database/migrations/tenant",
-            "version": 1,
+            "version": 2,
             "drivers": [
                 "pgsql",
                 "sqlite"
@@ -219,7 +219,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/tasks/database/migrations/tenant",
-            "version": 1,
+            "version": 2,
             "drivers": [
                 "pgsql",
                 "sqlite"
@@ -235,7 +235,7 @@
             "name": "root",
             "scope": "central",
             "path": "packages/tenancy/database/migrations/root",
-            "version": 1,
+            "version": 2,
             "drivers": [
                 "pgsql"
             ],
@@ -250,7 +250,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/tenancy/database/migrations/tenant",
-            "version": 1,
+            "version": 2,
             "drivers": [
                 "pgsql"
             ],
@@ -267,7 +267,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/webhooks/database/migrations/tenant",
-            "version": 1,
+            "version": 2,
             "drivers": [
                 "pgsql",
                 "sqlite"
@@ -283,7 +283,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/workflow/database/migrations/tenant",
-            "version": 1,
+            "version": 2,
             "drivers": [
                 "pgsql",
                 "sqlite"
@@ -299,7 +299,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/core/database/migrations/tenant",
-            "version": 1,
+            "version": 2,
             "drivers": [
                 "pgsql"
             ],

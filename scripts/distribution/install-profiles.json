@@ -1,5 +1,10 @@
 {
   "schema_version": "corex-install-profiles/1",
+  "required_profiles": [
+    "bare-single", "modular-single", "modular-multi", "worker-only",
+    "search-portable", "full-corex", "operations-standalone", "search-fields",
+    "search-meilisearch", "flex-crm"
+  ],
   "profiles": [
     {
       "id": "bare-single",
@@ -64,6 +69,42 @@
     {
       "id": "full-corex",
       "packages": ["*"],
+      "database": "sqlite-single",
+      "http": true,
+      "forbid": []
+    },
+    {
+      "id": "operations-standalone",
+      "packages": ["axiomasoft/corex-operations"],
+      "database": "sqlite-single",
+      "http": true,
+      "forbid": [
+        {"package": "axiomasoft/corex-import-export", "name": "ImportExport"}
+      ]
+    },
+    {
+      "id": "search-fields",
+      "packages": ["axiomasoft/corex-search", "axiomasoft/corex-custom-fields"],
+      "database": "sqlite-single",
+      "http": false,
+      "forbid": [
+        {"package": "axiomasoft/corex-search-intl", "name": "Search Intl"},
+        {"package": "axiomasoft/corex-search-meilisearch", "name": "Meilisearch"}
+      ]
+    },
+    {
+      "id": "search-meilisearch",
+      "packages": ["axiomasoft/corex-search", "axiomasoft/corex-search-meilisearch"],
+      "database": "sqlite-single",
+      "http": false,
+      "forbid": [
+        {"package": "axiomasoft/corex-custom-fields", "name": "Custom Fields"}
+      ]
+    },
+    {
+      "id": "flex-crm",
+      "product": "flex/crm",
+      "packages": ["axiomasoft/corex", "axiomasoft/corex-intl"],
       "database": "sqlite-single",
       "http": true,
       "forbid": []
