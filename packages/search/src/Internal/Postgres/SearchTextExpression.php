@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Search\Internal\Postgres;
 
-use CoreX\Search\Data\SearchSnapshot;
 use Illuminate\Contracts\Database\Query\Expression;
 use Illuminate\Database\Grammar;
 use InvalidArgumentException;
@@ -14,7 +13,8 @@ use Packman\Attributes\Internal;
 #[Internal]
 final readonly class SearchTextExpression implements Expression
 {
-    public function __construct(private SearchSnapshot $schema, private string $configuration)
+    /** @param non-empty-list<string> $columns */
+    public function __construct(private array $columns, private string $configuration)
     {
         if (! in_array($configuration, ['simple', 'english'], true)) {
             throw new InvalidArgumentException('PostgreSQL text search configuration is not allowlisted.');
@@ -25,7 +25,7 @@ final readonly class SearchTextExpression implements Expression
     {
         $columns = implode(', ', array_map(
             static fn (string $column): string => 'COALESCE('.$grammar->wrap($column).", '')",
-            $this->schema->searchableColumns,
+            $this->columns,
         ));
 
         return "to_tsvector('{$this->configuration}', concat_ws(' ', {$columns})) @@ websearch_to_tsquery(?, ?)";

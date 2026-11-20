@@ -2,43 +2,39 @@
 
 declare(strict_types=1);
 
-use CoreX\Context\Data\AccountRef;
-use CoreX\Context\Data\TenantContext;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Search\Data\Candidate;
-use CoreX\Search\Data\CandidatePage;
-use CoreX\Search\Data\CurrentSearchRecord;
-use CoreX\Search\Data\DocumentBatch;
-use CoreX\Search\Data\DocumentCursor;
-use CoreX\Search\Data\IndexBatch;
-use CoreX\Search\Data\IndexOutcome;
-use CoreX\Search\Data\IndexSubmission;
-use CoreX\Search\Data\IndexSwap;
-use CoreX\Search\Data\SearchCapabilities;
-use CoreX\Search\Data\SearchPage;
-use CoreX\Search\Data\SearchQuery;
-use CoreX\Search\Data\SearchSnapshot;
-use CoreX\Search\Internal\UnavailableSearchProvider;
-use CoreX\Tests\Support\CallerWorkScopeFixture;
+use CoreX\Data\Enums\FieldUse;
+use CoreX\Search\Projection\Data\ProjectedValues;
+use CoreX\Search\Projection\Data\ProjectionField;
+use CoreX\Search\Projection\Data\ProjectionFields;
+use CoreX\Search\Projection\Enums\FieldType;
+use CoreX\Search\Query\Data\CandidatePage;
+use CoreX\Search\Query\Data\SearchFilter;
+use CoreX\Search\Testing\SearchFixtures;
 
-it('keeps neutral search value objects typed and unsupported providers empty', function (): void {
-    $record = new RecordRef(entity: 'equipment', id: 'pump-1');
-    $scope = CallerWorkScopeFixture::forContext(new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false), 'operator-a', str_repeat('a', 64));
-    $provider = new UnavailableSearchProvider;
-    $page = $provider->query(scope: $scope, query: new SearchQuery(entity: 'equipment', schemaHash: str_repeat('b', 64), text: 'pump'));
-
-    expect($provider->capabilities())->toEqual(new SearchCapabilities(fullText: false))
-        ->and($page)->toEqual(new CandidatePage(candidates: [], nextAfterId: null, truncated: false))
-        ->and((new Candidate($record))->record)->toBe($record)
-        ->and((new SearchPage(records: [['id' => 'pump-1']], nextAfterId: null, truncated: false))->records)->toHaveCount(1)
-        ->and((new DocumentBatch(documents: [['id' => 'pump-1']], next: new DocumentCursor(value: 'cursor')))->next->value)->toBe('cursor')
-        ->and((new IndexBatch(generation: 'g1', documents: [['id' => 'pump-1']]))->generation)->toBe('g1')
-        ->and((new IndexSubmission(taskId: 'task-1', generation: 'g1'))->taskId)->toBe('task-1')
-        ->and((new IndexOutcome(status: 'succeeded'))->status)->toBe('succeeded')
-        ->and((new IndexSwap(fromGeneration: 'g1', toGeneration: 'g2'))->toGeneration)->toBe('g2');
+it('keeps projection and source values typed and distinguishes null from absent', function (): void {
+    $values = new ProjectedValues(['paid' => null, 'quantity' => 0]);
+    $ref = new RecordRef('equipment', 'pump-1');
+    $record = SearchFixtures::record($ref, $values->values);
+    expect($record->record)->toBe($ref)->and($record->values)->toEqual($values)
+        ->and($record->revision)->toBe(SearchFixtures::record($ref, ['quantity' => 0, 'paid' => null])->revision)
+        ->and($record->revision)->not->toBe(SearchFixtures::record($ref, ['quantity' => 0])->revision);
 });
 
-it('rejects unsafe search snapshot and current record values', function (): void {
-    expect(fn (): SearchSnapshot => new SearchSnapshot(entity: 'equipment', schemaHash: str_repeat('a', 64), table: 'bad-table', idColumn: 'id', searchableColumns: ['title']))->toThrow(InvalidArgumentException::class)
-        ->and(fn (): CurrentSearchRecord => new CurrentSearchRecord(record: new RecordRef(entity: 'equipment', id: 'pump-1'), schemaHash: str_repeat('a', 64), revision: str_repeat('b', 64), fields: ['bad-field' => 'unsafe']))->toThrow(InvalidArgumentException::class);
+it('rejects unsafe duplicate or untyped projection, filter and candidate fields', function (): void {
+    $field = new ProjectionField('name', FieldType::Text, [FieldUse::Search]);
+    expect(fn () => new ProjectionFields([$field, $field], str_repeat('a', 64)))->toThrow(InvalidArgumentException::class)
+        ->and(fn () => new ProjectedValues(['name' => new stdClass]))->toThrow(InvalidArgumentException::class)
+        ->and(fn () => new ProjectedValues(['unsafe field' => 1]))->toThrow(InvalidArgumentException::class)
+        ->and(fn () => new SearchFilter('paid', [[true]]))->toThrow(InvalidArgumentException::class)
+        ->and(fn () => new CandidatePage([new stdClass], null))->toThrow(InvalidArgumentException::class);
+});
+
+it('binds text witnesses to field identity and distinguishes exact scalar types, null and absence', function (): void {
+    $digests = [];
+    foreach ([[], ['name' => null], ['name' => '1'], ['name' => 1], ['name' => true], ['name' => '']] as $values) {
+        $digests[] = (new ProjectedValues($values))->fieldWitness('name');
+    }
+    expect(array_unique($digests))->toHaveCount(6)
+        ->and((new ProjectedValues([]))->fieldWitness('other'))->not->toBe($digests[0]);
 });

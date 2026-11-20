@@ -95,6 +95,9 @@ final class ScenarioPrincipalAuthority implements WorkPrincipalAuthority
             FieldScenario::WORKER => in_array(getenv('COREX_SCENARIO_CASE'), ['field-write', 'ddl-claim'], true)
                 && $context->workspace !== null && $connection->table('scenario_field_worker_grants')
                     ->where('service', $service)->where('account_id', $context->id())->where('workspace_id', $context->workspace->id)->exists(),
+            SearchScenarioData::SERVICE => in_array(getenv('COREX_SCENARIO_CASE'), ['search-rights', 'generation'], true)
+                && $context->workspace !== null && $connection->table('scenario_search_service_grants')
+                    ->where('service', $service)->where('account_id', $context->id())->where('workspace_id', $context->workspace->id)->exists(),
             default => false,
         };
 

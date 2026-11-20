@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — Authorized query and durable index generations
+
+- Replace the application candidate and hydrator ports with Search. Each query verifies the caller, field uses, candidate namespace and fresh projected values before releasing hits and an opaque continuation.
+- SearchSource and SearchProjectionContributor describe current owner data and typed fields. Candidate and index factories resolve inside verified work. Exact PostgreSQL statistics require a shared owner and ACL snapshot.
+- Persist dirty sequence numbers, immutable generation UIDs and submission outcomes. Rebuilds publish a single active SQL pointer after catch-up and recover ambiguous outcomes from the journal.
+
 ## Unreleased — Packman governance
 
 - Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.

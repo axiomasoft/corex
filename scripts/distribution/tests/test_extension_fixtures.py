@@ -60,6 +60,27 @@ class ExtensionFixtureTest(unittest.TestCase):
         self.assertTrue(MODULE.autoload_contains_workspace(str(ROOT / "vendor/autoload.php"), ROOT))
         self.assertFalse(MODULE.autoload_contains_workspace("/tmp/consumer/vendor/autoload.php", ROOT))
 
+    def test_search_requires_public_entrypoint_and_actual_tagged_scoped_candidate_driver(self) -> None:
+        fixture = next(spec["search_proof"] for spec in MODULE.FIXTURES if spec["id"] == "custom-search-provider")
+        databases = {"COREX_SCENARIO_DB_A": "owner_test", "COREX_SCENARIO_DB_CONTROL": "control_test"}
+        witness = {
+            **fixture, "entrypoint": r"CoreX\Search\Query\Contracts\Search", "tagged": True,
+            "candidate_calls": 1, "projection": {"title": "pump alpha"}, "count": "unavailable",
+            "stale_text_rejected": True,
+            "uid": "cx_" + "a" * 64, "generation": 1, "php": "8.5.12", "pid": 12,
+            "owner": {"database": "owner_test", "session": 10, "oid": "20", "backend": "PostgreSQL 18.6"},
+            "control": {"database": "control_test", "session": 11, "oid": "21", "backend": "PostgreSQL 18.6"},
+        }
+        MODULE.validate_search_witness(witness, databases, fixture, "8.5")
+        for changes in (
+            {"entrypoint": r"CoreX\Search\Query\Contracts\CandidateDriver"},
+            {"tagged": False}, {"candidate_calls": 0}, {"count": "exact"},
+            {"stale_text_rejected": False},
+            {"uid": "fixed-index"}, {"php": "8.4.27"},
+        ):
+            with self.subTest(changes=changes), self.assertRaises(SystemExit):
+                MODULE.validate_search_witness({**witness, **changes}, databases, fixture, "8.5")
+
 
 if __name__ == "__main__":
     unittest.main()

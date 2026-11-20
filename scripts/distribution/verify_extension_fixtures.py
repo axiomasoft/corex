@@ -8,10 +8,12 @@ import hashlib
 import importlib.util
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
 import tempfile
+from contextlib import contextmanager
 from pathlib import Path
 
 # Also support the test harness loading this script by file path.
@@ -25,7 +27,11 @@ FIXTURES = (
         "id": "custom-search-provider",
         "package": "thirdparty/custom-search-provider",
         "class": r"ThirdParty\Search\Module",
-        "forbidden": r"CoreX\Search\Internal\UnavailableSearchProvider",
+        "forbidden": r"CoreX\Search\Query\Internal\AuthorizedSearch",
+        "search_proof": {
+            "entity": "csp.document", "record": "eq-1", "backend": "thirdparty-search",
+            "adapter": r"ThirdParty\Search\MemoryDriver",
+        },
     },
     {
         "id": "custom-attribute-source",
@@ -93,7 +99,7 @@ def materialize_repository(candidate: Path, destination: Path) -> None:
 
 
 def write_consumer(
-    consumer: Path, fixture: Path, repository: Path, *, drop_corex: bool, field_proof: bool = False,
+    consumer: Path, fixture: Path, repository: Path, *, drop_corex: bool, laravel_host: bool = False,
 ) -> None:
     source = fixture_composer(fixture)
     requirements = dict(source["require"])
@@ -114,7 +120,7 @@ def write_consumer(
         "prefer-stable": True,
         "config": {"allow-plugins": True, "secure-http": False, "preferred-install": "dist"},
     }
-    if field_proof:
+    if laravel_host:
         composer["require"]["laravel/framework"] = "^13.0"
     (consumer / "composer.json").write_text(json.dumps(composer, indent=4) + "\n", encoding="utf-8")
 
@@ -175,6 +181,10 @@ def validate_field_witness(witness: dict, databases: dict[str, str], fixture: di
             or not isinstance(ids, list) or not all(isinstance(value, str) for value in ids)
             or len(set(ids)) != len(ids) or len(ids) != len(fixture["values"])):
         raise SystemExit(f"{fixture['entity']}: field proof process or field identities are incomplete")
+    validate_isolated_databases(witness, databases, fixture["entity"])
+
+
+def validate_isolated_databases(witness: dict, databases: dict[str, str], entity: str) -> None:
     owner = witness.get("owner")
     control = witness.get("control")
     if (not isinstance(owner, dict) or not isinstance(control, dict)
@@ -184,39 +194,44 @@ def validate_field_witness(witness: dict, databases: dict[str, str], fixture: di
             or not owner.get("oid") or not control.get("oid") or owner["oid"] == control["oid"]
             or not str(owner.get("backend", "")).startswith("PostgreSQL ")
             or not str(control.get("backend", "")).startswith("PostgreSQL ")):
-        raise SystemExit(f"{fixture['entity']}: field proof did not use both isolated databases")
+        raise SystemExit(f"{entity}: installed proof did not use both isolated databases")
 
 
-def field_phase(consumer: Path, command: list[str], env: dict[str, str], fixture: dict, phase: str) -> dict:
-    completed = run([*command, phase], consumer, env)
+def probe_phase(consumer: Path, command: list[str], env: dict[str, str], entity: str, phase: str) -> dict:
+    completed = run(command, consumer, env)
     if completed.returncode:
-        raise SystemExit(completed.stderr or completed.stdout or f"{fixture['entity']}: {phase} phase failed")
+        raise SystemExit(completed.stderr or completed.stdout or f"{entity}: {phase} phase failed")
     try:
         witness = json.loads(completed.stdout)
     except json.JSONDecodeError as error:
-        raise SystemExit(f"{fixture['entity']}: invalid {phase} witness: {completed.stdout.strip()}") from error
+        raise SystemExit(f"{entity}: invalid {phase} witness: {completed.stdout.strip()}") from error
     if not isinstance(witness, dict) or witness.get("phase") != phase:
-        raise SystemExit(f"{fixture['entity']}: missing {phase} phase witness")
+        raise SystemExit(f"{entity}: missing {phase} phase witness")
     witness["exit_code"] = completed.returncode
     witness["stdout_sha256"] = hashlib.sha256(completed.stdout.encode()).hexdigest()
     return witness
 
 
-def run_field_proof(
-    consumer: Path, probe: Path, fixture: dict, env: dict[str, str], postgres: int | None, php: str | None,
-) -> dict:
+@contextmanager
+def installed_runtime(consumer: Path, env: dict[str, str], postgres: int | None):
     profiles = profile_proof_module()
     profile = {"database": "postgres-isolated", "database_roles": ["control", "a"], "default_database": "a"}
     for path in ("bootstrap/cache", "storage/logs", "storage/framework/views"):
         (consumer / path).mkdir(parents=True, exist_ok=True)
     with profiles.isolated_scenario_databases(profile, postgres) as databases:
-        runtime = {
+        yield databases, {
             **env, **databases, "APP_ENV": "testing",
             "APP_KEY": "base64:" + base64.b64encode(os.urandom(32)).decode("ascii"),
         }
+
+
+def run_field_proof(
+    consumer: Path, probe: Path, fixture: dict, env: dict[str, str], postgres: int | None, php: str | None,
+) -> dict:
+    with installed_runtime(consumer, env, postgres) as (databases, runtime):
         command = ["php", str(probe), fixture["class"]]
-        compiled = field_phase(consumer, command, runtime, fixture, "compile")
-        witness = field_phase(consumer, command, runtime, fixture, "exercise")
+        compiled = probe_phase(consumer, [*command, "compile"], runtime, fixture["entity"], "compile")
+        witness = probe_phase(consumer, [*command, "exercise"], runtime, fixture["entity"], "exercise")
         validate_field_witness(witness, databases, fixture)
         compiler_pid = compiled.get("pid")
         if type(compiler_pid) is not int or compiler_pid < 1 or compiler_pid == witness["pid"]:
@@ -226,6 +241,29 @@ def run_field_proof(
         ):
             raise SystemExit(f"{fixture['entity']}: installed field proof did not use PHP {php}")
         witness["compiler"] = compiled
+        return witness
+
+
+def validate_search_witness(witness: dict, databases: dict[str, str], fixture: dict, php: str | None) -> None:
+    if (witness.get("entrypoint") != r"CoreX\Search\Query\Contracts\Search" or witness.get("tagged") is not True
+            or witness.get("candidate_calls") != 1 or witness.get("count") != "unavailable"
+            or witness.get("stale_text_rejected") is not True
+            or witness.get("projection") != {"title": "pump alpha"}
+            or any(witness.get(key) != fixture[key] for key in ("entity", "record", "backend", "adapter"))
+            or not re.fullmatch(r"cx_[a-f0-9]{64}", str(witness.get("uid", "")))
+            or type(witness.get("generation")) is not int or witness["generation"] < 1
+            or type(witness.get("pid")) is not int or witness["pid"] < 1
+            or not isinstance(witness.get("php"), str) or (php is not None and not witness["php"].startswith(php + "."))):
+        raise SystemExit(f"{fixture['entity']}: public Search proof is incomplete")
+    validate_isolated_databases(witness, databases, fixture["entity"])
+
+
+def run_search_proof(
+    consumer: Path, probe: Path, fixture: dict, env: dict[str, str], postgres: int | None, php: str | None,
+) -> dict:
+    with installed_runtime(consumer, env, postgres) as (databases, runtime):
+        witness = probe_phase(consumer, ["php", str(probe), fixture["class"]], runtime, fixture["entity"], "search")
+        validate_search_witness(witness, databases, fixture, php)
         return witness
 
 
@@ -298,12 +336,20 @@ def verify(
             fixture = workspace / "fixtures/extensions" / spec["id"]
             assert_source_autoload(fixture, workspace)
             consumer = root / spec["id"]
-            write_consumer(consumer, fixture, repository, drop_corex=False, field_proof=spec.get("field_proof", False))
+            write_consumer(
+                consumer, fixture, repository, drop_corex=False,
+                laravel_host=bool(spec.get("field_proof") or spec.get("search_proof")),
+            )
             installed = install(consumer, env)
             if installed.returncode != 0:
                 raise SystemExit(installed.stderr or installed.stdout or f"{spec['id']} install failed")
             proof = prove(consumer, spec, workspace, env)
             proof.update(assert_dist_install(consumer, repository, list(fixture_composer(fixture)["require"]), workspace))
+            if search := spec.get("search_proof"):
+                proof["installed_search"] = run_search_proof(
+                    consumer, consumer / "vendor" / spec["package"] / "bin/search-proof.php",
+                    {"class": spec["class"], **search}, env, postgres, php,
+                )
             if spec.get("field_proof"):
                 proof["installed_fields"] = run_field_proof(
                     consumer, consumer / "vendor" / spec["package"] / "bin/field-proof.php",

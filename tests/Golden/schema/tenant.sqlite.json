@@ -604,9 +604,9 @@
         },
         "corex_search_dirty": {
             "columns": {
-                "completed_at": {
-                    "type": "datetime",
-                    "nullable": true,
+                "event_id": {
+                    "type": "varchar",
+                    "nullable": false,
                     "default": null
                 },
                 "lane_key": {
@@ -614,75 +614,144 @@
                     "nullable": false,
                     "default": null
                 },
-                "payload_hash": {
+                "operation": {
                     "type": "varchar",
-                    "nullable": true,
-                    "default": null
+                    "nullable": false,
+                    "default": "'reread'"
                 },
                 "record_id": {
                     "type": "varchar",
                     "nullable": false,
                     "default": null
                 },
-                "restore_epoch": {
-                    "type": "varchar",
-                    "nullable": false,
-                    "default": null
-                },
-                "revision": {
+                "seq": {
                     "type": "integer",
                     "nullable": false,
                     "default": null
                 },
-                "schema_hash": {
+                "source": {
                     "type": "varchar",
-                    "nullable": true,
-                    "default": null
-                },
-                "sequence": {
-                    "type": "integer",
                     "nullable": false,
                     "default": null
-                },
-                "submitted_at": {
-                    "type": "datetime",
-                    "nullable": true,
-                    "default": null
-                },
-                "tombstone": {
-                    "type": "tinyint(1)",
-                    "nullable": false,
-                    "default": "'0'"
                 }
             },
             "indexes": [
                 {
-                    "name": "corex_search_dirty_lane_key_record_id_revision_uq",
+                    "name": "corex_search_dirty_event_record_uq",
                     "kind": "uq",
                     "columns": [
                         "lane_key",
-                        "record_id",
-                        "revision"
+                        "source",
+                        "event_id",
+                        "record_id"
                     ],
                     "predicate": null,
                     "method": "btree"
                 },
                 {
-                    "name": "corex_search_dirty_lane_key_submitted_at_sequence_ix",
-                    "kind": "ix",
-                    "columns": [
-                        "lane_key",
-                        "submitted_at",
-                        "sequence"
-                    ],
-                    "predicate": null,
-                    "method": "btree"
-                },
-                {
-                    "name": "corex_search_dirty_pk",
+                    "name": "sqlite_autoindex_corex_search_dirty_1",
                     "kind": "pk",
                     "columns": [
-                        "sequence"
+                        "lane_key",
+                        "seq"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
+        "corex_search_generations": {
+            "columns": {
+                "allocation_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "claim_epoch": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "'0'"
+                },
+                "cluster": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "confirmed_seq": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "'0'"
+                },
+                "generation": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "lane_key": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "mapping_digest": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "policy_digest": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "retain_until": {
+                    "type": "datetime",
+                    "nullable": true,
+                    "default": null
+                },
+                "scan_cursor": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "state": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "uid": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "corex_search_generations_active_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "lane_key"
+                    ],
+                    "predicate": "state = 'active'",
+                    "method": "btree"
+                },
+                {
+                    "name": "corex_search_generations_uid_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "cluster",
+                        "uid"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sqlite_autoindex_corex_search_generations_1",
+                    "kind": "pk",
+                    "columns": [
+                        "lane_key",
+                        "generation"
                     ],
                     "predicate": null,
                     "method": "btree"
@@ -694,29 +763,54 @@
         },
         "corex_search_lanes": {
             "columns": {
-                "active_task": {
+                "account_id": {
                     "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "active_generation": {
+                    "type": "integer",
                     "nullable": true,
                     "default": null
                 },
-                "claim_epoch": {
-                    "type": "integer",
-                    "nullable": false,
-                    "default": "'0'"
-                },
-                "committed_revision": {
-                    "type": "integer",
-                    "nullable": false,
-                    "default": "'0'"
-                },
-                "created_at": {
-                    "type": "datetime",
-                    "nullable": true,
-                    "default": null
-                },
-                "generation": {
+                "backend": {
                     "type": "varchar",
                     "nullable": false,
+                    "default": null
+                },
+                "binding_generation": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "cluster": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "deployment_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "entity": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "freeze_seq": {
+                    "type": "integer",
+                    "nullable": true,
                     "default": null
                 },
                 "lane_key": {
@@ -724,7 +818,22 @@
                     "nullable": false,
                     "default": null
                 },
-                "request_hash": {
+                "last_allocated_seq": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "'0'"
+                },
+                "last_generation": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "'0'"
+                },
+                "next_seq": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "'1'"
+                },
+                "rebuild_id": {
                     "type": "varchar",
                     "nullable": true,
                     "default": null
@@ -734,13 +843,13 @@
                     "nullable": false,
                     "default": null
                 },
-                "state": {
+                "workspace_scope": {
                     "type": "varchar",
                     "nullable": false,
-                    "default": "'ready'"
+                    "default": null
                 },
-                "updated_at": {
-                    "type": "datetime",
+                "writer_generation": {
+                    "type": "integer",
                     "nullable": true,
                     "default": null
                 }
@@ -762,19 +871,14 @@
         },
         "corex_search_rebuilds": {
             "columns": {
-                "created_at": {
-                    "type": "datetime",
+                "barrier_seq": {
+                    "type": "integer",
                     "nullable": true,
                     "default": null
                 },
-                "fence_revision": {
-                    "type": "integer",
-                    "nullable": false,
-                    "default": null
-                },
                 "from_generation": {
-                    "type": "varchar",
-                    "nullable": false,
+                    "type": "integer",
+                    "nullable": true,
                     "default": null
                 },
                 "lane_key": {
@@ -782,9 +886,19 @@
                     "nullable": false,
                     "default": null
                 },
-                "marker_hash": {
+                "mapping_digest": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "operation_key": {
                     "type": "varchar",
                     "nullable": true,
+                    "default": null
+                },
+                "policy_digest": {
+                    "type": "varchar",
+                    "nullable": false,
                     "default": null
                 },
                 "rebuild_id": {
@@ -792,49 +906,53 @@
                     "nullable": false,
                     "default": null
                 },
-                "restore_epoch": {
+                "rollback_of": {
                     "type": "varchar",
-                    "nullable": false,
+                    "nullable": true,
                     "default": null
                 },
-                "schema_hash": {
-                    "type": "varchar",
-                    "nullable": false,
+                "start_seq": {
+                    "type": "integer",
+                    "nullable": true,
                     "default": null
                 },
                 "state": {
                     "type": "varchar",
                     "nullable": false,
-                    "default": "'pending'"
-                },
-                "swap_task": {
-                    "type": "varchar",
-                    "nullable": true,
-                    "default": null
-                },
-                "swapped_at": {
-                    "type": "datetime",
-                    "nullable": true,
                     "default": null
                 },
                 "to_generation": {
-                    "type": "varchar",
-                    "nullable": false,
-                    "default": null
-                },
-                "updated_at": {
-                    "type": "datetime",
+                    "type": "integer",
                     "nullable": true,
                     "default": null
                 }
             },
             "indexes": [
                 {
-                    "name": "corex_search_rebuilds_lane_key_to_generation_uq",
+                    "name": "corex_search_rebuilds_destination_uq",
                     "kind": "uq",
                     "columns": [
                         "lane_key",
                         "to_generation"
+                    ],
+                    "predicate": "rollback_of is null",
+                    "method": "btree"
+                },
+                {
+                    "name": "corex_search_rebuilds_live_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "lane_key"
+                    ],
+                    "predicate": "state in ('scanning','catching-up','barrier')",
+                    "method": "btree"
+                },
+                {
+                    "name": "corex_search_rebuilds_operation_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "lane_key",
+                        "operation_key"
                     ],
                     "predicate": null,
                     "method": "btree"
@@ -844,6 +962,147 @@
                     "kind": "pk",
                     "columns": [
                         "rebuild_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
+        "corex_search_submissions": {
+            "columns": {
+                "action": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "batch_digest": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_generation": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "claim_epoch": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "control_recorded": {
+                    "type": "tinyint(1)",
+                    "nullable": false,
+                    "default": "'0'"
+                },
+                "deployment_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "documents": {
+                    "type": "text",
+                    "nullable": false,
+                    "default": null
+                },
+                "first_seq": {
+                    "type": "integer",
+                    "nullable": true,
+                    "default": null
+                },
+                "generation": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "lane_key": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "last_seq": {
+                    "type": "integer",
+                    "nullable": true,
+                    "default": null
+                },
+                "lease_until": {
+                    "type": "datetime",
+                    "nullable": true,
+                    "default": null
+                },
+                "provider_ticket": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "restore_epoch": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "scan_next": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "state": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "submission_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "task_ref": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "uid": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "corex_search_submissions_inflight_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "lane_key",
+                        "generation"
+                    ],
+                    "predicate": "state in ('planned','sending','accepted','unknown')",
+                    "method": "btree"
+                },
+                {
+                    "name": "corex_search_submissions_settlement_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "lane_key",
+                        "generation",
+                        "claim_epoch"
+                    ],
+                    "predicate": "control_recorded = false and provider_ticket is not null and state in ('confirmed','failed','not-sent','unknown')",
+                    "method": "btree"
+                },
+                {
+                    "name": "sqlite_autoindex_corex_search_submissions_1",
+                    "kind": "pk",
+                    "columns": [
+                        "lane_key",
+                        "generation",
+                        "submission_id"
                     ],
                     "predicate": null,
                     "method": "btree"

@@ -1,20 +1,22 @@
 # axiomasoft/corex-search-meilisearch
 
-An optional candidate adapter for `axiomasoft/corex-search`. It is disabled by default and never opens a network connection during provider registration. Applications own the endpoint, credentials, index UID, and current-policy hydration.
+An optional candidate adapter for `axiomasoft/corex-search`. Installing the package registers its drivers. Selecting the adapter uses the host's endpoint and credentials, the Search cluster identity, and the immutable UID of the current SQL generation.
 
-The adapter returns asynchronous task receipts for document submission and swaps. A `202` receipt is not completion; the durable lane in `axiomasoft/corex-search` must reconcile the task before progressing.
+The adapter pages by opaque record position and supplies candidate identities for current owner hydration. Exact count and facets are unavailable in this profile.
 
 ## Installation
 
-Install the optional adapter with `composer require axiomasoft/corex-search-meilisearch` alongside `axiomasoft/corex-search`. Configure an application-owned Meilisearch endpoint, credentials and index UID before selecting it. Installing the package alone does not connect to the service.
+Install the optional adapter with `composer require axiomasoft/corex-search-meilisearch` alongside `axiomasoft/corex-search`. Set `corex-search-meilisearch.host` and select the `meilisearch` driver in Search. Set `corex-search.cluster` to the identifier for that deployment.
+
+Bind `MeilisearchCredentialProvider` to supply provider-enforced credentials for the exact generation UID. Supply search-only access for candidate queries, document and index mutation access for submissions, and index, settings, and task read access for verification. Provision credentials in the host or secrets service before use.
 
 ## Extension contracts
 
-Use the public search provider/driver boundary of `axiomasoft/corex-search` to select the adapter and supply current-policy hydration. The application owns its index schema and entity visibility; adapter internals are not an additional public extension surface.
+Use `CoreX\Search\Query\Contracts\Search` for queries and the Search rebuild API to publish a generation. The application supplies the current record source, projection fields, and authorization policy.
 
 ## Failure semantics
 
-An asynchronous task receipt is acceptance, not completed indexing. Reconcile completion or failure before advancing the durable search lane. Missing endpoint/key/index configuration and transport failures must not be converted into an empty successful search or a completed swap.
+The durable Search lane verifies the exact Meilisearch task receipt before advancing a generation. An ambiguous submission quarantines its UID, and a rebuild allocates a fresh UID. The active pointer changes in SQL after the destination is confirmed.
 
 ## Typed errors
 

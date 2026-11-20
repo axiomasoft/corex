@@ -105,12 +105,12 @@
 | corex-scheduler.max_attempts | axiomasoft/corex-scheduler | int | 5 | no | product-policy | unobserved | unobserved | SchedulerOptions::$maxAttempts |  |  |
 | corex-search-intl.enabled | axiomasoft/corex-search-intl | unobserved | unobserved | no | deployment | no | unobserved | SearchIntlOptions::$enabled |  |  |
 | corex-search-meilisearch.host | axiomasoft/corex-search-meilisearch | null | null | no | product-policy | unobserved | unobserved | MeilisearchOptions::$host |  |  |
-| corex-search-meilisearch.index_uid | axiomasoft/corex-search-meilisearch | null | null | no | product-policy | unobserved | unobserved | MeilisearchOptions::$indexUid |  |  |
-| corex-search-meilisearch.key | axiomasoft/corex-search-meilisearch | null | null | yes | secret | unobserved | unobserved | MeilisearchOptions::$key |  |  |
+| corex-search.cluster | axiomasoft/corex-search | string | primary | no | deployment | no | boot | SearchOptions::$cluster |  | Cluster identity recorded with each Search generation. |
 | corex-search.cursor_secret | axiomasoft/corex-search | null | null | yes | secret | unobserved | unobserved | SearchOptions::$cursorSecret |  |  |
 | corex-search.driver | axiomasoft/corex-search | string | null | no | product-policy | unobserved | unobserved | SearchOptions::$driver |  |  |
-| corex-search.postgres.scan_budget | axiomasoft/corex-search | int | 1000 | no | product-policy | unobserved | unobserved | SearchOptions::$scanBudget |  |  |
+| corex-search.postgres.scan_budget | axiomasoft/corex-search | int | 1000 | no | product-policy | unobserved | 1..1000 at boot | SearchOptions::$scanBudget |  |  |
 | corex-search.postgres.text_search_config | axiomasoft/corex-search | string | simple | no | product-policy | unobserved | unobserved | SearchOptions::$textSearchConfig |  |  |
+| corex-search.retention_seconds | axiomasoft/corex-search | int | 604800 | no | product-policy | no | positive integer at boot | SearchOptions::$retentionSeconds |  | Rollback retention for a generation after publication. |
 | corex-tenancy.central_connection | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$centralConnection |  |  |
 | corex-tenancy.domain_trust.challenge_ttl_seconds | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$domainTrustChallengeTtlSeconds |  |  |
 | corex-tenancy.domain_trust.enabled | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$domainTrustEnabled |  |  |

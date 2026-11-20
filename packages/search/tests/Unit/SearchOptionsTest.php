@@ -9,6 +9,8 @@ it('passes on an empty environment with the shipped defaults and no secret', fun
     $options = SearchOptions::fromArray([]);
 
     expect($options->driver)->toBe('null')
+        ->and($options->cluster)->toBe('primary')
+        ->and($options->retentionSeconds)->toBe(604800)
         ->and($options->cursorSecret)->toBeNull()
         ->and($options->textSearchConfig)->toBe('simple')
         ->and($options->scanBudget)->toBe(1000);
@@ -21,7 +23,7 @@ it('accumulates violations of the driver and the postgres section', function ():
     } catch (InvalidConfiguration $exception) {
         expect($exception->violations)->toBe([
             'driver: must be a non-empty string',
-            'postgres.scan_budget: must be a positive integer',
+            'postgres.scan_budget: must be an integer from 1 to 1000',
         ]);
     }
 });
@@ -31,4 +33,10 @@ it('wraps the cursor secret so it is never printed', function (): void {
 
     expect($options->cursorSecret?->reveal())->toBe('a-private-secret-value-of-sufficient-length')
         ->and((string) $options->cursorSecret)->toBe('[redacted]');
+});
+
+it('enforces the maximum backend budget and a stable cluster name', function (): void {
+    expect(fn () => SearchOptions::fromArray(['postgres' => ['scan_budget' => 1001]]))->toThrow(InvalidConfiguration::class)
+        ->and(fn () => SearchOptions::fromArray(['retention_seconds' => 0]))->toThrow(InvalidConfiguration::class)
+        ->and(fn () => SearchOptions::fromArray(['cluster' => 'http://cluster']))->toThrow(InvalidConfiguration::class);
 });

@@ -177,7 +177,7 @@ jobs:
 
       - name: Prepare PostgreSQL test databases
         run: |
-          for database in corex_test corex_search_a_test corex_search_b_test corex_budget_test; do
+          for database in corex_test corex_search_a_test corex_search_b_test corex_budget_test corex_search_control_test; do
             PGPASSWORD=corex psql -h 127.0.0.1 -U corex -d postgres -tc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 \
               || PGPASSWORD=corex psql -h 127.0.0.1 -U corex -d postgres -c "CREATE DATABASE ${database}"
           done
@@ -189,6 +189,7 @@ jobs:
           PGSQL_PORT: 5432
           PGSQL_DATABASE: corex_test
           PGSQL_BUDGET_DATABASE: corex_budget_test
+          PGSQL_CONTROL_DATABASE: corex_search_control_test
           PGSQL_USERNAME: corex
           PGSQL_PASSWORD: corex
 
@@ -930,7 +931,7 @@ jobs:
 
       - name: Prepare PostgreSQL test databases
         run: |
-          for database in corex_test corex_search_a_test corex_search_b_test corex_budget_test; do
+          for database in corex_test corex_search_a_test corex_search_b_test corex_budget_test corex_search_control_test; do
             PGPASSWORD=corex psql -h 127.0.0.1 -U corex -d postgres -tc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 \
               || PGPASSWORD=corex psql -h 127.0.0.1 -U corex -d postgres -c "CREATE DATABASE ${database}"
           done
@@ -948,6 +949,7 @@ jobs:
           PGSQL_PORT: 5432
           PGSQL_DATABASE: corex_test
           PGSQL_BUDGET_DATABASE: corex_budget_test
+          PGSQL_CONTROL_DATABASE: corex_search_control_test
           PGSQL_USERNAME: corex
           PGSQL_PASSWORD: corex
 

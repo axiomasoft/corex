@@ -1108,7 +1108,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search",
-                "reference": "37551a73db60ce48eac7330889e65b3c73f6d520"
+                "reference": "ae62bd795de3bb770dad946f3debc259e7186147"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1147,12 +1147,16 @@
                     "profile": "laravel-package",
                     "error-prefix": "search",
                     "owns": [
-                        "Contracts",
-                        "Data",
                         "Errors",
                         "Exceptions",
+                        "Index",
                         "Internal",
+                        "Lane",
                         "Laravel",
+                        "Postgres",
+                        "Projection",
+                        "Query",
+                        "Rebuild",
                         "Testing"
                     ]
                 }
@@ -1187,7 +1191,7 @@
             "license": [
                 "MIT"
             ],
-            "description": "Typed, policy-hydrated search boundary for CoreX.",
+            "description": "Authorized search queries, owner projections and durable index generations for CoreX.",
             "transport-options": {
                 "relative": true
             }
@@ -1279,7 +1283,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-meilisearch",
-                "reference": "2d745d056d3af7e6109ee587ee037e5c7c352366"
+                "reference": "6f4689349dcfb4b296f602207c3279a9054b777f"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1318,6 +1322,8 @@
                     "profile": "laravel-package",
                     "error-prefix": "search-meilisearch",
                     "owns": [
+                        "Contracts",
+                        "Enums",
                         "Errors",
                         "Exceptions",
                         "Internal",

@@ -52,8 +52,10 @@ use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Notifications\Delivery\Contracts\RecipientResolver;
 use CoreX\Notifications\Inbox\Contracts\NotificationPolicy;
-use CoreX\Search\Contracts\SearchProvider;
-use CoreX\Search\Contracts\SearchSchema;
+use CoreX\Search\Postgres\Contracts\PostgresCorpus;
+use CoreX\Search\Projection\Contracts\SearchProjectionContributor;
+use CoreX\Search\Projection\Contracts\SearchSource;
+use CoreX\Search\Query\Contracts\CandidateDriver;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tenancy\Runtime\Contracts\AccountIsolationMapper;
 use CoreX\Webhooks\Contracts\WebhookEgressPolicy;
@@ -108,8 +110,17 @@ final class ScenarioServiceProvider extends ServiceProvider
         $this->app->singleton(ScenarioJobLedger::class);
         $this->app->singleton(ScenarioPrincipalAuthority::class);
         $this->app->alias(ScenarioPrincipalAuthority::class, WorkPrincipalAuthority::class);
-        $this->app->scoped(DataScopeAuthorizer::class, ScenarioAuthorization::class);
-        $this->app->bind(SearchSchema::class, ScenarioSearchSchema::class);
+
+        if ($case !== 'search-rights') {
+            $this->app->scoped(DataScopeAuthorizer::class, ScenarioAuthorization::class);
+        }
+
+        if (in_array($case, ['worker-scope', 'binding-restore'], true)) {
+            $this->app->scoped(FieldUsePolicy::class, ScenarioAuthorization::class);
+            $this->app->bind(PostgresCorpus::class, ScenarioSearchSchema::class);
+            $this->app->bind(SearchSource::class, ScenarioSearchSchema::class);
+            $this->app->tag(ScenarioSearchSchema::class, SearchProjectionContributor::class);
+        }
 
         if ($cloud) {
             $config->set('tenant', [
@@ -142,7 +153,7 @@ final class ScenarioServiceProvider extends ServiceProvider
             $config->set('corex-scheduler.handlers', [
                 'scenario.wakeup' => ['handler' => ScenarioWakeup::class, 'version' => 'scenario-wakeup/1'],
             ]);
-            $this->app->resolving(SearchProvider::class, static function (): void {
+            $this->app->resolving(CandidateDriver::class, static function (): void {
                 $connection = app('db')->connection();
                 Scenario::connection('control')->table('scenario_search_resolutions')->insert([
                     'target' => Scenario::describe($connection)['database'],
@@ -150,13 +161,17 @@ final class ScenarioServiceProvider extends ServiceProvider
             });
         }
 
-        if (in_array($case, ['workspace-sweep', 'notification-visibility', 'provider-unknown', 'field-write', 'ddl-claim'], true)) {
+        if (in_array($case, ['workspace-sweep', 'notification-visibility', 'provider-unknown', 'field-write', 'ddl-claim', 'search-rights', 'generation'], true)) {
             $this->app->singleton(ScenarioClock::class);
             $this->app->alias(ScenarioClock::class, ClockInterface::class);
             $this->app->singleton(BoxedWorkspaces::class);
             foreach ([WorkScopeDirectory::class, TenancyManager::class, TenantContextResolver::class] as $contract) {
                 $this->app->alias(BoxedWorkspaces::class, $contract);
             }
+        }
+
+        if (in_array($case, ['search-rights', 'generation'], true)) {
+            $this->app->register(SearchScenarioServiceProvider::class);
         }
 
         if ($case === 'ddl-claim') {

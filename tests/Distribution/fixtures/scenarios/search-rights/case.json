@@ -1,0 +1,178 @@
+{
+  "id": "search-rights",
+  "laravel": 13,
+  "host_support": true,
+  "timeout_seconds": 210,
+  "distinct_connections": true,
+  "profile": {
+    "id": "native-search-rights",
+    "database": "postgres-isolated",
+    "database_roles": [
+      "control",
+      "a"
+    ],
+    "default_database": "a",
+    "http": true,
+    "meilisearch": "1.16.0",
+    "packages": [
+      "axiomasoft/corex",
+      "axiomasoft/corex-search",
+      "axiomasoft/corex-access",
+      "axiomasoft/corex-search-meilisearch"
+    ],
+    "prerequisites": [
+      "axiomasoft/azguard"
+    ],
+    "forbid": [
+      {
+        "package": "axiomasoft/corex-custom-fields",
+        "name": "Custom Fields"
+      },
+      {
+        "package": "axiomasoft/corex-search-intl",
+        "name": "Search Intl"
+      }
+    ]
+  },
+  "processes": {
+    "produce": [
+      "php",
+      "{fixture}/probe.php",
+      "produce"
+    ],
+    "meili-rights": [
+      "php",
+      "{fixture}/probe.php",
+      "meili-rights"
+    ],
+    "postgres-rights": [
+      "php",
+      "{fixture}/probe.php",
+      "postgres-rights"
+    ],
+    "tamper-uid": [
+      "php",
+      "{fixture}/probe.php",
+      "tamper"
+    ],
+    "tamper-ref": [
+      "php",
+      "{fixture}/probe.php",
+      "tamper"
+    ],
+    "tamper-document": [
+      "php",
+      "{fixture}/probe.php",
+      "tamper"
+    ],
+    "race-reader": [
+      "php",
+      "{fixture}/probe.php",
+      "race-reader"
+    ],
+    "race-revoke": [
+      "php",
+      "{fixture}/probe.php",
+      "race-revoke"
+    ]
+  },
+  "actions": [
+    {
+      "action": "start",
+      "name": "produce"
+    },
+    {
+      "action": "await",
+      "name": "rights-ready",
+      "process": "produce"
+    },
+    {
+      "action": "release",
+      "name": "rights-ready"
+    },
+    {
+      "action": "complete",
+      "name": "produce"
+    },
+    {
+      "action": "start",
+      "name": "meili-rights"
+    },
+    {
+      "action": "complete",
+      "name": "meili-rights"
+    },
+    {
+      "action": "start",
+      "name": "postgres-rights",
+      "environment": {
+        "COREX_SCENARIO_SEARCH_DRIVER": "postgres"
+      }
+    },
+    {
+      "action": "complete",
+      "name": "postgres-rights"
+    },
+    {
+      "action": "start",
+      "name": "tamper-uid",
+      "environment": {
+        "COREX_SCENARIO_TAMPER_CANDIDATE": "uid"
+      }
+    },
+    {
+      "action": "complete",
+      "name": "tamper-uid"
+    },
+    {
+      "action": "start",
+      "name": "tamper-ref",
+      "environment": {
+        "COREX_SCENARIO_TAMPER_CANDIDATE": "ref"
+      }
+    },
+    {
+      "action": "complete",
+      "name": "tamper-ref"
+    },
+    {
+      "action": "start",
+      "name": "tamper-document",
+      "environment": {
+        "COREX_SCENARIO_TAMPER_CANDIDATE": "document"
+      }
+    },
+    {
+      "action": "complete",
+      "name": "tamper-document"
+    },
+    {
+      "action": "start",
+      "name": "race-reader",
+      "environment": {
+        "COREX_SCENARIO_PROJECTION_BARRIER": "1"
+      }
+    },
+    {
+      "action": "await",
+      "name": "rights-projected",
+      "process": "race-reader"
+    },
+    {
+      "action": "start",
+      "name": "race-revoke"
+    },
+    {
+      "action": "complete",
+      "name": "race-revoke"
+    },
+    {
+      "action": "release",
+      "name": "rights-projected"
+    },
+    {
+      "action": "complete",
+      "name": "race-reader"
+    }
+  ]
+}

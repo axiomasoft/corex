@@ -4,8 +4,9 @@ Optional localized projection glue between `axiomasoft/corex-intl` and `axiomaso
 
 ## Capabilities
 
-- `LocalizedSearchSchema` wraps an existing `SearchSchema` with locale-resolved searchable columns
-- `LocalizedSearchHydrator` resolves localized result fields through `TranslationReader`
+- A tagged `SearchProjectionContributor` describes the locale-resolved projection fields and their permitted uses
+- The host binds `LocalizedSearchValues` to supply declared fields and current translations from the record owner
+- Selected values follow the host locale policy and resolve through `TranslationReader`
 - `SavedViewLabelReader` resolves saved-view `localizedName` metadata without changing filter grammar
 - `TranslationRevision` computes content revisions for the existing P6 dirty/outbox lane
 

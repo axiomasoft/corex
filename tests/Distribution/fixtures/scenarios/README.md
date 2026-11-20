@@ -56,3 +56,15 @@ a real backfill conversion while an independent session commits a newer document
 before the owner acknowledgement. The receipt includes the index identity and the
 actual acknowledgement count. Use `--variant interrupted`, `--variant lost-ack`,
 or `--variant stale-ack` to isolate a race during diagnosis.
+
+Stage 4 adds `search-rights` and `generation` on the same PHP and PostgreSQL
+lanes. Set `MEILISEARCH_HOST` to the disposable loopback service and
+`MEILISEARCH_MASTER_KEY` to its test credential. The runner checks for
+Meilisearch 1.16.0, derives a unique namespace for each scenario variant, and
+releases only the verified UIDs and scoped credentials issued to that variant.
+The host uses the test credential to provision per-UID keys. Search and index
+requests use the scoped keys configured through the installed credential SPI.
+`search-rights` tests the actual Access role matrix, a PostgreSQL exact-count
+snapshot, and Meilisearch candidate hydration. `generation` stops the publisher
+on both sides of the real SQL commit and records public restart inspection,
+late completion on the old UID, PostgreSQL backup restore, and cancellation.

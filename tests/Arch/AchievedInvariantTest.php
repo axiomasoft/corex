@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use CoreX\Tests\Support\SourceScanner;
 
+const SEARCH_BACKEND_IMPLEMENTATION = '/\bimplements\s+[^{};]*\b(?:CandidateDriver|LiveCandidateDriver|ExactCandidateDriver|IndexDriver)\b/';
+
 // P3.7 — achieved audit invariants A57, A61, A99 and table-ownership gate T1/T2/T4 (D19).
 
 test('attributes package does not depend on search or meilisearch (A57)', function (): void {
@@ -24,7 +26,7 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal;
 
-use CoreX\Search\Contracts\SearchProvider;
+use CoreX\Search\Query\Contracts\Search;
 
 final class A57Probe
 {
@@ -41,67 +43,53 @@ PHP;
         ->and($offenders[0])->toContain('A57Probe.php');
 });
 
-test('search provider implementations do not import eloquent (A61)', function (): void {
-    $providerFiles = [
-        ...SourceScanner::filesMatching(SourceScanner::packagePath('search', 'src'), '/implements\s+SearchProvider\b/'),
-        ...SourceScanner::filesMatching(SourceScanner::packagePath('search-meilisearch', 'src'), '/implements\s+SearchProvider\b/'),
-    ];
+test('search backend adapters do not import eloquent (A61)', function (): void {
+    foreach (['search', 'search-meilisearch'] as $package) {
+        $drivers = SourceScanner::filesMatching(SourceScanner::packagePath($package, 'src'), SEARCH_BACKEND_IMPLEMENTATION);
 
-    $offenders = [];
+        expect($drivers)->not->toBeEmpty("no backend adapter detected in {$package}");
 
-    foreach ($providerFiles as $file) {
-        if (preg_match('/\buse\s+Illuminate\\\\Database\\\\Eloquent\b/', (string) file_get_contents($file)) === 1) {
-            $offenders[] = $file;
+        foreach ($drivers as $file) {
+            expect((string) file_get_contents($file))->not->toMatch('/\buse\s+Illuminate\\\\Database\\\\Eloquent\b/', $file);
         }
     }
-
-    expect($offenders)->toBe([]);
 });
 
 test('search contracts are split across dedicated files (A61)', function (): void {
-    $contractsDir = SourceScanner::packagePath('search', 'src/Contracts');
     $expected = [
-        'SearchProvider.php',
-        'SearchSchema.php',
-        'SearchDocuments.php',
-        'IndexDriver.php',
-        'SearchHydrator.php',
+        'Query/Contracts/Search.php',
+        'Query/Contracts/CandidateDriver.php',
+        'Projection/Contracts/SearchSource.php',
+        'Projection/Contracts/SearchProjectionContributor.php',
+        'Index/Contracts/IndexDriver.php',
+        'Rebuild/Contracts/SearchRebuilds.php',
     ];
 
     foreach ($expected as $file) {
-        expect(is_file($contractsDir.'/'.$file))->toBeTrue("missing contract file {$file}");
+        expect(is_file(SourceScanner::packagePath('search', 'src/'.$file)))->toBeTrue("missing contract file {$file}");
     }
 });
 
-test('search provider eloquent import probe fails A61 with file path', function (): void {
-    $probePath = SourceScanner::packagePath('search', 'src/Internal/A61ProbeSearchProvider.php');
+test('search backend eloquent import probe fails A61 with file path', function (): void {
+    $probePath = SourceScanner::packagePath('search', 'src/A61ProbeCandidateDriver.php');
     $probeContents = <<<'PHP'
     <?php
     
     declare(strict_types=1);
     
-    namespace CoreX\Search\Internal;
+    namespace CoreX\Search\Query\Internal;
     
-    use CoreX\Search\Contracts\SearchProvider;
+    use CoreX\Search\Query\Contracts\CandidateDriver;
     use Illuminate\Database\Eloquent\Model;
     
-    final class A61ProbeSearchProvider implements SearchProvider
+    abstract class A61ProbeCandidateDriver implements CandidateDriver
     {
-        public function capabilities(): \CoreX\Search\Data\SearchCapabilities
-        {
-            throw new \LogicException('probe');
-        }
-    
-        public function query(\CoreX\Data\Data\DataScope $scope, \CoreX\Search\Data\SearchQuery $query): \CoreX\Search\Data\CandidatePage
-        {
-            throw new \LogicException('probe');
-        }
     }
     PHP;
 
     file_put_contents($probePath, $probeContents);
 
-    $offenders = SourceScanner::filesMatching(SourceScanner::packagePath('search', 'src'), '/implements\s+SearchProvider\b/');
+    $offenders = SourceScanner::filesMatching(SourceScanner::packagePath('search', 'src'), SEARCH_BACKEND_IMPLEMENTATION);
     $offenders = array_values(array_filter(
         $offenders,
         static fn (string $file): bool => preg_match('/\buse\s+Illuminate\\\\Database\\\\Eloquent\b/', (string) file_get_contents($file)) === 1,
@@ -110,7 +98,7 @@ test('search provider eloquent import probe fails A61 with file path', function 
     unlink($probePath);
 
     expect($offenders)->toHaveCount(1)
-        ->and($offenders[0])->toContain('A61ProbeSearchProvider.php');
+        ->and($offenders[0])->toContain('A61ProbeCandidateDriver.php');
 });
 
 test('trusted context resolver does not read tenant id from the request payload (A99)', function (): void {

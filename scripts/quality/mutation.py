@@ -416,8 +416,11 @@ def php_environment(sandbox, fragment):
            'COREX_MUTATION_LOGS': str(sandbox.parent / 'processes')}
     require(re.fullmatch(r'[a-z0-9_]+_test', env['PGSQL_DATABASE']), 'Unsafe worker DB')
     env.pop('PGSQL_BUDGET_DATABASE', None)
+    env.pop('PGSQL_CONTROL_DATABASE', None)
     if fragment['package'] == 'operations':
         env['PGSQL_BUDGET_DATABASE'] = env['PGSQL_DATABASE'].removesuffix('_test') + '_budget_test'
+    if fragment['package'] == 'search':
+        env['PGSQL_CONTROL_DATABASE'] = env['PGSQL_DATABASE'].removesuffix('_test') + '_control_test'
     return binary, version, env
 
 
@@ -754,9 +757,10 @@ def run_fragment(fragment, root, output, ast, inputs, probe=False):
     snapshot(sandbox, root, test_directory)
     binary, version, env = php_environment(sandbox, fragment)
     db = pg_preflight(binary, sandbox, env, base)
-    if 'PGSQL_BUDGET_DATABASE' in env:
-        budget_env = {**env, 'PGSQL_DATABASE': env['PGSQL_BUDGET_DATABASE']}
-        db['budget'] = pg_preflight(binary, sandbox, budget_env, base, label='pg-budget')
+    for role, variable in [('budget', 'PGSQL_BUDGET_DATABASE'), ('control', 'PGSQL_CONTROL_DATABASE')]:
+        if variable in env:
+            store_env = {**env, 'PGSQL_DATABASE': env[variable]}
+            db[role] = pg_preflight(binary, sandbox, store_env, base, label='pg-' + role)
     files = ['packages/tenancy/src/Provisioning/Internal/DatabaseValue.php'] if probe else fragment['files']
     selected = {**fragment, 'files': files}
     versions = subprocess.check_output([binary, '-r', 'require "vendor/autoload.php"; echo json_encode(array_map('

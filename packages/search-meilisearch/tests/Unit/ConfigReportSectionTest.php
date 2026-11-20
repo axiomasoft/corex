@@ -18,18 +18,14 @@ final class ConfigReportSectionTest extends TestCase
         return [CoreServiceProvider::class, SearchMeilisearchServiceProvider::class];
     }
 
-    public function test_section_registers_in_report_order_and_redacts_its_secrets(): void
+    public function test_section_registers_in_report_order_without_boot_credentials(): void
     {
         $sections = iterator_to_array($this->app->tagged(ConfigReportSection::class));
         $owned = array_values(array_filter($sections, static fn (ConfigReportSection $section): bool => $section instanceof MeilisearchConfigSection));
         self::assertCount(1, $owned);
         self::assertSame(60, $owned[0]->order());
-        config(['corex-search-meilisearch.key' => 'a-private-section-secret']);
+        self::assertSame([], $owned[0]->secretKeys());
         self::assertSame(0, Artisan::call('packman:config:validate'));
-        self::assertStringContainsString('secret corex-search-meilisearch.key=present', Artisan::output());
-        self::assertStringNotContainsString('a-private-section-secret', Artisan::output());
-        config(['corex-search-meilisearch.key' => null]);
-        self::assertSame(0, Artisan::call('packman:config:validate'));
-        self::assertStringContainsString('secret corex-search-meilisearch.key=absent', Artisan::output());
+        self::assertStringNotContainsString('corex-search-meilisearch.key', Artisan::output());
     }
 }

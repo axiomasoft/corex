@@ -22,7 +22,8 @@ VALID = {
     'core/src/Audit/Internal/QueuedLogger.php': 'namespace CoreX\\Audit\\Internal; final class QueuedLogger {}',
     'search/src/SearchServiceProvider.php': 'namespace CoreX\\Search; use CoreX\\Search\\Index\\Internal\\Driver; '
                                             'final class SearchServiceProvider {}',
-    'search/src/Data/SearchQuery.php': 'namespace CoreX\\Search\\Data; final readonly class SearchQuery {}',
+    'search/src/Events/RootEvent.php': 'namespace CoreX\\Search\\Events; final readonly class RootEvent {}',
+    'search/src/Query/Data/SearchQuery.php': 'namespace CoreX\\Search\\Query\\Data; final readonly class SearchQuery {}',
     'search/src/Internal/Hydrator.php': 'namespace CoreX\\Search\\Internal; final class Hydrator {}',
     'search/src/Index/Contracts/IndexDriver.php': 'namespace CoreX\\Search\\Index\\Contracts; interface IndexDriver {}',
     'search/src/Index/Internal/Driver.php': 'namespace CoreX\\Search\\Index\\Internal; final class Driver {}',
@@ -30,7 +31,7 @@ VALID = {
                                                  'use CoreX\\Search\\Internal\\Hydrator; final class IndexCommand {}',
 }
 PLANTED = {
-    'R0': ('search/src/Data/Wrong.php', 'namespace CoreX\\Search; final class Wrong {}'),
+    'R0': ('search/src/Query/Data/Wrong.php', 'namespace CoreX\\Search; final class Wrong {}'),
     'R1': ('core/src/Unlisted/Helper.php', 'namespace CoreX\\Unlisted; final class Helper {}'),
     'R2': ('search/src/Index/Deep/Data/X.php', 'namespace CoreX\\Search\\Index\\Deep\\Data; final class X {}'),
     'R3': ('search/src/Index/Compiler/Plan.php', 'namespace CoreX\\Search\\Index\\Compiler; final class Plan {}'),
@@ -83,21 +84,21 @@ class ModuleLayoutGateTest(unittest.TestCase):
 
     def test_r5_resolves_namespace_aliases_and_relative_names(self) -> None:
         bodies = [
-            'namespace CoreX\\Search\\Data; use CoreX\\Search\\Index; '
+            'namespace CoreX\\Search\\Query\\Data; use CoreX\\Search\\Index; '
             'final class Uses { public function run() { return new Index\\Internal\\Driver(); }}',
-            'namespace CoreX\\Search\\Data; use CoreX\\Search\\Index as Feature; '
+            'namespace CoreX\\Search\\Query\\Data; use CoreX\\Search\\Index as Feature; '
             'final class Uses { public function run() { return Feature\\Internal\\Driver::class; }}',
-            'namespace CoreX\\Search\\Data; use CoreX\\Search\\{Index as Feature, Other}; '
+            'namespace CoreX\\Search\\Query\\Data; use CoreX\\Search\\{Index as Feature, Other}; '
             'final class Uses extends Feature\\Internal\\Driver {}',
-            'namespace CoreX\\Search\\Data; use CoreX\\Search\\Other, CoreX\\Search\\Index as Feature; '
+            'namespace CoreX\\Search\\Query\\Data; use CoreX\\Search\\Other, CoreX\\Search\\Index as Feature; '
             'final class Uses { public Feature\\Internal\\Driver $driver; }',
             'namespace CoreX\\Search; final class Uses { public Index\\Internal\\Driver $driver; }',
             'namespace CoreX\\Search; final class Uses { public namespace\\Index\\Internal\\Driver $driver; }',
-            'namespace CoreX\\Search\\Data; final class Uses { public \\CoreX\\Search\\Index\\Internal\\Driver $driver; }',
+            'namespace CoreX\\Search\\Query\\Data; final class Uses { public \\CoreX\\Search\\Index\\Internal\\Driver $driver; }',
         ]
         for body in bodies:
             with self.subTest(body=body), tempfile.TemporaryDirectory() as tmp:
-                rel = 'search/src/Data/Uses.php' if 'namespace CoreX\\Search\\Data;' in body else 'search/src/Uses.php'
+                rel = 'search/src/Query/Data/Uses.php' if 'namespace CoreX\\Search\\Query\\Data;' in body else 'search/src/Uses.php'
                 self.assertIn('R5', rules(build(Path(tmp), {rel: body})))
 
     def test_only_direct_laravel_bridge_is_composition(self) -> None:
@@ -122,7 +123,7 @@ class ModuleLayoutGateTest(unittest.TestCase):
 
     def test_strings_comments_and_nonclass_imports_are_not_references(self) -> None:
         source = '''<?php
-namespace CoreX\\Search\\Data;
+namespace CoreX\\Search\\Query\\Data;
 use function CoreX\\Search\\Index\\Internal\\Driver;
 use const CoreX\\Search\\Internal\\Hydrator;
 final class Uses {
@@ -132,7 +133,7 @@ final class Uses {
 }
 '''
         ns, declarations, refs = GATE.parse(source)
-        self.assertEqual('CoreX\\Search\\Data', ns)
+        self.assertEqual('CoreX\\Search\\Query\\Data', ns)
         self.assertEqual(['Uses'], declarations)
         self.assertEqual(set(), refs)
 

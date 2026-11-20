@@ -6,9 +6,6 @@ namespace CoreX\SearchIntl\Tests;
 
 use CoreX\Intl\IntlServiceProvider;
 use CoreX\Search\SearchServiceProvider;
-use CoreX\SearchIntl\Contracts\SavedViewLabelReader;
-use CoreX\SearchIntl\Internal\LocalizedFieldProjector;
-use CoreX\SearchIntl\Internal\SqlSavedViewLabelReader;
 use CoreX\SearchIntl\SearchIntlServiceProvider;
 use CoreX\SearchIntl\Tests\Support\SearchIntlTestCase;
 use Illuminate\Support\Facades\DB;
@@ -44,9 +41,8 @@ abstract class TestCase extends SearchIntlTestCase
     {
         parent::setUp();
 
-        $this->app['config']->set('corex-search-intl.enabled', true);
-        $this->app->scoped(LocalizedFieldProjector::class);
-        $this->app->scoped(SavedViewLabelReader::class, SqlSavedViewLabelReader::class);
+        // Testbench applies its environment after the first provider registration.
+        $this->app->register(SearchIntlServiceProvider::class, force: true);
     }
 
     #[Override]

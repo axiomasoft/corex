@@ -15,21 +15,22 @@ return new class extends PackmanMigration
     public function up(): void
     {
         $this->create('corex_search_rebuilds', function (Blueprint $table): void {
-            $table->string('rebuild_id', 128);
+            $table->uuid('rebuild_id');
             $table->primary(['rebuild_id'], 'corex_search_rebuilds_pk');
-            $table->string('lane_key', 128);
-            $table->string('from_generation', 128);
-            $table->string('to_generation', 128);
-            $table->string('restore_epoch', 64);
-            $table->char('schema_hash', 64);
-            $table->unsignedBigInteger('fence_revision');
-            $table->string('state', 24)->default('pending');
-            $table->string('swap_task', 255)->nullable();
-            $table->char('marker_hash', 64)->nullable();
-            $table->timestampTz('swapped_at', 6)->nullable();
-            $table->timestampsTz(6);
-            $table->unique(['lane_key', 'to_generation'], 'corex_search_rebuilds_lane_key_to_generation_uq');
+            $table->char('lane_key', 64);
+            $table->string('operation_key', 191)->nullable();
+            $table->bigInteger('from_generation')->nullable();
+            $table->bigInteger('to_generation')->nullable();
+            $table->string('state', 24);
+            $table->char('mapping_digest', 64);
+            $table->char('policy_digest', 64);
+            $table->bigInteger('start_seq')->nullable();
+            $table->bigInteger('barrier_seq')->nullable();
+            $table->uuid('rollback_of')->nullable();
+            $table->unique(['lane_key', 'operation_key'], 'corex_search_rebuilds_operation_uq');
         });
+        $this->db()->statement('create unique index corex_search_rebuilds_destination_uq on corex_search_rebuilds(lane_key,to_generation) where rollback_of is null');
+        $this->db()->statement("create unique index corex_search_rebuilds_live_uq on corex_search_rebuilds(lane_key) where state in ('scanning','catching-up','barrier')");
     }
 
     public function down(): void

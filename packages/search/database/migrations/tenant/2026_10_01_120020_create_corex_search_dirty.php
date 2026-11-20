@@ -15,18 +15,14 @@ return new class extends PackmanMigration
     public function up(): void
     {
         $this->create('corex_search_dirty', function (Blueprint $table): void {
-            $table->bigIncrements('sequence');
-            $table->string('lane_key', 128);
+            $table->char('lane_key', 64);
+            $table->bigInteger('seq');
+            $table->string('source', 128);
+            $table->string('event_id', 128);
             $table->string('record_id', 128);
-            $table->unsignedBigInteger('revision');
-            $table->boolean('tombstone')->default(false);
-            $table->string('restore_epoch', 64);
-            $table->char('schema_hash', 64)->nullable();
-            $table->char('payload_hash', 64)->nullable();
-            $table->timestampTz('submitted_at', 6)->nullable();
-            $table->timestampTz('completed_at', 6)->nullable();
-            $table->unique(['lane_key', 'record_id', 'revision'], 'corex_search_dirty_lane_key_record_id_revision_uq');
-            $table->index(['lane_key', 'submitted_at', 'sequence'], 'corex_search_dirty_lane_key_submitted_at_sequence_ix');
+            $table->string('operation', 16)->default('reread');
+            $table->primary(['lane_key', 'seq'], 'corex_search_dirty_pk');
+            $table->unique(['lane_key', 'source', 'event_id', 'record_id'], 'corex_search_dirty_event_record_uq');
         });
     }
 

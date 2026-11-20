@@ -3,17 +3,23 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib.util
 import json
 import os
 import re
+import secrets
 import signal
 import subprocess
 import sys
 import tempfile
 import time
+import uuid
 from contextlib import ExitStack
 from pathlib import Path
+from urllib.error import HTTPError
+from urllib.parse import urlsplit
+from urllib.request import Request, urlopen
 
 from consumer_repository import ConsumerError, assert_dist_install, load_json
 from release_candidate import CandidateError, git_bytes, resolve_commit
@@ -73,6 +79,94 @@ def read_witness(output: Path, pid: int) -> dict:
         if key not in report:
             raise ScenarioError(f"{output.name}: missing {key} evidence")
     return report
+
+
+def meilisearch_environment(version: str) -> tuple[dict[str, str], dict]:
+    host = os.environ.get("MEILISEARCH_HOST", "").rstrip("/")
+    endpoint = urlsplit(host)
+    if (endpoint.scheme != "http" or endpoint.hostname not in {"127.0.0.1", "::1", "localhost"}
+            or not endpoint.port or endpoint.username or endpoint.password or endpoint.path
+            or endpoint.query or endpoint.fragment):
+        raise ScenarioError("MEILISEARCH_HOST must identify the explicit loopback test service and port")
+    key = os.environ.get("MEILISEARCH_MASTER_KEY", "")
+    if not key:
+        raise ScenarioError("MEILISEARCH_MASTER_KEY must identify the disposable Meilisearch client credentials")
+    identity = meilisearch_request(host, key, "/version")
+    if not isinstance(identity, dict) or identity.get("pkgVersion") != version or not identity.get("commitSha"):
+        raise ScenarioError(f"a live Meilisearch {version} service is required")
+    namespace = f"corex_scenario_{secrets.token_hex(10)}"
+    return {
+        "MEILISEARCH_HOST": host,
+        "MEILISEARCH_MASTER_KEY": key,
+        "COREX_SCENARIO_MEILI_NAMESPACE": namespace,
+    }, {**identity, "namespace": namespace}
+
+
+def meilisearch_request(host: str, key: str, path: str, method: str = "GET") -> dict:
+    headers = {"Authorization": f"Bearer {key}"} if key else {}
+    with urlopen(Request(f"{host}{path}", headers=headers, method=method), timeout=5) as response:
+        body = response.read()
+        return json.loads(body) if body else {}
+
+
+def staged_meilisearch_targets(ledger: Path, namespace: str) -> set[str]:
+    targets = set()
+    if not ledger.is_file():
+        return targets
+    for line in ledger.read_text(encoding="utf-8").splitlines():
+        record = json.loads(line)
+        parts = record["parts"]
+        if (len(parts) != 14 or not all(isinstance(part, str) for part in parts)
+                or parts[0] != "corex.search.uid.v2" or parts[10:12] != ["meilisearch", namespace]):
+            raise ScenarioError("Meilisearch cleanup encountered a coordinate outside this scenario")
+        chunks = [part.encode() for part in parts]
+        uid = "cx_" + hashlib.sha256(b"".join(len(chunk).to_bytes(4, "big") + chunk for chunk in chunks)).hexdigest()
+        if uid != record["uid"]:
+            raise ScenarioError("Meilisearch cleanup encountered a noncanonical index coordinate")
+        targets.add(uid)
+    return targets
+
+
+def release_meilisearch(env: dict, ledger: Path) -> dict:
+    host, key, namespace = (env[name] for name in (
+        "MEILISEARCH_HOST", "MEILISEARCH_MASTER_KEY", "COREX_SCENARIO_MEILI_NAMESPACE",
+    ))
+    released = {}
+    for uid in sorted(staged_meilisearch_targets(ledger, namespace)):
+        credentials = []
+        for access in ("search", "index", "observe"):
+            credential = uuid.uuid5(uuid.NAMESPACE_URL, f"urn:corex:scenario-meili:{uid}:{access}")
+            try:
+                details = meilisearch_request(host, key, f"/keys/{credential}")
+            except HTTPError as response:
+                if response.code != 404:
+                    raise
+                continue
+            if (details.get("uid") != str(credential) or details.get("name") != f"CoreX scenario {namespace} {access}"
+                    or details.get("indexes") != [uid]):
+                raise ScenarioError("Meilisearch cleanup encountered a credential outside this scenario")
+            meilisearch_request(host, key, f"/keys/{credential}", "DELETE")
+            credentials.append(str(credential))
+        try:
+            meilisearch_request(host, key, f"/indexes/{uid}")
+        except HTTPError as response:
+            if response.code != 404:
+                raise
+            released[uid] = {"status": "absent", "released_credentials": credentials}
+            continue
+        task = meilisearch_request(host, key, f"/indexes/{uid}", "DELETE")["taskUid"]
+        deadline = time.monotonic() + 15
+        while time.monotonic() < deadline:
+            observation = meilisearch_request(host, key, f"/tasks/{task}")
+            if observation["status"] == "succeeded" and observation["indexUid"] == uid:
+                released[uid] = {"status": "deleted", "task": task, "released_credentials": credentials}
+                break
+            if observation["status"] in {"failed", "canceled"}:
+                raise ScenarioError(f"Meilisearch cleanup did not delete {uid}: {task}")
+            time.sleep(0.05)
+        else:
+            raise ScenarioError(f"Meilisearch cleanup did not confirm deletion of {uid}: {task}")
+    return released
 
 
 def run_actions(spec: dict, consumer: Path, fixture: Path, env: dict, evidence: Path, trace: dict) -> dict:
@@ -224,6 +318,7 @@ def prove_variant(spec: dict, fixture: Path, evidence: Path, root: Path, reposit
     }
     if "variant" in spec:
         receipt["variant"] = spec["variant"]
+    cluster = {}
     try:
         packages = profiles.expand_packages(profile, names)
         cell = {"id": case, "packages": packages, "php": interpreter["minor"], "laravel": spec["laravel"]}
@@ -238,6 +333,9 @@ def prove_variant(spec: dict, fixture: Path, evidence: Path, root: Path, reposit
                     "COREX_SCENARIO_CASE": case,
                     "COREX_SCENARIO_VARIANT": spec.get("variant", ""),
                 })
+            if meili := profile.get("meilisearch"):
+                cluster, receipt["meilisearch"] = meilisearch_environment(meili)
+                database.update(cluster)
             consumer, runtime, declared = profiles.install_app(
                 root, cell, profile, repository, ROOT, interpreter, binding["candidate_version"],
                 isolated=database, host_overlays=tuple(layers),
@@ -271,7 +369,16 @@ def prove_variant(spec: dict, fixture: Path, evidence: Path, root: Path, reposit
         receipt["error"] = str(error)
         raise
     finally:
-        write_json(evidence / "receipt.json", receipt)
+        try:
+            if cluster:
+                receipt["meilisearch"]["released"] = release_meilisearch(cluster, evidence / "barriers/meilisearch-targets.ndjson")
+        except (OSError, ValueError, KeyError, ScenarioError) as cleanup:
+            receipt["meilisearch"]["cleanup_error"] = str(cleanup)
+            if receipt["exit_code"] == 0:
+                receipt["exit_code"] = 1
+                raise
+        finally:
+            write_json(evidence / "receipt.json", receipt)
     return receipt
 
 

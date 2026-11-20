@@ -502,6 +502,46 @@
         "retryable": false
     },
     {
+        "category": "unsupported",
+        "code": "search.feature_unavailable",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-search",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "search.generation_changed",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-search",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "unavailable",
+        "code": "search.index_not_ready",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-search",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "search.invalid_cursor",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-search",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "search.witness_changed",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-search",
+        "path": null,
+        "retryable": false
+    },
+    {
         "category": "validation",
         "code": "webhooks.unknown_message_contract",
         "detail_keys": [],

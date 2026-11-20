@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Search;
 
 use CoreX\Search\Errors\Internal\PackageProblemDefinitions;
+use CoreX\Search\Index\Laravel\IndexBindings;
 use CoreX\Search\Internal\SearchManager;
 use CoreX\Search\Internal\SearchOptions;
 use CoreX\Search\Internal\SearchSchemaSets;
@@ -41,6 +42,7 @@ final class SearchServiceProvider extends ServiceProvider
         $this->app->singleton(SearchManager::class);
 
         SearchPortBindings::register($this->app);
+        IndexBindings::register($this->app);
 
     }
 

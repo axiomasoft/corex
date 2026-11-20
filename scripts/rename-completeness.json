@@ -3332,6 +3332,16 @@
         ],
         "namespaces": [
             {
+                "old": "CoreX\\Search\\Contracts",
+                "match": "prefix",
+                "kind": "retired"
+            },
+            {
+                "old": "CoreX\\Search\\Data",
+                "match": "prefix",
+                "kind": "retired"
+            },
+            {
                 "old": "CoreX\\CustomFields\\Contracts",
                 "match": "prefix",
                 "kind": "retired"

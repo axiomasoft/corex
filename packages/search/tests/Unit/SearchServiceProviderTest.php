@@ -2,117 +2,98 @@
 
 declare(strict_types=1);
 
-use CoreX\Context\Contracts\CurrentWorkScope;
-use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Context\Data\AccountRef;
-use CoreX\Context\Data\TenantContext;
+namespace CoreX\Search\Tests\Unit;
+
 use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\Data\Data\DataScope;
-use CoreX\Search\Contracts\SearchDriverRegistry;
-use CoreX\Search\Contracts\SearchProvider;
-use CoreX\Search\Contracts\SearchSchema;
-use CoreX\Search\Data\SearchSnapshot;
+use CoreX\CoreServiceProvider;
+use CoreX\Search\Errors\Exceptions\SearchFeatureUnavailable;
 use CoreX\Search\Exceptions\InvalidSearchConfiguration;
-use CoreX\Search\Internal\Postgres\PostgresSearchProvider;
 use CoreX\Search\Internal\SearchOptions;
 use CoreX\Search\Internal\UnavailableSearchProvider;
+use CoreX\Search\Projection\Contracts\SearchProjectionContributor;
+use CoreX\Search\Projection\Data\ProjectionContext;
+use CoreX\Search\Query\Contracts\CandidateDriver;
+use CoreX\Search\Query\Contracts\Search;
+use CoreX\Search\Query\Data\SearchQuery;
 use CoreX\Search\SearchServiceProvider;
 use CoreX\Tests\Support\CallerWorkScopeFixture;
-use Illuminate\Database\ConnectionInterface;
+use InvalidArgumentException;
 use Orchestra\Testbench\TestCase;
 
 final class SearchServiceProviderTest extends TestCase
 {
-    #[Override]
     protected function getPackageProviders($app): array
     {
-        return [SearchServiceProvider::class];
+        return [CoreServiceProvider::class, SearchServiceProvider::class];
     }
 
-    public function test_it_boots_without_database_schemas_sdk_credentials_or_network_activity(): void
+    public function test_boot_and_null_driver_are_lazy(): void
     {
-        expect($this->app->make(SearchProvider::class))->toBeInstanceOf(UnavailableSearchProvider::class);
-    }
-
-    public function test_null_driver_returns_unsupported_search_provider(): void
-    {
+        self::assertInstanceOf(Search::class, $this->app->make(Search::class));
+        self::assertInstanceOf(UnavailableSearchProvider::class, $this->app->make(CandidateDriver::class));
+        $f = new QueryFixture;
+        $f->bind($this->app);
         $this->app['config']->set('corex-search.driver', 'null');
         $this->app->forgetInstance(SearchOptions::class);
-
-        expect($this->app->make(SearchProvider::class))->toBeInstanceOf(UnavailableSearchProvider::class);
+        $this->expectException(SearchFeatureUnavailable::class);
+        $this->app->make(Search::class)->query($f->scope, new SearchQuery($f->entity));
     }
 
-    public function test_postgres_driver_with_weak_cursor_secret_throws(): void
+    public function test_weak_cursor_secret_fails_before_driver_factory(): void
     {
-        $this->app['config']->set('corex-search.driver', 'postgres');
-        $this->app->forgetInstance(SearchOptions::class);
+        $f = new QueryFixture;
+        $f->bind($this->app);
         $this->app['config']->set('corex-search.cursor_secret', 'short');
-
-        expect(fn (): SearchProvider => $this->app->make(SearchProvider::class))
-            ->toThrow(InvalidSearchConfiguration::class);
-    }
-
-    public function test_meilisearch_driver_without_adapter_throws(): void
-    {
-        $this->app['config']->set('corex-search.driver', 'meilisearch');
         $this->app->forgetInstance(SearchOptions::class);
 
-        expect(fn (): SearchProvider => $this->app->make(SearchProvider::class))
-            ->toThrow(InvalidArgumentException::class);
+        try {
+            $this->app->make(Search::class)->query($f->scope, new SearchQuery($f->entity));
+            self::fail();
+        } catch (InvalidSearchConfiguration) {
+            self::assertSame(0, $f->factoryCalls);
+        }
     }
 
-    public function test_registered_factory_is_not_called_until_the_active_owner_is_proved(): void
+    public function test_missing_adapter_is_diagnosed_in_verified_work(): void
     {
-        $this->app['config']->set('corex-search.driver', 'fixture');
+        $f = new QueryFixture;
+        $f->bind($this->app);
+        $this->app['config']->set('corex-search.driver', 'missing');
         $this->app->forgetInstance(SearchOptions::class);
-        $this->app->instance(TenantContextResolver::class, new class implements TenantContextResolver
-        {
-            public function current(): TenantContext
-            {
-                return new TenantContext(new AccountRef('search-test', 'search-test', 'active', [], []));
-            }
-        });
-        CallerWorkScopeFixture::bind($this->app);
-        $this->app->instance(CurrentWorkScope::class, new class implements CurrentWorkScope
-        {
-            public function assert(DataScope $scope, ?ConnectionInterface $connection = null): TenantContext
-            {
-                throw new ScopeContextMismatch('Fixture physical owner changed.');
-            }
-        });
-
-        $calls = 0;
-        $this->app->make(SearchDriverRegistry::class)->register('fixture', static function () use (&$calls): SearchProvider {
-            $calls++;
-
-            return new UnavailableSearchProvider;
-        });
-
-        expect(fn (): SearchProvider => $this->app->make(SearchProvider::class))->toThrow(ScopeContextMismatch::class)
-            ->and($calls)->toBe(0);
+        $this->expectException(InvalidArgumentException::class);
+        $this->app->make(Search::class)->query($f->scope, new SearchQuery($f->entity));
     }
 
-    public function test_it_selects_the_postgresql_provider_only_for_an_explicit_ready_profile(): void
+    public function test_factory_is_called_after_scope_verification_and_never_cached(): void
     {
-        $this->app['config']->set('corex-search.driver', 'postgres');
-        $this->app->forgetInstance(SearchOptions::class);
-        $this->app['config']->set('corex-search.cursor_secret', str_repeat('a', 32));
-        $this->app->instance(TenantContextResolver::class, new class implements TenantContextResolver
-        {
-            public function current(): TenantContext
-            {
-                return new TenantContext(new AccountRef('search-test', 'search-test', 'active', [], []));
-            }
-        });
-        CallerWorkScopeFixture::bind($this->app);
-        $this->app->instance(SearchSchema::class, new class implements SearchSchema
-        {
-            public function describe(DataScope $scope, string $entity): SearchSnapshot
-            {
-                return new SearchSnapshot(entity: $entity, schemaHash: str_repeat('b', 64), table: 'equipment', idColumn: 'id', searchableColumns: ['title']);
-            }
-        });
+        $f = new QueryFixture;
+        $f->bind($this->app);
+        $search = $this->app->make(Search::class);
+        $query = new SearchQuery($f->entity);
 
-        expect($this->app->make(SearchProvider::class))->toBeInstanceOf(PostgresSearchProvider::class);
+        try {
+            $search->query(CallerWorkScopeFixture::scope('other', null, 'other', str_repeat('b', 64)), $query);
+            self::fail();
+        } catch (ScopeContextMismatch) {
+            self::assertSame(0, $f->factoryCalls);
+        }
+        $search->query($f->scope, $query);
+        $search->query($f->scope, $query);
+        self::assertSame(2, $f->factoryCalls);
+    }
+
+    public function test_tagged_projection_derives_revision_and_rejects_duplicate_owners(): void
+    {
+        $f = new QueryFixture;
+        $this->app->instance(QueryFixture::class, $f);
+        $this->app->tag(QueryFixture::class, SearchProjectionContributor::class);
+        $context = new ProjectionContext($f->scope, $f->entity);
+        $part = $this->app->make(SearchProjectionContributor::class);
+        $first = $part->describe($context)->revision;
+        $f->revision++;
+        self::assertNotSame($first, $part->describe($context)->revision);
+        $this->app->tag(QueryFixture::class, SearchProjectionContributor::class);
+        $this->expectException(InvalidArgumentException::class);
+        $this->app->make(SearchProjectionContributor::class)->describe($context);
     }
 }

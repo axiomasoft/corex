@@ -15,16 +15,25 @@ return new class extends PackmanMigration
     public function up(): void
     {
         $this->create('corex_search_lanes', function (Blueprint $table): void {
-            $table->string('lane_key', 128);
+            $table->char('lane_key', 64);
             $table->primary(['lane_key'], 'corex_search_lanes_pk');
-            $table->string('generation', 128);
-            $table->unsignedBigInteger('committed_revision')->default(0);
-            $table->string('restore_epoch', 64);
-            $table->string('state', 24)->default('ready');
-            $table->unsignedBigInteger('claim_epoch')->default(0);
-            $table->string('active_task', 255)->nullable();
-            $table->char('request_hash', 64)->nullable();
-            $table->timestampsTz(6);
+            $table->string('deployment_id', 128);
+            $table->string('binding_id', 128);
+            $table->bigInteger('binding_generation');
+            $table->char('restore_epoch', 64);
+            $table->string('account_id', 128);
+            $table->string('account_incarnation', 128);
+            $table->string('workspace_scope', 140);
+            $table->string('entity', 128);
+            $table->string('backend', 128);
+            $table->string('cluster', 128);
+            $table->bigInteger('active_generation')->nullable();
+            $table->bigInteger('writer_generation')->nullable();
+            $table->bigInteger('last_generation')->default(0);
+            $table->bigInteger('last_allocated_seq')->default(0);
+            $table->bigInteger('next_seq')->default(1);
+            $table->uuid('rebuild_id')->nullable();
+            $table->bigInteger('freeze_seq')->nullable();
         });
     }
 

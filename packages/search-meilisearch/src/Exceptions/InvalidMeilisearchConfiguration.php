@@ -20,18 +20,14 @@ final class InvalidMeilisearchConfiguration extends CodedException
         );
     }
 
-    public static function invalidIndexUid(): self
-    {
-        return new self(
-            'corex-search-meilisearch.index_uid must be a non-empty string when corex-search.driver is "meilisearch".',
-        );
-    }
-
     public static function invalidKey(): self
     {
-        return new self(
-            'corex-search-meilisearch.key must be a non-empty string when corex-search.driver is "meilisearch".',
-        );
+        return new self('The Meilisearch credential for the selected index and access mode is empty.');
+    }
+
+    public static function missingCredentialProvider(): self
+    {
+        return new self('A scoped Meilisearch credential provider is required for the Meilisearch driver.');
     }
 
     public static function missingSdk(): self

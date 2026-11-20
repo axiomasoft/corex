@@ -807,23 +807,14 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-search-meilisearch.index_uid": {
-            "owner": "axiomasoft/corex-search-meilisearch",
+        "corex-search.cluster": {
+            "owner": "axiomasoft/corex-search",
             "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
+            "mode": "deployment",
+            "reloadable": "no",
+            "validation": "boot",
             "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex-search-meilisearch.key": {
-            "owner": "axiomasoft/corex-search-meilisearch",
-            "secret": "yes",
-            "mode": "secret",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
+            "notes": "Cluster identity recorded with each Search generation."
         },
         "corex-search.cursor_secret": {
             "owner": "axiomasoft/corex-search",
@@ -848,7 +839,7 @@
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
-            "validation": "unobserved",
+            "validation": "1..1000 at boot",
             "deprecated_aliases": "",
             "notes": ""
         },
@@ -860,6 +851,15 @@
             "validation": "unobserved",
             "deprecated_aliases": "",
             "notes": ""
+        },
+        "corex-search.retention_seconds": {
+            "owner": "axiomasoft/corex-search",
+            "secret": "no",
+            "mode": "product-policy",
+            "reloadable": "no",
+            "validation": "positive integer at boot",
+            "deprecated_aliases": "",
+            "notes": "Rollback retention for a generation after publication."
         },
         "corex-recurring-tasks.completion_capture.definition_ref": {
             "owner": "axiomasoft/corex-recurring-tasks",

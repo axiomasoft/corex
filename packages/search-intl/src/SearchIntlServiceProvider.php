@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\SearchIntl;
 
+use CoreX\Search\Projection\Contracts\SearchProjectionContributor;
+use CoreX\SearchIntl\Contracts\LocalizedSearchValues;
 use CoreX\SearchIntl\Contracts\SavedViewLabelReader;
 use CoreX\SearchIntl\Internal\LocalizedFieldProjector;
+use CoreX\SearchIntl\Internal\LocalizedSearchContributor;
 use CoreX\SearchIntl\Internal\SearchIntlOptions;
 use CoreX\SearchIntl\Internal\SqlSavedViewLabelReader;
 use Illuminate\Contracts\Config\Repository;
@@ -32,8 +35,12 @@ final class SearchIntlServiceProvider extends ServiceProvider
             return;
         }
 
-        $this->app->scoped(LocalizedFieldProjector::class);
         $this->app->scoped(SavedViewLabelReader::class, SqlSavedViewLabelReader::class);
+        $this->app->scoped(LocalizedSearchContributor::class, static fn (Application $app): LocalizedSearchContributor => new LocalizedSearchContributor(
+            projector: $app->make(LocalizedFieldProjector::class),
+            source: $app->bound(LocalizedSearchValues::class) ? $app->make(LocalizedSearchValues::class) : null,
+        ));
+        $this->app->tag(LocalizedSearchContributor::class, SearchProjectionContributor::class);
     }
 
     public function boot(): void

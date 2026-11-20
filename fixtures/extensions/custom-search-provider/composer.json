@@ -6,11 +6,20 @@
     "require": {
         "php": "^8.4",
         "axiomasoft/corex": "^2.0",
-        "axiomasoft/corex-search": "^2.0"
+        "axiomasoft/corex-search": "^2.0",
+        "illuminate/contracts": "^13.0",
+        "illuminate/support": "^13.0"
     },
     "autoload": {
         "psr-4": {
             "ThirdParty\\Search\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ThirdParty\\Search\\FixtureServiceProvider"
+            ]
         }
     },
     "minimum-stability": "dev",

@@ -174,6 +174,10 @@ final class ScenarioSetup
             [...$readGrant, 'field_id' => 'record'],
             [...$readGrant, 'field_id' => 'tenant_'.$role.'_label'],
         ]);
+
+        if (in_array($case, ['worker-scope', 'binding-restore'], true)) {
+            $database->table('scenario_field_grants')->insert([...$readGrant, 'field_id' => 'marker', 'field_use' => 'search']);
+        }
     }
 
     private static function seedRootAccount(Connection $control, Connection $target, string $account, string $role): void

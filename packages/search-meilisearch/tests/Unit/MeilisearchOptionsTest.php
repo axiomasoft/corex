@@ -5,30 +5,21 @@ declare(strict_types=1);
 use CoreX\SearchMeilisearch\Internal\MeilisearchOptions;
 use Packman\Config\Exceptions\InvalidConfiguration;
 
-it('passes on an empty environment because presence is a runtime requirement of the driver', function (): void {
-    $options = MeilisearchOptions::fromArray([]);
-
-    expect($options->host)->toBeNull()
-        ->and($options->indexUid)->toBeNull()
-        ->and($options->key)->toBeNull();
+it('passes on an empty environment before a driver is selected', function (): void {
+    expect(MeilisearchOptions::fromArray([])->host)->toBeNull();
 });
 
-it('accumulates type violations without revealing the key', function (): void {
+it('reports an invalid endpoint type', function (): void {
     try {
-        MeilisearchOptions::fromArray(['host' => 7, 'index_uid' => [], 'key' => 12345]);
+        MeilisearchOptions::fromArray(['host' => 7]);
         $this->fail('Invalid configuration was accepted.');
     } catch (InvalidConfiguration $exception) {
-        expect($exception->violations)->toBe([
-            'host: must be null or a string',
-            'index_uid: must be null or a string',
-            'key: must be null or a string',
-        ]);
+        expect($exception->violations)->toBe(['host: must be null or a string']);
     }
 });
 
-it('keeps the key behind a redacted reference', function (): void {
-    $options = MeilisearchOptions::fromArray(['key' => 'local-test-key']);
+it('stores only the endpoint in the adapter options', function (): void {
+    $options = MeilisearchOptions::fromArray(['host' => 'http://127.0.0.1:7700']);
 
-    expect($options->key?->reveal())->toBe('local-test-key')
-        ->and((string) $options->key)->toBe('[redacted]');
+    expect(get_object_vars($options))->toBe(['host' => 'http://127.0.0.1:7700']);
 });

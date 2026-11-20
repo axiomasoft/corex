@@ -4,70 +4,118 @@ declare(strict_types=1);
 
 namespace ThirdParty\Search;
 
-use CoreX\Data\Data\DataScope;
-use CoreX\Data\Data\RecordRef;
-use CoreX\Search\Contracts\IndexDriver;
-use CoreX\Search\Contracts\SearchProvider;
-use CoreX\Search\Data\Candidate;
-use CoreX\Search\Data\CandidatePage;
-use CoreX\Search\Data\IndexBatch;
-use CoreX\Search\Data\IndexOutcome;
-use CoreX\Search\Data\IndexSubmission;
-use CoreX\Search\Data\IndexSwap;
-use CoreX\Search\Data\SearchCapabilities;
-use CoreX\Search\Data\SearchQuery;
+use CoreX\Search\Index\Contracts\IndexDriver;
+use CoreX\Search\Index\Data\IndexBatch;
+use CoreX\Search\Index\Data\IndexDocument;
+use CoreX\Search\Index\Data\IndexReceipt;
+use CoreX\Search\Index\Data\IndexTarget;
+use CoreX\Search\Index\Enums\IndexAction;
+use CoreX\Search\Index\Enums\IndexOutcome;
+use CoreX\Search\Projection\Data\FieldWitnesses;
+use CoreX\Search\Projection\Data\ProjectionSelection;
+use CoreX\Search\Query\Contracts\CandidateDriver;
+use CoreX\Search\Query\Data\Candidate;
+use CoreX\Search\Query\Data\CandidatePage;
+use CoreX\Search\Query\Data\CandidateRequest;
+use CoreX\Search\Query\Data\DriverCapabilities;
+use LogicException;
 
-final class MemoryDriver implements IndexDriver, SearchProvider
+final class MemoryDriver implements CandidateDriver, IndexDriver
 {
-    /** @var array<string, array<string, null|scalar>> */
-    private array $documents = [];
+    /** @var array<string, array<string, IndexDocument>> */
+    private array $indexes = [];
 
-    public function capabilities(): SearchCapabilities
+    /** @var array<string, true> */
+    private array $receipts = [];
+
+    public int $queries = 0;
+
+    public function capabilities(): DriverCapabilities
     {
-        return new SearchCapabilities(fullText: true);
+        return new DriverCapabilities(text: true, scopedCorpus: true);
     }
 
-    public function query(DataScope $scope, SearchQuery $query): CandidatePage
+    public function candidates(CandidateRequest $request): CandidatePage
     {
+        $this->queries++;
+        $target = $request->generation;
+        $docs = $this->indexes[$target->uid] ?? throw new LogicException('The fixture index is unavailable.');
+        uasort($docs, static fn (IndexDocument $a, IndexDocument $b): int => strcmp($a->record->id, $b->record->id));
         $matches = [];
 
-        foreach ($this->documents as $id => $document) {
-            if (($document['entity'] ?? null) !== $query->entity) {
+        foreach ($docs as $documentId => $doc) {
+            $id = $doc->record->id;
+
+            if (strcmp($id, $request->position ?? '') <= 0 || ($request->recordIds !== null && ! in_array($id, $request->recordIds, true))) {
                 continue;
             }
+            $parts = array_intersect_key($doc->values->values, array_fill_keys($request->searchFields, true));
 
-            if (! str_contains((string) ($document['text'] ?? ''), $query->text)) {
+            if ($request->text !== null && ! str_contains(implode(' ', $parts), $request->text)) {
                 continue;
             }
+            $witness = $request->text === null ? null : FieldWitnesses::capture($doc->values, new ProjectionSelection($request->searchFields));
+            $matches[] = new Candidate($target, $doc->record, $documentId, $witness);
 
-            $matches[] = new Candidate(new RecordRef($query->entity, $id));
+            if (count($matches) === $request->limit) {
+                return new CandidatePage($matches, $id);
+            }
         }
 
-        return new CandidatePage($matches, null, false);
+        return new CandidatePage($matches, null);
     }
 
-    public function submit(IndexBatch $batch): IndexSubmission
+    public function submit(IndexBatch $batch): IndexReceipt
     {
-        foreach ($batch->documents as $document) {
-            $id = $document['id'] ?? null;
+        $uid = $batch->target->uid;
+        $receipt = self::taskId($batch);
 
-            if (! is_string($id) || $id === '') {
-                continue;
-            }
-
-            $this->documents[$id] = $document;
+        if (isset($this->receipts[$receipt])) {
+            return new IndexReceipt($receipt);
         }
 
-        return new IndexSubmission('task-'.$batch->generation, $batch->generation);
+        if ($batch->action === IndexAction::Create) {
+            $this->indexes[$uid] ??= [];
+        } elseif ($batch->action === IndexAction::Drop) {
+            unset($this->indexes[$uid]);
+        } else {
+            if (! isset($this->indexes[$uid])) {
+                throw new LogicException('Create the fixture index first.');
+            }
+
+            foreach ($batch->documents as $doc) {
+                $id = $batch->target->documentId($doc->record);
+
+                if ($batch->action === IndexAction::Upsert) {
+                    $this->indexes[$uid][$id] = $doc;
+                } else {
+                    unset($this->indexes[$uid][$id]);
+                }
+            }
+        }
+        $this->receipts[$receipt] = true;
+
+        return new IndexReceipt($receipt);
     }
 
-    public function status(IndexSubmission $submission): IndexOutcome
+    public function lookup(IndexBatch $batch, ?IndexReceipt $receipt): IndexOutcome
     {
-        return new IndexOutcome($submission->generation === '' ? 'failed' : 'ready');
+        $id = self::taskId($batch);
+
+        return $receipt?->taskId === $id && isset($this->receipts[$id])
+            ? IndexOutcome::Confirmed
+            : IndexOutcome::Unknown;
     }
 
-    public function swap(IndexSwap $swap): IndexSubmission
+    public function canary(IndexTarget $target): bool
     {
-        return new IndexSubmission('swap-'.$swap->toGeneration, $swap->toGeneration);
+        return isset($this->indexes[$target->uid]);
+    }
+
+    private static function taskId(IndexBatch $batch): string
+    {
+        return 'memory-'.hash('sha256', json_encode([
+            $batch->target->uid, $batch->submissionId, $batch->action->value, $batch->documents,
+        ], JSON_THROW_ON_ERROR));
     }
 }

@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace CoreX\Search\Internal;
 
-use CoreX\Data\Data\DataScope;
-use CoreX\Search\Contracts\SearchProvider;
-use CoreX\Search\Data\CandidatePage;
-use CoreX\Search\Data\SearchCapabilities;
-use CoreX\Search\Data\SearchQuery;
+use CoreX\Search\Errors\Exceptions\SearchFeatureUnavailable;
+use CoreX\Search\Query\Contracts\CandidateDriver;
+use CoreX\Search\Query\Data\CandidatePage;
+use CoreX\Search\Query\Data\CandidateRequest;
+use CoreX\Search\Query\Data\DriverCapabilities;
 use Packman\Attributes\Internal;
 
 #[Internal]
-final class UnavailableSearchProvider implements SearchProvider
+final class UnavailableSearchProvider implements CandidateDriver
 {
-    public function capabilities(): SearchCapabilities
+    public function capabilities(): DriverCapabilities
     {
-        return new SearchCapabilities(fullText: false);
+        return new DriverCapabilities;
     }
 
-    public function query(DataScope $scope, SearchQuery $query): CandidatePage
+    public function candidates(CandidateRequest $request): CandidatePage
     {
-        return new CandidatePage(candidates: [], nextAfterId: null, truncated: false);
+        throw SearchFeatureUnavailable::unsupported();
     }
 }

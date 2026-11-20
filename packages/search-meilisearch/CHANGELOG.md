@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased] — scoped Search generations
+
+- Use typed candidate and indexing drivers with immutable scoped UIDs and exact asynchronous task receipts. Search allocates the UID and sets the cluster through `corex-search.cluster`.
+- Replace the fixed adapter `index_uid` and engine swap with SQL generation publication. Candidate queries scan approved fields and an optional authorized record corpus without exact counts or facets.
+- Replace the shared configuration key with a host credential provider for exact UID and Search, Index, or Observe mode. Attach typed text field witnesses to candidates for current owner verification.
+
 ## Unreleased — Packman governance
 
 - Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.

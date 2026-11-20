@@ -14,7 +14,8 @@ CoreX 2.0 перевыпускает 20 пакетов на общей Composer-
 | 1 | §§12.1–12.3, 14.1–14.2 · `DataScopeFactory` выдаёт scope v3 от текущего principal. `StoredWorkRunner` сверяет proof владельца и immutable reference. Хост хранит допуск, tickets и использованные epochs вне tenant backup. `DataScopeAuthorizer` проверяет typed use. Scheduler сохраняет scope, версию обработчика и digest запроса. | `worker-scope` проверяет A→B→A, вложенные jobs, root sweep и очистку контекста. `binding-restore` проверяет rebind, restore и ожидание активных tickets. `workspace-sweep` проверяет W1/W2, рестарт после claim и rollback на просроченном token. |
 | 2 | §§12.1–12.3, 13.5, 14.2–14.3 · Envelope v2 с подтверждённым происхождением, явная connection у Inbox/Outbox и Workflow capture. Notifications возвращает typed page и exact/unavailable count. Webhook replay имеет собственный effect key. Внешний control store хранит provider evidence. | Same-connection rollback и дедупликация на PostgreSQL, отзыв доступа к related record, потеря подтверждения у провайдера и сверка исходного effect key. |
 | 3 | Custom Fields (§§13.1–13.2, 13.5) · `FieldValues`, `FieldSchemas`, `FieldCatalogue`, `FieldFilter` и версионированный `FieldType`. Слоты JSONB по FieldId и storage revision. Три факта Fields v2. | Установленный `vendor.type`, scoped write/read/filter, backfill с конкурентной записью, смена head и восстановление CIC на PostgreSQL. |
-| 4–5 | Search и Search Intl (§§13.3–13.5) · Прикладной `Search::query()`, отдельные SPI projection, candidate и index, новая cursor grammar. Fields подключаются мостом. | Драйверы PostgreSQL и Meilisearch, ACL фильтрации и полей, смена поколения и независимый install Search. |
+| 4 | Search и Search Intl (§§13.3–13.5) · Прикладной `Search::query()`, отдельные SPI projection, candidate и index, opaque cursor, SQL-указатель поколения. | Драйверы PostgreSQL и Meilisearch, отдельные ACL поля и способа использования, барьер H/H+1 и независимый install Search. |
+| 5 | Search Custom Fields (§§13.1–13.5) · Мост связывает факты и effective schema полей с Search projection. | Установочные профили с мостом и автономный Search, локализация, изменение поля и смена mapping. |
 | 6 | Tasks, Recurring Tasks, Workflow (§14.3) · Typed capture admission и scoped receipts, `TaskPlanning` и `transition()`. Completion contributor живёт в Tasks Workflow. | Три установочных состава, первый Done, повторный Done после reopen, конфликт и rollback. |
 | 7 | Access/Core, Media и Bulk (§§14.1, 14.4–14.5) · FQCN `PrincipalIdentity` и scanner tooling, Packman discovery, scoped lifecycle, `MediaAttachments`, durable `requestConversion()` и host SPI `BulkExecutor`. | Fencing и lifecycle blockers, readiness обязательных интеграций, standalone Operations и host-адаптер Import/Export. |
 | 8 | Operations и Tools (§14.4) · `HttpOperationDispatcher`, REST v2 с типизированными metadata, host-mounted MCP на общем `OperationInvoker`. Старые HTTP маршруты и произвольный version matcher удаляются. | API v2 carriers, маршруты и MCP transport, replay authorization, Equipment и FlexCRM из split archives. |
@@ -30,6 +31,8 @@ Production FlexCRM и Equipment deployments, частные расширения
 Custom Fields регистрирует версии codec и определения через Tagged-провайдеры. Хост, которому нужен concurrent DDL, подтверждает прямой PostgreSQL writer и управляемую схему через `AccountConnectionResolver`. Опции `corex_fields_ddl_transport=direct-v1` и `corex_fields_ddl_namespace` проверяются вместе с текущим физическим scope. `corex:custom-fields:work` выполняет одну ограниченную фазу по умолчанию. Владелец удерживает session advisory lock до записи результата под актуальным claim. В конфигурации PHPStan зафиксированы ровно два срабатывания правила для pooled connections в `PostgresDdlExecutor.php`.
 
 Стабильные коды Custom Fields сериализуются по грамматике закреплённого Packman. Именам плана `schema-revision-mismatch`, `field-type-unavailable`, `idempotency-conflict` и `claim-lost` в публичном каталоге соответствуют `custom-fields.schema_revision_mismatch`, `custom-fields.field_type_unavailable`, `custom-fields.idempotency_conflict` и `custom-fields.claim_lost`.
+
+Search хранит активное поколение и верхнюю границу барьера в SQL. `corex-search.cluster` связывает поколение с backend, а `corex-search.retention_seconds` задаёт окно для возврата к сохранённому поколению. Хост Meilisearch разрешает credential по проверенному `IndexTarget` и роли запроса, записи или сверки. Search проверяет актуальный witness каждого поля, участвующего в поиске по тексту, перед выдачей результата.
 
 ```bash
 python3 scripts/distribution/compare_contracts.py \
@@ -51,11 +54,87 @@ Diff содержит SHA и digest каждого прочитанного но
       "scripts/distribution/tests/test_release_candidate.py",
       "scripts/distribution/tests/test_profile_proof.py"
     ],
-    "group": {
-      "category": "install-edge",
-      "count": 79,
-      "digest": "b85097337ea9b480b65c33eb943866ad63268a41bfef1eabb989bdf77f561e59"
-    }
+    "changes": [
+      "01477fbf06dc8ff1daf5dc82f26b791646651c14f4690119ad76881d3b073e9a",
+      "041bf4d0b79f0f97ce81ad7562dbb30f6848ddf87ae877c4ffb623de09e48d93",
+      "0afdad0ac66c57f90abb959c356fb4e9805c9c6d077390a488f79b5c7390c706",
+      "0b47325b9e3f5d8f2bbdff0536eaeafd3a7bbd3f59230099245dcc2ce673f45a",
+      "0c26ffb0e51772af10b38289fa5cf961f72f873e540c3a7e6038e6ab890ee7c5",
+      "1099f46878b0fc57914efc0d90286b221735042f37401cb9d84c0fc2db96bc4a",
+      "130350d46b5f3ab7df6767a0e0444fc20e6dc3c72b88a6ee2393245f2964a11e",
+      "1567d7edc61ad34e4c822bc56209f234494e7c364f1e6c1237409defd9b0bbfe",
+      "166911d0169b93dd531bb7818246218dd6c4af2bb5259f9b651f4df028dd1fdf",
+      "186753df2c03d95667837f68b149a309bc4ca85416d420725f5b6af707cb2e81",
+      "1f962a58c2558728f1675c5a3ef02cc9b0e08afd3b513f9e0ebde4b484d479ea",
+      "1ffa75dcbc6baebb380562cef50506009fe98a89e28615fd05596f1a5b289458",
+      "204bb1ac12239741d0257efc9e14c9cc874a01e65c5b23b6086686efe4023737",
+      "2265ef4cc52b2724931b9a55e7f4a20b5cd14ffdce4cef0ebfa6929769d09632",
+      "25bd5b562dbddbbba0baa2fed5654585c22f6a424b4b60009ffaaaaa7017c999",
+      "260bd6db895bc975d9d6e810f7963cb1537b54aa1ee126aa9d0baf6290c2fd41",
+      "263dffc64e56dd40351a2d45de6035f5e4216f950a0ae3a711c04196531b3368",
+      "2873669b9960d1625763eda8f94afe4e4db02753709d1815cb2e737ba48b64b6",
+      "28e622b321b8f71a3d27a64aea1ddc95574470a524d87087ee8a2b51299f68af",
+      "2a6da9b40b116f8fc37bb4436e9c7f3674ebece95905caf48136e9a664518fc4",
+      "2ed44fb214e3842dcc526ab082dee7e8eb7527316955c0467cc05f97a05feceb",
+      "2ff8fbb08b7f4c51f3b94dfdcbfad3593661da255b092528e2433d547bed4752",
+      "30855e50540b57ba44a323e6f2402e6704221d225235ec421df081d0d475c080",
+      "3a3c3be833195b89fc8d903dabf75047718542ad39016b8ccd8fd080f426e928",
+      "3c3690fa01891caea137e8338951ab0a2fdc35e3812e0c11faf487db3e2f6bab",
+      "3ccbada12bc5bd56f28046256ab9e9a9b277b63b7e3513b0aee089366a98d3ba",
+      "476ef00f7a81a55c9298ee9b4a4ca63f93bf048d146a8279d44f8323c2849b5f",
+      "4f7b854a980ff3ec0702b718b6098362434b4aaa5eccab889b5a927fe23ab123",
+      "50c4e46b0646e33606d65f34f0f279082e698e785f1c33c0d9100e547d1ba993",
+      "59aeba5df3eeff70a5e5a5a4865de7f840d8ddcde4d4f4c93999f263c3f74545",
+      "5a5a72d6f67ed365ae61c4b159005e9cd7460b90471721d6427a4b019f87646f",
+      "615a10b2adb60a284f1f23566951b4cb243f582fd2e0f11c707426a98f50723f",
+      "67220a5f63f389cacbeeff6ae726820f82d1c8585b1417e52d78b6d27edf5b42",
+      "681dc64ddca7cc7c93368d095c67c33ae13efb288c54cd8c0f14c44cb866e14d",
+      "706a713815dd5778d70ab559d874c108db02f0bbea8871879c43b968bebf01d5",
+      "7f05df30eccde3bfe55e50f1bd5a135dd8014568868a5502724034bcc5f209a1",
+      "81600197d7371326cf56a2dc3d3cd55dafb7522fd42a0d1a9f24e06a443bf870",
+      "8323e349b2c13fa4296d44ab0fc8380edb572ef2bd0b6946251031a673562235",
+      "84ceec0887b1c137a7de5c66888fd77d83590c0170d475e04d3a460681c82c37",
+      "85ff9f9dab18c792142f0505f9564bd35d310982ef37410680bbe7a03f7e342d",
+      "893b04474683b7927a6e5e3c8da5be16ef05180ef2de463c2444d6904001261a",
+      "8c6f7865df4e578398d9a63f0999216f0406abfe90c344dc62b936628b3294db",
+      "8c7bc3ea97c30da3b91a6c9ad17d81987b58fafef90d71aaab36033415f80e1a",
+      "8cc5d62cf70960bab2576b550f38ff65696e91bbe75c4e8642bb422da9863141",
+      "8e122a9b3e060be279b9c268cbcb10d9675edcf65c1779bac4d68207b7693058",
+      "8f82e458ade050c72682ebe3073dadeb623a2d464f67e419812d036b7f3e52d2",
+      "96de510fd66a9e98ab86b6e7902293dbe9ef70049e58c81caf28a4697da5a139",
+      "9722035e2bdecf3a90662cf64e2bf4e7e05861698ec37b151dafb796bf637937",
+      "a1d4073ab94c5788529d00f48098df4d50c4ebd87d35030b1bef790f4fedf60b",
+      "a280111fe3969c70d0e9f935599e2f103f160548addc765e0de3a97ea790f298",
+      "a5292b01b68f429200c4dabd752b0dfd69558c5c709a2dd31b914f52abd68bb5",
+      "b12bf7bcf813ecc778bb9a590c0f700d6146a5e2cb8a8f66840eae3f7362ef2d",
+      "b1a1923cba271978edd512b1a6e9aac057a9c621d5c30a31fe6cd9702d7191a7",
+      "b1deadefd96ea10c1c213471707f39aabd5d18e1f3f9e65ca5c5598bd62fe846",
+      "b631fae64ca23b07e9e2ef4cef2c8dc01ccc367d6095f7f3f93ce16266424f28",
+      "b7a0e373880258d8d799689af422617ea43855695b7af2dabab424c749fbe2e3",
+      "b875f0d2f8777ee8df67258f1a1754cde1a73ccfbe3185d57c0c03aa1b937c9a",
+      "bcd0b067f87e91091b7d5fdadc8f83ef2381a9c7ef1ea8098c104f5a2018bc64",
+      "beb3956b03e601b1814341ecf7b8ac4f527a9bdba88427728bc08e4c557e0beb",
+      "c0167cd6e6e42202ca7479068bd433e6a061fa55ae7a569b7ef38c609f34064f",
+      "c1ff69d2e7540c116f13246e3fb264a3c729cbbad12b6ead75f1b064033f8409",
+      "ce0f765469444d1c34d6b73df003cb9c17e916b529d963e21c3e3ae34d511fd1",
+      "cf15b696879a5c83510f5aae6f9fb0338ce5fab5e431327891cd23cce890c3a6",
+      "d17fe087e834627f9f816cb70e93896998aaad633c8159c6f1cf1bd537524129",
+      "d1bc6685012343a6d5ef5225e3b47b9c60976ce38208093e1ce1892e04e5a334",
+      "d61b0b567ddec31e1d734d78b7ef9194c097535db27e8e08a1edcd22db0514a4",
+      "de1145de3c684d2bdc97773e09e5c30b362ca7ad9671c6f1300e748fa763838a",
+      "dee992eb4d17f9b8aa4db9f8d319c185ba1b4f2ba1f4ddcc7998b64c52c8fb68",
+      "dfca441c9bdfe7f5345d76b8e2301bb37383961dd516792de86181fa047d01a4",
+      "e1148078432f9a90c57ffa35975422f91d25d16bd5397c740c388e8f3b0f39f1",
+      "e1bd63d51fd1e842db652f2622c0f964eadfac329862dd787b5fa6627dbc5ed0",
+      "e1d5c9995451868a0fd0a40d74130d99a6316cefbccf98818eea84ee946d1012",
+      "e551d038bd1e454e3070a42e674cb9a4df43d5c8ab7e9f2c2f68a1ed1c6ccff9",
+      "e6985cf62bdc660a1cf159cc34fa567bae81db3ef3349d8d7f6a6dc69f57bf48",
+      "e7e46ede49aed03f4baaa19f82379f89856528517512b1783713719755f91322",
+      "f352074c32645f5181984f1b0e5deddc1de16a3d168c6cbc68fd896ae8261c87",
+      "f5f43f9b6f99fbff895f2dcb2bad1e755dfd243adf5b86f4c53c970352319a2b",
+      "f9439ccc7808b8f9aa348c96843af66442d46bd67cf3939d4ddbef0ec7d07f6c",
+      "fb9c1ddfce67e08826e59785beac81d47137bfac5d8adc905a7c0c1953173890"
+    ]
   },
   {
     "id": "composer-resolution-2",
@@ -489,6 +568,83 @@ Diff содержит SHA и digest каждого прочитанного но
     "changes": [
       "71f3f96767795c3ce96613ed5823624d67429d4ce3e8e56933ff44627b7a92f5",
       "9dade62c59b2d2791db8e464a04a8bde36f0636b87a7b03e37d395a5ece85e7a"
+    ]
+  },
+  {
+    "id": "authorized-search-query",
+    "plan": "§§7, 11.4, 12.3, 13.3 — typed Search query, per-use policy and authenticated cursors",
+    "tests": [
+      "packages/search/tests/Unit/PolicySearchHydratorTest.php",
+      "packages/search/tests/Unit/AuthorizedPostgresTest.php",
+      "tests/Distribution/fixtures/scenarios/search-rights/probe.php"
+    ],
+    "changes": [
+      "017773ab7ce2632d38e69bc58c309e175356290b59d73400915519fd5003cb03",
+      "1491732b61c1b45fd26ab8f49e3a45049c05f4a264a3893270a8e79d0ca4d961",
+      "312dbeeddce6013b1fb196fcf30f1776cd8e2eb79dfc7e38713c5c12a460ce98",
+      "3e079c2cfa25951c60e29c7b2207fb7149bdf574bd7d15f8e9e06d5a834705db",
+      "4a0343a565dd6f47db4a4885ec5871fb4bbc4cf76edcd6f0d6fd0a82fb836c0f",
+      "58b8bbcd91e88376cc9d85276d5f2cba92a66b806e2057c4272c1375f2959f1b",
+      "5fe36448f976b51262c3d769a39059476a6294075db2ee9111a1cc4a9390d3c4",
+      "6416c5b8dbf4c12fc95f80035afb9b8a36bd6c1f2b3937a2fbf1439216bc4d96",
+      "686776e95fe4e217b6435431cc6a35e4b6bd740b0aa5ef772a9a36da62ee57e9",
+      "6e86ba29a662ac15d1eef66edca7b63f0f617d2f9a5ae8cfa2714fb1d74bfc17",
+      "706ed0d23f630deb36995fd208a666cb701f7b0463ad0b88fb18b057954701a5",
+      "77513de8a82956de4b09d4760c8b98c86b144f10a3b93c0c9945a39c6158c4ee",
+      "7a2a06dde6133c784a5fd2287c453856ba6c7f8768e2f439a2a8f39982f88a26",
+      "7dfed9519af3f757cc3fa5996d863f17ab42f153857aa10a4aaee47df8372c66",
+      "8303b1553a00491a18a78a52c6b913a975d3a8fc38b3f3c1683c450848bffbba",
+      "84b32ca4e5f7f091eea0aa2cf13cb29a4660f494909cd60ce7115d6074d92e4c",
+      "8f0a3b9446d3cc385edff572ce05e6441086ae9973803ec033a36cdc67739d83",
+      "b647d678e51f2e34a96f48e22cab65949a0f359fc6ee6b63db96a52534c98992",
+      "c30f81c0b56c235febb87b211f5963a34a95b39c3facd26c89af85877651e592",
+      "c8ce88a4b8b51cbbfb6a216eb943b6d8af48b68e5813bf4d95daf95821cc4726",
+      "cad759b7d5853636f2768084ac3e8af3b568a12bc44e5decee2077fffd27f7d4",
+      "d449f68dc6c98ed23569765bf7443dbe7aaf2b055a217b14db90156433551b57",
+      "ef8ad3c401d71172f9cb8afb8ab4b1e5626d99582d57190e7ca56f5ef5af4939",
+      "eff15a1694a5b07f21e994b24265fba99fcc5322d09c6f658cdc6ea96890d5fd"
+    ]
+  },
+  {
+    "id": "durable-search-generations",
+    "plan": "§§12.1–12.3, 13.4–13.5 — owner journal, immutable UIDs and SQL publication barrier",
+    "tests": [
+      "packages/search/tests/Pg/IndexLifecyclePgTest.php",
+      "tests/Distribution/fixtures/scenarios/generation/probe.php"
+    ],
+    "changes": [
+      "0b2b389f984a2ec783134d98f9cf4deea306509b3215e0ea72c34f57cb4620b4",
+      "43112089074bb529bcb1548eda62e7608e18de2d32152b73e8de605e2a718fa1",
+      "4e442bd2e6683298eb375ea0b97a6c59a4c7232df0117f9e6c403d0e0bdca072",
+      "5877373dcccf93a2a665c4cc442449a038f75f2d48527b02fce3b4086c23c8fd",
+      "62316bcd000deb4779f230b4c36ccbe43bae395ed3050dd047b138ddc32807e7",
+      "be9c7ee4f786c5ff17d89586c28734487095402159c9c23823d72803f238cd63",
+      "d52ac69934c8fb088f7117d87d23ec73706d19a35b3a161c47bba886587b11b8",
+      "d86ca69a2395a4c5f208e2efe722cbf4608922455e2f37f70d28a11897e13db0",
+      "ec67f4c4fd6acb95e88d955335e9ff7046e039d6ecf1ad413fceed227ecd3ef9"
+    ]
+  },
+  {
+    "id": "typed-search-drivers-and-locale",
+    "plan": "§§7, 11.4, 13.3–13.5 — PostgreSQL and Meilisearch drivers and optional locale projection",
+    "tests": [
+      "packages/search/tests/Pg/PostgresSearchProviderTest.php",
+      "packages/search-meilisearch/tests/Feature/IndexLifecycleTest.php",
+      "packages/search-intl/tests/Unit/OptionalBridgesTest.php",
+      "tests/Distribution/fixtures/scenarios/search-rights/probe.php",
+      "tests/Distribution/fixtures/scenarios/generation/probe.php"
+    ],
+    "changes": [
+      "0853d1baef521a4334148be21865a15a159475ed9f4ab30a8b7e7da1d10094f8",
+      "0dc12c075aa480383d1c33973f36aa23e02f22f3141f06f9427278a7f9f1da2f",
+      "138aa64fa10bc6d1419c93b5d8258b9b639e1673bde804a2d8a502ec210c7d2c",
+      "1e671899ca864e53466903f2520f85932b9d4b6d3d6fcf68b4e2e599623a1082",
+      "25a9b24d1983783ffc1243677183458b743f8eac721d713e2069457ea8c7dcac",
+      "30b0f306e795c66be01430d5f422ffdea6a0efd959f4bb49c53fa2fc15aee439",
+      "7a80af832e677f4516a8302262316d85f755fbff745a4c2811454e01549a18bc",
+      "7b581ad42c39c51adae12e0438205b8a60c0800aee3051640ce749aa794f64fb",
+      "b288b07785aad29e2535f1b910d4679ec31fea3c33905ec63b8d1b90f9302342",
+      "f1310871652b2ce39f1d15ec0f18ac770959e4b707aa72b0c3748dee61ff8a69"
     ]
   }
 ]

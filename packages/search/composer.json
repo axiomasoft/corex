@@ -1,6 +1,6 @@
 {
     "name": "axiomasoft/corex-search",
-    "description": "Typed, policy-hydrated search boundary for CoreX.",
+    "description": "Authorized search queries, owner projections and durable index generations for CoreX.",
     "type": "library",
     "license": "MIT",
     "require": {
@@ -45,12 +45,16 @@
             "profile": "laravel-package",
             "error-prefix": "search",
             "owns": [
-                "Contracts",
-                "Data",
                 "Errors",
                 "Exceptions",
+                "Index",
                 "Internal",
+                "Lane",
                 "Laravel",
+                "Postgres",
+                "Projection",
+                "Query",
+                "Rebuild",
                 "Testing"
             ]
         }

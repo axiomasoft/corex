@@ -23,7 +23,7 @@ final class MeilisearchConfigSection implements ConfigReportSection
 
     public function secretKeys(): array
     {
-        return ['corex-search-meilisearch.key'];
+        return [];
     }
 
     public function secretDefaults(): array

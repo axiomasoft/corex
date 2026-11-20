@@ -12,6 +12,12 @@ enum SearchErrorCode: string implements ErrorCode
 {
     case InvalidSearchConfiguration = 'search.invalid_search_configuration';
 
+    case SearchFeatureUnavailable = 'search.feature_unavailable';
+    case IndexNotReady = 'search.index_not_ready';
+    case GenerationChanged = 'search.generation_changed';
+    case SearchWitnessChanged = 'search.witness_changed';
+    case InvalidSearchCursor = 'search.invalid_cursor';
+
     public function value(): string
     {
         return $this->value;

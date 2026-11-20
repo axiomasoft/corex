@@ -27,6 +27,8 @@ class AttributeRenameTest(unittest.TestCase):
             old_schema = 'CoreX\\CustomFields' + '\\Internal\\Schema'
             old_namespace = next(row['old'] for row in manifest['tokens']['namespaces']
                                  if row.get('new') == old_schema)
+            retired_search = 'CoreX\\Search' + '\\Contracts\\SearchProvider'
+            retired_query = 'CoreX\\Search' + '\\Data\\SearchQuery'
             for text, expected in (
                 ('namespace CoreX\\Attributes;', 0),
                 ('namespace CoreX\\Attributes\\Tooling;', 0),
@@ -35,6 +37,10 @@ class AttributeRenameTest(unittest.TestCase):
                 ('use ' + catalogue + ';', 1),
                 ('namespace ' + old_schema + ';', 1),
                 ('use CoreX\\CustomFields\\Schemas\\Contracts\\FieldCatalogue;', 0),
+                ('use ' + retired_search + ';', 1),
+                ('use ' + retired_query + ';', 1),
+                ('use CoreX\\Search\\Query\\Contracts\\Search;', 0),
+                ('use CoreX\\Search\\Query\\Data\\SearchQuery;', 0),
             ):
                 with self.subTest(text=text):
                     fixture.write_text('<?php ' + text)

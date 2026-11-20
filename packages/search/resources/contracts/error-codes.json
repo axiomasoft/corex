@@ -5,6 +5,50 @@
         {
             "package": "axiomasoft/corex-search",
             "enum": "CoreX\\Search\\Errors\\Enums\\SearchErrorCode",
+            "case": "SearchFeatureUnavailable",
+            "code": "search.feature_unavailable",
+            "type": "urn:packman:problem:search.feature_unavailable",
+            "status": 422,
+            "title": "Search feature unavailable.",
+            "retryable": false,
+            "category": "unsupported"
+        },
+        {
+            "package": "axiomasoft/corex-search",
+            "enum": "CoreX\\Search\\Errors\\Enums\\SearchErrorCode",
+            "case": "GenerationChanged",
+            "code": "search.generation_changed",
+            "type": "urn:packman:problem:search.generation_changed",
+            "status": 409,
+            "title": "Search generation changed.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex-search",
+            "enum": "CoreX\\Search\\Errors\\Enums\\SearchErrorCode",
+            "case": "IndexNotReady",
+            "code": "search.index_not_ready",
+            "type": "urn:packman:problem:search.index_not_ready",
+            "status": 503,
+            "title": "Search index is not ready.",
+            "retryable": false,
+            "category": "unavailable"
+        },
+        {
+            "package": "axiomasoft/corex-search",
+            "enum": "CoreX\\Search\\Errors\\Enums\\SearchErrorCode",
+            "case": "InvalidSearchCursor",
+            "code": "search.invalid_cursor",
+            "type": "urn:packman:problem:search.invalid_cursor",
+            "status": 422,
+            "title": "Invalid search cursor.",
+            "retryable": false,
+            "category": "validation"
+        },
+        {
+            "package": "axiomasoft/corex-search",
+            "enum": "CoreX\\Search\\Errors\\Enums\\SearchErrorCode",
             "case": "InvalidSearchConfiguration",
             "code": "search.invalid_search_configuration",
             "type": "urn:packman:problem:search.invalid_search_configuration",
@@ -12,6 +56,17 @@
             "title": "Invalid search configuration.",
             "retryable": false,
             "category": "internal"
+        },
+        {
+            "package": "axiomasoft/corex-search",
+            "enum": "CoreX\\Search\\Errors\\Enums\\SearchErrorCode",
+            "case": "SearchWitnessChanged",
+            "code": "search.witness_changed",
+            "type": "urn:packman:problem:search.witness_changed",
+            "status": 409,
+            "title": "Search witness changed.",
+            "retryable": false,
+            "category": "conflict"
         }
     ]
 }

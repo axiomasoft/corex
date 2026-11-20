@@ -12,20 +12,6 @@
                         "null"
                     ],
                     "default": null
-                },
-                "index_uid": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
-                    "default": null
-                },
-                "key": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
-                    "default": null
                 }
             },
             "additionalProperties": false

@@ -40,6 +40,14 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+      meilisearch:
+        image: getmeili/meilisearch:v1.16@sha256:c0c45cb82a96221d7c855d1cc36ca04ff4b3ce6330fbd8df5ba82e86e632a053
+        env:
+          MEILI_MASTER_KEY: corex-stage4-disposable-meilisearch-key
+          MEILI_NO_ANALYTICS: 'true'
+          MEILI_ENV: development
+        ports:
+          - 7700:7700
     env:
       CANDIDATE: ${{ github.workspace }}/build/distribution/candidate
       EVIDENCE: ${{ github.workspace }}/build/distribution/evidence
@@ -49,6 +57,8 @@ jobs:
       PGSQL_PORT: 5434
       PGSQL_USERNAME: corex
       PGSQL_PASSWORD: corex
+      MEILISEARCH_HOST: http://127.0.0.1:7700
+      MEILISEARCH_MASTER_KEY: corex-stage4-disposable-meilisearch-key
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -64,6 +74,7 @@ jobs:
       - name: Build and validate the committed archive repository
         run: |
           mkdir -p "$EVIDENCE"
+          curl --retry 20 --retry-all-errors --retry-delay 1 -fsS -H "Authorization: Bearer $MEILISEARCH_MASTER_KEY" "$MEILISEARCH_HOST/version" > "$EVIDENCE/meili-version.json"
           python3 scripts/distribution/release_candidate.py build --version 2.0.0 --output "$CANDIDATE" > "$EVIDENCE/candidate-build.json"
           python3 scripts/distribution/release_candidate.py verify --candidate "$CANDIDATE" > "$EVIDENCE/candidate-verify.json"
           cp "$CANDIDATE/candidate.json" "$EVIDENCE"
@@ -71,9 +82,9 @@ jobs:
         run: |
           python3 scripts/distribution/profile-proof.py --candidate "$CANDIDATE" --mode all --php "$PHP_VERSION" --receipt "$EVIDENCE/profile-receipt.json" --matrix "$EVIDENCE/profile-matrix.json"
           python3 scripts/distribution/prove_scenario.py --candidate "$CANDIDATE" --case installed-boot --php "$PHP_VERSION" --evidence-dir "$EVIDENCE/scenario"
-      - name: Prove worker scope, provider delivery and field schemas from installed archives
+      - name: Prove scoped workers, provider delivery, fields and search from installed archives
         run: |
-          for scenario in worker-scope binding-restore workspace-sweep notification-visibility provider-unknown field-write ddl-claim; do
+          for scenario in worker-scope binding-restore workspace-sweep notification-visibility provider-unknown field-write ddl-claim search-rights generation; do
             python3 scripts/distribution/prove_scenario.py --candidate "$CANDIDATE" --case "$scenario" --php "$PHP_VERSION" --postgres "$PG_MAJOR" --evidence-dir "$EVIDENCE/scenarios/$scenario"
           done
       - name: Prove extension and equipment fixtures

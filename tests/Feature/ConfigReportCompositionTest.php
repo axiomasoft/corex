@@ -30,7 +30,6 @@ final class ConfigReportCompositionTest extends GoldenTestCase
             'corex-tenancy.oidc.client_secret' => null,
             'corex-intl.reference.cursor_secret' => '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
             'corex-search.cursor_secret' => null,
-            'corex-search-meilisearch.key' => 'test-only-meilisearch-key',
         ]);
 
         self::assertSame(0, Artisan::call('packman:config:validate'));
@@ -49,7 +48,6 @@ secret corex-tenancy.oidc.client_secret=absent
 secret corex-intl.reference.cursor_secret=present
 WARNING [secret-default] corex-intl.reference.cursor_secret
 secret corex-search.cursor_secret=absent
-secret corex-search-meilisearch.key=present
 
 REPORT, Artisan::output());
     }

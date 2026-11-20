@@ -226,12 +226,16 @@
             "layer": "L2",
             "type": "capability",
             "owns": [
-                "Contracts",
-                "Data",
                 "Errors",
                 "Exceptions",
+                "Index",
                 "Internal",
+                "Lane",
                 "Laravel",
+                "Postgres",
+                "Projection",
+                "Query",
+                "Rebuild",
                 "Testing"
             ]
         },
@@ -256,6 +260,8 @@
             "layer": "L3",
             "type": "integration",
             "owns": [
+                "Contracts",
+                "Enums",
                 "Errors",
                 "Exceptions",
                 "Internal",

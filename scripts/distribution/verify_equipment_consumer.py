@@ -23,7 +23,7 @@ RECEIPT = ROOT / "build" / "distribution" / "consumer-receipt.json"
 PROBE = ROOT / "scripts" / "distribution" / "extension_fixture_probe.php"
 BANNED = re.compile(r"\b(?:flex|crm|cms|store|storefront|customer|lead|deal)\b|content-page|Flex\\\\|flex/", re.IGNORECASE)
 PACKAGE = "equipment/registry"
-FORBIDDEN = r"CoreX\Search\Internal\UnavailableSearchProvider"
+FORBIDDEN = r"CoreX\Search\Query\Internal\AuthorizedSearch"
 
 
 def load_extension_verifier():
@@ -53,7 +53,7 @@ def flex_dependency_fails(composer: dict) -> bool:
 
 def prepare_install(source: Path, destination: Path, repository: Path) -> None:
     extensions = load_extension_verifier()
-    extensions.write_consumer(destination, source, repository, drop_corex=False, field_proof=True)
+    extensions.write_consumer(destination, source, repository, drop_corex=False, laravel_host=True)
 
 
 def prove(candidate: Path | None, *, php: str | None = None, postgres: int | None = None) -> dict:
@@ -98,10 +98,21 @@ def prove(candidate: Path | None, *, php: str | None = None, postgres: int | Non
         if probe.returncode != 0:
             raise SystemExit(probe.stderr or probe.stdout or "equipment probe failed")
         contract = json.loads(probe.stdout)
+        search_probe = install_root / "search-proof.php"
+        shutil.copyfile(ROOT / "fixtures/extensions/custom-search-provider/bin/search-proof.php", search_probe)
+        search = extensions.run_search_proof(
+            install_root, search_probe,
+            {"class": r"Equipment\Registry\Smoke", "entity": "eq.equipment", "record": "eq-1",
+             "backend": "equipment-memory", "adapter": r"Equipment\Registry\MemoryDriver"},
+            env, postgres, php,
+        )
         database = root / "equipment.sqlite"
         for mode in ("schedule", "worker", "read"):
+            command = ["php", str(install_root / "vendor" / PACKAGE / "bin/smoke.php"), mode, str(database)]
+            if mode == "schedule":
+                command.append(search["record"])
             completed = subprocess.run(
-                ["php", str(install_root / "vendor" / PACKAGE / "bin/smoke.php"), mode, str(database)],
+                command,
                 cwd=install_root,
                 env=env,
                 text=True,
@@ -120,7 +131,8 @@ def prove(candidate: Path | None, *, php: str | None = None, postgres: int | Non
              "filter_operand": "pump-1"},
             env, postgres, php,
         )
-    if result["maintenance"] != "completed" or result["imported"] != 1 or result["failed"] != "missing-serial":
+    if (result["maintenance"] != "completed" or result["imported"] != 1 or result["failed"] != "missing-serial"
+            or result["found"] != search["record"]):
         raise SystemExit(f"worker restart lost the equipment result: {result}")
     return {
         "schema_version": "corex-equipment-consumer-receipt/1",
@@ -135,6 +147,7 @@ def prove(candidate: Path | None, *, php: str | None = None, postgres: int | Non
         "vocabulary": "clean",
         "autoload_workspace": False,
         "worker_restart": result,
+        "installed_search": search,
         "installed_fields": fields,
         "lower_level_packages": sorted(name for name in committed["require"] if is_corex_package(name)),
     }

@@ -1123,77 +1123,46 @@
         },
         "corex_search_dirty": {
             "columns": {
-                "completed_at": {
-                    "type": "timestamp(6) with time zone",
-                    "nullable": true,
-                    "default": null
-                },
-                "lane_key": {
+                "event_id": {
                     "type": "character varying(128)",
                     "nullable": false,
                     "default": null
                 },
-                "payload_hash": {
+                "lane_key": {
                     "type": "character(64)",
-                    "nullable": true,
+                    "nullable": false,
                     "default": null
+                },
+                "operation": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": "'reread'::character varying"
                 },
                 "record_id": {
                     "type": "character varying(128)",
                     "nullable": false,
                     "default": null
                 },
-                "restore_epoch": {
-                    "type": "character varying(64)",
-                    "nullable": false,
-                    "default": null
-                },
-                "revision": {
+                "seq": {
                     "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
-                "schema_hash": {
-                    "type": "character(64)",
-                    "nullable": true,
-                    "default": null
-                },
-                "sequence": {
-                    "type": "bigint",
+                "source": {
+                    "type": "character varying(128)",
                     "nullable": false,
-                    "default": "nextval('corex_search_dirty_sequence_seq'::regclass)"
-                },
-                "submitted_at": {
-                    "type": "timestamp(6) with time zone",
-                    "nullable": true,
                     "default": null
-                },
-                "tombstone": {
-                    "type": "boolean",
-                    "nullable": false,
-                    "default": "false"
                 }
             },
             "indexes": [
                 {
-                    "name": "corex_search_dirty_lane_key_record_id_revision_uq",
+                    "name": "corex_search_dirty_event_record_uq",
                     "kind": "uq",
                     "columns": [
                         "lane_key",
-                        "record_id",
-                        "revision"
-                    ],
-                    "predicate": null,
-                    "method": "btree",
-                    "nulls_not_distinct": false
-                },
-                {
-                    "name": "corex_search_dirty_lane_key_submitted_at_sequence_ix",
-                    "kind": "ix",
-                    "columns": [
-                        "lane_key",
-                        "submitted_at",
-                        "sequence"
+                        "source",
+                        "event_id",
+                        "record_id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -1203,7 +1172,109 @@
                     "name": "corex_search_dirty_pk",
                     "kind": "pk",
                     "columns": [
-                        "sequence"
+                        "lane_key",
+                        "seq"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
+        "corex_search_generations": {
+            "columns": {
+                "allocation_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "claim_epoch": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'0'::bigint"
+                },
+                "cluster": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "confirmed_seq": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'0'::bigint"
+                },
+                "generation": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "lane_key": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "mapping_digest": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "policy_digest": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "retain_until": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "scan_cursor": {
+                    "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                },
+                "state": {
+                    "type": "character varying(24)",
+                    "nullable": false,
+                    "default": null
+                },
+                "uid": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "corex_search_generations_active_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "lane_key"
+                    ],
+                    "predicate": "((state)::text = 'active'::text)",
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "corex_search_generations_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "lane_key",
+                        "generation"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "corex_search_generations_uid_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "cluster",
+                        "uid"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -1216,53 +1287,93 @@
         },
         "corex_search_lanes": {
             "columns": {
-                "active_task": {
-                    "type": "character varying(255)",
-                    "nullable": true,
-                    "default": null
-                },
-                "claim_epoch": {
-                    "type": "bigint",
-                    "nullable": false,
-                    "default": "'0'::bigint"
-                },
-                "committed_revision": {
-                    "type": "bigint",
-                    "nullable": false,
-                    "default": "'0'::bigint"
-                },
-                "created_at": {
-                    "type": "timestamp(6) with time zone",
-                    "nullable": true,
-                    "default": null
-                },
-                "generation": {
+                "account_id": {
                     "type": "character varying(128)",
                     "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "active_generation": {
+                    "type": "bigint",
+                    "nullable": true,
+                    "default": null
+                },
+                "backend": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_generation": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "cluster": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "deployment_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "entity": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "freeze_seq": {
+                    "type": "bigint",
+                    "nullable": true,
                     "default": null
                 },
                 "lane_key": {
-                    "type": "character varying(128)",
+                    "type": "character(64)",
                     "nullable": false,
                     "default": null
                 },
-                "request_hash": {
-                    "type": "character(64)",
+                "last_allocated_seq": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'0'::bigint"
+                },
+                "last_generation": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'0'::bigint"
+                },
+                "next_seq": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'1'::bigint"
+                },
+                "rebuild_id": {
+                    "type": "uuid",
                     "nullable": true,
                     "default": null
                 },
                 "restore_epoch": {
-                    "type": "character varying(64)",
+                    "type": "character(64)",
                     "nullable": false,
                     "default": null
                 },
-                "state": {
-                    "type": "character varying(24)",
+                "workspace_scope": {
+                    "type": "character varying(140)",
                     "nullable": false,
-                    "default": "'ready'::character varying"
+                    "default": null
                 },
-                "updated_at": {
-                    "type": "timestamp(6) with time zone",
+                "writer_generation": {
+                    "type": "bigint",
                     "nullable": true,
                     "default": null
                 }
@@ -1285,79 +1396,90 @@
         },
         "corex_search_rebuilds": {
             "columns": {
-                "created_at": {
-                    "type": "timestamp(6) with time zone",
-                    "nullable": true,
-                    "default": null
-                },
-                "fence_revision": {
+                "barrier_seq": {
                     "type": "bigint",
-                    "nullable": false,
+                    "nullable": true,
                     "default": null
                 },
                 "from_generation": {
-                    "type": "character varying(128)",
-                    "nullable": false,
-                    "default": null
-                },
-                "lane_key": {
-                    "type": "character varying(128)",
-                    "nullable": false,
-                    "default": null
-                },
-                "marker_hash": {
-                    "type": "character(64)",
+                    "type": "bigint",
                     "nullable": true,
                     "default": null
                 },
-                "rebuild_id": {
-                    "type": "character varying(128)",
-                    "nullable": false,
-                    "default": null
-                },
-                "restore_epoch": {
-                    "type": "character varying(64)",
-                    "nullable": false,
-                    "default": null
-                },
-                "schema_hash": {
+                "lane_key": {
                     "type": "character(64)",
                     "nullable": false,
+                    "default": null
+                },
+                "mapping_digest": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "operation_key": {
+                    "type": "character varying(191)",
+                    "nullable": true,
+                    "default": null
+                },
+                "policy_digest": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "rebuild_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "rollback_of": {
+                    "type": "uuid",
+                    "nullable": true,
+                    "default": null
+                },
+                "start_seq": {
+                    "type": "bigint",
+                    "nullable": true,
                     "default": null
                 },
                 "state": {
                     "type": "character varying(24)",
                     "nullable": false,
-                    "default": "'pending'::character varying"
-                },
-                "swap_task": {
-                    "type": "character varying(255)",
-                    "nullable": true,
-                    "default": null
-                },
-                "swapped_at": {
-                    "type": "timestamp(6) with time zone",
-                    "nullable": true,
                     "default": null
                 },
                 "to_generation": {
-                    "type": "character varying(128)",
-                    "nullable": false,
-                    "default": null
-                },
-                "updated_at": {
-                    "type": "timestamp(6) with time zone",
+                    "type": "bigint",
                     "nullable": true,
                     "default": null
                 }
             },
             "indexes": [
                 {
-                    "name": "corex_search_rebuilds_lane_key_to_generation_uq",
+                    "name": "corex_search_rebuilds_destination_uq",
                     "kind": "uq",
                     "columns": [
                         "lane_key",
                         "to_generation"
+                    ],
+                    "predicate": "(rollback_of IS NULL)",
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "corex_search_rebuilds_live_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "lane_key"
+                    ],
+                    "predicate": "((state)::text = ANY ((ARRAY['scanning'::character varying, 'catching-up'::character varying, 'barrier'::character varying])::text[]))",
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "corex_search_rebuilds_operation_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "lane_key",
+                        "operation_key"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -1370,6 +1492,150 @@
                         "rebuild_id"
                     ],
                     "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
+        "corex_search_submissions": {
+            "columns": {
+                "action": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                },
+                "batch_digest": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_generation": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "claim_epoch": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "control_recorded": {
+                    "type": "boolean",
+                    "nullable": false,
+                    "default": "false"
+                },
+                "deployment_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "documents": {
+                    "type": "json",
+                    "nullable": false,
+                    "default": null
+                },
+                "first_seq": {
+                    "type": "bigint",
+                    "nullable": true,
+                    "default": null
+                },
+                "generation": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "lane_key": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "last_seq": {
+                    "type": "bigint",
+                    "nullable": true,
+                    "default": null
+                },
+                "lease_until": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "provider_ticket": {
+                    "type": "uuid",
+                    "nullable": true,
+                    "default": null
+                },
+                "restore_epoch": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "scan_next": {
+                    "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                },
+                "state": {
+                    "type": "character varying(24)",
+                    "nullable": false,
+                    "default": null
+                },
+                "submission_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "task_ref": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "uid": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "corex_search_submissions_inflight_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "lane_key",
+                        "generation"
+                    ],
+                    "predicate": "((state)::text = ANY ((ARRAY['planned'::character varying, 'sending'::character varying, 'accepted'::character varying, 'unknown'::character varying])::text[]))",
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "corex_search_submissions_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "lane_key",
+                        "generation",
+                        "submission_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "corex_search_submissions_settlement_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "lane_key",
+                        "generation",
+                        "claim_epoch"
+                    ],
+                    "predicate": "((control_recorded = false) AND (provider_ticket IS NOT NULL) AND ((state)::text = ANY ((ARRAY['confirmed'::character varying, 'failed'::character varying, 'not-sent'::character varying, 'unknown'::character varying])::text[])))",
                     "method": "btree",
                     "nulls_not_distinct": false
                 }

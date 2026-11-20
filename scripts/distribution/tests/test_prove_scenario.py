@@ -1,12 +1,14 @@
 """Process and barrier contracts for the installed scenario runner."""
 from __future__ import annotations
 
+import json
 import os
 import signal
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 SCRIPTS = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SCRIPTS))
@@ -14,6 +16,33 @@ import prove_scenario as runner
 
 
 class ScenarioProcessTest(unittest.TestCase):
+    def test_meilisearch_requires_the_expected_loopback_service(self) -> None:
+        with patch.dict(os.environ, {"MEILISEARCH_HOST": "http://127.0.0.1:17700", "MEILISEARCH_MASTER_KEY": "fixture-key"}):
+            with patch.object(runner, "meilisearch_request", return_value={"pkgVersion": "1.15.0", "commitSha": "ab"}):
+                with self.assertRaisesRegex(runner.ScenarioError, "Meilisearch 1.16.0"):
+                    runner.meilisearch_environment("1.16.0")
+            with patch.object(runner, "meilisearch_request", return_value={"pkgVersion": "1.16.0", "commitSha": "cd"}):
+                first, receipt = runner.meilisearch_environment("1.16.0")
+                second, _ = runner.meilisearch_environment("1.16.0")
+                self.assertEqual(first["COREX_SCENARIO_MEILI_NAMESPACE"], receipt["namespace"])
+                self.assertNotEqual(first["COREX_SCENARIO_MEILI_NAMESPACE"], second["COREX_SCENARIO_MEILI_NAMESPACE"])
+                self.assertNotIn("fixture-key", json.dumps(receipt))
+
+        with patch.dict(os.environ, {"MEILISEARCH_HOST": "https://example.test:7700", "MEILISEARCH_MASTER_KEY": "fixture-key"}):
+            with self.assertRaisesRegex(runner.ScenarioError, "loopback test service"):
+                runner.meilisearch_environment("1.16.0")
+
+    def test_meilisearch_cleanup_rejects_unproven_uid(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            ledger = Path(temporary) / "meilisearch-targets.ndjson"
+            parts = ["corex.search.uid.v2", "d", "b", "1", "epoch", "a", "incarnation", "workspace", "w", "e",
+                     "meilisearch", "competing-namespace", "2", "allocation"]
+            ledger.write_text(json.dumps({"uid": "another-index", "parts": parts}) + "\n")
+            with self.assertRaisesRegex(runner.ScenarioError, "outside this scenario"):
+                runner.staged_meilisearch_targets(ledger, "expected-namespace")
+            with self.assertRaisesRegex(runner.ScenarioError, "noncanonical"):
+                runner.staged_meilisearch_targets(ledger, "competing-namespace")
+
     def test_terminate_records_live_owner_and_pretermination_witness(self) -> None:
         with tempfile.TemporaryDirectory(prefix="corex-scenario-process-contract-") as temporary:
             root = Path(temporary)

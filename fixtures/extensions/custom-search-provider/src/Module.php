@@ -4,12 +4,7 @@ declare(strict_types=1);
 
 namespace ThirdParty\Search;
 
-use CoreX\Data\Data\DataScope;
 use CoreX\Database\Laravel\BaseModel;
-use CoreX\Search\Contracts\IndexDriver;
-use CoreX\Search\Contracts\SearchProvider;
-use CoreX\Search\Data\IndexBatch;
-use CoreX\Search\Data\SearchQuery;
 use Packman\Modules\Data\Compiler\InstalledPackageVersion;
 use Packman\Modules\Data\Entities\Entity;
 use Packman\Modules\Data\Entities\FieldDefinition;
@@ -19,7 +14,7 @@ use RuntimeException;
 
 final class Module
 {
-    private static ?SearchProvider $bound = null;
+    public const string Driver = 'thirdparty-search';
 
     public static function manifest(): ModuleManifest
     {
@@ -38,40 +33,16 @@ final class Module
         return new InstalledPackageVersion('thirdparty/custom-search-provider', '1.0.0', 'custom-search-provider');
     }
 
-    public static function driver(): MemoryDriver
+    public static function searchFixture(): array
     {
-        return new MemoryDriver;
-    }
-
-    public static function bind(SearchProvider $provider): void
-    {
-        self::$bound = $provider;
+        return [
+            'driver' => self::Driver, 'class' => MemoryDriver::class,
+            'entity' => 'csp.document', 'record' => 'eq-1', 'title' => 'pump alpha',
+        ];
     }
 
     public static function prove(): void
     {
-        $provider = self::$bound;
-
-        if (! $provider instanceof IndexDriver) {
-            throw new RuntimeException('Search manager did not return the fixture index driver.');
-        }
-
-        $scope = new DataScope(deploymentId: 'fixture-deployment', accountId: 'account-1', workspaceId: null, bindingId: 'fixture-binding', bindingGeneration: 1, accountIncarnation: 'fixture-incarnation', restoreEpoch: hash('sha256', 'search-epoch'), principalKind: 'user', principalId: 'actor-1');
-        $submission = $provider->submit(new IndexBatch('generation-1', [
-            ['id' => 'eq-1', 'entity' => 'equipment', 'text' => 'pump alpha'],
-        ]));
-        $status = $provider->status($submission);
-
-        if ($status->status !== 'ready') {
-            throw new RuntimeException('Index submission was not ready.');
-        }
-
-        $page = $provider->query($scope, new SearchQuery('equipment', hash('sha256', 'schema'), 'pump'));
-
-        if (count($page->candidates) !== 1 || $page->candidates[0]->record->id !== 'eq-1') {
-            throw new RuntimeException('Indexed equipment was not returned by the public search provider.');
-        }
-
         $report = ExtensionContract::verify(
             manifests: [self::manifest()],
             installedPackages: ['thirdparty/custom-search-provider' => self::installedVersion()],

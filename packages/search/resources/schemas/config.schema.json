@@ -6,6 +6,10 @@
         "corex-search": {
             "type": "object",
             "properties": {
+                "cluster": {
+                    "type": "string",
+                    "default": "primary"
+                },
                 "cursor_secret": {
                     "type": [
                         "string",
@@ -30,6 +34,10 @@
                         }
                     },
                     "additionalProperties": false
+                },
+                "retention_seconds": {
+                    "type": "integer",
+                    "default": 604800
                 }
             },
             "additionalProperties": false

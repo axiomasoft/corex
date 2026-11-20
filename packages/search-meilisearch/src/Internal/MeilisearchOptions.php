@@ -5,46 +5,31 @@ declare(strict_types=1);
 namespace CoreX\SearchMeilisearch\Internal;
 
 use Packman\Attributes\Internal;
-use Packman\Config\Data\SecretRef;
 use Packman\Config\Laravel\ConfigurationValidator;
 
 /**
- * Shape of `corex-search-meilisearch`. Presence of host, index and key is a runtime
- * requirement of the "meilisearch" driver, checked when the driver is created.
+ * The host endpoint is checked when the Meilisearch driver is created.
  *
  * @internal Package composition type: read only by the provider.
  */
 #[Internal]
 final readonly class MeilisearchOptions
 {
-    public function __construct(
-        public ?string $host,
-        public ?string $indexUid,
-        public ?SecretRef $key,
-    ) {}
+    public function __construct(public ?string $host) {}
 
     /** @param  array<array-key, mixed>  $config */
     public static function fromArray(array $config): self
     {
         $violations = new ConfigurationValidator;
+        $host = $config['host'] ?? null;
 
-        $host = self::nullableString(violations: $violations, path: 'host', value: $config['host'] ?? null);
-        $indexUid = self::nullableString(violations: $violations, path: 'index_uid', value: $config['index_uid'] ?? null);
-        $key = self::nullableString(violations: $violations, path: 'key', value: $config['key'] ?? null);
+        if ($host !== null && ! is_string($host)) {
+            $violations->add(path: 'host', message: 'must be null or a string');
+            $host = null;
+        }
 
         $violations->failIfAny();
 
-        return new self(host: $host, indexUid: $indexUid, key: $key === null || $key === '' ? null : new SecretRef($key));
-    }
-
-    private static function nullableString(ConfigurationValidator $violations, string $path, mixed $value): ?string
-    {
-        if ($value === null || is_string($value)) {
-            return $value;
-        }
-
-        $violations->add(path: $path, message: 'must be null or a string');
-
-        return null;
+        return new self(host: $host);
     }
 }

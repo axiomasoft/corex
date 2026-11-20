@@ -1,0 +1,360 @@
+{
+  "id": "generation",
+  "laravel": 13,
+  "host_support": true,
+  "timeout_seconds": 245,
+  "distinct_connections": true,
+  "profile": {
+    "id": "immutable-search-generations",
+    "database": "postgres-isolated",
+    "database_roles": [
+      "control",
+      "a",
+      "backup"
+    ],
+    "default_database": "a",
+    "http": true,
+    "meilisearch": "1.16.0",
+    "packages": [
+      "axiomasoft/corex",
+      "axiomasoft/corex-search",
+      "axiomasoft/corex-search-meilisearch"
+    ],
+    "forbid": [
+      {
+        "package": "axiomasoft/corex-custom-fields",
+        "name": "Custom Fields"
+      },
+      {
+        "package": "axiomasoft/corex-search-intl",
+        "name": "Search Intl"
+      },
+      {
+        "package": "axiomasoft/corex-access",
+        "name": "Access"
+      }
+    ]
+  },
+  "variants": {
+    "publication": {
+      "processes": {
+        "produce": [
+          "php",
+          "{fixture}/probe.php",
+          "produce"
+        ],
+        "backup": [
+          "php",
+          "{fixture}/probe.php",
+          "backup"
+        ],
+        "old-task": [
+          "php",
+          "{fixture}/probe.php",
+          "old-task"
+        ],
+        "scan": [
+          "php",
+          "{fixture}/probe.php",
+          "scan"
+        ],
+        "during-scan": [
+          "php",
+          "{fixture}/probe.php",
+          "during-scan"
+        ],
+        "set-barrier": [
+          "php",
+          "{fixture}/probe.php",
+          "set-barrier"
+        ],
+        "destination": [
+          "php",
+          "{fixture}/probe.php",
+          "destination"
+        ],
+        "after-h": [
+          "php",
+          "{fixture}/probe.php",
+          "after-h"
+        ],
+        "publish-before": [
+          "php",
+          "{fixture}/probe.php",
+          "publish-before"
+        ],
+        "inspect-before": [
+          "php",
+          "{fixture}/probe.php",
+          "inspect-before"
+        ],
+        "publish-after": [
+          "php",
+          "{fixture}/probe.php",
+          "publish-after"
+        ],
+        "inspect-after": [
+          "php",
+          "{fixture}/probe.php",
+          "inspect-after"
+        ],
+        "drain": [
+          "php",
+          "{fixture}/probe.php",
+          "drain"
+        ],
+        "verify-late": [
+          "php",
+          "{fixture}/probe.php",
+          "verify-late"
+        ],
+        "restore": [
+          "php",
+          "{fixture}/probe.php",
+          "restore"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "produce"
+        },
+        {
+          "action": "await",
+          "name": "generation-ready",
+          "process": "produce"
+        },
+        {
+          "action": "release",
+          "name": "generation-ready"
+        },
+        {
+          "action": "complete",
+          "name": "produce"
+        },
+        {
+          "action": "start",
+          "name": "backup"
+        },
+        {
+          "action": "complete",
+          "name": "backup"
+        },
+        {
+          "action": "start",
+          "name": "old-task",
+          "environment": {
+            "COREX_SCENARIO_INDEX_BARRIER": "late-submit"
+          }
+        },
+        {
+          "action": "await",
+          "name": "old-task-submission",
+          "process": "old-task"
+        },
+        {
+          "action": "start",
+          "name": "scan",
+          "environment": {
+            "COREX_SCENARIO_INDEX_BARRIER": "during-scan"
+          }
+        },
+        {
+          "action": "await",
+          "name": "scan-submitting",
+          "process": "scan"
+        },
+        {
+          "action": "start",
+          "name": "during-scan"
+        },
+        {
+          "action": "complete",
+          "name": "during-scan"
+        },
+        {
+          "action": "release",
+          "name": "scan-submitting"
+        },
+        {
+          "action": "complete",
+          "name": "scan"
+        },
+        {
+          "action": "start",
+          "name": "set-barrier"
+        },
+        {
+          "action": "await",
+          "name": "generation-h",
+          "process": "set-barrier"
+        },
+        {
+          "action": "release",
+          "name": "generation-h"
+        },
+        {
+          "action": "complete",
+          "name": "set-barrier"
+        },
+        {
+          "action": "start",
+          "name": "destination",
+          "environment": {
+            "COREX_SCENARIO_INDEX_BARRIER": "destination-confirm"
+          }
+        },
+        {
+          "action": "await",
+          "name": "destination-task-confirmed",
+          "process": "destination"
+        },
+        {
+          "action": "start",
+          "name": "after-h",
+          "environment": {
+            "COREX_SCENARIO_INDEX_BARRIER": "pending-confirm"
+          }
+        },
+        {
+          "action": "complete",
+          "name": "after-h"
+        },
+        {
+          "action": "release",
+          "name": "destination-task-confirmed"
+        },
+        {
+          "action": "complete",
+          "name": "destination"
+        },
+        {
+          "action": "start",
+          "name": "publish-before"
+        },
+        {
+          "action": "await",
+          "name": "publish-before-commit",
+          "process": "publish-before"
+        },
+        {
+          "action": "terminate",
+          "name": "publish-before",
+          "barrier": "publish-before-commit"
+        },
+        {
+          "action": "start",
+          "name": "inspect-before"
+        },
+        {
+          "action": "complete",
+          "name": "inspect-before"
+        },
+        {
+          "action": "start",
+          "name": "publish-after"
+        },
+        {
+          "action": "await",
+          "name": "publish-after-commit",
+          "process": "publish-after"
+        },
+        {
+          "action": "terminate",
+          "name": "publish-after",
+          "barrier": "publish-after-commit"
+        },
+        {
+          "action": "start",
+          "name": "inspect-after"
+        },
+        {
+          "action": "complete",
+          "name": "inspect-after"
+        },
+        {
+          "action": "start",
+          "name": "drain"
+        },
+        {
+          "action": "await",
+          "name": "generation-drained",
+          "process": "drain"
+        },
+        {
+          "action": "release",
+          "name": "generation-drained"
+        },
+        {
+          "action": "complete",
+          "name": "drain"
+        },
+        {
+          "action": "release",
+          "name": "old-task-submission"
+        },
+        {
+          "action": "complete",
+          "name": "old-task"
+        },
+        {
+          "action": "start",
+          "name": "verify-late"
+        },
+        {
+          "action": "complete",
+          "name": "verify-late"
+        },
+        {
+          "action": "start",
+          "name": "restore"
+        },
+        {
+          "action": "complete",
+          "name": "restore"
+        }
+      ]
+    },
+    "cancel": {
+      "processes": {
+        "produce": [
+          "php",
+          "{fixture}/probe.php",
+          "produce"
+        ],
+        "cancel": [
+          "php",
+          "{fixture}/probe.php",
+          "cancel"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "produce"
+        },
+        {
+          "action": "await",
+          "name": "generation-ready",
+          "process": "produce"
+        },
+        {
+          "action": "release",
+          "name": "generation-ready"
+        },
+        {
+          "action": "complete",
+          "name": "produce"
+        },
+        {
+          "action": "start",
+          "name": "cancel"
+        },
+        {
+          "action": "complete",
+          "name": "cancel"
+        }
+      ]
+    }
+  }
+}

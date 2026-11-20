@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Scenario;
 
-use CoreX\Search\Contracts\SearchProvider;
+use CoreX\Search\Query\Contracts\LiveCandidateDriver;
 
 /** Process-local observations of the real queue worker and deliberately retained driver. */
 final class ScenarioJobLedger
@@ -13,7 +13,7 @@ final class ScenarioJobLedger
 
     public array $failures = [];
 
-    public ?SearchProvider $retained = null;
+    public ?LiveCandidateDriver $retained = null;
 
-    public ?SearchProvider $retainedB = null;
+    public ?LiveCandidateDriver $retainedB = null;
 }

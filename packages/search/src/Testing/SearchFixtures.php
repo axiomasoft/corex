@@ -4,23 +4,20 @@ declare(strict_types=1);
 
 namespace CoreX\Search\Testing;
 
-use Closure;
-use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
-use CoreX\Search\Contracts\SearchHydrator;
-use CoreX\Search\Data\CurrentSearchRecord;
-use CoreX\Search\Data\SearchSnapshot;
-use CoreX\Search\Internal\Query\PolicySearchHydrator;
+use CoreX\Search\Projection\Data\ProjectedValues;
+use CoreX\Search\Projection\Data\SourceRecord;
 use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
-#[Spi(kind: SpiKind::Call, since: '1.0')]
+#[Spi(kind: SpiKind::Call, since: '2.0.0')]
 final class SearchFixtures
 {
-    /** @param Closure(DataScope, RecordRef, SearchSnapshot):?CurrentSearchRecord $loadCurrent */
-    public static function policyHydrator(Closure $loadCurrent, DataScopeAuthorizer $authorizer): SearchHydrator
+    /** @param array<string,string|bool|int|null> $values */
+    public static function record(RecordRef $record, array $values): SourceRecord
     {
-        return new PolicySearchHydrator(loadCurrent: $loadCurrent, authorizer: $authorizer);
+        ksort($values, SORT_STRING);
+
+        return new SourceRecord($record, hash('sha256', json_encode($values, JSON_THROW_ON_ERROR)), new ProjectedValues($values));
     }
 }

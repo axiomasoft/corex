@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\SearchMeilisearch;
 
-use CoreX\Search\Contracts\SearchDriverRegistry;
-use CoreX\Search\Contracts\SearchProvider;
+use CoreX\Search\Index\Contracts\IndexDriver;
+use CoreX\Search\Query\Contracts\CandidateDriver;
+use CoreX\Search\Query\Contracts\SearchDriverRegistry;
 use CoreX\Search\SearchServiceProvider;
 use CoreX\SearchMeilisearch\Errors\Internal\PackageProblemDefinitions;
 use CoreX\SearchMeilisearch\Internal\MeilisearchConfigSection;
 use CoreX\SearchMeilisearch\Internal\MeilisearchOptions;
-use CoreX\SearchMeilisearch\Laravel\MeilisearchProviderFactory;
+use CoreX\SearchMeilisearch\Laravel\MeilisearchDriverFactory;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
@@ -44,6 +45,8 @@ final class SearchMeilisearchServiceProvider extends ServiceProvider
     {
         $this->app->make(MeilisearchOptions::class);
 
-        $this->app->make(SearchDriverRegistry::class)->register('meilisearch', static fn (Application $app): SearchProvider => (new MeilisearchProviderFactory)->make($app));
+        $drivers = $this->app->make(SearchDriverRegistry::class);
+        $drivers->register('meilisearch', static fn (Application $app): CandidateDriver => (new MeilisearchDriverFactory)->candidates($app));
+        $drivers->registerIndex('meilisearch', static fn (Application $app): IndexDriver => (new MeilisearchDriverFactory)->index($app));
     }
 }

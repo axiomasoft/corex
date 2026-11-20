@@ -11,11 +11,10 @@ use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Enums\FieldUse;
-use CoreX\Search\Contracts\SearchProvider;
-use CoreX\Search\Contracts\SearchSchema;
-use CoreX\Search\Data\CurrentSearchRecord;
-use CoreX\Search\Data\SearchQuery;
-use CoreX\Search\Testing\SearchFixtures;
+use CoreX\Search\Query\Contracts\CandidateDriver;
+use CoreX\Search\Query\Contracts\LiveCandidateDriver;
+use CoreX\Search\Query\Contracts\Search;
+use CoreX\Search\Query\Data\SearchQuery;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -43,14 +42,19 @@ final readonly class ScenarioJob implements ShouldQueue
 
         $context = app(TenantContextResolver::class)->current();
         $scope = app(DataScopeFactory::class)->forCurrentPrincipal($context);
-        $provider = app(SearchProvider::class);
-        $query = new SearchQuery(ScenarioSearchSchema::ENTITY, ScenarioSearchSchema::hash(), 'equipment');
+        $provider = app(CandidateDriver::class);
+
+        if (! $provider instanceof LiveCandidateDriver) {
+            throw new RuntimeException('The queue scenario expected the live installed PostgreSQL driver.');
+        }
+        $entity = ScenarioSearchSchema::entity();
+        $query = new SearchQuery($entity, 'equipment', ['marker'], fields: ['tenant_a_label', 'tenant_b_label']);
 
         if ($this->operation === 'nested-b') {
             $ledger->retainedB = $provider;
 
             try {
-                ($ledger->retained ?? throw new RuntimeException('Missing retained A driver.'))->query($scope, $query);
+                ($ledger->retained ?? throw new RuntimeException('Missing retained A driver.'))->target($scope, $entity, hash('sha256', 'queue-retained-target'));
             } catch (ScopeContextMismatch $error) {
                 if (! str_contains($error->getMessage(), 'connection')) {
                     throw $error;
@@ -63,16 +67,9 @@ final readonly class ScenarioJob implements ShouldQueue
             }
         }
 
-        $hits = $provider->query($scope, $query);
-        $schema = app(SearchSchema::class)->describe($scope, ScenarioSearchSchema::ENTITY);
+        $page = app(Search::class)->query($scope, $query);
         $authorizer = app(DataScopeAuthorizer::class);
-        $hydrator = SearchFixtures::policyHydrator(static function ($scope, $ref, $schema): ?CurrentSearchRecord {
-            $row = DB::table('scenario_records')->find($ref->id);
-
-            return $row === null ? null : new CurrentSearchRecord($ref, $schema->schemaHash, hash('sha256', $row->marker), (array) $row);
-        }, $authorizer);
-        $page = $hydrator->authorize($scope, $hits, $schema);
-        $hit = $hits->candidates[0] ?? throw new RuntimeException('PostgreSQL Search returned no candidates.');
+        $hit = $page->hits[0] ?? throw new RuntimeException('PostgreSQL Search returned no visible hits.');
         $hidden = $scope->accountId === Scenario::ACCOUNT_B ? 'tenant_a_label' : 'tenant_b_label';
         $ledger->queries[] = [
             'reference' => $this->reference,
@@ -81,7 +78,7 @@ final readonly class ScenarioJob implements ShouldQueue
             'principal' => $scope->principalId,
             'database' => Scenario::describe(DB::connection()),
             'record' => $hit->record->id,
-            'records' => $page->records,
+            'records' => array_map(static fn ($item): array => $item->projection->values, $page->hits),
             'hidden_allowed' => $authorizer->authorize($scope, $hit->record, new FieldSelection([$hidden]), FieldUse::Read)->allowed,
             'marker' => DB::table('scenario_records')->where('id', $hit->record->id)->value('marker'),
         ];
@@ -95,7 +92,7 @@ final readonly class ScenarioJob implements ShouldQueue
         }
     }
 
-    private function nested(ScenarioJobLedger $ledger, SearchProvider $provider): void
+    private function nested(ScenarioJobLedger $ledger, LiveCandidateDriver $provider): void
     {
         $ledger->retained = $provider;
         $guard = auth()->guard();
@@ -131,7 +128,7 @@ final readonly class ScenarioJob implements ShouldQueue
             if ($ledger->retainedB !== null) {
                 try {
                     $scope = app(DataScopeFactory::class)->forCurrentPrincipal($context);
-                    $ledger->retainedB->query($scope, new SearchQuery(ScenarioSearchSchema::ENTITY, ScenarioSearchSchema::hash(), 'equipment'));
+                    $ledger->retainedB->target($scope, ScenarioSearchSchema::entity(), hash('sha256', 'queue-retained-target'));
 
                     throw new RuntimeException('A retained B driver executed after restoring A.');
                 } catch (ScopeContextMismatch $error) {

@@ -640,32 +640,69 @@ Attributes own membership. Members belong to this package; direct extends/implem
 
 | Symbol | Layer | Since |
 |:--|:--|:--|
-| `CoreX\Search\Contracts\IndexDriver` | spi-implement | 1.0 |
-| `CoreX\Search\Contracts\SearchDocuments` | spi-implement | 1.0 |
-| `CoreX\Search\Contracts\SearchDriverRegistry` | spi-call | 1.0 |
-| `CoreX\Search\Contracts\SearchHydrator` | spi-implement | 1.0 |
-| `CoreX\Search\Contracts\SearchProvider` | spi-implement | 1.0 |
-| `CoreX\Search\Contracts\SearchSchema` | spi-implement | 1.0 |
-| `CoreX\Search\Data\Candidate` | api | 1.0 |
-| `CoreX\Search\Data\CandidatePage` | api | 1.0 |
-| `CoreX\Search\Data\CurrentSearchRecord` | api | 1.0 |
-| `CoreX\Search\Data\DocumentBatch` | api | 1.0 |
-| `CoreX\Search\Data\DocumentCursor` | api | 1.0 |
-| `CoreX\Search\Data\IndexBatch` | api | 1.0 |
-| `CoreX\Search\Data\IndexClaim` | api | 1.0 |
-| `CoreX\Search\Data\IndexOutcome` | api | 1.0 |
-| `CoreX\Search\Data\IndexSubmission` | api | 1.0 |
-| `CoreX\Search\Data\IndexSwap` | api | 1.0 |
-| `CoreX\Search\Data\SearchCapabilities` | api | 1.0 |
-| `CoreX\Search\Data\SearchFilter` | api | 1.0 |
-| `CoreX\Search\Data\SearchPage` | api | 1.0 |
-| `CoreX\Search\Data\SearchQuery` | api | 1.0 |
-| `CoreX\Search\Data\SearchSnapshot` | api | 1.0 |
 | `CoreX\Search\Errors\Enums\SearchErrorCode` | api | 1.0 |
+| `CoreX\Search\Errors\Exceptions\GenerationChanged` | api | 2.0.0 |
+| `CoreX\Search\Errors\Exceptions\IndexNotReady` | api | 2.0.0 |
+| `CoreX\Search\Errors\Exceptions\InvalidSearchCursor` | api | 2.0.0 |
+| `CoreX\Search\Errors\Exceptions\SearchFeatureUnavailable` | api | 2.0.0 |
+| `CoreX\Search\Errors\Exceptions\SearchWitnessChanged` | api | 2.0.0 |
 | `CoreX\Search\Exceptions\InvalidSearchConfiguration` | api | 1.0 |
-| `CoreX\Search\Laravel\SearchPortBindings` | spi-call | 1.0 |
+| `CoreX\Search\Index\Contracts\ActiveGenerations` | spi-call | 2.0.0 |
+| `CoreX\Search\Index\Contracts\IndexDriver` | spi-implement | 2.0.0 |
+| `CoreX\Search\Index\Contracts\IndexLookupAccess` | spi-call | 2.0.0 |
+| `CoreX\Search\Index\Contracts\IndexWorker` | spi-call | 2.0.0 |
+| `CoreX\Search\Index\Data\IndexBatch` | api | 2.0.0 |
+| `CoreX\Search\Index\Data\IndexDocument` | api | 2.0.0 |
+| `CoreX\Search\Index\Data\IndexReceipt` | api | 2.0.0 |
+| `CoreX\Search\Index\Data\IndexTarget` | api | 2.0.0 |
+| `CoreX\Search\Index\Enums\IndexAction` | api | 2.0.0 |
+| `CoreX\Search\Index\Enums\IndexOutcome` | api | 2.0.0 |
+| `CoreX\Search\Lane\Contracts\SearchInvalidations` | spi-call | 2.0.0 |
+| `CoreX\Search\Laravel\SearchPortBindings` | spi-call | 2.0.0 |
+| `CoreX\Search\Postgres\Contracts\PostgresCorpus` | spi-implement | 2.0.0 |
+| `CoreX\Search\Postgres\Contracts\PostgresSnapshotAuthority` | spi-implement | 2.0.0 |
+| `CoreX\Search\Postgres\Data\PostgresCorpusRows` | spi-call | 2.0.0 |
+| `CoreX\Search\Projection\Contracts\SearchProjectionContributor` | spi-implement | 2.0.0 |
+| `CoreX\Search\Projection\Contracts\SearchSource` | spi-implement | 2.0.0 |
+| `CoreX\Search\Projection\Data\FieldWitnesses` | api | 2.0.0 |
+| `CoreX\Search\Projection\Data\ProjectedValues` | api | 2.0.0 |
+| `CoreX\Search\Projection\Data\ProjectionContext` | api | 2.0.0 |
+| `CoreX\Search\Projection\Data\ProjectionField` | api | 2.0.0 |
+| `CoreX\Search\Projection\Data\ProjectionFields` | api | 2.0.0 |
+| `CoreX\Search\Projection\Data\ProjectionSelection` | api | 2.0.0 |
+| `CoreX\Search\Projection\Data\RecordBatch` | api | 2.0.0 |
+| `CoreX\Search\Projection\Data\RecordRefs` | api | 2.0.0 |
+| `CoreX\Search\Projection\Data\SourceRecord` | api | 2.0.0 |
+| `CoreX\Search\Projection\Data\SourceRecords` | api | 2.0.0 |
+| `CoreX\Search\Projection\Enums\FieldType` | api | 2.0.0 |
+| `CoreX\Search\Query\Contracts\CandidateDriver` | spi-implement | 2.0.0 |
+| `CoreX\Search\Query\Contracts\ExactCandidateDriver` | spi-implement | 2.0.0 |
+| `CoreX\Search\Query\Contracts\LiveCandidateDriver` | spi-implement | 2.0.0 |
+| `CoreX\Search\Query\Contracts\Search` | api | 2.0.0 |
+| `CoreX\Search\Query\Contracts\SearchDriverRegistry` | spi-call | 2.0.0 |
+| `CoreX\Search\Query\Data\Candidate` | api | 2.0.0 |
+| `CoreX\Search\Query\Data\CandidatePage` | api | 2.0.0 |
+| `CoreX\Search\Query\Data\CandidateRequest` | api | 2.0.0 |
+| `CoreX\Search\Query\Data\DriverCapabilities` | api | 2.0.0 |
+| `CoreX\Search\Query\Data\SearchCount` | api | 2.0.0 |
+| `CoreX\Search\Query\Data\SearchFacets` | api | 2.0.0 |
+| `CoreX\Search\Query\Data\SearchFilter` | api | 2.0.0 |
+| `CoreX\Search\Query\Data\SearchHit` | api | 2.0.0 |
+| `CoreX\Search\Query\Data\SearchPage` | api | 2.0.0 |
+| `CoreX\Search\Query\Data\SearchQuery` | api | 2.0.0 |
+| `CoreX\Search\Query\Data\SearchSort` | api | 2.0.0 |
+| `CoreX\Search\Query\Data\SearchStatistics` | api | 2.0.0 |
+| `CoreX\Search\Query\Enums\StatisticStatus` | api | 2.0.0 |
+| `CoreX\Search\Rebuild\Contracts\RebuildWorker` | spi-call | 2.0.0 |
+| `CoreX\Search\Rebuild\Contracts\SearchRebuilds` | api | 2.0.0 |
+| `CoreX\Search\Rebuild\Data\GenerationRef` | api | 2.0.0 |
+| `CoreX\Search\Rebuild\Data\RebuildInput` | api | 2.0.0 |
+| `CoreX\Search\Rebuild\Data\RebuildPlan` | api | 2.0.0 |
+| `CoreX\Search\Rebuild\Data\RebuildPlanRef` | api | 2.0.0 |
+| `CoreX\Search\Rebuild\Data\RebuildRef` | api | 2.0.0 |
+| `CoreX\Search\Rebuild\Data\RebuildStatus` | api | 2.0.0 |
 | `CoreX\Search\SearchServiceProvider` | spi-call | 1.0 |
-| `CoreX\Search\Testing\SearchFixtures` | spi-call | 1.0 |
+| `CoreX\Search\Testing\SearchFixtures` | spi-call | 2.0.0 |
 
 ## axiomasoft/corex-search-intl
 
@@ -673,6 +710,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 
 | Symbol | Layer | Since |
 |:--|:--|:--|
+| `CoreX\SearchIntl\Contracts\LocalizedSearchValues` | spi-implement | 2.0.0 |
 | `CoreX\SearchIntl\Contracts\SavedViewLabelReader` | spi-implement | 1.0 |
 | `CoreX\SearchIntl\Data\LocalizedFieldBinding` | api | 1.0 |
 | `CoreX\SearchIntl\SearchIntlServiceProvider` | spi-call | 1.0 |
@@ -683,9 +721,11 @@ Attributes own membership. Members belong to this package; direct extends/implem
 
 | Symbol | Layer | Since |
 |:--|:--|:--|
+| `CoreX\SearchMeilisearch\Contracts\MeilisearchCredentialProvider` | spi-implement | 2.0.0 |
+| `CoreX\SearchMeilisearch\Enums\MeilisearchAccess` | api | 2.0.0 |
 | `CoreX\SearchMeilisearch\Errors\Enums\SearchMeilisearchErrorCode` | api | 1.0 |
 | `CoreX\SearchMeilisearch\Exceptions\InvalidMeilisearchConfiguration` | api | 1.0 |
-| `CoreX\SearchMeilisearch\Laravel\MeilisearchProviderFactory` | spi-call | 1.0 |
+| `CoreX\SearchMeilisearch\Laravel\MeilisearchDriverFactory` | spi-call | 2.0.0 |
 | `CoreX\SearchMeilisearch\SearchMeilisearchServiceProvider` | spi-call | 1.0 |
 
 ## axiomasoft/corex-tasks

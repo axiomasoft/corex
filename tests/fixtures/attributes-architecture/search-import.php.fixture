@@ -2,4 +2,4 @@
 
 namespace CoreX\CustomFields\Schemas\Internal;
 
-use CoreX\Search\Contracts\SearchProvider;
+use CoreX\Search\Query\Contracts\Search;

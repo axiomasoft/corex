@@ -22,10 +22,6 @@ use CoreX\ImportExport\Data\SourceManifest;
 use CoreX\ImportExport\Data\SourceRow;
 use CoreX\ImportExport\Data\TargetResult;
 use CoreX\ImportExport\Data\TransferLimits;
-use CoreX\Search\Contracts\IndexDriver;
-use CoreX\Search\Contracts\SearchProvider;
-use CoreX\Search\Data\IndexBatch;
-use CoreX\Search\Data\SearchQuery;
 use Packman\Modules\Data\Compiler\ExtensionStamp;
 use Packman\Modules\Data\Compiler\InstalledPackageVersion;
 use Packman\Modules\Data\Entities\Entity;
@@ -40,7 +36,7 @@ final class MaintenanceActivity {}
 
 final class Smoke
 {
-    private static ?SearchProvider $bound = null;
+    public const string Driver = 'equipment-memory';
 
     public static function manifest(): ModuleManifest
     {
@@ -49,7 +45,7 @@ final class Smoke
             ->description('Tracks equipment, inspection attributes and maintenance work.')
             ->tablePrefix('eq')
             ->extends([
-                Entity::make(Equipment::class)->handle(Equipment::Handle)->table('eq_equipment')->customFields()->workflowable()->fields([new FieldDefinition('name', 'string')]),
+                Entity::make(Equipment::class)->handle(Equipment::Handle)->table('eq_equipment')->customFields()->workflowable()->searchable()->fields([new FieldDefinition('name', 'string')]),
                 Workflow::stepType(MaintenanceActivity::class),
             ]);
     }
@@ -59,14 +55,12 @@ final class Smoke
         return new InstalledPackageVersion('equipment/registry', '1.0.0', 'equipment-registry');
     }
 
-    public static function driver(): MemoryDriver
+    public static function searchFixture(): array
     {
-        return new MemoryDriver;
-    }
-
-    public static function bind(SearchProvider $provider): void
-    {
-        self::$bound = $provider;
+        return [
+            'driver' => self::Driver, 'class' => MemoryDriver::class,
+            'entity' => Equipment::Handle, 'record' => 'eq-1', 'title' => 'pump alpha',
+        ];
     }
 
     public static function fieldFixture(): array
@@ -87,15 +81,15 @@ final class Smoke
 
     public static function prove(): void
     {
-        $result = self::exercise(self::$bound);
+        $result = self::exercise();
 
-        if ($result['attribute'] !== 'serial' || $result['found'] !== 'eq-1' || $result['imported'] !== 1 || $result['failed'] !== 'missing-serial') {
-            throw new RuntimeException('Equipment behavior flow did not resolve the attribute, the index, and the partial import.');
+        if ($result['attribute'] !== 'serial' || $result['imported'] !== 1 || $result['failed'] !== 'missing-serial') {
+            throw new RuntimeException('Equipment behavior flow did not resolve the attribute and the partial import.');
         }
     }
 
-    /** @return array{serial: string, attribute: string, found: string, imported: int, failed: string, maintenance: string} */
-    public static function exercise(?SearchProvider $provider): array
+    /** @return array{serial: string, attribute: string, imported: int, failed: string, maintenance: string} */
+    private static function exercise(): array
     {
         $manifest = self::manifest();
         $reversed = self::manifest();
@@ -110,41 +104,28 @@ final class Smoke
         }
 
         $definitions = (new DeclaredEquipmentFields)->fields(new EntityHandle(Equipment::Handle));
-        $provider = $provider instanceof IndexDriver ? $provider : new MemoryDriver;
         $scope = new DataScope(deploymentId: 'fixture-deployment', accountId: 'account-1', workspaceId: null, bindingId: 'fixture-binding', bindingGeneration: 1, accountIncarnation: 'fixture-incarnation', restoreEpoch: hash('sha256', 'equipment-epoch'), principalKind: 'user', principalId: 'actor-1');
-        $submission = $provider->submit(new IndexBatch('generation-1', [
-            ['id' => 'eq-1', 'entity' => 'equipment', 'text' => 'pump alpha'],
-        ]));
-
-        if ($provider->status($submission)->status !== 'ready') {
-            throw new RuntimeException('Index submission was not ready.');
-        }
-
-        $page = $provider->query($scope, new SearchQuery('equipment', hash('sha256', 'schema'), 'pump'));
-
-        if (count($page->candidates) !== 1 || $page->candidates[0]->record->id !== 'eq-1') {
-            throw new RuntimeException('Indexed equipment was not found.');
-        }
-
         $imported = self::import($scope);
 
         return [
             'serial' => 'pump-1',
             'attribute' => $definitions[0]->machineKey,
-            'found' => $page->candidates[0]->record->id,
             'imported' => $imported['applied'],
             'failed' => $imported['failed'],
             'maintenance' => 'scheduled',
         ];
     }
 
-    public static function schedule(string $database): void
+    public static function schedule(string $database, string $found): void
     {
-        $result = self::exercise(self::$bound ?? new MemoryDriver);
+        if ($found !== self::searchFixture()['record']) {
+            throw new RuntimeException('The public Search proof did not resolve this equipment record.');
+        }
+        $result = ['found' => $found, ...self::exercise()];
         $pdo = self::database($database);
         $pdo->exec('create table if not exists equipment (id text primary key, serial text not null)');
         $pdo->exec('create table if not exists maintenance_jobs (id integer primary key, serial text not null, status text not null, result text)');
-        $pdo->prepare('insert into equipment (id, serial) values (?, ?)')->execute(['eq-1', $result['serial']]);
+        $pdo->prepare('insert into equipment (id, serial) values (?, ?)')->execute([$found, $result['serial']]);
         $pdo->prepare('insert into maintenance_jobs (serial, status, result) values (?, ?, ?)')->execute([
             $result['serial'],
             'scheduled',

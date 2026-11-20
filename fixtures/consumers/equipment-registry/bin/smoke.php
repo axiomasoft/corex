@@ -11,7 +11,7 @@ $mode = $argv[1] ?? '';
 $database = $argv[2] ?? '';
 
 if (! in_array($mode, ['schedule', 'worker', 'read'], true) || $database === '') {
-    fwrite(STDERR, "usage: smoke.php schedule|worker|read database\n");
+    fwrite(STDERR, "usage: smoke.php schedule|worker|read database [search-record-id]\n");
     exit(1);
 }
 
@@ -23,7 +23,7 @@ if ($application->basePath() === '') {
 }
 
 if ($mode === 'schedule') {
-    Smoke::schedule($database);
+    Smoke::schedule($database, $argv[3] ?? '');
     echo "scheduled\n";
     exit(0);
 }

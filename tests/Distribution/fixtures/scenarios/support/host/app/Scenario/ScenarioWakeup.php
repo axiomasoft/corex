@@ -7,8 +7,8 @@ namespace App\Scenario;
 use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Scheduling\Contracts\DueWakeupHandler;
 use CoreX\Scheduling\Data\WakeupDelivery;
-use CoreX\Search\Contracts\SearchProvider;
-use CoreX\Search\Data\SearchQuery;
+use CoreX\Search\Query\Contracts\Search;
+use CoreX\Search\Query\Data\SearchQuery;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
@@ -19,9 +19,9 @@ final class ScenarioWakeup implements DueWakeupHandler
     {
         $database = DB::connection();
         app(CurrentWorkScope::class)->assert($delivery->request->scope, $database);
-        $page = app(SearchProvider::class)->query($delivery->request->scope, new SearchQuery(ScenarioSearchSchema::ENTITY, ScenarioSearchSchema::hash(), 'equipment'));
+        $page = app(Search::class)->query($delivery->request->scope, new SearchQuery(ScenarioSearchSchema::entity(), 'equipment', ['marker']));
 
-        if ($page->candidates[0]?->record->id !== Scenario::RECORD) {
+        if (($page->hits[0]->record->id ?? null) !== Scenario::RECORD) {
             throw new RuntimeException('The installed wakeup did not query its real Search target.');
         }
         $database->getSchemaBuilder()->create('scenario_wakeup_publication', static fn (Blueprint $table) => $table->string('reference')->primary());

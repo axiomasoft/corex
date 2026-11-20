@@ -44,6 +44,8 @@
             "profile": "laravel-package",
             "error-prefix": "search-meilisearch",
             "owns": [
+                "Contracts",
+                "Enums",
                 "Errors",
                 "Exceptions",
                 "Internal",
