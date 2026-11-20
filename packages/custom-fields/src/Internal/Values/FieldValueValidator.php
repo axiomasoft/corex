@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace CoreX\CustomFields\Internal\Values;
 
 use CoreX\CustomFields\Contracts\FieldCatalogue;
-use CoreX\CustomFields\Data\FieldSelection;
+use CoreX\CustomFields\Data\AttributeId;
 use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\InvalidAttributeValue;
 use CoreX\CustomFields\Internal\Value;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Data\RecordRef;
 use DateTimeImmutable;
 use Exception;
@@ -21,15 +22,24 @@ final readonly class FieldValueValidator
 {
     public function __construct(private FieldCatalogue $catalogue) {}
 
-    public function validateSelection(DataScope $scope, RecordRef $record, FieldSelection $selection): void
+    /** @return array<string, array<string, mixed>> */
+    public function selectedDefinitions(DataScope $scope, string $entity, FieldSelection $selection): array
     {
-        $fields = $this->fields($this->catalogue->snapshot(scope: $scope, entity: $record->entity));
+        $definitions = $this->fields($this->catalogue->snapshot(scope: $scope, entity: $entity));
+        $byId = [];
 
-        foreach ($selection->fields as $field) {
-            if (! isset($fields[$field])) {
-                throw new InvalidAttributeValue("Attribute field [{$field}] is not active for this entity.");
-            }
+        foreach ($definitions as $code => $definition) {
+            $id = $definition['id'] ?? AttributeId::legacy($entity, $code)->value;
+            $byId[Value::text($id)] = $code;
         }
+
+        $selected = [];
+        foreach ($selection->fields as $id) {
+            $code = $byId[$id] ?? throw new InvalidAttributeValue("Attribute field [{$id}] is not active for this entity.");
+            $selected[$code] = $definitions[$code];
+        }
+
+        return $selected;
     }
 
     public function validatePatch(DataScope $scope, RecordRef $record, ValuePatch $patch): void

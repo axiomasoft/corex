@@ -8,3 +8,5 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(TestCase::class, RefreshDatabase::class)->in('Address', 'Locale', 'Money', 'Reference');
 uses(PgTestCase::class)->in('Pg');
+
+require_once dirname(__DIR__, 3).'/tests/Support/CallerWorkScopeFixture.php';

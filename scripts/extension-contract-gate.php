@@ -27,7 +27,6 @@ $classification = [
     'CoreX\\Operations\\Definition\\Contracts\\OperationRegistry' => 'projection',
     'CoreX\\Operations\\Pagination\\Contracts\\OrderingRegistry' => 'projection',
     'CoreX\\Search\\Contracts\\SearchDriverRegistry' => 'driver factory',
-    'CoreX\\Search\\Internal\\ManagerDriverRegistry' => 'driver factory',
     'CoreX\\Webhooks\\Internal\\WebhookTopicCatalogue' => 'projection',
     'CoreX\\Tools\\Contracts\\ToolCatalogue' => 'projection',
     'CoreX\\Tools\\Internal\\CompiledToolCatalogue' => 'projection',
@@ -45,6 +44,7 @@ $classification = [
     'CoreX\\Messaging\\Internal\\ArrayMessageContractRegistry' => 'authority',
     'CoreX\\Context\\Contracts\\TenancyManager' => 'runtime manager',
     'CoreX\Context\Internal\NullTenancyManager' => 'runtime manager',
+    'CoreX\Context\Internal\WorkAuthManager' => 'runtime manager',
     'CoreX\Search\Internal\SearchManager' => 'driver factory',
     'CoreX\\Scheduler\\Internal\\WakeupHandlerRegistry' => 'authority',
 ];

@@ -6,9 +6,9 @@ namespace CoreX\Webhooks\Tests\Feature;
 
 use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Audit\Data\AuditEntry;
-use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\Internal\GuardedTenantContextRestorer;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Messaging\Data\MessageContract;
@@ -24,6 +24,7 @@ use CoreX\Operations\Pagination\Contracts\CursorKeyring;
 use CoreX\Operations\Pagination\Internal\SignedCursorCodec;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Data\WebhookTopic;
@@ -52,7 +53,7 @@ final class WebhookReplayTest extends TestCase
 
     private WebhookReplay $replay;
 
-    private TenantContextRestorer $restorer;
+    private CurrentWorkScope $restorer;
 
     protected function setUp(): void
     {
@@ -66,9 +67,9 @@ final class WebhookReplayTest extends TestCase
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-26T16:00:00.000000+00:00'));
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
-        $this->scope = new DataScope('account-a', null, 'sqlite::memory:', 'actor-a', hash('sha256', 'webhook-replay'));
+        $this->scope = CallerWorkScopeFixture::scope('account-a', null, 'actor-a', hash('sha256', 'webhook-replay'));
         $this->audit = new ReplayAuditLogger;
-        $this->restorer = new GuardedTenantContextRestorer($contexts);
+        $this->restorer = new CallerWorkScopeFixture($contexts);
         $this->replay = new WebhookReplay(
             connection: $this->connection,
             contexts: $this->restorer,
@@ -222,14 +223,8 @@ final class WebhookReplayTest extends TestCase
             $this->connection = DB::connection('api_p1416_tenant');
             $contexts = new ContextFixture;
             $contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
-            $this->restorer = new GuardedTenantContextRestorer($contexts);
-            $this->scope = new DataScope(
-                'account-a',
-                null,
-                'pgsql:'.$this->connection->getDatabaseName(),
-                'actor-a',
-                hash('sha256', 'webhook-replay-pg'),
-            );
+            $this->restorer = new CallerWorkScopeFixture($contexts);
+            $this->scope = CallerWorkScopeFixture::scope('account-a', null, 'actor-a', hash('sha256', 'webhook-replay-pg'));
             $this->replay = new WebhookReplay(
                 $this->connection,
                 $this->restorer,
@@ -301,7 +296,7 @@ final class WebhookReplayTest extends TestCase
             'id' => $id, 'subscription_id' => $subscription, 'subscription_revision' => $subscriptionRevision,
             'event_id' => 'event-'.$id, 'topic' => 'orders.placed', 'topic_version' => 1, 'major' => 'v1',
             'endpoint_snapshot' => 'https://hooks.example/receiver',
-            'scope' => JsonCanonical::encode(['account' => 'account-a', 'workspace' => null]),
+            'scope' => JsonCanonical::encode(resolve(DataScopeCodec::class)->encode($this->scope)),
             'body' => $body, 'body_hash' => hash('sha256', $body), 'status' => $status, 'attempt' => $attempt,
             'replay_count' => $replayCount, 'lease_owner' => $leaseOwner,
             'lease_until' => $leaseOwner === null ? null : $this->clock->now()->add(new DateInterval('PT30S')),

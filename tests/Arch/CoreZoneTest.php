@@ -12,9 +12,9 @@ use CoreX\Messaging\Events\DomainEvent;
 use CoreX\Messaging\Internal\DomainEventDefaults;
 use CoreX\Observability\Contracts\TracePropagation;
 use CoreX\Observability\Data\OperationContext;
-use CoreX\Panels\SavedViews\Internal\SqlSavedViewRepository;
 use CoreX\Settings\Data\SettingsScope;
 use CoreX\Settings\Enums\SettingScope;
+use CoreX\Settings\Internal\DatabaseSettingsRepository;
 use CoreX\Tests\Support\SourceScanner;
 use Packman\Schema\Contracts\Migration\SchemaSets;
 use Packman\Schema\Enums\SchemaLifecycle;
@@ -94,9 +94,6 @@ const CORE_ZONE_EXACT_IMPORTS = [
         SchemaSetException::class,
     ],
     'packages/core/src/Context/Internal/ImpersonationGuard.php' => [AuditLog::class],
-    'packages/core/src/Data/Data/DataScope.php' => [
-        TenantContext::class,
-    ],
     'packages/core/src/Messaging/Events/DomainEvent.php' => [
         TenantContext::class,
         DomainEventDefaults::class,
@@ -113,9 +110,6 @@ const CORE_ZONE_EXACT_IMPORTS = [
     'packages/core/src/Features/Internal/DatabaseFeatureFlags.php' => [
         SettingsScope::class,
         SettingScope::class,
-    ],
-    'packages/core/src/Context/Internal/GuardedTenantContextRestorer.php' => [
-        TenantContext::class,
     ],
     'packages/core/src/Context/Internal/NullTenancyManager.php' => [
         AccountRef::class,
@@ -244,38 +238,72 @@ const CORE_ZONE_DUMP = [
     'Config/Data/SecretRef.php' => 'Foundation',
     'Config/Laravel/ConfigurationValidator.php' => 'Foundation',
     'Context/Contracts/AccountConnectionResolver.php' => 'TenancyContracts',
+    'Context/Contracts/ControlStoreIsolation.php' => 'TenancyContracts',
+    'Context/Contracts/CurrentWorkScope.php' => 'TenancyContracts',
+    'Context/Contracts/DataScopeFactory.php' => 'TenancyContracts',
     'Context/Contracts/IdentityPasswordRehasher.php' => 'TenancyContracts',
+    'Context/Contracts/NamedWorkPrincipal.php' => 'TenancyContracts',
     'Context/Contracts/ImpersonationService.php' => 'TenancyContracts',
+    'Context/Contracts/PhysicalBindingVerifier.php' => 'TenancyContracts',
+    'Context/Contracts/ScopeAdmission.php' => 'TenancyContracts',
+    'Context/Contracts/ScopeAuthority.php' => 'TenancyContracts',
+    'Context/Contracts/StoredWorkRunner.php' => 'TenancyContracts',
     'Context/Contracts/TenancyManager.php' => 'TenancyContracts',
     'Context/Contracts/TenantContextResolver.php' => 'TenancyContracts',
-    'Context/Contracts/TenantContextRestorer.php' => 'TenancyContracts',
     'Context/Contracts/TenantDatabaseLifecycle.php' => 'TenancyContracts',
     'Context/Contracts/TenantDatabaseProvisioner.php' => 'TenancyContracts',
+    'Context/Contracts/WorkPrincipalAuthority.php' => 'TenancyContracts',
+    'Context/Contracts/WorkScopeDirectory.php' => 'TenancyContracts',
+    'Context/Contracts/WorkScopeRunner.php' => 'TenancyContracts',
     'Context/Data/AccountRef.php' => 'TenancyContracts',
+    'Context/Data/AdmissionTicket.php' => 'TenancyContracts',
+    'Context/Data/AttemptEvidence.php' => 'TenancyContracts',
     'Context/Data/DatabaseConnectionConfig.php' => 'TenancyContracts',
+    'Context/Data/OperationKey.php' => 'TenancyContracts',
+    'Context/Data/PhysicalBinding.php' => 'TenancyContracts',
+    'Context/Data/ScopePrincipal.php' => 'TenancyContracts',
     'Context/Data/TenantContext.php' => 'TenancyContracts',
     'Context/Data/WorkspaceRef.php' => 'TenancyContracts',
+    'Context/Enums/AdmissionKind.php' => 'TenancyContracts',
     'Context/Enums/ImpersonationRestrictedAction.php' => 'TenancyContracts',
     'Context/Exceptions/CentralContextException.php' => 'TenancyContracts',
     'Context/Exceptions/ImpersonationRestrictedException.php' => 'TenancyContracts',
     'Context/Exceptions/ScopeContextMismatch.php' => 'TenancyContracts',
-    'Context/Internal/GuardedTenantContextRestorer.php' => 'TenancyContracts',
+    'Context/Exceptions/ScopeStale.php' => 'TenancyContracts',
+    'Context/Internal/AuthenticatedWorkPrincipal.php' => 'TenancyContracts',
+    'Context/Internal/BoxedCentralWorkRunner.php' => 'TenancyContracts',
+    'Context/Internal/BoxedWorkScopeDirectory.php' => 'TenancyContracts',
     'Context/Internal/ImpersonationGuard.php' => 'TenancyContracts',
     'Context/Data/ImpersonationState.php' => 'TenancyContracts',
     'Context/Internal/NullImpersonationService.php' => 'TenancyContracts',
     'Context/Internal/NullTenancyManager.php' => 'TenancyContracts',
+    'Context/Internal/RequiredPhysicalBindingVerifier.php' => 'TenancyContracts',
     'Context/Data/ProvisionParams.php' => 'TenancyContracts',
     'Context/Internal/SingleAccountResolver.php' => 'TenancyContracts',
-    'Data/Internal/AllowAllDataScopeAuthorizer.php' => 'Foundation',
+    'Context/Internal/VerifiedWorkScope.php' => 'TenancyContracts',
+    'Context/Laravel/DatabaseScopeControl.php' => 'TenancyContracts',
+    'Context/Laravel/ScopeControlSchema.php' => 'TenancyContracts',
+    'Context/Laravel/ScopeOptions.php' => 'TenancyContracts',
+    'Context/Laravel/WorkQueueBoundary.php' => 'TenancyContracts',
+    'Context/Laravel/WorkQueueHandler.php' => 'TenancyContracts',
+    'Context/Laravel/WorkQueueHandlers.php' => 'TenancyContracts',
     'Data/Internal/ArrayDataScopeCodec.php' => 'Foundation',
     'Data/Internal/CallableDataScopeAuthorizer.php' => 'Foundation',
     'Data/Contracts/DataScopeAuthorizer.php' => 'Foundation',
     'Data/Contracts/DataScopeCodec.php' => 'Foundation',
+    'Data/Contracts/FieldUsePolicy.php' => 'Foundation',
     'Data/Data/DataScope.php' => 'Foundation',
     'Data/Data/DataScopeAccessDecision.php' => 'Foundation',
+    'Data/Data/EntityHandle.php' => 'Foundation',
+    'Data/Data/FieldSelection.php' => 'Foundation',
+    'Data/Data/FieldUsePlan.php' => 'Foundation',
+    'Data/Data/FieldUseRequest.php' => 'Foundation',
+    'Data/Enums/FieldUse.php' => 'Foundation',
+    'Data/Enums/FieldUsePlanKind.php' => 'Foundation',
     'Data/Internal/DenyDataScopeAuthorizer.php' => 'Foundation',
     'Data/Exceptions/InvalidScopePayload.php' => 'Foundation',
     'Data/Data/RecordRef.php' => 'Foundation',
+    'Data/Data/ScopeIdentity.php' => 'Foundation',
     'Data/Data/WriteToken.php' => 'Foundation',
     'Database/Laravel/BaseModel.php' => 'Foundation',
     'Departments/Contracts/DepartmentRepository.php' => 'Departments',
@@ -415,37 +443,37 @@ test('foreign files do not import zone Internal (R-Z2)', function (): void {
 test('R-Z1 planting in Foundation RecordRef names the file and symbol', function (): void {
     $line = coreZonePlant(
         'packages/core/src/Data/Data/RecordRef.php',
-        SqlSavedViewRepository::class,
+        DatabaseSettingsRepository::class,
         rz1Offenders(...),
     );
 
     expect($line)->toContain('R-Z1')
         ->and($line)->toContain('RecordRef.php')
-        ->and($line)->toContain('SqlSavedViewRepository');
+        ->and($line)->toContain('DatabaseSettingsRepository');
 });
 
 test('R-Z1 planting in TenancyContracts AccountRef names the file and symbol', function (): void {
     $line = coreZonePlant(
         'packages/core/src/Context/Data/AccountRef.php',
-        SqlSavedViewRepository::class,
+        DatabaseSettingsRepository::class,
         rz1Offenders(...),
     );
 
     expect($line)->toContain('R-Z1')
         ->and($line)->toContain('AccountRef.php')
-        ->and($line)->toContain('SqlSavedViewRepository');
+        ->and($line)->toContain('DatabaseSettingsRepository');
 });
 
 test('R-Z2 planting in ActorType names the file and symbol', function (): void {
     $line = coreZonePlant(
         'packages/core/src/Audit/Enums/ActorType.php',
-        SqlSavedViewRepository::class,
+        DatabaseSettingsRepository::class,
         rz2Offenders(...),
     );
 
     expect($line)->toContain('R-Z2')
         ->and($line)->toContain('ActorType.php')
-        ->and($line)->toContain('SqlSavedViewRepository');
+        ->and($line)->toContain('DatabaseSettingsRepository');
 });
 
 test('R-Z0 planting of an unclassified error file names the path', function (): void {

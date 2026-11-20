@@ -62,7 +62,6 @@
 | corex-media.purposes | axiomasoft/corex-media | array | unobserved | no | product-policy | unobserved | use-site | MediaOptions::$purposes |  | undeclared-read |
 | corex-notifications.delivery.claim_seconds | axiomasoft/corex-notifications | int | 60 | no | product-policy | unobserved | unobserved | NotificationsOptions::$deliveryClaimSeconds |  |  |
 | corex-notifications.delivery.max_attempts | axiomasoft/corex-notifications | int | 5 | no | product-policy | unobserved | unobserved | NotificationsOptions::$deliveryMaxAttempts |  |  |
-| corex-notifications.digest.accept_legacy_unstamped | axiomasoft/corex-notifications | bool | false | no | product-policy | unobserved | unobserved | NotificationsOptions::$digestAcceptLegacyUnstamped |  |  |
 | corex-notifications.digest.enabled | axiomasoft/corex-notifications | bool | false | no | product-policy | unobserved | unobserved | NotificationsOptions::$digestEnabled |  |  |
 | corex-operations.build | axiomasoft/corex-operations | string | dev | no | product-policy | unobserved | unobserved | ApiOptions::$build |  |  |
 | corex-operations.bulk.enabled | axiomasoft/corex-operations | bool | true | no | product-policy | unobserved | unobserved | BulkOptions::$enabled |  |  |
@@ -103,7 +102,6 @@
 | corex-recurring-tasks.completion_capture.definition_ref | axiomasoft/corex-recurring-tasks | string | task-completion/1 | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$completionCaptureDefinitionRef |  |  |
 | corex-recurring-tasks.completion_capture.enabled | axiomasoft/corex-recurring-tasks | bool | false | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$completionCaptureEnabled |  |  |
 | corex-recurring-tasks.completion_capture.version_ref | axiomasoft/corex-recurring-tasks | string | task-completion/1 | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$completionCaptureVersionRef |  |  |
-| corex-recurring-tasks.wakeup.accept_legacy_unstamped | axiomasoft/corex-recurring-tasks | bool | false | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$wakeupAcceptLegacyUnstamped |  |  |
 | corex-recurring-tasks.wakeup.enabled | axiomasoft/corex-recurring-tasks | bool | false | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$wakeupEnabled |  |  |
 | corex-recurring-tasks.wakeup.handler | axiomasoft/corex-recurring-tasks | string | CoreX\RecurringTasks\Internal\MaterializationWakeupHandler | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$wakeupHandler |  |  |
 | corex-recurring-tasks.wakeup.handler_kind | axiomasoft/corex-recurring-tasks | string | task-recurrence.materialize | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$wakeupHandlerKind |  |  |
@@ -152,7 +150,7 @@
 | corex-tenancy.storage.durable_root | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$storageDurableRoot |  |  |
 | corex-tenancy.storage.ephemeral_root | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$storageEphemeralRoot |  |  |
 | corex-tenancy.trial_days | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$lifecycle |  |  |
-| corex-tenancy.wakeup.driver | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$wakeupDriver |  |  |
+| corex-tenancy.wakeup.driver | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$wakeupDriver |  | The root registry requires Scheduler and the host's explicit corex.scheduler-sweep grant. |
 | corex-tenancy.wakeup.lease_seconds | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$wakeupLeaseSeconds |  |  |
 | corex-tenancy.wakeup.root_connection | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$wakeupRootConnection |  |  |
 | corex-tenancy.workspace.path_segment | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$workspacePathSegment |  |  |
@@ -188,6 +186,10 @@
 | corex.pubsub.octane_worker_opt_in | axiomasoft/corex | bool | false | no | product-policy | unobserved | use-site | CoreOptions::$pubsubOctaneWorkerOptIn |  |  |
 | corex.pubsub.poll_interval_microseconds | axiomasoft/corex | int | 50000 | no | product-policy | unobserved | use-site | CoreOptions::$pubsubPollIntervalMicroseconds |  |  |
 | corex.pubsub.retention | axiomasoft/corex | string | 30 days | no | product-policy | unobserved | use-site | CoreOptions::$pubsubRetention |  |  |
+| corex.scope.central_jobs | axiomasoft/corex | array | [] | no | deployment | no | boot | ScopeOptions::$centralJobs |  | Handlers explicitly admitted to run in the central context. |
+| corex.scope.control_connection | axiomasoft/corex | unobserved | unobserved | no | deployment | no | use-site | ScopeOptions::$controlConnection |  | Connection to the control store outside tenant backup and restore. |
+| corex.scope.deployment_id | axiomasoft/corex | unobserved | unobserved | no | deployment | no | use-site | ScopeOptions::$deploymentId |  | Stable identifier for the deployment that admits the work. |
+| corex.scope.tenant_jobs | axiomasoft/corex | array | [] | no | deployment | no | boot | ScopeOptions::$tenantJobs |  | Handlers explicitly admitted to run with a verified tenant scope. |
 | corex.settings.cache_prefix | axiomasoft/corex | string | corex.settings | no | product-policy | unobserved | use-site | CoreOptions::$settingsCachePrefix |  |  |
 | corex.settings.cache_store | axiomasoft/corex | string | array | no | product-policy | unobserved | use-site | CoreOptions::$settingsCacheStore |  |  |
 | corex.settings.cache_ttl | axiomasoft/corex | int | 3600 | no | product-policy | unobserved | use-site | CoreOptions::$settingsCacheTtl |  |  |

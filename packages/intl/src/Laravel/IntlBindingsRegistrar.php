@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Laravel;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Intl\Currency\Contracts\CurrencyConverter;
 use CoreX\Intl\Currency\Contracts\CurrencyMetadata;
@@ -60,6 +61,7 @@ final class IntlBindingsRegistrar implements PackageRegistrar
         $app->scoped(RateImporter::class, static fn (Application $app): RateImporter => new SqlRateImporter(
             connection: $app->make(DatabaseManager::class)->connection(),
             authorizer: $app->make(DataScopeAuthorizer::class),
+            current: $app->make(CurrentWorkScope::class),
             clock: $app->make(ClockInterface::class),
             batchLimit: $app->make(IntlOptions::class)->moneyBatchLimit,
         ));

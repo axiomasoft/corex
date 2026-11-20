@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — CoreX 2.0 binding authority
+
+- Host composition implements `TenantBindingAuthority` to verify the physical binding in the active Tenant runtime. Resolve accounts and workspaces through the trusted directory to restore persisted scope. CoreX uses declared tenant and central handlers with the shared v3 queue envelope.
+
 ## Unreleased — Packman governance
 
 - Eloquent relation adapters expose covariant Model contracts; middleware and Artisan handlers are explicitly Internal.

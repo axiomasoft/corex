@@ -6,6 +6,7 @@ namespace CoreX\Webhooks\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\MessagePublisher;
 use CoreX\Messaging\Data\MessageContract;
@@ -18,6 +19,7 @@ use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Data\WebhookSubscription;
@@ -206,7 +208,7 @@ final class WebhookFanoutTest extends TestCase
         ]);
         $catalogue = new WebhookTopicCatalogue($contracts, [$topic], ['orders.placed' => $projector]);
 
-        return new WebhookFanout($db, MessagingFixtures::inbox($db, $this->clock), $catalogue, ['orders.placed' => $projector], $this->clock, new JsonCloudEventCodec($contracts));
+        return new WebhookFanout($db, MessagingFixtures::inbox($db, $this->clock), $catalogue, ['orders.placed' => $projector], $this->clock, new JsonCloudEventCodec($contracts), resolve(DataScopeCodec::class), new CallerWorkScopeFixture($contexts));
     }
 
     private function subscribe(string $id, string $connection = 'api_tenant'): void
@@ -236,7 +238,7 @@ final class WebhookFanoutTest extends TestCase
             name: 'orders.placed',
             contractVersion: 1,
             occurredAt: new DateTimeImmutable('2026-09-25T12:00:00+00:00'),
-            scope: ['account' => 'account-1'],
+            scope: resolve(DataScopeCodec::class)->encode(CallerWorkScopeFixture::scope('account-1', null, 'actor-1', str_repeat('a', 64))),
             payload: new MessagePayload(['id' => 'order-1', 'secret' => 'hidden']),
             piiClass: PiiClass::Personal,
             correlationId: 'correlation-1',

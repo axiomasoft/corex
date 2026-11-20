@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace CoreX\Scheduler\Laravel;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Context\Contracts\StoredWorkIssuer;
+use CoreX\Context\Contracts\StoredWorkRunner;
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Scheduler\Internal\DangerousModesCheck;
+use CoreX\Context\Contracts\WorkScopeRunner;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Scheduler\Internal\SchedulerOptions;
 use CoreX\Scheduler\Internal\SqlWakeupScheduler;
 use CoreX\Scheduler\Internal\SweepRunner;
 use CoreX\Scheduler\Internal\WakeupHandlerRegistry;
+use CoreX\Scheduler\Internal\WakeupInput;
 use CoreX\Scheduling\Contracts\DueWakeupSource;
 use CoreX\Scheduling\Contracts\DueWakeupSweeper;
 use CoreX\Scheduling\Contracts\WakeupScheduleHint;
@@ -22,7 +28,6 @@ use Illuminate\Database\DatabaseManager;
 use Override;
 use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
-use Packman\Config\Contracts\RuntimeConfigCheck;
 use Packman\Config\Exceptions\InvalidConfiguration;
 use Packman\Foundation\Contracts\PackageRegistrar;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
@@ -38,7 +43,6 @@ final class WakeupBindingsRegistrar implements PackageRegistrar
         $app->singleton(SchedulerOptions::class, static fn (Application $app): SchedulerOptions => SchedulerOptions::fromArray(
             (array) $app->make(Repository::class)->get('corex-scheduler', []),
         ));
-        $app->tag([DangerousModesCheck::class], RuntimeConfigCheck::class);
 
         if (! $app->bound(ClockInterface::class)) {
             $app->singleton(ClockInterface::class, static fn (): SystemClock => new SystemClock);
@@ -48,25 +52,34 @@ final class WakeupBindingsRegistrar implements PackageRegistrar
             WakeupHandlerRegistry::class,
             static fn (Application $app): WakeupHandlerRegistry => WakeupHandlerRegistry::compile(
                 definitions: self::definitions($app),
-                resolve: static fn (string $handler) => $app->make($handler),
                 registryFingerprint: self::registryFingerprint($app->bound(ModuleRegistry::class) ? $app->make(ModuleRegistry::class) : null),
             ),
         );
         $app->scoped(
             WakeupScheduler::class,
             static fn (Application $app): SqlWakeupScheduler => new SqlWakeupScheduler(
-                connection: $app->make(DatabaseManager::class)->connection(),
-                contexts: $app->make(TenantContextResolver::class),
+                databases: $app->make(DatabaseManager::class),
+                current: $app->make(CurrentWorkScope::class),
+                runner: $app->make(WorkScopeRunner::class),
+                issuer: $app->make(StoredWorkIssuer::class),
+                input: $app->make(WakeupInput::class),
                 handlers: $app->make(WakeupHandlerRegistry::class),
                 hints: self::hints($app),
                 clock: $app->make(ClockInterface::class),
             ),
         );
         $app->scoped(DueWakeupSweeper::class, static fn (Application $app): SweepRunner => new SweepRunner(
-            connection: $app->make(DatabaseManager::class)->connection(),
+            databases: $app->make(DatabaseManager::class),
             contexts: $app->make(TenantContextResolver::class),
+            current: $app->make(CurrentWorkScope::class),
+            scopes: $app->make(DataScopeFactory::class),
+            runner: $app->make(WorkScopeRunner::class),
+            stored: $app->make(StoredWorkRunner::class),
+            codec: $app->make(DataScopeCodec::class),
+            input: $app->make(WakeupInput::class),
             handlers: $app->make(WakeupHandlerRegistry::class),
-            dueSources: self::dueSources($app),
+            resolveHandler: static fn (string $handler) => $app->make($handler),
+            dueSources: static fn (): array => self::dueSources($app),
             leaseSeconds: $app->make(SchedulerOptions::class)->leaseSeconds,
             maxAttempts: $app->make(SchedulerOptions::class)->maxAttempts,
             clock: $app->make(ClockInterface::class),

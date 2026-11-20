@@ -1,4 +1,4 @@
-# Второй, САМОСТОЯТЕЛЬНЫЙ PHPStan-прогон: 9 правил `corex/modules-lint`
+# Второй, САМОСТОЯТЕЛЬНЫЙ PHPStan-прогон: 9 правил Packman Modules
 # (transaction-pooling дисциплина, P1.13) на каталоге `tests/` — item P1.28, D48.
 #
 # ПОЧЕМУ ОТДЕЛЬНЫЙ КОНФИГ, а не `paths += tests` в корневом `phpstan.neon`:
@@ -20,6 +20,7 @@
 
 includes:
     - packages/core/extension.neon
+    - vendor/axiomasoft/packman-modules/packages/modules/extension.neon
     - vendor/pestphp/pest/extension.neon
 
 parameters:
@@ -76,35 +77,27 @@ parameters:
         # `tests/` — новый файл с `SET`/`LISTEN`/temp-table/`PREPARE`/`eval`/записью
         # в `sys_*`/`mod_*` красит прогон.
 
-        # --- corexModules.directSystemTableWrite (13) -------------------------
+        # --- modules.directSystemTableWrite -----------------------------------
         # Прямая запись в `sys_*`/`mod_*` в arrange/assert: через контракт владельца
         # эти тесты недостижимы по построению.
         -
             # Дубль `is_primary` — предмет теста partial-unique в БД (AC-24d);
             # плюс arrange для subtree()/primaryOf()/soft-delete (AC-24e/AC-24).
-            identifier: corexModules.directSystemTableWrite
+            identifier: modules.directSystemTableWrite
             path: tests/Feature/DepartmentTest.php
             count: 4
         -
             # Регрессия расширенного CHECK `actor_type` (D138): строка обязана
             # писаться СЫРЬЁМ, иначе контракт подставит своё значение и CHECK
             # не будет тем, что под тестом.
-            identifier: corexModules.directSystemTableWrite
+            identifier: modules.directSystemTableWrite
             path: tests/Feature/ImpersonatedActorTest.php
             count: 4
-        -
-            # (1) детерминизация `created_at` для патча-саботажа purge-порядка
-            # (без неё мутант выживает); (2) посев `mod_modules` для регрессии
-            # container-биндинга `ModuleStateReader` (D63/D65) — контракт писал бы
-            # в дефолтный коннекшен, т.е. мимо предмета теста.
-            identifier: corexModules.directSystemTableWrite
-            path: tests/Feature/ModuleLifecycleTest.php
-            count: 2
         -
             # Дубль account-строки СЫРЫМ insert'ом: репозиторий ходит через
             # `updateOrCreate()` и второй INSERT не эмитит никогда — через него
             # констрейнт `UNIQUE NULLS NOT DISTINCT` недостижим (A57/A63).
-            identifier: corexModules.directSystemTableWrite
+            identifier: modules.directSystemTableWrite
             path: tests/Feature/SettingsTest.php
             count: 2
 
@@ -113,39 +106,84 @@ parameters:
         # consumed by the resolver under test; the owning contract cannot
         # create this deliberately malformed/cross-branch fixture.
         -
-            identifier: corexModules.directSystemTableWrite
+            identifier: modules.directSystemTableWrite
             path: packages/access/tests/Pg/ScopeResolverTest.php
             count: 1
         # AccessChecker uses the same real core ltree department fixture to
         # prove its public record path, then removes its table for the
         # fail-closed path; sibling/NULL/non-user cases deny.
         -
-            identifier: corexModules.directSystemTableWrite
+            identifier: modules.directSystemTableWrite
             path: packages/access/tests/Pg/AccessCheckerTest.php
             count: 2
         # WorkspaceResolver verifies the tenancy/auth boundary with raw core
         # department membership rows. Keep the exception exact: any additional
         # write, or either removed fixture write, fails this standalone pass.
         -
-            identifier: corexModules.directSystemTableWrite
+            identifier: modules.directSystemTableWrite
             path: packages/tenancy/tests/Feature/WorkspaceResolverTest.php
             count: 2
 
-        # --- corexModules.setWithoutLocal (3) ---------------------------------
+        # These Operations fixtures place rows at exact retention times,
+        # install malformed rows to exercise constraints, or remove the
+        # idempotency table to prove the gate fails before execution.
+        -
+            identifier: modules.directSystemTableWrite
+            message: '#^Direct write to core table "sys_api_(budget_buckets|budget_reservations|bulk_operations)"#'
+            path: packages/operations/tests/Feature/ApiRetentionTest.php
+            count: 6
+        -
+            identifier: modules.directSystemTableWrite
+            message: '#^Direct write to core table "sys_api_idempotency"#'
+            path: packages/operations/tests/Feature/ApiRoutesTest.php
+            count: 1
+        -
+            identifier: modules.directSystemTableWrite
+            message: '#^Direct write to core table "sys_api_idempotency"#'
+            path: packages/operations/tests/Feature/AuthorizationLayersTest.php
+            count: 1
+        -
+            identifier: modules.directSystemTableWrite
+            message: '#^Direct write to core table "sys_api_idempotency"#'
+            path: packages/operations/tests/Feature/CostInvocationTest.php
+            count: 2
+        -
+            identifier: modules.directSystemTableWrite
+            message: '#^Direct write to core table "sys_api_idempotency"#'
+            path: packages/operations/tests/Feature/IdempotentInvocationTest.php
+            count: 2
+        -
+            identifier: modules.directSystemTableWrite
+            message: '#^Direct write to core table "sys_api_(budget_buckets|budget_reservations|bulk_operations|webhook_subscriptions|webhook_deliveries|webhook_attempts)"#'
+            path: packages/operations/tests/Feature/LoadSchemaTest.php
+            count: 9
+        -
+            identifier: modules.directSystemTableWrite
+            message: '#^Direct write to core table "sys_api_(budget_buckets|budget_reservations)"#'
+            path: packages/operations/tests/Feature/OperationBudgetTest.php
+            count: 3
+        -
+            identifier: modules.directSystemTableWrite
+            message: '#^Direct write to core table "sys_api_idempotency"#'
+            path: tests/Feature/OperationContractTest.php
+            count: 1
+
+        # --- modules.setWithoutLocal -----------------------------------------
         # Единственный санкционированный session-level `SET` в харнессе —
         # `set lock_timeout` на ОТДЕЛЬНОМ пробном коннекшене: он обязан пережить
-        # оператор и подействовать на СЛЕДУЮЩИЙ вызов (`move()`/`enable()`),
+        # оператор и подействовать на СЛЕДУЮЩИЙ вызов `move()`,
         # который открывает собственную транзакцию. `SET LOCAL` здесь не просто
         # эквивалент — он сделал бы доказательство взятия advisory-lock пустым.
         # Привязка — ТОЛЬКО по файлу и точному счёту: сообщение правила не несёт
         # самого SQL, отличить `SET lock_timeout` от `SET search_path` регексом
-        # нечем. Поэтому граница держится счётом: ЧЕТВЁРТЫЙ session-level `SET`
-        # в этих двух файлах (как и первый в любом другом) красит прогон.
+        # нечем. Второй session-level `SET` в этом файле красит прогон.
         -
-            identifier: corexModules.setWithoutLocal
+            identifier: modules.setWithoutLocal
             path: tests/Feature/DepartmentTest.php
             count: 1
+        # NativePermissionTest changes the session time zone to verify the
+        # authorization clock against a differently configured PostgreSQL session.
         -
-            identifier: corexModules.setWithoutLocal
-            path: tests/Feature/ModuleLifecycleTest.php
-            count: 2
+            identifier: modules.setWithoutLocal
+            path: packages/access/tests/Pg/NativePermissionTest.php
+            count: 1

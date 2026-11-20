@@ -120,9 +120,7 @@ $this->connection->transaction(function () use ($envelope): void {
 });
 ```
 
-Восстановление контекста выполнения — только через `TenantContextRestorer::restore()` (`RUN-002`,
-`RUN-003`). Строка соединения или иной параметр подключения из сообщения не является входом
-маршрутизации.
+Потребитель передаёт декодированный `DataScope` v3 и отдельно сохранённый `StoredWorkProof` в `StoredWorkRunner::runStored()` (`RUN-002`, `RUN-003`). Proof связывает scope с владельцем и идентификатором принятой работы. Runner проверяет proof и допуск во внешнем control store, восстанавливает tenant context и principal и проверяет физическое соединение до разрешения обработчика. Прямой вызов из аутентифицированного контекста использует `WorkScopeRunner::run()`.
 
 ## Retention
 

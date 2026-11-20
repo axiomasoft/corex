@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Internal\Commands;
 
-use CoreX\Data\Data\DataScope;
+use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Contracts\WorkScopeRunner;
+use CoreX\Context\Exceptions\CentralContextException;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Webhooks\Internal\WebhookDeliveryWorker;
 use Illuminate\Console\Command;
 use Packman\Attributes\Internal;
@@ -19,9 +23,11 @@ final class DeliverWebhooks extends Command
 
     protected $description = 'Deliver due CoreX webhooks on the current trusted tenant connection.';
 
-    public function handle(WebhookDeliveryWorker $worker): int
+    public function handle(): int
     {
-        if (! $this->laravel->bound(DataScope::class)) {
+        try {
+            $scope = $this->laravel->make(DataScopeFactory::class)->forCurrentPrincipal($this->laravel->make(TenantContextResolver::class)->current());
+        } catch (CentralContextException|ScopeContextMismatch) {
             $this->components->warn('No trusted tenant scope is active.');
 
             return self::SUCCESS;
@@ -42,10 +48,10 @@ final class DeliverWebhooks extends Command
             return self::INVALID;
         }
 
-        $scope = $this->laravel->make(DataScope::class);
         $delivered = 0;
+        $runner = $this->laravel->make(WorkScopeRunner::class);
 
-        while ($delivered < $max && $worker->workOnce(scope: $scope, worker: $leaseOwner) !== null) {
+        while ($delivered < $max && $runner->run($scope, fn () => $this->laravel->make(WebhookDeliveryWorker::class)->workOnce(scope: $scope, worker: $leaseOwner)) !== null) {
             $delivered++;
         }
 

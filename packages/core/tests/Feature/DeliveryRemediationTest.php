@@ -9,6 +9,7 @@ use CoreX\Config\Data\CoreOptions;
 use CoreX\Features\Data\FeatureFlagDefinition;
 use CoreX\Features\Internal\DatabaseFeatureFlags;
 use CoreX\Messaging\Internal\DatabasePollPubSub;
+use CoreX\Tests\Support\WorkScopeFixture;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 
@@ -23,7 +24,8 @@ beforeEach(function (): void {
 });
 
 it('records committed audit only after the outer transaction succeeds', function (): void {
-    $logger = app()->make(QueuedAuditLogger::class, ['connection' => 'pgsql']);
+    WorkScopeFixture::install(app())->scope();
+    $logger = app()->make(QueuedAuditLogger::class);
     foreach ([false, true] as $commit) {
         DB::beginTransaction();
         DB::transaction(fn () => $logger->record(new AuditEntry(action: 'changed', actorType: ActorType::System)));

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Search\Internal\Postgres;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Search\Contracts\SearchProvider;
@@ -29,6 +30,7 @@ final readonly class PostgresSearchProvider implements SearchProvider
 
     public function __construct(
         private ConnectionInterface $connection,
+        private CurrentWorkScope $current,
         private SearchSchema $schemas,
         private SearchCursorCodec $cursors,
         private string $configuration = 'simple',
@@ -45,6 +47,7 @@ final readonly class PostgresSearchProvider implements SearchProvider
 
     public function query(DataScope $scope, SearchQuery $query): CandidatePage
     {
+        $this->current->assert($scope, $this->connection);
         $schema = $this->schemas->describe(scope: $scope, entity: $query->entity);
         $this->assertSchema(query: $query, schema: $schema);
 

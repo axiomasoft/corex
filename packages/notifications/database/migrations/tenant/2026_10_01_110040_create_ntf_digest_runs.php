@@ -17,16 +17,19 @@ return new class extends PackmanMigration
         $this->create('ntf_digest_runs', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'ntf_digest_runs_pk');
+            $table->char('scope_key', 64);
+            $table->json('scope');
+            $table->char('scope_seal', 64);
             $table->string('recipient_kind', 64);
             $table->string('recipient_id', 128);
             $table->string('period', 16);
-            $table->timestampTz('period_start');
-            $table->timestampTz('period_end');
+            $table->timestampTz('period_start', precision: 6);
+            $table->timestampTz('period_end', precision: 6);
             $table->unsignedBigInteger('batch_seq');
             $table->char('membership_hash', 64);
             $table->string('state', 16);
             $table->timestampTz('created_at');
-            $table->unique(['recipient_kind', 'recipient_id', 'period', 'period_start', 'batch_seq'], 'ntf_digest_runs_recipient_kind_recipient_id_period__27ecc408_uq');
+            $table->unique(['scope_key', 'recipient_kind', 'recipient_id', 'period', 'period_start', 'batch_seq'], 'ntf_digest_runs_recipient_kind_recipient_id_period__27ecc408_uq');
         });
     }
 

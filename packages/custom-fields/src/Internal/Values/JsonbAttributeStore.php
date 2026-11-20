@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal\Values;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\CustomFields\Contracts\AttributeStore;
 use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Data\AttributeId;
 use CoreX\CustomFields\Data\AttributeTables;
 use CoreX\CustomFields\Data\AttributeWriteResult;
-use CoreX\CustomFields\Data\FieldSelection;
 use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Data\RecordSelection;
 use CoreX\CustomFields\Data\ValueBag;
@@ -19,14 +19,15 @@ use CoreX\CustomFields\Internal\Integration\AttributeMessageTranslator;
 use CoreX\CustomFields\Internal\Integration\AttributeValuesChanged;
 use CoreX\CustomFields\Internal\KeyConflict;
 use CoreX\CustomFields\Internal\ScopeDenied;
-use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
 use CoreX\CustomFields\Internal\Support\Validation;
 use CoreX\CustomFields\Internal\Value;
 use CoreX\CustomFields\Internal\VersionConflict;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
+use CoreX\Data\Enums\FieldUse;
 use CoreX\Messaging\Contracts\Outbox;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Builder;
@@ -42,6 +43,7 @@ final readonly class JsonbAttributeStore implements AttributeStore
 {
     public function __construct(
         private ConnectionInterface $connection,
+        private CurrentWorkScope $current,
         private AttributeTables $tables,
         private FieldCatalogue $catalogue,
         private DataScopeAuthorizer $authorizer,
@@ -53,10 +55,9 @@ final readonly class JsonbAttributeStore implements AttributeStore
 
     public function read(DataScope $scope, RecordRef $record, FieldSelection $fields): ValueBag
     {
-        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
-        $this->authorize(scope: $scope, record: $record, fields: $fields->fields, action: 'read');
-        $this->validator()->validateSelection(scope: $scope, record: $record, selection: $fields);
-        $definitions = $this->definitions(scope: $scope, entity: $record->entity, fields: $fields->fields);
+        $this->current->assert($scope, $this->connection);
+        $this->authorize(scope: $scope, record: $record, fields: $fields);
+        $definitions = $this->validator()->selectedDefinitions(scope: $scope, entity: $record->entity, selection: $fields);
         $row = $this->documents()->where('entity', $record->entity)->where('record_id', $record->id)->first();
         $values = $row === null ? [] : $this->decode(Value::text($row->values));
 
@@ -68,12 +69,13 @@ final readonly class JsonbAttributeStore implements AttributeStore
 
     public function write(DataScope $scope, RecordRef $record, ValuePatch $patch, WriteToken $token): AttributeWriteResult
     {
-        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
+        $this->current->assert($scope, $this->connection);
         $fields = array_keys($patch->values);
         $snapshot = $this->writeGuard()->assertCanWrite(scope: $scope, record: $record, patch: $patch);
         $definitions = $this->definitionsFromSnapshot(snapshot: $snapshot, fields: $fields);
 
         return $this->connection->transaction(function () use ($scope, $record, $patch, $token, $snapshot, $definitions): AttributeWriteResult {
+            $this->current->assert($scope, $this->connection);
             $existing = $this->tokens()->where('operation_key', $token->operationKey)->lockForUpdate()->first();
 
             if ($existing !== null) {
@@ -137,14 +139,13 @@ final readonly class JsonbAttributeStore implements AttributeStore
 
     public function loadMany(DataScope $scope, RecordSelection $records, FieldSelection $fields): ValueBatch
     {
-        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
+        $this->current->assert($scope, $this->connection);
         foreach ($records->records as $record) {
-            $this->authorize(scope: $scope, record: $record, fields: $fields->fields, action: 'read');
-            $this->validator()->validateSelection(scope: $scope, record: $record, selection: $fields);
+            $this->authorize(scope: $scope, record: $record, fields: $fields);
         }
         $definitionsByEntity = [];
         foreach ($this->recordsByEntity($records) as $entity => $_ids) {
-            $definitionsByEntity[$entity] = $this->definitions(scope: $scope, entity: $entity, fields: $fields->fields);
+            $definitionsByEntity[$entity] = $this->validator()->selectedDefinitions(scope: $scope, entity: $entity, selection: $fields);
         }
 
         $rows = $this->documents()->where(function (Builder $query) use ($records): void {
@@ -181,10 +182,10 @@ final readonly class JsonbAttributeStore implements AttributeStore
         return $grouped;
     }
 
-    /** @param list<string> $fields */
-    private function authorize(DataScope $scope, RecordRef $record, array $fields, string $action): void
+    private function authorize(DataScope $scope, RecordRef $record, FieldSelection $fields): void
     {
-        if (! $this->authorizer->authorize(scope: $scope, entity: $record->entity, subjectId: $record->id, fields: $fields, action: $action)->allowed) {
+        if (! $this->authorizer->authorize($scope, $record, new FieldSelection([]), FieldUse::Read)->allowed
+            || ($fields->fields !== [] && ! $this->authorizer->authorize($scope, $record, $fields, FieldUse::Read)->allowed)) {
             throw new ScopeDenied('The current scope denies this attribute operation.');
         }
     }
@@ -237,15 +238,6 @@ final readonly class JsonbAttributeStore implements AttributeStore
             authorizer: $this->authorizer,
             validator: $this->validator(),
         );
-    }
-
-    /**
-     * @param  list<string>  $fields
-     * @return array<string, array<string, mixed>>
-     */
-    private function definitions(DataScope $scope, string $entity, array $fields): array
-    {
-        return $this->definitionsFromSnapshot(snapshot: $this->catalogue->snapshot(scope: $scope, entity: $entity), fields: $fields);
     }
 
     /**

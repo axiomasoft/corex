@@ -6,6 +6,9 @@ namespace CoreX\ImportExport\Internal\Export;
 
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\FieldSelection;
+use CoreX\Data\Data\RecordRef;
+use CoreX\Data\Enums\FieldUse;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\ImportExport\Contracts\CancellationSignal;
 use CoreX\ImportExport\Contracts\ExportRunner;
@@ -26,6 +29,7 @@ use CoreX\ImportExport\Internal\Value;
 use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 use JsonException;
 use Override;
 use Packman\Attributes\Internal;
@@ -63,13 +67,14 @@ final readonly class DatabaseExportRunner implements ExportRunner
             throw new ExportUnavailable('Only a coherent manifest may be sealed.');
         }
 
-        if ($this->abortUnsealedAttempt($draft->id)) {
+        if ($this->abortUnsealedAttempt($scope, $draft->id)) {
             throw new ExportUnavailable('An interrupted unsealed capture requires a new manifest attempt.');
         }
 
         return $this->connection->transaction(function () use ($scope, $jobId, $draft, $after): ExportManifest {
-            $this->assertCaptureAccess(scope: $scope, manifest: $draft);
             $this->connection->statement('SET LOCAL TRANSACTION ISOLATION LEVEL REPEATABLE READ');
+            $this->runtime?->assertCurrent($this->connection, $scope);
+            $this->assertCaptureAccess(scope: $scope, manifest: $draft);
             $existing = $this->connection->table('corex_export_manifests')->where('id', $draft->id)->lockForUpdate()->first();
 
             if ($existing !== null && Value::text($existing->job_id) !== $jobId) {
@@ -113,6 +118,9 @@ final readonly class DatabaseExportRunner implements ExportRunner
 
                     $page = $this->source->page(scope: $scope, manifest: $draft, after: $cursor, limits: $this->limits);
                     $this->assertPageBounds(records: $page->rows);
+                    foreach ($page->rows as $record) {
+                        $this->authorizeRecord($scope, $record->entity, $record->externalId, array_keys($record->values));
+                    }
                     $this->assertBudget(guard: $guard, manifest: $draft);
 
                     if ($this->cancellation->isCancelled()) {
@@ -186,9 +194,36 @@ final readonly class DatabaseExportRunner implements ExportRunner
             throw new ExportUnavailable('Immutable export part verification failed.');
         }
 
+        foreach (explode("\n", rtrim($bytes, "\n")) as $line) {
+            if ($line === '') {
+                continue;
+            }
+
+            try {
+                $record = Value::map(json_decode($line, true, flags: JSON_THROW_ON_ERROR));
+                $fields = Value::map($record['values'] ?? null);
+                $this->authorizeRecord($scope, Value::text($record['entity'] ?? null), Value::text($record['externalId'] ?? null), array_keys($fields));
+            } catch (InvalidArgumentException|JsonException $exception) {
+                throw new ExportUnavailable('The sealed export projection cannot be verified.', previous: $exception);
+            }
+        }
         $this->assertEmitAccess(scope: $scope, manifest: $manifest, cursor: $cursor);
 
         return $bytes;
+    }
+
+    /** @param list<string> $fields */
+    private function authorizeRecord(DataScope $scope, string $entity, string $id, array $fields): void
+    {
+        try {
+            $decision = $this->authorizer->authorize($scope, new RecordRef($entity, $id), new FieldSelection($fields), FieldUse::Export);
+        } catch (InvalidArgumentException $exception) {
+            throw new ExportUnavailable('The export record cannot be authorized.', previous: $exception);
+        }
+
+        if (! $decision->allowed) {
+            throw new ExportUnavailable('An export record is unavailable under the current field policy.');
+        }
     }
 
     /** @param list<CanonicalRecord> $records */
@@ -277,14 +312,15 @@ final readonly class DatabaseExportRunner implements ExportRunner
     {
         if (! $this->storage->capabilities()->export
             || ! hash_equals($scope->restoreEpoch, $manifest->restoreEpoch)
-            || ! $this->authorizer->authorize(scope: $scope, entity: '*', subjectId: $manifest->id, fields: [], action: 'export.capture')->allowed) {
+            || ! $this->authorizer->authorize($scope, new RecordRef('import-export.manifest', $manifest->id), new FieldSelection([]), FieldUse::Export)->allowed) {
             throw new ExportUnavailable('Export capture is unavailable under the current authority.');
         }
     }
 
-    private function abortUnsealedAttempt(string $manifestId): bool
+    private function abortUnsealedAttempt(DataScope $scope, string $manifestId): bool
     {
-        return $this->connection->transaction(function () use ($manifestId): bool {
+        return $this->connection->transaction(function () use ($scope, $manifestId): bool {
+            $this->runtime?->assertCurrent($this->connection, $scope);
             $manifest = $this->connection->table('corex_export_manifests')->where('id', $manifestId)->lockForUpdate()->first();
 
             if ($manifest === null || $manifest->state !== 'capturing') {
@@ -301,7 +337,7 @@ final readonly class DatabaseExportRunner implements ExportRunner
     {
         if (! hash_equals($scope->restoreEpoch, $manifest->restoreEpoch)
             || ! hash_equals($cursor->manifestHash, $manifest->partsHash)
-            || ! $this->authorizer->authorize(scope: $scope, entity: '*', subjectId: $manifest->id, fields: [], action: 'export.emit')->allowed) {
+            || ! $this->authorizer->authorize($scope, new RecordRef('import-export.manifest', $manifest->id), new FieldSelection([]), FieldUse::Export)->allowed) {
             throw new ExportUnavailable('Export output is denied by the current authority.');
         }
     }

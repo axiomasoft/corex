@@ -10,8 +10,10 @@ use CoreX\Audit\Contracts\SynchronousAuditWriter;
 use CoreX\Audit\Internal\AuditObserver;
 use CoreX\Audit\Internal\CurrentActor;
 use CoreX\Audit\Internal\DatabaseSynchronousAuditWriter;
+use CoreX\Audit\Internal\RecordAuditEntry;
 use CoreX\Config\Data\CoreOptions;
 use CoreX\Context\Contracts\ImpersonationService;
+use CoreX\Context\Laravel\WorkQueueHandlers;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionResolverInterface;
@@ -29,6 +31,7 @@ final class AuditRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
+        $app->afterResolving(WorkQueueHandlers::class, static fn (WorkQueueHandlers $handlers) => $handlers->tenant(RecordAuditEntry::class));
         $app->scoped(AuditLogger::class, static fn (Application $app): AuditLogger => ConfiguredImplementation::resolve(app: $app, contract: AuditLogger::class, implementation: $app->make(CoreOptions::class)->auditLogger));
         $app->scoped(SynchronousAuditWriter::class, static fn (Application $app): SynchronousAuditWriter => new DatabaseSynchronousAuditWriter($app->make(ConnectionResolverInterface::class)));
         $app->scoped(CurrentActor::class, static fn (Application $app): CurrentActor => new CurrentActor(

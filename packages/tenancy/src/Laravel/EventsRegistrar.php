@@ -9,11 +9,8 @@ use CoreX\Tenancy\DomainTrust\Internal\Models\Domain;
 use CoreX\Tenancy\Impersonation\Internal\ImpersonatedModelWriteGuard;
 use CoreX\Tenancy\Laravel\Support\HostResolverCacheInvalidator;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
-use CoreX\Tenancy\Runtime\Internal\QueueTenantContext;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Queue\Events\JobAttempted;
-use Illuminate\Queue\Events\JobProcessing;
 use Override;
 use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
@@ -30,12 +27,6 @@ final class EventsRegistrar implements PackageRegistrar
     {
         $options = $app->make(TenancyOptions::class);
         $events = $app->make(Dispatcher::class);
-
-        // Resolved from the container per event: QueueTenantContext is a singleton frame stack.
-        // JobAttempted (dispatched from the `finally` of Worker::process and SyncQueue::executeJob)
-        // is the only point that ends a job's context.
-        $events->listen(JobProcessing::class, [QueueTenantContext::class, 'processing']);
-        $events->listen(JobAttempted::class, [QueueTenantContext::class, 'finished']);
 
         // Fence host mappings after committed saves/deletes, including cascade deletion.
         // The invalidator itself is a no-op while host identification or its cache is off.

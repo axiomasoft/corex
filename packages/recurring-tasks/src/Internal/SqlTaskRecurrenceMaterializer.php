@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\RecurringTasks\Internal;
 
-use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\FieldSelection;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
+use CoreX\Data\Enums\FieldUse;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Recurrence\Contracts\RecurrenceExpander;
 use CoreX\Recurrence\Data\ExpansionCursor;
@@ -50,9 +54,10 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
         private TaskAccess $taskAccess,
         private bool $wakeupEnabled,
         private string $wakeupHandlerKind,
+        private string $wakeupHandlerVersion,
         private Container $container,
         private DataScopeAuthorizer $authorizer,
-        private TenantContextRestorer $contexts,
+        private CurrentWorkScope $contexts,
         private TaskOperationReceipts $receipts,
     ) {}
 
@@ -63,11 +68,9 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
         MaterializationWindow $window,
         WriteToken $token,
     ): MaterializationReceipt {
-        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
+        $context = $this->contexts->assert($scope, $this->connection);
 
-        $context = $this->contexts->restore($scope);
-
-        if (! $this->authorizer->authorize(scope: $scope, entity: 'task-series', subjectId: $series->id, fields: [], action: 'materialize')->allowed) {
+        if (! $this->authorizer->authorize(scope: $scope, record: new RecordRef('task-series', $series->id), fields: new FieldSelection([]), use: FieldUse::Write)->allowed) {
             throw UnsupportedMaterialization::connection('Materialization is not authorized for the current actor.');
         }
 
@@ -96,7 +99,7 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
 
         if ($existing !== null) {
             $receipt = $store->assertReplayable(existing: $existing, payloadHash: $payloadHash);
-            $this->scheduleWakeup(context: $context, series: $series, window: $window, payloadHash: $payloadHash, receipt: $receipt, scheduler: $scheduler);
+            $this->scheduleWakeup(scope: $scope, series: $series, window: $window, payloadHash: $payloadHash, receipt: $receipt, scheduler: $scheduler);
 
             return $receipt;
         }
@@ -111,7 +114,8 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
             throw StaleMaterialization::definition($series->id);
         }
 
-        $receipt = $this->connection->transaction(function () use ($scope, $context, $series, $window, $token, $payloadHash, $store, $seriesRow): MaterializationReceipt {
+        $receipt = $this->connection->transaction(function () use ($scope, $context, $series, $window, $token, $payloadHash, $store, $seriesRow, $scheduler): MaterializationReceipt {
+            $this->contexts->assert($scope, $this->connection);
             $state = $store->lockSeriesState($series->id);
 
             if ($state === null) {
@@ -133,7 +137,10 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
             $replay = $store->findOperation($token->operationKey);
 
             if ($replay !== null) {
-                return $store->assertReplayable(existing: $replay, payloadHash: $payloadHash);
+                $receipt = $store->assertReplayable(existing: $replay, payloadHash: $payloadHash);
+                $this->scheduleWakeup(scope: $scope, series: $series, window: $window, payloadHash: $payloadHash, receipt: $receipt, scheduler: $scheduler);
+
+                return $receipt;
             }
 
             $decoded = SeriesDefinitionCodec::decode(
@@ -141,6 +148,10 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
                 templateJson: $this->jsonColumn($seriesRow->template),
                 actorJson: $this->jsonColumn($seriesRow->actor),
             );
+
+            if ($scope->workspaceId !== null && $decoded['template']->workspaceId !== $scope->workspaceId) {
+                throw new ScopeContextMismatch('The series belongs to another workspace.');
+            }
 
             $recurrenceWindow = $this->materializationWindow(
                 window: $window,
@@ -259,10 +270,10 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
 
             $store->persistOperation(operationKey: $token->operationKey, payloadHash: $payloadHash, restoreEpoch: $scope->restoreEpoch, resultRef: $store->receiptToStored($receipt));
 
+            $this->scheduleWakeup(scope: $scope, series: $series, window: $window, payloadHash: $payloadHash, receipt: $receipt, scheduler: $scheduler);
+
             return $receipt;
         });
-
-        $this->scheduleWakeup(context: $context, series: $series, window: $window, payloadHash: $payloadHash, receipt: $receipt, scheduler: $scheduler);
 
         return $receipt;
     }
@@ -447,7 +458,7 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
         return json_encode($value, JSON_THROW_ON_ERROR);
     }
 
-    private function scheduleWakeup(TenantContext $context, SeriesReference $series, MaterializationWindow $window, string $payloadHash, MaterializationReceipt $receipt, ?WakeupScheduler $scheduler): void
+    private function scheduleWakeup(DataScope $scope, SeriesReference $series, MaterializationWindow $window, string $payloadHash, MaterializationReceipt $receipt, ?WakeupScheduler $scheduler): void
     {
         if ($scheduler === null || $receipt->retired || $receipt->unknown || $receipt->conflict > 0) {
             return;
@@ -457,8 +468,9 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
         $fireAt = new DateTimeImmutable($window->end)->sub(new DateInterval('P1D'));
 
         $result = $scheduler->schedule(new WakeupRequest(
-            context: $context,
+            scope: $scope,
             kind: $kind,
+            handlerVersion: $this->wakeupHandlerVersion,
             requestKey: 'materialize:'.hash('sha256', $payloadHash."\0".json_encode($receipt->cursor?->resumePosition, JSON_THROW_ON_ERROR)),
             fireAt: $fireAt,
             window: null,

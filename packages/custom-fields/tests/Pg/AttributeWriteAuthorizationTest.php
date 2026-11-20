@@ -2,20 +2,22 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\CustomFields\Contracts\AttributeStore;
 use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\InvalidAttributeValue;
-use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\CustomFields\Internal\Values\EavAttributeStore;
 use CoreX\CustomFields\Internal\Values\JsonbAttributeStore;
 use CoreX\CustomFields\Tests\PgTestCase;
 use CoreX\CustomFields\Tests\Support\PgTestSupport;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
+use CoreX\Data\Enums\FieldUse;
 use Illuminate\Support\Facades\DB;
 
 uses(PgTestCase::class)->group('pg');
@@ -27,6 +29,7 @@ function p106PgStore(
 ): AttributeStore {
     $arguments = [
         'connection' => DB::connection(),
+        'current' => jsonbCurrent(),
         'tables' => PgTestSupport::tables(),
         'catalogue' => $catalogue,
         'authorizer' => $authorizer,
@@ -49,14 +52,13 @@ it('denies each engine atomically before database mutation', function (string $e
     $actions = [];
     $authorizer = jsonbAuthorizer(function (
         $scope,
-        string $entity,
-        string $subjectId,
-        array $fields,
-        string $action,
+        RecordRef $record,
+        FieldSelection $fields,
+        FieldUse $use,
     ) use (&$actions): bool {
-        $actions[] = $action;
+        $actions[] = [$use, $fields->fields];
 
-        return $action !== 'attributes.mutate';
+        return $use !== FieldUse::Write;
     });
     $catalogue = PgTestSupport::catalogue('contact', [
         ['code' => 'email', 'id' => '018d5f56-6f83-7a36-b0ac-6eabce87c10b', 'type' => 'email'],
@@ -71,10 +73,9 @@ it('denies each engine atomically before database mutation', function (string $e
     ))->toThrow(InvalidAttributeValue::class, 'The attribute write is not allowed.');
 
     expect($actions)->toBe([
-        'attributes.subject', 'attributes.subject',
-        'attributes.view', 'attributes.view',
-        'attributes.write', 'attributes.write',
-        'attributes.mutate',
+        [FieldUse::Read, []],
+        [FieldUse::Read, ['018d5f56-6f83-7a36-b0ac-6eabce87c10b']],
+        [FieldUse::Write, ['018d5f56-6f83-7a36-b0ac-6eabce87c10b']],
     ]);
     p106AssertNoMutation();
 })->with(['jsonb', 'eav']);
@@ -95,11 +96,11 @@ it('checks the tenant connection before catalogue or database mutation', functio
     };
 
     expect(fn (): mixed => p106PgStore($engine, $catalogue, jsonbAuthorizer())->write(
-        jsonbScope(connectionIdentity: 'pgsql:another_test'),
+        jsonbScope(bindingId: 'another-binding'),
         new RecordRef('contact', 'wrong-tenant-'.$engine),
         new ValuePatch(['email' => 'owner@example.test']),
         new WriteToken('wrong-tenant-'.$engine, hash('sha256', 'wrong-'.$engine), 'absent'),
-    ))->toThrow(ScopeDenied::class);
+    ))->toThrow(ScopeContextMismatch::class);
 
     expect($counter->calls)->toBe(0);
     p106AssertNoMutation();

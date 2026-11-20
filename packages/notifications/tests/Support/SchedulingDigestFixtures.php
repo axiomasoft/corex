@@ -5,7 +5,10 @@ declare(strict_types=1);
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\JsonDocument;
+use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Notifications\Delivery\Data\RecipientReference;
 use CoreX\Notifications\Digest\Contracts\DigestBuilder;
@@ -21,9 +24,11 @@ use CoreX\Notifications\Tests\NotificationTenantContextResolver;
 use CoreX\Scheduling\Contracts\WakeupScheduler;
 use CoreX\Scheduling\Data\CancelResult;
 use CoreX\Scheduling\Data\ScheduleResult;
+use CoreX\Scheduling\Data\WakeupIdentity;
 use CoreX\Scheduling\Data\WakeupRequest;
 use CoreX\Settings\Contracts\SettingsRepository;
 use CoreX\Settings\Data\SettingsScope;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Illuminate\Support\Facades\DB;
 
 final class SchedulingSpy implements WakeupScheduler
@@ -34,10 +39,10 @@ final class SchedulingSpy implements WakeupScheduler
     {
         $this->calls++;
 
-        return new ScheduleResult('scheduled', $request->requestKey);
+        return new ScheduleResult('created', $request->requestKey, 'test-scheduled');
     }
 
-    public function cancel(TenantContext $context, string $requestKey): CancelResult
+    public function cancel(DataScope $scope, WakeupIdentity $identity): CancelResult
     {
         return new CancelResult('cancelled');
     }
@@ -74,6 +79,10 @@ function schedulingFreeze(string $requestKey): ?object
     app()->instance(SettingsRepository::class, new SchedulingSettingsRepository);
     app()->instance(TenantContextResolver::class, new NotificationTenantContextResolver);
     app()->forgetScopedInstances();
+    app()->instance(DataScopeCodec::class, new ArrayDataScopeCodec);
+    CallerWorkScopeFixture::bind(app(), CallerWorkScopeFixture::forContext(
+        schedulingContext()->tenant, '11111111-1111-7111-8111-111111111112', str_repeat('a', 64),
+    ));
     resolve(NotificationCenter::class)->notify(schedulingContext(), new NotificationInput(
         requestKey: $requestKey,
         eventType: 'document.ready',

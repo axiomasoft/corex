@@ -241,7 +241,7 @@ foreach ($trees as $file => $tree) {
         assert($call instanceof Expr\MethodCall || $call instanceof Expr\StaticCall);
         $method = $call->name instanceof Node\Identifier ? $call->name->toString() : null;
 
-        if ($method === null || ! in_array($method, ['insert', 'insertGetId', 'insertOrIgnore', 'upsert', 'update', 'updateOrInsert', 'delete', 'truncate', 'increment', 'decrement', 'create', 'firstOrCreate', 'updateOrCreate', 'save', 'forceDelete', 'statement', 'affectingStatement'], true)) {
+        if ($method === null || ! in_array($method, ['insert', 'insertGetId', 'insertOrIgnore', 'insertOrIgnoreReturning', 'upsert', 'update', 'updateOrInsert', 'delete', 'truncate', 'increment', 'decrement', 'create', 'firstOrCreate', 'updateOrCreate', 'save', 'forceDelete', 'statement', 'affectingStatement'], true)) {
             continue;
         }
         $table = null;

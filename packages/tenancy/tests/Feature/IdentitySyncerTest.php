@@ -8,6 +8,7 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Identity\Contracts\IdentitySyncer;
 use CoreX\Tenancy\Identity\Events\UserSynced;
+use CoreX\Tenancy\Tests\Support\IdentityServiceHost;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
@@ -21,6 +22,7 @@ uses()->group('pg');
 const TENANT_DB_IS = 'acc_is_test';
 
 beforeEach(function (): void {
+    IdentityServiceHost::install(app());
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');

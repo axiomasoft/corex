@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Currency\Internal;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\FieldSelection;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
+use CoreX\Data\Enums\FieldUse;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Intl\Currency\Contracts\RateImporter;
 use CoreX\Intl\Currency\Data\RateBatch;
@@ -28,6 +32,7 @@ final readonly class SqlRateImporter implements RateImporter
     public function __construct(
         private Connection $connection,
         private DataScopeAuthorizer $authorizer,
+        private CurrentWorkScope $current,
         private ClockInterface $clock,
         private int $batchLimit = 1000,
     ) {}
@@ -35,7 +40,9 @@ final readonly class SqlRateImporter implements RateImporter
     #[Override]
     public function import(DataScope $scope, RateBatch $batch, WriteToken $token): RateImportReceipt
     {
-        if (! $this->authorizer->authorize(scope: $scope, entity: 'rate-import', subjectId: $token->operationKey, fields: [], action: 'import')->allowed) {
+        $this->current->assert($scope, $this->connection);
+
+        if (! $this->authorizer->authorize($scope, new RecordRef('rate-import', $token->operationKey), new FieldSelection([]), FieldUse::Write)->allowed) {
             throw new AccessDeniedException('Rate import is not authorized for the current actor.');
         }
 
@@ -69,7 +76,8 @@ final readonly class SqlRateImporter implements RateImporter
         $noop = 0;
         $conflicts = 0;
 
-        return $this->connection->transaction(function () use ($batch, $token, &$imported, &$noop, &$conflicts): RateImportReceipt {
+        return $this->connection->transaction(function () use ($scope, $batch, $token, &$imported, &$noop, &$conflicts): RateImportReceipt {
+            $this->current->assert($scope, $this->connection);
             $generation = $batch->expectedGeneration;
 
             foreach ($batch->snapshots as $snapshot) {

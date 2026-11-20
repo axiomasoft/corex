@@ -4,9 +4,19 @@ declare(strict_types=1);
 
 namespace CoreX\Scheduler\Internal;
 
+use Closure;
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Context\Contracts\StoredWorkRunner;
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Contracts\WorkScopeRunner;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\JsonDocument;
+use CoreX\Data\Exceptions\InvalidScopePayload;
+use CoreX\Scheduling\Contracts\DueWakeupHandler;
 use CoreX\Scheduling\Contracts\DueWakeupSource;
 use CoreX\Scheduling\Contracts\DueWakeupSweeper;
 use CoreX\Scheduling\Data\SweepResult;
@@ -15,23 +25,40 @@ use CoreX\Scheduling\Data\WakeupRequest;
 use CoreX\Scheduling\Data\WakeupWindow;
 use DateInterval;
 use DateTimeImmutable;
-use DateTimeInterface;
 use Illuminate\Database\Connection;
+use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Str;
+use InvalidArgumentException;
+use JsonException;
 use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
+use stdClass;
 use Throwable;
 
 #[Internal]
 final readonly class SweepRunner implements DueWakeupSweeper
 {
-    /** @param list<DueWakeupSource> $dueSources */
+    private const string DUE_TIME = "case when status in ('running', 'cancel-requested') then lease_until when status = 'retry-scheduled' then retry_at else fire_at end";
+
+    /**
+     * @param  Closure(class-string<DueWakeupHandler>): mixed  $resolveHandler
+     * @param  Closure():list<DueWakeupSource>  $dueSources
+     */
     public function __construct(
-        private Connection $connection,
+        private DatabaseManager $databases,
         private TenantContextResolver $contexts,
+        private DataScopeFactory $scopes,
+        private CurrentWorkScope $current,
+        private WorkScopeRunner $runner,
+        private StoredWorkRunner $stored,
+        private DataScopeCodec $codec,
+        private WakeupInput $input,
         private WakeupHandlerRegistry $handlers,
-        private array $dueSources,
+        private Closure $resolveHandler,
+        private Closure $dueSources,
         private int $leaseSeconds,
         private int $maxAttempts,
         private ClockInterface $clock,
@@ -39,40 +66,50 @@ final readonly class SweepRunner implements DueWakeupSweeper
 
     public function sweep(TenantContext $context, int $limit): SweepResult
     {
-        if ($limit < 1 || $limit > 1_000 || $this->contexts->current()->account->id !== $context->account->id) {
-            throw new RuntimeException('Invalid wakeup sweep context or limit.');
+        if ($limit < 1 || $limit > 1000) {
+            throw new InvalidArgumentException('Wakeup sweep limit must be between 1 and 1000.');
         }
-        $claims = $this->claimDue(limit: $limit);
-        $completed = $retried = $failed = $skipped = 0;
+        $owner = $this->scopes->forCurrentPrincipal($context);
+        $claims = $this->runner->run($owner, fn (): array => $this->claimDue($owner, $limit));
+        $counts = ['completed' => 0, 'retried' => 0, 'failed' => 0, 'skipped' => 0];
+
         foreach ($claims as $claim) {
-            $result = $this->run(context: $context, id: $claim['id'], generation: $claim['generation']);
-            $completed += $result === 'completed' ? 1 : 0;
-            $retried += $result === 'retried' ? 1 : 0;
-            $failed += $result === 'failed' ? 1 : 0;
-            $skipped += $result === 'skipped' ? 1 : 0;
+            $counts[$this->run($owner, $claim)]++;
         }
-        $sourceLimit = max(1, intdiv($limit, count($this->dueSources) + 1));
-        foreach ($this->dueSources as $source) {
-            $sourceResult = $source->sweep($context, $this->clock->now(), $sourceLimit);
-            $completed += $sourceResult->completed;
-            $retried += $sourceResult->retried;
-            $failed += $sourceResult->failed;
-            $skipped += $sourceResult->skipped;
+
+        $context = $this->contexts->current();
+        $current = $this->scopes->forCurrentPrincipal($context);
+        $this->assertOwner($owner, $current);
+        $sources = ($this->dueSources)();
+        $available = $limit - count($claims);
+        $claimed = count($claims);
+        foreach ($sources as $i => $source) {
+            if ($available <= 0) {
+                break;
+            }
+            $batch = max(1, intdiv($available, count($sources) - $i));
+            $result = $this->runner->run($current, fn (): SweepResult => $source->sweep($context, $this->clock->now(), $batch));
+            $available -= $result->claimed;
+            $claimed += $result->claimed;
+            $counts['completed'] += $result->completed;
+            $counts['retried'] += $result->retried;
+            $counts['failed'] += $result->failed;
+            $counts['skipped'] += $result->skipped;
         }
         $next = $this->nextDue($context);
 
-        return new SweepResult(claimed: count($claims), completed: $completed, retried: $retried, failed: $failed, skipped: $skipped, remainingDue: count($claims) === $limit, nextFireAt: $next);
+        return new SweepResult($claimed, $counts['completed'], $counts['retried'], $counts['failed'], $counts['skipped'],
+            $next !== null && $next <= $this->clock->now(), $next);
     }
 
     public function nextDue(TenantContext $context): ?DateTimeImmutable
     {
-        if ($this->contexts->current()->account->id !== $context->account->id) {
-            throw new RuntimeException('Wakeup context does not match the current tenant context.');
-        }
-        $value = $this->connection->table('sys_wakeup_requests')->whereIn('status', ['pending', 'failed'])->where('attempt', '<', $this->maxAttempts)->min('fire_at');
-        $due = $value === null ? null : new DateTimeImmutable(Value::text($value));
+        $scope = $this->scopes->forCurrentPrincipal($context);
+        $db = $this->connection($scope);
+        $value = $this->runnable($db, $scope)->min($db->raw(self::DUE_TIME));
+        $due = $value === null ? null : WakeupInput::instant($value);
 
-        foreach ($this->dueSources as $source) {
+        foreach (($this->dueSources)() as $source) {
             $candidate = $source->nextDue($context);
 
             if ($candidate !== null && ($due === null || $candidate < $due)) {
@@ -83,155 +120,221 @@ final readonly class SweepRunner implements DueWakeupSweeper
         return $due;
     }
 
-    /** @return list<array{id: string, generation: int}> */
-    private function claimDue(int $limit): array
+    private function runnable(Connection $db, DataScope $owner): Builder
     {
-        return $this->connection->transaction(function () use ($limit): array {
+        return $db->table('sys_wakeup_requests')->where('account_id', $owner->accountId)
+            ->where(function (Builder $rows): void {
+                $rows->where(fn (Builder $row) => $row->whereIn('status', ['pending', 'retry-scheduled'])->where('attempt', '<', $this->maxAttempts))
+                    ->orWhereIn('status', ['running', 'cancel-requested']);
+            });
+    }
+
+    /** @return list<WakeupClaim> */
+    private function claimDue(DataScope $owner, int $limit): array
+    {
+        $db = $this->connection($owner);
+
+        if ($db->transactionLevel() !== 0) {
+            throw new RuntimeException('A wakeup sweep must start outside a tenant transaction.');
+        }
+
+        return $db->transaction(function () use ($db, $owner, $limit): array {
             $now = $this->clock->now();
-            $this->connection->table('sys_wakeup_requests')
-                ->where('status', 'running')
-                ->where('lease_until', '<=', $now)
-                ->where('attempt', '<', $this->maxAttempts)
-                ->update(['status' => 'failed', 'retry_at' => $now, 'lease_until' => null, 'updated_at' => $now]);
-            $this->connection->table('sys_wakeup_requests')
-                ->where('status', 'running')
-                ->where('lease_until', '<=', $now)
-                ->where('attempt', '>=', $this->maxAttempts)
-                ->update(['status' => 'failed', 'retry_at' => null, 'lease_until' => null, 'failure_code' => 'lease-expired', 'updated_at' => $now]);
-
-            $query = $this->connection->table('sys_wakeup_requests')
-                ->whereIn('status', ['pending', 'failed'])
-                ->where('attempt', '<', $this->maxAttempts)
-                ->where('fire_at', '<=', $now)
-                ->where(static fn (Builder $query) => $query->whereNull('retry_at')->orWhere('retry_at', '<=', $now))
-                ->oldest('fire_at')
-                ->orderBy('id')
-                ->limit($limit);
-
-            if ($this->connection->getDriverName() === 'pgsql') {
-                $query->lock('for update skip locked');
-            } else {
-                $query->lockForUpdate();
-            }
-
-            $rows = $query->get();
+            $stamp = WakeupInput::time($now);
+            $query = $this->runnable($db, $owner)->whereRaw(self::DUE_TIME.' <= ?', [$stamp])
+                ->orderByRaw(self::DUE_TIME)->orderBy('id')->limit($limit);
+            $rows = $query->lock($db->getDriverName() === 'pgsql' ? 'for update skip locked' : true)->get();
             $claims = [];
-
             foreach ($rows as $row) {
-                $generation = Value::integer($row->generation) + 1;
-                $this->connection->table('sys_wakeup_requests')->where('id', $row->id)->update([
-                    'status' => 'running',
-                    'generation' => $generation,
-                    'attempt' => Value::integer($row->attempt) + 1,
-                    'lease_until' => $now->add(new DateInterval("PT{$this->leaseSeconds}S")),
-                    'updated_at' => $now,
-                ]);
-                $claims[] = ['id' => Value::text($row->id), 'generation' => $generation];
+                $attempt = Value::integer($row->attempt);
+                $update = $db->table('sys_wakeup_requests')->where('id', $row->id);
+
+                if ($row->status === 'cancel-requested' || $attempt >= $this->maxAttempts) {
+                    $cancel = $row->status === 'cancel-requested';
+                    $update->update(['status' => $cancel ? 'cancelled' : 'exhausted', 'claim_token' => null,
+                        'lease_until' => null, 'failure_code' => $cancel ? null : 'lease-expired', 'updated_at' => $stamp]);
+
+                    continue;
+                }
+                $claim = new WakeupClaim(Value::text($row->id), (string) Str::uuid7(), Value::integer($row->generation) + 1,
+                    $attempt + 1, Value::text($row->data_scope), Value::text($row->request_digest), Value::text($row->scope_seal), Value::text($row->workspace_scope_key),
+                    $now->add(new DateInterval("PT{$this->leaseSeconds}S")));
+                $update->update(['status' => 'running', 'claim_token' => $claim->token, 'generation' => $claim->generation,
+                    'attempt' => $claim->attempt, 'lease_until' => WakeupInput::time($claim->deadline),
+                    'retry_at' => null, 'failure_code' => null, 'updated_at' => $stamp]);
+                $claims[] = $claim;
             }
 
             return $claims;
         });
     }
 
-    private function run(TenantContext $context, string $id, int $generation): string
+    private function run(DataScope $owner, WakeupClaim $claim): string
     {
         try {
-            return $this->connection->transaction(function () use ($context, $generation, $id): string {
-                $now = $this->clock->now();
-                $row = $this->connection->table('sys_wakeup_requests')->where('id', $id)->lockForUpdate()->first();
+            $fields = json_decode($claim->scope, true, flags: JSON_THROW_ON_ERROR);
 
-                if ($row === null
-                    || $row->status !== 'running'
-                    || Value::integer($row->generation) !== $generation
-                    || $row->lease_until === null
-                    || $this->date($row->lease_until) <= $now) {
+            if (! is_array($fields) || array_any(array_keys($fields), static fn (int|string $key): bool => is_int($key))) {
+                throw InvalidScopePayload::missing('scope');
+            }
+            $scope = $this->codec->decode(Value::map($fields));
+            $this->assertOwner($owner, $scope);
+
+            if (WakeupInput::workspace($scope) !== $claim->workspace) {
+                throw new ScopeContextMismatch('Claim has an inconsistent workspace.');
+            }
+
+            return $this->stored->runStored($scope, $claim->proof(), function (TenantContext $context) use ($scope, $claim): string {
+                $db = $this->connection($scope);
+
+                return $this->deliver($db, $context, $scope, $claim);
+            }, $claim->operation());
+        } catch (WakeupClaimLost) {
+            return 'skipped';
+        } catch (InvalidScopePayload|JsonException|ScopeContextMismatch) {
+            // Only a currently admitted sweep of the same physical owner may quarantine a row.
+            $current = $this->scopes->forCurrentPrincipal($this->contexts->current());
+            $this->assertOwner($owner, $current);
+
+            return $this->runner->run($current, function () use ($current, $claim): string {
+                $db = $this->connection($current);
+
+                return $db->transaction(fn (): string => $this->quarantine($db, $claim, 'scope-unavailable'));
+            });
+        }
+    }
+
+    private function deliver(Connection $db, TenantContext $context, DataScope $scope, WakeupClaim $claim): string
+    {
+        try {
+            return $db->transaction(function () use ($db, $context, $scope, $claim): string {
+                $row = $claim->row($db)->lockForUpdate()->first();
+
+                if ($row === null || $row->lease_until === null || WakeupInput::instant($row->lease_until) <= $this->clock->now()) {
                     return 'skipped';
                 }
-                $handler = $this->handlers->handler(Value::text($row->kind));
+
+                if ($row->status === 'cancel-requested') {
+                    $claim->row($db)->where('status', 'cancel-requested')->update(['status' => 'cancelled', 'claim_token' => null,
+                        'lease_until' => null, 'updated_at' => WakeupInput::time($this->clock->now())]);
+
+                    return 'skipped';
+                }
+
+                if ($row->status !== 'running') {
+                    return 'skipped';
+                }
+
+                try {
+                    $envelope = json_decode(Value::text($row->payload), flags: JSON_THROW_ON_ERROR);
+                    $metadata = $envelope instanceof stdClass ? ($envelope->_corex ?? null) : null;
+                    $data = $envelope instanceof stdClass ? ($envelope->data ?? null) : null;
+                    $payload = $this->handlers->inspectPayload(Value::text($row->kind), [
+                        '_corex' => $metadata instanceof stdClass ? ['schema' => $metadata->schema ?? null, 'extension' => (array) ($metadata->extension ?? null)] : null,
+                        'data' => $data instanceof stdClass || $data === [] ? (array) $data : null,
+                    ]);
+
+                    if ($payload['status'] !== 'ready') {
+                        return $this->quarantine($db, $claim, $payload['status']);
+                    }
+                    $request = $this->request($row, $scope, $payload['data'] ?? []);
+
+                    if ($row->account_id !== $scope->accountId || $row->account_incarnation !== $scope->accountIncarnation
+                        || $row->workspace_scope_key !== WakeupInput::workspace($scope) || $row->data_scope !== $claim->scope
+                        || ! hash_equals($claim->digest, $this->input->digest($request, WakeupInput::payload($request->payload)))) {
+                        return $this->quarantine($db, $claim, 'request-digest-mismatch');
+                    }
+                } catch (InvalidArgumentException|JsonException|RuntimeException $e) {
+                    if ($e instanceof QueryException) {
+                        throw $e;
+                    }
+
+                    return $this->quarantine($db, $claim, 'request-invalid');
+                }
+
+                $handler = $this->handlers->handler($request->kind, $this->resolveHandler);
 
                 if ($handler === null) {
-                    $this->terminalFailure(id: $id, code: 'handler-unavailable', now: $now);
-
-                    return 'failed';
+                    return $this->quarantine($db, $claim, 'handler-unavailable');
                 }
-                $payload = $this->payload($row);
+                $this->current->assert($scope, $db);
 
-                if ($payload['status'] !== 'ready' && $payload['status'] !== 'legacy-admitted') {
-                    $this->terminalFailure(id: $id, code: $payload['status'], now: $now);
-
-                    return 'failed';
+                if (WakeupInput::instant($row->lease_until) <= $this->clock->now()) {
+                    return 'skipped';
                 }
+                $handler->handle(new WakeupDelivery($request, $context, $claim->generation, $claim->attempt, 'wakeup:'.$claim->id));
+                $this->current->assert($scope, $db);
+                $stamp = WakeupInput::time($this->clock->now());
+                $updated = $this->active($db, $claim, $stamp)->update(['status' => 'completed', 'completed_at' => $stamp,
+                    'lease_until' => null, 'claim_token' => null, 'updated_at' => $stamp]);
 
-                $handler->handle(new WakeupDelivery(
-                    request: $this->request(context: $context, row: $row, payload: Value::map($payload['data'] ?? null)),
-                    generation: $generation,
-                    attempt: Value::integer($row->attempt),
-                ));
-                $this->connection->table('sys_wakeup_requests')->where('id', $id)->where('status', 'running')->where('generation', $generation)->update(['status' => 'completed', 'completed_at' => $now, 'lease_until' => null, 'updated_at' => $now]);
+                if ($updated !== 1) {
+                    throw new WakeupClaimLost;
+                }
 
                 return 'completed';
             });
+        } catch (WakeupClaimLost|ScopeContextMismatch $error) {
+            throw $error;
         } catch (Throwable) {
-            $row = $this->connection->table('sys_wakeup_requests')->where('id', $id)->first();
-
-            if ($row === null) {
-                return 'skipped';
-            }
+            $this->current->assert($scope, $db);
             $now = $this->clock->now();
-            $attempt = Value::integer($row->attempt);
-            $backoffSeconds = min(300, 2 ** $attempt);
-            $retry = $attempt >= $this->maxAttempts ? null : $now->add(new DateInterval("PT{$backoffSeconds}S"));
-            $this->connection->table('sys_wakeup_requests')
-                ->where('id', $id)
-                ->where('status', 'running')
-                ->where('generation', $generation)
-                ->update([
-                    'status' => 'failed',
-                    'attempt' => $attempt,
-                    'retry_at' => $retry,
-                    'lease_until' => null,
-                    'failure_code' => 'handler-failed',
-                    'updated_at' => $now,
-                ]);
+            $stamp = WakeupInput::time($now);
+            $retry = $claim->attempt < $this->maxAttempts;
+            $delay = min(300, 2 ** min(9, $claim->attempt));
+            $changed = $this->active($db, $claim, $stamp)->update(['status' => $retry ? 'retry-scheduled' : 'exhausted',
+                'retry_at' => $retry ? WakeupInput::time($now->add(new DateInterval("PT{$delay}S"))) : null,
+                'failure_code' => 'handler-failed', 'lease_until' => null, 'claim_token' => null, 'updated_at' => $stamp]);
 
-            return $retry === null ? 'failed' : 'retried';
+            return $changed === 1 ? ($retry ? 'retried' : 'failed') : 'skipped';
         }
     }
 
-    /** @return array{status: 'ready'|'legacy-admitted'|'handler-unavailable'|'handler-stamp-missing'|'handler-version-mismatch', data?: array<string, mixed>} */
-    private function payload(object $row): array
+    private function active(Connection $db, WakeupClaim $claim, string $stamp): Builder
     {
-        try {
-            $payload = json_decode(Value::text(Value::field(row: $row, name: 'payload')), true, flags: JSON_THROW_ON_ERROR);
-        } catch (Throwable) {
-            return ['status' => 'handler-stamp-missing'];
+        return $claim->row($db)->where('status', 'running')->where('lease_until', '>', $stamp);
+    }
+
+    private function quarantine(Connection $db, WakeupClaim $claim, string $reason): string
+    {
+        $stamp = WakeupInput::time($this->clock->now());
+        $changed = $this->active($db, $claim, $stamp)->update(['status' => 'quarantined', 'retry_at' => null,
+            'failure_code' => $reason, 'lease_until' => null, 'claim_token' => null, 'updated_at' => $stamp]);
+
+        return $changed === 1 ? 'failed' : 'skipped';
+    }
+
+    /** @param array<string,mixed> $data */
+    private function request(object $row, DataScope $scope, array $data): WakeupRequest
+    {
+        $start = Value::field($row, 'window_start');
+        $end = Value::field($row, 'window_end');
+        $period = Value::field($row, 'period');
+
+        if (($start === null) !== ($end === null) || ($start === null) !== ($period === null)) {
+            throw new RuntimeException('Incomplete wakeup window.');
         }
+        $window = $start === null ? null : new WakeupWindow(WakeupInput::instant($start), WakeupInput::instant($end), Value::text($period));
+        $kind = Value::text(Value::field($row, 'kind'));
 
-        return $this->handlers->inspectPayload(kind: Value::text(Value::field(row: $row, name: 'kind')), payload: $payload);
+        return new WakeupRequest($scope, $kind, $this->handlers->definition($kind)->version ?? '', Value::text(Value::field($row, 'request_key')),
+            WakeupInput::instant(Value::field($row, 'fire_at')), $window, new JsonDocument(json_encode((object) $data, JSON_THROW_ON_ERROR)));
     }
 
-    /** @param array<string, mixed> $payload */
-    private function request(TenantContext $context, object $row, array $payload): WakeupRequest
+    private function assertOwner(DataScope $owner, DataScope $scope): void
     {
-        $window = Value::field(row: $row, name: 'window_start') === null ? null : new WakeupWindow(start: $this->date(Value::field(row: $row, name: 'window_start')), end: $this->date(Value::field(row: $row, name: 'window_end')), period: Value::text(Value::field(row: $row, name: 'period')));
-
-        return new WakeupRequest(context: $context, kind: Value::text(Value::field(row: $row, name: 'kind')), requestKey: Value::text(Value::field(row: $row, name: 'request_key')), fireAt: $this->date(Value::field(row: $row, name: 'fire_at')), window: $window, payload: JsonDocuments::capture($payload));
+        if ($scope->accountId !== $owner->accountId || $scope->bindingId !== $owner->bindingId
+            || $scope->deploymentId !== $owner->deploymentId || $scope->bindingGeneration !== $owner->bindingGeneration
+            || $scope->restoreEpoch !== $owner->restoreEpoch || $scope->accountIncarnation !== $owner->accountIncarnation) {
+            throw new ScopeContextMismatch('The wakeup belongs to a different physical owner.');
+        }
     }
 
-    private function terminalFailure(string $id, string $code, DateTimeImmutable $now): void
+    private function connection(DataScope $scope): Connection
     {
-        $this->connection->table('sys_wakeup_requests')->where('id', $id)->update([
-            'status' => 'failed',
-            'attempt' => $this->maxAttempts,
-            'retry_at' => null,
-            'lease_until' => null,
-            'failure_code' => $code,
-            'updated_at' => $now,
-        ]);
-    }
+        $connection = $this->databases->connection();
+        $this->current->assert($scope, $connection);
 
-    private function date(mixed $value): DateTimeImmutable
-    {
-        return $value instanceof DateTimeInterface ? DateTimeImmutable::createFromInterface($value) : new DateTimeImmutable(Value::text($value));
+        return $connection;
     }
 }

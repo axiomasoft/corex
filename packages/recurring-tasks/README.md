@@ -14,7 +14,7 @@ integration remains in `axiomasoft/corex-workflow`.
 
 ## Configuration
 
-See `config/corex-recurring-tasks.php` for wakeup and completion-capture toggles. `corex-recurring-tasks.wakeup.accept_legacy_unstamped=true` is a dangerous mode: production starts only when `corex.acknowledged_dangerous_modes` lists that exact path.
+See `config/corex-recurring-tasks.php` for wakeup and completion-capture toggles.
 
 ## Installation
 

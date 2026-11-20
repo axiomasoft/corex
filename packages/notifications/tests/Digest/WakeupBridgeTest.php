@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Contracts\DataScopeFactory;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Data\Data\JsonDocument;
@@ -19,12 +20,12 @@ use CoreX\Notifications\Inbox\Data\NotificationAction;
 use CoreX\Notifications\Inbox\Data\NotificationContext;
 use CoreX\Notifications\Inbox\Data\NotificationInput;
 use CoreX\Notifications\Inbox\Data\NotificationSubject;
-use CoreX\Notifications\Internal\NotificationsOptions;
 use CoreX\Notifications\Preferences\Contracts\PreferenceRepository;
 use CoreX\Notifications\Preferences\Data\NotificationPreference;
 use CoreX\Notifications\Tests\TestCase;
 use CoreX\Scheduling\Contracts\WakeupScheduler;
 use CoreX\Scheduling\Data\WakeupDelivery;
+use CoreX\Scheduling\Data\WakeupIdentity;
 use CoreX\Scheduling\Data\WakeupRequest;
 use CoreX\Scheduling\Data\WakeupWindow;
 use CoreX\Settings\Contracts\SettingsRepository;
@@ -63,12 +64,13 @@ it('maps a typed digest wakeup request without a workflow dependency', function 
     $seen = null;
     $context = new TenantContext(new AccountRef('11111111-1111-7111-8111-111111111111', 'digest-test', 'active', [], []));
     $window = new WakeupWindow(new DateTimeImmutable('2026-09-16T09:00:00Z'), new DateTimeImmutable('2026-09-16T10:00:00Z'), 'hourly');
-    $request = new WakeupRequest($context, 'notification.digest.v1', 'digest:2026-09-16T09', new DateTimeImmutable('2026-09-16T10:00:00Z'), $window, JsonDocuments::capture([]));
+    $scope = resolve(DataScopeFactory::class)->forCurrentPrincipal($context);
+    $request = new WakeupRequest($scope, 'notification.digest.v1', 'notification-digest/1', 'digest:2026-09-16T09', new DateTimeImmutable('2026-09-16T10:00:00Z'), $window, JsonDocuments::capture([]));
     $adapter = new DigestWakeupAdapter(function (DigestTick $tick) use (&$seen): void {
         $seen = $tick;
     });
 
-    $adapter->handle(new WakeupDelivery($request, 1, 1));
+    $adapter->handle(new WakeupDelivery($request, $context, 1, 1, 'digest-tick'));
 
     expect($seen)->toBeInstanceOf(DigestTick::class)
         ->and($seen->requestKey)->toBe('digest:2026-09-16T09')
@@ -114,22 +116,6 @@ it('denies legacy unstamped rows by default without invoking the adapter', funct
     expect($result->failed)->toBe(1)
         ->and($seen)->toBe([])
         ->and(DB::table('sys_wakeup_requests')->where('request_key', 'legacy-denied')->value('failure_code'))->toBe('handler-stamp-missing');
-});
-
-it('admits an explicit bounded legacy fixture for this definition only', function (): void {
-    $seen = [];
-    app()['config']->set('corex-notifications.digest.accept_legacy_unstamped', true);
-    app()->forgetInstance(NotificationsOptions::class);
-    app()->forgetInstance('corex.notifications.digest-wakeup-handler');
-    app()->forgetInstance(wakeup_bridge_registry());
-    bindRecordingDigestAdapter($seen);
-    insertLegacyDigestWakeup(requestKey: 'legacy-admitted', payload: ['run_id' => 'legacy-run']);
-
-    $result = wakeup_bridge_sweep(digestContext()->tenant, 10);
-
-    expect($result->completed)->toBe(1)
-        ->and($seen)->toHaveCount(1)
-        ->and($seen[0]->requestKey)->toBe('legacy-admitted');
 });
 
 it('quarantines a version mismatch without invoking the adapter', function (): void {
@@ -201,23 +187,17 @@ function insertLegacyDigestWakeup(string $requestKey, array $payload): void
 {
     $now = new DateTimeImmutable('-1 minute');
 
-    DB::table('sys_wakeup_requests')->insert([
-        'id' => (string) Str::uuid7(),
-        'workspace_scope_key' => 'account',
-        'kind' => 'notification.digest.v1',
-        'request_key' => $requestKey,
-        'request_digest' => hash('sha256', $requestKey),
-        'fire_at' => $now,
-        'window_start' => $now->modify('-1 hour'),
-        'window_end' => $now,
-        'period' => 'hourly',
-        'payload' => json_encode($payload, JSON_THROW_ON_ERROR),
-        'status' => 'pending',
-        'generation' => 0,
-        'attempt' => 0,
-        'created_at' => $now,
-        'updated_at' => $now,
-    ]);
+    $scope = resolve(DataScopeFactory::class)->forCurrentPrincipal(digestContext()->tenant);
+    resolve(WakeupScheduler::class)->schedule(new WakeupRequest(
+        $scope,
+        'notification.digest.v1',
+        'notification-digest/1',
+        $requestKey,
+        $now,
+        new WakeupWindow($now->modify('-1 hour'), $now, 'hourly'),
+        JsonDocuments::capture(['run_id' => 'legacy-test']),
+    ));
+    DB::table('sys_wakeup_requests')->where('request_key', $requestKey)->update(['payload' => json_encode($payload, JSON_THROW_ON_ERROR)]);
 }
 
 it('keeps real frozen digests behind durable admission and cancellation', function (string $mode): void {
@@ -232,9 +212,9 @@ it('keeps real frozen digests behind durable admission and cancellation', functi
     if ($mode === 'lease') {
         DB::table('sys_wakeup_requests')->where('request_key', $key)->update(['status' => 'running', 'lease_until' => new DateTimeImmutable('+1 hour')]);
     } elseif ($mode === 'retry') {
-        DB::table('sys_wakeup_requests')->where('request_key', $key)->update(['status' => 'failed', 'attempt' => 1, 'retry_at' => new DateTimeImmutable('+1 hour')]);
+        DB::table('sys_wakeup_requests')->where('request_key', $key)->update(['status' => 'retry-scheduled', 'attempt' => 1, 'retry_at' => new DateTimeImmutable('+1 hour')]);
     } elseif ($mode === 'cancelled') {
-        resolve(WakeupScheduler::class)->cancel(digestContext()->tenant, $key);
+        resolve(WakeupScheduler::class)->cancel(resolve(DataScopeFactory::class)->forCurrentPrincipal(digestContext()->tenant), new WakeupIdentity('notification.digest.v1', $key));
     } elseif ($mode !== 'valid') {
         $payload = json_decode($row->payload, true, flags: JSON_THROW_ON_ERROR);
 
@@ -250,6 +230,19 @@ it('keeps real frozen digests behind durable admission and cancellation', functi
     expect(DB::table('ntf_deliveries')->where('digest_run_id', $digest->id)->count())->toBe($mode === 'valid' ? 1 : 0)
         ->and(DB::table('ntf_digest_runs')->where('id', $digest->id)->value('state'))->toBe($mode === 'valid' ? 'admitted' : 'frozen');
 })->with(['mismatch', 'missing', 'cancelled', 'lease', 'retry', 'valid']);
+
+it('refuses to recover a digest whose stored work provenance was replaced', function (): void {
+    $digest = freezeDigest('tampered-provenance');
+    DB::table('sys_wakeup_requests')->delete();
+    DB::table('ntf_digest_runs')->where('id', $digest->id)->update(['scope_seal' => str_repeat('0', 64)]);
+
+    $result = resolve(NotificationDigestDueSource::class)->sweep(digestContext()->tenant, new DateTimeImmutable, 10);
+
+    expect($result->failed)->toBe(1)
+        ->and($result->retried)->toBe(0)
+        ->and(DB::table('sys_wakeup_requests')->count())->toBe(0)
+        ->and(DB::table('ntf_deliveries')->where('digest_run_id', $digest->id)->count())->toBe(0);
+});
 
 it('recovers the concrete frozen run after terminal history longer than the source limit', function (): void {
     $old = freezeDigest('history');

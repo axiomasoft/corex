@@ -24,9 +24,6 @@ those exact runs after a restart. Recovery never invokes the handler directly or
 replaces a cancelled, quarantined or completed request. The durable runner remains
 the admission boundary. Residual and late batches require an explicit builder call. Current cancellation and preference state is
 checked before admission. Once admitted, the delivery is an immutable effect.
-`corex-notifications.digest.accept_legacy_unstamped=true` is a dangerous mode: production starts only when
-`corex.acknowledged_dangerous_modes` lists that exact path.
-
 ## Installation
 
 Install with `composer require axiomasoft/corex-notifications` through the approved CoreX channel. Apply the package-owned notification schema on the tenant connection and provide `NotificationPolicy` before exposing inbox or delivery actions. Schedule `corex:notifications:sweep` in an already trusted tenant context.

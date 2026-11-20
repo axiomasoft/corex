@@ -12,6 +12,7 @@ use CoreX\Search\Data\SearchSnapshot;
 use CoreX\Search\Internal\Postgres\PostgresSearchProvider;
 use CoreX\Search\Internal\Query\SearchCursorCodec;
 use CoreX\Search\Tests\PgTestCase;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Illuminate\Support\Facades\DB;
 
 uses(PgTestCase::class)->group('pg');
@@ -40,12 +41,12 @@ it('uses allowlisted schema identifiers and bound text-query values', function (
             );
         }
     };
-    $provider = new PostgresSearchProvider(connection: DB::connection(), schemas: $schema, cursors: new SearchCursorCodec(secret: str_repeat('c', 32)));
-    $scope = DataScope::fromTenantContext(
-        context: new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false),
-        connectionIdentity: 'pgsql:account-a',
-        actorId: 'operator-a',
-        restoreEpoch: str_repeat('b', 64),
+    $scope = CallerWorkScopeFixture::forContext(new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false), 'operator-a', str_repeat('b', 64));
+    $provider = new PostgresSearchProvider(
+        connection: DB::connection(),
+        current: new CallerWorkScopeFixture(new TenantContext(new AccountRef($scope->accountId, $scope->accountId, 'active', [], [])), static fn () => DB::connection(), $scope),
+        schemas: $schema,
+        cursors: new SearchCursorCodec(secret: str_repeat('c', 32)),
     );
 
     $page = $provider->query(
@@ -79,10 +80,12 @@ it('uses an opaque cursor bound to its scope and query', function (): void {
             return new SearchSnapshot(entity: $entity, schemaHash: str_repeat('a', 64), table: 'corex_search_provider_test', idColumn: 'id', searchableColumns: ['title']);
         }
     };
-    $provider = new PostgresSearchProvider(connection: DB::connection(), schemas: $schema, cursors: new SearchCursorCodec(secret: str_repeat('c', 32)));
-    $scope = DataScope::fromTenantContext(
-        context: new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false),
-        connectionIdentity: 'pgsql:account-a', actorId: 'operator-a', restoreEpoch: str_repeat('b', 64),
+    $scope = CallerWorkScopeFixture::forContext(new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false), 'operator-a', str_repeat('b', 64));
+    $provider = new PostgresSearchProvider(
+        connection: DB::connection(),
+        current: new CallerWorkScopeFixture(new TenantContext(new AccountRef($scope->accountId, $scope->accountId, 'active', [], [])), static fn () => DB::connection(), $scope),
+        schemas: $schema,
+        cursors: new SearchCursorCodec(secret: str_repeat('c', 32)),
     );
 
     $first = $provider->query(scope: $scope, query: new SearchQuery(entity: 'equipment', schemaHash: str_repeat('a', 64), text: 'pump', limit: 1));
@@ -131,15 +134,19 @@ it('keeps physically separate account databases and their cursors isolated', fun
             return new SearchSnapshot(entity: $entity, schemaHash: str_repeat('a', 64), table: 'corex_search_physical_test', idColumn: 'id', searchableColumns: ['title']);
         }
     };
-    $providerA = new PostgresSearchProvider(connection: DB::connection('search_a'), schemas: $schema, cursors: new SearchCursorCodec(secret: str_repeat('c', 32)));
-    $providerB = new PostgresSearchProvider(connection: DB::connection('search_b'), schemas: $schema, cursors: new SearchCursorCodec(secret: str_repeat('c', 32)));
-    $scopeA = DataScope::fromTenantContext(
-        context: new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false),
-        connectionIdentity: 'pgsql:account-a', actorId: 'operator-a', restoreEpoch: str_repeat('b', 64),
+    $scopeA = CallerWorkScopeFixture::forContext(new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false), 'operator-a', str_repeat('b', 64));
+    $providerA = new PostgresSearchProvider(
+        connection: DB::connection('search_a'),
+        current: new CallerWorkScopeFixture(new TenantContext(new AccountRef($scopeA->accountId, $scopeA->accountId, 'active', [], [])), static fn () => DB::connection('search_a'), $scopeA),
+        schemas: $schema,
+        cursors: new SearchCursorCodec(secret: str_repeat('c', 32)),
     );
-    $scopeB = DataScope::fromTenantContext(
-        context: new TenantContext(account: new AccountRef(id: 'account-b', slug: 'account-b', status: 'active', features: [], limits: []), boxed: false),
-        connectionIdentity: 'pgsql:account-b', actorId: 'operator-a', restoreEpoch: str_repeat('b', 64),
+    $scopeB = CallerWorkScopeFixture::forContext(new TenantContext(account: new AccountRef(id: 'account-b', slug: 'account-b', status: 'active', features: [], limits: []), boxed: false), 'operator-a', str_repeat('b', 64));
+    $providerB = new PostgresSearchProvider(
+        connection: DB::connection('search_b'),
+        current: new CallerWorkScopeFixture(new TenantContext(new AccountRef($scopeB->accountId, $scopeB->accountId, 'active', [], [])), static fn () => DB::connection('search_b'), $scopeB),
+        schemas: $schema,
+        cursors: new SearchCursorCodec(secret: str_repeat('c', 32)),
     );
     $firstA = $providerA->query(scope: $scopeA, query: new SearchQuery(entity: 'equipment', schemaHash: str_repeat('a', 64), text: 'pump', limit: 1));
 
@@ -157,10 +164,12 @@ it('preserves phrase search across nullable schema columns without interpreting 
             return new SearchSnapshot(entity: $entity, schemaHash: str_repeat('a', 64), table: 'corex_search_provider_test', idColumn: 'id', searchableColumns: ['title', 'subtitle']);
         }
     };
-    $provider = new PostgresSearchProvider(connection: DB::connection(), schemas: $schema, cursors: new SearchCursorCodec(secret: str_repeat('c', 32)));
-    $scope = DataScope::fromTenantContext(
-        context: new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false),
-        connectionIdentity: 'pgsql:account-a', actorId: 'operator-a', restoreEpoch: str_repeat('b', 64),
+    $scope = CallerWorkScopeFixture::forContext(new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false), 'operator-a', str_repeat('b', 64));
+    $provider = new PostgresSearchProvider(
+        connection: DB::connection(),
+        current: new CallerWorkScopeFixture(new TenantContext(new AccountRef($scope->accountId, $scope->accountId, 'active', [], [])), static fn () => DB::connection(), $scope),
+        schemas: $schema,
+        cursors: new SearchCursorCodec(secret: str_repeat('c', 32)),
     );
     $phrase = $provider->query(scope: $scope, query: new SearchQuery(entity: 'equipment', schemaHash: str_repeat('a', 64), text: '"water pump"'));
     $nullable = $provider->query(scope: $scope, query: new SearchQuery(entity: 'equipment', schemaHash: str_repeat('a', 64), text: 'archived'));

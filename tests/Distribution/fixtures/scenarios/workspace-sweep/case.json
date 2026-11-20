@@ -1,0 +1,44 @@
+{
+  "id": "workspace-sweep",
+  "laravel": 13,
+  "host_support": true,
+  "timeout_seconds": 90,
+  "distinct_connections": true,
+  "profile": {
+    "id": "standalone-workspace-sweep",
+    "database": "postgres-isolated",
+    "database_roles": ["control", "a"],
+    "default_database": "a",
+    "http": true,
+    "packages": ["axiomasoft/corex", "axiomasoft/corex-scheduler", "axiomasoft/corex-recurring-tasks"],
+    "forbid": [{"package": "axiomasoft/corex-tenancy", "name": "Tenancy"}]
+  },
+  "processes": {
+    "producer": ["php", "{fixture}/probe.php", "produce"],
+    "first": ["php", "{fixture}/probe.php", "first"],
+    "resume": ["php", "{fixture}/probe.php", "resume"],
+    "retire": ["php", "{fixture}/probe.php", "retire"],
+    "late": ["php", "{fixture}/probe.php", "late"],
+    "observe-late": ["php", "{fixture}/probe.php", "observe-late"],
+    "reclaim": ["php", "{fixture}/probe.php", "reclaim"]
+  },
+  "actions": [
+    {"action": "start", "name": "producer"},
+    {"action": "complete", "name": "producer"},
+    {"action": "start", "name": "first"},
+    {"action": "await", "name": "workspace-claim", "process": "first"},
+    {"action": "terminate", "name": "first", "barrier": "workspace-claim"},
+    {"action": "start", "name": "resume"},
+    {"action": "complete", "name": "resume"},
+    {"action": "start", "name": "retire", "environment": {"COREX_SCENARIO_HANDLER_GENERATION": "retired"}},
+    {"action": "complete", "name": "retire"},
+    {"action": "start", "name": "late"},
+    {"action": "await", "name": "before-expired-cas", "process": "late"},
+    {"action": "start", "name": "observe-late"},
+    {"action": "complete", "name": "observe-late"},
+    {"action": "release", "name": "before-expired-cas"},
+    {"action": "complete", "name": "late"},
+    {"action": "start", "name": "reclaim"},
+    {"action": "complete", "name": "reclaim"}
+  ]
+}

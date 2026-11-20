@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Audit\Internal;
 
 use CoreX\Audit\Data\AuditEntry;
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
@@ -22,13 +24,6 @@ use Psr\Clock\ClockInterface;
  * different (or absent) tenant context and would otherwise stamp a foreign
  * workspace and the write moment instead of the event moment.
  *
- * `$writeConnection` is null (the app's default) unless a caller pins an
- * explicit name — same seam as DatabaseRecordsRegistrar/
- * DatabaseSettingsRepository, used by the PG-only test lane
- * since sys_audit_log has no sqlite equivalent. Named apart from
- * `$connection` — Illuminate\Bus\Queueable already declares that property
- * for the job's own queue connection.
- *
  * @internal spec: B-10 §7.1, P1.6, P1.7, D12
  */
 #[Internal]
@@ -41,12 +36,14 @@ final class RecordAuditEntry implements ShouldQueueAfterCommit
 
     public function __construct(
         private readonly AuditEntry $entry,
-        private readonly ?string $writeConnection = null,
+        private readonly DataScope $scope,
     ) {}
 
-    public function handle(ClockInterface $clock): void
+    public function handle(ClockInterface $clock, CurrentWorkScope $work): void
     {
-        AuditLog::on($this->writeConnection)->create([
+        $model = new AuditLog;
+        $work->assert($this->scope, $model->getConnection());
+        $model->newQuery()->create([
             'occurred_at' => $this->entry->occurredAt ?? $clock->now(),
             'actor_type' => $this->entry->actorType,
             'actor_id' => $this->entry->actorId,

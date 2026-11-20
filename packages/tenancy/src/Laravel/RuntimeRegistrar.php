@@ -4,32 +4,39 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
+use CoreX\Context\Contracts\CentralWorkRunner;
+use CoreX\Context\Contracts\PhysicalBindingVerifier;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Context\Contracts\WorkPrincipalAuthority;
+use CoreX\Context\Contracts\WorkScopeDirectory;
+use CoreX\Context\Laravel\WorkAuthentication;
+use CoreX\Context\Laravel\WorkQueueHandlers;
 use CoreX\Storage\Contracts\TenantStorage;
-use CoreX\Tenancy\Account\Contracts\AccountRead;
+use CoreX\Tenancy\Account\Internal\Jobs\CreateDatabaseFromTemplate;
+use CoreX\Tenancy\Identity\Internal\Jobs\SyncIdentityToAccount;
 use CoreX\Tenancy\Impersonation\Internal\ImpersonatedModelWriteGuard;
 use CoreX\Tenancy\Internal\DangerousModesCheck;
 use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
 use CoreX\Tenancy\Laravel\Support\ImpersonationPolicy;
 use CoreX\Tenancy\Laravel\Support\StatusGatePolicy;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
-use CoreX\Tenancy\Runtime\Internal\ConnectionGuardedTenantContextRestorer;
-use CoreX\Tenancy\Runtime\Internal\QueueTenantContext;
+use CoreX\Tenancy\Runtime\Internal\CloudCentralWorkRunner;
 use CoreX\Tenancy\Runtime\Internal\Storage\ContextTenantStorage;
 use CoreX\Tenancy\Runtime\Internal\TenancyManagerContextResolver;
+use CoreX\Tenancy\Runtime\Internal\TenantPhysicalBindingVerifier;
 use CoreX\Tenancy\Runtime\Internal\TenantRuntimeManager;
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Database\DatabaseManager;
 use Illuminate\Filesystem\FilesystemManager;
-use Illuminate\Queue\QueueManager;
 use Override;
 use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 use Packman\Config\Contracts\RuntimeConfigCheck;
 use Packman\Foundation\Contracts\PackageRegistrar;
+use Tenant\Contracts\Runtime\TenantRuntime;
+use Tenant\Data\Context\ProfileRef;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class RuntimeRegistrar implements PackageRegistrar
@@ -62,23 +69,15 @@ final class RuntimeRegistrar implements PackageRegistrar
 
         $app->singleton(TenantRuntimeManager::class);
         $app->singleton(TenancyManager::class, static fn (Application $app): TenantRuntimeManager => $app->make(TenantRuntimeManager::class));
-        $app->singleton(
-            QueueTenantContext::class,
-            static fn (Application $app): QueueTenantContext => new QueueTenantContext(
-                manager: $app->make(TenancyManager::class),
-                accounts: $app->make(AccountRead::class),
-                workspaceResolver: TenancyRuntimeFactory::workspaceResolver(),
-                centralConnection: $app->make(TenancyOptions::class)->centralConnection,
-            ),
-        );
+        $app->scoped(WorkPrincipalAuthority::class, MembershipWorkPrincipal::class);
+        $app->bind(CentralWorkRunner::class, static fn (Application $app): CentralWorkRunner => new CloudCentralWorkRunner(
+            $app->make(TenantRuntime::class), $app->make(Container::class), $app->make(WorkAuthentication::class),
+            new ProfileRef($app->make(Repository::class)->string('tenant.runtime_profile'), 1),
+        ));
+        $app->afterResolving(WorkQueueHandlers::class, self::declareCentralJobs(...));
         $app->singleton(TenantContextResolver::class, TenancyManagerContextResolver::class);
-        $app->extend(
-            TenantContextRestorer::class,
-            static fn (TenantContextRestorer $semantic, Application $app): ConnectionGuardedTenantContextRestorer => new ConnectionGuardedTenantContextRestorer(
-                semantic: $semantic,
-                database: $app->make(DatabaseManager::class),
-            ),
-        );
+        $app->scoped(PhysicalBindingVerifier::class, TenantPhysicalBindingVerifier::class);
+        $app->scoped(WorkScopeDirectory::class, CloudWorkScopeDirectory::class);
 
         $app->scoped(
             TenantStorage::class,
@@ -93,11 +92,14 @@ final class RuntimeRegistrar implements PackageRegistrar
 
     }
 
-    #[Override]
-    public function boot(Application $app): void
+    private static function declareCentralJobs(WorkQueueHandlers $handlers): void
     {
-        $app->make(QueueManager::class)->createPayloadUsing(TenancyRuntimeFactory::payloadHook());
+        $handlers->central(CreateDatabaseFromTemplate::class);
+        $handlers->tenant(SyncIdentityToAccount::class);
     }
+
+    #[Override]
+    public function boot(Application $app): void {}
 
     /** @return array<string, mixed> */
     private static function configSection(Application $app, string $key): array

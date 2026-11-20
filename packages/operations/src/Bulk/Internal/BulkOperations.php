@@ -34,7 +34,7 @@ final readonly class BulkOperations
             return $this->problem(status: 400, code: 'idempotency_required');
         }
 
-        if ($definition->clientId !== $clientId || $definition->actorId !== $scope->actorId) {
+        if ($definition->clientId !== $clientId || $definition->actorId !== $scope->principalId) {
             return $this->problem(status: 404, code: 'not_found');
         }
 

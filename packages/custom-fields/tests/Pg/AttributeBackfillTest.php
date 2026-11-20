@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\CustomFields\Contracts\AttributeStore;
 use CoreX\CustomFields\Data\AttributeDefinition;
 use CoreX\CustomFields\Data\AttributeId;
@@ -10,8 +11,6 @@ use CoreX\CustomFields\Data\IndexPolicy;
 use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\Schema\DatabaseFieldCatalogue;
 use CoreX\CustomFields\Internal\Schema\DefinitionEvolution;
-use CoreX\CustomFields\Internal\ScopeDenied;
-use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
 use CoreX\CustomFields\Internal\Values\AttributeBackfill;
 use CoreX\CustomFields\Internal\Values\AttributeValueTransformerRegistry;
 use CoreX\CustomFields\Internal\Values\EavAttributeStore;
@@ -41,7 +40,7 @@ function backfillCatalogue(): DatabaseFieldCatalogue
     return new DatabaseFieldCatalogue(
         connection: $connection,
         tables: PgTestSupport::tables(),
-        guard: new ScopeConnectionGuard($connection),
+        current: jsonbCurrent(),
         drivers: ['jsonb' => true, 'eav' => true],
     );
 }
@@ -71,6 +70,7 @@ function backfillStore(
 ): AttributeStore {
     $arguments = [
         'connection' => DB::connection(),
+        'current' => jsonbCurrent(),
         'tables' => PgTestSupport::tables(),
         'catalogue' => $catalogue,
         'authorizer' => jsonbAuthorizer(),
@@ -108,7 +108,7 @@ function seedBackfill(string $engine, AttributeValueTransformerRegistry $registr
 it('resumes ordered batches and verifies canonical digests on both engines', function (string $engine, string $operationId): void {
     $registry = backfillRegistry();
     [, $active, $expanded] = seedBackfill($engine, $registry, ['record-1' => 7, 'record-2' => 11]);
-    $backfill = new AttributeBackfill(DB::connection(), PgTestSupport::tables(), $registry, $engine);
+    $backfill = new AttributeBackfill(DB::connection(), jsonbCurrent(), PgTestSupport::tables(), $registry, $engine);
     $backfill->start(jsonbScope(), $operationId, $active, $expanded);
     $backfill->start(jsonbScope(), $operationId, $active, $expanded);
 
@@ -154,7 +154,7 @@ it('rolls back a failed batch and resumes it without advancing the cursor', func
     ]);
     [, $active, $expanded] = seedBackfill('jsonb', $failing, ['record-1' => 13]);
     $operationId = '018f0b5d-0000-7000-8000-000000000033';
-    $backfill = new AttributeBackfill(DB::connection(), PgTestSupport::tables(), $failing, 'jsonb');
+    $backfill = new AttributeBackfill(DB::connection(), jsonbCurrent(), PgTestSupport::tables(), $failing, 'jsonb');
     $backfill->start(jsonbScope(), $operationId, $active, $expanded);
 
     expect(fn (): mixed => $backfill->runBatch(jsonbScope(), $operationId, 10))
@@ -165,7 +165,7 @@ it('rolls back a failed batch and resumes it without advancing the cursor', func
         ->and($checkpoint->attempted)->toBe(0)
         ->and($checkpoint->changed)->toBe(0);
 
-    $resumed = new AttributeBackfill(DB::connection(), PgTestSupport::tables(), backfillRegistry(), 'jsonb');
+    $resumed = new AttributeBackfill(DB::connection(), jsonbCurrent(), PgTestSupport::tables(), backfillRegistry(), 'jsonb');
     expect($resumed->runBatch(jsonbScope(), $operationId, 10)['changed'])->toBe(1)
         ->and($resumed->runBatch(jsonbScope(), $operationId, 10)['status'])->toBe('backfilled')
         ->and($resumed->verify(jsonbScope(), $operationId)['status'])->toBe('verified');
@@ -185,7 +185,7 @@ it('preserves a concurrent dual write and blocks switch after digest drift', fun
     );
 
     $operationId = '018f0b5d-0000-7000-8000-000000000034';
-    $backfill = new AttributeBackfill(DB::connection(), PgTestSupport::tables(), $registry, 'eav');
+    $backfill = new AttributeBackfill(DB::connection(), jsonbCurrent(), PgTestSupport::tables(), $registry, 'eav');
     $backfill->start(jsonbScope(), $operationId, $active, $expanded);
     expect($backfill->runBatch(jsonbScope(), $operationId, 10)['changed'])->toBe(0)
         ->and($backfill->runBatch(jsonbScope(), $operationId, 10)['status'])->toBe('backfilled');
@@ -218,10 +218,10 @@ it('aborts an unfinished backfill and refuses to resume it', function (): void {
     $registry = backfillRegistry();
     [, $active, $expanded] = seedBackfill('jsonb', $registry, ['record-1' => 5]);
     $operationId = '018f0b5d-0000-7000-8000-000000000035';
-    $backfill = new AttributeBackfill(DB::connection(), PgTestSupport::tables(), $registry, 'jsonb');
+    $backfill = new AttributeBackfill(DB::connection(), jsonbCurrent(), PgTestSupport::tables(), $registry, 'jsonb');
 
-    expect(fn (): mixed => $backfill->start(jsonbScope('pgsql:another_test'), $operationId, $active, $expanded))
-        ->toThrow(ScopeDenied::class);
+    expect(fn (): mixed => $backfill->start(jsonbScope('another-binding'), $operationId, $active, $expanded))
+        ->toThrow(ScopeContextMismatch::class);
 
     $backfill->start(jsonbScope(), $operationId, $active, $expanded);
     $backfill->abort(jsonbScope(), $operationId);

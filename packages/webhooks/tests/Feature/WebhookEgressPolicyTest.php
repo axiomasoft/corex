@@ -6,11 +6,11 @@ namespace CoreX\Webhooks\Tests\Feature;
 
 use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Audit\Data\AuditEntry;
-use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Pagination\Contracts\CursorCodec;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Webhooks\Contracts\WebhookEgressPolicy;
 use CoreX\Webhooks\Contracts\WebhookHttpTransport;
 use CoreX\Webhooks\Data\ValidatedWebhookRequest;
@@ -60,13 +60,13 @@ final class WebhookEgressPolicyTest extends TestCase
         $this->seedDelivery('delivery', 'seed-subscription');
         $this->connection->table('sys_api_webhook_deliveries')->where('id', 'delivery')->update(['subscription_id' => 'subscription']);
         // A recorded actor proves the delivery's persisted scope is passed to the SPI.
-        $recorded = new DataScope('account-1', null, 'sqlite::memory:', 'recorded-actor', $this->scope->restoreEpoch);
+        $recorded = CallerWorkScopeFixture::scope('account-1', null, 'recorded-actor', $this->scope->restoreEpoch);
         $this->connection->table('sys_api_webhook_deliveries')->where('id', 'delivery')->update(['scope' => json_encode(resolve(DataScopeCodec::class)->encode($recorded), JSON_THROW_ON_ERROR)]);
         $policy->allowed = false;
         $dns = 0;
         $transport = new EgressRecordingTransport;
         $worker = new WebhookDeliveryWorker(
-            store: new SqlWebhookDeliveryStore($this->connection, new GuardedTenantContextRestorer($this->contexts), $this->clock, new WebhookRetryPolicy(WebhookOptionsParser::fromArray([]))),
+            store: new SqlWebhookDeliveryStore($this->connection, new CallerWorkScopeFixture($this->contexts), $this->clock, new WebhookRetryPolicy(WebhookOptionsParser::fromArray([]))),
             signer: $this->signer(),
             urlPolicy: new WebhookUrlPolicy(static function () use (&$dns): array {
                 $dns++;
@@ -85,10 +85,10 @@ final class WebhookEgressPolicyTest extends TestCase
         self::assertSame(0, $dns);
         self::assertSame(0, $transport->sends);
         self::assertNull($policy->scopes[1]->workspaceId);
-        self::assertSame('recorded-actor', $policy->scopes[1]->actorId);
+        self::assertSame('recorded-actor', $policy->scopes[1]->principalId);
         self::assertSame('egress_denied', $this->connection->table('sys_api_webhook_attempts')->where('delivery_id', 'delivery')->value('error_code'));
 
-        $replay = new WebhookReplay($this->connection, new GuardedTenantContextRestorer($this->contexts), $this->topics(), $this->clock, resolve(CursorCodec::class), $audit = new EgressAuditLogger);
+        $replay = new WebhookReplay($this->connection, new CallerWorkScopeFixture($this->contexts), $this->topics(), $this->clock, resolve(CursorCodec::class), $audit = new EgressAuditLogger);
         $replay->one($recorded, 'delivery', false, null);
         self::assertSame('pending', $this->connection->table('sys_api_webhook_deliveries')->where('id', 'delivery')->value('status'));
         $second = $worker->workOnce($this->scope, 'replay-worker');
@@ -107,7 +107,7 @@ final class WebhookEgressPolicyTest extends TestCase
         $this->seedDelivery('delivery', 'subscription');
         $transport = new EgressRecordingTransport;
         $transport->result = new WebhookHttpResult(503, null, null, 1);
-        $worker = new WebhookDeliveryWorker(new SqlWebhookDeliveryStore($this->connection, new GuardedTenantContextRestorer($this->contexts), $this->clock, new WebhookRetryPolicy(WebhookOptionsParser::fromArray([]), static fn (): int => 1)), $this->signer(), $this->urlPolicy(), $transport, $this->topics(), $this->clock, $policy, resolve(DataScopeCodec::class));
+        $worker = new WebhookDeliveryWorker(new SqlWebhookDeliveryStore($this->connection, new CallerWorkScopeFixture($this->contexts), $this->clock, new WebhookRetryPolicy(WebhookOptionsParser::fromArray([]), static fn (): int => 1)), $this->signer(), $this->urlPolicy(), $transport, $this->topics(), $this->clock, $policy, resolve(DataScopeCodec::class));
         self::assertSame('retry', $worker->workOnce($this->scope, 'worker')?->status);
         $policy->allowed = false;
         $this->clock->advance(new DateInterval('PT2S'));
@@ -126,7 +126,7 @@ final class WebhookEgressPolicyTest extends TestCase
             }
         });
         $transport = new EgressRecordingTransport;
-        $worker = new WebhookDeliveryWorker(new SqlWebhookDeliveryStore($this->connection, new GuardedTenantContextRestorer($this->contexts), $this->clock, new WebhookRetryPolicy(WebhookOptionsParser::fromArray([]))), $this->signer(), $this->urlPolicy(), $transport, $this->topics(), $this->clock, $policy, resolve(DataScopeCodec::class));
+        $worker = new WebhookDeliveryWorker(new SqlWebhookDeliveryStore($this->connection, new CallerWorkScopeFixture($this->contexts), $this->clock, new WebhookRetryPolicy(WebhookOptionsParser::fromArray([]))), $this->signer(), $this->urlPolicy(), $transport, $this->topics(), $this->clock, $policy, resolve(DataScopeCodec::class));
 
         try {
             $worker->workOnce($this->scope, 'worker');
@@ -147,7 +147,7 @@ final class WebhookEgressPolicyTest extends TestCase
         $policy->failure = new RuntimeException('policy unavailable');
         $transport = new EgressRecordingTransport;
         $dns = 0;
-        $worker = new WebhookDeliveryWorker(new SqlWebhookDeliveryStore($this->connection, new GuardedTenantContextRestorer($this->contexts), $this->clock, new WebhookRetryPolicy(WebhookOptionsParser::fromArray([]))), $this->signer(), new WebhookUrlPolicy(static function () use (&$dns): array {
+        $worker = new WebhookDeliveryWorker(new SqlWebhookDeliveryStore($this->connection, new CallerWorkScopeFixture($this->contexts), $this->clock, new WebhookRetryPolicy(WebhookOptionsParser::fromArray([]))), $this->signer(), new WebhookUrlPolicy(static function () use (&$dns): array {
             $dns++;
 
             return ['93.184.216.34'];
@@ -176,7 +176,7 @@ final class WebhookEgressPolicyTest extends TestCase
 
     private function subscriptions(RevocableEgressPolicy $policy): SqlWebhookSubscriptionStore
     {
-        return new SqlWebhookSubscriptionStore($this->connection, new GuardedTenantContextRestorer($this->contexts), $this->topics(), $this->clock, $policy);
+        return new SqlWebhookSubscriptionStore($this->connection, new CallerWorkScopeFixture($this->contexts), $this->topics(), $this->clock, $policy);
     }
 
     private function subscription(): WebhookSubscription

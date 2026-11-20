@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Integration\Internal\Wakeup;
 
+use Closure;
+use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Context\Contracts\NamedWorkPrincipal;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Scheduling\Contracts\DueWakeupSweeper;
 use CoreX\Tenancy\Integration\Internal\DatabaseValue;
 use DateInterval;
@@ -22,18 +26,22 @@ use Throwable;
 /**
  * @internal Host-first wakeup adapter. Not package public API.
  *
- * Claims one root hint at a time and invokes the existing tenant-local
- * sweeper through TenancyManager. It never constructs a tenant DSN itself.
+ * Claims one root hint at a time and invokes the tenant-local sweeper
+ * under the host's named account service grant.
  */
 #[Internal]
 final readonly class RootWakeupReconciler
 {
+    private const string SERVICE = 'corex.scheduler-sweep';
+
     public function __construct(
         private ConnectionResolverInterface $connections,
         private string $rootConnection,
         private ClockInterface $clock,
         private RootRegistryWakeupHint $hint,
         private TenancyManager $tenancy,
+        private NamedWorkPrincipal $namedPrincipals,
+        private DataScopeFactory $scopes,
         private DueWakeupSweeper $sweeper,
         private int $leaseSeconds,
     ) {}
@@ -120,10 +128,9 @@ final readonly class RootWakeupReconciler
             $context = new TenantContext(account: $accountRef);
 
             try {
-                $nextFireAt = $this->tenancy->runFor(
-                    account: $accountRef,
-                    workspace: null,
-                    callback: fn (): ?DateTimeImmutable => $this->sweeper->nextDue(context: $context),
+                $nextFireAt = $this->inAccount(
+                    $context,
+                    fn (): ?DateTimeImmutable => $this->sweeper->nextDue(context: $context),
                 );
             } catch (Throwable) {
                 $attempts = DatabaseValue::integer($state->attempts) + 1;
@@ -208,11 +215,10 @@ final readonly class RootWakeupReconciler
     /** @param array{account: AccountRef, revision: int, epoch: int} $claim */
     private function runClaim(array $claim): void
     {
-        $nextFireAt = $this->tenancy->runFor(
-            account: $claim['account'],
-            workspace: null,
-            callback: function () use ($claim): ?DateTimeImmutable {
-                $context = new TenantContext(account: $claim['account']);
+        $context = new TenantContext(account: $claim['account']);
+        $nextFireAt = $this->inAccount(
+            $context,
+            function () use ($context): ?DateTimeImmutable {
                 $this->sweeper->sweep(context: $context, limit: 100);
 
                 return $this->sweeper->nextDue(context: $context);
@@ -237,6 +243,24 @@ final readonly class RootWakeupReconciler
                 'updated_at' => $this->clock->now(),
             ]);
         });
+    }
+
+    /** @param  Closure():?DateTimeImmutable  $work */
+    private function inAccount(TenantContext $context, Closure $work): ?DateTimeImmutable
+    {
+        return $this->tenancy->runFor($context->account, null, fn (): ?DateTimeImmutable => $this->namedPrincipals->run(
+            $context,
+            self::SERVICE,
+            function () use ($context, $work): ?DateTimeImmutable {
+                $scope = $this->scopes->forCurrentPrincipal($context);
+
+                if ($scope->principalKind !== 'service' || $scope->principalId !== self::SERVICE) {
+                    throw new ScopeContextMismatch('Root wakeup requires the scoped Scheduler service grant.');
+                }
+
+                return $work();
+            },
+        ));
     }
 
     private function root(): ConnectionInterface

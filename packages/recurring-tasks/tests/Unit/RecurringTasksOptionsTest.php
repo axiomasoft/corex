@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Laravel\CoreOptionsParser;
-use CoreX\RecurringTasks\Internal\DangerousModesCheck;
 use CoreX\RecurringTasks\Internal\RecurringTasksOptions;
 use Packman\Config\Exceptions\InvalidConfiguration;
 
@@ -14,8 +12,7 @@ it('passes on an empty environment with the shipped defaults', function (): void
         ->and($options->wakeupHandlerKind)->toBe('task-recurrence.materialize')
         ->and($options->wakeupHandlerVersion)->toBe('task-materialization/1')
         ->and($options->completionCaptureEnabled)->toBeFalse()
-        ->and($options->completionCaptureDefinitionRef)->toBe('task-completion/1')
-        ->and($options->dangerousModes())->toBe([]);
+        ->and($options->completionCaptureDefinitionRef)->toBe('task-completion/1');
 });
 
 it('accumulates violations across the wakeup and capture sections', function (): void {
@@ -29,15 +26,4 @@ it('accumulates violations across the wakeup and capture sections', function ():
             'completion_capture.version_ref: must be a non-empty string',
         ]);
     }
-});
-
-it('lists legacy unstamped materialization wakeups as a dangerous mode that production must acknowledge', function (): void {
-    $options = RecurringTasksOptions::fromArray(['wakeup' => ['accept_legacy_unstamped' => true]]);
-    $path = 'corex-recurring-tasks.wakeup.accept_legacy_unstamped';
-
-    expect($options->dangerousModes())->toBe([$path])
-        ->and(new DangerousModesCheck($options, CoreOptionsParser::fromArray([]))->violations(true))
-        ->toBe([$path.': dangerous mode is not acknowledged for production'])
-        ->and(new DangerousModesCheck($options, CoreOptionsParser::fromArray(['acknowledged_dangerous_modes' => [$path]]))->violations(true))
-        ->toBe([]);
 });

@@ -18,7 +18,6 @@ function compileWakeupRegistry(array $definitions, string $fingerprint = 'regist
 {
     return WakeupHandlerRegistry::compile(
         definitions: $definitions,
-        resolve: static fn (string $handler): DueWakeupHandler => new $handler,
         registryFingerprint: $fingerprint,
     );
 }
@@ -32,7 +31,7 @@ it('compiles typed definitions into a frozen handler catalogue', function (): vo
     $registry = compileWakeupRegistry([$definition]);
 
     expect($registry->definition('test.reminder'))->toBe($definition)
-        ->and($registry->handler('test.reminder'))->toBeInstanceOf(RegistryTestHandler::class)
+        ->and($registry->handler('test.reminder', static fn (string $handler): DueWakeupHandler => new $handler))->toBeInstanceOf(RegistryTestHandler::class)
         ->and($registry->definition('test.missing'))->toBeNull();
 });
 
@@ -62,7 +61,7 @@ it('rejects duplicate, malformed and non-handler definitions', function (): void
         ))->toThrow(InvalidArgumentException::class, 'must implement DueWakeupHandler');
 });
 
-it('stores provenance but excludes it from replay identity', function (): void {
+it('stores registry provenance on each stamped envelope', function (): void {
     $definition = new WakeupHandlerDefinition(
         kind: 'test.reminder',
         version: 'reminder/1',
@@ -80,22 +79,16 @@ it('stores provenance but excludes it from replay identity', function (): void {
             'version' => 'reminder/1',
             'registryFingerprint' => 'registry-a',
         ])
-        ->and($registryA->replayIdentity($envelopeA))->toBe($registryB->replayIdentity($envelopeB));
+        ->and($envelopeB['_corex']['extension']['registryFingerprint'])->toBe('registry-b');
 });
 
-it('classifies exact, drifted, missing and bounded legacy payloads', function (): void {
+it('classifies exact, drifted, missing and malformed payloads', function (): void {
     $strict = new WakeupHandlerDefinition(
         kind: 'test.reminder',
         version: 'reminder/1',
         handler: RegistryTestHandler::class,
     );
-    $legacy = new WakeupHandlerDefinition(
-        kind: 'test.legacy',
-        version: 'legacy/1',
-        handler: RegistryTestHandler::class,
-        acceptLegacyUnstamped: true,
-    );
-    $registry = compileWakeupRegistry([$strict, $legacy]);
+    $registry = compileWakeupRegistry([$strict]);
     $exact = $registry->envelope($strict, ['message' => 'wake']);
     $fingerprintDrift = $exact;
     $fingerprintDrift['_corex']['extension']['registryFingerprint'] = 'registry-b';
@@ -111,12 +104,5 @@ it('classifies exact, drifted, missing and bounded legacy payloads', function ()
     ])->and($registry->inspectPayload('test.reminder', $versionDrift)['status'])
         ->toBe('handler-version-mismatch')
         ->and($registry->inspectPayload('test.reminder', ['message' => 'wake'])['status'])
-        ->toBe('handler-stamp-missing')
-        ->and($registry->inspectPayload('test.legacy', ['message' => 'wake']))->toBe([
-            'status' => 'legacy-admitted',
-            'data' => ['message' => 'wake'],
-        ])->and($registry->inspectPayload('test.legacy', ['_corex' => ['business' => true]]))->toBe([
-            'status' => 'legacy-admitted',
-            'data' => ['_corex' => ['business' => true]],
-        ]);
+        ->toBe('handler-stamp-missing');
 });

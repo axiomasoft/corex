@@ -15,6 +15,12 @@ use CoreX\Settings\Internal\DatabaseSettingsRepository;
 use CoreX\Settings\Internal\NullSettingDefaultsProvider;
 
 return [
+    'scope' => [
+        'deployment_id' => env('COREX_DEPLOYMENT_ID'),
+        'control_connection' => env('COREX_SCOPE_CONTROL_CONNECTION'),
+        'tenant_jobs' => [],
+        'central_jobs' => [],
+    ],
 
     /*
     |--------------------------------------------------------------------------

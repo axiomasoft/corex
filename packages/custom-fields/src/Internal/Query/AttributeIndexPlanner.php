@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal\Query;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\WorkScopeRunner;
 use CoreX\CustomFields\Contracts\SchemaOperations;
 use CoreX\CustomFields\Data\AttributeDefinition;
 use CoreX\CustomFields\Data\AttributeTables;
 use CoreX\CustomFields\Data\IndexPolicy;
 use CoreX\CustomFields\Data\SchemaChange;
 use CoreX\CustomFields\Data\SchemaOperationId;
-use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
 use CoreX\CustomFields\Internal\Value;
 use CoreX\Data\Data\DataScope;
 use Illuminate\Database\ConnectionInterface;
@@ -24,6 +25,8 @@ final readonly class AttributeIndexPlanner
 {
     public function __construct(
         private ConnectionInterface $connection,
+        private CurrentWorkScope $current,
+        private WorkScopeRunner $runner,
         private AttributeTables $tables,
         private SchemaOperations $operations,
         private readonly ClockInterface $clock,
@@ -56,7 +59,12 @@ final readonly class AttributeIndexPlanner
         string $schemaHash,
         string $approvalDigest,
     ): AttributeIndexReceipt {
-        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
+        return $this->runner->run($scope, fn (): AttributeIndexReceipt => $this->activateAdmitted($scope, $definition, $schemaHash, $approvalDigest));
+    }
+
+    private function activateAdmitted(DataScope $scope, AttributeDefinition $definition, string $schemaHash, string $approvalDigest): AttributeIndexReceipt
+    {
+        $this->current->assert($scope, $this->connection);
 
         if ($definition->index === IndexPolicy::None) {
             return new AttributeIndexReceipt(mode: 'none', ddl: false, indexName: null, expression: null, orderBy: null, owner: 'attributes');

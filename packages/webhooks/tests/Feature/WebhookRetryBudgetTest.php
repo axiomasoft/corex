@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Feature;
 
-use CoreX\Context\Internal\GuardedTenantContextRestorer;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Webhooks\Data\WebhookHttpResult;
 use CoreX\Webhooks\Enums\WebhookFailureReason;
 use CoreX\Webhooks\Internal\SqlWebhookDeliveryStore;
@@ -50,7 +50,7 @@ final class WebhookRetryBudgetTest extends TestCase
         self::assertSame($status, $row->status);
         self::assertSame($error, $row->lastError);
         self::assertSame($attempt, $row->attempt);
-        self::assertFalse($store->finish($claim, new WebhookHttpResult(204, null, null, 1)));
+        self::assertFalse($store->finish($this->scope, $claim, new WebhookHttpResult(204, null, null, 1)));
     }
 
     #[DataProvider('budgets')]
@@ -61,7 +61,7 @@ final class WebhookRetryBudgetTest extends TestCase
         $store = $this->budgetStore($max);
         $claim = $store->claim($this->scope, 'worker');
         self::assertNotNull($claim);
-        self::assertTrue($store->finish($claim, new WebhookHttpResult(null, null, WebhookFailureReason::NetworkFailure, 1)));
+        self::assertTrue($store->finish($this->scope, $claim, new WebhookHttpResult(null, null, WebhookFailureReason::NetworkFailure, 1)));
         $row = $store->find($this->scope, 'delivery');
         self::assertNotNull($row);
         // A next attempt exactly at the horizon is already exhausted.
@@ -79,7 +79,7 @@ final class WebhookRetryBudgetTest extends TestCase
             $store = $this->budgetStore(3);
             $claim = $store->claim($this->scope, 'worker');
             self::assertNotNull($claim);
-            self::assertTrue($store->finish($claim, new WebhookHttpResult($http, null, null, 1)));
+            self::assertTrue($store->finish($this->scope, $claim, new WebhookHttpResult($http, null, null, 1)));
             $finished = $store->find($this->scope, $claim->id);
             self::assertSame($status, $finished?->status);
             self::assertSame($error, $finished?->lastError);
@@ -111,7 +111,7 @@ final class WebhookRetryBudgetTest extends TestCase
                 $store = $this->budgetStore(20);
                 $claim = $store->claim($this->scope, 'worker');
                 self::assertNotNull($claim);
-                self::assertTrue($store->finish($claim, new WebhookHttpResult($http, null, $reason, 1)));
+                self::assertTrue($store->finish($this->scope, $claim, new WebhookHttpResult($http, null, $reason, 1)));
                 self::assertSame('dead', $store->find($this->scope, $id)?->status);
                 self::assertSame($reason->value, $store->find($this->scope, $id)?->lastError);
                 self::assertSame('active', $this->connection->table('sys_api_webhook_subscriptions')->where('id', 'subscription-'.$id)->value('status'));
@@ -135,6 +135,6 @@ final class WebhookRetryBudgetTest extends TestCase
 
     private function budgetStore(int $max): SqlWebhookDeliveryStore
     {
-        return new SqlWebhookDeliveryStore($this->connection, new GuardedTenantContextRestorer($this->contexts), $this->clock, new WebhookRetryPolicy(WebhookOptionsParser::fromArray(['max_attempts' => $max, 'retry_horizon_seconds' => 3600]), static fn (): int => 1));
+        return new SqlWebhookDeliveryStore($this->connection, new CallerWorkScopeFixture($this->contexts), $this->clock, new WebhookRetryPolicy(WebhookOptionsParser::fromArray(['max_attempts' => $max, 'retry_horizon_seconds' => 3600]), static fn (): int => 1));
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal\Laravel;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\CustomFields\Contracts\AttributeStore;
 use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Data\AttributeStoragePolicy;
@@ -43,6 +44,7 @@ final class AttributeStoreFactory
         $jsonb = ($composition->drivers['jsonb'] ?? false)
             ? new JsonbAttributeStore(
                 connection: $connection,
+                current: $app->make(CurrentWorkScope::class),
                 tables: $tables,
                 catalogue: $catalogue,
                 authorizer: $authorizer,
@@ -54,6 +56,7 @@ final class AttributeStoreFactory
         $eav = ($composition->drivers['eav'] ?? false)
             ? new EavAttributeStore(
                 connection: $connection,
+                current: $app->make(CurrentWorkScope::class),
                 tables: $tables,
                 catalogue: $catalogue,
                 authorizer: $authorizer,

@@ -995,7 +995,7 @@ jobs:
       - name: Audit every maintained Composer source root
         run: env -u COMPOSER_NO_AUDIT python3 scripts/distribution/audit-roots.py --scope source --evidence-dir build/quality/audits
 
-      # Второй, самостоятельный прогон (P1.28/D48): 9 правил corex/modules-lint
+      # Второй, самостоятельный прогон (P1.28/D48): 9 правил Packman Modules
       # на tests/ через phpstan-tests-lint.neon (без larastan — иначе Pest-идиома
       # даёт 60 несвязанных property.notFound). Строго ПОСЛЕ основного analyse.
       - name: PHPStan (modules-lint on tests/)

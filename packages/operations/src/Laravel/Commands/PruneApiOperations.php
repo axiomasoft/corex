@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Laravel\Commands;
 
-use CoreX\Data\Data\DataScope;
+use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Contracts\WorkScopeRunner;
+use CoreX\Context\Exceptions\CentralContextException;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Operations\Bulk\Internal\BulkRetention;
 use CoreX\Operations\Cost\Internal\BudgetRetention;
 use Illuminate\Console\Command;
@@ -24,7 +28,7 @@ final class PruneApiOperations extends Command
 
     protected $description = 'Prune expired CoreX API bulk results and budget reservations.';
 
-    public function handle(BulkRetention $bulk, BudgetRetention $budget): int
+    public function handle(BudgetRetention $budget): int
     {
         $max = (int) $this->option('max');
 
@@ -38,15 +42,19 @@ final class PruneApiOperations extends Command
         $reservations = $budget->pruneTerminal($max);
         $buckets = $budget->forgetIdleBuckets($max);
 
-        if (! $this->laravel->bound(DataScope::class)) {
+        try {
+            $scope = $this->laravel->make(DataScopeFactory::class)->forCurrentPrincipal($this->laravel->make(TenantContextResolver::class)->current());
+        } catch (CentralContextException|ScopeContextMismatch) {
             $this->components->warn('No trusted tenant scope is active.');
             $this->components->info("Budget retention: abandoned {$abandoned}, pruned {$reservations}, idle buckets {$buckets}.");
 
             return self::SUCCESS;
         }
 
-        $scope = $this->laravel->make(DataScope::class);
-        $bulkResult = $bulk->prune(scope: $scope, limit: $max);
+        $bulkResult = $this->laravel->make(WorkScopeRunner::class)->run(
+            $scope,
+            fn (): array => $this->laravel->make(BulkRetention::class)->prune(scope: $scope, limit: $max),
+        );
         $this->components->info(sprintf(
             'API retention: bulk cleared %d removed %d; budget abandoned %d pruned %d idle buckets %d.',
             $bulkResult['cleared'],

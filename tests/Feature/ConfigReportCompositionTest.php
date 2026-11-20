@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Feature;
 
+use CoreX\Context\Contracts\NamedWorkPrincipal;
 use CoreX\Tests\Golden\GoldenTestCase;
 use Illuminate\Support\Facades\Artisan;
+use Mockery;
 
 final class ConfigReportCompositionTest extends GoldenTestCase
 {
@@ -20,6 +22,7 @@ final class ConfigReportCompositionTest extends GoldenTestCase
     public function test_package_sections_preserve_the_complete_report(): void
     {
         $this->declareTenancyHostConfiguration();
+        $this->app->instance(NamedWorkPrincipal::class, Mockery::mock(NamedWorkPrincipal::class));
         config([
             'corex.pubsub.driver' => 'redis',
             'corex-tenancy.wakeup.driver' => 'root_registry',
@@ -49,5 +52,16 @@ secret corex-search.cursor_secret=absent
 secret corex-search-meilisearch.key=present
 
 REPORT, Artisan::output());
+    }
+
+    public function test_root_wakeup_requires_an_explicit_service_grant(): void
+    {
+        $this->declareTenancyHostConfiguration();
+        config(['corex-tenancy.wakeup.driver' => 'root_registry']);
+
+        self::assertNotSame(0, Artisan::call('packman:config:validate'));
+        $output = Artisan::output();
+        self::assertStringContainsString('adapter wakeup.root_registry=missing', $output);
+        self::assertStringContainsString(NamedWorkPrincipal::class, $output);
     }
 }

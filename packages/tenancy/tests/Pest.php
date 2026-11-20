@@ -7,6 +7,9 @@ use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Runtime\Internal\TenantRuntimeManager;
 use CoreX\Tenancy\Tests\TestCase;
 
+require_once dirname(__DIR__, 3).'/tests/Support/LocalWorkContexts.php';
+require_once dirname(__DIR__, 3).'/tests/Support/WorkScopeFixture.php';
+
 uses(TestCase::class)->group('pg')->in('Feature');
 
 uses()->group('pg')->in('Pg');

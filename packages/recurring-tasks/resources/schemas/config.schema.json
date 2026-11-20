@@ -27,10 +27,6 @@
                 "wakeup": {
                     "type": "object",
                     "properties": {
-                        "accept_legacy_unstamped": {
-                            "type": "boolean",
-                            "default": false
-                        },
                         "enabled": {
                             "type": "boolean",
                             "default": false

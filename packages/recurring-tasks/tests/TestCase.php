@@ -6,13 +6,14 @@ namespace CoreX\RecurringTasks\Tests;
 
 use CoreX\CoreServiceProvider;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\Internal\AllowAllDataScopeAuthorizer;
+use CoreX\Data\Internal\CallableDataScopeAuthorizer;
 use CoreX\RecurringTasks\Contracts\TaskRecurrenceCommand;
 use CoreX\RecurringTasks\RecurringTasksServiceProvider;
 use CoreX\RecurringTasks\Tests\Support\IsolatesDatabasePath;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
 use CoreX\Tasks\TasksServiceProvider;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Illuminate\Foundation\Application;
 use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -45,7 +46,9 @@ abstract class TestCase extends Orchestra
         $mutationAccess->shouldReceive('authorizeComplete')->byDefault()->andReturnNull();
         $mutationAccess->shouldReceive('authorizeUpdate')->byDefault()->andReturnNull();
         $this->app->instance(TaskMutationAccess::class, $mutationAccess);
-        $this->app->instance(DataScopeAuthorizer::class, new AllowAllDataScopeAuthorizer);
+        $this->app->scoped(DataScopeAuthorizer::class, static fn (): DataScopeAuthorizer => new CallableDataScopeAuthorizer(static fn (): bool => true));
+
+        CallerWorkScopeFixture::bind($this->app);
 
         $this->app->forgetInstance(TaskRecurrenceCommand::class);
         $this->app->forgetScopedInstances();

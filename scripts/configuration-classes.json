@@ -5,6 +5,10 @@
         "corex": [
             {
                 "class": "CoreX\\Config\\Data\\CoreOptions"
+            },
+            {
+                "class": "CoreX\\Context\\Laravel\\ScopeOptions",
+                "prefix": "scope"
             }
         ],
         "corex-access": [
@@ -506,15 +510,6 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-notifications.digest.accept_legacy_unstamped": {
-            "owner": "axiomasoft/corex-notifications",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
         "corex-notifications.digest.enabled": {
             "owner": "axiomasoft/corex-notifications",
             "secret": "no",
@@ -947,15 +942,6 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-recurring-tasks.wakeup.accept_legacy_unstamped": {
-            "owner": "axiomasoft/corex-recurring-tasks",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
         "corex-recurring-tasks.wakeup.enabled": {
             "owner": "axiomasoft/corex-recurring-tasks",
             "secret": "no",
@@ -999,7 +985,7 @@
             "reloadable": "no",
             "validation": "use-site",
             "deprecated_aliases": "",
-            "notes": ""
+            "notes": "The root registry requires Scheduler and the host's explicit corex.scheduler-sweep grant."
         },
         "corex-tenancy.wakeup.lease_seconds": {
             "owner": "axiomasoft/corex-tenancy",
@@ -1387,6 +1373,42 @@
             "validation": "use-site",
             "deprecated_aliases": "",
             "notes": ""
+        },
+        "corex.scope.central_jobs": {
+            "owner": "axiomasoft/corex",
+            "secret": "no",
+            "mode": "deployment",
+            "reloadable": "no",
+            "validation": "boot",
+            "deprecated_aliases": "",
+            "notes": "Handlers explicitly admitted to run in the central context."
+        },
+        "corex.scope.control_connection": {
+            "owner": "axiomasoft/corex",
+            "secret": "no",
+            "mode": "deployment",
+            "reloadable": "no",
+            "validation": "use-site",
+            "deprecated_aliases": "",
+            "notes": "Connection to the control store outside tenant backup and restore."
+        },
+        "corex.scope.deployment_id": {
+            "owner": "axiomasoft/corex",
+            "secret": "no",
+            "mode": "deployment",
+            "reloadable": "no",
+            "validation": "use-site",
+            "deprecated_aliases": "",
+            "notes": "Stable identifier for the deployment that admits the work."
+        },
+        "corex.scope.tenant_jobs": {
+            "owner": "axiomasoft/corex",
+            "secret": "no",
+            "mode": "deployment",
+            "reloadable": "no",
+            "validation": "boot",
+            "deprecated_aliases": "",
+            "notes": "Handlers explicitly admitted to run with a verified tenant scope."
         },
         "corex.storage.durable_root": {
             "owner": "axiomasoft/corex",

@@ -7,8 +7,7 @@ namespace CoreX\Webhooks\Internal;
 use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Audit\Data\AuditEntry;
 use CoreX\Audit\Enums\ActorType;
-use CoreX\Context\Contracts\TenantContextRestorer;
-use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Invocation\Contracts\OperationHandler;
@@ -40,7 +39,7 @@ final readonly class WebhookReplay
 
     public function __construct(
         private Connection $connection,
-        private TenantContextRestorer $contexts,
+        private CurrentWorkScope $contexts,
         private WebhookTopicCatalogue $topics,
         private ClockInterface $clock,
         private CursorCodec $cursors,
@@ -57,6 +56,7 @@ final readonly class WebhookReplay
         $this->assertScope($scope);
 
         return $this->connection->transaction(function () use ($scope, $deliveryId, $explicit, $auditReason): array {
+            $this->assertScope($scope);
             $row = $this->scopedDeliveries($scope)->where('id', $deliveryId)->lockForUpdate()->first();
 
             if ($row === null) {
@@ -259,7 +259,7 @@ final readonly class WebhookReplay
         $this->audit->record(new AuditEntry(
             action: 'webhook.delivery.replayed',
             actorType: ActorType::ApiKey,
-            actorId: $scope->actorId,
+            actorId: $scope->principalId,
             entityType: 'webhook_delivery',
             entityId: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id')),
             context: JsonDocuments::capture($context),
@@ -302,34 +302,12 @@ final readonly class WebhookReplay
 
     private function assertScope(DataScope $scope): void
     {
-        $context = $this->contexts->restore($scope);
-        $actual = $context->isBoxed()
-            ? 'boxed:'.$context->account->id
-            : $this->connection->getDriverName().':'.$this->connection->getDatabaseName();
-
-        if (! hash_equals($scope->connectionIdentity, $actual) || ! hash_equals($scope->accountId, $context->account->id)) {
-            throw ScopeContextMismatch::connection(expected: $scope->connectionIdentity, actual: $actual);
-        }
+        $this->contexts->assert($scope, $this->connection);
     }
 
     private function scopedDeliveries(DataScope $scope): Builder
     {
-        $query = $this->connection->table('sys_api_webhook_deliveries');
-        $accountPath = $this->connection->getDriverName() === 'pgsql'
-            ? "scope->>'account'"
-            : "json_extract(scope, '$.account')";
-        $workspacePath = $this->connection->getDriverName() === 'pgsql'
-            ? "scope->>'workspace'"
-            : "json_extract(scope, '$.workspace')";
-        $query->whereRaw("{$accountPath} = ?", [$scope->accountId]);
-
-        if ($scope->workspaceId === null) {
-            $query->whereRaw("{$workspacePath} IS NULL");
-        } else {
-            $query->whereRaw("{$workspacePath} = ?", [$scope->workspaceId]);
-        }
-
-        return $query;
+        return WebhookDeliveryScope::constrain($this->connection->table('sys_api_webhook_deliveries'), $scope);
     }
 
     private static function rangeOrdering(): OrderingRegistry

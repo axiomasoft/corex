@@ -23,21 +23,17 @@ final readonly class WakeupHandlerRegistry
 
     /**
      * @param  array<string, WakeupHandlerDefinition>  $definitions
-     * @param  array<string, DueWakeupHandler>  $handlers
      */
     private function __construct(
         private array $definitions,
-        private array $handlers,
         private string $registryFingerprint,
     ) {}
 
     /**
      * @param  iterable<WakeupHandlerDefinition>  $definitions
-     * @param  Closure(string): mixed  $resolve
      */
     public static function compile(
         iterable $definitions,
-        Closure $resolve,
         string $registryFingerprint,
     ): self {
         if ($registryFingerprint === '' || trim($registryFingerprint) !== $registryFingerprint) {
@@ -45,26 +41,17 @@ final readonly class WakeupHandlerRegistry
         }
 
         $compiledDefinitions = [];
-        $handlers = [];
 
         foreach ($definitions as $definition) {
             if (isset($compiledDefinitions[$definition->kind])) {
                 throw new RuntimeException("Duplicate wakeup handler definition [{$definition->kind}].");
             }
 
-            $handler = $resolve($definition->handler);
-
-            if (! $handler instanceof DueWakeupHandler) {
-                throw new RuntimeException("Wakeup handler [{$definition->handler}] must resolve to DueWakeupHandler.");
-            }
-
             $compiledDefinitions[$definition->kind] = $definition;
-            $handlers[$definition->kind] = $handler;
         }
 
         return new self(
             definitions: $compiledDefinitions,
-            handlers: $handlers,
             registryFingerprint: $registryFingerprint,
         );
     }
@@ -74,9 +61,21 @@ final readonly class WakeupHandlerRegistry
         return $this->definitions[$kind] ?? null;
     }
 
-    public function handler(string $kind): ?DueWakeupHandler
+    /** @param Closure(class-string<DueWakeupHandler>): mixed $resolve */
+    public function handler(string $kind, Closure $resolve): ?DueWakeupHandler
     {
-        return $this->handlers[$kind] ?? null;
+        $definition = $this->definition($kind);
+
+        if ($definition === null) {
+            return null;
+        }
+        $handler = $resolve($definition->handler);
+
+        if (! $handler instanceof DueWakeupHandler) {
+            throw new RuntimeException("Wakeup handler [{$definition->handler}] must resolve to DueWakeupHandler.");
+        }
+
+        return $handler;
     }
 
     /**
@@ -95,22 +94,7 @@ final readonly class WakeupHandlerRegistry
     }
 
     /**
-     * @param  array<string, mixed>  $envelope
-     * @return array<string, mixed>
-     */
-    public function replayIdentity(array $envelope): array
-    {
-        $identity = $envelope;
-
-        if (is_array($identity['_corex'] ?? null) && is_array($identity['_corex']['extension'] ?? null)) {
-            unset($identity['_corex']['extension']['registryFingerprint']);
-        }
-
-        return $identity;
-    }
-
-    /**
-     * @return array{status: 'ready'|'legacy-admitted'|'handler-unavailable'|'handler-stamp-missing'|'handler-version-mismatch', data?: array<string, mixed>}
+     * @return array{status: 'ready'|'handler-unavailable'|'handler-stamp-missing'|'handler-version-mismatch', data?: array<string, mixed>}
      */
     public function inspectPayload(string $kind, mixed $payload): array
     {
@@ -126,17 +110,9 @@ final readonly class WakeupHandlerRegistry
 
         $metadata = $payload['_corex'] ?? null;
 
-        if (! is_array($metadata) || ! array_key_exists('schema', $metadata)) {
-            if (! $definition->acceptLegacyUnstamped) {
-                return ['status' => 'handler-stamp-missing'];
-            }
-
-            return ['status' => 'legacy-admitted', 'data' => Value::map($payload)];
-        }
-
         $data = $payload['data'] ?? null;
 
-        if ($metadata['schema'] !== self::Schema
+        if (! is_array($metadata) || ($metadata['schema'] ?? null) !== self::Schema
             || ! is_array($metadata['extension'] ?? null)
             || ! is_array($data)) {
             return ['status' => 'handler-stamp-missing'];

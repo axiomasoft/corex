@@ -24,16 +24,12 @@ use CoreX\Intl\Formatting\Data\FormatPolicy;
 use CoreX\Intl\Locale\Contracts\LocaleResolver;
 use CoreX\Intl\Locale\Data\LocaleInputs;
 use CoreX\Intl\Locale\Data\LocalePolicy;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Illuminate\Support\Str;
 
 function intlScope(): DataScope
 {
-    return DataScope::fromTenantContext(
-        context: new TenantContext(account: new AccountRef(id: 'acct', slug: 'acct', status: 'active', features: [], limits: [])),
-        connectionIdentity: 'sqlite::memory:',
-        actorId: 'fx-tester',
-        restoreEpoch: str_repeat('b', 64),
-    );
+    return CallerWorkScopeFixture::forContext(new TenantContext(account: new AccountRef(id: 'acct', slug: 'acct', status: 'active', features: [], limits: [])), 'fx-tester', str_repeat('b', 64));
 }
 
 function sampleRate(string $base = 'USD', string $quote = 'EUR', string $rate = '0.92', string $validOn = '2026-09-15'): RateSnapshot

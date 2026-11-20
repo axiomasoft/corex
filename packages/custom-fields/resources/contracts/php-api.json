@@ -98,7 +98,7 @@
                         },
                         {
                             "name": "fields",
-                            "type": "CoreX\\CustomFields\\Data\\FieldSelection",
+                            "type": "CoreX\\Data\\Data\\FieldSelection",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -136,7 +136,7 @@
                         },
                         {
                             "name": "fields",
-                            "type": "CoreX\\CustomFields\\Data\\FieldSelection",
+                            "type": "CoreX\\Data\\Data\\FieldSelection",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -1151,44 +1151,6 @@
             "enum_backing": null,
             "enum_cases": []
         },
-        "CoreX\\CustomFields\\Data\\FieldSelection": {
-            "kind": "class",
-            "layer": "api",
-            "since": "1.0",
-            "final": true,
-            "readonly": true,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": [],
-            "methods": {
-                "__construct": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "fields",
-                            "type": "array",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        }
-                    ],
-                    "return": null,
-                    "doc": []
-                }
-            },
-            "properties": {},
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
         "CoreX\\CustomFields\\Data\\FieldSnapshot": {
             "kind": "class",
             "layer": "api",
@@ -1332,6 +1294,24 @@
                         {
                             "name": "tree",
                             "type": "array",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "scopeFingerprint",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "policyWitness",
+                            "type": "string",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,

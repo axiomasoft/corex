@@ -14,11 +14,12 @@ import tempfile
 import xml.etree.ElementTree as ET
 
 CONSUMER = Path("packages/core/tests/Release/octane-consumer")
+CONSUMER_LOCK = ".composer-snapshots.lock"
 IMPLEMENTATION = "Laravel\\Octane\\Worker"
 TENANTS = ["0198a000-0000-7000-8000-00000000000a", "0198a000-0000-7000-8000-00000000000b"]
 CASES = {
     "test_tenant_request_isolation": (2, 0, [200, 200], []),
-    "test_failed_request_cleanup": (2, 0, [500, 200], []),
+    "test_failed_request_cleanup": (3, 0, [200, 500, 200], []),
     "test_worker_error_cleanup": (1, 1, [200], ["fixture transport failure"]),
     "test_worker_restart": (2, 0, [200, 200], []),
 }
@@ -49,6 +50,13 @@ def source_hashes(root: Path) -> dict[str, str]:
     files += sorted((root / CONSUMER / "bootstrap").glob("*.php"))
     files += sorted((root / CONSUMER / "config").glob("*.php"))
     return {str(path.relative_to(root)): sha256(path) for path in files}
+
+
+def core_hashes(package: Path) -> dict[str, str]:
+    files = [package / "composer.json"]
+    files += sorted((package / "src").rglob("*.php"))
+    files += sorted((package / "config").rglob("*.php"))
+    return {str(path.relative_to(package)): sha256(path) for path in files}
 
 
 def octane_hashes(consumer: Path) -> dict[str, str]:
@@ -83,10 +91,15 @@ def validate_trace(trace: dict, case: str) -> None:
     require(trace.get("implementation") == IMPLEMENTATION
             and trace.get("execution_scope") == "real-php-worker-handler", "wrong or modeled handler")
     require(type(trace.get("pid")) is int and trace["pid"] > 0, "missing PHP process witness")
-    require(trace.get("handles") == 2 and trace.get("tenants") == TENANTS, "missing tenant handler cycles")
+    tenants = [*TENANTS, TENANTS[0]] if case == "test_failed_request_cleanup" else TENANTS
+    owners = ["lifecycle-tenant-" + tenant[-1] for tenant in tenants]
+    require(trace.get("handles") == len(tenants) and trace.get("tenants") == tenants, "missing tenant handler cycles")
+    require(trace.get("markers") == tenants and trace.get("connections") == owners and trace.get("bindings") == owners,
+            "missing independent tenant binding and database evidence")
+    require(trace.get("principals") == ["fixture-user:" + tenant for tenant in tenants], "missing scoped principal evidence")
     terminated, errors, statuses, messages = CASES[case]
     require(trace.get("statuses") == statuses and trace.get("errors") == messages, "failure cleanup outcome changed")
-    expected_events = {"RequestReceived": 2, "RequestHandled": 2,
+    expected_events = {"RequestReceived": len(tenants), "RequestHandled": len(tenants),
                        "RequestTerminated": terminated, "WorkerErrorOccurred": errors,
                        "WorkerStarting": 2 if case == "test_worker_restart" else 1,
                        "WorkerStopping": 2 if case == "test_worker_restart" else 1}
@@ -106,9 +119,13 @@ def validate_receipt(receipt: dict, root: Path, directory: Path, matrix: list[st
     consumer = root / CONSUMER
     require(receipt.get("schema") == "corex-octane-source-proof/v1", "wrong receipt schema")
     require(receipt.get("source_hashes") == source_hashes(root), "source/hash binding changed")
-    require(receipt.get("consumer_lock_sha256") == sha256(consumer / "composer.lock"), "consumer lock changed")
+    require(receipt.get("consumer_lock_sha256") == sha256(consumer / CONSUMER_LOCK), "consumer lock changed")
     require(receipt.get("octane_hashes") == octane_hashes(consumer), "installed Octane source changed")
-    lock = json.loads((consumer / "composer.lock").read_text())
+    installed_core = consumer / "vendor/axiomasoft/corex"
+    source_core_hashes = core_hashes(root / "packages/core")
+    require(receipt.get("installed_core_hashes") == core_hashes(installed_core) == source_core_hashes,
+            "installed CoreX mirror differs from the verified source")
+    lock = json.loads((consumer / CONSUMER_LOCK).read_text())
     packages = {package["name"]: package for package in lock["packages"]}
     cells = receipt.get("cells", [])
     require(len(cells) == len(matrix) and {cell.get("cell") for cell in cells} == set(matrix), "incomplete runtime matrix")
@@ -121,7 +138,7 @@ def validate_receipt(receipt: dict, root: Path, directory: Path, matrix: list[st
             version = packages[name]["version"]
             require(version.startswith(prefix) and runtime[key] == version, "wrong installed package version")
         require(runtime["octane_ref"] == packages["laravel/octane"]["source"]["reference"], "wrong Octane source reference")
-        require(Path(runtime["core_path"]).resolve() == (root / "packages/core").resolve(), "wrong CoreX source root")
+        require(Path(runtime["core_path"]).resolve() == installed_core.resolve(), "wrong installed CoreX root")
         require(runtime["implementation"] == IMPLEMENTATION
                 and Path(runtime["worker_file"]).resolve() == (consumer / "vendor/laravel/octane/src/Worker.php").resolve(),
                 "wrong Worker implementation path")
@@ -159,11 +176,15 @@ def produce(root: Path, directory: Path, matrix: list[str]) -> dict:
     consumer = root / CONSUMER
     require((consumer / "vendor/bin/phpunit").is_file(), "install the locked Octane consumer before running proof")
     before = source_hashes(root)
-    lock_hash = sha256(consumer / "composer.lock")
+    lock_hash = sha256(consumer / CONSUMER_LOCK)
     octane_before = octane_hashes(consumer)
+    installed_core = consumer / "vendor/axiomasoft/corex"
+    core_before = core_hashes(installed_core)
+    require(core_before == core_hashes(root / "packages/core"), "refresh the installed CoreX mirror from this checkout")
     execution = Path(tempfile.mkdtemp(prefix="run-", dir=directory))
     receipt = {"schema": "corex-octane-source-proof/v1", "source_hashes": before,
-               "consumer_lock_sha256": lock_hash, "octane_hashes": octane_before, "cells": []}
+               "consumer_lock_sha256": lock_hash, "octane_hashes": octane_before,
+               "installed_core_hashes": core_before, "cells": []}
     for cell in matrix:
         php = shutil.which("php" + cell) or shutil.which("php")
         require(php is not None, f"PHP {cell} runtime is unavailable")
@@ -201,8 +222,9 @@ def produce(root: Path, directory: Path, matrix: list[str]) -> dict:
                                   "raw_log_sha256": sha256(cell_dir / "worker.log"),
                                   "raw_junit": str(junit.relative_to(directory)), "raw_junit_sha256": sha256(junit),
                                   "cases": artifacts})
-    require(source_hashes(root) == before and sha256(consumer / "composer.lock") == lock_hash
-            and octane_hashes(consumer) == octane_before, "source/lock/tool changed during execution")
+    require(source_hashes(root) == before and sha256(consumer / CONSUMER_LOCK) == lock_hash
+            and octane_hashes(consumer) == octane_before and core_hashes(installed_core) == core_before,
+            "source/lock/tool changed during execution")
     validate_receipt(receipt, root, directory, matrix)
     return receipt
 

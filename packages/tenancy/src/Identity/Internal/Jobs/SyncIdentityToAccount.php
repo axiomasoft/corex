@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Identity\Internal\Jobs;
 
+use CoreX\Data\Data\DataScope;
 use CoreX\Tenancy\Identity\Contracts\IdentitySyncer;
+use CoreX\Tenancy\Identity\Internal\DatabaseIdentitySyncer;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -28,11 +30,11 @@ final class SyncIdentityToAccount implements ShouldQueue
 
     public function __construct(
         public readonly string $identityId,
-        public readonly string $accountId,
+        public readonly DataScope $scope,
     ) {}
 
-    public function handle(IdentitySyncer $syncer): void
+    public function handle(DatabaseIdentitySyncer $syncer): void
     {
-        $syncer->syncToAccount(identityId: $this->identityId, accountId: $this->accountId);
+        $syncer->syncCaptured($this->identityId, $this->scope);
     }
 }

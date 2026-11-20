@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Operations\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Data\Laravel\JsonDocuments;
@@ -21,6 +20,7 @@ use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Tests\Fixtures\BulkTransferFactory;
 use CoreX\Operations\Tests\TestCase;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Time\Testing\FrozenClock;
 use DateTimeImmutable;
 use Illuminate\Support\Facades\DB;
@@ -61,8 +61,8 @@ final class BulkResultAccessTest extends TestCase
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
         $clock = new FrozenClock(new DateTimeImmutable('2026-09-25T10:00:00.000000+00:00'));
-        $this->store = new SqlBulkOperationStore($connection, new ArrayDataScopeCodec, new GuardedTenantContextRestorer($contexts), $clock);
-        $this->scope = new DataScope('account-1', null, $connection->getDriverName().':'.$connection->getDatabaseName(), 'actor-1', hash('sha256', 'epoch'));
+        $this->store = new SqlBulkOperationStore($connection, new ArrayDataScopeCodec, new CallerWorkScopeFixture($contexts), $clock);
+        $this->scope = CallerWorkScopeFixture::scope('account-1', null, 'actor-1', hash('sha256', 'epoch'));
         $this->clock = $clock;
     }
 
@@ -76,7 +76,7 @@ final class BulkResultAccessTest extends TestCase
         self::assertNotNull($claimed);
         self::assertTrue($this->store->save($this->completed($claimed), 'worker-1', $claimed->revision));
 
-        $foreign = new DataScope('account-9', null, 'other:db', 'actor-9', hash('sha256', 'other'));
+        $foreign = CallerWorkScopeFixture::scope('account-9', null, 'actor-9', hash('sha256', 'other'));
         self::assertSame(404, $api->result($foreign, 'client-9', 'bulk-1')->status());
         self::assertSame(404, $api->show($this->scope, 'client-9', 'bulk-1')->status());
         self::assertSame(404, $api->result($this->scope, 'client-1', 'bulk-1')->status());

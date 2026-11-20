@@ -59,6 +59,20 @@ class Writer {
         self.assertEqual(1, code, output)
         self.assertIn("owned by axiomasoft/corex", output)
 
+    def test_conflict_insert_returning_checks_the_table_owner(self):
+        source = """namespace Demo;
+class Writer {
+    public function write() {
+        $this->db->table('sys_settings')->insertOrIgnoreReturning(['key' => 'probe'], ['key'], ['key']);
+    }
+}"""
+        owned_status, owned_output = self.run_gate(source, package="core")
+        self.assertEqual(0, owned_status, owned_output)
+        self.assertIn("1 statically resolved writes", owned_output)
+        foreign_status, foreign_output = self.run_gate(source)
+        self.assertEqual(1, foreign_status, foreign_output)
+        self.assertIn("owned by axiomasoft/corex", foreign_output)
+
     def test_unrelated_options_fqn_stays_dynamic(self):
         code, output = self.run_gate(r'''namespace Demo;
 class Writer {

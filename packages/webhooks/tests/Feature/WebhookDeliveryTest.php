@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Feature;
 
-use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Testing\MessagingFixtures;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Webhooks\Contracts\WebhookHttpTransport;
 use CoreX\Webhooks\Data\ValidatedWebhookRequest;
 use CoreX\Webhooks\Data\WebhookHttpResult;
@@ -167,7 +167,7 @@ final class WebhookDeliveryTest extends TestCase
     {
         return new SqlWebhookDeliveryStore(
             connection: $this->connection,
-            contexts: new GuardedTenantContextRestorer($this->contexts),
+            contexts: new CallerWorkScopeFixture($this->contexts),
             clock: $this->clock,
             retry: new WebhookRetryPolicy(WebhookOptionsParser::fromArray([]), $random),
             leaseSeconds: 30,

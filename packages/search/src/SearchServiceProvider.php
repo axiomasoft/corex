@@ -38,7 +38,7 @@ final class SearchServiceProvider extends ServiceProvider
             (array) $app->make(Repository::class)->get('corex-search', []),
         ));
 
-        $this->app->singleton(SearchManager::class, static fn (Application $app): SearchManager => new SearchManager($app));
+        $this->app->singleton(SearchManager::class);
 
         SearchPortBindings::register($this->app);
 

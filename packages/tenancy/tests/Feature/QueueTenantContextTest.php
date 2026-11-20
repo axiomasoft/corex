@@ -2,20 +2,28 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Contracts\PhysicalBindingVerifier;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\PhysicalBinding;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
+use CoreX\Context\Laravel\DatabaseScopeControl;
+use CoreX\Context\Laravel\WorkQueueHandlers;
 use CoreX\Tenancy\Account\Internal\Models\Account;
-use CoreX\Tenancy\Runtime\Exceptions\TenantContextUnavailable;
-use CoreX\Tenancy\Runtime\Internal\QueueTenantContext;
 use CoreX\Tenancy\Tests\Support\Queue\RecordContextJob;
-use Illuminate\Contracts\Queue\Job;
+use CoreX\Tests\Support\WorkScopeFixture;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Queue\Events\JobAttempted;
 use Illuminate\Queue\Events\JobProcessing;
+use Illuminate\Queue\Jobs\DatabaseJob;
 use Illuminate\Queue\Jobs\SyncJob;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Str;
 
 uses()->group('pg');
@@ -55,6 +63,24 @@ beforeEach(function (): void {
         $this->accounts[$name] = new AccountRef(id: $account->id, slug: 'acc-'.$name, status: 'active', features: [], limits: []);
     }
 
+    $this->host = WorkScopeFixture::install(app());
+    app(WorkQueueHandlers::class)->tenant(RecordContextJob::class);
+    $routes = $this->databases;
+    $accounts = $this->accounts;
+    app()->scoped(PhysicalBindingVerifier::class, static fn () => new class($routes, $accounts) implements PhysicalBindingVerifier
+    {
+        public function __construct(private array $databases, private array $accounts) {}
+
+        public function verify(PhysicalBinding $binding, TenantContext $context, ConnectionInterface $connection): void
+        {
+            $expected = $this->accounts['a']->id === $context->account->id ? $this->databases['a'] : $this->databases['b'];
+            $actual = $connection->selectOne('select current_database() as physical')->physical;
+
+            if ($actual !== $expected || $binding->bindingId !== 'resource:'.hash('sha256', $context->account->id)) {
+                throw new ScopeContextMismatch('Physical account mismatch.');
+            }
+        }
+    });
     $this->workspace = static fn (string $name): WorkspaceRef => new WorkspaceRef(id: test()->workspaceId, slug: 'ws-'.$name, type: 'company', path: 'ws-'.$name, parentId: null);
 });
 
@@ -67,189 +93,153 @@ afterEach(function (): void {
     }
 });
 
-/** A job object as the worker hands it to the events. */
-function queuedJobQTC(array $payload): Job
+it('captures a signed scope at enqueue and resumes the original account, workspace and physical database', function (): void {
+    $manager = app(TenancyManager::class);
+    $payloads = [];
+    Event::listen(JobProcessing::class, function (JobProcessing $event) use (&$payloads): void {
+        $payloads[] = $event->job->payload();
+    });
+    foreach (['a', 'b', 'a'] as $name) {
+        $manager->runFor($this->accounts[$name], ($this->workspace)($name), function () use ($name): void {
+            $this->host->scope();
+            Queue::connection('sync')->push(new RecordContextJob($name));
+        });
+        expect($manager->context())->toBeNull();
+    }
+    expect(array_column(RecordContextJob::$runs, 'database'))->toBe([$this->databases['a'], $this->databases['b'], $this->databases['a']])
+        ->and(array_column(RecordContextJob::$runs, 'workspace'))->toBe(['ws-a', 'ws-b', 'ws-a'])
+        ->and($payloads[0]['corex_scope']['scope']['account_id'])->toBe($this->accounts['a']->id)
+        ->and($payloads[0]['corex_scope']['scope']['version'])->toBe(3);
+    $saved = $payloads[1];
+    $job = new SyncJob(app(), json_encode($saved, JSON_THROW_ON_ERROR), 'sync', 'default');
+    Event::dispatch(new JobProcessing('sync', $job));
+
+    try {
+        $job->fire();
+    } finally {
+        Event::dispatch(new JobAttempted('sync', $job));
+    }
+    expect(RecordContextJob::$runs[3]['database'])->toBe($this->databases['b'])->and($manager->context())->toBeNull();
+    $saved['corex_scope']['scope']['principal_id'] = 'substitute';
+    $job = new SyncJob(app(), json_encode($saved, JSON_THROW_ON_ERROR), 'sync', 'default');
+    expect(fn () => Event::dispatch(new JobProcessing('sync', $job)))->toThrow(ScopeContextMismatch::class)
+        ->and($job->isDeleted())->toBeTrue()->and(RecordContextJob::$runs)->toHaveCount(4);
+});
+
+it('restores the outer account after a failing nested synchronous job', function (): void {
+    $manager = app(TenancyManager::class);
+    $manager->runFor($this->accounts['a'], ($this->workspace)('a'), function () use ($manager): void {
+        $this->host->scope();
+        Queue::connection('sync')->push(new RecordContextJob('first'));
+
+        try {
+            $manager->runFor($this->accounts['b'], ($this->workspace)('b'), function (): void {
+                $this->host->scope();
+                Queue::connection('sync')->push(new RecordContextJob('failed', true));
+            });
+            test()->fail('The inner job did not fail.');
+        } catch (RuntimeException $error) {
+            expect($error)->not->toBeNull();
+        }
+        expect($manager->context()?->workspace?->slug)->toBe('ws-a');
+        Queue::connection('sync')->push(new RecordContextJob('last'));
+    });
+    expect(array_column(RecordContextJob::$runs, 'tag'))->toBe(['first', 'failed', 'last'])
+        ->and($manager->context())->toBeNull()->and(DB::getDefaultConnection())->toBe('pgsql');
+});
+
+/** Reserve a real Laravel database job stamped in the producer's account and workspace. */
+function reserveScopeJob(string $name): DatabaseJob
 {
-    $job = Mockery::mock(Job::class);
-    $job->shouldReceive('payload')->andReturn($payload);
+    $broker = DB::connection('pgsql');
+    $broker->statement('CREATE TABLE IF NOT EXISTS scope_queue_jobs (id bigserial PRIMARY KEY, queue text, payload text, attempts int, reserved_at int, available_at int, created_at int)');
+    config(['queue.connections.scope_broker' => [
+        'driver' => 'database', 'connection' => 'pgsql', 'queue' => 'work', 'table' => 'scope_queue_jobs', 'retry_after' => 90,
+    ]]);
+    $queue = Queue::connection('scope_broker');
+    $fixture = test();
+    app(TenancyManager::class)->runFor($fixture->accounts[$name], ($fixture->workspace)($name), function () use ($fixture, $queue, $name): void {
+        $fixture->host->scope();
+        $queue->push(new RecordContextJob($name));
+    });
+    $job = $queue->pop();
+    expect($job)->toBeInstanceOf(DatabaseJob::class);
 
     return $job;
 }
 
-function tenantPayloadQTC(string $account, ?string $workspace = null): array
+function fireReservedScopeJob(DatabaseJob $job): void
 {
-    return ['corex_tenant' => ['account' => $account, 'workspace' => $workspace]];
+    Event::dispatch(new JobProcessing('scope_broker', $job));
+
+    try {
+        $job->fire();
+    } finally {
+        Event::dispatch(new JobAttempted('scope_broker', $job));
+    }
 }
 
-it('stamps the payload of a job pushed inside a context with that account and workspace', function (): void {
-    $payloads = [];
-    Event::listen(JobProcessing::class, function (JobProcessing $event) use (&$payloads): void {
-        $payloads[] = $event->job->payload()['corex_tenant'] ?? null;
-    });
+it('quarantines a correctly signed job when its account has disappeared from the central directory', function (): void {
+    $job = reserveScopeJob('a');
+    DB::connection('pgsql')->table('root_accounts')->where('id', $this->accounts['a']->id)->delete();
 
-    resolve(TenancyManager::class)->runFor($this->accounts['a'], ($this->workspace)('a'), function (): void {
-        dispatch(new RecordContextJob('inside'))->onConnection('sync');
-    });
-    dispatch(new RecordContextJob('central'))->onConnection('sync');
-
-    expect($payloads)->toBe([['account' => $this->accounts['a']->id, 'workspace' => $this->workspaceId], null])
-        ->and(RecordContextJob::$runs[0])->toMatchArray(['account' => $this->accounts['a']->id, 'workspace' => 'ws-a'])
-        ->and(RecordContextJob::$runs[1])->toMatchArray(['account' => null]);
-});
-
-it('a worker processes job A then job B in one process: each sees its own account and database, central in between', function (): void {
-    $manager = resolve(TenancyManager::class);
-    $seen = [];
-
-    foreach (['a', 'b'] as $name) {
-        $job = queuedJobQTC(tenantPayloadQTC($this->accounts[$name]->id));
-        Event::dispatch(new JobProcessing('database', $job));
-        $seen[] = [$manager->context()?->account->id, DB::connection()->getDatabaseName()];
-        Event::dispatch(new JobAttempted('database', $job));
-
-        expect($manager->initialized())->toBeFalse()
-            ->and(DB::getDefaultConnection())->toBe('pgsql');
-    }
-
-    expect($seen)->toBe([
-        [$this->accounts['a']->id, $this->databases['a']],
-        [$this->accounts['b']->id, $this->databases['b']],
-    ]);
-});
-
-it('a sync job dispatched inside A/workspace runs under A/workspace and restores the caller afterwards', function (): void {
-    $manager = resolve(TenancyManager::class);
-    $manager->initialize($this->accounts['a']);
-    $manager->setWorkspace(($this->workspace)('a'));
-
-    dispatch(new RecordContextJob('sync-ok'))->onConnection('sync');
-
-    expect(RecordContextJob::$runs)->toBe([[
-        'account' => $this->accounts['a']->id, 'workspace' => 'ws-a', 'database' => $this->databases['a'], 'tag' => 'sync-ok',
-    ]])
-        ->and($manager->context()->account->id)->toBe($this->accounts['a']->id)
-        ->and($manager->context()->workspace?->slug)->toBe('ws-a');
-});
-
-it('real nested sync jobs restore the outer account and workspace after success and after failure', function (): void {
-    $manager = resolve(TenancyManager::class);
-    $manager->initialize($this->accounts['a']);
-    $manager->setWorkspace(($this->workspace)('a'));
-
-    $manager->runFor($this->accounts['b'], ($this->workspace)('b'), function (): void {
-        dispatch(new RecordContextJob('inner-ok'))->onConnection('sync');
-    });
-    expect(RecordContextJob::$runs[0])->toMatchArray(['account' => $this->accounts['b']->id, 'workspace' => 'ws-b', 'tag' => 'inner-ok'])
-        ->and($manager->context()->account->id)->toBe($this->accounts['a']->id)
-        ->and($manager->context()->workspace?->slug)->toBe('ws-a');
-
-    $manager->runFor($this->accounts['b'], ($this->workspace)('b'), function (): void {
-        expect(fn () => dispatch(new RecordContextJob('inner-fail', true))->onConnection('sync'))
-            ->toThrow(RuntimeException::class, 'job failed: inner-fail');
-    });
-
-    expect($manager->context()->account->id)->toBe($this->accounts['a']->id)
-        ->and($manager->context()->workspace?->slug)->toBe('ws-a');
-});
-
-it('a nested sync job frame restores the outer context after success (explicit events)', function (): void {
-    $manager = resolve(TenancyManager::class);
-    $manager->initialize($this->accounts['a']);
-    $manager->setWorkspace(($this->workspace)('a'));
-    $inner = new SyncJob(app(), json_encode(tenantPayloadQTC($this->accounts['b']->id, $this->workspaceId) + ['job' => 'x', 'data' => []]), 'sync', 'default');
-
-    Event::dispatch(new JobProcessing('sync', $inner));
-    expect($manager->context()->account->id)->toBe($this->accounts['b']->id)
-        ->and($manager->context()->workspace?->slug)->toBe('ws-b');
-    Event::dispatch(new JobAttempted('sync', $inner));
-
-    expect($manager->context()->account->id)->toBe($this->accounts['a']->id)
-        ->and($manager->context()->workspace?->slug)->toBe('ws-a');
-});
-
-it('a nested sync job frame restores the outer context after a processing failure', function (): void {
-    $manager = resolve(TenancyManager::class);
-    $manager->initialize($this->accounts['a']);
-    $manager->setWorkspace(($this->workspace)('a'));
-    $inner = new SyncJob(app(), json_encode(tenantPayloadQTC($this->accounts['b']->id, (string) Str::uuid()) + ['job' => 'x', 'data' => []]), 'sync', 'default');
-
-    // the workspace of the payload does not exist in B → processing fails half-way ...
-    expect(fn () => Event::dispatch(new JobProcessing('sync', $inner)))->toThrow(TenantContextUnavailable::class);
-    expect($manager->context()->account->id)->toBe($this->accounts['b']->id);
-
-    // ... and the worker's `finally` still reports the attempt
-    Event::dispatch(new JobAttempted('sync', $inner, new RuntimeException('failed')));
-
-    expect($manager->context()->account->id)->toBe($this->accounts['a']->id)
-        ->and($manager->context()->workspace?->slug)->toBe('ws-a');
-});
-
-it('an async job starts central, ends central, and a repeated completion cannot pop another job frame', function (): void {
-    $manager = resolve(TenancyManager::class);
-    $manager->initialize($this->accounts['a']); // left over from earlier code in the worker
-    $job = queuedJobQTC(tenantPayloadQTC($this->accounts['b']->id));
-
-    Event::dispatch(new JobProcessing('database', $job));
-    expect($manager->context()->account->id)->toBe($this->accounts['b']->id);
-
-    $other = queuedJobQTC(tenantPayloadQTC($this->accounts['a']->id));
-    Event::dispatch(new JobAttempted('database', $other)); // not the job on top of the stack: ignored
-    expect($manager->context()->account->id)->toBe($this->accounts['b']->id);
-
-    Event::dispatch(new JobAttempted('database', $job));
-    Event::dispatch(new JobAttempted('database', $job)); // repeated completion
-    expect($manager->initialized())->toBeFalse();
-});
-
-it('a job whose account is missing fails without falling back to the previous database', function (): void {
-    $manager = resolve(TenancyManager::class);
-    $manager->initialize($this->accounts['a']);
-    $job = queuedJobQTC(tenantPayloadQTC((string) Str::uuid()));
-
-    expect(fn () => Event::dispatch(new JobProcessing('database', $job)))->toThrow(TenantContextUnavailable::class);
-    expect($manager->initialized())->toBeFalse()
+    expect(fn () => fireReservedScopeJob($job))->toThrow(ScopeContextMismatch::class)
+        ->and($job->hasFailed())->toBeTrue()
+        ->and($job->isDeleted())->toBeTrue()
+        ->and(RecordContextJob::$runs)->toBe([])
+        ->and(app(TenancyManager::class)->context())->toBeNull()
         ->and(DB::getDefaultConnection())->toBe('pgsql');
-
-    Event::dispatch(new JobAttempted('database', $job, new TenantContextUnavailable('x')));
-    expect(DB::getDefaultConnection())->toBe('pgsql');
 });
 
-it('a malformed payload is refused', function (mixed $payload): void {
-    $job = queuedJobQTC(['corex_tenant' => $payload]);
+it('refuses a retired workspace even when the previous account has a live workspace with the same id', function (): void {
+    $job = reserveScopeJob('b');
+    $manager = app(TenancyManager::class);
+    $manager->runFor($this->accounts['b'], null, fn () => DB::table('wsp_workspaces')->where('id', $this->workspaceId)->delete());
+    $manager->runFor($this->accounts['a'], ($this->workspace)('a'), function () use ($manager, $job): void {
+        $this->host->scope();
+        expect(fn () => fireReservedScopeJob($job))->toThrow(ScopeContextMismatch::class)
+            ->and($job->hasFailed())->toBeTrue()
+            ->and($manager->context()?->workspace?->slug)->toBe('ws-a')
+            ->and(DB::selectOne('select current_database() as owner')->owner)->toBe($this->databases['a'])
+            ->and(RecordContextJob::$runs)->toBe([]);
+    });
+});
 
-    expect(fn () => Event::dispatch(new JobProcessing('database', $job)))->toThrow(TenantContextUnavailable::class, 'malformed');
-})->with([
-    'not an array' => ['a'],
-    'no account' => [['workspace' => null]],
-    'no workspace key' => [['account' => 'x']],
-    'workspace not a string' => [['account' => 'x', 'workspace' => 5]],
-]);
+it('rejects an earlier restore epoch at delivery and accepts a fresh enqueue for the unchanged account database', function (): void {
+    $oldJob = reserveScopeJob('a');
+    $owner = app(DatabaseScopeControl::class);
+    $account = $this->accounts['a'];
+    $route = $owner->resolve($account);
+    $closed = $owner->drain($account->id, $owner->close($account->id, $route->controlRevision));
+    $next = new PhysicalBinding($route->deploymentId, $route->bindingId, $route->bindingGeneration, $route->accountIncarnation, str_repeat('e', 64));
+    $owner->reopen($account->id, $closed, $next, function (PhysicalBinding $candidate) use ($account): bool {
+        return app(TenancyManager::class)->runFor($account, null, fn () => DB::selectOne('select current_database() as owner')->owner === $this->databases['a']
+            && $candidate->bindingId === 'resource:'.hash('sha256', $account->id));
+    });
 
-it('queue:retry re-runs the stored payload under its original account', function (): void {
-    $manager = resolve(TenancyManager::class);
-    $payload = tenantPayloadQTC($this->accounts['a']->id);
+    expect(fn () => fireReservedScopeJob($oldJob))->toThrow(ScopeStale::class)
+        ->and($oldJob->isDeleted())->toBeTrue()
+        ->and(RecordContextJob::$runs)->toBe([]);
+    $fresh = reserveScopeJob('a');
+    fireReservedScopeJob($fresh);
+    expect($fresh->payload()['corex_scope']['scope']['restore_epoch'])->toBe($next->restoreEpoch)
+        ->and(array_column(RecordContextJob::$runs, 'database'))->toBe([$this->databases['a']]);
+});
 
-    foreach ([1, 2] as $attempt) {
-        $job = queuedJobQTC($payload);
-        Event::dispatch(new JobProcessing('database', $job));
-        expect($manager->context()->account->id)->toBe($this->accounts['a']->id);
-        Event::dispatch(new JobAttempted('database', $job));
-        expect($manager->initialized())->toBeFalse();
+it('ignores a repeated completion for the inner job and preserves the admitted outer Laravel frame', function (): void {
+    $outer = reserveScopeJob('a');
+    $inner = reserveScopeJob('b');
+    Event::dispatch(new JobProcessing('scope_broker', $outer));
+
+    try {
+        fireReservedScopeJob($inner);
+        Event::dispatch(new JobAttempted('scope_broker', $inner));
+        $outer->fire();
+    } finally {
+        Event::dispatch(new JobAttempted('scope_broker', $outer));
     }
-});
-
-it('a central job (no payload key) runs central and a sync caller is restored only after it', function (): void {
-    $manager = resolve(TenancyManager::class);
-    $manager->initialize($this->accounts['a']);
-    $sync = new SyncJob(app(), json_encode(['job' => 'x', 'data' => []]), 'sync', 'default');
-
-    Event::dispatch(new JobProcessing('sync', $sync));
-    expect($manager->initialized())->toBeFalse();
-    Event::dispatch(new JobAttempted('sync', $sync));
-
-    expect($manager->context()->account->id)->toBe($this->accounts['a']->id);
-});
-
-it('is a single instance keeping its frames per application, not in static state', function (): void {
-    expect(resolve(QueueTenantContext::class))->toBe(resolve(QueueTenantContext::class));
+    expect(array_column(RecordContextJob::$runs, 'database'))->toBe([$this->databases['b'], $this->databases['a']])
+        ->and(array_column(RecordContextJob::$runs, 'workspace'))->toBe(['ws-b', 'ws-a'])
+        ->and(app(TenancyManager::class)->context())->toBeNull()
+        ->and(DB::getDefaultConnection())->toBe('pgsql');
 });

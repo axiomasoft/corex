@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 require_once __DIR__.'/../Support/SchedulingDigestFixtures.php';
 
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Context\Contracts\StoredWorkIssuer;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Notifications\Digest\Internal\NotificationDigestDueSource;
 use CoreX\Notifications\Digest\Internal\SqlDigestBuilder;
 use CoreX\Notifications\Tests\TestCase;
@@ -25,6 +29,10 @@ it('tags the digest handler and due source when digest is enabled', function ():
 it('rejects an enabled digest builder that has no scheduler before it writes', function (): void {
     expect(fn () => new SqlDigestBuilder(
         connection: resolve('db')->connection(),
+        scopes: resolve(DataScopeFactory::class),
+        currentScope: resolve(CurrentWorkScope::class),
+        scopeCodec: resolve(DataScopeCodec::class),
+        issuer: resolve(StoredWorkIssuer::class),
         wakeup: null,
         enabled: true,
         clock: resolve(ClockInterface::class),

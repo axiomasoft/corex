@@ -7,8 +7,10 @@ namespace CoreX\Audit\Internal;
 use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Audit\Data\AuditEntry;
 use CoreX\Config\Data\CoreOptions;
+use CoreX\Context\Contracts\DataScopeFactory;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenantContextResolver;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 
@@ -24,11 +26,6 @@ use Psr\Clock\ClockInterface;
  * moment). Boxed/CLI installs (SingleAccountResolver) carry workspaceId = null
  * — an honest null, not a foreign tenant.
  *
- * `$connection` is null (the app's default) unless a caller pins an explicit
- * name — forwarded to RecordAuditEntry, same seam as DatabaseSettingsRepository,
- * used by the PG-only test lane. The logger is scoped: it reads the impersonation
- * state of the running cycle.
- *
  * @internal spec: B-10 §7.1, P1.7, D12
  */
 #[Internal]
@@ -39,7 +36,8 @@ final readonly class QueuedAuditLogger implements AuditLogger
         private ImpersonationService $impersonation,
         private TenantContextResolver $tenantContext,
         private ClockInterface $clock,
-        private ?string $connection = null,
+        private DataScopeFactory $scopes,
+        private Dispatcher $bus,
     ) {}
 
     public function record(AuditEntry $entry): void
@@ -61,6 +59,9 @@ final readonly class QueuedAuditLogger implements AuditLogger
             $entry = $entry->withImpersonation($state);
         }
 
-        RecordAuditEntry::dispatch(entry: $entry->withSnapshot(occurredAt: $this->clock->now(), workspaceId: $this->tenantContext->current()->workspace?->id), writeConnection: $this->connection);
+        $current = $this->tenantContext->current();
+        $scope = $this->scopes->forCurrentPrincipal($current);
+        $entry = $entry->withSnapshot(occurredAt: $this->clock->now(), workspaceId: $current->workspace?->id);
+        $this->bus->dispatch(new RecordAuditEntry($entry, $scope));
     }
 }

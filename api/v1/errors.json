@@ -80,8 +80,24 @@
         "retryable": false
     },
     {
+        "category": "unavailable",
+        "code": "core.scope_authority_unavailable",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": true
+    },
+    {
         "category": "authorization",
         "code": "core.scope_context_mismatch",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "core.scope_stale",
         "detail_keys": [],
         "owner": "axiomasoft/corex",
         "path": null,

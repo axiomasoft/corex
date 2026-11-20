@@ -6,7 +6,10 @@ namespace CoreX\ImportExport\Internal\Transfer;
 
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\FieldSelection;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
+use CoreX\Data\Enums\FieldUse;
 use CoreX\ImportExport\Contracts\CancellationSignal;
 use CoreX\ImportExport\Contracts\RecordMapper;
 use CoreX\ImportExport\Contracts\TransferRunner;
@@ -60,6 +63,7 @@ final readonly class SqlTransferExecutor implements TransferRunner
 
         try {
             return $this->connection->transaction(function () use ($scope, $transfer, $token): TransferReceipt {
+                $this->runtime?->assertCurrent($this->connection, $scope);
                 $job = $this->connection->table('corex_transfer_jobs')->where('id', $transfer->id)->lockForUpdate()->first();
 
                 if ($job === null) {
@@ -224,7 +228,7 @@ final readonly class SqlTransferExecutor implements TransferRunner
             throw new ImportUnavailable('Transfer checkpoint token does not match the current job.');
         }
 
-        if (! $this->authorizer->authorize(scope: $scope, entity: '*', subjectId: Value::text(Value::field(row: $job, name: 'id')), fields: [], action: 'transfer.run')->allowed) {
+        if (! $this->authorizer->authorize($scope, new RecordRef('import-export.transfer', Value::text(Value::field(row: $job, name: 'id'))), new FieldSelection([]), FieldUse::Write)->allowed) {
             throw new ImportUnavailable('Transfer access is denied by the current policy.');
         }
     }

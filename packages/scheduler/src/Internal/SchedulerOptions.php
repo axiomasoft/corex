@@ -54,8 +54,8 @@ final readonly class SchedulerOptions
                 || ! is_array($definition)
                 || ! is_string($definition['handler'] ?? null)
                 || ! is_string($definition['version'] ?? null)
-                || (isset($definition['accept_legacy_unstamped']) && ! is_bool($definition['accept_legacy_unstamped']))) {
-                $violations->add(path: $path, message: 'requires handler, version and an optional boolean accept_legacy_unstamped');
+                || array_diff(array_keys($definition), ['handler', 'version']) !== []) {
+                $violations->add(path: $path, message: 'requires handler, version as its only fields');
 
                 continue;
             }
@@ -65,7 +65,6 @@ final readonly class SchedulerOptions
                     kind: $kind,
                     version: $definition['version'],
                     handler: $definition['handler'],
-                    acceptLegacyUnstamped: $definition['accept_legacy_unstamped'] ?? false,
                 );
             } catch (InvalidArgumentException $exception) {
                 $violations->add(path: $path, message: $exception->getMessage());
@@ -75,19 +74,5 @@ final readonly class SchedulerOptions
         $violations->failIfAny();
 
         return new self(leaseSeconds: $leaseSeconds, maxAttempts: $maxAttempts, handlers: $handlers);
-    }
-
-    /** @return list<string> config paths of enabled dangerous modes */
-    public function dangerousModes(): array
-    {
-        $paths = [];
-
-        foreach ($this->handlers as $handler) {
-            if ($handler->acceptLegacyUnstamped) {
-                $paths[] = 'corex-scheduler.handlers.'.$handler->kind.'.accept_legacy_unstamped';
-            }
-        }
-
-        return $paths;
     }
 }

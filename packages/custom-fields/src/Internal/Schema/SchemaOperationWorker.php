@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal\Schema;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\WorkScopeRunner;
 use CoreX\CustomFields\Data\AttributeTables;
 use CoreX\CustomFields\Data\OperationRef;
 use CoreX\CustomFields\Internal\SchemaOperationConflict;
 use CoreX\CustomFields\Internal\ScopeDenied;
-use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
 use CoreX\CustomFields\Internal\Value;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Enums\FieldUse;
 use DateInterval;
 use DateTimeImmutable;
 use Exception;
@@ -24,29 +26,45 @@ use Throwable;
 #[Internal]
 final readonly class SchemaOperationWorker
 {
+    private SchemaOperationAdmission $admission;
+
     public function __construct(
         private ConnectionInterface $connection,
+        private CurrentWorkScope $current,
+        private WorkScopeRunner $runner,
         private AttributeTables $tables,
-        private DataScopeAuthorizer $authorizer,
+        DataScopeAuthorizer $authorizer,
         private readonly ClockInterface $clock,
-    ) {}
+    ) {
+        $this->admission = new SchemaOperationAdmission($authorizer);
+    }
 
     public function run(DataScope $scope, OperationRef $operation): void
     {
-        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
+        $this->runner->run($scope, function () use ($scope, $operation): void {
+            $this->applyAdmitted($scope, $operation);
+        });
+    }
+
+    private function applyAdmitted(DataScope $scope, OperationRef $operation): void
+    {
+        $this->current->assert($scope, $this->connection);
         $row = $this->claim(scope: $scope, operation: $operation);
 
         try {
+            $this->current->assert($scope, $this->connection);
             $definition = json_decode(Value::text(Value::field(row: $row, name: 'definition')), true, 16, JSON_THROW_ON_ERROR);
             $this->apply(entity: Value::text(Value::field(row: $row, name: 'entity')), definition: Value::map($definition));
 
-            $this->connection->table($this->tables->schemaOperations)->where('id', $operation->id)->update([
+            $this->current->assert($scope, $this->connection);
+            $this->connection->table($this->tables->schemaOperations)->where('id', $operation->id)->where('scope_hash', SchemaOperationAdmission::scopeHash($scope))->update([
                 'status' => 'verified',
                 'error_code' => null,
                 'finished_at' => $this->clock->now(),
             ]);
         } catch (Throwable $exception) {
-            $this->connection->table($this->tables->schemaOperations)->where('id', $operation->id)->update([
+            $this->current->assert($scope, $this->connection);
+            $this->connection->table($this->tables->schemaOperations)->where('id', $operation->id)->where('scope_hash', SchemaOperationAdmission::scopeHash($scope))->update([
                 'status' => 'failed',
                 'error_code' => 'ddl_execution_failed',
                 'finished_at' => $this->clock->now(),
@@ -59,17 +77,18 @@ final readonly class SchemaOperationWorker
     private function claim(DataScope $scope, OperationRef $operation): object
     {
         return $this->connection->transaction(function () use ($scope, $operation): object {
+            $this->current->assert($scope, $this->connection);
             $operations = $this->connection->table($this->tables->schemaOperations);
-            $row = $operations->where('id', $operation->id)->lockForUpdate()->first();
+            $row = $operations->where('id', $operation->id)->where('scope_hash', SchemaOperationAdmission::scopeHash($scope))->lockForUpdate()->first();
 
             if ($row === null || $row->restore_epoch !== $scope->restoreEpoch
-                || ! $this->authorizer->authorize(scope: $scope, entity: Value::text($row->entity), subjectId: '', fields: [], action: 'schema')->allowed
-                || ! $this->authorizer->authorize(scope: $scope, entity: Value::text($row->entity), subjectId: '', fields: Value::strings([$row->approval_digest]), action: 'schema-approve')->allowed) {
+                || ! $this->admission->allows($scope, Value::text($row->entity), FieldUse::Write)
+                || ! $this->admission->approves($scope, Value::text($row->approval_digest))) {
                 throw new ScopeDenied('The schema operation cannot run in the current scope.');
             }
 
             if ($row->status === 'running' && $row->started_at !== null && new DateTimeImmutable(Value::text($row->started_at)) <= new DateTimeImmutable(Value::text('-10 minutes'))) {
-                $operations->where('id', $operation->id)->update(['status' => 'pending', 'error_code' => 'stale_worker_reclaimed']);
+                $operations->where('id', $operation->id)->where('scope_hash', SchemaOperationAdmission::scopeHash($scope))->update(['status' => 'pending', 'error_code' => 'stale_worker_reclaimed']);
                 $row->status = 'pending';
             }
 
@@ -81,7 +100,7 @@ final readonly class SchemaOperationWorker
                 throw SchemaOperationConflict::retryExhausted();
             }
 
-            $operations->where('id', $operation->id)->update([
+            $operations->where('id', $operation->id)->where('scope_hash', SchemaOperationAdmission::scopeHash($scope))->update([
                 'status' => 'running',
                 'attempts' => Value::integer($row->attempts) + 1,
                 'started_at' => $this->clock->now(),

@@ -12,7 +12,9 @@ use CoreX\CustomFields\Internal\Values\FieldValueValidator;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\DataScopeAccessDecision;
+use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Data\RecordRef;
+use CoreX\Data\Enums\FieldUse;
 
 /** @param list<array<string, mixed>> $fields */
 function p106Catalogue(array $fields, ?string $hash = null): FieldCatalogue
@@ -58,12 +60,16 @@ function p106Guard(FieldCatalogue $catalogue, ArrayObject $calls, ?string $denie
 
         public function authorize(
             DataScope $scope,
-            string $entity,
-            string $subjectId,
-            array $fields,
-            string $action,
+            RecordRef $record,
+            FieldSelection $fields,
+            FieldUse $use,
         ): DataScopeAccessDecision {
-            $this->calls->append(compact('entity', 'subjectId', 'fields', 'action'));
+            $action = match (true) {
+                $fields->fields === [] => 'attributes.subject',
+                $use === FieldUse::Read => 'attributes.view',
+                default => 'attributes.write',
+            };
+            $this->calls->append(compact('record', 'fields', 'action'));
 
             return new DataScopeAccessDecision(
                 allowed: $action !== $this->deniedAction,
@@ -96,7 +102,7 @@ function p106Reason(Closure $operation): string
     throw new RuntimeException('The guarded operation unexpectedly succeeded.');
 }
 
-it('runs the four authority layers in their fixed order with an opaque resource', function (): void {
+it('checks record visibility and per-field visibility and write in order', function (): void {
     $calls = new ArrayObject;
     $catalogue = p106Catalogue([p106Field()]);
     $snapshot = p106Guard($catalogue, $calls)->assertCanWrite(
@@ -110,10 +116,9 @@ it('runs the four authority layers in their fixed order with an opaque resource'
             'attributes.subject',
             'attributes.view',
             'attributes.write',
-            'attributes.mutate',
         ])
-        ->and($calls[0]['subjectId'])->toMatch('/\Aattributes:[a-f0-9]{64}\z/D')
-        ->and($calls[0]['subjectId'])->not->toContain('CoreX\\');
+        ->and($calls[0]['record']->id)->toBe('record-1')
+        ->and($calls[1]['fields']->fields)->toBe([p106Field()['id']]);
 });
 
 it('keeps field absence and hidden-field denial externally indistinguishable', function (): void {
@@ -149,7 +154,6 @@ it('reports every authority layer with a distinct value-free reason', function (
     'subject ownership' => 'attributes.subject',
     'field visibility' => 'attributes.view',
     'field write' => 'attributes.write',
-    'operation mutation' => 'attributes.mutate',
 ]);
 
 it('requires a current schema hash for stale or evolving definitions', function (): void {

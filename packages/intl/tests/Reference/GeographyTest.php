@@ -19,15 +19,11 @@ use CoreX\Intl\Territory\Internal\Reference\BoxesReferenceProvider;
 use CoreX\Intl\Territory\Internal\Reference\CompactReferenceProvider;
 use CoreX\Intl\Territory\Internal\Reference\FixtureReferenceNormalizer;
 use CoreX\Intl\Territory\Internal\Reference\ReferenceCursorCodec;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 
 function geoScope(): DataScope
 {
-    return DataScope::fromTenantContext(
-        context: new TenantContext(account: new AccountRef(id: 'acct', slug: 'acct', status: 'active', features: [], limits: [])),
-        connectionIdentity: 'sqlite::memory:',
-        actorId: 'geo',
-        restoreEpoch: str_repeat('c', 64),
-    );
+    return CallerWorkScopeFixture::forContext(new TenantContext(account: new AccountRef(id: 'acct', slug: 'acct', status: 'active', features: [], limits: [])), 'geo', str_repeat('c', 64));
 }
 
 function boxesProvider(): BoxesReferenceProvider

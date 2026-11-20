@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Internal;
 
-use CoreX\Context\Contracts\TenantContextRestorer;
-use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Data\DataScope;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
@@ -35,7 +34,7 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
 
     public function __construct(
         private Connection $connection,
-        private TenantContextRestorer $contexts,
+        private CurrentWorkScope $contexts,
         private WebhookTopicCatalogue $catalogue,
         private ClockInterface $clock,
         private WebhookEgressPolicy $egress,
@@ -58,7 +57,9 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
 
         $this->assertEgress(scope: $scope, url: $subscription->endpointUrl);
 
-        return $this->connection->transaction(function () use ($subscription): WebhookSubscription {
+        return $this->connection->transaction(function () use ($scope, $subscription): WebhookSubscription {
+            $this->assertScope($scope);
+
             if ($this->connection->table(self::Table)->count() >= self::CAP) {
                 throw new ApiError(errorCode: WebhooksErrorCode::WebhookSubscriptionCap, status: 422, message: 'The webhook subscription cap is 100.', category: ErrorCategory::Validation);
             }
@@ -113,7 +114,8 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
 
         $this->assertEgress(scope: $scope, url: $replacement->endpointUrl);
 
-        return $this->connection->transaction(function () use ($id, $expectedRevision, $replacement): WebhookSubscription {
+        return $this->connection->transaction(function () use ($scope, $id, $expectedRevision, $replacement): WebhookSubscription {
+            $this->assertScope($scope);
             $updated = $this->connection->table(self::Table)
                 ->where('id', $id)
                 ->where('revision', $expectedRevision)
@@ -148,7 +150,8 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
         $this->assertScope($scope);
         $this->assertRevision($expectedRevision);
 
-        return $this->connection->transaction(function () use ($id, $expectedRevision): WebhookSubscription {
+        return $this->connection->transaction(function () use ($scope, $id, $expectedRevision): WebhookSubscription {
+            $this->assertScope($scope);
             $updated = $this->connection->table(self::Table)
                 ->where('id', $id)
                 ->where('revision', $expectedRevision)
@@ -176,14 +179,7 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
 
     private function assertScope(DataScope $scope): void
     {
-        $context = $this->contexts->restore($scope);
-        $actual = $context->isBoxed()
-            ? 'boxed:'.$context->account->id
-            : $this->connection->getDriverName().':'.$this->connection->getDatabaseName();
-
-        if (! hash_equals($scope->connectionIdentity, $actual) || ! hash_equals($scope->accountId, $context->account->id)) {
-            throw ScopeContextMismatch::connection(expected: $scope->connectionIdentity, actual: $actual);
-        }
+        $this->contexts->assert($scope, $this->connection);
     }
 
     private function assertRevision(int $expectedRevision): void

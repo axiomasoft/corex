@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-use CoreX\CustomFields\Data\FieldSelection;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\CustomFields\Data\RecordSelection;
 use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\InvalidAttributeValue;
 use CoreX\CustomFields\Internal\KeyConflict;
-use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\CustomFields\Internal\Values\JsonbAttributeStore;
 use CoreX\CustomFields\Internal\VersionConflict;
 use CoreX\CustomFields\Tests\PgTestCase;
@@ -21,6 +20,7 @@ uses(PgTestCase::class)->group('pg');
 it('writes reads replays and versions an isolated JSONB attribute document', function (): void {
     $store = new JsonbAttributeStore(
         connection: DB::connection(),
+        current: jsonbCurrent(),
         tables: PgTestSupport::tables(),
         catalogue: PgTestSupport::catalogue('contact', [['code' => 'email', 'type' => 'email']]),
         authorizer: jsonbAuthorizer(),
@@ -31,7 +31,7 @@ it('writes reads replays and versions an isolated JSONB attribute document', fun
 
     $written = $store->write(jsonbScope(), $record, $patch, $token);
     $replayed = $store->write(jsonbScope(), $record, $patch, $token);
-    $read = $store->read(jsonbScope(), $record, new FieldSelection(fields: ['email']));
+    $read = $store->read(jsonbScope(), $record, jsonbSelection('contact', ['email']));
 
     expect($written->status)->toBe('applied')
         ->and($replayed->status)->toBe('replayed')
@@ -55,21 +55,23 @@ it('writes reads replays and versions an isolated JSONB attribute document', fun
 it('rejects a scope whose physical database identity differs from the bound connection', function (): void {
     $store = new JsonbAttributeStore(
         connection: DB::connection(),
+        current: jsonbCurrent(),
         tables: PgTestSupport::tables(),
         catalogue: PgTestSupport::catalogue('contact', [['code' => 'email', 'type' => 'email']]),
         authorizer: jsonbAuthorizer(),
     );
 
     expect(fn (): mixed => $store->read(
-        jsonbScope(connectionIdentity: 'pgsql:another_test'),
+        jsonbScope(bindingId: 'another-binding'),
         new RecordRef(entity: 'contact', id: 'record-1'),
-        new FieldSelection(fields: ['email']),
-    ))->toThrow(ScopeDenied::class);
+        jsonbSelection('contact', ['email']),
+    ))->toThrow(ScopeContextMismatch::class);
 })->group('pg');
 
 it('loads a bounded JSONB record selection with one documents query', function (): void {
     $store = new JsonbAttributeStore(
         connection: DB::connection(),
+        current: jsonbCurrent(),
         tables: PgTestSupport::tables(),
         catalogue: PgTestSupport::catalogue('contact', [['code' => 'email', 'type' => 'email']]),
         authorizer: jsonbAuthorizer(),
@@ -87,7 +89,7 @@ it('loads a bounded JSONB record selection with one documents query', function (
 
     DB::flushQueryLog();
     DB::enableQueryLog();
-    $batch = $store->loadMany(jsonbScope(), new RecordSelection(records: $records), new FieldSelection(fields: ['email']));
+    $batch = $store->loadMany(jsonbScope(), new RecordSelection(records: $records), jsonbSelection('contact', ['email']));
     $queries = DB::getQueryLog();
     DB::disableQueryLog();
 
@@ -99,6 +101,7 @@ it('loads a bounded JSONB record selection with one documents query', function (
 it('rejects writes for fields that are absent from the active schema snapshot', function (): void {
     $store = new JsonbAttributeStore(
         connection: DB::connection(),
+        current: jsonbCurrent(),
         tables: PgTestSupport::tables(),
         catalogue: PgTestSupport::catalogue('contact', [['code' => 'email', 'type' => 'email']]),
         authorizer: jsonbAuthorizer(),

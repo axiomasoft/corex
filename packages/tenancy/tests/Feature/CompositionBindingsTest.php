@@ -6,9 +6,10 @@ use CoreX\Context\Contracts\IdentityPasswordRehasher;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Contracts\TenantDatabaseLifecycle;
+use CoreX\Context\Contracts\WorkScopeDirectory;
 use CoreX\Context\Internal\NullImpersonationService;
+use CoreX\Context\Laravel\WorkQueueBoundary;
 use CoreX\Context\Laravel\WorkspaceScopeProvider;
 use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Tenancy\Account\Internal\DatabaseTenantProvisioner;
@@ -31,6 +32,7 @@ use CoreX\Tenancy\Impersonation\Internal\DatabaseImpersonationService;
 use CoreX\Tenancy\Integration\Internal\Wakeup\RootRegistryWakeupHint;
 use CoreX\Tenancy\Integration\Internal\Wakeup\RootWakeupReconciler;
 use CoreX\Tenancy\Laravel\AuthenticationRegistrar;
+use CoreX\Tenancy\Laravel\CloudWorkScopeDirectory;
 use CoreX\Tenancy\Laravel\DomainTrustRegistrar;
 use CoreX\Tenancy\Laravel\IdentityRegistrar;
 use CoreX\Tenancy\Laravel\ProvisioningRegistrar;
@@ -40,8 +42,6 @@ use CoreX\Tenancy\Laravel\WakeupRegistrar;
 use CoreX\Tenancy\Laravel\WorkspaceRegistrar;
 use CoreX\Tenancy\Provisioning\Contracts\AccountResources;
 use CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle;
-use CoreX\Tenancy\Runtime\Internal\ConnectionGuardedTenantContextRestorer;
-use CoreX\Tenancy\Runtime\Internal\QueueTenantContext;
 use CoreX\Tenancy\Runtime\Internal\Storage\ContextTenantStorage;
 use CoreX\Tenancy\Runtime\Internal\TenancyManagerContextResolver;
 use CoreX\Tenancy\Runtime\Internal\TenantRuntimeManager;
@@ -67,7 +67,7 @@ it('keeps Runtime register bindings on the measured key, concrete and lifetime',
     $app = $this->app;
     $this->assertSingletonBinding($app, TenantRuntimeManager::class, TenantRuntimeManager::class);
     $this->assertSingletonBinding($app, TenancyManager::class, TenantRuntimeManager::class);
-    $this->assertSingletonBinding($app, QueueTenantContext::class, QueueTenantContext::class);
+    $this->assertSingletonBinding($app, WorkQueueBoundary::class, WorkQueueBoundary::class);
     $this->assertSingletonBinding(
         $app,
         TenantContextResolver::class,
@@ -76,8 +76,8 @@ it('keeps Runtime register bindings on the measured key, concrete and lifetime',
     $this->assertScopedBinding($app, TenantStorage::class, ContextTenantStorage::class);
     $this->assertScopedBinding(
         $app,
-        TenantContextRestorer::class,
-        ConnectionGuardedTenantContextRestorer::class,
+        WorkScopeDirectory::class,
+        CloudWorkScopeDirectory::class,
     );
 
 });

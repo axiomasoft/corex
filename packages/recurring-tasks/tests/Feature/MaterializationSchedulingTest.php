@@ -16,17 +16,17 @@ use CoreX\RecurringTasks\Data\SeriesReference;
 use CoreX\RecurringTasks\Exceptions\MaterializationConflict;
 use CoreX\RecurringTasks\Exceptions\UnsupportedMaterialization;
 use CoreX\RecurringTasks\Internal\MaterializationHasher;
-use CoreX\RecurringTasks\Internal\ScopeConnectionGuard;
 use CoreX\RecurringTasks\Internal\SeriesDefinitionCodec;
 use CoreX\RecurringTasks\Tests\Support\SeriesSeeder;
 use CoreX\RecurringTasks\Tests\TestCase;
 use CoreX\Scheduling\Contracts\WakeupScheduler;
 use CoreX\Scheduling\Data\ScheduleResult;
 use CoreX\Scheduling\Data\WakeupHandlerDefinition;
+use CoreX\Scheduling\Data\WakeupIdentity;
 use CoreX\Scheduling\Data\WakeupRequest;
 use CoreX\Tasks\Task\Data\ActorData;
 use CoreX\Tasks\Task\Data\TaskDraft;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Packman\Config\Exceptions\InvalidConfiguration;
@@ -37,8 +37,6 @@ use RuntimeException;
 
 final class MaterializationSchedulingTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function getPackageProviders($app): array
     {
         $app['config']->set('corex-recurring-tasks.wakeup.enabled', true);
@@ -47,7 +45,6 @@ final class MaterializationSchedulingTest extends TestCase
         if ($custom) {
             $app['config']->set('corex-recurring-tasks.wakeup.handler_kind', 'custom.materialize');
             $app['config']->set('corex-recurring-tasks.wakeup.handler_version', 'custom/2');
-            $app['config']->set('corex-recurring-tasks.wakeup.accept_legacy_unstamped', true);
         }
         $providers = parent::getPackageProviders($app);
 
@@ -59,7 +56,8 @@ final class MaterializationSchedulingTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->migrateSchemaSets(['axiomasoft/corex-scheduler:tenant']);
+        $this->artisan('migrate', ['--force' => true])->assertSuccessful();
+        $this->migrateSchemaSets(['axiomasoft/corex-tasks:tenant', 'axiomasoft/corex-recurring-tasks:tenant', 'axiomasoft/corex-scheduler:tenant']);
         resolve(ModuleRegistry::class)->shouldReceive('compiled')->andReturn(CompiledRegistry::empty());
     }
 
@@ -75,7 +73,7 @@ final class MaterializationSchedulingTest extends TestCase
 
     private function scope(): DataScope
     {
-        return DataScope::fromTenantContext(resolve(TenantContextResolver::class)->current(), ScopeConnectionGuard::identity(DB::connection()), 'operator', str_repeat('a', 64));
+        return CallerWorkScopeFixture::forContext(resolve(TenantContextResolver::class)->current(), 'operator', str_repeat('a', 64));
     }
 
     private function runWindow(SeriesReference $series, MaterializationWindow $window, string $key): void
@@ -96,7 +94,6 @@ final class MaterializationSchedulingTest extends TestCase
         self::assertCount(1, $definitions);
         self::assertSame($custom ? 'custom.materialize' : MaterializationHasher::HANDLER_KIND, $definitions[0]->kind);
         self::assertSame($custom ? 'custom/2' : MaterializationHasher::HANDLER_VERSION, $definitions[0]->version);
-        self::assertSame($custom, $definitions[0]->acceptLegacyUnstamped);
         $series = $this->series();
         $window = new MaterializationWindow('2026-09-01', '2026-09-08', pageLimit: 2);
         $this->runWindow($series, $window, 'scheduled-1');
@@ -127,7 +124,7 @@ final class MaterializationSchedulingTest extends TestCase
         $row = DB::table('sys_wakeup_requests')->first();
 
         if ($state === 'cancelled') {
-            resolve(WakeupScheduler::class)->cancel(resolve(TenantContextResolver::class)->current(), $row->request_key);
+            resolve(WakeupScheduler::class)->cancel($this->scope(), new WakeupIdentity((string) $row->kind, (string) $row->request_key));
         } else {
             wakeup_bridge_sweep(resolve(TenantContextResolver::class)->current(), 10);
         }
@@ -173,7 +170,7 @@ final class MaterializationSchedulingTest extends TestCase
         }
     }
 
-    public function test_replay_recovers_scheduling_failure_after_commit_and_exposes_conflict(): void
+    public function test_schedule_failure_and_conflict_roll_back_the_materialized_effects(): void
     {
         $series = $this->series();
         $window = new MaterializationWindow('2026-09-01', '2026-09-08');
@@ -186,8 +183,8 @@ final class MaterializationSchedulingTest extends TestCase
             $this->runWindow($series, $window, 'recover');
             self::fail('Scheduling failure hidden.');
         } catch (RuntimeException) {
-            self::assertSame(6, DB::table('tsk_tasks')->count());
-            self::assertSame(1, DB::table('corex_task_operations')->count());
+            self::assertSame(0, DB::table('tsk_tasks')->count());
+            self::assertSame(0, DB::table('corex_task_operations')->count());
         }
         $conflict = $this->createMock(WakeupScheduler::class);
         $conflict->method('schedule')->willReturnCallback(static fn (WakeupRequest $request): ScheduleResult => new ScheduleResult('conflict', $request->requestKey));
@@ -197,7 +194,7 @@ final class MaterializationSchedulingTest extends TestCase
             $this->runWindow($series, $window, 'recover');
             self::fail('Scheduling conflict hidden.');
         } catch (MaterializationConflict) {
-            self::assertSame(6, DB::table('tsk_tasks')->count());
+            self::assertSame(0, DB::table('tsk_tasks')->count());
         }
         app()->instance(WakeupScheduler::class, $scheduler);
         $this->runWindow($series, $window, 'recover');

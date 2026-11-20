@@ -36,13 +36,13 @@ approvals, command exit codes, verification results and target files.
 runs use the same source export and compare semantic digests after separate
 verification. `resumed/target.sqlite` is available for independent SQL reads.
 
-The frozen SQL can be reproduced from a clean checkout of the audited SHA
-with its locked Composer dependencies installed. The same rehearsal accepts
+The frozen exporter fixture loads the audited 1.x checkout and its locked Composer
+dependencies. The same rehearsal accepts
 the generated SQLite file as its positive source, preserving the owner-produced
 database bytes.
 
 ```bash
-php scripts/migration/corex-v2/tests/export-source-v1.php "$BASELINE" "$EXPORT"
+php scripts/migration/corex-v2/tests/export-source-v1.php.fixture "$BASELINE" "$EXPORT"
 diff -u scripts/migration/corex-v2/tests/fixtures/source-v1-schema.sql "$EXPORT/source-v1-schema.sql"
 diff -u scripts/migration/corex-v2/tests/fixtures/source-v1-data.sql "$EXPORT/source-v1-data.sql"
 php scripts/migration/corex-v2/tests/rehearse.php "$DIRECT_RUN" "$TARGET_SHA" "$EXPORT/source-v1.sqlite"

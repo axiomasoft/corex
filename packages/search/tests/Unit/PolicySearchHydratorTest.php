@@ -5,6 +5,7 @@ declare(strict_types=1);
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Internal\CallableDataScopeAuthorizer;
 use CoreX\Search\Data\Candidate;
@@ -12,6 +13,7 @@ use CoreX\Search\Data\CandidatePage;
 use CoreX\Search\Data\CurrentSearchRecord;
 use CoreX\Search\Data\SearchSnapshot;
 use CoreX\Search\Internal\Query\PolicySearchHydrator;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 
 it('drops deleted, stale and policy-denied candidates before returning schema-approved fields', function (): void {
     $schema = new SearchSnapshot(
@@ -20,10 +22,7 @@ it('drops deleted, stale and policy-denied candidates before returning schema-ap
     $allowed = new RecordRef(entity: 'equipment', id: 'allowed');
     $denied = new RecordRef(entity: 'equipment', id: 'denied');
     $stale = new RecordRef(entity: 'equipment', id: 'stale');
-    $scope = DataScope::fromTenantContext(
-        context: new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false),
-        connectionIdentity: 'pgsql:account-a', actorId: 'operator-a', restoreEpoch: str_repeat('b', 64),
-    );
+    $scope = CallerWorkScopeFixture::forContext(new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false), 'operator-a', str_repeat('b', 64));
     $hydrator = new PolicySearchHydrator(
         static function (DataScope $_scope, RecordRef $record): ?CurrentSearchRecord {
             if ($record->id === 'deleted') {
@@ -38,7 +37,7 @@ it('drops deleted, stale and policy-denied candidates before returning schema-ap
             );
         },
         new CallableDataScopeAuthorizer(
-            static fn (DataScope $_scope, string $entity, string $subjectId): bool => $subjectId === 'allowed',
+            static fn (DataScope $_scope, RecordRef $record): bool => $record->id === 'allowed',
         ),
     );
 
@@ -65,23 +64,20 @@ it('authorizes the returned field projection for the current actor', function ()
             fields: ['id' => 'employee-1', 'name' => 'Alice', 'salary' => 100000, 'private_note' => 'hidden'],
         ),
         new CallableDataScopeAuthorizer(
-            static function (DataScope $scope, string $entity, string $subjectId, array $fields) use (&$seen): bool {
-                $seen[] = $fields;
+            static function (DataScope $scope, RecordRef $record, FieldSelection $selection) use (&$seen): bool {
+                $seen[] = $selection->fields;
 
-                return $scope->actorId === 'payroll' || ! in_array('salary', $fields, true);
+                return $scope->principalId === 'payroll' || ! in_array('salary', $selection->fields, true);
             },
         ),
     );
     $pages = [];
     foreach (['employee', 'payroll'] as $actor) {
-        $scope = DataScope::fromTenantContext(
-            context: new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false),
-            connectionIdentity: 'pgsql:account-a', actorId: $actor, restoreEpoch: str_repeat('b', 64),
-        );
+        $scope = CallerWorkScopeFixture::forContext(new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false), $actor, str_repeat('b', 64));
         $pages[] = $hydrator->authorize($scope, new CandidatePage(candidates: [new Candidate($record)], nextAfterId: null, truncated: false), $schema)->records;
     }
 
     expect($pages[0])->toBe([])
         ->and($pages[1])->toBe([['id' => 'employee-1', 'name' => 'Alice', 'salary' => 100000]])
-        ->and($seen)->toBe([['id', 'name', 'salary'], ['id', 'name', 'salary']]);
+        ->and($seen)->toBe([[], ['id', 'name', 'salary'], [], ['id', 'name', 'salary']]);
 });

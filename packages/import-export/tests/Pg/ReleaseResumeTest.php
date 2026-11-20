@@ -25,8 +25,10 @@ use CoreX\ImportExport\Data\TargetResult;
 use CoreX\ImportExport\Data\TransferLimits;
 use CoreX\ImportExport\Data\TransferRef;
 use CoreX\ImportExport\Exceptions\ImportUnavailable;
+use CoreX\ImportExport\Internal\SessionIdentity;
 use CoreX\ImportExport\Internal\Transfer\SqlTransferExecutor;
 use CoreX\ImportExport\Tests\PgTestCase;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Time\Laravel\SystemClock;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -41,17 +43,14 @@ it('resumes the persisted checkpoint in a new executor without replaying committ
         $table->string('external_id')->primary();
         $table->string('name');
     });
+    $scope = CallerWorkScopeFixture::forContext(new TenantContext(account: new AccountRef(id: 'account-1', slug: 'account-1', status: 'active', features: [], limits: []), boxed: true), 'user-1', $hash);
     DB::table('corex_transfer_jobs')->insert([
-        'id' => $id, 'source_manifest' => '{}', 'source_hash' => $hash,
+        'id' => $id, 'source_manifest' => json_encode(['_scope_hash' => SessionIdentity::scopeHash($scope)], JSON_THROW_ON_ERROR), 'source_hash' => $hash,
         'mapping_snapshot' => '{}', 'mapping_hash' => $hash, 'schema_hash' => $hash,
         'restore_epoch' => $hash, 'mode' => 'import', 'state' => 'running',
         'checkpoint_seq' => '0', 'cursor' => '{"ordinal":"0","boundaryByteOffset":"0"}',
         'stats' => '{}', 'claim_epoch' => '1', 'created_at' => now(), 'updated_at' => now(),
     ]);
-    $scope = DataScope::fromTenantContext(
-        context: new TenantContext(account: new AccountRef(id: 'account-1', slug: 'account-1', status: 'active', features: [], limits: []), boxed: true),
-        connectionIdentity: 'pgsql:'.DB::connection()->getDatabaseName(), actorId: 'user-1', restoreEpoch: $hash,
-    );
     $manifest = new SourceManifest(immutableRef: 'object://imports/resume', sha256: $hash, length: 84, format: 'csv', parserVersion: '1', encoding: 'UTF-8', delimiter: ',', enclosure: '"', escape: '', schemaHash: $hash);
     $firstSource = new TransferResumeSourceFixture($manifest);
     $firstSink = new TransferResumeSinkFixture;

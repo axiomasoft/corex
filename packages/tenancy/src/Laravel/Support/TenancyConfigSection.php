@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel\Support;
 
+use CoreX\Context\Contracts\NamedWorkPrincipal;
 use CoreX\Messaging\Enums\PubSubDriver;
 use CoreX\Scheduling\Contracts\DueWakeupSweeper;
 use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier;
@@ -49,9 +50,12 @@ final class TenancyConfigSection implements ConfigReportSection
     public function adapters(): array
     {
         $selected = config('corex-tenancy.wakeup.driver') === 'root_registry';
-        $available = app()->bound(DueWakeupSweeper::class);
-
-        $adapters = [['line' => 'adapter wakeup.root_registry='.($selected ? ($available ? 'available' : 'missing') : 'not-selected'), 'error' => $selected && ! $available ? 'adapter wakeup.root_registry missing' : null]];
+        $missing = array_filter([DueWakeupSweeper::class, NamedWorkPrincipal::class], static fn (string $contract): bool => ! app()->bound($contract));
+        $available = $missing === [];
+        $adapters = [[
+            'line' => 'adapter wakeup.root_registry='.($selected ? ($available ? 'available' : 'missing') : 'not-selected'),
+            'error' => $selected && ! $available ? 'adapter wakeup.root_registry missing '.implode(', ', $missing) : null,
+        ]];
 
         foreach ([TenantRuntime::class, AccountIsolationMapper::class, AccountResources::class, TemplateIntegrityChecks::class, TemplateIntegrityVerifier::class] as $contract) {
             $bound = app()->bound($contract);

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal\Laravel;
 
-use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Internal\Schema\ModuleFieldCatalogue;
 use CoreX\CustomFields\Internal\Schema\StaticFieldCatalogue;
@@ -30,7 +30,7 @@ final class FieldCatalogueFactory
             return $catalogue->appending(new ModuleFieldCatalogue(
                 entities: $app->make(EntityRegistry::class),
                 modules: $app->make(ModuleRegistry::class),
-                contexts: $app->make(TenantContextRestorer::class),
+                contexts: $app->make(CurrentWorkScope::class),
                 drivers: $composition->drivers,
             ));
         }

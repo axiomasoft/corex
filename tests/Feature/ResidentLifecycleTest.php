@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Config\Data\CoreOptions;
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Context\Contracts\WorkScopeRunner;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Messaging\Contracts\Inbox;
@@ -44,7 +44,7 @@ it('does not carry scoped services or tenant context across a lifecycle boundary
         Outbox::class => $this->app->make(Outbox::class),
         Inbox::class => $this->app->make(Inbox::class),
         TenantStorage::class => $this->app->make(TenantStorage::class),
-        TenantContextRestorer::class => $this->app->make(TenantContextRestorer::class),
+        WorkScopeRunner::class => $this->app->make(WorkScopeRunner::class),
     ];
 
     $this->app->forgetScopedInstances();

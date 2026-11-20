@@ -2,40 +2,29 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Contracts\PhysicalBindingVerifier;
+use CoreX\Context\Contracts\StoredWorkIssuer;
+use CoreX\Context\Contracts\StoredWorkRunner;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\PhysicalBinding;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Context\Exceptions\CentralContextException;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Storage\Exceptions\StorageOperationFailed;
 use CoreX\Tenancy\Account\Internal\Models\Account;
-use CoreX\Tenancy\Runtime\Exceptions\TenantContextUnavailable;
 use CoreX\Tenancy\Tests\TestCase;
-use Illuminate\Contracts\Queue\Job;
+use CoreX\Tests\Support\WorkScopeFixture;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Connectors\ConnectionFactory;
-use Illuminate\Queue\Events\JobAttempted;
-use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 uses(TestCase::class)->group('pg');
-
-/** @return array{corex_tenant: array{account: string, workspace: ?string}} */
-function physicalContextPayload(string $account, ?string $workspace = null): array
-{
-    return ['corex_tenant' => ['account' => $account, 'workspace' => $workspace]];
-}
-
-/** @param array<string, mixed> $payload */
-function physicalContextJob(array $payload): Job
-{
-    $job = Mockery::mock(Job::class);
-    $job->shouldReceive('payload')->andReturn($payload);
-
-    return $job;
-}
 
 beforeEach(function (): void {
     expect(app()->environment())->toBe('testing')
@@ -54,7 +43,7 @@ beforeEach(function (): void {
 
     foreach (['archive', 'lab'] as $name) {
         $database = 'corex_p3_context_'.bin2hex(random_bytes(6)).'_test';
-        $this->databases[] = $database;
+        $this->databases[$name] = $database;
         DB::statement('CREATE DATABASE '.$database);
         $configuration = DB::connection('pgsql')->getConfig();
         $configuration['database'] = $database;
@@ -75,6 +64,30 @@ beforeEach(function (): void {
         $account = Account::on('pgsql')->create(['cluster_id' => $cluster, 'db_name' => $database, 'slug' => $name, 'template_version' => 1, 'embedding_model' => 'bge-m3', 'embedding_dim' => 1024, 'owner_identity_id' => $identity, 'status' => 'active']);
         $this->accounts[$name] = new AccountRef(id: $account->id, slug: $name, status: 'active', features: [], limits: []);
     }
+    $host = WorkScopeFixture::install(app());
+    $expected = [];
+    foreach ($this->accounts as $name => $account) {
+        $expected[$account->id] = $this->databases[$name];
+    }
+    app()->scoped(PhysicalBindingVerifier::class, static fn () => new class($expected) implements PhysicalBindingVerifier
+    {
+        public function __construct(private array $databases) {}
+
+        public function verify(PhysicalBinding $binding, TenantContext $context, ConnectionInterface $connection): void
+        {
+            if ($connection->selectOne('select current_database() as physical')->physical !== $this->databases[$context->account->id]) {
+                throw new ScopeContextMismatch;
+            }
+        }
+    });
+    foreach ($this->accounts as $name => $account) {
+        $workspace = new WorkspaceRef($this->workspaceId, $name, 'company', $name, null);
+        $this->scopes[$name] = resolve(TenancyManager::class)->runFor($account, $workspace, fn () => $host->scope());
+        $this->proofs[$name] = resolve(TenancyManager::class)->runFor($account, $workspace, fn () => app(StoredWorkIssuer::class)->issue($this->scopes[$name], 'test.pg', $name));
+        $this->wide[$name] = resolve(TenancyManager::class)->runFor($account, null, fn () => $host->scope());
+        $this->wideProof[$name] = resolve(TenancyManager::class)->runFor($account, null, fn () => app(StoredWorkIssuer::class)->issue($this->wide[$name], 'test.pg', 'wide-'.$name));
+    }
+
 });
 
 afterEach(function (): void {
@@ -86,61 +99,42 @@ afterEach(function (): void {
     File::deleteDirectory($this->storageRoot);
 });
 
-it('clears previous workspace for another job in the same account and refuses unavailable narrowing', function (): void {
-    $manager = resolve(TenancyManager::class);
-    $account = $this->accounts['archive'];
-    $job = physicalContextJob(physicalContextPayload($account->id, $this->workspaceId));
-    Event::dispatch(new JobProcessing('database', $job));
-    expect($manager->context()->workspace->slug)->toBe('archive');
-
-    Event::dispatch(new JobProcessing('database', physicalContextJob(physicalContextPayload($account->id))));
-    expect($manager->context()->workspace)->toBeNull();
-
-    $manager->setWorkspace(new WorkspaceRef(id: $this->workspaceId, slug: 'archive', type: 'company', path: 'archive', parentId: null));
-    expect(fn () => Event::dispatch(new JobProcessing('database', physicalContextJob(physicalContextPayload($account->id, (string) Str::uuid())))))
-        ->toThrow(TenantContextUnavailable::class, 'does not exist in the current account');
-    expect($manager->context()->workspace)->toBeNull();
+it('clears previous workspace for account-wide work and refuses unavailable narrowing', function (): void {
+    $runner = resolve(StoredWorkRunner::class);
+    $runner->runStored($this->scopes['archive'], $this->proofs['archive'], function () use ($runner): void {
+        $runner->runStored($this->wide['archive'], $this->wideProof['archive'], function (): void {
+            expect(resolve(TenancyManager::class)->context()->workspace)->toBeNull();
+        });
+        expect(resolve(TenancyManager::class)->context()->workspace->slug)->toBe('archive');
+    });
+    $wire = resolve(DataScopeCodec::class)->encode($this->scopes['archive']);
+    $wire['workspace_id'] = (string) Str::uuid();
+    $unavailable = resolve(DataScopeCodec::class)->decode($wire);
+    expect(fn () => $runner->runStored($unavailable, $this->proofs['archive'], static fn () => throw new LogicException))->toThrow(ScopeContextMismatch::class)
+        ->and(resolve(TenancyManager::class)->context())->toBeNull();
 });
 
-it('runs archive and laboratory jobs on distinct physical databases with success exception retry and nested restoration', function (): void {
-    $manager = resolve(TenancyManager::class);
-    $archive = $this->accounts['archive'];
-    $lab = $this->accounts['lab'];
-    $archivePayload = physicalContextPayload($archive->id, $this->workspaceId);
-    $archiveJob = physicalContextJob($archivePayload);
-    Event::dispatch(new JobProcessing('database', $archiveJob));
-    expect(DB::table('context_sentinel')->value('name'))->toBe('archive');
-    $archiveDisk = resolve(TenantStorage::class)->disk();
-    $archiveDisk->put('document.txt', 'archive');
-    Event::dispatch(new JobAttempted('database', $archiveJob));
-    expect($manager->context())->toBeNull()->and(DB::table('context_sentinel')->value('name'))->toBe('root');
-    expect(fn () => $archiveDisk->get('document.txt'))->toThrow(CentralContextException::class);
+it('restores stored work on distinct physical databases across success, exception and retry', function (): void {
+    $runner = resolve(StoredWorkRunner::class);
+    $disk = $runner->runStored($this->scopes['archive'], $this->proofs['archive'], function () {
+        expect(DB::table('context_sentinel')->value('name'))->toBe('archive');
+        $disk = resolve(TenantStorage::class)->disk();
+        $disk->put('document.txt', 'archive');
 
-    $rootJob = physicalContextJob([]);
-    Event::dispatch(new JobProcessing('database', $rootJob));
-    expect(DB::table('context_sentinel')->value('name'))->toBe('root');
-    Event::dispatch(new JobAttempted('database', $rootJob));
+        return $disk;
+    });
+    expect(DB::table('context_sentinel')->value('name'))->toBe('root')
+        ->and(fn () => $disk->get('document.txt'))->toThrow(CentralContextException::class);
+    $runner->runStored($this->scopes['archive'], $this->proofs['archive'], function () use ($runner, $disk): void {
+        expect(fn () => $runner->runStored($this->scopes['lab'], $this->proofs['lab'], function () use ($disk): void {
+            expect(DB::table('context_sentinel')->value('name'))->toBe('lab')
+                ->and(resolve(TenantStorage::class)->disk()->exists('document.txt'))->toBeFalse()
+                ->and(fn () => $disk->get('document.txt'))->toThrow(StorageOperationFailed::class);
 
-    $labJob = physicalContextJob(physicalContextPayload($lab->id, $this->workspaceId));
-    Event::dispatch(new JobProcessing('database', $labJob));
-    expect(DB::table('context_sentinel')->value('name'))->toBe('lab')
-        ->and($manager->context()->workspace->slug)->toBe('lab')
-        ->and(resolve(TenantStorage::class)->disk()->exists('document.txt'))->toBeFalse();
-    expect(fn () => $archiveDisk->get('document.txt'))->toThrow(StorageOperationFailed::class);
-    Event::dispatch(new JobAttempted('database', $labJob, new RuntimeException('interrupted lab job')));
-    expect($manager->context())->toBeNull()->and(DB::table('context_sentinel')->value('name'))->toBe('root');
-
-    // queue:retry re-pushes the stored payload, so the retried job runs under its original account.
-    $retriedJob = physicalContextJob($archivePayload);
-    Event::dispatch(new JobProcessing('database', $retriedJob));
-    $outerWorkspace = $manager->context()->workspace;
-    expect(DB::table('context_sentinel')->value('name'))->toBe('archive')->and($archiveDisk->get('document.txt'))->toBe('archive');
-    expect(fn () => $manager->runFor($lab, null, function (): void {
-        expect(DB::table('context_sentinel')->value('name'))->toBe('lab');
-
-        throw new RuntimeException('nested lab failure');
-    }))->toThrow(RuntimeException::class, 'nested lab failure');
-    expect(DB::table('context_sentinel')->value('name'))->toBe('archive')->and($manager->context()->workspace)->toBe($outerWorkspace);
-    Event::dispatch(new JobAttempted('database', $retriedJob));
-    expect($manager->context())->toBeNull()->and(DB::table('context_sentinel')->value('name'))->toBe('root');
+            throw new RuntimeException('interrupted');
+        }))->toThrow(RuntimeException::class, 'interrupted');
+        expect(DB::table('context_sentinel')->value('name'))->toBe('archive')
+            ->and($disk->get('document.txt'))->toBe('archive');
+    });
+    expect(resolve(TenancyManager::class)->context())->toBeNull()->and(DB::table('context_sentinel')->value('name'))->toBe('root');
 });

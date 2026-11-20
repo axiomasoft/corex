@@ -11,6 +11,7 @@ use CoreX\Database\Internal\CoreSchemaSets;
 use CoreX\Panels\PanelsServiceProvider;
 use CoreX\Tenancy\Internal\TenancySchemaSets;
 use CoreX\Tests\Fixtures\Schema\FixtureSchemaSets;
+use CoreX\Tests\Support\WorkScopeFixture;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Packman\Schema\Contracts\Migration\SchemaMigrator;
@@ -90,14 +91,22 @@ it('preserves the monotonic audit sequence cursor (D42)', function (): void {
     $this->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
     config(['corex.audit.enabled' => true]);
     app()->forgetInstance(CoreOptions::class);
-    $logger = app()->make(QueuedAuditLogger::class, ['connection' => 'pgsql']);
-    foreach (['first', 'second'] as $action) {
-        $logger->record(new AuditEntry(action: $action, actorType: ActorType::System));
+    $previous = DB::getDefaultConnection();
+    DB::setDefaultConnection('pgsql');
+
+    try {
+        WorkScopeFixture::install($this->app, 'schema-audit-test', 'service')->scope();
+        $logger = app()->make(QueuedAuditLogger::class);
+        foreach (['first', 'second'] as $action) {
+            $logger->record(new AuditEntry(action: $action, actorType: ActorType::System));
+        }
+        $seqs = DB::connection('pgsql')->table('sys_audit_log')->orderBy('seq')->pluck('seq');
+        expect($seqs)->toHaveCount(2)
+            ->and((int) $seqs[0])->toBeGreaterThan(0)
+            ->and((int) $seqs[1])->toBeGreaterThan((int) $seqs[0]);
+    } finally {
+        DB::setDefaultConnection($previous);
     }
-    $seqs = DB::connection('pgsql')->table('sys_audit_log')->orderBy('seq')->pluck('seq');
-    expect($seqs)->toHaveCount(2)
-        ->and((int) $seqs[0])->toBeGreaterThan(0)
-        ->and((int) $seqs[1])->toBeGreaterThan((int) $seqs[0]);
 });
 
 it('reads the PostgreSQL journal and reports pending files on the selected connection', function (): void {

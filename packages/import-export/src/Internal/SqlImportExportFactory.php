@@ -6,6 +6,9 @@ namespace CoreX\ImportExport\Internal;
 
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\FieldSelection;
+use CoreX\Data\Data\RecordRef;
+use CoreX\Data\Enums\FieldUse;
 use CoreX\ImportExport\Contracts\CancellationSignal;
 use CoreX\ImportExport\Contracts\ExportSource;
 use CoreX\ImportExport\Contracts\ImportExportFactory;
@@ -116,8 +119,7 @@ final readonly class SqlImportExportFactory implements ImportExportFactory
         $this->runtime->assertCurrent($connection, $scope);
 
         if (! Str::isUuid($transfer->id)
-            || $scope->connectionIdentity !== $connection->getDriverName().':'.$connection->getDatabaseName()
-            || ! $this->authorizer->authorize($scope, '*', $transfer->id, [], 'transfer.open')->allowed) {
+            || ! $this->authorizer->authorize($scope, new RecordRef('import-export.transfer', $transfer->id), new FieldSelection([]), FieldUse::Write)->allowed) {
             throw new SessionUnavailable('The transfer session is unavailable under the current authority.');
         }
 
@@ -132,6 +134,7 @@ final readonly class SqlImportExportFactory implements ImportExportFactory
         $manifest['_request_hash'] = $requestHash;
 
         return $connection->transaction(function () use ($connection, $scope, $transfer, $mode, $sourceHash, $mappingHash, $schemaHash, $manifest, $mappingSnapshot, $requestHash): StepToken {
+            $this->runtime->assertCurrent($connection, $scope);
             $connection->table('corex_transfer_jobs')->insertOrIgnore([
                 'id' => $transfer->id,
                 'source_manifest' => json_encode($manifest, JSON_THROW_ON_ERROR),

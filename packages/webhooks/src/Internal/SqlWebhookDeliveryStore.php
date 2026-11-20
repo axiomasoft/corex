@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Internal;
 
-use CoreX\Context\Contracts\TenantContextRestorer;
-use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Data\DataScope;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Webhooks\Contracts\WebhookDeliveryStore;
@@ -31,7 +30,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
 
     public function __construct(
         private Connection $connection,
-        private TenantContextRestorer $contexts,
+        private CurrentWorkScope $contexts,
         private ClockInterface $clock,
         private WebhookRetryPolicy $retry,
         private int $leaseSeconds = 30,
@@ -45,7 +44,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
     public function find(DataScope $scope, string $id): ?WebhookDelivery
     {
         $this->assertScope($scope);
-        $row = $this->connection->table(self::Table)->where('id', $id)->first();
+        $row = $this->scoped($scope)->where('id', $id)->first();
 
         return $row === null ? null : $this->delivery($row);
     }
@@ -54,7 +53,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
     public function forEvent(DataScope $scope, string $eventId): array
     {
         $this->assertScope($scope);
-        $rows = $this->connection->table(self::Table)->where('event_id', $eventId)->orderBy('id')->get();
+        $rows = $this->scoped($scope)->where('event_id', $eventId)->orderBy('id')->get();
         $deliveries = [];
 
         foreach ($rows as $row) {
@@ -69,10 +68,11 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
         $this->assertScope($scope);
         $this->assertIdentifier(value: $worker, name: 'worker');
 
-        return $this->connection->transaction(function () use ($worker): ?WebhookDelivery {
+        return $this->connection->transaction(function () use ($scope, $worker): ?WebhookDelivery {
+            $this->assertScope($scope);
             $now = $this->clock->now();
-            $this->recoverExpired($now);
-            $query = $this->connection->table(self::Table)
+            $this->recoverExpired($scope, $now);
+            $query = $this->scoped($scope)
                 ->whereIn('status', ['pending', 'retry'])
                 ->where('next_attempt_at', '<=', $now)
                 ->whereNull('lease_owner')
@@ -127,9 +127,10 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
     {
         $this->assertScope($scope);
 
-        return $this->connection->transaction(function () use ($delivery): ?array {
+        return $this->connection->transaction(function () use ($scope, $delivery): ?array {
+            $this->assertScope($scope);
             $now = $this->clock->now();
-            $row = $this->connection->table(self::Table)
+            $row = $this->scoped($scope)
                 ->where('id', $delivery->id)
                 ->where('status', 'sending')
                 ->where('lease_owner', $delivery->leaseOwner)
@@ -170,15 +171,18 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
         }, $this->transactionAttempts());
     }
 
-    public function finish(WebhookDelivery $delivery, WebhookHttpResult $result): bool
+    public function finish(DataScope $scope, WebhookDelivery $delivery, WebhookHttpResult $result): bool
     {
+        $this->assertScope($scope);
+
         if ($delivery->leaseOwner === null) {
             throw new InvalidArgumentException('Webhook finish requires a leased delivery.');
         }
 
-        return $this->connection->transaction(function () use ($delivery, $result): bool {
+        return $this->connection->transaction(function () use ($scope, $delivery, $result): bool {
+            $this->assertScope($scope);
             $now = $this->clock->now();
-            $row = $this->connection->table(self::Table)
+            $row = $this->scoped($scope)
                 ->where('id', $delivery->id)
                 ->where('status', 'sending')
                 ->where('lease_owner', $delivery->leaseOwner)
@@ -225,19 +229,17 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
 
     private function assertScope(DataScope $scope): void
     {
-        $context = $this->contexts->restore($scope);
-        $actual = $context->isBoxed()
-            ? 'boxed:'.$context->account->id
-            : $this->connection->getDriverName().':'.$this->connection->getDatabaseName();
-
-        if (! hash_equals($scope->connectionIdentity, $actual) || ! hash_equals($scope->accountId, $context->account->id)) {
-            throw ScopeContextMismatch::connection(expected: $scope->connectionIdentity, actual: $actual);
-        }
+        $this->contexts->assert($scope, $this->connection);
     }
 
-    private function recoverExpired(DateTimeImmutable $now): void
+    private function scoped(DataScope $scope): Builder
     {
-        $query = $this->connection->table(self::Table)
+        return WebhookDeliveryScope::constrain($this->connection->table(self::Table), $scope);
+    }
+
+    private function recoverExpired(DataScope $scope, DateTimeImmutable $now): void
+    {
+        $query = $this->scoped($scope)
             ->where('status', 'sending')
             ->where('lease_until', '<=', $now)
             ->orderBy('id');

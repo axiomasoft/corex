@@ -202,7 +202,7 @@
         "aut_role_matrix": {
             "columns": {
                 "action": {
-                    "type": "character varying(120)",
+                    "type": "character varying(160)",
                     "nullable": false,
                     "default": null
                 },
@@ -299,7 +299,7 @@
             "checks": [
                 {
                     "name": "aut_role_matrix_action_ck",
-                    "expression": "((action)::text ~ '^[a-z][a-z0-9_-]*$'::text)"
+                    "expression": "(((action)::text ~ '^[a-z][a-z0-9_-]*$'::text) OR ((action)::text ~ '^field[.][A-Za-z0-9][A-Za-z0-9._:-]{0,127}[.](read|write|search|filter|sort|aggregate|export)$'::text))"
                 },
                 {
                     "name": "aut_role_matrix_context_ck",
@@ -4991,12 +4991,12 @@
                     "default": null
                 },
                 "period_end": {
-                    "type": "timestamp(0) with time zone",
+                    "type": "timestamp(6) with time zone",
                     "nullable": false,
                     "default": null
                 },
                 "period_start": {
-                    "type": "timestamp(0) with time zone",
+                    "type": "timestamp(6) with time zone",
                     "nullable": false,
                     "default": null
                 },
@@ -5007,6 +5007,21 @@
                 },
                 "recipient_kind": {
                     "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope": {
+                    "type": "json",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_key": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_seal": {
+                    "type": "character(64)",
                     "nullable": false,
                     "default": null
                 },
@@ -5031,6 +5046,7 @@
                     "name": "ntf_digest_runs_recipient_kind_recipient_id_period__27ecc408_uq",
                     "kind": "uq",
                     "columns": [
+                        "scope_key",
                         "recipient_kind",
                         "recipient_id",
                         "period",
@@ -6359,6 +6375,11 @@
                     "nullable": false,
                     "default": null
                 },
+                "scope_hash": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
                 "started_at": {
                     "type": "timestamp(0) with time zone",
                     "nullable": true,
@@ -6375,6 +6396,7 @@
                     "name": "sys_attribute_schema_operations_operation_key_uq",
                     "kind": "uq",
                     "columns": [
+                        "scope_hash",
                         "operation_key"
                     ],
                     "predicate": null,
@@ -7533,13 +7555,28 @@
         },
         "sys_wakeup_requests": {
             "columns": {
+                "account_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
                 "attempt": {
                     "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
+                "claim_token": {
+                    "type": "uuid",
+                    "nullable": true,
+                    "default": null
+                },
                 "completed_at": {
-                    "type": "timestamp(0) with time zone",
+                    "type": "timestamp(6) with time zone",
                     "nullable": true,
                     "default": null
                 },
@@ -7548,13 +7585,18 @@
                     "nullable": true,
                     "default": null
                 },
+                "data_scope": {
+                    "type": "json",
+                    "nullable": false,
+                    "default": null
+                },
                 "failure_code": {
                     "type": "character varying(64)",
                     "nullable": true,
                     "default": null
                 },
                 "fire_at": {
-                    "type": "timestamp(0) with time zone",
+                    "type": "timestamp(6) with time zone",
                     "nullable": false,
                     "default": null
                 },
@@ -7574,7 +7616,7 @@
                     "default": null
                 },
                 "lease_until": {
-                    "type": "timestamp(0) with time zone",
+                    "type": "timestamp(6) with time zone",
                     "nullable": true,
                     "default": null
                 },
@@ -7599,8 +7641,13 @@
                     "default": null
                 },
                 "retry_at": {
-                    "type": "timestamp(0) with time zone",
+                    "type": "timestamp(6) with time zone",
                     "nullable": true,
+                    "default": null
+                },
+                "scope_seal": {
+                    "type": "character(64)",
+                    "nullable": false,
                     "default": null
                 },
                 "status": {
@@ -7614,12 +7661,12 @@
                     "default": null
                 },
                 "window_end": {
-                    "type": "timestamp(0) with time zone",
+                    "type": "timestamp(6) with time zone",
                     "nullable": true,
                     "default": null
                 },
                 "window_start": {
-                    "type": "timestamp(0) with time zone",
+                    "type": "timestamp(6) with time zone",
                     "nullable": true,
                     "default": null
                 },
@@ -7631,9 +7678,12 @@
             },
             "indexes": [
                 {
-                    "name": "sys_wakeup_requests_pk",
-                    "kind": "pk",
+                    "name": "sys_wakeup_requests_due_ix",
+                    "kind": "ix",
                     "columns": [
+                        "account_id",
+                        "status",
+                        "fire_at",
                         "id"
                     ],
                     "predicate": null,
@@ -7641,21 +7691,11 @@
                     "nulls_not_distinct": false
                 },
                 {
-                    "name": "sys_wakeup_requests_scan_ix",
-                    "kind": "ix",
-                    "columns": [
-                        "status",
-                        "retry_at",
-                        "fire_at"
-                    ],
-                    "predicate": null,
-                    "method": "btree",
-                    "nulls_not_distinct": false
-                },
-                {
-                    "name": "sys_wakeup_requests_workspace_scope_key_kind_request_key_uq",
+                    "name": "sys_wakeup_requests_identity_uq",
                     "kind": "uq",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
                         "workspace_scope_key",
                         "kind",
                         "request_key"
@@ -7665,11 +7705,22 @@
                     "nulls_not_distinct": false
                 },
                 {
-                    "name": "sys_wakeup_requests_workspace_scope_key_request_key_uq",
-                    "kind": "uq",
+                    "name": "sys_wakeup_requests_lease_ix",
+                    "kind": "ix",
                     "columns": [
-                        "workspace_scope_key",
-                        "request_key"
+                        "account_id",
+                        "status",
+                        "lease_until"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "sys_wakeup_requests_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
                     ],
                     "predicate": null,
                     "method": "btree",

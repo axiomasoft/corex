@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Media;
 
+use CoreX\Context\Laravel\WorkQueueHandlers;
 use CoreX\Media\Internal\Commands\SweepMediaOperations;
+use CoreX\Media\Internal\Jobs\ConvertMedia;
+use CoreX\Media\Internal\Jobs\PurgeMedia;
 use CoreX\Media\Internal\Support\MediaConfigSection;
 use CoreX\Media\Laravel\MediaBindingsRegistrar;
 use Illuminate\Console\Events\ArtisanStarting;
@@ -28,6 +31,9 @@ final class MediaServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->callAfterResolving(WorkQueueHandlers::class, static fn (WorkQueueHandlers $handlers) => $handlers->tenant(ConvertMedia::class));
+        $this->callAfterResolving(WorkQueueHandlers::class, static fn (WorkQueueHandlers $handlers) => $handlers->tenant(PurgeMedia::class));
+
         $this->app->register(VaulterServiceProvider::class);
         $this->app->register(VaulterMediaServiceProvider::class);
         $this->app->tag((new MediaModule)->schemaSetProviders(), SchemaSetProvider::class);

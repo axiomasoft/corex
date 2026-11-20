@@ -7,10 +7,8 @@ use CoreX\Audit\Data\AuditEntry;
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Context\Contracts\ImpersonationGuard;
 use CoreX\Context\Contracts\ImpersonationService;
-use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\ImpersonationState;
-use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Enums\ImpersonationRestrictedAction;
 use CoreX\Context\Exceptions\ImpersonationRestrictedException;
 use CoreX\Tenancy\Impersonation\Internal\ImpersonatedModelWriteGuard;
@@ -18,6 +16,8 @@ use CoreX\Tenancy\Impersonation\Internal\Models\ImpersonationGrant;
 use CoreX\Tenancy\Laravel\Http\Middleware\AllowImpersonatedWrites;
 use CoreX\Tenancy\Laravel\Http\Middleware\DenyImpersonatedWrites;
 use CoreX\Tenancy\Laravel\Http\Middleware\ImpersonationSessionGuard;
+use CoreX\Tests\Support\LocalWorkContexts;
+use CoreX\Tests\Support\WorkScopeFixture;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\DB;
@@ -158,15 +158,9 @@ it('ъ: L2 exempts AuditLog — the compliance record can write while queue=sync
     $guard = app()->make(ImpersonatedModelWriteGuard::class);
     Event::listen('eloquent.saving: *', $guard->handle(...));
 
-    app()->instance(TenantContextResolver::class, new class implements TenantContextResolver
-    {
-        public function current(): TenantContext
-        {
-            return new TenantContext(new AccountRef(
-                id: 'audit-write-fixture', slug: 'fixture', status: 'trial', features: [], limits: [],
-            ));
-        }
-    });
+    $context = new AccountRef('audit-write-fixture', 'fixture', 'trial', [], []);
+    LocalWorkContexts::install(app())->initialize($context);
+    WorkScopeFixture::install(app(), principalKind: 'service')->scope();
     resolve(AuditLogger::class)->record(new AuditEntry(
         action: 'created', actorType: ActorType::Support,
     ));

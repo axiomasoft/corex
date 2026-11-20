@@ -2,12 +2,17 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Search\Contracts\SearchProvider;
+use CoreX\Search\Internal\SearchOptions;
 use CoreX\Search\SearchServiceProvider;
 use CoreX\SearchMeilisearch\Exceptions\InvalidMeilisearchConfiguration;
 use CoreX\SearchMeilisearch\Internal\MeilisearchOptions;
 use CoreX\SearchMeilisearch\Internal\MeilisearchSearchProvider;
 use CoreX\SearchMeilisearch\SearchMeilisearchServiceProvider;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Orchestra\Testbench\TestCase;
 
 final class SearchMeilisearchServiceProviderTest extends TestCase
@@ -18,9 +23,23 @@ final class SearchMeilisearchServiceProviderTest extends TestCase
         return [SearchServiceProvider::class, SearchMeilisearchServiceProvider::class];
     }
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->app->instance(TenantContextResolver::class, new class implements TenantContextResolver
+        {
+            public function current(): TenantContext
+            {
+                return new TenantContext(new AccountRef('meili-test', 'meili-test', 'active', [], []));
+            }
+        });
+        CallerWorkScopeFixture::bind($this->app);
+    }
+
     public function test_meilisearch_driver_without_consumer_configuration_throws(): void
     {
         $this->app['config']->set('corex-search.driver', 'meilisearch');
+        $this->app->forgetInstance(SearchOptions::class);
 
         expect(fn (): SearchProvider => $this->app->make(SearchProvider::class))
             ->toThrow(InvalidMeilisearchConfiguration::class);
@@ -29,6 +48,7 @@ final class SearchMeilisearchServiceProviderTest extends TestCase
     public function test_meilisearch_driver_resolves_adapter_for_explicit_consumer_configuration(): void
     {
         $this->app['config']->set('corex-search.driver', 'meilisearch');
+        $this->app->forgetInstance(SearchOptions::class);
         $this->app['config']->set('corex-search-meilisearch.host', 'http://127.0.0.1:7700');
         $this->app['config']->set('corex-search-meilisearch.index_uid', 'equipment');
         $this->app['config']->set('corex-search-meilisearch.key', 'local-test-key');
@@ -45,6 +65,7 @@ final class SearchMeilisearchServiceProviderTest extends TestCase
         new SearchMeilisearchServiceProvider($app)->boot();
 
         $app['config']->set('corex-search.driver', 'meilisearch');
+        $app->forgetInstance(SearchOptions::class);
         $app['config']->set('corex-search-meilisearch.host', 'http://127.0.0.1:7700');
         $app['config']->set('corex-search-meilisearch.index_uid', 'equipment');
         $app['config']->set('corex-search-meilisearch.key', 'local-test-key');

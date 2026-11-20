@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\CustomFields\Data\FieldSelection;
 use CoreX\CustomFields\Data\RecordSelection;
 use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\Values\EavAttributeStore;
@@ -17,6 +16,7 @@ uses(PgTestCase::class)->group('pg');
 it('stores independently indexed EAV values with the same version boundary', function (): void {
     $store = new EavAttributeStore(
         connection: DB::connection(),
+        current: jsonbCurrent(),
         tables: PgTestSupport::tables(),
         catalogue: PgTestSupport::catalogue('contact', [
             ['code' => 'status', 'type' => 'text'],
@@ -32,7 +32,7 @@ it('stores independently indexed EAV values with the same version boundary', fun
         new WriteToken(operationKey: 'eav-write-1', payloadHash: str_repeat('e', 64), expectedRecordVersion: 'absent'),
     );
 
-    $values = $store->read(jsonbScope(), $record, new FieldSelection(fields: ['score']));
+    $values = $store->read(jsonbScope(), $record, jsonbSelection('contact', ['score']));
 
     expect($written->status)->toBe('applied')
         ->and($values->values)->toBe(['score' => 5])
@@ -43,6 +43,7 @@ it('loads a 50 by 30 EAV selection with one values query', function (): void {
     $fields = array_map(static fn (int $number): string => sprintf('field_%02d', $number), range(1, 30));
     $store = new EavAttributeStore(
         connection: DB::connection(),
+        current: jsonbCurrent(),
         tables: PgTestSupport::tables(),
         catalogue: PgTestSupport::catalogue('contact', array_map(
             static fn (string $field): array => ['code' => $field, 'type' => 'text'],
@@ -64,7 +65,7 @@ it('loads a 50 by 30 EAV selection with one values query', function (): void {
 
     DB::flushQueryLog();
     DB::enableQueryLog();
-    $batch = $store->loadMany(jsonbScope(), new RecordSelection(records: $records), new FieldSelection(fields: $fields));
+    $batch = $store->loadMany(jsonbScope(), new RecordSelection(records: $records), jsonbSelection('contact', $fields));
     $queries = DB::getQueryLog();
     DB::disableQueryLog();
 

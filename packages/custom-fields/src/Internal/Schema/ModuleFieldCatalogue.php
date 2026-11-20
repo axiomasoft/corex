@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal\Schema;
 
-use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Data\AttributeDefinition;
 use CoreX\CustomFields\Data\AttributeId;
@@ -26,13 +26,13 @@ final readonly class ModuleFieldCatalogue implements FieldCatalogue
     public function __construct(
         private EntityRegistry $entities,
         private ModuleRegistry $modules,
-        private TenantContextRestorer $contexts,
+        private CurrentWorkScope $contexts,
         private array $drivers,
     ) {}
 
     public function snapshot(DataScope $scope, string $entity): FieldSnapshot
     {
-        $context = $this->contexts->restore($scope);
+        $context = $this->contexts->assert($scope);
 
         $active = array_filter(
             $this->entities->all($context),
@@ -40,7 +40,7 @@ final readonly class ModuleFieldCatalogue implements FieldCatalogue
         );
 
         if ($active === []) {
-            throw new RuntimeException('The entity is not active for the current tenant.');
+            throw new InactiveEntity('The entity is not active for the current tenant.');
         }
 
         $definitions = [];

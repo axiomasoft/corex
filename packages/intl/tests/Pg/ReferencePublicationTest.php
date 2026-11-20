@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Data\Data\DataScope;
 use CoreX\Intl\Territory\Contracts\DatasetImporter;
 use CoreX\Intl\Territory\Contracts\GeographyProvider;
 use CoreX\Intl\Territory\Data\DatasetCandidate;
 use CoreX\Intl\Territory\Data\DatasetGeneration;
 use CoreX\Intl\Territory\Internal\Reference\FixtureReferenceNormalizer;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Illuminate\Support\Facades\DB;
 
 beforeEach(function (): void {
@@ -18,12 +18,7 @@ beforeEach(function (): void {
 });
 
 it('GEO-04 publishes reference dataset with CAS generation on PostgreSQL', function (): void {
-    $scope = DataScope::fromTenantContext(
-        context: new TenantContext(account: new AccountRef(id: 'acct', slug: 'acct', status: 'active', features: [], limits: [])),
-        connectionIdentity: 'pgsql:'.(getenv('PGSQL_DATABASE') ?: 'corex_test'),
-        actorId: 'geo-pg',
-        restoreEpoch: str_repeat('e', 64),
-    );
+    $scope = CallerWorkScopeFixture::forContext(new TenantContext(account: new AccountRef(id: 'acct', slug: 'acct', status: 'active', features: [], limits: [])), 'geo-pg', str_repeat('e', 64));
 
     $parsed = resolve(FixtureReferenceNormalizer::class)->parse(provider: 'boxes', fixturePath: __DIR__.'/../fixtures/reference/boxes.json');
     $candidate = new DatasetCandidate(

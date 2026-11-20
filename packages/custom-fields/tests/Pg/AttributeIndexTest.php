@@ -6,7 +6,6 @@ use CoreX\CustomFields\Data\AttributeDefinition;
 use CoreX\CustomFields\Data\AttributeId;
 use CoreX\CustomFields\Data\AttributeLifecycle;
 use CoreX\CustomFields\Data\AttributeStoragePolicy;
-use CoreX\CustomFields\Data\FieldSelection;
 use CoreX\CustomFields\Data\IndexPolicy;
 use CoreX\CustomFields\Data\RecordSelection;
 use CoreX\CustomFields\Data\ValuePatch;
@@ -18,6 +17,7 @@ use CoreX\CustomFields\Internal\Values\EavAttributeStore;
 use CoreX\CustomFields\Internal\Values\JsonbAttributeStore;
 use CoreX\CustomFields\Tests\PgTestCase;
 use CoreX\CustomFields\Tests\Support\PgTestSupport;
+use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
 use CoreX\Time\Laravel\SystemClock;
@@ -26,10 +26,10 @@ use Illuminate\Support\Facades\DB;
 uses(PgTestCase::class)->group('pg');
 
 it('routes a mixed batch through both engines without reordering', function (): void {
-    $catalogue = PgTestSupport::catalogue('contact', [['code' => 'email', 'type' => 'email']]);
-    $dealCatalogue = PgTestSupport::catalogue('deal', [['code' => 'email', 'type' => 'email']]);
-    $jsonb = new JsonbAttributeStore(connection: DB::connection(), tables: PgTestSupport::tables(), catalogue: $catalogue, authorizer: jsonbAuthorizer());
-    $eav = new EavAttributeStore(connection: DB::connection(), tables: PgTestSupport::tables(), catalogue: $dealCatalogue, authorizer: jsonbAuthorizer());
+    $catalogue = PgTestSupport::catalogue('contact', [['code' => 'email', 'id' => 'email', 'type' => 'email']]);
+    $dealCatalogue = PgTestSupport::catalogue('deal', [['code' => 'email', 'id' => 'email', 'type' => 'email']]);
+    $jsonb = new JsonbAttributeStore(connection: DB::connection(), current: jsonbCurrent(), tables: PgTestSupport::tables(), catalogue: $catalogue, authorizer: jsonbAuthorizer());
+    $eav = new EavAttributeStore(connection: DB::connection(), current: jsonbCurrent(), tables: PgTestSupport::tables(), catalogue: $dealCatalogue, authorizer: jsonbAuthorizer());
     $store = new ResolvingAttributeStore(new ConfiguredAttributeStoreResolver(
         policy: new AttributeStoragePolicy(default: 'jsonb', entities: ['deal' => 'eav']),
         jsonb: $jsonb,
@@ -115,9 +115,12 @@ function indexPlanner(): AttributeIndexPlanner
 {
     return new AttributeIndexPlanner(
         connection: DB::connection(),
+        current: jsonbCurrent(),
+        runner: jsonbCurrent(),
         tables: PgTestSupport::tables(),
         operations: new QueuedSchemaOperations(
             connection: DB::connection(),
+            current: jsonbCurrent(),
             tables: PgTestSupport::tables(),
             catalogue: schemaCatalogue('contact', str_repeat('f', 64)),
             authorizer: jsonbAuthorizer(),

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CoreX\RecurringTasks;
 
 use CoreX\RecurringTasks\Errors\Internal\PackageProblemDefinitions;
-use CoreX\RecurringTasks\Internal\DangerousModesCheck;
 use CoreX\RecurringTasks\Internal\MaterializationBindings;
 use CoreX\RecurringTasks\Internal\RecurringTasksOptions;
 use CoreX\RecurringTasks\Internal\TaskWorkflowIntegration;
@@ -16,7 +15,6 @@ use Illuminate\Support\ServiceProvider;
 use Override;
 use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
-use Packman\Config\Contracts\RuntimeConfigCheck;
 use Packman\Errors\Laravel\ProblemDefinitions;
 use Packman\Schema\Contracts\Migration\SchemaSetProvider;
 
@@ -37,7 +35,6 @@ final class RecurringTasksServiceProvider extends ServiceProvider
         ));
         // Register-time read: the wakeup tag must be decided before the registry is built.
         $options = RecurringTasksOptions::fromArray((array) $this->app->make(Repository::class)->get('corex-recurring-tasks', []));
-        $this->app->tag([DangerousModesCheck::class], RuntimeConfigCheck::class);
 
         MaterializationBindings::register(app: $this->app, wakeupEnabled: $options->wakeupEnabled);
     }

@@ -370,7 +370,7 @@ it('н: post-condition — TenancyManager с no-op setWorkspace() → 403, не 
         }
     };
 
-    app()->instance(TenancyManager::class, new NullTenancyManager($stubResolver));
+    app()->instance(TenancyManager::class, new NullTenancyManager(static fn () => $stubResolver));
 
     expect(statusOfRW(fn () => dispatchRW(Request::create('http://x/w/'.$workspace->slug, 'GET'))))->toBe(403);
 });

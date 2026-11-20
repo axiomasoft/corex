@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Webhooks\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\Internal\GuardedTenantContextRestorer;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Invocation\Contracts\OperationHandler;
@@ -25,6 +25,7 @@ use CoreX\Operations\Pagination\Contracts\CursorKeyring;
 use CoreX\Operations\Pagination\Internal\SignedCursorCodec;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Data\WebhookTopic;
@@ -67,7 +68,7 @@ final class WebhookManagementTest extends TestCase
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-26T15:00:00.000000+00:00'));
         $this->contexts = new ContextFixture;
         $this->contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
-        $restorer = new GuardedTenantContextRestorer($this->contexts);
+        $restorer = new CallerWorkScopeFixture($this->contexts);
         $this->management = new WebhookManagement(
             connection: $this->connection,
             contexts: $restorer,
@@ -218,7 +219,7 @@ final class WebhookManagementTest extends TestCase
             'id' => $id, 'subscription_id' => $subscription, 'subscription_revision' => 0,
             'event_id' => 'event-'.$id, 'topic' => 'orders.placed', 'topic_version' => 1, 'major' => 'v1',
             'endpoint_snapshot' => 'https://hooks.example/receiver?token=private',
-            'scope' => JsonCanonical::encode(['account' => $scope->accountId, 'workspace' => $scope->workspaceId]),
+            'scope' => JsonCanonical::encode(resolve(DataScopeCodec::class)->encode($scope)),
             'body' => $body, 'body_hash' => hash('sha256', $body), 'status' => 'dead', 'attempt' => 1,
             'replay_count' => 0, 'lease_owner' => null, 'lease_until' => null, 'next_attempt_at' => $createdAt,
             'created_at' => $createdAt, 'finished_at' => $createdAt, 'expires_at' => $createdAt->add(new DateInterval('P7D')),
@@ -228,7 +229,7 @@ final class WebhookManagementTest extends TestCase
 
     private function scope(string $account): DataScope
     {
-        return new DataScope($account, null, 'sqlite::memory:', 'actor-a', hash('sha256', 'webhook-management'));
+        return CallerWorkScopeFixture::scope($account, null, 'actor-a', hash('sha256', 'webhook-management'));
     }
 
     private function keyring(): CursorKeyring

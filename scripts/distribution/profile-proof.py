@@ -9,15 +9,17 @@ import importlib.util
 import json
 import os
 import re
+import secrets
 import shutil
 import subprocess
 import sys
 import tempfile
+from contextlib import contextmanager
 from pathlib import Path
 
 # Also support the test harness loading this script by file path.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from ecosystem_repositories import is_corex_package
+from ecosystem_repositories import is_corex_package, snapshot_repositories
 from consumer_repository import assert_dist_install, dist_closure, repositories
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -481,6 +483,61 @@ def postgres_settings() -> dict[str, str]:
     }
 
 
+def psql(settings: dict[str, str], database: str, statement: str) -> str:
+    completed = subprocess.run(
+        ["psql", "-X", "-h", settings["host"], "-p", settings["port"], "-U", settings["user"],
+         "-d", database, "-At", "-v", "ON_ERROR_STOP=1", "-c", statement],
+        text=True, capture_output=True, check=False,
+        env={**os.environ, "PGPASSWORD": settings["password"], "PGCONNECT_TIMEOUT": "5"},
+    )
+    if completed.returncode:
+        raise ProfileError(f"PostgreSQL {database}: {completed.stderr.strip()}")
+    return completed.stdout.strip()
+
+
+@contextmanager
+def isolated_scenario_databases(profile: dict, expected_major: int | None):
+    if profile["database"] != "postgres-isolated":
+        if expected_major is not None:
+            raise ProfileError("this scenario does not declare an isolated PostgreSQL profile")
+        yield {}
+        return
+    roles = profile["database_roles"]
+    if (not roles or len(set(roles)) != len(roles)
+            or not all(re.fullmatch(r"[a-z][a-z0-9_]{0,19}", role) for role in roles)
+            or profile["default_database"] not in roles):
+        raise ProfileError("invalid scenario database roles")
+    settings = postgres_settings()
+    version = int(psql(settings, "postgres", "SHOW server_version_num"))
+    major = version // 10000
+    if major not in (16, 18) or (expected_major is not None and major != expected_major):
+        raise ProfileError(f"expected PostgreSQL {expected_major or '16 or 18'}, observed {version}")
+    prefix = f"corex_scenario_{secrets.token_hex(8)}"
+    names = {role: f"{prefix}_{role}_test" for role in roles}
+    created = []
+    try:
+        for name in names.values():
+            psql(settings, "postgres", f'CREATE DATABASE "{name}" TEMPLATE template0')
+            created.append(name)
+        yield {
+            "COREX_PG_DATABASES": ",".join(names.values()),
+            "COREX_SCENARIO_DB_DEFAULT": names[profile["default_database"]],
+            "COREX_SCENARIO_PG_VERSION": str(version),
+            **{f"COREX_SCENARIO_DB_{role.upper()}": name for role, name in names.items()},
+            "PGSQL_HOST": settings["host"], "PGSQL_PORT": settings["port"],
+            "PGSQL_USERNAME": settings["user"], "PGSQL_PASSWORD": settings["password"],
+        }
+    finally:
+        failures = []
+        for name in reversed(created):
+            try:
+                psql(settings, "postgres", f'DROP DATABASE IF EXISTS "{name}" WITH (FORCE)')
+            except ProfileError as error:
+                failures.append(str(error))
+        if failures:
+            raise ProfileError("isolated PostgreSQL cleanup failed: " + " | ".join(failures))
+
+
 def ensure_databases(names: tuple[str, ...]) -> None:
     settings = postgres_settings()
     ready = subprocess.run(
@@ -517,30 +574,34 @@ def set_env(text: str, key: str, value: str) -> str:
     return text + f"\n{key}={value}\n"
 
 
-def configure_database(consumer: Path, profile: dict, cell_id: str) -> dict[str, str]:
+def configure_database(consumer: Path, profile: dict, cell_id: str, isolated: dict[str, str]) -> dict[str, str]:
     env_path = consumer / ".env"
     text = env_path.read_text(encoding="utf-8") if env_path.exists() else ""
     extra: dict[str, str] = {}
-    if profile.get("database") == "postgres-two":
-        names = ("corex_p176_tenant_a_test", "corex_p176_tenant_b_test")
-        ensure_databases(names)
-        settings = postgres_settings()
+    if profile.get("database") in {"postgres-two", "postgres-isolated"}:
+        if profile["database"] == "postgres-two":
+            names = ("corex_p176_tenant_a_test", "corex_p176_tenant_b_test")
+            ensure_databases(names)
+            settings = postgres_settings()
+            extra = {
+                "COREX_PG_DATABASES": ",".join(names),
+                "PGSQL_HOST": settings["host"], "PGSQL_PORT": settings["port"],
+                "PGSQL_USERNAME": settings["user"], "PGSQL_PASSWORD": settings["password"],
+                "COREX_SCENARIO_DB_DEFAULT": names[0],
+            }
+        elif not isolated:
+            raise ProfileError(f"{cell_id}: isolated PostgreSQL databases were not provisioned")
+        else:
+            extra = isolated
         for key, value in (
             ("DB_CONNECTION", "pgsql"),
-            ("DB_HOST", settings["host"]),
-            ("DB_PORT", settings["port"]),
-            ("DB_DATABASE", names[0]),
-            ("DB_USERNAME", settings["user"]),
-            ("DB_PASSWORD", settings["password"]),
+            ("DB_HOST", extra["PGSQL_HOST"]),
+            ("DB_PORT", extra["PGSQL_PORT"]),
+            ("DB_DATABASE", extra["COREX_SCENARIO_DB_DEFAULT"]),
+            ("DB_USERNAME", extra["PGSQL_USERNAME"]),
+            ("DB_PASSWORD", extra["PGSQL_PASSWORD"]),
         ):
             text = set_env(text, key, value)
-        extra = {
-            "COREX_PG_DATABASES": ",".join(names),
-            "PGSQL_HOST": settings["host"],
-            "PGSQL_PORT": settings["port"],
-            "PGSQL_USERNAME": settings["user"],
-            "PGSQL_PASSWORD": settings["password"],
-        }
     elif profile.get("database") == "sqlite-single":
         database = consumer / "profile.sqlite"
         database.touch()
@@ -577,6 +638,9 @@ def install_app(
     workspace: Path,
     binary: dict,
     candidate_version: str,
+    *,
+    isolated: dict[str, str] | None = None,
+    host_overlays: tuple[Path, ...] = (),
 ) -> tuple[Path, dict[str, str], list[str]]:
     laravel = cell["laravel"] or 13
     home = root / "home"
@@ -593,6 +657,7 @@ def install_app(
     consumer = root / "consumer"
     packages = list(cell["packages"])
     write_consumer(consumer, packages, laravel, repository, ".".join(map(str, binary["version"])), candidate_version)
+    prerequisites = reviewed_prerequisites(consumer, profile.get("prerequisites", []), workspace)
     if profile.get("product") == "flex/crm":
         shutil.copytree(workspace / "products/flex-crm", consumer / "flex-crm", ignore=shutil.ignore_patterns("vendor", "composer.lock"))
         manifest = load_json(consumer / "composer.json")
@@ -615,6 +680,7 @@ def install_app(
     if validated.returncode:
         fail_command(cell["id"], validated)
     assert_dist_install(consumer, repository, packages, workspace)
+    assert_prerequisites(consumer, prerequisites)
     example = consumer / ".env.example"
     env_file = consumer / ".env"
     if not env_file.exists() and example.exists():
@@ -624,11 +690,39 @@ def install_app(
         providers = consumer / "bootstrap/providers.php"
         contents = providers.read_text(encoding="utf-8")
         providers.write_text(contents.replace("return [", "return [\n    \\CoreX\\Operations\\OperationsServiceProvider::class,", 1), encoding="utf-8")
-    runtime = {**env, **configure_database(consumer, profile, cell["id"])}
+    runtime = {**env, **configure_database(consumer, profile, cell["id"], isolated or {})}
+    for overlay in host_overlays:
+        shutil.copytree(overlay, consumer, dirs_exist_ok=True)
     generated = run(["php", "artisan", "key:generate", "--ansi", "--force"], consumer, runtime)
     if generated.returncode != 0:
         fail_command(cell["id"], generated)
     return consumer, runtime, packages
+
+
+def reviewed_prerequisites(consumer: Path, names: list[str], workspace: Path) -> dict:
+    if not names:
+        return {}
+    snapshots = {item["package"]["name"]: item["package"] for item in snapshot_repositories(workspace)}
+    unknown = set(names) - set(snapshots)
+    if unknown:
+        raise ProfileError(f"unreviewed prerequisites: {sorted(unknown)}")
+    manifest_path = consumer / "composer.json"
+    manifest = load_json(manifest_path)
+    requirements = {name: snapshots[name] for name in names}
+    manifest["require"].update({name: row["version"] for name, row in requirements.items()})
+    manifest_path.write_text(json.dumps(manifest, indent=4) + "\n", encoding="utf-8")
+    return requirements
+
+
+def assert_prerequisites(consumer: Path, prerequisites: dict) -> None:
+    if not prerequisites:
+        return
+    locked = {row["name"]: row for row in load_json(consumer / "composer.lock")["packages"]}
+    installed = {row["name"]: row for row in load_json(consumer / "vendor/composer/installed.json")["packages"]}
+    for name, expected in prerequisites.items():
+        for actual in (locked.get(name, {}), installed.get(name, {})):
+            if any(actual.get(key) != expected[key] for key in ("version", "source")):
+                raise ProfileError(f"{name}: installed prerequisite differs from reviewed Composer source")
 
 
 def boot_app(consumer: Path, runtime: dict, cell_id: str) -> dict:

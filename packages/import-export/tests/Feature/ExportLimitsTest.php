@@ -17,12 +17,14 @@ use CoreX\ImportExport\Data\TransferLimits;
 use CoreX\ImportExport\Exceptions\ExportUnavailable;
 use CoreX\ImportExport\Internal\Export\CanonicalExportCodec;
 use CoreX\ImportExport\Internal\Export\DatabaseExportRunner;
+use CoreX\ImportExport\Internal\SessionIdentity;
 use CoreX\ImportExport\Internal\Transfer\ExecutionGuard;
 use CoreX\ImportExport\Internal\Transfer\TransferLimitReached;
 use CoreX\ImportExport\Tests\PgTestCase;
 use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Storage\Data\ExportArchiveRef;
 use CoreX\Storage\Data\StorageCapabilities;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -132,7 +134,7 @@ it('checks runtime and memory before each page and rolls the capture back', func
 function exportLimitJob(string $id, string $hash): void
 {
     DB::table('corex_transfer_jobs')->insert([
-        'id' => $id, 'source_manifest' => '{}', 'source_hash' => $hash, 'mapping_snapshot' => '{}', 'mapping_hash' => $hash,
+        'id' => $id, 'source_manifest' => json_encode(['_scope_hash' => SessionIdentity::scopeHash(exportLimitScope($hash))], JSON_THROW_ON_ERROR), 'source_hash' => $hash, 'mapping_snapshot' => '{}', 'mapping_hash' => $hash,
         'schema_hash' => $hash, 'restore_epoch' => $hash, 'mode' => 'export', 'state' => 'running', 'checkpoint_seq' => '0',
         'cursor' => '{"ordinal":"0","boundaryByteOffset":"0"}', 'stats' => '{}', 'claim_epoch' => '1', 'created_at' => now(), 'updated_at' => now(),
     ]);
@@ -140,12 +142,7 @@ function exportLimitJob(string $id, string $hash): void
 
 function exportLimitScope(string $hash): DataScope
 {
-    return DataScope::fromTenantContext(
-        context: new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true),
-        connectionIdentity: 'pgsql:corex_test',
-        actorId: 'user-1',
-        restoreEpoch: $hash,
-    );
+    return CallerWorkScopeFixture::forContext(new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true), 'user-1', $hash);
 }
 
 function exportLimitRunner(int $records, int $pages = 1, ?TransferLimits $limits = null, ?CancellationSignal $cancellation = null, ?ExecutionGuard $guard = null): DatabaseExportRunner

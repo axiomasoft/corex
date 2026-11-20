@@ -6,7 +6,7 @@ namespace CoreX\Webhooks\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\Context\Internal\GuardedTenantContextRestorer;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
@@ -18,6 +18,7 @@ use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Data\WebhookSubscription;
@@ -56,8 +57,8 @@ final class WebhookSubscriptionTest extends TestCase
         $connection = DB::connection('api_tenant');
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-25T12:00:00.000000+00:00'));
         $this->catalogue = $this->catalogue();
-        $this->store = new SqlWebhookSubscriptionStore($connection, new GuardedTenantContextRestorer($contexts), $this->catalogue, $this->clock, new PermitPublicEgressPolicy);
-        $this->scope = new DataScope('account-1', null, $connection->getDriverName().':'.$connection->getDatabaseName(), 'actor-1', hash('sha256', 'epoch'));
+        $this->store = new SqlWebhookSubscriptionStore($connection, new CallerWorkScopeFixture($contexts), $this->catalogue, $this->clock, new PermitPublicEgressPolicy);
+        $this->scope = CallerWorkScopeFixture::scope('account-1', null, 'actor-1', hash('sha256', 'epoch'));
     }
 
     public function test_unknown_contract_version_schema_and_class_names_are_rejected(): void
@@ -127,7 +128,7 @@ final class WebhookSubscriptionTest extends TestCase
 
         self::assertSame('https://hooks.example/next', $this->store->find($this->scope, 'sub-1')?->endpointUrl);
 
-        $foreign = new DataScope('account-2', null, 'sqlite:foreign', 'actor-2', hash('sha256', 'epoch'));
+        $foreign = CallerWorkScopeFixture::scope('account-2', null, 'actor-2', hash('sha256', 'epoch'));
 
         try {
             $this->store->find($foreign, 'sub-1');
@@ -191,8 +192,8 @@ final class WebhookSubscriptionTest extends TestCase
             $connection = DB::connection('api_pg_tenant');
             $contexts = new ContextFixture;
             $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
-            $store = new SqlWebhookSubscriptionStore($connection, new GuardedTenantContextRestorer($contexts), $this->catalogue, $this->clock, new PermitPublicEgressPolicy);
-            $scope = new DataScope('account-1', null, 'pgsql:'.$database, 'actor-1', hash('sha256', 'epoch'));
+            $store = new SqlWebhookSubscriptionStore($connection, new CallerWorkScopeFixture($contexts), $this->catalogue, $this->clock, new PermitPublicEgressPolicy);
+            $scope = CallerWorkScopeFixture::scope('account-1', null, 'actor-1', hash('sha256', 'epoch'));
             $created = $store->create($scope, $this->subscription('sub-pg'), true, true);
 
             self::assertSame(0, $created->revision);
@@ -211,7 +212,7 @@ final class WebhookSubscriptionTest extends TestCase
             name: 'orders.placed',
             contractVersion: 1,
             occurredAt: new DateTimeImmutable('2026-09-25T12:00:00+00:00'),
-            scope: ['account' => 'account-1'],
+            scope: resolve(DataScopeCodec::class)->encode($this->scope),
             payload: new MessagePayload(['id' => 'order-1', 'secret' => 'hidden']),
             piiClass: PiiClass::Personal,
             correlationId: 'correlation-1',

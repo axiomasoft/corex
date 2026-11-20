@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Internal;
 
-use CoreX\Context\Contracts\TenantContextRestorer;
-use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Data\DataScope;
 use CoreX\Messaging\Laravel\InboxRetention;
 use DateInterval;
@@ -45,7 +44,7 @@ final readonly class WebhookRetention
 
     public function __construct(
         private Connection $connection,
-        private TenantContextRestorer $contexts,
+        private CurrentWorkScope $contexts,
         private ClockInterface $clock,
         private int $bodyRetentionSeconds = self::DefaultBodySeconds,
         private int $historyRetentionSeconds = self::DefaultHistorySeconds,
@@ -73,6 +72,13 @@ final readonly class WebhookRetention
     public function prune(DataScope $scope, int $limit = self::BatchLimit): array
     {
         $this->assertLimit($limit);
+
+        return $this->connection->transaction(fn (): array => $this->pruneAdmitted($scope, $limit));
+    }
+
+    /** @return array{bodies: int, attempts: int, inbox: int} */
+    private function pruneAdmitted(DataScope $scope, int $limit): array
+    {
         $this->assertScope($scope);
         $now = $this->clock->now();
         $bodyCutoff = $now->sub(new DateInterval('PT'.$this->bodyRetentionSeconds.'S'));
@@ -166,14 +172,7 @@ final readonly class WebhookRetention
 
     private function assertScope(DataScope $scope): void
     {
-        $context = $this->contexts->restore($scope);
-        $actual = $context->isBoxed()
-            ? 'boxed:'.$context->account->id
-            : $this->connection->getDriverName().':'.$this->connection->getDatabaseName();
-
-        if (! hash_equals($scope->connectionIdentity, $actual) || ! hash_equals($scope->accountId, $context->account->id)) {
-            throw ScopeContextMismatch::connection(expected: $scope->connectionIdentity, actual: $actual);
-        }
+        $this->contexts->assert($scope, $this->connection);
     }
 
     private function terminal(DataScope $scope, DateTimeImmutable $now): Builder
@@ -187,21 +186,6 @@ final readonly class WebhookRetention
 
     private function scoped(DataScope $scope): Builder
     {
-        $query = $this->connection->table(self::Deliveries);
-        $accountPath = $this->connection->getDriverName() === 'pgsql'
-            ? "scope->>'account'"
-            : "json_extract(scope, '$.account')";
-        $workspacePath = $this->connection->getDriverName() === 'pgsql'
-            ? "scope->>'workspace'"
-            : "json_extract(scope, '$.workspace')";
-        $query->whereRaw($accountPath.' = ?', [$scope->accountId]);
-
-        if ($scope->workspaceId === null) {
-            $query->whereRaw($workspacePath.' IS NULL');
-        } else {
-            $query->whereRaw($workspacePath.' = ?', [$scope->workspaceId]);
-        }
-
-        return $query;
+        return WebhookDeliveryScope::constrain($this->connection->table(self::Deliveries), $scope);
     }
 }

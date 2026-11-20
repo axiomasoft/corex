@@ -14,7 +14,7 @@ final class SessionIdentity
 {
     public static function scopeHash(DataScope $scope): string
     {
-        return hash('sha256', json_encode($scope, JSON_THROW_ON_ERROR));
+        return hash('sha256', json_encode([DataScope::VERSION, $scope], JSON_THROW_ON_ERROR));
     }
 
     public static function assertScope(object $job, DataScope $scope): void
@@ -25,8 +25,7 @@ final class SessionIdentity
 
         $manifest = json_decode(Value::text(Value::field($job, 'source_manifest')), true, 32, JSON_THROW_ON_ERROR);
 
-        if (is_array($manifest) && isset($manifest['_scope_hash'])
-            && (! is_string($manifest['_scope_hash']) || ! hash_equals($manifest['_scope_hash'], self::scopeHash($scope)))) {
+        if (! is_array($manifest) || ! is_string($manifest['_scope_hash'] ?? null) || ! hash_equals($manifest['_scope_hash'], self::scopeHash($scope))) {
             throw new SessionUnavailable('The transfer belongs to another data scope.');
         }
     }

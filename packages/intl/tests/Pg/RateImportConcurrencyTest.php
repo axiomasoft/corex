@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\WriteToken;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Intl\Currency\Contracts\RateImporter;
 use CoreX\Intl\Currency\Data\RateBatch;
 use CoreX\Intl\Currency\Data\RateSnapshot;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -19,12 +19,7 @@ beforeEach(function (): void {
 });
 
 it('FX-04 imports concurrent rate batches into one immutable row set', function (): void {
-    $scope = DataScope::fromTenantContext(
-        context: new TenantContext(account: new AccountRef(id: 'acct', slug: 'acct', status: 'active', features: [], limits: [])),
-        connectionIdentity: 'pgsql:'.(getenv('PGSQL_DATABASE') ?: 'corex_test'),
-        actorId: 'fx-pg',
-        restoreEpoch: str_repeat('d', 64),
-    );
+    $scope = CallerWorkScopeFixture::forContext(new TenantContext(account: new AccountRef(id: 'acct', slug: 'acct', status: 'active', features: [], limits: [])), 'fx-pg', str_repeat('d', 64));
 
     $snapshot = new RateSnapshot(
         schema: 'rate-snapshot/1',

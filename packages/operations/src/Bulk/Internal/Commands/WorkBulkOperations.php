@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Internal\Commands;
 
-use CoreX\Data\Data\DataScope;
+use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Contracts\WorkScopeRunner;
+use CoreX\Context\Exceptions\CentralContextException;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Operations\Bulk\Internal\BulkWorker;
 use Illuminate\Console\Command;
 use Packman\Attributes\Internal;
@@ -17,15 +21,17 @@ final class WorkBulkOperations extends Command
 
     protected $description = 'Claim and advance one durable bulk operation';
 
-    public function handle(BulkWorker $worker): int
+    public function handle(): int
     {
-        if (! $this->laravel->bound(DataScope::class)) {
+        try {
+            $scope = $this->laravel->make(DataScopeFactory::class)->forCurrentPrincipal($this->laravel->make(TenantContextResolver::class)->current());
+        } catch (CentralContextException|ScopeContextMismatch) {
             $this->components->warn('No trusted tenant scope is active.');
 
             return self::SUCCESS;
         }
 
-        $worker->workOnce($this->laravel->make(DataScope::class));
+        $this->laravel->make(WorkScopeRunner::class)->run($scope, fn () => $this->laravel->make(BulkWorker::class)->workOnce($scope));
 
         return self::SUCCESS;
     }

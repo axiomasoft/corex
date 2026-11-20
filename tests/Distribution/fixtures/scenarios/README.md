@@ -17,3 +17,25 @@ completed process witness. Processes write `<name>.reached` and wait for `<name>
 backend version, connection identity, artifact references and observed states. Set
 `distinct_connections` when the case requires independent database sessions. The runner records
 worker stderr and the result receipt separately.
+
+The stage 1 cases use disposable PostgreSQL 16 and 18. Set `PGSQL_HOST`,
+`PGSQL_PORT`, `PGSQL_USERNAME`, and `PGSQL_PASSWORD` for a test server where the
+runner can create isolated databases and enable the `ltree` extension. Use
+`--postgres 16` or `--postgres 18` to require that backend version. The runner
+records the server version and provisions separate control, tenant, and backup
+databases according to the case.
+
+```sh
+scripts/php84 python3 scripts/distribution/prove_scenario.py \
+  --candidate "$COREX_CANDIDATE_DIR" --case worker-scope --postgres 16
+```
+
+`worker-scope` executes its cloud and boxed variants. The cloud host also
+reconciles and runs a tenant-local wakeup through the installed root Artisan
+command under its named service grant. Select one with `--variant cloud` or
+`--variant boxed` for diagnosis. The Octane counterpart
+runs through `verify_installed_consumers.py --consumer octane`. The
+`binding-restore` case creates and restores a native PostgreSQL template backup
+while the external control store remains live. The `workspace-sweep` runner
+terminates the first worker only after that worker's durable claim marker, then
+starts a separate process for recovery.

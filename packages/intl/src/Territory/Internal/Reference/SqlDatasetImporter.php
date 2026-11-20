@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Territory\Internal\Reference;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\FieldSelection;
+use CoreX\Data\Data\RecordRef;
+use CoreX\Data\Enums\FieldUse;
 use CoreX\Intl\Territory\Contracts\DatasetImporter;
 use CoreX\Intl\Territory\Data\DatasetCandidate;
 use CoreX\Intl\Territory\Data\DatasetGeneration;
@@ -28,13 +32,16 @@ final readonly class SqlDatasetImporter implements DatasetImporter
         private string $datasetKey,
         private FixtureReferenceNormalizer $normalizer,
         private DataScopeAuthorizer $authorizer,
+        private CurrentWorkScope $current,
         private ClockInterface $clock,
     ) {}
 
     #[Override]
     public function publish(DataScope $scope, DatasetCandidate $candidate, DatasetGeneration $expected): DatasetReceipt
     {
-        if (! $this->authorizer->authorize(scope: $scope, entity: 'reference-publish', subjectId: $candidate->manifest->snapshotId, fields: [], action: 'publish')->allowed) {
+        $this->current->assert($scope, $this->connection);
+
+        if (! $this->authorizer->authorize($scope, new RecordRef('reference-publish', $candidate->manifest->snapshotId), new FieldSelection([]), FieldUse::Write)->allowed) {
             throw new AccessDeniedException('Reference dataset publication is not authorized.');
         }
 
@@ -54,7 +61,8 @@ final readonly class SqlDatasetImporter implements DatasetImporter
         $datasetKey = $this->datasetKey;
         $snapshotId = $candidate->manifest->snapshotId;
 
-        return $this->connection->transaction(function () use ($datasetKey, $snapshotId, $candidate, $expected, $parsed): DatasetReceipt {
+        return $this->connection->transaction(function () use ($scope, $datasetKey, $snapshotId, $candidate, $expected, $parsed): DatasetReceipt {
+            $this->current->assert($scope, $this->connection);
             $current = $this->connection->table('corex_reference_current')
                 ->where('dataset_key', $datasetKey)
                 ->lockForUpdate()

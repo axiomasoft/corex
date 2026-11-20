@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\CustomFields\Data\FieldSelection;
 use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Data\FilterNode;
 use CoreX\CustomFields\Data\OperationRef;
@@ -14,18 +13,16 @@ use CoreX\CustomFields\Data\SchemaOperationId;
 use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\UnavailableAttributes;
 use CoreX\CustomFields\Internal\UnsupportedAttributeCapability;
-use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Packman\Errors\Enums\ErrorCategory;
 use Packman\Errors\Enums\UnavailabilityReason;
 
 it('fails closed consistently when an application has not enabled attributes', function (): void {
     $hash = str_repeat('a', 64);
-    $scope = DataScope::fromTenantContext(
-        context: new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true),
-        connectionIdentity: 'pgsql:corex_test', actorId: 'user-1', restoreEpoch: $hash,
-    );
+    $scope = CallerWorkScopeFixture::forContext(new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true), 'user-1', $hash);
     $record = new RecordRef(entity: 'contact', id: 'record-1');
     $schema = new FieldSnapshot(entity: 'contact', schemaVersion: $hash, schemaHash: $hash, activeFields: [['code' => 'name', 'type' => 'text']], driverCapabilities: []);
     $unavailable = new UnavailableAttributes;

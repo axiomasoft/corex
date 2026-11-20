@@ -99,7 +99,7 @@ final class Smoke
 
         $definitions = self::attributes();
         $provider = $provider instanceof IndexDriver ? $provider : new MemoryDriver;
-        $scope = new DataScope('account-1', null, 'sqlite', 'actor-1', hash('sha256', 'equipment-epoch'));
+        $scope = new DataScope(deploymentId: 'fixture-deployment', accountId: 'account-1', workspaceId: null, bindingId: 'fixture-binding', bindingGeneration: 1, accountIncarnation: 'fixture-incarnation', restoreEpoch: hash('sha256', 'equipment-epoch'), principalKind: 'user', principalId: 'actor-1');
         $submission = $provider->submit(new IndexBatch('generation-1', [
             ['id' => 'eq-1', 'entity' => 'equipment', 'text' => 'pump alpha'],
         ]));

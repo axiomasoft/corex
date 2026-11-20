@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Laravel;
 
-use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Operations\Bulk\Contracts\BulkOperationStore;
@@ -45,7 +45,7 @@ final class BulkBindingsRegistrar implements PackageRegistrar
         $app->scoped(BulkRetention::class, static fn (Application $app): BulkRetention => new BulkRetention(
             connection: $app->make(ApiSchemaConnections::class)->tenant(),
             scopeCodec: $app->make(DataScopeCodec::class),
-            contexts: $app->make(TenantContextRestorer::class),
+            contexts: $app->make(CurrentWorkScope::class),
             clock: $app->make(ClockInterface::class),
             resultRetentionSeconds: $app->make(BulkOptions::class)->resultRetentionSeconds,
             metadataRetentionSeconds: $app->make(BulkOptions::class)->metadataRetentionSeconds,
@@ -59,7 +59,7 @@ final class BulkBindingsRegistrar implements PackageRegistrar
         $app->scoped(BulkOperationStore::class, static fn (Application $app): SqlBulkOperationStore => new SqlBulkOperationStore(
             connection: $app->make(ApiSchemaConnections::class)->tenant(),
             scopeCodec: $app->make(DataScopeCodec::class),
-            contexts: $app->make(TenantContextRestorer::class),
+            contexts: $app->make(CurrentWorkScope::class),
             clock: $app->make(ClockInterface::class),
             leaseSeconds: $app->make(BulkOptions::class)->leaseSeconds,
             resultRetentionSeconds: $app->make(BulkOptions::class)->resultRetentionSeconds,

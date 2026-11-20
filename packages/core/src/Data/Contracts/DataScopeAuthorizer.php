@@ -6,20 +6,14 @@ namespace CoreX\Data\Contracts;
 
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\DataScopeAccessDecision;
+use CoreX\Data\Data\FieldSelection;
+use CoreX\Data\Data\RecordRef;
+use CoreX\Data\Enums\FieldUse;
 use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
-#[Spi(kind: SpiKind::Implement, since: '1.0')]
+#[Spi(kind: SpiKind::Implement, since: '2.0.0')]
 interface DataScopeAuthorizer
 {
-    /**
-     * @param  list<string>  $fields
-     */
-    public function authorize(
-        DataScope $scope,
-        string $entity,
-        string $subjectId,
-        array $fields,
-        string $action,
-    ): DataScopeAccessDecision;
+    public function authorize(DataScope $scope, RecordRef $record, FieldSelection $fields, FieldUse $use): DataScopeAccessDecision;
 }

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal\Values;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\CustomFields\Data\AttributeDefinition;
 use CoreX\CustomFields\Data\AttributeLifecycle;
 use CoreX\CustomFields\Data\AttributeTables;
 use CoreX\CustomFields\Internal\KeyConflict;
-use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
 use CoreX\CustomFields\Internal\Value;
 use CoreX\CustomFields\Internal\VersionConflict;
 use CoreX\Data\Data\DataScope;
@@ -25,6 +25,7 @@ final readonly class AttributeBackfill
 {
     public function __construct(
         private ConnectionInterface $connection,
+        private CurrentWorkScope $current,
         private AttributeTables $tables,
         private AttributeValueTransformerRegistry $transformers,
         private string $engine,
@@ -36,7 +37,7 @@ final readonly class AttributeBackfill
 
     public function start(DataScope $scope, string $operationId, AttributeDefinition $from, AttributeDefinition $to): void
     {
-        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
+        $this->current->assert($scope, $this->connection);
 
         if (preg_match('/\A[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\z/iD', $operationId) !== 1) {
             throw new InvalidArgumentException('Attribute backfill operation id must be a UUID.');
@@ -66,7 +67,8 @@ final readonly class AttributeBackfill
             'target_key' => $to->key,
         ];
 
-        $this->connection->transaction(function () use ($operationId, $payload): void {
+        $this->connection->transaction(function () use ($scope, $operationId, $payload): void {
+            $this->current->assert($scope, $this->connection);
             $existing = $this->backfills()->where('id', $operationId)->lockForUpdate()->first();
 
             if ($existing !== null) {
@@ -94,13 +96,14 @@ final readonly class AttributeBackfill
     /** @return array{status: string, attempted: int, changed: int, cursor: ?string} */
     public function runBatch(DataScope $scope, string $operationId, int $batchSize = 100): array
     {
-        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
+        $this->current->assert($scope, $this->connection);
 
         if ($batchSize < 1 || $batchSize > 1000) {
             throw new InvalidArgumentException('Attribute backfill batch size must be between 1 and 1000.');
         }
 
-        return $this->connection->transaction(function () use ($operationId, $batchSize): array {
+        return $this->connection->transaction(function () use ($scope, $operationId, $batchSize): array {
+            $this->current->assert($scope, $this->connection);
             $operation = $this->operationForUpdate($operationId);
 
             if ($operation->status === 'aborted') {
@@ -154,9 +157,10 @@ final readonly class AttributeBackfill
     /** @return array{status: string, source_digest: string, target_digest: string} */
     public function verify(DataScope $scope, string $operationId): array
     {
-        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
+        $this->current->assert($scope, $this->connection);
 
-        $result = $this->connection->transaction(function () use ($operationId): array {
+        $result = $this->connection->transaction(function () use ($scope, $operationId): array {
+            $this->current->assert($scope, $this->connection);
             $operation = $this->operationForUpdate($operationId);
 
             if ($operation->status !== 'backfilled' && $operation->status !== 'verified') {
@@ -196,8 +200,9 @@ final readonly class AttributeBackfill
 
     public function abort(DataScope $scope, string $operationId): void
     {
-        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
-        $this->connection->transaction(function () use ($operationId): void {
+        $this->current->assert($scope, $this->connection);
+        $this->connection->transaction(function () use ($scope, $operationId): void {
+            $this->current->assert($scope, $this->connection);
             $operation = $this->operationForUpdate($operationId);
 
             if ($operation->status === 'verified') {

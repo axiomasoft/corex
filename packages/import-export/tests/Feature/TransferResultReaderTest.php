@@ -8,8 +8,10 @@ use CoreX\Data\Data\DataScope;
 use CoreX\Data\Internal\CallableDataScopeAuthorizer;
 use CoreX\ImportExport\Data\TransferRef;
 use CoreX\ImportExport\Exceptions\ImportUnavailable;
+use CoreX\ImportExport\Internal\SessionIdentity;
 use CoreX\ImportExport\Internal\Transfer\SqlTransferResultReader;
 use CoreX\ImportExport\Tests\PgTestCase;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Illuminate\Support\Facades\DB;
 
 uses(PgTestCase::class)->group('pg');
@@ -18,7 +20,7 @@ it('returns a bounded failure page and a typed manifest from transfer tables onl
     $hash = str_repeat('a', 64);
     $jobId = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa01';
     DB::table('corex_transfer_jobs')->insert([
-        'id' => $jobId, 'source_manifest' => '{}', 'source_hash' => $hash, 'mapping_snapshot' => '{}', 'mapping_hash' => $hash,
+        'id' => $jobId, 'source_manifest' => json_encode(['_scope_hash' => SessionIdentity::scopeHash(readerScope($hash))], JSON_THROW_ON_ERROR), 'source_hash' => $hash, 'mapping_snapshot' => '{}', 'mapping_hash' => $hash,
         'schema_hash' => $hash, 'restore_epoch' => $hash, 'mode' => 'import', 'state' => 'completed', 'checkpoint_seq' => '2',
         'cursor' => '{"ordinal":"2","boundaryByteOffset":"40"}', 'stats' => '{"invalid":1}', 'claim_epoch' => '1',
         'created_at' => now(), 'updated_at' => now(),
@@ -56,7 +58,7 @@ it('refuses a result when the scope or policy does not match', function (): void
     $hash = str_repeat('c', 64);
     $jobId = 'cccccccc-cccc-4ccc-8ccc-cccccccccc01';
     DB::table('corex_transfer_jobs')->insert([
-        'id' => $jobId, 'source_manifest' => '{}', 'source_hash' => $hash, 'mapping_snapshot' => '{}', 'mapping_hash' => $hash,
+        'id' => $jobId, 'source_manifest' => json_encode(['_scope_hash' => SessionIdentity::scopeHash(readerScope($hash))], JSON_THROW_ON_ERROR), 'source_hash' => $hash, 'mapping_snapshot' => '{}', 'mapping_hash' => $hash,
         'schema_hash' => $hash, 'restore_epoch' => $hash, 'mode' => 'import', 'state' => 'completed', 'checkpoint_seq' => '1',
         'cursor' => '{"ordinal":"1","boundaryByteOffset":"1"}', 'stats' => '{}', 'claim_epoch' => '1',
         'created_at' => now(), 'updated_at' => now(),
@@ -72,10 +74,5 @@ it('refuses a result when the scope or policy does not match', function (): void
 
 function readerScope(string $hash): DataScope
 {
-    return DataScope::fromTenantContext(
-        context: new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true),
-        connectionIdentity: 'pgsql:corex_test',
-        actorId: 'user-1',
-        restoreEpoch: $hash,
-    );
+    return CallerWorkScopeFixture::forContext(new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true), 'user-1', $hash);
 }

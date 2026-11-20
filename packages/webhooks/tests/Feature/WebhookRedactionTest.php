@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace CoreX\Webhooks\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\Internal\GuardedTenantContextRestorer;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Pagination\Contracts\CursorKeyring;
 use CoreX\Operations\Pagination\Internal\SignedCursorCodec;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Internal\WebhookManagement;
 use CoreX\Webhooks\Tests\TestCase;
@@ -35,11 +36,11 @@ final class WebhookRedactionTest extends TestCase
         $clock = new FrozenClock(new DateTimeImmutable('2026-09-26T17:00:00.000000+00:00'));
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
-        $scope = new DataScope('account-a', null, 'sqlite::memory:', 'actor-a', hash('sha256', 'webhook-redaction'));
+        $scope = CallerWorkScopeFixture::scope('account-a', null, 'actor-a', hash('sha256', 'webhook-redaction'));
         $this->seedFixture($connection, $scope, $clock->now());
         $management = new WebhookManagement(
             $connection,
-            new GuardedTenantContextRestorer($contexts),
+            new CallerWorkScopeFixture($contexts),
             new SignedCursorCodec($clock, $this->keyring()),
         );
 
@@ -67,7 +68,7 @@ final class WebhookRedactionTest extends TestCase
             'id' => 'delivery-redacted', 'subscription_id' => 'subscription-redacted', 'subscription_revision' => 0,
             'event_id' => 'event-redacted', 'topic' => 'orders.placed', 'topic_version' => 1, 'major' => 'v1',
             'endpoint_snapshot' => 'https://hooks.example/receiver?token=private',
-            'scope' => JsonCanonical::encode(['account' => $scope->accountId, 'workspace' => null]),
+            'scope' => JsonCanonical::encode(resolve(DataScopeCodec::class)->encode($scope)),
             'body' => $body, 'body_hash' => hash('sha256', $body), 'status' => 'dead', 'attempt' => 1,
             'replay_count' => 0, 'lease_owner' => null, 'lease_until' => null, 'next_attempt_at' => $now,
             'created_at' => $now, 'finished_at' => $now, 'expires_at' => $now->add(new DateInterval('P7D')),

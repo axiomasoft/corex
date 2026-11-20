@@ -23,6 +23,16 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Context\Enums\PrincipalType;
+use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\Contracts\FieldUsePolicy;
+use CoreX\Data\Data\EntityHandle;
+use CoreX\Data\Data\FieldSelection;
+use CoreX\Data\Data\FieldUseRequest;
+use CoreX\Data\Data\RecordRef;
+use CoreX\Data\Enums\FieldUse;
+use CoreX\Data\Enums\FieldUsePlanKind;
+use CoreX\Tests\Support\LocalWorkContexts;
+use CoreX\Tests\Support\WorkScopeFixture;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -469,4 +479,34 @@ it('rechecks native workspace assignments after a workspace switch', function ()
     expect($checker->allowed($identity, 'crm.deal', 'read'))->toBeTrue();
     $fakeTenancy->setWorkspace($workspaceB);
     expect($checker->allowed($identity, 'crm.deal', 'read'))->toBeFalse();
+});
+
+it('intersects record and stable field permissions for each independent use', function (): void {
+    $actor = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
+    $owner = LocalWorkContexts::install(app());
+    $owner->initialize(new AccountRef('field-account', 'fields', 'active', [], []));
+    $scope = WorkScopeFixture::install(app(), $actor->principalId())->scope();
+    $this->actingAs($actor);
+    $role = ($this->newRole)();
+    foreach (['read' => 'account', 'field.title.read' => 'own', 'export' => 'account'] as $action => $visibility) {
+        RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => $action, 'scope' => $visibility]);
+    }
+    RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $actor->principalId()]);
+    ($this->compileRole)($role->id);
+    $mine = (string) Str::uuid7();
+    $other = (string) Str::uuid7();
+    DB::table('deals')->insert([['id' => $mine, 'owner_id' => $actor->principalId()], ['id' => $other, 'owner_id' => (string) Str::uuid7()]]);
+    $fields = new FieldSelection(['title']);
+    $auth = app(DataScopeAuthorizer::class);
+    $read = FieldUse::Read;
+    $export = FieldUse::Export;
+    foreach ([[$mine, $read, true], [$other, $read, false], [$mine, $export, false]] as [$id, $use, $allowed]) {
+        expect($auth->authorize($scope, new RecordRef('crm.deal', $id), $fields, $use)->allowed)->toBe($allowed);
+    }
+    $policy = app(FieldUsePolicy::class);
+    $entity = new EntityHandle('crm.deal');
+    $visible = $policy->plan($scope, $entity, new FieldUseRequest($fields, $read));
+    expect($visible->kind)->toBe(FieldUsePlanKind::ScopedPredicate)
+        ->and($visible->recordIds)->toBe([$mine])
+        ->and($policy->plan($scope, $entity, new FieldUseRequest($fields, $export))->kind)->toBe(FieldUsePlanKind::Denied);
 });

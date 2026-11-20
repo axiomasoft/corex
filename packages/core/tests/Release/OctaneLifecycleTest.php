@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Config\Data\CoreOptions;
-use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\Outbox;
 use CoreX\Storage\Contracts\TenantStorage;
@@ -112,10 +112,12 @@ final class OctaneLifecycleTest extends TestCase
         $this->worker->handle(Request::create('/lifecycle', 'GET', server: ['HTTP_X_TENANT' => $tenant, 'HTTP_X_FAIL' => $fails ? 'yes' : 'no']), new RequestContext);
         self::assertSame($this->worker->application(), Container::getInstance());
         self::assertNull($this->worker->application()['config']->get('lifecycle.leak'));
+        self::assertSame('sqlite', $this->worker->application()['config']->get('database.default'));
     }
 
     private function assertTenantSeparation(): void
     {
+        self::assertSame([], $this->trace->scopeFailures);
         self::assertCount(2, $this->trace->requests);
         [$a, $b] = $this->trace->requests;
         self::assertSame(self::A, $a['tenant']);
@@ -157,18 +159,27 @@ final class OctaneLifecycleTest extends TestCase
     public function test_failed_request_cleanup(): void
     {
         $warmed = $this->warmServices();
-        $this->handle(self::A, true);
+        $this->handle(self::A);
         self::assertSame($warmed, $this->trace->requests[0]['services']);
-        $this->handle(self::B);
-        $this->assertTenantSeparation();
-        $this->assertEvents(2);
-        self::assertSame([500, 200], $this->client->statuses);
+        $this->handle(self::B, true);
+        $this->handle(self::A);
+        self::assertSame([], $this->trace->scopeFailures);
+        self::assertSame([200, 500, 200], $this->client->statuses);
+        self::assertSame([self::A, self::B, self::A], array_column($this->trace->requests, 'marker'));
+        self::assertSame(['lifecycle-tenant-a', 'lifecycle-tenant-b', 'lifecycle-tenant-a'], array_column($this->trace->requests, 'connection'));
+        [$a, $b, $again] = $this->trace->requests;
+        foreach ($again['services'] as $key => $service) {
+            self::assertNotSame($b['services'][$key], $service);
+        }
+        self::assertSame($a['root'], $again['root']);
+        self::assertSame(self::A, $again['before']);
+        self::assertSame(3, array_count_values($this->trace->events)[RequestTerminated::class]);
     }
 
     /** Pre-warming makes a missing Octane scoped-reset listener observable. */
     private function warmServices(): array
     {
-        return array_map(fn (string $key): object => $this->worker->application()->make($key), [TenantContextRestorer::class, TenantStorage::class, Inbox::class, Outbox::class]);
+        return array_map(fn (string $key): object => $this->worker->application()->make($key), [CurrentWorkScope::class, TenantStorage::class, Inbox::class, Outbox::class]);
     }
 
     public function test_worker_error_cleanup(): void
@@ -213,6 +224,10 @@ final class OctaneLifecycleTest extends TestCase
                     'pid' => getmypid(), 'handles' => $this->handles,
                     'events' => array_count_values($this->trace->events),
                     'tenants' => array_column($this->trace->requests, 'tenant'),
+                    'markers' => array_column($this->trace->requests, 'marker'),
+                    'connections' => array_column($this->trace->requests, 'connection'),
+                    'bindings' => array_column($this->trace->requests, 'binding'),
+                    'principals' => array_column($this->trace->requests, 'principal'),
                     'statuses' => $this->client->statuses, 'errors' => $this->client->errors,
                 ], JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT));
             }

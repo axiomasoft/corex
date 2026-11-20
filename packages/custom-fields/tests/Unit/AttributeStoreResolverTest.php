@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use CoreX\CustomFields\Data\AttributeStoragePolicy;
-use CoreX\CustomFields\Data\FieldSelection;
 use CoreX\CustomFields\Data\RecordSelection;
 use CoreX\CustomFields\Data\ValueBag;
 use CoreX\CustomFields\Internal\Laravel\AttributeComposition;
@@ -11,6 +10,7 @@ use CoreX\CustomFields\Internal\Storage\ConfiguredAttributeStoreResolver;
 use CoreX\CustomFields\Internal\Storage\ResolvingAttributeStore;
 use CoreX\CustomFields\Tests\Support\AttributeCompositionProbe;
 use CoreX\CustomFields\Tests\Support\RecordingAttributeStore;
+use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Data\RecordRef;
 use Packman\Config\Exceptions\InvalidConfiguration;
 

@@ -6,7 +6,6 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\DataScopeAccessDecision;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\ImportExport\Contracts\ExportSource;
@@ -21,8 +20,8 @@ use CoreX\ImportExport\Exceptions\SessionUnavailable;
 use CoreX\ImportExport\Tests\PgTestCase;
 use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Storage\Data\StorageCapabilities;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Illuminate\Support\Facades\DB;
 
 uses(PgTestCase::class)->group('pg');
 
@@ -31,7 +30,8 @@ it('seals, reads and reopens a public export without touching private tables', f
     $resolver->shouldReceive('current')->andReturn(new TenantContext(new AccountRef('account', 'a', 'active', [], [])));
     app()->instance(TenantContextResolver::class, $resolver);
     $hash = str_repeat('a', 64);
-    $scope = new DataScope('account', null, 'pgsql:'.DB::connection()->getDatabaseName(), 'user-a', $hash);
+    $scope = CallerWorkScopeFixture::scope('account', null, 'user-a', $hash);
+    CallerWorkScopeFixture::bind(app(), $scope);
     $authorizer = Mockery::mock(DataScopeAuthorizer::class);
     $authorizer->shouldReceive('authorize')->andReturn(new DataScopeAccessDecision(true, 'allowed'));
     app()->instance(DataScopeAuthorizer::class, $authorizer);
@@ -72,7 +72,7 @@ it('seals, reads and reopens a public export without touching private tables', f
     expect($replayed->partsHash)->toBe($sealed->partsHash)
         ->and($reopened->runner->emit($scope, $replayed, $output))->toBe($bytes);
 
-    $foreign = new DataScope('account', null, $scope->connectionIdentity, 'user-b', $hash);
+    $foreign = CallerWorkScopeFixture::scope('account', null, 'user-b', $hash);
     expect(fn () => $session->runner->emit($foreign, $sealed, $output))->toThrow(SessionUnavailable::class);
 
     $other = $factory->openExport($scope, new TransferRef('33333333-3333-4333-8333-333333333333'), $source, $draft, $cursor);

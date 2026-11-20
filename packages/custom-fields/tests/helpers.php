@@ -2,43 +2,44 @@
 
 declare(strict_types=1);
 
-use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\CustomFields\Contracts\FieldCatalogue;
+use CoreX\CustomFields\Data\AttributeId;
 use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
-use CoreX\Data\Internal\AllowAllDataScopeAuthorizer;
+use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Internal\CallableDataScopeAuthorizer;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
+use Illuminate\Database\ConnectionInterface;
+use Illuminate\Support\Facades\DB;
 
-function jsonbScope(?string $connectionIdentity = null, ?string $restoreEpoch = null): DataScope
+function jsonbScope(?string $bindingId = null, ?string $restoreEpoch = null): DataScope
 {
-    return DataScope::fromTenantContext(
-        context: new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true),
-        connectionIdentity: $connectionIdentity ?? 'pgsql:'.(getenv('PGSQL_DATABASE') ?: 'corex_test'),
-        actorId: 'user-1',
-        restoreEpoch: $restoreEpoch ?? str_repeat('a', 64),
-    );
+    return CallerWorkScopeFixture::forContext(jsonbContext(), 'user-1', $restoreEpoch ?? str_repeat('a', 64), $bindingId);
 }
 
-function fixedTenantContextRestorer(TenantContext $context): TenantContextRestorer
+function jsonbContext(): TenantContext
 {
-    return new readonly class($context) implements TenantContextRestorer
-    {
-        public function __construct(private TenantContext $context) {}
+    return new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true);
+}
 
-        public function restore(DataScope $scope): TenantContext
-        {
-            return $this->context;
-        }
-    };
+function jsonbCurrent(): CallerWorkScopeFixture
+{
+    return new CallerWorkScopeFixture(jsonbContext(), static fn (): ConnectionInterface => DB::connection(), jsonbScope());
+}
+
+/** @param list<string> $codes */
+function jsonbSelection(string $entity, array $codes): FieldSelection
+{
+    return new FieldSelection(array_map(static fn (string $code): string => AttributeId::legacy($entity, $code)->value, $codes));
 }
 
 function jsonbAuthorizer(?Closure $authorize = null): DataScopeAuthorizer
 {
     if ($authorize === null) {
-        return new AllowAllDataScopeAuthorizer;
+        return new CallableDataScopeAuthorizer(static fn (): bool => true);
     }
 
     return new CallableDataScopeAuthorizer($authorize);

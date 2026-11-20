@@ -15,6 +15,7 @@
 
 ### Changed
 
+- `DataScope` v3 передаёт логическую область, проверяемого principal и версию физической привязки. `WorkScopeRunner` проводит допуск до выбора handler. Scheduler восстанавливает исходную область каждой записи wakeup и сверяет версию handler и всё окно запуска.
 - Двадцать пакетов CoreX переходят на общую Composer-линию 2.x и наборы схем CoreX версии 2. FlexCRM сохраняет собственную версию.
 - Unify all 21 CoreX packages and Flex CRM under native Packman governance. Pin Packman runtime, devtools and testkit to the reviewed integration commit; adopt its public attributes, configuration/error contracts and composable schema facets without compatibility aliases. Preserve the redesigned package names and external engine ownership. Native contract manifests and CoreX architecture checks share one verified source tree.
 - Apply a commit/hash-bound development-tool patch so Packman table-write checks honor the exact declared table owner; CoreX DATA-003 still validates that ownership against its schema catalogue.

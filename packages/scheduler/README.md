@@ -26,7 +26,7 @@ Install with `composer require axiomasoft/corex-scheduler`. Apply the package-ow
 
 Scheduling contracts (`WakeupScheduler`, `DueWakeupSource`, `DueWakeupHandler` and the wakeup data types) live in the kernel module `CoreX\Scheduling`, as do `DueWakeupSweeper` and `WakeupScheduleHint`. This package implements those canonical contracts directly; it declares no duplicate scheduling interfaces.
 
-Register exported `DueWakeupHandler` implementations in `corex-scheduler.handlers` or by tagging a `WakeupHandlerDefinition` with `WakeupHandlerDefinition::TAG` (`corex.scheduling.wakeup-handlers`). A repeated kind is invalid configuration. Feature packages can tag bounded `DueWakeupSource` implementations with `DueWakeupSource::TAG` (`corex.scheduling.due-sources`) for the same sweeper. Each handler is an array with `handler`, an exact `version` and an optional boolean `accept_legacy_unstamped`; the former scalar `kind => class` form is rejected as an invalid configuration. `accept_legacy_unstamped=true` is a dangerous mode: production starts only when `corex.acknowledged_dangerous_modes` lists `corex-scheduler.handlers.<kind>.accept_legacy_unstamped`. Keep handler effects transactional; external delivery belongs in an outbox.
+Register exported `DueWakeupHandler` implementations in `corex-scheduler.handlers` or by tagging a `WakeupHandlerDefinition` with `WakeupHandlerDefinition::TAG` (`corex.scheduling.wakeup-handlers`). A repeated kind is invalid configuration. Feature packages can tag bounded `DueWakeupSource` implementations with `DueWakeupSource::TAG` (`corex.scheduling.due-sources`) for the same sweeper. Each handler declaration contains its `handler` class and exact `version`. The producer supplies this version and its verified `DataScope`. The scheduler seals the verified scope together with the request digest and durable row ID. Each dispatch verifies that proof before restoring the row’s workspace and principal and resolving the handler. The delivery supplies a stable idempotency key across retries. Keep handler effects transactional; external delivery belongs in an outbox.
 
 ## Failure semantics
 
@@ -36,4 +36,4 @@ Unknown kinds, unsupported versions and stale generation/lease claims cannot exe
 
 Register the package provider, then run `php artisan packman:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `packman:schema:status`.
 
-Схема: набор(ы) `tenant`, baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.
+The tenant schema set is version 2. Replay identity includes the logical account incarnation, workspace, handler kind and request key. The canonical digest covers the full scope, handler version, UTC instant, entire optional window and payload. A changed digest reports a conflict. Cancel by scope, kind and request key.

@@ -3934,6 +3934,21 @@
                     "nullable": false,
                     "default": null
                 },
+                "scope": {
+                    "type": "text",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_key": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_seal": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "state": {
                     "type": "varchar",
                     "nullable": false,
@@ -3945,6 +3960,7 @@
                     "name": "ntf_digest_runs_recipient_kind_recipient_id_period__27ecc408_uq",
                     "kind": "uq",
                     "columns": [
+                        "scope_key",
                         "recipient_kind",
                         "recipient_id",
                         "period",
@@ -4870,9 +4886,24 @@
         },
         "sys_wakeup_requests": {
             "columns": {
+                "account_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "attempt": {
                     "type": "integer",
                     "nullable": false,
+                    "default": null
+                },
+                "claim_token": {
+                    "type": "varchar",
+                    "nullable": true,
                     "default": null
                 },
                 "completed_at": {
@@ -4883,6 +4914,11 @@
                 "created_at": {
                     "type": "datetime",
                     "nullable": true,
+                    "default": null
+                },
+                "data_scope": {
+                    "type": "text",
+                    "nullable": false,
                     "default": null
                 },
                 "failure_code": {
@@ -4940,6 +4976,11 @@
                     "nullable": true,
                     "default": null
                 },
+                "scope_seal": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "status": {
                     "type": "varchar",
                     "nullable": false,
@@ -4977,20 +5018,23 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_wakeup_requests_scan_ix",
+                    "name": "sys_wakeup_requests_due_ix",
                     "kind": "ix",
                     "columns": [
+                        "account_id",
                         "status",
-                        "retry_at",
-                        "fire_at"
+                        "fire_at",
+                        "id"
                     ],
                     "predicate": null,
                     "method": "btree"
                 },
                 {
-                    "name": "sys_wakeup_requests_workspace_scope_key_kind_request_key_uq",
+                    "name": "sys_wakeup_requests_identity_uq",
                     "kind": "uq",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
                         "workspace_scope_key",
                         "kind",
                         "request_key"
@@ -4999,11 +5043,12 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_wakeup_requests_workspace_scope_key_request_key_uq",
-                    "kind": "uq",
+                    "name": "sys_wakeup_requests_lease_ix",
+                    "kind": "ix",
                     "columns": [
-                        "workspace_scope_key",
-                        "request_key"
+                        "account_id",
+                        "status",
+                        "lease_until"
                     ],
                     "predicate": null,
                     "method": "btree"

@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace CoreX\CustomFields\Internal\Values;
 
 use CoreX\CustomFields\Contracts\FieldCatalogue;
+use CoreX\CustomFields\Data\AttributeId;
 use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\InvalidAttributeValue;
 use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Data\RecordRef;
+use CoreX\Data\Enums\FieldUse;
 use Packman\Attributes\Internal;
 
 #[Internal]
@@ -38,23 +41,23 @@ final readonly class AttributeWriteGuard
 
         $this->assertSchemaCompatibility(snapshot: $snapshot, definitions: $definitions, patch: $patch);
 
-        foreach (['attributes.subject', 'attributes.view', 'attributes.write', 'attributes.mutate'] as $action) {
-            foreach (array_keys($patch->values) as $code) {
-                $definition = $definitions[$code];
-                $attributeId = is_string($definition['id'] ?? null)
-                    ? $definition['id']
-                    : 'legacy:'.$code;
-                $decision = $this->authorizer->authorize(
-                    scope: $scope,
-                    entity: $record->entity,
-                    subjectId: $this->resource(scope: $scope, record: $record, attributeId: $attributeId),
-                    fields: [$code],
-                    action: $action,
-                );
+        if (! $this->authorizer->authorize($scope, $record, new FieldSelection([]), FieldUse::Read)->allowed) {
+            $this->deny('attributes.subject.denied');
+        }
 
-                if (! $decision->allowed) {
-                    $this->deny($action.'.denied');
-                }
+        foreach (array_keys($patch->values) as $code) {
+            $definition = $definitions[$code];
+            $attributeId = is_string($definition['id'] ?? null)
+                ? $definition['id']
+                : AttributeId::legacy($record->entity, $code)->value;
+            $selection = new FieldSelection([$attributeId]);
+
+            if (! $this->authorizer->authorize($scope, $record, $selection, FieldUse::Read)->allowed) {
+                $this->deny('attributes.view.denied');
+            }
+
+            if (! $this->authorizer->authorize($scope, $record, $selection, FieldUse::Write)->allowed) {
+                $this->deny('attributes.write.denied');
             }
         }
 
@@ -142,21 +145,6 @@ final readonly class AttributeWriteGuard
         }
 
         return $keys;
-    }
-
-    private function resource(DataScope $scope, RecordRef $record, string $attributeId): string
-    {
-        $payload = json_encode([
-            'account' => $scope->accountId,
-            'workspace' => $scope->workspaceId,
-            'boxed' => $scope->boxed,
-            'connection' => $scope->connectionIdentity,
-            'entity' => $record->entity,
-            'record' => $record->id,
-            'attribute' => $attributeId,
-        ], JSON_THROW_ON_ERROR);
-
-        return 'attributes:'.hash('sha256', $payload);
     }
 
     private function deny(string $reasonCode): never

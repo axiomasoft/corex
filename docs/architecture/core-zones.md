@@ -161,12 +161,10 @@ packages/core/src/Modules/Internal/ServiceProviderModuleRegistrar.php
 **E-BASEMODEL:** `packages/core/src/Database/Laravel/BaseModel.php` — единственный файл Foundation,
 которому разрешён импорт Audit-типа `CoreX\Audit\Laravel\HasAuditLog`.
 
-**E-ZONE-EDGE (D116):** шесть публичных импортов разрешены только парой
+**E-ZONE-EDGE (D116):** указанные импорты разрешены только парой
 «файл + символ». Матрица зон от этого не расширяется.
 
 ```text
-packages/core/src/Data/Data/DataScope.php
-    CoreX\Context\Data\TenantContext
 packages/core/src/Messaging/Events/DomainEvent.php
     CoreX\Context\Data\TenantContext
     CoreX\Context\Contracts\TenantContextResolver
@@ -191,10 +189,7 @@ packages/core/src/Database/Laravel/BaseModel.php
 
 ## 4. Почему `Support/` и `Data/` остаются
 
-`Data/` и `Support/Data/` выражают Foundation: `DataScope`, `RecordRef`, `WriteToken`,
-кодек, authorizers и решение доступа имеют одинаковую семантику для всех потребителей.
-`DataScopeAccessDecision` с P15.10 лежит в `Support/Data/` и остаётся публичным
-return type `DataScopeAuthorizer`.
+Foundation определяет `DataScope`, `RecordRef`, `WriteToken`, wire-кодек, типы использования полей и решение `DataScopeAuthorizer` в `Data/`. `DataScope` передаёт скалярные идентификаторы и поколение в формате v3. Границы физического размещения и допуск проверяют `ScopeAuthority` и `WorkScopeRunner` в `Context/`.
 
 `Support/Config` и `Support/ServiceProviderModuleRegistrar` являются boot-адаптерами
 Composition. Первый связывает конфигурацию нескольких зон, второй работает с Laravel

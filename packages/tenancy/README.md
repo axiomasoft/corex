@@ -78,12 +78,18 @@ their audit/approval requirements; production `dev` requires the existing explic
 `corex.acknowledged_dangerous_modes` acknowledgement. Physical isolation remains Tenant's
 responsibility in every profile.
 
-`corex-tenancy.wakeup.driver=root_registry` optionally supplies advisory account wakeup
-hints when `corex-scheduler` is installed. Hints never authorize a connection or replace
-local durable requests. Native `bootstrappers` configuration has been removed; a nonempty
-old value is rejected. Configure connection/cache/session facilities in the host Tenant
+`corex-tenancy.wakeup.driver=root_registry` supplies advisory account wakeup hints.
+Install `corex-scheduler` and implement `CoreX\Context\Contracts\NamedWorkPrincipal`
+with an explicit account-scoped grant for `corex.scheduler-sweep`. The root sweep and
+reconciliation commands use that grant to enter the account. Scheduler restores each
+stored request’s workspace and principal separately. Native `bootstrappers` configuration
+has been removed. Configure connection, cache and session facilities in the host Tenant
 composition.
 
 `TenantContextInitialized` and `TenantContextEnded` notify explicit CoreX
 `initialize`/`setWorkspace`/`end` calls only. Observe protected `runFor` executions
 through Tenant's observation facilities.
+
+### Identity synchronization
+
+Identity fan-out and reconciliation run under the account-wide named service grant for corex.identity-sync. Configure NamedWorkPrincipal together with WorkPrincipalAuthority to verify this service in the target account. Each queued synchronization records its producer scope and reloads the central membership before changing the corresponding tenant user.

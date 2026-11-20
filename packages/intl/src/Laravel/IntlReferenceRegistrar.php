@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Laravel;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Intl\Internal\IntlOptions;
 use CoreX\Intl\Territory\Contracts\DatasetImporter;
@@ -41,6 +42,7 @@ final class IntlReferenceRegistrar implements PackageRegistrar
             datasetKey: $app->make(IntlOptions::class)->referenceDatasetKey,
             normalizer: $app->make(FixtureReferenceNormalizer::class),
             authorizer: $app->make(DataScopeAuthorizer::class),
+            current: $app->make(CurrentWorkScope::class),
             clock: $app->make(ClockInterface::class),
         ));
     }

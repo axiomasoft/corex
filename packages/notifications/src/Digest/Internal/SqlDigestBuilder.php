@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Digest\Internal;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Context\Contracts\StoredWorkIssuer;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Notifications\Delivery\Data\RecipientReference;
 use CoreX\Notifications\Digest\Contracts\DigestBuilder;
@@ -24,8 +28,16 @@ use Psr\Clock\ClockInterface;
 #[Internal]
 final readonly class SqlDigestBuilder implements DigestBuilder
 {
+    public const string HandlerKind = 'notification.digest.v1';
+
+    public const string HandlerVersion = 'notification-digest/1';
+
     public function __construct(
         private ConnectionInterface $connection,
+        private DataScopeFactory $scopes,
+        private CurrentWorkScope $currentScope,
+        private DataScopeCodec $scopeCodec,
+        private StoredWorkIssuer $issuer,
         private ?WakeupScheduler $wakeup,
         private bool $enabled,
         private ClockInterface $clock,
@@ -42,10 +54,20 @@ final readonly class SqlDigestBuilder implements DigestBuilder
         if ($context->actorId === null || $context->actorId === '') {
             throw new NotificationAccessDenied('Digest building requires an authenticated recipient.');
         }
-        $recipient = new RecipientReference(kind: $context->actorKind, id: $context->actorId);
+        $scope = $this->scopes->forCurrentPrincipal($context->tenant);
+        $this->currentScope->assert($scope, $this->connection);
 
-        return $this->connection->transaction(function () use ($context, $recipient, $window): ?DigestRef {
-            $runs = $this->connection->table('ntf_digest_runs')->where('recipient_kind', $recipient->kind)->where('recipient_id', $recipient->id)->where('period', $window->period)->where('period_start', $window->start)->orderByDesc('batch_seq')->lockForUpdate()->get();
+        if ($scope->principalKind !== $context->actorKind || $scope->principalId !== $context->actorId) {
+            throw new NotificationAccessDenied('Digest building requires the active recipient.');
+        }
+
+        $recipient = new RecipientReference(kind: $context->actorKind, id: $context->actorId);
+        $encodedScope = json_encode($this->scopeCodec->encode($scope), JSON_THROW_ON_ERROR);
+        $scopeKey = hash('sha256', $encodedScope);
+
+        return $this->connection->transaction(function () use ($scope, $encodedScope, $scopeKey, $recipient, $window): ?DigestRef {
+            $this->currentScope->assert($scope, $this->connection);
+            $runs = $this->connection->table('ntf_digest_runs')->where('scope_key', $scopeKey)->where('recipient_kind', $recipient->kind)->where('recipient_id', $recipient->id)->where('period', $window->period)->where('period_start', DigestRunIdentity::timestamp($window->start))->orderByDesc('batch_seq')->lockForUpdate()->get();
             $items = $this->connection->table('ntf_notifications')
                 ->where('recipient_kind', $recipient->kind)
                 ->where('recipient_id', $recipient->id)
@@ -74,8 +96,9 @@ final readonly class SqlDigestBuilder implements DigestBuilder
             }
             $ids = Value::strings($items->pluck('id')->all());
             $runId = (string) Str::uuid7();
+            $proof = $this->issuer->issue($scope, DigestRunIdentity::Owner, DigestRunIdentity::reference($runId, $window->start, $window->end, $window->period));
             $batchSequence = $runs->isEmpty() ? 0 : Value::integer($runs->first()->batch_seq) + 1;
-            $this->connection->table('ntf_digest_runs')->insert(['id' => $runId, 'recipient_kind' => $recipient->kind, 'recipient_id' => $recipient->id, 'period' => $window->period, 'period_start' => $window->start, 'period_end' => $window->end, 'batch_seq' => $batchSequence, 'membership_hash' => hash('sha256', implode("\0", $ids)), 'state' => 'frozen', 'created_at' => $this->clock->now()]);
+            $this->connection->table('ntf_digest_runs')->insert(['id' => $runId, 'scope_key' => $scopeKey, 'scope' => $encodedScope, 'scope_seal' => $proof->seal, 'recipient_kind' => $recipient->kind, 'recipient_id' => $recipient->id, 'period' => $window->period, 'period_start' => DigestRunIdentity::timestamp($window->start), 'period_end' => DigestRunIdentity::timestamp($window->end), 'batch_seq' => $batchSequence, 'membership_hash' => hash('sha256', implode("\0", $ids)), 'state' => 'frozen', 'created_at' => $this->clock->now()]);
             foreach ($ids as $id) {
                 $this->connection->table('ntf_digest_items')->insert(['id' => (string) Str::uuid7(), 'run_id' => $runId, 'notification_id' => $id, 'channel' => 'in_app']);
             }
@@ -84,14 +107,19 @@ final readonly class SqlDigestBuilder implements DigestBuilder
                 $wakeup = $this->wakeup ?? throw new InvalidConfiguration([
                     'corex-notifications.digest.enabled requires a bound CoreX\Scheduling\Contracts\WakeupScheduler',
                 ]);
-                $wakeup->schedule(new WakeupRequest(
-                    context: $context->tenant,
-                    kind: 'notification.digest.v1',
+                $result = $wakeup->schedule(new WakeupRequest(
+                    scope: $scope,
+                    kind: self::HandlerKind,
+                    handlerVersion: self::HandlerVersion,
                     requestKey: "notification.digest:{$runId}",
                     fireAt: $window->end,
                     window: new WakeupWindow(start: $window->start, end: $window->end, period: $window->period),
                     payload: JsonDocuments::capture(['run_id' => $runId]),
                 ));
+
+                if (! in_array($result->status, ['created', 'existing'], true)) {
+                    throw new NotificationAccessDenied('The digest wakeup could not be scheduled in the current scope.');
+                }
             }
 
             return new DigestRef(id: $runId, recipient: $recipient, window: $window, batchSequence: $batchSequence);

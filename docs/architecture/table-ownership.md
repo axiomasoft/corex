@@ -14,6 +14,8 @@
 `tenant_scope=test` обозначает только disposable-таблицы reference consumer'ов:
 их создают тестовые fixture, в shipped-наборы они не входят.
 
+`tenant_scope=control` обозначает хранилище полномочий хоста за пределами восстанавливаемой БД арендатора. Хост, использующий SQL-реализацию CoreX, устанавливает его через `ScopeControlSchema::install()` при подготовке развёртывания.
+
 Префикс `sys_` не является владельцем. Сегодня его делят:
 
 | Таблицы | Владелец |
@@ -73,6 +75,8 @@ CoreX не поставляет их DDL и не пишет эти таблиц�
 | sys_pubsub_cursors | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_pubsub_cursors_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | table-name-via-config-default |
 | sys_pubsub_messages | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_pubsub_messages_channel_id_ix`; `sys_pubsub_messages_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | table-name-via-config-default |
 | sys_settings | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_settings_pk`; `sys_settings_scope_ix`; `sys_settings_uq` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
+| corex_scope_routes | axiomasoft/corex | control | axiomasoft/corex | axiomasoft/corex | pii-pseudonymous | forbidden | `corex_scope_routes_pk` | external control store | active route and incarnation retained by host | host provisioning | operation-state | Binding generation and restore epoch are retained outside tenant backups. |
+| corex_scope_tickets | axiomasoft/corex | control | axiomasoft/corex | axiomasoft/corex | pii-pseudonymous | forbidden | `corex_scope_tickets_pk`; `corex_scope_attempt_uq`; `corex_scope_outstanding_ix` | external control store | unresolved tickets retained through reconciliation | host provisioning | operation-state | One ticket per admitted attempt under the route lock. |
 | corex_rate_batches | axiomasoft/corex-intl | tenant | axiomasoft/corex-intl |  | unobserved | forbidden | `corex_rate_batches_operation_key_uq`; `corex_rate_batches_pk`; `corex_rate_batches_format_hash_ck`; `corex_rate_batches_generation_ck`; `corex_rate_batches_operation_key_ck`; `corex_rate_batches_payload_hash_ck`; `corex_rate_batches_state_ck` | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | corex_rate_current | axiomasoft/corex-intl | tenant | axiomasoft/corex-intl |  | unobserved | forbidden | `corex_rate_current_pk`; `corex_rate_current_snapshot_fk`; `corex_rate_current_generation_ck` | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | corex_rate_snapshots | axiomasoft/corex-intl | tenant | axiomasoft/corex-intl |  | unobserved | forbidden | `corex_rate_snapshots_pk`; `corex_rate_snapshots_publication_uq`; `corex_rate_snapshots_payload_hash_ck` | unobserved | unobserved | expand-migrate-contract (policy-default) | projection |  |

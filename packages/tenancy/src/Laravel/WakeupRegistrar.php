@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Laravel;
 
+use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Context\Contracts\NamedWorkPrincipal;
 use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Exceptions\ScopeAuthorityUnavailable;
 use CoreX\Scheduling\Contracts\DueWakeupSweeper;
 use CoreX\Scheduling\Contracts\WakeupScheduleHint;
 use CoreX\Tenancy\Integration\Internal\Wakeup\RootRegistryWakeupHint;
@@ -46,6 +49,10 @@ final class WakeupRegistrar implements PackageRegistrar
                 clock: $app->make(ClockInterface::class),
                 hint: $app->make(RootRegistryWakeupHint::class),
                 tenancy: $app->make(TenancyManager::class),
+                namedPrincipals: $app->bound(NamedWorkPrincipal::class)
+                    ? $app->make(NamedWorkPrincipal::class)
+                    : throw new ScopeAuthorityUnavailable('Root wakeup requires a host Scheduler service grant.'),
+                scopes: $app->make(DataScopeFactory::class),
                 sweeper: $app->make(DueWakeupSweeper::class),
                 leaseSeconds: $app->make(TenancyOptions::class)->wakeupLeaseSeconds,
             ),

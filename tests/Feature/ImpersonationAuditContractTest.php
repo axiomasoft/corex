@@ -9,12 +9,12 @@ use CoreX\Audit\Internal\QueuedAuditLogger;
 use CoreX\Audit\Internal\RecordAuditEntry;
 use CoreX\Config\Data\CoreOptions;
 use CoreX\Context\Contracts\ImpersonationService;
-use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\ImpersonationState;
-use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Tests\Support\LocalWorkContexts;
+use CoreX\Tests\Support\WorkScopeFixture;
 use Illuminate\Support\Facades\Queue;
 
 test('P12 stamps a direct AuditLogger call with authoritative impersonation provenance', function (): void {
@@ -24,7 +24,11 @@ test('P12 stamps a direct AuditLogger call with authoritative impersonation prov
 
     $state = new ImpersonationState('grant-p12', 'staff-p12', 'target-p12', new DateTimeImmutable('+1 hour'), 'support case 42');
     app()->instance(ImpersonationService::class, new P12FixedImpersonationService($state));
-    app()->instance(AuditLogger::class, app()->make(QueuedAuditLogger::class, ['tenantContext' => new P12FixedTenantContextResolver('workspace-p12')]));
+    $contexts = LocalWorkContexts::install($this->app);
+    $contexts->initialize(new AccountRef('account-p12', 'account', 'active', [], []));
+    $contexts->setWorkspace(new WorkspaceRef('workspace-p12', 'main', 'standard', 'main', null));
+    WorkScopeFixture::install($this->app, 'target-p12')->register($contexts->current());
+    app()->instance(AuditLogger::class, app()->make(QueuedAuditLogger::class));
 
     resolve(AuditLogger::class)->record(new AuditEntry(
         action: 'direct-contract-proof',
@@ -34,10 +38,12 @@ test('P12 stamps a direct AuditLogger call with authoritative impersonation prov
     ));
 
     Queue::assertPushed(RecordAuditEntry::class, function (RecordAuditEntry $job): bool {
-        $property = new ReflectionProperty($job, 'entry');
-        $entry = $property->getValue($job);
+        $entry = new ReflectionProperty($job, 'entry')->getValue($job);
+        $scope = new ReflectionProperty($job, 'scope')->getValue($job);
 
         expect($entry)->toBeInstanceOf(AuditEntry::class)
+            ->and($scope->principalId)->toBe('target-p12')
+            ->and($scope->workspaceId)->toBe('workspace-p12')
             ->and($entry->actorType)->toBe(ActorType::Support)
             ->and($entry->actorId)->toBe('staff-p12')
             ->and($entry->workspaceId)->toBe('workspace-p12')
@@ -109,18 +115,5 @@ final readonly class P12FixedImpersonationService implements ImpersonationServic
     public function state(): ?ImpersonationState
     {
         return $this->fixed;
-    }
-}
-
-final readonly class P12FixedTenantContextResolver implements TenantContextResolver
-{
-    public function __construct(private string $workspaceId) {}
-
-    public function current(): TenantContext
-    {
-        return new TenantContext(
-            new AccountRef('account-p12', 'account', 'active', [], []),
-            new WorkspaceRef($this->workspaceId, 'main', 'standard', 'main', null),
-        );
     }
 }

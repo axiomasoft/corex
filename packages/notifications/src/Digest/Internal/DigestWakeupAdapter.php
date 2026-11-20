@@ -18,12 +18,13 @@ final readonly class DigestWakeupAdapter implements DueWakeupHandler
 
     public function handle(WakeupDelivery $delivery): void
     {
-        if ($delivery->request->kind !== 'notification.digest.v1' || $delivery->request->window === null) {
+        if ($delivery->request->kind !== SqlDigestBuilder::HandlerKind || $delivery->request->window === null) {
             throw new RuntimeException('Wakeup request is not a notification digest tick.');
         }
 
         ($this->handle)(new DigestTick(
-            tenant: $delivery->request->context,
+            tenant: $delivery->context,
+            scope: $delivery->request->scope,
             window: $delivery->request->window,
             requestKey: $delivery->request->requestKey,
         ));

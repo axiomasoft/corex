@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Operations\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\Internal\GuardedTenantContextRestorer;
-use CoreX\Data\Data\DataScope;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\ImportExport\Contracts\ExportRunner;
@@ -21,6 +19,7 @@ use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\OperationsServiceProvider;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Tests\TestCase;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Time\Testing\FrozenClock;
 use DateTimeImmutable;
 use Illuminate\Foundation\Application;
@@ -92,16 +91,10 @@ final class LoadContourBootTest extends TestCase
         $store = new SqlBulkOperationStore(
             connection: $connection,
             scopeCodec: new ArrayDataScopeCodec,
-            contexts: new GuardedTenantContextRestorer($contexts),
+            contexts: new CallerWorkScopeFixture($contexts),
             clock: $clock,
         );
-        $scope = new DataScope(
-            accountId: 'account-1',
-            workspaceId: null,
-            connectionIdentity: $connection->getDriverName().':'.$connection->getDatabaseName(),
-            actorId: 'actor-1',
-            restoreEpoch: hash('sha256', 'load-contour-restore'),
-        );
+        $scope = CallerWorkScopeFixture::scope('account-1', null, 'actor-1', hash('sha256', 'load-contour-restore'));
         $definition = new BulkOperationDefinition(
             id: 'bulk-load-contour',
             submissionId: 'submission-load-contour',

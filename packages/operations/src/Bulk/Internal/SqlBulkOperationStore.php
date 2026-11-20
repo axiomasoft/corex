@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Internal;
 
-use CoreX\Context\Contracts\TenantContextRestorer;
-use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
@@ -34,7 +33,7 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
     public function __construct(
         private Connection $connection,
         private DataScopeCodec $scopeCodec,
-        private TenantContextRestorer $contexts,
+        private CurrentWorkScope $contexts,
         private ClockInterface $clock,
         private int $leaseSeconds = 30,
         private int $resultRetentionSeconds = 86_400,
@@ -50,7 +49,8 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
         $scope = $this->definitionScope($definition);
         $this->assertScope($scope);
 
-        return $this->connection->transaction(function () use ($definition): BulkOperation {
+        return $this->connection->transaction(function () use ($scope, $definition): BulkOperation {
+            $this->assertScope($scope);
             $now = $this->clock->now();
             $this->connection->table(self::Table)->insertOrIgnore([
                 'id' => $definition->id,
@@ -124,6 +124,7 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
         $this->assertIdentifier(value: $worker, name: 'worker');
 
         return $this->connection->transaction(function () use ($scope, $worker): ?BulkOperation {
+            $this->assertScope($scope);
             $now = $this->clock->now();
             $query = $this->scopeQuery(query: $this->connection->table(self::Table), scope: $scope)
                 ->where(function (Builder $query) use ($now): void {
@@ -186,6 +187,7 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
         }
 
         return $this->connection->transaction(function () use ($leaseOwner, $operation, $revision, $scope): bool {
+            $this->assertScope($scope);
             $now = $this->clock->now();
             $row = $this->connection->table(self::Table)
                 ->where('id', $operation->definition->id)
@@ -247,6 +249,7 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
         $this->assertIdentifier(value: $id, name: 'operation id');
 
         return $this->connection->transaction(function () use ($id, $scope): BulkOperation {
+            $this->assertScope($scope);
             $row = $this->connection->table(self::Table)->where('id', $id)->lockForUpdate()->first();
 
             if ($row === null || ! $this->rowMatchesScope(row: $row, scope: $scope)) {
@@ -296,7 +299,7 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
             throw new InvalidArgumentException('Bulk encoded scope is not canonical.');
         }
 
-        if ($scope->actorId !== $definition->actorId) {
+        if ($scope->principalId !== $definition->actorId) {
             throw new InvalidArgumentException('Bulk actor does not match the durable scope.');
         }
 
@@ -305,14 +308,7 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
 
     private function assertScope(DataScope $scope): void
     {
-        $context = $this->contexts->restore($scope);
-        $actual = $context->isBoxed()
-            ? 'boxed:'.$context->account->id
-            : $this->connection->getDriverName().':'.$this->connection->getDatabaseName();
-
-        if (! hash_equals($scope->connectionIdentity, $actual)) {
-            throw ScopeContextMismatch::connection(expected: $scope->connectionIdentity, actual: $actual);
-        }
+        $this->contexts->assert($scope, $this->connection);
     }
 
     private function scopeQuery(Builder $query, DataScope $scope): Builder

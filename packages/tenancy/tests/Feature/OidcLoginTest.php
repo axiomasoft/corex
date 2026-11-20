@@ -7,6 +7,7 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Authentication\Internal\Oidc\OidcClient;
 use CoreX\Tenancy\Tests\Stubs\StubIdentityProvider;
+use CoreX\Tenancy\Tests\Support\IdentityServiceHost;
 use CoreX\Tenancy\Tests\TestCase;
 use Firebase\JWT\JWT;
 use Illuminate\Session\Middleware\StartSession;
@@ -40,6 +41,7 @@ const OL_TOKEN_ENDPOINT = OL_ISSUER.'/token';
 const OL_JWKS_URI = OL_ISSUER.'/jwks';
 
 beforeEach(function (): void {
+    IdentityServiceHost::install(app());
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');

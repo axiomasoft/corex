@@ -7,7 +7,9 @@ namespace CoreX\Scheduler\Tests;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\CoreServiceProvider;
 use CoreX\Scheduler\SchedulerServiceProvider;
+use CoreX\Tests\Support\WorkScopeFixture;
 use CoreX\Time\Laravel\LaravelClock;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\DateFactory;
@@ -35,7 +37,7 @@ abstract class TestCase extends Orchestra
     #[Override]
     protected function getPackageProviders($app): array
     {
-        return [PackmanServiceProvider::class, SchemaServiceProvider::class, SchedulerServiceProvider::class];
+        return [PackmanServiceProvider::class, SchemaServiceProvider::class, CoreServiceProvider::class, SchedulerServiceProvider::class];
     }
 
     #[Override]
@@ -61,5 +63,6 @@ abstract class TestCase extends Orchestra
             dates: $app->make(DateFactory::class),
         ));
         $this->app->instance(TenantContextResolver::class, new TestTenantContextResolver);
+        WorkScopeFixture::install($this->app)->scope();
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal\Schema;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Contracts\SchemaOperations;
 use CoreX\CustomFields\Data\AttributeTables;
@@ -15,30 +16,35 @@ use CoreX\CustomFields\Data\SchemaReceipt;
 use CoreX\CustomFields\Internal\KeyConflict;
 use CoreX\CustomFields\Internal\SchemaOperationConflict;
 use CoreX\CustomFields\Internal\ScopeDenied;
-use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
 use CoreX\CustomFields\Internal\Support\Validation;
 use CoreX\CustomFields\Internal\Value;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Enums\FieldUse;
 use Illuminate\Database\ConnectionInterface;
 use Packman\Attributes\Internal;
 
 #[Internal]
 final readonly class QueuedSchemaOperations implements SchemaOperations
 {
+    private SchemaOperationAdmission $admission;
+
     public function __construct(
         private ConnectionInterface $connection,
+        private CurrentWorkScope $current,
         private AttributeTables $tables,
         private FieldCatalogue $catalogue,
-        private DataScopeAuthorizer $authorizer,
-    ) {}
+        DataScopeAuthorizer $authorizer,
+    ) {
+        $this->admission = new SchemaOperationAdmission($authorizer);
+    }
 
     public function request(DataScope $scope, SchemaChange $change, SchemaOperationId $key): SchemaReceipt
     {
-        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
+        $this->current->assert($scope, $this->connection);
 
-        if (! $this->authorizer->authorize(scope: $scope, entity: $change->entity, subjectId: '', fields: [], action: 'schema')->allowed
-            || ! $this->authorizer->authorize(scope: $scope, entity: $change->entity, subjectId: '', fields: [$change->approvalDigest], action: 'schema-approve')->allowed) {
+        if (! $this->admission->allows($scope, $change->entity, FieldUse::Write)
+            || ! $this->admission->approves($scope, $change->approvalDigest)) {
             throw new ScopeDenied('The current scope denies this schema operation.');
         }
 
@@ -46,9 +52,12 @@ final readonly class QueuedSchemaOperations implements SchemaOperations
             throw SchemaOperationConflict::staleSnapshot();
         }
 
-        return $this->connection->transaction(function () use ($scope, $change, $key): SchemaReceipt {
+        $scopeHash = SchemaOperationAdmission::scopeHash($scope);
+
+        return $this->connection->transaction(function () use ($scope, $scopeHash, $change, $key): SchemaReceipt {
+            $this->current->assert($scope, $this->connection);
             $operations = $this->connection->table($this->tables->schemaOperations);
-            $existing = $operations->where('operation_key', $key->key)->lockForUpdate()->first();
+            $existing = $operations->where('operation_key', $key->key)->where('scope_hash', $scopeHash)->lockForUpdate()->first();
 
             if ($existing !== null) {
                 if ($existing->payload_hash !== $key->payloadHash) {
@@ -58,9 +67,9 @@ final readonly class QueuedSchemaOperations implements SchemaOperations
                 return new SchemaReceipt(operation: new OperationRef(Value::text($existing->id)), status: Value::text($existing->status), schemaHash: Value::text($existing->schema_hash), errorCode: Value::nullableText($existing->error_code));
             }
 
-            $id = hash('sha256', $key->key."\n".$key->payloadHash);
+            $id = hash('sha256', $scopeHash."\n".$key->key."\n".$key->payloadHash);
             $operations->insert([
-                'id' => $id, 'operation_key' => $key->key, 'payload_hash' => $key->payloadHash,
+                'id' => $id, 'scope_hash' => $scopeHash, 'operation_key' => $key->key, 'payload_hash' => $key->payloadHash,
                 'entity' => $change->entity, 'schema_hash' => $change->expectedSchemaHash,
                 'approval_digest' => $change->approvalDigest, 'restore_epoch' => $scope->restoreEpoch,
                 'definition' => json_encode(['kind' => $change->kind, 'definition' => $change->definition], JSON_THROW_ON_ERROR),
@@ -73,10 +82,10 @@ final readonly class QueuedSchemaOperations implements SchemaOperations
 
     public function inspect(DataScope $scope, OperationRef $operation): SchemaReceipt
     {
-        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
-        $row = $this->connection->table($this->tables->schemaOperations)->where('id', $operation->id)->first();
+        $this->current->assert($scope, $this->connection);
+        $row = $this->connection->table($this->tables->schemaOperations)->where('id', $operation->id)->where('scope_hash', SchemaOperationAdmission::scopeHash($scope))->first();
 
-        if ($row === null || $row->restore_epoch !== $scope->restoreEpoch || ! $this->authorizer->authorize(scope: $scope, entity: Value::text($row->entity), subjectId: '', fields: [], action: 'schema')->allowed) {
+        if ($row === null || $row->restore_epoch !== $scope->restoreEpoch || ! $this->admission->allows($scope, Value::text($row->entity), FieldUse::Read)) {
             throw new ScopeDenied('The current scope cannot inspect this schema operation.');
         }
 
@@ -85,13 +94,13 @@ final readonly class QueuedSchemaOperations implements SchemaOperations
 
     public function verify(DataScope $scope, string $entity): DriftReport
     {
-        new ScopeConnectionGuard($this->connection)->assertMatches($scope);
+        $this->current->assert($scope, $this->connection);
 
-        if (! $this->authorizer->authorize(scope: $scope, entity: $entity, subjectId: '', fields: [], action: 'schema')->allowed) {
+        if (! $this->admission->allows($scope, $entity, FieldUse::Read)) {
             throw new ScopeDenied('The current scope cannot verify this schema.');
         }
 
-        $rows = $this->connection->table($this->tables->schemaOperations)->where('entity', $entity)->oldest()->get();
+        $rows = $this->connection->table($this->tables->schemaOperations)->where('entity', $entity)->where('scope_hash', SchemaOperationAdmission::scopeHash($scope))->oldest()->get();
         $drift = [];
         $managed = [];
         foreach ($rows as $row) {

@@ -15,8 +15,11 @@ final readonly class FilterPlan
     public function __construct(
         public string $schemaHash,
         public array $tree,
+        public string $scopeFingerprint,
+        public string $policyWitness,
     ) {
         Validation::sha256(value: $schemaHash, name: 'schema hash');
+        Validation::sha256(value: $scopeFingerprint, name: 'scope fingerprint');
         Validation::jsonMap(value: $tree, name: 'filter plan');
     }
 }

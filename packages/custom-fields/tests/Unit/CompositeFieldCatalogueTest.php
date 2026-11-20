@@ -8,6 +8,7 @@ use CoreX\CustomFields\Internal\Schema\CachedFieldCatalogue;
 use CoreX\CustomFields\Internal\Schema\CatalogueConflictPolicy;
 use CoreX\CustomFields\Internal\Schema\CompositeFieldCatalogue;
 use CoreX\Data\Data\DataScope;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Illuminate\Cache\ArrayStore;
 use Illuminate\Cache\Repository;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
@@ -152,6 +153,7 @@ it('fails closed and evicts a malformed cached snapshot', function (): void {
     $cache->shouldReceive('get')->once()->andReturn(['entity' => 'contact']);
     $cache->shouldReceive('forget')->once()->andReturnTrue();
     $catalogue = new CachedFieldCatalogue(
+        current: new CallerWorkScopeFixture(jsonbContext()),
         source: catalogueSource([catalogueField()]),
         cache: $cache,
         sourceFingerprint: 'sources/1',
@@ -168,6 +170,7 @@ it('does not reuse a snapshot after the source fingerprint changes', function ()
     $changed = catalogueField(type: 'url');
 
     $first = new CachedFieldCatalogue(
+        current: new CallerWorkScopeFixture(jsonbContext()),
         source: catalogueSource([$original]),
         cache: $cache,
         sourceFingerprint: 'sources/1',
@@ -176,6 +179,7 @@ it('does not reuse a snapshot after the source fingerprint changes', function ()
     $first->snapshot(jsonbScope(), 'contact');
 
     $second = new CachedFieldCatalogue(
+        current: new CallerWorkScopeFixture(jsonbContext()),
         source: catalogueSource([$changed]),
         cache: $cache,
         sourceFingerprint: 'sources/2',
@@ -190,6 +194,7 @@ it('falls back to the authoritative source when cache access fails', function ()
     $cache->shouldReceive('get')->once()->andThrow(new RuntimeException('cache unavailable'));
     $field = catalogueField();
     $catalogue = new CachedFieldCatalogue(
+        current: new CallerWorkScopeFixture(jsonbContext()),
         source: catalogueSource([$field]),
         cache: $cache,
         sourceFingerprint: 'sources/1',

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal\Schema;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\Data\Data\DataScope;
@@ -18,6 +19,7 @@ final readonly class CachedFieldCatalogue implements FieldCatalogue
 {
     public function __construct(
         private FieldCatalogue $source,
+        private CurrentWorkScope $current,
         private CacheRepository $cache,
         private string $sourceFingerprint,
         private string $policyVersion,
@@ -30,6 +32,7 @@ final readonly class CachedFieldCatalogue implements FieldCatalogue
 
     public function snapshot(DataScope $scope, string $entity): FieldSnapshot
     {
+        $this->current->assert($scope);
         $key = $this->key(scope: $scope, entity: $entity);
 
         try {
@@ -64,10 +67,7 @@ final readonly class CachedFieldCatalogue implements FieldCatalogue
     private function key(DataScope $scope, string $entity): string
     {
         return 'corex:attributes:catalogue:'.hash('sha256', json_encode([
-            'account' => $scope->accountId,
-            'workspace' => $scope->workspaceId,
-            'boxed' => $scope->boxed,
-            'connection' => $scope->connectionIdentity,
+            'scope' => $scope,
             'entity' => $entity,
             'source' => $this->sourceFingerprint,
             'policy' => $this->policyVersion,

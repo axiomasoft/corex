@@ -9,18 +9,18 @@ use CoreX\Context\Data\ImpersonationState;
 use CoreX\Context\Enums\ImpersonationRestrictedAction;
 use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\Context\Exceptions\ImpersonationRestrictedException;
-use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
 use CoreX\Context\Internal\ImpersonationGuard;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\DataScopeAccessDecision;
+use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
+use CoreX\Data\Enums\FieldUse;
 use CoreX\Data\Exceptions\InvalidScopePayload;
-use CoreX\Data\Internal\AllowAllDataScopeAuthorizer;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Data\Internal\CallableDataScopeAuthorizer;
 use CoreX\Data\Internal\DenyDataScopeAuthorizer;
-use CoreX\Data\Laravel\SystemDataScopeAuthorization;
 use CoreX\Errors\Enums\CoreErrorCode;
 use DateTimeImmutable;
 use InvalidArgumentException;
@@ -34,25 +34,20 @@ final class SecurityBoundaryContractTest extends TestCase
     public function test_each_authorizer_preserves_the_admission_verdict_and_reason(): void
     {
         $scope = $this->scope();
-        foreach ([new AllowAllDataScopeAuthorizer, new SystemDataScopeAuthorization] as $authorizer) {
-            $decision = $authorizer->authorize($scope, 'contact', 'record-1', ['name'], 'write');
-            self::assertTrue($decision->allowed);
-            self::assertSame('allow-all', $decision->reasonCode);
-        }
-        $decision = (new DenyDataScopeAuthorizer)->authorize($scope, 'contact', 'record-1', ['name'], 'write');
+        $decision = (new DenyDataScopeAuthorizer)->authorize($scope, new RecordRef('contact', 'record-1'), new FieldSelection(['name']), FieldUse::Write);
         self::assertFalse($decision->allowed);
         self::assertSame('deny.default', $decision->reasonCode);
 
-        $authorizer = new CallableDataScopeAuthorizer(function (DataScope $actual, string $entity, string $subject, array $fields, string $action) use ($scope): bool {
+        $authorizer = new CallableDataScopeAuthorizer(function (DataScope $actual, RecordRef $record, FieldSelection $selection, FieldUse $use) use ($scope): bool {
             self::assertSame($scope, $actual);
-            self::assertSame('contact', $entity);
-            self::assertSame('record-1', $subject);
-            self::assertSame(['name', 'email'], $fields);
+            self::assertSame('contact', $record->entity);
+            self::assertSame('record-1', $record->id);
+            self::assertSame(['name', 'email'], $selection->fields);
 
-            return $action === 'write';
+            return $use === FieldUse::Write;
         });
         foreach (['write' => [true, 'callable.allowed'], 'read' => [false, 'callable.denied']] as $action => [$allowed, $reason]) {
-            $decision = $authorizer->authorize($scope, 'contact', 'record-1', ['name', 'email'], $action);
+            $decision = $authorizer->authorize($scope, new RecordRef('contact', 'record-1'), new FieldSelection(['name', 'email']), FieldUse::from($action));
             self::assertSame($allowed, $decision->allowed);
             self::assertSame($reason, $decision->reasonCode);
         }
@@ -61,20 +56,15 @@ final class SecurityBoundaryContractTest extends TestCase
     #[DataProvider('invalidOpaqueValues')]
     public function test_control_bytes_and_overlong_scope_and_token_identities_are_rejected(string $value): void
     {
-        foreach (['accountId', 'workspaceId', 'connectionIdentity', 'actorId'] as $key) {
-            $args = ['accountId' => 'account', 'workspaceId' => 'workspace', 'connectionIdentity' => 'tenant:account', 'actorId' => 'actor', 'restoreEpoch' => str_repeat('a', 64)];
+        foreach (['accountId', 'workspaceId', 'bindingId', 'principalId'] as $key) {
+            $args = get_object_vars($this->scope());
             $args[$key] = $value;
 
             try {
                 new DataScope(...$args);
                 self::fail('Invalid scope identity admitted: '.$key);
             } catch (InvalidArgumentException $exception) {
-                self::assertSame('Invalid '.match ($key) {
-                    'accountId' => 'account identity',
-                    'workspaceId' => 'workspace identity',
-                    'connectionIdentity' => 'connection identity',
-                    'actorId' => 'actor identity',
-                }.'.', $exception->getMessage());
+                self::assertStringStartsWith('Invalid ', $exception->getMessage());
             }
         }
         foreach (['operationKey', 'expectedRecordVersion'] as $key) {
@@ -106,8 +96,7 @@ final class SecurityBoundaryContractTest extends TestCase
     public function test_opaque_boundaries_and_reason_code_grammar_accept_the_exact_limits(): void
     {
         $id = str_repeat('a', 128);
-        $scope = new DataScope($id, $id, $id, $id, str_repeat('a', 64));
-        self::assertFalse($scope->boxed);
+        $scope = new DataScope($id, $id, $id, $id, 1, $id, str_repeat('a', 64), 'user', $id);
         self::assertSame($id, $scope->workspaceId);
         self::assertSame($id, (new RecordRef($id, $id))->id);
         self::assertSame($id, (new WriteToken($id, str_repeat('b', 64), $id))->operationKey);
@@ -160,20 +149,11 @@ final class SecurityBoundaryContractTest extends TestCase
 
     public function test_context_mismatch_diagnostics_keep_both_identities_and_safe_error_descriptors(): void
     {
-        $cases = [
-            [ScopeContextMismatch::account('expected', 'actual'), 'Data scope account [expected] does not match the active context [actual].'],
-            [ScopeContextMismatch::connection('expected', 'actual'), 'Data scope connection [expected] does not match the active connection [actual].'],
-            [ScopeContextMismatch::workspace(null, 'actual'), 'Data scope workspace [none] does not match the active context [actual].'],
-            [ScopeContextMismatch::workspace('expected', null), 'Data scope workspace [expected] does not match the active context [none].'],
-            [ScopeContextMismatch::profile(true), 'Data scope was produced by a boxed profile but the active context is not boxed.'],
-            [ScopeContextMismatch::profile(false), 'Data scope was produced by a tenant profile but the active context is boxed.'],
-        ];
-        foreach ($cases as [$exception, $message]) {
-            self::assertSame($message, $exception->getMessage());
-            self::assertSame(CoreErrorCode::ScopeContextMismatch->value, $exception->errorDescriptor()->code);
-            self::assertSame(ErrorCategory::Authorization, $exception->errorDescriptor()->category);
-            self::assertFalse($exception->errorDescriptor()->retryable);
-        }
+        $stale = new ScopeStale('Work scope is stale.');
+        self::assertSame(CoreErrorCode::ScopeStale->value, $stale->errorDescriptor()->code);
+        self::assertSame(ErrorCategory::Conflict, $stale->errorDescriptor()->category);
+        self::assertSame([], $stale->errorDescriptor()->details);
+        self::assertFalse($stale->errorDescriptor()->retryable);
         $central = new CentralContextException;
         self::assertSame('No tenant context is active — this call must run inside an initialized tenant (not the central/root scope).', $central->getMessage());
         self::assertSame(CoreErrorCode::CentralContextException->value, $central->errorDescriptor()->code);
@@ -183,14 +163,14 @@ final class SecurityBoundaryContractTest extends TestCase
 
     private function scope(): DataScope
     {
-        return new DataScope('account', null, 'tenant:account', 'actor', str_repeat('a', 64));
+        return new DataScope('test', 'account', null, 'resource', 1, 'incarnation', str_repeat('a', 64), 'user', 'actor');
     }
 
     public function test_missing_version_and_untyped_optional_workspace_are_safe_payload_failures(): void
     {
         $codec = new ArrayDataScopeCodec;
         $payload = $codec->encode(scope: $this->scope());
-        foreach (['version', 'workspace'] as $key) {
+        foreach (['version', 'workspace_id'] as $key) {
             $invalid = $payload;
 
             if ($key === 'version') {

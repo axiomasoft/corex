@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\TenantContext;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\WriteToken;
 use CoreX\Data\Laravel\JsonDocuments;
@@ -21,7 +22,6 @@ use CoreX\RecurringTasks\Exceptions\UnsupportedMaterialization;
 use CoreX\RecurringTasks\Internal\MaterializationHasher;
 use CoreX\RecurringTasks\Internal\MaterializationStore;
 use CoreX\RecurringTasks\Internal\MaterializationWakeupHandler;
-use CoreX\RecurringTasks\Internal\ScopeConnectionGuard;
 use CoreX\RecurringTasks\Tests\Support\SeriesSeeder;
 use CoreX\Scheduling\Data\WakeupDelivery;
 use CoreX\Scheduling\Data\WakeupRequest;
@@ -34,6 +34,7 @@ use CoreX\Tasks\Task\Data\TaskDraft;
 use CoreX\Tasks\Task\Data\TaskReference;
 use CoreX\Tasks\Task\Internal\Models\Stage;
 use CoreX\Tasks\Task\Internal\Models\Task;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Sleep;
@@ -67,12 +68,7 @@ beforeEach(function (): void {
 
 function matScope(object $test): DataScope
 {
-    return DataScope::fromTenantContext(
-        context: resolve(TenantContextResolver::class)->current(),
-        connectionIdentity: ScopeConnectionGuard::identity(DB::connection()),
-        actorId: $test->userId,
-        restoreEpoch: $test->restoreEpoch,
-    );
+    return CallerWorkScopeFixture::forContext(resolve(TenantContextResolver::class)->current(), $test->userId, $test->restoreEpoch);
 }
 
 function matToken(object $test, SeriesReference $series, MaterializationWindow $window, string $operationKey = 'mat-op-1'): WriteToken
@@ -188,12 +184,7 @@ it('MAT-08 denies stale restore epochs and re-checks access before writes', func
     $set = SeriesSeeder::dailySet('series-mat-08', 'rev-1', 1);
     $series = SeriesSeeder::seed('series-mat-08', $set, $this->template, $this->restoreEpoch);
     $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05');
-    $staleScope = DataScope::fromTenantContext(
-        context: resolve(TenantContextResolver::class)->current(),
-        connectionIdentity: ScopeConnectionGuard::identity(DB::connection()),
-        actorId: $this->userId,
-        restoreEpoch: str_repeat('b', 64),
-    );
+    $staleScope = CallerWorkScopeFixture::forContext(resolve(TenantContextResolver::class)->current(), $this->userId, str_repeat('b', 64));
 
     expect(fn () => resolve(TaskRecurrenceCommand::class)->materialize(
         $staleScope,
@@ -310,19 +301,22 @@ it('MAT-12 fails incomplete or tampered wakeup payloads without writing', functi
 /**
  * @param  array<array-key, mixed>  $payload
  */
-function wakeupDelivery(object $context, array $payload, string $requestKey): WakeupDelivery
+function wakeupDelivery(TenantContext $context, array $payload, string $requestKey): WakeupDelivery
 {
     return new WakeupDelivery(
         request: new WakeupRequest(
-            context: $context,
+            scope: CallerWorkScopeFixture::forContext($context, 'operator', str_repeat('a', 64)),
             kind: MaterializationHasher::HANDLER_KIND,
+            handlerVersion: MaterializationHasher::HANDLER_VERSION,
             requestKey: $requestKey,
             fireAt: new DateTimeImmutable('2026-09-16T10:00:00Z'),
             window: null,
             payload: JsonDocuments::capture($payload),
         ),
+        context: $context,
         generation: 1,
         attempt: 1,
+        idempotencyKey: 'wakeup:'.$requestKey,
     );
 }
 

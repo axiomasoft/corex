@@ -8,11 +8,32 @@
         "~^docs/architecture/rename-registry\\.md$~",
         "~^tests/Golden/(?:rename-map|package-projection)\\.json$~",
         "~^scripts/rename-completeness\\.json$~",
+        "~^scripts/migration/corex-v2/tests/export-source-v1\\.php\\.fixture$~",
         "~^tests/Golden/baseline/~",
         "~^scripts/ratchet-successors\\.json$~"
     ],
     "tokens": {
         "classes": [
+            {
+                "old": "CoreX\\Context\\Contracts\\TenantContextRestorer",
+                "new": "CoreX\\Context\\Contracts\\WorkScopeRunner",
+                "match": "fqcn"
+            },
+            {
+                "old": "CoreX\\Context\\Internal\\GuardedTenantContextRestorer",
+                "new": "CoreX\\Context\\Contracts\\WorkScopeRunner",
+                "match": "fqcn"
+            },
+            {
+                "old": "CoreX\\Tenancy\\Runtime\\Internal\\ConnectionGuardedTenantContextRestorer",
+                "new": "CoreX\\Context\\Contracts\\WorkScopeRunner",
+                "match": "fqcn"
+            },
+            {
+                "old": "CoreX\\CustomFields\\Data\\FieldSelection",
+                "new": "CoreX\\Data\\Data\\FieldSelection",
+                "match": "fqcn"
+            },
             {
                 "old": "CoreX\\Attributes\\AttributesServiceProvider",
                 "new": "CoreX\\CustomFields\\CustomFieldsServiceProvider",

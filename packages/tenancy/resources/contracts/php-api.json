@@ -4867,45 +4867,6 @@
             "enum_cases": [],
             "spi_kind": "call"
         },
-        "CoreX\\Tenancy\\Laravel\\TenancyRuntimeFactory": {
-            "kind": "class",
-            "layer": "spi",
-            "since": "1.0",
-            "final": true,
-            "readonly": false,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": [],
-            "methods": {
-                "payloadHook": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "Closure",
-                    "doc": []
-                },
-                "workspaceResolver": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "Closure",
-                    "doc": []
-                }
-            },
-            "properties": {},
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": [],
-            "spi_kind": "call"
-        },
         "CoreX\\Tenancy\\Laravel\\WakeupRegistrar": {
             "kind": "class",
             "layer": "spi",
@@ -7911,6 +7872,54 @@
                         }
                     ],
                     "return": "Tenant\\Data\\Context\\Selection",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "implement"
+        },
+        "CoreX\\Tenancy\\Runtime\\Contracts\\TenantBindingAuthority": {
+            "kind": "interface",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "verify": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "binding",
+                            "type": "CoreX\\Context\\Data\\PhysicalBinding",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "context",
+                            "type": "CoreX\\Context\\Data\\TenantContext",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "Tenant\\Data\\Verification\\VerifiedBinding",
                     "doc": []
                 }
             },

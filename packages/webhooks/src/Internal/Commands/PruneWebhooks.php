@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Internal\Commands;
 
-use CoreX\Data\Data\DataScope;
+use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Contracts\WorkScopeRunner;
+use CoreX\Context\Exceptions\CentralContextException;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Webhooks\Internal\WebhookRetention;
 use Illuminate\Console\Command;
 use Packman\Attributes\Internal;
@@ -17,7 +21,7 @@ final class PruneWebhooks extends Command
 
     protected $description = 'Prune expired CoreX webhook bodies, attempts and inbox history.';
 
-    public function handle(WebhookRetention $webhooks): int
+    public function handle(): int
     {
         $max = (int) $this->option('max');
 
@@ -27,13 +31,18 @@ final class PruneWebhooks extends Command
             return self::INVALID;
         }
 
-        if (! $this->laravel->bound(DataScope::class)) {
+        try {
+            $scope = $this->laravel->make(DataScopeFactory::class)->forCurrentPrincipal($this->laravel->make(TenantContextResolver::class)->current());
+        } catch (CentralContextException|ScopeContextMismatch) {
             $this->components->warn('No trusted tenant scope is active.');
 
             return self::SUCCESS;
         }
 
-        $result = $webhooks->prune(scope: $this->laravel->make(DataScope::class), limit: $max);
+        $result = $this->laravel->make(WorkScopeRunner::class)->run(
+            $scope,
+            fn (): array => $this->laravel->make(WebhookRetention::class)->prune(scope: $scope, limit: $max),
+        );
         $this->components->info(sprintf('Webhook retention: bodies %d attempts %d inbox %d.', $result['bodies'], $result['attempts'], $result['inbox']));
 
         return self::SUCCESS;

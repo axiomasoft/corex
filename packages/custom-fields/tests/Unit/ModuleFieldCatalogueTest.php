@@ -6,7 +6,7 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\CustomFields\Data\AttributeId;
 use CoreX\CustomFields\Internal\Schema\ModuleFieldCatalogue;
-use CoreX\Data\Data\DataScope;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Packman\Context\Contracts\ContextScopeInterface;
 use Packman\Modules\Contracts\Entities\EntityRegistry;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
@@ -95,11 +95,11 @@ it('projects active compiled entity fields without creating another registry', f
                 return $this->compiled;
             }
         },
-        contexts: fixedTenantContextRestorer($context),
+        contexts: new CallerWorkScopeFixture($context),
         drivers: ['jsonb' => true, 'eav' => true, 'ddl' => true],
     );
 
-    $snapshot = $catalogue->snapshot(DataScope::fromTenantContext($context, 'boxed:account-1', 'user-1', str_repeat('a', 64)), 'contact');
+    $snapshot = $catalogue->snapshot(CallerWorkScopeFixture::forContext($context, 'user-1', str_repeat('a', 64)), 'contact');
 
     expect($snapshot->schemaVersion)->toBe('attributes/2')
         ->and($snapshot->activeFields)->toBe([[

@@ -6,7 +6,6 @@ namespace CoreX\Operations\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Data\Laravel\JsonDocuments;
@@ -17,6 +16,7 @@ use CoreX\Operations\Bulk\Internal\SqlBulkOperationStore;
 use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Tests\TestCase;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Time\Testing\FrozenClock;
 use DateInterval;
 use DateTimeImmutable;
@@ -187,13 +187,7 @@ final class BulkStoreTest extends TestCase
 
     public function test_wrong_active_connection_and_unsafe_input_references_fail_closed(): void
     {
-        $wrongScope = new DataScope(
-            accountId: 'account-1',
-            workspaceId: null,
-            connectionIdentity: 'sqlite:foreign-tenant',
-            actorId: 'actor-1',
-            restoreEpoch: hash('sha256', 'bulk-restore-epoch'),
-        );
+        $wrongScope = CallerWorkScopeFixture::scope('account-1', null, 'actor-1', hash('sha256', 'bulk-restore-epoch'), 'foreign-binding');
 
         try {
             $this->store->submit($this->definition(
@@ -203,7 +197,7 @@ final class BulkStoreTest extends TestCase
             ));
             self::fail('A foreign active connection unexpectedly admitted durable work.');
         } catch (ScopeContextMismatch $exception) {
-            self::assertStringContainsString('foreign-tenant', $exception->getMessage());
+            self::assertStringContainsString('test owner connection', $exception->getMessage());
         }
 
         $this->expectException(InvalidArgumentException::class);
@@ -402,7 +396,7 @@ final class BulkStoreTest extends TestCase
         return new SqlBulkOperationStore(
             connection: $connection,
             scopeCodec: new ArrayDataScopeCodec,
-            contexts: new GuardedTenantContextRestorer($this->contexts),
+            contexts: new CallerWorkScopeFixture($this->contexts, static fn () => $connection, $this->scope()),
             clock: $clock,
             leaseSeconds: 30,
             resultRetentionSeconds: 86_400,
@@ -421,13 +415,7 @@ final class BulkStoreTest extends TestCase
     {
         $connection ??= $this->connection;
 
-        return new DataScope(
-            accountId: 'account-1',
-            workspaceId: null,
-            connectionIdentity: $connection->getDriverName().':'.$connection->getDatabaseName(),
-            actorId: 'actor-1',
-            restoreEpoch: hash('sha256', 'bulk-restore-epoch'),
-        );
+        return CallerWorkScopeFixture::scope('account-1', null, 'actor-1', hash('sha256', 'bulk-restore-epoch'));
     }
 
     /** @param array<string, mixed>|null $inputRef */
@@ -446,7 +434,7 @@ final class BulkStoreTest extends TestCase
             major: 'v1',
             contractHash: hash('sha256', 'bulk-contract'),
             encodedScope: (new ArrayDataScopeCodec)->encode($scope),
-            actorId: $scope->actorId,
+            actorId: $scope->principalId,
             clientId: 'client-1',
             extensionStamp: JsonDocuments::capture([
                 'point' => 'api.operation',

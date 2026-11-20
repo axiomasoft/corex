@@ -7,35 +7,28 @@ namespace CoreX\Data\Internal;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Exceptions\InvalidScopePayload;
-use Override;
+use InvalidArgumentException;
 use Packman\Attributes\Internal;
 
 #[Internal]
 final readonly class ArrayDataScopeCodec implements DataScopeCodec
 {
-    /**
-     * Порядок ключей фиксирован и является частью контракта: по этому массиву
-     * считаются отпечатки идемпотентности, поэтому перестановка ключей — ломающее
-     * изменение, а не форматирование.
-     *
-     * @return array<string, scalar|null>
-     */
-    #[Override]
     public function encode(DataScope $scope): array
     {
         return [
-            'version' => $scope->version,
-            'account' => $scope->accountId,
-            'workspace' => $scope->workspaceId,
-            'connection' => $scope->connectionIdentity,
-            'actor' => $scope->actorId,
-            'restoreEpoch' => $scope->restoreEpoch,
-            'boxed' => $scope->boxed,
+            'version' => DataScope::VERSION,
+            'deployment_id' => $scope->deploymentId,
+            'account_id' => $scope->accountId,
+            'workspace_id' => $scope->workspaceId,
+            'binding_id' => $scope->bindingId,
+            'binding_generation' => $scope->bindingGeneration,
+            'account_incarnation' => $scope->accountIncarnation,
+            'restore_epoch' => $scope->restoreEpoch,
+            'principal_kind' => $scope->principalKind,
+            'principal_id' => $scope->principalId,
         ];
     }
 
-    /** @param array<string, mixed> $payload */
-    #[Override]
     public function decode(array $payload): DataScope
     {
         $version = $payload['version'] ?? null;
@@ -47,55 +40,25 @@ final readonly class ArrayDataScopeCodec implements DataScopeCodec
         if ($version !== DataScope::VERSION) {
             throw InvalidScopePayload::unsupportedVersion($version);
         }
-
-        return new DataScope(
-            accountId: self::requireString(payload: $payload, key: 'account'),
-            workspaceId: self::optionalString(payload: $payload, key: 'workspace'),
-            connectionIdentity: self::requireString(payload: $payload, key: 'connection'),
-            actorId: self::requireString(payload: $payload, key: 'actor'),
-            restoreEpoch: self::requireString(payload: $payload, key: 'restoreEpoch'),
-            boxed: self::requireBool(payload: $payload, key: 'boxed'),
-            version: $version,
-        );
-    }
-
-    /** @param array<string, mixed> $payload */
-    private static function requireString(array $payload, string $key): string
-    {
-        $value = $payload[$key] ?? null;
-
-        if (! is_string($value)) {
-            throw InvalidScopePayload::missing($key);
+        foreach (['deployment_id', 'account_id', 'binding_id', 'account_incarnation', 'restore_epoch', 'principal_kind', 'principal_id'] as $key) {
+            if (! is_string($payload[$key] ?? null)) {
+                throw InvalidScopePayload::missing($key);
+            }
         }
 
-        return $value;
-    }
-
-    /** @param array<string, mixed> $payload */
-    private static function optionalString(array $payload, string $key): ?string
-    {
-        if (! array_key_exists($key, $payload)) {
-            throw InvalidScopePayload::missing($key);
+        if (! array_key_exists('workspace_id', $payload) || ($payload['workspace_id'] !== null && ! is_string($payload['workspace_id']))) {
+            throw InvalidScopePayload::missing('workspace_id');
         }
 
-        $value = $payload[$key];
-
-        if ($value !== null && ! is_string($value)) {
-            throw InvalidScopePayload::missing($key);
+        if (! is_int($payload['binding_generation'] ?? null) || count($payload) !== 10) {
+            throw InvalidScopePayload::missing('scope');
         }
 
-        return $value;
-    }
-
-    /** @param array<string, mixed> $payload */
-    private static function requireBool(array $payload, string $key): bool
-    {
-        $value = $payload[$key] ?? null;
-
-        if (! is_bool($value)) {
-            throw InvalidScopePayload::missing($key);
+        try {
+            return new DataScope($payload['deployment_id'], $payload['account_id'], $payload['workspace_id'], $payload['binding_id'],
+                $payload['binding_generation'], $payload['account_incarnation'], $payload['restore_epoch'], $payload['principal_kind'], $payload['principal_id']);
+        } catch (InvalidArgumentException) {
+            throw InvalidScopePayload::missing('scope');
         }
-
-        return $value;
     }
 }

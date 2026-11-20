@@ -6,6 +6,9 @@ namespace CoreX\ImportExport\Internal\Transfer;
 
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\FieldSelection;
+use CoreX\Data\Data\RecordRef;
+use CoreX\Data\Enums\FieldUse;
 use CoreX\ImportExport\Contracts\TransferResultReader;
 use CoreX\ImportExport\Data\TransferRef;
 use CoreX\ImportExport\Exceptions\ImportUnavailable;
@@ -95,7 +98,7 @@ final readonly class SqlTransferResultReader implements TransferResultReader
 
         if ($job === null
             || ! hash_equals(Value::text($job->restore_epoch), $scope->restoreEpoch)
-            || ! $this->authorizer->authorize(scope: $scope, entity: '*', subjectId: $ref->id, fields: [], action: 'transfer.read')->allowed) {
+            || ! $this->authorizer->authorize($scope, new RecordRef('import-export.transfer', $ref->id), new FieldSelection([]), FieldUse::Read)->allowed) {
             throw new ImportUnavailable('Transfer result is not available under the current authority.');
         }
 

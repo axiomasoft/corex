@@ -8,7 +8,6 @@ return [
         'handler_kind' => 'task-recurrence.materialize',
         'handler_version' => 'task-materialization/1',
         'handler' => 'CoreX\\RecurringTasks\\Internal\\MaterializationWakeupHandler',
-        'accept_legacy_unstamped' => false,
     ],
     'completion_capture' => [
         'enabled' => false,

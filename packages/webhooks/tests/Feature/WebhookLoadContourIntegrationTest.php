@@ -9,10 +9,8 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\CoreServiceProvider;
 use CoreX\Data\Contracts\DataScopeCodec;
-use CoreX\Data\Data\DataScope;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
@@ -27,6 +25,7 @@ use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\LoadContourModule;
 use CoreX\Operations\Testing\ModuleFixture;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Data\ValidatedWebhookRequest;
@@ -139,7 +138,9 @@ final class WebhookLoadContourIntegrationTest extends TestCase
             });
             $clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
             $catalogue = $this->catalogue();
-            $fanout = new WebhookFanout($connection, MessagingFixtures::inbox($connection, $clock), $catalogue, ['orders.placed' => new WebhookLoadContourIntegrationLoadContourProjector], $clock, new JsonCloudEventCodec(MessagingFixtures::contracts([new MessageContract('orders.placed', 1, MessageClass::IntegrationEvent, 'orders/api', PiiClass::Personal, 'webhooks')])));
+            $contexts = new ContextFixture;
+            $contexts->initialize(new AccountRef('account-1', 'account-1', 'active', [], []));
+            $fanout = new WebhookFanout($connection, MessagingFixtures::inbox($connection, $clock), $catalogue, ['orders.placed' => new WebhookLoadContourIntegrationLoadContourProjector], $clock, new JsonCloudEventCodec(MessagingFixtures::contracts([new MessageContract('orders.placed', 1, MessageClass::IntegrationEvent, 'orders/api', PiiClass::Personal, 'webhooks')])), resolve(DataScopeCodec::class), new CallerWorkScopeFixture($contexts));
             $now = $clock->now();
             $connection->table('sys_api_webhook_subscriptions')->insert([
                 'id' => 'sub-local',
@@ -154,13 +155,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
                 'created_at' => $now,
                 'updated_at' => $now,
             ]);
-            $scope = new DataScope(
-                'account-1',
-                null,
-                'pgsql:'.$database,
-                'actor-1',
-                hash('sha256', 'p1420-restore'),
-            );
+            $scope = CallerWorkScopeFixture::scope('account-1', null, 'actor-1', hash('sha256', 'p1420-restore'));
             $envelope = new MessageEnvelope(
                 messageId: '55555555-5555-4555-8555-555555555555',
                 source: 'orders',
@@ -185,7 +180,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
             $keys->provision('current', new SecretRef(self::Secret), 0);
             $receiver = new LocalWebhookReceiver([self::Secret], $clock->now()->getTimestamp());
             $worker = new WebhookDeliveryWorker(
-                store: new SqlWebhookDeliveryStore($connection, new GuardedTenantContextRestorer($contexts), $clock, new WebhookRetryPolicy(WebhookOptionsParser::fromArray([]))),
+                store: new SqlWebhookDeliveryStore($connection, new CallerWorkScopeFixture($contexts), $clock, new WebhookRetryPolicy(WebhookOptionsParser::fromArray([]))),
                 signer: new HmacWebhookSigner($keys),
                 urlPolicy: new WebhookUrlPolicy(static fn (): array => ['93.184.216.34']),
                 transport: $receiver,
@@ -282,8 +277,8 @@ final class WebhookLoadContourIntegrationTest extends TestCase
         $contexts = new ContextFixture;
         $contexts->value = new TenantContext($account, null, true);
         $clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
-        $store = new SqlWebhookSubscriptionStore($connection, new GuardedTenantContextRestorer($contexts), $this->catalogue(), $clock, new PermitPublicEgressPolicy);
-        $boxed = new DataScope('account-1', null, 'boxed:account-1', 'actor-1', hash('sha256', 'boxed-restore'), boxed: true);
+        $boxed = CallerWorkScopeFixture::scope('account-1', null, 'actor-1', hash('sha256', 'boxed-restore'));
+        $store = new SqlWebhookSubscriptionStore($connection, new CallerWorkScopeFixture($contexts, static fn () => $connection, $boxed), $this->catalogue(), $clock, new PermitPublicEgressPolicy);
         $created = $store->create($boxed, $this->subscription('boxed-sub', $clock->now()), true, true);
 
         self::assertSame('boxed-sub', $created->id);
@@ -293,7 +288,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
 
         try {
             $store->create(
-                new DataScope('account-1', null, 'pgsql:production', 'actor-1', hash('sha256', 'boxed-restore'), boxed: true),
+                CallerWorkScopeFixture::scope('account-1', null, 'actor-1', hash('sha256', 'boxed-restore'), 'foreign-binding'),
                 $this->subscription('foreign-sub', $clock->now()),
                 true,
                 true,
@@ -305,13 +300,8 @@ final class WebhookLoadContourIntegrationTest extends TestCase
         }
 
         $contexts->value = new TenantContext($account, null, false);
-        $cloud = new DataScope(
-            'account-1',
-            null,
-            $connection->getDriverName().':'.$connection->getDatabaseName(),
-            'actor-1',
-            hash('sha256', 'cloud-restore'),
-        );
+        $cloud = CallerWorkScopeFixture::scope('account-1', null, 'actor-1', hash('sha256', 'cloud-restore'));
+        $store = new SqlWebhookSubscriptionStore($connection, new CallerWorkScopeFixture($contexts, static fn () => $connection, $cloud), $this->catalogue(), $clock, new PermitPublicEgressPolicy);
         $store->create($cloud, $this->subscription('cloud-sub', $clock->now()), true, true);
 
         self::assertSame(2, $connection->table('sys_api_webhook_subscriptions')->count());

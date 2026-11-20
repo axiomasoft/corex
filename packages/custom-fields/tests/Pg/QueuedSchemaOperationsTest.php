@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\CustomFields\Data\SchemaChange;
 use CoreX\CustomFields\Data\SchemaOperationId;
 use CoreX\CustomFields\Internal\Schema\QueuedSchemaOperations;
@@ -12,6 +13,7 @@ use CoreX\CustomFields\Tests\PgTestCase;
 use CoreX\CustomFields\Tests\Support\PgTestSupport;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Internal\CallableDataScopeAuthorizer;
 use CoreX\Time\Laravel\SystemClock;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +26,7 @@ function queuedSchemaOperations(string $schemaHash = '', ?DataScopeAuthorizer $a
 
     return new QueuedSchemaOperations(
         connection: DB::connection(),
+        current: jsonbCurrent(),
         tables: PgTestSupport::tables(),
         catalogue: schemaCatalogue('contact', $hash),
         authorizer: $authorizer ?? jsonbAuthorizer(),
@@ -34,6 +37,8 @@ function schemaWorker(?DataScopeAuthorizer $authorizer = null): SchemaOperationW
 {
     return new SchemaOperationWorker(
         connection: DB::connection(),
+        current: jsonbCurrent(),
+        runner: jsonbCurrent(),
         tables: PgTestSupport::tables(),
         authorizer: $authorizer ?? jsonbAuthorizer(),
         clock: new SystemClock,
@@ -123,7 +128,7 @@ it('denies a stale restore epoch before a worker can execute DDL', function (): 
     expect(fn (): mixed => schemaWorker()->run(
         jsonbScope(restoreEpoch: str_repeat('b', 64)),
         $receipt->operation,
-    ))->toThrow(ScopeDenied::class);
+    ))->toThrow(ScopeContextMismatch::class);
 
     $index = 'sys_attr_doc_'.substr(hash('sha256', "contact\nstale_score"), 0, 24);
     expect(DB::table('pg_indexes')->where('indexname', $index)->exists())->toBeFalse()
@@ -133,7 +138,7 @@ it('denies a stale restore epoch before a worker can execute DDL', function (): 
 it('requires the trusted scope to approve the exact schema approval digest', function (): void {
     $hash = str_repeat('f', 64);
     $operations = queuedSchemaOperations($hash, new CallableDataScopeAuthorizer(
-        static fn (DataScope $_scope, string $entity, string $subjectId, array $fields, string $action): bool => $action !== 'schema-approve',
+        static fn (DataScope $_scope, RecordRef $record): bool => $record->entity !== 'attributes.schema-approval',
     ));
 
     expect(fn (): mixed => $operations->request(

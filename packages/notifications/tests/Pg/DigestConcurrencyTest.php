@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
+use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Notifications\Tests\PgTestCase;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Illuminate\Support\Facades\DB;
 
 uses(PgTestCase::class)->group('pg');
@@ -23,7 +25,14 @@ it('holds a PostgreSQL frozen digest run lock across independent tick connection
         'created_at' => now(),
         'updated_at' => now(),
     ]);
+    $scope = (new ArrayDataScopeCodec)->encode(
+        CallerWorkScopeFixture::scope('digest-concurrency', null, 'recipient', str_repeat('a', 64)),
+    );
+    $scopeJson = json_encode($scope, JSON_THROW_ON_ERROR);
     DB::table('ntf_digest_runs')->insert([
+        'scope_key' => hash('sha256', $scopeJson),
+        'scope' => $scopeJson,
+        'scope_seal' => str_repeat('a', 64),
         'id' => $runId,
         'recipient_kind' => 'user',
         'recipient_id' => 'recipient-1',

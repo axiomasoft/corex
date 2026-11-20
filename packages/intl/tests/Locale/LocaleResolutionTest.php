@@ -5,7 +5,6 @@ declare(strict_types=1);
 use Brick\Money\Money;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Intl\Formatting\Contracts\MoneyFormatter;
 use CoreX\Intl\Formatting\Data\FormatPolicy;
@@ -24,6 +23,7 @@ use CoreX\Intl\Territory\Internal\Reference\FixtureReferenceNormalizer;
 use CoreX\Intl\Territory\Internal\Reference\ReferenceCursorCodec;
 use CoreX\Intl\Translation\Contracts\TranslationReader;
 use CoreX\Intl\Translation\Data\LocalizedText;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 
 it('LOC-01 validates supported allowlist and rejects invalid tags', function (): void {
     $policy = resolve(LocalePolicy::class);
@@ -203,12 +203,7 @@ it('LOC-09 reads localized reference metadata from two providers deterministical
         cursors: $cursors,
     );
 
-    $scope = DataScope::fromTenantContext(
-        context: new TenantContext(account: new AccountRef(id: 'acct', slug: 'acct', status: 'active', features: [], limits: [])),
-        connectionIdentity: 'sqlite::memory:',
-        actorId: 'reader',
-        restoreEpoch: str_repeat('a', 64),
-    );
+    $scope = CallerWorkScopeFixture::forContext(new TenantContext(account: new AccountRef(id: 'acct', slug: 'acct', status: 'active', features: [], limits: [])), 'reader', str_repeat('a', 64));
 
     $boxesCountry = $boxes->query($scope, new GeographyQuery(
         kind: 'country', countryKey: null, parentKey: null, placeKey: null, query: 'united', locale: 'en', snapshotId: null, mode: 'prefix', limit: 10,

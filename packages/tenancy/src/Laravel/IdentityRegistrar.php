@@ -10,6 +10,7 @@ use CoreX\Tenancy\Account\Contracts\AccountRead;
 use CoreX\Tenancy\Identity\Contracts\IdentitySyncer;
 use CoreX\Tenancy\Identity\Internal\DatabaseIdentitySyncer;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionResolverInterface;
@@ -37,6 +38,7 @@ final class IdentityRegistrar implements PackageRegistrar
                 connections: $app->make(ConnectionResolverInterface::class),
                 clock: $app->make(ClockInterface::class),
                 events: $app->make(Dispatcher::class),
+                application: static fn (): Container => Container::getInstance(),
             ),
         );
         $app->singleton(IdentitySyncer::class, static fn (Application $app): DatabaseIdentitySyncer => $app->make(DatabaseIdentitySyncer::class));

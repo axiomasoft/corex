@@ -10,7 +10,6 @@ use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\RecurringTasks\Contracts\TaskRecurrenceCommand;
 use CoreX\RecurringTasks\Data\MaterializationWindow;
 use CoreX\RecurringTasks\Data\SeriesReference;
-use CoreX\RecurringTasks\Exceptions\UnsupportedMaterialization;
 use CoreX\RecurringTasks\Internal\MaterializationHasher;
 use CoreX\RecurringTasks\Internal\RecurringTasksOptions;
 use CoreX\RecurringTasks\Tests\PgTestCase;
@@ -23,10 +22,12 @@ use CoreX\Tasks\Task\Data\CompleteTaskData;
 use CoreX\Tasks\Task\Data\TaskDraft;
 use CoreX\Tasks\Task\Internal\Models\Stage;
 use CoreX\Tasks\Task\Internal\Models\Task;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Compiler\CompiledRegistry;
 
 require_once __DIR__.'/../../../scheduler/tests/Support/PackageBridge.php';
+use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\RecurringTasks\RecurringTasksServiceProvider;
 use CoreX\Scheduling\Contracts\WakeupScheduler;
 use CoreX\Scheduling\Data\WakeupRequest;
@@ -83,12 +84,7 @@ beforeEach(function (): void {
 
 function pgScope(object $test): DataScope
 {
-    return DataScope::fromTenantContext(
-        context: resolve(TenantContextResolver::class)->current(),
-        connectionIdentity: 'pgsql:'.DB::connection('pgsql')->getDatabaseName(),
-        actorId: $test->userId,
-        restoreEpoch: $test->restoreEpoch,
-    );
+    return CallerWorkScopeFixture::forContext(resolve(TenantContextResolver::class)->current(), $test->userId, $test->restoreEpoch);
 }
 
 function pgToken(object $test, SeriesReference $series, MaterializationWindow $window, string $operationKey): WriteToken
@@ -154,8 +150,9 @@ it('MAT-06 schedules a stamped complete payload and materializes through the han
     $second = SeriesSeeder::dailySet('series-pg-06b', 'rev-1', 1);
     $secondSeries = SeriesSeeder::seed('series-pg-06b', $second, $this->template, $this->restoreEpoch);
     expect(resolve(WakeupScheduler::class)->schedule(new WakeupRequest(
-        context: $context,
+        scope: pgScope($this),
         kind: MaterializationHasher::HANDLER_KIND,
+        handlerVersion: MaterializationHasher::HANDLER_VERSION,
         requestKey: 'manual:series-pg-06b',
         fireAt: new DateTimeImmutable('2026-09-16T10:00:00Z'),
         window: null,
@@ -188,20 +185,17 @@ it('MAT-06b quarantines an exact handler version mismatch without invoking mater
     );
     $envelope['_corex']['extension']['version'] = 'task-materialization/0';
     $now = new DateTimeImmutable('2026-09-16T10:00:00Z');
-    DB::table('sys_wakeup_requests')->insert([
-        'id' => (string) Str::uuid7(),
-        'workspace_scope_key' => 'account',
-        'kind' => MaterializationHasher::HANDLER_KIND,
-        'request_key' => 'mismatch:series-pg-06b',
-        'request_digest' => hash('sha256', 'mismatch'),
-        'fire_at' => $now,
-        'payload' => json_encode($envelope, JSON_THROW_ON_ERROR),
-        'status' => 'pending',
-        'generation' => 0,
-        'attempt' => 0,
-        'created_at' => $now,
-        'updated_at' => $now,
-    ]);
+    resolve(WakeupScheduler::class)->schedule(new WakeupRequest(
+        scope: pgScope($this),
+        kind: MaterializationHasher::HANDLER_KIND,
+        handlerVersion: MaterializationHasher::HANDLER_VERSION,
+        requestKey: 'mismatch:series-pg-06b',
+        fireAt: $now,
+        window: null,
+        payload: JsonDocuments::capture($envelope['data']),
+    ));
+    DB::table('sys_wakeup_requests')->where('request_key', 'mismatch:series-pg-06b')
+        ->update(['payload' => json_encode($envelope, JSON_THROW_ON_ERROR)]);
 
     $result = wakeup_bridge_sweep(resolve(TenantContextResolver::class)->current(), 10);
 
@@ -237,19 +231,14 @@ it('MAT-08 denies cross-account restore epoch reuse on postgres', function (): v
     $set = SeriesSeeder::dailySet('series-pg-08', 'rev-1', 1);
     $series = SeriesSeeder::seed('series-pg-08', $set, $this->template, $this->restoreEpoch);
     $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05');
-    $scope = DataScope::fromTenantContext(
-        context: resolve(TenantContextResolver::class)->current(),
-        connectionIdentity: 'pgsql:another_account',
-        actorId: $this->userId,
-        restoreEpoch: $this->restoreEpoch,
-    );
+    $scope = CallerWorkScopeFixture::scope('foreign-account', null, $this->userId, $this->restoreEpoch);
 
     expect(fn () => resolve(TaskRecurrenceCommand::class)->materialize(
         $scope,
         $series,
         $window,
         new WriteToken('pg-08', MaterializationHasher::payload($scope, $series, $window), $series->immutableRevision),
-    ))->toThrow(UnsupportedMaterialization::class);
+    ))->toThrow(ScopeContextMismatch::class);
 });
 
 function registerMaterializationWakeup(): void

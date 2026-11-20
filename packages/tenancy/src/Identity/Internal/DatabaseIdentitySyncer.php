@@ -4,14 +4,22 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Identity\Internal;
 
+use Closure;
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\DataScopeFactory;
 use CoreX\Context\Contracts\IdentityPasswordRehasher;
+use CoreX\Context\Contracts\NamedWorkPrincipal;
 use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Contracts\WorkScopeRunner;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Data\Data\DataScope;
 use CoreX\Tenancy\Account\Contracts\AccountRead;
 use CoreX\Tenancy\Identity\Contracts\IdentitySyncer;
 use CoreX\Tenancy\Identity\Events\UserSynced;
 use CoreX\Tenancy\Identity\Internal\Jobs\SyncIdentityToAccount;
 use CoreX\Tenancy\Identity\Internal\Models\User;
 use DateTimeImmutable;
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
@@ -35,6 +43,9 @@ use Throwable;
 #[Internal]
 final readonly class DatabaseIdentitySyncer implements IdentityPasswordRehasher, IdentitySyncer
 {
+    public const string SERVICE = 'corex.identity-sync';
+
+    /** @param Closure():Container $application */
     public function __construct(
         private string $centralConnection,
         private TenancyManager $tenancy,
@@ -42,6 +53,7 @@ final readonly class DatabaseIdentitySyncer implements IdentityPasswordRehasher,
         private ConnectionResolverInterface $connections,
         private ClockInterface $clock,
         private Dispatcher $events,
+        private Closure $application,
     ) {}
 
     /** @param array<string, string> $columns */
@@ -62,74 +74,85 @@ final readonly class DatabaseIdentitySyncer implements IdentityPasswordRehasher,
 
     public function syncToAccount(string $identityId, string $accountId): void
     {
+        try {
+            $this->asService($accountId, function (DataScope $scope) use ($identityId): void {
+                ($this->application)()->make(WorkScopeRunner::class)->run($scope, fn () => $this->syncCaptured($identityId, $scope));
+            });
+        } catch (Throwable) {
+            $this->markFailed($identityId, $accountId);
+        }
+    }
+
+    public function syncCaptured(string $identityId, DataScope $scope): void
+    {
+        $accountId = $scope->accountId;
+
+        if ($scope->workspaceId !== null || $scope->principalKind !== 'service' || $scope->principalId !== self::SERVICE) {
+            throw new ScopeContextMismatch('A granted identity synchronization principal is required.');
+        }
+        $current = ($this->application)()->make(CurrentWorkScope::class);
+        $current->assert($scope);
         $identity = $this->connections->connection($this->centralConnection)
             ->table('root_identities')
             ->where('id', $identityId)
             ->first();
 
-        $account = $this->accounts->find(accountId: $accountId, connectionName: $this->centralConnection);
-
-        if ($identity === null || $account === null) {
-            $this->markFailed(identityId: $identityId, accountId: $accountId);
+        if ($identity === null) {
+            $this->markFailed($identityId, $accountId);
 
             return;
         }
-
         $membership = $this->connections->connection($this->centralConnection)
             ->table('root_identity_accounts')
             ->where('identity_id', $identityId)
             ->where('account_id', $accountId)
             ->first();
 
-        $accountRef = $account;
+        /** @var Connection $connection */
+        $connection = $this->connections->connection();
+        $connection->transaction(function () use ($connection, $identity, $identityId, $accountId, $scope, $current): void {
+            $current->assert($scope, $connection);
+            // The lock also covers an absent user row, serializing first delivery.
+            $connection->select('SELECT pg_advisory_xact_lock(hashtextextended(?, 0))', ['corex-identity:'.$identityId]);
+            $existing = User::withTrashed()->whereKey($identityId)->first();
+            $sourceUpdatedAt = new DateTimeImmutable(DatabaseValue::text($identity->updated_at));
+            $status = $this->connections->connection($this->centralConnection)->table('root_identity_accounts')
+                ->where('identity_id', $identityId)->where('account_id', $accountId)->value('status');
 
-        try {
-            $this->tenancy->runFor(account: $accountRef, workspace: null, callback: function () use ($identity, $identityId, $accountId): void {
-                /** @var Connection */
-                $connection = $this->connections->connection();
-                $connection->transaction(function () use ($connection, $identity, $identityId, $accountId): void {
-                    // The lock also covers an absent user row, serializing first delivery.
-                    $connection->select('SELECT pg_advisory_xact_lock(hashtextextended(?, 0))', ['corex-identity:'.$identityId]);
-                    $existing = User::withTrashed()->whereKey($identityId)->first();
-                    $sourceUpdatedAt = new DateTimeImmutable(DatabaseValue::text($identity->updated_at));
-                    $isMembershipActive = $this->connections->connection($this->centralConnection)->table('root_identity_accounts')
-                        ->where('identity_id', $identityId)->where('account_id', $accountId)->value('status') === 'active';
+            if ($status === null && $existing === null) {
+                return;
+            }
+            $isMembershipActive = $status === 'active';
 
-                    if ($existing !== null
-                        && $existing->identity_source_updated_at !== null
-                        && $sourceUpdatedAt <= $existing->identity_source_updated_at) {
-                        // Membership authority is independent of the profile clock. A
-                        // revoke must apply even when the identity profile has not
-                        // changed; a stale profile snapshot must still not overwrite
-                        // local profile data.
-                        User::query()
-                            ->whereKey($identity->id)
-                            ->update(['is_active' => $isMembershipActive]);
+            if ($existing !== null
+                && $existing->identity_source_updated_at !== null
+                && $sourceUpdatedAt <= $existing->identity_source_updated_at) {
+                // Membership authority is independent of the profile clock. A
+                // revoke must apply even when the identity profile has not
+                // changed; a stale profile snapshot must still not overwrite
+                // local profile data.
+                User::query()
+                    ->whereKey($identity->id)
+                    ->update(['is_active' => $isMembershipActive]);
 
-                        return;
-                    }
+                return;
+            }
 
-                    User::withTrashed()->updateOrCreate(
-                        attributes: ['id' => $identity->id],
-                        values: [
-                            'email' => $identity->email,
-                            'name' => $identity->name,
-                            'phone' => $identity->phone,
-                            'locale' => $identity->locale,
-                            'is_active' => $isMembershipActive,
-                            'synced_at' => $this->clock->now(),
-                            'identity_source_updated_at' => $sourceUpdatedAt->format('Y-m-d H:i:s.uP'),
-                        ],
-                    );
+            User::withTrashed()->updateOrCreate(
+                attributes: ['id' => $identity->id],
+                values: [
+                    'email' => $identity->email,
+                    'name' => $identity->name,
+                    'phone' => $identity->phone,
+                    'locale' => $identity->locale,
+                    'is_active' => $isMembershipActive,
+                    'synced_at' => $this->clock->now(),
+                    'identity_source_updated_at' => $sourceUpdatedAt->format('Y-m-d H:i:s.uP'),
+                ],
+            );
 
-                    $connection->afterCommit(fn () => $this->events->dispatch(new UserSynced(identityId: $identityId, accountId: $accountId)));
-                });
-            });
-        } catch (Throwable) {
-            $this->markFailed(identityId: $identityId, accountId: $accountId);
-
-            return;
-        }
+            $connection->afterCommit(fn () => $this->events->dispatch(new UserSynced(identityId: $identityId, accountId: $accountId)));
+        });
 
         if ($membership !== null) {
             $this->connections->connection($this->centralConnection)
@@ -151,8 +174,34 @@ final readonly class DatabaseIdentitySyncer implements IdentityPasswordRehasher,
             ->pluck('account_id');
 
         foreach ($accountIds as $accountId) {
-            SyncIdentityToAccount::dispatch(identityId: $identityId, accountId: DatabaseValue::text($accountId));
+            $id = DatabaseValue::text($accountId);
+
+            try {
+                $this->asService($id, static function (DataScope $scope) use ($identityId): void {
+                    SyncIdentityToAccount::dispatch($identityId, $scope);
+                });
+            } catch (Throwable) {
+                $this->markFailed($identityId, $id);
+            }
         }
+    }
+
+    /** @param Closure(DataScope):void $work */
+    private function asService(string $accountId, Closure $work): void
+    {
+        $account = $this->accounts->find($accountId, $this->centralConnection) ?? throw new ScopeContextMismatch('Account is unavailable.');
+        $this->tenancy->runFor($account, null, function () use ($work): void {
+            $context = $this->tenancy->context() ?? throw new ScopeContextMismatch('Missing identity projection target.');
+            $app = ($this->application)();
+            $app->make(NamedWorkPrincipal::class)->run($context, self::SERVICE, static function () use ($context, $work, $app): void {
+                $scope = $app->make(DataScopeFactory::class)->forCurrentPrincipal($context);
+
+                if ($scope->principalKind !== 'service' || $scope->principalId !== self::SERVICE) {
+                    throw new ScopeContextMismatch('Missing identity service grant.');
+                }
+                $work($scope);
+            });
+        });
     }
 
     private function markFailed(string $identityId, string $accountId): void

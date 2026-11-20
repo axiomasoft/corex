@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Digest\Internal;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Notifications\Delivery\Data\RecipientReference;
 use CoreX\Notifications\Digest\Contracts\DigestBuilder;
 use CoreX\Notifications\Digest\Data\DigestWindow;
@@ -20,6 +22,8 @@ final readonly class DigestWakeupHandler
 {
     public function __construct(
         private ConnectionInterface $connection,
+        private CurrentWorkScope $currentScope,
+        private DataScopeCodec $scopeCodec,
         private PreferenceRepository $preferences,
         private ClockInterface $clock,
         private DigestBuilder $digests,
@@ -27,6 +31,8 @@ final readonly class DigestWakeupHandler
 
     public function __invoke(DigestTick $tick): void
     {
+        $this->currentScope->assert($tick->scope, $this->connection);
+        $scopeKey = hash('sha256', json_encode($this->scopeCodec->encode($tick->scope), JSON_THROW_ON_ERROR));
         $prefix = 'notification.digest:';
 
         if (! str_starts_with($tick->requestKey, $prefix)) {
@@ -39,10 +45,13 @@ final readonly class DigestWakeupHandler
             throw new RuntimeException('Digest wakeup key does not identify a run.');
         }
 
-        $this->connection->transaction(function () use ($runId, $tick): void {
-            $run = $this->connection->table('ntf_digest_runs')->where('id', $runId)->lockForUpdate()->first();
+        $this->connection->transaction(function () use ($runId, $scopeKey, $tick): void {
+            $this->currentScope->assert($tick->scope, $this->connection);
+            $run = $this->connection->table('ntf_digest_runs')->where('id', $runId)->where('scope_key', $scopeKey)->lockForUpdate()->first();
 
-            if ($run === null || $run->state !== 'frozen') {
+            if ($run === null || $run->state !== 'frozen'
+                || $run->recipient_kind !== $tick->scope->principalKind
+                || $run->recipient_id !== $tick->scope->principalId) {
                 return;
             }
 

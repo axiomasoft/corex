@@ -11,6 +11,7 @@ use CoreX\CustomFields\Internal\InvalidAttributeValue;
 use CoreX\CustomFields\Internal\Values\FieldValueValidator;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 
 it('accepts all supported typed values from the active registry snapshot', function (): void {
     $hash = str_repeat('a', 64);
@@ -33,10 +34,7 @@ it('accepts all supported typed values from the active registry snapshot', funct
             return $this->snapshot;
         }
     };
-    $scope = DataScope::fromTenantContext(
-        context: new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true),
-        connectionIdentity: 'pgsql:corex_test', actorId: 'user-1', restoreEpoch: $hash,
-    );
+    $scope = CallerWorkScopeFixture::forContext(new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true), 'user-1', $hash);
 
     new FieldValueValidator($catalogue)->validatePatch(
         scope: $scope,
@@ -64,10 +62,7 @@ it('rejects an unknown field and floating point money values', function (): void
             return $this->snapshot;
         }
     };
-    $scope = DataScope::fromTenantContext(
-        context: new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true),
-        connectionIdentity: 'pgsql:corex_test', actorId: 'user-1', restoreEpoch: $hash,
-    );
+    $scope = CallerWorkScopeFixture::forContext(new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true), 'user-1', $hash);
     $validator = new FieldValueValidator($catalogue);
     $record = new RecordRef(entity: 'contact', id: 'record-1');
 

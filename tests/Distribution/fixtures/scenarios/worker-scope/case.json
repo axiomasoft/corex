@@ -1,0 +1,47 @@
+{
+  "id": "worker-scope",
+  "laravel": 13,
+  "host_support": true,
+  "distinct_connections": true,
+  "variants": {
+    "cloud": {
+      "profile": {
+        "id": "cloud-worker-scope",
+        "database": "postgres-isolated",
+        "database_roles": ["control", "a", "b"],
+        "default_database": "control",
+        "http": true,
+        "packages": [
+          "axiomasoft/corex", "axiomasoft/corex-tenancy", "axiomasoft/corex-access",
+          "axiomasoft/corex-search", "axiomasoft/corex-scheduler"
+        ],
+        "prerequisites": ["axiomasoft/tenant-laravel"]
+      }
+    },
+    "boxed": {
+      "profile": {
+        "id": "boxed-worker-scope",
+        "database": "postgres-isolated",
+        "database_roles": ["control", "a"],
+        "default_database": "a",
+        "http": true,
+        "packages": ["axiomasoft/corex"],
+        "forbid": [{"package": "axiomasoft/corex-tenancy", "name": "Tenancy"}]
+      }
+    }
+  },
+  "processes": {
+    "producer": ["php", "{fixture}/probe.php", "produce"],
+    "worker": ["php", "{fixture}/probe.php", "work"]
+  },
+  "actions": [
+    {"action": "start", "name": "producer"},
+    {"action": "await", "name": "produced", "process": "producer"},
+    {"action": "start", "name": "worker"},
+    {"action": "await", "name": "worked", "process": "worker"},
+    {"action": "release", "name": "worked"},
+    {"action": "complete", "name": "worker"},
+    {"action": "release", "name": "produced"},
+    {"action": "complete", "name": "producer"}
+  ]
+}

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications;
 
+use CoreX\Context\Laravel\WorkQueueHandlers;
 use CoreX\Notifications\Delivery\Internal\Commands\SweepNotificationDeliveries;
+use CoreX\Notifications\Delivery\Internal\Jobs\DeliverNotification;
 use CoreX\Notifications\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Notifications\Laravel\NotificationsBindingsRegistrar;
 use CoreX\Notifications\Laravel\NotificationsDigestRegistrar;
@@ -27,6 +29,8 @@ final class NotificationsServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->callAfterResolving(WorkQueueHandlers::class, static fn (WorkQueueHandlers $handlers) => $handlers->tenant(DeliverNotification::class));
+
         $this->app->tag((new NotificationsModule)->schemaSetProviders(), SchemaSetProvider::class);
 
         ProblemDefinitions::register(app: $this->app, composerManifest: __DIR__.'/../composer.json', provider: PackageProblemDefinitions::class);

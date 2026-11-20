@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal\Schema;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Data\AttributeDefinition;
 use CoreX\CustomFields\Data\AttributeId;
@@ -12,7 +13,6 @@ use CoreX\CustomFields\Data\AttributeTables;
 use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Data\IndexPolicy;
 use CoreX\CustomFields\Data\ValueBag;
-use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
 use CoreX\CustomFields\Internal\Support\Validation;
 use CoreX\CustomFields\Internal\Value;
 use CoreX\Data\Data\DataScope;
@@ -32,13 +32,13 @@ final readonly class DatabaseFieldCatalogue implements FieldCatalogue
     public function __construct(
         private ConnectionInterface $connection,
         private AttributeTables $tables,
-        private ScopeConnectionGuard $guard,
+        private CurrentWorkScope $current,
         private array $drivers = [],
     ) {}
 
     public function snapshot(DataScope $scope, string $entity): FieldSnapshot
     {
-        $this->guard->assertMatches($scope);
+        $this->current->assert($scope, $this->connection);
 
         $latest = [];
         foreach ($this->connection->table($this->tables->definitions)
@@ -70,7 +70,7 @@ final readonly class DatabaseFieldCatalogue implements FieldCatalogue
     /** @param array<string, string> $reservations key => current|alias */
     public function publish(DataScope $scope, AttributeDefinition $definition, array $reservations): void
     {
-        $this->guard->assertMatches($scope);
+        $this->current->assert($scope, $this->connection);
 
         if ($definition->id->isLegacy()) {
             throw new InvalidArgumentException('Legacy attribute identities must be pinned before database publication.');
@@ -89,7 +89,8 @@ final readonly class DatabaseFieldCatalogue implements FieldCatalogue
         $canonical = $definition->canonical();
         $definitionHash = hash('sha256', json_encode($canonical, JSON_THROW_ON_ERROR));
 
-        $this->connection->transaction(function () use ($definition, $definitionHash, $reservations): void {
+        $this->connection->transaction(function () use ($scope, $definition, $definitionHash, $reservations): void {
+            $this->current->assert($scope, $this->connection);
             $this->connection->table($this->tables->definitions)->insert([
                 'attribute_id' => $definition->id->value,
                 'revision' => $definition->revision,

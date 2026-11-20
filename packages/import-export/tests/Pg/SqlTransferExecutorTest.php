@@ -25,8 +25,10 @@ use CoreX\ImportExport\Data\TargetResult;
 use CoreX\ImportExport\Data\TransferLimits;
 use CoreX\ImportExport\Data\TransferRef;
 use CoreX\ImportExport\Exceptions\ImportUnavailable;
+use CoreX\ImportExport\Internal\SessionIdentity;
 use CoreX\ImportExport\Internal\Transfer\SqlTransferExecutor;
 use CoreX\ImportExport\Tests\PgTestCase;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Time\Laravel\SystemClock;
 use Illuminate\Support\Facades\DB;
 
@@ -180,7 +182,7 @@ function insertJob(string $id, string $hash, string $mode): void
 {
     DB::table('corex_transfer_jobs')->insert([
         'id' => $id,
-        'source_manifest' => '{}',
+        'source_manifest' => json_encode(['_scope_hash' => SessionIdentity::scopeHash(scope($hash))], JSON_THROW_ON_ERROR),
         'source_hash' => $hash,
         'mapping_snapshot' => '{}',
         'mapping_hash' => $hash,
@@ -199,12 +201,7 @@ function insertJob(string $id, string $hash, string $mode): void
 
 function scope(string $hash): DataScope
 {
-    return DataScope::fromTenantContext(
-        context: new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true),
-        connectionIdentity: 'pgsql:corex_test',
-        actorId: 'user-1',
-        restoreEpoch: $hash,
-    );
+    return CallerWorkScopeFixture::forContext(new TenantContext(new AccountRef('account-1', 'account-1', 'active', [], []), boxed: true), 'user-1', $hash);
 }
 
 function record(string $hash): CanonicalRecord

@@ -112,6 +112,7 @@ abstract class TestCase extends Orchestra
     /** @param Application $app */
     protected function defineEnvironment($app): void
     {
+        $app['config']->set('app.key', 'base64:'.base64_encode(str_repeat('q', 32)));
         $this->runtimeFixtures = sys_get_temp_dir().'/corex-tenancy-runtime-'.bin2hex(random_bytes(8));
         (new Filesystem)->makeDirectory($this->runtimeFixtures.'/cache', 0700, true);
         (new Filesystem)->makeDirectory($this->runtimeFixtures.'/sessions', 0700, true);

@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Internal;
 
-use CoreX\Context\Contracts\TenantContextRestorer;
-use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
@@ -39,7 +38,7 @@ final readonly class BulkRetention
     public function __construct(
         private Connection $connection,
         private DataScopeCodec $scopeCodec,
-        private TenantContextRestorer $contexts,
+        private CurrentWorkScope $contexts,
         private ClockInterface $clock,
         private int $resultRetentionSeconds = self::DefaultResultSeconds,
         private int $metadataRetentionSeconds = self::DefaultMetadataSeconds,
@@ -66,6 +65,13 @@ final readonly class BulkRetention
     public function prune(DataScope $scope, int $limit = self::BatchLimit): array
     {
         $this->assertLimit($limit);
+
+        return $this->connection->transaction(fn (): array => $this->pruneAdmitted($scope, $limit));
+    }
+
+    /** @return array{cleared: int, removed: int} */
+    private function pruneAdmitted(DataScope $scope, int $limit): array
+    {
         $this->assertScope($scope);
         $now = $this->clock->now();
         $resultCutoff = $now->sub(new DateInterval('PT'.$this->resultRetentionSeconds.'S'));
@@ -132,14 +138,7 @@ final readonly class BulkRetention
 
     private function assertScope(DataScope $scope): void
     {
-        $context = $this->contexts->restore($scope);
-        $actual = $context->isBoxed()
-            ? 'boxed:'.$context->account->id
-            : $this->connection->getDriverName().':'.$this->connection->getDatabaseName();
-
-        if (! hash_equals($scope->connectionIdentity, $actual) || ! hash_equals($scope->accountId, $context->account->id)) {
-            throw ScopeContextMismatch::connection(expected: $scope->connectionIdentity, actual: $actual);
-        }
+        $this->contexts->assert($scope, $this->connection);
     }
 
     private function terminal(DataScope $scope, DateTimeImmutable $now): Builder

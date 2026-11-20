@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Operations\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Data\Laravel\JsonDocuments;
@@ -21,6 +20,7 @@ use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Tests\Fixtures\BulkTransferFactory;
 use CoreX\Operations\Tests\TestCase;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Time\Testing\FrozenClock;
 use DateInterval;
 use DateTimeImmutable;
@@ -52,8 +52,8 @@ final class BulkApiTest extends TestCase
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-25T10:00:00.000000+00:00'));
-        $this->store = new SqlBulkOperationStore($connection, new ArrayDataScopeCodec, new GuardedTenantContextRestorer($contexts), $this->clock);
-        $this->scope = new DataScope('account-1', null, $connection->getDriverName().':'.$connection->getDatabaseName(), 'actor-1', hash('sha256', 'epoch'));
+        $this->store = new SqlBulkOperationStore($connection, new ArrayDataScopeCodec, new CallerWorkScopeFixture($contexts), $this->clock);
+        $this->scope = CallerWorkScopeFixture::scope('account-1', null, 'actor-1', hash('sha256', 'epoch'));
         $this->api = new BulkOperations(
             $this->store,
             new TransferBulkExecutor(new BulkTransferFactory, $this->store, $this->clock, scopes: new ArrayDataScopeCodec),

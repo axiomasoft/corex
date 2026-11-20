@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace CoreX\Webhooks\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\Internal\GuardedTenantContextRestorer;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Data\WebhookHttpResult;
 use CoreX\Webhooks\Internal\SqlWebhookDeliveryStore;
@@ -67,8 +68,8 @@ final class WebhookConcurrencyTest extends TestCase
             $replacement = $store->claim($scope, 'worker-replacement');
             self::assertNotNull($replacement);
             self::assertSame(2, $replacement->attempt);
-            self::assertFalse($store->finish($first, new WebhookHttpResult(204, null, null, 1)));
-            self::assertTrue($store->finish($replacement, new WebhookHttpResult(204, null, null, 1)));
+            self::assertFalse($store->finish($scope, $first, new WebhookHttpResult(204, null, null, 1)));
+            self::assertTrue($store->finish($scope, $replacement, new WebhookHttpResult(204, null, null, 1)));
             self::assertSame('succeeded', $store->find($scope, 'delivery-pg')?->status);
             self::assertSame(
                 ['unknown', 'succeeded'],
@@ -144,7 +145,7 @@ final class WebhookConcurrencyTest extends TestCase
 
         return new SqlWebhookDeliveryStore(
             $connection,
-            new GuardedTenantContextRestorer($contexts),
+            new CallerWorkScopeFixture($contexts),
             $clock,
             new WebhookRetryPolicy(WebhookOptionsParser::fromArray([]), static fn (int $min, int $max): int => $max),
             30,
@@ -163,7 +164,7 @@ final class WebhookConcurrencyTest extends TestCase
             'id' => 'delivery-pg', 'subscription_id' => 'subscription-pg', 'subscription_revision' => 0,
             'event_id' => 'event-pg', 'topic' => 'orders.placed', 'topic_version' => 1, 'major' => 'v1',
             'endpoint_snapshot' => 'https://hooks.example/receiver',
-            'scope' => JsonCanonical::encode(['account' => 'account-1']), 'body' => $body,
+            'scope' => JsonCanonical::encode(resolve(DataScopeCodec::class)->encode($this->scope($connection))), 'body' => $body,
             'body_hash' => hash('sha256', $body), 'status' => 'pending', 'attempt' => 0, 'replay_count' => 0,
             'lease_owner' => null, 'lease_until' => null, 'next_attempt_at' => $now, 'created_at' => $now,
             'finished_at' => null, 'expires_at' => $now->add(new DateInterval('P7D')), 'last_error' => null,
@@ -202,9 +203,6 @@ final class WebhookConcurrencyTest extends TestCase
 
     private function scope(Connection $connection): DataScope
     {
-        return new DataScope(
-            'account-1', null, 'pgsql:'.$connection->getDatabaseName(), 'actor-1',
-            hash('sha256', 'webhook-pg-restore'),
-        );
+        return CallerWorkScopeFixture::scope('account-1', null, 'actor-1', hash('sha256', 'webhook-pg-restore'));
     }
 }

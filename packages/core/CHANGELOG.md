@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — CoreX 2.0 trusted work scope
+
+- Build a v3 `DataScope` from the authenticated principal with `DataScopeFactory`. `WorkScopeRunner` verifies direct work, and `StoredWorkRunner` restores work from a verified queue envelope or durable owner row. Hosts declare physical binding verification, admission storage and service principals. Old context restorer and unrestricted system authorization bindings have been removed.
+- Use the shared `FieldSelection` and typed field use for record authorization. `FieldUsePolicy` describes which records support an entity-wide operation.
+- Schedule a `WakeupRequest` with the full scope, handler version and normalized window. Cancellation takes the v3 scope and `WakeupIdentity`.
+
 ## Unreleased — Packman governance
 
 - Remove 25 unused generic/module/schema error identities now owned by Packman; retain only emitted CoreX domain identities.

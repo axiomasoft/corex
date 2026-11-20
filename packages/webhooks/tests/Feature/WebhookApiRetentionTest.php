@@ -6,10 +6,12 @@ namespace CoreX\Webhooks\Tests\Feature;
 
 use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Audit\Data\AuditEntry;
-use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\Internal\GuardedTenantContextRestorer;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\CoreServiceProvider;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
@@ -23,6 +25,7 @@ use CoreX\Operations\Pagination\Contracts\CursorKeyring;
 use CoreX\Operations\Pagination\Internal\SignedCursorCodec;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Data\WebhookTopic;
@@ -78,7 +81,9 @@ final class WebhookApiRetentionTest extends TestCase
 
     private DataScope $scope;
 
-    private TenantContextRestorer $restorer;
+    private CallerWorkScopeFixture $restorer;
+
+    private ContextFixture $scopeContexts;
 
     protected function setUp(): void
     {
@@ -93,14 +98,9 @@ final class WebhookApiRetentionTest extends TestCase
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
-        $this->restorer = new GuardedTenantContextRestorer($contexts);
-        $this->scope = new DataScope(
-            'account-a',
-            null,
-            $this->tenant->getDriverName().':'.$this->tenant->getDatabaseName(),
-            'actor-a',
-            hash('sha256', 'api-retention'),
-        );
+        $this->scopeContexts = $contexts;
+        $this->scope = CallerWorkScopeFixture::scope('account-a', null, 'actor-a', hash('sha256', 'api-retention'));
+        $this->restorer = new CallerWorkScopeFixture($contexts, expected: $this->scope);
     }
 
     protected function tearDown(): void
@@ -202,8 +202,8 @@ final class WebhookApiRetentionTest extends TestCase
             $this->inbox($tenant);
             $contexts = new ContextFixture;
             $contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
-            $restorer = new GuardedTenantContextRestorer($contexts);
-            $scope = new DataScope('account-a', null, $tenant->getDriverName().':'.$tenant->getDatabaseName(), 'actor-a', hash('sha256', 'api-retention-pg'));
+            $restorer = new CallerWorkScopeFixture($contexts);
+            $scope = CallerWorkScopeFixture::scope('account-a', null, 'actor-a', hash('sha256', 'api-retention-pg'));
             $previous = $this->tenant;
             $previousBudget = $this->budget;
             $previousScope = $this->scope;
@@ -237,7 +237,8 @@ final class WebhookApiRetentionTest extends TestCase
         $now = $this->clock->now();
         $this->delivery('delivery-command', self::OldEvent, 'dead', $now->sub(new DateInterval('P8D')), $now->sub(new DateInterval('P1D')), 'command-body');
         $this->app->instance(WebhookRetention::class, $this->webhooks());
-        $this->app->instance(DataScope::class, $this->scope);
+        $this->app->instance(TenantContextResolver::class, $this->scopeContexts);
+        CallerWorkScopeFixture::bind($this->app, $this->scope);
         $kernel = $this->app->make(Kernel::class);
         self::assertInstanceOf(ConsoleKernel::class, $kernel);
         $kernel->registerCommand(new PruneWebhooks);
@@ -251,6 +252,13 @@ final class WebhookApiRetentionTest extends TestCase
 
     public function test_command_without_a_trusted_scope_preserves_tenant_rows(): void
     {
+        $this->app->instance(TenantContextResolver::class, new class implements TenantContextResolver
+        {
+            public function current(): TenantContext
+            {
+                throw new CentralContextException;
+            }
+        });
         $now = $this->clock->now();
         $this->delivery('delivery-unscoped', self::OldEvent, 'dead', $now->sub(new DateInterval('P8D')), $now->sub(new DateInterval('P1D')), 'unscoped-body');
         $this->app->instance(WebhookRetention::class, $this->webhooks());
@@ -319,7 +327,7 @@ final class WebhookApiRetentionTest extends TestCase
             'topic_version' => 1,
             'major' => 'v1',
             'endpoint_snapshot' => 'https://hooks.example/receiver',
-            'scope' => JsonCanonical::encode(['account' => 'account-a', 'workspace' => null]),
+            'scope' => JsonCanonical::encode(resolve(DataScopeCodec::class)->encode($this->scope)),
             'body' => $body,
             'body_hash' => hash('sha256', $body),
             'status' => $status,

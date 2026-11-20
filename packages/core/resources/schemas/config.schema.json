@@ -171,6 +171,44 @@
                     },
                     "additionalProperties": false
                 },
+                "scope": {
+                    "type": "object",
+                    "properties": {
+                        "central_jobs": {
+                            "type": [
+                                "array",
+                                "object"
+                            ]
+                        },
+                        "control_connection": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "null"
+                            ],
+                            "default": null
+                        },
+                        "deployment_id": {
+                            "type": [
+                                "string",
+                                "integer",
+                                "number",
+                                "boolean",
+                                "null"
+                            ],
+                            "default": null
+                        },
+                        "tenant_jobs": {
+                            "type": [
+                                "array",
+                                "object"
+                            ]
+                        }
+                    },
+                    "additionalProperties": false
+                },
                 "settings": {
                     "type": "object",
                     "properties": {

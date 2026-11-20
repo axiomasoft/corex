@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Laravel\CoreOptionsParser;
-use CoreX\Scheduler\Internal\DangerousModesCheck;
 use CoreX\Scheduler\Internal\SchedulerOptions;
 use CoreX\Scheduler\Tests\Support\OptionsProbeHandler;
 use Packman\Config\Exceptions\InvalidConfiguration;
@@ -13,8 +11,7 @@ it('passes on an empty environment with the shipped defaults', function (): void
 
     expect($options->leaseSeconds)->toBe(60)
         ->and($options->maxAttempts)->toBe(5)
-        ->and($options->handlers)->toBe([])
-        ->and($options->dangerousModes())->toBe([]);
+        ->and($options->handlers)->toBe([]);
 });
 
 it('accumulates violations of both limits', function (): void {
@@ -34,15 +31,8 @@ it('rejects the scalar handler form', function (): void {
         ->toThrow(InvalidConfiguration::class, 'handlers.a: requires handler, version');
 });
 
-it('lists a legacy-unstamped handler as a dangerous mode that production must acknowledge by exact path', function (): void {
-    $options = SchedulerOptions::fromArray(['handlers' => [
-        'test.reminder' => ['handler' => OptionsProbeHandler::class, 'version' => 'test/1', 'accept_legacy_unstamped' => true],
-    ]]);
-    $path = 'corex-scheduler.handlers.test.reminder.accept_legacy_unstamped';
-
-    expect($options->dangerousModes())->toBe([$path])
-        ->and(new DangerousModesCheck($options, CoreOptionsParser::fromArray([]))->violations(true))
-        ->toBe([$path.': dangerous mode is not acknowledged for production'])
-        ->and(new DangerousModesCheck($options, CoreOptionsParser::fromArray(['acknowledged_dangerous_modes' => [$path]]))->violations(true))
-        ->toBe([]);
+it('rejects undeclared handler options', function (): void {
+    expect(fn () => SchedulerOptions::fromArray(['handlers' => [
+        'test.reminder' => ['handler' => OptionsProbeHandler::class, 'version' => 'test/1', 'unknown' => true],
+    ]]))->toThrow(InvalidConfiguration::class);
 });

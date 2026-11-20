@@ -7,7 +7,9 @@ namespace CoreX\Search\Internal\Query;
 use Closure;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Data\RecordRef;
+use CoreX\Data\Enums\FieldUse;
 use CoreX\Search\Contracts\SearchHydrator;
 use CoreX\Search\Data\CandidatePage;
 use CoreX\Search\Data\CurrentSearchRecord;
@@ -40,14 +42,17 @@ final readonly class PolicySearchHydrator implements SearchHydrator
                 continue;
             }
 
+            if (! $this->authorizer->authorize($scope, $current->record, new FieldSelection([]), FieldUse::Read)->allowed) {
+                continue;
+            }
+
             $projection = array_intersect_key($current->fields, array_flip($schema->resultColumns));
 
-            if (! $this->authorizer->authorize(
+            if ($projection !== [] && ! $this->authorizer->authorize(
                 scope: $scope,
-                entity: $current->record->entity,
-                subjectId: $current->record->id,
-                fields: array_keys($projection),
-                action: 'search.hydrate',
+                record: $current->record,
+                fields: new FieldSelection(array_keys($projection)),
+                use: FieldUse::Read,
             )->allowed) {
                 continue;
             }

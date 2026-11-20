@@ -32,6 +32,7 @@ function p107Store(string $engine, bool $declareContract = true): AttributeStore
     $contracts = $declareContract ? AttributeMessageContracts::all() : [];
     $arguments = [
         'connection' => DB::connection(),
+        'current' => jsonbCurrent(),
         'tables' => PgTestSupport::tables(),
         'catalogue' => PgTestSupport::catalogue('contact', [
             ['code' => 'status', 'id' => '018d5f56-6f83-7a36-b0ac-6eabce87c10c', 'type' => 'text'],

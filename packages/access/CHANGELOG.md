@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — field use authorization
+
+- Added separate read, write, search, filter, sort, aggregate and export checks for stable field IDs. FieldUsePolicy returns an unconditional grant, a witnessed set of allowed records, or a denial. DataScopeAuthorizer enforces record and field grants on the verified physical connection.
+
 ## Unreleased — CoreX authorization
 
 - Install `axiomasoft/corex-access` to check actions, authorize individual records and filter Eloquent queries. CoreX registers its AzGuard policy for the role matrix and direct grants during Laravel discovery.

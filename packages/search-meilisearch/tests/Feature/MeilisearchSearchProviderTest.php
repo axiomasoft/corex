@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Data\Data\DataScope;
 use CoreX\Search\Data\SearchFilter;
 use CoreX\Search\Data\SearchQuery;
 use CoreX\SearchMeilisearch\Internal\MeilisearchSearchProvider;
 use CoreX\SearchMeilisearch\Tests\MeilisearchTestCase;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 
 uses(MeilisearchTestCase::class)->group('meilisearch');
 
@@ -20,12 +20,7 @@ it('returns candidate identifiers only from an isolated local Meilisearch servic
     ], 'id');
     $this->client->waitForTask($task['taskUid']);
     $adapter = new MeilisearchSearchProvider(client: $this->client, indexUid: $index->getUid());
-    $scope = DataScope::fromTenantContext(
-        context: new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false),
-        connectionIdentity: 'pgsql:account-a',
-        actorId: 'operator-a',
-        restoreEpoch: str_repeat('b', 64),
-    );
+    $scope = CallerWorkScopeFixture::forContext(new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false), 'operator-a', str_repeat('b', 64));
 
     $page = $adapter->query(
         scope: $scope,

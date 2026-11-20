@@ -234,7 +234,7 @@ it('freezes at most one hundred notifications in a half-open digest window', fun
     $now = new DateTimeImmutable('now');
 
     $digest = resolve(DigestBuilder::class)->build(notificationContext(), new DigestWindow(
-        start: $now->modify('-1 minute'),
+        start: $now->modify('-59 minutes'),
         end: $now->add(new DateInterval('PT1M')),
         period: 'hourly',
     ));
@@ -260,9 +260,10 @@ it('drains bounded digest batches through the shared runner without duplicating 
         $center->notify(notificationContext(), notificationInput("digest-residual-{$number}"));
     }
     DB::table('ntf_notifications')->update(['created_at' => now()->subSeconds(90)]);
+    $end = new DateTimeImmutable('-1 minute');
     $window = new DigestWindow(
-        start: new DateTimeImmutable('-2 minutes'),
-        end: new DateTimeImmutable('-1 minute'),
+        start: $end->modify('-1 hour'),
+        end: $end,
         period: 'hourly',
     );
     $first = resolve(DigestBuilder::class)->build(notificationContext(), $window);
@@ -302,9 +303,10 @@ it('keeps an admitted digest effect when a later preference change disables futu
     ));
     $notification = resolve(NotificationCenter::class)->notify(notificationContext(), notificationInput('digest-admission'));
     DB::table('ntf_notifications')->where('id', $notification->id)->update(['created_at' => now()->subSeconds(90)]);
+    $end = new DateTimeImmutable('-1 minute');
     $digest = resolve(DigestBuilder::class)->build(notificationContext(), new DigestWindow(
-        start: new DateTimeImmutable('-2 minutes'),
-        end: new DateTimeImmutable('-1 minute'),
+        start: $end->modify('-1 hour'),
+        end: $end,
         period: 'hourly',
     ));
 

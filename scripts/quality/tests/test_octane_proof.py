@@ -26,6 +26,8 @@ class OctaneReceiptTest(unittest.TestCase):
                      "packages/core/tests/Release/OctaneLifecycleTest.php", "scripts/quality/octane-proof.py",
                      str(proof.CONSUMER / "composer.json"), str(proof.CONSUMER / "phpunit.xml"),
                      str(proof.CONSUMER / "LifecycleServiceProvider.php"),
+                     str(proof.CONSUMER / "vendor/axiomasoft/corex/composer.json"),
+                     str(proof.CONSUMER / "vendor/axiomasoft/corex/src/Example.php"),
                      str(proof.CONSUMER / "vendor/laravel/octane/src/Worker.php"),
                      str(proof.CONSUMER / "vendor/laravel/octane/config/octane.php")]:
             target = self.root / path
@@ -35,11 +37,13 @@ class OctaneReceiptTest(unittest.TestCase):
             {"name": "laravel/framework", "version": "v13.12.0"},
             {"name": "laravel/octane", "version": "v2.17.4", "source": {"reference": "source-ref"}},
         ]}
-        (self.consumer / "composer.lock").write_text(json.dumps(lock))
+        (self.consumer / proof.CONSUMER_LOCK).write_text(json.dumps(lock))
         self.receipt = {"schema": "corex-octane-source-proof/v1",
                         "source_hashes": proof.source_hashes(self.root),
-                        "consumer_lock_sha256": proof.sha256(self.consumer / "composer.lock"),
-                        "octane_hashes": proof.octane_hashes(self.consumer), "cells": []}
+                        "consumer_lock_sha256": proof.sha256(self.consumer / proof.CONSUMER_LOCK),
+                        "octane_hashes": proof.octane_hashes(self.consumer),
+                        "installed_core_hashes": proof.core_hashes(self.consumer / "vendor/axiomasoft/corex"),
+                        "cells": []}
         for version in ["8.4", "8.5"]:
             junit = self.directory / (version + ".xml")
             suite = ET.Element("testsuite")
@@ -50,7 +54,7 @@ class OctaneReceiptTest(unittest.TestCase):
                     "runtime": {"php": version + ".1", "laravel": "v13.12.0", "octane": "v2.17.4",
                                 "octane_ref": "source-ref", "implementation": proof.IMPLEMENTATION,
                                 "worker_file": str(self.consumer / "vendor/laravel/octane/src/Worker.php"),
-                                "core_path": str(self.root / "packages/core")},
+                                "core_path": str(self.consumer / "vendor/axiomasoft/corex")},
                     "raw_junit": junit.name, "raw_junit_sha256": proof.sha256(junit), "cases": {}}
             witness = self.directory / (version + "-runtime.json")
             witness.write_text(json.dumps(cell["runtime"]))
@@ -59,13 +63,17 @@ class OctaneReceiptTest(unittest.TestCase):
             cell.update({"runtime_witness": witness.name, "runtime_witness_sha256": proof.sha256(witness),
                          "raw_log": log.name, "raw_log_sha256": proof.sha256(log)})
             for name, (terminated, errors, statuses, messages) in proof.CASES.items():
-                counts = {"RequestReceived": 2, "RequestHandled": 2, "RequestTerminated": terminated,
+                tenants = [*proof.TENANTS, proof.TENANTS[0]] if name == "test_failed_request_cleanup" else proof.TENANTS
+                owners = ["lifecycle-tenant-" + tenant[-1] for tenant in tenants]
+                counts = {"RequestReceived": len(tenants), "RequestHandled": len(tenants), "RequestTerminated": terminated,
                           "WorkerErrorOccurred": errors, "WorkerStarting": 2 if name == "test_worker_restart" else 1,
                           "WorkerStopping": 2 if name == "test_worker_restart" else 1}
                 trace = {"case": name, "executed": True, "implementation": proof.IMPLEMENTATION,
-                         "execution_scope": "real-php-worker-handler", "pid": 123, "handles": 2,
+                         "execution_scope": "real-php-worker-handler", "pid": 123, "handles": len(tenants),
                          "events": {proof.EVENT_PREFIX + key: value for key, value in counts.items()},
-                         "tenants": proof.TENANTS, "statuses": statuses, "errors": messages}
+                         "tenants": tenants, "markers": tenants, "connections": owners, "bindings": owners,
+                         "principals": ["fixture-user:" + tenant for tenant in tenants],
+                         "statuses": statuses, "errors": messages}
                 path = self.directory / (version + "-" + name + ".json")
                 path.write_text(json.dumps(trace))
                 cell["cases"][name] = {"path": path.name, "sha256": proof.sha256(path), "assertions": 10}
@@ -118,6 +126,9 @@ class OctaneReceiptTest(unittest.TestCase):
         self.reject_trace_change("statuses", [200, 200], "test_failed_request_cleanup")
         self.reject_trace_change("errors", [], "test_worker_error_cleanup")
         self.reject_trace_change("pid", 456)
+        for key in ["markers", "connections", "bindings", "principals"]:
+            with self.subTest(key=key):
+                self.reject_trace_change(key, [], "test_failed_request_cleanup")
 
     def test_skipped_failed_missing_duplicate_and_empty_junit_cases_are_rejected(self):
         for defect in ["skipped", "failure", "error", "missing", "duplicate", "no-assertions", "wrong-class"]:
@@ -159,6 +170,11 @@ class OctaneReceiptTest(unittest.TestCase):
             with self.assertRaises(proof.ProofError):
                 self.validate(receipt)
         (self.root / "packages/core/src/Example.php").write_text("changed\n")
+        with self.assertRaises(proof.ProofError):
+            self.validate()
+
+    def test_changed_installed_core_is_rejected(self):
+        (self.consumer / "vendor/axiomasoft/corex/src/Example.php").write_text("different installed source\n")
         with self.assertRaises(proof.ProofError):
             self.validate()
 

@@ -15,6 +15,7 @@ use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Data\WebhookTopic;
@@ -62,13 +63,7 @@ trait WebhookDeliveryFixture
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
         $this->contexts = new ContextFixture;
         $this->contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
-        $this->scope = new DataScope(
-            accountId: 'account-1',
-            workspaceId: null,
-            connectionIdentity: 'sqlite::memory:',
-            actorId: 'actor-1',
-            restoreEpoch: hash('sha256', 'webhook-delivery-restore'),
-        );
+        $this->scope = CallerWorkScopeFixture::scope('account-1', null, 'actor-1', hash('sha256', 'webhook-delivery-restore'));
     }
 
     private function signer(): HmacWebhookSigner

@@ -6,18 +6,17 @@ use CoreX\CustomFields\Contracts\AttributeStore;
 use CoreX\CustomFields\Data\AttributeDefinition;
 use CoreX\CustomFields\Data\AttributeId;
 use CoreX\CustomFields\Data\AttributeLifecycle;
-use CoreX\CustomFields\Data\FieldSelection;
 use CoreX\CustomFields\Data\IndexPolicy;
 use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\Schema\DatabaseFieldCatalogue;
 use CoreX\CustomFields\Internal\Schema\DefinitionEvolution;
-use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
 use CoreX\CustomFields\Internal\Values\AttributeValueTransformerRegistry;
 use CoreX\CustomFields\Internal\Values\EavAttributeStore;
 use CoreX\CustomFields\Internal\Values\JsonbAttributeStore;
 use CoreX\CustomFields\Internal\VersionConflict;
 use CoreX\CustomFields\Tests\Pg\AttributeEvolutionPgTestCase;
 use CoreX\CustomFields\Tests\Support\PgTestSupport;
+use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +40,7 @@ function pgEvolutionCatalogue(): DatabaseFieldCatalogue
     return new DatabaseFieldCatalogue(
         connection: $connection,
         tables: PgTestSupport::tables(),
-        guard: new ScopeConnectionGuard($connection),
+        current: jsonbCurrent(),
         drivers: ['jsonb' => true, 'eav' => true],
     );
 }
@@ -73,6 +72,7 @@ function pgEvolutionStore(
 ): AttributeStore {
     $arguments = [
         'connection' => DB::connection(),
+        'current' => jsonbCurrent(),
         'tables' => PgTestSupport::tables(),
         'catalogue' => $catalogue,
         'authorizer' => jsonbAuthorizer(),
@@ -104,7 +104,7 @@ it('dual reads and writes rename and type evolution on both engines', function (
     $catalogue->publish(jsonbScope(), $expanded, $evolution->reservations($expanded));
     $expandedHash = $catalogue->snapshot(jsonbScope(), 'contact')->schemaHash;
 
-    expect($store->read(jsonbScope(), $legacyRecord, new FieldSelection(fields: ['score']))->values)
+    expect($store->read(jsonbScope(), $legacyRecord, new FieldSelection([pgEvolutionDefinition()->id->value]))->values)
         ->toBe(['score' => 7]);
 
     $currentRecord = new RecordRef(entity: 'contact', id: "{$engine}-current");
@@ -126,7 +126,7 @@ it('dual reads and writes rename and type evolution on both engines', function (
     }
 
     expect($stored)->toMatchArray(['legacy_score' => '11', 'score' => 11])
-        ->and($store->read(jsonbScope(), $currentRecord, new FieldSelection(fields: ['score']))->values)
+        ->and($store->read(jsonbScope(), $currentRecord, new FieldSelection([pgEvolutionDefinition()->id->value]))->values)
         ->toBe(['score' => 11]);
 
     if ($engine === 'jsonb') {
@@ -141,7 +141,7 @@ it('dual reads and writes rename and type evolution on both engines', function (
             ->update(['value' => json_encode('99', JSON_THROW_ON_ERROR)]);
     }
 
-    expect($store->read(jsonbScope(), $currentRecord, new FieldSelection(fields: ['score']))->values)
+    expect($store->read(jsonbScope(), $currentRecord, new FieldSelection([pgEvolutionDefinition()->id->value]))->values)
         ->toBe(['score' => 11])
         ->and(fn (): mixed => $store->write(
             jsonbScope(),

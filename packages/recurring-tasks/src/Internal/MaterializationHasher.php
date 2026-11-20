@@ -25,7 +25,7 @@ final class MaterializationHasher
     ): string {
         return hash('sha256', implode("\0", [
             self::HANDLER_VERSION,
-            $scope->restoreEpoch,
+            json_encode($scope, JSON_THROW_ON_ERROR),
             $series->id,
             $series->immutableRevision,
             $series->definitionHash,

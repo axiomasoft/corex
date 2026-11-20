@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal\Laravel;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Contracts\SchemaOperations;
 use CoreX\CustomFields\Data\AttributeTables;
@@ -32,6 +33,7 @@ final class SchemaOperationsFactory
         if (($composition->drivers['ddl'] ?? false) && $app->bound('db')) {
             return new QueuedSchemaOperations(
                 connection: $app->make(DatabaseManager::class)->connection(),
+                current: $app->make(CurrentWorkScope::class),
                 tables: $app->make(AttributeTables::class),
                 catalogue: $catalogue,
                 authorizer: $app->make(DataScopeAuthorizer::class),

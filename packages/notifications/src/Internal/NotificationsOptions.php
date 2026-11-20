@@ -13,7 +13,6 @@ final readonly class NotificationsOptions
 {
     public function __construct(
         public bool $digestEnabled,
-        public bool $digestAcceptLegacyUnstamped,
         public int $deliveryClaimSeconds,
         public int $deliveryMaxAttempts,
     ) {}
@@ -26,19 +25,12 @@ final readonly class NotificationsOptions
         $delivery = is_array($config['delivery'] ?? null) ? $config['delivery'] : [];
 
         $digestEnabled = self::bool(violations: $violations, path: 'digest.enabled', value: $digest['enabled'] ?? false);
-        $acceptLegacy = self::bool(violations: $violations, path: 'digest.accept_legacy_unstamped', value: $digest['accept_legacy_unstamped'] ?? false);
         $claimSeconds = self::positiveInt(violations: $violations, path: 'delivery.claim_seconds', value: $delivery['claim_seconds'] ?? 60);
         $maxAttempts = self::positiveInt(violations: $violations, path: 'delivery.max_attempts', value: $delivery['max_attempts'] ?? 5);
 
         $violations->failIfAny();
 
-        return new self(digestEnabled: $digestEnabled, digestAcceptLegacyUnstamped: $acceptLegacy, deliveryClaimSeconds: $claimSeconds, deliveryMaxAttempts: $maxAttempts);
-    }
-
-    /** @return list<string> config paths of enabled dangerous modes */
-    public function dangerousModes(): array
-    {
-        return $this->digestAcceptLegacyUnstamped ? ['corex-notifications.digest.accept_legacy_unstamped'] : [];
+        return new self(digestEnabled: $digestEnabled, deliveryClaimSeconds: $claimSeconds, deliveryMaxAttempts: $maxAttempts);
     }
 
     private static function bool(ConfigurationValidator $violations, string $path, mixed $value): bool

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\ImportExport\Internal;
 
-use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\ImportExport\Contracts\ImportExportFactory;
 use CoreX\ImportExport\Data\TransferLimits;
@@ -25,7 +25,7 @@ final class ImportExportBindings
 
             return new SqlImportExportFactory(
                 database: $app->make(DatabaseManager::class),
-                runtime: new SessionRuntime($app->make(DatabaseManager::class), $app->make(TenantContextResolver::class)),
+                runtime: new SessionRuntime($app->make(CurrentWorkScope::class)),
                 authorizer: $app->make(DataScopeAuthorizer::class),
                 clock: $app->make(ClockInterface::class),
                 storage: $app->make(TenantStorage::class),

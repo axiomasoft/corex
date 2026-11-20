@@ -10,7 +10,6 @@ use CoreX\CustomFields\Internal\Support\Validation;
 use CoreX\CustomFields\Internal\Value;
 use CoreX\Data\Data\DataScope;
 use Packman\Attributes\Internal;
-use RuntimeException;
 
 #[Internal]
 final readonly class StaticFieldCatalogue implements FieldCatalogue
@@ -42,7 +41,7 @@ final readonly class StaticFieldCatalogue implements FieldCatalogue
         if ($this->appended instanceof FieldCatalogue) {
             try {
                 $extra = $this->appended->snapshot(scope: $scope, entity: $entity)->activeFields;
-            } catch (RuntimeException) {
+            } catch (InactiveEntity) {
                 $extra = [];
             }
 

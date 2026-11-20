@@ -4,56 +4,86 @@ declare(strict_types=1);
 
 namespace CoreX\Search\Internal;
 
+use Closure;
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Data\Data\DataScope;
+use CoreX\Search\Contracts\SearchDriverRegistry;
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Contracts\SearchSchema;
 use CoreX\Search\Exceptions\InvalidSearchConfiguration;
 use CoreX\Search\Internal\Postgres\PostgresSearchProvider;
 use CoreX\Search\Internal\Query\SearchCursorCodec;
-use Illuminate\Support\Manager;
-use Override;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\DatabaseManager;
+use InvalidArgumentException;
 use Packman\Attributes\Internal;
 
 #[Internal]
-final class SearchManager extends Manager
+final class SearchManager implements SearchDriverRegistry
 {
-    #[Override]
-    public function getDefaultDriver(): string
-    {
-        $driver = $this->config->get('corex-search.driver');
+    /** @var array<string, Closure(Application): SearchProvider> */
+    private array $factories = [];
 
-        if (! is_string($driver) || $driver === '') {
-            throw InvalidSearchConfiguration::missingDriver();
+    public function register(string $name, Closure $factory): void
+    {
+        $this->factories[$name] = $factory;
+    }
+
+    public function driver(Application $app, SearchOptions $options): SearchProvider
+    {
+        $driver = $options->driver;
+
+        if (isset($this->factories[$driver])) {
+            $this->currentScope($app);
+
+            return ($this->factories[$driver])($app);
         }
 
-        return $driver;
+        return match ($driver) {
+            'null' => new UnavailableSearchProvider,
+            'postgres' => $this->createPostgresDriver($app, $options),
+            default => throw new InvalidArgumentException("Driver [{$driver}] not supported."),
+        };
     }
 
-    protected function createNullDriver(): SearchProvider
+    private function createPostgresDriver(Application $app, SearchOptions $options): SearchProvider
     {
-        return new UnavailableSearchProvider;
-    }
-
-    protected function createPostgresDriver(): SearchProvider
-    {
-        $secret = $this->config->get('corex-search.cursor_secret');
+        $secret = $options->cursorSecret?->reveal();
 
         if (! is_string($secret) || strlen($secret) < 32) {
             throw InvalidSearchConfiguration::weakCursorSecret();
         }
 
-        if (! $this->container->bound(SearchSchema::class)) {
+        if (! $app->bound(SearchSchema::class)) {
             throw InvalidSearchConfiguration::missingSchemaBinding();
         }
 
-        if (! $this->container->bound('db')) {
+        if (! $app->bound('db')) {
             throw InvalidSearchConfiguration::missingDatabase();
         }
 
+        $scope = $this->currentScope($app);
+        $current = $app->make(CurrentWorkScope::class);
+        $connection = $app->make(DatabaseManager::class)->connection();
+        $current->assert($scope, $connection);
+
         return new PostgresSearchProvider(
-            connection: $this->container->make('db')->connection(),
-            schemas: $this->container->make(SearchSchema::class),
+            connection: $connection,
+            current: $current,
+            schemas: $app->make(SearchSchema::class),
             cursors: new SearchCursorCodec(secret: $secret),
-            configuration: Value::text($this->config->get('corex-search.postgres.text_search_config', 'simple')),
+            configuration: $options->textSearchConfig,
         );
+    }
+
+    private function currentScope(Application $app): DataScope
+    {
+        $context = $app->make(TenantContextResolver::class)->current();
+        $scope = $app->make(DataScopeFactory::class)->forCurrentPrincipal($context);
+        $app->make(CurrentWorkScope::class)->assert($scope);
+
+        return $scope;
     }
 }

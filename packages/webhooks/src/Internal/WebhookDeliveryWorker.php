@@ -66,6 +66,32 @@ final readonly class WebhookDeliveryWorker
         }
 
         try {
+            $destination = WebhookDestination::fromUrl($delivery->endpointSnapshot);
+        } catch (InvalidArgumentException) {
+            return $this->finish(scope: $scope, delivery: $delivery, result: new WebhookHttpResult(
+                status: null,
+                retryAfter: null,
+                errorCode: WebhookFailureReason::UrlForbidden,
+                durationMs: 0,
+            ));
+        }
+
+        try {
+            $deliveryScope = $this->scopeCodec->decode($delivery->scope);
+        } catch (InvalidArgumentException) {
+            $deliveryScope = null;
+        }
+
+        if ($deliveryScope === null || ! $this->egress->allows(scope: $deliveryScope, destination: $destination)) {
+            return $this->finish(scope: $scope, delivery: $delivery, result: new WebhookHttpResult(
+                status: null,
+                retryAfter: null,
+                errorCode: WebhookFailureReason::EgressDenied,
+                durationMs: 0,
+            ));
+        }
+
+        try {
             $signed = $this->signer->sign(
                 deliveryId: $delivery->id,
                 timestamp: $this->clock->now()->getTimestamp(),
@@ -77,28 +103,6 @@ final readonly class WebhookDeliveryWorker
                 status: null,
                 retryAfter: null,
                 errorCode: WebhookFailureReason::SigningUnavailable,
-                durationMs: 0,
-            ));
-        }
-
-        try {
-            $destination = WebhookDestination::fromUrl($delivery->endpointSnapshot);
-        } catch (InvalidArgumentException) {
-            return $this->finish(scope: $scope, delivery: $delivery, result: new WebhookHttpResult(
-                status: null,
-                retryAfter: null,
-                errorCode: WebhookFailureReason::UrlForbidden,
-                durationMs: 0,
-            ));
-        }
-
-        $deliveryScope = $this->scopeCodec->decode($delivery->scope);
-
-        if (! $this->egress->allows(scope: $deliveryScope, destination: $destination)) {
-            return $this->finish(scope: $scope, delivery: $delivery, result: new WebhookHttpResult(
-                status: null,
-                retryAfter: null,
-                errorCode: WebhookFailureReason::EgressDenied,
                 durationMs: 0,
             ));
         }
@@ -144,7 +148,7 @@ final readonly class WebhookDeliveryWorker
         WebhookDelivery $delivery,
         WebhookHttpResult $result,
     ): WebhookDelivery {
-        $this->store->finish(delivery: $delivery, result: $result);
+        $this->store->finish(scope: $scope, delivery: $delivery, result: $result);
 
         return $this->store->find(scope: $scope, id: $delivery->id) ?? $delivery;
     }

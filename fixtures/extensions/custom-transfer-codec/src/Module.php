@@ -57,7 +57,7 @@ final class Module
         $source = new CheckpointSource($rows, $hash);
         $codec = new EquipmentCodec;
         $sink = new CheckpointSink;
-        $scope = new DataScope('account-1', null, 'sqlite-memory', 'actor-1', hash('sha256', 'transfer-epoch'));
+        $scope = new DataScope(deploymentId: 'fixture-deployment', accountId: 'account-1', workspaceId: null, bindingId: 'fixture-binding', bindingGeneration: 1, accountIncarnation: 'fixture-incarnation', restoreEpoch: hash('sha256', 'transfer-epoch'), principalKind: 'user', principalId: 'actor-1');
         $limits = new TransferLimits;
         $mapping = new MappingSnapshot('map/1', hash('sha256', 'mapping'), ['serial' => 'serial'], hash('sha256', 'mapping-body'));
         $cursor = new SourceCursor('0', null, $hash);

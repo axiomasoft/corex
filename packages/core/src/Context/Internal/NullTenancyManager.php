@@ -23,13 +23,14 @@ use Packman\Attributes\Internal;
 #[Internal]
 final readonly class NullTenancyManager implements TenancyManager
 {
+    /** @param Closure():TenantContextResolver $resolver */
     public function __construct(
-        private TenantContextResolver $resolver,
+        private Closure $resolver,
     ) {}
 
     public function context(): TenantContext
     {
-        return $this->resolver->current();
+        return ($this->resolver)()->current();
     }
 
     public function initialized(): bool

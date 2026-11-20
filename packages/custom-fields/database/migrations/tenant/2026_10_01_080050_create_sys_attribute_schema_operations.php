@@ -17,7 +17,9 @@ return new class extends PackmanMigration
         $this->create('sys_attribute_schema_operations', function (Blueprint $table): void {
             $table->string('id', 64);
             $table->primary(['id'], 'sys_attribute_schema_operations_pk');
-            $table->string('operation_key', 128)->unique('sys_attribute_schema_operations_operation_key_uq');
+            $table->char('scope_hash', 64);
+            $table->string('operation_key', 128);
+            $table->unique(['scope_hash', 'operation_key'], 'sys_attribute_schema_operations_operation_key_uq');
             $table->string('payload_hash', 64);
             $table->string('entity', 128);
             $table->string('schema_hash', 64);

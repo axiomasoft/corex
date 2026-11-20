@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Tests\Feature;
 
 use CoreX\Config\Data\CoreOptions;
-use CoreX\Notifications\Internal\NotificationsOptions;
 use CoreX\Scheduler\Internal\SchedulerOptions;
 use CoreX\Tests\Golden\GoldenTestCase;
 use CoreX\Workflow\Internal\WorkflowOptions;
@@ -92,9 +91,8 @@ final class BuildStageBootTest extends GoldenTestCase
 
     public function test_a_dangerous_mode_outside_production_is_not_a_violation(): void
     {
-        config([self::WORKFLOW_MODE => false, 'corex-notifications.digest.accept_legacy_unstamped' => true]);
+        config([self::WORKFLOW_MODE => false]);
         $this->app->forgetInstance(WorkflowOptions::class);
-        $this->app->forgetInstance(NotificationsOptions::class);
 
         $this->startCommand('queue:work');
         self::assertSame([], RuntimeConfigGate::violations($this->app, false));

@@ -7,7 +7,9 @@ namespace CoreX\Data\Laravel;
 use CoreX\Config\Data\CoreOptions;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Data\Contracts\FieldUsePolicy;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
+use CoreX\Data\Internal\DenyDataScopeAuthorizer;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
 use Packman\Attributes\Spi;
@@ -22,7 +24,8 @@ final class DataRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
-        $app->singleton(DataScopeAuthorizer::class, static fn (Application $app): DataScopeAuthorizer => ConfiguredImplementation::resolve(app: $app, contract: DataScopeAuthorizer::class, implementation: $app->make(CoreOptions::class)->dataScopeAuthorizer));
+        $app->scoped(FieldUsePolicy::class, DenyDataScopeAuthorizer::class);
+        $app->scoped(DataScopeAuthorizer::class, static fn (Application $app): DataScopeAuthorizer => ConfiguredImplementation::resolve(app: $app, contract: DataScopeAuthorizer::class, implementation: $app->make(CoreOptions::class)->dataScopeAuthorizer));
         $app->singleton(DataScopeCodec::class, ArrayDataScopeCodec::class);
     }
 

@@ -45,6 +45,27 @@ php artisan packman:schema:status --scope=tenant --database=<tenant>
 После фиксации baseline изменение схемы поставляется новым файлом с повышением версии набора.
 Повторный `packman:schema:migrate` применяет только отсутствующие в журнале Laravel `migrations` файлы.
 
+## Доверенный scope для worker
+
+Задайте `corex.scope.deployment_id` и подключение `corex.scope.control_connection`.
+Control store должен находиться за пределами backup и restore тенантской БД, в том числе
+в boxed-установке. Установите его схему через `ScopeControlSchema::install()` и
+зарегистрируйте активную привязку каждого аккаунта у владельца `ScopeAuthority`.
+Хост реализует `ControlStoreIsolation` и проверку владельца физического соединения.
+В cloud-профиле реализацию проверки связывает Tenancy через `TenantBindingAuthority`.
+
+`DataScopeFactory` выдаёт scope от аутентифицированного principal текущего account/workspace.
+Хост проверяет живое членство и именованные service grants через `WorkPrincipalAuthority`.
+Для операций из консоли или центрального обработчика хост явно устанавливает именованный
+grant через `NamedWorkPrincipal`. Декларируйте tenant и central job handlers в
+`corex.scope.tenant_jobs` и `corex.scope.central_jobs` или в `WorkQueueHandlers`.
+Локальная durable работа сохраняет proof от `StoredWorkIssuer` вместе со своей записью.
+
+Перед переносом или восстановлением закройте admission в control store, дождитесь
+завершения tickets и разрешите все неизвестные результаты. После проверки новой
+физической привязки откройте admission с новым поколением или restore epoch.
+Worker проверяет эту границу до получения доступа к обработчику.
+
 
 ## Mandatory support audit
 
@@ -83,10 +104,9 @@ internal `<Pkg>Options` type; the shape check passes on an empty environment, so
 separate `Packman\Config\Contracts\RuntimeConfigCheck` services tagged by the owning package: they
 run when the HTTP application finishes booting or a console command starts (build commands such as
 `package:discover`, `config:cache`, `optimize` and `packman:config:validate` are exempt). In
-`production`, an enabled dangerous mode (`corex-workflow.enforce_declarations=false`,
-`accept_legacy_unstamped=true` of notifications, recurring-tasks or any wakeup handler) stops the
-process unless its exact config path is listed in `corex.acknowledged_dangerous_modes`; patterns
-are rejected. `packman:config:validate` runs the same checks (`--production` evaluates them as
+`production`, setting `corex-workflow.enforce_declarations=false` requires its exact config path
+in `corex.acknowledged_dangerous_modes`. Patterns are rejected. `packman:config:validate`
+runs the same checks (`--production` evaluates them as
 production), prints acknowledged modes as warnings and the `corex-operations.require_physical_tenancy=false`
 opt-out as a notice, and exits non-zero on a violation.
 

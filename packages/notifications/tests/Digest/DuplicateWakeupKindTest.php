@@ -27,7 +27,6 @@ it('rejects a duplicate wakeup handler kind when the host config repeats the tag
         'notification.digest.v1' => [
             'handler' => DigestWakeupAdapter::class,
             'version' => 'notification-digest/1',
-            'accept_legacy_unstamped' => false,
         ],
     ]);
     app()->forgetInstance(wakeup_bridge_options());

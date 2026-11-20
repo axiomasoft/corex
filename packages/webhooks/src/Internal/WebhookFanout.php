@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Internal;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Messaging\Contracts\CloudEventCodec;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Data\MessageEnvelope;
@@ -34,11 +36,16 @@ final readonly class WebhookFanout
         private array $projectors,
         private ClockInterface $clock,
         private CloudEventCodec $codec,
+        private DataScopeCodec $scopes,
+        private CurrentWorkScope $current,
     ) {}
 
     public function accept(MessageEnvelope $message): void
     {
-        $this->connection->transaction(function () use ($message): void {
+        $scope = $this->scopes->decode($message->scope);
+        $this->connection->transaction(function () use ($message, $scope): void {
+            $this->current->assert($scope, $this->connection);
+
             if (! $this->inbox->claim(consumer: self::Consumer, messageId: $message->messageId, name: $message->name)) {
                 return;
             }

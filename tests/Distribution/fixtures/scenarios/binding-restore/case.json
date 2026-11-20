@@ -1,0 +1,59 @@
+{
+  "id": "binding-restore",
+  "laravel": 13,
+  "host_support": true,
+  "timeout_seconds": 90,
+  "distinct_connections": true,
+  "profile": {
+    "id": "cloud-binding-restore",
+    "database": "postgres-isolated",
+    "database_roles": ["control", "a", "b", "backup"],
+    "default_database": "control",
+    "http": true,
+    "packages": [
+      "axiomasoft/corex", "axiomasoft/corex-tenancy", "axiomasoft/corex-access",
+      "axiomasoft/corex-search", "axiomasoft/corex-scheduler"
+    ],
+    "prerequisites": ["axiomasoft/tenant-laravel"]
+  },
+  "processes": {
+    "producer": ["php", "{fixture}/probe.php", "produce"],
+    "old-route": ["php", "{fixture}/probe.php", "old-route"],
+    "rebind": ["php", "{fixture}/probe.php", "rebind"],
+    "old-epoch": ["php", "{fixture}/probe.php", "old-epoch"],
+    "restore": ["php", "{fixture}/probe.php", "restore"],
+    "provider": ["php", "{fixture}/probe.php", "provider"],
+    "close-provider": ["php", "{fixture}/probe.php", "close-provider"],
+    "fresh": ["php", "{fixture}/probe.php", "fresh"]
+  },
+  "actions": [
+    {"action": "start", "name": "producer"},
+    {"action": "complete", "name": "producer"},
+    {"action": "start", "name": "old-route"},
+    {"action": "await", "name": "before-old-route", "process": "old-route"},
+    {"action": "start", "name": "rebind"},
+    {"action": "complete", "name": "rebind"},
+    {"action": "release", "name": "before-old-route"},
+    {"action": "complete", "name": "old-route"},
+    {"action": "start", "name": "old-epoch"},
+    {"action": "await", "name": "before-old-epoch", "process": "old-epoch"},
+    {"action": "start", "name": "restore"},
+    {"action": "complete", "name": "restore"},
+    {"action": "release", "name": "before-old-epoch"},
+    {"action": "complete", "name": "old-epoch"},
+    {"action": "start", "name": "provider"},
+    {"action": "await", "name": "provider-outstanding", "process": "provider"},
+    {"action": "start", "name": "close-provider"},
+    {"action": "await", "name": "provider-closing", "process": "close-provider"},
+    {"action": "release", "name": "provider-outstanding"},
+    {"action": "await", "name": "provider-unknown", "process": "provider"},
+    {"action": "release", "name": "provider-closing"},
+    {"action": "await", "name": "provider-still-blocked", "process": "close-provider"},
+    {"action": "release", "name": "provider-unknown"},
+    {"action": "complete", "name": "provider"},
+    {"action": "release", "name": "provider-still-blocked"},
+    {"action": "complete", "name": "close-provider"},
+    {"action": "start", "name": "fresh"},
+    {"action": "complete", "name": "fresh"}
+  ]
+}

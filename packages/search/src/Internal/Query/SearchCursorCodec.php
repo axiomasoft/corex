@@ -143,6 +143,6 @@ final readonly class SearchCursorCodec
 
     private function scopeFingerprint(DataScope $scope): string
     {
-        return hash('sha256', $scope->connectionIdentity."\0".$scope->actorId."\0".$scope->restoreEpoch);
+        return hash('sha256', json_encode($scope, JSON_THROW_ON_ERROR));
     }
 }

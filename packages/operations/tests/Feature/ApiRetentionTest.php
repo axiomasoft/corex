@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Operations\Bulk\Internal\BulkRetention;
@@ -21,6 +20,7 @@ use CoreX\Operations\Laravel\Commands\PruneApiOperations;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Tests\TestCase;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Time\Testing\FrozenClock;
 use DateInterval;
 use DateTimeImmutable;
@@ -50,7 +50,9 @@ final class ApiRetentionTest extends TestCase
 
     private DataScope $scope;
 
-    private TenantContextRestorer $restorer;
+    private CallerWorkScopeFixture $restorer;
+
+    private ContextFixture $scopeContexts;
 
     protected function setUp(): void
     {
@@ -65,14 +67,9 @@ final class ApiRetentionTest extends TestCase
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
-        $this->restorer = new GuardedTenantContextRestorer($contexts);
-        $this->scope = new DataScope(
-            'account-a',
-            null,
-            $this->tenant->getDriverName().':'.$this->tenant->getDatabaseName(),
-            'actor-a',
-            hash('sha256', 'api-retention'),
-        );
+        $this->scopeContexts = $contexts;
+        $this->scope = CallerWorkScopeFixture::scope('account-a', null, 'actor-a', hash('sha256', 'api-retention'));
+        $this->restorer = new CallerWorkScopeFixture($contexts, expected: $this->scope);
     }
 
     protected function tearDown(): void
@@ -127,7 +124,7 @@ final class ApiRetentionTest extends TestCase
         self::assertStringContainsString('active-input', (string) $this->tenant->table('sys_api_bulk_operations')->where('id', 'bulk-active')->value('input_ref'));
 
         try {
-            $retention->prune(new DataScope('account-a', null, 'sqlite:nowhere', 'actor-a', hash('sha256', 'api-retention')));
+            $retention->prune(CallerWorkScopeFixture::scope('account-a', null, 'actor-a', hash('sha256', 'api-retention'), 'foreign-binding'));
             self::fail('A foreign connection identity was accepted.');
         } catch (ScopeContextMismatch) {
             self::assertNotNull($this->tenant->table('sys_api_bulk_operations')->where('id', 'bulk-recent')->first());
@@ -206,7 +203,8 @@ final class ApiRetentionTest extends TestCase
         $this->bulkRow('bulk-command', 'completed', $now->sub(new DateInterval('PT2H')), $now->sub(new DateInterval('PT1H')), 'command-input', 'command-bytes');
         $this->app->instance(BulkRetention::class, $this->bulk());
         $this->app->instance(BudgetRetention::class, new BudgetRetention($this->budget, $this->clock));
-        $this->app->instance(DataScope::class, $this->scope);
+        $this->app->instance(TenantContextResolver::class, $this->scopeContexts);
+        CallerWorkScopeFixture::bind($this->app, $this->scope);
         $kernel = $this->app->make(Kernel::class);
         self::assertInstanceOf(ConsoleKernel::class, $kernel);
         $kernel->registerCommand(new PruneApiOperations);
@@ -242,8 +240,8 @@ final class ApiRetentionTest extends TestCase
             $budget = DB::connection('api_p1417_budget');
             $contexts = new ContextFixture;
             $contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
-            $restorer = new GuardedTenantContextRestorer($contexts);
-            $scope = new DataScope('account-a', null, $tenant->getDriverName().':'.$tenant->getDatabaseName(), 'actor-a', hash('sha256', 'api-retention-pg'));
+            $restorer = new CallerWorkScopeFixture($contexts);
+            $scope = CallerWorkScopeFixture::scope('account-a', null, 'actor-a', hash('sha256', 'api-retention-pg'));
             $previous = $this->tenant;
             $previousBudget = $this->budget;
             $previousScope = $this->scope;
@@ -317,7 +315,7 @@ final class ApiRetentionTest extends TestCase
     ): void {
         $scope = $account === $this->scope->accountId
             ? $this->scope
-            : new DataScope($account, null, $this->scope->connectionIdentity, 'actor-a', hash('sha256', 'api-retention'));
+            : CallerWorkScopeFixture::scope($account, null, 'actor-a', hash('sha256', 'api-retention'));
         $result = null;
 
         if ($bytes !== null) {

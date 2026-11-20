@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — CoreX 2.0 field scope
+
+- `AttributeStore` uses `CoreX\Data\Data\FieldSelection` for explicit field selection. `FilterPlan` carries the field-use evidence produced for the verified scope.
+
 ## Unreleased — Packman governance
 
 - Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.

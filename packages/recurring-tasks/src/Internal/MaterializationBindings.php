@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\RecurringTasks\Internal;
 
-use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Recurrence\Contracts\RecurrenceExpander;
 use CoreX\Recurrence\Laravel\RecurrenceFactory;
@@ -45,9 +45,10 @@ final class MaterializationBindings
             taskAccess: $app->make(TaskAccess::class),
             wakeupEnabled: $app->make(RecurringTasksOptions::class)->wakeupEnabled,
             wakeupHandlerKind: $app->make(RecurringTasksOptions::class)->wakeupHandlerKind,
+            wakeupHandlerVersion: $app->make(RecurringTasksOptions::class)->wakeupHandlerVersion,
             container: $app,
             authorizer: $app->make(DataScopeAuthorizer::class),
-            contexts: $app->make(TenantContextRestorer::class),
+            contexts: $app->make(CurrentWorkScope::class),
             receipts: $app->make(TaskOperationReceipts::class),
         ));
     }

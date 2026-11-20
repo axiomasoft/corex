@@ -14,16 +14,19 @@ use CoreX\Audit\Internal\QueuedAuditLogger;
 use CoreX\Audit\Internal\RecordAuditEntry;
 use CoreX\Audit\Laravel\HasAuditLog;
 use CoreX\Config\Data\CoreOptions;
-use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Tests\Stubs\StubAuditableThing;
 use CoreX\Tests\Stubs\Widget;
+use CoreX\Tests\Support\LocalWorkContexts;
+use CoreX\Tests\Support\WorkScopeFixture;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Queue\WorkerOptions;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
@@ -88,22 +91,6 @@ final class AuditUnguardedStub extends Model implements Auditable
     }
 }
 
-/** Tenant resolver whose current workspace can be mutated between dispatch and handle. */
-final class MutableTenantResolver implements TenantContextResolver
-{
-    public ?string $workspaceId = null;
-
-    public function current(): TenantContext
-    {
-        $account = new AccountRef('00000000-0000-7000-8000-0000000000aa', 'acct', 'active', [], []);
-        $workspace = $this->workspaceId !== null
-            ? new WorkspaceRef($this->workspaceId, 'wsp', 'team', '/wsp', null)
-            : null;
-
-        return new TenantContext($account, $workspace);
-    }
-}
-
 /** AuditRetention with a fixed cutoff, for the prune test. */
 final readonly class FixedAuditRetention implements AuditRetention
 {
@@ -122,7 +109,7 @@ function auditPg(): Connection
 
 function auditLogger(): QueuedAuditLogger
 {
-    return app()->make(QueuedAuditLogger::class, ['connection' => AUDIT_TEST_CONNECTION]);
+    return app()->make(QueuedAuditLogger::class);
 }
 
 /** @param array<string, mixed> $overrides */
@@ -162,11 +149,21 @@ beforeEach(function (): void {
     DB::purge(AUDIT_TEST_CONNECTION);
 
     $this->migrateSchemaSets(['axiomasoft/corex:tenant'], AUDIT_TEST_CONNECTION);
+    DB::setDefaultConnection(AUDIT_TEST_CONNECTION);
+    Schema::clearResolvedInstance('db.schema');
+    $widgetsMigration = require dirname(__DIR__).'/database/migrations/2026_06_14_100000_create_widgets_table.php';
+    $widgetsMigration->up();
+    $contexts = LocalWorkContexts::install($this->app);
+    $contexts->initialize(new AccountRef('00000000-0000-7000-8000-0000000000aa', 'acct', 'active', [], []));
+    $this->app->instance(LocalWorkContexts::class, $contexts);
+    WorkScopeFixture::install($this->app, 'audit-tests', 'service')->register($contexts->current());
 
     $this->app->instance(AuditLogger::class, auditLogger());
 });
 
 afterEach(function (): void {
+    DB::setDefaultConnection('testbench');
+    Schema::clearResolvedInstance('db.schema');
     Date::setTestNow();
 });
 
@@ -423,40 +420,64 @@ it('killswitch aborts in the observer itself — an unconditional logger stays u
 });
 
 it('snapshots occurred_at and workspace_id at enqueue, not in the worker (A17)', function (): void {
-    Queue::fake();
-
-    $resolver = new MutableTenantResolver;
-    $resolver->workspaceId = $eventWorkspace = (string) Str::uuid7();
-
-    $logger = app()->make(QueuedAuditLogger::class, ['connection' => AUDIT_TEST_CONNECTION, 'tenantContext' => $resolver]);
+    config([
+        'queue.connections.database.connection' => 'work-scope-control',
+        'queue.default' => 'database',
+    ]);
+    Schema::connection('work-scope-control')->create('jobs', static function (Blueprint $table): void {
+        $table->id();
+        $table->string('queue')->index();
+        $table->longText('payload');
+        $table->unsignedTinyInteger('attempts');
+        $table->unsignedInteger('reserved_at')->nullable();
+        $table->unsignedInteger('available_at');
+        $table->unsignedInteger('created_at');
+    });
+    $contexts = app(LocalWorkContexts::class);
+    $eventWorkspace = new WorkspaceRef((string) Str::uuid7(), 'event', 'team', 'event', null);
+    $workerWorkspace = new WorkspaceRef((string) Str::uuid7(), 'worker', 'team', 'worker', null);
+    $contexts->setWorkspace($eventWorkspace);
 
     Date::setTestNow('2026-07-14 10:00:00');
 
-    $logger->record(new AuditEntry(
+    auditLogger()->record(new AuditEntry(
         action: 'created',
         actorType: ActorType::System,
         entityType: 'stub.thing',
         entityId: (string) Str::uuid7(),
     ));
 
-    $captured = null;
-    Queue::assertPushed(RecordAuditEntry::class, function (RecordAuditEntry $job) use (&$captured): bool {
-        $captured = $job;
+    $queue = Queue::connection('database');
+    expect($queue->size())->toBe(1)
+        ->and(AuditLog::on(AUDIT_TEST_CONNECTION)->count())->toBe(0);
 
-        return true;
-    });
-
-    // Tenant context and clock move AFTER dispatch but BEFORE the worker runs —
-    // a worker that resolved tenant/now itself would write the wrong values.
-    $resolver->workspaceId = (string) Str::uuid7();
+    $contexts->setWorkspace($workerWorkspace);
     Date::setTestNow('2026-07-14 12:00:00');
 
-    app()->call([$captured, 'handle']);
+    $job = $queue->pop();
+    expect($job)->not->toBeNull();
+    app('queue.worker')->process('database', $job, new WorkerOptions(maxTries: 1));
 
     $row = AuditLog::on(AUDIT_TEST_CONNECTION)->sole();
 
-    expect($row->workspace_id)->toBe($eventWorkspace)
-        ->and($row->occurred_at->format('Y-m-d H:i:s'))->toBe('2026-07-14 10:00:00');
+    expect($row->workspace_id)->toBe($eventWorkspace->id)
+        ->and($row->occurred_at->format('Y-m-d H:i:s'))->toBe('2026-07-14 10:00:00')
+        ->and($contexts->current()->workspace)->toBe($workerWorkspace)
+        ->and($queue->size())->toBe(0);
+});
+
+it('refuses an audit write under a different workspace without queue restoration', function (): void {
+    $contexts = app(LocalWorkContexts::class);
+    $eventWorkspace = new WorkspaceRef((string) Str::uuid7(), 'event', 'team', 'event', null);
+    $workerWorkspace = new WorkspaceRef((string) Str::uuid7(), 'worker', 'team', 'worker', null);
+    $contexts->setWorkspace($eventWorkspace);
+    $scope = app(WorkScopeFixture::class)->scope();
+    $job = new RecordAuditEntry(new AuditEntry(action: 'created', actorType: ActorType::System), $scope);
+    $contexts->setWorkspace($workerWorkspace);
+
+    expect(fn () => app()->call([$job, 'handle']))->toThrow(ScopeContextMismatch::class)
+        ->and(AuditLog::on(AUDIT_TEST_CONNECTION)->count())->toBe(0)
+        ->and($contexts->current()->workspace)->toBe($workerWorkspace);
 });
 
 it('records restored and forceDeleted, folding the redundant delete of a forceDelete (A17)', function (): void {

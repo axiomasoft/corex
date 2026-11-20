@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\CustomFields\Data\AttributeDefinition;
 use CoreX\CustomFields\Data\AttributeId;
 use CoreX\CustomFields\Data\AttributeLifecycle;
 use CoreX\CustomFields\Data\IndexPolicy;
 use CoreX\CustomFields\Internal\Schema\DatabaseFieldCatalogue;
-use CoreX\CustomFields\Internal\ScopeDenied;
-use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
 use CoreX\CustomFields\Tests\Pg\DatabaseFieldCataloguePgTestCase;
 use CoreX\CustomFields\Tests\Support\PgTestSupport;
 use Illuminate\Database\QueryException;
@@ -25,7 +24,7 @@ function databaseCatalogue(): DatabaseFieldCatalogue
     return new DatabaseFieldCatalogue(
         connection: $connection,
         tables: PgTestSupport::tables(),
-        guard: new ScopeConnectionGuard($connection),
+        current: jsonbCurrent(),
         drivers: ['jsonb' => true, 'eav' => true],
     );
 }
@@ -135,5 +134,5 @@ it('rejects duplicate immutable revisions without changing reservations', functi
 
 it('checks the tenant connection before reading definitions', function (): void {
     expect(fn (): mixed => databaseCatalogue()->snapshot(jsonbScope('pgsql:another_test'), 'contact'))
-        ->toThrow(ScopeDenied::class);
+        ->toThrow(ScopeContextMismatch::class);
 });

@@ -56,7 +56,7 @@ final class Module
             throw new RuntimeException('Search manager did not return the fixture index driver.');
         }
 
-        $scope = new DataScope('account-1', null, 'sqlite-memory', 'actor-1', hash('sha256', 'search-epoch'));
+        $scope = new DataScope(deploymentId: 'fixture-deployment', accountId: 'account-1', workspaceId: null, bindingId: 'fixture-binding', bindingGeneration: 1, accountIncarnation: 'fixture-incarnation', restoreEpoch: hash('sha256', 'search-epoch'), principalKind: 'user', principalId: 'actor-1');
         $submission = $provider->submit(new IndexBatch('generation-1', [
             ['id' => 'eq-1', 'entity' => 'equipment', 'text' => 'pump alpha'],
         ]));

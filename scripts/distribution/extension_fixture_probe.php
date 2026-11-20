@@ -2,9 +2,18 @@
 
 declare(strict_types=1);
 
-use CoreX\Search\Internal\SearchManager;
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Data\Data\DataScope;
+use CoreX\Search\Contracts\SearchDriverRegistry;
+use CoreX\Search\Contracts\SearchProvider;
+use CoreX\Search\SearchServiceProvider;
 use Illuminate\Config\Repository;
-use Illuminate\Container\Container;
+use Illuminate\Database\ConnectionInterface;
+use Illuminate\Foundation\Application;
 use Packman\Modules\Data\Compiler\InstalledPackageVersion;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 use Packman\Modules\Testing\ExtensionContract;
@@ -42,13 +51,55 @@ if (! $report->passed() || ! is_string($report->fingerprint) || preg_match('/\A[
 
 if (method_exists($class, 'driver')) {
     $driver = $class::driver();
-    $container = new Container;
+
+    if (! $driver instanceof SearchProvider) {
+        fail('search-driver', ['The fixture did not return a SearchProvider.']);
+    }
+
+    $container = new Application;
     $container->instance('config', new Repository([
         'corex-search' => ['driver' => 'thirdparty'],
     ]));
-    $manager = new SearchManager($container);
-    $manager->extend('thirdparty', fn (mixed ...$ignored) => $driver);
-    $class::bind($manager->driver('thirdparty'));
+    $authority = new class implements CurrentWorkScope, DataScopeFactory, TenantContextResolver
+    {
+        private readonly TenantContext $context;
+
+        public function __construct()
+        {
+            $this->context = new TenantContext(new AccountRef('account-1', 'fixture-account', 'active', [], []));
+        }
+
+        public function current(): TenantContext
+        {
+            return $this->context;
+        }
+
+        public function forCurrentPrincipal(TenantContext $context): DataScope
+        {
+            if ($context !== $this->context) {
+                throw new RuntimeException('Unexpected account in the extension test host.');
+            }
+
+            return new DataScope('fixture-deployment', $context->account->id, null, 'fixture-binding', 1, 'fixture-incarnation', hash('sha256', 'search-epoch'), 'user', 'actor-1');
+        }
+
+        public function assert(DataScope $scope, ?ConnectionInterface $connection = null): TenantContext
+        {
+            $context = $this->current();
+
+            if (get_object_vars($scope) !== get_object_vars($this->forCurrentPrincipal($context)) || $connection !== null) {
+                throw new RuntimeException('Unexpected authority in the extension test host.');
+            }
+
+            return $context;
+        }
+    };
+    $container->instance(TenantContextResolver::class, $authority);
+    $container->instance(DataScopeFactory::class, $authority);
+    $container->instance(CurrentWorkScope::class, $authority);
+    $container->register(SearchServiceProvider::class);
+    $container->make(SearchDriverRegistry::class)->register('thirdparty', static fn (): SearchProvider => $driver);
+    $class::bind($container->make(SearchProvider::class));
 }
 
 $class::prove();

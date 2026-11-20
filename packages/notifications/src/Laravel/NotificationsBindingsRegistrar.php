@@ -17,7 +17,6 @@ use CoreX\Notifications\Inbox\Contracts\NotificationCenter;
 use CoreX\Notifications\Inbox\Contracts\NotificationPolicy;
 use CoreX\Notifications\Inbox\Internal\DenyNotificationPolicy;
 use CoreX\Notifications\Inbox\Internal\SqlNotificationCenter;
-use CoreX\Notifications\Internal\DangerousModesCheck;
 use CoreX\Notifications\Internal\DigestSchedulerCheck;
 use CoreX\Notifications\Internal\NotificationsOptions;
 use CoreX\Notifications\Preferences\Contracts\PreferenceRepository;
@@ -44,7 +43,7 @@ final class NotificationsBindingsRegistrar implements PackageRegistrar
         $app->singleton(NotificationsOptions::class, static fn (Application $app): NotificationsOptions => NotificationsOptions::fromArray(
             (array) $app->make(Repository::class)->get('corex-notifications', []),
         ));
-        $app->tag([DangerousModesCheck::class, DigestSchedulerCheck::class], RuntimeConfigCheck::class);
+        $app->tag([DigestSchedulerCheck::class], RuntimeConfigCheck::class);
         $app->singleton(NotificationPolicy::class, DenyNotificationPolicy::class);
         $app->singleton(InAppChannelDriver::class);
         $app->tag(InAppChannelDriver::class, 'corex.notifications.channels');

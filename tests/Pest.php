@@ -8,6 +8,9 @@ use CoreX\Testing\CoreXTestCase;
 use CoreX\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+require_once __DIR__.'/Support/LocalWorkContexts.php';
+require_once __DIR__.'/Support/WorkScopeFixture.php';
+
 uses(TestCase::class, RefreshDatabase::class)->in('Feature');
 uses(TestCase::class)->in('Unit');
 uses(CoreXTestCase::class)->in('../packages/core/tests/Unit', '../packages/core/tests/Storage', '../packages/core/tests/Views', '../packages/core/tests/Feature', '../packages/core/tests/Pg');

@@ -13,10 +13,11 @@ use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\ImpersonationState;
-use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Context\Internal\NullImpersonationService;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Tests\Support\LocalWorkContexts;
+use CoreX\Tests\Support\WorkScopeFixture;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
@@ -39,10 +40,10 @@ it('stamps observer and direct logger entries from authority and keeps unrelated
     $state = impersonationState('because');
     $tenant = fixedTenant(Str::uuid7()->toString());
     app()->instance(ImpersonationService::class, new FixedImpersonationService($state));
-    app()->instance(AuditLogger::class, app()->make(QueuedAuditLogger::class, ['connection' => 'pgsql', 'tenantContext' => $tenant]));
+    app()->instance(AuditLogger::class, app()->make(QueuedAuditLogger::class, ['tenantContext' => $tenant]));
 
     resolve(AuditObserver::class)->record(auditSubject((string) Str::uuid7()), 'updated');
-    (app()->make(QueuedAuditLogger::class, ['connection' => 'pgsql', 'tenantContext' => $tenant]))->record(new AuditEntry(
+    (app()->make(QueuedAuditLogger::class, ['tenantContext' => $tenant]))->record(new AuditEntry(
         action: 'direct',
         actorType: ActorType::User,
         actorId: 'caller',
@@ -72,7 +73,7 @@ it('stamps observer and direct logger entries from authority and keeps unrelated
 it('leaves user and system records byte-equivalent when no impersonation is active', function (): void {
     $workspaceId = Str::uuid7()->toString();
     $actorId = Str::uuid7()->toString();
-    $logger = app()->make(QueuedAuditLogger::class, ['connection' => 'pgsql', 'tenantContext' => fixedTenant($workspaceId)]);
+    $logger = app()->make(QueuedAuditLogger::class, ['tenantContext' => fixedTenant($workspaceId)]);
     $user = new AuditEntry(action: 'user-act', actorType: ActorType::User, actorId: $actorId, context: JsonDocuments::capture(['ip' => '1.1.1.1']));
     $system = new AuditEntry(action: 'system-act', actorType: ActorType::System, context: JsonDocuments::capture(['module' => 'core']));
 
@@ -99,7 +100,7 @@ it('writes the captured snapshot from a worker that has no session', function ()
     $user->id = 'session-user';
 
     $workspaceId = Str::uuid7()->toString();
-    (app()->make(QueuedAuditLogger::class, ['connection' => 'pgsql', 'tenantContext' => fixedTenant($workspaceId)]))->record(new AuditEntry(
+    (app()->make(QueuedAuditLogger::class, ['tenantContext' => fixedTenant($workspaceId)]))->record(new AuditEntry(
         action: 'queued',
         actorType: ActorType::User,
         actorId: 'session-user',
@@ -159,18 +160,12 @@ function impersonationState(string $reason): ImpersonationState
 
 function fixedTenant(string $workspaceId): TenantContextResolver
 {
-    return new readonly class($workspaceId) implements TenantContextResolver
-    {
-        public function __construct(private string $workspaceId) {}
+    $host = LocalWorkContexts::install(app());
+    $host->initialize(new AccountRef('acct-1', 'acct', 'active', [], []));
+    $host->setWorkspace(new WorkspaceRef($workspaceId, 'main', 'standard', 'main', null));
+    WorkScopeFixture::install(app())->scope();
 
-        public function current(): TenantContext
-        {
-            return new TenantContext(
-                new AccountRef('acct-1', 'acct', 'active', [], []),
-                new WorkspaceRef($this->workspaceId, 'main', 'standard', 'main', null),
-            );
-        }
-    };
+    return $host;
 }
 
 function auditSubject(string $id): Model

@@ -31,6 +31,7 @@ use CoreX\SearchIntl\Internal\LocalizedSearchSchema;
 use CoreX\SearchIntl\Internal\TranslationRevision;
 use CoreX\SearchIntl\SearchIntlServiceProvider;
 use CoreX\SearchIntl\Tests\TestCase;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Illuminate\Config\Repository;
 use Illuminate\Foundation\Application;
 
@@ -38,12 +39,7 @@ final class OptionalBridgesTest extends TestCase
 {
     private function scope(): DataScope
     {
-        return DataScope::fromTenantContext(
-            context: new TenantContext(account: new AccountRef(id: 'acct', slug: 'acct', status: 'active', features: [], limits: [])),
-            connectionIdentity: 'sqlite::memory:',
-            actorId: 'reader',
-            restoreEpoch: str_repeat('a', 64),
-        );
+        return CallerWorkScopeFixture::forContext(new TenantContext(account: new AccountRef(id: 'acct', slug: 'acct', status: 'active', features: [], limits: [])), 'reader', str_repeat('a', 64));
     }
 
     public function test_opt_01_keeps_intl_search_disabled_without_eager_bridge_registration(): void
@@ -132,7 +128,7 @@ final class OptionalBridgesTest extends TestCase
                 fields: ['id' => 'eq1', 'title' => 'Late translation'],
             ),
             new CallableDataScopeAuthorizer(
-                static fn (DataScope $_scope, string $entity, string $subjectId): bool => $subjectId === 'eq1',
+                static fn (DataScope $_scope, RecordRef $record): bool => $record->id === 'eq1',
             ),
         );
 
@@ -201,7 +197,7 @@ final class OptionalBridgesTest extends TestCase
                 fields: ['id' => 'eq1'],
             ),
             new CallableDataScopeAuthorizer(
-                static fn (DataScope $_scope, string $entity, string $subjectId): bool => $subjectId === 'eq1',
+                static fn (DataScope $_scope, RecordRef $record): bool => $record->id === 'eq1',
             ),
         );
         $projector = new LocalizedFieldProjector(new class implements TranslationReader

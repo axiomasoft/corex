@@ -2,10 +2,14 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Context\Contracts\NamedWorkPrincipal;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Data\Data\DataScope;
 use CoreX\Scheduling\Contracts\DueWakeupSweeper;
 use CoreX\Scheduling\Data\SweepResult;
 use CoreX\Tenancy\Integration\Internal\Wakeup\RootRegistryWakeupHint;
@@ -82,6 +86,31 @@ final class WakeupRoutingSweeper implements DueWakeupSweeper
     }
 }
 
+final class WakeupRoutingPrincipal implements DataScopeFactory, NamedWorkPrincipal
+{
+    private ?string $service = null;
+
+    public function __construct(private readonly string $kind = 'service') {}
+
+    public function run(TenantContext $context, string $serviceId, Closure $work): mixed
+    {
+        $previous = $this->service;
+        $this->service = $serviceId;
+
+        try {
+            return $work();
+        } finally {
+            $this->service = $previous;
+        }
+    }
+
+    public function forCurrentPrincipal(TenantContext $context): DataScope
+    {
+        return new DataScope('wakeup-routing', $context->account->id, $context->workspace?->id, $context->account->id, 1,
+            $context->account->id, str_repeat('a', 64), $this->kind, $this->service ?? 'ambient-owner');
+    }
+}
+
 function wakeupRoutingAccount(): AccountRef
 {
     $clusterId = (string) Str::uuid();
@@ -121,6 +150,23 @@ function wakeupRoutingHint(): RootRegistryWakeupHint
     );
 }
 
+function wakeupRoutingReconciler(RootRegistryWakeupHint $hint, WakeupRoutingSweeper $sweeper, ?WakeupRoutingPrincipal $principal = null): RootWakeupReconciler
+{
+    $principal ??= new WakeupRoutingPrincipal;
+
+    return new RootWakeupReconciler(
+        connections: resolve(ConnectionResolverInterface::class),
+        rootConnection: 'pgsql',
+        clock: resolve(ClockInterface::class),
+        hint: $hint,
+        tenancy: new WakeupRoutingTenancyManager,
+        namedPrincipals: $principal,
+        scopes: $principal,
+        sweeper: $sweeper,
+        leaseSeconds: 60,
+    );
+}
+
 it('keeps the earliest root hint and increments its revision on every upsert', function (): void {
     $hint = wakeupRoutingHint();
     $context = new TenantContext(new AccountRef(
@@ -152,15 +198,7 @@ it('does not let a stale root claimant delete a concurrently refreshed hint', fu
         $hint->scheduled(context: $current, fireAt: new DateTimeImmutable('2000-01-01T00:01:00Z'));
     };
 
-    $reconciler = new RootWakeupReconciler(
-        connections: resolve(ConnectionResolverInterface::class),
-        rootConnection: 'pgsql',
-        clock: resolve(ClockInterface::class),
-        hint: wakeupRoutingHint(),
-        tenancy: new WakeupRoutingTenancyManager,
-        sweeper: $sweeper,
-        leaseSeconds: 60,
-    );
+    $reconciler = wakeupRoutingReconciler($hint, $sweeper);
 
     expect($reconciler->sweep(limit: 1))->toBe(1);
 
@@ -180,15 +218,7 @@ it('reclaims expired root leases and rebuilds lost hints in bounded account page
         'claim_epoch' => 7,
     ]);
     $sweeper = new WakeupRoutingSweeper;
-    $reconciler = new RootWakeupReconciler(
-        connections: resolve(ConnectionResolverInterface::class),
-        rootConnection: 'pgsql',
-        clock: resolve(ClockInterface::class),
-        hint: wakeupRoutingHint(),
-        tenancy: new WakeupRoutingTenancyManager,
-        sweeper: $sweeper,
-        leaseSeconds: 60,
-    );
+    $reconciler = wakeupRoutingReconciler($hint, $sweeper);
 
     expect($reconciler->sweep(limit: 1))->toBe(1)
         ->and(DB::table('root_wakeup_hints')->where('account_id', $account->id)->exists())->toBeFalse();
@@ -214,15 +244,7 @@ it('reclaims expired root leases and rebuilds lost hints in bounded account page
 it('runs valid root sweeps and rejects invalid limits before doing root work', function (): void {
     $this->app->instance(
         RootWakeupReconciler::class,
-        new RootWakeupReconciler(
-            connections: resolve(ConnectionResolverInterface::class),
-            rootConnection: 'pgsql',
-            clock: resolve(ClockInterface::class),
-            hint: wakeupRoutingHint(),
-            tenancy: new WakeupRoutingTenancyManager,
-            sweeper: new WakeupRoutingSweeper,
-            leaseSeconds: 60,
-        ),
+        wakeupRoutingReconciler(wakeupRoutingHint(), new WakeupRoutingSweeper),
     );
     $invalid = new SweepRootWakeups;
     $invalid->setLaravel($this->app);
@@ -240,4 +262,20 @@ it('runs valid root sweeps and rejects invalid limits before doing root work', f
         ->and($sweepOutput->fetch())->toContain('Swept 0 account hints.')
         ->and($reconcile->run(new ArrayInput(['--limit' => '1', '--reconcile' => true]), $reconcileOutput))->toBe(0)
         ->and($reconcileOutput->fetch())->toContain('Reconciled 0 account wakeup hints.');
+});
+
+it('does not invoke the tenant sweep with an ambient user in place of the named grant', function (): void {
+    $account = wakeupRoutingAccount();
+    $hint = wakeupRoutingHint();
+    $hint->scheduled(new TenantContext($account), new DateTimeImmutable('2000-01-01T00:00:00Z'));
+    $called = false;
+    $sweeper = new WakeupRoutingSweeper;
+    $sweeper->onSweep = static function () use (&$called): void {
+        $called = true;
+    };
+
+    $reconciler = wakeupRoutingReconciler($hint, $sweeper, new WakeupRoutingPrincipal('user'));
+    expect(fn () => $reconciler->sweep(1))->toThrow(ScopeContextMismatch::class)
+        ->and($called)->toBeFalse()
+        ->and(DB::table('root_wakeup_hints')->where('account_id', $account->id)->exists())->toBeTrue();
 });

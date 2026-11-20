@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Laravel;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Context\Contracts\StoredWorkIssuer;
+use CoreX\Context\Contracts\StoredWorkRunner;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Notifications\Digest\Contracts\DigestBuilder;
 use CoreX\Notifications\Digest\Internal\DigestTick;
 use CoreX\Notifications\Digest\Internal\DigestWakeupAdapter;
@@ -36,6 +41,8 @@ final class NotificationsDigestRegistrar implements PackageRegistrar
 
         $app->scoped(DigestWakeupHandler::class, static fn (Application $app): DigestWakeupHandler => new DigestWakeupHandler(
             connection: $app->make(DatabaseManager::class)->connection(),
+            currentScope: $app->make(CurrentWorkScope::class),
+            scopeCodec: $app->make(DataScopeCodec::class),
             preferences: $app->make(PreferenceRepository::class),
             clock: $app->make(ClockInterface::class),
             digests: $app->make(DigestBuilder::class),
@@ -47,11 +54,10 @@ final class NotificationsDigestRegistrar implements PackageRegistrar
         ));
 
         if ($options->digestEnabled) {
-            $app->singleton('corex.notifications.digest-wakeup-handler', static fn (Application $app): WakeupHandlerDefinition => new WakeupHandlerDefinition(
-                kind: 'notification.digest.v1',
+            $app->singleton('corex.notifications.digest-wakeup-handler', static fn (): WakeupHandlerDefinition => new WakeupHandlerDefinition(
+                kind: SqlDigestBuilder::HandlerKind,
                 handler: DigestWakeupAdapter::class,
-                version: 'notification-digest/1',
-                acceptLegacyUnstamped: $app->make(NotificationsOptions::class)->digestAcceptLegacyUnstamped,
+                version: SqlDigestBuilder::HandlerVersion,
             ));
             $app->tag('corex.notifications.digest-wakeup-handler', WakeupHandlerDefinition::TAG);
             $app->tag(NotificationDigestDueSource::class, DueWakeupSource::TAG);
@@ -59,13 +65,19 @@ final class NotificationsDigestRegistrar implements PackageRegistrar
 
         $app->scoped(DigestBuilder::class, static fn (Application $app): SqlDigestBuilder => new SqlDigestBuilder(
             connection: $app->make(DatabaseManager::class)->connection(),
+            scopes: $app->make(DataScopeFactory::class),
+            currentScope: $app->make(CurrentWorkScope::class),
+            scopeCodec: $app->make(DataScopeCodec::class),
+            issuer: $app->make(StoredWorkIssuer::class),
             wakeup: $app->make(NotificationsOptions::class)->digestEnabled ? $app->make(WakeupScheduler::class) : null,
             enabled: $app->make(NotificationsOptions::class)->digestEnabled,
             clock: $app->make(ClockInterface::class),
         ));
         $app->scoped(NotificationDigestDueSource::class, static fn (Application $app): NotificationDigestDueSource => new NotificationDigestDueSource(
             connection: $app->make(DatabaseManager::class)->connection(),
-            scheduler: $app->make(WakeupScheduler::class),
+            scopes: $app->make(DataScopeCodec::class),
+            runner: $app->make(StoredWorkRunner::class),
+            scheduler: static fn (): WakeupScheduler => Container::getInstance()->make(WakeupScheduler::class),
         ));
 
     }

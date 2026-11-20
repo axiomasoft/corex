@@ -2,142 +2,136 @@
 
 declare(strict_types=1);
 
-use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Context\Contracts\TenantContextRestorer;
-use CoreX\Context\Data\AccountRef;
-use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\WorkScopeRunner;
+use CoreX\Context\Data\AttemptEvidence;
+use CoreX\Context\Data\OperationKey;
+use CoreX\Context\Data\PhysicalBinding;
+use CoreX\Context\Enums\AdmissionKind;
+use CoreX\Context\Exceptions\ScopeAuthorityUnavailable;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Data\Data\DataScope;
-use CoreX\Data\Internal\AllowAllDataScopeAuthorizer;
-use Illuminate\Contracts\Container\Container;
+use CoreX\Context\Exceptions\ScopeStale;
+use CoreX\Context\Laravel\DatabaseScopeControl;
+use CoreX\Tests\Support\WorkScopeFixture;
+use Illuminate\Support\Facades\DB;
 
-final class WorkUnitMutableContextResolver implements TenantContextResolver
-{
-    public function __construct(public TenantContext $context) {}
+it('drains an in-flight provider attempt before reopening a restored binding', function (): void {
+    $fixture = WorkScopeFixture::install(app());
+    $scope = $fixture->scope();
+    $owner = app(DatabaseScopeControl::class);
+    $ticket = $owner->acquire($scope, new OperationKey('provider', 1, 'effect-1', new DateTimeImmutable('+1 minute')), AdmissionKind::ProviderSend);
+    $closing = $owner->close($scope->accountId, 1);
+    expect(fn () => $owner->acquire($scope, new OperationKey('after-close', 1), AdmissionKind::LocalWrite))->toThrow(ScopeContextMismatch::class);
+    $owner->settle($ticket, new AttemptEvidence('unknown', 'provider-timeout'));
+    expect(fn () => $owner->drain($scope->accountId, $closing))->toThrow(ScopeContextMismatch::class);
+    $owner->settle($ticket, new AttemptEvidence('reconciled', 'provider-receipt-1'));
+    $closed = $owner->drain($scope->accountId, $closing);
+    $next = new PhysicalBinding($scope->deploymentId, $scope->bindingId, 1, $scope->accountIncarnation, str_repeat('b', 64));
+    expect(fn () => $owner->reopen($scope->accountId, $closed, $next, static fn () => false))->toThrow(ScopeContextMismatch::class);
+    $owner->reopen($scope->accountId, $closed, $next, static fn () => true);
+    $ran = false;
+    expect(fn () => app(WorkScopeRunner::class)->run($scope, function () use (&$ran) {
+        $ran = true;
+    }))->toThrow(ScopeStale::class)
+        ->and($ran)->toBeFalse()->and($fixture->scope()->restoreEpoch)->toBe(str_repeat('b', 64));
+    $closed = $owner->drain($scope->accountId, $owner->close($scope->accountId, 4));
+    $old = new PhysicalBinding($scope->deploymentId, $scope->bindingId, 1, $scope->accountIncarnation, $scope->restoreEpoch);
+    expect(fn () => $owner->reopen($scope->accountId, $closed, $old, static fn () => true))->toThrow(ScopeContextMismatch::class);
+});
 
-    public function current(): TenantContext
-    {
-        return $this->context;
-    }
-}
-
-function workUnitAccount(string $id): AccountRef
-{
-    return new AccountRef(id: $id, slug: $id, status: 'active', features: [], limits: []);
-}
-
-function workUnitScope(TenantContext $context): DataScope
-{
-    return DataScope::fromTenantContext(
-        context: $context,
-        connectionIdentity: 'sqlite::memory:'.$context->account->id,
-        actorId: 'actor-'.$context->account->id,
-        restoreEpoch: str_repeat('a', 64),
-    );
-}
-
-/**
- * @return array{0: DataScope, 1: object, 2: DataScopeAuthorizer|null}
- */
-function workUnitPassA(Container $container, TenantContext $contextA): array
-{
-    $container->instance(
-        TenantContextResolver::class,
-        new WorkUnitMutableContextResolver($contextA),
-    );
-
-    $originalAuthorizer = $container->bound(DataScopeAuthorizer::class)
-        ? $container->make(DataScopeAuthorizer::class)
-        : null;
-
-    $previousAuthorizer = $container->bound(DataScopeAuthorizer::class)
-        ? $container->make(DataScopeAuthorizer::class)
-        : null;
-
-    $container->instance(DataScopeAuthorizer::class, new AllowAllDataScopeAuthorizer);
-    $container->forgetScopedInstances();
-
-    $scopeA = workUnitScope($contextA);
-    $scopedFromA = $container->make(TenantContextRestorer::class);
+it('preserves the caller transaction and holds its ticket until commit', function (): void {
+    $scope = WorkScopeFixture::install(app())->scope();
+    $owner = app(DatabaseScopeControl::class);
+    $business = DB::connection();
+    $business->beginTransaction();
 
     try {
-        throw new RuntimeException('work-unit-pass-a');
-    } catch (RuntimeException $exception) {
-        expect($exception->getMessage())->toBe('work-unit-pass-a');
+        app(WorkScopeRunner::class)->run($scope, function () use ($scope, $business): void {
+            expect(app(CurrentWorkScope::class)->assert($scope, $business)->account->id)->toBe($scope->accountId)
+                ->and($business->transactionLevel())->toBe(1);
+        });
+        $closing = $owner->close($scope->accountId, 1);
+        expect(fn () => $owner->drain($scope->accountId, $closing))->toThrow(ScopeContextMismatch::class);
+        $business->commit();
+        expect($owner->drain($scope->accountId, $closing))->toBe(3);
     } finally {
-        if ($previousAuthorizer instanceof DataScopeAuthorizer) {
-            $container->instance(DataScopeAuthorizer::class, $previousAuthorizer);
-        } else {
-            $container->forgetInstance(DataScopeAuthorizer::class);
+        if ($business->transactionLevel()) {
+            $business->rollBack();
         }
-
-        $container->forgetScopedInstances();
     }
+});
 
-    return [$scopeA, $scopedFromA, $originalAuthorizer];
-}
+it('pins a direct transaction once and retains its ticket while a nested savepoint rolls back', function (): void {
+    $scope = WorkScopeFixture::install(app())->scope();
+    $db = DB::connection();
+    $owner = app(DatabaseScopeControl::class);
+    $db->beginTransaction();
 
-function workUnitInspectPassB(
-    Container $container,
-    TenantContext $contextB,
-    DataScope $scopeA,
-    object $scopedFromA,
-    ?DataScopeAuthorizer $originalAuthorizer,
-    array $configBaseline,
-): object {
-    $container->instance(
-        TenantContextResolver::class,
-        new WorkUnitMutableContextResolver($contextB),
-    );
-
-    expect(fn () => $container->make(TenantContextRestorer::class)->restore($scopeA))
-        ->toThrow(ScopeContextMismatch::class);
-
-    expect($container['config']->get('corex.work_unit_isolation.leak_marker'))->toBeNull()
-        ->and($container['config']->get('database.connections.testbench'))->toBe($configBaseline);
-
-    if ($originalAuthorizer instanceof DataScopeAuthorizer) {
-        expect($container->make(DataScopeAuthorizer::class))->toBe($originalAuthorizer);
-    } else {
-        expect($container->bound(DataScopeAuthorizer::class))->toBeFalse();
+    try {
+        $db->beginTransaction();
+        app(CurrentWorkScope::class)->assert($scope, $db);
+        $closing = $owner->close($scope->accountId, 1);
+        $db->rollBack();
+        app(CurrentWorkScope::class)->assert($scope, $db);
+        expect(DB::connection('work-scope-control')->table('corex_scope_tickets')->count())->toBe(1)
+            ->and(fn () => $owner->drain($scope->accountId, $closing))->toThrow(ScopeContextMismatch::class);
+        $db->rollBack();
+        expect(DB::connection('work-scope-control')->table('corex_scope_tickets')->value('state'))->toBe('rolled-back')
+            ->and($owner->drain($scope->accountId, $closing))->toBe(3);
+    } finally {
+        if ($db->transactionLevel()) {
+            $db->rollBack(0);
+        }
     }
+});
 
-    $scopedBeforeBInit = $container->make(TenantContextRestorer::class);
-    expect($scopedBeforeBInit)->not->toBe($scopedFromA);
+it('refuses to issue an uncommitted ticket on a host-owned outer control transaction', function (): void {
+    $scope = WorkScopeFixture::install(app())->scope();
+    DB::connection('work-scope-control')->transaction(function () use ($scope): void {
+        expect(fn () => app(DatabaseScopeControl::class)->acquire($scope, new OperationKey('pinned', 1), AdmissionKind::LocalWrite))
+            ->toThrow(ScopeAuthorityUnavailable::class);
+    });
+});
 
-    return $scopedBeforeBInit;
-}
-
-it('isolates consecutive work units when the first pass throws', function (): void {
-    $container = app();
-    $configBaseline = $container['config']->get('database.connections.testbench');
-    $contextA = new TenantContext(account: workUnitAccount('account-a'), boxed: true);
-    $contextB = new TenantContext(account: workUnitAccount('account-b'), boxed: true);
-
-    [$scopeA, $scopedFromA, $originalAuthorizer] = workUnitPassA($container, $contextA);
-
-    if ($originalAuthorizer instanceof DataScopeAuthorizer) {
-        expect($container->make(DataScopeAuthorizer::class))->toBe($originalAuthorizer);
-    } else {
-        expect($container->bound(DataScopeAuthorizer::class))->toBeFalse();
+it('requires a stable effect key and deadline before recording a provider attempt', function (): void {
+    $scope = WorkScopeFixture::install(app())->scope();
+    $control = app(DatabaseScopeControl::class);
+    $deadline = new DateTimeImmutable('+1 minute');
+    foreach ([new OperationKey('send', 1, null, $deadline), new OperationKey('send', 1, 'payment-1')] as $invalid) {
+        expect(fn () => $control->acquire($scope, $invalid, AdmissionKind::ProviderSend))->toThrow(ScopeContextMismatch::class);
     }
+    $ticket = $control->acquire($scope, new OperationKey('send', 1, 'payment-1', $deadline), AdmissionKind::ProviderSend);
+    $row = DB::connection('work-scope-control')->table('corex_scope_tickets')->sole();
+    expect($row->ticket_id)->toBe($ticket->id)->and($row->effect_key)->toBe('payment-1')->and($row->deadline)->not->toBeNull();
+});
 
-    $container->forgetScopedInstances();
+it('accepts identical completion evidence on retry and preserves the original receipt on conflict', function (): void {
+    $scope = WorkScopeFixture::install(app())->scope();
+    $control = app(DatabaseScopeControl::class);
+    $ticket = $control->acquire($scope, new OperationKey('apply', 2), AdmissionKind::LocalWrite);
+    $receipt = new AttemptEvidence('committed', 'receipt-2');
+    $control->settle($ticket, $receipt);
+    $control->settle($ticket, $receipt);
+    expect(fn () => $control->settle($ticket, new AttemptEvidence('rolled-back', 'conflicting-receipt')))->toThrow(ScopeContextMismatch::class);
+    $row = DB::connection('work-scope-control')->table('corex_scope_tickets')->sole();
+    expect($row->state)->toBe('committed')->and($row->evidence)->toBe('receipt-2');
+});
 
-    $scopedBeforeWarmup = workUnitInspectPassB(
-        container: $container,
-        contextB: $contextB,
-        scopeA: $scopeA,
-        scopedFromA: $scopedFromA,
-        originalAuthorizer: $originalAuthorizer,
-        configBaseline: $configBaseline,
-    );
+it('keeps admission closed when an earlier autocommit effect survives a later transaction rollback', function (): void {
+    $scope = WorkScopeFixture::install(app())->scope();
+    DB::statement('CREATE TABLE local_effects (label text NOT NULL)');
+    $work = app(WorkScopeRunner::class);
+    expect(fn () => $work->run($scope, static function (): void {
+        DB::table('local_effects')->insert(['label' => 'committed']);
+        DB::transaction(static function (): void {
+            DB::table('local_effects')->insert(['label' => 'rolled-back']);
 
-    $container->instance(DataScopeAuthorizer::class, new AllowAllDataScopeAuthorizer);
-    $container->forgetScopedInstances();
-
-    $scopedFromB = $container->make(TenantContextRestorer::class);
-    expect($scopedFromB)->not->toBe($scopedFromA)
-        ->and($scopedFromB)->not->toBe($scopedBeforeWarmup);
+            throw new RuntimeException('local failure');
+        });
+    }))->toThrow(RuntimeException::class, 'local failure');
+    expect(DB::table('local_effects')->pluck('label')->all())->toBe(['committed'])
+        ->and(DB::connection('work-scope-control')->table('corex_scope_tickets')->sole()->state)->toBe('unknown');
+    $control = app(DatabaseScopeControl::class);
+    $closing = $control->close($scope->accountId, 1);
+    expect(fn () => $control->drain($scope->accountId, $closing))->toThrow(ScopeContextMismatch::class);
 });

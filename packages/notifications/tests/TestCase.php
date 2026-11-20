@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Notifications\Tests;
 
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Notifications\Internal\NotificationsOptions;
 use CoreX\Notifications\NotificationsServiceProvider;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Illuminate\Support\Facades\Schema;
 use Packman\Schema\Testing\MigratesSchemaSets;
 
@@ -26,7 +29,6 @@ abstract class TestCase extends Orchestra
     {
         // Package registration runs before defineEnvironment, and the digest tags are chosen then.
         $app['config']->set('corex-notifications.digest.enabled', true);
-        $app['config']->set('corex-notifications.digest.accept_legacy_unstamped', false);
 
         return [PackmanServiceProvider::class, SchemaServiceProvider::class, wakeup_bridge_provider(), NotificationsServiceProvider::class];
     }
@@ -38,7 +40,6 @@ abstract class TestCase extends Orchestra
         $app['config']->set('database.connections.sqlite.database', ':memory:');
         $app['config']->set('queue.default', 'sync');
         $app['config']->set('corex-notifications.digest.enabled', true);
-        $app['config']->set('corex-notifications.digest.accept_legacy_unstamped', false);
     }
 
     protected function defineDatabaseMigrations(): void
@@ -55,7 +56,12 @@ abstract class TestCase extends Orchestra
     protected function setUp(): void
     {
         parent::setUp();
-        $this->app->instance(TenantContextResolver::class, new NotificationTenantContextResolver);
+        $contexts = new NotificationTenantContextResolver;
+        $this->app->instance(TenantContextResolver::class, $contexts);
+        $this->app->instance(DataScopeCodec::class, new ArrayDataScopeCodec);
+        CallerWorkScopeFixture::bind($this->app, CallerWorkScopeFixture::forContext(
+            $contexts->current(), '11111111-1111-7111-8111-111111111112', str_repeat('a', 64),
+        ));
         $this->app->forgetInstance(NotificationsOptions::class);
         $this->app->forgetScopedInstances();
     }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Search\Data\Candidate;
 use CoreX\Search\Data\CandidatePage;
@@ -20,13 +19,11 @@ use CoreX\Search\Data\SearchPage;
 use CoreX\Search\Data\SearchQuery;
 use CoreX\Search\Data\SearchSnapshot;
 use CoreX\Search\Internal\UnavailableSearchProvider;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 
 it('keeps neutral search value objects typed and unsupported providers empty', function (): void {
     $record = new RecordRef(entity: 'equipment', id: 'pump-1');
-    $scope = DataScope::fromTenantContext(
-        context: new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false),
-        connectionIdentity: 'pgsql:account-a', actorId: 'operator-a', restoreEpoch: str_repeat('a', 64),
-    );
+    $scope = CallerWorkScopeFixture::forContext(new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false), 'operator-a', str_repeat('a', 64));
     $provider = new UnavailableSearchProvider;
     $page = $provider->query(scope: $scope, query: new SearchQuery(entity: 'equipment', schemaHash: str_repeat('b', 64), text: 'pump'));
 

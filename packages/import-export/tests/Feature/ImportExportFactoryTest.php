@@ -31,6 +31,7 @@ use CoreX\ImportExport\Data\TargetResult;
 use CoreX\ImportExport\Data\TransferRef;
 use CoreX\ImportExport\Exceptions\SessionUnavailable;
 use CoreX\ImportExport\Tests\FactoryTestCase;
+use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Illuminate\Support\Facades\DB;
 
 uses(FactoryTestCase::class);
@@ -39,6 +40,7 @@ beforeEach(function (): void {
     $resolver = Mockery::mock(TenantContextResolver::class);
     $resolver->shouldReceive('current')->andReturn(new TenantContext(new AccountRef('account-a', 'a', 'active', [], []), boxed: true));
     app()->instance(TenantContextResolver::class, $resolver);
+    CallerWorkScopeFixture::bind(app(), factoryScope());
     $this->migrateSchemaSets(['axiomasoft/corex-import-export:tenant']);
     $authorizer = Mockery::mock(DataScopeAuthorizer::class);
     $authorizer->shouldReceive('authorize')->andReturn(new DataScopeAccessDecision(true, 'allowed'));
@@ -47,7 +49,7 @@ beforeEach(function (): void {
 
 function factoryScope(string $actor = 'user-a', string $epoch = 'a'): DataScope
 {
-    return new DataScope('account-a', null, 'sqlite::memory:', $actor, str_repeat($epoch, 64), true);
+    return CallerWorkScopeFixture::scope('account-a', null, $actor, str_repeat($epoch, 64));
 }
 
 /** @return array{TransferSource, RecordMapper, TransferSink, MappingSnapshot, ConflictRule} */
@@ -180,6 +182,7 @@ it('refuses a retained session when tenant context changes on the same connectio
         return $context;
     });
     app()->instance(TenantContextResolver::class, $resolver);
+    CallerWorkScopeFixture::bind(app(), factoryScope());
     $scope = factoryScope();
     $session = resolve(ImportExportFactory::class)->openImport($scope, new TransferRef('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'), ...factoryImportPorts());
     $context = new TenantContext(new AccountRef('account-b', 'b', 'active', [], []), boxed: true);

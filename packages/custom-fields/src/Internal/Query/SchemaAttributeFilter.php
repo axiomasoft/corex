@@ -4,50 +4,70 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal\Query;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\CustomFields\Contracts\AttributeFilter;
+use CoreX\CustomFields\Data\AttributeId;
 use CoreX\CustomFields\Data\FieldSnapshot;
 use CoreX\CustomFields\Data\FilterNode;
 use CoreX\CustomFields\Data\FilterPlan;
 use CoreX\CustomFields\Internal\ScopeDenied;
-use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Data\Contracts\FieldUsePolicy;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\EntityHandle;
+use CoreX\Data\Data\FieldSelection;
+use CoreX\Data\Data\FieldUseRequest;
+use CoreX\Data\Enums\FieldUse;
+use CoreX\Data\Enums\FieldUsePlanKind;
 use InvalidArgumentException;
 use Packman\Attributes\Internal;
 
 #[Internal]
 final readonly class SchemaAttributeFilter implements AttributeFilter
 {
-    public function __construct(private DataScopeAuthorizer $authorizer) {}
+    public function __construct(private FieldUsePolicy $policy, private CurrentWorkScope $current) {}
 
     public function compile(DataScope $scope, FieldSnapshot $schema, FilterNode $filter): FilterPlan
     {
-        $codes = [];
+        $this->current->assert($scope);
+        $fields = [];
+
         foreach ($schema->activeFields as $field) {
             $code = $field['code'] ?? null;
 
             if (! is_string($code)) {
                 throw new InvalidArgumentException('Active field code must be a string.');
             }
-            $codes[] = $code;
+
+            $id = $field['id'] ?? AttributeId::legacy($schema->entity, $code)->value;
+
+            if (! is_string($id)) {
+                throw new InvalidArgumentException('Active field identity must be a string.');
+            }
+            $fields[$code] = $id;
         }
 
-        if (! $this->authorizer->authorize(scope: $scope, entity: $schema->entity, subjectId: '', fields: $codes, action: 'filter')->allowed) {
+        $field = $this->validate($filter->tree, $fields);
+        $plan = $this->policy->plan($scope, new EntityHandle($schema->entity), new FieldUseRequest(new FieldSelection([$field]), FieldUse::Filter));
+
+        if ($plan->kind !== FieldUsePlanKind::Unconditional || $plan->witness === null) {
             throw new ScopeDenied('The current scope denies this attribute filter.');
         }
 
-        $fields = array_fill_keys($codes, true);
-        $this->validate(node: $filter->tree, fields: $fields, depth: 0);
-
-        return new FilterPlan(schemaHash: $schema->schemaHash, tree: $filter->tree);
+        return new FilterPlan(
+            schemaHash: $schema->schemaHash,
+            tree: $filter->tree,
+            scopeFingerprint: hash('sha256', json_encode([DataScope::VERSION, $scope], JSON_THROW_ON_ERROR)),
+            policyWitness: $plan->witness,
+        );
     }
 
     /**
      * @param  array<array-key, mixed>  $node
-     * @param  array<string, true>  $fields
+     * @param  array<string, string>  $fields
      */
-    private function validate(array $node, array $fields, int $depth): void
+    private function validate(array $node, array $fields): string
     {
-        if ($depth > 8 || ! isset($node['op']) || ! is_string($node['op'])) {
+        if (! isset($node['op']) || ! is_string($node['op'])) {
             throw new InvalidArgumentException('Filter node is malformed.');
         }
 
@@ -60,5 +80,7 @@ final readonly class SchemaAttributeFilter implements AttributeFilter
         if (! is_string($field) || ! isset($fields[$field])) {
             throw new InvalidArgumentException('Filter references an unknown active field.');
         }
+
+        return $fields[$field];
     }
 }
