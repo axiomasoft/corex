@@ -7,6 +7,7 @@ namespace CoreX\Webhooks\Tests\Feature;
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
 use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\MessagePublisher;
 use CoreX\Messaging\Data\MessageContract;
@@ -208,7 +209,10 @@ final class WebhookFanoutTest extends TestCase
         ]);
         $catalogue = new WebhookTopicCatalogue($contracts, [$topic], ['orders.placed' => $projector]);
 
-        return new WebhookFanout($db, MessagingFixtures::inbox($db, $this->clock), $catalogue, ['orders.placed' => $projector], $this->clock, new JsonCloudEventCodec($contracts), resolve(DataScopeCodec::class), new CallerWorkScopeFixture($contexts));
+        $scope = new CallerWorkScopeFixture($contexts, static fn () => $db);
+        $codec = resolve(DataScopeCodec::class);
+
+        return new WebhookFanout($db, MessagingFixtures::inbox($scope, $contracts, $this->clock), $catalogue, ['orders.placed' => $projector], $this->clock, new JsonCloudEventCodec($contracts, $codec), $codec, $scope, $scope);
     }
 
     private function subscribe(string $id, string $connection = 'api_tenant'): void
@@ -238,7 +242,8 @@ final class WebhookFanoutTest extends TestCase
             name: 'orders.placed',
             contractVersion: 1,
             occurredAt: new DateTimeImmutable('2026-09-25T12:00:00+00:00'),
-            scope: resolve(DataScopeCodec::class)->encode(CallerWorkScopeFixture::scope('account-1', null, 'actor-1', str_repeat('a', 64))),
+            scope: CallerWorkScopeFixture::scope('account-1', null, 'actor-1', str_repeat('a', 64)),
+            subject: new RecordRef('orders.order', 'order-1'),
             payload: new MessagePayload(['id' => 'order-1', 'secret' => 'hidden']),
             piiClass: PiiClass::Personal,
             correlationId: 'correlation-1',
@@ -248,11 +253,22 @@ final class WebhookFanoutTest extends TestCase
     private function inbox(string $connection = 'api_tenant'): void
     {
         DB::connection($connection)->getSchemaBuilder()->create('sys_inbox_messages', function (Blueprint $table): void {
+            $table->string('account_id', 128);
+            $table->string('account_incarnation', 128);
+            $table->string('workspace_scope', 138);
             $table->string('consumer', 120);
-            $table->uuid('message_id');
+            $table->string('deployment_id', 128);
+            $table->string('binding_id', 128);
+            $table->unsignedBigInteger('binding_generation');
+            $table->char('restore_epoch', 64);
+            $table->unsignedBigInteger('contract_version');
+            $table->unsignedInteger('consumer_version');
+            $table->string('source', 255);
+            $table->string('message_id', 128);
             $table->string('name', 160);
+            $table->char('digest', 64);
             $table->timestampTz('processed_at', precision: 6);
-            $table->primary(['consumer', 'message_id']);
+            $table->unique(['account_id', 'account_incarnation', 'workspace_scope', 'consumer', 'source', 'message_id'], 'sys_inbox_messages_scope_consumer_source_message_uq');
         });
     }
 

@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Laravel;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
+use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
 use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
+use CoreX\Operations\Cost\Contracts\BudgetExecution;
 use CoreX\Operations\Errors\Internal\ErrorMapper;
 use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
 use CoreX\Operations\Idempotency\Internal\IdempotentOperationInvoker;
@@ -33,10 +38,15 @@ final class IdempotencyRegistrar implements PackageRegistrar
                 store: static fn (): IdempotencyStore => $app->make(IdempotencyStore::class),
                 connection: $app->make(Connection::class),
                 modules: $app->make(ModuleRegistry::class),
+                scopes: $app->make(DataScopeFactory::class),
+                current: $app->make(CurrentWorkScope::class),
+                clientScopes: $app->make(ClientScopeAuthorizer::class),
+                fields: $app->make(OperationFieldAuthorizer::class),
                 authorizer: $app->make(OperationAuthorizer::class),
                 replayAuthorizer: $app->make(ReplayAuthorizer::class),
                 errors: $app->make(ErrorMapper::class),
                 problems: $app->make(ProblemRegistry::class),
+                budget: $app->bound(BudgetExecution::class) ? $app->make(BudgetExecution::class) : null,
             ));
         $app->scoped(IdempotencyStore::class, static fn (Application $app): IdempotencyStore => (new IdempotencyStoreFactory)->make($app));
     }

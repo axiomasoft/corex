@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Notifications;
 
 use CoreX\Context\Laravel\WorkQueueHandlers;
-use CoreX\Notifications\Delivery\Internal\Commands\SweepNotificationDeliveries;
-use CoreX\Notifications\Delivery\Internal\Jobs\DeliverNotification;
 use CoreX\Notifications\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Notifications\Laravel\NotificationsBindingsRegistrar;
 use CoreX\Notifications\Laravel\NotificationsDigestRegistrar;
+use CoreX\Notifications\Runtime\Internal\Commands\SweepNotificationDeliveries;
+use CoreX\Notifications\Runtime\Internal\Jobs\DeliverNotification;
 use Illuminate\Console\Events\ArtisanStarting;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\ServiceProvider;

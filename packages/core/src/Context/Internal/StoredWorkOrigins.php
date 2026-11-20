@@ -12,11 +12,12 @@ use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Packman\Attributes\Internal;
+use Packman\Foundation\ApplicationLocator;
 
 #[Internal]
 final readonly class StoredWorkOrigins implements StoredWorkIssuer
 {
-    public function __construct(private CurrentWorkScope $current, private DataScopeCodec $codec, private Encrypter $encrypter) {}
+    public function __construct(private CurrentWorkScope $current, private DataScopeCodec $codec) {}
 
     public function issue(DataScope $scope, string $owner, string $reference): StoredWorkProof
     {
@@ -34,6 +35,8 @@ final readonly class StoredWorkOrigins implements StoredWorkIssuer
 
     private function seal(DataScope $scope, string $owner, string $reference): string
     {
-        return hash_hmac('sha256', json_encode(['corex.stored-work.v1', $owner, $reference, $this->codec->encode($scope)], JSON_THROW_ON_ERROR), $this->encrypter->getKey());
+        $key = ApplicationLocator::current()->make(Encrypter::class)->getKey();
+
+        return hash_hmac('sha256', json_encode(['corex.stored-work.v1', $owner, $reference, $this->codec->encode($scope)], JSON_THROW_ON_ERROR), $key);
     }
 }

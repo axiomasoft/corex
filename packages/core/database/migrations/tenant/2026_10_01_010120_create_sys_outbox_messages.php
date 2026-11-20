@@ -18,14 +18,26 @@ return new class extends PackmanMigration
         $tableName = 'sys_outbox_messages';
 
         $this->create($tableName, function (Blueprint $table): void {
+            $table->string('account_id', 128);
+            $table->string('account_incarnation', 128);
+            $table->string('workspace_scope', 140);
+            $table->string('deployment_id', 128);
+            $table->string('binding_id', 128);
+            $table->unsignedBigInteger('binding_generation');
+            $table->char('restore_epoch', 64);
+            $table->char('digest', 64);
+            $table->string('message_id', 128);
+            $table->char('scope_seal', 64);
+            $table->uuid('claim_token')->nullable();
+            $table->unique(['account_id', 'account_incarnation', 'workspace_scope', 'source', 'message_id'], 'sys_outbox_messages_fact_uq');
             $table->uuid('id');
             $table->primary(['id'], 'sys_outbox_messages_pk');
             $table->string('name', 160);
             $table->unsignedSmallInteger('contract_version');
             $table->unsignedSmallInteger('envelope_version');
             $table->string('source', 128);
-            $table->string('subject', 128)->nullable();
-            $table->string('correlation_id', 128)->nullable();
+            $table->json('subject');
+            $table->string('correlation_id', 128);
             $table->string('causation_id', 128)->nullable();
             $table->string('pii_class', 16);
             $table->json('scope');
@@ -49,7 +61,7 @@ return new class extends PackmanMigration
 
         Schema::getConnection()->statement(
             "CREATE INDEX sys_outbox_messages_claim_ix ON {$wrappedTable} "
-            ."(available_at, occurred_at, id) WHERE status = 'pending'",
+            ."(available_at, id) WHERE status = 'pending'",
         );
 
         Schema::getConnection()->statement(

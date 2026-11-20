@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Operations\Cost\Internal;
 
 use CoreX\Operations\Cost\Contracts\BudgetReservation;
-use CoreX\Operations\Cost\Contracts\OperationBudget;
+use CoreX\Operations\Cost\Contracts\DurableOperationBudget;
 use CoreX\Operations\Cost\Data\ActualCost;
+use CoreX\Operations\Cost\Data\BudgetReceipt;
 use CoreX\Operations\Cost\Data\BudgetScope;
 use CoreX\Operations\Cost\Data\EstimatedCost;
 use CoreX\Operations\Cost\Data\ThrottleStatus;
@@ -26,7 +27,7 @@ use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 /** @internal Shared SQL authority for atomic hierarchical operation budgets. */
 #[Internal]
-final readonly class SqlOperationBudget implements OperationBudget
+final readonly class SqlOperationBudget implements DurableOperationBudget
 {
     private const int MicroUnits = 1_000_000;
 
@@ -76,14 +77,36 @@ final readonly class SqlOperationBudget implements OperationBudget
     #[Override]
     public function reserve(BudgetScope $scope, EstimatedCost $cost): BudgetReservation
     {
+        return $this->hold($scope, $cost, (string) Str::uuid7());
+    }
+
+    public function reserveAttempt(BudgetScope $scope, EstimatedCost $cost, string $reservationId): BudgetReservation
+    {
+        if (preg_match('/\A[a-f0-9]{64}\z/D', $reservationId) !== 1) {
+            throw new InvalidArgumentException('Invalid budget reservation ID.');
+        }
+
+        return $this->hold($scope, $cost, $reservationId);
+    }
+
+    public function recover(BudgetReceipt $receipt): void
+    {
+        $this->settle($receipt->reservationId, new ActualCost($receipt->actualUnits));
+    }
+
+    private function hold(BudgetScope $scope, EstimatedCost $cost, string $id): BudgetReservation
+    {
         $estimate = $this->toMicroUnits(units: $cost->units, label: 'estimated cost');
         $keysByLevel = $this->keys($scope);
         $attempts = $this->connection->getDriverName() === 'pgsql' ? 3 : 1;
 
-        return $this->connection->transaction(function () use ($cost, $estimate, $keysByLevel): SqlBudgetReservation {
+        return $this->connection->transaction(function () use ($cost, $estimate, $keysByLevel, $id): SqlBudgetReservation {
             $now = $this->clock->now();
             $capacity = $this->toMicroUnits(units: $this->capacity, label: 'capacity');
             $timestamp = $this->timestamp($now);
+            $deadline = $this->timestamp($now->add(new DateInterval("PT{$this->reservationTtlSeconds}S")));
+            $reservation = $this->connection->table(self::ReservationTable)->where('id', $id);
+            $existing = (clone $reservation)->lockForUpdate()->first();
 
             foreach ($keysByLevel as $key) {
                 $this->connection->table(self::BucketTable)->insertOrIgnore([
@@ -103,6 +126,30 @@ final readonly class SqlOperationBudget implements OperationBudget
 
             foreach ($rows as $key => $row) {
                 $available[$key] = $this->refilledAvailable(row: $row, now: $now);
+            }
+
+            // A concurrent reserve can insert its hold while this attempt waits for the buckets.
+            $existing ??= (clone $reservation)->first();
+            $encodedKeys = JsonCanonical::encode($keys);
+
+            if ($existing !== null) {
+                if (! in_array($existing->state, ['held', 'abandoned', 'rejected'], true)
+                    || $existing->keys !== $encodedKeys || $existing->recipe_hash !== $cost->recipeHash
+                    || DatabaseValue::integer($existing->estimate) !== $estimate) {
+                    throw new RuntimeException('Budget attempt ID has conflicting evidence.');
+                }
+
+                if ($existing->state !== 'rejected') {
+                    if (DatabaseValue::integer($existing->charged) !== $estimate) {
+                        throw new RuntimeException('Budget attempt retained an inconsistent charge.');
+                    }
+
+                    if ($existing->state === 'abandoned' || $this->date($existing->expires_at) <= $now) {
+                        $reservation->where('state', $existing->state)->update(['state' => 'held', 'expires_at' => $deadline]);
+                    }
+
+                    return $this->reservation($id, $available[$keysByLevel['global']], $now);
+                }
             }
 
             $retryAfter = 0;
@@ -130,31 +177,39 @@ final readonly class SqlOperationBudget implements OperationBudget
                     ]);
             }
 
-            $id = (string) Str::uuid7();
-            $this->connection->table(self::ReservationTable)->insert([
-                'id' => $id,
-                'keys' => JsonCanonical::encode($keys),
-                'estimate' => $estimate,
-                'charged' => $estimate,
-                'recipe_hash' => $cost->recipeHash,
-                'state' => 'held',
-                'created_at' => $timestamp,
-                'expires_at' => $this->timestamp($now->add(new DateInterval("PT{$this->reservationTtlSeconds}S"))),
-            ]);
+            if ($existing === null) {
+                $this->connection->table(self::ReservationTable)->insert([
+                    'id' => $id,
+                    'keys' => $encodedKeys,
+                    'estimate' => $estimate,
+                    'charged' => $estimate,
+                    'recipe_hash' => $cost->recipeHash,
+                    'state' => 'held',
+                    'created_at' => $timestamp,
+                    'expires_at' => $deadline,
+                ]);
+            } elseif ($reservation->where('state', 'rejected')->update([
+                'charged' => $estimate, 'state' => 'held', 'expires_at' => $deadline,
+            ]) !== 1) {
+                throw new RuntimeException('Budget hold lost its rollback recovery fence.');
+            }
 
-            $global = $available[$keysByLevel['global']] - $estimate;
-
-            return new SqlBudgetReservation(
-                budget: $this,
-                id: $id,
-                throttleStatus: new ThrottleStatus(
-                    capacity: $this->capacity,
-                    available: max(0, intdiv($global, self::MicroUnits)),
-                    restoreRate: $this->restoreRate,
-                    observedAt: $now,
-                ),
-            );
+            return $this->reservation($id, $available[$keysByLevel['global']] - $estimate, $now);
         }, $attempts);
+    }
+
+    private function reservation(string $id, int $available, DateTimeImmutable $now): SqlBudgetReservation
+    {
+        return new SqlBudgetReservation(
+            budget: $this,
+            id: $id,
+            throttleStatus: new ThrottleStatus(
+                capacity: $this->capacity,
+                available: max(0, intdiv($available, self::MicroUnits)),
+                restoreRate: $this->restoreRate,
+                observedAt: $now,
+            ),
+        );
     }
 
     public function settle(string $id, ActualCost $cost): void
@@ -188,6 +243,12 @@ final readonly class SqlOperationBudget implements OperationBudget
                 return;
             }
 
+            if ($state === 'abandoned' && $outcome === 'settled' && $storedCharge === $charged) {
+                $this->connection->table(self::ReservationTable)->where('id', $id)->where('state', 'abandoned')->update(['state' => 'settled']);
+
+                return;
+            }
+
             if ($state !== 'held') {
                 throw new RuntimeException('Budget reservation already has a conflicting terminal outcome.');
             }
@@ -198,7 +259,7 @@ final readonly class SqlOperationBudget implements OperationBudget
                 $this->connection->table(self::ReservationTable)
                     ->where('id', $id)
                     ->where('state', 'held')
-                    ->update(['state' => 'abandoned']);
+                    ->update(['state' => $outcome === 'settled' && $storedCharge === $charged ? 'settled' : 'abandoned']);
 
                 return;
             }

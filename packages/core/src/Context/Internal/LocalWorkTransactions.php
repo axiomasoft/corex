@@ -27,7 +27,21 @@ final class LocalWorkTransactions
     public function holds(DataScope $scope, ConnectionInterface $connection): bool
     {
         foreach ($this->attempts as $attempt) {
-            if ($attempt['connection'] === $connection && get_object_vars($attempt['ticket']->scope) === get_object_vars($scope)) {
+            if ($attempt['ticket']->kind === AdmissionKind::LocalWrite && $attempt['connection'] === $connection && get_object_vars($attempt['ticket']->scope) === get_object_vars($scope)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function holdsReceipt(AdmissionTicket $provider, ConnectionInterface $connection): bool
+    {
+        foreach ($this->attempts as $attempt) {
+            $ticket = $attempt['ticket'];
+
+            if (! $attempt['waiting'] && $ticket->kind === AdmissionKind::ReceiptProjection && $attempt['connection'] === $connection
+                && $ticket->key->effectKey === $provider->id && get_object_vars($ticket->scope) === get_object_vars($provider->scope)) {
                 return true;
             }
         }

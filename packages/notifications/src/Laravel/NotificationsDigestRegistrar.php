@@ -10,13 +10,14 @@ use CoreX\Context\Contracts\StoredWorkIssuer;
 use CoreX\Context\Contracts\StoredWorkRunner;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Notifications\Digest\Contracts\DigestBuilder;
-use CoreX\Notifications\Digest\Internal\DigestTick;
-use CoreX\Notifications\Digest\Internal\DigestWakeupAdapter;
-use CoreX\Notifications\Digest\Internal\DigestWakeupHandler;
-use CoreX\Notifications\Digest\Internal\NotificationDigestDueSource;
-use CoreX\Notifications\Digest\Internal\SqlDigestBuilder;
 use CoreX\Notifications\Internal\NotificationsOptions;
 use CoreX\Notifications\Preferences\Contracts\PreferenceRepository;
+use CoreX\Notifications\Runtime\Internal\DeliveryIntents;
+use CoreX\Notifications\Runtime\Internal\DigestTick;
+use CoreX\Notifications\Runtime\Internal\DigestWakeupAdapter;
+use CoreX\Notifications\Runtime\Internal\DigestWakeupHandler;
+use CoreX\Notifications\Runtime\Internal\NotificationDigestDueSource;
+use CoreX\Notifications\Runtime\Internal\SqlDigestBuilder;
 use CoreX\Scheduling\Contracts\DueWakeupSource;
 use CoreX\Scheduling\Contracts\WakeupScheduler;
 use CoreX\Scheduling\Data\WakeupHandlerDefinition;
@@ -44,7 +45,7 @@ final class NotificationsDigestRegistrar implements PackageRegistrar
             currentScope: $app->make(CurrentWorkScope::class),
             scopeCodec: $app->make(DataScopeCodec::class),
             preferences: $app->make(PreferenceRepository::class),
-            clock: $app->make(ClockInterface::class),
+            deliveries: $app->make(DeliveryIntents::class),
             digests: $app->make(DigestBuilder::class),
         ));
         $app->singleton(DigestWakeupAdapter::class, static fn (Application $app): DigestWakeupAdapter => new DigestWakeupAdapter(
@@ -77,6 +78,8 @@ final class NotificationsDigestRegistrar implements PackageRegistrar
             connection: $app->make(DatabaseManager::class)->connection(),
             scopes: $app->make(DataScopeCodec::class),
             runner: $app->make(StoredWorkRunner::class),
+            currentScopes: $app->make(DataScopeFactory::class),
+            current: $app->make(CurrentWorkScope::class),
             scheduler: static fn (): WakeupScheduler => Container::getInstance()->make(WakeupScheduler::class),
         ));
 

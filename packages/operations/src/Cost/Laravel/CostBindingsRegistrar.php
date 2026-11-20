@@ -14,6 +14,7 @@ use CoreX\Operations\Cost\Internal\DeclaredCostEstimator;
 use CoreX\Operations\Cost\Internal\SqlOperationBudget;
 use CoreX\Operations\Laravel\ApiSchemaConnections;
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
 use Packman\Attributes\Spi;
@@ -59,6 +60,7 @@ final class CostBindingsRegistrar implements PackageRegistrar
             budget: $app->make(OperationBudget::class),
             estimator: $app->make(OperationCostEstimator::class),
             installationId: $app->make(CostOptions::class)->installationId,
+            exceptions: $app->make(ExceptionHandler::class),
         ));
     }
 

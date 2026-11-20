@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Contracts\Outbox;
 use CoreX\Messaging\Data\MessageContract;
@@ -14,6 +15,7 @@ use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Internal\ArrayMessageContractRegistry;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Tests\TestCase;
+use CoreX\Tests\Support\WorkScopeFixture;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Connectors\ConnectionFactory;
@@ -38,7 +40,9 @@ function residentSwitchMessage(string $marker): MessageEnvelope
         name: 'resident.marker',
         contractVersion: 1,
         occurredAt: new DateTimeImmutable('2026-01-01T00:00:00Z'),
-        scope: ['accountId' => 'resident-'.$marker],
+        scope: WorkScopeFixture::install(app())->scope(),
+        subject: new RecordRef('resident.marker', $marker),
+        correlationId: 'resident-'.$marker,
         payload: new MessagePayload(['marker' => $marker]),
         piiClass: PiiClass::None,
     );
@@ -121,16 +125,18 @@ it('writes after a lifecycle boundary into the database of the tenant that is cu
     $manager = resolve(TenancyManager::class);
 
     $manager->initialize($this->accounts['alpha']);
+    WorkScopeFixture::install(app())->scope();
     $outboxForAlpha = resolve(Outbox::class);
-    DB::transaction(static fn () => $outboxForAlpha->append(residentSwitchMessage('A')));
+    DB::transaction(static fn () => $outboxForAlpha->append(DB::connection(), residentSwitchMessage('A')));
     $manager->end();
 
     // What an Octane or queue worker runs between two requests.
     app()->forgetScopedInstances();
 
     $manager->initialize($this->accounts['beta']);
+    WorkScopeFixture::install(app())->scope();
     $outboxForBeta = resolve(Outbox::class);
-    DB::transaction(static fn () => $outboxForBeta->append(residentSwitchMessage('B')));
+    DB::transaction(static fn () => $outboxForBeta->append(DB::connection(), residentSwitchMessage('B')));
     $manager->end();
 
     $alpha = residentSwitchTenantConnection($this->databases['alpha']);

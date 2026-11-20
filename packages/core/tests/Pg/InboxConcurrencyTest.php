@@ -2,56 +2,62 @@
 
 declare(strict_types=1);
 
+use CoreX\Messaging\Contracts\Inbox;
+use CoreX\Messaging\Data\ConsumerId;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\Process\Process;
+
+require_once __DIR__.'/../Support/Messaging.php';
 
 beforeEach(function (): void {
-    config(['database.default' => 'pgsql']);
-    DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
-    DB::statement('CREATE SCHEMA public');
-    test()->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
+    outboxRelayMigrate();
 });
 
 it('inserts exactly one inbox row when two connections race on the same key', function (): void {
 
-    $table = 'sys_inbox_messages';
-    $consumer = 'inbox.concurrency.v1';
-    $messageId = '55555555-5555-7555-8555-555555555555';
-    $name = 'membership.expired';
-    $processedAt = '2026-06-15T12:00:00+00:00';
+    $db = DB::connection('pgsql');
+    $message = messagingSampleEnvelope(['messageId' => '55555555-5555-7555-8555-555555555555']);
+    $consumer = new ConsumerId('inbox.concurrency', 1);
+    $db->beginTransaction();
+    $inbox = resolve(Inbox::class);
+    expect($inbox->claim($db, $consumer, $message))->toBeTrue();
+    $row = (array) $db->table('sys_inbox_messages')->first();
+    $config = $db->getConfig();
+    $child = new Process([PHP_BINARY, '-r', <<<'PHP'
+        [$dsn,$user,$password,$row] = json_decode(stream_get_contents(STDIN), true, flags: JSON_THROW_ON_ERROR);
+        $db = new PDO($dsn, $user, $password);
+        echo $db->query('select pg_backend_pid()')->fetchColumn()."\n";
+        flush();
+        $columns = implode(',',array_keys($row));
+        $parameters = implode(',',array_fill(0,count($row),'?'));
+        $stmt=$db->prepare("insert into sys_inbox_messages ($columns) values ($parameters) on conflict (account_id,account_incarnation,workspace_scope,consumer,source,message_id) do nothing");
+        $stmt->execute(array_values($row));
+        echo 'inserted='.$stmt->rowCount();
+        PHP], input: json_encode(["pgsql:host={$config['host']};port={$config['port']};dbname={$config['database']}", $config['username'], $config['password'], $row], JSON_THROW_ON_ERROR));
+    $child->start();
 
-    $connection = config('database.connections.pgsql');
-    $dsn = "pgsql:host={$connection['host']};port={$connection['port']};dbname={$connection['database']}";
-    $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+    try {
+        $deadline = microtime(true) + 10;
+        $blocked = false;
+        while (microtime(true) < $deadline && $child->isRunning()) {
+            $pid = (int) trim($child->getOutput());
 
-    $first = new PDO($dsn, $connection['username'], $connection['password'], $options);
-    $second = new PDO($dsn, $connection['username'], $connection['password'], $options);
+            if ($pid > 0 && $db->selectOne('select pg_backend_pid() = any(pg_blocking_pids(?)) as blocked', [$pid])->blocked) {
+                $blocked = true;
 
-    $sql = <<<SQL
-        INSERT INTO {$table} (consumer, message_id, name, processed_at)
-        VALUES (:consumer, :message_id::uuid, :name, :processed_at::timestamptz)
-        ON CONFLICT DO NOTHING
-        SQL;
-
-    // Autocommit on two independent connections: no open txn on A while B inserts
-    // (holding A's row uncommitted would block B forever in this single-threaded test).
-    $stmtA = $first->prepare($sql);
-    $stmtA->execute([
-        'consumer' => $consumer,
-        'message_id' => $messageId,
-        'name' => $name,
-        'processed_at' => $processedAt,
-    ]);
-    $insertedA = $stmtA->rowCount();
-
-    $stmtB = $second->prepare($sql);
-    $stmtB->execute([
-        'consumer' => $consumer,
-        'message_id' => $messageId,
-        'name' => $name,
-        'processed_at' => $processedAt,
-    ]);
-    $insertedB = $stmtB->rowCount();
-
-    expect([$insertedA, $insertedB])->toContain(1)->toContain(0)
-        ->and(DB::connection('pgsql')->table($table)->count())->toBe(1);
+                break;
+            }
+            usleep(10000);
+        }
+        expect($blocked)->toBeTrue();
+        $db->commit();
+        expect($child->wait())->toBe(0)->and($child->getOutput())->toContain('inserted=0');
+        expect($db->transaction(fn () => $inbox->claim($db, new ConsumerId($consumer->name, 2), $message)))->toBeFalse()
+            ->and($db->table('sys_inbox_messages')->count())->toBe(1);
+    } finally {
+        if ($db->transactionLevel() > 0) {
+            $db->rollBack();
+        }
+        $child->stop();
+    }
 })->group('pg');

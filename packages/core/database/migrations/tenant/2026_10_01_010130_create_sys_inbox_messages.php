@@ -15,11 +15,22 @@ return new class extends PackmanMigration
     public function up(): void
     {
         $this->create('sys_inbox_messages', function (Blueprint $table): void {
+            $table->string('account_id', 128);
+            $table->string('account_incarnation', 128);
+            $table->string('workspace_scope', 140);
+            $table->string('deployment_id', 128);
+            $table->string('binding_id', 128);
+            $table->unsignedBigInteger('binding_generation');
+            $table->char('restore_epoch', 64);
+            $table->char('digest', 64);
+            $table->string('source', 128);
+            $table->unsignedBigInteger('contract_version');
+            $table->unsignedBigInteger('consumer_version');
             $table->string('consumer', 120);
-            $table->uuid('message_id');
+            $table->string('message_id', 128);
             $table->string('name', 160);
             $table->timestampTz('processed_at', precision: 6);
-            $table->primary(['consumer', 'message_id'], 'sys_inbox_messages_pk');
+            $table->primary(['account_id', 'account_incarnation', 'workspace_scope', 'consumer', 'source', 'message_id'], 'sys_inbox_messages_pk');
             $table->index(['processed_at'], 'sys_inbox_messages_processed_ix');
         });
     }

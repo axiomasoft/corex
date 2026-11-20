@@ -54,6 +54,7 @@ final readonly class OperationDispatcher implements \CoreX\Operations\Invocation
             $principal = $this->principals->resolve($request)
                 ?? throw new ApiError(errorCode: OperationsErrorCode::AuthenticationRequired, status: 401, message: 'Authentication is required.');
             $context = $this->contexts->resolve(request: $request, principal: $principal, metadata: $metadata);
+            $clientId = $request->attributes->get('corex.client_id');
             $input = $this->input(request: $request, operation: $operation);
             $previousRequest = $this->container->bound('request') ? $this->container->make('request') : null;
             $this->container->instance('request', $request);
@@ -65,6 +66,7 @@ final readonly class OperationDispatcher implements \CoreX\Operations\Invocation
                     input: JsonDocuments::capture($input),
                     parameters: $parameters,
                     idempotencyKey: $this->idempotencyKey($request),
+                    clientId: is_string($clientId) && $clientId !== '' ? $clientId : null,
                 ));
             } finally {
                 if ($previousRequest !== null) {

@@ -3,11 +3,17 @@
 declare(strict_types=1);
 
 use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\ProviderEffectLedger;
+use CoreX\Context\Contracts\ProviderRecoveryAuthority;
 use CoreX\Context\Contracts\WorkScopeRunner;
 use CoreX\Context\Data\AttemptEvidence;
 use CoreX\Context\Data\OperationKey;
 use CoreX\Context\Data\PhysicalBinding;
+use CoreX\Context\Data\ProviderAttempt;
+use CoreX\Context\Data\ProviderEffectRef;
+use CoreX\Context\Data\ProviderObservation;
 use CoreX\Context\Enums\AdmissionKind;
+use CoreX\Context\Enums\ProviderObservationKind;
 use CoreX\Context\Exceptions\ScopeAuthorityUnavailable;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Context\Exceptions\ScopeStale;
@@ -18,13 +24,28 @@ use Illuminate\Support\Facades\DB;
 it('drains an in-flight provider attempt before reopening a restored binding', function (): void {
     $fixture = WorkScopeFixture::install(app());
     $scope = $fixture->scope();
+    $effect = new ProviderEffectRef($scope->accountId, $scope->accountIncarnation, $scope->workspaceId, 'delivery', 'provider', 'effect-1');
+    app()->instance(ProviderRecoveryAuthority::class, new class($effect) implements ProviderRecoveryAuthority
+    {
+        public function __construct(private ProviderEffectRef $permitted) {}
+
+        public function authorize(ProviderEffectRef $effect): void
+        {
+            if ($this->permitted->identity() !== $effect->identity()) {
+                throw new ScopeContextMismatch('Unexpected fixture effect.');
+            }
+        }
+    });
     $owner = app(DatabaseScopeControl::class);
-    $ticket = $owner->acquire($scope, new OperationKey('provider', 1, 'effect-1', new DateTimeImmutable('+1 minute')), AdmissionKind::ProviderSend);
+    $ledger = app(ProviderEffectLedger::class);
+    $ticket = $ledger->reserve($scope, new ProviderAttempt($effect, 'owner-row', 'claim', 1, new DateTimeImmutable('+1 minute'), hash('sha256', 'payload')));
     $closing = $owner->close($scope->accountId, 1);
     expect(fn () => $owner->acquire($scope, new OperationKey('after-close', 1), AdmissionKind::LocalWrite))->toThrow(ScopeContextMismatch::class);
+    $ledger->observe($ticket, new ProviderObservation(ProviderObservationKind::Unknown, 'provider-timeout', 'sender'));
     $owner->settle($ticket, new AttemptEvidence('unknown', 'provider-timeout'));
     expect(fn () => $owner->drain($scope->accountId, $closing))->toThrow(ScopeContextMismatch::class);
-    $owner->settle($ticket, new AttemptEvidence('reconciled', 'provider-receipt-1'));
+    $ledger->observe($ticket, new ProviderObservation(ProviderObservationKind::Confirmed, 'provider-receipt-1', 'operator'));
+    $owner->settle($ticket, new AttemptEvidence('reconciled', 'owner-receipt-1'));
     $closed = $owner->drain($scope->accountId, $closing);
     $next = new PhysicalBinding($scope->deploymentId, $scope->bindingId, 1, $scope->accountIncarnation, str_repeat('b', 64));
     expect(fn () => $owner->reopen($scope->accountId, $closed, $next, static fn () => false))->toThrow(ScopeContextMismatch::class);
@@ -93,16 +114,16 @@ it('refuses to issue an uncommitted ticket on a host-owned outer control transac
     });
 });
 
-it('requires a stable effect key and deadline before recording a provider attempt', function (): void {
+it('rejects generic provider admission and freezes the owner linkage under a typed reservation', function (): void {
     $scope = WorkScopeFixture::install(app())->scope();
     $control = app(DatabaseScopeControl::class);
     $deadline = new DateTimeImmutable('+1 minute');
-    foreach ([new OperationKey('send', 1, null, $deadline), new OperationKey('send', 1, 'payment-1')] as $invalid) {
-        expect(fn () => $control->acquire($scope, $invalid, AdmissionKind::ProviderSend))->toThrow(ScopeContextMismatch::class);
-    }
-    $ticket = $control->acquire($scope, new OperationKey('send', 1, 'payment-1', $deadline), AdmissionKind::ProviderSend);
+    expect(fn () => $control->acquire($scope, new OperationKey('send', 1, 'payment-1', $deadline), AdmissionKind::ProviderSend))->toThrow(ScopeContextMismatch::class)
+        ->and(DB::connection('work-scope-control')->table('corex_scope_tickets')->count())->toBe(0);
+    $effect = new ProviderEffectRef($scope->accountId, $scope->accountIncarnation, $scope->workspaceId, 'delivery', 'provider', 'payment-1');
+    $ticket = app(ProviderEffectLedger::class)->reserve($scope, new ProviderAttempt($effect, 'payment-row', 'claim-1', 1, $deadline, hash('sha256', 'payment')));
     $row = DB::connection('work-scope-control')->table('corex_scope_tickets')->sole();
-    expect($row->ticket_id)->toBe($ticket->id)->and($row->effect_key)->toBe('payment-1')->and($row->deadline)->not->toBeNull();
+    expect($row->ticket_id)->toBe($ticket->id)->and($row->effect_key)->toBe('payment-1')->and($row->deadline)->not->toBeNull()->and($row->provider_identity)->toBe($effect->identity())->and($row->claim_token)->toBe('claim-1');
 });
 
 it('accepts identical completion evidence on retry and preserves the original receipt on conflict', function (): void {

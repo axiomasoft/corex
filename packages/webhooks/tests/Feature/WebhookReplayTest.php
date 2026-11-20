@@ -77,26 +77,34 @@ final class WebhookReplayTest extends TestCase
             clock: $this->clock,
             cursors: new SignedCursorCodec($this->clock, $this->keyring()),
             audit: $this->audit,
+            issuer: $this->restorer,
+            scopes: resolve(DataScopeCodec::class),
         );
     }
 
-    public function test_replay_keeps_delivery_identity_bytes_destination_and_monotonic_attempt_sequence(): void
+    public function test_replay_keeps_original_receipt_and_creates_a_new_effect_with_identical_body(): void
     {
         $this->seedSubscription('subscription-a');
         $before = $this->seedDelivery('delivery-a', 'subscription-a', 'dead', attempt: 7);
 
         $result = $this->replay->one($this->scope, 'delivery-a', false, null);
-        $after = $this->connection->table('sys_api_webhook_deliveries')->where('id', 'delivery-a')->first();
+        $original = $this->connection->table('sys_api_webhook_deliveries')->where('id', 'delivery-a')->first();
+        $replay = $this->connection->table('sys_api_webhook_deliveries')->where('id', $result['id'])->first();
 
-        self::assertNotNull($after);
-        self::assertSame('delivery-a', $result['id']);
-        self::assertSame($before['body'], $after->body);
-        self::assertSame($before['body_hash'], $after->body_hash);
-        self::assertSame($before['endpoint_snapshot'], $after->endpoint_snapshot);
-        self::assertSame(7, $after->attempt);
-        self::assertSame(1, $after->replay_count);
-        self::assertSame('pending', $after->status);
-        self::assertNull($after->finished_at);
+        self::assertNotNull($original);
+        self::assertNotNull($replay);
+        self::assertSame('delivery-a', $result['replay_of']);
+        self::assertSame('delivery-a', $replay->replay_of);
+        self::assertSame($before['body'], $replay->body);
+        self::assertSame($before['body_hash'], $replay->body_hash);
+        self::assertSame($before['endpoint_snapshot'], $replay->endpoint_snapshot);
+        self::assertSame($original->event_id, $replay->event_id);
+        self::assertNotSame($original->effect_key, $replay->effect_key);
+        self::assertSame(7, $original->attempt);
+        self::assertSame(0, $replay->attempt);
+        self::assertSame(1, $original->replay_count);
+        self::assertSame('dead', $original->status);
+        self::assertSame('pending', $replay->status);
     }
 
     public function test_succeeded_replay_requires_explicit_confirmation_and_audit_reason(): void
@@ -154,6 +162,8 @@ final class WebhookReplayTest extends TestCase
             $this->clock,
             new SignedCursorCodec($this->clock, $this->keyring()),
             $this->audit,
+            issuer: $this->restorer,
+            scopes: resolve(DataScopeCodec::class),
         );
 
         try {
@@ -232,6 +242,8 @@ final class WebhookReplayTest extends TestCase
                 $this->clock,
                 new SignedCursorCodec($this->clock, $this->keyring()),
                 $this->audit,
+                issuer: $this->restorer,
+                scopes: resolve(DataScopeCodec::class),
             );
             $this->seedSubscription('subscription-pg');
             $before = $this->seedDelivery('delivery-pg', 'subscription-pg', 'dead', attempt: 4);
@@ -240,9 +252,10 @@ final class WebhookReplayTest extends TestCase
             $after = $this->connection->table('sys_api_webhook_deliveries')->where('id', 'delivery-pg')->first();
 
             self::assertNotNull($after);
-            self::assertSame('delivery-pg', $result['id']);
+            self::assertSame('delivery-pg', $result['replay_of']);
+            self::assertNotSame('delivery-pg', $result['id']);
             self::assertSame($before['body_hash'], $after->body_hash);
-            self::assertSame('pending', $after->status);
+            self::assertSame('dead', $after->status);
             self::assertSame(4, $after->attempt);
             self::assertSame(1, $after->replay_count);
         } finally {
@@ -304,7 +317,7 @@ final class WebhookReplayTest extends TestCase
             'finished_at' => in_array($status, ['dead', 'succeeded'], true) ? $createdAt : null,
             'expires_at' => $expiresAt, 'last_error' => $status === 'dead' ? 'http_permanent' : null,
         ];
-        $this->connection->table('sys_api_webhook_deliveries')->insert($row);
+        $this->connection->table('sys_api_webhook_deliveries')->insert(WebhookRows::original($this->scope, $row));
 
         return $row;
     }

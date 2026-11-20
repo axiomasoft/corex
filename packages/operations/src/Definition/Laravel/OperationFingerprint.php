@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Definition\Laravel;
 
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Idempotency\Data\IdempotencyScope;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
-use Illuminate\Database\Connection;
 use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
@@ -25,19 +25,11 @@ final class OperationFingerprint
         ]));
     }
 
-    public static function scope(OperationInvocation $invocation, Connection $connection): IdempotencyScope
+    public static function scope(OperationInvocation $invocation, DataScope $scope): IdempotencyScope
     {
-        $tenant = $invocation->context->tenant();
-        $principal = $invocation->context->principal();
-
         return new IdempotencyScope(
-            connectionName: (string) $connection->getName(),
-            databaseName: $connection->getDatabaseName(),
-            accountId: $tenant->account->id,
-            workspaceId: $tenant->workspace?->id,
-            principalType: $principal->principalType(),
-            principalId: $principal->principalId(),
-            clientId: null,
+            scope: $scope,
+            clientId: $invocation->clientId,
             apiMajor: $invocation->operation->version,
             operationId: $invocation->operation->id,
         );

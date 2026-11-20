@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Testing;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\StoredWorkIssuer;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Contracts\Outbox;
@@ -13,7 +16,6 @@ use CoreX\Messaging\Internal\ArrayMessageContractRegistry;
 use CoreX\Messaging\Internal\NullTraceContextBridge;
 use CoreX\Messaging\Internal\SqlInbox;
 use CoreX\Messaging\Internal\SqlOutbox;
-use Illuminate\Database\ConnectionInterface;
 use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 use Psr\Clock\ClockInterface;
@@ -28,13 +30,13 @@ final class MessagingFixtures
         return new ArrayMessageContractRegistry(contracts: $contracts);
     }
 
-    public static function inbox(ConnectionInterface $connection, ClockInterface $clock): Inbox
+    public static function inbox(CurrentWorkScope $current, MessageContractRegistry $contracts, ClockInterface $clock): Inbox
     {
-        return new SqlInbox(connection: $connection, clock: $clock);
+        return new SqlInbox(current: $current, contracts: $contracts, clock: $clock);
     }
 
-    public static function outbox(ConnectionInterface $connection, MessageContractRegistry $contracts, ClockInterface $clock, ?TraceContextBridge $traces = null): Outbox
+    public static function outbox(CurrentWorkScope $current, StoredWorkIssuer $issuer, MessageContractRegistry $contracts, ClockInterface $clock, DataScopeCodec $scopes, ?TraceContextBridge $traces = null): Outbox
     {
-        return new SqlOutbox(connection: $connection, contracts: $contracts, clock: $clock, traces: $traces ?? new NullTraceContextBridge);
+        return new SqlOutbox(scopes: $scopes, current: $current, issuer: $issuer, contracts: $contracts, clock: $clock, traces: $traces ?? new NullTraceContextBridge);
     }
 }

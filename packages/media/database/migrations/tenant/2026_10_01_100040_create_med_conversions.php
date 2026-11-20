@@ -22,6 +22,9 @@ return new class extends PackmanMigration
                 $table->primary(['id'], 'med_conversions_pk');
             }
             $table->uuid('file_id');
+            $table->string('account_id', 128);
+            $table->string('account_incarnation', 128);
+            $table->string('workspace_scope', 138);
             $table->string('profile_key', 128);
             $table->char('profile_digest', 64);
             $table->unsignedBigInteger('source_version');
@@ -34,7 +37,9 @@ return new class extends PackmanMigration
             $table->unsignedInteger('height')->nullable();
             $table->timestamps();
             $table->foreign('file_id', 'med_conversions_file_id_fk')->references('id')->on('med_files')->restrictOnDelete();
-            $table->unique(['file_id', 'profile_key', 'profile_digest', 'source_version'], 'med_conversions_file_id_profile_key_profile_digest__67e95e41_uq');
+            $table->unique([
+                'account_id', 'account_incarnation', 'workspace_scope', 'file_id', 'source_version', 'profile_key', 'profile_digest',
+            ], 'med_conversions_scope_file_profile_uq');
         });
     }
 

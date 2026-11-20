@@ -146,16 +146,19 @@ class CompareContractsTest(unittest.TestCase):
     def test_consumers_and_installers_are_compared_from_each_commit(self):
         openapi = "api/v1/openapi.json"
         messages = "packages/core/resources/schemas/message.schema.json"
+        attribute_fact = "packages/custom-fields/resources/message-schemas/attributes.values.changed.v1.json"
         routes = "packages/core/routes/api.php"
         config = "packages/core/resources/schemas/config.schema.json"
         self.write_json(openapi, {"paths": {"/things": {"get": {"operationId": "list"}}}})
         self.write_json(messages, {"type": "string"})
+        self.write_json(attribute_fact, {"properties": {"schemaHash": {"type": "string"}}})
         self.write(routes, "<?php Route::get('/things', ThingController::class);")
         self.write_json(config, {"properties": {"enabled": {"default": True}}})
         self.write_json("composer.json", {"require": {"axiomasoft/corex": "^1.0"}})
         base = self.commit("Baseline")
         self.write_json(openapi, {"paths": {"/things": {"post": {"operationId": "create"}}}})
         self.write_json(messages, {"type": "integer"})
+        self.write_json(attribute_fact, {"properties": {"schemaHash": {"type": "integer"}}})
         self.write(routes, "<?php Route::post('/things', ThingController::class);")
         self.write_json(config, {"properties": {"enabled": {"default": False}}})
         self.write_json("composer.json", {"require": {"axiomasoft/corex": "^2.0", "other/owner": "^1.0"}})
@@ -167,7 +170,8 @@ class CompareContractsTest(unittest.TestCase):
             },
             {(delta["category"], delta["kind"]) for delta in report["changes"] if delta["breaking"]},
         )
-        self.assertEqual(6, report["unexplained"])
+        self.assertEqual(7, report["unexplained"])
+        self.assertNotEqual(report["base_digests"][attribute_fact], report["candidate_digests"][attribute_fact])
         self.assertNotEqual(report["base_digests"][routes], report["candidate_digests"][routes])
         self.assertIn("Route::post('/things'", report["source_diffs"][routes])
 

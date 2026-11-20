@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Internal;
 
+use Closure;
 use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\ProviderEffectLedger;
+use CoreX\Context\Data\ProviderEffectRef;
 use CoreX\Data\Data\DataScope;
-use CoreX\Messaging\Laravel\InboxRetention;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
@@ -14,10 +16,9 @@ use Illuminate\Database\Query\Builder;
 use InvalidArgumentException;
 use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
-use UnexpectedValueException;
 
 /**
- * Clock-controlled webhook body, history and inbox cleanup.
+ * Clock-controlled webhook body and attempt history cleanup.
  *
  * Terminal bodies expire with the replay horizon. Attempt history expires
  * later. Delivery tombstones and the consumer inbox stay paired so an old
@@ -34,22 +35,19 @@ final readonly class WebhookRetention
 
     public const int BatchLimit = 100;
 
-    public const string Consumer = 'api.webhooks.v1';
-
     private const string Deliveries = 'sys_api_webhook_deliveries';
 
     private const string Attempts = 'sys_api_webhook_attempts';
 
-    private const string Inbox = 'sys_inbox_messages';
-
+    /** @param Closure(): ProviderEffectLedger $providerLedger */
     public function __construct(
         private Connection $connection,
         private CurrentWorkScope $contexts,
         private ClockInterface $clock,
+        private Closure $providerLedger,
         private int $bodyRetentionSeconds = self::DefaultBodySeconds,
         private int $historyRetentionSeconds = self::DefaultHistorySeconds,
         private int $replayHorizonSeconds = self::DefaultBodySeconds,
-        private string $inboxTable = self::Inbox,
     ) {
         if ($this->bodyRetentionSeconds < 1
             || $this->historyRetentionSeconds < 1
@@ -92,8 +90,8 @@ final readonly class WebhookRetention
             })
             ->orderBy('id')
             ->limit($limit)
-            ->pluck('id')
-            ->all();
+            ->get(['id', 'effect_key', 'endpoint_snapshot', 'provider_ticket']);
+        $bodyIds = $this->settledDeliveryIds($scope, $bodyIds);
         $bodies = $bodyIds === []
             ? 0
             : $this->connection->table(self::Deliveries)->whereIn('id', $bodyIds)->update([
@@ -105,8 +103,8 @@ final readonly class WebhookRetention
             ->where('created_at', '<=', $historyCutoff)
             ->orderBy('id')
             ->limit($limit)
-            ->pluck('id')
-            ->all();
+            ->get(['id', 'effect_key', 'endpoint_snapshot', 'provider_ticket']);
+        $historyIds = $this->settledDeliveryIds($scope, $historyIds);
         $attemptIds = $historyIds === []
             ? []
             : $this->connection->table(self::Attempts)
@@ -122,45 +120,34 @@ final readonly class WebhookRetention
         return [
             'bodies' => $bodies,
             'attempts' => $attempts,
-            'inbox' => $this->pruneInbox($limit),
+            'inbox' => 0,
         ];
     }
 
-    public function pruneInbox(int $limit = self::BatchLimit): int
+    /**
+     * @param  iterable<object>  $rows
+     * @return list<string>
+     */
+    private function settledDeliveryIds(DataScope $scope, iterable $rows): array
     {
-        $this->assertLimit($limit);
+        $ids = [];
+        foreach ($rows as $row) {
+            if (DatabaseValue::field($row, 'provider_ticket') !== null) {
+                $effect = new ProviderEffectRef(
+                    $scope->accountId, $scope->accountIncarnation, $scope->workspaceId, WebhookWork::Owner,
+                    'webhook.'.hash('sha256', DatabaseValue::text(DatabaseValue::field($row, 'endpoint_snapshot'))), DatabaseValue::text(DatabaseValue::field($row, 'effect_key')),
+                );
+                $status = ($this->providerLedger)()->inspect($effect);
 
-        if (! $this->connection->getSchemaBuilder()->hasTable($this->inboxTable)) {
-            return 0;
-        }
-
-        $ids = $this->connection->table($this->inboxTable.' as retained_inbox')
-            ->where('consumer', self::Consumer)
-            ->whereNotExists(function (Builder $query): void {
-                $query->selectRaw('1')->from(self::Deliveries);
-
-                if ($this->connection->getDriverName() === 'pgsql') {
-                    $query->whereRaw('sys_api_webhook_deliveries.event_id = retained_inbox.message_id::text');
-
-                    return;
+                if ($status === null || ! in_array($status->state, ['reconciled', 'isolated'], true)) {
+                    continue;
                 }
+            }
 
-                $query->whereColumn(self::Deliveries.'.event_id', 'retained_inbox.message_id');
-            })
-            ->orderBy('message_id')
-            ->limit($limit)
-            ->pluck('message_id')
-            ->all();
-
-        if ($ids === []) {
-            return 0;
+            $ids[] = DatabaseValue::text(DatabaseValue::field($row, 'id'));
         }
 
-        return new InboxRetention(connection: $this->connection, table: $this->inboxTable)
-            ->forget(consumer: self::Consumer, messageIds: array_map(
-                static fn (mixed $id): string => is_string($id) ? $id : throw new UnexpectedValueException('Inbox message ID must be a string.'),
-                array_values($ids),
-            ));
+        return $ids;
     }
 
     private function assertLimit(int $limit): void

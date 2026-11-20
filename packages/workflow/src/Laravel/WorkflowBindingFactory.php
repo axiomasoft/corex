@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace CoreX\Workflow\Laravel;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Workflow\Contracts\EngineAdapter;
 use CoreX\Workflow\Contracts\WorkflowBinding;
-use CoreX\Workflow\Internal\SqlWorkflowBinding;
-use CoreX\Workflow\Internal\UnavailableEngineAdapter;
+use CoreX\Workflow\Execution\Internal\SqlWorkflowBinding;
+use CoreX\Workflow\Execution\Internal\UnavailableEngineAdapter;
+use CoreX\Workflow\Execution\Internal\WorkflowIntentStore;
 use CoreX\Workflow\Internal\WorkflowOptions;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Database\DatabaseManager;
 use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
@@ -23,14 +24,11 @@ final class WorkflowBindingFactory
 {
     public function make(Application $app): WorkflowBinding
     {
-        $engine = $app->bound(EngineAdapter::class)
-            ? $app->make(EngineAdapter::class)
-            : new UnavailableEngineAdapter;
-
         return new SqlWorkflowBinding(
-            connection: $app->make(DatabaseManager::class)->connection(),
+            scopes: $app->make(CurrentWorkScope::class),
+            intents: $app->make(WorkflowIntentStore::class),
             contexts: $app->make(TenantContextResolver::class),
-            engine: $engine,
+            engine: $app->bound(EngineAdapter::class) ? $app->make(EngineAdapter::class) : new UnavailableEngineAdapter,
             modules: $app->bound(ModuleRegistry::class) ? $app->make(ModuleRegistry::class) : null,
             enforceDeclarations: $app->make(WorkflowOptions::class)->enforceDeclarations,
             clock: $app->make(ClockInterface::class),

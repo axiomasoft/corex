@@ -6,7 +6,7 @@ use CoreX\CustomFields\Internal\Integration\AttributeMessageContractRegistry;
 use CoreX\CustomFields\Internal\Integration\AttributeMessageContracts;
 use CoreX\CustomFields\Internal\Integration\AttributeMessageTranslator;
 use CoreX\CustomFields\Internal\Integration\AttributeValuesChanged;
-use CoreX\Data\Internal\ArrayDataScopeCodec;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Testing\MessagingFixtures;
 
@@ -31,11 +31,14 @@ function attributeValuesChanged(): AttributeValuesChanged
 }
 
 it('translates a mutation into the declared metadata-only contract', function (): void {
-    $message = new AttributeMessageTranslator(new ArrayDataScopeCodec)
+    $message = new AttributeMessageTranslator()
         ->translate(attributeValuesChanged());
 
     expect($message->contract())->toBe('attributes.values.changed.v1')
         ->and($message->source)->toBe('axiomasoft/corex-custom-fields')
+        ->and($message->envelopeVersion)->toBe(2)
+        ->and($message->scope)->toEqual(jsonbScope())
+        ->and($message->subject)->toEqual(new RecordRef('contact', 'record-1'))
         ->and($message->piiClass)->toBe(PiiClass::Pseudonymous)
         ->and($message->correlationId)->toBe('operation-1')
         ->and($message->causationId)->toBe('message-0')

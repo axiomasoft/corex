@@ -25,6 +25,8 @@ final class AttributeMessageContracts
                 owner: 'axiomasoft/corex-custom-fields',
                 maxPiiClass: PiiClass::Pseudonymous,
                 channel: 'attributes',
+                dataSchema: 'urn:corex:schema:attributes.values.changed.v1',
+                derived: true,
             ),
         ];
     }

@@ -16,6 +16,7 @@ use CoreX\Media\Internal\ConversionProfiles;
 use CoreX\Media\Internal\MediaBlobs;
 use CoreX\Media\Internal\MediaOperationStore;
 use CoreX\Media\Internal\Support\MediaOptions;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Support\Facades\DB;
 use Psr\Clock\ClockInterface;
 use Vaulter\Media\Contracts\Cas\BlobPins;
@@ -118,13 +119,13 @@ it('supersedes obsolete pending profiles instead of applying a new driver under 
             }
         };
 
-        return new ConversionCoordinator(DB::connection(), resolve(MediaBlobs::class), new ConversionProfiles([$driver]), resolve(MediaOperationStore::class), resolve(MediaOptions::class), resolve(ClockInterface::class));
+        return new ConversionCoordinator(DB::connection(), resolve(MediaBlobs::class), new ConversionProfiles([$driver]), resolve(MediaOperationStore::class), resolve(MediaOptions::class), resolve(ClockInterface::class), resolve(ExceptionHandler::class));
     };
     $old = $make('old');
     $old->request($file->id, 'custom');
     $new = $make('new');
     $new->request($file->id, 'custom');
-    $new->process($file->id, 'custom');
+    $new->process($file->id, 'custom', DB::table('med_operations')->where('file_id', $file->id)->latest('id')->value('operation_key'));
 
     expect(DB::table('med_conversions')->where('file_id', $file->id)->where('state', 'superseded')->count())->toBe(1)
         ->and(DB::table('med_conversions')->where('file_id', $file->id)->where('state', 'ready')->count())->toBe(1)
@@ -132,7 +133,7 @@ it('supersedes obsolete pending profiles instead of applying a new driver under 
 
     // Rolling back the deployment reactivates the old digest with a fresh fenced operation.
     $old->request($file->id, 'custom');
-    $old->process($file->id, 'custom');
+    $old->process($file->id, 'custom', DB::table('med_operations')->where('file_id', $file->id)->where('state', 'pending')->value('operation_key'));
     expect(DB::table('med_conversions')->where('file_id', $file->id)->where('state', 'ready')->count())->toBe(2)
         ->and(resolve(MediaOperationStore::class)->dueConversionRequests())->toBe([]);
 });

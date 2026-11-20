@@ -53,6 +53,7 @@ final class ShowDeliveryHealth extends Command
         $this->line('Pending: '.$snapshot->pendingCount);
         $this->line('Publishing: '.$snapshot->publishingCount);
         $this->line('Dead: '.$snapshot->deadCount);
+        $this->line('Quarantined: '.$snapshot->quarantinedCount);
         $this->line('Max attempts (pending/publishing): '.$snapshot->maxAttempts);
 
         if ($maxAgeOption !== null) {

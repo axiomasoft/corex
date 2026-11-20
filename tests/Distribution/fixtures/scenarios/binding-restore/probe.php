@@ -2,18 +2,23 @@
 
 declare(strict_types=1);
 
+use App\Scenario\BindingRestoreRecoveryAuthority;
 use App\Scenario\PhysicalMarker;
 use App\Scenario\Scenario;
 use App\Scenario\ScenarioJob;
 use App\Scenario\ScenarioQueue;
 use App\Scenario\ScenarioSetup;
 use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Context\Contracts\ProviderEffectLedger;
 use CoreX\Context\Contracts\ScopeAdmission;
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AdmissionTicket;
 use CoreX\Context\Data\AttemptEvidence;
-use CoreX\Context\Data\OperationKey;
 use CoreX\Context\Data\PhysicalBinding;
-use CoreX\Context\Enums\AdmissionKind;
+use CoreX\Context\Data\ProviderAttempt;
+use CoreX\Context\Data\ProviderEffectRef;
+use CoreX\Context\Data\ProviderObservation;
+use CoreX\Context\Enums\ProviderObservationKind;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Context\Laravel\DatabaseScopeControl;
 use CoreX\Data\Laravel\JsonDocuments;
@@ -21,6 +26,7 @@ use CoreX\Scheduling\Contracts\WakeupScheduler;
 use CoreX\Scheduling\Data\WakeupRequest;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 require getcwd().'/vendor/autoload.php';
 Scenario::boot();
@@ -183,13 +189,34 @@ switch ($mode) {
 
     case 'provider':
         $admission = app(ScopeAdmission::class);
-        $ticket = ScenarioQueue::inScope(Scenario::ACCOUNT_A, Scenario::W1, Scenario::USER_A, static function () use ($admission) {
+        $ledger = app(ProviderEffectLedger::class);
+        $ticket = ScenarioQueue::inScope(Scenario::ACCOUNT_A, Scenario::W1, Scenario::USER_A, static function () use ($ledger): AdmissionTicket {
             $scope = app(DataScopeFactory::class)->forCurrentPrincipal(app(TenantContextResolver::class)->current());
+            $effect = new ProviderEffectRef(
+                accountId: $scope->accountId,
+                accountIncarnation: $scope->accountIncarnation,
+                workspaceId: $scope->workspaceId,
+                owner: BindingRestoreRecoveryAuthority::Owner,
+                providerNamespace: BindingRestoreRecoveryAuthority::Provider,
+                effectKey: BindingRestoreRecoveryAuthority::Key,
+            );
 
-            return $admission->acquire($scope, new OperationKey('provider-in-flight', 1, 'provider-effect-key', new DateTimeImmutable('now +1 hour')), AdmissionKind::ProviderSend);
+            return $ledger->reserve($scope, new ProviderAttempt(
+                effect: $effect,
+                ownerRef: 'provider-in-flight',
+                claimToken: (string) Str::uuid7(),
+                attempt: 1,
+                deadline: new DateTimeImmutable('now +1 hour'),
+                digest: hash('sha256', 'binding-restore physical session'),
+            ));
         });
         $providerSession = Scenario::describe(Scenario::connection('b'));
         Scenario::barrier('provider-outstanding', ['ticket' => $ticket->id, 'control' => Scenario::describe($control), 'provider' => $providerSession]);
+        $ledger->observe($ticket, new ProviderObservation(
+            kind: ProviderObservationKind::Unknown,
+            reference: 'provider reply unconfirmed',
+            observer: BindingRestoreRecoveryAuthority::Owner,
+        ));
         $admission->settle($ticket, new AttemptEvidence('unknown', 'provider reply unconfirmed'));
         Scenario::barrier('provider-unknown', ['ticket' => $ticket->id]);
         DB::purge('scenario_b');

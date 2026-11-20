@@ -5,11 +5,18 @@ declare(strict_types=1);
 namespace CoreX\Operations\Idempotency\Internal;
 
 use Closure;
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\DataScopeFactory;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Errors\Enums\CoreErrorCode;
+use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
+use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
 use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
+use CoreX\Operations\Authorization\Laravel\DeclaredFieldAuthorizer;
 use CoreX\Operations\Cost\Contracts\BudgetExecution as BudgetAdmission;
+use CoreX\Operations\Cost\Data\BudgetAttempt;
+use CoreX\Operations\Cost\Data\BudgetInvocationResult;
 use CoreX\Operations\Cost\Exceptions\BudgetRateLimited;
 use CoreX\Operations\Cost\Exceptions\BudgetStoreUnavailable;
 use CoreX\Operations\Definition\Laravel\OperationFingerprint;
@@ -22,6 +29,7 @@ use CoreX\Operations\Idempotency\Data\IdempotencyScope;
 use CoreX\Operations\Idempotency\Data\StoredOperationOutcome;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
+use CoreX\Operations\Invocation\Contracts\TransactionalOperationInvoker;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Data\OperationResult;
 use Illuminate\Database\Connection;
@@ -41,6 +49,10 @@ final readonly class IdempotentOperationInvoker implements OperationInvoker
         private Closure $store,
         private Connection $connection,
         private ModuleRegistry $modules,
+        private DataScopeFactory $scopes,
+        private CurrentWorkScope $current,
+        private ClientScopeAuthorizer $clientScopes,
+        private OperationFieldAuthorizer $fields,
         private OperationAuthorizer $authorizer,
         private ReplayAuthorizer $replayAuthorizer,
         private ErrorMapper $errors,
@@ -74,7 +86,14 @@ final readonly class IdempotentOperationInvoker implements OperationInvoker
             throw new ApiError(errorCode: OperationsErrorCode::IdempotencyNotSupported, status: 422, message: 'This operation does not support transactional idempotency.');
         }
 
-        $scope = OperationFingerprint::scope(invocation: $invocation, connection: $this->connection);
+        $dataScope = $this->scopes->forCurrentPrincipal($invocation->context->tenant());
+        $principal = $invocation->context->principal();
+
+        if ($dataScope->principalKind !== $principal->principalType()->value || $dataScope->principalId !== $principal->principalId()) {
+            throw new ApiError(errorCode: OperationsErrorCode::AccessDenied, status: 403, message: 'The invocation principal differs from the authenticated scope.');
+        }
+
+        $scope = OperationFingerprint::scope(invocation: $invocation, scope: $dataScope);
         $fingerprint = OperationFingerprint::request($invocation);
         $handlerFailure = new HandlerFailure;
         $effectCompleted = false;
@@ -92,6 +111,7 @@ final readonly class IdempotentOperationInvoker implements OperationInvoker
                 &$terminalPersisted,
                 &$freshMetadata,
             ): array {
+                $this->current->assert($scope->scope, $this->connection);
                 $store = ($this->store)();
                 $attempt = $store->begin(
                     scope: $scope,
@@ -106,8 +126,17 @@ final readonly class IdempotentOperationInvoker implements OperationInvoker
 
                 $this->throwUnlessOwner(attempt: $attempt, contractHash: $invocation->operation->contractHash);
 
+                // Acquiring the owner row proves that no earlier same-transaction effect committed.
+                $budgetAttempt = new BudgetAttempt(hash('sha256', json_encode([
+                    'corex.operation-budget/2', $attempt->scopeHash, $attempt->keyHash, $attempt->requestFingerprint,
+                    $scope->scope->bindingId, $scope->scope->bindingGeneration, $scope->scope->restoreEpoch,
+                ], JSON_THROW_ON_ERROR)));
+
                 try {
-                    $result = $this->inner->invoke($invocation);
+                    $execution = $this->inner instanceof TransactionalOperationInvoker
+                        ? $this->inner->invokeTransactional($invocation, $budgetAttempt)
+                        : new BudgetInvocationResult($this->inner->invoke($invocation));
+                    $result = $execution->result;
                     $effectCompleted = true;
                     $freshMetadata = JsonDocuments::map($result->metadata);
                 } catch (BudgetStoreUnavailable|BudgetRateLimited $error) {
@@ -118,9 +147,14 @@ final readonly class IdempotentOperationInvoker implements OperationInvoker
                     throw $error;
                 }
 
-                $outcome = StoredOperationOutcome::success(JsonDocuments::capture(JsonDocuments::array($result->data)));
+                $outcome = StoredOperationOutcome::success(JsonDocuments::capture(JsonDocuments::array($result->data)), $execution->receipt);
                 $store->complete($attempt, $outcome->canonicalJson());
                 $terminalPersisted = true;
+
+                if ($outcome->budgetReceipt !== null) {
+                    $receipt = $outcome->budgetReceipt;
+                    $this->connection->afterCommit(fn () => $this->budget?->recover($receipt));
+                }
 
                 return [$outcome, false];
             });
@@ -138,11 +172,7 @@ final readonly class IdempotentOperationInvoker implements OperationInvoker
                     error: $handlerFailure->error,
                 );
 
-                if ($outcome->kind === 'error') {
-                    throw $outcome->error($this->problems);
-                }
-
-                return $this->project(invocation: $invocation, outcome: $outcome, replayed: true);
+                return $this->replay($invocation, $outcome);
             }
 
             if ($effectCompleted && $terminalPersisted) {
@@ -160,17 +190,27 @@ final readonly class IdempotentOperationInvoker implements OperationInvoker
             throw $this->errors->map($error);
         }
 
-        $projected = $this->project(invocation: $invocation, outcome: $outcome, replayed: $replayed);
-
-        if ($replayed && $this->budget !== null) {
-            return $this->budget->replay(invocation: $invocation, result: $projected);
+        if ($replayed) {
+            return $this->replay($invocation, $outcome);
         }
+        $projected = $this->project(invocation: $invocation, outcome: $outcome, replayed: false);
 
         return new OperationResult(
             data: JsonDocuments::capture(JsonDocuments::array($projected->data)),
-            replayed: $projected->replayed,
+            replayed: false,
             metadata: JsonDocuments::capture($freshMetadata),
         );
+    }
+
+    private function replay(OperationInvocation $invocation, StoredOperationOutcome $outcome): OperationResult
+    {
+        $projected = $this->project(invocation: $invocation, outcome: $outcome, replayed: true);
+
+        if ($outcome->budgetReceipt !== null) {
+            $this->budget?->recover($outcome->budgetReceipt);
+        }
+
+        return $this->budget?->replay($invocation, $projected) ?? $projected;
     }
 
     private function admitOperation(OperationInvocation $invocation): void
@@ -185,8 +225,18 @@ final readonly class IdempotentOperationInvoker implements OperationInvoker
             throw new ApiError(errorCode: OperationsErrorCode::ModuleUnavailable, status: 404, message: 'Operation not found.');
         }
 
+        if (! $this->clientScopes->allows($operation, $invocation->context)) {
+            throw new ApiError(errorCode: OperationsErrorCode::ScopeRequired, status: 403, message: 'The client lacks a required operation scope.');
+        }
+
         if (! $this->authorizer->allows(operation: $operation, context: $invocation->context)) {
             throw new ApiError(errorCode: OperationsErrorCode::Forbidden, status: 403, message: 'Operation is not permitted.');
+        }
+
+        $path = DeclaredFieldAuthorizer::firstForbiddenWrite($operation, $invocation->context, $this->fields, JsonDocuments::map($invocation->input));
+
+        if ($path !== null) {
+            throw new ApiError(errorCode: OperationsErrorCode::AccessDenied, status: 403, message: 'An input field is not writable.', path: $path);
         }
     }
 
@@ -246,6 +296,7 @@ final readonly class IdempotentOperationInvoker implements OperationInvoker
                 $error,
                 &$terminalPersisted,
             ): StoredOperationOutcome {
+                $this->current->assert($scope->scope, $this->connection);
                 $store = ($this->store)();
                 $attempt = $store->begin(
                     scope: $scope,

@@ -6,8 +6,8 @@ namespace CoreX\Webhooks\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
-use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
@@ -212,7 +212,8 @@ final class WebhookSubscriptionTest extends TestCase
             name: 'orders.placed',
             contractVersion: 1,
             occurredAt: new DateTimeImmutable('2026-09-25T12:00:00+00:00'),
-            scope: resolve(DataScopeCodec::class)->encode($this->scope),
+            scope: $this->scope,
+            subject: new RecordRef('orders.order', 'order-1'),
             payload: new MessagePayload(['id' => 'order-1', 'secret' => 'hidden']),
             piiClass: PiiClass::Personal,
             correlationId: 'correlation-1',

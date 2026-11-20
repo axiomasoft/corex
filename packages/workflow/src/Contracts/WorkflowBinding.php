@@ -10,13 +10,14 @@ use CoreX\Workflow\Data\SignalResult;
 use CoreX\Workflow\Data\TransitionRequest;
 use CoreX\Workflow\Data\TransitionResult;
 use CoreX\Workflow\Data\TriggerRequest;
+use Illuminate\Database\ConnectionInterface;
 use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface WorkflowBinding
 {
-    public function capture(TriggerRequest $request): CaptureResult;
+    public function capture(TriggerRequest $request, ConnectionInterface $connection): CaptureResult;
 
     public function signal(SignalRequest $request): SignalResult;
 

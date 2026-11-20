@@ -44,14 +44,15 @@ test('package graph gate reports no violations', function (): void {
 
 test('package graph gate forbids a notifications import of corex-scheduler', function (): void {
     $repoRoot = dirname(__DIR__, 2);
-    $probePath = $repoRoot.'/packages/notifications/src/Digest/Internal/DigestTick.php';
+    $probePath = $repoRoot.'/packages/notifications/src/Runtime/Internal/DigestTick.php';
     $originalContents = (string) file_get_contents($probePath);
     $tamperedContents = str_replace(
-        'namespace CoreX\\Notifications\\Digest\\Internal;',
-        "namespace CoreX\\Notifications\\Digest\\Internal;\n\nuse CoreX\\Scheduler\\Contracts\\DueWakeupSweeper;",
+        'namespace CoreX\\Notifications\\Runtime\\Internal;',
+        "namespace CoreX\\Notifications\\Runtime\\Internal;\n\nuse CoreX\\Scheduler\\Contracts\\DueWakeupSweeper;",
         $originalContents,
     );
 
+    expect($tamperedContents)->not->toBe($originalContents);
     file_put_contents($probePath, $tamperedContents);
 
     try {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Notifications\Delivery\Laravel;
 
 use CoreX\Notifications\Delivery\Contracts\DeliveryExecution;
-use CoreX\Notifications\Delivery\Internal\DeliveryCoordinator;
+use CoreX\Notifications\Runtime\Internal\DeliveryCoordinator;
 use Illuminate\Contracts\Foundation\Application;
 use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;

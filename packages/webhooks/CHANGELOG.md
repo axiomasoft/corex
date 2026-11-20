@@ -1,6 +1,12 @@
 
 ## Unreleased — Packman governance
 
+## Unreleased — CoreX 2.0 delivery receipts
+
+- Consume envelope v2 with a typed logical subscriber receipt in the fanout transaction. Send each delivery with its stable provider effect key while preserving its signed webhook ID across attempts.
+- Keep potentially accepted requests in the unknown state until provider or operator evidence resolves them. Hosts can implement `WebhookProviderLookup` for read-only lookup by effect key.
+- Authorized replay returns a new delivery ID and `replay_of` for the original receipt. The replay carries its own signed ID and provider key and preserves the original event body.
+
 - Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.
 
 ## Unreleased — canonical registration

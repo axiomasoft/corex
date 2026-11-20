@@ -27,7 +27,11 @@ final readonly class ValidatedWebhookRequest
         public string $body,
         array $signatureHeaders,
         public int $timeoutSeconds = 10,
+        public ?string $effectKey = null,
     ) {
+        if ($effectKey !== null && preg_match('/\A[a-f0-9]{64}\z/D', $effectKey) !== 1) {
+            throw new InvalidArgumentException('Webhook effect key is invalid.');
+        }
         self::validateInput(canonicalHost: $canonicalHost, url: $url, address: $address, body: $body, signatureHeaders: $signatureHeaders, timeoutSeconds: $timeoutSeconds);
         $this->signatureHeaders = [
             'webhook-id' => $signatureHeaders['webhook-id'],

@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — durable messaging and provider receipts
+
+- Pass the caller's active Laravel connection to `Outbox::append` and `Inbox::claim`. The v2 envelope carries a typed scope, subject and correlation. Domain handlers consume each immutable fact once per logical subscriber. A changed payload under an existing fact identity raises a conflict.
+- Broker workers verify stored provenance, restore the producer scope and resolve the publisher inside that frame. An expired or cancelled claim cannot acknowledge a later delivery. The health command reports quarantined rows.
+- Receive broker deliveries through `BrokerReceiver` using the original restricted reference. The host retains malformed or unknown messages with their raw digest until operator release.
+- Provider owners reserve a stable effect key in the independent control journal before sending. Confirmed observations survive tenant rollback and restore. Hosts authorize operator recovery through `ProviderRecoveryAuthority` and register a `ProviderReceiptProjector` for each supported owner.
+
 ## Unreleased — CoreX 2.0 trusted work scope
 
 - Build a v3 `DataScope` from the authenticated principal with `DataScopeFactory`. `WorkScopeRunner` verifies direct work, and `StoredWorkRunner` restores work from a verified queue envelope or durable owner row. Hosts declare physical binding verification, admission storage and service principals. Old context restorer and unrestricted system authorization bindings have been removed.

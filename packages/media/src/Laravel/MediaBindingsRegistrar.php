@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Media\Laravel;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Context\Contracts\StoredWorkIssuer;
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Media\Contracts\ConversionDriver;
 use CoreX\Media\Contracts\MediaLibrary;
 use CoreX\Media\Contracts\MediaPolicy;
@@ -19,6 +23,7 @@ use CoreX\Media\Internal\SqlMediaLibrary;
 use CoreX\Media\Internal\SqlRelationLookup;
 use CoreX\Media\Internal\Support\MediaOptions;
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
 use Override;
@@ -44,7 +49,11 @@ final class MediaBindingsRegistrar implements PackageRegistrar
         ));
         $app->singleton(MediaPolicy::class, DenyMediaPolicy::class);
         $app->scoped(MediaBlobs::class, static fn (Application $app): MediaBlobs => new MediaBlobs($app->make(VaulterDatabase::class), $app->make(DatabaseManager::class), $app->make(BlobStore::class), $app->make(BlobPins::class), $app->make(TenantContextResolver::class)));
-        $app->scoped(MediaOperationStore::class, static fn (Application $app): MediaOperationStore => new MediaOperationStore(connection: $app->make(DatabaseManager::class)->connection(), clock: $app->make(ClockInterface::class), blobs: $app->make(MediaBlobs::class)));
+        $app->scoped(MediaOperationStore::class, static fn (Application $app): MediaOperationStore => new MediaOperationStore(connection: $app->make(DatabaseManager::class)->connection(), clock: $app->make(ClockInterface::class), blobs: $app->make(MediaBlobs::class),
+            contexts: $app->make(TenantContextResolver::class), scopes: $app->make(DataScopeFactory::class),
+            current: $app->make(CurrentWorkScope::class), codec: $app->make(DataScopeCodec::class),
+            issuer: $app->make(StoredWorkIssuer::class),
+        ));
 
         if (extension_loaded('gd')) {
             $app->singleton(GdThumbnailDriver::class, static fn (Application $app): ConversionDriver => (new GdThumbnailDriverFactory)->make($app));
@@ -52,7 +61,7 @@ final class MediaBindingsRegistrar implements PackageRegistrar
         }
 
         $app->scoped(ConversionProfiles::class, static fn (Application $app): ConversionProfiles => new ConversionProfiles(self::conversionDrivers($app)));
-        $app->scoped(ConversionCoordinator::class, static fn (Application $app): ConversionCoordinator => new ConversionCoordinator(connection: $app->make(DatabaseManager::class)->connection(), blobs: $app->make(MediaBlobs::class), profiles: $app->make(ConversionProfiles::class), operations: $app->make(MediaOperationStore::class), options: $app->make(MediaOptions::class), clock: $app->make(ClockInterface::class)));
+        $app->scoped(ConversionCoordinator::class, static fn (Application $app): ConversionCoordinator => new ConversionCoordinator(connection: $app->make(DatabaseManager::class)->connection(), blobs: $app->make(MediaBlobs::class), profiles: $app->make(ConversionProfiles::class), operations: $app->make(MediaOperationStore::class), options: $app->make(MediaOptions::class), clock: $app->make(ClockInterface::class), exceptions: $app->make(ExceptionHandler::class)));
         $app->scoped(RelationLookup::class, static fn (Application $app): SqlRelationLookup => new SqlRelationLookup(connection: $app->make(DatabaseManager::class)->connection(), policy: $app->make(MediaPolicy::class), clock: $app->make(ClockInterface::class), blobs: $app->make(MediaBlobs::class)));
         $app->scoped(MediaLibrary::class, static fn (Application $app): SqlMediaLibrary => new SqlMediaLibrary(connection: $app->make(DatabaseManager::class)->connection(), blobs: $app->make(MediaBlobs::class), policy: $app->make(MediaPolicy::class), operations: $app->make(MediaOperationStore::class), conversions: $app->make(ConversionCoordinator::class), options: $app->make(MediaOptions::class), clock: $app->make(ClockInterface::class)));
     }

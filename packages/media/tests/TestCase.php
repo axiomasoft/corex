@@ -7,9 +7,12 @@ namespace CoreX\Media\Tests;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\CoreServiceProvider;
 use CoreX\Media\Contracts\MediaPolicy;
 use CoreX\Media\MediaServiceProvider;
+use CoreX\Tests\Support\WorkScopeFixture;
 use CoreX\Time\Laravel\TimeRegistrar;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Mockery;
@@ -24,10 +27,12 @@ abstract class TestCase extends Orchestra
 {
     use MigratesSchemaSets;
 
+    private ?string $mediaRoot = null;
+
     #[Override]
     protected function getPackageProviders($app): array
     {
-        return [PackmanServiceProvider::class, SchemaServiceProvider::class, MediaServiceProvider::class];
+        return [PackmanServiceProvider::class, SchemaServiceProvider::class, CoreServiceProvider::class, MediaServiceProvider::class];
     }
 
     #[Override]
@@ -38,6 +43,7 @@ abstract class TestCase extends Orchestra
         $app['config']->set('vaulter.database.connection', 'sqlite');
         $app['config']->set('vaulter-media.disk', 'media');
         $app['config']->set('vaulter.schedule.enabled', false);
+        $app['config']->set('queue.default', 'null');
     }
 
     protected function defineDatabaseMigrations(): void
@@ -53,11 +59,25 @@ abstract class TestCase extends Orchestra
 
         $this->app->make(Kernel::class)->assertValid();
         (new TimeRegistrar)->register($this->app);
-        Storage::fake('media');
+        $this->mediaRoot = sys_get_temp_dir().'/corex-media-'.bin2hex(random_bytes(12));
+        Storage::set('media', Storage::build([
+            'driver' => 'local', 'root' => $this->mediaRoot, 'throw' => true,
+        ]));
         $resolver = Mockery::mock(TenantContextResolver::class);
         $resolver->shouldReceive('current')->andReturn(new TenantContext(new AccountRef('11111111-1111-7111-8111-111111111111', 'media-test', 'active', [], [])));
         $this->app->instance(TenantContextResolver::class, $resolver);
+        WorkScopeFixture::install($this->app)->scope();
         $this->app->forgetScopedInstances();
         $this->app->forgetInstance(MediaPolicy::class);
+    }
+
+    #[Override]
+    protected function tearDown(): void
+    {
+        if ($this->mediaRoot !== null) {
+            (new Filesystem)->deleteDirectory($this->mediaRoot);
+        }
+
+        parent::tearDown();
     }
 }

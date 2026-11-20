@@ -91,8 +91,9 @@
         }
     },
     "scripts": {
-        "test": "pest",
-        "test:coverage": "pest --coverage --min=80",
+        "test": "pest --exclude-group=pg",
+        "test:pg": "pest --group=pg",
+        "test:coverage": "pest --exclude-group=pg --coverage --min=80",
         "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/operations/phpstan.neon --memory-limit=2G --no-progress",
         "lint:check": "pint --test"
     },

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Idempotency\Data;
 
-use CoreX\Context\Enums\PrincipalType;
+use CoreX\Data\Data\DataScope;
 use InvalidArgumentException;
 use Packman\Attributes\Api;
 
@@ -16,21 +16,12 @@ use Packman\Attributes\Api;
 final readonly class IdempotencyScope
 {
     public function __construct(
-        public string $connectionName,
-        public string $databaseName,
-        public string $accountId,
-        public ?string $workspaceId,
-        public PrincipalType $principalType,
-        public string $principalId,
+        public DataScope $scope,
         public ?string $clientId,
         public string $apiMajor,
         public string $operationId,
     ) {
         foreach ([
-            'connectionName' => $connectionName,
-            'databaseName' => $databaseName,
-            'accountId' => $accountId,
-            'principalId' => $principalId,
             'apiMajor' => $apiMajor,
             'operationId' => $operationId,
         ] as $field => $value) {
@@ -39,10 +30,8 @@ final readonly class IdempotencyScope
             }
         }
 
-        foreach (['workspaceId' => $workspaceId, 'clientId' => $clientId] as $field => $value) {
-            if ($value !== null && ($value === '' || strlen($value) > 255)) {
-                throw new InvalidArgumentException("Idempotency scope {$field} must be null or contain 1-255 bytes.");
-            }
+        if ($clientId !== null && ($clientId === '' || strlen($clientId) > 255)) {
+            throw new InvalidArgumentException('Idempotency client ID must be null or contain 1-255 bytes.');
         }
     }
 
@@ -50,15 +39,15 @@ final readonly class IdempotencyScope
     public function toArray(): array
     {
         return [
-            'account_id' => $this->accountId,
+            'deployment_id' => $this->scope->deploymentId,
+            'account_id' => $this->scope->accountId,
+            'account_incarnation' => $this->scope->accountIncarnation,
             'api_major' => $this->apiMajor,
             'client_id' => $this->clientId,
-            'connection_name' => $this->connectionName,
-            'database_name' => $this->databaseName,
             'operation_id' => $this->operationId,
-            'principal_id' => $this->principalId,
-            'principal_type' => $this->principalType->value,
-            'workspace_id' => $this->workspaceId,
+            'principal_id' => $this->scope->principalId,
+            'principal_type' => $this->scope->principalKind,
+            'workspace_id' => $this->scope->workspaceId,
         ];
     }
 }

@@ -2,78 +2,42 @@
 
 declare(strict_types=1);
 
-use CoreX\Messaging\Contracts\MessageContractRegistry;
+require_once __DIR__.'/../Support/Messaging.php';
+
 use CoreX\Messaging\Contracts\Outbox;
 use CoreX\Messaging\Contracts\TraceContextBridge;
-use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessagePayload;
-use CoreX\Messaging\Enums\MessageClass;
 use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Exceptions\OutboxRefused;
 use CoreX\Messaging\Exceptions\UnknownMessageContract;
-use CoreX\Messaging\Internal\ArrayMessageContractRegistry;
 use CoreX\Observability\Data\OperationContext;
 use CoreX\Time\Testing\FrozenClock;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Encryption\MissingAppKeyException;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Psr\Clock\ClockInterface;
 
-function outboxAppendDeclaredContract(): MessageContract
-{
-    return new MessageContract(
-        name: 'membership.expired',
-        version: 1,
-        class: MessageClass::IntegrationEvent,
-        owner: 'acme/core',
-        maxPiiClass: PiiClass::Pseudonymous,
-        channel: 'membership',
-    );
-}
-
-function outboxAppendInstallSchema(): void
-{
-    Schema::create('sys_outbox_messages', function (Blueprint $table): void {
-        $table->string('id')->primary();
-        $table->string('name');
-        $table->unsignedSmallInteger('contract_version');
-        $table->unsignedSmallInteger('envelope_version');
-        $table->string('source');
-        $table->string('subject')->nullable();
-        $table->string('correlation_id')->nullable();
-        $table->string('causation_id')->nullable();
-        $table->string('pii_class');
-        $table->text('scope');
-        $table->text('payload');
-        $table->text('metadata');
-        $table->dateTimeTz('occurred_at');
-        $table->dateTimeTz('available_at');
-        $table->string('status');
-        $table->unsignedInteger('attempts');
-        $table->dateTimeTz('created_at');
-        $table->dateTimeTz('updated_at');
-    });
-}
-
-function outboxAppendBindRegistry(MessageContract ...$contracts): void
-{
-    app()->instance(
-        MessageContractRegistry::class,
-        new ArrayMessageContractRegistry(contracts: $contracts),
-    );
-    app()->forgetScopedInstances();
-}
-
 beforeEach(function (): void {
-    outboxAppendInstallSchema();
+    messagingWorkScope();
+    messagingInstallTable('outbox');
     outboxAppendBindRegistry(outboxAppendDeclaredContract());
+});
+
+it('resolves the outbox without a key and requires the real secret at protected append', function (): void {
+    $envelope = messagingSampleEnvelope();
+    config(['app.key' => '']);
+    app()->forgetInstance('encrypter');
+    app()->forgetScopedInstances();
+    $outbox = resolve(Outbox::class);
+    expect($outbox)->toBeInstanceOf(Outbox::class)
+        ->and(fn () => DB::transaction(fn () => $outbox->append(DB::connection(), $envelope)))->toThrow(MissingAppKeyException::class)
+        ->and(DB::table('sys_outbox_messages')->count())->toBe(0);
 });
 
 it('refuses append outside a transaction with MSG-008', function (): void {
     $outbox = resolve(Outbox::class);
     $envelope = messagingSampleEnvelope();
 
-    expect(fn (): mixed => $outbox->append($envelope))
+    expect(fn (): mixed => $outbox->append(DB::connection(), $envelope))
         ->toThrow(OutboxRefused::class, 'MSG-008');
 });
 
@@ -83,7 +47,7 @@ it('refuses undeclared contracts inside a transaction with MSG-002', function ()
     $envelope = messagingSampleEnvelope();
 
     DB::transaction(function () use ($outbox, $envelope): void {
-        expect(fn (): mixed => $outbox->append($envelope))
+        expect(fn (): mixed => $outbox->append(DB::connection(), $envelope))
             ->toThrow(UnknownMessageContract::class, 'MSG-002');
     });
 });
@@ -93,7 +57,7 @@ it('refuses payload personal data above the contract maximum with MSG-007', func
     $envelope = messagingSampleEnvelope(['piiClass' => PiiClass::Personal]);
 
     DB::transaction(function () use ($outbox, $envelope): void {
-        expect(fn (): mixed => $outbox->append($envelope))
+        expect(fn (): mixed => $outbox->append(DB::connection(), $envelope))
             ->toThrow(OutboxRefused::class, 'MSG-007');
     });
 });
@@ -108,10 +72,10 @@ it('persists a pending row with encoded payload and clock-backed timestamps', fu
     $outbox = resolve(Outbox::class);
 
     DB::transaction(function () use ($outbox, $envelope): void {
-        $outbox->append($envelope);
+        $outbox->append(DB::connection(), $envelope);
     });
 
-    $row = DB::table('sys_outbox_messages')->where('id', $envelope->messageId)->first();
+    $row = DB::table('sys_outbox_messages')->where('message_id', $envelope->messageId)->first();
 
     expect($row)->not->toBeNull()
         ->and($row->status)->toBe('pending')
@@ -141,23 +105,23 @@ it('injects trace carrier into persisted metadata without changing identity', fu
 
     $envelope = messagingSampleEnvelope([
         'messageId' => 'msg-trace-1',
-        'metadata' => ['trace' => 'keep'],
+        'metadata' => ['tracestate' => 'vendor=keep'],
         'correlationId' => 'corr-keep',
     ]);
     $outbox = resolve(Outbox::class);
 
     DB::transaction(function () use ($outbox, $envelope): void {
-        $outbox->append($envelope);
+        $outbox->append(DB::connection(), $envelope);
     });
 
-    $row = DB::table('sys_outbox_messages')->where('id', 'msg-trace-1')->first();
+    $row = DB::table('sys_outbox_messages')->where('message_id', 'msg-trace-1')->first();
     $metadata = json_decode((string) $row->metadata, true, flags: JSON_THROW_ON_ERROR);
 
     expect($row->correlation_id)->toBe('corr-keep')
         ->and($row->payload)->toBe($envelope->payload->encode())
-        ->and($envelope->metadata)->toBe(['trace' => 'keep'])
+        ->and($envelope->metadata)->toBe(['tracestate' => 'vendor=keep'])
         ->and($metadata)->toBe([
-            'trace' => 'keep',
+            'tracestate' => 'vendor=keep',
             'traceparent' => '00-'.str_repeat('ab', 16).'-'.str_repeat('cd', 8).'-01',
         ]);
 });
@@ -170,10 +134,10 @@ it('uses one clock instant for available_at created_at and updated_at', function
     $outbox = resolve(Outbox::class);
 
     DB::transaction(function () use ($outbox): void {
-        $outbox->append(messagingSampleEnvelope(['messageId' => 'msg-clock-1']));
+        $outbox->append(DB::connection(), messagingSampleEnvelope(['messageId' => 'msg-clock-1']));
     });
 
-    $row = DB::table('sys_outbox_messages')->where('id', 'msg-clock-1')->first();
+    $row = DB::table('sys_outbox_messages')->where('message_id', 'msg-clock-1')->first();
 
     expect($row->available_at)->toBe($row->created_at)
         ->and($row->created_at)->toBe($row->updated_at);

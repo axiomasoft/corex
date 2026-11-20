@@ -10,9 +10,9 @@ use CoreX\CustomFields\Internal\Values\EavAttributeStore;
 use CoreX\CustomFields\Internal\Values\JsonbAttributeStore;
 use CoreX\CustomFields\Tests\PgTestCase;
 use CoreX\CustomFields\Tests\Support\PgTestSupport;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
-use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Messaging\Exceptions\UnknownMessageContract;
 use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Time\Testing\FrozenClock;
@@ -40,11 +40,13 @@ function p107Store(string $engine, bool $declareContract = true): AttributeStore
         ]),
         'authorizer' => jsonbAuthorizer(),
         'outbox' => MessagingFixtures::outbox(
-            connection: DB::connection(),
+            current: jsonbCurrent(),
+            issuer: jsonbCurrent(),
             contracts: MessagingFixtures::contracts(contracts: $contracts),
             clock: $clock,
+            scopes: resolve(DataScopeCodec::class),
         ),
-        'messageTranslator' => new AttributeMessageTranslator(new ArrayDataScopeCodec),
+        'messageTranslator' => new AttributeMessageTranslator,
         'clock' => $clock,
     ];
 
@@ -79,6 +81,7 @@ it('commits one metadata-only outbox row and appends nothing on replay', functio
     expect($row->name)->toBe(AttributeMessageContracts::VALUES_CHANGED)
         ->and($row->contract_version)->toBe(1)
         ->and($row->correlation_id)->toBe('outbox-'.$engine)
+        ->and($row->causation_id)->toBe('outbox-'.$engine)
         ->and($payload)->toBe([
             'changedAttributeIds' => [
                 '018d5f56-6f83-7a36-b0ac-6eabce87c10b',

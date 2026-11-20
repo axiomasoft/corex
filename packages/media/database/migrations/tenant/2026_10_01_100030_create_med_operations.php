@@ -28,6 +28,17 @@ return new class extends PackmanMigration
             $table->string('profile_key', 128)->nullable();
             $table->char('profile_digest', 64)->nullable();
             $table->unsignedBigInteger('source_version')->nullable();
+            $table->string('account_id', 128)->nullable();
+            $table->string('account_incarnation', 128)->nullable();
+            $table->string('workspace_scope', 138)->nullable();
+            $table->string('deployment_id', 128)->nullable();
+            $table->string('binding_id', 128)->nullable();
+            $table->unsignedBigInteger('binding_generation')->nullable();
+            $table->char('restore_epoch', 64)->nullable();
+            $table->json('conversion_scope')->nullable();
+            $table->char('scope_seal', 64)->nullable();
+            $table->uuid('claim_token')->nullable();
+            $table->string('blob_receipt', 255)->nullable();
             $table->unsignedBigInteger('claim_epoch')->default(0);
             $table->unsignedBigInteger('attempts')->default(0);
             $table->timestamp('next_attempt_at')->nullable();

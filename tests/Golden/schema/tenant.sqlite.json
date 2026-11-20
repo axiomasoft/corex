@@ -3243,6 +3243,16 @@
         },
         "med_conversions": {
             "columns": {
+                "account_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "blob_id": {
                     "type": "varchar",
                     "nullable": true,
@@ -3312,26 +3322,34 @@
                     "type": "integer",
                     "nullable": true,
                     "default": null
+                },
+                "workspace_scope": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
                 }
             },
             "indexes": [
-                {
-                    "name": "med_conversions_file_id_profile_key_profile_digest__67e95e41_uq",
-                    "kind": "uq",
-                    "columns": [
-                        "file_id",
-                        "profile_key",
-                        "profile_digest",
-                        "source_version"
-                    ],
-                    "predicate": null,
-                    "method": "btree"
-                },
                 {
                     "name": "med_conversions_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "med_conversions_scope_file_profile_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "file_id",
+                        "source_version",
+                        "profile_key",
+                        "profile_digest"
                     ],
                     "predicate": null,
                     "method": "btree"
@@ -3467,18 +3485,58 @@
         },
         "med_operations": {
             "columns": {
+                "account_id": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
                 "attempts": {
                     "type": "integer",
                     "nullable": false,
                     "default": "'0'"
+                },
+                "binding_generation": {
+                    "type": "integer",
+                    "nullable": true,
+                    "default": null
+                },
+                "binding_id": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "blob_receipt": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
                 },
                 "claim_epoch": {
                     "type": "integer",
                     "nullable": false,
                     "default": "'0'"
                 },
+                "claim_token": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "conversion_scope": {
+                    "type": "text",
+                    "nullable": true,
+                    "default": null
+                },
                 "created_at": {
                     "type": "datetime",
+                    "nullable": true,
+                    "default": null
+                },
+                "deployment_id": {
+                    "type": "varchar",
                     "nullable": true,
                     "default": null
                 },
@@ -3522,6 +3580,16 @@
                     "nullable": true,
                     "default": null
                 },
+                "restore_epoch": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "scope_seal": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
                 "source_version": {
                     "type": "integer",
                     "nullable": true,
@@ -3534,6 +3602,11 @@
                 },
                 "updated_at": {
                     "type": "datetime",
+                    "nullable": true,
+                    "default": null
+                },
+                "workspace_scope": {
+                    "type": "varchar",
                     "nullable": true,
                     "default": null
                 }
@@ -3663,6 +3736,16 @@
         },
         "ntf_deliveries": {
             "columns": {
+                "account_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "admitted_revision": {
                     "type": "numeric",
                     "nullable": false,
@@ -3670,6 +3753,16 @@
                 },
                 "attempts": {
                     "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_generation": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_id": {
+                    "type": "varchar",
                     "nullable": false,
                     "default": null
                 },
@@ -3683,7 +3776,17 @@
                     "nullable": false,
                     "default": null
                 },
+                "claim_token": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
                 "delivery_key": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "deployment_id": {
                     "type": "varchar",
                     "nullable": false,
                     "default": null
@@ -3738,9 +3841,34 @@
                     "nullable": true,
                     "default": null
                 },
+                "provider_namespace": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
                 "provider_ref": {
                     "type": "varchar",
                     "nullable": true,
+                    "default": null
+                },
+                "provider_ticket": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "restore_epoch": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope": {
+                    "type": "text",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_seal": {
+                    "type": "varchar",
+                    "nullable": false,
                     "default": null
                 },
                 "sent_at": {
@@ -3753,9 +3881,19 @@
                     "nullable": false,
                     "default": null
                 },
+                "target_reference": {
+                    "type": "text",
+                    "nullable": true,
+                    "default": null
+                },
                 "template_version": {
                     "type": "varchar",
                     "nullable": true,
+                    "default": null
+                },
+                "workspace_scope": {
+                    "type": "varchar",
+                    "nullable": false,
                     "default": null
                 }
             },
@@ -3770,11 +3908,35 @@
                     "method": "btree"
                 },
                 {
+                    "name": "ntf_deliveries_digest_channel_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "digest_run_id",
+                        "channel"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "ntf_deliveries_notification_channel_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "notification_id",
+                        "channel"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
                     "name": "ntf_deliveries_scan_ix",
                     "kind": "ix",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
                         "state",
-                        "next_attempt"
+                        "next_attempt",
+                        "id"
                     ],
                     "predicate": null,
                     "method": "btree"
@@ -3889,6 +4051,16 @@
         },
         "ntf_digest_runs": {
             "columns": {
+                "account_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "batch_seq": {
                     "type": "integer",
                     "nullable": false,
@@ -3953,19 +4125,39 @@
                     "type": "varchar",
                     "nullable": false,
                     "default": null
+                },
+                "workspace_scope": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
                 }
             },
             "indexes": [
                 {
-                    "name": "ntf_digest_runs_recipient_kind_recipient_id_period__27ecc408_uq",
+                    "name": "ntf_digest_runs_identity_uq",
                     "kind": "uq",
                     "columns": [
-                        "scope_key",
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
                         "recipient_kind",
                         "recipient_id",
                         "period",
                         "period_start",
                         "batch_seq"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "ntf_digest_runs_scan_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "state",
+                        "period_end",
+                        "id"
                     ],
                     "predicate": null,
                     "method": "btree"
@@ -3986,6 +4178,16 @@
         },
         "ntf_notifications": {
             "columns": {
+                "account_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "cancelled_at": {
                     "type": "datetime",
                     "nullable": true,
@@ -3999,6 +4201,11 @@
                 "dismissed_at": {
                     "type": "datetime",
                     "nullable": true,
+                    "default": null
+                },
+                "event_id": {
+                    "type": "varchar",
+                    "nullable": false,
                     "default": null
                 },
                 "event_type": {
@@ -4041,17 +4248,17 @@
                     "nullable": false,
                     "default": null
                 },
-                "request_key": {
-                    "type": "varchar",
-                    "nullable": false,
-                    "default": null
-                },
                 "revision": {
                     "type": "numeric",
                     "nullable": false,
                     "default": null
                 },
-                "template_key": {
+                "source": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "template_action": {
                     "type": "varchar",
                     "nullable": false,
                     "default": null
@@ -4060,16 +4267,26 @@
                     "type": "datetime",
                     "nullable": true,
                     "default": null
+                },
+                "workspace_scope": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
                 }
             },
             "indexes": [
                 {
-                    "name": "ntf_notifications_recipient_kind_recipient_id_request_key_uq",
+                    "name": "ntf_notifications_intent_uq",
                     "kind": "uq",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
                         "recipient_kind",
                         "recipient_id",
-                        "request_key"
+                        "source",
+                        "event_id",
+                        "template_action"
                     ],
                     "predicate": null,
                     "method": "btree"
@@ -4078,6 +4295,9 @@
                     "name": "ntf_notifications_scan_ix",
                     "kind": "ix",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
                         "recipient_kind",
                         "recipient_id",
                         "read_at",
@@ -4102,6 +4322,16 @@
         },
         "ntf_recipient_state": {
             "columns": {
+                "account_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "id": {
                     "type": "varchar",
                     "nullable": false,
@@ -4116,6 +4346,11 @@
                     "type": "numeric",
                     "nullable": false,
                     "default": null
+                },
+                "workspace_scope": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
                 }
             },
             "indexes": [
@@ -4123,6 +4358,9 @@
                     "name": "sqlite_autoindex_ntf_recipient_state_1",
                     "kind": "pk",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
                         "kind",
                         "id"
                     ],
@@ -4313,8 +4551,38 @@
         },
         "sys_api_idempotency": {
             "columns": {
+                "account_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "api_major": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "attempt": {
                     "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_generation": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "client_scope": {
+                    "type": "varchar",
                     "nullable": false,
                     "default": null
                 },
@@ -4325,6 +4593,11 @@
                 },
                 "created_at": {
                     "type": "datetime",
+                    "nullable": false,
+                    "default": null
+                },
+                "deployment_id": {
+                    "type": "varchar",
                     "nullable": false,
                     "default": null
                 },
@@ -4348,12 +4621,32 @@
                     "nullable": true,
                     "default": null
                 },
+                "operation_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "outcome_json": {
                     "type": "text",
                     "nullable": true,
                     "default": null
                 },
+                "principal_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "principal_kind": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "request_fingerprint": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "restore_epoch": {
                     "type": "varchar",
                     "nullable": false,
                     "default": null
@@ -4372,9 +4665,24 @@
                     "type": "datetime",
                     "nullable": false,
                     "default": null
+                },
+                "workspace_scope": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
                 }
             },
             "indexes": [
+                {
+                    "name": "sys_api_idempotency_lookup_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "scope_hash",
+                        "key_hash"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
                 {
                     "name": "sys_api_idempotency_retention_ix",
                     "kind": "ix",
@@ -4389,7 +4697,14 @@
                     "name": "sys_api_idempotency_scope_key_uq",
                     "kind": "uq",
                     "columns": [
-                        "scope_hash",
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "principal_kind",
+                        "principal_id",
+                        "client_scope",
+                        "api_major",
+                        "operation_id",
                         "key_hash"
                     ],
                     "predicate": null,
@@ -4493,8 +4808,28 @@
         },
         "sys_api_webhook_deliveries": {
             "columns": {
+                "account_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "attempt": {
                     "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_generation": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_id": {
+                    "type": "varchar",
                     "nullable": false,
                     "default": null
                 },
@@ -4508,8 +4843,23 @@
                     "nullable": false,
                     "default": null
                 },
+                "claim_token": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
                 "created_at": {
                     "type": "datetime",
+                    "nullable": false,
+                    "default": null
+                },
+                "deployment_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "effect_key": {
+                    "type": "varchar",
                     "nullable": false,
                     "default": null
                 },
@@ -4519,6 +4869,11 @@
                     "default": null
                 },
                 "event_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "event_source": {
                     "type": "varchar",
                     "nullable": false,
                     "default": null
@@ -4563,13 +4918,43 @@
                     "nullable": false,
                     "default": null
                 },
+                "provider_ref": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "provider_ticket": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
                 "replay_count": {
                     "type": "integer",
                     "nullable": false,
                     "default": null
                 },
+                "replay_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "replay_of": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "restore_epoch": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "scope": {
                     "type": "text",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_seal": {
+                    "type": "varchar",
                     "nullable": false,
                     "default": null
                 },
@@ -4597,6 +4982,11 @@
                     "type": "integer",
                     "nullable": false,
                     "default": null
+                },
+                "workspace_scope": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
                 }
             },
             "indexes": [
@@ -4613,9 +5003,21 @@
                     "name": "sys_api_webhook_deliveries_claim_ix",
                     "kind": "ix",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
                         "status",
                         "next_attempt_at",
-                        "lease_until"
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sys_api_webhook_deliveries_effect_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "effect_key"
                     ],
                     "predicate": null,
                     "method": "btree"
@@ -4624,8 +5026,23 @@
                     "name": "sys_api_webhook_deliveries_event_uq",
                     "kind": "uq",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
                         "subscription_id",
-                        "event_id"
+                        "event_source",
+                        "event_id",
+                        "replay_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sys_api_webhook_deliveries_reclaim_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "status",
+                        "lease_until"
                     ],
                     "predicate": null,
                     "method": "btree"
@@ -4636,8 +5053,8 @@
             "triggers": {
                 "sys_api_webhook_deliveries_counts_ck_insert": "CREATE TRIGGER \"sys_api_webhook_deliveries_counts_ck_insert\" BEFORE INSERT ON \"sys_api_webhook_deliveries\" WHEN NOT (NEW.subscription_revision >= 0 AND NEW.topic_version >= 0 AND NEW.attempt >= 0 AND NEW.replay_count >= 0) BEGIN SELECT RAISE(ABORT, 'sys_api_webhook_deliveries_counts_ck'); END",
                 "sys_api_webhook_deliveries_counts_ck_update": "CREATE TRIGGER \"sys_api_webhook_deliveries_counts_ck_update\" BEFORE UPDATE ON \"sys_api_webhook_deliveries\" WHEN NOT (NEW.subscription_revision >= 0 AND NEW.topic_version >= 0 AND NEW.attempt >= 0 AND NEW.replay_count >= 0) BEGIN SELECT RAISE(ABORT, 'sys_api_webhook_deliveries_counts_ck'); END",
-                "sys_api_webhook_deliveries_status_ck_insert": "CREATE TRIGGER \"sys_api_webhook_deliveries_status_ck_insert\" BEFORE INSERT ON \"sys_api_webhook_deliveries\" WHEN NOT (NEW.status IN ('pending', 'sending', 'retry', 'succeeded', 'dead')) BEGIN SELECT RAISE(ABORT, 'sys_api_webhook_deliveries_status_ck'); END",
-                "sys_api_webhook_deliveries_status_ck_update": "CREATE TRIGGER \"sys_api_webhook_deliveries_status_ck_update\" BEFORE UPDATE ON \"sys_api_webhook_deliveries\" WHEN NOT (NEW.status IN ('pending', 'sending', 'retry', 'succeeded', 'dead')) BEGIN SELECT RAISE(ABORT, 'sys_api_webhook_deliveries_status_ck'); END"
+                "sys_api_webhook_deliveries_status_ck_insert": "CREATE TRIGGER \"sys_api_webhook_deliveries_status_ck_insert\" BEFORE INSERT ON \"sys_api_webhook_deliveries\" WHEN NOT (NEW.status IN ('pending', 'claimed', 'sending', 'retry', 'succeeded', 'dead', 'unknown', 'quarantined')) BEGIN SELECT RAISE(ABORT, 'sys_api_webhook_deliveries_status_ck'); END",
+                "sys_api_webhook_deliveries_status_ck_update": "CREATE TRIGGER \"sys_api_webhook_deliveries_status_ck_update\" BEFORE UPDATE ON \"sys_api_webhook_deliveries\" WHEN NOT (NEW.status IN ('pending', 'claimed', 'sending', 'retry', 'succeeded', 'dead', 'unknown', 'quarantined')) BEGIN SELECT RAISE(ABORT, 'sys_api_webhook_deliveries_status_ck'); END"
             }
         },
         "sys_api_webhook_subscriptions": {
@@ -5060,19 +5477,34 @@
         },
         "sys_workflow_intents": {
             "columns": {
+                "account_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "attempt": {
                     "type": "integer",
                     "nullable": false,
                     "default": "'0'"
                 },
-                "claim_epoch": {
+                "binding_generation": {
                     "type": "integer",
                     "nullable": false,
-                    "default": "'0'"
+                    "default": null
                 },
-                "context_hash": {
+                "binding_id": {
                     "type": "varchar",
                     "nullable": false,
+                    "default": null
+                },
+                "claim_token": {
+                    "type": "varchar",
+                    "nullable": true,
                     "default": null
                 },
                 "created_at": {
@@ -5082,13 +5514,23 @@
                 },
                 "definition_ref": {
                     "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "deployment_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "due_at": {
+                    "type": "datetime",
                     "nullable": true,
                     "default": null
                 },
-                "generation": {
-                    "type": "integer",
+                "effect_key": {
+                    "type": "varchar",
                     "nullable": false,
-                    "default": "'0'"
+                    "default": null
                 },
                 "id": {
                     "type": "varchar",
@@ -5098,6 +5540,11 @@
                 "kind": {
                     "type": "varchar",
                     "nullable": false,
+                    "default": null
+                },
+                "lease_until": {
+                    "type": "datetime",
+                    "nullable": true,
                     "default": null
                 },
                 "module": {
@@ -5120,12 +5567,37 @@
                     "nullable": true,
                     "default": null
                 },
+                "provider_namespace": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "provider_receipt": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "provider_ticket": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
                 "request_key": {
                     "type": "varchar",
                     "nullable": false,
                     "default": null
                 },
                 "restore_epoch": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_json": {
+                    "type": "text",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_seal": {
                     "type": "varchar",
                     "nullable": false,
                     "default": null
@@ -5147,7 +5619,22 @@
                 },
                 "version_ref": {
                     "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "worker_claim": {
+                    "type": "varchar",
                     "nullable": true,
+                    "default": null
+                },
+                "workspace_id": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "workspace_scope": {
+                    "type": "varchar",
+                    "nullable": false,
                     "default": null
                 }
             },
@@ -5162,20 +5649,45 @@
                     "method": "btree"
                 },
                 {
+                    "name": "sys_workflow_intents_effect_key_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "effect_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
                     "name": "sys_workflow_intents_request_key_uq",
                     "kind": "uq",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "module",
+                        "kind",
                         "request_key"
                     ],
                     "predicate": null,
                     "method": "btree"
                 },
                 {
-                    "name": "sys_workflow_intents_state_updated_at_ix",
+                    "name": "sys_workflow_intents_state_due_at_ix",
                     "kind": "ix",
                     "columns": [
                         "state",
-                        "updated_at"
+                        "due_at",
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sys_workflow_intents_state_lease_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "state",
+                        "lease_until"
                     ],
                     "predicate": null,
                     "method": "btree"

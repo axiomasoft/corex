@@ -11,6 +11,8 @@ use CoreX\Context\Contracts\DataScopeFactory;
 use CoreX\Context\Contracts\ImpersonationGuard;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\PhysicalBindingVerifier;
+use CoreX\Context\Contracts\ProviderEffectLedger;
+use CoreX\Context\Contracts\ProviderEffectRecovery;
 use CoreX\Context\Contracts\ScopeAdmission;
 use CoreX\Context\Contracts\ScopeAuthority;
 use CoreX\Context\Contracts\StoredWorkIssuer;
@@ -68,12 +70,14 @@ final class ContextRegistrar implements PackageRegistrar
         $app->bind(CentralWorkRunner::class, BoxedCentralWorkRunner::class);
         $app->scoped(VerifiedWorkScope::class, static fn (): VerifiedWorkScope => new VerifiedWorkScope(static fn (): Container => Container::getInstance()));
         $app->alias(VerifiedWorkScope::class, CurrentWorkScope::class);
+        $app->alias(VerifiedWorkScope::class, ProviderEffectRecovery::class);
         $app->alias(VerifiedWorkScope::class, DataScopeFactory::class);
         $app->alias(VerifiedWorkScope::class, WorkScopeRunner::class);
         $app->alias(VerifiedWorkScope::class, StoredWorkRunner::class);
         $app->scoped(StoredWorkIssuer::class, StoredWorkOrigins::class);
         $app->scoped(ScopeAuthority::class, DatabaseScopeControl::class);
         $app->scoped(ScopeAdmission::class, DatabaseScopeControl::class);
+        $app->scoped(ProviderEffectLedger::class, DatabaseScopeControl::class);
         $app->scoped(PhysicalBindingVerifier::class, RequiredPhysicalBindingVerifier::class);
         $app->scoped(WorkScopeDirectory::class, BoxedWorkScopeDirectory::class);
         $app->scoped(WorkPrincipalAuthority::class, AuthenticatedWorkPrincipal::class);
@@ -87,6 +91,10 @@ final class ContextRegistrar implements PackageRegistrar
     {
         Queue::createPayloadUsing(self::payloadHook(...));
         $events = $app->make(Dispatcher::class);
+
+        // A transport failure skips Octane's OperationTerminated. Clear the root that its next sandbox will clone.
+        $worker = $app->make(Container::class);
+        $events->listen('Laravel\\Octane\\Events\\WorkerErrorOccurred', $worker->forgetScopedInstances(...));
         $events->listen(QueryExecuted::class, [LocalWorkTransactions::class, 'query']);
         $events->listen([TransactionCommitted::class, TransactionRolledBack::class], [LocalWorkTransactions::class, 'completed']);
 

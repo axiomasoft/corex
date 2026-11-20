@@ -26,14 +26,15 @@ Wire — **CloudEvents 1.0 structured JSON**, media type `application/cloudevent
 | `id` | `messageId`, непустая строка ≤128 байт |
 | `source` | непустой RFC 3986 URI-reference ≤128 байт |
 | `type` | `name.vN`, объявленный контракт |
-| `subject` | необязательный субъект ≤128 байт |
+| `subject` | каноническая JSON-строка `RecordRef` или `EntityHandle` |
 | `time` | `occurredAt`, UTC RFC 3339 с шестью знаками микросекунд |
 | `datacontenttype` | `application/json` |
 | `dataschema` | необязательный `MessageContract::$dataSchema`, абсолютный URI без fragment |
 | `corexscope` | каноническая JSON-строка объекта scope с рекурсивной сортировкой ключей |
 | `corexpii` | `none`, `pseudonymous` или `personal` |
-| `corexenvelope` | целое `envelopeVersion`, сейчас 1 |
-| `corexcorrelation`, `corexcausation` | необязательные идентичности ≤128 байт |
+| `corexenvelope` | целое `envelopeVersion`, сейчас 2 |
+| `corexproof` | HMAC, выданный при записи в outbox и сохранённый вместе с фактом |
+| `corexcorrelation`, `corexcausation` | correlation обязательна, causation необязательна. Обе идентичности ≤128 байт |
 | `traceparent`, `tracestate` | только эти ключи metadata; tracestate требует traceparent |
 | `data` | ограниченный объект payload: ≤8 уровней, ≤256 ключей на уровень, ≤64 KiB |
 
@@ -49,8 +50,10 @@ trace; `dataschema` также отсутствует, поскольку redact
 
 ## Обязательные правила
 
-1. Потребитель идемпотентен: повтор доставки не создаёт второго эффекта. Основание
-   идемпотентности — пара «источник + id», а не содержимое.
+1. Идентичность факта включает account, incarnation, workspace scope, source и message ID.
+   Inbox добавляет стабильное имя потребителя. Мажор обработчика хранится для диагностики.
+   Повтор с тем же digest использует сохранённый receipt, а другой digest под тем же ключом
+   даёт конфликт.
 2. Модель Eloquent в payload не сериализуется; передаются неизменяемые версионированные
    значения.
 3. Сообщение несёт объявленный класс персональных данных и не превышает объявленный лимит
@@ -100,7 +103,12 @@ trace; `dataschema` также отсутствует, поскольку redact
    работу или публикация провалилась, и локальной записи, из которой можно сверить и повторить,
    нет (D25).
 
-## Обязательная форма потребителя
+## Транзакции производителя и потребителя
+
+Производитель передаёт в `Outbox::append(connection: $connection, message: $envelope)`
+тот же объект соединения Laravel с открытой транзакцией, в которой зафиксировано изменение.
+Outbox проверяет допуск и сохраняет факт до коммита. Poller подбирает готовые строки при потере
+сигнала после коммита. Повтор публикации после потери ACK сохраняет исходный message ID.
 
 При повторной доставке потребитель подтверждает доставку, не применяя бизнес-логику снова; не
 подтверждает брокеру успех до коммита локальной транзакции; не переиздаёт побочные эффекты из-за
@@ -109,9 +117,9 @@ trace; `dataschema` также отсутствует, поскольку redact
 ```php
 $this->connection->transaction(function () use ($envelope): void {
     if (! $this->inbox->claim(
-        consumer: 'search.projection.v1',
-        messageId: $envelope->messageId,
-        name: $envelope->name,
+        connection: $this->connection,
+        consumer: new ConsumerId(name: 'search.projection', version: 1),
+        message: $envelope,
     )) {
         return; // дубликат: доставка подтверждается, бизнес-эффект не повторяется
     }
@@ -120,7 +128,33 @@ $this->connection->transaction(function () use ($envelope): void {
 });
 ```
 
-Потребитель передаёт декодированный `DataScope` v3 и отдельно сохранённый `StoredWorkProof` в `StoredWorkRunner::runStored()` (`RUN-002`, `RUN-003`). Proof связывает scope с владельцем и идентификатором принятой работы. Runner проверяет proof и допуск во внешнем control store, восстанавливает tenant context и principal и проверяет физическое соединение до разрешения обработчика. Прямой вызов из аутентифицированного контекста использует `WorkScopeRunner::run()`.
+Внешний broker adapter передаёт `ConsumerId`, закрытый reference доставки и обработчик
+в `BrokerReceiver::consume()`. Receiver читает оригинальные байты через
+`BrokerDeliverySource`, проверяет происхождение и передаёт обработчику открытую транзакцию.
+Результат `Applied` или `Duplicate` возвращается после локального коммита. Неизвестный
+контракт помещается в журнал карантина брокера с SHA-256 исходных байтов и закрытым
+reference для авторизованной сверки.
+
+Владелец собственного consumer entrypoint передаёт декодированный `DataScope` v3 и `$envelope->workProof()` в
+`StoredWorkRunner::runStored()` (`RUN-002`, `RUN-003`). Proof связывает scope с владельцем
+и digest принятого факта. Runner проверяет proof и допуск во внешнем control store,
+восстанавливает tenant context и principal и проверяет физическое соединение до разрешения
+обработчика. Прямой вызов из аутентифицированного контекста использует `WorkScopeRunner::run()`.
+
+Владелец внешнего эффекта резервирует попытку в control store до сетевого вызова. Срок lease
+определяет следующего обработчика, а токен claim и epoch ограничивают запись результата.
+Наблюдение провайдера сохраняется вне tenant snapshot до записи локального receipt.
+После потери ответа переход из `unknown` опирается на подтверждённое наблюдение провайдера
+или журнал авторизованной операторской сверки. Ответ «не найдено» внутри окна eventual
+consistency оставляет эффект в `unknown`. На закрывающемся route право записать
+подтверждённый локальный receipt проверяет `ProviderRecoveryAuthority`; recovery
+запускает зарегистрированный projector владельца под исходным fence.
+Control store сохраняет первую ссылку вместе с полным журналом наблюдений. Workflow
+закрепляет идентификатор запуска из первого `Accepted` или `Confirmed` и переводит
+попытку в карантин при другой положительной ссылке. Драйвер может объявить отдельные
+идентификаторы приёма и подтверждения. Последующие подтверждения сохраняются в журнале.
+Решение об изоляции требует полномочий оператора. Reopen проверяет unresolved tickets
+под блокировкой route перед сменой fence.
 
 ## Retention
 
@@ -146,13 +180,13 @@ active subscriptions/account ≤ 100 и matching subscriptions/event ≤ 100.
 Переполнение сохраняется как dead с safe code, без truncation или произвольного URL.
 Шифрование хранения принадлежит deployment; crypto-shredding не обещается.
 
-Inbox claim `api.webhooks.v1` и deliveries коммитятся в одной tenant transaction,
-unique(subscription,event_id) исключает второй fan-out. Snapshot включает подписки
-на первой successful materialization. Сеть вне transaction. `event_id` — исходный
-message id; `webhook-id` — отдельная delivery id. Retries/replay сохраняют raw body,
-hash, destination и оба id. Доставка at-least-once, без ordering; ACK loss допускает
-повтор после receiver success. Receiver фиксирует inbox и effect атомарно.
-Lease fence защищает sender DB, но не отзывает отправленный HTTP request.
+Inbox claim и deliveries коммитятся в одной tenant transaction. Уникальный ключ
+логической области, подписки, исходного source/event ID и replay ID исключает повтор
+fan-out. Snapshot включает подписки при первой успешной материализации. Сеть вызывается
+после коммита claim. `event_id` сохраняет идентификатор факта, `webhook-id` идентифицирует
+конкретную доставку. Повтор попытки сохраняет raw body, hash, destination и оба
+идентификатора. Receiver фиксирует inbox и effect атомарно. Истечение lease лишает
+worker права записать результат. Уже отправленный запрос может завершиться у receiver.
 
 Standard Webhooks HMAC-SHA256 подписывает `delivery-id.timestamp.raw-body`;
 `whsec_` содержит strict base64 ровно 32 bytes. Timestamp и подпись свежие на каждой
@@ -170,15 +204,16 @@ TLS hostname/SNI и peer verification сохраняются. Redirects/proxies/
 Timeouts 3/10 s; response body discarded ≤ 64 KiB, headers ≤ 16 KiB. Local-only TLS tests
 отделены от production policy, которая не получает localhost exception.
 
-Lease 30 s; 2xx success, 410 disable subscription, 3xx terminal; 408/425/429, 5xx
-и network failures retry, остальные 4xx dead. Full jitter base 5 s / cap 3600 s / min 1 s,
-Retry-After ≤ 24 h; retry cycle ≤ 12 attempts / 72 h. Unknown attempt остаётся unknown;
-late ACK не меняет новую lease. Worker получает уже active trusted tenant,
-multi-account scheduler отсутствует; remote delivery default off.
+Lease 30 s. 2xx подтверждает доставку, 410 отключает подписку. Retry с исходным
+effect key допустим после подтверждённого отсутствия эффекта. Потеря ACK оставляет
+доставку в `unknown` до авторизованной сверки. Full jitter base 5 s / cap 3600 s /
+min 1 s, Retry-After ≤ 24 h, цикл ≤ 12 attempts / 72 h. Worker восстанавливает
+проверенный scope до отправки. Remote delivery по умолчанию отключена.
 
-Replay — та же delivery, не новое business event (D84). Terminal-only CAS,
-active lease конфликтует; succeeded replay требует explicit intent и audit reason.
-До 3 cycles в абсолютном горизонте 7 d; attempt sequence монотонна. Range replay требует
+Операторский replay создаёт отдельную доставку с новым effect key, ссылкой на
+исходную доставку и тем же фактом. Replay доступен для подтверждённого terminal
+исхода. Повтор успешной доставки требует явного подтверждения и причины для аудита.
+До трёх replay в горизонте 7 d. Range replay требует
 subscription, UTC window ≤ 24 h, fixed upper bound, max 100 и scoped continuation;
 idempotency возвращает прежний selection/outcome. Disabled/changed endpoint,
 revoked policy, expired body или removed topic дают отказ.
@@ -190,5 +225,4 @@ Default indefinite P5 inbox остаётся границей корректно
 не создаёт нового send после уборки body. Prune ≤ 100, tenant-scoped, Clock-based;
 expiry и отсутствие reservation никогда не разрешают refund.
 
-Schema owner и retained classes — [table-ownership.md](table-ownership.md).
-Current proof, grants, hashes и ограничения —
+Владельцы схем и правила хранения перечислены в [реестре таблиц](table-ownership.md).

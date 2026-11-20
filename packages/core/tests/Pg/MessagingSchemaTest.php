@@ -19,6 +19,7 @@ it('creates messaging tables with expected columns', function (): void {
 
     $outboxColumns = collect(Schema::getColumnListing('sys_outbox_messages'))->sort()->values()->all();
     $expectedOutbox = [
+        'account_id', 'account_incarnation', 'workspace_scope', 'deployment_id', 'binding_id', 'binding_generation', 'restore_epoch', 'digest', 'scope_seal', 'claim_token', 'message_id',
         'attempts',
         'available_at',
         'causation_id',
@@ -48,7 +49,7 @@ it('creates messaging tables with expected columns', function (): void {
     expect($outboxColumns)->toBe($expectedOutbox);
 
     $inboxColumns = collect(Schema::getColumnListing('sys_inbox_messages'))->sort()->values()->all();
-    expect($inboxColumns)->toBe(['consumer', 'message_id', 'name', 'processed_at']);
+    expect($inboxColumns)->toBe(['account_id', 'account_incarnation', 'binding_generation', 'binding_id', 'consumer', 'consumer_version', 'contract_version', 'deployment_id', 'digest', 'message_id', 'name', 'processed_at', 'restore_epoch', 'source', 'workspace_scope']);
 })->group('pg');
 
 it('defines a composite primary key on sys_inbox_messages', function (): void {
@@ -66,7 +67,7 @@ it('defines a composite primary key on sys_inbox_messages', function (): void {
         SQL,
     );
 
-    expect(collect($columns)->pluck('column_name')->all())->toBe(['consumer', 'message_id']);
+    expect(collect($columns)->pluck('column_name')->all())->toBe(['account_id', 'account_incarnation', 'workspace_scope', 'consumer', 'source', 'message_id']);
 })->group('pg');
 
 it('creates partial indexes on sys_outbox_messages hot paths', function (): void {
@@ -99,13 +100,20 @@ it('rejects duplicate inbox consumer and message_id pairs', function (): void {
     $now = now()->toIso8601String();
 
     DB::table('sys_inbox_messages')->insert([
+        'account_id' => 'a', 'account_incarnation' => 'i', 'workspace_scope' => 'account', 'deployment_id' => 'd',
+        'binding_id' => 'b', 'binding_generation' => 1, 'restore_epoch' => str_repeat('a', 64), 'digest' => str_repeat('f', 64),
+        'source' => 'urn:fact', 'consumer_version' => 1, 'contract_version' => 1,
         'consumer' => 'test-consumer',
         'message_id' => '01932f5a-0000-7000-8000-000000000001',
         'name' => 'example.event.v1',
         'processed_at' => $now,
     ]);
 
+    expect(DB::table('sys_inbox_messages')->count())->toBe(1);
     DB::table('sys_inbox_messages')->insert([
+        'account_id' => 'a', 'account_incarnation' => 'i', 'workspace_scope' => 'account', 'deployment_id' => 'd',
+        'binding_id' => 'b', 'binding_generation' => 1, 'restore_epoch' => str_repeat('a', 64), 'digest' => str_repeat('f', 64),
+        'source' => 'urn:fact', 'consumer_version' => 1, 'contract_version' => 1,
         'consumer' => 'test-consumer',
         'message_id' => '01932f5a-0000-7000-8000-000000000001',
         'name' => 'example.event.v1',

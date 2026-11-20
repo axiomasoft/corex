@@ -17,15 +17,29 @@ return new class extends PackmanMigration
     {
         $connection = $this->db();
 
-        $subscriptionStatuses = "('active', 'disabled')";
-        $deliveryStatuses = "('pending', 'sending', 'retry', 'succeeded', 'dead')";
+        $deliveryStatuses = "('pending', 'claimed', 'sending', 'retry', 'succeeded', 'dead', 'unknown', 'quarantined')";
 
         $this->create('sys_api_webhook_deliveries', function (Blueprint $table): void {
             $table->string('id', 64);
             $table->primary(['id'], 'sys_api_webhook_deliveries_pk');
+            $table->string('account_id', 128);
+            $table->string('account_incarnation', 128);
+            $table->string('workspace_scope', 138);
+            $table->string('deployment_id', 128);
+            $table->string('binding_id', 128);
+            $table->unsignedBigInteger('binding_generation');
+            $table->char('restore_epoch', 64);
             $table->string('subscription_id', 64);
             $table->unsignedBigInteger('subscription_revision');
-            $table->string('event_id', 64);
+            $table->string('event_id', 128);
+            $table->string('event_source', 255);
+            $table->string('replay_id', 64);
+            $table->string('replay_of', 64)->nullable();
+            $table->char('effect_key', 64)->unique('sys_api_webhook_deliveries_effect_uq');
+            $table->char('scope_seal', 64);
+            $table->uuid('claim_token')->nullable();
+            $table->uuid('provider_ticket')->nullable();
+            $table->string('provider_ref', 255)->nullable();
             $table->string('topic', 191);
             $table->unsignedInteger('topic_version');
             $table->string('major', 32);
@@ -43,8 +57,9 @@ return new class extends PackmanMigration
             $table->timestampTz('finished_at', precision: 6)->nullable();
             $table->timestampTz('expires_at', precision: 6);
             $table->text('last_error')->nullable();
-            $table->unique(['subscription_id', 'event_id'], 'sys_api_webhook_deliveries_event_uq');
-            $table->index(['status', 'next_attempt_at', 'lease_until'], 'sys_api_webhook_deliveries_claim_ix');
+            $table->unique(['account_id', 'account_incarnation', 'workspace_scope', 'subscription_id', 'event_source', 'event_id', 'replay_id'], 'sys_api_webhook_deliveries_event_uq');
+            $table->index(['account_id', 'account_incarnation', 'workspace_scope', 'status', 'next_attempt_at', 'id'], 'sys_api_webhook_deliveries_claim_ix');
+            $table->index(['status', 'lease_until'], 'sys_api_webhook_deliveries_reclaim_ix');
         });
         $this->addCheck($connection, 'sys_api_webhook_deliveries', 'sys_api_webhook_deliveries_status_ck',
             "status IN {$deliveryStatuses}",

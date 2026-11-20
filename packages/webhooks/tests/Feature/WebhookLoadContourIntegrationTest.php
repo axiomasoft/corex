@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Feature;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\ProviderEffectRecovery;
+use CoreX\Context\Contracts\StoredWorkIssuer;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
@@ -11,6 +14,7 @@ use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\CoreServiceProvider;
 use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
@@ -26,6 +30,7 @@ use CoreX\Operations\Testing\LoadContourModule;
 use CoreX\Operations\Testing\ModuleFixture;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Tests\Support\CallerWorkScopeFixture;
+use CoreX\Tests\Support\WorkScopeFixture;
 use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Data\ValidatedWebhookRequest;
@@ -45,7 +50,7 @@ use CoreX\Webhooks\Laravel\WebhookOptionsParser;
 use CoreX\Webhooks\Tests\Fixtures\LocalWebhookReceiver;
 use CoreX\Webhooks\WebhooksServiceProvider;
 use DateTimeImmutable;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Support\Facades\DB;
 use Orchestra\Testbench\TestCase;
 use Packman\Config\Data\SecretRef;
@@ -55,6 +60,7 @@ use Packman\Schema\Contracts\Migration\SchemaMigrator;
 use Packman\Schema\Contracts\Migration\SchemaSets;
 use Packman\Schema\Testing\MigratesSchemaSets;
 use PHPUnit\Framework\Attributes\Group;
+use Psr\Clock\ClockInterface;
 
 final class WebhookLoadContourIntegrationTest extends TestCase
 {
@@ -129,18 +135,25 @@ final class WebhookLoadContourIntegrationTest extends TestCase
 
             $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
             $connection = DB::connection('api_p1420_tenant');
-            $connection->getSchemaBuilder()->create('sys_inbox_messages', function (Blueprint $table): void {
-                $table->string('consumer', 120);
-                $table->uuid('message_id');
-                $table->string('name', 160);
-                $table->timestampTz('processed_at', precision: 6);
-                $table->primary(['consumer', 'message_id']);
-            });
+            $core = resolve(SchemaSets::class)->get('axiomasoft/corex:tenant');
+            $inbox = $core->path.'/2026_10_01_010130_create_sys_inbox_messages.php';
+            self::assertFileExists($inbox);
+            $migrator = resolve(Migrator::class);
+            $migrator->usingConnection('api_p1420_tenant', static fn () => $migrator->run([$inbox]));
+            DB::setDefaultConnection('api_p1420_tenant');
             $clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
             $catalogue = $this->catalogue();
             $contexts = new ContextFixture;
             $contexts->initialize(new AccountRef('account-1', 'account-1', 'active', [], []));
-            $fanout = new WebhookFanout($connection, MessagingFixtures::inbox($connection, $clock), $catalogue, ['orders.placed' => new WebhookLoadContourIntegrationLoadContourProjector], $clock, new JsonCloudEventCodec(MessagingFixtures::contracts([new MessageContract('orders.placed', 1, MessageClass::IntegrationEvent, 'orders/api', PiiClass::Personal, 'webhooks')])), resolve(DataScopeCodec::class), new CallerWorkScopeFixture($contexts));
+            $this->app->instance(TenantContextResolver::class, $contexts);
+            $this->app->instance(TenancyManager::class, $contexts);
+            $this->app->instance(ClockInterface::class, $clock);
+            $scope = WorkScopeFixture::install($this->app)->scope($contexts->current());
+            $contracts = MessagingFixtures::contracts([new MessageContract('orders.placed', 1, MessageClass::IntegrationEvent, 'orders/api', PiiClass::Personal, 'webhooks')]);
+            $codec = resolve(DataScopeCodec::class);
+            $current = resolve(CurrentWorkScope::class);
+            $fanout = new WebhookFanout($connection, MessagingFixtures::inbox($current, $contracts, $clock), $catalogue, ['orders.placed' => new WebhookLoadContourIntegrationLoadContourProjector], $clock, new JsonCloudEventCodec($contracts, $codec), $codec, $current, resolve(StoredWorkIssuer::class));
+
             $now = $clock->now();
             $connection->table('sys_api_webhook_subscriptions')->insert([
                 'id' => 'sub-local',
@@ -155,14 +168,14 @@ final class WebhookLoadContourIntegrationTest extends TestCase
                 'created_at' => $now,
                 'updated_at' => $now,
             ]);
-            $scope = CallerWorkScopeFixture::scope('account-1', null, 'actor-1', hash('sha256', 'p1420-restore'));
             $envelope = new MessageEnvelope(
                 messageId: '55555555-5555-4555-8555-555555555555',
                 source: 'orders',
                 name: 'orders.placed',
                 contractVersion: 1,
                 occurredAt: $now,
-                scope: resolve(DataScopeCodec::class)->encode($scope),
+                scope: $scope,
+                subject: new RecordRef('orders.order', 'order-1'),
                 payload: new MessagePayload(['id' => 'order-1', 'secret' => 'hidden']),
                 piiClass: PiiClass::Personal,
                 correlationId: 'correlation-1',
@@ -180,7 +193,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
             $keys->provision('current', new SecretRef(self::Secret), 0);
             $receiver = new LocalWebhookReceiver([self::Secret], $clock->now()->getTimestamp());
             $worker = new WebhookDeliveryWorker(
-                store: new SqlWebhookDeliveryStore($connection, new CallerWorkScopeFixture($contexts), $clock, new WebhookRetryPolicy(WebhookOptionsParser::fromArray([]))),
+                store: new SqlWebhookDeliveryStore($connection, $current, $clock, new WebhookRetryPolicy(WebhookOptionsParser::fromArray([])), receiptRecovery: static fn (): ProviderEffectRecovery => resolve(ProviderEffectRecovery::class)),
                 signer: new HmacWebhookSigner($keys),
                 urlPolicy: new WebhookUrlPolicy(static fn (): array => ['93.184.216.34']),
                 transport: $receiver,

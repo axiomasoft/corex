@@ -685,14 +685,14 @@ def install_app(
     env_file = consumer / ".env"
     if not env_file.exists() and example.exists():
         env_file.write_text(example.read_text(encoding="utf-8"), encoding="utf-8")
+    runtime = {**env, **configure_database(consumer, profile, cell["id"], isolated or {})}
+    for overlay in host_overlays:
+        shutil.copytree(overlay, consumer, dirs_exist_ok=True)
     closure = dist_closure(packages, load_json(repository / "packages.json")["packages"])
     if "axiomasoft/corex-operations" in closure:
         providers = consumer / "bootstrap/providers.php"
         contents = providers.read_text(encoding="utf-8")
         providers.write_text(contents.replace("return [", "return [\n    \\CoreX\\Operations\\OperationsServiceProvider::class,", 1), encoding="utf-8")
-    runtime = {**env, **configure_database(consumer, profile, cell["id"], isolated or {})}
-    for overlay in host_overlays:
-        shutil.copytree(overlay, consumer, dirs_exist_ok=True)
     generated = run(["php", "artisan", "key:generate", "--ansi", "--force"], consumer, runtime)
     if generated.returncode != 0:
         fail_command(cell["id"], generated)

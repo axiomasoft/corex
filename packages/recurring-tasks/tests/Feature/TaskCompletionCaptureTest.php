@@ -17,6 +17,8 @@ use CoreX\Tasks\Task\Internal\Models\Task;
 use CoreX\Workflow\Contracts\WorkflowBinding;
 use CoreX\Workflow\Data\CaptureResult;
 use CoreX\Workflow\Data\TriggerRequest;
+use CoreX\Workflow\Enums\CaptureStatus;
+use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -38,13 +40,14 @@ beforeEach(function (): void {
 
 it('captures synchronously with a DTO and deduplicates the receipt on repeated completion', function (): void {
     $binding = Mockery::mock(WorkflowBinding::class);
-    $binding->shouldReceive('capture')->once()->withArgs(function (TriggerRequest $request): bool {
-        expect(DB::connection()->transactionLevel())->toBeGreaterThan(0)
+    $binding->shouldReceive('capture')->once()->withArgs(function (TriggerRequest $request, Connection $connection): bool {
+        expect($connection)->toBe(DB::connection())
+            ->and($connection->transactionLevel())->toBeGreaterThan(0)
             ->and(JsonDocuments::map($request->scalarSnapshot))->toBe(['taskId' => $this->taskId, 'status' => 'done'])
             ->and(Task::query()->findOrFail($this->taskId)->status)->toBe(TaskStatus::Open);
 
         return true;
-    })->andReturn(new CaptureResult('captured'));
+    })->andReturn(new CaptureResult(CaptureStatus::Created, 'intent:1', str_repeat('a', 64)));
     app()->instance(WorkflowBinding::class, $binding);
     $data = new CompleteTaskData(taskId: $this->taskId, actor: $this->actor);
     resolve(CompleteTaskCommand::class)->handle($data);
@@ -61,11 +64,11 @@ it('captures synchronously with a DTO and deduplicates the receipt on repeated c
 
 it('rolls the task and already recorded receipt back when a later synchronous contributor throws', function (): void {
     $binding = Mockery::mock(WorkflowBinding::class);
-    $binding->shouldReceive('capture')->once()->andReturn(new CaptureResult('captured'));
+    $binding->shouldReceive('capture')->once()->andReturn(new CaptureResult(CaptureStatus::Created, 'intent:1', str_repeat('a', 64)));
     app()->instance(WorkflowBinding::class, $binding);
     app()->instance('test.failing-capture', new class implements TaskCompletionCapture
     {
-        public function capture(TaskCompletionCandidate $candidate): void
+        public function capture(TaskCompletionCandidate $candidate, Connection $connection): void
         {
             if ($candidate->status === TaskStatus::Done && $candidate->statusChanged) {
                 throw new RuntimeException('Contributor failed');
@@ -80,15 +83,26 @@ it('rolls the task and already recorded receipt back when a later synchronous co
         ->and(DB::table('corex_task_operations')->count())->toBe(0);
 });
 
-it('preserves normal saves when capture is disabled or the workflow binding is missing', function (bool $disabled): void {
-    if ($disabled) {
-        config()->set('corex-recurring-tasks.completion_capture.enabled', false);
-        app()->forgetInstance(RecurringTasksOptions::class);
-        $binding = Mockery::mock(WorkflowBinding::class);
-        $binding->shouldNotReceive('capture');
-        app()->instance(WorkflowBinding::class, $binding);
-    }
+it('preserves normal saves when capture is disabled', function (): void {
+    config()->set('corex-recurring-tasks.completion_capture.enabled', false);
+    app()->forgetInstance(RecurringTasksOptions::class);
+    $binding = Mockery::mock(WorkflowBinding::class);
+    $binding->shouldNotReceive('capture');
+    app()->instance(WorkflowBinding::class, $binding);
+
     resolve(CompleteTaskCommand::class)->handle(new CompleteTaskData(taskId: $this->taskId, actor: $this->actor));
+
     expect(Task::query()->findOrFail($this->taskId)->status)->toBe(TaskStatus::Done)
         ->and(DB::table('corex_task_operations')->count())->toBe(0);
-})->with([true, false]);
+});
+
+it('rolls back the completion when the workflow returns a conflict', function (): void {
+    $binding = Mockery::mock(WorkflowBinding::class);
+    $binding->shouldReceive('capture')->once()->andReturn(new CaptureResult(CaptureStatus::Conflict));
+    app()->instance(WorkflowBinding::class, $binding);
+
+    expect(fn () => resolve(CompleteTaskCommand::class)->handle(new CompleteTaskData(taskId: $this->taskId, actor: $this->actor)))
+        ->toThrow(LogicException::class, 'Conflicting workflow completion intent for the task.');
+    expect(Task::query()->findOrFail($this->taskId)->status)->toBe(TaskStatus::Open)
+        ->and(DB::table('corex_task_operations')->count())->toBe(0);
+});

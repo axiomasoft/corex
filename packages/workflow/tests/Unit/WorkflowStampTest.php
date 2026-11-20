@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Workflow\Data\TriggerRequest;
-use CoreX\Workflow\Internal\WorkflowDefinitionStamp;
+use CoreX\Workflow\Execution\Internal\WorkflowDefinitionStamp;
 use Packman\Modules\Data\Compiler\ExtensionStamp;
 
 function stampRequest(string $definitionRef = 'definition:1', string $versionRef = 'version:1'): TriggerRequest
 {
     return new TriggerRequest(
         context: new TenantContext(new AccountRef('11111111-1111-7111-8111-111111111111', 'workflow-test', 'active', [], [])),
+        scope: new DataScope(
+            'fixture-deployment', '11111111-1111-7111-8111-111111111111', null,
+            'fixture-binding', 1, 'fixture-incarnation', str_repeat('a', 64), 'user', 'actor',
+        ),
         module: 'axiomasoft/corex-workflow',
         entityHandle: 'test.ticket',
         eventId: 'event:1',
@@ -42,7 +47,7 @@ it('derives the trigger identity and keeps the fingerprint out of the replay has
         ->and($stored['registryFingerprint'])->toBe('fingerprint-a')
         ->and(WorkflowDefinitionStamp::payloadHash('trigger', 'workflow:stamp:1', WorkflowDefinitionStamp::canonicalPayload($stored)))
         ->toBe(WorkflowDefinitionStamp::payloadHash('trigger', 'workflow:stamp:1', WorkflowDefinitionStamp::canonicalPayload($drifted)))
-        ->and(WorkflowDefinitionStamp::schemaOf($stored, 'definition:1', 'version:1'))->toBe('versioned');
+        ->and(WorkflowDefinitionStamp::matches($stored, $stamp))->toBeTrue();
 });
 
 it('uses module-free provenance when no registry fingerprint is available', function (): void {
@@ -58,10 +63,8 @@ it('rejects empty definition and version refs before a stamp is built', function
     'blank version' => ['definition:1', ' '],
 ])->throws(InvalidArgumentException::class);
 
-it('keeps the legacy comparison for non-empty refs that have no identity schema', function (): void {
-    $business = ['event_name' => 'created'];
+it('rejects a missing identity schema despite pinned ref strings', function (): void {
+    $stamp = WorkflowDefinitionStamp::fromRequest(stampRequest(), 'fingerprint-a');
 
-    expect(WorkflowDefinitionStamp::schemaOf($business, 'definition:1', 'version:1'))->toBe('legacy')
-        ->and(WorkflowDefinitionStamp::legacyPayloadHash('trigger', 'workflow:stamp:1', $business))
-        ->not->toBe(WorkflowDefinitionStamp::payloadHash('trigger', 'workflow:stamp:1', $business));
+    expect(WorkflowDefinitionStamp::matches(['event_name' => 'created'], $stamp))->toBeFalse();
 });

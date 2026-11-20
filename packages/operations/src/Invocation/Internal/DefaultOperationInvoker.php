@@ -14,9 +14,12 @@ use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
 use CoreX\Operations\Authorization\Laravel\DeclaredFieldAuthorizer;
 use CoreX\Operations\Cost\Contracts\BudgetExecution as BudgetAdmission;
+use CoreX\Operations\Cost\Data\BudgetAttempt;
+use CoreX\Operations\Cost\Data\BudgetInvocationResult;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
+use CoreX\Operations\Invocation\Contracts\TransactionalOperationInvoker;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Data\OperationResult;
 use Illuminate\Contracts\Container\Container;
@@ -26,7 +29,7 @@ use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 /** Transport-neutral activation, authorization and exactly-once handler call. */
 #[Internal]
-final readonly class DefaultOperationInvoker implements OperationInvoker
+final readonly class DefaultOperationInvoker implements OperationInvoker, TransactionalOperationInvoker
 {
     public function __construct(
         private ModuleRegistry $modules,
@@ -38,6 +41,16 @@ final readonly class DefaultOperationInvoker implements OperationInvoker
     ) {}
 
     public function invoke(OperationInvocation $invocation): OperationResult
+    {
+        return $this->run($invocation, null)->result;
+    }
+
+    public function invokeTransactional(OperationInvocation $invocation, BudgetAttempt $attempt): BudgetInvocationResult
+    {
+        return $this->run($invocation, $attempt);
+    }
+
+    private function run(OperationInvocation $invocation, ?BudgetAttempt $attempt): BudgetInvocationResult
     {
         $operation = $invocation->operation;
 
@@ -98,19 +111,24 @@ final readonly class DefaultOperationInvoker implements OperationInvoker
                 )));
             };
 
-            $result = $this->budget === null
-                ? $this->admitOnce(static fn (): OperationResult => $effect(static function (): void {}))
-                : $this->budget->invoke(invocation: $invocation, effect: $effect);
+            $execution = match (true) {
+                $this->budget === null => new BudgetInvocationResult($this->admitOnce(static fn (): OperationResult => $effect(static function (): void {}))),
+                $attempt === null => new BudgetInvocationResult($this->budget->invoke($invocation, $effect)),
+                default => $this->budget->invokeTransactional($invocation, $effect, $attempt),
+            };
         } finally {
             $this->restore($previous);
         }
 
-        return new OperationResult(data: JsonDocuments::capture(DeclaredFieldAuthorizer::prune(
+        $result = $execution->result;
+        $output = new OperationResult(data: JsonDocuments::capture(DeclaredFieldAuthorizer::prune(
             operation: $operation,
             context: $invocation->context,
             authorizer: $this->fields,
             data: JsonDocuments::array($result->data),
         )), replayed: $result->replayed, metadata: JsonDocuments::capture(JsonDocuments::map($result->metadata)));
+
+        return new BudgetInvocationResult($output, $execution->receipt);
     }
 
     /**

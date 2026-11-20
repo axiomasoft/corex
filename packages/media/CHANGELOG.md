@@ -1,5 +1,9 @@
 # Changelog
 
+## CoreX 2.0 — Durable effects
+
+- Persist a scoped conversion intent and Vaulter receipt. An after-commit wakeup accelerates the durable sweep, and expired claims cannot publish a conversion.
+
 ## Unreleased — Packman governance
 
 - Factory signatures expose ConversionDriver rather than the private GD implementation.

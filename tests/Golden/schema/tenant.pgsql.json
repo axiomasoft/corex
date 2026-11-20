@@ -4018,6 +4018,16 @@
         },
         "med_conversions": {
             "columns": {
+                "account_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
                 "blob_id": {
                     "type": "character varying(128)",
                     "nullable": true,
@@ -4087,27 +4097,35 @@
                     "type": "integer",
                     "nullable": true,
                     "default": null
+                },
+                "workspace_scope": {
+                    "type": "character varying(138)",
+                    "nullable": false,
+                    "default": null
                 }
             },
             "indexes": [
                 {
-                    "name": "med_conversions_file_id_profile_key_profile_digest__67e95e41_uq",
-                    "kind": "uq",
+                    "name": "med_conversions_pk",
+                    "kind": "pk",
                     "columns": [
-                        "file_id",
-                        "profile_key",
-                        "profile_digest",
-                        "source_version"
+                        "id"
                     ],
                     "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
                 },
                 {
-                    "name": "med_conversions_pk",
-                    "kind": "pk",
+                    "name": "med_conversions_scope_file_profile_uq",
+                    "kind": "uq",
                     "columns": [
-                        "id"
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "file_id",
+                        "source_version",
+                        "profile_key",
+                        "profile_digest"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -4246,18 +4264,58 @@
         },
         "med_operations": {
             "columns": {
+                "account_id": {
+                    "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                },
                 "attempts": {
                     "type": "bigint",
                     "nullable": false,
                     "default": "'0'::bigint"
+                },
+                "binding_generation": {
+                    "type": "bigint",
+                    "nullable": true,
+                    "default": null
+                },
+                "binding_id": {
+                    "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                },
+                "blob_receipt": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
                 },
                 "claim_epoch": {
                     "type": "bigint",
                     "nullable": false,
                     "default": "'0'::bigint"
                 },
+                "claim_token": {
+                    "type": "uuid",
+                    "nullable": true,
+                    "default": null
+                },
+                "conversion_scope": {
+                    "type": "json",
+                    "nullable": true,
+                    "default": null
+                },
                 "created_at": {
                     "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "deployment_id": {
+                    "type": "character varying(128)",
                     "nullable": true,
                     "default": null
                 },
@@ -4301,6 +4359,16 @@
                     "nullable": true,
                     "default": null
                 },
+                "restore_epoch": {
+                    "type": "character(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "scope_seal": {
+                    "type": "character(64)",
+                    "nullable": true,
+                    "default": null
+                },
                 "source_version": {
                     "type": "bigint",
                     "nullable": true,
@@ -4313,6 +4381,11 @@
                 },
                 "updated_at": {
                     "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "workspace_scope": {
+                    "type": "character varying(138)",
                     "nullable": true,
                     "default": null
                 }
@@ -4734,6 +4807,16 @@
         },
         "ntf_deliveries": {
             "columns": {
+                "account_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
                 "admitted_revision": {
                     "type": "numeric(20,0)",
                     "nullable": false,
@@ -4741,6 +4824,16 @@
                 },
                 "attempts": {
                     "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_generation": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_id": {
+                    "type": "character varying(128)",
                     "nullable": false,
                     "default": null
                 },
@@ -4754,8 +4847,18 @@
                     "nullable": false,
                     "default": null
                 },
+                "claim_token": {
+                    "type": "uuid",
+                    "nullable": true,
+                    "default": null
+                },
                 "delivery_key": {
                     "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "deployment_id": {
+                    "type": "character varying(128)",
                     "nullable": false,
                     "default": null
                 },
@@ -4809,9 +4912,34 @@
                     "nullable": true,
                     "default": null
                 },
+                "provider_namespace": {
+                    "type": "character varying(191)",
+                    "nullable": true,
+                    "default": null
+                },
                 "provider_ref": {
                     "type": "character varying(255)",
                     "nullable": true,
+                    "default": null
+                },
+                "provider_ticket": {
+                    "type": "uuid",
+                    "nullable": true,
+                    "default": null
+                },
+                "restore_epoch": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope": {
+                    "type": "json",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_seal": {
+                    "type": "character(64)",
+                    "nullable": false,
                     "default": null
                 },
                 "sent_at": {
@@ -4820,13 +4948,23 @@
                     "default": null
                 },
                 "state": {
-                    "type": "character varying(16)",
+                    "type": "character varying(32)",
                     "nullable": false,
+                    "default": null
+                },
+                "target_reference": {
+                    "type": "text",
+                    "nullable": true,
                     "default": null
                 },
                 "template_version": {
                     "type": "character varying(128)",
                     "nullable": true,
+                    "default": null
+                },
+                "workspace_scope": {
+                    "type": "character varying(138)",
+                    "nullable": false,
                     "default": null
                 }
             },
@@ -4836,6 +4974,28 @@
                     "kind": "uq",
                     "columns": [
                         "delivery_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "ntf_deliveries_digest_channel_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "digest_run_id",
+                        "channel"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "ntf_deliveries_notification_channel_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "notification_id",
+                        "channel"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -4855,8 +5015,12 @@
                     "name": "ntf_deliveries_scan_ix",
                     "kind": "ix",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
                         "state",
-                        "next_attempt"
+                        "next_attempt",
+                        "id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -4965,6 +5129,16 @@
         },
         "ntf_digest_runs": {
             "columns": {
+                "account_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
                 "batch_seq": {
                     "type": "bigint",
                     "nullable": false,
@@ -5029,9 +5203,31 @@
                     "type": "character varying(16)",
                     "nullable": false,
                     "default": null
+                },
+                "workspace_scope": {
+                    "type": "character varying(138)",
+                    "nullable": false,
+                    "default": null
                 }
             },
             "indexes": [
+                {
+                    "name": "ntf_digest_runs_identity_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "recipient_kind",
+                        "recipient_id",
+                        "period",
+                        "period_start",
+                        "batch_seq"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
                 {
                     "name": "ntf_digest_runs_pk",
                     "kind": "pk",
@@ -5043,15 +5239,14 @@
                     "nulls_not_distinct": false
                 },
                 {
-                    "name": "ntf_digest_runs_recipient_kind_recipient_id_period__27ecc408_uq",
-                    "kind": "uq",
+                    "name": "ntf_digest_runs_scan_ix",
+                    "kind": "ix",
                     "columns": [
-                        "scope_key",
-                        "recipient_kind",
-                        "recipient_id",
-                        "period",
-                        "period_start",
-                        "batch_seq"
+                        "account_id",
+                        "account_incarnation",
+                        "state",
+                        "period_end",
+                        "id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -5064,6 +5259,16 @@
         },
         "ntf_notifications": {
             "columns": {
+                "account_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
                 "cancelled_at": {
                     "type": "timestamp(0) with time zone",
                     "nullable": true,
@@ -5077,6 +5282,11 @@
                 "dismissed_at": {
                     "type": "timestamp(0) with time zone",
                     "nullable": true,
+                    "default": null
+                },
+                "event_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
                     "default": null
                 },
                 "event_type": {
@@ -5119,17 +5329,17 @@
                     "nullable": false,
                     "default": null
                 },
-                "request_key": {
-                    "type": "character varying(128)",
-                    "nullable": false,
-                    "default": null
-                },
                 "revision": {
                     "type": "numeric(20,0)",
                     "nullable": false,
                     "default": null
                 },
-                "template_key": {
+                "source": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "template_action": {
                     "type": "character varying(128)",
                     "nullable": false,
                     "default": null
@@ -5138,9 +5348,31 @@
                     "type": "timestamp(0) with time zone",
                     "nullable": true,
                     "default": null
+                },
+                "workspace_scope": {
+                    "type": "character varying(138)",
+                    "nullable": false,
+                    "default": null
                 }
             },
             "indexes": [
+                {
+                    "name": "ntf_notifications_intent_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "recipient_kind",
+                        "recipient_id",
+                        "source",
+                        "event_id",
+                        "template_action"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
                 {
                     "name": "ntf_notifications_pk",
                     "kind": "pk",
@@ -5152,21 +5384,12 @@
                     "nulls_not_distinct": false
                 },
                 {
-                    "name": "ntf_notifications_recipient_kind_recipient_id_request_key_uq",
-                    "kind": "uq",
-                    "columns": [
-                        "recipient_kind",
-                        "recipient_id",
-                        "request_key"
-                    ],
-                    "predicate": null,
-                    "method": "btree",
-                    "nulls_not_distinct": false
-                },
-                {
                     "name": "ntf_notifications_scan_ix",
                     "kind": "ix",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
                         "recipient_kind",
                         "recipient_id",
                         "read_at",
@@ -5183,6 +5406,16 @@
         },
         "ntf_recipient_state": {
             "columns": {
+                "account_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
                 "id": {
                     "type": "character varying(128)",
                     "nullable": false,
@@ -5197,6 +5430,11 @@
                     "type": "numeric(20,0)",
                     "nullable": false,
                     "default": null
+                },
+                "workspace_scope": {
+                    "type": "character varying(138)",
+                    "nullable": false,
+                    "default": null
                 }
             },
             "indexes": [
@@ -5204,6 +5442,9 @@
                     "name": "ntf_recipient_state_pk",
                     "kind": "pk",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
                         "kind",
                         "id"
                     ],
@@ -5473,8 +5714,38 @@
         },
         "sys_api_idempotency": {
             "columns": {
+                "account_id": {
+                    "type": "character varying(191)",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "character varying(191)",
+                    "nullable": false,
+                    "default": null
+                },
+                "api_major": {
+                    "type": "character varying(32)",
+                    "nullable": false,
+                    "default": null
+                },
                 "attempt": {
                     "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_generation": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_id": {
+                    "type": "character varying(191)",
+                    "nullable": false,
+                    "default": null
+                },
+                "client_scope": {
+                    "type": "character varying(263)",
                     "nullable": false,
                     "default": null
                 },
@@ -5485,6 +5756,11 @@
                 },
                 "created_at": {
                     "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": null
+                },
+                "deployment_id": {
+                    "type": "character varying(191)",
                     "nullable": false,
                     "default": null
                 },
@@ -5508,12 +5784,32 @@
                     "nullable": true,
                     "default": null
                 },
+                "operation_id": {
+                    "type": "character varying(255)",
+                    "nullable": false,
+                    "default": null
+                },
                 "outcome_json": {
                     "type": "json",
                     "nullable": true,
                     "default": null
                 },
+                "principal_id": {
+                    "type": "character varying(191)",
+                    "nullable": false,
+                    "default": null
+                },
+                "principal_kind": {
+                    "type": "character varying(32)",
+                    "nullable": false,
+                    "default": null
+                },
                 "request_fingerprint": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "restore_epoch": {
                     "type": "character(64)",
                     "nullable": false,
                     "default": null
@@ -5532,9 +5828,25 @@
                     "type": "timestamp(6) with time zone",
                     "nullable": false,
                     "default": null
+                },
+                "workspace_scope": {
+                    "type": "character varying(201)",
+                    "nullable": false,
+                    "default": null
                 }
             },
             "indexes": [
+                {
+                    "name": "sys_api_idempotency_lookup_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "scope_hash",
+                        "key_hash"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
                 {
                     "name": "sys_api_idempotency_retention_ix",
                     "kind": "ix",
@@ -5550,7 +5862,14 @@
                     "name": "sys_api_idempotency_scope_key_uq",
                     "kind": "uq",
                     "columns": [
-                        "scope_hash",
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "principal_kind",
+                        "principal_id",
+                        "client_scope",
+                        "api_major",
+                        "operation_id",
                         "key_hash"
                     ],
                     "predicate": null,
@@ -5660,8 +5979,28 @@
         },
         "sys_api_webhook_deliveries": {
             "columns": {
+                "account_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
                 "attempt": {
                     "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_generation": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_id": {
+                    "type": "character varying(128)",
                     "nullable": false,
                     "default": null
                 },
@@ -5675,8 +6014,23 @@
                     "nullable": false,
                     "default": null
                 },
+                "claim_token": {
+                    "type": "uuid",
+                    "nullable": true,
+                    "default": null
+                },
                 "created_at": {
                     "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": null
+                },
+                "deployment_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "effect_key": {
+                    "type": "character(64)",
                     "nullable": false,
                     "default": null
                 },
@@ -5686,7 +6040,12 @@
                     "default": null
                 },
                 "event_id": {
-                    "type": "character varying(64)",
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "event_source": {
+                    "type": "character varying(255)",
                     "nullable": false,
                     "default": null
                 },
@@ -5730,13 +6089,43 @@
                     "nullable": false,
                     "default": null
                 },
+                "provider_ref": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "provider_ticket": {
+                    "type": "uuid",
+                    "nullable": true,
+                    "default": null
+                },
                 "replay_count": {
                     "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
+                "replay_id": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "replay_of": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "restore_epoch": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
                 "scope": {
                     "type": "json",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_seal": {
+                    "type": "character(64)",
                     "nullable": false,
                     "default": null
                 },
@@ -5764,6 +6153,11 @@
                     "type": "integer",
                     "nullable": false,
                     "default": null
+                },
+                "workspace_scope": {
+                    "type": "character varying(138)",
+                    "nullable": false,
+                    "default": null
                 }
             },
             "indexes": [
@@ -5771,9 +6165,22 @@
                     "name": "sys_api_webhook_deliveries_claim_ix",
                     "kind": "ix",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
                         "status",
                         "next_attempt_at",
-                        "lease_until"
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "sys_api_webhook_deliveries_effect_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "effect_key"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -5783,8 +6190,13 @@
                     "name": "sys_api_webhook_deliveries_event_uq",
                     "kind": "uq",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
                         "subscription_id",
-                        "event_id"
+                        "event_source",
+                        "event_id",
+                        "replay_id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -5799,6 +6211,17 @@
                     "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
+                },
+                {
+                    "name": "sys_api_webhook_deliveries_reclaim_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "status",
+                        "lease_until"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -5809,7 +6232,7 @@
                 },
                 {
                     "name": "sys_api_webhook_deliveries_status_ck",
-                    "expression": "((status)::text = ANY ((ARRAY['pending'::character varying, 'sending'::character varying, 'retry'::character varying, 'succeeded'::character varying, 'dead'::character varying])::text[]))"
+                    "expression": "((status)::text = ANY ((ARRAY['pending'::character varying, 'claimed'::character varying, 'sending'::character varying, 'retry'::character varying, 'succeeded'::character varying, 'dead'::character varying, 'unknown'::character varying, 'quarantined'::character varying])::text[]))"
                 }
             ],
             "triggers": []
@@ -6976,13 +7399,53 @@
         },
         "sys_inbox_messages": {
             "columns": {
+                "account_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_generation": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
                 "consumer": {
                     "type": "character varying(120)",
                     "nullable": false,
                     "default": null
                 },
+                "consumer_version": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "contract_version": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "deployment_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "digest": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
                 "message_id": {
-                    "type": "uuid",
+                    "type": "character varying(128)",
                     "nullable": false,
                     "default": null
                 },
@@ -6995,6 +7458,21 @@
                     "type": "timestamp(6) with time zone",
                     "nullable": false,
                     "default": null
+                },
+                "restore_epoch": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "source": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "workspace_scope": {
+                    "type": "character varying(140)",
+                    "nullable": false,
+                    "default": null
                 }
             },
             "indexes": [
@@ -7002,7 +7480,11 @@
                     "name": "sys_inbox_messages_pk",
                     "kind": "pk",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
                         "consumer",
+                        "source",
                         "message_id"
                     ],
                     "predicate": null,
@@ -7026,6 +7508,16 @@
         },
         "sys_outbox_messages": {
             "columns": {
+                "account_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
                 "attempts": {
                     "type": "bigint",
                     "nullable": false,
@@ -7036,8 +7528,23 @@
                     "nullable": false,
                     "default": null
                 },
+                "binding_generation": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
                 "causation_id": {
                     "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                },
+                "claim_token": {
+                    "type": "uuid",
                     "nullable": true,
                     "default": null
                 },
@@ -7048,7 +7555,7 @@
                 },
                 "correlation_id": {
                     "type": "character varying(128)",
-                    "nullable": true,
+                    "nullable": false,
                     "default": null
                 },
                 "created_at": {
@@ -7059,6 +7566,16 @@
                 "dead_at": {
                     "type": "timestamp(6) with time zone",
                     "nullable": true,
+                    "default": null
+                },
+                "deployment_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "digest": {
+                    "type": "character(64)",
+                    "nullable": false,
                     "default": null
                 },
                 "envelope_version": {
@@ -7091,6 +7608,11 @@
                     "nullable": true,
                     "default": null
                 },
+                "message_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
                 "metadata": {
                     "type": "json",
                     "nullable": false,
@@ -7121,8 +7643,18 @@
                     "nullable": true,
                     "default": null
                 },
+                "restore_epoch": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
                 "scope": {
                     "type": "json",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_seal": {
+                    "type": "character(64)",
                     "nullable": false,
                     "default": null
                 },
@@ -7137,14 +7669,19 @@
                     "default": null
                 },
                 "subject": {
-                    "type": "character varying(128)",
-                    "nullable": true,
+                    "type": "json",
+                    "nullable": false,
                     "default": null
                 },
                 "updated_at": {
                     "type": "timestamp(6) with time zone",
                     "nullable": false,
                     "default": "CURRENT_TIMESTAMP"
+                },
+                "workspace_scope": {
+                    "type": "character varying(140)",
+                    "nullable": false,
+                    "default": null
                 }
             },
             "indexes": [
@@ -7153,7 +7690,6 @@
                     "kind": "ix",
                     "columns": [
                         "available_at",
-                        "occurred_at",
                         "id"
                     ],
                     "predicate": "((status)::text = 'pending'::text)",
@@ -7168,6 +7704,20 @@
                         "id"
                     ],
                     "predicate": "((status)::text = 'dead'::text)",
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "sys_outbox_messages_fact_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "source",
+                        "message_id"
+                    ],
+                    "predicate": null,
                     "method": "btree",
                     "nulls_not_distinct": false
                 },
@@ -7733,35 +8283,60 @@
         },
         "sys_workflow_intents": {
             "columns": {
+                "account_id": {
+                    "type": "character varying(191)",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "character varying(191)",
+                    "nullable": false,
+                    "default": null
+                },
                 "attempt": {
                     "type": "bigint",
                     "nullable": false,
                     "default": "'0'::bigint"
                 },
-                "claim_epoch": {
+                "binding_generation": {
                     "type": "bigint",
-                    "nullable": false,
-                    "default": "'0'::bigint"
-                },
-                "context_hash": {
-                    "type": "character(64)",
                     "nullable": false,
                     "default": null
                 },
+                "binding_id": {
+                    "type": "character varying(191)",
+                    "nullable": false,
+                    "default": null
+                },
+                "claim_token": {
+                    "type": "uuid",
+                    "nullable": true,
+                    "default": null
+                },
                 "created_at": {
-                    "type": "timestamp(0) without time zone",
+                    "type": "timestamp(6) without time zone",
                     "nullable": true,
                     "default": null
                 },
                 "definition_ref": {
                     "type": "character varying(255)",
+                    "nullable": false,
+                    "default": null
+                },
+                "deployment_id": {
+                    "type": "character varying(191)",
+                    "nullable": false,
+                    "default": null
+                },
+                "due_at": {
+                    "type": "timestamp(6) with time zone",
                     "nullable": true,
                     "default": null
                 },
-                "generation": {
-                    "type": "bigint",
+                "effect_key": {
+                    "type": "character(64)",
                     "nullable": false,
-                    "default": "'0'::bigint"
+                    "default": null
                 },
                 "id": {
                     "type": "uuid",
@@ -7771,6 +8346,11 @@
                 "kind": {
                     "type": "character varying(16)",
                     "nullable": false,
+                    "default": null
+                },
+                "lease_until": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
                     "default": null
                 },
                 "module": {
@@ -7793,12 +8373,37 @@
                     "nullable": true,
                     "default": null
                 },
+                "provider_namespace": {
+                    "type": "character varying(96)",
+                    "nullable": false,
+                    "default": null
+                },
+                "provider_receipt": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "provider_ticket": {
+                    "type": "uuid",
+                    "nullable": true,
+                    "default": null
+                },
                 "request_key": {
                     "type": "character varying(128)",
                     "nullable": false,
                     "default": null
                 },
                 "restore_epoch": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_json": {
+                    "type": "json",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_seal": {
                     "type": "character(64)",
                     "nullable": false,
                     "default": null
@@ -7814,17 +8419,42 @@
                     "default": null
                 },
                 "updated_at": {
-                    "type": "timestamp(0) without time zone",
+                    "type": "timestamp(6) without time zone",
                     "nullable": true,
                     "default": null
                 },
                 "version_ref": {
                     "type": "character varying(255)",
+                    "nullable": false,
+                    "default": null
+                },
+                "worker_claim": {
+                    "type": "uuid",
                     "nullable": true,
+                    "default": null
+                },
+                "workspace_id": {
+                    "type": "character varying(191)",
+                    "nullable": true,
+                    "default": null
+                },
+                "workspace_scope": {
+                    "type": "character varying(201)",
+                    "nullable": false,
                     "default": null
                 }
             },
             "indexes": [
+                {
+                    "name": "sys_workflow_intents_effect_key_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "effect_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
                 {
                     "name": "sys_workflow_intents_pk",
                     "kind": "pk",
@@ -7839,6 +8469,11 @@
                     "name": "sys_workflow_intents_request_key_uq",
                     "kind": "uq",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "module",
+                        "kind",
                         "request_key"
                     ],
                     "predicate": null,
@@ -7846,11 +8481,23 @@
                     "nulls_not_distinct": false
                 },
                 {
-                    "name": "sys_workflow_intents_state_updated_at_ix",
+                    "name": "sys_workflow_intents_state_due_at_ix",
                     "kind": "ix",
                     "columns": [
                         "state",
-                        "updated_at"
+                        "due_at",
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "sys_workflow_intents_state_lease_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "state",
+                        "lease_until"
                     ],
                     "predicate": null,
                     "method": "btree",

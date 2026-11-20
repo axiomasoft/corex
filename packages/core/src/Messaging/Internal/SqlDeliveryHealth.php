@@ -70,6 +70,7 @@ final readonly class SqlDeliveryHealth
             publishingCount: $counts['publishing'] ?? 0,
             deadCount: $counts['dead'] ?? 0,
             maxAttempts: (int) ($attempts ?? 0),
+            quarantinedCount: $counts['quarantined'] ?? 0,
         );
     }
 

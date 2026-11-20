@@ -9,8 +9,7 @@ use CoreX\Data\Data\JsonDocument;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Notifications\Delivery\Data\DeliveryOutcome;
 use CoreX\Notifications\Delivery\Data\RecipientReference;
-use CoreX\Notifications\Delivery\Internal\DeliveryCoordinator;
-use CoreX\Notifications\Delivery\Internal\DeliveryStore;
+use CoreX\Notifications\Delivery\Enums\DeliveryOutcomeKind;
 use CoreX\Notifications\Digest\Contracts\DigestBuilder;
 use CoreX\Notifications\Digest\Data\DigestWindow;
 use CoreX\Notifications\Inbox\Contracts\NotificationCenter;
@@ -23,9 +22,11 @@ use CoreX\Notifications\Inbox\Data\NotificationInput;
 use CoreX\Notifications\Inbox\Data\NotificationSubject;
 use CoreX\Notifications\Inbox\Exceptions\NotificationAccessDenied;
 use CoreX\Notifications\Inbox\Exceptions\NotificationOperationConflict;
-use CoreX\Notifications\Inbox\Internal\DenyNotificationPolicy;
 use CoreX\Notifications\Preferences\Contracts\PreferenceRepository;
 use CoreX\Notifications\Preferences\Data\PreferenceInput;
+use CoreX\Notifications\Runtime\Internal\DeliveryCoordinator;
+use CoreX\Notifications\Runtime\Internal\DeliveryStore;
+use CoreX\Notifications\Runtime\Internal\DenyNotificationPolicy;
 use CoreX\Notifications\Tests\TestCase;
 use CoreX\Settings\Contracts\SettingsRepository;
 use CoreX\Settings\Data\SettingsScope;
@@ -120,12 +121,12 @@ it('persists a tenant-local inbox intent and replays an identical request', func
     expect($replayed->id)->toBe($created->id)
         ->and(DB::table('ntf_notifications')->count())->toBe(1)
         ->and(DB::table('ntf_deliveries')->where('notification_id', $created->id)->value('state'))->toBe('pending')
-        ->and($center->unreadCount(notificationContext()))->toBe(1);
+        ->and($center->unreadCount(notificationContext())->count)->toBe(1);
 
     $center->markRead(notificationContext(), $created->id);
 
-    expect($center->unreadCount(notificationContext()))->toBe(0)
-        ->and($center->inbox(notificationContext(), new InboxQuery(before: null)))->toHaveCount(1);
+    expect($center->unreadCount(notificationContext())->count)->toBe(0)
+        ->and($center->inbox(notificationContext(), new InboxQuery(before: null))->items)->toHaveCount(1);
 });
 
 it('does not admit notification work before a consumer policy allows it', function (): void {
@@ -168,14 +169,14 @@ it('rejects a stale delivery completion after a newer claim epoch', function ():
     $second = $deliveries->claim($id);
 
     expect($first)->not->toBeNull()->and($second)->not->toBeNull();
-    $deliveries->complete($first, new DeliveryOutcome(kind: 'accepted', providerRef: 'old', retryAfter: null, reason: 'old-worker'));
+    $deliveries->complete($first, new DeliveryOutcome(kind: DeliveryOutcomeKind::Accepted, providerRef: 'old', retryAfter: null, reason: 'old-worker'));
 
     expect(DB::table('ntf_deliveries')->where('id', $id)->value('state'))->toBe('claimed')
         ->and(DB::table('ntf_deliveries')->where('id', $id)->value('claim_epoch'))->toBe(2);
 
-    $deliveries->complete($second, new DeliveryOutcome(kind: 'accepted', providerRef: 'new', retryAfter: null, reason: 'current-worker'));
+    $deliveries->complete($second, new DeliveryOutcome(kind: DeliveryOutcomeKind::Accepted, providerRef: 'new', retryAfter: null, reason: 'current-worker'));
 
-    expect(DB::table('ntf_deliveries')->where('id', $id)->value('state'))->toBe('sent')
+    expect(DB::table('ntf_deliveries')->where('id', $id)->value('state'))->toBe('accepted')
         ->and(DB::table('ntf_deliveries')->where('id', $id)->value('provider_ref'))->toBe('new');
 });
 
@@ -224,7 +225,7 @@ it('admits an in-app delivery through the registered driver only after the durab
 
     resolve(DeliveryCoordinator::class)->deliver($id);
 
-    expect(DB::table('ntf_deliveries')->where('id', $id)->value('state'))->toBe('sent')
+    expect(DB::table('ntf_deliveries')->where('id', $id)->value('state'))->toBe('completed')
         ->and(DB::table('ntf_deliveries')->where('id', $id)->value('provider_ref'))->not->toBeNull();
 });
 
@@ -322,6 +323,6 @@ it('keeps an admitted digest effect when a later preference change disables futu
     ));
     resolve(DeliveryCoordinator::class)->deliver($deliveryId);
 
-    expect(DB::table('ntf_deliveries')->where('id', $deliveryId)->value('state'))->toBe('sent')
+    expect(DB::table('ntf_deliveries')->where('id', $deliveryId)->value('state'))->toBe('completed')
         ->and(DB::table('ntf_digest_runs')->where('id', $digest->id)->value('state'))->toBe('sent');
 });

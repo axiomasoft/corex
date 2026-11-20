@@ -22,6 +22,10 @@ interface OutboxRelay
     /** @return list<LeasedMessage> */
     public function lease(string $leaseOwner, int $batchSize): array;
 
+    public function assertClaim(LeasedMessage $message): void;
+
+    public function quarantine(LeasedMessage $message, Throwable $error): void;
+
     public function markPublished(LeasedMessage $message): void;
 
     public function releaseWithBackoff(LeasedMessage $message, Throwable $error): void;

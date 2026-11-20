@@ -2,14 +2,25 @@
 
 declare(strict_types=1);
 
+require_once __DIR__.'/../Support/Messaging.php';
+
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Messaging\Contracts\BrokerDeliverySource;
+use CoreX\Messaging\Contracts\BrokerReceiver;
+use CoreX\Messaging\Contracts\CloudEventCodec;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\MessagePublisher;
 use CoreX\Messaging\Contracts\Outbox;
+use CoreX\Messaging\Data\ConsumerId;
 use CoreX\Messaging\Data\MessageEnvelope;
+use CoreX\Messaging\Enums\BrokerReceipt;
 use CoreX\Messaging\Internal\SqlOutboxRelay;
 use CoreX\Testing\Fixtures\RecordingPublisher;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -42,6 +53,8 @@ function deliveryGuaranteesInstallDurableStore(): void
         $table->string('name', 160);
         $table->text('payload');
         $table->timestampTz('stored_at');
+        $table->string('quarantine_digest', 64)->nullable();
+        $table->string('quarantine_reason')->nullable();
     });
 }
 
@@ -55,9 +68,7 @@ function deliveryGuaranteesConsume(MessageEnvelope $envelope, string $consumer =
 
     DB::connection('pgsql')->transaction(function () use ($inbox, $envelope, $consumer, &$claims): void {
         $claims[] = $inbox->claim(
-            consumer: $consumer,
-            messageId: $envelope->messageId,
-            name: $envelope->name,
+            connection: DB::connection(), consumer: new ConsumerId($consumer, 1), message: $envelope,
         );
 
         if ($claims[array_key_last($claims)] === false) {
@@ -78,6 +89,8 @@ function deliveryGuaranteesConsume(MessageEnvelope $envelope, string $consumer =
 function deliveryGuaranteesRelayOnConnection(string $connectionName): SqlOutboxRelay
 {
     return new SqlOutboxRelay(
+        current: resolve(CurrentWorkScope::class),
+        scopes: resolve(DataScopeCodec::class),
         connection: DB::connection($connectionName),
         clock: resolve(ClockInterface::class),
         leaseSeconds: 120,
@@ -114,12 +127,12 @@ it('proves at-least-once when the relay dies after durable publish but before ma
         // Relay process died before markPublished; no releaseWithBackoff — crash, not defer.
     }
 
-    expect(DB::table('sys_outbox_messages')->where('id', $messageId)->value('status'))->toBe('publishing')
+    expect(DB::table('sys_outbox_messages')->where('message_id', $messageId)->value('status'))->toBe('publishing')
         ->and($publisher->recordedMessageIds)->toBe([$messageId]);
 
     outboxRelayClock(new DateTimeImmutable('2026-06-15T13:05:00+00:00'));
 
-    $rowBeforeReclaim = DB::table('sys_outbox_messages')->where('id', $messageId)->first();
+    $rowBeforeReclaim = DB::table('sys_outbox_messages')->where('message_id', $messageId)->first();
     expect($rowBeforeReclaim->status)->toBe('publishing');
 
     $reclaimRelay = outboxRelayService(leaseSeconds: 60);
@@ -167,7 +180,7 @@ it('partitions concurrent relay leases without overlap or blocking', function ()
     $table = 'sys_outbox_messages';
 
     DB::connection('dg_relay_a')->beginTransaction();
-    DB::connection('dg_relay_a')->table($table)->where('id', $heldId)->lockForUpdate()->first();
+    DB::connection('dg_relay_a')->table($table)->where('message_id', $heldId)->lockForUpdate()->first();
 
     $skippedWhileHeld = $relayB->lease(leaseOwner: DG_RELAY_OWNER_B, batchSize: 10);
     $skippedIds = array_map(static fn ($message) => $message->envelope->messageId, $skippedWhileHeld);
@@ -189,7 +202,7 @@ it('rolls back outbox rows with the business transaction and commits both on suc
                 'created_at' => resolve(ClockInterface::class)->now(),
                 'updated_at' => resolve(ClockInterface::class)->now(),
             ]);
-            $outbox->append(messagingSampleEnvelope(['messageId' => $messageId]));
+            $outbox->append(DB::connection(), messagingSampleEnvelope(['messageId' => $messageId]));
 
             throw new RuntimeException('force-rollback');
         });
@@ -207,7 +220,7 @@ it('rolls back outbox rows with the business transaction and commits both on suc
             'created_at' => resolve(ClockInterface::class)->now(),
             'updated_at' => resolve(ClockInterface::class)->now(),
         ]);
-        $outbox->append(messagingSampleEnvelope(['messageId' => $messageId]));
+        $outbox->append(DB::connection(), messagingSampleEnvelope(['messageId' => $messageId]));
     });
 
     expect(DB::table('dg_business_effects')->count())->toBe(1)
@@ -222,7 +235,7 @@ it('hands off durably to a restarted consumer and rejects lossy publishers befor
             DB::connection('pgsql')->table('dg_durable_store')->insert([
                 'message_id' => $message->messageId,
                 'name' => $message->name,
-                'payload' => $message->payload->encode(),
+                'payload' => resolve(CloudEventCodec::class)->encode($message),
                 'stored_at' => resolve(ClockInterface::class)->now(),
             ]);
         }
@@ -232,14 +245,58 @@ it('hands off durably to a restarted consumer and rejects lossy publishers befor
     $messageId = outboxRelayInsertRow(['id' => '01932f5a-0000-7000-8000-000000000104']);
     Artisan::call('corex:messaging:relay', ['--once' => true]);
 
-    expect(DB::table('sys_outbox_messages')->where('id', $messageId)->value('status'))->toBe('published')
+    expect(DB::table('sys_outbox_messages')->where('message_id', $messageId)->value('status'))->toBe('published')
         ->and(DB::table('dg_durable_store')->count())->toBe(1);
 
     $stored = DB::table('dg_durable_store')->where('message_id', $messageId)->first();
-    $envelope = messagingSampleEnvelope(['messageId' => $messageId]);
+    app()->instance(BrokerDeliverySource::class, new class implements BrokerDeliverySource
+    {
+        public function read(ConsumerId $consumer, string $restrictedRef): ?string
+        {
+            return DB::connection('dg_relay_b')->table('dg_durable_store')->where('message_id', $restrictedRef)
+                ->whereNull('quarantine_digest')->value('payload');
+        }
 
-    deliveryGuaranteesConsume($envelope);
-    deliveryGuaranteesConsume($envelope);
+        public function quarantine(ConsumerId $consumer, string $restrictedRef, string $rawDigest, string $reason): void
+        {
+            DB::connection('dg_relay_b')->table('dg_durable_store')->where('message_id', $restrictedRef)
+                ->update(['quarantine_digest' => $rawDigest, 'quarantine_reason' => $reason]);
+        }
+    });
+    $consumer = new ConsumerId('delivery.guarantees', 1);
+    $receiver = resolve(BrokerReceiver::class);
+    $apply = static function (ConnectionInterface $connection, MessageEnvelope $message) use ($consumer): void {
+        $connection->table('dg_business_effects')->insert(['message_id' => $message->messageId, 'consumer' => $consumer->name]);
+    };
+    $original = resolve(TenancyManager::class)->context();
+    resolve(TenancyManager::class)->end();
+    expect(fn () => $receiver->consume($consumer, $messageId, static function (ConnectionInterface $connection, MessageEnvelope $message) use ($apply): void {
+        $apply($connection, $message);
+
+        throw new RuntimeException('subscriber-rollback');
+    }))->toThrow(RuntimeException::class, 'subscriber-rollback')
+        ->and(DB::table('sys_inbox_messages')->count())->toBe(0)
+        ->and(DB::table('dg_business_effects')->count())->toBe(0)
+        ->and($receiver->consume($consumer, $messageId, $apply))->toBe(BrokerReceipt::Applied)
+        ->and($receiver->consume($consumer, $messageId, $apply))->toBe(BrokerReceipt::Duplicate);
+
+    $wire = json_decode($stored->payload, true, flags: JSON_THROW_ON_ERROR);
+    $wire['data'] = (object) ['changed' => true];
+    $tampered = json_encode($wire, JSON_THROW_ON_ERROR);
+    $tamperedRef = '01932f5a-0000-7000-8000-000000000109';
+    $unknownRef = '01932f5a-0000-7000-8000-000000000110';
+    foreach ([$tamperedRef => $tampered, $unknownRef => $stored->payload] as $ref => $body) {
+        DB::table('dg_durable_store')->insert(['message_id' => $ref, 'name' => $stored->name, 'payload' => $body, 'stored_at' => $stored->stored_at]);
+    }
+    expect($receiver->consume($consumer, $tamperedRef, $apply))->toBe(BrokerReceipt::Quarantined)
+        ->and(DB::table('dg_durable_store')->where('message_id', $tamperedRef)->value('quarantine_digest'))->toBe(hash('sha256', $tampered));
+    outboxAppendBindRegistry();
+    expect($receiver->consume($consumer, $unknownRef, $apply))->toBe(BrokerReceipt::Quarantined)
+        ->and(DB::table('dg_durable_store')->where('message_id', $unknownRef)->value('quarantine_digest'))->toBe(hash('sha256', $stored->payload));
+    outboxAppendBindRegistry(outboxAppendDeclaredContract());
+    expect($receiver->consume($consumer, $unknownRef, $apply))->toBe(BrokerReceipt::Quarantined)
+        ->and(resolve(TenancyManager::class)->context())->toBeNull();
+    resolve(TenancyManager::class)->initialize($original->account);
 
     expect(DB::table('dg_business_effects')->count())->toBe(1);
 
@@ -254,7 +311,7 @@ it('hands off durably to a restarted consumer and rejects lossy publishers befor
     expect(fn () => Artisan::call('corex:messaging:relay', ['--once' => true]))
         ->toThrow(BindingResolutionException::class);
 
-    expect(DB::table('sys_outbox_messages')->where('id', '01932f5a-0000-7000-8000-000000000105')->value('status'))
+    expect(DB::table('sys_outbox_messages')->where('message_id', '01932f5a-0000-7000-8000-000000000105')->value('status'))
         ->toBe('pending');
 })->group('pg');
 
@@ -273,7 +330,7 @@ it('terminates expired publishing rows at maxAttempts without another publish an
     $relay = outboxRelayService(maxAttempts: 8);
     expect($relay->lease(leaseOwner: OUTBOX_RELAY_OWNER, batchSize: 1))->toBe([]);
 
-    $exhaustedRow = DB::table('sys_outbox_messages')->where('id', $exhaustedId)->first();
+    $exhaustedRow = DB::table('sys_outbox_messages')->where('message_id', $exhaustedId)->first();
     expect($exhaustedRow->status)->toBe('dead')
         ->and($exhaustedRow->failure_class)->toBe('lease-expiry-attempts-exhausted')
         ->and($publisher->recordedMessageIds)->toBe([]);
@@ -285,8 +342,8 @@ it('terminates expired publishing rows at maxAttempts without another publish an
     $corruptRelay = outboxRelayService(maxAttempts: 1);
     expect($corruptRelay->lease(leaseOwner: OUTBOX_RELAY_OWNER, batchSize: 1))->toBe([]);
 
-    $corruptRow = DB::table('sys_outbox_messages')->where('id', $corruptId)->first();
-    expect($corruptRow->status)->toBe('dead')
-        ->and($corruptRow->failure_class)->toBe('attempts-exhausted')
+    $corruptRow = DB::table('sys_outbox_messages')->where('message_id', $corruptId)->first();
+    expect($corruptRow->status)->toBe('quarantined')
+        ->and($corruptRow->failure_class)->toBe('invalid-fact')
         ->and($publisher->recordedMessageIds)->toBe([]);
 })->group('pg');

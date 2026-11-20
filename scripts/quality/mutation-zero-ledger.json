@@ -77,6 +77,22 @@
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "123ef8385aafcbcb1b5778e125fc5f51de278908e1fb00ed55df596287fb4f28"
     },
+    "packages/core/src/Context/Contracts/CentralWorkRunner.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "758eb0710a4f7212f54d5fd6160d1749e8a384c4fd48a5abed3d0e585902fae2"
+    },
+    "packages/core/src/Context/Contracts/ControlStoreIsolation.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "fb5a3595242a5124f777552ef8a76f09d4c89224b81aa4e40acff0d6942bcb8a"
+    },
+    "packages/core/src/Context/Contracts/CurrentWorkScope.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "a82681c859dafe839568c4241c62182373f27f53495918db2a0ec3d3822bfd8a"
+    },
+    "packages/core/src/Context/Contracts/DataScopeFactory.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "f9feb95c6507fac9761b9af8400f1ab53c94397db3b2350d04e8dab104c64d83"
+    },
     "packages/core/src/Context/Contracts/IdentityPasswordRehasher.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "0d55f72ff1871013feef871d583fce9b68c068f41cf31c155e1aa1c8fb1fa5cf"
@@ -89,9 +105,49 @@
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "82e96ea0df3664b249f0f77e77b243bcfad71db290536651966b451bfc008cdf"
     },
+    "packages/core/src/Context/Contracts/NamedWorkPrincipal.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "212a25db5df68641962b8775741bd79f24b755cf0270e8e270ec7cf8d675addd"
+    },
+    "packages/core/src/Context/Contracts/PhysicalBindingVerifier.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "179bea759a91a4da5e9c762f25066509fb03680c896bbd132905466ebf3e070a"
+    },
     "packages/core/src/Context/Contracts/Principal.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "a48d5dddc3f19cee8b596e1f04744bdc67222d0388d1b51a7976c5d42a947430"
+    },
+    "packages/core/src/Context/Contracts/ProviderEffectLedger.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "dd78b3cc249fa205a1b42816908dbe2e5c22867cd23ec416386ae77e9094ede9"
+    },
+    "packages/core/src/Context/Contracts/ProviderEffectRecovery.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "66ecc76b222a786ff8babb26f20431b572bdc8dbd6c21c060dbe3a5bcc0f6201"
+    },
+    "packages/core/src/Context/Contracts/ProviderReceiptProjector.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "cef5a177a76997d6f9d62ad554ab2a5d6a11a44f8028e7fb5bfd78cadaa6affc"
+    },
+    "packages/core/src/Context/Contracts/ProviderRecoveryAuthority.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "c8036cbd97a849dd001aec058298e920053ac40b10092b13fa1000f65ec9d25a"
+    },
+    "packages/core/src/Context/Contracts/ScopeAdmission.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "65577b563fa067e7948a316a4b6787b45a71c9ec6662376cab6d60c9fd5dffc3"
+    },
+    "packages/core/src/Context/Contracts/ScopeAuthority.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "9d384f1600e6ca38d133ac160f3d8d853994b7eebfe0be6fdc99e21dcafd345c"
+    },
+    "packages/core/src/Context/Contracts/StoredWorkIssuer.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "7dda316472b416e3062f0fcc64192f0f0be40027c30c3986abf9f9bd9d7aba99"
+    },
+    "packages/core/src/Context/Contracts/StoredWorkRunner.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "7e78eae5cc7ffeb654b137991fe1254ddc8f9338caa82ab4c6dac60f7147aa58"
     },
     "packages/core/src/Context/Contracts/TenancyManager.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -101,10 +157,6 @@
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "afb04174ece9eef736a34c18ba0da387ab3fbea11ebf94219e76d93f6260d734"
     },
-    "packages/core/src/Context/Contracts/TenantContextRestorer.php": {
-      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "bc4e6dfe899ac26945e16c39a97c46c86bdd2b23a9fe881a62c3028e3d4160e7"
-    },
     "packages/core/src/Context/Contracts/TenantDatabaseLifecycle.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "176dcd6854b848d07560c93a2b2f2af2a81d4570cc8f7a67633a27e08bb87599"
@@ -113,9 +165,25 @@
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "f454e6eaa7debcb61eeae0bcc1dc2095bb914d2e1f6ddea6de27dbff46381674"
     },
+    "packages/core/src/Context/Contracts/WorkPrincipalAuthority.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "9c49f4fe38f2c07a17816d873b5ad18350d4c24f82b6f126a22bd78b929f0c3b"
+    },
+    "packages/core/src/Context/Contracts/WorkScopeDirectory.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "40e22a7509367f9757890c11d77dda1ed97b1be86b1c5c8f126d0b1fba230e69"
+    },
+    "packages/core/src/Context/Contracts/WorkScopeRunner.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "c5ac82a32e24084fd37fcd848c1a73d9e5fda970eeff2704c18c191a3f397344"
+    },
     "packages/core/src/Context/Data/AccountRef.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "11a6c30750b670903e99b0ef8e1ed558ac1f9e9e009a981d925036c44464a576"
+    },
+    "packages/core/src/Context/Data/AdmissionTicket.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "a6dc522462676d148e61c45add3df0adf8bb20efa030b24ed3f4e491ff6dd1b0"
     },
     "packages/core/src/Context/Data/DatabaseConnectionConfig.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -125,6 +193,10 @@
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "929442ff7e25f571aebd72a81069ff4ddc0434503406b4d3118ded2cca7123ec"
     },
+    "packages/core/src/Context/Data/ProviderEffectStatus.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "ff95203dd41ab469810d5b6885603a5613c553e6d289dfd8c804bb189554ba10"
+    },
     "packages/core/src/Context/Data/ProvisionParams.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "105cdcdf67a00eb8896360df249c7ca181c489f517445bc420ae3a00299c3775"
@@ -132,6 +204,10 @@
     "packages/core/src/Context/Data/WorkspaceRef.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "c7d16105e12fb6ff7cd0d3b44b1db1538fa2ffa6e6716c03aafed6fdf778053f"
+    },
+    "packages/core/src/Context/Enums/AdmissionKind.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "be978d32d1e9fe92749cfa37a2e8e6d889bc45d3de2cba42f1ab96ed953e6b1f"
     },
     "packages/core/src/Context/Enums/ImpersonationRestrictedAction.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -141,17 +217,45 @@
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "91edae27a2ad06834b8ed73bcb27c25c4b0c4daa5a47f3520c8d895bc7d91860"
     },
+    "packages/core/src/Context/Enums/ProviderObservationKind.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "b1fbd7018bd510de9fa25f710d7b5ff482f9f2cf1984bbb9b371ebf284eaed53"
+    },
+    "packages/core/src/Context/Laravel/FrozenQueuePayload.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "a83309893b32c50e4e9c98b0e06d1c54a9af2763984b9be29fa1d54493189919"
+    },
+    "packages/core/src/Context/Laravel/ScopeOptions.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "3ea56fb982c6699a95e876c2b8f631b678675e8a3dcf9d0da21150e55e573425"
+    },
     "packages/core/src/Context/Laravel/WorkspaceScopeProvider.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "88a95afaaf2b52e6319ca878d903f5574725460ee4bc0c3373ab803cd54bb4fa"
     },
     "packages/core/src/Data/Contracts/DataScopeAuthorizer.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "ca1376ab3af4651609861b691d3f47e18739c8cf3a2fbdd766ec2ab2e61803ca"
+      "sha256": "cb5b21ee3bb03c240d92193bee0c14a099d6e4020867af10837cefcf38693913"
     },
     "packages/core/src/Data/Contracts/DataScopeCodec.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "012fafe451ff25617259b193ac15fd3995e3edf60d992d75c19d2dfa721d4ce9"
+    },
+    "packages/core/src/Data/Contracts/FieldUsePolicy.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "6bc08c8c06dc04cc2556dda2c13fe451a97495f535534821db110e8e9fc34762"
+    },
+    "packages/core/src/Data/Data/FieldUseRequest.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "0053544aec141bd3beb3982405a6dfa458539f51cbd5f0b5cfb9eb88be286e46"
+    },
+    "packages/core/src/Data/Enums/FieldUse.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "d12899bb2fb6ad355f5370bbc3dbd8d306896679cfadfd2b4d0208ad1c0a99d9"
+    },
+    "packages/core/src/Data/Enums/FieldUsePlanKind.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "91a6163e41dcac1e0a364f1cedb0add1658bda89ef44db691906791f0976b0e6"
     },
     "packages/core/src/Database/Laravel/BaseModel.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -173,6 +277,14 @@
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "07c1424e58258c553b1fd6b45c90bbff06f0ca303eb0cde6e1ea68b91e76b0dc"
     },
+    "packages/core/src/Messaging/Contracts/BrokerDeliverySource.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "35233a525bdbf5a89ec32feeff516278598ec7c05d5fb3df01709b1462953238"
+    },
+    "packages/core/src/Messaging/Contracts/BrokerReceiver.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "d096d180ae658463797ec48ce2608b6365f52b781df61e11d2eccb531ed21975"
+    },
     "packages/core/src/Messaging/Contracts/Cancellable.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "b635e00a2b43b96d5c3e00720b5421136e4d1b7a609bef55abeea359bd348803"
@@ -191,7 +303,7 @@
     },
     "packages/core/src/Messaging/Contracts/Inbox.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "6435eb9813ee7021cf4817bab8a7cebed88859ed12c3a3e7c85b454fd8579cc1"
+      "sha256": "b585c64c81d64c52f1e14e3f2f6e4ca947ada516188f8c2269fcc739a3193b62"
     },
     "packages/core/src/Messaging/Contracts/MessageContractRegistry.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -203,11 +315,11 @@
     },
     "packages/core/src/Messaging/Contracts/Outbox.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "3aa7a8ad92762fe6d3aa5015661c0ac567f8037e244aefb5800ff2e91e2b2ad2"
+      "sha256": "e3b3bd4dbe09fa00fbecb130376ad19401b665ad57cf88e7cd3382c81f22b3af"
     },
     "packages/core/src/Messaging/Contracts/OutboxRelay.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "596c59a47ef41bb3408c6a157d9ae536288fd88ec4938eff4bcfb92ba84f15d4"
+      "sha256": "d3e03526c619b037aef0b215e545def73ab4aa17e76752940d1c5df29f350837"
     },
     "packages/core/src/Messaging/Contracts/PubSub.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -223,11 +335,15 @@
     },
     "packages/core/src/Messaging/Data/DeliveryHealth.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "23470a25e31624b0fd72db6aed3a761953613fd18c9a0e50fe9ba397bc258e3c"
+      "sha256": "1c10a2ddfbc83e2ff68108fff75eb771283dfad56d2f91f14cd3a1e079ec3d18"
     },
     "packages/core/src/Messaging/Data/LeasedMessage.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "727d07f7ac1acfbb7f48f39d1f49b99a401340a522b3af65633781fdb1a4cd9e"
+      "sha256": "87af74461b5987ee3676b2c44aa1eb40dd2e6e72862de52fe885b73e526bf04c"
+    },
+    "packages/core/src/Messaging/Enums/BrokerReceipt.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "8a2f0d5caa5c0d54dfdb53c972d1ff5252ee0e92375ca26b50b3650418bebf5f"
     },
     "packages/core/src/Messaging/Enums/MessageClass.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -263,15 +379,11 @@
     },
     "packages/core/src/Scheduling/Contracts/WakeupScheduler.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "fb9eb2022158752bebbd19d99faa0737b0ddfd98782feb279fd4fa3e4b33da83"
+      "sha256": "b9b8da7353f8edf71b7356612d5c513a0d124b868afcb5408b5b1a944b2d2560"
     },
     "packages/core/src/Scheduling/Data/CancelResult.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "7f2cc5ed5d7cad792c5174c6d922ea5003b6d74b30f04de7e05b17f82aeeea86"
-    },
-    "packages/core/src/Scheduling/Data/ScheduleResult.php": {
-      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "b4c12239a5ce7fc9ae5bb48b1f3d979f1e64e64bc4a0e8410ead951c46164efc"
     },
     "packages/core/src/Scheduling/Data/SweepResult.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -279,7 +391,7 @@
     },
     "packages/core/src/Scheduling/Data/WakeupDelivery.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "78beeadd9e58e37f19f1a4d27f7c3106196de814554ff3ae4228f51a810628c7"
+      "sha256": "66e23f5b41854244811c7492d92897cc9dc6ea32fc688cfea5c2b1fe0deeb8ca"
     },
     "packages/core/src/Settings/Contracts/SettingsRepository.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -307,7 +419,7 @@
     },
     "packages/custom-fields/src/Contracts/AttributeStore.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "5481d8a8b27c0d853c0b91a291c00d844c9036d0742de6329cb8a2c0aa20d696"
+      "sha256": "9d11d2995dfbb00342658c9f8dd1feb921eae6cb8505fc33f3196d78c5b94ea7"
     },
     "packages/custom-fields/src/Contracts/AttributeStoreResolver.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -567,11 +679,11 @@
     },
     "packages/media/src/Internal/Data/ConversionClaim.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "aa8ab4ccbcfa2479d39140c05d575e969f37baa6de38313c717748b5928e0483"
+      "sha256": "661d4ee878140c91afc26fabd64b71e871f5a827087a57be1c7dc54cc352ddb0"
     },
     "packages/media/src/Internal/Data/ConversionOperationRequest.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "cf13874577316f9ab1a5f74831e6758e6f863e938837bd2afa2f731eb80b1dfb"
+      "sha256": "ca29cc11f250dbecc44c48bef9918446b996bbdceedab3c747b6e40f6c2be85a"
     },
     "packages/media/src/Internal/Data/PurgeClaim.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -579,7 +691,7 @@
     },
     "packages/notifications/src/Delivery/Contracts/DeliveryExecution.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "22206463a0c940d6283eacb7b242b54e236545ce7e9a05b2ae162b00d27a0ec1"
+      "sha256": "b2a5ff69367ea36a853f57d32af720024d5c045f82840938448a4dabc09e5a42"
     },
     "packages/notifications/src/Delivery/Contracts/NotificationChannelDriver.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -595,19 +707,19 @@
     },
     "packages/notifications/src/Delivery/Data/DeliveryClaim.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "2f844a3e41543bd3abd1fb3541b9a4073c39564f60cc83dc256be31250ab0850"
+      "sha256": "988a3ac5af1eb53a6395f1d2ec8428fa9bda69cca4f6b7a04ed599acc348f202"
     },
     "packages/notifications/src/Delivery/Data/DeliveryInput.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "8c1bfd2fbf1e5e1354774d1457bd375544da7f202f71729c0492cf5922e96389"
     },
-    "packages/notifications/src/Delivery/Data/DeliveryOutcome.php": {
-      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "0f790c6b7ae53d03607cf9ef8472949ea4a4a66d20a6c09b7e276aa57c912821"
-    },
     "packages/notifications/src/Delivery/Data/DeliveryTarget.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "c1432208591e34acb3675fd0987d422c500dd79b62da8b8c46c34c74fec8ab4f"
+    },
+    "packages/notifications/src/Delivery/Enums/DeliveryOutcomeKind.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "df2ab600b09b4a14fadb571c5c47e27e0431aaf57786f7c31e80fe67e2dd48ef"
     },
     "packages/notifications/src/Digest/Contracts/DigestBuilder.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -617,13 +729,9 @@
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "9670ab559eb97fb069e0db94078f83ae7fa862f76d6908b399c9f8e8687c11a7"
     },
-    "packages/notifications/src/Digest/Internal/DigestTick.php": {
-      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "016da48f97d535dfa541e81c89cdd062a405982cc7cf3b50b7d8d371ab138885"
-    },
     "packages/notifications/src/Inbox/Contracts/NotificationCenter.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "fadf4ea069f55cfe1ec9bf2c014bd2d3f64b9e4a79a7329f650ca3fcce11a321"
+      "sha256": "517884f1da81bea4edf39086b3b7868bbcc26c919f467203953aa5fcba9b0370"
     },
     "packages/notifications/src/Inbox/Contracts/NotificationPolicy.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -632,6 +740,10 @@
     "packages/notifications/src/Inbox/Data/CancelResult.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "2f953df923a533c9c7b9e7dd8d1334c5a79a89fd6695dd49cac6c04e24abfb34"
+    },
+    "packages/notifications/src/Inbox/Data/InboxPage.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "213fe5efa578c920fe0c6065699474a153385b1cfe9a3bc41cec3e1a171baa2a"
     },
     "packages/notifications/src/Inbox/Data/NotificationAction.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -652,6 +764,10 @@
     "packages/notifications/src/Preferences/Contracts/PreferenceRepository.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "c178bfc75f271732aaf7a344377dadf22a236d828c2e6f35751c20da43607404"
+    },
+    "packages/notifications/src/Runtime/Internal/DigestTick.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "e131e0c5f6e2cabde3484328bf9dddd35dbb7c1339ec16179f6d950364a175e6"
     },
     "packages/operations/src/Authorization/Contracts/ClientScopeAuthorizer.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -687,11 +803,15 @@
     },
     "packages/operations/src/Cost/Contracts/BudgetExecution.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "e53542994c55390326a07b0487c891a009ed1ce66b91fe0718d584f13130baf1"
+      "sha256": "c98528ad456da406d2b7cb6926a3bce90fef049879a941b1c102a1b741b8c254"
     },
     "packages/operations/src/Cost/Contracts/BudgetReservation.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "968b8b062125591359c5d4bdb68b0824a48a544ac974c27cb81552d22350b0a6"
+    },
+    "packages/operations/src/Cost/Contracts/DurableOperationBudget.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "c3a39f1d54021d6fb885171bbe2f33ea6c6e2a56ce4b8aa18b0baab77acb7218"
     },
     "packages/operations/src/Cost/Contracts/OperationBudget.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -700,6 +820,10 @@
     "packages/operations/src/Cost/Contracts/OperationCostEstimator.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "162468eefdc1de07e7b30a92231e5db72abcf8d2285303144600d5a3928f71b9"
+    },
+    "packages/operations/src/Cost/Data/BudgetInvocationResult.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "db04c251c40b20cf4bbb2991b556f4177db9224a03fcbaa294bc27d077c2d56a"
     },
     "packages/operations/src/Cost/Data/CostOptions.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -757,9 +881,13 @@
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "21450be845961839ac8b8a196a21f43bc574b0457cd87358c3b6bbceb0c57e1e"
     },
+    "packages/operations/src/Invocation/Contracts/TransactionalOperationInvoker.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "717fb986097e4cdce97c4fa6eabdbfb0c446122a2c680865dd9e894be636126d"
+    },
     "packages/operations/src/Invocation/Data/OperationInvocation.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "c41eb5a638c2e3e134660148cd18e53add750466c91e4344701eddeab3f3800e"
+      "sha256": "743cbcd24fef7880cb086766f5f9fffa9b01864388e005e98e9f4c9223250e75"
     },
     "packages/operations/src/Invocation/Internal/InputEnvelopeReader.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -995,7 +1123,7 @@
     },
     "packages/tasks/src/Task/Contracts/TaskCompletionCapture.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "c35134f6261f28cb41ac042bdb8da2ee0240b7d27f749568c3d545ef515e5a6c"
+      "sha256": "e2e49450331052e6af87d14d61d017c38cf69cca2b208869f946e96ac7322520"
     },
     "packages/tasks/src/Task/Contracts/UpdateTaskCommand.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -1217,6 +1345,10 @@
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "2457c0eded2faf3d1c2aa0cf0830fc3d5a95c2a06e33a1fb51fb752b48f6c7cf"
     },
+    "packages/tenancy/src/Runtime/Contracts/TenantBindingAuthority.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "5d2c4dc7daa4d114db0805f0f1d25315581de70307019b6e2042341aff46574f"
+    },
     "packages/tenancy/src/Runtime/Events/TenantContextEnded.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "340dcd005fe5dd14adb8a4c0ccc3d7ab80f1d8aac13f8624d9bef5a209ac11ae"
@@ -1285,6 +1417,10 @@
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "e09c46da7955050ac78f83fadcf535882eb8349849920ae98a39486041921b4f"
     },
+    "packages/webhooks/src/Contracts/WebhookProviderLookup.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "c83b1a0832b2d5515e3a33811e3ffa9778f59c6de24585cbc70a51c3c2dbf13a"
+    },
     "packages/webhooks/src/Contracts/WebhookSigner.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "17ff299ef8cb7e1376d6719aa3e238871798712d18c38d41936fcdf9395d36bb"
@@ -1297,17 +1433,21 @@
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "42c0f254e77228d4950902dacd504be69f91be99c3ff14e8129ba4c9bc5198e6"
     },
+    "packages/webhooks/src/Data/WebhookProviderReference.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "28599511f051c232bc6359c1fa1d16fc1a16a04078406590160b84565b6fdc5b"
+    },
     "packages/workflow/src/Contracts/EngineAdapter.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "6f5d2cf1e4179bf51e9e2a2f749d12c66ba6a64c5b824133b8c1b019e60e6022"
+      "sha256": "23089b0ea36cce50f55f386677260d655cd65800b79e32c37bda633c7c23a403"
     },
     "packages/workflow/src/Contracts/WorkflowBinding.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "ba3c996b35bef7adc4ced06cd30d347c2f44f687c785df10fa2af46d3fdf920c"
+      "sha256": "8157887457380d4d3760f3b60bc94e3dcd9b0240b8cfc5a654f67374b273d699"
     },
-    "packages/workflow/src/Data/CaptureResult.php": {
+    "packages/workflow/src/Data/EngineEffectRef.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "2cacd133323261d85ea17f3a3865460ab2b3ee24bfdd060c9cf10e029fbe8348"
+      "sha256": "ab07d8ca4878731f6f8f322ea267ca52a2554c7377ca6661fc9782a2cd80bc3c"
     },
     "packages/workflow/src/Data/SignalRequest.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -1316,10 +1456,6 @@
     "packages/workflow/src/Data/SignalResult.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
       "sha256": "dc2820af83fce8af8d9d4055f641278ea8a3aec6a015c181dfa5ce9572d24d03"
-    },
-    "packages/workflow/src/Data/StartResult.php": {
-      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "7c060785413360d3b0059476e005785068534c8ceeac1e48314cc1986b0b3429"
     },
     "packages/workflow/src/Data/TransitionRequest.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
@@ -1331,7 +1467,15 @@
     },
     "packages/workflow/src/Data/TriggerRequest.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
-      "sha256": "1d017a4229a5da70106c1177a15181cd21f8a4efc6f5b5d7ea76cfdbc58bf763"
+      "sha256": "ed3de91703316561f418956ec40e11c4d06b7043ddee49059a603dcb7f9954c7"
+    },
+    "packages/workflow/src/Enums/CaptureStatus.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "d23f82f1149ae4b8495acaf1f7d0d4e198846bbb9746da2186678259ee8f2ed4"
+    },
+    "packages/workflow/src/Enums/StartOutcome.php": {
+      "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",
+      "sha256": "7d455a8045fcc00257be1c40351effb82214405525ee5978d2364beaf080df67"
     },
     "products/flex-crm/src/Activity/Enums/ActivityType.php": {
       "reason": "PHPParser: declarations or immutable storage; no executable value expressions or branches",

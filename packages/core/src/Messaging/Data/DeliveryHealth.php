@@ -26,5 +26,6 @@ final readonly class DeliveryHealth
         public int $publishingCount,
         public int $deadCount,
         public int $maxAttempts,
+        public int $quarantinedCount,
     ) {}
 }

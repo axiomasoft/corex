@@ -1,5 +1,9 @@
 # Changelog
 
+## CoreX 2.0 — Durable effects
+
+- Pass the saving Task model’s active owner connection to completion contributors.
+
 ## Unreleased — Packman governance
 
 - Eloquent relation adapters expose covariant Model contracts rather than private model classes.

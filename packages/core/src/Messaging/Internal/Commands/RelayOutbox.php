@@ -5,10 +5,16 @@ declare(strict_types=1);
 namespace CoreX\Messaging\Internal\Commands;
 
 use CoreX\Config\Data\CoreOptions;
+use CoreX\Context\Contracts\StoredWorkRunner;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
+use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Contracts\OutboxRelay;
+use CoreX\Messaging\Exceptions\InvalidMessage;
 use CoreX\Messaging\Exceptions\OutboxLeaseLost;
+use CoreX\Messaging\Exceptions\UnknownMessageContract;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Sleep;
 use Illuminate\Support\Str;
 use Packman\Attributes\Internal;
@@ -38,7 +44,7 @@ final class RelayOutbox extends Command
 
     private bool $stopping = false;
 
-    public function handle(OutboxRelay $relay, DurableMessagePublisher $publisher, CoreOptions $options): int
+    public function handle(OutboxRelay $relay, StoredWorkRunner $runner, CoreOptions $options): int
     {
         /** @var string|null $batchOption */
         $batchOption = $this->option('batch');
@@ -50,6 +56,9 @@ final class RelayOutbox extends Command
             return self::INVALID;
         }
 
+        if (! $this->laravel->bound(DurableMessagePublisher::class)) {
+            throw new BindingResolutionException('A durable broker publisher is required.');
+        }
         $this->listenForShutdown();
         $leaseOwner = (string) Str::uuid7();
         $published = $deferred = 0;
@@ -63,14 +72,37 @@ final class RelayOutbox extends Command
                 }
 
                 try {
-                    $publisher->publish($message->envelope);
-                    $relay->markPublished($message);
-                    $published++;
+                    try {
+                        $envelope = $message->envelope;
+                        $failure = $runner->runStored($envelope->scope, $envelope->workProof(), function () use ($envelope, $relay, $message): ?Throwable {
+                            $contract = $this->laravel->make(MessageContractRegistry::class)->get($envelope->name, $envelope->contractVersion);
+                            $contract->validateFact($envelope);
+                            $relay->assertClaim($message);
+
+                            try {
+                                $this->laravel->make(DurableMessagePublisher::class)->publish($envelope);
+                            } catch (Throwable $failure) {
+                                return $failure;
+                            }
+                            $relay->markPublished($message);
+
+                            return null;
+                        });
+
+                        if ($failure instanceof Throwable) {
+                            throw $failure;
+                        }
+                        $published++;
+                    } catch (OutboxLeaseLost $lost) {
+                        throw $lost;
+                    } catch (InvalidMessage|UnknownMessageContract|ScopeContextMismatch $error) {
+                        $relay->quarantine($message, $error);
+                    } catch (Throwable $error) {
+                        $relay->releaseWithBackoff(message: $message, error: $error);
+                        $deferred++;
+                    }
                 } catch (OutboxLeaseLost $lost) {
                     $this->warn($lost->getMessage());
-                } catch (Throwable $error) {
-                    $relay->releaseWithBackoff(message: $message, error: $error);
-                    $deferred++;
                 }
             }
 

@@ -83,6 +83,9 @@ def run_actions(spec: dict, consumer: Path, fixture: Path, env: dict, evidence: 
     runtime = {**env, "COREX_SCENARIO_BARRIERS": str(directory)}
     running = {}
     reports = {}
+    auxiliary = set(spec.get("auxiliary_processes", []))
+    if not auxiliary < set(spec["processes"]):
+        raise ScenarioError("auxiliary processes require a declared scenario worker")
     with ExitStack() as cleanup:
         for item in spec["actions"]:
             action, name = item["action"], item["name"]
@@ -144,7 +147,17 @@ def run_actions(spec: dict, consumer: Path, fixture: Path, env: dict, evidence: 
                 raise ScenarioError(f"unknown scenario action: {action}")
     if not reports or set(reports) != set(spec["processes"]):
         raise ScenarioError("each declared worker must complete with assertions")
-    if spec.get("distinct_connections") and len({json.dumps(report["connection"], sort_keys=True) for report in reports.values()}) != len(reports):
+    workers = [report for name, report in reports.items() if name not in auxiliary]
+    if "COREX_SCENARIO_PG_VERSION" in env:
+        databases = set(env["COREX_PG_DATABASES"].split(","))
+        for report in workers:
+            backend = report["backend"]
+            connection = report["connection"]
+            if (not isinstance(backend, str) or not backend.startswith("PostgreSQL ")
+                    or not isinstance(connection, dict) or connection.get("database") not in databases
+                    or type(connection.get("session")) is not int or connection["session"] <= 0):
+                raise ScenarioError("worker did not report a provisioned PostgreSQL session")
+    if spec.get("distinct_connections") and len({json.dumps(report["connection"], sort_keys=True) for report in workers}) != len(workers):
         raise ScenarioError("workers did not obtain independent database connections")
     return reports
 

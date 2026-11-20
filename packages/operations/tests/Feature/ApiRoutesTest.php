@@ -20,6 +20,7 @@ use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
 use CoreX\Operations\Tests\TestCase;
 use CoreX\Operations\Versioning\Internal\ApiProfileFactory;
+use CoreX\Tests\Support\WorkScopeFixture;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
@@ -68,6 +69,7 @@ final class ApiRoutesTest extends TestCase
         $this->app->instance(TenantContextResolver::class, $tenants);
         $this->app->instance(TenancyManager::class, $tenants);
         $this->app->instance(PrincipalResolver::class, $this->identity);
+        WorkScopeFixture::install($this->app, $this->identity->principalId())->scope();
         $this->app->instance(OperationAuthorizer::class, new class implements OperationAuthorizer
         {
             public bool $allow = true;

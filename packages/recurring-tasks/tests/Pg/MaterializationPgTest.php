@@ -31,6 +31,8 @@ use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\RecurringTasks\RecurringTasksServiceProvider;
 use CoreX\Scheduling\Contracts\WakeupScheduler;
 use CoreX\Scheduling\Data\WakeupRequest;
+use CoreX\Workflow\Contracts\EngineAdapter;
+use CoreX\Workflow\Data\EngineProvider;
 use CoreX\Workflow\Internal\WorkflowOptions;
 use CoreX\Workflow\WorkflowServiceProvider;
 use Illuminate\Support\Facades\DB;
@@ -206,6 +208,9 @@ it('MAT-06b quarantines an exact handler version mismatch without invoking mater
 
 it('MAT-07 captures workflow completion inside the task transaction when enabled', function (): void {
     app()->register(WorkflowServiceProvider::class);
+    $engine = Mockery::mock(EngineAdapter::class);
+    $engine->shouldReceive('provider')->andReturn(new EngineProvider('fixture.workflow'));
+    app()->instance(EngineAdapter::class, $engine);
     expect($this->migrateWorkflow())->toBe(0);
     app()['config']->set('corex-workflow.enforce_declarations', false);
     app()->forgetInstance(WorkflowOptions::class);

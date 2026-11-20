@@ -6,6 +6,7 @@ namespace CoreX\Webhooks\Tests\Feature;
 
 use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Audit\Data\AuditEntry;
+use CoreX\Context\Contracts\ProviderEffectLedger;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
@@ -139,7 +140,7 @@ final class WebhookApiRetentionTest extends TestCase
 
         self::assertSame(1, $first['bodies']);
         self::assertSame(1, $first['attempts']);
-        self::assertSame(1, $first['inbox']);
+        self::assertSame(0, $first['inbox']);
         self::assertNotNull($old);
         self::assertSame('', $old->body);
         self::assertSame($oldHash, $old->body_hash);
@@ -149,7 +150,7 @@ final class WebhookApiRetentionTest extends TestCase
         self::assertSame('leased-body', $this->tenant->table('sys_api_webhook_deliveries')->where('id', 'delivery-leased')->value('body'));
         self::assertSame('fresh-body', $this->tenant->table('sys_api_webhook_deliveries')->where('id', 'delivery-fresh')->value('body'));
         self::assertNotNull($this->tenant->table('sys_inbox_messages')->where('message_id', self::OldEvent)->first());
-        self::assertNull($this->tenant->table('sys_inbox_messages')->where('message_id', self::OrphanEvent)->first());
+        self::assertNotNull($this->tenant->table('sys_inbox_messages')->where('message_id', self::OrphanEvent)->first());
         self::assertSame(0, $this->tenant->table('sys_api_webhook_deliveries')->insertOrIgnore($this->deliveryInsert('delivery-duplicate', self::OldEvent, 'pending', $now, $now->add(new DateInterval('P7D')), 'new-body')));
         self::assertSame(1, $this->tenant->table('sys_api_webhook_deliveries')->where('event_id', self::OldEvent)->count());
         $this->assertReplayExpired('delivery-old');
@@ -214,11 +215,11 @@ final class WebhookApiRetentionTest extends TestCase
             $this->delivery('delivery-pg', self::OldEvent, 'dead', $now->sub(new DateInterval('P8D')), $now->sub(new DateInterval('P1D')), 'pg-body');
             $this->inboxRow(self::OldEvent);
             $this->inboxRow(self::OrphanEvent);
-            $webhooks = new WebhookRetention($tenant, $restorer, $this->clock);
-            self::assertSame(['bodies' => 1, 'attempts' => 0, 'inbox' => 1], $webhooks->prune($scope));
+            $webhooks = new WebhookRetention($tenant, $restorer, $this->clock, providerLedger: static fn (): ProviderEffectLedger => resolve(ProviderEffectLedger::class));
+            self::assertSame(['bodies' => 1, 'attempts' => 0, 'inbox' => 0], $webhooks->prune($scope));
             self::assertSame('', $tenant->table('sys_api_webhook_deliveries')->where('id', 'delivery-pg')->value('body'));
             self::assertNotNull($tenant->table('sys_inbox_messages')->where('message_id', self::OldEvent)->first());
-            self::assertNull($tenant->table('sys_inbox_messages')->where('message_id', self::OrphanEvent)->first());
+            self::assertNotNull($tenant->table('sys_inbox_messages')->where('message_id', self::OrphanEvent)->first());
             self::assertSame(0, $tenant->table('sys_api_webhook_deliveries')->insertOrIgnore($this->deliveryInsert('delivery-pg-dup', self::OldEvent, 'pending', $now, $now->add(new DateInterval('P7D')), 'again')));
             $this->tenant = $previous;
             $this->budget = $previousBudget;
@@ -285,6 +286,7 @@ final class WebhookApiRetentionTest extends TestCase
             bodyRetentionSeconds: $body,
             historyRetentionSeconds: $history,
             replayHorizonSeconds: $replay,
+            providerLedger: static fn (): ProviderEffectLedger => resolve(ProviderEffectLedger::class),
         );
     }
 
@@ -318,7 +320,7 @@ final class WebhookApiRetentionTest extends TestCase
         string $body,
         ?DateTimeImmutable $leaseUntil = null,
     ): array {
-        return [
+        return WebhookRows::original($this->scope, [
             'id' => $id,
             'subscription_id' => 'subscription-a',
             'subscription_revision' => 0,
@@ -340,7 +342,7 @@ final class WebhookApiRetentionTest extends TestCase
             'finished_at' => in_array($status, ['dead', 'succeeded'], true) ? $createdAt : null,
             'expires_at' => $expiresAt,
             'last_error' => $status === 'dead' ? 'http_permanent' : null,
-        ];
+        ]);
     }
 
     private function insertWebhookAttempt(string $id, string $deliveryId): void
@@ -362,7 +364,7 @@ final class WebhookApiRetentionTest extends TestCase
     private function inboxRow(string $eventId): void
     {
         $this->tenant->table('sys_inbox_messages')->insert([
-            'consumer' => WebhookRetention::Consumer,
+            'consumer' => 'api.webhooks',
             'message_id' => $eventId,
             'name' => 'orders.placed',
             'processed_at' => $this->clock->now(),
@@ -382,6 +384,8 @@ final class WebhookApiRetentionTest extends TestCase
             clock: $this->clock,
             cursors: new SignedCursorCodec($this->clock, new WebhookApiRetentionRetentionKeyring),
             audit: new WebhookApiRetentionRetentionAudit,
+            issuer: $this->restorer,
+            scopes: resolve(DataScopeCodec::class),
         );
 
         try {

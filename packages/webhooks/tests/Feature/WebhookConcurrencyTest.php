@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Feature;
 
+use CoreX\Context\Contracts\ProviderEffectRecovery;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
@@ -72,7 +73,7 @@ final class WebhookConcurrencyTest extends TestCase
             self::assertTrue($store->finish($scope, $replacement, new WebhookHttpResult(204, null, null, 1)));
             self::assertSame('succeeded', $store->find($scope, 'delivery-pg')?->status);
             self::assertSame(
-                ['unknown', 'succeeded'],
+                ['retry', 'succeeded'],
                 $connection->table('sys_api_webhook_attempts')->orderBy('attempt')->pluck('outcome')->all(),
             );
         } finally {
@@ -148,7 +149,8 @@ final class WebhookConcurrencyTest extends TestCase
             new CallerWorkScopeFixture($contexts),
             $clock,
             new WebhookRetryPolicy(WebhookOptionsParser::fromArray([]), static fn (int $min, int $max): int => $max),
-            30,
+            receiptRecovery: static fn (): ProviderEffectRecovery => resolve(ProviderEffectRecovery::class),
+            leaseSeconds: 30,
         );
     }
 
@@ -160,7 +162,7 @@ final class WebhookConcurrencyTest extends TestCase
             'max_pii_class' => 'personal', 'key_refs' => '["current"]', 'created_at' => $now, 'updated_at' => $now,
         ]);
         $body = JsonCanonical::encode(['event_id' => 'event-pg', 'data' => ['id' => 'order-1']]);
-        $connection->table('sys_api_webhook_deliveries')->insert([
+        $connection->table('sys_api_webhook_deliveries')->insert(WebhookRows::original($this->scope($connection), [
             'id' => 'delivery-pg', 'subscription_id' => 'subscription-pg', 'subscription_revision' => 0,
             'event_id' => 'event-pg', 'topic' => 'orders.placed', 'topic_version' => 1, 'major' => 'v1',
             'endpoint_snapshot' => 'https://hooks.example/receiver',
@@ -168,7 +170,7 @@ final class WebhookConcurrencyTest extends TestCase
             'body_hash' => hash('sha256', $body), 'status' => 'pending', 'attempt' => 0, 'replay_count' => 0,
             'lease_owner' => null, 'lease_until' => null, 'next_attempt_at' => $now, 'created_at' => $now,
             'finished_at' => null, 'expires_at' => $now->add(new DateInterval('P7D')), 'last_error' => null,
-        ]);
+        ]));
     }
 
     private function configurePostgres(string $database): Connection

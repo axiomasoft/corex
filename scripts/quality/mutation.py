@@ -30,9 +30,9 @@ SECURITY_CORE = ('Context/', 'Tenancy/', 'Database/', 'Data/', 'Foundation/Inter
                  'Foundation/Internal/PackmanContextResolver.php', 'Foundation/Internal/PackmanFeatureFlags.php')
 ANCHORS = ('Foundation/Internal/PackmanActorResolver.php', 'Foundation/Internal/PackmanContextResolver.php',
            'Foundation/Internal/PackmanFeatureFlags.php',
-           'Data/Contracts/DataScopeAuthorizer.php', 'Data/Internal/AllowAllDataScopeAuthorizer.php',
+           'Data/Contracts/DataScopeAuthorizer.php', 'Data/Contracts/FieldUsePolicy.php',
            'Data/Internal/DenyDataScopeAuthorizer.php', 'Data/Internal/CallableDataScopeAuthorizer.php',
-           'Data/Laravel/SystemDataScopeAuthorization.php')
+           'Context/Internal/VerifiedWorkScope.php', 'Context/Laravel/DatabaseScopeControl.php')
 INFRA = re.compile(r'connection refused|could not find driver|SQLSTATE\[(?:080\w*|3D000)\]|'
                    r'Allowed memory size|out of memory|Segmentation fault|Pinned Pest executable is missing|'
                    r'Could not open input file|Could not execute the pinned Pest|No tests (?:executed|found)|'
@@ -415,6 +415,9 @@ def php_environment(sandbox, fragment):
            'PGSQL_DATABASE': 'corex_msi_' + fragment['package'].replace('-', '_') + '_' + fragment['zone'] + '_test',
            'COREX_MUTATION_LOGS': str(sandbox.parent / 'processes')}
     require(re.fullmatch(r'[a-z0-9_]+_test', env['PGSQL_DATABASE']), 'Unsafe worker DB')
+    env.pop('PGSQL_BUDGET_DATABASE', None)
+    if fragment['package'] == 'operations':
+        env['PGSQL_BUDGET_DATABASE'] = env['PGSQL_DATABASE'].removesuffix('_test') + '_budget_test'
     return binary, version, env
 
 
@@ -426,22 +429,22 @@ def php_witness(binary):
     return json.loads(result.stdout)
 
 
-def pg_preflight(binary, sandbox, env, base):
+def pg_preflight(binary, sandbox, env, base, label='pg'):
     name = env['PGSQL_DATABASE']
     require(re.fullmatch(r'[a-z0-9_]+_test', name), 'Unsafe PostgreSQL database')
     common = ['-h', env['PGSQL_HOST'], '-p', env['PGSQL_PORT'], '-U', env['PGSQL_USERNAME']]
-    run(['pg_isready', *common, '-d', name], sandbox, env, base / 'pg-ready', base)
+    run(['pg_isready', *common, '-d', name], sandbox, env, base / (label + '-ready'), base)
     query_env = {**env, 'PGPASSWORD': env['PGSQL_PASSWORD']}
     exists = subprocess.check_output(['psql', *common, '-d', 'postgres', '-Atqc',
                                      "SELECT 1 FROM pg_database WHERE datname='" + name + "'"], env=query_env, text=True)
     if exists.strip() != '1':
         run(['psql', *common, '-d', 'postgres', '-v', 'ON_ERROR_STOP=1', '-c', 'CREATE DATABASE ' + name],
-            sandbox, query_env, base / 'pg-create', base)
+            sandbox, query_env, base / (label + '-create'), base)
     expression = ('echo json_encode((new PDO("pgsql:host=".getenv("PGSQL_HOST").";port=".getenv("PGSQL_PORT").'
                   '";dbname=".getenv("PGSQL_DATABASE"),getenv("PGSQL_USERNAME"),getenv("PGSQL_PASSWORD")))'
                   '->query("SELECT current_database() AS database, current_setting(\'server_version\') AS version")'
                   '->fetch(PDO::FETCH_ASSOC));')
-    witness = run([binary, '-r', expression], sandbox, env, base / 'pg-witness', base)
+    witness = run([binary, '-r', expression], sandbox, env, base / (label + '-witness'), base)
     value = load(verify_artifact(witness['stdout'], base))
     require(value.get('database') == name, 'Wrong actual worker database')
     return value
@@ -751,6 +754,9 @@ def run_fragment(fragment, root, output, ast, inputs, probe=False):
     snapshot(sandbox, root, test_directory)
     binary, version, env = php_environment(sandbox, fragment)
     db = pg_preflight(binary, sandbox, env, base)
+    if 'PGSQL_BUDGET_DATABASE' in env:
+        budget_env = {**env, 'PGSQL_DATABASE': env['PGSQL_BUDGET_DATABASE']}
+        db['budget'] = pg_preflight(binary, sandbox, budget_env, base, label='pg-budget')
     files = ['packages/tenancy/src/Provisioning/Internal/DatabaseValue.php'] if probe else fragment['files']
     selected = {**fragment, 'files': files}
     versions = subprocess.check_output([binary, '-r', 'require "vendor/autoload.php"; echo json_encode(array_map('

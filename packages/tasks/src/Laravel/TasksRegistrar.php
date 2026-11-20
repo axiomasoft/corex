@@ -71,7 +71,7 @@ final class TasksRegistrar implements PackageRegistrar
                 throw new LogicException('Task completion captures must implement TaskCompletionCapture.');
             }
 
-            $capture->capture($candidate);
+            $capture->capture($candidate, $task->getConnection());
         }
     }
 }

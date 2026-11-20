@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Webhooks\Internal;
 
 use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\StoredWorkIssuer;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Messaging\Contracts\CloudEventCodec;
 use CoreX\Messaging\Contracts\Inbox;
+use CoreX\Messaging\Data\ConsumerId;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
@@ -22,7 +24,7 @@ use RuntimeException;
 #[Internal]
 final readonly class WebhookFanout
 {
-    public const string Consumer = 'api.webhooks.v1';
+    public const string Consumer = 'api.webhooks';
 
     public const int BodyLimit = 20 * 1024;
 
@@ -38,15 +40,16 @@ final readonly class WebhookFanout
         private CloudEventCodec $codec,
         private DataScopeCodec $scopes,
         private CurrentWorkScope $current,
+        private StoredWorkIssuer $issuer,
     ) {}
 
     public function accept(MessageEnvelope $message): void
     {
-        $scope = $this->scopes->decode($message->scope);
+        $scope = $message->scope;
         $this->connection->transaction(function () use ($message, $scope): void {
             $this->current->assert($scope, $this->connection);
 
-            if (! $this->inbox->claim(consumer: self::Consumer, messageId: $message->messageId, name: $message->name)) {
+            if (! $this->inbox->claim($this->connection, new ConsumerId(self::Consumer, 1), $message)) {
                 return;
             }
 
@@ -75,18 +78,32 @@ final readonly class WebhookFanout
             $now = $this->clock->now();
 
             foreach ($rows as $row) {
-                $this->connection->table('sys_api_webhook_deliveries')->insertOrIgnore([
-                    'id' => substr(hash('sha256', DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id')).'|'.$message->messageId), 0, 32),
-                    'subscription_id' => DatabaseValue::field(row: $row, name: 'id'),
-                    'subscription_revision' => DatabaseValue::field(row: $row, name: 'revision'),
+                $subscription = DatabaseValue::text(DatabaseValue::field($row, 'id'));
+                $revision = DatabaseValue::integer(DatabaseValue::field($row, 'revision'));
+                $endpoint = DatabaseValue::text(DatabaseValue::field($row, 'endpoint_url'));
+                $key = WebhookWork::key($scope, $subscription, $message->source, $message->messageId, 'original');
+                $id = substr($key, 0, 32);
+                $bodyHash = hash('sha256', $body);
+                $digest = WebhookWork::digest($endpoint, $bodyHash, $topic->name, $topic->version, $revision, $topic->major);
+                $proof = $this->issuer->issue($scope, WebhookWork::Owner, WebhookWork::reference($id, $key, $digest));
+                $this->connection->table('sys_api_webhook_deliveries')->insert([
+                    ...WebhookDeliveryScope::logical($scope),
+                    ...WebhookDeliveryScope::fence($scope),
+                    'id' => $id,
+                    'subscription_id' => $subscription,
+                    'subscription_revision' => $revision,
+                    'event_source' => $message->source,
                     'event_id' => $message->messageId,
+                    'replay_id' => 'original',
+                    'effect_key' => $key,
+                    'scope_seal' => $proof->seal,
                     'topic' => $topic->name,
                     'topic_version' => $topic->version,
                     'major' => $topic->major,
-                    'endpoint_snapshot' => DatabaseValue::field(row: $row, name: 'endpoint_url'),
-                    'scope' => JsonCanonical::encode($message->scope),
+                    'endpoint_snapshot' => $endpoint,
+                    'scope' => JsonCanonical::encode($this->scopes->encode($scope)),
                     'body' => $body,
-                    'body_hash' => hash('sha256', $body),
+                    'body_hash' => $bodyHash,
                     'status' => $oversize ? 'dead' : 'pending',
                     'attempt' => 0,
                     'replay_count' => 0,

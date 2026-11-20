@@ -2,14 +2,19 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Contracts\DataScopeFactory;
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Workflow\Contracts\WorkflowBinding;
+use CoreX\Workflow\Data\CaptureResult;
 use CoreX\Workflow\Data\SignalRequest;
 use CoreX\Workflow\Data\TransitionRequest;
 use CoreX\Workflow\Data\TriggerRequest;
+use CoreX\Workflow\Enums\CaptureStatus;
 use CoreX\Workflow\Internal\WorkflowOptions;
 use CoreX\Workflow\Tests\TestCase;
+use Illuminate\Support\Facades\DB;
 use Packman\Context\Contracts\ContextScopeInterface;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Compiler\CompiledModule;
@@ -23,6 +28,7 @@ function triggerRequest(string $key, array $snapshot = ['status' => 'new']): Tri
 
     return new TriggerRequest(
         context: $context,
+        scope: resolve(DataScopeFactory::class)->forCurrentPrincipal($context),
         module: 'axiomasoft/corex-workflow',
         entityHandle: 'test.ticket',
         eventId: 'event:1',
@@ -35,20 +41,28 @@ function triggerRequest(string $key, array $snapshot = ['status' => 'new']): Tri
     );
 }
 
-it('captures an immutable intent and replays the same request key', function (): void {
-    $binding = resolve(WorkflowBinding::class);
+function captureWorkflow(TriggerRequest $request): CaptureResult
+{
+    $connection = DB::connection();
 
-    expect($binding->capture(triggerRequest('workflow:test:1'))->status)->toBe('created')
-        ->and($binding->capture(triggerRequest('workflow:test:1'))->status)->toBe('existing')
+    return $connection->transaction(fn () => resolve(WorkflowBinding::class)->capture($request, $connection));
+}
+
+it('captures an immutable intent and replays the same request key', function (): void {
+    $first = captureWorkflow(triggerRequest('workflow:test:1'));
+    $replay = captureWorkflow(triggerRequest('workflow:test:1'));
+
+    expect($first->status)->toBe(CaptureStatus::Created)
+        ->and($replay->status)->toBe(CaptureStatus::Existing)
+        ->and($replay->intentRef)->toBe($first->intentRef)
+        ->and($replay->digest)->toBe($first->digest)
         ->and($this->app['db']->table('sys_workflow_intents')->where('request_key', 'workflow:test:1')->value('state'))->toBe('pending');
 });
 
 it('rejects a changed immutable payload for the same request key', function (): void {
-    $binding = resolve(WorkflowBinding::class);
+    captureWorkflow(triggerRequest('workflow:test:conflict'));
 
-    $binding->capture(triggerRequest('workflow:test:conflict'));
-
-    expect($binding->capture(triggerRequest('workflow:test:conflict', ['status' => 'changed']))->status)->toBe('conflict');
+    expect(captureWorkflow(triggerRequest('workflow:test:conflict', ['status' => 'changed']))->status)->toBe(CaptureStatus::Conflict);
 });
 
 it('delegates signal and transition operations to the configured engine adapter', function (): void {
@@ -67,11 +81,11 @@ it('does not send expired signals to the engine adapter', function (): void {
 });
 
 it('rejects empty definition and version refs before insert', function (string $definitionRef, string $versionRef): void {
-    $binding = resolve(WorkflowBinding::class);
     $context = resolve(TenantContextResolver::class)->current();
 
-    $binding->capture(new TriggerRequest(
+    captureWorkflow(new TriggerRequest(
         context: $context,
+        scope: resolve(DataScopeFactory::class)->forCurrentPrincipal($context),
         module: 'axiomasoft/corex-workflow',
         entityHandle: 'test.ticket',
         eventId: 'event:1',
@@ -88,35 +102,33 @@ it('rejects empty definition and version refs before insert', function (string $
 ])->throws(InvalidArgumentException::class);
 
 it('stores the stamp inside the payload and excludes the fingerprint from the hash', function (): void {
-    $binding = resolve(WorkflowBinding::class);
-
-    expect($binding->capture(triggerRequest('workflow:stamp:hash'))->status)->toBe('created');
+    expect(captureWorkflow(triggerRequest('workflow:stamp:hash'))->status)->toBe(CaptureStatus::Created);
 
     $row = $this->app['db']->table('sys_workflow_intents')->where('request_key', 'workflow:stamp:hash')->first();
     $stored = json_decode((string) $row->payload, true);
 
     expect($stored['identity'])->toMatchArray([
-        'schema' => 'workflow-definition/1',
+        'schema' => 'workflow-definition/2',
         'point' => 'workflow.trigger',
         'id' => 'axiomasoft/corex-workflow:test.ticket:created',
         'version' => 'version:1',
-    ])->and($stored['registryFingerprint'])->toBe('module-free')
+    ])->and($stored['registryFingerprint'])->toBe(resolve(ModuleRegistry::class)->compiled()->fingerprint)
         ->and($row->payload_hash)->toBe(hash(
             'sha256',
-            "workflow-definition/1\0trigger\0workflow:stamp:hash\0".json_encode(
+            "workflow-definition/2\0trigger\0workflow:stamp:hash\0".json_encode(
                 array_diff_key($stored, ['registryFingerprint' => true]),
                 JSON_THROW_ON_ERROR,
             ),
         ))
-        ->and($binding->capture(triggerRequest('workflow:stamp:hash'))->status)->toBe('existing');
+        ->and(captureWorkflow(triggerRequest('workflow:stamp:hash'))->status)->toBe(CaptureStatus::Existing);
 });
 
 it('conflicts when the pinned version does not match the stored identity', function (): void {
-    $binding = resolve(WorkflowBinding::class);
-    $binding->capture(triggerRequest('workflow:stamp:version'));
+    captureWorkflow(triggerRequest('workflow:stamp:version'));
     $changed = triggerRequest('workflow:stamp:version');
     $changed = new TriggerRequest(
         context: $changed->context,
+        scope: $changed->scope,
         module: $changed->module,
         entityHandle: $changed->entityHandle,
         eventId: $changed->eventId,
@@ -128,45 +140,23 @@ it('conflicts when the pinned version does not match the stored identity', funct
         requestKey: $changed->requestKey,
     );
 
-    expect($binding->capture($changed)->status)->toBe('conflict');
+    expect(captureWorkflow($changed)->status)->toBe(CaptureStatus::Conflict);
 });
 
-it('admits a legacy non-empty ref with the original hash and does not rewrite it', function (): void {
-    $context = resolve(TenantContextResolver::class)->current();
-    $business = [
-        'event_id' => 'event:1',
-        'event_name' => 'created',
-        'entity_handle' => 'test.ticket',
-        'scalar_snapshot' => ['status' => 'new'],
-    ];
-    ksort($business['scalar_snapshot']);
-    $encoded = json_encode($business, JSON_THROW_ON_ERROR);
-    $hash = hash('sha256', "engine-binding/1\0trigger\0workflow:legacy:1\0{$encoded}");
-    $this->app['db']->table('sys_workflow_intents')->insert([
-        'id' => '01999999-9999-7999-8999-999999999999',
-        'request_key' => 'workflow:legacy:1',
-        'payload_hash' => $hash,
-        'context_hash' => hash('sha256', $context->account->id."\0"),
-        'restore_epoch' => str_repeat('0', 64),
-        'module' => 'axiomasoft/corex-workflow',
-        'kind' => 'trigger',
-        'definition_ref' => 'definition:1',
-        'version_ref' => 'version:1',
-        'subject_ref' => 'ticket:1',
-        'payload' => $encoded,
-        'state' => 'pending',
-        'claim_epoch' => 0,
-        'attempt' => 0,
-        'generation' => 0,
-        'created_at' => now(),
-        'updated_at' => now(),
-    ]);
-
+it('rejects capture outside the exact live owner connection, and rolls back an accepted intent with its caller', function (): void {
     $binding = resolve(WorkflowBinding::class);
+    $request = triggerRequest('workflow:owner-transaction');
+    $owner = DB::connection();
+    config(['database.connections.foreign' => ['driver' => 'sqlite', 'database' => ':memory:', 'prefix' => '']]);
+    $foreign = DB::connection('foreign');
 
-    expect($binding->capture(triggerRequest('workflow:legacy:1'))->status)->toBe('existing')
-        ->and($this->app['db']->table('sys_workflow_intents')->where('request_key', 'workflow:legacy:1')->value('payload'))->toBe($encoded)
-        ->and($binding->capture(triggerRequest('workflow:legacy:1', ['status' => 'changed']))->status)->toBe('conflict');
+    expect(fn () => $binding->capture($request, $owner))->toThrow(RuntimeException::class, 'active owner transaction');
+    expect(fn () => $foreign->transaction(fn () => $binding->capture($request, $foreign)))->toThrow(ScopeContextMismatch::class);
+
+    $owner->beginTransaction();
+    expect($binding->capture($request, $owner)->status)->toBe(CaptureStatus::Created);
+    $owner->rollBack();
+    expect($owner->table('sys_workflow_intents')->where('request_key', $request->requestKey)->exists())->toBeFalse();
 });
 
 it('treats an unrelated registry fingerprint change as the same work', function (): void {
@@ -210,19 +200,21 @@ it('treats an unrelated registry fingerprint change as the same work', function 
         }
     };
     $this->app->instance(ModuleRegistry::class, $registry);
-    $binding = resolve(WorkflowBinding::class);
-
-    expect($binding->capture(triggerRequest('workflow:stamp:drift'))->status)->toBe('created');
+    expect(captureWorkflow(triggerRequest('workflow:stamp:drift'))->status)->toBe(CaptureStatus::Created);
 
     $registry->fingerprint = 'fingerprint-b';
 
-    expect($binding->capture(triggerRequest('workflow:stamp:drift'))->status)->toBe('existing')
+    expect(captureWorkflow(triggerRequest('workflow:stamp:drift'))->status)->toBe(CaptureStatus::Existing)
         ->and(json_decode((string) $this->app['db']->table('sys_workflow_intents')->where('request_key', 'workflow:stamp:drift')->value('payload'), true)['registryFingerprint'])->toBe('fingerprint-a');
 });
 
 it('checks workflow triggers through the public Packman registry projection', function (): void {
     $payload = CompiledRegistry::empty()->toArray();
-    $payload['workflow'] = [['kind' => 'trigger', 'stepClass' => null, 'entityHandle' => 'test.ticket', 'eventNames' => ['created']]];
+    $payload['extensions'] = [[
+        'point' => 'workflow.trigger', 'id' => 'axiomasoft/corex-workflow:test.ticket:created',
+        'owner' => 'axiomasoft/corex-workflow', 'ownerVersion' => '2.0.0', 'payload' => ['event' => 'created'],
+    ]];
+    $payload['fingerprint'] = CompiledRegistry::hashCanonical($payload['compiler'], $payload['modules'], $payload['extensions'], $payload['replacements']);
     $registry = Mockery::mock(ModuleRegistry::class);
     $registry->shouldReceive('isActive')->andReturnTrue();
     $registry->shouldReceive('compiled')->andReturn(CompiledRegistry::fromArray($payload));
@@ -230,5 +222,5 @@ it('checks workflow triggers through the public Packman registry projection', fu
     config(['corex-workflow.enforce_declarations' => true]);
     $this->app->forgetInstance(WorkflowOptions::class);
 
-    expect(resolve(WorkflowBinding::class)->capture(triggerRequest('workflow:packman:declared'))->status)->toBe('created');
+    expect(captureWorkflow(triggerRequest('workflow:packman:declared'))->status)->toBe(CaptureStatus::Created);
 });

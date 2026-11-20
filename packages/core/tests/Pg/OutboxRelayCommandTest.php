@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+require_once __DIR__.'/../Support/Messaging.php';
+
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\MessagePublisher;
 use CoreX\Messaging\Data\MessageEnvelope;
@@ -64,7 +66,7 @@ it('defers the second message when the publisher throws', function (): void {
 
     $now = resolve(ClockInterface::class)->now();
     $second = DB::connection('pgsql')->table('sys_outbox_messages')
-        ->where('id', '01932f5a-0000-7000-8000-000000000032')
+        ->where('message_id', '01932f5a-0000-7000-8000-000000000032')
         ->first();
 
     $availableAt = new DateTimeImmutable((string) $second->available_at);
@@ -100,7 +102,7 @@ it('warns on OutboxLeaseLost without deferring', function (): void {
         ->assertSuccessful();
 
     $second = DB::connection('pgsql')->table('sys_outbox_messages')
-        ->where('id', '01932f5a-0000-7000-8000-000000000042')
+        ->where('message_id', '01932f5a-0000-7000-8000-000000000042')
         ->first();
 
     expect($second->status)->toBe('publishing');
@@ -114,4 +116,28 @@ it('runs relay once in the test environment', function (): void {
     outboxRelayCommandBindPublisher($publisher);
 
     $this->artisan('corex:messaging:relay', ['--once' => true])->assertSuccessful();
+})->group('pg');
+
+it('continues the current pass when the failed publisher has already lost its row lease', function (): void {
+    $publisher = new class implements DurableMessagePublisher
+    {
+        public int $calls = 0;
+
+        public function publish(MessageEnvelope $message): void
+        {
+            if (++$this->calls === 1) {
+                DB::connection('pgsql')->table('sys_outbox_messages')->where('message_id', $message->messageId)
+                    ->update(['lease_until' => resolve(ClockInterface::class)->now()->modify('-1 second')]);
+
+                throw new RuntimeException('private provider response');
+            }
+        }
+    };
+    outboxRelayCommandBindPublisher($publisher);
+    outboxRelayInsertRow(['id' => '01932f5a-0000-7000-8000-000000000091']);
+    outboxRelayInsertRow(['id' => '01932f5a-0000-7000-8000-000000000092']);
+    $this->artisan('corex:messaging:relay', ['--once' => true])->expectsOutputToContain('published 1')->assertSuccessful();
+    expect($publisher->calls)->toBe(2)
+        ->and(DB::table('sys_outbox_messages')->where('status', 'publishing')->count())->toBe(1)
+        ->and(DB::table('sys_outbox_messages')->where('status', 'published')->count())->toBe(1);
 })->group('pg');

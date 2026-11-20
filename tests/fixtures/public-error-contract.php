@@ -428,13 +428,13 @@ return [
             'owner' => 'axiomasoft/corex-operations',
             'source' => 'packages/operations/src/Idempotency/Data/StoredOperationOutcome.php',
             'adapter' => 'stored-api-error-outcome',
-            'sha256' => 'c740713238368aa44d94b47aaf8a1ad63004ba1a10021410ce14122ccf6b4afc',
+            'sha256' => 'a21f5359d5a77b88dc86667c861e122a7b42d90532f78932ee32b809d0bd53bb',
         ],
         [
             'owner' => 'axiomasoft/corex-operations',
             'source' => 'packages/operations/src/Invocation/Internal/DefaultOperationInvoker.php',
             'adapter' => 'field-path-api-error',
-            'sha256' => '0c1649758325f17bcb02ce184445468d9375c34d79cae08cd70fd6018c80a2c1',
+            'sha256' => '104aba0ac9c1300134ea876591d5992efe75269c90bbbadd95bc1bf3edc094ed',
         ],
         [
             'owner' => 'axiomasoft/corex-operations',

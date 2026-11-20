@@ -16,6 +16,8 @@ final readonly class WebhookHttpResult
         public ?string $retryAfter,
         public ?WebhookFailureReason $errorCode,
         public int $durationMs,
+        public ?string $providerRef = null,
+        public bool $absenceProven = false,
     ) {
         if ($status !== null && ($status < 100 || $status > 599)) {
             throw new InvalidArgumentException('Webhook HTTP status is invalid.');
@@ -30,6 +32,10 @@ final readonly class WebhookHttpResult
 
         if ($status === null && $errorCode === null) {
             throw new InvalidArgumentException('Webhook result must contain a status or a safe error code.');
+        }
+
+        if ($providerRef !== null && ($providerRef === '' || strlen($providerRef) > 255 || preg_match('/[\x00-\x1f\x7f]/', $providerRef) === 1)) {
+            throw new InvalidArgumentException('Webhook provider reference is invalid.');
         }
 
         if ($durationMs < 0) {

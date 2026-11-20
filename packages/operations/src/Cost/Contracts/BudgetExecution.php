@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Operations\Cost\Contracts;
 
 use Closure;
+use CoreX\Operations\Cost\Data\BudgetAttempt;
+use CoreX\Operations\Cost\Data\BudgetInvocationResult;
+use CoreX\Operations\Cost\Data\BudgetReceipt;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Data\OperationResult;
 use Packman\Attributes\Spi;
@@ -16,6 +19,11 @@ interface BudgetExecution
 {
     /** @param Closure(Closure():void):OperationResult $effect */
     public function invoke(OperationInvocation $invocation, Closure $effect): OperationResult;
+
+    /** @param Closure(Closure():void):OperationResult $effect */
+    public function invokeTransactional(OperationInvocation $invocation, Closure $effect, BudgetAttempt $attempt): BudgetInvocationResult;
+
+    public function recover(BudgetReceipt $receipt): void;
 
     public function replay(OperationInvocation $invocation, OperationResult $result): OperationResult;
 }

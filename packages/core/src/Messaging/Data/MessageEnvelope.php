@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Data;
 
+use CoreX\Context\Data\StoredWorkProof;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Data\EntityHandle;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Messaging\Contracts\DurablePayload;
 use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Exceptions\InvalidMessage;
 use CoreX\Messaging\Internal\UriReference;
 use DateTimeImmutable;
+use DateTimeZone;
 use Packman\Attributes\Api;
 
 /**
@@ -21,13 +26,16 @@ use Packman\Attributes\Api;
  * Наружу публикуется одна идентичность контракта — contract(), то есть `name.vN`:
  * подписка на имя без версии однажды получит следующую мажорную версию (D24).
  */
-#[Api(since: '1.0')]
+#[Api(since: '2.0.0')]
 final readonly class MessageEnvelope implements DurablePayload
 {
-    public const int ENVELOPE_VERSION = 1;
+    public const int ENVELOPE_VERSION = 2;
+
+    public const string PROOF_OWNER = 'corex.messaging.outbox';
+
+    public DateTimeImmutable $occurredAt;
 
     /**
-     * @param  array<string, scalar|null>  $scope  результат DataScopeCodec::encode()
      * @param  array<string, scalar|null>  $metadata
      */
     public function __construct(
@@ -35,15 +43,16 @@ final readonly class MessageEnvelope implements DurablePayload
         public string $source,
         public string $name,
         public int $contractVersion,
-        public DateTimeImmutable $occurredAt,
-        public array $scope,
+        DateTimeImmutable $occurredAt,
+        public DataScope $scope,
         public MessagePayload $payload,
         public PiiClass $piiClass,
-        public ?string $subject = null,
-        public ?string $correlationId = null,
+        public RecordRef|EntityHandle $subject,
+        public string $correlationId,
         public ?string $causationId = null,
         public array $metadata = [],
         public int $envelopeVersion = self::ENVELOPE_VERSION,
+        public ?string $seal = null,
     ) {
         self::assertOpaque(value: $messageId, name: 'message identity');
         self::assertOpaque(value: $source, name: 'message source');
@@ -60,16 +69,11 @@ final readonly class MessageEnvelope implements DurablePayload
             throw InvalidMessage::identity("envelope version [{$envelopeVersion}]");
         }
 
-        if ($scope === []) {
-            throw InvalidMessage::identity('scope: a published message carries a data scope (RUN-002)');
-        }
+        $this->occurredAt = $occurredAt->setTimezone(new DateTimeZone('UTC'));
+        self::assertOpaque(value: $correlationId, name: 'correlation identity');
 
-        if ($subject !== null) {
-            self::assertOpaque(value: $subject, name: 'message subject');
-        }
-
-        if ($correlationId !== null) {
-            self::assertOpaque(value: $correlationId, name: 'correlation identity');
+        if ($seal !== null && preg_match('/\A[a-f0-9]{64}\z/D', $seal) !== 1) {
+            throw InvalidMessage::identity('provenance seal');
         }
 
         if ($causationId !== null) {
@@ -93,6 +97,29 @@ final readonly class MessageEnvelope implements DurablePayload
             causationId: $this->causationId, metadata: $this->metadata,
             envelopeVersion: $this->envelopeVersion,
         );
+    }
+
+    /** @return array{entity:string,id?:string} */
+    public function subjectData(): array
+    {
+        return $this->subject instanceof RecordRef
+            ? ['entity' => $this->subject->entity, 'id' => $this->subject->id]
+            : ['entity' => $this->subject->value];
+    }
+
+    public function digest(): string
+    {
+        return hash('sha256', json_encode([
+            'corex.fact.v2', $this->contract(), $this->messageId, $this->source, $this->occurredAt->format('Y-m-d\\TH:i:s.u\\Z'),
+            [DataScope::VERSION, $this->scope->deploymentId, $this->scope->accountId, $this->scope->workspaceId, $this->scope->bindingId,
+                $this->scope->bindingGeneration, $this->scope->accountIncarnation, $this->scope->restoreEpoch, $this->scope->principalKind, $this->scope->principalId], $this->subjectData(), $this->correlationId, $this->causationId,
+            $this->piiClass->value, $this->payload->encode(),
+        ], JSON_THROW_ON_ERROR));
+    }
+
+    public function workProof(): StoredWorkProof
+    {
+        return new StoredWorkProof(self::PROOF_OWNER, $this->digest(), $this->seal ?? throw InvalidMessage::identity('missing stored work provenance'));
     }
 
     private static function assertOpaque(string $value, string $name): void

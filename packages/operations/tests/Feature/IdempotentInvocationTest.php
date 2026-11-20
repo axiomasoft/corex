@@ -11,7 +11,9 @@ use CoreX\Context\Enums\PrincipalType;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Invocation\Data\InvocationMetadata;
+use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
+use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
 use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
@@ -35,6 +37,7 @@ use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
 use CoreX\Operations\Testing\NoteHandler;
+use CoreX\Operations\Tests\Support\IdempotencyWorkScope;
 use CoreX\Operations\Tests\TestCase;
 use CoreX\Time\Testing\FrozenClock;
 use DateTimeImmutable;
@@ -56,6 +59,8 @@ final class IdempotentInvocationTest extends TestCase
     private ContextFixture $tenants;
 
     private IdentityFixture $principal;
+
+    private IdempotencyWorkScope $work;
 
     private SqlIdempotencyStore $store;
 
@@ -87,6 +92,7 @@ final class IdempotentInvocationTest extends TestCase
         $this->tenants = new ContextFixture;
         $this->tenants->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
         $this->principal = new IdentityFixture;
+        $this->work = new IdempotencyWorkScope($this->tenants, $this->connection);
         $this->store = $this->makeStore($this->connection);
         $this->inner = new EffectInvokerFixture($this->connection);
         $this->authorizer = new ReplayAuthorizerFixture;
@@ -132,7 +138,9 @@ final class IdempotentInvocationTest extends TestCase
     public function test_same_id_under_different_principal_types_never_replays_across_principals(): void
     {
         $invoker = $this->invoker();
+        $this->work->principalId = 'shared-5';
         $user = $invoker->invoke($this->invocation(principal: new TypedPrincipal(PrincipalType::User, 'shared-5')));
+        $this->work->principalKind = 'agent';
         $agent = $invoker->invoke($this->invocation(principal: new TypedPrincipal(PrincipalType::Agent, 'shared-5')));
 
         self::assertFalse($user->replayed);
@@ -157,7 +165,7 @@ final class IdempotentInvocationTest extends TestCase
 
         $pending = $this->invocation(key: 'pending-key');
         $this->connection->transaction(fn (): IdempotencyAttempt => $this->store->begin(
-            OperationFingerprint::scope($pending, $this->connection),
+            OperationFingerprint::scope($pending, $this->work->forCurrentPrincipal($this->tenants->current())),
             'pending-key',
             OperationFingerprint::request($pending),
             $pending->operation->contractHash,
@@ -224,12 +232,23 @@ final class IdempotentInvocationTest extends TestCase
         ?EffectInvokerFixture $inner = null,
     ): IdempotentOperationInvoker {
         $store ??= $this->store;
+        $work = $connection === null ? $this->work : new IdempotencyWorkScope($this->tenants, $connection);
 
         return new IdempotentOperationInvoker(
             inner: $inner ?? $this->inner,
             store: static fn (): IdempotencyStore => $store,
             connection: $connection ?? $this->connection,
             modules: $this->modules,
+            scopes: $work,
+            current: $work,
+            clientScopes: new class implements ClientScopeAuthorizer
+            {
+                public function allows(Operation $operation, RequestContext $context): bool
+                {
+                    return true;
+                }
+            },
+            fields: resolve(OperationFieldAuthorizer::class),
             authorizer: $this->operationAuthorizer,
             replayAuthorizer: $this->authorizer,
             errors: resolve(ErrorMapper::class),
@@ -286,7 +305,7 @@ final class IdempotentInvocationTest extends TestCase
     {
         return new SqlIdempotencyStore(
             connection: $connection,
-            contexts: $this->tenants,
+            current: $connection === $this->connection ? $this->work : new IdempotencyWorkScope($this->tenants, $connection),
             clock: new FrozenClock(new DateTimeImmutable('2026-09-25T00:00:00+00:00')),
             keyHmacSecret: new SecretRef('idempotency-test-secret'),
             leaseSeconds: 30,
@@ -306,7 +325,23 @@ final class IdempotentInvocationTest extends TestCase
 
     private function createTables(Connection $connection): void
     {
-        $connection->statement('CREATE TABLE sys_api_idempotency (scope_hash VARCHAR(64) NOT NULL, key_hash VARCHAR(64) NOT NULL, request_fingerprint VARCHAR(64) NOT NULL, state VARCHAR(16) NOT NULL, attempt INTEGER NOT NULL, lease_token VARCHAR(64), lease_until DATETIME, outcome_json TEXT, contract_hash VARCHAR(64) NOT NULL, expires_at DATETIME, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, UNIQUE(scope_hash, key_hash))');
+        $connection->getSchemaBuilder()->create('sys_api_idempotency', function (Blueprint $table): void {
+            foreach ([
+                'scope_hash', 'key_hash', 'account_id', 'account_incarnation', 'workspace_scope', 'principal_kind', 'principal_id',
+                'client_scope', 'api_major', 'operation_id', 'deployment_id', 'binding_id', 'restore_epoch',
+                'request_fingerprint', 'state', 'contract_hash',
+            ] as $column) {
+                $table->string($column);
+            }
+            $table->unsignedBigInteger('binding_generation');
+            $table->unsignedBigInteger('attempt');
+            $table->uuid('lease_token')->nullable();
+            $table->text('outcome_json')->nullable();
+            $table->timestamp('lease_until')->nullable();
+            $table->timestamp('expires_at')->nullable();
+            $table->timestamps();
+            $table->unique(['account_id', 'account_incarnation', 'workspace_scope', 'principal_kind', 'principal_id', 'client_scope', 'api_major', 'operation_id', 'key_hash']);
+        });
         $connection->statement('CREATE TABLE idempotent_effects (id INTEGER PRIMARY KEY AUTOINCREMENT, value VARCHAR(255) NOT NULL)');
     }
 }

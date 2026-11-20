@@ -15,5 +15,7 @@ final readonly class LeasedMessage
         public string $leaseOwner,
         public int $attempt,
         public DateTimeImmutable $leaseUntil,
+        public string $rowId,
+        public string $claimToken,
     ) {}
 }

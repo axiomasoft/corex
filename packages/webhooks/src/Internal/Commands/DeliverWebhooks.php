@@ -6,7 +6,6 @@ namespace CoreX\Webhooks\Internal\Commands;
 
 use CoreX\Context\Contracts\DataScopeFactory;
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Context\Contracts\WorkScopeRunner;
 use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Webhooks\Internal\WebhookDeliveryWorker;
@@ -19,7 +18,8 @@ final class DeliverWebhooks extends Command
 {
     protected $signature = 'corex:webhooks:deliver
         {--worker=api-webhook : Lease owner for this process}
-        {--max=100 : Maximum deliveries in this pass}';
+        {--max=100 : Maximum deliveries in this pass}
+        {--reconcile= : Reconcile one existing provider effect}';
 
     protected $description = 'Deliver due CoreX webhooks on the current trusted tenant connection.';
 
@@ -48,10 +48,15 @@ final class DeliverWebhooks extends Command
             return self::INVALID;
         }
 
-        $delivered = 0;
-        $runner = $this->laravel->make(WorkScopeRunner::class);
+        $reconcile = $this->option('reconcile');
 
-        while ($delivered < $max && $runner->run($scope, fn () => $this->laravel->make(WebhookDeliveryWorker::class)->workOnce(scope: $scope, worker: $leaseOwner)) !== null) {
+        if (is_string($reconcile)) {
+            return $this->laravel->make(WebhookDeliveryWorker::class)->reconcile($scope, $reconcile) ? self::SUCCESS : self::FAILURE;
+        }
+
+        $delivered = 0;
+
+        while ($delivered < $max && $this->laravel->make(WebhookDeliveryWorker::class)->workOnce(scope: $scope, worker: $leaseOwner) !== null) {
             $delivered++;
         }
 

@@ -123,7 +123,7 @@ final class OctaneLifecycleTest extends TestCase
         self::assertSame(self::A, $a['tenant']);
         self::assertSame(self::B, $b['tenant']);
         foreach ($a['services'] as $key => $service) {
-            self::assertNotSame($service, $b['services'][$key]);
+            self::assertNotSame($service, $b['services'][$key], 'Octane reused '.$service::class.' across tenant requests.');
         }
 
         self::assertStringContainsString(self::A, $a['root']);
@@ -184,8 +184,10 @@ final class OctaneLifecycleTest extends TestCase
 
     public function test_worker_error_cleanup(): void
     {
+        $warmed = $this->warmServices();
         $this->client->failResponse = true;
         $this->handle(self::A);
+        self::assertSame($warmed, $this->trace->requests[0]['services']);
         $this->handle(self::B);
         $this->assertTenantSeparation();
         $this->assertEvents(1, 1);

@@ -6,7 +6,6 @@ namespace CoreX\CustomFields\Internal\Laravel;
 
 use CoreX\CustomFields\Internal\Integration\AttributeMessageContractRegistry;
 use CoreX\CustomFields\Internal\Integration\AttributeMessageTranslator;
-use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
@@ -24,12 +23,7 @@ final class AttributeMessagingRegistrar implements PackageRegistrar
             MessageContractRegistry::class,
             static fn (MessageContractRegistry $registry): AttributeMessageContractRegistry => new AttributeMessageContractRegistry($registry),
         );
-        $app->singleton(
-            AttributeMessageTranslator::class,
-            static fn (Application $app): AttributeMessageTranslator => new AttributeMessageTranslator(
-                scopeCodec: $app->make(DataScopeCodec::class),
-            ),
-        );
+        $app->singleton(AttributeMessageTranslator::class);
     }
 
     #[Override]

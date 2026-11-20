@@ -2,98 +2,12 @@
 
 declare(strict_types=1);
 
+require_once __DIR__.'/../Support/Messaging.php';
+
 use CoreX\Messaging\Data\LeasedMessage;
-use CoreX\Messaging\Data\MessageEnvelope;
-use CoreX\Messaging\Data\MessagePayload;
-use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Exceptions\OutboxLeaseLost;
-use CoreX\Messaging\Internal\SqlOutboxRelay;
-use CoreX\Time\Testing\FrozenClock;
 use Illuminate\Support\Facades\DB;
 use Psr\Clock\ClockInterface;
-
-const OUTBOX_RELAY_OWNER = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
-
-const OUTBOX_RELAY_OTHER_OWNER = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
-
-function outboxRelayMigrate(): void
-{
-    config(['database.default' => 'pgsql']);
-    DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
-    DB::statement('CREATE SCHEMA public');
-    test()->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
-}
-
-function outboxRelayClock(DateTimeImmutable $frozen): void
-{
-    app()->instance(ClockInterface::class, new FrozenClock($frozen));
-}
-
-function outboxRelayService(
-    int $leaseSeconds = 120,
-    int $maxAttempts = 8,
-    int $backoffCapSeconds = 300,
-): SqlOutboxRelay {
-    return new SqlOutboxRelay(
-        connection: DB::connection('pgsql'),
-        clock: resolve(ClockInterface::class),
-        leaseSeconds: $leaseSeconds,
-        maxAttempts: $maxAttempts,
-        backoffCapSeconds: $backoffCapSeconds,
-    );
-}
-
-function outboxRelayInsertRow(array $overrides = []): string
-{
-    $payload = $overrides['payload'] ?? MessagePayload::empty();
-    $storedEnvelopeVersion = $overrides['envelope_version'] ?? MessageEnvelope::ENVELOPE_VERSION;
-    $envelope = new MessageEnvelope(
-        messageId: $overrides['id'] ?? '01932f5a-0000-7000-8000-000000000001',
-        source: 'axiomasoft/corex',
-        name: 'membership.expired',
-        contractVersion: 1,
-        occurredAt: new DateTimeImmutable('2026-01-01T00:00:00Z'),
-        scope: ['accountId' => 'account-1'],
-        payload: $payload,
-        piiClass: PiiClass::None,
-        subject: 'subject-1',
-        correlationId: 'corr-1',
-        causationId: 'cause-1',
-        metadata: ['trace' => 't1'],
-        envelopeVersion: MessageEnvelope::ENVELOPE_VERSION,
-    );
-    $now = resolve(ClockInterface::class)->now();
-    $id = $envelope->messageId;
-
-    DB::table('sys_outbox_messages')->insert([
-        'id' => $id,
-        'name' => $envelope->name,
-        'contract_version' => $envelope->contractVersion,
-        'envelope_version' => $storedEnvelopeVersion,
-        'source' => $envelope->source,
-        'subject' => $envelope->subject,
-        'correlation_id' => $envelope->correlationId,
-        'causation_id' => $envelope->causationId,
-        'pii_class' => $envelope->piiClass->value,
-        'scope' => $overrides['scope_raw'] ?? json_encode($envelope->scope, JSON_THROW_ON_ERROR),
-        'payload' => $overrides['payload_raw'] ?? $envelope->payload->encode(),
-        'metadata' => json_encode($envelope->metadata, JSON_THROW_ON_ERROR),
-        'occurred_at' => $envelope->occurredAt,
-        'available_at' => $overrides['available_at'] ?? $now,
-        'status' => $overrides['status'] ?? 'pending',
-        'lease_owner' => $overrides['lease_owner'] ?? null,
-        'lease_until' => $overrides['lease_until'] ?? null,
-        'attempts' => $overrides['attempts'] ?? 0,
-        'failure_class' => $overrides['failure_class'] ?? null,
-        'last_error' => $overrides['last_error'] ?? null,
-        'published_at' => $overrides['published_at'] ?? null,
-        'dead_at' => $overrides['dead_at'] ?? null,
-        'created_at' => $now,
-        'updated_at' => $now,
-    ]);
-
-    return $id;
-}
 
 beforeEach(function (): void {
     outboxRelayMigrate();
@@ -114,7 +28,7 @@ it('leases a pending row into publishing with owner, lease window, and attempt c
         ->and($leased[0]->leaseUntil->getTimestamp())->toBe($now->modify('+120 seconds')->getTimestamp())
         ->and($leased[0]->envelope->messageId)->toBe($id);
 
-    $row = DB::table('sys_outbox_messages')->where('id', $id)->first();
+    $row = DB::table('sys_outbox_messages')->where('message_id', $id)->first();
 
     expect($row->status)->toBe('publishing')
         ->and($row->lease_owner)->toBe(OUTBOX_RELAY_OWNER)
@@ -156,12 +70,12 @@ it('reclaims expired publishing rows, marks exhausted leases dead, and fences co
 
     $relay->markPublished($leased[0]);
 
-    $deadRow = DB::table('sys_outbox_messages')->where('id', $deadId)->first();
+    $deadRow = DB::table('sys_outbox_messages')->where('message_id', $deadId)->first();
     expect($deadRow->status)->toBe('dead')
         ->and($deadRow->failure_class)->toBe('lease-expiry-attempts-exhausted');
 })->group('pg');
 
-it('fences corrupt envelope reconstruction through the same backoff budget', function (): void {
+it('quarantines corrupt envelopes without spending the rest of the delivery budget', function (): void {
     $corruptId = outboxRelayInsertRow([
         'id' => '01932f5a-0000-7000-8000-000000000004',
         'scope_raw' => '[]',
@@ -170,10 +84,10 @@ it('fences corrupt envelope reconstruction through the same backoff budget', fun
 
     expect($relay->lease(leaseOwner: OUTBOX_RELAY_OWNER, batchSize: 1))->toBe([]);
 
-    $row = DB::table('sys_outbox_messages')->where('id', $corruptId)->first();
-    expect($row->status)->toBe('dead')
+    $row = DB::table('sys_outbox_messages')->where('message_id', $corruptId)->first();
+    expect($row->status)->toBe('quarantined')
         ->and($row->attempts)->toBe(1)
-        ->and($row->failure_class)->toBe('attempts-exhausted');
+        ->and($row->failure_class)->toBe('invalid-fact');
 })->group('pg');
 
 it('refuses markPublished when the lease owner no longer matches', function (): void {
@@ -185,55 +99,14 @@ it('refuses markPublished when the lease owner no longer matches', function (): 
         envelope: $leased->envelope,
         leaseOwner: OUTBOX_RELAY_OTHER_OWNER,
         attempt: $leased->attempt,
-        leaseUntil: $leased->leaseUntil,
+        leaseUntil: $leased->leaseUntil, rowId: $leased->rowId, claimToken: $leased->claimToken,
     );
 
     expect(fn (): mixed => $relay->markPublished($wrongOwner))
         ->toThrow(OutboxLeaseLost::class, 'may already have reached its destination');
 
-    expect(DB::table('sys_outbox_messages')->where('id', $id)->value('status'))->toBe('publishing');
+    expect(DB::table('sys_outbox_messages')->where('message_id', $id)->value('status'))->toBe('publishing');
 })->group('pg');
-
-function outboxRelayLeasedMessageFromRow(string $id, int $attempt): LeasedMessage
-{
-    $row = DB::table('sys_outbox_messages')->where('id', $id)->first();
-    $envelope = new MessageEnvelope(
-        messageId: (string) $row->id,
-        source: (string) $row->source,
-        name: (string) $row->name,
-        contractVersion: (int) $row->contract_version,
-        occurredAt: new DateTimeImmutable((string) $row->occurred_at),
-        scope: json_decode((string) $row->scope, true, flags: JSON_THROW_ON_ERROR),
-        payload: MessagePayload::empty(),
-        piiClass: PiiClass::from((string) $row->pii_class),
-        subject: $row->subject === null ? null : (string) $row->subject,
-        correlationId: $row->correlation_id === null ? null : (string) $row->correlation_id,
-        causationId: $row->causation_id === null ? null : (string) $row->causation_id,
-        metadata: json_decode((string) $row->metadata, true, flags: JSON_THROW_ON_ERROR),
-        envelopeVersion: (int) $row->envelope_version,
-    );
-
-    return new LeasedMessage(
-        envelope: $envelope,
-        leaseOwner: (string) $row->lease_owner,
-        attempt: $attempt,
-        leaseUntil: new DateTimeImmutable((string) $row->lease_until),
-    );
-}
-
-function outboxRelaySeedPublishing(string $id, int $attempt): void
-{
-    $now = resolve(ClockInterface::class)->now();
-    outboxRelayInsertRow(['id' => $id, 'attempts' => $attempt]);
-    $updated = DB::table('sys_outbox_messages')->where('id', $id)->update([
-        'status' => 'publishing',
-        'lease_owner' => OUTBOX_RELAY_OWNER,
-        'lease_until' => $now->modify('+120 seconds'),
-        'updated_at' => $now,
-    ]);
-
-    expect($updated)->toBe(1);
-}
 
 it('applies deterministic exponential backoff on the first four publish failures', function (): void {
     $relay = outboxRelayService(maxAttempts: 8);
@@ -250,14 +123,16 @@ it('applies deterministic exponential backoff on the first four publish failures
 
     foreach ($expectedDelays as $attempt => $delay) {
         $messageId = $messageIds[$attempt];
-        outboxRelaySeedPublishing(id: $messageId, attempt: $attempt + 1);
+        outboxRelayInsertRow(['id' => $messageId, 'attempts' => $attempt]);
+        $leased = $relay->lease(OUTBOX_RELAY_OWNER, 1);
+        expect($leased)->toHaveCount(1);
 
         $relay->releaseWithBackoff(
-            outboxRelayLeasedMessageFromRow(id: $messageId, attempt: $attempt + 1),
+            $leased[0],
             new RuntimeException('publish-failed'),
         );
 
-        $availableAt = new DateTimeImmutable((string) DB::table('sys_outbox_messages')->where('id', $messageId)->value('available_at'));
+        $availableAt = new DateTimeImmutable((string) DB::table('sys_outbox_messages')->where('message_id', $messageId)->value('available_at'));
         expect($availableAt->getTimestamp())->toBe($baseline->modify("+{$delay} seconds")->getTimestamp());
     }
 })->group('pg');
@@ -277,13 +152,13 @@ it('marks a row dead after the eighth failed attempt', function (): void {
 
     $relay->releaseWithBackoff($leased[0], new RuntimeException('publish-failed'));
 
-    $row = DB::table('sys_outbox_messages')->where('id', $id)->first();
+    $row = DB::table('sys_outbox_messages')->where('message_id', $id)->first();
     expect($row->status)->toBe('dead')
         ->and($row->dead_at)->not->toBeNull()
         ->and($row->failure_class)->toBe('attempts-exhausted');
 })->group('pg');
 
-it('truncates last_error to two thousand characters', function (): void {
+it('stores only the safe error class from an external failure', function (): void {
     outboxRelayInsertRow(['id' => '01932f5a-0000-7000-8000-000000000008']);
     $relay = outboxRelayService();
     $leased = $relay->lease(leaseOwner: OUTBOX_RELAY_OWNER, batchSize: 1)[0];
@@ -291,7 +166,7 @@ it('truncates last_error to two thousand characters', function (): void {
     $relay->releaseWithBackoff($leased, new RuntimeException(str_repeat('x', 2_500)));
 
     $error = (string) DB::table('sys_outbox_messages')->value('last_error');
-    expect(mb_strlen($error))->toBe(2_000);
+    expect($error)->toBe(RuntimeException::class)->not->toContain('xxx');
 })->group('pg');
 
 it('skips locked pending rows with SKIP LOCKED and blocks without it', function (): void {
@@ -302,7 +177,7 @@ it('skips locked pending rows with SKIP LOCKED and blocks without it', function 
     $second = new PDO($dsn, $connection['username'], $connection['password'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
 
     DB::beginTransaction();
-    DB::table($table)->where('id', $id)->lock('for update skip locked')->first();
+    DB::table($table)->where('message_id', $id)->lock('for update skip locked')->first();
 
     $skipped = $second->query(
         "SELECT id FROM {$table} WHERE status = 'pending' FOR UPDATE SKIP LOCKED",
@@ -313,9 +188,23 @@ it('skips locked pending rows with SKIP LOCKED and blocks without it', function 
     $second->exec("SET lock_timeout = '100ms'");
 
     try {
-        expect(fn (): mixed => $second->query("SELECT id FROM {$table} WHERE id = '{$id}' FOR UPDATE"))
+        expect(fn (): mixed => $second->query("SELECT id FROM {$table} WHERE message_id = '{$id}' FOR UPDATE"))
             ->toThrow(PDOException::class);
     } finally {
         DB::rollBack();
     }
+})->group('pg');
+
+it('invalidates the old token when the same worker name reclaims and never publishes cancelled work', function (): void {
+    $id = outboxRelayInsertRow();
+    $first = outboxRelayService(leaseSeconds: 10)->lease(OUTBOX_RELAY_OWNER, 1)[0];
+    outboxRelayClock($first->leaseUntil->modify('+1 second'));
+    $relay = outboxRelayService(leaseSeconds: 10);
+    $second = $relay->lease(OUTBOX_RELAY_OWNER, 1)[0];
+    expect($second->claimToken)->not->toBe($first->claimToken)
+        ->and(fn () => $relay->markPublished($first))->toThrow(OutboxLeaseLost::class);
+    DB::table('sys_outbox_messages')->where('message_id', $id)->update(['status' => 'cancelled']);
+    expect(fn () => $relay->assertClaim($second))->toThrow(OutboxLeaseLost::class)
+        ->and(fn () => $relay->markPublished($second))->toThrow(OutboxLeaseLost::class)
+        ->and($relay->lease(OUTBOX_RELAY_OTHER_OWNER, 10))->toBe([]);
 })->group('pg');

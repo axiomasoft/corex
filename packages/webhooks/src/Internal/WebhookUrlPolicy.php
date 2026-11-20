@@ -71,6 +71,7 @@ final readonly class WebhookUrlPolicy
         string $body,
         WebhookSignedHeaders $signedHeaders,
         int $timeoutSeconds = 10,
+        ?string $effectKey = null,
     ): ValidatedWebhookRequest {
         $destination = WebhookDestination::fromUrl($url);
         $canonicalHost = $destination->host;
@@ -108,6 +109,7 @@ final readonly class WebhookUrlPolicy
             body: $body,
             signatureHeaders: $signedHeaders->toArray(),
             timeoutSeconds: $timeoutSeconds,
+            effectKey: $effectKey,
         );
     }
 

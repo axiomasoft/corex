@@ -8,6 +8,9 @@ use Closure;
 use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Context\Contracts\DataScopeFactory;
 use CoreX\Context\Contracts\PhysicalBindingVerifier;
+use CoreX\Context\Contracts\ProviderEffectLedger;
+use CoreX\Context\Contracts\ProviderEffectRecovery;
+use CoreX\Context\Contracts\ProviderReceiptProjector;
 use CoreX\Context\Contracts\ScopeAdmission;
 use CoreX\Context\Contracts\ScopeAuthority;
 use CoreX\Context\Contracts\StoredWorkRunner;
@@ -16,12 +19,18 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Contracts\WorkPrincipalAuthority;
 use CoreX\Context\Contracts\WorkScopeDirectory;
 use CoreX\Context\Contracts\WorkScopeRunner;
+use CoreX\Context\Data\AdmissionTicket;
+use CoreX\Context\Data\AttemptEvidence;
 use CoreX\Context\Data\OperationKey;
 use CoreX\Context\Data\PhysicalBinding;
+use CoreX\Context\Data\ProviderEffectRef;
+use CoreX\Context\Data\ProviderEffectStatus;
 use CoreX\Context\Data\StoredWorkProof;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Enums\AdmissionKind;
+use CoreX\Context\Enums\ProviderObservationKind;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Laravel\DatabaseScopeControl;
 use CoreX\Data\Data\DataScope;
 use Illuminate\Container\Container;
 use Illuminate\Database\ConnectionInterface;
@@ -31,7 +40,7 @@ use Packman\Attributes\Internal;
 use Throwable;
 
 #[Internal]
-final readonly class VerifiedWorkScope implements CurrentWorkScope, DataScopeFactory, StoredWorkRunner, WorkScopeRunner
+final readonly class VerifiedWorkScope implements CurrentWorkScope, DataScopeFactory, ProviderEffectRecovery, StoredWorkRunner, WorkScopeRunner
 {
     /** @param Closure():Container $application */
     public function __construct(private Closure $application) {}
@@ -89,13 +98,93 @@ final readonly class VerifiedWorkScope implements CurrentWorkScope, DataScopeFac
         return $this->execute($scope, $work, true, $attempt);
     }
 
+    public function assertReceipt(ProviderEffectStatus $status, ConnectionInterface $connection): TenantContext
+    {
+        $scope = $status->ticket->scope;
+        $context = ($this->application)()->make(TenantContextResolver::class)->current();
+        $this->checkLogical($context, $scope->accountId, $scope->workspaceId);
+        $binding = ($this->application)()->make(ScopeAuthority::class)->resolve($context->account);
+        $binding->assertScope($scope);
+        $principal = ($this->application)()->make(WorkPrincipalAuthority::class)->current($context);
+
+        if ($status->effect->identity() !== $status->ticket->key->id || $principal->kind !== $scope->principalKind || $principal->id !== $scope->principalId
+            || $this->verify($binding, $context) !== $connection || ! ($this->application)()->make(LocalWorkTransactions::class)->holdsReceipt($status->ticket, $connection)) {
+            throw new ScopeContextMismatch('This receipt does not belong to the verified projector frame.');
+        }
+
+        return $context;
+    }
+
+    public function recover(ProviderEffectRef $effect): bool
+    {
+        $ledger = ($this->application)()->make(ProviderEffectLedger::class);
+        $initial = $ledger->inspect($effect);
+
+        if ($initial === null || $initial->state === 'isolated') {
+            return false;
+        }
+
+        return $this->execute($initial->ticket->scope, function () use ($effect, $ledger, $initial): bool {
+            $projector = null;
+            foreach (($this->application)()->tagged(ProviderReceiptProjector::class) as $candidate) {
+                if ($candidate instanceof ProviderReceiptProjector && $candidate->owner() === $effect->owner) {
+                    if ($projector !== null) {
+                        throw new ScopeContextMismatch('Duplicate provider receipt projector.');
+                    }
+                    $projector = $candidate;
+                }
+            }
+
+            if ($projector === null) {
+                if ($initial->state === 'conflicting') {
+                    return false;
+                }
+
+                throw new ScopeContextMismatch('Missing provider receipt projector.');
+            }
+            $status = $ledger->inspect($effect);
+
+            if ($status === null || $status->state === 'isolated' || $status->ticket->id !== $initial->ticket->id) {
+                return false;
+            }
+
+            if ($status->state !== 'conflicting' && in_array($status->observation?->kind, [null, ProviderObservationKind::Unknown, ProviderObservationKind::Accepted], true)) {
+                $found = $projector->lookup($status);
+
+                if ($found !== null) {
+                    $ledger->observe($status->ticket, $found);
+                }
+                $status = $ledger->inspect($effect);
+            }
+
+            if ($status === null || $status->state === 'isolated' || $status->ticket->id !== $initial->ticket->id || ($status->state !== 'conflicting' && in_array($status->observation?->kind, [null, ProviderObservationKind::Unknown], true))) {
+                return false;
+            }
+            $receipt = $projector->project($status);
+
+            if (($this->application)()->make(DatabaseManager::class)->connection()->transactionLevel() !== 0) {
+                throw new ScopeContextMismatch('Provider receipt projection has not committed.');
+            }
+
+            if ($status->state === 'conflicting' || $receipt === null) {
+                return false;
+            }
+
+            if ($status->state !== 'reconciled') {
+                ($this->application)()->make(ScopeAdmission::class)->settle($status->ticket, new AttemptEvidence('reconciled', $receipt));
+            }
+
+            return true;
+        }, true, provider: $initial->ticket);
+    }
+
     /**
      * @template T
      *
      * @param  Closure(TenantContext): T  $work
      * @return T
      */
-    private function execute(DataScope $scope, Closure $work, bool $durable, ?OperationKey $attempt = null): mixed
+    private function execute(DataScope $scope, Closure $work, bool $durable, ?OperationKey $attempt = null, ?AdmissionTicket $provider = null): mixed
     {
         $health = ($this->application)()->make(WorkProcessHealth::class);
         $health->check();
@@ -110,7 +199,7 @@ final readonly class VerifiedWorkScope implements CurrentWorkScope, DataScopeFac
             : $database->connection();
         $switch = $previous?->account->id !== $scope->accountId || $previous->workspace?->id !== $scope->workspaceId;
 
-        if ($switch && $outerConnection !== null && $outerConnection->transactionLevel() > 0) {
+        if (($switch || $provider !== null) && $outerConnection !== null && $outerConnection->transactionLevel() > 0) {
             throw new ScopeContextMismatch('A live business transaction cannot switch its physical or logical work frame.');
         }
         $outerBinding = $previous === null ? null : ($this->application)()->make(ScopeAuthority::class)->resolve($previous->account);
@@ -126,7 +215,9 @@ final readonly class VerifiedWorkScope implements CurrentWorkScope, DataScopeFac
             }
         }
         $admission = ($this->application)()->make(ScopeAdmission::class);
-        $ticket = $admission->acquire($scope, $attempt ?? new OperationKey((string) Str::uuid7(), 1), AdmissionKind::LocalWrite);
+        $ticket = $provider === null
+            ? $admission->acquire($scope, $attempt ?? new OperationKey((string) Str::uuid7(), 1), AdmissionKind::LocalWrite)
+            : ($this->application)()->make(DatabaseScopeControl::class)->receiptTicket($provider);
         $transactions = ($this->application)()->make(LocalWorkTransactions::class);
 
         $success = false;

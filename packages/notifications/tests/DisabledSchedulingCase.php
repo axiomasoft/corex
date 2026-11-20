@@ -28,6 +28,7 @@ abstract class DisabledSchedulingCase extends Orchestra
     #[Override]
     protected function defineEnvironment($app): void
     {
+        $app['config']->set('app.key', 'base64:'.base64_encode(str_repeat('n', 32)));
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite.database', ':memory:');
         $app['config']->set('corex-notifications.digest.enabled', false);

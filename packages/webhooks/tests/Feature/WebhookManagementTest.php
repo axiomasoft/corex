@@ -215,7 +215,7 @@ final class WebhookManagementTest extends TestCase
     private function seedDelivery(string $id, string $subscription, DataScope $scope, DateTimeImmutable $createdAt): void
     {
         $body = JsonCanonical::encode(['event_id' => $id, 'data' => ['secret' => 'never-public']]);
-        $this->connection->table('sys_api_webhook_deliveries')->insert([
+        $this->connection->table('sys_api_webhook_deliveries')->insert(WebhookRows::original($scope, [
             'id' => $id, 'subscription_id' => $subscription, 'subscription_revision' => 0,
             'event_id' => 'event-'.$id, 'topic' => 'orders.placed', 'topic_version' => 1, 'major' => 'v1',
             'endpoint_snapshot' => 'https://hooks.example/receiver?token=private',
@@ -224,7 +224,7 @@ final class WebhookManagementTest extends TestCase
             'replay_count' => 0, 'lease_owner' => null, 'lease_until' => null, 'next_attempt_at' => $createdAt,
             'created_at' => $createdAt, 'finished_at' => $createdAt, 'expires_at' => $createdAt->add(new DateInterval('P7D')),
             'last_error' => 'http_permanent',
-        ]);
+        ]));
     }
 
     private function scope(string $account): DataScope

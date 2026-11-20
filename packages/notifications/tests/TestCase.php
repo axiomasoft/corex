@@ -39,6 +39,7 @@ abstract class TestCase extends Orchestra
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite.database', ':memory:');
         $app['config']->set('queue.default', 'sync');
+        $app['config']->set('app.key', 'base64:'.base64_encode(str_repeat('n', 32)));
         $app['config']->set('corex-notifications.digest.enabled', true);
     }
 

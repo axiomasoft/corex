@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Idempotency\Internal;
 
-use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
 use CoreX\Operations\Idempotency\Data\IdempotencyAttempt;
 use CoreX\Operations\Idempotency\Data\IdempotencyScope;
@@ -12,7 +12,9 @@ use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 use Illuminate\Database\Connection;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Override;
@@ -29,7 +31,7 @@ final readonly class SqlIdempotencyStore implements IdempotencyStore
 
     public function __construct(
         private Connection $connection,
-        private TenantContextResolver $contexts,
+        private CurrentWorkScope $current,
         private ClockInterface $clock,
         private SecretRef $keyHmacSecret,
         private int $leaseSeconds,
@@ -51,8 +53,8 @@ final readonly class SqlIdempotencyStore implements IdempotencyStore
         string $requestFingerprint,
         string $contractHash,
     ): IdempotencyAttempt {
-        $this->assertScope($scope);
         $this->assertTransaction();
+        $this->assertScope($scope);
         $this->assertKey($key);
         $this->assertDigest(value: $requestFingerprint, label: 'request fingerprint');
         $this->assertDigest(value: $contractHash, label: 'contract hash');
@@ -63,22 +65,37 @@ final readonly class SqlIdempotencyStore implements IdempotencyStore
         $leaseToken = (string) Str::uuid7();
         $leaseUntil = $now->add(new DateInterval("PT{$this->leaseSeconds}S"));
 
-        $inserted = $this->connection->table(self::Table)->insertOrIgnore([
+        $identity = [
+            'account_id' => $scope->scope->accountId,
+            'account_incarnation' => $scope->scope->accountIncarnation,
+            'workspace_scope' => $scope->scope->workspaceId === null ? 'account' : 'workspace:'.$scope->scope->workspaceId,
+            'principal_kind' => $scope->scope->principalKind,
+            'principal_id' => $scope->scope->principalId,
+            'client_scope' => $scope->clientId === null ? 'anonymous' : 'client:'.$scope->clientId,
+            'api_major' => $scope->apiMajor,
+            'operation_id' => $scope->operationId,
+        ];
+        $columns = [
+            ...$identity,
+            ...$this->fence($scope),
             'scope_hash' => $scopeHash,
             'key_hash' => $keyHash,
             'request_fingerprint' => $requestFingerprint,
             'state' => 'started',
             'attempt' => 1,
             'lease_token' => $leaseToken,
-            'lease_until' => $leaseUntil,
+            'lease_until' => $this->time($leaseUntil),
             'outcome_json' => null,
             'contract_hash' => $contractHash,
             'expires_at' => null,
-            'created_at' => $now,
-            'updated_at' => $now,
-        ]);
+            'created_at' => $this->time($now),
+            'updated_at' => $this->time($now),
+        ];
+        $inserted = $this->connection->table(self::Table)->insertOrIgnoreReturning(
+            $columns, ['key_hash'], [...array_keys($identity), 'key_hash'],
+        );
 
-        if ($inserted === 1) {
+        if ($inserted->isNotEmpty()) {
             return new IdempotencyAttempt(
                 disposition: IdempotencyAttempt::Owner,
                 scope: $scope,
@@ -95,7 +112,7 @@ final readonly class SqlIdempotencyStore implements IdempotencyStore
         }
 
         $row = $this->connection->table(self::Table)
-            ->where('scope_hash', $scopeHash)
+            ->where($identity)
             ->where('key_hash', $keyHash)
             ->lockForUpdate()
             ->first();
@@ -126,20 +143,13 @@ final readonly class SqlIdempotencyStore implements IdempotencyStore
         $leaseToken = (string) Str::uuid7();
         $leaseUntil = $now->add(new DateInterval("PT{$this->leaseSeconds}S"));
         $nextAttempt = $attempt->attempt + 1;
-        $changed = $this->connection->table(self::Table)
-            ->where('scope_hash', $attempt->scopeHash)
-            ->where('key_hash', $attempt->keyHash)
-            ->where('request_fingerprint', $attempt->requestFingerprint)
-            ->where('contract_hash', $attempt->contractHash)
-            ->where('state', 'started')
-            ->where('attempt', $attempt->attempt)
-            ->where('lease_token', $attempt->leaseToken)
-            ->where('lease_until', '<=', $now)
+        $changed = $this->attempt($attempt)
+            ->where('lease_until', '<=', $this->time($now))
             ->update([
                 'attempt' => $nextAttempt,
                 'lease_token' => $leaseToken,
-                'lease_until' => $leaseUntil,
-                'updated_at' => $now,
+                'lease_until' => $this->time($leaseUntil),
+                'updated_at' => $this->time($now),
             ]);
 
         if ($changed !== 1) {
@@ -179,7 +189,7 @@ final readonly class SqlIdempotencyStore implements IdempotencyStore
         return $this->connection->table(self::Table)
             ->whereIn('state', ['completed', 'failed'])
             ->whereNotNull('expires_at')
-            ->where('expires_at', '<=', $this->clock->now())
+            ->where('expires_at', '<=', $this->time($this->clock->now()))
             ->delete();
     }
 
@@ -199,26 +209,37 @@ final readonly class SqlIdempotencyStore implements IdempotencyStore
         }
 
         $now = $this->clock->now();
-        $changed = $this->connection->table(self::Table)
-            ->where('scope_hash', $attempt->scopeHash)
-            ->where('key_hash', $attempt->keyHash)
-            ->where('request_fingerprint', $attempt->requestFingerprint)
-            ->where('contract_hash', $attempt->contractHash)
-            ->where('state', 'started')
-            ->where('attempt', $attempt->attempt)
-            ->where('lease_token', $attempt->leaseToken)
+        $changed = $this->attempt($attempt)
+            ->where('lease_until', '>', $this->time($now))
             ->update([
                 'state' => $state,
                 'outcome_json' => $outcomeJson,
                 'lease_token' => null,
                 'lease_until' => null,
-                'expires_at' => $now->add(new DateInterval("PT{$this->retentionSeconds}S")),
-                'updated_at' => $now,
+                'expires_at' => $this->time($now->add(new DateInterval("PT{$this->retentionSeconds}S"))),
+                'updated_at' => $this->time($now),
             ]);
 
         if ($changed !== 1) {
             throw new RuntimeException('Idempotency lease was superseded before terminal persistence.');
         }
+    }
+
+    private function attempt(IdempotencyAttempt $attempt): Builder
+    {
+        return $this->connection->table(self::Table)->where($this->fence($attempt->scope))
+            ->where('scope_hash', $attempt->scopeHash)->where('key_hash', $attempt->keyHash)
+            ->where('request_fingerprint', $attempt->requestFingerprint)->where('contract_hash', $attempt->contractHash)
+            ->where('state', 'started')->where('attempt', $attempt->attempt)->where('lease_token', $attempt->leaseToken);
+    }
+
+    /** @return array{deployment_id: string, binding_id: string, binding_generation: int, restore_epoch: string} */
+    private function fence(IdempotencyScope $scope): array
+    {
+        return [
+            'deployment_id' => $scope->scope->deploymentId, 'binding_id' => $scope->scope->bindingId,
+            'binding_generation' => $scope->scope->bindingGeneration, 'restore_epoch' => $scope->scope->restoreEpoch,
+        ];
     }
 
     private function decision(
@@ -253,14 +274,7 @@ final readonly class SqlIdempotencyStore implements IdempotencyStore
 
     private function assertScope(IdempotencyScope $scope): void
     {
-        $current = $this->contexts->current();
-
-        if ($current->account->id !== $scope->accountId
-            || $current->workspace?->id !== $scope->workspaceId
-            || $this->connection->getName() !== $scope->connectionName
-            || $this->connection->getDatabaseName() !== $scope->databaseName) {
-            throw new RuntimeException('Idempotency scope does not match the active tenant connection.');
-        }
+        $this->current->assert($scope->scope, $this->connection);
     }
 
     private function assertTransaction(): void
@@ -284,6 +298,11 @@ final readonly class SqlIdempotencyStore implements IdempotencyStore
         if (preg_match('/\A[a-f0-9]{64}\z/D', $value) !== 1) {
             throw new InvalidArgumentException("Idempotency {$label} must be a lowercase SHA-256 digest.");
         }
+    }
+
+    private function time(DateTimeImmutable $at): string
+    {
+        return $at->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s.uP');
     }
 
     private function date(mixed $value): ?DateTimeImmutable

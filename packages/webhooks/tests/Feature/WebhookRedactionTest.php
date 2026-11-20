@@ -64,7 +64,7 @@ final class WebhookRedactionTest extends TestCase
             'max_pii_class' => 'personal', 'key_refs' => '["whsec_ref"]', 'created_at' => $now, 'updated_at' => $now,
         ]);
         $body = JsonCanonical::encode(['secret' => 'payload-secret']);
-        $connection->table('sys_api_webhook_deliveries')->insert([
+        $connection->table('sys_api_webhook_deliveries')->insert(WebhookRows::original($scope, [
             'id' => 'delivery-redacted', 'subscription_id' => 'subscription-redacted', 'subscription_revision' => 0,
             'event_id' => 'event-redacted', 'topic' => 'orders.placed', 'topic_version' => 1, 'major' => 'v1',
             'endpoint_snapshot' => 'https://hooks.example/receiver?token=private',
@@ -73,7 +73,7 @@ final class WebhookRedactionTest extends TestCase
             'replay_count' => 0, 'lease_owner' => null, 'lease_until' => null, 'next_attempt_at' => $now,
             'created_at' => $now, 'finished_at' => $now, 'expires_at' => $now->add(new DateInterval('P7D')),
             'last_error' => 'http_permanent',
-        ]);
+        ]));
         $connection->table('sys_api_webhook_attempts')->insert([
             'id' => 'attempt-redacted', 'delivery_id' => 'delivery-redacted', 'attempt' => 1,
             'lease_owner' => 'worker-redacted', 'started_at' => $now, 'finished_at' => $now,

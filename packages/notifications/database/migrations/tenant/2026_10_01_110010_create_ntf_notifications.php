@@ -18,12 +18,16 @@ return new class extends PackmanMigration
         $this->create('ntf_notifications', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'ntf_notifications_pk');
+            $table->string('account_id', 128);
+            $table->string('account_incarnation', 128);
+            $table->string('workspace_scope', 138);
             $table->string('recipient_kind', 64);
             $table->string('recipient_id', 128);
-            $table->string('request_key', 128);
+            $table->string('source', 128);
+            $table->string('event_id', 128);
             $table->char('request_digest', 64);
             $table->string('event_type', 128);
-            $table->string('template_key', 128);
+            $table->string('template_action', 128);
             $table->json('payload');
             $table->json('related')->nullable();
             $table->timestampTz('read_at')->nullable();
@@ -31,8 +35,8 @@ return new class extends PackmanMigration
             $table->timestampTz('cancelled_at')->nullable();
             $table->decimal('revision', 20, 0);
             $table->timestampsTz();
-            $table->unique(['recipient_kind', 'recipient_id', 'request_key'], 'ntf_notifications_recipient_kind_recipient_id_request_key_uq');
-            $table->index(['recipient_kind', 'recipient_id', 'read_at', 'id'], 'ntf_notifications_scan_ix');
+            $table->unique(['account_id', 'account_incarnation', 'workspace_scope', 'recipient_kind', 'recipient_id', 'source', 'event_id', 'template_action'], 'ntf_notifications_intent_uq');
+            $table->index(['account_id', 'account_incarnation', 'workspace_scope', 'recipient_kind', 'recipient_id', 'read_at', 'id'], 'ntf_notifications_scan_ix');
         });
     }
 

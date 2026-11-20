@@ -1,0 +1,45 @@
+{
+  "id": "notification-visibility",
+  "laravel": 13,
+  "host_support": true,
+  "timeout_seconds": 140,
+  "distinct_connections": true,
+  "auxiliary_processes": ["provider"],
+  "profile": {
+    "id": "boxed-notification-visibility",
+    "database": "postgres-isolated",
+    "database_roles": ["control", "a"],
+    "default_database": "a",
+    "http": true,
+    "packages": ["axiomasoft/corex", "axiomasoft/corex-notifications", "axiomasoft/corex-access"],
+    "forbid": [{"package": "axiomasoft/corex-tenancy", "name": "Tenancy"}]
+  },
+  "processes": {
+    "provider": ["python3", "{fixture}/../support/provider/simulator.py"],
+    "producer": ["php", "{fixture}/probe.php", "produce"],
+    "revoke": ["php", "{fixture}/probe.php", "revoke"],
+    "observe": ["php", "{fixture}/probe.php", "observe"],
+    "history": ["php", "{fixture}/probe.php", "history"],
+    "bounded": ["php", "{fixture}/probe.php", "bounded"]
+  },
+  "actions": [
+    {"action": "start", "name": "provider"},
+    {"action": "await", "name": "provider-ready", "process": "provider"},
+    {"action": "start", "name": "producer"},
+    {"action": "await", "name": "notification-committed", "process": "producer"},
+    {"action": "start", "name": "revoke"},
+    {"action": "complete", "name": "revoke"},
+    {"action": "release", "name": "notification-committed"},
+    {"action": "complete", "name": "producer"},
+    {"action": "start", "name": "observe"},
+    {"action": "complete", "name": "observe"},
+    {"action": "start", "name": "history"},
+    {"action": "await", "name": "terminal-history", "process": "history"},
+    {"action": "start", "name": "bounded"},
+    {"action": "complete", "name": "bounded"},
+    {"action": "release", "name": "terminal-history"},
+    {"action": "complete", "name": "history"},
+    {"action": "release", "name": "provider-ready"},
+    {"action": "complete", "name": "provider"}
+  ]
+}

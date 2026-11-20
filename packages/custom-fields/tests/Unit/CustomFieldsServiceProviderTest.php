@@ -39,6 +39,11 @@ final class CustomFieldsServiceProviderTest extends TestCase
         return [CoreServiceProvider::class, CustomFieldsServiceProvider::class];
     }
 
+    protected function defineEnvironment($app): void
+    {
+        $app['config']->set('app.key', 'base64:'.base64_encode(str_repeat('f', 32)));
+    }
+
     public function test_it_resolves_a_static_catalogue_with_the_kernel_module_registry(): void
     {
         expect($this->app->make(FieldCatalogue::class))->toBeInstanceOf(StaticFieldCatalogue::class)

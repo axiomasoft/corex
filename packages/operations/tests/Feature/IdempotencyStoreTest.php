@@ -6,13 +6,14 @@ namespace CoreX\Operations\Tests\Feature;
 
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Context\Enums\PrincipalType;
+use CoreX\Data\Data\DataScope;
 use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
 use CoreX\Operations\Idempotency\Data\IdempotencyAttempt;
 use CoreX\Operations\Idempotency\Data\IdempotencyScope;
 use CoreX\Operations\Idempotency\Internal\SqlIdempotencyStore;
 use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Testing\ContextFixture;
+use CoreX\Operations\Tests\Support\IdempotencyWorkScope;
 use CoreX\Operations\Tests\TestCase;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Time\Testing\FrozenClock;
@@ -196,12 +197,7 @@ final class IdempotencyStoreTest extends TestCase
         }
 
         $wrong = new IdempotencyScope(
-            connectionName: 'sqlite',
-            databaseName: ':memory:',
-            accountId: 'other-account',
-            workspaceId: null,
-            principalType: PrincipalType::User,
-            principalId: 'principal-1',
+            scope: new DataScope('installation-test', 'other-account', null, 'fixture-binding', 1, 'incarnation-1', str_repeat('a', 64), 'user', 'principal-1'),
             clientId: null,
             apiMajor: 'v1',
             operationId: 'notes.create',
@@ -218,6 +214,18 @@ final class IdempotencyStoreTest extends TestCase
     {
         self::assertSame([
             'scope_hash',
+            'account_id',
+            'account_incarnation',
+            'workspace_scope',
+            'principal_kind',
+            'principal_id',
+            'client_scope',
+            'api_major',
+            'operation_id',
+            'deployment_id',
+            'binding_id',
+            'binding_generation',
+            'restore_epoch',
             'key_hash',
             'request_fingerprint',
             'state',
@@ -299,9 +307,9 @@ final class IdempotencyStoreTest extends TestCase
                     );
                     fwrite($pair[1], "ready\n");
                     fgets($pair[1]);
-                    $attempt = $connection->transaction(function () use ($store, $connection, $database): IdempotencyAttempt {
+                    $attempt = $connection->transaction(function () use ($store): IdempotencyAttempt {
                         $attempt = $store->begin(
-                            $this->scope($connection, $database),
+                            $this->scope(),
                             'postgres-race-key',
                             $this->digest('postgres-request'),
                             $this->digest('postgres-contract'),
@@ -356,7 +364,7 @@ final class IdempotencyStoreTest extends TestCase
     {
         return new SqlIdempotencyStore(
             connection: $connection,
-            contexts: $contexts,
+            current: new IdempotencyWorkScope($contexts, $connection, 'principal-1'),
             clock: $clock ?? $this->clock,
             keyHmacSecret: new SecretRef(self::Secret),
             leaseSeconds: 10,
@@ -372,17 +380,10 @@ final class IdempotencyStoreTest extends TestCase
         return $contexts;
     }
 
-    private function scope(?Connection $connection = null, ?string $database = null): IdempotencyScope
+    private function scope(): IdempotencyScope
     {
-        $connection ??= $this->connection;
-
         return new IdempotencyScope(
-            connectionName: (string) $connection->getName(),
-            databaseName: $database ?? $connection->getDatabaseName(),
-            accountId: 'account-1',
-            workspaceId: null,
-            principalType: PrincipalType::User,
-            principalId: 'principal-1',
+            scope: new DataScope('installation-test', 'account-1', null, 'fixture-binding', 1, 'incarnation-1', str_repeat('a', 64), 'user', 'principal-1'),
             clientId: 'client-1',
             apiMajor: 'v1',
             operationId: 'notes.create',

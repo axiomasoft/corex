@@ -36,16 +36,26 @@ final readonly class WebhookDelivery
         public ?DateTimeImmutable $finishedAt,
         public DateTimeImmutable $expiresAt,
         public ?string $lastError,
+        public string $effectKey = '',
+        public string $scopeSeal = '',
+        public ?string $claimToken = null,
+        public ?string $providerTicket = null,
+        public ?string $providerRef = null,
+        public ?string $replayOf = null,
+        public string $eventSource = '',
+        public string $replayId = 'original',
     ) {
         if ($subscriptionRevision < 0 || $topicVersion < 1 || $attempt < 0 || $replayCount < 0) {
             throw new InvalidArgumentException('Webhook delivery counters are invalid.');
         }
 
-        if (! in_array($status, ['pending', 'sending', 'retry', 'succeeded', 'dead'], true)) {
+        if (! in_array($status, ['pending', 'claimed', 'sending', 'retry', 'succeeded', 'dead', 'unknown', 'quarantined'], true)) {
             throw new InvalidArgumentException('Webhook delivery status is not declared.');
         }
 
-        if (! hash_equals(hash('sha256', $body), $bodyHash)) {
+        $expiredBody = $body === '' && in_array($status, ['succeeded', 'dead'], true);
+
+        if (! $expiredBody && ! hash_equals(hash('sha256', $body), $bodyHash)) {
             throw new InvalidArgumentException('Webhook delivery body hash does not match the body.');
         }
     }

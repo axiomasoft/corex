@@ -33,6 +33,7 @@ use CoreX\Operations\Testing\ModuleFixture;
 use CoreX\Operations\Testing\NoteHandler;
 use CoreX\Operations\Validation\Data\JsonObject;
 use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
+use CoreX\Tests\Support\WorkScopeFixture;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
@@ -54,6 +55,8 @@ use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 use Packman\Modules\ModulesServiceProvider;
 use Packman\Schema\Contracts\Migration\SchemaMigrator;
+
+require_once dirname(__DIR__, 4).'/tests/Support/WorkScopeFixture.php';
 
 final class ToolIdempotentInvocationTest extends TestCase
 {
@@ -125,11 +128,17 @@ final class ToolIdempotentInvocationTest extends TestCase
             ]),
         ], installedPackages: []);
         $modules = new ModuleFixture($registry);
-        $this->app['config']->set('app.key', 'provider-idempotency-secret');
+        $this->app['config']->set('app.key', 'base64:'.base64_encode(str_repeat('s', 32)));
         $this->app->instance(ModuleRegistry::class, $modules);
         $this->app->instance(TenantContextResolver::class, $this->tenants);
         $this->app->instance(TenancyManager::class, $this->tenants);
         $this->app->instance(PrincipalResolver::class, $this->principal);
+        $scope = WorkScopeFixture::install(
+            app: $this->app,
+            principalId: $this->principal->principalId(),
+            principalKind: $this->principal->principalType()->value,
+        );
+        $scope->register(context: $this->tenants->current(), connection: $this->connection);
         $this->app->instance(ReplayAuthorizer::class, $this->authorizer);
         $this->app->instance(OperationAuthorizer::class, new class implements OperationAuthorizer
         {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal\Integration;
 
-use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
 use CoreX\Messaging\Enums\PiiClass;
@@ -13,8 +13,6 @@ use Packman\Attributes\Internal;
 #[Internal]
 final readonly class AttributeMessageTranslator
 {
-    public function __construct(private DataScopeCodec $scopeCodec) {}
-
     public function translate(AttributeValuesChanged $event): MessageEnvelope
     {
         return new MessageEnvelope(
@@ -23,7 +21,8 @@ final readonly class AttributeMessageTranslator
             name: AttributeMessageContracts::VALUES_CHANGED,
             contractVersion: 1,
             occurredAt: $event->occurredAt,
-            scope: $this->scopeCodec->encode($event->scope),
+            scope: $event->scope,
+            subject: new RecordRef(entity: $event->recordEntity, id: $event->recordId),
             payload: new MessagePayload([
                 'changedAttributeIds' => $event->changedAttributeIds,
                 'changedKeys' => $event->changedKeys,

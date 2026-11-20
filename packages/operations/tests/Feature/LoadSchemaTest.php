@@ -289,6 +289,10 @@ final class LoadSchemaTest extends TestCase
         $now = '2026-09-25 10:00:00.123456+00:00';
         $connection->table('sys_api_webhook_subscriptions')->insert($this->subscriptionRow('subscription-'.$suffix));
         $connection->table('sys_api_webhook_deliveries')->insert([
+            'account_id' => 'account', 'account_incarnation' => 'incarnation', 'workspace_scope' => 'account',
+            'deployment_id' => 'deployment', 'binding_id' => 'binding', 'binding_generation' => 1,
+            'restore_epoch' => str_repeat('a', 64), 'effect_key' => hash('sha256', 'effect-'.$suffix),
+            'scope_seal' => str_repeat('f', 64), 'event_source' => 'urn:corex:fixture', 'replay_id' => 'original',
             'id' => 'delivery-'.$suffix, 'subscription_id' => 'subscription-'.$suffix, 'subscription_revision' => 1,
             'event_id' => 'event-'.$suffix, 'topic' => 'orders.changed', 'topic_version' => 1, 'major' => 'v1',
             'endpoint_snapshot' => 'https://receiver.test/hook', 'scope' => '{}', 'body' => '{}',

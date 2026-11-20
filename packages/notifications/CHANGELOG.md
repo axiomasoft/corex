@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — CoreX 2.0 delivery receipts
+
+- Return `InboxPage` with an encrypted continuation and `UnreadCount` with an exact count or an unavailability reason. Inbox reads, mark-read, counts and send eligibility apply related-record visibility.
+- Accept typed `DeliveryOutcomeKind` outcomes. Delivery intents capture the verified scope, producer source and channel selection. Provider attempts record evidence independently of the tenant database, and an ambiguous result stays unknown until reconciled.
+- Use `DeliveryExecution::reconcile` or `corex:notifications:sweep --reconcile=<id>` to reconcile an existing provider effect.
+
 ## Unreleased — Packman governance
 
 - Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.

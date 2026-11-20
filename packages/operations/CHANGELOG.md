@@ -1,5 +1,9 @@
 # Changelog
 
+## CoreX 2.0 — Durable effects
+
+- Reauthorize operation retries in their verified logical scope. Commit successful operation receipts with their tenant effects and recover dedicated budget settlements from the same receipt.
+
 ## Unreleased — Packman governance
 
 - Move the physical-tenancy opt-out report into the operations configuration section; expose IdempotencyStore from its factory and keep Artisan handler classes private.

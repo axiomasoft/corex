@@ -48,6 +48,8 @@
             "owns": [
                 "Contracts",
                 "Data",
+                "Enums",
+                "Execution",
                 "Internal",
                 "Laravel"
             ]

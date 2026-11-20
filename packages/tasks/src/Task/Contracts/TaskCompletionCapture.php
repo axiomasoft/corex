@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tasks\Task\Contracts;
 
 use CoreX\Tasks\Task\Data\TaskCompletionCandidate;
+use Illuminate\Database\Connection;
 use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
@@ -12,5 +13,5 @@ use Packman\Attributes\SpiKind;
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface TaskCompletionCapture
 {
-    public function capture(TaskCompletionCandidate $candidate): void;
+    public function capture(TaskCompletionCandidate $candidate, Connection $connection): void;
 }

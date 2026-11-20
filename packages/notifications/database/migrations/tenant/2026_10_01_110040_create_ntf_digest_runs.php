@@ -17,6 +17,9 @@ return new class extends PackmanMigration
         $this->create('ntf_digest_runs', function (Blueprint $table): void {
             $table->uuid('id');
             $table->primary(['id'], 'ntf_digest_runs_pk');
+            $table->string('account_id', 128);
+            $table->string('account_incarnation', 128);
+            $table->string('workspace_scope', 138);
             $table->char('scope_key', 64);
             $table->json('scope');
             $table->char('scope_seal', 64);
@@ -29,7 +32,8 @@ return new class extends PackmanMigration
             $table->char('membership_hash', 64);
             $table->string('state', 16);
             $table->timestampTz('created_at');
-            $table->unique(['scope_key', 'recipient_kind', 'recipient_id', 'period', 'period_start', 'batch_seq'], 'ntf_digest_runs_recipient_kind_recipient_id_period__27ecc408_uq');
+            $table->unique(['account_id', 'account_incarnation', 'workspace_scope', 'recipient_kind', 'recipient_id', 'period', 'period_start', 'batch_seq'], 'ntf_digest_runs_identity_uq');
+            $table->index(['account_id', 'account_incarnation', 'state', 'period_end', 'id'], 'ntf_digest_runs_scan_ix');
         });
     }
 

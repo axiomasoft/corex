@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Webhooks\Internal;
 
 use Closure;
+use CoreX\Context\Enums\ProviderObservationKind;
 use CoreX\Webhooks\Data\WebhookDelivery;
 use CoreX\Webhooks\Data\WebhookHttpResult;
 use CoreX\Webhooks\Data\WebhookOptions;
@@ -64,6 +65,28 @@ final readonly class WebhookRetryPolicy
         }
 
         return ['status' => 'retry', 'next' => $next, 'error' => $classification['error']];
+    }
+
+    public function maxAttempts(): int
+    {
+        return $this->options->maxAttempts;
+    }
+
+    public function horizonStart(DateTimeImmutable $now): DateTimeImmutable
+    {
+        return $now->sub(new DateInterval('PT'.$this->options->retryHorizonSeconds.'S'));
+    }
+
+    public function observation(WebhookHttpResult $result): ProviderObservationKind
+    {
+        $classification = $this->classification($result);
+
+        return match ($classification['status']) {
+            'succeeded' => ProviderObservationKind::Confirmed,
+            'dead' => $result->status === null && ! $result->absenceProven
+                ? ProviderObservationKind::Unknown : ProviderObservationKind::Permanent,
+            'retry' => $result->absenceProven ? ProviderObservationKind::Absent : ProviderObservationKind::Unknown,
+        };
     }
 
     public function budgetFailure(WebhookDelivery $delivery, DateTimeImmutable $instant): ?WebhookFailureReason

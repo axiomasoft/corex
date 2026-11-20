@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Feature;
 
+use CoreX\Context\Contracts\StoredWorkIssuer;
+use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
@@ -15,7 +17,7 @@ use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
-use CoreX\Tests\Support\CallerWorkScopeFixture;
+use CoreX\Tests\Support\WorkScopeFixture;
 use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Data\WebhookTopic;
@@ -26,11 +28,11 @@ use CoreX\Webhooks\Internal\WebhookUrlPolicy;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Packman\Config\Data\SecretRef;
 use Packman\Schema\Contracts\Migration\SchemaMigrator;
 use Packman\Schema\Contracts\Migration\SchemaSets;
+use Psr\Clock\ClockInterface;
 
 trait WebhookDeliveryFixture
 {
@@ -53,17 +55,13 @@ trait WebhookDeliveryFixture
         $this->connection = DB::connection('api_tenant');
 
         $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
-        $this->connection->getSchemaBuilder()->create('sys_inbox_messages', function (Blueprint $table): void {
-            $table->string('consumer', 120);
-            $table->string('message_id', 64);
-            $table->string('name', 160);
-            $table->timestampTz('processed_at', precision: 6);
-            $table->primary(['consumer', 'message_id']);
-        });
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
         $this->contexts = new ContextFixture;
         $this->contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
-        $this->scope = CallerWorkScopeFixture::scope('account-1', null, 'actor-1', hash('sha256', 'webhook-delivery-restore'));
+        $this->app->instance(TenantContextResolver::class, $this->contexts);
+        DB::setDefaultConnection('api_tenant');
+        $this->scope = WorkScopeFixture::install($this->app)->scope($this->contexts->current());
+        $this->app->instance(ClockInterface::class, $this->clock);
     }
 
     private function signer(): HmacWebhookSigner
@@ -123,7 +121,7 @@ trait WebhookDeliveryFixture
             'updated_at' => $createdAt,
         ]);
         $body = JsonCanonical::encode(['event_id' => $delivery, 'data' => ['id' => 'order-1']]);
-        $this->connection->table('sys_api_webhook_deliveries')->insert([
+        $this->connection->table('sys_api_webhook_deliveries')->insert(WebhookRows::original($this->scope, [
             'id' => $delivery,
             'subscription_id' => $subscription,
             'subscription_revision' => 0,
@@ -145,7 +143,7 @@ trait WebhookDeliveryFixture
             'finished_at' => null,
             'expires_at' => $createdAt->add(new DateInterval('P7D')),
             'last_error' => null,
-        ]);
+        ], resolve(StoredWorkIssuer::class)));
     }
 
     private function configure(string $name): void

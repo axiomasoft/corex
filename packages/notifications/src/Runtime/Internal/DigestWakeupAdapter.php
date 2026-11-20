@@ -1,0 +1,32 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Notifications\Runtime\Internal;
+
+use Closure;
+use CoreX\Scheduling\Contracts\DueWakeupHandler;
+use CoreX\Scheduling\Data\WakeupDelivery;
+use Packman\Attributes\Internal;
+use RuntimeException;
+
+#[Internal]
+final readonly class DigestWakeupAdapter implements DueWakeupHandler
+{
+    /** @param Closure(DigestTick):void $handle */
+    public function __construct(private Closure $handle) {}
+
+    public function handle(WakeupDelivery $delivery): void
+    {
+        if ($delivery->request->kind !== SqlDigestBuilder::HandlerKind || $delivery->request->window === null) {
+            throw new RuntimeException('Wakeup request is not a notification digest tick.');
+        }
+
+        ($this->handle)(new DigestTick(
+            tenant: $delivery->context,
+            scope: $delivery->request->scope,
+            window: $delivery->request->window,
+            requestKey: $delivery->request->requestKey,
+        ));
+    }
+}

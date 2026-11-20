@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Laravel;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Data\Data\DataScope;
+use CoreX\Messaging\Data\ConsumerId;
+use CoreX\Messaging\Internal\MessageReceiptIdentity;
 use Illuminate\Database\ConnectionInterface;
 use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
@@ -14,6 +18,7 @@ final readonly class InboxRetention
 {
     public function __construct(
         private ConnectionInterface $connection,
+        private CurrentWorkScope $current,
         private string $table = 'sys_inbox_messages',
     ) {}
 
@@ -22,15 +27,19 @@ final readonly class InboxRetention
      *
      * @param  list<string>  $messageIds
      */
-    public function forget(string $consumer, array $messageIds): int
+    public function forget(DataScope $scope, ConsumerId $consumer, string $source, array $messageIds): int
     {
         if ($messageIds === []) {
             return 0;
         }
 
-        return $this->connection->table($this->table)
-            ->where('consumer', $consumer)
-            ->whereIn('message_id', $messageIds)
-            ->delete();
+        return $this->connection->transaction(function () use ($scope, $consumer, $source, $messageIds): int {
+            $this->current->assert($scope, $this->connection);
+
+            return $this->connection->table($this->table)->where(MessageReceiptIdentity::logical($scope))
+                ->where('source', $source)->where('consumer', $consumer->name)
+                ->whereIn('message_id', $messageIds)
+                ->delete();
+        });
     }
 }

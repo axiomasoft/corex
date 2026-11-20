@@ -32,8 +32,8 @@ final readonly class AttributeValuesChanged
         array $changedAttributeIds,
         array $changedKeys,
         public DateTimeImmutable $occurredAt,
-        public ?string $correlationId = null,
-        public ?string $causationId = null,
+        public string $correlationId,
+        public string $causationId,
     ) {
         if ($messageId === '' || $recordVersion === '' || $recordEntity === '' || $recordId === '') {
             throw new InvalidArgumentException('Attribute mutation identity and record version are required.');

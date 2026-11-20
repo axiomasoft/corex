@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Messaging\Laravel;
 
 use CoreX\Config\Data\CoreOptions;
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\StoredWorkIssuer;
+use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Messaging\Contracts\BrokerReceiver;
 use CoreX\Messaging\Contracts\CloudEventCodec;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
@@ -17,6 +21,7 @@ use CoreX\Messaging\Enums\PubSubDriver;
 use CoreX\Messaging\Internal\ArrayMessageContractRegistry;
 use CoreX\Messaging\Internal\DatabasePollPubSub;
 use CoreX\Messaging\Internal\DefaultWorkerRuntime;
+use CoreX\Messaging\Internal\DurableBrokerReceiver;
 use CoreX\Messaging\Internal\JsonCloudEventCodec;
 use CoreX\Messaging\Internal\NullPubSub;
 use CoreX\Messaging\Internal\NullTraceContextBridge;
@@ -46,14 +51,18 @@ final class MessagingRegistrar implements PackageRegistrar
             MessageContractRegistry::class,
             static fn (): ArrayMessageContractRegistry => new ArrayMessageContractRegistry(contracts: []),
         );
+        $app->scoped(BrokerReceiver::class, static fn (): DurableBrokerReceiver => new DurableBrokerReceiver(ApplicationLocator::current(...)));
         $app->scoped(CloudEventCodec::class, static fn (Application $app): JsonCloudEventCodec => new JsonCloudEventCodec(
+            scopes: $app->make(DataScopeCodec::class),
             contracts: $app->make(MessageContractRegistry::class),
         ));
         $app->instance(TraceContextBridge::class, new NullTraceContextBridge);
         $app->scoped(
             Outbox::class,
             static fn (Application $app): SqlOutbox => new SqlOutbox(
-                connection: $app->make(ConnectionInterface::class),
+                scopes: $app->make(DataScopeCodec::class),
+                current: $app->make(CurrentWorkScope::class),
+                issuer: $app->make(StoredWorkIssuer::class),
                 contracts: $app->make(MessageContractRegistry::class),
                 clock: $app->make(ClockInterface::class),
                 traces: $app->make(TraceContextBridge::class),
@@ -63,18 +72,20 @@ final class MessagingRegistrar implements PackageRegistrar
         $app->scoped(
             OutboxRelay::class,
             static fn (Application $app): SqlOutboxRelay => new SqlOutboxRelay(
+                current: $app->make(CurrentWorkScope::class),
+                scopes: $app->make(DataScopeCodec::class),
                 connection: $app->make(Connection::class),
                 clock: $app->make(ClockInterface::class),
                 leaseSeconds: $app->make(CoreOptions::class)->messagingLeaseSeconds,
                 maxAttempts: $app->make(CoreOptions::class)->messagingMaxAttempts,
                 backoffCapSeconds: $app->make(CoreOptions::class)->messagingBackoffCapSeconds,
-                table: 'sys_outbox_messages',
             ),
         );
         $app->scoped(
             Inbox::class,
             static fn (Application $app): SqlInbox => new SqlInbox(
-                connection: $app->make(ConnectionInterface::class),
+                current: $app->make(CurrentWorkScope::class),
+                contracts: $app->make(MessageContractRegistry::class),
                 clock: $app->make(ClockInterface::class),
                 table: 'sys_inbox_messages',
             ),

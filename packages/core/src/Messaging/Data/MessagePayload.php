@@ -6,6 +6,7 @@ namespace CoreX\Messaging\Data;
 
 use CoreX\Messaging\Exceptions\InvalidMessage;
 use Packman\Attributes\Api;
+use stdClass;
 
 /**
  * Канонизованный payload сообщения: ограниченная карта объектов из null, bool, int,
@@ -43,25 +44,34 @@ final readonly class MessagePayload
     /** @var array<string, JsonLevel7> */
     public array $values;
 
-    /** @param array<string, JsonLevel7> $values */
-    public function __construct(array $values)
+    private string $wire;
+
+    /** @param MessageMap|string $values A bounded PHP map or an encoded JSON object. */
+    public function __construct(array|string $values)
     {
-        /** @var array<string, JsonLevel7> $canonical Validated by the bounded scalar-tree validator. */
-        $canonical = self::canonical($values);
+        if (is_string($values)) {
+            $decoded = json_decode($values, false, 512, JSON_THROW_ON_ERROR);
+
+            if (! $decoded instanceof stdClass) {
+                throw InvalidMessage::payloadShape('must be a bounded object map, not a list or scalar');
+            }
+            $tree = self::canonicalValue($decoded, 0, true);
+        } else {
+            $tree = self::canonicalValue($values, 0, false);
+        }
+        $this->wire = json_encode($tree, JSON_THROW_ON_ERROR);
+
+        if (strlen($this->wire) > self::MAX_BYTES) {
+            throw InvalidMessage::payloadShape('exceeds 64KiB');
+        }
+        /** @var MessageMap $canonical The validated tree contains only bounded scalar maps and lists. */
+        $canonical = json_decode($this->wire, true, flags: JSON_THROW_ON_ERROR);
         $this->values = $canonical;
     }
 
     public static function fromJson(string $json): self
     {
-        $decoded = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-
-        if (! is_array($decoded)) {
-            throw InvalidMessage::payloadShape('must be a bounded object map, not a scalar');
-        }
-        /** @var MessageMap $canonical Validated by the same bounded scalar-tree validator as construction. */
-        $canonical = self::canonical($decoded);
-
-        return new self($canonical);
+        return new self($json);
     }
 
     public static function empty(): self
@@ -77,43 +87,10 @@ final readonly class MessagePayload
 
     public function encode(): string
     {
-        return json_encode($this->values, JSON_THROW_ON_ERROR);
+        return $this->wire;
     }
 
-    /**
-     * @param  array<array-key, mixed>  $values
-     * @return array<string, mixed>
-     */
-    private static function canonical(array $values): array
-    {
-        if ($values !== [] && array_is_list($values)) {
-            throw InvalidMessage::payloadShape('must be a bounded object map, not a list');
-        }
-
-        if (count($values) > self::MAX_KEYS) {
-            throw InvalidMessage::payloadShape('contains too many values');
-        }
-
-        $canonical = [];
-
-        foreach ($values as $key => $value) {
-            if (! is_string($key) || $key === '') {
-                throw InvalidMessage::payloadShape('contains an unsupported key');
-            }
-
-            $canonical[$key] = self::canonicalValue(value: $value, depth: 1);
-        }
-
-        ksort($canonical);
-
-        if (strlen(json_encode($canonical, JSON_THROW_ON_ERROR)) > self::MAX_BYTES) {
-            throw InvalidMessage::payloadShape('exceeds 64KiB');
-        }
-
-        return $canonical;
-    }
-
-    private static function canonicalValue(mixed $value, int $depth): mixed
+    private static function canonicalValue(mixed $value, int $depth, bool $fromJson): mixed
     {
         if ($depth > self::MAX_DEPTH) {
             throw InvalidMessage::payloadShape('nesting exceeds eight levels');
@@ -121,6 +98,12 @@ final readonly class MessagePayload
 
         if ($value === null || is_bool($value) || is_int($value) || is_string($value)) {
             return $value;
+        }
+
+        $map = $fromJson && $value instanceof stdClass;
+
+        if ($map) {
+            $value = get_object_vars($value);
         }
 
         if (! is_array($value)) {
@@ -131,9 +114,13 @@ final readonly class MessagePayload
             throw InvalidMessage::payloadShape('contains too many values');
         }
 
-        if (array_is_list($value)) {
+        if ($depth === 0 && ! $map && $value !== [] && array_is_list($value)) {
+            throw InvalidMessage::payloadShape('must be a bounded object map, not a list');
+        }
+
+        if ($depth > 0 && ! $map && array_is_list($value)) {
             return array_map(
-                static fn (mixed $item): mixed => self::canonicalValue(value: $item, depth: $depth + 1),
+                static fn (mixed $item): mixed => self::canonicalValue(value: $item, depth: $depth + 1, fromJson: $fromJson),
                 $value,
             );
         }
@@ -145,11 +132,11 @@ final readonly class MessagePayload
                 throw InvalidMessage::payloadShape('contains an unsupported key');
             }
 
-            $canonical[$key] = self::canonicalValue(value: $item, depth: $depth + 1);
+            $canonical[$key] = self::canonicalValue(value: $item, depth: $depth + 1, fromJson: $fromJson);
         }
 
         ksort($canonical);
 
-        return $canonical;
+        return (object) $canonical;
     }
 }

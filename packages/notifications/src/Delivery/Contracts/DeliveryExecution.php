@@ -12,4 +12,6 @@ use Packman\Attributes\SpiKind;
 interface DeliveryExecution
 {
     public function deliver(string $deliveryId): void;
+
+    public function reconcile(string $deliveryId): void;
 }

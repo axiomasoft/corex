@@ -25,6 +25,7 @@ use CoreX\Operations\Cost\Data\EstimatedCost;
 use CoreX\Operations\Cost\Exceptions\BudgetStoreUnavailable;
 use CoreX\Operations\Cost\Internal\BudgetAdmission;
 use CoreX\Operations\Cost\Internal\DeclaredCostEstimator;
+use CoreX\Operations\Cost\Internal\SqlOperationBudget;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
@@ -44,9 +45,13 @@ use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
+use CoreX\Operations\Tests\Support\IdempotencyWorkScope;
 use CoreX\Operations\Tests\TestCase;
 use CoreX\Time\Testing\FrozenClock;
 use DateTimeImmutable;
+use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Database\Connection;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -56,6 +61,9 @@ use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Extenders\Api;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
+use Packman\Schema\Contracts\Migration\SchemaMigrator;
+use Packman\Schema\Contracts\Migration\SchemaSets;
+use PHPUnit\Framework\Attributes\Group;
 use RuntimeException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Throwable;
@@ -95,9 +103,10 @@ final class CostInvocationTest extends TestCase
         $modules = $this->modules();
         $connection = DB::connection('sqlite');
         $inner = $this->defaultInvoker($modules, $admission);
+        $work = new IdempotencyWorkScope($this->tenants, $connection);
         $store = new SqlIdempotencyStore(
             connection: $connection,
-            contexts: $this->tenants,
+            current: $work,
             clock: new FrozenClock(new DateTimeImmutable('2026-09-25T10:00:00+00:00')),
             keyHmacSecret: new SecretRef('idempotency-test-secret'),
             leaseSeconds: 30,
@@ -106,6 +115,10 @@ final class CostInvocationTest extends TestCase
         $invoker = new IdempotentOperationInvoker(
             inner: $inner,
             store: static fn (): IdempotencyStore => $store,
+            scopes: $work,
+            current: $work,
+            clientScopes: new AllowClientScopeAuthorizer,
+            fields: new AllowFieldAuthorizer,
             connection: $connection,
             modules: $modules,
             authorizer: $this->operationAuthorizer(),
@@ -220,12 +233,164 @@ final class CostInvocationTest extends TestCase
         self::assertNull($unavailable->headers->get('Retry-After'));
     }
 
+    #[Group('pg')]
+    public function test_committed_tenant_receipt_recovers_a_lost_dedicated_budget_settlement_once(): void
+    {
+        $tenantName = getenv('PGSQL_DATABASE') ?: '';
+        $budgetName = getenv('PGSQL_BUDGET_DATABASE') ?: '';
+        self::assertStringEndsWith('_test', $tenantName);
+        self::assertStringEndsWith('_test', $budgetName);
+        self::assertNotSame($tenantName, $budgetName);
+        $connectionConfig = [
+            'driver' => 'pgsql', 'host' => getenv('PGSQL_HOST') ?: '127.0.0.1',
+            'port' => getenv('PGSQL_PORT') ?: '5434', 'username' => getenv('PGSQL_USERNAME') ?: 'corex',
+            'password' => getenv('PGSQL_PASSWORD') ?: 'corex', 'charset' => 'utf8', 'timezone' => 'UTC', 'prefix' => '',
+            'search_path' => 'corex_cost_receipt_test',
+        ];
+        config([
+            'database.connections.cost_receipt_tenant' => $connectionConfig + ['database' => $tenantName],
+            'database.connections.cost_receipt_retry' => $connectionConfig + ['database' => $tenantName],
+            'database.connections.cost_receipt_budget' => $connectionConfig + ['database' => $budgetName],
+            'database.connections.cost_receipt_observer' => $connectionConfig + ['database' => $budgetName],
+            'corex-operations.schema' => [
+                'budget' => ['connection' => 'cost_receipt_budget', 'driver' => 'pgsql', 'database' => $budgetName],
+                'tenant' => ['connection' => 'cost_receipt_tenant', 'driver' => 'pgsql', 'database' => $tenantName],
+            ],
+        ]);
+        $this->app->forgetInstance(ApiSchemaConnections::class);
+        $this->app->forgetInstance(SchemaSets::class);
+        $this->app->forgetInstance(SchemaMigrator::class);
+        $tenant = DB::connection('cost_receipt_tenant');
+        $retry = DB::connection('cost_receipt_retry');
+        $budget = DB::connection('cost_receipt_budget');
+        $observer = DB::connection('cost_receipt_observer');
+
+        foreach ([$tenant, $budget] as $connection) {
+            $connection->statement('DROP SCHEMA IF EXISTS corex_cost_receipt_test CASCADE');
+            $connection->statement('CREATE SCHEMA corex_cost_receipt_test');
+        }
+
+        try {
+            $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], 'cost_receipt_tenant');
+            $this->migrateSchemaSets(['axiomasoft/corex-operations:budget'], null);
+            $tenant->getSchemaBuilder()->create('cost_receipt_effects', static fn (Blueprint $table) => $table->string('name'));
+            $observer->unprepared(<<<'SQL'
+                CREATE FUNCTION fail_settlement_once() RETURNS trigger LANGUAGE plpgsql AS $$
+                BEGIN
+                    IF OLD.state = 'held' AND NEW.state = 'settled' THEN
+                        RAISE EXCEPTION 'fixture drops settlement';
+                    END IF;
+                    RETURN NEW;
+                END;
+                $$;
+                CREATE TRIGGER cost_settlement_failure BEFORE UPDATE ON sys_api_budget_reservations
+                    FOR EACH ROW EXECUTE FUNCTION fail_settlement_once();
+                SQL);
+            $clock = new FrozenClock(new DateTimeImmutable('2026-09-25T10:00:00Z'));
+            $admission = $this->admission(new SqlOperationBudget($budget, $clock, new SecretRef('fixture-budget')));
+            $this->app->instance(ReceiptCostHandler::class, new ReceiptCostHandler($tenant));
+            $operation = $this->operation(handler: ReceiptCostHandler::class, idempotency: IdempotencyRequirement::Required);
+            $invocation = $this->invocation($operation, 'cost-receipt');
+
+            $fresh = $this->transactionalCostInvoker($tenant, $admission, $clock)->invoke($invocation);
+            $journal = $retry->table('sys_api_idempotency')->value('outcome_json');
+            $receipt = StoredOperationOutcome::fromCanonicalJson($journal, resolve(ProblemRegistry::class))->budgetReceipt;
+            self::assertNotNull($receipt);
+            self::assertFalse($fresh->replayed);
+            self::assertSame(5, $receipt->actualUnits);
+            self::assertSame(1, $retry->table('cost_receipt_effects')->count());
+            self::assertSame('held', $observer->table('sys_api_budget_reservations')->where('id', $receipt->reservationId)->value('state'));
+
+            $observer->statement('DROP TRIGGER cost_settlement_failure ON sys_api_budget_reservations');
+            $second = $this->transactionalCostInvoker($retry, $admission, $clock);
+            self::assertTrue($second->invoke($invocation)->replayed);
+            self::assertSame('settled', $observer->table('sys_api_budget_reservations')->where('id', $receipt->reservationId)->value('state'));
+            self::assertSame(2, $observer->table('sys_api_budget_reservations')->count());
+            self::assertSame(1, $retry->table('cost_receipt_effects')->count());
+
+            $tenant->unprepared(<<<'SQL'
+                CREATE FUNCTION fail_owner_receipt_once() RETURNS trigger LANGUAGE plpgsql AS $$
+                BEGIN
+                    IF NEW.state = 'completed' THEN
+                        RAISE EXCEPTION 'fixture rolls back the tenant receipt';
+                    END IF;
+                    RETURN NEW;
+                END;
+                $$;
+                CREATE TRIGGER cost_owner_receipt_failure BEFORE UPDATE ON sys_api_idempotency
+                    FOR EACH ROW EXECUTE FUNCTION fail_owner_receipt_once();
+                SQL);
+            $uncommitted = new OperationInvocation($operation, $invocation->context, JsonDocuments::capture(['name' => 'retry']), [], 'retry-cost');
+
+            try {
+                $this->transactionalCostInvoker($tenant, $admission, $clock)->invoke($uncommitted);
+                self::fail('The injected tenant receipt failure did not abort the transaction.');
+            } catch (ApiError $error) {
+                self::assertSame('core.internal_error', $error->errorCode);
+            }
+            self::assertSame(1, $retry->table('sys_api_idempotency')->count());
+            self::assertSame(0, $retry->table('cost_receipt_effects')->where('name', 'retry')->count());
+            $retained = $observer->table('sys_api_budget_reservations')->where('state', 'held')->first();
+            self::assertNotNull($retained);
+            $balances = $observer->table('sys_api_budget_buckets')->orderBy('key')->pluck('available')->all();
+            $tenant->statement('DROP TRIGGER cost_owner_receipt_failure ON sys_api_idempotency');
+            $this->app->instance(ReceiptCostHandler::class, new ReceiptCostHandler($retry));
+            self::assertFalse($second->invoke($uncommitted)->replayed);
+            self::assertSame(1, $retry->table('cost_receipt_effects')->where('name', 'retry')->count());
+            self::assertSame('settled', $observer->table('sys_api_budget_reservations')->where('id', $retained->id)->value('state'));
+            self::assertSame(3, $observer->table('sys_api_budget_reservations')->count());
+            self::assertSame($balances, $observer->table('sys_api_budget_buckets')->orderBy('key')->pluck('available')->all());
+
+            $failed = new OperationInvocation($operation, $invocation->context, JsonDocuments::capture(['name' => 'rollback']), [], 'rollback-cost');
+            $this->app->instance(ReceiptCostHandler::class, new ReceiptCostHandler($retry));
+
+            try {
+                $second->invoke($failed);
+                self::fail('The injected handler failure did not abort the transaction.');
+            } catch (ApiError $error) {
+                self::assertSame('core.internal_error', $error->errorCode);
+            }
+            self::assertSame(0, $tenant->table('cost_receipt_effects')->where('name', 'rollback')->count());
+            self::assertSame(1, $observer->table('sys_api_budget_reservations')->where('state', 'held')->count());
+        } finally {
+            $tenant->statement('DROP SCHEMA IF EXISTS corex_cost_receipt_test CASCADE');
+            $budget->statement('DROP SCHEMA IF EXISTS corex_cost_receipt_test CASCADE');
+            foreach (['cost_receipt_tenant', 'cost_receipt_retry', 'cost_receipt_budget', 'cost_receipt_observer'] as $name) {
+                DB::purge($name);
+            }
+        }
+    }
+
+    private function transactionalCostInvoker(Connection $connection, BudgetAdmission $budget, FrozenClock $clock): IdempotentOperationInvoker
+    {
+        $work = new IdempotencyWorkScope($this->tenants, $connection);
+        $store = new SqlIdempotencyStore($connection, $work, $clock, new SecretRef('fixture-owner'), 30, 300);
+        $modules = $this->modules();
+
+        return new IdempotentOperationInvoker(
+            inner: $this->defaultInvoker($modules, $budget),
+            store: static fn (): IdempotencyStore => $store,
+            connection: $connection,
+            modules: $modules,
+            scopes: $work,
+            current: $work,
+            clientScopes: new AllowClientScopeAuthorizer,
+            fields: new AllowFieldAuthorizer,
+            authorizer: $this->operationAuthorizer(),
+            replayAuthorizer: new AllowReplayAuthorizer,
+            errors: resolve(ErrorMapper::class),
+            problems: resolve(ProblemRegistry::class),
+            budget: $budget,
+        );
+    }
+
     private function admission(OperationBudget $budget): BudgetAdmission
     {
         return new BudgetAdmission(
             budget: $budget,
             estimator: new DeclaredCostEstimator,
             installationId: 'installation-a',
+            exceptions: resolve(ExceptionHandler::class),
             costInput: static fn (): CostInput => new CostInput(0, 0, 0, 0, false, 0, 0),
             clientId: static fn (): string => 'client-a',
         );
@@ -378,6 +543,23 @@ final class CostInvocationHandler implements OperationHandler
         }
 
         return ['name' => $input['name'] ?? 'read'];
+    }
+}
+
+final readonly class ReceiptCostHandler implements OperationHandler
+{
+    public function __construct(private Connection $connection) {}
+
+    public function handle(RequestContext $context, array $input, array $parameters): array
+    {
+        $name = $input['name'] ?? 'alpha';
+        $this->connection->table('cost_receipt_effects')->insert(['name' => $name]);
+
+        if ($name === 'rollback') {
+            throw new RuntimeException('fixture rolls back the owner transaction');
+        }
+
+        return ['name' => $name];
     }
 }
 

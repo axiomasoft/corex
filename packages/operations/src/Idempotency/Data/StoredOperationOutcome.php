@@ -7,6 +7,7 @@ namespace CoreX\Operations\Idempotency\Data;
 use CoreX\Data\Data\JsonDocument;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Errors\Enums\CoreErrorCode;
+use CoreX\Operations\Cost\Data\BudgetReceipt;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Data\OperationResult;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
@@ -33,12 +34,13 @@ final readonly class StoredOperationOutcome
         public ?string $errorCategory,
         public bool $errorRetryable,
         public ?string $errorPath,
+        public ?BudgetReceipt $budgetReceipt = null,
     ) {}
 
     /** Immutable JSON value. */
-    public static function success(JsonDocument $data): self
+    public static function success(JsonDocument $data, ?BudgetReceipt $budgetReceipt = null): self
     {
-        return new self(kind: 'success', data: JsonDocuments::nullable($data), errorCode: null, errorStatus: null, errorMessage: null, errorDetails: JsonDocuments::capture([]), errorCategory: null, errorRetryable: false, errorPath: null);
+        return new self(kind: 'success', data: JsonDocuments::nullable($data), errorCode: null, errorStatus: null, errorMessage: null, errorDetails: JsonDocuments::capture([]), errorCategory: null, errorRetryable: false, errorPath: null, budgetReceipt: $budgetReceipt);
     }
 
     public static function failure(ApiError $error): self
@@ -70,8 +72,18 @@ final readonly class StoredOperationOutcome
         $rootKeys = array_keys($payload);
         sort($rootKeys);
 
-        if ($kind === 'success' && $rootKeys === ['data', 'kind'] && is_array($payload['data'] ?? null)) {
-            return self::success(JsonDocuments::capture($payload['data']));
+        if ($kind === 'success' && is_array($payload['data'] ?? null)) {
+            if ($rootKeys === ['data', 'kind']) {
+                return self::success(JsonDocuments::capture($payload['data']));
+            }
+
+            $budget = $payload['budget'] ?? null;
+
+            if ($rootKeys === ['budget', 'data', 'kind'] && is_array($budget)
+                && array_keys($budget) === ['actual_units', 'reservation_id']
+                && is_int($budget['actual_units']) && is_string($budget['reservation_id'])) {
+                return self::success(JsonDocuments::capture($payload['data']), new BudgetReceipt($budget['reservation_id'], $budget['actual_units']));
+            }
         }
 
         $error = $payload['error'] ?? null;
@@ -125,7 +137,13 @@ final readonly class StoredOperationOutcome
     public function canonicalJson(): string
     {
         return JsonCanonical::encode($this->kind === 'success'
-            ? ['data' => JsonDocuments::optionalArray($this->data), 'kind' => 'success']
+            ? [
+                'data' => JsonDocuments::optionalArray($this->data), 'kind' => 'success',
+                ...($this->budgetReceipt === null ? [] : ['budget' => [
+                    'actual_units' => $this->budgetReceipt->actualUnits,
+                    'reservation_id' => $this->budgetReceipt->reservationId,
+                ]]),
+            ]
             : [
                 'error' => [
                     'category' => $this->errorCategory,

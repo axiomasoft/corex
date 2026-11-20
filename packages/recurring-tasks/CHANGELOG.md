@@ -1,5 +1,9 @@
 # Changelog
 
+## CoreX 2.0 — Durable effects
+
+- Pass the exact Task transaction connection to Workflow and record confirmed capture evidence with the original scope epoch.
+
 ## Unreleased — Packman governance
 
 - Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Laravel;
 
-use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
 use CoreX\Operations\Idempotency\Internal\SqlIdempotencyStore;
 use CoreX\Operations\Laravel\Support\ApiOptions;
@@ -31,7 +31,7 @@ final class IdempotencyStoreFactory
 
         return new SqlIdempotencyStore(
             connection: $app->make(Connection::class),
-            contexts: $app->make(TenantContextResolver::class),
+            current: $app->make(CurrentWorkScope::class),
             clock: $app->make(ClockInterface::class),
             keyHmacSecret: new SecretRef($secret),
             leaseSeconds: $app->make(ApiOptions::class)->idempotencyLeaseSeconds,

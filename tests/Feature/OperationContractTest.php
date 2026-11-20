@@ -26,6 +26,7 @@ use CoreX\Operations\Validation\Data\JsonObject;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Operations\Versioning\Data\ApiProfile;
 use CoreX\Operations\Versioning\Internal\ApiProfileFactory;
+use CoreX\Tests\Support\WorkScopeFixture;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
@@ -58,7 +59,7 @@ final class OperationContractTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->app['config']->set('app.key', 'p13-contract-test-secret');
+        $this->app['config']->set('app.key', 'base64:'.base64_encode(str_repeat('s', 32)));
         Schema::dropIfExists('sys_api_idempotency');
         resolve(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], resolve(ApiSchemaConnections::class)->tenant()->getName());
 
@@ -93,6 +94,12 @@ final class OperationContractTest extends TestCase
         $this->app->instance(TenantContextResolver::class, $this->tenants);
         $this->app->instance(TenancyManager::class, $this->tenants);
         $this->app->instance(PrincipalResolver::class, $this->identity);
+        $scope = WorkScopeFixture::install(
+            app: $this->app,
+            principalId: $this->identity->principalId(),
+            principalKind: $this->identity->principalType()->value,
+        );
+        $scope->register(context: $this->tenants->current(), connection: resolve(ApiSchemaConnections::class)->tenant());
         $this->app->instance(OperationAuthorizer::class, new class implements OperationAuthorizer
         {
             public function allows(Operation $operation, RequestContext $context): bool

@@ -19,7 +19,7 @@ final class PruneWebhooks extends Command
 {
     protected $signature = 'corex:webhooks:prune {--max=100 : Maximum rows in this pass}';
 
-    protected $description = 'Prune expired CoreX webhook bodies, attempts and inbox history.';
+    protected $description = 'Prune expired CoreX webhook bodies and attempt history.';
 
     public function handle(): int
     {

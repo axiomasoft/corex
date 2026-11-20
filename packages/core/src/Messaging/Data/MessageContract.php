@@ -19,6 +19,13 @@ use Packman\Attributes\Api;
 #[Api(since: '1.0')]
 final readonly class MessageContract
 {
+    /** Delivery class of a journaled broker fact; subscribers deduplicate by logical identity. */
+    public const string RETRY_CLASS = 'durable-broker-handoff';
+
+    public const string RETENTION = 'consumer-evidence';
+
+    public string $handler;
+
     public function __construct(
         public string $name,
         public int $version,
@@ -27,8 +34,15 @@ final readonly class MessageContract
         public PiiClass $maxPiiClass,
         public string $channel,
         public ?string $dataSchema = null,
+        public bool $derived = false,
+        ?string $handler = null,
     ) {
         self::assertContractName($name);
+        $this->handler = $handler ?? $channel;
+
+        if ($handler !== null && ($handler === '' || strlen($handler) > 120 || preg_match('/[\x00-\x1f\x7f]/', $handler) === 1)) {
+            throw InvalidMessage::identity('handler identity');
+        }
 
         if ($dataSchema !== null && ! UriReference::isAbsolute($dataSchema)) {
             throw InvalidMessage::identity('contract data schema');
@@ -50,6 +64,14 @@ final readonly class MessageContract
 
         if ($channel === '' || strlen($channel) > 120 || preg_match('/[\x00-\x1f\x7f]/', $channel) === 1) {
             throw InvalidMessage::identity("contract channel [{$channel}]");
+        }
+    }
+
+    public function validateFact(MessageEnvelope $message): void
+    {
+        if ($message->contract() !== $this->id() || ! $this->maxPiiClass->permits($message->piiClass)
+            || ($this->derived && $message->causationId === null)) {
+            throw InvalidMessage::identity('declared contract, lineage or PII limit');
         }
     }
 

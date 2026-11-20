@@ -1,0 +1,32 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:corex:schema:attributes.values.changed.v1",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["changedAttributeIds", "changedKeys", "record", "recordVersion", "schemaHash"],
+    "properties": {
+        "changedAttributeIds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+        },
+        "changedKeys": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+        },
+        "record": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["entity", "id"],
+            "properties": {
+                "entity": {"type": "string", "minLength": 1, "maxLength": 128},
+                "id": {"type": "string", "minLength": 1, "maxLength": 128}
+            }
+        },
+        "recordVersion": {"type": "string", "minLength": 1},
+        "schemaHash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    }
+}

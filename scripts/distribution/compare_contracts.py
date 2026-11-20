@@ -254,7 +254,8 @@ def documents(revision):
             yield "config-schema", path + subject, definition, path
 
     for path in revision.matching(
-        PACKAGE + r"/resources/(?:contracts|schemas)/[^/]*(?:message|event|envelope)[^/]*\.json"
+        rf"{PACKAGE}/resources/(?:contracts|schemas)/[^/]*(?:message|event|envelope)[^/]*\.json"
+        rf"|{PACKAGE}/resources/message-schemas/[^/]+\.json"
         r"|schemas/(?:messages|events)/.+\.json"
     ):
         yield "message-schema", path, revision.document(path), path

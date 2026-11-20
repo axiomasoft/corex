@@ -18,6 +18,7 @@ use CoreX\Operations\Invocation\Contracts\OperationInvoker;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Internal\DefaultOperationInvoker;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Database\Connection;
 use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
@@ -45,6 +46,6 @@ final class InvocationFixtures
      */
     public static function costInvoker(ModuleRegistry $modules, ClientScopeAuthorizer $clientScopes, OperationAuthorizer $authorizer, OperationFieldAuthorizer $fields, Container $container, OperationBudget $budget, string $installationId, Closure $costInput, Closure $clientId): OperationInvoker
     {
-        return new DefaultOperationInvoker(modules: $modules, clientScopes: $clientScopes, authorizer: $authorizer, fields: $fields, container: $container, budget: new BudgetAdmission(budget: $budget, estimator: self::declaredCosts(), installationId: $installationId, costInput: $costInput, clientId: $clientId));
+        return new DefaultOperationInvoker(modules: $modules, clientScopes: $clientScopes, authorizer: $authorizer, fields: $fields, container: $container, budget: new BudgetAdmission(budget: $budget, estimator: self::declaredCosts(), installationId: $installationId, exceptions: $container->make(ExceptionHandler::class), costInput: $costInput, clientId: $clientId));
     }
 }

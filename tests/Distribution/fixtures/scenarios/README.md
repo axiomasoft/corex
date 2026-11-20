@@ -39,3 +39,10 @@ runs through `verify_installed_consumers.py --consumer octane`. The
 while the external control store remains live. The `workspace-sweep` runner
 terminates the first worker only after that worker's durable claim marker, then
 starts a separate process for recovery.
+
+Stage 2 adds `notification-visibility` and `provider-unknown` on the same PostgreSQL
+lanes. The external provider process binds loopback and records requests, effects,
+and lookups in `provider-journal.sqlite` under the individual proof directory.
+Its receipt identifies the journal, while each Laravel worker reports its own
+provisioned PostgreSQL session. Named barriers establish the order of revocation,
+provider commit, lost responses, worker termination, and recovery.

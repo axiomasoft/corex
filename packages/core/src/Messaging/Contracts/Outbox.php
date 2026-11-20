@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Messaging\Contracts;
 
 use CoreX\Messaging\Data\MessageEnvelope;
+use Illuminate\Database\ConnectionInterface;
 use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
@@ -21,5 +22,5 @@ use Packman\Attributes\SpiKind;
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface Outbox
 {
-    public function append(MessageEnvelope $message): void;
+    public function append(ConnectionInterface $connection, MessageEnvelope $message): void;
 }

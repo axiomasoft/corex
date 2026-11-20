@@ -44,10 +44,33 @@ final class ScopeControlSchema
                 $table->string('kind', 32);
                 $table->string('effect_key', 191)->nullable();
                 $table->timestampTz('deadline', 6)->nullable();
+                $table->char('provider_identity', 64)->nullable();
+                $table->string('provider_owner', 191)->nullable();
+                $table->string('provider_namespace', 191)->nullable();
+                $table->string('owner_ref', 191)->nullable();
+                $table->string('claim_token', 191)->nullable();
+                $table->char('effect_digest', 64)->nullable();
+                $table->boolean('single_instance_reference')->default(false);
+                $table->string('first_provider_ref')->nullable();
+                $table->string('observation_kind', 16)->nullable();
+                $table->string('observation_ref')->nullable();
+                $table->string('observer', 191)->nullable();
+                $table->index(['deployment_id', 'provider_identity', 'attempt'], 'corex_provider_effect_ix');
                 $table->string('state', 32);
                 $table->string('evidence')->nullable();
                 $table->unique(['deployment_id', 'account_id', 'operation_id', 'attempt'], 'corex_scope_attempt_uq');
                 $table->index(['binding_id', 'binding_generation', 'restore_epoch', 'state'], 'corex_scope_outstanding_ix');
+            });
+            $schema->create('corex_provider_observations', function (Blueprint $table): void {
+                $table->uuid('id');
+                $table->primary(['id'], 'corex_provider_observations_pk');
+                $table->uuid('ticket_id');
+                $table->string('kind', 16);
+                $table->string('reference');
+                $table->string('observer', 191);
+                $table->timestampTz('observed_at', 6);
+                $table->index(['ticket_id', 'observed_at'], 'corex_provider_evidence_ix');
+                $table->foreign('ticket_id', 'corex_provider_observations_ticket_fk')->references('ticket_id')->on('corex_scope_tickets')->restrictOnDelete();
             });
         });
     }

@@ -1,5 +1,9 @@
 # Changelog
 
+## CoreX 2.0 — Durable effects
+
+- Capture sealed intents on the caller’s active owner connection. Scoped replay returns the existing intent reference and digest. The workflow sweep starts committed work with its original effect key and reconciles provider outcomes through durable receipts.
+
 ## Unreleased — Packman governance
 
 - Expose WorkflowBinding from the binding factory instead of its private SQL implementation.

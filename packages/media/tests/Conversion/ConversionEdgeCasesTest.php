@@ -20,6 +20,7 @@ use CoreX\Media\Internal\MediaBlobs;
 use CoreX\Media\Internal\MediaOperationStore;
 use CoreX\Media\Internal\Support\MediaOptions;
 use CoreX\Media\Laravel\UploadedFileSource;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Psr\Clock\ClockInterface;
@@ -56,7 +57,7 @@ it('keeps malformed source conversions pending for durable retry instead of publ
 
     resolve(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail');
 
-    expect(fn (): mixed => new ConvertMedia($file->id, 'thumbnail')->handle(resolve(ConversionCoordinator::class)))
+    expect(fn (): mixed => app()->call([new ConvertMedia($file->id, 'thumbnail', mediaConversionKey($file->id)), 'handle']))
         ->toThrow(MediaOperationConflict::class);
 
     expect(DB::table('med_conversions')->where('file_id', $file->id)->value('state'))->toBe('pending')
@@ -86,21 +87,11 @@ it('rejects output facts that exceed the immutable conversion profile', function
         new UploadInput('bounded-conversion', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.txt', 'bytes')), 'attachment'),
     );
     $profiles = new ConversionProfiles([$driver]);
-    $digest = $profiles->digest($driver);
-    DB::table('med_conversions')->insert([
-        'file_id' => $file->id,
-        'profile_key' => 'bounded',
-        'profile_digest' => $digest,
-        'source_version' => 1,
-        'state' => 'pending',
-        'created_at' => now(),
-        'updated_at' => now(),
-    ]);
     $operations = resolve(MediaOperationStore::class);
-    $operations->enqueueConversion($file->id, 'bounded', $digest, 1);
-    $coordinator = new ConversionCoordinator(resolve('db')->connection(), resolve(MediaBlobs::class), $profiles, $operations, resolve(MediaOptions::class), resolve(ClockInterface::class));
+    $coordinator = new ConversionCoordinator(resolve('db')->connection(), resolve(MediaBlobs::class), $profiles, $operations, resolve(MediaOptions::class), resolve(ClockInterface::class), resolve(ExceptionHandler::class));
+    $coordinator->request($file->id, 'bounded');
 
-    expect(fn (): mixed => $coordinator->process($file->id, 'bounded'))->toThrow(MediaOperationConflict::class);
+    expect(fn (): mixed => $coordinator->process($file->id, 'bounded', mediaConversionKey($file->id)))->toThrow(MediaOperationConflict::class);
 
     expect(DB::table('med_conversions')->where('file_id', $file->id)->value('state'))->toBe('pending')
         ->and(DB::table('med_operations')->where('file_id', $file->id)->where('kind', 'conversion')->value('state'))->toBe('unknown');

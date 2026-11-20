@@ -16,10 +16,13 @@ return new class extends PackmanMigration
     public function up(): void
     {
         $this->create('ntf_recipient_state', function (Blueprint $table): void {
+            $table->string('account_id', 128);
+            $table->string('account_incarnation', 128);
+            $table->string('workspace_scope', 138);
             $table->string('kind', 64);
             $table->string('id', 128);
             $table->decimal('preference_revision', 20, 0);
-            $table->primary(['kind', 'id'], 'ntf_recipient_state_pk');
+            $table->primary(['account_id', 'account_incarnation', 'workspace_scope', 'kind', 'id'], 'ntf_recipient_state_pk');
         });
     }
 

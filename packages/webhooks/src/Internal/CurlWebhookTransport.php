@@ -144,12 +144,18 @@ final class CurlWebhookTransport implements WebhookHttpTransport
     /** @return list<string> */
     private function requestHeaders(ValidatedWebhookRequest $request): array
     {
-        return [
+        $headers = [
             'Content-Type: application/cloudevents+json',
             'Webhook-Id: '.$request->signatureHeaders['webhook-id'],
             'Webhook-Timestamp: '.$request->signatureHeaders['webhook-timestamp'],
             'Webhook-Signature: '.$request->signatureHeaders['webhook-signature'],
         ];
+
+        if ($request->effectKey !== null) {
+            $headers[] = 'Idempotency-Key: '.$request->effectKey;
+        }
+
+        return $headers;
     }
 
     private function sameAddress(string $actual, string $expected): bool

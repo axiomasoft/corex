@@ -221,7 +221,7 @@ final readonly class WebhookManagement
         }
 
         if (isset($filters['status']) && (! is_string($filters['status'])
-            || ! in_array($filters['status'], ['pending', 'sending', 'retry', 'succeeded', 'dead'], true))) {
+            || ! in_array($filters['status'], ['pending', 'claimed', 'sending', 'retry', 'succeeded', 'dead', 'unknown', 'quarantined'], true))) {
             throw new ApiError(errorCode: OperationsErrorCode::ValidationFailed, status: 422, message: 'Webhook status filter is invalid.', category: ErrorCategory::Validation);
         }
 

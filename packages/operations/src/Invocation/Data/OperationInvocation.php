@@ -15,5 +15,5 @@ final readonly class OperationInvocation
     /**
      * @param  array<string, string>  $parameters
      */
-    public function __construct(public Operation $operation, public RequestContext $context, public JsonDocument $input, public array $parameters, public ?string $idempotencyKey) {}
+    public function __construct(public Operation $operation, public RequestContext $context, public JsonDocument $input, public array $parameters, public ?string $idempotencyKey, public ?string $clientId = null) {}
 }

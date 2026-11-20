@@ -2,41 +2,14 @@
 
 declare(strict_types=1);
 
+require_once __DIR__.'/../Support/Messaging.php';
+
 use CoreX\Messaging\Internal\SqlDeliveryHealth;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
-use Psr\Clock\ClockInterface;
 
 function deliveryHealthInsertRow(array $overrides = []): void
 {
-    $now = resolve(ClockInterface::class)->now();
-
-    DB::connection('pgsql')->table('sys_outbox_messages')->insert([
-        'id' => $overrides['id'] ?? '01932f5a-0000-7000-8000-000000000099',
-        'name' => $overrides['name'] ?? 'membership.expired',
-        'contract_version' => $overrides['contract_version'] ?? 1,
-        'envelope_version' => 1,
-        'source' => 'axiomasoft/corex',
-        'subject' => 'subject-1',
-        'correlation_id' => 'corr-1',
-        'causation_id' => 'cause-1',
-        'pii_class' => 'none',
-        'scope' => json_encode(['accountId' => 'account-1'], JSON_THROW_ON_ERROR),
-        'payload' => '{}',
-        'metadata' => '{}',
-        'occurred_at' => $overrides['occurred_at'] ?? $now,
-        'available_at' => $overrides['available_at'] ?? $now,
-        'status' => $overrides['status'] ?? 'pending',
-        'lease_owner' => null,
-        'lease_until' => null,
-        'attempts' => $overrides['attempts'] ?? 0,
-        'failure_class' => null,
-        'last_error' => null,
-        'published_at' => $overrides['published_at'] ?? null,
-        'dead_at' => $overrides['dead_at'] ?? null,
-        'created_at' => $now,
-        'updated_at' => $now,
-    ]);
+    outboxRelayInsertRow($overrides);
 }
 
 beforeEach(function (): void {

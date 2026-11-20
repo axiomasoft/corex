@@ -2,28 +2,21 @@
 
 declare(strict_types=1);
 
+require_once __DIR__.'/../Support/Messaging.php';
+
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Messaging\Contracts\Inbox;
+use CoreX\Messaging\Data\ConsumerId;
 use CoreX\Messaging\Exceptions\InboxRefused;
 use CoreX\Messaging\Laravel\InboxRetention;
 use CoreX\Time\Testing\FrozenClock;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Psr\Clock\ClockInterface;
 
-function inboxClaimInstallSchema(): void
-{
-    Schema::create('sys_inbox_messages', function (Blueprint $table): void {
-        $table->string('consumer');
-        $table->string('message_id');
-        $table->string('name');
-        $table->dateTimeTz('processed_at');
-        $table->primary(['consumer', 'message_id']);
-    });
-}
-
 beforeEach(function (): void {
-    inboxClaimInstallSchema();
+    messagingWorkScope();
+    messagingInstallTable('inbox');
+    outboxAppendBindRegistry(outboxAppendDeclaredContract());
 });
 
 it('forgets only explicit message ids for the selected consumer', function (): void {
@@ -31,15 +24,15 @@ it('forgets only explicit message ids for the selected consumer', function (): v
     DB::transaction(function () use ($inbox): void {
         foreach (['webhooks', 'billing'] as $consumer) {
             foreach (['old', 'retained'] as $messageId) {
-                $inbox->claim(consumer: $consumer, messageId: $messageId, name: 'example');
+                $inbox->claim(connection: DB::connection(), consumer: new ConsumerId($consumer, 1), message: messagingSampleEnvelope(['messageId' => $messageId]));
             }
         }
     });
-    $retention = new InboxRetention(connection: DB::connection(), table: 'sys_inbox_messages');
+    $retention = new InboxRetention(connection: DB::connection(), current: resolve(CurrentWorkScope::class), table: 'sys_inbox_messages');
 
-    expect($retention->forget(consumer: 'webhooks', messageIds: []))->toBe(0)
-        ->and($retention->forget(consumer: 'webhooks', messageIds: ['old']))->toBe(1)
-        ->and($retention->forget(consumer: 'webhooks', messageIds: ['old']))->toBe(0)
+    expect($retention->forget(scope: messagingWorkScope(), consumer: new ConsumerId('webhooks', 1), source: 'axiomasoft/corex', messageIds: []))->toBe(0)
+        ->and($retention->forget(scope: messagingWorkScope(), consumer: new ConsumerId('webhooks', 1), source: 'axiomasoft/corex', messageIds: ['old']))->toBe(1)
+        ->and($retention->forget(scope: messagingWorkScope(), consumer: new ConsumerId('webhooks', 1), source: 'axiomasoft/corex', messageIds: ['old']))->toBe(0)
         ->and(DB::table('sys_inbox_messages')->where('consumer', 'billing')->count())->toBe(2)
         ->and(DB::table('sys_inbox_messages')->where('consumer', 'webhooks')->value('message_id'))->toBe('retained');
 });
@@ -48,9 +41,7 @@ it('refuses claim outside a transaction with MSG-006', function (): void {
     $inbox = resolve(Inbox::class);
 
     expect(fn (): bool => $inbox->claim(
-        consumer: 'search.projection.v1',
-        messageId: '11111111-1111-7111-8111-111111111111',
-        name: 'membership.expired',
+        connection: DB::connection(), consumer: new ConsumerId('search.projection.v1', 1), message: messagingSampleEnvelope(['messageId' => '11111111-1111-7111-8111-111111111111']),
     ))->toThrow(InboxRefused::class, 'MSG-006');
 });
 
@@ -63,14 +54,10 @@ it('returns true on first claim and false on duplicate consumer and message id',
 
     DB::transaction(function () use ($inbox, $messageId, &$first, &$second): void {
         $first = $inbox->claim(
-            consumer: 'search.projection.v1',
-            messageId: $messageId,
-            name: 'membership.expired',
+            connection: DB::connection(), consumer: new ConsumerId('search.projection.v1', 1), message: messagingSampleEnvelope(['messageId' => $messageId]),
         );
         $second = $inbox->claim(
-            consumer: 'search.projection.v1',
-            messageId: $messageId,
-            name: 'membership.expired',
+            connection: DB::connection(), consumer: new ConsumerId('search.projection.v1', 1), message: messagingSampleEnvelope(['messageId' => $messageId]),
         );
     });
 
@@ -87,14 +74,10 @@ it('treats consumers independently for the same message id', function (): void {
 
     DB::transaction(function () use ($inbox, $messageId, &$firstConsumer, &$secondConsumer): void {
         $firstConsumer = $inbox->claim(
-            consumer: 'search.projection.v1',
-            messageId: $messageId,
-            name: 'membership.expired',
+            connection: DB::connection(), consumer: new ConsumerId('search.projection.v1', 1), message: messagingSampleEnvelope(['messageId' => $messageId]),
         );
         $secondConsumer = $inbox->claim(
-            consumer: 'billing.projection.v1',
-            messageId: $messageId,
-            name: 'membership.expired',
+            connection: DB::connection(), consumer: new ConsumerId('billing.projection.v1', 1), message: messagingSampleEnvelope(['messageId' => $messageId]),
         );
     });
 
@@ -112,9 +95,7 @@ it('stores processed_at from FrozenClock', function (): void {
 
     DB::transaction(function () use ($inbox, $messageId): void {
         $inbox->claim(
-            consumer: 'search.projection.v1',
-            messageId: $messageId,
-            name: 'membership.expired',
+            connection: DB::connection(), consumer: new ConsumerId('search.projection.v1', 1), message: messagingSampleEnvelope(['messageId' => $messageId]),
         );
     });
 

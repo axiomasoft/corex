@@ -6,6 +6,10 @@ namespace CoreX\Webhooks\Laravel;
 
 use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\ProviderEffectLedger;
+use CoreX\Context\Contracts\ProviderEffectRecovery;
+use CoreX\Context\Contracts\ProviderReceiptProjector;
+use CoreX\Context\Contracts\StoredWorkIssuer;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Messaging\Contracts\CloudEventCodec;
 use CoreX\Messaging\Contracts\Inbox;
@@ -28,11 +32,13 @@ use CoreX\Webhooks\Internal\WebhookDeliveryWorker;
 use CoreX\Webhooks\Internal\WebhookFanout;
 use CoreX\Webhooks\Internal\WebhookKeyRing;
 use CoreX\Webhooks\Internal\WebhookManagement;
+use CoreX\Webhooks\Internal\WebhookReceiptProjector;
 use CoreX\Webhooks\Internal\WebhookReplay;
 use CoreX\Webhooks\Internal\WebhookRetention;
 use CoreX\Webhooks\Internal\WebhookRetryPolicy;
 use CoreX\Webhooks\Internal\WebhookTopicCatalogue;
 use CoreX\Webhooks\Internal\WebhookUrlPolicy;
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Override;
@@ -70,7 +76,10 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
             clock: $app->make(ClockInterface::class),
             egress: $app->make(WebhookEgressPolicy::class),
         ));
-        $app->scoped(WebhookDeliveryStore::class, static fn (Application $app): SqlWebhookDeliveryStore => self::deliveryStore(app: $app, options: $app->make(WebhookOptions::class)));
+        $app->scoped(SqlWebhookDeliveryStore::class, static fn (Application $app): SqlWebhookDeliveryStore => self::deliveryStore(app: $app, options: $app->make(WebhookOptions::class)));
+        $app->alias(SqlWebhookDeliveryStore::class, WebhookDeliveryStore::class);
+        $app->scoped(WebhookReceiptProjector::class);
+        $app->tag(WebhookReceiptProjector::class, ProviderReceiptProjector::class);
         $app->scoped(WebhookManagement::class, static fn (Application $app): WebhookManagement => new WebhookManagement(
             connection: $app->make(ApiSchemaConnections::class)->tenant(),
             contexts: $app->make(CurrentWorkScope::class),
@@ -83,6 +92,8 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
             clock: $app->make(ClockInterface::class),
             cursors: $app->make(CursorCodec::class),
             audit: $app->make(AuditLogger::class),
+            issuer: $app->make(StoredWorkIssuer::class),
+            scopes: $app->make(DataScopeCodec::class),
         ));
         $app->scoped(WebhookFanout::class, static fn (Application $app): WebhookFanout => new WebhookFanout(
             connection: $app->make(ApiSchemaConnections::class)->tenant(),
@@ -93,11 +104,13 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
             codec: $app->make(CloudEventCodec::class),
             scopes: $app->make(DataScopeCodec::class),
             current: $app->make(CurrentWorkScope::class),
+            issuer: $app->make(StoredWorkIssuer::class),
         ));
         $app->scoped(WebhookRetention::class, static fn (Application $app): WebhookRetention => new WebhookRetention(
             connection: $app->make(ApiSchemaConnections::class)->tenant(),
             contexts: $app->make(CurrentWorkScope::class),
             clock: $app->make(ClockInterface::class),
+            providerLedger: static fn (): ProviderEffectLedger => Container::getInstance()->make(ProviderEffectLedger::class),
             bodyRetentionSeconds: $app->make(WebhookOptions::class)->bodyRetentionSeconds,
             historyRetentionSeconds: $app->make(WebhookOptions::class)->historyRetentionSeconds,
             replayHorizonSeconds: $app->make(WebhookOptions::class)->replayHorizonSeconds,
@@ -125,6 +138,7 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
             contexts: $app->make(CurrentWorkScope::class),
             clock: $app->make(ClockInterface::class),
             retry: $app->make(WebhookRetryPolicy::class),
+            receiptRecovery: static fn (): ProviderEffectRecovery => Container::getInstance()->make(ProviderEffectRecovery::class),
             leaseSeconds: $options->leaseSeconds,
         );
     }
@@ -171,7 +185,7 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
         self::assertDeliveryReady(app: $app, options: $app->make(WebhookOptions::class));
 
         return new WebhookDeliveryWorker(
-            store: self::deliveryStore(app: $app, options: $app->make(WebhookOptions::class)),
+            store: $app->make(SqlWebhookDeliveryStore::class),
             signer: $app->make(WebhookSigner::class),
             urlPolicy: $app->make(WebhookUrlPolicy::class),
             transport: $app->make(WebhookHttpTransport::class),
@@ -179,6 +193,7 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
             clock: $app->make(ClockInterface::class),
             egress: $app->make(WebhookEgressPolicy::class),
             scopeCodec: $app->make(DataScopeCodec::class),
+            resolveWorker: static fn (): WebhookDeliveryWorker => Container::getInstance()->make(WebhookDeliveryWorker::class),
         );
     }
 

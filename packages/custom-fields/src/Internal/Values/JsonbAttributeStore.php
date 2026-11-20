@@ -406,7 +406,7 @@ final readonly class JsonbAttributeStore implements AttributeStore
                 : AttributeId::legacy(entity: $record->entity, key: $key)->value;
         }
 
-        $this->outbox->append($this->messageTranslator->translate(new AttributeValuesChanged(
+        $this->outbox->append($this->connection, $this->messageTranslator->translate(new AttributeValuesChanged(
             messageId: (string) Str::uuid7(),
             scope: $scope,
             recordEntity: $record->entity,
@@ -417,6 +417,7 @@ final readonly class JsonbAttributeStore implements AttributeStore
             changedKeys: array_keys($definitions),
             occurredAt: $this->clock->now(),
             correlationId: $correlationId,
+            causationId: $correlationId,
         )));
     }
 }

@@ -58,3 +58,33 @@ while True:
             }
             with self.assertRaisesRegex(runner.ScenarioError, "invalid process-specific scenario environment"):
                 runner.run_actions(spec, root, root, {key: "allocated"}, root, {})
+
+    def test_provider_sidecar_does_not_relax_postgres_worker_witness(self) -> None:
+        report = '''
+import json, os, sys
+backend = sys.argv[1]
+print(json.dumps({
+    "pid": os.getpid(), "assertions": 1, "backend": backend,
+    "connection": {"session": os.getpid(), "database": "allocated_test"},
+    "refs": [], "before": {}, "after": {},
+}))
+'''
+        for worker_backend in ("PostgreSQL 16.14", "SQLite 3"):
+            with self.subTest(backend=worker_backend), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                spec = {
+                    "processes": {
+                        "provider": [sys.executable, "-c", report, "SQLite 3"],
+                        "worker": [sys.executable, "-c", report, worker_backend],
+                    },
+                    "auxiliary_processes": ["provider"],
+                    "distinct_connections": True,
+                    "actions": [{"action": action, "name": name} for name in ("provider", "worker") for action in ("start", "complete")],
+                }
+                env = {**os.environ, "COREX_SCENARIO_PG_VERSION": "160014", "COREX_PG_DATABASES": "allocated_test"}
+                if worker_backend.startswith("PostgreSQL "):
+                    witnesses = runner.run_actions(spec, root, root, env, root, {})
+                    self.assertEqual("SQLite 3", witnesses["provider"]["backend"])
+                else:
+                    with self.assertRaisesRegex(runner.ScenarioError, "did not report a provisioned PostgreSQL session"):
+                        runner.run_actions(spec, root, root, env, root, {})

@@ -13,13 +13,17 @@ it('holds a PostgreSQL frozen digest run lock across independent tick connection
     $notificationId = '22222222-2222-7222-8222-222222222222';
     $runId = '33333333-3333-7333-8333-333333333333';
     DB::table('ntf_notifications')->insert([
+        'account_id' => 'account-1',
+        'account_incarnation' => 'incarnation-1',
+        'workspace_scope' => 'account',
+        'source' => 'pg-fixture',
         'id' => $notificationId,
         'recipient_kind' => 'user',
         'recipient_id' => 'recipient-1',
-        'request_key' => 'pg-digest-lock',
+        'event_id' => 'pg-digest-lock',
         'request_digest' => hash('sha256', 'pg-digest-lock'),
         'event_type' => 'document.ready',
-        'template_key' => 'document-ready',
+        'template_action' => 'document-ready',
         'payload' => json_encode([], JSON_THROW_ON_ERROR),
         'revision' => '1',
         'created_at' => now(),
@@ -30,6 +34,9 @@ it('holds a PostgreSQL frozen digest run lock across independent tick connection
     );
     $scopeJson = json_encode($scope, JSON_THROW_ON_ERROR);
     DB::table('ntf_digest_runs')->insert([
+        'account_id' => 'account-1',
+        'account_incarnation' => 'incarnation-1',
+        'workspace_scope' => 'account',
         'scope_key' => hash('sha256', $scopeJson),
         'scope' => $scopeJson,
         'scope_seal' => str_repeat('a', 64),

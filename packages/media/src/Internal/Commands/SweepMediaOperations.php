@@ -15,7 +15,7 @@ final class SweepMediaOperations extends Command
 {
     protected $signature = 'corex:media:sweep {--limit=100 : Maximum due operations to dispatch}';
 
-    protected $description = 'Dispatch due CoreX media purge operations.';
+    protected $description = 'Dispatch due CoreX media operations.';
 
     public function handle(MediaOperationStore $operations): int
     {
@@ -31,9 +31,10 @@ final class SweepMediaOperations extends Command
         foreach ($fileIds as $fileId) {
             PurgeMedia::dispatch($fileId);
         }
-        $conversionRequests = $operations->dueConversionRequests(limit: $limit);
+        $remaining = $limit - count($fileIds);
+        $conversionRequests = $remaining > 0 ? $operations->dueConversionRequests(limit: $remaining) : [];
         foreach ($conversionRequests as $request) {
-            ConvertMedia::dispatch(fileId: $request->fileId, profileKey: $request->profileKey);
+            ConvertMedia::dispatch(fileId: $request->fileId, profileKey: $request->profileKey, operationKey: $request->operationKey);
         }
         $this->info('Dispatched '.(count($fileIds) + count($conversionRequests)).' media operation(s).');
 

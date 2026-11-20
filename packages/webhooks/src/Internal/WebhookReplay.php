@@ -8,6 +8,8 @@ use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Audit\Data\AuditEntry;
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\StoredWorkIssuer;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Invocation\Contracts\OperationHandler;
@@ -20,16 +22,18 @@ use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Pagination\Contracts\CursorCodec;
 use CoreX\Operations\Pagination\Contracts\OrderingRegistry;
 use CoreX\Operations\Pagination\Laravel\OrderingFactory;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Webhooks\Errors\Enums\WebhooksErrorCode;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Str;
 use Packman\Attributes\Internal;
 use Packman\Errors\Enums\ErrorCategory;
 use Psr\Clock\ClockInterface;
 
-/** @internal Authorized same-delivery replay with finite cycles and range selection. */
+/** @internal Authorized replay creating a distinct delivery with finite cycles and range selection. */
 #[Internal]
 final readonly class WebhookReplay
 {
@@ -44,6 +48,8 @@ final readonly class WebhookReplay
         private ClockInterface $clock,
         private CursorCodec $cursors,
         private AuditLogger $audit,
+        private StoredWorkIssuer $issuer,
+        private DataScopeCodec $scopes,
     ) {}
 
     /** @return array<string, mixed> */
@@ -112,7 +118,7 @@ final readonly class WebhookReplay
         }
 
         $query = $this->scopedDeliveries($scope)
-            ->where('subscription_id', $subscriptionId)
+            ->where('subscription_id', $subscriptionId)->whereNull('replay_of')
             ->where('created_at', '>=', $from)
             ->where('created_at', '<=', $upper);
 
@@ -227,27 +233,65 @@ final readonly class WebhookReplay
             throw new ApiError(errorCode: OperationsErrorCode::Conflict, status: 409, message: 'Webhook topic is no longer available.', category: ErrorCategory::Conflict);
         }
 
-        $changed = $this->connection->table('sys_api_webhook_deliveries')
-            ->where('id', DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id')))
-            ->where('status', $status)
-            ->where('replay_count', DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'replay_count')))
-            ->whereNull('lease_owner')
-            ->update([
-                'status' => 'pending',
-                'replay_count' => DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'replay_count')) + 1,
-                'lease_owner' => null,
-                'lease_until' => null,
-                'next_attempt_at' => $now,
-                'finished_at' => null,
-                'last_error' => null,
-            ]);
+        if (! hash_equals(DatabaseValue::text(DatabaseValue::field($row, 'body_hash')), hash('sha256', DatabaseValue::text(DatabaseValue::field($row, 'body'))))) {
+            throw new ApiError(errorCode: OperationsErrorCode::Conflict, status: 409, message: 'Webhook replay body no longer matches its receipt.', category: ErrorCategory::Conflict);
+        }
+
+        $original = DatabaseValue::text(DatabaseValue::field($row, 'id'));
+
+        if (DatabaseValue::field($row, 'replay_of') !== null) {
+            throw new ApiError(errorCode: OperationsErrorCode::Conflict, status: 409, message: 'Replay requires the original webhook delivery.', category: ErrorCategory::Conflict);
+        }
+
+        $attempt = DatabaseValue::integer(DatabaseValue::field($row, 'replay_count'));
+        $changed = $this->scopedDeliveries($scope)->where('id', $original)->where('status', $status)
+            ->where('replay_count', $attempt)->whereNull('lease_owner')
+            ->update(['replay_count' => $attempt + 1]);
 
         if ($changed !== 1) {
             throw new ApiError(errorCode: OperationsErrorCode::Conflict, status: 409, message: 'Webhook replay lost its compare-and-swap fence.', category: ErrorCategory::Conflict);
         }
 
+        $id = (string) Str::uuid7();
+        $subscriptionId = DatabaseValue::text(DatabaseValue::field($row, 'subscription_id'));
+        $source = DatabaseValue::text(DatabaseValue::field($row, 'event_source'));
+        $event = DatabaseValue::text(DatabaseValue::field($row, 'event_id'));
+        $key = WebhookWork::key($scope, $subscriptionId, $source, $event, $id);
+        $digest = WebhookWork::digest(
+            DatabaseValue::text(DatabaseValue::field($row, 'endpoint_snapshot')), DatabaseValue::text(DatabaseValue::field($row, 'body_hash')),
+            DatabaseValue::text(DatabaseValue::field($row, 'topic')), DatabaseValue::integer(DatabaseValue::field($row, 'topic_version')), DatabaseValue::integer(DatabaseValue::field($row, 'subscription_revision')), DatabaseValue::text(DatabaseValue::field($row, 'major')),
+        );
+        $proof = $this->issuer->issue($scope, WebhookWork::Owner, WebhookWork::reference($id, $key, $digest));
+        $this->connection->table('sys_api_webhook_deliveries')->insert([
+            ...WebhookDeliveryScope::logical($scope),
+            ...WebhookDeliveryScope::fence($scope),
+            'id' => $id,
+            'subscription_id' => $subscriptionId,
+            'subscription_revision' => DatabaseValue::field($row, 'subscription_revision'),
+            'event_id' => $event,
+            'event_source' => $source,
+            'replay_id' => $id,
+            'replay_of' => $original,
+            'effect_key' => $key,
+            'scope_seal' => $proof->seal,
+            'topic' => DatabaseValue::field($row, 'topic'),
+            'topic_version' => DatabaseValue::field($row, 'topic_version'),
+            'major' => DatabaseValue::field($row, 'major'),
+            'endpoint_snapshot' => DatabaseValue::field($row, 'endpoint_snapshot'),
+            'scope' => JsonCanonical::encode($this->scopes->encode($scope)),
+            'body' => DatabaseValue::field($row, 'body'),
+            'body_hash' => DatabaseValue::field($row, 'body_hash'),
+            'status' => 'pending',
+            'attempt' => 0,
+            'replay_count' => 0,
+            'next_attempt_at' => $now,
+            'created_at' => $now,
+            'expires_at' => DatabaseValue::field($row, 'expires_at'),
+        ]);
+
         $context = [
             'previous_status' => $status,
+            'replay_id' => $id,
             'replay_count' => DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'replay_count')) + 1,
         ];
 
@@ -258,7 +302,7 @@ final readonly class WebhookReplay
 
         $this->audit->record(new AuditEntry(
             action: 'webhook.delivery.replayed',
-            actorType: ActorType::ApiKey,
+            actorType: ActorType::tryFrom($scope->principalKind) ?? ActorType::System,
             actorId: $scope->principalId,
             entityType: 'webhook_delivery',
             entityId: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id')),
@@ -268,12 +312,13 @@ final readonly class WebhookReplay
         ));
 
         return [
-            'attempt' => DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'attempt')),
-            'body_hash' => DatabaseValue::text(DatabaseValue::field(row: $row, name: 'body_hash')),
-            'id' => DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id')),
-            'replay_count' => DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'replay_count')) + 1,
+            'attempt' => 0,
+            'body_hash' => DatabaseValue::text(DatabaseValue::field($row, 'body_hash')),
+            'id' => $id,
+            'replay_of' => $original,
+            'replay_count' => $attempt + 1,
             'status' => 'pending',
-            'subscription_id' => DatabaseValue::text(DatabaseValue::field(row: $row, name: 'subscription_id')),
+            'subscription_id' => $subscriptionId,
         ];
     }
 

@@ -4,10 +4,19 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Scenario\BindingRestoreRecoveryAuthority;
 use App\Scenario\BoxedWorkspaces;
 use App\Scenario\CloudTopology;
 use App\Scenario\ExpiringWakeup;
 use App\Scenario\ExternalControlStore;
+use App\Scenario\FixtureBrokerReceipt;
+use App\Scenario\FixtureNotificationDriver;
+use App\Scenario\FixtureNotificationPolicy;
+use App\Scenario\FixtureProviderRecoveryAuthority;
+use App\Scenario\FixtureWebhookEgress;
+use App\Scenario\FixtureWebhookTransport;
+use App\Scenario\FixtureWorkflowEngine;
+use App\Scenario\NotificationRelated;
 use App\Scenario\PhysicalMarker;
 use App\Scenario\RootScheduleService;
 use App\Scenario\RootSweepEffect;
@@ -23,17 +32,38 @@ use App\Scenario\WorkspaceTaskAccess;
 use CoreX\Context\Contracts\ControlStoreIsolation;
 use CoreX\Context\Contracts\NamedWorkPrincipal;
 use CoreX\Context\Contracts\PhysicalBindingVerifier;
+use CoreX\Context\Contracts\ProviderRecoveryAuthority;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Contracts\WorkPrincipalAuthority;
 use CoreX\Context\Contracts\WorkScopeDirectory;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Messaging\Contracts\DurableMessagePublisher;
+use CoreX\Messaging\Contracts\MessageContractRegistry;
+use CoreX\Messaging\Data\MessageContract;
+use CoreX\Messaging\Enums\MessageClass;
+use CoreX\Messaging\Enums\PiiClass;
+use CoreX\Messaging\Testing\MessagingFixtures;
+use CoreX\Notifications\Delivery\Contracts\RecipientResolver;
+use CoreX\Notifications\Inbox\Contracts\NotificationPolicy;
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Contracts\SearchSchema;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tenancy\Runtime\Contracts\AccountIsolationMapper;
+use CoreX\Webhooks\Contracts\WebhookEgressPolicy;
+use CoreX\Webhooks\Contracts\WebhookHttpTransport;
+use CoreX\Webhooks\Internal\WebhookFanout;
+use CoreX\Webhooks\Internal\WebhookKeyRing;
+use CoreX\Webhooks\Internal\WebhookMessagePublisher;
+use CoreX\Webhooks\Internal\WebhookUrlPolicy;
+use CoreX\Workflow\Contracts\EngineAdapter;
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\ServiceProvider;
+use Packman\Config\Data\SecretRef;
+use Packman\Modules\Contracts\Entities\EntityRegistry;
+use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Packman\Modules\Data\Entities\EntityDefinition;
+use Packman\Modules\Testing\ArrayEntityRegistry;
 use Psr\Clock\ClockInterface;
 use Tenant\Contracts\Context\ContextResolver;
 use Tenant\Contracts\Verification\BindingVerifier;
@@ -102,6 +132,7 @@ final class ScenarioServiceProvider extends ServiceProvider
         }
 
         if ($case === 'binding-restore') {
+            $this->app->singleton(ProviderRecoveryAuthority::class, BindingRestoreRecoveryAuthority::class);
             $config->set('corex-scheduler.handlers', [
                 'scenario.wakeup' => ['handler' => ScenarioWakeup::class, 'version' => 'scenario-wakeup/1'],
             ]);
@@ -113,6 +144,63 @@ final class ScenarioServiceProvider extends ServiceProvider
             });
         }
 
+        if (in_array($case, ['workspace-sweep', 'notification-visibility', 'provider-unknown'], true)) {
+            $this->app->singleton(ScenarioClock::class);
+            $this->app->alias(ScenarioClock::class, ClockInterface::class);
+            $this->app->singleton(BoxedWorkspaces::class);
+            foreach ([WorkScopeDirectory::class, TenancyManager::class, TenantContextResolver::class] as $contract) {
+                $this->app->alias(BoxedWorkspaces::class, $contract);
+            }
+        }
+
+        if (in_array($case, ['notification-visibility', 'provider-unknown'], true)) {
+            $config->set('queue.default', 'sync');
+            $config->set('corex-notifications.delivery.claim_seconds', 3);
+            $this->app->singleton(FixtureNotificationPolicy::class);
+            $this->app->alias(FixtureNotificationPolicy::class, NotificationPolicy::class);
+            $this->app->alias(FixtureNotificationPolicy::class, RecipientResolver::class);
+            $this->app->singleton(FixtureNotificationDriver::class);
+            $this->app->tag(FixtureNotificationDriver::class, 'corex.notifications.channels');
+        }
+
+        if ($case === 'notification-visibility') {
+            $this->app->singleton(EntityRegistry::class, static function ($app): EntityRegistry {
+                $registry = new ArrayEntityRegistry(
+                    moduleActive: static fn (string $module, mixed $context): bool => $app->make(ModuleRegistry::class)->isActive($module, $context),
+                );
+                $registry->register(new EntityDefinition(
+                    handle: NotificationRelated::HANDLE, model: NotificationRelated::class, table: 'scenario_records', module: 'axiomasoft/corex-notifications',
+                    labelSingular: 'Related record', labelPlural: 'Related records', capabilities: [], fields: [], titleAttribute: null,
+                ));
+
+                return $registry;
+            });
+        }
+
+        if ($case === 'provider-unknown') {
+            $config->set('corex-workflow.enforce_declarations', false);
+            $this->app->singleton(EngineAdapter::class, FixtureWorkflowEngine::class);
+            $this->app->singleton(FixtureProviderRecoveryAuthority::class);
+            $this->app->alias(FixtureProviderRecoveryAuthority::class, ProviderRecoveryAuthority::class);
+            $this->app->singleton(WebhookEgressPolicy::class, FixtureWebhookEgress::class);
+            $this->app->singleton(WebhookHttpTransport::class, FixtureWebhookTransport::class);
+            $this->app->singleton(WebhookUrlPolicy::class, static fn () => new WebhookUrlPolicy(
+                resolver: static fn (string $host): array => $host === FixtureWebhookTransport::HOST ? ['93.184.216.34'] : [],
+            ));
+            $this->app->singleton(WebhookKeyRing::class, static function (): WebhookKeyRing {
+                $keys = new WebhookKeyRing;
+                $keys->provision(FixtureWebhookTransport::KEY, new SecretRef('whsec_'.base64_encode(FixtureWebhookTransport::secret())), 0);
+
+                return $keys;
+            });
+            $this->app->singleton(MessageContractRegistry::class, static fn () => MessagingFixtures::contracts([
+                new MessageContract('fixture.recordchanged', 1, MessageClass::IntegrationEvent, 'fixture/scenario', PiiClass::None, 'webhooks'),
+            ]));
+            $this->app->scoped(DurableMessagePublisher::class, static fn ($app) => new WebhookMessagePublisher(
+                $app->make(FixtureBrokerReceipt::class), $app->make(WebhookFanout::class),
+            ));
+        }
+
         if ($case === 'workspace-sweep') {
             $handlers = ['scenario.cas' => ['handler' => ExpiringWakeup::class, 'version' => 'cas/1']];
 
@@ -122,13 +210,7 @@ final class ScenarioServiceProvider extends ServiceProvider
             $config->set('corex-recurring-tasks.wakeup.enabled', true);
             $config->set('corex-scheduler.handlers', $handlers);
             $config->set('corex-scheduler.lease_seconds', 3);
-            $this->app->singleton(ScenarioClock::class);
-            $this->app->alias(ScenarioClock::class, ClockInterface::class);
             $this->app->scoped(TaskAccess::class, WorkspaceTaskAccess::class);
-            $this->app->singleton(BoxedWorkspaces::class);
-            foreach ([WorkScopeDirectory::class, TenancyManager::class, TenantContextResolver::class] as $contract) {
-                $this->app->alias(BoxedWorkspaces::class, $contract);
-            }
         }
         $this->app->singleton(
             PhysicalBindingVerifier::class,

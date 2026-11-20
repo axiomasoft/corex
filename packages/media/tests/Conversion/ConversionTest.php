@@ -10,7 +10,6 @@ use CoreX\Media\Data\MediaAction;
 use CoreX\Media\Data\MediaContext;
 use CoreX\Media\Data\MediaSubject;
 use CoreX\Media\Data\UploadInput;
-use CoreX\Media\Internal\ConversionCoordinator;
 use CoreX\Media\Internal\Jobs\ConvertMedia;
 use CoreX\Media\Internal\Jobs\PurgeMedia;
 use CoreX\Media\Internal\MediaOperationStore;
@@ -58,7 +57,7 @@ it('creates one bounded GD thumbnail for a file/profile/version', function (): v
 
     expect(resolve(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail'))->toBeNull();
 
-    new ConvertMedia($file->id, 'thumbnail')->handle(resolve(ConversionCoordinator::class));
+    app()->call([new ConvertMedia($file->id, 'thumbnail', mediaConversionKey($file->id)), 'handle']);
     $conversion = resolve(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail');
     $stored = DB::table('med_conversions')->where('file_id', $file->id)->first();
 
@@ -90,7 +89,7 @@ it('purges a published conversion together with its deleting original', function
         new UploadInput('conversion-purge-request', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.jpg', thumbnailBytes())), 'attachment'),
     );
     resolve(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail');
-    new ConvertMedia($file->id, 'thumbnail')->handle(resolve(ConversionCoordinator::class));
+    app()->call([new ConvertMedia($file->id, 'thumbnail', mediaConversionKey($file->id)), 'handle']);
     $outputKey = DB::table('med_conversions')->where('file_id', $file->id)->value('blob_id');
 
     resolve(MediaLibrary::class)->delete(conversionContext(), $file->id);
@@ -100,6 +99,11 @@ it('purges a published conversion together with its deleting original', function
         ->and(resolve(BlobPins::class)->countByOwner())->toBe([])
         ->and(mediaBlobBytes($outputKey))->not->toBeEmpty();
 });
+
+function mediaConversionKey(string $fileId): string
+{
+    return DB::table('med_operations')->where('file_id', $fileId)->where('kind', 'conversion')->where('state', 'pending')->value('operation_key');
+}
 
 function mediaBlobBytes(string $id): string
 {
