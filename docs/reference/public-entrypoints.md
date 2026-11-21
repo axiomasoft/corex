@@ -6,13 +6,13 @@ This catalogue records reviewed methods whose legitimate callers lie outside the
 
 | Exact method | Invocation contract |
 |---|---|
-| `CoreX\Access\Access\Laravel\PrincipalIdentity::fromPrincipal` | Host access adapters convert a trusted CoreX Principal into the Laravel-compatible identity used by native authorization. |
-| `CoreX\Access\Access\Laravel\PrincipalIdentity::getAuthIdentifierName` | Laravel authenticators ask which identity field contains the identifier. |
-| `CoreX\Access\Access\Laravel\PrincipalIdentity::getAuthPasswordName` | Laravel authenticators ask which field contains the password credential. |
-| `CoreX\Access\Access\Laravel\PrincipalIdentity::getMorphClass` | Laravel polymorphic identity consumers ask for the stable actor morph type. |
-| `CoreX\Access\Access\Laravel\PrincipalIdentity::getRememberToken` | Laravel session authentication reads the remember token through Authenticatable. |
-| `CoreX\Access\Access\Laravel\PrincipalIdentity::getRememberTokenName` | Laravel session authentication obtains the remember-token field through Authenticatable. |
-| `CoreX\Access\Access\Laravel\PrincipalIdentity::setRememberToken` | Laravel session authentication writes a remember token through Authenticatable. |
+| `CoreX\Access\Laravel\PrincipalIdentity::fromPrincipal` | Host access adapters convert a trusted CoreX Principal into the Laravel-compatible identity used by native authorization. |
+| `CoreX\Access\Laravel\PrincipalIdentity::getAuthIdentifierName` | Laravel authenticators ask which identity field contains the identifier. |
+| `CoreX\Access\Laravel\PrincipalIdentity::getAuthPasswordName` | Laravel authenticators ask which field contains the password credential. |
+| `CoreX\Access\Laravel\PrincipalIdentity::getMorphClass` | Laravel polymorphic identity consumers ask for the stable actor morph type. |
+| `CoreX\Access\Laravel\PrincipalIdentity::getRememberToken` | Laravel session authentication reads the remember token through Authenticatable. |
+| `CoreX\Access\Laravel\PrincipalIdentity::getRememberTokenName` | Laravel session authentication obtains the remember-token field through Authenticatable. |
+| `CoreX\Access\Laravel\PrincipalIdentity::setRememberToken` | Laravel session authentication writes a remember token through Authenticatable. |
 | `CoreX\Access\Enums\Scope::weight` | Host native role-matrix tools compare Scope values using the documented none→own→department→workspace→account ordering. |
 | `CoreX\Audit\Laravel\HasAuditLog::bootHasAuditLog` | Eloquent boots this trait on consumer models and registers the audit observer before model lifecycle events are emitted. |
 | `CoreX\Context\Exceptions\ScopeContextMismatch::errorDescriptor` | Exception adapters call DescribesError::errorDescriptor() to obtain a stable error code, category and retryability instead of parsing the exception message. |

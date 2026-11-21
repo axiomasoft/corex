@@ -27,7 +27,7 @@ composer lint:check
 
 ## Installation
 
-Install with `composer require axiomasoft/corex-recurrence` through the configured Composer channel. The package needs no Laravel provider, database migration or background scheduler. Supply a recurrence set, explicit half-open expansion window and traversal limits to the public expansion port.
+Install with `composer require axiomasoft/corex-recurrence` through the configured Composer channel. Laravel discovers `CoreX\Recurrence\RecurrenceServiceProvider` to bind the expander. The package owns no database migration or background scheduler. Supply a recurrence set, explicit half-open expansion window and traversal limits to the public expansion port.
 
 ## Typed errors
 

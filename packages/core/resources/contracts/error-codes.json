@@ -93,6 +93,28 @@
         {
             "package": "axiomasoft/corex",
             "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "case": "LifecycleBlocked",
+            "code": "core.lifecycle_blocked",
+            "type": "urn:packman:problem:core.lifecycle_blocked",
+            "status": 409,
+            "title": "Lifecycle operation is blocked.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "case": "LifecyclePlanConflict",
+            "code": "core.lifecycle_plan_conflict",
+            "type": "urn:packman:problem:core.lifecycle_plan_conflict",
+            "status": 409,
+            "title": "Lifecycle plan changed.",
+            "retryable": false,
+            "category": "conflict"
+        },
+        {
+            "package": "axiomasoft/corex",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
             "case": "OutboxLeaseLost",
             "code": "core.outbox_lease_lost",
             "type": "urn:packman:problem:core.outbox_lease_lost",

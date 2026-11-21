@@ -22,6 +22,7 @@ final class ScenarioSetup
     {
         $control = Scenario::connection('control');
         ScopeControlSchema::install($control);
+        FixtureLifecycleOperators::install($control);
         $schema = $control->getSchemaBuilder();
         $schema->create('scenario_binding_locations', static function (Blueprint $table): void {
             $table->string('binding_id')->primary();
@@ -81,6 +82,8 @@ final class ScenarioSetup
         if (Artisan::call('modules:compile') !== 0) {
             throw new RuntimeException('Could not compile the installed catalogue. '.Artisan::output());
         }
+
+        FixtureLifecycleOperators::provision($case);
 
         if ($case === 'workspace-sweep') {
             ScenarioQueue::inScope(Scenario::BOXED, Scenario::W2, Scenario::USER_B, static fn () => app(ModuleLifecycle::class)->enable(

@@ -4,24 +4,39 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Internal;
 
+use Closure;
+use CoreX\Context\Data\OperationKey;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Operations\Bulk\Contracts\BulkExecutor;
 use CoreX\Operations\Bulk\Contracts\BulkOperationStore;
 use CoreX\Operations\Bulk\Data\BulkOperation;
+use CoreX\Operations\Bulk\Data\BulkStep;
+use CoreX\Operations\Bulk\Data\BulkStepResult;
 use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
+use CoreX\Operations\Bulk\Enums\BulkStepStatus;
+use CoreX\Operations\Bulk\Laravel\BulkReferences;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
+use CoreX\Operations\Errors\Exceptions\ApiError;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use DateInterval;
 use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
 use Throwable;
+use UnexpectedValueException;
 
 /** @internal One leased bulk step. Observer failures never change the durable outcome. */
 #[Internal]
 final readonly class BulkWorker
 {
+    /** @param Closure(): BulkExecutor $executor */
     public function __construct(
         private BulkOperationStore $store,
-        private TransferBulkExecutor $executor,
+        private Closure $executor,
         private ClockInterface $clock,
         private string $worker,
+        private int $retrySeconds = 5,
+        private int $maxRecoveryAttempts = 5,
     ) {}
 
     /**
@@ -35,16 +50,28 @@ final readonly class BulkWorker
             return null;
         }
 
-        if ($claimed->nextAttemptAt > $this->clock->now()) {
+        $this->observe(observer: $observer, phase: 'started', operation: $claimed, metrics: []);
+        $now = $this->clock->now();
+        $definition = $claimed->definition;
+
+        if (! $this->store->ownsClaim($scope, $claimed) || $claimed->leaseUntil === null
+            || $now->add(new DateInterval("PT{$definition->timeLimitSeconds}S")) >= $claimed->leaseUntil) {
             return $claimed;
         }
 
-        $this->observe(observer: $observer, phase: 'started', operation: $claimed, metrics: []);
-
         try {
-            $advanced = $this->executor->advance($claimed);
-        } catch (TransferStampDrift) {
-            $advanced = $this->failed(operation: $claimed, code: 'contract_drift');
+            $result = $claimed->recoveryAttempts > $this->maxRecoveryAttempts
+                ? new BulkStepResult(BulkStepStatus::Failed, $claimed->checkpoint, [], errorCode: 'bulk_reconciliation_required')
+                : $this->step($scope, $claimed);
+            $advanced = $this->advance($claimed, $result);
+        } catch (ApiError $error) {
+            if ($error->errorCode !== OperationsErrorCode::IdempotencyContractMismatch->value) {
+                throw $error;
+            }
+            $advanced = $this->advance($claimed, new BulkStepResult(
+                BulkStepStatus::Failed, $claimed->checkpoint, [],
+                errorCode: $claimed->recoveryAttempts > 1 ? 'bulk_reconciliation_required' : 'contract_drift',
+            ));
         } catch (Throwable $exception) {
             $this->observe(observer: $observer, phase: 'failed', operation: $claimed, metrics: ['safe' => 1]);
 
@@ -97,26 +124,70 @@ final readonly class BulkWorker
         return $metrics;
     }
 
-    private function failed(BulkOperation $operation, string $code): BulkOperation
+    private function step(DataScope $scope, BulkOperation $operation): BulkStepResult
     {
+        $definition = $operation->definition;
+        $token = hash('sha256', JsonCanonical::encode([
+            'corex.bulk.step/1', $definition->id, $definition->encodedScope, $definition->contractHash,
+            JsonDocuments::map($definition->inputRef), JsonDocuments::map($definition->extensionStamp),
+            $definition->rowLimit, $definition->timeLimitSeconds, $operation->checkpoint->sequence ?? 0,
+        ]));
+        $context = $definition->context($scope, new OperationKey($definition->id, $operation->attempt, $token, $operation->leaseUntil));
+
+        return ($this->executor)()->step($context, new BulkStep(
+            $token, $operation->checkpoint, $definition->rowLimit, $definition->timeLimitSeconds, $operation->cancelRequestedAt !== null,
+        ));
+    }
+
+    private function advance(BulkOperation $operation, BulkStepResult $outcome): BulkOperation
+    {
+        $owners = array_map(static fn ($target): string => $target->package, BulkReferences::targets($operation->definition));
+        foreach ([$outcome->resultRef, $outcome->failurePageRef] as $ref) {
+            if ($ref !== null && ! in_array($ref->owner, $owners, true)) {
+                throw new UnexpectedValueException('Bulk step returned an undeclared owner reference.');
+            }
+        }
+
+        $checkpoint = $outcome->nextCheckpoint ?? $operation->checkpoint;
+        $before = $operation->checkpoint->sequence ?? 0;
+        $after = $checkpoint->sequence ?? 0;
+
+        if ($after < $before || $after > $before + 1
+            || ($after === $before && $checkpoint?->ownerState->canonicalJson !== $operation->checkpoint?->ownerState->canonicalJson)) {
+            throw new UnexpectedValueException('Bulk step returned an invalid continuation.');
+        }
+
+        $status = match ($outcome->status) {
+            BulkStepStatus::Completed => BulkOperationStatus::Completed,
+            BulkStepStatus::Failed => BulkOperationStatus::Failed,
+            BulkStepStatus::Cancelled => BulkOperationStatus::Cancelled,
+            default => $operation->status,
+        };
+        $progress = $outcome->counters === [] ? JsonDocuments::map($operation->progress) : $outcome->counters;
+        $progress['phase'] = $outcome->status->value;
+
         return new BulkOperation(
             definition: $operation->definition,
-            transferRef: JsonDocuments::nullable(JsonDocuments::optionalMap($operation->transferRef)),
-            status: BulkOperationStatus::Failed,
+            status: $status,
             terminalStatus: $operation->terminalStatus,
             revision: $operation->revision,
             leaseOwner: $operation->leaseOwner,
             leaseUntil: $operation->leaseUntil,
             cancelRequestedAt: $operation->cancelRequestedAt,
-            checkpoint: JsonDocuments::capture(JsonDocuments::map($operation->checkpoint)),
-            progress: JsonDocuments::capture(['phase' => 'failed']),
-            resultRef: JsonDocuments::nullable(JsonDocuments::optionalMap($operation->resultRef)),
-            error: JsonDocuments::nullable(['code' => $code]),
+            checkpoint: $checkpoint,
+            progress: JsonDocuments::capture($progress),
+            resultRef: $operation->resultRef,
+            error: JsonDocuments::nullable($outcome->errorCode === null ? null : ['code' => $outcome->errorCode]),
             attempt: $operation->attempt,
-            nextAttemptAt: $operation->nextAttemptAt,
+            nextAttemptAt: $status->isTerminal()
+                ? $operation->nextAttemptAt
+                : $this->clock->now()->add(new DateInterval("PT{$this->retrySeconds}S")),
             createdAt: $operation->createdAt,
             finishedAt: $operation->finishedAt,
             expiresAt: $operation->expiresAt,
+            ownerResultRef: $outcome->resultRef ?? $operation->ownerResultRef,
+            failurePageRef: $outcome->failurePageRef ?? $operation->failurePageRef,
+            recoveryAttempts: $after > $before ? 0 : $operation->recoveryAttempts,
         );
     }
 }

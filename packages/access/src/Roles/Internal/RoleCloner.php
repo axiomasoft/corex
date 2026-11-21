@@ -6,6 +6,7 @@ namespace CoreX\Access\Roles\Internal;
 
 use CoreX\Access\Roles\Internal\Models\Role;
 use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use Illuminate\Database\ConnectionResolverInterface;
 use Packman\Attributes\Internal;
 
@@ -26,6 +27,7 @@ final readonly class RoleCloner
     public function clone(Role $source, string $slug, ?string $name = null): Role
     {
         return $this->connections->connection()->transaction(function () use ($source, $slug, $name): Role {
+            ReferenceWrites::enlist($this->connections->connection(), ReferenceWrites::current(), 'axiomasoft/corex-access', 'clone-role', ['role' => $source->id]);
             $clone = Role::query()->create([
                 'slug' => $slug,
                 'name' => $name ?? $source->name,

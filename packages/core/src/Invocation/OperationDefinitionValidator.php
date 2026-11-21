@@ -115,12 +115,15 @@ final class OperationDefinitionValidator
             throw new CompilationException("Async command [{$api->operationId}] owned by [{$owner}] requires success status 202.");
         }
 
-        if (in_array($mode, ['bulk_query', 'bulk_command'], true)) {
-            $api->executionSupported = false;
+        $bulk = in_array($mode, ['bulk_query', 'bulk_command'], true);
 
-            if ($api->bulkExecutionEnabled) {
-                throw new CompilationException("Bulk operation [{$api->operationId}] owned by [{$owner}] cannot enable execution.");
-            }
+        if ($bulk) {
+            $api->executionSupported = false;
+        }
+
+        if ($api->bulkExecutionEnabled && ($mode !== 'bulk_command' || ! $api->idempotencyExplicit
+            || $api->effectMode !== 'tenant_transactional' || $api->successStatus !== 202)) {
+            throw new CompilationException("Bulk operation [{$api->operationId}] owned by [{$owner}] cannot enable execution. Expected an explicitly idempotent tenant-transactional bulk command with success status 202.");
         }
 
         self::assertUniqueStrings(values: $api->requiredScopes, message: "duplicate scope on [{$api->operationId}] owned by [{$owner}]");
@@ -152,6 +155,10 @@ final class OperationDefinitionValidator
 
         if ($api->effectMode !== null && ! in_array($api->effectMode, ['tenant_transactional', 'same_transaction_outbox', 'reconciliation_contract'], true)) {
             throw new CompilationException("Unsafe idempotent effect mode on [{$api->operationId}] owned by [{$owner}].");
+        }
+
+        if ($bulk) {
+            $api->executionSupported = $api->bulkExecutionEnabled;
         }
     }
 

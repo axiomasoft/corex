@@ -13,6 +13,7 @@ use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
 use CoreX\Access\Roles\RoleAdministration;
 use CoreX\Context\Contracts\Principal;
 use CoreX\Context\Enums\PrincipalType;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use DateTimeImmutable;
 use DomainException;
 use Illuminate\Database\ConnectionInterface;
@@ -55,6 +56,7 @@ final readonly class DatabaseRoleAdministration implements RoleAdministration
     public function setScope(string $roleId, string $entityKey, string $action, Scope $scope, ?RecordContext $context = null): void
     {
         $this->connection()->transaction(function () use ($roleId, $entityKey, $action, $scope, $context): void {
+            ReferenceWrites::enlist($this->connection(), ReferenceWrites::current(), 'axiomasoft/corex-access', 'matrix', ['entity' => $entityKey, 'context' => $context]);
             $role = $this->lockedRole($roleId);
             $row = RoleMatrixRow::query()->firstOrNew([
                 'role_id' => $role->id,
@@ -77,6 +79,7 @@ final readonly class DatabaseRoleAdministration implements RoleAdministration
     public function assign(string $roleId, Principal $principal, ?string $workspaceId = null, ?DateTimeImmutable $expiresAt = null): void
     {
         $this->connection()->transaction(function () use ($roleId, $principal, $workspaceId, $expiresAt): void {
+            ReferenceWrites::enlist($this->connection(), ReferenceWrites::current(), 'axiomasoft/corex-access', 'role-assignment', ['role' => $roleId, 'principal' => $principal]);
             $role = $this->lockedRole($roleId);
 
             if (! in_array($principal->principalType()->value, $role->assignable_to, true)) {

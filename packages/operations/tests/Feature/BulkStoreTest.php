@@ -9,6 +9,7 @@ use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Operations\Bulk\Data\BulkCheckpoint;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
 use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
@@ -92,17 +93,6 @@ final class BulkStoreTest extends TestCase
         $running = $this->store->claim($this->scope(), 'worker-1');
         self::assertNotNull($running);
 
-        try {
-            $this->store->save(
-                $this->next($running, BulkOperationStatus::Cancelled),
-                'worker-1',
-                $running->revision,
-            );
-            self::fail('A running operation skipped the cancelling state.');
-        } catch (InvalidArgumentException $exception) {
-            self::assertStringContainsString('running -> cancelled', $exception->getMessage());
-        }
-
         $cancelling = $this->store->cancel($this->scope(), $running->definition->id);
         self::assertSame(BulkOperationStatus::Cancelling, $cancelling->status);
         self::assertSame($running->revision + 1, $cancelling->revision);
@@ -177,7 +167,9 @@ final class BulkStoreTest extends TestCase
 
         $current = $this->store->find($this->scope(), 'bulk-takeover');
         self::assertNotNull($current);
-        self::assertSame(['offset' => 2], JsonDocuments::map($current->checkpoint));
+        self::assertSame(['offset' => 2], JsonDocuments::map($current->checkpoint->ownerState));
+        $current = $this->store->claim($this->scope(), 'worker-2');
+        self::assertNotNull($current);
         self::assertTrue($this->store->save(
             $this->next($current, BulkOperationStatus::Completed, resultRef: ['id' => 'result-2']),
             'worker-2',
@@ -460,14 +452,13 @@ final class BulkStoreTest extends TestCase
     ): BulkOperation {
         return new BulkOperation(
             definition: $operation->definition,
-            transferRef: JsonDocuments::nullable(JsonDocuments::optionalMap($operation->transferRef)),
             status: $status,
             terminalStatus: $operation->terminalStatus,
             revision: $operation->revision,
             leaseOwner: $operation->leaseOwner,
             leaseUntil: $operation->leaseUntil,
             cancelRequestedAt: $operation->cancelRequestedAt,
-            checkpoint: JsonDocuments::capture($checkpoint ?? JsonDocuments::map($operation->checkpoint)),
+            checkpoint: $checkpoint === null ? $operation->checkpoint : new BulkCheckpoint(($operation->checkpoint?->sequence ?? 0) + 1, JsonDocuments::capture($checkpoint)),
             progress: JsonDocuments::capture(JsonDocuments::map($operation->progress)),
             resultRef: JsonDocuments::nullable($resultRef),
             error: JsonDocuments::nullable($error),

@@ -2,7 +2,6 @@
  "schema": "module-layout/1",
  "decision": "PLAN3.D57",
  "kernel_modules": [
-  "Attributes",
   "Audit",
   "Config",
   "Context",

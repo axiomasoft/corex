@@ -12,6 +12,7 @@ use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
 use CoreX\Data\Enums\FieldUse;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Intl\Currency\Contracts\RateImporter;
 use CoreX\Intl\Currency\Data\RateBatch;
 use CoreX\Intl\Currency\Data\RateImportReceipt;
@@ -77,6 +78,7 @@ final readonly class SqlRateImporter implements RateImporter
         $conflicts = 0;
 
         return $this->connection->transaction(function () use ($scope, $batch, $token, &$imported, &$noop, &$conflicts): RateImportReceipt {
+            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-intl', 'rate-import', ['batch' => $batch]);
             $this->current->assert($scope, $this->connection);
             $generation = $batch->expectedGeneration;
 

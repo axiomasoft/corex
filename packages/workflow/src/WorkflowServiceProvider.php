@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace CoreX\Workflow;
 
 use CoreX\Context\Contracts\ProviderReceiptProjector;
+use CoreX\Foundation\Contracts\ModuleReferences;
 use CoreX\Workflow\Contracts\EngineAdapter;
 use CoreX\Workflow\Contracts\WorkflowBinding;
 use CoreX\Workflow\Execution\Internal\SqlWorkflowBinding;
 use CoreX\Workflow\Execution\Internal\UnavailableEngineAdapter;
+use CoreX\Workflow\Execution\Internal\WorkflowModuleReferences;
 use CoreX\Workflow\Execution\Internal\WorkflowReceiptProjector;
 use CoreX\Workflow\Execution\Laravel\Commands\SweepWorkflowIntents;
 use CoreX\Workflow\Internal\DangerousModesCheck;
@@ -29,6 +31,8 @@ final class WorkflowServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->tag(WorkflowModuleReferences::class, ModuleReferences::class);
+
         $this->app->tag((new WorkflowModule)->schemaSetProviders(), SchemaSetProvider::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-workflow.php', 'corex-workflow');

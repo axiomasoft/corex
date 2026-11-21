@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Identity\Laravel;
 
-use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Identity\Internal\LowercaseColumn;
 use CoreX\Access\Laravel\AuthOptions;
+use CoreX\Access\Laravel\PrincipalIdentity;
 use CoreX\Context\Contracts\IdentityPasswordRehasher;
 use CoreX\Context\Enums\PrincipalType;
 use Illuminate\Contracts\Auth\Authenticatable;

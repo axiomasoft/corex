@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Context\Internal;
 
+use Closure;
 use CoreX\Context\Contracts\ScopeAdmission;
 use CoreX\Context\Data\AdmissionTicket;
 use CoreX\Context\Data\AttemptEvidence;
@@ -24,15 +25,20 @@ final class LocalWorkTransactions
     /** @var array<string,array{connection:ConnectionInterface,admission:ScopeAdmission,ticket:AdmissionTicket,waiting:bool,outside:bool,rollback:bool}> */
     private array $attempts = [];
 
-    public function holds(DataScope $scope, ConnectionInterface $connection): bool
+    public function localTicket(DataScope $scope, ConnectionInterface $connection): ?AdmissionTicket
     {
         foreach ($this->attempts as $attempt) {
             if ($attempt['ticket']->kind === AdmissionKind::LocalWrite && $attempt['connection'] === $connection && get_object_vars($attempt['ticket']->scope) === get_object_vars($scope)) {
-                return true;
+                return $attempt['ticket'];
             }
         }
 
-        return false;
+        return null;
+    }
+
+    public function holds(DataScope $scope, ConnectionInterface $connection): bool
+    {
+        return $this->localTicket($scope, $connection) !== null;
     }
 
     public function holdsReceipt(AdmissionTicket $provider, ConnectionInterface $connection): bool
@@ -96,6 +102,27 @@ final class LocalWorkTransactions
                 $this->attempts[$id]['outside'] = true;
             }
         }
+    }
+
+    /** Capture only the pin waiting for this outer transaction's committed event.
+     * @return (Closure():void)|null Call only with a durable commit witness.
+     */
+    public function commitConfirmation(DataScope $scope, ConnectionInterface $connection): ?Closure
+    {
+        $ticket = $this->localTicket($scope, $connection);
+
+        if ($ticket === null || ! $this->attempts[$ticket->id]['waiting']) {
+            return null;
+        }
+
+        return function () use ($ticket, $connection): void {
+            $attempt = $this->attempts[$ticket->id] ?? null;
+
+            if ($attempt !== null && $attempt['ticket'] === $ticket && $connection->transactionLevel() === 0) {
+                $attempt['admission']->settle($ticket, new AttemptEvidence('committed', $ticket->id));
+                unset($this->attempts[$ticket->id]);
+            }
+        };
     }
 
     public function leave(ScopeAdmission $admission, AdmissionTicket $ticket, bool $success): void

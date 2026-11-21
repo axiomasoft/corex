@@ -20,6 +20,7 @@ return new class extends PackmanMigration
             $table->uuid('id');
             $table->primary(['id'], 'corex_transfer_refs_pk');
             $table->uuid('job_id');
+            $table->char('logical_scope', 64);
             $table->string('entity', 128);
             $table->string('external_system', 128);
             $table->string('external_id', 255);
@@ -30,7 +31,7 @@ return new class extends PackmanMigration
             $table->string('state', 24);
             $table->jsonb('result')->nullable();
             $table->timestampsTz();
-            $table->unique(['entity', 'external_system', 'external_id'], 'corex_transfer_refs_entity_external_system_external_id_uq');
+            $table->unique(['logical_scope', 'entity', 'external_system', 'external_id'], 'corex_transfer_refs_entity_external_system_external_id_uq');
             $table->foreign('job_id', 'corex_transfer_refs_job_id_fk')->references('id')->on('corex_transfer_jobs')->restrictOnDelete();
         });
     }

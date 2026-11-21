@@ -1,0 +1,344 @@
+{
+  "id": "lifecycle",
+  "laravel": 13,
+  "host_support": true,
+  "retain_install_evidence": true,
+  "timeout_seconds": 240,
+  "distinct_connections": true,
+  "variants": {
+    "cloud": {
+      "profile": {
+        "id": "lifecycle-two-owners",
+        "database": "postgres-isolated",
+        "database_roles": [
+          "control",
+          "a",
+          "b"
+        ],
+        "default_database": "control",
+        "http": true,
+        "packages": [
+          "axiomasoft/corex-tenancy",
+          "axiomasoft/corex-panels",
+          "axiomasoft/corex-custom-fields",
+          "axiomasoft/corex-search",
+          "axiomasoft/corex-search-meilisearch"
+        ],
+        "meilisearch": "1.16.0",
+        "extension_fixture": {
+          "id": "custom-attribute-source",
+          "version": "1.0.0"
+        },
+        "prerequisites": [
+          "axiomasoft/tenant-laravel",
+          "axiomasoft/packman-panels"
+        ],
+        "forbid": []
+      }
+    }
+  },
+  "processes": {
+    "writer": [
+      "php",
+      "{fixture}/probe.php",
+      "writer"
+    ],
+    "purge": [
+      "php",
+      "{fixture}/probe.php",
+      "purge"
+    ],
+    "lost-writer": [
+      "php",
+      "{fixture}/probe.php",
+      "lost-writer"
+    ],
+    "setup": [
+      "php",
+      "{fixture}/probe.php",
+      "setup"
+    ],
+    "fence": [
+      "php",
+      "{fixture}/probe.php",
+      "fence"
+    ],
+    "denied-writer": [
+      "php",
+      "{fixture}/probe.php",
+      "denied-writer"
+    ],
+    "blockers": [
+      "php",
+      "{fixture}/probe.php",
+      "blockers"
+    ],
+    "remediate": [
+      "php",
+      "{fixture}/probe.php",
+      "remediate"
+    ],
+    "detach": [
+      "php",
+      "{fixture}/probe.php",
+      "detach"
+    ],
+    "purge-plan": [
+      "php",
+      "{fixture}/probe.php",
+      "purge-plan"
+    ],
+    "resume": [
+      "php",
+      "{fixture}/probe.php",
+      "resume"
+    ],
+    "provider": [
+      "php",
+      "{fixture}/probe.php",
+      "provider"
+    ],
+    "reconcile": [
+      "php",
+      "{fixture}/probe.php",
+      "reconcile"
+    ],
+    "owner-off": [
+      "php",
+      "{fixture}/probe.php",
+      "owner-off"
+    ],
+    "lease-off": [
+      "php",
+      "{fixture}/probe.php",
+      "lease-off"
+    ],
+    "network": [
+      "php",
+      "{fixture}/probe.php",
+      "network"
+    ],
+    "authority-off": [
+      "php",
+      "{fixture}/probe.php",
+      "authority-off"
+    ],
+    "prerequisites": [
+      "php",
+      "{fixture}/probe.php",
+      "prerequisites"
+    ],
+    "stale": [
+      "php",
+      "{fixture}/probe.php",
+      "stale"
+    ],
+    "native-search": [
+      "php",
+      "{fixture}/probe.php",
+      "native-search"
+    ],
+    "release-crash": [
+      "php",
+      "{fixture}/probe.php",
+      "release-crash"
+    ]
+  },
+  "actions": [
+    {
+      "action": "start",
+      "name": "setup"
+    },
+    {
+      "action": "complete",
+      "name": "setup"
+    },
+    {
+      "action": "start",
+      "name": "prerequisites"
+    },
+    {
+      "action": "complete",
+      "name": "prerequisites"
+    },
+    {
+      "action": "start",
+      "name": "writer"
+    },
+    {
+      "action": "await",
+      "name": "before-commit",
+      "process": "writer"
+    },
+    {
+      "action": "start",
+      "name": "fence"
+    },
+    {
+      "action": "complete",
+      "name": "fence"
+    },
+    {
+      "action": "start",
+      "name": "denied-writer"
+    },
+    {
+      "action": "complete",
+      "name": "denied-writer"
+    },
+    {
+      "action": "release",
+      "name": "before-commit"
+    },
+    {
+      "action": "complete",
+      "name": "writer"
+    },
+    {
+      "action": "start",
+      "name": "blockers"
+    },
+    {
+      "action": "complete",
+      "name": "blockers"
+    },
+    {
+      "action": "start",
+      "name": "owner-off"
+    },
+    {
+      "action": "complete",
+      "name": "owner-off"
+    },
+    {
+      "action": "start",
+      "name": "lease-off"
+    },
+    {
+      "action": "complete",
+      "name": "lease-off"
+    },
+    {
+      "action": "start",
+      "name": "remediate"
+    },
+    {
+      "action": "complete",
+      "name": "remediate"
+    },
+    {
+      "action": "start",
+      "name": "detach"
+    },
+    {
+      "action": "complete",
+      "name": "detach"
+    },
+    {
+      "action": "start",
+      "name": "purge-plan"
+    },
+    {
+      "action": "complete",
+      "name": "purge-plan"
+    },
+    {
+      "action": "start",
+      "name": "network"
+    },
+    {
+      "action": "complete",
+      "name": "network"
+    },
+    {
+      "action": "start",
+      "name": "purge"
+    },
+    {
+      "action": "await",
+      "name": "before-transition",
+      "process": "purge"
+    },
+    {
+      "action": "terminate",
+      "name": "purge",
+      "barrier": "before-transition"
+    },
+    {
+      "action": "start",
+      "name": "release-crash"
+    },
+    {
+      "action": "await",
+      "name": "partial-lease-release",
+      "process": "release-crash"
+    },
+    {
+      "action": "terminate",
+      "name": "release-crash",
+      "barrier": "partial-lease-release"
+    },
+    {
+      "action": "start",
+      "name": "resume"
+    },
+    {
+      "action": "complete",
+      "name": "resume"
+    },
+    {
+      "action": "start",
+      "name": "lost-writer"
+    },
+    {
+      "action": "await",
+      "name": "abandoned-write",
+      "process": "lost-writer"
+    },
+    {
+      "action": "terminate",
+      "name": "lost-writer",
+      "barrier": "abandoned-write"
+    },
+    {
+      "action": "start",
+      "name": "reconcile"
+    },
+    {
+      "action": "complete",
+      "name": "reconcile"
+    },
+    {
+      "action": "start",
+      "name": "authority-off"
+    },
+    {
+      "action": "complete",
+      "name": "authority-off"
+    },
+    {
+      "action": "start",
+      "name": "provider"
+    },
+    {
+      "action": "complete",
+      "name": "provider"
+    },
+    {
+      "action": "start",
+      "name": "stale"
+    },
+    {
+      "action": "complete",
+      "name": "stale"
+    },
+    {
+      "action": "start",
+      "name": "native-search"
+    },
+    {
+      "action": "complete",
+      "name": "native-search"
+    }
+  ]
+}

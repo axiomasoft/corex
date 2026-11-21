@@ -104,7 +104,6 @@
             "profile": "laravel-package",
             "error-prefix": "core",
             "owns": [
-                "Attributes",
                 "Audit",
                 "Config",
                 "Context",

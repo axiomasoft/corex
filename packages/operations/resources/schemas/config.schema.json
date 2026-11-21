@@ -25,6 +25,10 @@
                             "type": "integer",
                             "default": 30
                         },
+                        "max_recovery_attempts": {
+                            "type": "integer",
+                            "default": 5
+                        },
                         "metadata_retention_seconds": {
                             "type": "integer",
                             "default": 2592000
@@ -36,6 +40,14 @@
                         "retry_seconds": {
                             "type": "integer",
                             "default": 5
+                        },
+                        "row_limit": {
+                            "type": "integer",
+                            "default": 500
+                        },
+                        "time_limit_seconds": {
+                            "type": "integer",
+                            "default": 20
                         },
                         "worker": {
                             "type": "string",

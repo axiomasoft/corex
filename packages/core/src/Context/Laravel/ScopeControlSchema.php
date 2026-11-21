@@ -12,6 +12,19 @@ use Packman\Attributes\SpiKind;
 #[Spi(kind: SpiKind::Call, since: '2.0.0')]
 final class ScopeControlSchema
 {
+    /** Upgrade the independent authority with ordinary writers quiesced. */
+    public static function upgradeLifecycle(Connection $control): void
+    {
+        $schema = $control->getSchemaBuilder();
+        $control->transaction(static function () use ($schema): void {
+            foreach (['corex_scope_routes' => 'module_closures', 'corex_scope_tickets' => 'module_targets'] as $table => $column) {
+                if (! $schema->hasColumn($table, $column)) {
+                    $schema->table($table, static fn (Blueprint $definition) => $definition->json($column)->nullable());
+                }
+            }
+        });
+    }
+
     /** Install on the host's independent control store during provisioning. */
     public static function install(Connection $control): void
     {
@@ -25,6 +38,7 @@ final class ScopeControlSchema
                 $table->string('account_incarnation', 128);
                 $table->char('restore_epoch', 64);
                 $table->json('used_epochs');
+                $table->json('module_closures')->nullable();
                 $table->string('mode', 16);
                 $table->unsignedBigInteger('control_revision');
                 $table->primary(['deployment_id', 'account_id'], 'corex_scope_routes_pk');
@@ -39,6 +53,7 @@ final class ScopeControlSchema
                 $table->char('restore_epoch', 64);
                 $table->unsignedBigInteger('control_revision');
                 $table->json('scope');
+                $table->json('module_targets')->nullable();
                 $table->string('operation_id', 191);
                 $table->unsignedInteger('attempt');
                 $table->string('kind', 32);

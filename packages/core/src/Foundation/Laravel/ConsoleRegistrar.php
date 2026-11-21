@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Foundation\Laravel;
 
 use CoreX\Audit\Internal\PruneAuditLog;
+use CoreX\Foundation\Internal\Commands\ManageLifecycle;
 use CoreX\Messaging\Internal\Commands\PruneOutboxMessages;
 use CoreX\Messaging\Internal\Commands\RelayOutbox;
 use CoreX\Messaging\Internal\Commands\ShowDeliveryHealth;
@@ -31,6 +32,7 @@ final class ConsoleRegistrar implements PackageRegistrar
         }
 
         $app->make(Dispatcher::class)->listen(ArtisanStarting::class, static fn (ArtisanStarting $event) => $event->artisan->resolveCommands([
+            ManageLifecycle::class,
             PruneAuditLog::class,
             PrunePubSubMessages::class,
             PruneOutboxMessages::class,

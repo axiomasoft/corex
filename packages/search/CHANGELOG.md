@@ -1,5 +1,10 @@
 # Changelog
 
+## CoreX 2.0 — Fenced generation ownership
+
+- Add exact index-removal evidence and namespace-exclusion host ports for lifecycle retirement. Unknown inventory or unverified absence blocks destructive work.
+- Enlist generation allocation and publication targets through the real outer transaction, including a previously planned rebuild started after a lifecycle closure.
+
 ## Unreleased — Custom Fields and locale integration
 
 - Compile stable logical field IDs and backend field keys before querying. Check the underlying field and its localized shape when admitting predicates and projecting results.

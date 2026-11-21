@@ -18,7 +18,9 @@ interface TransferSink
 {
     public function preview(DataScope $scope, CanonicalRecord $record, ConflictRule $rule): ImportDecision;
 
+    /** Commit the target effect and its receipt for this token atomically. */
     public function apply(DataScope $scope, CanonicalRecord $record, ConflictRule $rule, WriteToken $token): TargetResult;
 
+    /** Use absent-with-proof only when the owner can establish that this token has no effect. */
     public function lookup(DataScope $scope, WriteToken $token): TargetResult;
 }

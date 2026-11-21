@@ -17,6 +17,7 @@ use CoreX\Context\Enums\ProviderObservationKind;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Webhooks\Contracts\WebhookEgressPolicy;
@@ -184,10 +185,10 @@ final readonly class WebhookDeliveryWorker
             && ! $container->make(ProviderEffectRecovery::class)->recover($effect)) {
             return null;
         }
-        $ticket = $ledger->reserve($scope, new ProviderAttempt(
+        $ticket = ReferenceWrites::reserveEffect($scope, new ProviderAttempt(
             $effect, $delivery->id, $delivery->claimToken, $delivery->attempt,
             $delivery->leaseUntil, WebhookWork::deliveryDigest($delivery),
-        ));
+        ), 'axiomasoft/corex-webhooks', $ledger);
 
         if (! $this->store->startSending($scope, $delivery, $ticket->id)) {
             $ledger->observe($ticket, new ProviderObservation(ProviderObservationKind::Absent, 'owner-send-not-started', WebhookWork::Owner));

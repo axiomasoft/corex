@@ -11,6 +11,7 @@ use CoreX\Settings\Exceptions\SettingValueTooLargeException;
 use CoreX\Settings\Exceptions\UnsupportedScopeException;
 use CoreX\Settings\Internal\DatabaseSettingsRepository;
 use CoreX\Tests\Stubs\StubSettingDefaultsProvider;
+use CoreX\Tests\Support\WorkScopeFixture;
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
@@ -44,14 +45,21 @@ function settingsRepositoryFor(array $defaults = [], array $sensitive = []): Set
 }
 
 beforeEach(function (): void {
+    $this->previousDefault = DB::getDefaultConnection();
     // D12: sys_settings is PG-only (jsonb/CHECK/UNIQUE NULLS NOT DISTINCT).
     // Reset to a clean public schema so each test starts with no migration
     // history (mirrors ModuleLifecycleTest's pg-lane pattern).
     settingsPg()->statement('DROP SCHEMA IF EXISTS public CASCADE');
     settingsPg()->statement('CREATE SCHEMA public');
     DB::purge(SETTINGS_TEST_CONNECTION);
+    DB::setDefaultConnection(SETTINGS_TEST_CONNECTION);
+    WorkScopeFixture::install($this->app, principalId: 'configuration-operator')->scope();
 
     $this->migrateSchemaSets(['axiomasoft/corex:tenant'], SETTINGS_TEST_CONNECTION);
+});
+
+afterEach(function (): void {
+    DB::setDefaultConnection($this->previousDefault);
 });
 
 it('cascades user over workspace over account over manifest default', function (): void {

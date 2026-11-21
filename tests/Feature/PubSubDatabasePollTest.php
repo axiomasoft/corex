@@ -2,8 +2,11 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Data\AccountRef;
 use CoreX\Messaging\Contracts\WorkerRuntime;
 use CoreX\Messaging\Internal\DatabasePollPubSub;
+use CoreX\Tests\Support\LocalWorkContexts;
+use CoreX\Tests\Support\WorkScopeFixture;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
 use Psr\Clock\ClockInterface;
@@ -39,6 +42,17 @@ beforeEach(function (): void {
     DB::purge(PUBSUB_DB_POLL_TEST_CONNECTION);
 
     $this->migrateSchemaSets(['axiomasoft/corex:tenant'], PUBSUB_DB_POLL_TEST_CONNECTION);
+    $this->previousPubSubConnection = DB::getDefaultConnection();
+    DB::setDefaultConnection(PUBSUB_DB_POLL_TEST_CONNECTION);
+    $contexts = LocalWorkContexts::install($this->app);
+    $contexts->initialize(new AccountRef('pubsub-account', 'pubsub', 'active', [], []));
+    WorkScopeFixture::install($this->app, principalId: 'pubsub-worker', principalKind: 'service')->scope();
+});
+
+afterEach(function (): void {
+    if (isset($this->previousPubSubConnection)) {
+        DB::setDefaultConnection($this->previousPubSubConnection);
+    }
 });
 
 function pollingPubSub(): DatabasePollPubSub

@@ -4,7 +4,7 @@
 
 ## Решение
 
-CoreX 2.0 перевыпускает 20 пакетов на общей Composer-линии. Мосты Search Custom Fields и Tasks Workflow увеличивают состав до 22 пакетов в этапах 5 и 6. FlexCRM сохраняет собственный мажор. Публичный distribution fixture устанавливает выпущенную версию Tasks 2.x с PHP `^8.4`, Illuminate `^13.0` и `minimum-stability: stable`. CoreX устанавливает схемы версии 2 в чистой целевой базе через Packman. FlexCRM ведёт версию своего набора отдельно. Старые сообщения, данные и журнал читаются одноразовым инструментом переноса.
+CoreX 2.0 перевыпускает 20 пакетов на общей Composer-линии. Мосты Search Custom Fields и Tasks Workflow увеличивают состав до 22 пакетов в этапах 5 и 6. FlexCRM сохраняет собственный мажор. Публичный distribution fixture устанавливает выпущенную версию Tasks 2.x с PHP `^8.4`, Illuminate `^13.0` и `minimum-stability: stable`. CoreX устанавливает в чистой целевой базе через Packman точные версии из `scripts/schema-sets.json`; tenant-наборы Core, Media, Operations и ImportExport используют версию 3 после этапа 7. FlexCRM ведёт версию своего набора отдельно. Старые сообщения, данные и журнал читаются одноразовым инструментом переноса.
 
 Следующие границы входят в CoreX 2.0. Названия строк отсылают к карте замен §11.4 и уточнениям §§7, 12–14 плана. При реализации этапа соответствующие конкретные изменения и тесты записываются в блок доказательств.
 
@@ -50,6 +50,12 @@ scripts/php84 php scripts/php-api.php --strict --check
 ```
 
 Diff содержит SHA и digest каждого прочитанного носителя, прежние и новые значения, категорию, затронутых потребителей и решение для каждого обязательного изменения. PHP route и message sources, а также config PHP проверяются по digest с приложением исходного diff. Provider/worker probes и behavioral tests подтверждают семантику затронутых веток. Проверка candidate PHP snapshot через установленный код запускается отдельно.
+
+Lifecycle использует публичные `LifecyclePlans::plan/inspect/apply` и typed plan digest. План хранит blockers, checkpoints и cleanup receipts, охватывает физические владельцы и workspace inventory и проверяет текущие полномочия оператора. Независимый control store закрывает запись для целевых модулей до повторного сканирования. `ReferenceAdmission` удерживает допуск до завершения настоящей внешней транзакции; ссылка, появившаяся после предварительного сканирования, не обходит fence. Повторный запуск продолжает сохранённый план, включая переход Packman и подтверждённую очистку внешних ресурсов.
+
+Media разделяет `Files`, `Attachments` и `Conversions`. Запрос конверсии возвращает durable reference; чтение готового результата проверяет текущую область и receipt. Удаление таблиц модуля сохраняет обязательства освобождения blob и квитанции внешних эффектов. Scanner tooling находится в `Foundation/Tooling` и вызывается инструментами разработки; `PrincipalIdentity` находится в `CoreX\Access\Laravel`.
+
+Operations публикует нейтральный `BulkExecutor::step` и opaque owner reference. Его runtime не зависит от ImportExport. Host подключает optional адаптер, а владелец импорта сохраняет стабильный step token и receipt вместе с изменением строки. Экспорт удерживает согласованный snapshot и sealed manifest; текущие права и `ExportSchemaWitness` проверяются перед известным результатом и чтением private parts. Отдельный бюджетный владелец подтверждает списание после завершения бизнес-транзакции.
 
 `changes` связывает решение с точными fingerprints отдельных изменений. `group` фиксирует количество и SHA-256 канонического JSON-массива отсортированных fingerprints всех breaking changes данной категории. Любой добавленный или изменённый fingerprint требует обновлённого решения и проверки. `plan` указывает строку плана, `tests` указывает проверку из candidate tree.
 
@@ -129,7 +135,6 @@ Diff содержит SHA и digest каждого прочитанного но
       "d1bc6685012343a6d5ef5225e3b47b9c60976ce38208093e1ce1892e04e5a334",
       "d61b0b567ddec31e1d734d78b7ef9194c097535db27e8e08a1edcd22db0514a4",
       "de1145de3c684d2bdc97773e09e5c30b362ca7ad9671c6f1300e748fa763838a",
-      "dee992eb4d17f9b8aa4db9f8d319c185ba1b4f2ba1f4ddcc7998b64c52c8fb68",
       "dfca441c9bdfe7f5345d76b8e2301bb37383961dd516792de86181fa047d01a4",
       "e1148078432f9a90c57ffa35975422f91d25d16bd5397c740c388e8f3b0f39f1",
       "e1bd63d51fd1e842db652f2622c0f964eadfac329862dd787b5fa6627dbc5ed0",
@@ -201,7 +206,6 @@ Diff содержит SHA и digest каждого прочитанного но
       "c7e293080e136575e7a76deb0d767790349bbdc68253a35a6df53b59441fa663",
       "ccb1d1db096848d642c74475cd41444febb519ca73e17d3416145ba690f8a614",
       "cd33bf4ba28f7744fdedd4fe4469c0790ef0382d65a79edab1e6d6a82efb1459",
-      "d54eb754df0a8addd252cfb3fdef28aafaebb883f76c985e89a1c5f7cd14b20c",
       "d6773e9f1124847883d3b306c2eb3aead8ddc6c93656ed7e3390ea8bf1a37c46",
       "d7e10495157c39d2f6e3a2f95e30e18c8777bcca881cef2599d42dab8d522453",
       "dbb88b1c75b5858e7f6d1943bdc00d7be8f732775f772d3210807fb4b9220b4d",
@@ -215,16 +219,19 @@ Diff содержит SHA и digest каждого прочитанного но
   },
   {
     "id": "clean-schema-sets-2",
-    "plan": "§§11.1, 16.1 — clean target installation and v1 source journal",
+    "plan": "§§11.1, 14.4–14.5, 16.1 — clean target schema sets; Core/Media/Operations/ImportExport tenant v3 retain lifecycle, conversion and transfer evidence; dedicated budget v2",
     "tests": [
       "tests/Feature/SchemaSetsTest.php",
       "tests/Feature/SchemaSetsPgTest.php",
-      "tests/Golden/SchemaGoldenTest.php"
+      "tests/Golden/SchemaGoldenTest.php",
+      "packages/core/tests/Modules/Feature/PackmanLifecyclePgTest.php",
+      "packages/import-export/tests/Pg/ReleaseResumeTest.php",
+      "tests/Distribution/fixtures/scenarios/owner-effects/probe.php"
     ],
     "group": {
       "category": "schema-set",
       "count": 18,
-      "digest": "f906dbb380693fe74ee0611efc05fb220a7a1b640dd13d25146f596b0644f2cd"
+      "digest": "e7046df263092ed6b3d4466c0a09f9e727116361edd45b5f53d777bb26017378"
     }
   },
   {
@@ -355,7 +362,6 @@ Diff содержит SHA и digest каждого прочитанного но
       "48e5e4040bb46c2b96f2516ea15b9f668345f1b53b6a56876a4e4fe9bb47033b",
       "58388f1944a375b89436d1211ebc7e3c2e52ae57d5cb46f5ca51a4e9ec15e92d",
       "58e6b510a543af14c4c38cd099f7e414f85d4bc3efce0c5212f813347a6b4f24",
-      "5954762caaf4a791c66a8ed38ee41032118f1c6420ea1f831a9a8d9d3f6a686c",
       "597389c8f2e49fc8935e6d63c49362d90168bf25e7dfa3dccc7107d0b9feff80",
       "5b362e847a80e390d66d371df7414a43cc9a7865029e00743b41f0670c2495f0",
       "5f3962835a17171fd2e9b554e20e56d61101c0e1e0dc9cfb401201bedb856d94",
@@ -382,7 +388,6 @@ Diff содержит SHA и digest каждого прочитанного но
       "b9449491a40e1b9c91d7ae1b106d61119a149cff474bcb72fc82d4f2e2a4fc8b",
       "c62addbb2a39a5e75c0e2bae89e0ddec1181623046afe6dce550f56749a5250b",
       "c6dfe09a4eb2aaf187d4fdc24e5786d65f2234256a0178dbfde891c895a8183e",
-      "c7e46273444491261d75efe48d3cb3317c50561d1d06a3b8b3630ee1d2c7ea12",
       "c9b11dca862d656375a154cc525f7f5a2dc22966383bc74c09c2bb12c8629423",
       "cc6a4cf4b49f309016616a8506a61ac57530563e03aa1699c8cb61c1c8ba69e4",
       "d312b230492c59feb8c08edaa0fa7fdcc254b251247db637036f1b5c5a2e1730",
@@ -763,6 +768,117 @@ Diff содержит SHA и digest каждого прочитанного но
     "changes": [
       "7f823664610e9e71626a7366b604a87d509efc6c0541891e185516973f0424fe",
       "89430ae86370ae4fe7aa6205621be7963710fd0bfd595394bad24d905cd2aac6"
+    ]
+  },
+  {
+    "id": "foundation-discovery-and-access-identity",
+    "plan": "§§3, 14.1 — canonical Access/Laravel PrincipalIdentity and config caller; Foundation/Tooling owns development scanner, Core drops Attributes ownership and retains native Packman discovery",
+    "tests": [
+      "packages/access/tests/Unit/PrincipalIdentityTest.php",
+      "packages/access/tests/Feature/PrincipalUserProviderTest.php",
+      "packages/core/tests/Foundation/Tooling/SurfaceScannerTest.php",
+      "packages/core/tests/Modules/Feature/PackmanIntegrationTest.php"
+    ],
+    "changes": [
+      "0d39fe4722d2535e1b32ddc4b76551d3c4b52e49405b30b1c4ae76df721240d9",
+      "138496c55224b02422305c8995b96912646e46aabc2f2c0ec9f3c14f844fc1ff",
+      "831389f2dc235cf10b3b730eae736c8c3c4fae4f8aa0a940cafcd36d5e5d6973"
+    ]
+  },
+  {
+    "id": "scoped-lifecycle-problem-codes",
+    "plan": "§14.4 — explicit lifecycle_blocked and lifecycle_plan_conflict 409 codes for current-grant, closure, inventory and stale-plan refusal",
+    "tests": [
+      "packages/core/tests/Modules/Feature/PackmanLifecyclePgTest.php",
+      "tests/fixtures/public-error-contract.php",
+      "tests/Distribution/fixtures/scenarios/lifecycle/probe.php"
+    ],
+    "changes": [
+      "689493e59aaee57badd64d812685598e775abd9c863517e80e15e5dcccd080f7",
+      "6cd9068812334bbf8465a1f242e061b4711806f6f98af97b90b021ec8d6645be"
+    ]
+  },
+  {
+    "id": "media-owned-domains-and-conversion-intent",
+    "plan": "§14.4 — move Files and Attachments ports to owners; replace ready-output conversion DTO with durable intent id/file/profile and inspect/read status; Vaulter keeps blob/pin ownership and retained purge receipts; native package metadata explicitly owns Files/Attachments/Conversions",
+    "tests": [
+      "packages/media/tests/Feature/MediaLifecycleTest.php",
+      "packages/media/tests/Feature/MediaLifecycleEdgeCasesTest.php",
+      "packages/media/tests/Conversion/ConversionTest.php",
+      "tests/Distribution/fixtures/scenarios/owner-effects/probe.php"
+    ],
+    "changes": [
+      "4f749e08be3be9c42a205404f39ea5407f8dbb0cf6bb17a03b819cf868b8b9b5",
+      "6ab168da2023e212534301d1876bceb8d0bb92cd2421d6dfb81b7954607d74c3",
+      "770479fbc6ed43bb67d68014a92477caa419590a62d86f5c8c6ae327ce49221e",
+      "963b30427526cb511f1f4f9ba9667d2f4dea815d224abcbd2915eac18c8d4adc",
+      "a028b47f66a71efa20354961eab399f901b8912da93e548073868157b0e81d3a",
+      "a83c3d27138bf55cbb9c35b3e529edf6f9a0722f4f1e36cc49b74be558bcd998",
+      "e8250e49916b1e50234a80e9d7ab59ec4906f0c5b38fd92527340e087b1dbc43",
+      "fec773879513b7c1d5dbbb11e98702efe65d425011b13e005a2848bdf229bd58"
+    ]
+  },
+  {
+    "id": "neutral-bulk-and-optional-transfer-owner",
+    "plan": "§14.5 — neutral BulkExecutor/BulkOwner, typed checkpoint and opaque owner result/failure refs, ownsClaim fencing, bounded rows/time; remove built-in TransferFactory/session and Operations ImportExport dev/path edges; equipment explicitly composes Operations and UUID helper",
+    "tests": [
+      "packages/operations/tests/Feature/BulkStoreTest.php",
+      "packages/operations/tests/Feature/BulkTransferTest.php",
+      "packages/operations/tests/Feature/BulkResultAccessTest.php",
+      "packages/import-export/tests/Pg/ReleaseResumeTest.php",
+      "tests/Distribution/fixtures/scenarios/bulk-transfer/probe.php"
+    ],
+    "changes": [
+      "0cbc08781654e14113ff33216a578156d33332f0f1ad370ebc5a19801238b6ff",
+      "16f532ce8efadb20d5ef73d72d04c3e66839b0a7bf611dda159d1628e47a26a2",
+      "187544a2c2b62ed4c3b6b08e3f52f25640270057975a60d4f6c68a9a95cd16b0",
+      "191b3d21de56fec514c66196618f02f4b7d19c44ae612484d34b64f212582788",
+      "26f4eacae0f98614e36b3c09dc292c64b5c24dee99ddb920af7d96e1a432a690",
+      "3176c6bd696fbd8c37027c5d24320fbc7f1fa7df1ff2f45f923cdf4aacc187c6",
+      "32f4053fa81100652ddbd1d49dda30cc461f7d2c982e1f3d7f5c0cdb5d1561be",
+      "3c9e9bda17fdc97a492f45693f3dfdfc910071d2d047ce18e15ce051666bdbb9",
+      "3e4b385d2cffc35dc8939bbc0b5cccec42f511862dc1fe21af3c7c1bbb0981cd",
+      "427ac1e3a5cc99e295587f6aa995ecc519307fec0b7e9e96607832920c7ff299",
+      "443fc325f7c81bc2cd1d0c55509311e0bdadb9f781af3fb8d27541f78f98ae20",
+      "47dae85bbcb3d2ca77ba8151cb5a1a827899fb9531e2eaa7fb9d5b7addbd155e",
+      "48494db9dce397ab19d8e5038df7d62ef3c33d3014145199db3051f310742bae",
+      "501ee6d2e9746148bb29abd9e0c6da5f0f507c5846fc67e09f2035cade268562",
+      "5ad8d136d1de7b2d3d2e6a0579b4728e912b1b4c4ac321a7e16159e440ccb954",
+      "62fc1810cda4cfccfe454dbdf26e4bd4045f78a970c33bb5c7b37c836d0e1446",
+      "7101810b8f93e70d32e85a06280d8bc59f404ac88796a523814db2622bb8a8ae",
+      "71044728f8ec8db93542ee4b6f0c0174145ae73daae54cac6d2efdf93b88c53f",
+      "75cf17cb3713b5662cce856ccc6d9e635cce9e985220cc2cc668b62b9137f6b9",
+      "7c2150cceb676ea8b2713aea8d48241cc9239f8de21e2159337c9d6dee7bf6cc",
+      "7ed1da7cf3545c537c78ec0b31a1f7ba9d666dd3cf94d64112513d5c5ff4a66f",
+      "81951e4c3c937f0e7a7b259c3e90995ee3dd77ea39d758a8005ba0721186ea3d",
+      "87f72ad385920b45c3530c709a1d6cd08e23cb9678f9dbe14b8e5b9279487d71",
+      "8bece4412c1df33b3748c3e972b43c599b06eb48bfb4439424d2d596e28b3c28",
+      "a4577200c21f52cd1687aa774125362638c53258011bd3ae8eb83e038f1bbe26",
+      "a71d89ecfa014c5444b1c44334b17e74201cf608251ab4bf472c4b0627e81c86",
+      "abf34823c75f14632d618c4c63d0bb1af6dea0ffd8e4f927c40867398761d93f",
+      "b20c66dbaecb58663c7555d662511199e481dbde7da117e306e3338c73a706c8",
+      "b60156248f2acdb86711ba92ce8196e3ec209b2676f61297b14de5276a42c518",
+      "c0b878b042f17593364406ef2214185cfe8e6e77435c09cc7e1074cc10203508",
+      "c40191ef0153a20f5788e64ec0b6244e70d35d7c2a1f6f90a8a1240b6406b6a1",
+      "db90ed851b76c444b9a9dfec91245c84f9e39c18a0c9d446f01a2cb8c0ed80d5",
+      "df7b50881a8f0874b5d99a8a94518314ac865ee6a00092b3a15c3ea21c5fb7bc",
+      "e54865a4f6974e55668eaa7a023647506e3ff563f6927efac89a6da8a8ee10e5",
+      "fff30c17631d8106eced250bb6296f34c60f6be8a4b9e37038a5f12ef0851119"
+    ]
+  },
+  {
+    "id": "reference-fenced-transactional-facts",
+    "plan": "§§12.1–12.3, 14.4 — preserve the already adopted Envelope v2, logical receipt and owner transaction; enlist Inbox/Outbox producer package/subject/consumer targets through the actual outer transaction before SQL",
+    "tests": [
+      "packages/core/tests/Pg/OutboxAppendPgTest.php",
+      "packages/core/tests/Pg/OutboxRelayTest.php",
+      "packages/core/tests/Pg/DeliveryGuaranteesTest.php",
+      "tests/Feature/PubSubDatabasePollTest.php",
+      "packages/core/tests/Modules/Feature/PackmanLifecyclePgTest.php"
+    ],
+    "changes": [
+      "2659b4c4390abc04ab13757bd3ff814b2e224f9a2a1de17c88acfd3dbef7d991",
+      "2a8b85f8584f39a55986b6cf3cf8bb17257f3ce3644cbef958f79decb7f700ec"
     ]
   }
 ]

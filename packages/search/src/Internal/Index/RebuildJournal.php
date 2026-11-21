@@ -8,6 +8,7 @@ use Closure;
 use CoreX\Context\Data\OperationKey;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\EntityHandle;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Search\Index\Contracts\IndexDriver;
 use CoreX\Search\Index\Data\IndexTarget;
 use CoreX\Search\Internal\Value;
@@ -69,6 +70,7 @@ final readonly class RebuildJournal implements RebuildWorker, SearchRebuilds
                 throw new LogicException('Search rebuild plan conflicts with the current generation.');
             }
             $entity = new EntityHandle(Value::text($lane->entity));
+            $this->enlist($db, $scope, $lane);
             $this->checkWitnesses($scope, $entity, $run);
             $dest = Value::integer($lane->last_generation) + 1;
             $allocation = (string) Str::uuid7();
@@ -109,6 +111,7 @@ final readonly class RebuildJournal implements RebuildWorker, SearchRebuilds
             if ($lane->rebuild_id !== $ref->id || $run->state !== 'catching-up' || $lane->active_generation !== $run->from_generation) {
                 throw new LogicException('Search destination scan has not completed.');
             }
+            $this->enlist($db, $scope, $lane);
             $this->checkWitnesses($scope, new EntityHandle(Value::text($lane->entity)), $run);
             LaneStore::one(self::run($db, $lane, $ref->id)->where('state', 'catching-up')->update(['state' => 'barrier', 'barrier_seq' => $lane->last_allocated_seq]));
             LaneStore::one($db->table('corex_search_lanes')->where('lane_key', $lane->lane_key)->where('rebuild_id', $ref->id)
@@ -158,6 +161,7 @@ final readonly class RebuildJournal implements RebuildWorker, SearchRebuilds
                 || $run->barrier_seq === null || $run->barrier_seq !== $lane->freeze_seq) {
                 throw new LogicException('Search publication claim lost.');
             }
+            $this->enlist($db, $scope, $lane);
             $this->checkWitnesses($scope, $entity, $run);
             $dest = LaneStore::generation($db, $lane, $status->destination);
 
@@ -244,6 +248,7 @@ final readonly class RebuildJournal implements RebuildWorker, SearchRebuilds
                 || $lane->active_generation !== $run->to_generation || Value::integer($lane->active_generation) !== $expected->value) {
                 throw new LogicException('Search rollback conflicts with the active pointer.');
             }
+            $this->enlist($db, $scope, $lane);
             $dest = LaneStore::generation($db, $lane, Value::integer($run->from_generation))->where('state', 'retained')->lockForUpdate()->firstOrFail();
             [$mapping, $policy] = ($this->projection)()->witnesses($scope, new EntityHandle(Value::text($lane->entity)));
 
@@ -261,6 +266,13 @@ final readonly class RebuildJournal implements RebuildWorker, SearchRebuilds
 
             return new RebuildRef($id);
         });
+    }
+
+    private function enlist(ConnectionInterface $db, DataScope $scope, stdClass $lane): void
+    {
+        ReferenceWrites::enlist($db, $scope, 'axiomasoft/corex-search', 'search-lane', [
+            'entity' => Value::text($lane->entity), 'backend' => $this->store->backend,
+        ]);
     }
 
     private static function run(ConnectionInterface $db, stdClass $lane, string $id): Builder

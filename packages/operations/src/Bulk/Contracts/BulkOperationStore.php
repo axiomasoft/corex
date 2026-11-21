@@ -19,6 +19,8 @@ interface BulkOperationStore
 
     public function claim(DataScope $scope, string $worker): ?BulkOperation;
 
+    public function ownsClaim(DataScope $scope, BulkOperation $operation): bool;
+
     public function save(BulkOperation $operation, string $leaseOwner, int $revision): bool;
 
     public function cancel(DataScope $scope, string $id): BulkOperation;

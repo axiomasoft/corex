@@ -11,6 +11,7 @@ use CoreX\ImportExport\Data\Export\ExportManifest;
 use CoreX\ImportExport\Data\ExportSession;
 use CoreX\ImportExport\Data\ImportSession;
 use CoreX\ImportExport\Data\MappingSnapshot;
+use CoreX\ImportExport\Data\TransferLimits;
 use CoreX\ImportExport\Data\TransferRef;
 use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
@@ -29,6 +30,7 @@ interface ImportExportFactory
         ConflictRule $conflicts,
         bool $dryRun = false,
         ?CancellationSignal $cancellation = null,
+        ?TransferLimits $limits = null,
     ): ImportSession;
 
     public function openExport(
@@ -38,5 +40,6 @@ interface ImportExportFactory
         ExportManifest $manifest,
         ExportCursor $cursor,
         ?CancellationSignal $cancellation = null,
+        ?TransferLimits $limits = null,
     ): ExportSession;
 }

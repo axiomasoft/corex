@@ -12,7 +12,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/core",
-                "reference": "f3212904945ec1538779cbb2e647c6aea5269105"
+                "reference": "772a22acf010e96735f1223980ffc19f13254c37"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -87,7 +87,6 @@
                     "profile": "laravel-package",
                     "error-prefix": "core",
                     "owns": [
-                        "Attributes",
                         "Audit",
                         "Config",
                         "Context",
@@ -453,7 +452,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/media",
-                "reference": "dae33b77bf458e5ff06decc5407b892d235098e3"
+                "reference": "53809e738a7d320b076a7dc5a04932d355a8c07d"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -501,9 +500,12 @@
                     "profile": "modular-platform",
                     "error-prefix": "media",
                     "owns": [
+                        "Attachments",
                         "Contracts",
+                        "Conversions",
                         "Data",
                         "Exceptions",
+                        "Files",
                         "Internal",
                         "Laravel"
                     ]
@@ -646,7 +648,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/operations",
-                "reference": "d9791312deb0374701c8373d9a4295e7e89fe8b9"
+                "reference": "79e6a8cd8e841a02f83dcbc48837b0b240dbd9bf"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -667,7 +669,6 @@
                 "symfony/http-kernel": "^7.2|^8.0"
             },
             "require-dev": {
-                "axiomasoft/corex-import-export": "^2.0@dev",
                 "axiomasoft/corex-webhooks": "^2.0@dev",
                 "ext-curl": "*",
                 "ext-openssl": "*",
@@ -682,7 +683,6 @@
                 "phpunit/phpunit": "^12.0|^13.0"
             },
             "suggest": {
-                "axiomasoft/corex-import-export": "Optional bounded import/export adapter for durable bulk operations",
                 "ext-curl": "Optional webhook transport; missing curl returns capability_unavailable.",
                 "opis/json-schema": "2.4.1 — bounded offline tool-schema/1 validation adapter"
             },

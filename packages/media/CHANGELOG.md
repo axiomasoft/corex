@@ -1,5 +1,10 @@
 # Changelog
 
+## CoreX 2.0 — Scoped owners and lifecycle
+
+- Move the file and attachment ports into Files and Attachments. Conversion requests return a durable intent reference; inspect/read checks current scope and verified output.
+- Retain upload, conversion, blob and pin-release evidence through module purge. Declare the Files, Attachments and Conversions domains in native package metadata.
+
 ## CoreX 2.0 — Durable effects
 
 - Persist a scoped conversion intent and Vaulter receipt. An after-commit wakeup accelerates the durable sweep, and expired claims cannot publish a conversion.

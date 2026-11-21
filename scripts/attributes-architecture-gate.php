@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tooling\AttributesArchitecture;
 
-use CoreX\Attributes\Tooling\SurfaceScanner;
 use CoreX\CustomFields\Internal\CustomFieldsOptions;
+use CoreX\Foundation\Tooling\SurfaceScanner;
 use Packman\Config\Exceptions\InvalidConfiguration;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Internal;
 
+use Closure;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
@@ -20,28 +21,14 @@ use Psr\Clock\ClockInterface as PsrClock;
 #[Internal]
 final readonly class BulkOperations
 {
+    /** @param null|Closure(DataScope, BulkOperationDefinition): bool $allowed */
     public function __construct(
         private BulkOperationStore $store,
-        private TransferBulkExecutor $executor,
         private BulkResultReader $results,
         private BulkFailureReader $failures,
         private PsrClock $clock,
+        private ?Closure $allowed = null,
     ) {}
-
-    public function submit(DataScope $scope, string $clientId, ?string $idempotencyKey, BulkOperationDefinition $definition): JsonResponse
-    {
-        if ($idempotencyKey === null || $idempotencyKey === '') {
-            return $this->problem(status: 400, code: 'idempotency_required');
-        }
-
-        if ($definition->clientId !== $clientId || $definition->actorId !== $scope->principalId) {
-            return $this->problem(status: 404, code: 'not_found');
-        }
-
-        $operation = $this->executor->submit($definition);
-
-        return $this->accepted($operation);
-    }
 
     public function show(DataScope $scope, string $clientId, string $id): JsonResponse
     {
@@ -55,7 +42,7 @@ final readonly class BulkOperations
             'operation_id' => $operation->definition->id,
             'status' => $operation->status->value,
             'progress' => JsonDocuments::map($operation->progress),
-            'has_failures' => (JsonDocuments::map($operation->progress)['invalid'] ?? 0) !== 0,
+            'has_failures' => $operation->failurePageRef !== null || (JsonDocuments::map($operation->progress)['invalid'] ?? 0) !== 0,
         ]);
 
         if (! $operation->status->isTerminal()) {
@@ -90,7 +77,7 @@ final readonly class BulkOperations
 
         $read = $this->results->read(scope: $scope, operation: $operation, now: $this->clock->now());
 
-        return response()->json($read['body'], $read['status']);
+        return response()->json($read['body'], $read['status'])->header('Cache-Control', 'private, no-store');
     }
 
     public function failurePage(DataScope $scope, string $clientId, string $id, ?string $afterOrdinal, int $limit): JsonResponse
@@ -101,13 +88,19 @@ final readonly class BulkOperations
             return $this->problem(status: 404, code: 'not_found');
         }
 
+        if ($operation->expiresAt !== null && $operation->expiresAt <= $this->clock->now()) {
+            return $this->problem(410, 'operations.bulk_result_expired');
+        }
+
         try {
             $page = $this->failures->read(scope: $scope, operation: $operation, afterOrdinal: $afterOrdinal, limit: $limit);
         } catch (InvalidArgumentException) {
             return $this->problem(status: 422, code: 'limit_exceeded');
         }
 
-        return response()->json($page);
+        return $page === null
+            ? $this->problem(404, 'not_found')
+            : response()->json($page)->header('Cache-Control', 'private, no-store');
     }
 
     private function visible(DataScope $scope, string $clientId, string $id): ?BulkOperation
@@ -118,16 +111,21 @@ final readonly class BulkOperations
             return null;
         }
 
-        if ($operation === null || ! hash_equals($operation->definition->clientId, $clientId)) {
+        if ($operation === null || ! hash_equals($operation->definition->clientId, $clientId)
+            || ($this->allowed !== null && ! ($this->allowed)($scope, $operation->definition))) {
             return null;
         }
 
         return $operation;
     }
 
-    private function accepted(BulkOperation $operation): JsonResponse
+    public function accepted(DataScope $scope, string $clientId, string $id, string $location): JsonResponse
     {
-        $location = '/api/v1/bulk-operations/'.$operation->definition->id;
+        $operation = $this->visible($scope, $clientId, $id);
+
+        if ($operation === null) {
+            return $this->problem(404, 'not_found');
+        }
 
         return response()->json([
             'operation_id' => $operation->definition->id,

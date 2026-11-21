@@ -59,7 +59,7 @@ it('refuses output after a current policy revocation or an incompatible restore 
         ->toThrow(ExportUnavailable::class);
 });
 
-it('aborts an unsealed capture instead of resuming its mutable snapshot', function (): void {
+it('refuses an unsealed capture with a foreign attempt digest without deleting evidence', function (): void {
     $hash = str_repeat('d', 64);
     $jobId = '55555555-5555-4555-8555-555555555555';
     $manifestId = '66666666-6666-4666-8666-666666666666';
@@ -74,7 +74,7 @@ it('aborts an unsealed capture instead of resuming its mutable snapshot', functi
         draft: new ExportManifest($manifestId, 'coherent', $hash, $hash, JsonDocuments::capture([]), str_repeat('0', 64)),
         after: new ExportCursor('0', '0', $hash),
     ))->toThrow(ExportUnavailable::class)
-        ->and(DB::table('corex_export_manifests')->value('state'))->toBe('aborted');
+        ->and(DB::table('corex_export_manifests')->value('state'))->toBe('capturing');
 });
 
 it('captures source pages inside a repeatable-read transaction', function (): void {

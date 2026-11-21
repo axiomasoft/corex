@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — owner-scoped bulk transfer
+
+- Added the neutral BulkExecutor and BulkOwner ports, scoped admission, replayable step tokens, and typed owner result and failure references.
+
 ## CoreX 2.0 — Durable effects
 
 - Reauthorize operation retries in their verified logical scope. Commit successful operation receipts with their tenant effects and recover dedicated budget settlements from the same receipt.
@@ -18,7 +22,7 @@
 
 - Breaking before release: remove deprecated invocation aliases and the `CostRegistrar`, `BulkRegistrar` and `ApiSchemaConnections::register()` shims. Use kernel invocation/principal contracts and the provider’s canonical bindings and HTTP registrars.
 
-- Breaking before release: Rename the public Laravel provider to `CoreX\Operations\OperationsServiceProvider` and update optional bulk integration to `axiomasoft/corex-import-export`.
+- Breaking before release: Rename the public Laravel provider to `CoreX\Operations\OperationsServiceProvider`.
 
 ## Unreleased — Packman runtime
 

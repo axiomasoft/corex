@@ -37,6 +37,14 @@ final class BulkOptionsParser
             $violations->add(path: 'metadata_retention_seconds', message: 'must cover idempotency_retention_seconds');
         }
 
+        $rows = self::positiveInt(violations: $violations, path: 'row_limit', value: $config['row_limit'] ?? 500);
+        $seconds = self::positiveInt(violations: $violations, path: 'time_limit_seconds', value: $config['time_limit_seconds'] ?? min(20, max(1, $lease - 1)));
+        $attempts = self::positiveInt(violations: $violations, path: 'max_recovery_attempts', value: $config['max_recovery_attempts'] ?? 5);
+
+        if ($rows > 500 || $seconds > 30 || $seconds >= $lease || $attempts > 100) {
+            $violations->add(path: 'bulk_limits', message: 'requires at most 500 rows, 30 seconds shorter than the lease, and 100 recovery attempts');
+        }
+
         $violations->failIfAny();
 
         return new BulkOptions(
@@ -47,6 +55,9 @@ final class BulkOptionsParser
             resultRetentionSeconds: $resultRetention,
             metadataRetentionSeconds: $metadataRetention,
             idempotencyRetentionSeconds: $idempotencyRetention,
+            rowLimit: $rows,
+            timeLimitSeconds: $seconds,
+            maxRecoveryAttempts: $attempts,
         );
     }
 

@@ -7,6 +7,9 @@ namespace CoreX\Operations\Tests\Feature;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
+use CoreX\Data\Data\DataScope;
+use CoreX\Foundation\Contracts\ReferenceAdmission;
+use CoreX\Foundation\Data\ModuleRef;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
@@ -21,9 +24,11 @@ use CoreX\Operations\Testing\ModuleFixture;
 use CoreX\Operations\Tests\TestCase;
 use CoreX\Operations\Versioning\Internal\ApiProfileFactory;
 use CoreX\Tests\Support\WorkScopeFixture;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
+use Mockery;
 use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
 use Packman\Modules\Data\Extenders\Api;
@@ -70,6 +75,15 @@ final class ApiRoutesTest extends TestCase
         $this->app->instance(TenancyManager::class, $tenants);
         $this->app->instance(PrincipalResolver::class, $this->identity);
         WorkScopeFixture::install($this->app, $this->identity->principalId())->scope();
+        $references = Mockery::mock(ReferenceAdmission::class);
+        $references->shouldReceive('enlist')->withArgs(static fn (
+            DataScope $scope,
+            ConnectionInterface $connection,
+            ModuleRef $owner,
+            ModuleRef $target,
+        ): bool => $scope->accountId === 'A' && $connection->transactionLevel() > 0
+            && $owner->package === 'axiomasoft/corex-operations' && $target->package === 'example/notes');
+        $this->app->instance(ReferenceAdmission::class, $references);
         $this->app->instance(OperationAuthorizer::class, new class implements OperationAuthorizer
         {
             public bool $allow = true;

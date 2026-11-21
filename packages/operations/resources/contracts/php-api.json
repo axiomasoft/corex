@@ -480,6 +480,54 @@
             "enum_cases": [],
             "spi_kind": "call"
         },
+        "CoreX\\Operations\\Bulk\\Contracts\\BulkExecutor": {
+            "kind": "interface",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "step": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "context",
+                            "type": "CoreX\\Operations\\Bulk\\Data\\BulkContext",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "step",
+                            "type": "CoreX\\Operations\\Bulk\\Data\\BulkStep",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "CoreX\\Operations\\Bulk\\Data\\BulkStepResult",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "implement"
+        },
         "CoreX\\Operations\\Bulk\\Contracts\\BulkOperationStore": {
             "kind": "interface",
             "layer": "spi",
@@ -579,6 +627,35 @@
                     "return": "?CoreX\\Operations\\Bulk\\Data\\BulkOperation",
                     "doc": []
                 },
+                "ownsClaim": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "scope",
+                            "type": "CoreX\\Data\\Data\\DataScope",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "operation",
+                            "type": "CoreX\\Operations\\Bulk\\Data\\BulkOperation",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "bool",
+                    "doc": []
+                },
                 "save": {
                     "visibility": "public",
                     "static": false,
@@ -644,10 +721,10 @@
             "enum_cases": [],
             "spi_kind": "implement"
         },
-        "CoreX\\Operations\\Bulk\\Contracts\\BulkTransferFactory": {
+        "CoreX\\Operations\\Bulk\\Contracts\\BulkOwner": {
             "kind": "interface",
             "layer": "spi",
-            "since": "1.0",
+            "since": "2.0.0",
             "final": false,
             "readonly": false,
             "abstract": false,
@@ -656,7 +733,7 @@
             "uses": [],
             "doc": [],
             "methods": {
-                "create": {
+                "admit": {
                     "visibility": "public",
                     "static": false,
                     "final": false,
@@ -664,8 +741,8 @@
                     "by_reference": false,
                     "parameters": [
                         {
-                            "name": "operation",
-                            "type": "CoreX\\Operations\\Bulk\\Data\\BulkOperation",
+                            "name": "context",
+                            "type": "CoreX\\Operations\\Bulk\\Data\\BulkContext",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -673,7 +750,83 @@
                             "flags": 0
                         }
                     ],
-                    "return": "CoreX\\Operations\\Bulk\\Data\\BulkTransferSession",
+                    "return": "void",
+                    "doc": []
+                },
+                "failures": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "context",
+                            "type": "CoreX\\Operations\\Bulk\\Data\\BulkContext",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "ref",
+                            "type": "CoreX\\Operations\\Bulk\\Data\\BulkOwnerRef",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "after",
+                            "type": "?string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "limit",
+                            "type": "int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "?CoreX\\Operations\\Bulk\\Data\\BulkFailurePage",
+                    "doc": []
+                },
+                "result": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "context",
+                            "type": "CoreX\\Operations\\Bulk\\Data\\BulkContext",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "ref",
+                            "type": "CoreX\\Operations\\Bulk\\Data\\BulkOwnerRef",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "?CoreX\\Data\\Data\\JsonDocument",
                     "doc": []
                 }
             },
@@ -682,6 +835,201 @@
             "enum_backing": null,
             "enum_cases": [],
             "spi_kind": "implement"
+        },
+        "CoreX\\Operations\\Bulk\\Data\\BulkCheckpoint": {
+            "kind": "class",
+            "layer": "api",
+            "since": "2.0.0",
+            "final": true,
+            "readonly": true,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "sequence",
+                            "type": "int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "ownerState",
+                            "type": "CoreX\\Data\\Data\\JsonDocument",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
+        "CoreX\\Operations\\Bulk\\Data\\BulkContext": {
+            "kind": "class",
+            "layer": "api",
+            "since": "2.0.0",
+            "final": true,
+            "readonly": true,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "scope",
+                            "type": "CoreX\\Data\\Data\\DataScope",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "operationRef",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "kind",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "contractFingerprint",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "key",
+                            "type": "CoreX\\Context\\Data\\OperationKey",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "clientId",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "inputRef",
+                            "type": "CoreX\\Data\\Data\\JsonDocument",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "extensionStamp",
+                            "type": "CoreX\\Data\\Data\\JsonDocument",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
+        "CoreX\\Operations\\Bulk\\Data\\BulkFailurePage": {
+            "kind": "class",
+            "layer": "api",
+            "since": "2.0.0",
+            "final": true,
+            "readonly": true,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "records",
+                            "type": "array",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "next",
+                            "type": "?string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
         },
         "CoreX\\Operations\\Bulk\\Data\\BulkOperation": {
             "kind": "class",
@@ -705,15 +1053,6 @@
                         {
                             "name": "definition",
                             "type": "CoreX\\Operations\\Bulk\\Data\\BulkOperationDefinition",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "transferRef",
-                            "type": "?CoreX\\Data\\Data\\JsonDocument",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -776,7 +1115,7 @@
                         },
                         {
                             "name": "checkpoint",
-                            "type": "CoreX\\Data\\Data\\JsonDocument",
+                            "type": "?CoreX\\Operations\\Bulk\\Data\\BulkCheckpoint",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -853,6 +1192,33 @@
                             "variadic": false,
                             "optional": false,
                             "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "ownerResultRef",
+                            "type": "?CoreX\\Operations\\Bulk\\Data\\BulkOwnerRef",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
+                            "flags": 1
+                        },
+                        {
+                            "name": "failurePageRef",
+                            "type": "?CoreX\\Operations\\Bulk\\Data\\BulkOwnerRef",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
+                            "flags": 1
+                        },
+                        {
+                            "name": "recoveryAttempts",
+                            "type": "int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "0",
                             "flags": 1
                         }
                     ],
@@ -973,9 +1339,56 @@
                             "optional": false,
                             "default": null,
                             "flags": 1
+                        },
+                        {
+                            "name": "rowLimit",
+                            "type": "int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "500",
+                            "flags": 1
+                        },
+                        {
+                            "name": "timeLimitSeconds",
+                            "type": "int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "20",
+                            "flags": 1
                         }
                     ],
                     "return": null,
+                    "doc": []
+                },
+                "context": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "scope",
+                            "type": "CoreX\\Data\\Data\\DataScope",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "key",
+                            "type": "?CoreX\\Context\\Data\\OperationKey",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
+                            "flags": 0
+                        }
+                    ],
+                    "return": "CoreX\\Operations\\Bulk\\Data\\BulkContext",
                     "doc": []
                 }
             },
@@ -1065,6 +1478,33 @@
                             "optional": false,
                             "default": null,
                             "flags": 1
+                        },
+                        {
+                            "name": "rowLimit",
+                            "type": "int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "500",
+                            "flags": 1
+                        },
+                        {
+                            "name": "timeLimitSeconds",
+                            "type": "int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "20",
+                            "flags": 1
+                        },
+                        {
+                            "name": "maxRecoveryAttempts",
+                            "type": "int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "5",
+                            "flags": 1
                         }
                     ],
                     "return": null,
@@ -1076,10 +1516,10 @@
             "enum_backing": null,
             "enum_cases": []
         },
-        "CoreX\\Operations\\Bulk\\Data\\BulkTransferSession": {
+        "CoreX\\Operations\\Bulk\\Data\\BulkOwnerRef": {
             "kind": "class",
             "layer": "api",
-            "since": "1.0",
+            "since": "2.0.0",
             "final": true,
             "readonly": true,
             "abstract": false,
@@ -1096,8 +1536,8 @@
                     "by_reference": false,
                     "parameters": [
                         {
-                            "name": "runner",
-                            "type": "CoreX\\ImportExport\\Contracts\\TransferRunner|CoreX\\ImportExport\\Contracts\\ExportRunner",
+                            "name": "owner",
+                            "type": "string",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -1105,17 +1545,55 @@
                             "flags": 1
                         },
                         {
-                            "name": "transfer",
-                            "type": "CoreX\\ImportExport\\Data\\TransferRef",
+                            "name": "kind",
+                            "type": "string",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
                             "default": null,
                             "flags": 1
                         },
+                        {
+                            "name": "id",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
+        "CoreX\\Operations\\Bulk\\Data\\BulkStep": {
+            "kind": "class",
+            "layer": "api",
+            "since": "2.0.0",
+            "final": true,
+            "readonly": true,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
                         {
                             "name": "token",
-                            "type": "CoreX\\ImportExport\\Data\\StepToken",
+                            "type": "string",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -1123,8 +1601,8 @@
                             "flags": 1
                         },
                         {
-                            "name": "cancellation",
-                            "type": "CoreX\\ImportExport\\Contracts\\CancellationSignal",
+                            "name": "checkpoint",
+                            "type": "?CoreX\\Operations\\Bulk\\Data\\BulkCheckpoint",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -1132,8 +1610,8 @@
                             "flags": 1
                         },
                         {
-                            "name": "results",
-                            "type": "CoreX\\ImportExport\\Contracts\\TransferResultReader",
+                            "name": "rowLimit",
+                            "type": "int",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -1141,8 +1619,82 @@
                             "flags": 1
                         },
                         {
-                            "name": "manifest",
-                            "type": "?CoreX\\ImportExport\\Data\\Export\\ExportManifest",
+                            "name": "timeLimitSeconds",
+                            "type": "int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "cancelRequested",
+                            "type": "bool",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
+        "CoreX\\Operations\\Bulk\\Data\\BulkStepResult": {
+            "kind": "class",
+            "layer": "api",
+            "since": "2.0.0",
+            "final": true,
+            "readonly": true,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "status",
+                            "type": "CoreX\\Operations\\Bulk\\Enums\\BulkStepStatus",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "nextCheckpoint",
+                            "type": "?CoreX\\Operations\\Bulk\\Data\\BulkCheckpoint",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "counters",
+                            "type": "array",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "resultRef",
+                            "type": "?CoreX\\Operations\\Bulk\\Data\\BulkOwnerRef",
                             "by_reference": false,
                             "variadic": false,
                             "optional": true,
@@ -1150,8 +1702,17 @@
                             "flags": 1
                         },
                         {
-                            "name": "cursor",
-                            "type": "?CoreX\\ImportExport\\Data\\Export\\ExportCursor",
+                            "name": "failurePageRef",
+                            "type": "?CoreX\\Operations\\Bulk\\Data\\BulkOwnerRef",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
+                            "flags": 1
+                        },
+                        {
+                            "name": "errorCode",
+                            "type": "?string",
                             "by_reference": false,
                             "variadic": false,
                             "optional": true,
@@ -1222,6 +1783,44 @@
                 {
                     "name": "Expired",
                     "value": "'expired'"
+                }
+            ]
+        },
+        "CoreX\\Operations\\Bulk\\Enums\\BulkStepStatus": {
+            "kind": "enum",
+            "layer": "api",
+            "since": "2.0.0",
+            "final": true,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {},
+            "properties": {},
+            "constants": [],
+            "enum_backing": "string",
+            "enum_cases": [
+                {
+                    "name": "Accepted",
+                    "value": "'accepted'"
+                },
+                {
+                    "name": "Progress",
+                    "value": "'progress'"
+                },
+                {
+                    "name": "Completed",
+                    "value": "'completed'"
+                },
+                {
+                    "name": "Failed",
+                    "value": "'failed'"
+                },
+                {
+                    "name": "Cancelled",
+                    "value": "'cancelled'"
                 }
             ]
         },
@@ -1526,6 +2125,197 @@
                     "by_reference": false,
                     "parameters": [],
                     "return": "mixed",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "call"
+        },
+        "CoreX\\Operations\\Bulk\\Laravel\\SubmitBulkOperation": {
+            "kind": "class",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": true,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [
+                "CoreX\\Invocation\\Contracts\\OperationHandler"
+            ],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "app",
+                            "type": "Illuminate\\Contracts\\Foundation\\Application",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 68
+                        },
+                        {
+                            "name": "store",
+                            "type": "CoreX\\Operations\\Bulk\\Contracts\\BulkOperationStore",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 68
+                        },
+                        {
+                            "name": "connections",
+                            "type": "CoreX\\Operations\\Laravel\\ApiSchemaConnections",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 68
+                        },
+                        {
+                            "name": "limits",
+                            "type": "CoreX\\Operations\\Bulk\\Data\\BulkOptions",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 68
+                        },
+                        {
+                            "name": "secret",
+                            "type": "?string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 68
+                        },
+                        {
+                            "name": "admission",
+                            "type": "CoreX\\Foundation\\Contracts\\ReferenceAdmission",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 68
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                },
+                "clear": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "invocation",
+                            "type": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "void",
+                    "doc": []
+                },
+                "handle": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "context",
+                            "type": "CoreX\\Invocation\\Contracts\\RequestContext",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "input",
+                            "type": "array",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "parameters",
+                            "type": "array",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "array",
+                    "doc": []
+                },
+                "prepare": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "invocation",
+                            "type": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "scope",
+                            "type": "CoreX\\Data\\Data\\DataScope",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "connection",
+                            "type": "Illuminate\\Database\\Connection",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "void",
                     "doc": []
                 }
             },

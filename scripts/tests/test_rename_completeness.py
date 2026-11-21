@@ -18,7 +18,8 @@ class AttributeRenameTest(unittest.TestCase):
                 shutil.copyfile(ROOT / 'scripts' / name, root / 'scripts' / name)
             subprocess.run(['git', 'init', '-q', str(root)], check=True)
             fixture = root / 'probe.php'
-            fixture.write_text('<?php namespace CoreX\\Attributes;')
+            retired_root = 'CoreX' + '\\Attributes'
+            fixture.write_text('<?php namespace ' + retired_root + ';')
             subprocess.run(['git', '-C', str(root), 'add', 'probe.php'], check=True)
             manifest = json.loads((root / 'scripts/rename-completeness.json').read_text())
             catalogue = 'CoreX\\CustomFields' + '\\Contracts\\FieldCatalogue'
@@ -33,8 +34,9 @@ class AttributeRenameTest(unittest.TestCase):
             retired_bridge = bridge + '\\TaskWorkflowIntegration'
             retired_recurring = 'CoreX\\RecurringTasks' + '\\Internal\\TaskWorkflowIntegration'
             for text, expected in (
-                ('namespace CoreX\\Attributes;', 0),
-                ('namespace CoreX\\Attributes\\Tooling;', 0),
+                ('namespace ' + retired_root + ';', 1),
+                ('namespace ' + retired_root + '\\Tooling;', 1),
+                ('namespace CoreX\\Foundation\\Tooling;', 0),
                 ('use ' + old_class + ';', 1),
                 ('namespace ' + old_namespace + ';', 1),
                 ('use ' + catalogue + ';', 1),

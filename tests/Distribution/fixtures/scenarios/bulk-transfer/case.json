@@ -1,0 +1,636 @@
+{
+  "id": "bulk-transfer",
+  "laravel": 13,
+  "host_support": true,
+  "retain_install_evidence": true,
+  "timeout_seconds": 120,
+  "distinct_connections": true,
+  "artisan": [
+    [
+      "config:cache",
+      "--no-interaction"
+    ],
+    [
+      "modules:compile",
+      "--no-interaction"
+    ],
+    [
+      "route:list",
+      "--json"
+    ]
+  ],
+  "variants": {
+    "operations-only": {
+      "profile": {
+        "id": "boxed-bulk-transfer-operations-only",
+        "database": "postgres-isolated",
+        "database_roles": [
+          "control",
+          "a",
+          "budget",
+          "sink"
+        ],
+        "default_database": "a",
+        "http": true,
+        "packages": [
+          "axiomasoft/corex-operations"
+        ],
+        "forbid": [
+          {
+            "package": "axiomasoft/corex-import-export",
+            "name": "axiomasoft/corex-import-export"
+          }
+        ]
+      },
+      "processes": {
+        "setup": [
+          "php",
+          "{fixture}/probe.php",
+          "setup"
+        ],
+        "control": [
+          "php",
+          "{fixture}/probe.php",
+          "control"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "setup"
+        },
+        {
+          "action": "complete",
+          "name": "setup"
+        },
+        {
+          "action": "start",
+          "name": "control"
+        },
+        {
+          "action": "complete",
+          "name": "control"
+        }
+      ]
+    },
+    "without-adapter": {
+      "profile": {
+        "id": "boxed-bulk-transfer-without-adapter",
+        "database": "postgres-isolated",
+        "database_roles": [
+          "control",
+          "a",
+          "budget",
+          "sink"
+        ],
+        "default_database": "a",
+        "http": true,
+        "packages": [
+          "axiomasoft/corex-operations",
+          "axiomasoft/corex-import-export"
+        ],
+        "forbid": []
+      },
+      "processes": {
+        "setup": [
+          "php",
+          "{fixture}/probe.php",
+          "setup"
+        ],
+        "control": [
+          "php",
+          "{fixture}/probe.php",
+          "control"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "setup"
+        },
+        {
+          "action": "complete",
+          "name": "setup"
+        },
+        {
+          "action": "start",
+          "name": "control"
+        },
+        {
+          "action": "complete",
+          "name": "control"
+        }
+      ]
+    },
+    "equipment": {
+      "profile": {
+        "id": "boxed-bulk-transfer-equipment",
+        "database": "postgres-isolated",
+        "database_roles": [
+          "control",
+          "a",
+          "budget",
+          "sink"
+        ],
+        "default_database": "a",
+        "http": true,
+        "packages": [
+          "axiomasoft/corex-operations"
+        ],
+        "forbid": [],
+        "extension_fixture": {
+          "kind": "equipment",
+          "id": "equipment-registry",
+          "version": "2.0.0"
+        }
+      },
+      "processes": {
+        "setup": [
+          "php",
+          "{fixture}/probe.php",
+          "setup"
+        ],
+        "submit-a": [
+          "php",
+          "{fixture}/probe.php",
+          "submit-a"
+        ],
+        "submit-b": [
+          "php",
+          "{fixture}/probe.php",
+          "submit-b"
+        ],
+        "observe-outer": [
+          "php",
+          "{fixture}/probe.php",
+          "observe-outer"
+        ],
+        "import-conflict": [
+          "php",
+          "{fixture}/probe.php",
+          "import-conflict"
+        ],
+        "import-send": [
+          "php",
+          "{fixture}/probe.php",
+          "work",
+          "import-send",
+          "0"
+        ],
+        "observe-sink": [
+          "php",
+          "{fixture}/probe.php",
+          "observe-sink"
+        ],
+        "import-unknown": [
+          "php",
+          "{fixture}/probe.php",
+          "work",
+          "import-unknown",
+          "35"
+        ],
+        "import-owner-ack": [
+          "php",
+          "{fixture}/probe.php",
+          "work",
+          "import-owner-ack",
+          "45"
+        ],
+        "observe-owner": [
+          "php",
+          "{fixture}/probe.php",
+          "observe-owner"
+        ],
+        "import-recover": [
+          "php",
+          "{fixture}/probe.php",
+          "work",
+          "import-recover",
+          "80"
+        ],
+        "import-final": [
+          "php",
+          "{fixture}/probe.php",
+          "work",
+          "import-final",
+          "90"
+        ],
+        "import-result": [
+          "php",
+          "{fixture}/probe.php",
+          "import-result"
+        ],
+        "drift": [
+          "php",
+          "{fixture}/probe.php",
+          "drift"
+        ],
+        "export-submit": [
+          "php",
+          "{fixture}/probe.php",
+          "export-submit"
+        ],
+        "export-stage": [
+          "php",
+          "{fixture}/probe.php",
+          "work",
+          "export-stage",
+          "160"
+        ],
+        "observe-part": [
+          "php",
+          "{fixture}/probe.php",
+          "observe-part"
+        ],
+        "export-ack": [
+          "php",
+          "{fixture}/probe.php",
+          "work",
+          "export-ack",
+          "195"
+        ],
+        "observe-publication": [
+          "php",
+          "{fixture}/probe.php",
+          "observe-publication"
+        ],
+        "export-recover": [
+          "php",
+          "{fixture}/probe.php",
+          "work",
+          "export-recover",
+          "230"
+        ],
+        "export-result": [
+          "php",
+          "{fixture}/probe.php",
+          "export-result"
+        ],
+        "export-revoke": [
+          "php",
+          "{fixture}/probe.php",
+          "export-revoke"
+        ],
+        "foreign": [
+          "php",
+          "{fixture}/probe.php",
+          "foreign"
+        ],
+        "export-tamper": [
+          "php",
+          "{fixture}/probe.php",
+          "export-tamper"
+        ],
+        "restore": [
+          "php",
+          "{fixture}/probe.php",
+          "restore"
+        ],
+        "stale-submit": [
+          "php",
+          "{fixture}/probe.php",
+          "stale-submit"
+        ],
+        "export-stale": [
+          "php",
+          "{fixture}/probe.php",
+          "work",
+          "export-stale",
+          "1000"
+        ],
+        "export-reclaim": [
+          "php",
+          "{fixture}/probe.php",
+          "work",
+          "export-reclaim",
+          "1035"
+        ],
+        "expiry": [
+          "php",
+          "{fixture}/probe.php",
+          "expiry"
+        ],
+        "write-snapshot": [
+          "php",
+          "{fixture}/probe.php",
+          "write-snapshot"
+        ],
+        "export-schema-read": [
+          "php",
+          "{fixture}/probe.php",
+          "export-schema-read"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "setup"
+        },
+        {
+          "action": "complete",
+          "name": "setup"
+        },
+        {
+          "action": "start",
+          "name": "submit-a"
+        },
+        {
+          "action": "await",
+          "name": "bulk-outer",
+          "process": "submit-a"
+        },
+        {
+          "action": "start",
+          "name": "submit-b"
+        },
+        {
+          "action": "await",
+          "name": "bulk-concurrent",
+          "process": "submit-b"
+        },
+        {
+          "action": "release",
+          "name": "bulk-concurrent"
+        },
+        {
+          "action": "start",
+          "name": "observe-outer"
+        },
+        {
+          "action": "complete",
+          "name": "observe-outer"
+        },
+        {
+          "action": "release",
+          "name": "bulk-outer"
+        },
+        {
+          "action": "complete",
+          "name": "submit-a"
+        },
+        {
+          "action": "complete",
+          "name": "submit-b"
+        },
+        {
+          "action": "start",
+          "name": "import-conflict"
+        },
+        {
+          "action": "complete",
+          "name": "import-conflict"
+        },
+        {
+          "action": "start",
+          "name": "import-send"
+        },
+        {
+          "action": "await",
+          "name": "sink-committed",
+          "process": "import-send"
+        },
+        {
+          "action": "start",
+          "name": "observe-sink"
+        },
+        {
+          "action": "complete",
+          "name": "observe-sink"
+        },
+        {
+          "action": "terminate",
+          "name": "import-send",
+          "barrier": "sink-committed"
+        },
+        {
+          "action": "start",
+          "name": "import-unknown"
+        },
+        {
+          "action": "complete",
+          "name": "import-unknown"
+        },
+        {
+          "action": "start",
+          "name": "import-owner-ack"
+        },
+        {
+          "action": "await",
+          "name": "import-owner-committed",
+          "process": "import-owner-ack"
+        },
+        {
+          "action": "start",
+          "name": "observe-owner"
+        },
+        {
+          "action": "complete",
+          "name": "observe-owner"
+        },
+        {
+          "action": "terminate",
+          "name": "import-owner-ack",
+          "barrier": "import-owner-committed"
+        },
+        {
+          "action": "start",
+          "name": "import-recover"
+        },
+        {
+          "action": "complete",
+          "name": "import-recover"
+        },
+        {
+          "action": "start",
+          "name": "import-final"
+        },
+        {
+          "action": "complete",
+          "name": "import-final"
+        },
+        {
+          "action": "start",
+          "name": "import-result"
+        },
+        {
+          "action": "complete",
+          "name": "import-result"
+        },
+        {
+          "action": "start",
+          "name": "drift"
+        },
+        {
+          "action": "complete",
+          "name": "drift"
+        },
+        {
+          "action": "start",
+          "name": "export-submit"
+        },
+        {
+          "action": "complete",
+          "name": "export-submit"
+        },
+        {
+          "action": "start",
+          "name": "export-stage"
+        },
+        {
+          "action": "await",
+          "name": "export-part-committed",
+          "process": "export-stage"
+        },
+        {
+          "action": "start",
+          "name": "observe-part"
+        },
+        {
+          "action": "complete",
+          "name": "observe-part"
+        },
+        {
+          "action": "terminate",
+          "name": "export-stage",
+          "barrier": "export-part-committed"
+        },
+        {
+          "action": "start",
+          "name": "export-ack"
+        },
+        {
+          "action": "await",
+          "name": "export-snapshot-open",
+          "process": "export-ack"
+        },
+        {
+          "action": "start",
+          "name": "write-snapshot"
+        },
+        {
+          "action": "complete",
+          "name": "write-snapshot"
+        },
+        {
+          "action": "release",
+          "name": "export-snapshot-open"
+        },
+        {
+          "action": "await",
+          "name": "export-published",
+          "process": "export-ack"
+        },
+        {
+          "action": "start",
+          "name": "observe-publication"
+        },
+        {
+          "action": "complete",
+          "name": "observe-publication"
+        },
+        {
+          "action": "terminate",
+          "name": "export-ack",
+          "barrier": "export-published"
+        },
+        {
+          "action": "start",
+          "name": "export-recover"
+        },
+        {
+          "action": "complete",
+          "name": "export-recover"
+        },
+        {
+          "action": "start",
+          "name": "export-result"
+        },
+        {
+          "action": "complete",
+          "name": "export-result"
+        },
+        {
+          "action": "start",
+          "name": "export-schema-read"
+        },
+        {
+          "action": "complete",
+          "name": "export-schema-read"
+        },
+        {
+          "action": "start",
+          "name": "export-revoke"
+        },
+        {
+          "action": "complete",
+          "name": "export-revoke"
+        },
+        {
+          "action": "start",
+          "name": "foreign"
+        },
+        {
+          "action": "complete",
+          "name": "foreign"
+        },
+        {
+          "action": "start",
+          "name": "export-tamper"
+        },
+        {
+          "action": "complete",
+          "name": "export-tamper"
+        },
+        {
+          "action": "start",
+          "name": "stale-submit"
+        },
+        {
+          "action": "complete",
+          "name": "stale-submit"
+        },
+        {
+          "action": "start",
+          "name": "export-stale"
+        },
+        {
+          "action": "await",
+          "name": "export-stale-ack",
+          "process": "export-stale"
+        },
+        {
+          "action": "start",
+          "name": "export-reclaim"
+        },
+        {
+          "action": "complete",
+          "name": "export-reclaim"
+        },
+        {
+          "action": "release",
+          "name": "export-stale-ack"
+        },
+        {
+          "action": "complete",
+          "name": "export-stale"
+        },
+        {
+          "action": "start",
+          "name": "expiry"
+        },
+        {
+          "action": "complete",
+          "name": "expiry"
+        },
+        {
+          "action": "start",
+          "name": "restore"
+        },
+        {
+          "action": "complete",
+          "name": "restore"
+        }
+      ]
+    }
+  }
+}

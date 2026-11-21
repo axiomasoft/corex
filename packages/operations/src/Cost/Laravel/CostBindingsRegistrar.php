@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Cost\Laravel;
 
+use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Context\Contracts\ProviderEffectLedger;
+use CoreX\Context\Contracts\ScopeAdmission;
+use CoreX\Foundation\Contracts\ReferenceAdmission;
 use CoreX\Operations\Cost\Contracts\BudgetExecution;
 use CoreX\Operations\Cost\Contracts\OperationBudget;
 use CoreX\Operations\Cost\Contracts\OperationCostEstimator;
 use CoreX\Operations\Cost\Data\CostOptions;
 use CoreX\Operations\Cost\Internal\BudgetAdmission;
+use CoreX\Operations\Cost\Internal\BudgetReferences;
 use CoreX\Operations\Cost\Internal\BudgetRetention;
 use CoreX\Operations\Cost\Internal\DeclaredCostEstimator;
 use CoreX\Operations\Cost\Internal\SqlOperationBudget;
@@ -56,11 +61,16 @@ final class CostBindingsRegistrar implements PackageRegistrar
             reservationTtlSeconds: $app->make(CostOptions::class)->reservationTtlSeconds,
         ));
         $app->bind(BudgetExecution::class, static fn (Application $app): BudgetExecution => $app->make(BudgetAdmission::class));
+        $app->scoped(BudgetReferences::class, static fn (Application $app): BudgetReferences => new BudgetReferences(
+            $app->make(DataScopeFactory::class), $app->make(ReferenceAdmission::class), $app->make(ProviderEffectLedger::class),
+            $app->make(ScopeAdmission::class), $app->make(ClockInterface::class),
+        ));
         $app->scoped(BudgetAdmission::class, static fn (Application $app): BudgetAdmission => new BudgetAdmission(
             budget: $app->make(OperationBudget::class),
             estimator: $app->make(OperationCostEstimator::class),
             installationId: $app->make(CostOptions::class)->installationId,
             exceptions: $app->make(ExceptionHandler::class),
+            references: $app->make(BudgetReferences::class),
         ));
     }
 

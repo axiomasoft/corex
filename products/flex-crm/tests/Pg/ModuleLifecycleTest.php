@@ -2,9 +2,18 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\ScopePrincipal;
+use CoreX\Data\Data\DataScope;
+use CoreX\Foundation\Contracts\LifecycleInventory;
+use CoreX\Foundation\Data\ModuleRef;
+use CoreX\Operations\Laravel\ApiSchemaConnections;
+use CoreX\Tests\Support\LocalWorkContexts;
+use CoreX\Tests\Support\WorkScopeFixture;
 use Flex\Crm\CrmModule;
 use Flex\Crm\Tests\Support\AccountFixture;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Packman\Modules\Contracts\Lifecycle\ModuleLifecycle;
@@ -20,9 +29,12 @@ it('discovers CRM composer metadata and manages its schema through the standard 
     app()->forgetInstance(ModulesOptions::class);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
+    config(['corex-operations.schema.tenant' => ['connection' => 'pgsql', 'driver' => 'pgsql', 'database' => DB::connection()->getDatabaseName()]]);
+    $this->app->forgetInstance(ApiSchemaConnections::class);
     AccountFixture::migrate();
     expect(Schema::hasTable('crm_companies'))->toBeFalse();
-    $this->migrateSchemaSets(['axiomasoft/corex:tenant', 'axiomasoft/packman-modules:tenant'], DB::getDefaultConnection());
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant', 'axiomasoft/packman-modules:tenant', 'axiomasoft/corex-operations:tenant', 'axiomasoft/corex-intl:tenant'], DB::getDefaultConnection());
+    $this->migrateSchemaSets(['axiomasoft/corex-operations:budget']);
 
     $consumer = database_path('consumer');
     mkdir($consumer.'/vendor/composer', 0700, true);
@@ -44,6 +56,44 @@ it('discovers CRM composer metadata and manages its schema through the standard 
     $this->artisan('modules:compile')->assertSuccessful();
     $this->app->forgetInstance(ModuleRegistry::class);
     $this->app->forgetInstance(ModuleLifecycle::class);
+    $contexts = LocalWorkContexts::install($this->app);
+    $contexts->initialize(new AccountRef('crm-account', 'crm', 'active', [], []));
+    $scope = WorkScopeFixture::install($this->app, principalId: 'crm-operator')->scope();
+    foreach (['inspect', 'enable', 'disable'] as $action) {
+        Gate::define('corex.lifecycle.'.$action, static fn (ScopePrincipal $principal, DataScope $current, ModuleRef $module): bool => $principal->kind === 'user' && $principal->id === 'crm-operator' && $current == $scope && $module->package === 'flex/crm');
+    }
+    $this->app->instance(LifecycleInventory::class, new readonly class($scope) implements LifecycleInventory
+    {
+        public function __construct(private DataScope $account) {}
+
+        public function scopes(DataScope $operator, ModuleRef $target): array
+        {
+            if ($operator != $this->account || DB::table('wsp_workspaces')->exists()) {
+                throw new LogicException('Unexpected CRM fixture workspace roster.');
+            }
+
+            return [$this->account];
+        }
+
+        public function owners(DataScope $scope, ModuleRef $target): array
+        {
+            return [];
+        }
+
+        public function revision(DataScope $operator, ModuleRef $target): string
+        {
+            return 'crm-single-account';
+        }
+
+        public function run(DataScope $scope, Closure $operation): mixed
+        {
+            if ($scope != $this->account) {
+                throw new LogicException('Foreign CRM fixture scope.');
+            }
+
+            return $operation();
+        }
+    });
     $lifecycle = resolve(ModuleLifecycle::class);
     $lifecycle->enable('flex/crm');
     foreach (['crm_sources', 'crm_companies', 'crm_contacts', 'crm_contact_company', 'crm_pipelines', 'crm_stages', 'crm_deals', 'crm_leads', 'crm_activities'] as $table) {

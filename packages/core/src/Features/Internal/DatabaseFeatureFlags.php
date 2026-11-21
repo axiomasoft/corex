@@ -10,6 +10,7 @@ use CoreX\Features\Contracts\FeatureFlags;
 use CoreX\Features\Data\FeatureFlagDefinition;
 use CoreX\Features\Internal\Models\FeatureFlag;
 use CoreX\Features\Internal\Models\FeatureOverride;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Settings\Data\SettingsScope;
 use CoreX\Settings\Enums\SettingScope;
 use Override;
@@ -84,15 +85,19 @@ final readonly class DatabaseFeatureFlags implements FeatureFlags
         // a read-then-create — createOrFirst() isolates a losing INSERT in a
         // savepoint when called inside a surrounding transaction. Idempotent:
         // never stomps an admin-toggled `is_enabled`.
-        FeatureFlag::on($this->connection)->createOrFirst(
-            attributes: ['key' => $def->key],
-            values: [
-                'key' => $def->key,
-                'module' => $def->module,
-                'is_enabled' => $def->default,
-                'payload' => $def->payload === null ? null : JsonDocuments::decode(JsonDocuments::capture($def->payload)),
-            ],
-        );
+        $db = FeatureFlag::on($this->connection)->getQuery()->getConnection();
+        $db->transaction(function () use ($db, $def): void {
+            ReferenceWrites::enlistFeatureDefault($db, $def);
+            FeatureFlag::on($this->connection)->createOrFirst(
+                attributes: ['key' => $def->key],
+                values: [
+                    'key' => $def->key,
+                    'module' => $def->module,
+                    'is_enabled' => $def->default,
+                    'payload' => $def->payload === null ? null : JsonDocuments::decode(JsonDocuments::capture($def->payload)),
+                ],
+            );
+        });
     }
 
     private function find(string $key): ?FeatureFlag

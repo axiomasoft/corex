@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Operations\Cost\Internal;
 
 use Closure;
+use CoreX\Context\Enums\ProviderObservationKind;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Cost\Contracts\BudgetExecution;
 use CoreX\Operations\Cost\Contracts\BudgetReservation;
@@ -50,6 +51,7 @@ final readonly class BudgetAdmission implements BudgetExecution
         private ExceptionHandler $exceptions,
         ?Closure $costInput = null,
         ?Closure $clientId = null,
+        private ?BudgetReferences $references = null,
     ) {
         $this->costInput = $costInput ?? static fn (OperationInvocation $invocation): CostInput => new CostInput(
             pageRows: 0,
@@ -161,6 +163,10 @@ final readonly class BudgetAdmission implements BudgetExecution
                 actorId: $invocation->context->principal()->principalId(),
             );
 
+            if ($this->references !== null && $this->budget instanceof SqlOperationBudget) {
+                return $this->reserveAdmitted($invocation, $scope, $estimate, $reservationId ?? bin2hex(random_bytes(32)), $this->budget);
+            }
+
             return $reservationId !== null && $this->budget instanceof DurableOperationBudget
                 ? $this->budget->reserveAttempt($scope, $estimate, $reservationId)
                 : $this->budget->reserve($scope, $estimate);
@@ -180,6 +186,26 @@ final readonly class BudgetAdmission implements BudgetExecution
         } catch (Throwable $error) {
             throw new BudgetStoreUnavailable(previous: $error);
         }
+    }
+
+    private function reserveAdmitted(OperationInvocation $invocation, BudgetScope $scope, EstimatedCost $estimate, string $id, SqlOperationBudget $budget): BudgetReservation
+    {
+        $references = $this->references ?? throw new BudgetStoreUnavailable;
+        $ticket = $references->admit($invocation, $budget, $scope, $estimate, $id);
+
+        try {
+            $hold = $budget->reserveAttempt($scope, $estimate, $id);
+        } catch (HttpExceptionInterface $refused) {
+            if ($refused->getStatusCode() === 429) {
+                $references->record($ticket, ProviderObservationKind::Absent, $id);
+            }
+
+            throw $refused;
+        }
+
+        $references->record($ticket, ProviderObservationKind::Confirmed, $id);
+
+        return $hold;
     }
 
     private function settleWithoutChangingOutcome(BudgetReservation $reservation, ActualCost $actual): void

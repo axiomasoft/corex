@@ -9,11 +9,15 @@ use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Context\Contracts\DataScopeFactory;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Errors\Enums\CoreErrorCode;
+use CoreX\Foundation\Contracts\ReferenceAdmission;
+use CoreX\Foundation\Data\ModuleRef;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
 use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
 use CoreX\Operations\Authorization\Laravel\DeclaredFieldAuthorizer;
+use CoreX\Operations\Bulk\Laravel\BulkReferences;
+use CoreX\Operations\Bulk\Laravel\SubmitBulkOperation;
 use CoreX\Operations\Cost\Contracts\BudgetExecution as BudgetAdmission;
 use CoreX\Operations\Cost\Data\BudgetAttempt;
 use CoreX\Operations\Cost\Data\BudgetInvocationResult;
@@ -58,6 +62,9 @@ final readonly class IdempotentOperationInvoker implements OperationInvoker
         private ErrorMapper $errors,
         private ProblemRegistry $problems,
         private ?BudgetAdmission $budget = null,
+        /** @var null|Closure(): SubmitBulkOperation */
+        private ?Closure $bulk = null,
+        private ?ReferenceAdmission $references = null,
     ) {}
 
     #[Override]
@@ -99,6 +106,9 @@ final readonly class IdempotentOperationInvoker implements OperationInvoker
         $effectCompleted = false;
         $terminalPersisted = false;
         $freshMetadata = [];
+        $bulk = $invocation->operation->handler === SubmitBulkOperation::class
+            ? ($this->bulk ?? throw new ApiError(OperationsErrorCode::CapabilityUnavailable, 503, 'Bulk admission is unavailable.'))()
+            : null;
 
         try {
             [$outcome, $replayed] = $this->connection->transaction(function () use (
@@ -110,8 +120,15 @@ final readonly class IdempotentOperationInvoker implements OperationInvoker
                 &$effectCompleted,
                 &$terminalPersisted,
                 &$freshMetadata,
+                $bulk,
             ): array {
                 $this->current->assert($scope->scope, $this->connection);
+
+                if ($bulk !== null) {
+                    $bulk->prepare($invocation, $scope->scope, $key, $this->connection);
+                } else {
+                    $this->enlistOutcome($scope, $invocation);
+                }
                 $store = ($this->store)();
                 $attempt = $store->begin(
                     scope: $scope,
@@ -188,6 +205,8 @@ final readonly class IdempotentOperationInvoker implements OperationInvoker
             }
 
             throw $this->errors->map($error);
+        } finally {
+            $bulk?->clear($invocation);
         }
 
         if ($replayed) {
@@ -278,6 +297,19 @@ final readonly class IdempotentOperationInvoker implements OperationInvoker
         };
     }
 
+    private function enlistOutcome(IdempotencyScope $scope, OperationInvocation $invocation): void
+    {
+        if ($this->references === null) {
+            return;
+        }
+
+        $stamp = $invocation->operation->handler === SubmitBulkOperation::class
+            ? JsonDocuments::map($invocation->input)['extension_stamp'] ?? []
+            : [];
+        $targets = is_array($stamp) ? BulkReferences::stampTargets($stamp) : [];
+        $this->references->enlist($scope->scope, $this->connection, new ModuleRef('axiomasoft/corex-operations'), new ModuleRef($invocation->operation->module), ...$targets);
+    }
+
     private function persistFailure(
         OperationInvocation $invocation,
         IdempotencyScope $scope,
@@ -297,6 +329,7 @@ final readonly class IdempotentOperationInvoker implements OperationInvoker
                 &$terminalPersisted,
             ): StoredOperationOutcome {
                 $this->current->assert($scope->scope, $this->connection);
+                $this->enlistOutcome($scope, $invocation);
                 $store = ($this->store)();
                 $attempt = $store->begin(
                     scope: $scope,

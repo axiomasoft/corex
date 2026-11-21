@@ -22,6 +22,9 @@ return new class extends PackmanMigration
                 $table->primary(['id'], 'med_relations_pk');
             }
             $table->uuid('file_id');
+            $table->string('account_id', 128);
+            $table->string('account_incarnation', 128);
+            $table->string('workspace_scope', 138);
             $table->string('entity_handle', 128);
             $table->string('entity_id', 128);
             $table->string('slot', 64);

@@ -9,6 +9,7 @@ use CoreX\Context\Contracts\DataScopeFactory;
 use CoreX\Context\Contracts\StoredWorkIssuer;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Notifications\Delivery\Data\RecipientReference;
 use CoreX\Notifications\Digest\Contracts\DigestBuilder;
 use CoreX\Notifications\Digest\Data\DigestRef;
@@ -66,6 +67,7 @@ final readonly class SqlDigestBuilder implements DigestBuilder
         $scopeKey = hash('sha256', $encodedScope);
 
         return $this->connection->transaction(function () use ($scope, $encodedScope, $scopeKey, $recipient, $window): ?DigestRef {
+            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-notifications', 'digest', ['recipient' => $recipient, 'window' => $window]);
             $this->currentScope->assert($scope, $this->connection);
             $logical = NotificationScope::logical($scope);
             $recipientIdentity = [...$logical, 'kind' => $recipient->kind, 'id' => $recipient->id];

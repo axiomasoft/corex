@@ -13,6 +13,7 @@ use App\Scenario\FieldBackfillBarrier;
 use App\Scenario\FieldScenarioPolicy;
 use App\Scenario\FieldScenarioRoute;
 use App\Scenario\FixtureBrokerReceipt;
+use App\Scenario\FixtureLifecycleOperators;
 use App\Scenario\FixtureNotificationDriver;
 use App\Scenario\FixtureNotificationPolicy;
 use App\Scenario\FixtureProviderRecoveryAuthority;
@@ -65,6 +66,7 @@ use CoreX\Webhooks\Internal\WebhookKeyRing;
 use CoreX\Webhooks\Internal\WebhookMessagePublisher;
 use CoreX\Webhooks\Internal\WebhookUrlPolicy;
 use CoreX\Workflow\Contracts\EngineAdapter;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\ServiceProvider;
 use Packman\Config\Data\SecretRef;
@@ -91,6 +93,15 @@ final class ScenarioServiceProvider extends ServiceProvider
                     ...$config->get('database.connections.pgsql'), 'database' => $name,
                 ]);
             }
+        }
+
+        if ($case === 'field-search') {
+            $budget = getenv('COREX_SCENARIO_DB_BUDGET');
+            $config->set([
+                'database.connections.scenario_budget' => [...$config->get('database.connections.pgsql'), 'database' => $budget],
+                'corex-operations.schema.tenant' => ['connection' => 'scenario_a', 'driver' => 'pgsql', 'database' => getenv('COREX_SCENARIO_DB_A')],
+                'corex-operations.schema.budget' => ['connection' => 'scenario_budget', 'driver' => 'pgsql', 'database' => $budget],
+            ]);
         }
         $config->set([
             'corex.scope.control_connection' => 'scenario_control',
@@ -253,6 +264,8 @@ final class ScenarioServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        FixtureLifecycleOperators::register($this->app->make(Gate::class));
+
         // The resident program uses Laravel's Worker directly. Attach the same
         // durable failure sink registered by the queue:work console command.
         $this->app['events']->listen(JobFailed::class, function (JobFailed $event): void {

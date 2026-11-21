@@ -42,14 +42,21 @@ The public `SessionUnavailable`, `ImportUnavailable` and `ExportUnavailable` exc
 
 `openExport()` accepts a trusted scope, stable job reference, consumer `ExportSource`, draft
 `ExportManifest` and initial cursor. It returns an `ExportSession` with the stock runner and
-current job token. Call its runner's `seal()` with the session job id, then `emit()` with the
-sealed manifest and a cursor carrying its parts hash. A successful seal completes the job.
+current job token. Bind `CoreX\ImportExport\Contracts\ExportSchemaWitness` to verify the
+draft schema against the current owner projection for the given scope and roster.
+The witness must read the current owner revision and must fail closed if that revision
+cannot be verified.
+
+Call the runner's `seal()` with the session job id. A public result becomes available after
+`ExportPublications::publish()` verifies all parts and completes the owner job.
+The runner's `emit()` uses the sealed manifest and a cursor carrying its parts hash.
 
 `ExportSource` is an explicit consumer-provided port. The stock runner seals only a
 `coherent` manifest: every page is canonical NDJSON, persisted as a hash-addressed immutable
-part, then read back and verified before the manifest is sealed. An interrupted unsealed attempt
-is aborted rather than resumed. Emission rereads only a sealed part and rechecks the current
-`DataScope` policy and restore epoch before returning bytes.
+part, then read back and verified before the manifest is sealed. After an interruption,
+the same capture can reuse previously verified parts whose checksums still match.
+Emission rereads only a sealed part and rechecks the current `DataScope` policy,
+owner schema and restore epoch before returning bytes.
 
 The raw NDJSON format is the reversible machine format. The internal display-CSV codec uses a
 separate spreadsheet-formula-prefix profile; the public export session emits canonical NDJSON.
@@ -69,3 +76,16 @@ Install with `composer require axiomasoft/corex-import-export` through the confi
 Register the package provider, then run `php artisan packman:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `packman:schema:status`.
 
 Схема: набор(ы) `tenant`, baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.
+
+
+### Durable transfer and export publication
+
+Use the existing TransferSource, TransferSink, RecordMapper and session ports.
+A qualified independent sink commits its effect and WriteToken receipt atomically.
+Its lookup distinguishes a retained receipt, proved absence and uncertainty.
+A keyed step replays its exact durable receipt after an ambiguous response.
+
+ExportRunner seals ordered private parts. ExportPublications publishes only after
+checking the complete manifest, stored bytes and current authorization. Resolve
+TransferResultReader directly for a scoped summary or safe failure page, without
+opening a write session. A known ref still requires current access.

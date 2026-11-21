@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Media\Contracts\MediaLibrary;
 use CoreX\Media\Contracts\MediaPolicy;
 use CoreX\Media\Data\MediaAction;
 use CoreX\Media\Data\MediaContext;
 use CoreX\Media\Data\MediaSubject;
 use CoreX\Media\Data\UploadInput;
+use CoreX\Media\Files\Contracts\MediaLibrary;
 use CoreX\Media\Laravel\UploadedFileSource;
 use CoreX\Media\Tests\PgTestCase;
 use Illuminate\Http\UploadedFile;
@@ -22,7 +22,7 @@ function pgConversionContext(): MediaContext
     return new MediaContext(
         tenant: new TenantContext(new AccountRef('11111111-1111-7111-8111-111111111111', 'media-pg-test', 'active', [], [])),
         actorKind: 'user',
-        actorId: '11111111-1111-7111-8111-111111111114',
+        actorId: 'actor-1',
     );
 }
 

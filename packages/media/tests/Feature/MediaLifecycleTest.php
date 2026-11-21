@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Media\Contracts\MediaLibrary;
+use CoreX\Media\Attachments\Contracts\MediaAttachments;
 use CoreX\Media\Contracts\MediaPolicy;
-use CoreX\Media\Contracts\RelationLookup;
 use CoreX\Media\Data\AttachmentInput;
 use CoreX\Media\Data\MediaAction;
 use CoreX\Media\Data\MediaContext;
@@ -15,6 +14,7 @@ use CoreX\Media\Data\UploadInput;
 use CoreX\Media\Exceptions\MediaAccessDenied;
 use CoreX\Media\Exceptions\MediaFileInUse;
 use CoreX\Media\Exceptions\MediaOperationConflict;
+use CoreX\Media\Files\Contracts\MediaLibrary;
 use CoreX\Media\Internal\DenyMediaPolicy;
 use CoreX\Media\Internal\Jobs\PurgeMedia;
 use CoreX\Media\Internal\MediaOperationStore;
@@ -36,7 +36,7 @@ function mediaContext(): MediaContext
     return new MediaContext(
         tenant: new TenantContext(new AccountRef('11111111-1111-7111-8111-111111111111', 'media-test', 'active', [], [])),
         actorKind: 'user',
-        actorId: '11111111-1111-7111-8111-111111111112',
+        actorId: 'actor-1',
     );
 }
 
@@ -54,7 +54,7 @@ function allowMedia(): void
 it('stores, reads, replays, attaches, and detaches private media', function (): void {
     allowMedia();
     $library = resolve(MediaLibrary::class);
-    $relations = resolve(RelationLookup::class);
+    $relations = resolve(MediaAttachments::class);
 
     $stored = $library->store(mediaContext(), upload('request-1', 'owned bytes'));
     $replayed = $library->store(mediaContext(), upload('request-1', 'owned bytes'));
@@ -66,7 +66,7 @@ it('stores, reads, replays, attaches, and detaches private media', function (): 
         ->and(stream_get_contents($stream))->toBe('owned bytes');
     fclose($stream);
 
-    $attachment = new AttachmentInput($stored->id, 'crm:contact', 'contact-1', 'avatar');
+    $attachment = new AttachmentInput($stored->id, 'crm.contact', 'contact-1', 'avatar');
     $relations->attach(mediaContext(), $attachment);
 
     expect($relations->usages(mediaContext(), $stored->id))->toHaveCount(1);
@@ -96,9 +96,9 @@ it('rejects a replay key with a different content digest', function (): void {
 it('refuses deletion while an authoritative relation exists and purges after detach', function (): void {
     allowMedia();
     $library = resolve(MediaLibrary::class);
-    $relations = resolve(RelationLookup::class);
+    $relations = resolve(MediaAttachments::class);
     $stored = $library->store(mediaContext(), upload('request-delete', 'erase me'));
-    $attachment = new AttachmentInput($stored->id, 'crm:contact', 'contact-2', 'avatar');
+    $attachment = new AttachmentInput($stored->id, 'crm.contact', 'contact-2', 'avatar');
     $relations->attach(mediaContext(), $attachment);
 
     expect(fn (): mixed => $library->delete(mediaContext(), $stored->id))->toThrow(MediaFileInUse::class);

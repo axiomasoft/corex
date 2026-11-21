@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tasks\Task\Internal\Actions;
 
 use CoreX\Context\Data\TenantContext;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Tasks\Access\Contracts\TaskModuleContext as TaskModuleGuard;
 use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
 use CoreX\Tasks\Project\Contracts\ProjectRead;
@@ -50,6 +51,7 @@ final readonly class UpdateTask implements UpdateTaskCommand
 
     private function update(UpdateTaskData $data, TenantContext $context, Connection $connection): TaskReference
     {
+        ReferenceWrites::enlist($connection, ReferenceWrites::current(), 'axiomasoft/corex-tasks', 'task-update', ['task' => $data->taskId]);
         $this->validateProvidedFields($data);
         $connectionName = $connection->getName();
 

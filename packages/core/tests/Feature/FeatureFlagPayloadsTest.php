@@ -6,12 +6,14 @@ use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Features\Data\FeatureFlagDefinition;
 use CoreX\Features\Internal\DatabaseFeatureFlags;
 use CoreX\Foundation\Internal\PackmanFeatureFlags;
+use CoreX\Tests\Support\WorkScopeFixture;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Packman\Data\Laravel\JsonDocuments as PackmanJsonDocuments;
 use Packman\Features\Data\FeatureFlagDefinition as PackmanFeatureFlagDefinition;
 
 beforeEach(function (): void {
+    WorkScopeFixture::install($this->app, principalId: 'flag-operator')->scope();
     Schema::dropIfExists('sys_feature_overrides');
     Schema::dropIfExists('sys_feature_flags');
 
@@ -62,7 +64,7 @@ it('accepts and round-trips scalar, null, and array JSON payloads through Databa
         $packmanBridge->define(new PackmanFeatureFlagDefinition(
             key: $packmanKey,
             default: true,
-            module: 'corex/test',
+            module: 'axiomasoft/corex',
             payload: PackmanJsonDocuments::capture($expected),
         ));
 

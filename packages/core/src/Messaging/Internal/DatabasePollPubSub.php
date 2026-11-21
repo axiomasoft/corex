@@ -6,6 +6,7 @@ namespace CoreX\Messaging\Internal;
 
 use Closure;
 use CoreX\Config\Data\CoreOptions;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Messaging\Contracts\PubSub;
 use CoreX\Messaging\Contracts\WorkerRuntime;
 use Illuminate\Database\ConnectionInterface;
@@ -60,6 +61,7 @@ final readonly class DatabasePollPubSub implements PubSub
         $connection = $this->connections->connection($this->connection);
 
         $connection->transaction(function () use ($channel, $payload, $connection): void {
+            ReferenceWrites::enlist($connection, ReferenceWrites::current(), 'axiomasoft/corex', 'pubsub-message', ['channel' => $channel]);
             $connection->select(
                 query: 'SELECT pg_advisory_xact_lock(hashtext(?))',
                 bindings: ['corex-pubsub:'.$channel],
@@ -162,9 +164,9 @@ final readonly class DatabasePollPubSub implements PubSub
         string $subscriber,
         int $position,
     ): void {
-        $connection->table($cursorsTable)->updateOrInsert(
-            ['channel' => $channel, 'subscriber' => $subscriber],
-            ['position' => $position, 'updated_at' => $this->clock->now()],
-        );
+        $connection->transaction(function () use ($connection, $channel, $subscriber, $cursorsTable, $position): void {
+            ReferenceWrites::enlist($connection, ReferenceWrites::current(), 'axiomasoft/corex', 'pubsub-cursor', ['channel' => $channel, 'subscriber' => $subscriber]);
+            $connection->table($cursorsTable)->updateOrInsert(['channel' => $channel, 'subscriber' => $subscriber], ['position' => $position, 'updated_at' => $this->clock->now()]);
+        });
     }
 }

@@ -314,17 +314,12 @@ store unavailability is an infrastructure error. Host body/rate/concurrency caps
 
 ## Durable bulk operations
 
-`axiomasoft/corex-import-export` is optional (`suggest`), and owns all import/export reads, mapping, writes
-and result storage. Bind `Contracts\BulkTransferFactory` explicitly in installed application
-code. It creates a transfer job atomically and idempotently using the bulk operation id,
-and returns a `Data\BulkTransferSession` with public transfer ports and the current token.
-Missing transfer or factory is `capability_unavailable` before submission.
-
-The host's admitted operation adapter must supply the trusted `DataScope`, client identity
-and `BulkOperationDefinition`; literal bulk routes consume these bindings, not raw connection
-or class names from JSON. Install the tenancy/auth/field-policy pipeline before those routes.
-Replace the default result reader's denying field-policy adapter with the host's current policy.
-Webhook management routes use the shared dispatcher; the host owns bulk admission composition.
+Explicitly register `OperationsServiceProvider`. A bulk host binds
+`Bulk\Contracts\BulkExecutor` and `Bulk\Contracts\BulkOwner` in the verified
+tenant scope. The equipment consumer adapts its owner ports at that boundary.
+The Bulk route validates its installed declaration, authenticates the current
+client and principal, and invokes the ordinary transactional admission path.
+Missing capability fails before submission or budget reservation.
 
 Submit requires an idempotency key and returns 202 with a stable id, `status_url` and
 `Location`. Poll returns progress and an execution error separately from admission;
@@ -339,8 +334,9 @@ operation moves through cancelling to cancelled after at most one bounded batch.
 rows remain committed. A completed/failed outcome committed before cancellation wins.
 Lease fencing prevents stale database completion; it cannot revoke an external effect.
 Unknown outcomes require reconciliation, rather than a blind retry or success counter.
-Import recovery resumes the committed checkpoint. An interrupted, unsealed export starts
-a new attempt and captures a new complete snapshot; it never resumes across snapshots.
+Recovery repeats the original step token until the owner acknowledges its receipt.
+An interrupted export restarts coherent capture under its pinned manifest identity.
+Only complete, verified manifests can be published.
 Only sealed parts with verified tenant, current field policy and matching hashes may be emitted.
 
 The qualified transfer maxima are 1 GiB/source, 1 MiB/record, 256 fields, depth 32,
@@ -435,7 +431,6 @@ requires PostgreSQL `*_test` after isolation preflight; never count a missing/sk
 The API has no package `test:pg` script: its declared PG lane is the root Pest configuration
 restricted to `packages/operations/tests/Feature --group=pg`, with explicit `PGSQL_*` test settings.
 Several earlier PG proofs are untagged and require those settings during the full API suite too.
-Transfer additionally provides `composer --working-dir=packages/import-export test:pg`.
 Real principal/workspace membership isolation is verified in the owning tenancy suite.
 From the monorepo root, `tests/Feature/OperationContractTest.php` covers real
 routes and exposed tools, `tests/Arch/ApiContractTest.php` guards the one-authority

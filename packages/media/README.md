@@ -2,10 +2,11 @@
 
 Private media references, attachment policy and conversions for CoreX, backed by Vaulter's content-addressed storage. `MediaPolicy` denies every action until the host explicitly permits it. The package exposes no public storage URLs.
 
-`MediaLibrary` stores and reads files; `RelationLookup` records opaque attachment edges to application entities. CoreX owns purpose, authorization, entity relations and conversion scheduling. Vaulter owns all bytes, deduplication, pins and physical garbage collection.
+`CoreX\Media\Files\Contracts\MediaLibrary` stores and reads files. `CoreX\Media\Attachments\Contracts\MediaAttachments` records opaque attachment edges to application entities. Attach and detach require write access to the related record. `usages()` returns only edges the current caller is authorized to see. CoreX owns purpose, authorization, entity relations and conversion scheduling. Vaulter owns the bytes, deduplication, pins and physical garbage collection.
 
 ```php
-$file = app(\CoreX\Media\Contracts\MediaLibrary::class)->store(
+$files = app(\CoreX\Media\Files\Contracts\MediaLibrary::class);
+$file = $files->store(
     context: $trustedMediaContext,
     input: new \CoreX\Media\Data\UploadInput(
         requestKey: $idempotencyKey,
@@ -13,11 +14,27 @@ $file = app(\CoreX\Media\Contracts\MediaLibrary::class)->store(
         purpose: 'attachment',
     ),
 );
+
+app(\CoreX\Media\Attachments\Contracts\MediaAttachments::class)->attach(
+    context: $trustedMediaContext,
+    input: new \CoreX\Media\Data\AttachmentInput(
+        fileId: $file->id,
+        entityHandle: $entityHandle,
+        entityId: $entityId,
+        slot: 'attachment',
+    ),
+);
+
+$conversion = $files->requestConversion($trustedMediaContext, $file->id, 'thumbnail');
+$status = app(\CoreX\Media\Conversions\Contracts\ConversionOperations::class)
+    ->inspect($trustedMediaContext, $conversion);
 ```
 
 An upload inserts its owner reference, commits the bytes through `BlobStore` and pins the blob in one `VaulterDatabase` transaction. Retrying the same request returns the same media reference; distinct references to identical bytes have independent pins. Publication or pin failures roll back the owner row. Unreferenced physical objects are Vaulter's cleanup responsibility.
 
-Conversions use the same protocol after the source-version and worker-lease checks. With PHP `ext-gd`, the bounded `thumbnail` profile handles PNG/JPEG; otherwise hosts can register `ConversionDriver` implementations. A conversion becomes visible only after its blob pin and reference commit together. `readConversion(context: $context, fileId: $file->id, profile: 'thumbnail')` returns an authorized `MediaReadRef`, or null while pending. Its `openStream` closure rechecks the current tenant, parent policy and profile before reading bytes. Expired worker claims are reclaimed with a new epoch; stale completions cannot publish. A changed driver profile supersedes old pending work instead of publishing new bytes under its old digest.
+With PHP `ext-gd`, the bounded `thumbnail` profile handles PNG and JPEG. Hosts can also register `ConversionDriver` implementations. `requestConversion()` records a durable intent for the current scope, source version and driver profile digest. Repeating that request returns the same `MediaConversionRef`. Use `inspect()` with the current authorized context to check whether the operation is pending, processing, ready, failed or unknown. A ready status supplies the confirmed output receipt. An unknown status requires reconciliation.
+
+Conversions use the same byte and pin protocol as uploads after source-version and worker-lease checks. Output becomes visible after the blob pin and reference commit together. `readConversion()` returns an authorized `MediaReadRef` when the current profile has published output and null otherwise. Its `openStream` closure rechecks the current tenant, parent policy and profile before reading bytes. An expired worker claim can be reclaimed with a new epoch. Stale completions cannot publish, and a changed driver profile supersedes old pending work.
 
 Deletion refuses files with entity attachments, then enqueues a durable purge. `corex:media:sweep` dispatches due work inside the host's trusted tenant job context. Purge releases original and conversion pins and retires their references atomically. It never deletes storage objects: Vaulter GC applies its grace period and preserves blobs still pinned by another reference.
 
@@ -31,6 +48,6 @@ Vaulter dedup scopes use the trusted account id. CoreX pins use `corex.media.fil
 
 ## Schema installation
 
-Install Vaulter's registered migrations using its documented schema lifecycle, then enable the CoreX media module through `Packman\Modules\Contracts\Lifecycle\ModuleLifecycle`. The CoreX set is `axiomasoft/corex-media:tenant`; Packman owns its migration journal.
+Install Vaulter's registered `axiomasoft/vaulter-core:core` and `axiomasoft/vaulter-media:media` sets on the configured Vaulter connection using Vaulter's schema tooling. The Media capability declares `axiomasoft/corex-media` as a Packman module and owns the version 3 tenant set `axiomasoft/corex-media:tenant`. Enable it through `Packman\Modules\Contracts\Lifecycle\ModuleLifecycle` in the verified tenant context with the required operator grant. Packman owns the Media migration journal.
 
 This unreleased baseline uses `blob_id` in `med_files` and `med_conversions`, and records account ownership in `med_files`. It replaces the former private filesystem keys; there is no compatibility backend. Existing development databases must be recreated. Retention, legal holds, backup and storage-provider guarantees remain host responsibilities.

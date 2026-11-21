@@ -11,6 +11,7 @@ use CoreX\Context\Contracts\ProviderEffectRecovery;
 use CoreX\Context\Contracts\ProviderReceiptProjector;
 use CoreX\Context\Contracts\StoredWorkIssuer;
 use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Foundation\Contracts\ModuleReferences;
 use CoreX\Messaging\Contracts\CloudEventCodec;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
@@ -32,6 +33,7 @@ use CoreX\Webhooks\Internal\WebhookDeliveryWorker;
 use CoreX\Webhooks\Internal\WebhookFanout;
 use CoreX\Webhooks\Internal\WebhookKeyRing;
 use CoreX\Webhooks\Internal\WebhookManagement;
+use CoreX\Webhooks\Internal\WebhookModuleReferences;
 use CoreX\Webhooks\Internal\WebhookReceiptProjector;
 use CoreX\Webhooks\Internal\WebhookReplay;
 use CoreX\Webhooks\Internal\WebhookRetention;
@@ -55,6 +57,9 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
+        $app->scoped(WebhookModuleReferences::class);
+        $app->tag(WebhookModuleReferences::class, ModuleReferences::class);
+
         // Registration below depends on enabled flags; this one-off read does not cache Options before boot.
         $options = WebhookOptionsParser::fromArray((array) $app->make(Repository::class)->get('corex-webhooks', []));
 

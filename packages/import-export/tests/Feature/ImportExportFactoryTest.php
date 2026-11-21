@@ -11,6 +11,7 @@ use CoreX\Data\Data\DataScopeAccessDecision;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\ImportExport\Contracts\ExportRunner;
+use CoreX\ImportExport\Contracts\ExportSchemaWitness;
 use CoreX\ImportExport\Contracts\ExportSource;
 use CoreX\ImportExport\Contracts\ImportExportFactory;
 use CoreX\ImportExport\Contracts\RecordMapper;
@@ -29,8 +30,10 @@ use CoreX\ImportExport\Data\SourceManifest;
 use CoreX\ImportExport\Data\SourceRow;
 use CoreX\ImportExport\Data\TargetResult;
 use CoreX\ImportExport\Data\TransferRef;
+use CoreX\ImportExport\Exceptions\ExportUnavailable;
 use CoreX\ImportExport\Exceptions\SessionUnavailable;
 use CoreX\ImportExport\Tests\FactoryTestCase;
+use CoreX\ImportExport\Tests\TransferAdmissionFixture;
 use CoreX\Tests\Support\CallerWorkScopeFixture;
 use Illuminate\Support\Facades\DB;
 
@@ -41,10 +44,14 @@ beforeEach(function (): void {
     $resolver->shouldReceive('current')->andReturn(new TenantContext(new AccountRef('account-a', 'a', 'active', [], []), boxed: true));
     app()->instance(TenantContextResolver::class, $resolver);
     CallerWorkScopeFixture::bind(app(), factoryScope());
+    TransferAdmissionFixture::bind(app());
     $this->migrateSchemaSets(['axiomasoft/corex-import-export:tenant']);
     $authorizer = Mockery::mock(DataScopeAuthorizer::class);
     $authorizer->shouldReceive('authorize')->andReturn(new DataScopeAccessDecision(true, 'allowed'));
     app()->instance(DataScopeAuthorizer::class, $authorizer);
+    $schema = Mockery::mock(ExportSchemaWitness::class);
+    $schema->shouldReceive('matches')->andReturnTrue();
+    app()->instance(ExportSchemaWitness::class, $schema);
 });
 
 function factoryScope(string $actor = 'user-a', string $epoch = 'a'): DataScope
@@ -69,6 +76,7 @@ function factoryImportPorts(): array
         'mapped', new CanonicalRecord('note', 'sample', $row->ordinal, '1', null, $row->values, $hash), null,
     ));
     $target = Mockery::mock(TransferSink::class);
+    $target->shouldReceive('lookup')->andReturn(new TargetResult('absent-with-proof', null, null, null, null));
     $target->shouldReceive('preview')->andReturn(new ImportDecision('apply', null));
     $target->shouldReceive('apply')->andReturnUsing(static fn ($scope, CanonicalRecord $record): TargetResult => new TargetResult(
         'applied', new RecordRef('note', 'local-'.$record->externalId), '1', null, null,
@@ -152,8 +160,21 @@ it('opens the stock export runner and refuses another restore epoch', function (
 
     expect($session->runner)->toBeInstanceOf(ExportRunner::class)
         ->and($session->token->checkpointSequence)->toBe('0')
-        ->and($session->results->result(factoryScope(), $ref)['mode'])->toBe('export');
+        ->and(fn () => $session->results->result(factoryScope(), $ref))->toThrow(ExportUnavailable::class);
     expect(fn () => $factory->openExport(factoryScope(epoch: 'b'), $ref, $source, $manifest, $cursor))->toThrow(SessionUnavailable::class);
+});
+
+it('refuses export before opening a job without a current schema witness', function (): void {
+    app()->forgetInstance(ExportSchemaWitness::class);
+    $hash = str_repeat('a', 64);
+    $manifest = new ExportManifest('55555555-5555-4555-8555-555555555555', 'coherent', $hash, $hash, JsonDocuments::capture([]), str_repeat('0', 64));
+    $source = Mockery::mock(ExportSource::class);
+    $source->shouldNotReceive('page');
+
+    expect(fn () => resolve(ImportExportFactory::class)->openExport(
+        factoryScope(), new TransferRef('66666666-6666-4666-8666-666666666666'), $source, $manifest, new ExportCursor('0', '0', str_repeat('0', 64)),
+    ))->toThrow(ExportUnavailable::class)
+        ->and(DB::table('corex_transfer_jobs')->count())->toBe(0);
 });
 
 it('refuses retained sessions before I/O after a tenant connection switch', function (): void {

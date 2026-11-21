@@ -18,6 +18,9 @@ final readonly class BulkOptions
         public int $resultRetentionSeconds,
         public int $metadataRetentionSeconds,
         public int $idempotencyRetentionSeconds,
+        public int $rowLimit = 500,
+        public int $timeLimitSeconds = 20,
+        public int $maxRecoveryAttempts = 5,
     ) {}
 
 }

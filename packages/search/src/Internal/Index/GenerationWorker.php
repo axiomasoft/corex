@@ -15,6 +15,7 @@ use CoreX\Context\Enums\ProviderObservationKind;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\EntityHandle;
 use CoreX\Data\Data\RecordRef;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Search\Index\Contracts\IndexDriver;
 use CoreX\Search\Index\Contracts\IndexWorker;
 use CoreX\Search\Index\Data\IndexBatch;
@@ -66,6 +67,8 @@ final readonly class GenerationWorker implements IndexWorker
                 ->whereIn('state', ['planned', 'sending', 'accepted', 'unknown'])->lockForUpdate()->first();
 
             if ($row === null) {
+                ReferenceWrites::enlist($db, $scope, 'axiomasoft/corex-search', 'generation', ['entity' => $entity->value, 'generation' => $generation]);
+
                 if ($gen->state === 'retained' && $gen->retain_until !== null && new DateTimeImmutable(Value::text($gen->retain_until)) <= $this->clock->now()) {
                     LaneStore::one(LaneStore::generation($db, $lane, $generation)->where('state', 'retained')->where('claim_epoch', $gen->claim_epoch)->update(['state' => 'retired']));
 
@@ -185,8 +188,8 @@ final readonly class GenerationWorker implements IndexWorker
                 }
                 $ticket = $prior->ticket;
             } else {
-                $ticket = $this->effects->reserve($target->scope, new ProviderAttempt($work->effect(), $work->batch->submissionId,
-                    Value::text($row->claim_epoch), 1, $until, Value::text($row->batch_digest), true));
+                $ticket = ReferenceWrites::reserveEffect($target->scope, new ProviderAttempt($work->effect(), $work->batch->submissionId,
+                    Value::text($row->claim_epoch), 1, $until, Value::text($row->batch_digest), true), 'axiomasoft/corex-search', $this->effects);
             }
             LaneStore::one(self::query($db, $row)->where('state', 'planned')->update(['state' => 'sending', 'provider_ticket' => $ticket->id,
                 'lease_until' => $until->format('Y-m-d H:i:s.uP')]));

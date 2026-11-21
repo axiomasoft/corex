@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Media\Contracts\MediaLibrary;
 use CoreX\Media\Contracts\MediaPolicy;
+use CoreX\Media\Conversions\Contracts\ConversionOperations;
 use CoreX\Media\Data\MediaAction;
 use CoreX\Media\Data\MediaContext;
+use CoreX\Media\Data\MediaConversionRef;
 use CoreX\Media\Data\MediaSubject;
 use CoreX\Media\Data\UploadInput;
+use CoreX\Media\Files\Contracts\MediaLibrary;
 use CoreX\Media\Internal\Jobs\ConvertMedia;
 use CoreX\Media\Internal\Jobs\PurgeMedia;
 use CoreX\Media\Internal\MediaOperationStore;
@@ -24,7 +26,7 @@ function conversionContext(): MediaContext
     return new MediaContext(
         tenant: new TenantContext(new AccountRef('11111111-1111-7111-8111-111111111111', 'conversion-test', 'active', [], [])),
         actorKind: 'user',
-        actorId: '11111111-1111-7111-8111-111111111113',
+        actorId: 'actor-1',
     );
 }
 
@@ -55,10 +57,10 @@ it('creates one bounded GD thumbnail for a file/profile/version', function (): v
         new UploadInput('conversion-request', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.jpg', $bytes)), 'attachment'),
     );
 
-    expect(resolve(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail'))->toBeNull();
+    expect(resolve(MediaLibrary::class)->requestConversion(conversionContext(), $file->id, 'thumbnail'))->toBeInstanceOf(MediaConversionRef::class);
 
     app()->call([new ConvertMedia($file->id, 'thumbnail', mediaConversionKey($file->id)), 'handle']);
-    $conversion = resolve(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail');
+    $conversion = resolve(MediaLibrary::class)->requestConversion(conversionContext(), $file->id, 'thumbnail');
     $stored = DB::table('med_conversions')->where('file_id', $file->id)->first();
 
     $read = resolve(MediaLibrary::class)->readConversion(conversionContext(), $file->id, 'thumbnail');
@@ -67,8 +69,8 @@ it('creates one bounded GD thumbnail for a file/profile/version', function (): v
     fclose($stream);
 
     expect($conversion)->not->toBeNull()
-        ->and($conversion->width)->toBe(100)
-        ->and($conversion->height)->toBe(50)
+        ->and(resolve(ConversionOperations::class)->inspect(conversionContext(), $conversion)->width)->toBe(100)
+        ->and(resolve(ConversionOperations::class)->inspect(conversionContext(), $conversion)->height)->toBe(50)
         ->and($stored->state)->toBe('ready')
         ->and(getimagesizefromstring($converted)[0])->toBe(100)
         ->and($read->sha256)->toBe(hash('sha256', $converted));
@@ -88,7 +90,7 @@ it('purges a published conversion together with its deleting original', function
         conversionContext(),
         new UploadInput('conversion-purge-request', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.jpg', thumbnailBytes())), 'attachment'),
     );
-    resolve(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail');
+    resolve(MediaLibrary::class)->requestConversion(conversionContext(), $file->id, 'thumbnail');
     app()->call([new ConvertMedia($file->id, 'thumbnail', mediaConversionKey($file->id)), 'handle']);
     $outputKey = DB::table('med_conversions')->where('file_id', $file->id)->value('blob_id');
 

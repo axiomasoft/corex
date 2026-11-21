@@ -11,7 +11,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Packman\Attributes\Internal;
-use Throwable;
 
 #[Internal]
 final class PurgeMedia implements ShouldQueue
@@ -27,18 +26,6 @@ final class PurgeMedia implements ShouldQueue
 
     public function handle(MediaOperationStore $operations): void
     {
-        $claim = $operations->claimPurge($this->fileId);
-
-        if ($claim === null) {
-            return;
-        }
-
-        try {
-            $operations->completePurge($claim);
-        } catch (Throwable $exception) {
-            $operations->markUnknown($claim);
-
-            throw $exception;
-        }
+        $operations->purge($this->fileId);
     }
 }

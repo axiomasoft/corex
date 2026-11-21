@@ -6,6 +6,7 @@ namespace CoreX\Settings\Internal;
 
 use CoreX\Data\Data\JsonDocument;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Settings\Contracts\SettingsRepository;
 use CoreX\Settings\Data\SettingsScope;
 use CoreX\Settings\Enums\SettingScope;
@@ -77,31 +78,37 @@ final readonly class DatabaseSettingsRepository implements SettingsRepository
             throw new SettingValueTooLargeException(namespace: $namespace, key: $key, bytes: strlen($encoded), limit: self::MAX_VALUE_BYTES);
         }
 
-        $old = $this->find(namespace: $namespace, key: $key, scopeType: $scopeType, scopeId: $scopeId);
-        $oldValue = $old instanceof Setting ? $this->decode($old) : null;
-        $changed = ! $old instanceof Setting || ($oldValue === null || JsonDocuments::decode($oldValue) !== JsonDocuments::decode($value));
+        $db = $this->db();
+        $db->transaction(function () use ($db, $namespace, $key, $scopeType, $scopeId, $encoded, $value, $sensitive): void {
+            ReferenceWrites::enlist($db, ReferenceWrites::current(), 'axiomasoft/corex', 'setting', [
+                'namespace' => $namespace, 'key' => $key, 'scope_type' => $scopeType->value, 'scope_id' => $scopeId, 'value' => $value,
+            ]);
+            $old = $this->find(namespace: $namespace, key: $key, scopeType: $scopeType, scopeId: $scopeId);
+            $oldValue = $old instanceof Setting ? $this->decode($old) : null;
+            $changed = ! $old instanceof Setting || ($oldValue === null || JsonDocuments::decode($oldValue) !== JsonDocuments::decode($value));
 
-        $stored = $sensitive ? json_encode($this->encrypter->encryptString($encoded), JSON_THROW_ON_ERROR) : $encoded;
+            $stored = $sensitive ? json_encode($this->encrypter->encryptString($encoded), JSON_THROW_ON_ERROR) : $encoded;
 
-        Setting::on($this->connection)->updateOrCreate(
-            attributes: ['namespace' => $namespace, 'key' => $key, 'scope_type' => $scopeType->value, 'scope_id' => $scopeId],
-            values: ['value' => $stored, 'is_sensitive' => $sensitive],
-        );
+            Setting::on($this->connection)->updateOrCreate(
+                attributes: ['namespace' => $namespace, 'key' => $key, 'scope_type' => $scopeType->value, 'scope_id' => $scopeId],
+                values: ['value' => $stored, 'is_sensitive' => $sensitive],
+            );
 
-        // Only on an actual value change, and after the write commits — a
-        // no-op set() (same value re-written) must not spam listeners, and a
-        // rolled-back transaction must not have fired the event at all.
-        if ($changed) {
-            $this->db()->afterCommit(fn () => $this->events->dispatch(new SettingChanged(
-                namespace: $namespace,
-                key: $key,
-                scopeType: $scopeType,
-                scopeId: $scopeId,
-                old: JsonDocuments::capture($oldValue),
-                new: JsonDocuments::capture($value),
-                sensitive: $sensitive,
-            )));
-        }
+            // Only on an actual value change, and after the write commits — a
+            // no-op set() (same value re-written) must not spam listeners, and a
+            // rolled-back transaction must not have fired the event at all.
+            if ($changed) {
+                $this->db()->afterCommit(fn () => $this->events->dispatch(new SettingChanged(
+                    namespace: $namespace,
+                    key: $key,
+                    scopeType: $scopeType,
+                    scopeId: $scopeId,
+                    old: JsonDocuments::capture($oldValue),
+                    new: JsonDocuments::capture($value),
+                    sensitive: $sensitive,
+                )));
+            }
+        });
     }
 
     #[Override]
@@ -109,12 +116,17 @@ final readonly class DatabaseSettingsRepository implements SettingsRepository
     {
         [$scopeType, $scopeId] = $this->level($scope);
 
-        Setting::on($this->connection)
-            ->where('namespace', $namespace)
-            ->where('key', $key)
-            ->where('scope_type', $scopeType->value)
-            ->where('scope_id', $scopeId)
-            ->delete();
+        $db = $this->db();
+        $db->transaction(function () use ($db, $namespace, $key, $scopeType, $scopeId): void {
+            ReferenceWrites::enlist($db, ReferenceWrites::current(), 'axiomasoft/corex', 'setting-delete',
+                ['namespace' => $namespace, 'key' => $key, 'scope_type' => $scopeType->value, 'scope_id' => $scopeId]);
+            Setting::on($this->connection)
+                ->where('namespace', $namespace)
+                ->where('key', $key)
+                ->where('scope_type', $scopeType->value)
+                ->where('scope_id', $scopeId)
+                ->delete();
+        });
     }
 
     #[Override]

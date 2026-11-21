@@ -45,6 +45,7 @@ use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\ToolsServiceProvider;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -119,6 +120,19 @@ final class ToolIdempotentInvocationTest extends TestCase
 
     public function test_http_key_and_exposed_tool_operation_key_share_one_effect(): void
     {
+        // Install the same declaring module that owns the HTTP and tool operation.
+        $files = new Filesystem;
+        $base = $this->app->basePath();
+        $fixture = sys_get_temp_dir().'/corex-tools-notes-'.bin2hex(random_bytes(12));
+        $files->makeDirectory($fixture.'/vendor/composer', 0700, true);
+        $this->beforeApplicationDestroyed(function () use ($base, $files, $fixture): void {
+            $this->app->setBasePath($base);
+            $files->deleteDirectory($fixture);
+        });
+        $catalogue = json_decode($files->get(dirname(__DIR__, 4).'/vendor/composer/installed.json'), true, flags: JSON_THROW_ON_ERROR);
+        $catalogue['packages'][] = ['name' => 'example/notes', 'version' => '1.0.0', 'type' => 'packman-module'];
+        $files->put($fixture.'/vendor/composer/installed.json', json_encode($catalogue, JSON_THROW_ON_ERROR));
+        $this->app->setBasePath($fixture);
         $schema = ['type' => 'object'];
         $registry = resolve(ModuleCompilation::class)->compile([
             ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends([

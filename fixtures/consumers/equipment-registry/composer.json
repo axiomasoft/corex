@@ -9,8 +9,10 @@
         "axiomasoft/corex": "^2.0",
         "axiomasoft/corex-search": "^2.0",
         "axiomasoft/corex-import-export": "^2.0",
+        "axiomasoft/corex-operations": "^2.0",
         "axiomasoft/corex-workflow": "^2.0",
-        "laravel/framework": "^13.0"
+        "laravel/framework": "^13.0",
+        "ramsey/uuid": "^4.7"
     },
     "autoload": {
         "psr-4": {

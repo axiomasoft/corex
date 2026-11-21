@@ -10,6 +10,7 @@ use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Enums\FieldUse;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Intl\Territory\Contracts\DatasetImporter;
 use CoreX\Intl\Territory\Data\DatasetCandidate;
 use CoreX\Intl\Territory\Data\DatasetGeneration;
@@ -62,6 +63,7 @@ final readonly class SqlDatasetImporter implements DatasetImporter
         $snapshotId = $candidate->manifest->snapshotId;
 
         return $this->connection->transaction(function () use ($scope, $datasetKey, $snapshotId, $candidate, $expected, $parsed): DatasetReceipt {
+            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-intl', 'dataset-publish', ['dataset' => $datasetKey, 'snapshot' => $snapshotId]);
             $this->current->assert($scope, $this->connection);
             $current = $this->connection->table('corex_reference_current')
                 ->where('dataset_key', $datasetKey)

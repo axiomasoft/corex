@@ -6,6 +6,7 @@ namespace Flex\Crm\Context;
 
 use CoreX\Context\Contracts\AccountConnectionResolver;
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use Flex\Crm\Context\Contracts\CrmExecutionContext;
 use Flex\Crm\Context\Data\ExecutionContext;
 use Flex\Crm\Internal\Value;
@@ -58,6 +59,16 @@ final readonly class ContextGuard
 
         if ($tenant->workspace === null && ! $ctx->allowAccountLevel) {
             throw new AuthorizationException('An explicit account-level capability is required without a workspace.');
+        }
+
+        if ($lock) {
+            $scope = ReferenceWrites::current();
+
+            if ($scope->accountId !== $tenant->account->id || $scope->workspaceId !== $tenant->workspace?->id
+                || $scope->principalId !== (string) $ctx->principalId) {
+                throw new AuthorizationException('The CRM write does not belong to the current scope.');
+            }
+            ReferenceWrites::enlist($db, $scope, 'flex/crm', 'crm-mutation', ['actor' => $ctx->actor->source]);
         }
 
         return $ctx;

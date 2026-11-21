@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tooling\PackageDocs;
 
-use CoreX\Attributes\Tooling\SurfaceReport;
-use CoreX\Attributes\Tooling\SurfaceScanner;
+use CoreX\Foundation\Tooling\SurfaceReport;
+use CoreX\Foundation\Tooling\SurfaceScanner;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;

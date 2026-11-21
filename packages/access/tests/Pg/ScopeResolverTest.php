@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 use CoreX\Access\Access\Internal\EffectiveWorkspaceScope;
 use CoreX\Access\Access\Internal\ScopePredicate;
-use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Data\RecordContext;
 use CoreX\Access\Enums\Scope;
+use CoreX\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Laravel\ScopeResolver;
 use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
 use CoreX\Access\Matrix\Internal\MatrixValidator;

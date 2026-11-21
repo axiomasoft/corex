@@ -1,5 +1,11 @@
 # Changelog
 
+## CoreX 2.0 — Saved-view reference admission
+
+- Add the host SavedViewInventory SPI and owner probe. Saved-view mutations enlist their module targets until the actual outer transaction completes.
+- Preserve native repository state and scoped/transient identities while keeping the public decorator after ordinary Laravel scope resets.
+- Match a named Packman system actor to its verified Core service principal for saved-view writes. The actor ID, account, workspace, and reference targets are still checked.
+
 ## Unreleased — Packman governance
 
 - Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.

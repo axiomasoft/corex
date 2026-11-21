@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Scenario;
 
-use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\AccessChecker;
+use CoreX\Access\Laravel\PrincipalIdentity;
 use CoreX\Context\Contracts\WorkPrincipalAuthority;
 use CoreX\Context\Enums\PrincipalType;
 use CoreX\Notifications\Delivery\Contracts\RecipientResolver;

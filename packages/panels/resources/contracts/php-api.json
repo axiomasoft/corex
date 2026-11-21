@@ -2,6 +2,123 @@
     "schema": "php-api/1",
     "package": "axiomasoft/corex-panels",
     "symbols": {
+        "CoreX\\Panels\\Contracts\\SavedViewInventory": {
+            "kind": "interface",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [
+                "CoreX\\Foundation\\Contracts\\ReferenceExclusion"
+            ],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "connection": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "scope",
+                            "type": "CoreX\\Data\\Data\\DataScope",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "Illuminate\\Database\\ConnectionInterface",
+                    "doc": []
+                },
+                "scopes": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "scope",
+                            "type": "CoreX\\Data\\Data\\DataScope",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "array",
+                    "doc": []
+                },
+                "targets": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "scope",
+                            "type": "CoreX\\Data\\Data\\DataScope",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "context",
+                            "type": "Packman\\Panels\\SavedViews\\Data\\ViewContext",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "operation",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "id",
+                            "type": "?string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "input",
+                            "type": "?Packman\\Panels\\SavedViews\\Data\\SaveViewInput",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "array",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "implement"
+        },
         "CoreX\\Panels\\Laravel\\PanelContexts": {
             "kind": "class",
             "layer": "spi",

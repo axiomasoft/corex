@@ -7,9 +7,12 @@ namespace CoreX\TasksWorkflow\Tests\Feature;
 use Closure;
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\ScopePrincipal;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\CoreServiceProvider;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Foundation\Data\ModuleRef;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
 use CoreX\Tasks\Task\Contracts\CompleteTaskCommand;
@@ -35,7 +38,9 @@ use CoreX\Workflow\WorkflowServiceProvider;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabaseState;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use LogicException;
@@ -102,7 +107,20 @@ final class ActivationGateRefreshObserver
 final class TaskCompletionCaptureTest extends TestCase
 {
     use MigratesSchemaSets;
-    use RefreshDatabase;
+    use RefreshDatabase {
+        beginDatabaseTransaction as private beginFixtureTransaction;
+    }
+
+    public function beginDatabaseTransaction(): void
+    {
+        if (DB::connection()->getDriverName() === 'pgsql') {
+            // Public lifecycle commits owner transitions. Rebuild between tests.
+            RefreshDatabaseState::$migrated = false;
+
+            return;
+        }
+        $this->beginFixtureTransaction();
+    }
 
     private const string DEFINITION = 'task-completion';
 
@@ -867,6 +885,13 @@ final class TaskCompletionCaptureTest extends TestCase
             self::markTestSkipped('Packman module lifecycle uses PostgreSQL transaction locks.');
         }
 
+        $context = resolve(TenantContextResolver::class)->current();
+        $scope = WorkScopeFixture::install($this->app, principalId: 'task-lifecycle-operator')->scope($context);
+        foreach (['enable', 'inspect'] as $ability) {
+            Gate::define('corex.lifecycle.'.$ability,
+                static fn (ScopePrincipal $actor, DataScope $actual, ModuleRef $target): bool => $actor->kind === 'user' && $actor->id === $scope->principalId
+                    && get_object_vars($actual) === get_object_vars($scope) && $target->package === TasksModule::NAME);
+        }
         $this->migrateSchemaSets(['axiomasoft/packman-modules:tenant'], DB::getDefaultConnection());
     }
 

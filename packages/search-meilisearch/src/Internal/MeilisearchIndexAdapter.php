@@ -9,6 +9,7 @@ use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Search\Errors\Exceptions\SearchFeatureUnavailable;
 use CoreX\Search\Index\Contracts\IndexDriver;
 use CoreX\Search\Index\Contracts\IndexLookupAccess;
+use CoreX\Search\Index\Contracts\IndexRemovalEvidence;
 use CoreX\Search\Index\Data\IndexBatch;
 use CoreX\Search\Index\Data\IndexReceipt;
 use CoreX\Search\Index\Data\IndexTarget;
@@ -17,11 +18,12 @@ use CoreX\Search\Index\Enums\IndexOutcome;
 use CoreX\SearchMeilisearch\Enums\MeilisearchAccess;
 use Exception;
 use Meilisearch\Client;
+use Meilisearch\Exceptions\ApiException;
 use Packman\Attributes\Internal;
 use RuntimeException;
 
 #[Internal]
-final readonly class MeilisearchIndexAdapter implements IndexDriver
+final readonly class MeilisearchIndexAdapter implements IndexDriver, IndexRemovalEvidence
 {
     private const array Settings = [
         'rankingRules' => ['sort'],
@@ -97,6 +99,29 @@ final readonly class MeilisearchIndexAdapter implements IndexDriver
             'failed', 'canceled' => IndexOutcome::Failed,
             default => IndexOutcome::Unknown,
         };
+    }
+
+    public function absent(IndexTarget $target): bool
+    {
+        $this->current->assert($target->scope);
+        MeilisearchNamespace::fingerprint($target, $this->cluster);
+        $client = ($this->clients)($target, MeilisearchAccess::Observe);
+
+        try {
+            $info = $client->getRawIndex($target->uid);
+        } catch (ApiException $error) {
+            if ($error->httpStatus === 404 && $error->errorCode === 'index_not_found') {
+                return true;
+            }
+
+            throw $error;
+        }
+
+        if (($info['uid'] ?? null) !== $target->uid) {
+            throw SearchFeatureUnavailable::unsupported();
+        }
+
+        return false;
     }
 
     public function canary(IndexTarget $target): bool

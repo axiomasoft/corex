@@ -39,6 +39,7 @@ return new class extends PackmanMigration
             $table->char('scope_seal', 64)->nullable();
             $table->uuid('claim_token')->nullable();
             $table->string('blob_receipt', 255)->nullable();
+            $table->json('released_pins')->nullable();
             $table->unsignedBigInteger('claim_epoch')->default(0);
             $table->unsignedBigInteger('attempts')->default(0);
             $table->timestamp('next_attempt_at')->nullable();

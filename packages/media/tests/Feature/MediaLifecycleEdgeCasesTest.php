@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Media\Contracts\MediaLibrary;
+use CoreX\Media\Attachments\Contracts\MediaAttachments;
 use CoreX\Media\Contracts\MediaPolicy;
-use CoreX\Media\Contracts\RelationLookup;
+use CoreX\Media\Conversions\Laravel\ConversionCoordinator;
 use CoreX\Media\Data\AttachmentInput;
 use CoreX\Media\Data\MediaAction;
 use CoreX\Media\Data\MediaContext;
@@ -14,11 +14,11 @@ use CoreX\Media\Data\MediaSubject;
 use CoreX\Media\Data\UploadInput;
 use CoreX\Media\Exceptions\MediaAccessDenied;
 use CoreX\Media\Exceptions\MediaOperationConflict;
-use CoreX\Media\Internal\ConversionCoordinator;
+use CoreX\Media\Files\Contracts\MediaLibrary;
+use CoreX\Media\Files\Laravel\SqlMediaLibrary;
 use CoreX\Media\Internal\Jobs\PurgeMedia;
 use CoreX\Media\Internal\MediaBlobs;
 use CoreX\Media\Internal\MediaOperationStore;
-use CoreX\Media\Internal\SqlMediaLibrary;
 use CoreX\Media\Internal\Support\MediaOptions;
 use CoreX\Media\Laravel\UploadedFileSource;
 use CoreX\Media\MediaModule;
@@ -33,7 +33,7 @@ function mediaEdgeContext(): MediaContext
     return new MediaContext(
         tenant: new TenantContext(new AccountRef('11111111-1111-7111-8111-111111111111', 'media-edge-test', 'active', [], [])),
         actorKind: 'user',
-        actorId: '11111111-1111-7111-8111-111111111115',
+        actorId: 'actor-1',
     );
 }
 
@@ -70,9 +70,9 @@ it('rolls back the owner reference when Vaulter commit fails', function (): void
 it('keeps attachment operations idempotent and rejects unavailable files', function (): void {
     allowMediaEdges();
     $library = resolve(MediaLibrary::class);
-    $relations = resolve(RelationLookup::class);
+    $relations = resolve(MediaAttachments::class);
     $file = $library->store(mediaEdgeContext(), edgeUpload('relation-idempotent', 'bytes'));
-    $attachment = new AttachmentInput($file->id, 'crm:contact', 'contact-edge', 'avatar');
+    $attachment = new AttachmentInput($file->id, 'crm.contact', 'contact-edge', 'avatar');
 
     $relations->attach(mediaEdgeContext(), $attachment);
     $relations->attach(mediaEdgeContext(), $attachment);
@@ -80,7 +80,7 @@ it('keeps attachment operations idempotent and rejects unavailable files', funct
     $relations->detach(mediaEdgeContext(), $attachment);
 
     expect($relations->usages(mediaEdgeContext(), $file->id))->toBe([]);
-    expect(fn (): mixed => $relations->attach(mediaEdgeContext(), new AttachmentInput('missing-file', 'crm:contact', 'contact-edge', 'avatar')))
+    expect(fn (): mixed => $relations->attach(mediaEdgeContext(), new AttachmentInput('missing-file', 'crm.contact', 'contact-edge', 'avatar')))
         ->toThrow(MediaOperationConflict::class);
 });
 
@@ -103,7 +103,7 @@ it('marks a failed purge unknown instead of publishing a false delete', function
 });
 
 it('rejects malformed trusted media inputs before creating storage keys', function (): void {
-    expect(fn (): AttachmentInput => new AttachmentInput('', 'crm:contact', 'contact-edge', 'avatar'))
+    expect(fn (): AttachmentInput => new AttachmentInput('', 'crm.contact', 'contact-edge', 'avatar'))
         ->toThrow(InvalidArgumentException::class);
     expect(fn (): UploadInput => new UploadInput('', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('safe.txt', 'bytes')), 'attachment'))
         ->toThrow(InvalidArgumentException::class);

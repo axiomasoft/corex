@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tasks\Task\Internal\Actions;
 
 use CoreX\Context\Data\TenantContext;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Tasks\Access\Contracts\TaskModuleContext as TaskModuleGuard;
 use CoreX\Tasks\Task\Contracts\CompleteTaskCommand;
 use CoreX\Tasks\Task\Data\CompleteTaskData;
@@ -44,6 +45,7 @@ final readonly class CompleteTask implements CompleteTaskCommand
 
     private function complete(CompleteTaskData $data, TenantContext $context, Connection $connection): TaskReference
     {
+        ReferenceWrites::enlist($connection, ReferenceWrites::current(), 'axiomasoft/corex-tasks', 'task-complete', ['task' => $data->taskId]);
         $scope = $this->completion->scope($context, $connection);
         $task = $this->completion->lockTask($data->taskId, $scope, $connection);
 

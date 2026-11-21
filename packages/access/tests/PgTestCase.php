@@ -6,6 +6,13 @@ namespace CoreX\Access\Tests;
 
 use CoreX\Access\Tests\Support\CoreAuthTestCase;
 use CoreX\Access\Tests\Support\FixtureTenantSchemaSets;
+use CoreX\Context\Contracts\PhysicalBindingVerifier;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\PhysicalBinding;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Tests\Support\WorkScopeFixture;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Override;
@@ -49,6 +56,24 @@ abstract class PgTestCase extends CoreAuthTestCase
         DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
         DB::statement('CREATE SCHEMA public');
         DB::purge('pgsql');
+        $connection = DB::connection('pgsql');
+        $context = resolve(TenantContextResolver::class)->current();
+        $host = WorkScopeFixture::install($this->app, principalId: 'access-fixture-operator');
+        $binding = $host->register($context, $connection);
+        // Reset can reconnect the same test account twice. Attest the newly
+        // selected connection, keeping the independent route and ticket history.
+        $this->app->instance(PhysicalBindingVerifier::class, new readonly class($connection, $binding, $context) implements PhysicalBindingVerifier
+        {
+            public function __construct(private ConnectionInterface $owner, private PhysicalBinding $expected, private TenantContext $context) {}
+
+            public function verify(PhysicalBinding $binding, TenantContext $context, ConnectionInterface $connection): void
+            {
+                if ($connection !== $this->owner || $binding->bindingId !== $this->expected->bindingId || $binding->restoreEpoch !== $this->expected->restoreEpoch
+                    || $binding->bindingGeneration !== $this->expected->bindingGeneration || $context->account->id !== $this->context->account->id) {
+                    throw new ScopeContextMismatch('Unexpected Access fixture owner.');
+                }
+            }
+        });
     }
 
     /** Tenant-DB aut_* migrations under test — no cross-package FK. */

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tasks\Task\Internal\Actions;
 
 use CoreX\Context\Data\TenantContext;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tasks\Access\Contracts\TaskModuleContext as TaskModuleGuard;
 use CoreX\Tasks\Project\Contracts\ProjectRead;
@@ -55,6 +56,7 @@ final readonly class MoveTaskToStage implements MoveTaskToStageCommand
 
     private function move(MoveTaskToStageData $data, TenantContext $context, Connection $connection): TaskReference
     {
+        ReferenceWrites::enlist($connection, ReferenceWrites::current(), 'axiomasoft/corex-tasks', 'task-move', ['task' => $data->taskId]);
         $connectionName = $connection->getName();
 
         $scope = $this->completion->scope($context, $connection);

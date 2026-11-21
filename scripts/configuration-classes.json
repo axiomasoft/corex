@@ -1734,6 +1734,33 @@
             "validation": "1..1024 MiB at boot",
             "deprecated_aliases": "",
             "notes": "Total worker process budget; default 128 MiB. Process supervisor and PHP memory_limit remain host backstops."
+        },
+        "corex-operations.bulk.row_limit": {
+            "owner": "axiomasoft/corex-operations",
+            "secret": "no",
+            "mode": "product-policy",
+            "reloadable": "unobserved",
+            "validation": "Integer 1–500",
+            "deprecated_aliases": "",
+            "notes": "Maximum number of rows admitted to one Bulk step."
+        },
+        "corex-operations.bulk.time_limit_seconds": {
+            "owner": "axiomasoft/corex-operations",
+            "secret": "no",
+            "mode": "product-policy",
+            "reloadable": "unobserved",
+            "validation": "Integer 1–30 and less than lease_seconds",
+            "deprecated_aliases": "",
+            "notes": "Upper execution bound for one Bulk step."
+        },
+        "corex-operations.bulk.max_recovery_attempts": {
+            "owner": "axiomasoft/corex-operations",
+            "secret": "no",
+            "mode": "product-policy",
+            "reloadable": "unobserved",
+            "validation": "Integer 1–100",
+            "deprecated_aliases": "",
+            "notes": "Consecutive retries for an unchanged checkpoint."
         }
     },
     "external": {

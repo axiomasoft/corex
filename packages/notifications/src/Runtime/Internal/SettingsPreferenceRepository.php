@@ -7,6 +7,7 @@ namespace CoreX\Notifications\Runtime\Internal;
 use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Notifications\Inbox\Data\NotificationContext;
 use CoreX\Notifications\Inbox\Exceptions\NotificationOperationConflict;
 use CoreX\Notifications\Preferences\Contracts\PreferenceRepository;
@@ -48,6 +49,7 @@ final readonly class SettingsPreferenceRepository implements PreferenceRepositor
         $recipient = $this->recipient($scope);
 
         return $this->connection->transaction(function () use ($scope, $recipient, $input): NotificationPreference {
+            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-notifications', 'preference', ['recipient' => $recipient, 'preference' => $input]);
             $this->current->assert($scope, $this->connection);
             $this->connection->table('ntf_recipient_state')->insertOrIgnore($recipient + ['preference_revision' => '1']);
             $state = $this->connection->table('ntf_recipient_state')->where($recipient)->lockForUpdate()->firstOrFail();

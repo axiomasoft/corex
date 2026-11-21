@@ -189,7 +189,6 @@
         "env_prefix": "COREX_",
         "command_prefix": "corex:",
         "modules": [
-            "Attributes",
             "Audit",
             "Config",
             "Context",

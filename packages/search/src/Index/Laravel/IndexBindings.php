@@ -8,6 +8,7 @@ use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Context\Contracts\ProviderEffectLedger;
 use CoreX\Context\Contracts\ProviderReceiptProjector;
 use CoreX\Context\Contracts\ScopeAdmission;
+use CoreX\Foundation\Contracts\ModuleReferences;
 use CoreX\Search\Index\Contracts\ActiveGenerations;
 use CoreX\Search\Index\Contracts\IndexDriver;
 use CoreX\Search\Index\Contracts\IndexLookupAccess;
@@ -19,6 +20,7 @@ use CoreX\Search\Internal\Index\IndexReceiptProjector;
 use CoreX\Search\Internal\Index\LaneStore;
 use CoreX\Search\Internal\Index\MappingJournal;
 use CoreX\Search\Internal\Index\RebuildJournal;
+use CoreX\Search\Internal\Index\SearchModuleReferences;
 use CoreX\Search\Internal\Index\VerifiedIndexLookup;
 use CoreX\Search\Internal\SearchOptions;
 use CoreX\Search\Lane\Contracts\SearchInvalidations;
@@ -38,6 +40,9 @@ final class IndexBindings
 {
     public static function register(Application $app): void
     {
+        $app->scoped(SearchModuleReferences::class);
+        $app->tag(SearchModuleReferences::class, ModuleReferences::class);
+
         $app->scoped(LaneStore::class, static fn (Application $app): LaneStore => new LaneStore(
             $app->make(DatabaseManager::class), $app->make(CurrentWorkScope::class),
             $app->make(SearchOptions::class)->driver,

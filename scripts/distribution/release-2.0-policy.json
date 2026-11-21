@@ -115,7 +115,6 @@
           "axiomasoft/corex"
         ],
         "require-dev": [
-          "axiomasoft/corex-import-export",
           "axiomasoft/corex-webhooks"
         ]
       }

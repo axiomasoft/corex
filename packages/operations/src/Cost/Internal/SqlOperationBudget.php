@@ -94,6 +94,25 @@ final readonly class SqlOperationBudget implements DurableOperationBudget
         $this->settle($receipt->reservationId, new ActualCost($receipt->actualUnits));
     }
 
+    public function provesHold(BudgetScope $scope, EstimatedCost $cost, string $id): bool
+    {
+        $row = $this->connection->table(self::ReservationTable)->where('id', $id)->first();
+
+        if ($row === null || $row->state === 'rejected') {
+            return false;
+        }
+
+        $keys = array_values($this->keys($scope));
+        sort($keys, SORT_STRING);
+
+        if ($row->keys !== JsonCanonical::encode($keys) || $row->recipe_hash !== $cost->recipeHash
+            || DatabaseValue::integer($row->estimate) !== $this->toMicroUnits($cost->units, 'estimated cost')) {
+            throw new RuntimeException('Budget attempt ID has conflicting evidence.');
+        }
+
+        return true;
+    }
+
     private function hold(BudgetScope $scope, EstimatedCost $cost, string $id): BudgetReservation
     {
         $estimate = $this->toMicroUnits(units: $cost->units, label: 'estimated cost');

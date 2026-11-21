@@ -78,7 +78,7 @@ it('deduplicates an identical external record across independent jobs before tar
     expect($counter->applied)->toBe(1)->and(DB::table('corex_transfer_refs')->count())->toBe(1);
 });
 
-it('rolls back only the failed row savepoint and continues the batch', function (): void {
+it('rolls back the owner transaction when the target outcome is ambiguous', function (): void {
     $hash = str_repeat('d', 64);
     $jobId = '55555555-5555-4555-8555-555555555555';
     $manifest = new SourceManifest('object://imports/4', $hash, 84, 'csv', '1', 'UTF-8', ',', '"', '', $hash);
@@ -139,12 +139,11 @@ it('rolls back only the failed row savepoint and continues the batch', function 
         new SystemClock,
     );
 
-    $receipt = $runner->step(scope: scope($hash), transfer: new TransferRef($jobId), token: new StepToken('0', '1', $hash, $hash, $hash, $hash));
-
-    expect($receipt->state)->toBe('completed')
-        ->and(DB::table('corex_transfer_rows')->where('result', 'invalid')->count())->toBe(1)
-        ->and(DB::table('corex_transfer_rows')->where('result', 'applied')->count())->toBe(1)
-        ->and(DB::table('corex_transfer_refs')->count())->toBe(1);
+    expect(fn () => $runner->step(scope: scope($hash), transfer: new TransferRef($jobId), token: new StepToken('0', '1', $hash, $hash, $hash, $hash)))
+        ->toThrow(RuntimeException::class, 'simulated target fault')
+        ->and(DB::table('corex_transfer_rows')->count())->toBe(0)
+        ->and(DB::table('corex_transfer_refs')->count())->toBe(0)
+        ->and((string) DB::table('corex_transfer_jobs')->where('id', $jobId)->value('checkpoint_seq'))->toBe('0');
 });
 
 it('quarantines an unknown target acknowledgement without advancing the cursor', function (): void {

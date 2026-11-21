@@ -10,7 +10,7 @@ CoreX — набор прикладных Laravel-компонентов. Каж
 `axiomasoft/packman`, `axiomasoft/packman-modules` и `axiomasoft/packman-schema` владеют
 обнаружением и компиляцией модулей, lifecycle и исполнением объявленных наборов схемы.
 CoreX использует их контракты и предоставляет адаптеры своего контекста, feature flags
-и аудита. Второй loader, module registry или schema migrator в CoreX не создаётся.
+и аудита. Допуск lifecycle и ссылки владельцев координирует CoreX через публичные контракты Packman.
 `axiomasoft/packman-panels` владеет панелями и saved views, включая их таблицы;
 `corex-panels` только регистрирует этот движок и адаптирует доверенный контекст.
 
@@ -139,6 +139,13 @@ flowchart TB
   принадлежат Packman Panels. Rendering и оболочка принадлежат UI-фреймворку или хосту.
 - `access` устанавливает движок авторизации как зависимость Composer. Приложение
   вызывает контракты CoreX для проверки прав и ограничения выборок.
+
+Operations включается явной регистрацией `CoreX\Operations\OperationsServiceProvider`.
+Для Bulk он публикует нейтральные `BulkExecutor` и `BulkOwner`. ImportExport
+владеет source, sink, checkpoint и публикацией export. Equipment регистрирует
+Operations и scoped host adapter с обоими портами. При отсутствии transfer adapter
+другие объявленные операции доступны. Recurrence обнаруживается Laravel через
+`CoreX\Recurrence\RecurrenceServiceProvider` и остаётся вычислительной библиотекой.
 
 ## Правила расширения и именования
 

@@ -31,6 +31,63 @@
             "enum_cases": [],
             "spi_kind": "implement"
         },
+        "CoreX\\ImportExport\\Contracts\\ExportPublications": {
+            "kind": "interface",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "publish": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "scope",
+                            "type": "CoreX\\Data\\Data\\DataScope",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "transfer",
+                            "type": "CoreX\\ImportExport\\Data\\TransferRef",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "manifest",
+                            "type": "CoreX\\ImportExport\\Data\\Export\\ExportManifest",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "void",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "call"
+        },
         "CoreX\\ImportExport\\Contracts\\ExportRunner": {
             "kind": "interface",
             "layer": "spi",
@@ -126,6 +183,63 @@
                         }
                     ],
                     "return": "CoreX\\ImportExport\\Data\\Export\\ExportManifest",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "implement"
+        },
+        "CoreX\\ImportExport\\Contracts\\ExportSchemaWitness": {
+            "kind": "interface",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "matches": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "scope",
+                            "type": "CoreX\\Data\\Data\\DataScope",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "expectedHash",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "roster",
+                            "type": "CoreX\\Data\\Data\\JsonDocument",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "bool",
                     "doc": []
                 }
             },
@@ -273,6 +387,15 @@
                             "optional": true,
                             "default": "null",
                             "flags": 0
+                        },
+                        {
+                            "name": "limits",
+                            "type": "?CoreX\\ImportExport\\Data\\TransferLimits",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
+                            "flags": 0
                         }
                     ],
                     "return": "CoreX\\ImportExport\\Data\\ExportSession",
@@ -360,6 +483,15 @@
                         {
                             "name": "cancellation",
                             "type": "?CoreX\\ImportExport\\Contracts\\CancellationSignal",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
+                            "flags": 0
+                        },
+                        {
+                            "name": "limits",
+                            "type": "?CoreX\\ImportExport\\Data\\TransferLimits",
                             "by_reference": false,
                             "variadic": false,
                             "optional": true,
@@ -1444,6 +1576,15 @@
                             "optional": false,
                             "default": null,
                             "flags": 1
+                        },
+                        {
+                            "name": "path",
+                            "type": "?string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
+                            "flags": 1
                         }
                     ],
                     "return": null,
@@ -1878,6 +2019,15 @@
                             "variadic": false,
                             "optional": false,
                             "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "stepKey",
+                            "type": "?string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
                             "flags": 1
                         }
                     ],

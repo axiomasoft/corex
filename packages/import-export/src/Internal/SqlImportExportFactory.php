@@ -9,6 +9,7 @@ use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\FieldSelection;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Enums\FieldUse;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\ImportExport\Contracts\CancellationSignal;
 use CoreX\ImportExport\Contracts\ExportSource;
 use CoreX\ImportExport\Contracts\ImportExportFactory;
@@ -26,12 +27,13 @@ use CoreX\ImportExport\Data\TransferLimits;
 use CoreX\ImportExport\Data\TransferRef;
 use CoreX\ImportExport\Exceptions\SessionUnavailable;
 use CoreX\ImportExport\Internal\Export\CanonicalExportCodec;
+use CoreX\ImportExport\Internal\Export\CurrentExportSchema;
 use CoreX\ImportExport\Internal\Export\DatabaseExportRunner;
 use CoreX\ImportExport\Internal\Transfer\NeverCancelled;
 use CoreX\ImportExport\Internal\Transfer\SqlTransferExecutor;
 use CoreX\ImportExport\Internal\Transfer\SqlTransferResultReader;
 use CoreX\Storage\Contracts\TenantStorage;
-use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Str;
 use Override;
@@ -48,10 +50,12 @@ final readonly class SqlImportExportFactory implements ImportExportFactory
         private TenantStorage $storage,
         private TransferLimits $limits,
         private SessionRuntime $runtime,
+        private CurrentExportSchema $schema,
+        private ?TransferReferences $references = null,
     ) {}
 
     #[Override]
-    public function openImport(DataScope $scope, TransferRef $transfer, TransferSource $source, RecordMapper $mapper, TransferSink $target, MappingSnapshot $mapping, ConflictRule $conflicts, bool $dryRun = false, ?CancellationSignal $cancellation = null): ImportSession
+    public function openImport(DataScope $scope, TransferRef $transfer, TransferSource $source, RecordMapper $mapper, TransferSink $target, MappingSnapshot $mapping, ConflictRule $conflicts, bool $dryRun = false, ?CancellationSignal $cancellation = null, ?TransferLimits $limits = null): ImportSession
     {
         $connection = $this->connection($scope, $transfer);
         $manifest = $source->describe($scope);
@@ -71,22 +75,23 @@ final readonly class SqlImportExportFactory implements ImportExportFactory
             sourceManifest: json_encode($manifest, JSON_THROW_ON_ERROR),
             mappingSnapshot: json_encode($mapping, JSON_THROW_ON_ERROR),
             requestIdentity: json_encode([$manifest, $mapping, $conflicts, $dryRun], JSON_THROW_ON_ERROR),
+            stamp: $mapping->definition,
         );
         $cancellation ??= new NeverCancelled;
 
         $runtime = $this->runtime->forTransfer($transfer->id);
 
         return new ImportSession(
-            runner: new SqlTransferExecutor($connection, $source, $mapper, $target, $mapping, $conflicts, $this->limits, $this->authorizer, $this->clock, $cancellation, runtime: $runtime),
+            runner: new SqlTransferExecutor($connection, $source, $mapper, $target, $mapping, $conflicts, $this->effectiveLimits($limits), $this->authorizer, $this->clock, $cancellation, runtime: $runtime, references: $this->references),
             transfer: $transfer,
             token: $token,
-            results: new SqlTransferResultReader($connection, $this->authorizer, $runtime),
+            results: new SqlTransferResultReader($connection, $this->authorizer, $runtime, $this->storage),
             cancellation: $cancellation,
         );
     }
 
     #[Override]
-    public function openExport(DataScope $scope, TransferRef $transfer, ExportSource $source, ExportManifest $manifest, ExportCursor $cursor, ?CancellationSignal $cancellation = null): ExportSession
+    public function openExport(DataScope $scope, TransferRef $transfer, ExportSource $source, ExportManifest $manifest, ExportCursor $cursor, ?CancellationSignal $cancellation = null, ?TransferLimits $limits = null): ExportSession
     {
         $connection = $this->connection($scope, $transfer);
 
@@ -95,25 +100,44 @@ final readonly class SqlImportExportFactory implements ImportExportFactory
             throw new SessionUnavailable('A coherent export under the current restore epoch is required.');
         }
 
+        $this->schema->assertCurrent($scope, $manifest->schemaHash, $manifest->roster);
         $identity = json_encode([$manifest, $cursor], JSON_THROW_ON_ERROR);
         $hash = hash('sha256', $identity);
-        $token = $this->open($connection, $scope, $transfer, 'export', $hash, $hash, $manifest->schemaHash, json_encode($manifest, JSON_THROW_ON_ERROR), '{}', $identity);
+        $token = $this->open($connection, $scope, $transfer, 'export', $hash, $hash, $manifest->schemaHash, json_encode($manifest, JSON_THROW_ON_ERROR), '{}', $identity, JsonDocuments::map($manifest->roster));
         $cancellation ??= new NeverCancelled;
 
         $runtime = $this->runtime->forTransfer($transfer->id, $identity);
 
         return new ExportSession(
-            runner: new DatabaseExportRunner($connection, $this->storage, $source, $this->limits, new CanonicalExportCodec, $this->authorizer, $cancellation, runtime: $runtime),
+            runner: new DatabaseExportRunner($connection, $this->storage, $source, $this->effectiveLimits($limits), new CanonicalExportCodec, $this->authorizer, $cancellation, runtime: $runtime, references: $this->references, limitCaptureRows: $limits !== null, schema: $this->schema),
             transfer: $transfer,
             token: $token,
-            results: new SqlTransferResultReader($connection, $this->authorizer, $runtime),
+            results: new SqlTransferResultReader($connection, $this->authorizer, $runtime, $this->storage, $this->schema),
             cancellation: $cancellation,
             manifest: $manifest,
             cursor: $cursor,
         );
     }
 
-    private function connection(DataScope $scope, TransferRef $transfer): ConnectionInterface
+    private function effectiveLimits(?TransferLimits $requested): TransferLimits
+    {
+        if ($requested === null) {
+            return $this->limits;
+        }
+
+        return new TransferLimits(
+            maxFileBytes: min($this->limits->maxFileBytes, $requested->maxFileBytes),
+            maxRecordBytes: min($this->limits->maxRecordBytes, $requested->maxRecordBytes),
+            maxFields: min($this->limits->maxFields, $requested->maxFields),
+            maxDepth: min($this->limits->maxDepth, $requested->maxDepth),
+            batchRows: min($this->limits->batchRows, $requested->batchRows),
+            maxErrors: min($this->limits->maxErrors, $requested->maxErrors),
+            maxRuntimeSeconds: min($this->limits->maxRuntimeSeconds, $requested->maxRuntimeSeconds),
+            maxMemoryMiB: min($this->limits->maxMemoryMiB, $requested->maxMemoryMiB),
+        );
+    }
+
+    private function connection(DataScope $scope, TransferRef $transfer): Connection
     {
         $connection = $this->database->connection();
         $this->runtime->assertCurrent($connection, $scope);
@@ -126,15 +150,17 @@ final readonly class SqlImportExportFactory implements ImportExportFactory
         return $connection;
     }
 
-    private function open(ConnectionInterface $connection, DataScope $scope, TransferRef $transfer, string $mode, string $sourceHash, string $mappingHash, string $schemaHash, string $sourceManifest, string $mappingSnapshot, string $requestIdentity): StepToken
+    /** @param array<string, mixed> $stamp */
+    private function open(Connection $connection, DataScope $scope, TransferRef $transfer, string $mode, string $sourceHash, string $mappingHash, string $schemaHash, string $sourceManifest, string $mappingSnapshot, string $requestIdentity, array $stamp): StepToken
     {
         $requestHash = hash('sha256', $requestIdentity);
         $manifest = Value::map(json_decode($sourceManifest, true, 32, JSON_THROW_ON_ERROR));
         $manifest['_scope_hash'] = SessionIdentity::scopeHash($scope);
         $manifest['_request_hash'] = $requestHash;
 
-        return $connection->transaction(function () use ($connection, $scope, $transfer, $mode, $sourceHash, $mappingHash, $schemaHash, $manifest, $mappingSnapshot, $requestHash): StepToken {
+        return $connection->transaction(function () use ($connection, $scope, $transfer, $mode, $sourceHash, $mappingHash, $schemaHash, $manifest, $mappingSnapshot, $requestHash, $stamp): StepToken {
             $this->runtime->assertCurrent($connection, $scope);
+            $this->references?->enlist($scope, $connection, $stamp);
             $connection->table('corex_transfer_jobs')->insertOrIgnore([
                 'id' => $transfer->id,
                 'source_manifest' => json_encode($manifest, JSON_THROW_ON_ERROR),

@@ -21,7 +21,7 @@ final readonly class OperationsSchemaSets implements SchemaSetProvider
         $root = dirname(__DIR__, 2).'/database/migrations';
 
         return [
-            new SchemaSet(package: 'axiomasoft/corex-operations', name: 'tenant', scope: SchemaScope::Tenant, path: $root.'/tenant', version: 2, drivers: ['pgsql', 'sqlite']),
+            new SchemaSet(package: 'axiomasoft/corex-operations', name: 'tenant', scope: SchemaScope::Tenant, path: $root.'/tenant', version: 3, drivers: ['pgsql', 'sqlite']),
             new SchemaSet(package: 'axiomasoft/corex-operations', name: 'budget', scope: SchemaScope::Dedicated, path: $root.'/budget', version: 2, drivers: ['pgsql', 'sqlite'], connection: $this->schema->budget()->getName()),
         ];
     }

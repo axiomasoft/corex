@@ -10,7 +10,7 @@ return (new Configuration)
     ->addPathToScan(__DIR__.'/tests', isDev: true)
     ->addPathToScan(__DIR__.'/database', isDev: true)
     ->addPathToScan(__DIR__.'/src/Messaging/PHPStan', isDev: true)
-    ->addPathToScan(__DIR__.'/src/Attributes/Tooling', isDev: true)
+    ->addPathToScan(__DIR__.'/src/Foundation/Tooling', isDev: true)
     ->addPathToScan(__DIR__.'/src/Errors/Tooling', isDev: true)
     // discovery: src/Messaging/Commands/RelayOutbox.php extension_loaded guard
     ->ignoreErrorsOnExtension('ext-pcntl', [ErrorType::SHADOW_DEPENDENCY])
@@ -18,7 +18,6 @@ return (new Configuration)
     ->ignoreErrorsOnPackage('open-telemetry/api', [ErrorType::DEV_DEPENDENCY_IN_PROD])
     // discovery: composer suggest; guarded optional adapter remains installable without psr/log
     ->ignoreErrorsOnPackage('psr/log', [ErrorType::DEV_DEPENDENCY_IN_PROD])
-    ->addPathToScan(__DIR__.'/src/Modules/PHPStan', isDev: true)
     // discovery: Testbench laravel/framework replaces illuminate/contracts; shipped Illuminate imports/helpers use this component
     ->ignoreErrorsOnPackage('illuminate/contracts', [ErrorType::UNUSED_DEPENDENCY])
     // discovery: Testbench laravel/framework replaces illuminate/database; shipped Illuminate imports/helpers use this component

@@ -9,6 +9,7 @@ use CoreX\Context\Contracts\StoredWorkIssuer;
 use CoreX\Context\Contracts\WorkScopeRunner;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Data\Data\DataScope;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Scheduling\Contracts\WakeupScheduleHint;
 use CoreX\Scheduling\Contracts\WakeupScheduler;
 use CoreX\Scheduling\Data\CancelResult;
@@ -53,6 +54,7 @@ final readonly class SqlWakeupScheduler implements WakeupScheduler
     private function store(Connection $db, TenantContext $context, WakeupRequest $request): ScheduleResult
     {
         $definition = $this->handlers->definition($request->kind);
+        ReferenceWrites::enlist($db, $request->scope, 'axiomasoft/corex-scheduler', 'wakeup', ['handler' => $request->kind, 'version' => $request->handlerVersion]);
         $data = WakeupInput::payload($request->payload);
         $digest = $this->input->digest($request, $data);
         $identity = WakeupInput::identity($db, $request->scope, $request->kind, $request->requestKey);

@@ -23,6 +23,11 @@
                     "nullable": true,
                     "default": null
                 },
+                "published_at": {
+                    "type": "datetime",
+                    "nullable": true,
+                    "default": null
+                },
                 "restore_epoch": {
                     "type": "varchar",
                     "nullable": false,
@@ -55,6 +60,15 @@
                     "kind": "uq",
                     "columns": [
                         "capture_attempt"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "corex_export_manifests_job_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "job_id"
                     ],
                     "predicate": null,
                     "method": "btree"
@@ -1687,6 +1701,11 @@
                     "nullable": false,
                     "default": null
                 },
+                "logical_scope": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "payload_hash": {
                     "type": "varchar",
                     "nullable": false,
@@ -1728,6 +1747,7 @@
                     "name": "corex_transfer_refs_entity_external_system_external_id_uq",
                     "kind": "uq",
                     "columns": [
+                        "logical_scope",
                         "entity",
                         "external_system",
                         "external_id"
@@ -1843,6 +1863,62 @@
             "foreign_keys": [
                 {
                     "name": "corex_transfer_rows_job_id_fk",
+                    "columns": [
+                        "job_id"
+                    ],
+                    "references": "corex_transfer_jobs(id)",
+                    "on_delete": "RESTRICT",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [],
+            "triggers": []
+        },
+        "corex_transfer_steps": {
+            "columns": {
+                "batch_hash": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "digest": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "job_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "receipt": {
+                    "type": "text",
+                    "nullable": true,
+                    "default": null
+                },
+                "step_key": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "sqlite_autoindex_corex_transfer_steps_1",
+                    "kind": "pk",
+                    "columns": [
+                        "job_id",
+                        "step_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "corex_transfer_steps_job_id_fk",
                     "columns": [
                         "job_id"
                     ],
@@ -3695,6 +3771,11 @@
                     "nullable": false,
                     "default": null
                 },
+                "account_incarnation": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "blob_id": {
                     "type": "varchar",
                     "nullable": true,
@@ -3770,6 +3851,11 @@
                     "nullable": false,
                     "default": null
                 },
+                "workspace_scope": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "workspace_scope_key": {
                     "type": "varchar",
                     "nullable": true,
@@ -3781,6 +3867,9 @@
                     "name": "med_files_request_key_uq",
                     "kind": "uq",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
                         "request_key"
                     ],
                     "predicate": null,
@@ -3897,6 +3986,11 @@
                     "nullable": true,
                     "default": null
                 },
+                "released_pins": {
+                    "type": "text",
+                    "nullable": true,
+                    "default": null
+                },
                 "restore_epoch": {
                     "type": "varchar",
                     "nullable": true,
@@ -3976,6 +4070,16 @@
         },
         "med_relations": {
             "columns": {
+                "account_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "created_at": {
                     "type": "datetime",
                     "nullable": true,
@@ -4009,6 +4113,11 @@
                 "updated_at": {
                     "type": "datetime",
                     "nullable": true,
+                    "default": null
+                },
+                "workspace_scope": {
+                    "type": "varchar",
+                    "nullable": false,
                     "default": null
                 }
             },
@@ -4741,6 +4850,11 @@
                     "nullable": false,
                     "default": null
                 },
+                "failure_page_ref": {
+                    "type": "text",
+                    "nullable": true,
+                    "default": null
+                },
                 "finished_at": {
                     "type": "datetime",
                     "nullable": true,
@@ -4766,6 +4880,11 @@
                     "nullable": true,
                     "default": null
                 },
+                "logical_scope": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "major": {
                     "type": "varchar",
                     "nullable": false,
@@ -4781,10 +4900,20 @@
                     "nullable": false,
                     "default": null
                 },
+                "owner_result_ref": {
+                    "type": "text",
+                    "nullable": true,
+                    "default": null
+                },
                 "progress": {
                     "type": "text",
                     "nullable": false,
                     "default": null
+                },
+                "recovery_attempts": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "'0'"
                 },
                 "result_ref": {
                     "type": "text",
@@ -4795,6 +4924,11 @@
                     "type": "integer",
                     "nullable": false,
                     "default": null
+                },
+                "row_limit": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "'500'"
                 },
                 "scope": {
                     "type": "text",
@@ -4816,10 +4950,10 @@
                     "nullable": true,
                     "default": null
                 },
-                "transfer_ref": {
-                    "type": "text",
-                    "nullable": true,
-                    "default": null
+                "time_limit_seconds": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "'20'"
                 }
             },
             "indexes": [
@@ -4836,6 +4970,7 @@
                     "name": "sys_api_bulk_operations_claim_ix",
                     "kind": "ix",
                     "columns": [
+                        "logical_scope",
                         "status",
                         "next_attempt_at",
                         "lease_until"
@@ -4847,6 +4982,8 @@
                     "name": "sys_api_bulk_operations_submission_uq",
                     "kind": "uq",
                     "columns": [
+                        "logical_scope",
+                        "client_id",
                         "major",
                         "operation_id",
                         "submission_id"

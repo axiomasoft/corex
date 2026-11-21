@@ -6,8 +6,13 @@ use CoreX\Context\Contracts\Principal;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Enums\PrincipalType;
+use CoreX\Foundation\Data\ModuleRef;
 use CoreX\Invocation\Contracts\RequestContext;
+use CoreX\Panels\Contracts\SavedViewInventory;
 use CoreX\Panels\Laravel\PanelContexts;
+use CoreX\Tests\Support\LocalWorkContexts;
+use CoreX\Tests\Support\WorkScopeFixture;
+use Illuminate\Support\Facades\DB;
 use Packman\Data\Laravel\JsonDocuments;
 use Packman\Panels\Contracts\Registry\PanelCatalogue;
 use Packman\Panels\Exceptions\SavedViews\SavedViewException;
@@ -92,6 +97,15 @@ it('saves and compiles through the upstream public repository under the host pol
         }
     });
     $context = PanelContexts::savedViewsForUser(panelsUserRequest());
+    $contexts = LocalWorkContexts::install($this->app);
+    $contexts->initialize(new AccountRef('account-a', 'Account A', 'active', [], []));
+    $scope = WorkScopeFixture::install($this->app, principalId: 'user-a')->scope();
+    $inventory = Mockery::mock(SavedViewInventory::class);
+    $inventory->shouldReceive('connection')->once()->withArgs(fn ($current): bool => $current == $scope)->andReturn(DB::connection());
+    // This fixture declares exactly one private note schema on the upstream repository.
+    $inventory->shouldReceive('targets')->once()->withArgs(fn ($current, $actor, $operation, $id, $input): bool => $current == $scope && $actor === $context && $operation === 'save' && $id === null && $input->scope->entityHandle === 'sample.note',
+    )->andReturn([new ModuleRef('axiomasoft/packman-panels')]);
+    $this->app->instance(SavedViewInventory::class, $inventory);
     $repository = resolve(SavedViewRepository::class);
     $view = $repository->save($context, new SaveViewInput(
         id: null,

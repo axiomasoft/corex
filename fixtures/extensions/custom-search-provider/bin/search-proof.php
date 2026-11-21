@@ -227,6 +227,15 @@ final class SearchProofServiceProvider extends ServiceProvider
             'cache.default' => 'array',
         ]);
 
+        if (getenv('COREX_SCENARIO_DB_BUDGET') !== false) {
+            $budget = searchFixtureDatabase('BUDGET');
+            $app['config']->set([
+                'database.connections.search_proof_budget' => [...$database, 'database' => $budget],
+                'corex-operations.schema.tenant' => ['connection' => 'pgsql', 'driver' => 'pgsql', 'database' => $owner],
+                'corex-operations.schema.budget' => ['connection' => 'search_proof_budget', 'driver' => 'pgsql', 'database' => $budget],
+            ]);
+        }
+
         $binding = new SearchProofBinding($owner, $control);
         $app->instance(ControlStoreIsolation::class, $binding);
         $app->scoped(PhysicalBindingVerifier::class, static fn (): SearchProofBinding => $binding);
@@ -243,7 +252,7 @@ final class SearchProofServiceProvider extends ServiceProvider
 function searchFixtureDatabase(string $role): string
 {
     $database = getenv('COREX_SCENARIO_DB_'.$role);
-    verifyFixture(is_string($database) && preg_match('/\Acorex_scenario_[a-f0-9]{16}_(?:a|control)_test\z/', $database) === 1,
+    verifyFixture(is_string($database) && preg_match('/\Acorex_scenario_[a-f0-9]{16}_'.strtolower($role).'_test\z/', $database) === 1,
         'The Search verifier must provide a fresh private database.');
 
     return $database;
@@ -287,6 +296,7 @@ try {
     $control = SearchProofBinding::identity($db->connection('search_proof_control'));
     verifyFixture($owner['database'] === searchFixtureDatabase('A') && $control['database'] === searchFixtureDatabase('CONTROL')
         && $owner['database'] !== $control['database'], 'The Search fixture database isolation is invalid.');
+    $budget = getenv('COREX_SCENARIO_DB_BUDGET') === false ? null : SearchProofBinding::identity($db->connection('search_proof_budget'));
     ScopeControlSchema::install($db->connection('search_proof_control'));
     $app->make(SchemaMigrator::class)->migrate(SchemaScope::Tenant);
     $context = $app->make(TenantContextResolver::class)->current();
@@ -359,6 +369,7 @@ try {
         'count' => $result->count->status->value, 'candidate_calls' => $firstQueryCalls, 'stale_text_rejected' => true,
         'compiled_fields' => ['title'], 'mapping' => $target->mappingDigest, 'assertions' => $GLOBALS['searchProofAssertions'],
         'php' => PHP_VERSION, 'pid' => getmypid(), 'owner' => $owner, 'control' => $control,
+        ...($budget === null ? [] : ['budget' => $budget]),
     ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES), "\n";
 } catch (Throwable $error) {
     fwrite(STDERR, (string) $error."\n");

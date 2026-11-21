@@ -39,6 +39,7 @@ parameters:
         - packages/tenancy/tests
 
     scanDirectories:
+        - fixtures/consumers/equipment-registry/src
         - packages/access/src
         - packages/access/database/seeders
         - products/flex-crm/src

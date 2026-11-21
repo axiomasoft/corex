@@ -4,37 +4,52 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Internal;
 
+use Closure;
 use CoreX\Data\Data\DataScope;
+use CoreX\Operations\Bulk\Contracts\BulkOwner;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use InvalidArgumentException;
 use Packman\Attributes\Internal;
 
-/** @internal Cursor page of safe bulk failure records. Limit 100 is mandatory. */
 #[Internal]
 final readonly class BulkFailureReader
 {
     public const int MAX_LIMIT = 100;
 
-    /**
-     * @param  callable(DataScope, BulkOperation, ?string, int):array{records: list<array{ordinal: string, code: string, path: ?string}>, next: ?string}  $page
-     */
-    public function __construct(private mixed $page) {}
+    /** @param Closure(): ?BulkOwner $owner */
+    public function __construct(private Closure $owner) {}
 
-    /**
-     * @return array{records: list<array{ordinal: string, code: string, path: ?string}>, next: ?string}
-     */
-    public function read(DataScope $scope, BulkOperation $operation, ?string $afterOrdinal, int $limit): array
+    /** @return array{records: list<array{ordinal: string, code: string, path: ?string}>, next: ?string}|null */
+    public function read(DataScope $scope, BulkOperation $operation, ?string $afterOrdinal, int $limit): ?array
     {
-        if ($limit < 1 || $limit > self::MAX_LIMIT) {
-            throw new InvalidArgumentException('Bulk failure page limit must be from 1 to 100.');
+        if ($limit < 1 || $limit > self::MAX_LIMIT || ($afterOrdinal !== null && preg_match('/\A(?:0|[1-9][0-9]{0,18})\z/D', $afterOrdinal) !== 1)) {
+            throw new InvalidArgumentException('Invalid bulk failure page limit or cursor.');
         }
 
-        $page = ($this->page)($scope, $operation, $afterOrdinal, $limit);
+        $owner = ($this->owner)();
 
-        if (count($page['records']) > $limit) {
+        if ($owner === null) {
+            return null;
+        }
+
+        $context = $operation->definition->context($scope);
+
+        if ($operation->failurePageRef === null) {
+            return $operation->ownerResultRef !== null && $owner->result($context, $operation->ownerResultRef) !== null
+                ? ['records' => [], 'next' => null]
+                : null;
+        }
+
+        $page = $owner->failures($context, $operation->failurePageRef, $afterOrdinal, $limit);
+
+        if ($page === null) {
+            return null;
+        }
+
+        if (count($page->records) > $limit) {
             throw new InvalidArgumentException('Bulk failure page exceeded the requested limit.');
         }
 
-        return $page;
+        return ['records' => $page->records, 'next' => $page->next];
     }
 }

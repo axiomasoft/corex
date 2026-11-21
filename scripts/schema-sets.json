@@ -75,7 +75,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/import-export/database/migrations/tenant",
-            "version": 2,
+            "version": 3,
             "drivers": [
                 "pgsql",
                 "sqlite"
@@ -107,7 +107,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/media/database/migrations/tenant",
-            "version": 2,
+            "version": 3,
             "drivers": [
                 "pgsql",
                 "sqlite"
@@ -155,7 +155,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/operations/database/migrations/tenant",
-            "version": 2,
+            "version": 3,
             "drivers": [
                 "pgsql",
                 "sqlite"
@@ -299,7 +299,7 @@
             "name": "tenant",
             "scope": "tenant",
             "path": "packages/core/database/migrations/tenant",
-            "version": 2,
+            "version": 3,
             "drivers": [
                 "pgsql"
             ],

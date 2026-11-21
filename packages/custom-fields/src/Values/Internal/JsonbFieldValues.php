@@ -33,6 +33,7 @@ use CoreX\Data\Data\JsonDocument;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
 use CoreX\Data\Enums\FieldUse;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Messaging\Contracts\Outbox;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\DatabaseManager;
@@ -137,6 +138,7 @@ final readonly class JsonbFieldValues implements FieldValues
     public function update(DataScope $scope, RecordRef $record, FieldPatch $patch, WriteToken $token): FieldWriteReceipt
     {
         return $this->transaction($scope, function (ConnectionInterface $db) use ($scope, $record, $patch, $token): FieldWriteReceipt {
+            ReferenceWrites::enlist($db, $scope, 'axiomasoft/corex-custom-fields', 'field-write', ['entity' => $record->entity, 'patch' => $patch]);
             $selection = new FieldSelection(array_map(static fn ($op): string => $op->field->value, $patch->operations));
 
             if (! $this->permits($scope, $record, $selection, FieldUse::Write)) {

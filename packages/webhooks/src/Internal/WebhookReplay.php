@@ -12,6 +12,7 @@ use CoreX\Context\Contracts\StoredWorkIssuer;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Invocation\Contracts\OperationHandler;
 use CoreX\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Definition\Data\Operation;
@@ -62,6 +63,7 @@ final readonly class WebhookReplay
         $this->assertScope($scope);
 
         return $this->connection->transaction(function () use ($scope, $deliveryId, $explicit, $auditReason): array {
+            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-webhooks', 'replay', ['delivery' => $deliveryId]);
             $this->assertScope($scope);
             $row = $this->scopedDeliveries($scope)->where('id', $deliveryId)->lockForUpdate()->first();
 

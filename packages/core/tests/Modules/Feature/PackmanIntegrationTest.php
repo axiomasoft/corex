@@ -35,17 +35,13 @@ it('registers one upstream control-plane schema and the independent CoreX schema
         ->and(glob($modules->path.'/*create_mod_*.php'))->toHaveCount(3);
 });
 
-it('discovers and compiles corex-module packages via extra.corex.module while preserving host overrides', function (): void {
+it('preserves native discovery, ignores the removed CoreX dialect and respects host overrides', function (): void {
     expect(config('modules.package_types'))->toBe([
-        'corex-module',
-        'corex-plugin',
         'packman-module',
         'packman-plugin',
         'module',
         'plugin',
     ])->and(config('modules.extra_keys'))->toBe([
-        ['corex', 'module'],
-        ['corex', 'plugin'],
         ['packman', 'module'],
         ['packman', 'plugin'],
         ['module'],
@@ -90,11 +86,11 @@ it('discovers and compiles corex-module packages via extra.corex.module while pr
 
         $manifests = resolve(ModuleDiscovery::class)->discover();
         expect(array_map(static fn ($manifest): string => $manifest->composerName, $manifests))
-            ->toEqualCanonicalizing(['corex/stub-module', 'corex/stub-base']);
+            ->toBe(['corex/stub-base']);
 
         $this->artisan('modules:compile')->assertExitCode(0);
         expect(is_file($sandbox.'/bootstrap/cache/modules.php'))->toBeTrue()
-            ->and(resolve(ModuleRegistry::class)->get('corex/stub-module')->composerName)->toBe('corex/stub-module');
+            ->and(resolve(ModuleRegistry::class)->get('corex/stub-base')->composerName)->toBe('corex/stub-base');
 
         config([
             'modules.package_types' => ['host-custom-module'],

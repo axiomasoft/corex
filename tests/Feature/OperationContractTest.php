@@ -36,6 +36,7 @@ use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Data\ToolResult;
 use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\ToolsServiceProvider;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Schema;
 use Packman\Modules\Contracts\Compiler\ModuleCompilation;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
@@ -131,6 +132,20 @@ final class OperationContractTest extends TestCase
 
     public function test_real_routes_and_exposed_tool_share_compiled_contract_and_guards(): void
     {
+        // Install the same declaring module that owns the HTTP and tool operation.
+        $files = new Filesystem;
+        $base = $this->app->basePath();
+        $fixture = sys_get_temp_dir().'/corex-contract-notes-'.bin2hex(random_bytes(12));
+        $files->makeDirectory($fixture.'/vendor/composer', 0700, true);
+        $this->beforeApplicationDestroyed(function () use ($base, $files, $fixture): void {
+            $this->app->setBasePath($base);
+            $files->deleteDirectory($fixture);
+        });
+        $catalogue = json_decode($files->get(dirname(__DIR__, 2).'/vendor/composer/installed.json'), true, flags: JSON_THROW_ON_ERROR);
+        [$declaringModule] = $this->modules->compiled()->modules;
+        $catalogue['packages'][] = ['name' => $declaringModule['name'], 'version' => $declaringModule['version'], 'type' => 'packman-module'];
+        $files->put($fixture.'/vendor/composer/installed.json', json_encode($catalogue, JSON_THROW_ON_ERROR));
+        $this->app->setBasePath($fixture);
         $operationRoutes = 0;
 
         foreach ($this->app['router']->getRoutes() as $route) {

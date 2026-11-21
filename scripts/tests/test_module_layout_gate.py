@@ -15,7 +15,7 @@ SPEC = importlib.util.spec_from_file_location('module_layout_gate', SCRIPT)
 assert SPEC and SPEC.loader
 GATE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(GATE)
-CONFIG = {'kernel_modules': ['Audit', 'Data', 'Attributes'], 'layer_buckets': ['Support', 'Models']}
+CONFIG = {'kernel_modules': ['Audit', 'Data', 'Foundation'], 'layer_buckets': ['Support', 'Models']}
 VALID = {
     'core/src/CoreServiceProvider.php': 'namespace CoreX; final class CoreServiceProvider {}',
     'core/src/Audit/Contracts/AuditLogger.php': 'namespace CoreX\\Audit\\Contracts; interface AuditLogger {}',
@@ -59,19 +59,17 @@ def rules(tmp: Path) -> list[str]:
 
 
 class ModuleLayoutGateTest(unittest.TestCase):
-    def test_attribute_exception_is_exact(self) -> None:
-        valid = {f'core/src/Attributes/{name}.php': f'namespace CoreX\\Attributes; final class {name} {{}}'
-                 for name in ('Api', 'Spi', 'SpiKind')}
+    def test_foundation_tooling_is_valid_and_old_attribute_root_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            self.assertEqual([], rules(build(Path(tmp), valid)))
-        for extra in (
-            {'core/src/Attributes/Fourth.php': 'namespace CoreX\\Attributes; final class Fourth {}'},
-            {'core/src/Attributes/Api.php': 'namespace CoreX\\Attributes; final class Other {}'},
-            {'search/src/Attributes/Api.php': 'namespace CoreX\\Search\\Attributes; final class Api {}'},
-            {'core/src/Attributes/Api.php': 'namespace CoreX\\Attributes; final class Api {}\nfinal class Extra {}'},
-        ):
-            with self.subTest(extra=extra), tempfile.TemporaryDirectory() as tmp:
-                self.assertIn('R3', rules(build(Path(tmp), {**valid, **extra})))
+            root = build(Path(tmp), {
+                'core/src/Foundation/Tooling/Helper.php': r'namespace CoreX\Foundation\Tooling; final class Helper {}',
+            })
+            self.assertEqual([], rules(root))
+        with tempfile.TemporaryDirectory() as tmp:
+            root = build(Path(tmp), {
+                'core/src/Attributes/Api.php': 'namespace CoreX' + r'\Attributes; final class Api {}',
+            })
+            self.assertIn('R1', rules(root))
 
     def test_valid_tree_is_clean(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -147,9 +145,9 @@ final class Uses {
     def test_r6_forbids_runtime_references_to_every_dev_bridge(self) -> None:
         for bridge in ('Tooling', 'PHPStan', 'Testing'):
             for body in (
-                f'namespace CoreX\\Search\\Internal; use CoreX\\Attributes\\{bridge}\\Helper; final class Uses {{}}',
-                f'namespace CoreX\\Search\\Internal; final class Uses {{ public \\CoreX\\Attributes\\{bridge}\\Helper $helper; }}',
-                f'namespace CoreX\\Search\\Internal; use CoreX\\Attributes as A; final class Uses extends A\\{bridge}\\Helper {{}}',
+                f'namespace CoreX\\Search\\Internal; use CoreX\\Foundation\\{bridge}\\Helper; final class Uses {{}}',
+                f'namespace CoreX\\Search\\Internal; final class Uses {{ public \\CoreX\\Foundation\\{bridge}\\Helper $helper; }}',
+                f'namespace CoreX\\Search\\Internal; use CoreX\\Foundation as A; final class Uses extends A\\{bridge}\\Helper {{}}',
                 f'namespace CoreX\\Search\\Internal; final class Uses {{ public {bridge}\\Helper $helper; }}',
             ):
                 with self.subTest(body=body), tempfile.TemporaryDirectory() as tmp:
@@ -159,7 +157,7 @@ final class Uses {
         for bridge in ('Tooling', 'PHPStan', 'Testing'):
             with self.subTest(bridge=bridge), tempfile.TemporaryDirectory() as tmp:
                 root = build(Path(tmp), {f'search/src/{bridge}/Uses.php':
-                    f'namespace CoreX\\Search\\{bridge}; use CoreX\\Attributes\\Tooling\\Helper; final class Uses {{}}'})
+                    f'namespace CoreX\\Search\\{bridge}; use CoreX\\Foundation\\Tooling\\Helper; final class Uses {{}}'})
                 self.assertEqual([], rules(root))
 
     def test_baseline_rejects_new_and_stale_entries(self) -> None:

@@ -5,9 +5,19 @@ declare(strict_types=1);
 namespace CoreX\ImportExport\Internal;
 
 use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\ProviderEffectLedger;
+use CoreX\Context\Contracts\ScopeAdmission;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Foundation\Contracts\ModuleReferences;
+use CoreX\Foundation\Contracts\ReferenceAdmission;
+use CoreX\ImportExport\Contracts\ExportPublications;
+use CoreX\ImportExport\Contracts\ExportSchemaWitness;
 use CoreX\ImportExport\Contracts\ImportExportFactory;
+use CoreX\ImportExport\Contracts\TransferResultReader;
 use CoreX\ImportExport\Data\TransferLimits;
+use CoreX\ImportExport\Internal\Export\CurrentExportSchema;
+use CoreX\ImportExport\Internal\Export\SqlExportPublications;
+use CoreX\ImportExport\Internal\Transfer\SqlTransferResultReader;
 use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
@@ -20,6 +30,32 @@ final class ImportExportBindings
 {
     public static function register(Application $app): void
     {
+        $app->scoped(TransferModuleReferences::class, static fn (Application $app): TransferModuleReferences => new TransferModuleReferences(
+            $app->make(DatabaseManager::class), $app->make(CurrentWorkScope::class),
+        ));
+        $app->tag([TransferModuleReferences::class], ModuleReferences::class);
+        $app->scoped(TransferReferences::class, static fn (Application $app): TransferReferences => new TransferReferences(
+            $app->make(ReferenceAdmission::class), $app->make(ProviderEffectLedger::class), $app->make(ScopeAdmission::class), $app->make(ClockInterface::class),
+        ));
+        $app->scoped(CurrentExportSchema::class, static fn (Application $app): CurrentExportSchema => new CurrentExportSchema(
+            static fn (): ?ExportSchemaWitness => $app->bound(ExportSchemaWitness::class) ? $app->make(ExportSchemaWitness::class) : null,
+        ));
+        $app->scoped(TransferResultReader::class, static fn (Application $app): TransferResultReader => new SqlTransferResultReader(
+            $app->make(DatabaseManager::class)->connection(),
+            $app->make(DataScopeAuthorizer::class),
+            new SessionRuntime($app->make(CurrentWorkScope::class)),
+            $app->make(TenantStorage::class),
+            $app->make(CurrentExportSchema::class),
+        ));
+        $app->scoped(ExportPublications::class, static fn (Application $app): ExportPublications => new SqlExportPublications(
+            $app->make(DatabaseManager::class)->connection(),
+            $app->make(TenantStorage::class),
+            $app->make(DataScopeAuthorizer::class),
+            new SessionRuntime($app->make(CurrentWorkScope::class)),
+            $app->make(TransferReferences::class),
+            $app->make(ClockInterface::class),
+            $app->make(CurrentExportSchema::class),
+        ));
         $app->scoped(ImportExportFactory::class, static function (Application $app): SqlImportExportFactory {
             $options = $app->make(ImportExportOptions::class);
 
@@ -29,6 +65,8 @@ final class ImportExportBindings
                 authorizer: $app->make(DataScopeAuthorizer::class),
                 clock: $app->make(ClockInterface::class),
                 storage: $app->make(TenantStorage::class),
+                references: $app->make(TransferReferences::class),
+                schema: $app->make(CurrentExportSchema::class),
                 limits: new TransferLimits(maxRecordBytes: $options->limitsMaxRecordBytes, maxFields: $options->limitsMaxFields, batchRows: $options->limitsBatchRows, maxMemoryMiB: $options->limitsMaxMemoryMiB),
             );
         });

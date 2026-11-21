@@ -23,6 +23,8 @@ if (count($argv) > 1 && ($fixture === null || ! is_file($fixture) || ! str_ends_
  * @var array<string, string>
  */
 $classification = [
+    // Projects the installed owner roster used by lifecycle reference probes.
+    'CoreX\\Foundation\\Internal\\LifecycleCatalogue' => 'projection',
     'CoreX\\Tenancy\\Runtime\\Internal\\TenantRuntimeManager' => 'runtime manager',
     'CoreX\\Operations\\Definition\\Contracts\\OperationRegistry' => 'projection',
     'CoreX\\Operations\\Pagination\\Contracts\\OrderingRegistry' => 'projection',

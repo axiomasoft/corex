@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Attributes\Tooling;
+namespace CoreX\Foundation\Tooling;
 
 use Packman\DevTools\Generators\Contracts\ApiManifestGenerator;
 use RuntimeException;

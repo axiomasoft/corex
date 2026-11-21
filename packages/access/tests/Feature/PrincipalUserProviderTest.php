@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Identity\Laravel\PrincipalUserProvider;
 use CoreX\Access\Laravel\AuthOptions;
+use CoreX\Access\Laravel\PrincipalIdentity;
 use CoreX\Context\Contracts\IdentityPasswordRehasher;
 use CoreX\Context\Enums\PrincipalType;
 use Illuminate\Database\Schema\Blueprint;

@@ -472,6 +472,96 @@
             "enum_cases": [],
             "spi_kind": "call"
         },
+        "CoreX\\Search\\Index\\Contracts\\IndexNamespaceExclusion": {
+            "kind": "interface",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [
+                "CoreX\\Foundation\\Contracts\\ModuleReferences",
+                "CoreX\\Foundation\\Contracts\\ReferenceExclusion"
+            ],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "verifyTarget": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "target",
+                            "type": "CoreX\\Search\\Index\\Data\\IndexTarget",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "lease",
+                            "type": "CoreX\\Foundation\\Data\\OwnerLease",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "void",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "implement"
+        },
+        "CoreX\\Search\\Index\\Contracts\\IndexRemovalEvidence": {
+            "kind": "interface",
+            "layer": "spi",
+            "since": "2.0.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "absent": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "target",
+                            "type": "CoreX\\Search\\Index\\Data\\IndexTarget",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "bool",
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": [],
+            "spi_kind": "implement"
+        },
         "CoreX\\Search\\Index\\Contracts\\IndexWorker": {
             "kind": "interface",
             "layer": "spi",

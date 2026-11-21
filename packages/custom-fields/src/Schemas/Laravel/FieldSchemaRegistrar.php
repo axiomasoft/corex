@@ -22,12 +22,14 @@ use CoreX\CustomFields\Schemas\Internal\DatabaseFieldSchemas;
 use CoreX\CustomFields\Schemas\Internal\DatabaseSchemaHeads;
 use CoreX\CustomFields\Schemas\Internal\DeclaredSchema;
 use CoreX\CustomFields\Schemas\Internal\DirectDdlRoute;
+use CoreX\CustomFields\Schemas\Internal\FieldModuleReferences;
 use CoreX\CustomFields\Schemas\Internal\SchemaJournal;
 use CoreX\CustomFields\Schemas\Internal\SchemaReferences;
 use CoreX\CustomFields\Schemas\Internal\SchemaSteps;
 use CoreX\CustomFields\Schemas\Internal\SchemaWorker;
 use CoreX\CustomFields\Types\Contracts\FieldTypes;
 use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Foundation\Contracts\ModuleReferences;
 use Illuminate\Console\Events\ArtisanStarting;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -45,6 +47,9 @@ final class FieldSchemaRegistrar implements PackageRegistrar
 {
     public function register(Application $app): void
     {
+        $app->scoped(FieldModuleReferences::class);
+        $app->tag(FieldModuleReferences::class, ModuleReferences::class);
+
         $app->scoped(DeclaredSchema::class, static fn (Application $app): DeclaredSchema => new DeclaredSchema($app->make(FieldTypes::class),
             static fn (): iterable => self::tagged($app, DeclaredFields::class),
             $app->bound(EntityRegistry::class) ? $app->make(EntityRegistry::class) : null, $app->bound(ModuleRegistry::class) ? $app->make(ModuleRegistry::class) : null));

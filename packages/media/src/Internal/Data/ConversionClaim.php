@@ -21,6 +21,8 @@ final readonly class ConversionClaim
         public string $sourceBlobId,
         public string $accountId,
         public string $sourceMimeType,
+        public string $sourceHash,
+        public int $sourceSize,
         public string $profileKey,
         public string $profileDigest,
     ) {}

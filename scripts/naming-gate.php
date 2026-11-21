@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tooling\Naming;
 
-use CoreX\Attributes\Tooling\SurfaceScanner;
+use CoreX\Foundation\Tooling\SurfaceScanner;
 use FilesystemIterator;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;

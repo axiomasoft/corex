@@ -6,6 +6,7 @@ namespace CoreX\RecurringTasks\Internal;
 
 use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Foundation\Contracts\ModuleReferences;
 use CoreX\Recurrence\Contracts\RecurrenceExpander;
 use CoreX\Recurrence\Laravel\RecurrenceFactory;
 use CoreX\RecurringTasks\Contracts\TaskRecurrenceCommand;
@@ -30,6 +31,9 @@ final class MaterializationBindings
 
     public static function register(Application $app, bool $wakeupEnabled): void
     {
+        $app->scoped(SeriesModuleReferences::class);
+        $app->tag(SeriesModuleReferences::class, ModuleReferences::class);
+
         $app->scoped(MaterializationWakeupHandler::class);
 
         if ($wakeupEnabled) {

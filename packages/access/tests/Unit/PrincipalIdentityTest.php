@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Access\Access\Laravel\PrincipalIdentity;
+use CoreX\Access\Laravel\PrincipalIdentity;
 use CoreX\Context\Contracts\Principal;
 use CoreX\Context\Enums\PrincipalType;
 

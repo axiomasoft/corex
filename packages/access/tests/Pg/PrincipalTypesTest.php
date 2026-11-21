@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use CoreX\Access\Access\Internal\MatrixPermissions;
-use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Enums\Scope;
+use CoreX\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
 use CoreX\Access\Roles\Internal\Models\Role;
 use CoreX\Access\Roles\Internal\Models\RoleAssignment;

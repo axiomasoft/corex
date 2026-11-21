@@ -22,6 +22,7 @@ use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\EntityHandle;
 use CoreX\Data\Enums\FieldUse;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Str;
 use Packman\Attributes\Internal;
@@ -42,6 +43,7 @@ final readonly class DatabaseFieldSchemas implements FieldSchemas
             return $db->transaction(function () use ($db, $scope, $change, $expected): SchemaPlan {
                 $this->current->assert($scope, $db);
                 $this->access->manage($scope, $change->entity);
+                ReferenceWrites::enlist($db, $scope, 'axiomasoft/corex-custom-fields', 'schema-plan', ['entity' => $change->entity->value, 'change' => $change]);
                 $head = $this->heads->row($db, $scope, $change->entity, allowManifestChange: true);
 
                 if ($head->effective_revision !== $expected->value) {
@@ -87,6 +89,7 @@ final readonly class DatabaseFieldSchemas implements FieldSchemas
                 $head = $this->heads->row($db, $scope, $entity, true, true);
                 $row = (clone $query)->lockForUpdate()->first() ?? throw new SchemaConflict('unknown-plan');
                 $body = SchemaRows::decode($row->plan);
+                ReferenceWrites::enlist($db, $scope, 'axiomasoft/corex-custom-fields', 'schema-apply', ['entity' => $entity->value, 'plan' => $body]);
 
                 if ($row->plan_digest !== $expected->value || $expected->value !== SchemaRows::digest(['fields.plan.v2', SchemaRows::logical($scope), SchemaRows::fence($scope), $body])
                     || ($key->deadline !== null && $key->deadline <= $this->clock->now())) {

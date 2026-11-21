@@ -18,6 +18,8 @@ enum CoreErrorCode: string implements ErrorCode
     case InternalError = 'core.internal_error';
     case InvalidMessage = 'core.invalid_message';
     case InvalidScopePayload = 'core.invalid_scope_payload';
+    case LifecycleBlocked = 'core.lifecycle_blocked';
+    case LifecyclePlanConflict = 'core.lifecycle_plan_conflict';
     case OutboxLeaseLost = 'core.outbox_lease_lost';
     case OutboxRefused = 'core.outbox_refused';
     case ScopeAuthorityUnavailable = 'core.scope_authority_unavailable';

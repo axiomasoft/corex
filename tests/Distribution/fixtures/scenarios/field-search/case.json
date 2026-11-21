@@ -12,7 +12,8 @@
         "database": "postgres-isolated",
         "database_roles": [
           "control",
-          "a"
+          "a",
+          "budget"
         ],
         "default_database": "a",
         "http": true,
@@ -62,7 +63,8 @@
         "database": "postgres-isolated",
         "database_roles": [
           "control",
-          "a"
+          "a",
+          "budget"
         ],
         "default_database": "a",
         "http": true,
@@ -108,7 +110,8 @@
         "database": "postgres-isolated",
         "database_roles": [
           "control",
-          "a"
+          "a",
+          "budget"
         ],
         "default_database": "a",
         "http": true,

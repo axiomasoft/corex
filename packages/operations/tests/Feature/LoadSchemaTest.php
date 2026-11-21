@@ -266,7 +266,7 @@ final class LoadSchemaTest extends TestCase
 
         return [
             'id' => $id, 'major' => 'v1', 'operation_id' => 'orders.import', 'submission_id' => 'submission-1',
-            'scope' => '{}', 'actor_id' => 'actor-1', 'client_id' => 'client-1', 'contract_hash' => str_repeat('c', 64),
+            'logical_scope' => str_repeat('a', 64), 'scope' => '{}', 'actor_id' => 'actor-1', 'client_id' => 'client-1', 'contract_hash' => str_repeat('c', 64),
             'extension_stamp' => '{}', 'input_ref' => '{}', 'status' => $status, 'revision' => 0,
             'checkpoint' => '{}', 'progress' => '{}', 'attempt' => 0, 'next_attempt_at' => $now, 'created_at' => $now,
         ];

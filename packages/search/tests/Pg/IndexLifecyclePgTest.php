@@ -29,6 +29,8 @@ use CoreX\Data\Data\FieldUsePlan;
 use CoreX\Data\Data\FieldUseRequest;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Enums\FieldUse;
+use CoreX\Foundation\Data\ModuleRef;
+use CoreX\Foundation\Exceptions\LifecycleBlocked;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Data\ConsumerId;
@@ -107,7 +109,7 @@ beforeEach(function (): void {
     if (! str_ends_with($controlName, '_test') || ! str_ends_with($ownerName, '_test') || $controlName === $ownerName) {
         throw new LogicException('Search requires separate disposable owner and control databases.');
     }
-    config(['database.connections.index_control' => [...$owner->getConfig(), 'database' => $controlName], 'corex-search.driver' => 'test',
+    config(['database.connections.index_control' => [...$owner->getConfig(), 'name' => 'index_control', 'database' => $controlName], 'corex-search.driver' => 'test',
         'corex-search.cluster' => 'primary']);
     expect($owner->selectOne('select current_database() as db')->db)->toBe($ownerName);
     $control = DB::connection('index_control');
@@ -297,6 +299,56 @@ beforeEach(function (): void {
     $this->worker = app()->make(IndexWorker::class);
     $this->publisher = app()->make(RebuildWorker::class);
     $this->active = app()->make(ActiveGenerations::class);
+});
+
+it('holds generation allocation through the caller commit and refuses a previously planned start after Search closes', function (): void {
+    $owner = DB::connection();
+    config(['database.connections.search_observer' => [...$owner->getConfig(), 'name' => 'search_observer']]);
+    $observer = DB::connection('search_observer');
+    expect($observer->getPdo())->not->toBe($owner->getPdo());
+    $control = app(DatabaseScopeControl::class);
+    $search = new ModuleRef('axiomasoft/corex-search');
+    $plan = $this->runs->plan($this->scope, new RebuildInput($this->entity));
+    $later = $this->runs->plan($this->scope, new RebuildInput($this->entity));
+    $key = new OperationKey((string) Str::uuid7(), 1);
+    $fence = (string) Str::uuid7();
+    $owner->beginTransaction();
+
+    try {
+        $started = $this->runs->start($this->scope, $plan->ref, $key);
+        $uid = $owner->table('corex_search_generations')->sole()->uid;
+        expect($uid)->toBeString()
+            ->and($observer->table('corex_search_generations')->count())->toBe(0)
+            ->and($control->outstandingReferences($this->scope, $search))->toHaveCount(1);
+        $control->fenceModule($this->scope, $search, $fence, null);
+        expect($control->outstandingReferences($this->scope, $search))->toHaveCount(1);
+        $owner->commit();
+    } finally {
+        if ($owner->transactionLevel() > 0) {
+            $owner->rollBack();
+        }
+    }
+    expect($observer->table('corex_search_generations')->sole()->uid)->toBe($uid)
+        ->and($control->outstandingReferences($this->scope, $search))->toBe([])
+        ->and($this->runs->start($this->scope, $plan->ref, $key))->toEqual($started);
+    $this->runs->cancel($this->scope, $started);
+    expect(fn () => $this->runs->plan($this->scope, new RebuildInput($this->entity)))->toThrow(LifecycleBlocked::class);
+    $owner->beginTransaction();
+
+    try {
+        $this->runs->start($this->scope, $later->ref, new OperationKey((string) Str::uuid7(), 1));
+        $this->fail('A previously planned allocation was accepted under the Search fence.');
+    } catch (LifecycleBlocked $blocked) {
+        expect($blocked->getMessage())->toBe('Module reference admission is closed.');
+    } finally {
+        $owner->rollBack();
+    }
+    expect($control->moduleClosure($this->scope, $search))->toBe($fence)
+        ->and($observer->table('corex_search_generations')->count())->toBe(1)
+        ->and($observer->table('corex_search_rebuilds')->where('rebuild_id', $later->ref->id)->value('state'))->toBe('planned');
+    $control->reopenModule($this->scope, $search, $fence);
+    $this->runs->start($this->scope, $later->ref, new OperationKey((string) Str::uuid7(), 1));
+    expect($observer->table('corex_search_generations')->count())->toBe(2);
 });
 
 function indexRebuild(): RebuildRef

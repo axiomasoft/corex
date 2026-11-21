@@ -425,6 +425,11 @@
                     "nullable": true,
                     "default": null
                 },
+                "published_at": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
                 "restore_epoch": {
                     "type": "character(64)",
                     "nullable": false,
@@ -457,6 +462,16 @@
                     "kind": "uq",
                     "columns": [
                         "capture_attempt"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "corex_export_manifests_job_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "job_id"
                     ],
                     "predicate": null,
                     "method": "btree",
@@ -2292,6 +2307,11 @@
                     "nullable": false,
                     "default": null
                 },
+                "logical_scope": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
                 "payload_hash": {
                     "type": "character(64)",
                     "nullable": false,
@@ -2333,6 +2353,7 @@
                     "name": "corex_transfer_refs_entity_external_system_external_id_uq",
                     "kind": "uq",
                     "columns": [
+                        "logical_scope",
                         "entity",
                         "external_system",
                         "external_id"
@@ -2452,6 +2473,63 @@
             "foreign_keys": [
                 {
                     "name": "corex_transfer_rows_job_id_fk",
+                    "columns": [
+                        "job_id"
+                    ],
+                    "references": "corex_transfer_jobs(id)",
+                    "on_delete": "RESTRICT",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [],
+            "triggers": []
+        },
+        "corex_transfer_steps": {
+            "columns": {
+                "batch_hash": {
+                    "type": "character(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "digest": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "job_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "receipt": {
+                    "type": "jsonb",
+                    "nullable": true,
+                    "default": null
+                },
+                "step_key": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "corex_transfer_steps_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "job_id",
+                        "step_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "corex_transfer_steps_job_fk",
                     "columns": [
                         "job_id"
                     ],
@@ -4483,6 +4561,11 @@
                     "nullable": false,
                     "default": null
                 },
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
                 "blob_id": {
                     "type": "character varying(128)",
                     "nullable": true,
@@ -4558,6 +4641,11 @@
                     "nullable": false,
                     "default": null
                 },
+                "workspace_scope": {
+                    "type": "character varying(138)",
+                    "nullable": false,
+                    "default": null
+                },
                 "workspace_scope_key": {
                     "type": "character varying(128)",
                     "nullable": true,
@@ -4579,6 +4667,9 @@
                     "name": "med_files_request_key_uq",
                     "kind": "uq",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
                         "request_key"
                     ],
                     "predicate": null,
@@ -4687,6 +4778,11 @@
                     "nullable": true,
                     "default": null
                 },
+                "released_pins": {
+                    "type": "json",
+                    "nullable": true,
+                    "default": null
+                },
                 "restore_epoch": {
                     "type": "character(64)",
                     "nullable": true,
@@ -4769,6 +4865,16 @@
         },
         "med_relations": {
             "columns": {
+                "account_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
                 "created_at": {
                     "type": "timestamp(0) without time zone",
                     "nullable": true,
@@ -4802,6 +4908,11 @@
                 "updated_at": {
                     "type": "timestamp(0) without time zone",
                     "nullable": true,
+                    "default": null
+                },
+                "workspace_scope": {
+                    "type": "character varying(138)",
+                    "nullable": false,
                     "default": null
                 }
             },
@@ -5906,6 +6017,11 @@
                     "nullable": false,
                     "default": null
                 },
+                "failure_page_ref": {
+                    "type": "json",
+                    "nullable": true,
+                    "default": null
+                },
                 "finished_at": {
                     "type": "timestamp(6) with time zone",
                     "nullable": true,
@@ -5931,6 +6047,11 @@
                     "nullable": true,
                     "default": null
                 },
+                "logical_scope": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
                 "major": {
                     "type": "character varying(32)",
                     "nullable": false,
@@ -5946,10 +6067,20 @@
                     "nullable": false,
                     "default": null
                 },
+                "owner_result_ref": {
+                    "type": "json",
+                    "nullable": true,
+                    "default": null
+                },
                 "progress": {
                     "type": "json",
                     "nullable": false,
                     "default": null
+                },
+                "recovery_attempts": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'0'::bigint"
                 },
                 "result_ref": {
                     "type": "json",
@@ -5960,6 +6091,11 @@
                     "type": "bigint",
                     "nullable": false,
                     "default": null
+                },
+                "row_limit": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'500'::bigint"
                 },
                 "scope": {
                     "type": "json",
@@ -5981,10 +6117,10 @@
                     "nullable": true,
                     "default": null
                 },
-                "transfer_ref": {
-                    "type": "json",
-                    "nullable": true,
-                    "default": null
+                "time_limit_seconds": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'20'::bigint"
                 }
             },
             "indexes": [
@@ -5992,6 +6128,7 @@
                     "name": "sys_api_bulk_operations_claim_ix",
                     "kind": "ix",
                     "columns": [
+                        "logical_scope",
                         "status",
                         "next_attempt_at",
                         "lease_until"
@@ -6014,6 +6151,8 @@
                     "name": "sys_api_bulk_operations_submission_uq",
                     "kind": "uq",
                     "columns": [
+                        "logical_scope",
+                        "client_id",
                         "major",
                         "operation_id",
                         "submission_id"
@@ -7903,6 +8042,158 @@
                     "kind": "ix",
                     "columns": [
                         "processed_at"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
+        "sys_lifecycle_plans": {
+            "columns": {
+                "account_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "action": {
+                    "type": "character varying(24)",
+                    "nullable": false,
+                    "default": null
+                },
+                "actions": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "arguments": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "blockers": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "cleanup_started": {
+                    "type": "boolean",
+                    "nullable": false,
+                    "default": "false"
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "cursor": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "digest": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "inventory": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "leases": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "module": {
+                    "type": "character varying(255)",
+                    "nullable": false,
+                    "default": null
+                },
+                "plan_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "receipts": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "request_key": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "state": {
+                    "type": "character varying(32)",
+                    "nullable": false,
+                    "default": null
+                },
+                "transition_result": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "workspace_scope": {
+                    "type": "character varying(138)",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "sys_lifecycle_plans_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "plan_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "sys_lifecycle_plans_scope_request_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "module",
+                        "request_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "sys_lifecycle_plans_scope_state_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
+                        "module",
+                        "state"
                     ],
                     "predicate": null,
                     "method": "btree",

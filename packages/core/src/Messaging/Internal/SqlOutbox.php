@@ -7,6 +7,7 @@ namespace CoreX\Messaging\Internal;
 use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Context\Contracts\StoredWorkIssuer;
 use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Contracts\Outbox;
 use CoreX\Messaging\Contracts\TraceContextBridge;
@@ -50,6 +51,7 @@ final readonly class SqlOutbox implements Outbox
         }
 
         $contract->validateFact($message);
+        ReferenceWrites::enlist($connection, $message->scope, 'axiomasoft/corex', 'outbox', ['package' => $contract->owner, 'subject' => $message->subjectData(), 'contract' => $contract->id()]);
         $key = [...MessageReceiptIdentity::logical($message->scope), 'source' => $message->source, 'message_id' => $message->messageId];
         $digest = $message->digest();
         $proof = $this->issuer->issue($message->scope, MessageEnvelope::PROOF_OWNER, $digest);

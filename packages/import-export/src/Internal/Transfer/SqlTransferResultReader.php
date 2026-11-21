@@ -11,11 +11,16 @@ use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Enums\FieldUse;
 use CoreX\ImportExport\Contracts\TransferResultReader;
 use CoreX\ImportExport\Data\TransferRef;
+use CoreX\ImportExport\Data\Validation;
+use CoreX\ImportExport\Exceptions\ExportUnavailable;
 use CoreX\ImportExport\Exceptions\ImportUnavailable;
+use CoreX\ImportExport\Internal\Export\CurrentExportSchema;
+use CoreX\ImportExport\Internal\Export\SealedExportParts;
 use CoreX\ImportExport\Internal\SessionIdentity;
 use CoreX\ImportExport\Internal\SessionRuntime;
 use CoreX\ImportExport\Internal\Value;
-use Illuminate\Database\ConnectionInterface;
+use CoreX\Storage\Contracts\TenantStorage;
+use Illuminate\Database\Connection;
 use Override;
 use Packman\Attributes\Internal;
 
@@ -23,23 +28,35 @@ use Packman\Attributes\Internal;
 final readonly class SqlTransferResultReader implements TransferResultReader
 {
     public function __construct(
-        private ConnectionInterface $connection,
+        private Connection $connection,
         private DataScopeAuthorizer $authorizer,
         private ?SessionRuntime $runtime = null,
+        private ?TenantStorage $storage = null,
+        private ?CurrentExportSchema $schema = null,
     ) {}
 
     #[Override]
     public function failures(DataScope $scope, TransferRef $ref, ?string $afterOrdinal, int $limit): array
     {
-        $this->authorize(scope: $scope, ref: $ref);
+        $job = $this->authorize(scope: $scope, ref: $ref);
 
         if ($limit < 1 || $limit > 100) {
             throw new ImportUnavailable('Transfer failure page limit is outside 1..100.');
         }
 
+        if ($afterOrdinal !== null) {
+            Validation::unsignedInteger($afterOrdinal, 'transfer failure cursor');
+        }
+
+        if (Value::field($job, 'mode') === 'export') {
+            $this->publishedExport($scope, $ref);
+
+            return ['records' => [], 'next' => null];
+        }
+
         $query = $this->connection->table('corex_transfer_rows')
             ->where('job_id', $ref->id)
-            ->whereNotNull('error')
+            ->whereIn('result', ['invalid', 'conflict', 'unsupported'])
             ->orderBy('ordinal');
 
         if ($afterOrdinal !== null) {
@@ -51,12 +68,14 @@ final readonly class SqlTransferResultReader implements TransferResultReader
         $records = [];
 
         foreach ($page as $row) {
-            $error = json_decode(Value::text($row->error), true);
+            $error = $row->error === null ? [] : json_decode(Value::text($row->error), true);
+            $code = is_array($error) ? $error['code'] ?? null : null;
+            $path = is_array($error) ? $error['path'] ?? null : null;
 
             $records[] = [
                 'ordinal' => Value::text($row->ordinal),
-                'code' => is_array($error) && is_string($error['code'] ?? null) ? $error['code'] : 'rowFailed',
-                'path' => is_array($error) && is_string($error['path'] ?? null) ? $error['path'] : null,
+                'code' => is_string($code) && preg_match('/\A[A-Za-z][A-Za-z0-9_.:-]{0,127}\z/D', $code) === 1 ? $code : 'rowFailed',
+                'path' => is_string($path) && strlen($path) <= 512 && preg_match('/\A(?:\/(?:[^~\x00-\x1f\x7f]|~[01])*)*\z/Du', $path) === 1 ? $path : null,
             ];
         }
 
@@ -72,6 +91,10 @@ final readonly class SqlTransferResultReader implements TransferResultReader
     public function result(DataScope $scope, TransferRef $ref): array
     {
         $job = $this->authorize(scope: $scope, ref: $ref);
+
+        if (Value::field($job, 'mode') === 'export') {
+            return $this->publishedExport($scope, $ref);
+        }
         $cursor = json_decode(Value::text(Value::field(row: $job, name: 'cursor')), true);
         $stats = json_decode(Value::text(Value::field(row: $job, name: 'stats')), true);
 
@@ -90,19 +113,39 @@ final readonly class SqlTransferResultReader implements TransferResultReader
         ];
     }
 
+    /** @return array{manifestId: string, partsHash: string, parts: list<array{number: string, sha256: string, byteLength: int, records: int}>} */
+    private function publishedExport(DataScope $scope, TransferRef $ref): array
+    {
+        if ($this->storage === null || $this->connection->transactionLevel() !== 0) {
+            throw new ExportUnavailable('Export read requires an independent owner snapshot.');
+        }
+
+        return $this->connection->transaction(function () use ($scope, $ref): array {
+            if ($this->connection->getDriverName() === 'pgsql') {
+                $this->connection->statement('SET LOCAL TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY');
+            }
+            $this->runtime?->assertCurrent($this->connection, $scope);
+            $verify = new SealedExportParts($this->connection, $this->storage, $this->authorizer, $this->schema);
+
+            return $verify->summary($scope, $verify->manifest($scope, $ref->id, published: true));
+        });
+    }
+
     private function authorize(DataScope $scope, TransferRef $ref): object
     {
         $this->runtime?->assertCurrent($this->connection, $scope);
         $this->runtime?->assertTransfer($ref->id);
         $job = $this->connection->table('corex_transfer_jobs')->where('id', $ref->id)->first();
 
-        if ($job === null
-            || ! hash_equals(Value::text($job->restore_epoch), $scope->restoreEpoch)
-            || ! $this->authorizer->authorize($scope, new RecordRef('import-export.transfer', $ref->id), new FieldSelection([]), FieldUse::Read)->allowed) {
+        if ($job === null || ! hash_equals(Value::text($job->restore_epoch), $scope->restoreEpoch)) {
             throw new ImportUnavailable('Transfer result is not available under the current authority.');
         }
 
         SessionIdentity::assertScope($job, $scope);
+
+        if (! $this->authorizer->authorize($scope, new RecordRef('import-export.transfer', $ref->id), new FieldSelection([]), FieldUse::Read)->allowed) {
+            throw new ImportUnavailable('Transfer result is not available under the current authority.');
+        }
 
         return $job;
     }

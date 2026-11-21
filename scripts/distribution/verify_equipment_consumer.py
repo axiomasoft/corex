@@ -130,6 +130,7 @@ def prove(candidate: Path | None, *, php: str | None = None, postgres: int | Non
             {"class": r"Equipment\Registry\Smoke", "entity": "eq.equipment", "values": {"serial": "pump-1", "hours": 12},
              "filter_operand": "pump-1"},
             env, postgres, php,
+            budget=True,
         )
     if (result["maintenance"] != "completed" or result["imported"] != 1 or result["failed"] != "missing-serial"
             or result["found"] != search["record"]):

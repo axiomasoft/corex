@@ -12,6 +12,7 @@ use CoreX\Context\Contracts\StoredWorkIssuer;
 use CoreX\Context\Contracts\StoredWorkRunner;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Foundation\Contracts\ModuleReferences;
 use CoreX\Notifications\Delivery\Contracts\NotificationChannelDriver;
 use CoreX\Notifications\Delivery\Contracts\RecipientResolver;
 use CoreX\Notifications\Delivery\Laravel\DeliveryPortBindings;
@@ -27,6 +28,7 @@ use CoreX\Notifications\Runtime\Internal\DeliveryReceiptProjector;
 use CoreX\Notifications\Runtime\Internal\DeliveryStore;
 use CoreX\Notifications\Runtime\Internal\DenyNotificationPolicy;
 use CoreX\Notifications\Runtime\Internal\InAppChannelDriver;
+use CoreX\Notifications\Runtime\Internal\NotificationModuleReferences;
 use CoreX\Notifications\Runtime\Internal\NotificationScope;
 use CoreX\Notifications\Runtime\Internal\NotificationVisibility;
 use CoreX\Notifications\Runtime\Internal\NullRecipientResolver;
@@ -51,6 +53,9 @@ final class NotificationsBindingsRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
+        $app->scoped(NotificationModuleReferences::class);
+        $app->tag(NotificationModuleReferences::class, ModuleReferences::class);
+
         DeliveryPortBindings::register($app);
 
         $app->singleton(NotificationsOptions::class, static fn (Application $app): NotificationsOptions => NotificationsOptions::fromArray(

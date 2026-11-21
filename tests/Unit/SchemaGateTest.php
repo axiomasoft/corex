@@ -7,19 +7,30 @@ use Illuminate\Filesystem\Filesystem;
 require_once dirname(__DIR__, 2).'/scripts/schema-gate.php';
 
 /** @return list<array{code: string, file: string, line: int, message: string}> */
-function schemaGateProbe(string $source, string $filename = '2026_10_01_010010_create_sys_gate_probe.php', int $version = 2, string $scope = 'tenant', string $catalogue = 'sys_gate_probe', array $allowlist = []): array
-{
+function schemaGateProbe(
+    string $source,
+    ?string $filename = null,
+    int $version = 3,
+    string $scope = 'tenant',
+    string $catalogue = 'sys_gate_probe',
+    array $allowlist = [],
+    string $package = 'axiomasoft/corex',
+    string $name = 'tenant',
+    string $path = 'packages/core/database/migrations/tenant',
+    string $sequence = '01',
+    string $catalogueScope = 'tenant',
+): array {
     $root = sys_get_temp_dir().'/corex-schema-gate-'.bin2hex(random_bytes(12));
-    $path = 'packages/core/database/migrations/tenant';
     $filesystem = new Filesystem;
+    $filename ??= '2026_10_01_'.$sequence.'0010_create_sys_gate_probe.php';
 
     try {
         $filesystem->makeDirectory($root.'/'.$path, 0700, true);
         $filesystem->makeDirectory($root.'/docs/architecture', 0700, true);
         file_put_contents($root.'/'.$path.'/'.$filename, $source);
-        file_put_contents($root.'/docs/architecture/table-ownership.md', "| {$catalogue} | axiomasoft/corex | tenant |\n");
-        $manifest = ['packages' => ['axiomasoft/corex' => '01'], 'sets' => [[
-            'id' => 'axiomasoft/corex:tenant', 'package' => 'axiomasoft/corex', 'name' => 'tenant', 'scope' => $scope,
+        file_put_contents($root.'/docs/architecture/table-ownership.md', "| {$catalogue} | {$package} | {$catalogueScope} |\n");
+        $manifest = ['packages' => [$package => $sequence], 'sets' => [[
+            'id' => $package.':'.$name, 'package' => $package, 'name' => $name, 'scope' => $scope,
             'path' => str_starts_with($filename, 'unregistered') ? $path.'/missing' : $path, 'version' => $version,
             'drivers' => ['pgsql', 'sqlite'], 'lifecycle' => 'platform', 'requires' => [], 'connection' => null,
         ]]];
@@ -41,12 +52,38 @@ it('rejects each schema rule with its own diagnostic code', function (string $co
         filename: match ($code) {
             'S1' => 'unregistered.php', 'S2' => '2026_10_01_020010_create_sys_gate_probe.php', default => '2026_10_01_010010_create_sys_gate_probe.php',
         },
-        version: $code === 'S8' ? 1 : 2, catalogue: $code === 'S9' ? 'other_table' : 'sys_gate_probe');
+        version: match ($code) {
+            'S1' => 2, 'S8' => 1, default => 3,
+        },
+        catalogue: $code === 'S9' ? 'other_table' : 'sys_gate_probe');
     expect(array_values(array_unique(array_column($hits, 'code'))))->toBe([$code]);
     foreach ($hits as $hit) {
         expect($hit['line'])->toBeGreaterThan(0)->and($hit['file'])->toContain('packages/core/database/migrations/tenant');
     }
 })->with(['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9']);
+
+it('requires exactly the adopted version for a schema set identity and path', function (string $package, string $name, string $scope, string $path, string $sequence, int $version): void {
+    $source = (string) file_get_contents(__DIR__.'/../fixtures/schema-gate/valid.php.fixture');
+    $run = static fn (int $candidate): array => schemaGateProbe(
+        $source, version: $candidate, scope: $scope, package: $package, name: $name,
+        path: $path, sequence: $sequence, catalogueScope: $scope === 'dedicated' ? 'shared-budget' : $scope,
+    );
+    $versionHit = [['code' => 'S8', 'file' => $path, 'line' => 1, 'message' => 'baseline set version must be '.$version]];
+
+    expect($run($version))->toBe([])
+        ->and($run($version - 1))->toBe($versionHit)
+        ->and($run($version + 1))->toBe($versionHit);
+})->with([
+    'Core tenant' => ['axiomasoft/corex', 'tenant', 'tenant', 'packages/core/database/migrations/tenant', '01', 3],
+    'ImportExport tenant' => ['axiomasoft/corex-import-export', 'tenant', 'tenant', 'packages/import-export/database/migrations/tenant', '13', 3],
+    'Media tenant' => ['axiomasoft/corex-media', 'tenant', 'tenant', 'packages/media/database/migrations/tenant', '10', 3],
+    'Operations tenant' => ['axiomasoft/corex-operations', 'tenant', 'tenant', 'packages/operations/database/migrations/tenant', '05', 3],
+    'Operations budget' => ['axiomasoft/corex-operations', 'budget', 'dedicated', 'packages/operations/database/migrations/budget', '05', 2],
+    'Access tenant' => ['axiomasoft/corex-access', 'tenant', 'tenant', 'packages/access/database/migrations/tenant', '03', 2],
+    'FlexCRM tenant' => ['flex/crm', 'tenant', 'tenant', 'products/flex-crm/database/migrations/tenant', '50', 1],
+    'different ID at the Core tenant path' => ['axiomasoft/corex', 'other', 'tenant', 'packages/core/database/migrations/tenant', '01', 2],
+    'Core tenant ID at a different path' => ['axiomasoft/corex', 'tenant', 'tenant', 'packages/core/database/migrations/other', '01', 2],
+]);
 
 it('enforces purity enum and ownership even for malformed filenames', function (string $code): void {
     $source = (string) file_get_contents(__DIR__.'/../fixtures/schema-gate/'.$code.'/migration.php.fixture');

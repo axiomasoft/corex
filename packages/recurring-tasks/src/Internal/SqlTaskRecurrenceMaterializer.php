@@ -14,6 +14,7 @@ use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
 use CoreX\Data\Enums\FieldUse;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Recurrence\Contracts\RecurrenceExpander;
 use CoreX\Recurrence\Data\ExpansionCursor;
 use CoreX\Recurrence\Data\ExpansionLimits;
@@ -150,6 +151,7 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
                 throw StaleMaterialization::restoreEpoch($series->id);
             }
 
+            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-recurring-tasks', 'series', ['series' => $series, 'template' => $payloadHash]);
             $recurrenceWindow = $this->materializationWindow(
                 window: $window,
                 valueType: $decoded['set']->start->valueType,

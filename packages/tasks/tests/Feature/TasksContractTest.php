@@ -43,6 +43,7 @@ use CoreX\Tasks\TasksModule;
 use CoreX\Time\Testing\FrozenClock;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Foundation\Testing\RefreshDatabaseState;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
@@ -570,6 +571,9 @@ it('rejects completion attempted from an old work frame after restore', function
     $task = resolve(CreateTaskCommand::class)->handle(new TaskDraft(
         workspaceId: $this->workspaceId, title: 'Restored owner', actor: $this->actor,
     ));
+    expect(DB::connection()->transactionLevel())->toBe(1);
+    DB::connection()->commit();
+    RefreshDatabaseState::$migrated = false;
     $before = $this->workScope;
     $control = resolve(DatabaseScopeControl::class);
     $closed = $control->drain($before->accountId, $control->close($before->accountId, 1));

@@ -7,6 +7,7 @@ namespace CoreX\Notifications\Runtime\Internal;
 use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Notifications\Inbox\Contracts\NotificationCenter;
 use CoreX\Notifications\Inbox\Contracts\NotificationPolicy;
 use CoreX\Notifications\Inbox\Data\CancelResult;
@@ -73,6 +74,7 @@ final readonly class SqlNotificationCenter implements NotificationCenter
 
         return $this->connection->transaction(function () use ($context, $scope, $input, $subject, $payload, $related, $channels, $identity, $digest): NotificationRef {
             $this->current->assert($scope, $this->connection);
+            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-notifications', 'notify', ['source' => $identity, 'related' => $related, 'channels' => $channels]);
 
             if (! $this->policy->allows($context, NotificationAction::Notify, $subject)) {
                 throw new NotificationAccessDenied('Notification delivery is denied.');

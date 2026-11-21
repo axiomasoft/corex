@@ -54,6 +54,27 @@ final class Value
         throw new RuntimeException('Expected a database integer within the native range.');
     }
 
+    /** @param array<string, mixed> $left
+     * @param  array<string, mixed>  $right
+     */
+    public static function sameMap(array $left, array $right): bool
+    {
+        return self::canonical($left) === self::canonical($right);
+    }
+
+    private static function canonical(mixed $value): mixed
+    {
+        if (! is_array($value)) {
+            return $value;
+        }
+
+        if (! array_is_list($value)) {
+            ksort($value, SORT_STRING);
+        }
+
+        return array_map(self::canonical(...), $value);
+    }
+
     /** @return array<string, mixed> */
     public static function map(mixed $value): array
     {

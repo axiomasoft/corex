@@ -7,6 +7,7 @@ namespace CoreX\Webhooks\Internal;
 use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Context\Contracts\StoredWorkIssuer;
 use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Messaging\Contracts\CloudEventCodec;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Data\ConsumerId;
@@ -48,6 +49,7 @@ final readonly class WebhookFanout
         $scope = $message->scope;
         $this->connection->transaction(function () use ($message, $scope): void {
             $this->current->assert($scope, $this->connection);
+            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-webhooks', 'webhook-fanout', ['contract' => $message->name, 'source' => $message->source]);
 
             if (! $this->inbox->claim($this->connection, new ConsumerId(self::Consumer, 1), $message)) {
                 return;

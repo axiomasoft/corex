@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Context\Data\OperationKey;
+use CoreX\Context\Data\ScopePrincipal;
 use CoreX\Context\Data\TenantContext;
 use CoreX\CustomFields\Schemas\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Schemas\Contracts\FieldSchemaDependencies;
@@ -17,13 +19,21 @@ use CoreX\CustomFields\Types\Data\FieldTypeId;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\EntityHandle;
 use CoreX\Data\Enums\FieldUse;
+use CoreX\Foundation\Data\LifecyclePlanRef;
+use CoreX\Foundation\Data\ModuleRef;
+use CoreX\Foundation\Data\OwnerLease;
+use CoreX\Foundation\Exceptions\LifecycleBlocked;
+use CoreX\Panels\Contracts\SavedViewInventory;
 use CoreX\Search\Index\Contracts\IndexDriver;
 use CoreX\Search\Projection\Contracts\SearchProjectionContributor;
 use CoreX\Search\Projection\Data\ProjectionContext;
 use CoreX\Search\Query\Contracts\CandidateDriver;
 use CoreX\Search\Rebuild\Contracts\SearchRebuilds;
 use CoreX\Search\Rebuild\Data\RebuildInput;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\DatabaseManager;
 use Illuminate\Foundation\Application;
 use Packman\Data\Laravel\JsonDocuments;
 use Packman\Modules\Contracts\Lifecycle\ModuleLifecycle;
@@ -122,9 +132,56 @@ final readonly class FixtureSavedViewReferences implements FieldSchemaDependenci
     }
 }
 
+final readonly class FixtureSavedViewInventory implements SavedViewInventory
+{
+    public function __construct(private Application $app, private DataScope $scope, private ViewContext $actor, private ViewScope $view) {}
+
+    public function connection(DataScope $scope): ConnectionInterface
+    {
+        verifyFixture($scope == $this->scope, 'Unknown fixture saved-view account.');
+        $connection = $this->app->make(DatabaseManager::class)->connection();
+        $this->app->make(CurrentWorkScope::class)->assert($scope, $connection);
+
+        return $connection;
+    }
+
+    public function scopes(DataScope $scope): array
+    {
+        $this->connection($scope);
+
+        return [[$this->actor, $this->view]];
+    }
+
+    public function targets(DataScope $scope, ViewContext $context, string $operation, ?string $id, ?SaveViewInput $input): array
+    {
+        $this->connection($scope);
+        verifyFixture($context === $this->actor && $operation === 'save' && $id === null && $input?->scope === $this->view,
+            'Unknown fixture saved-view write.');
+
+        return [new ModuleRef(Module::Name), new ModuleRef('axiomasoft/corex-custom-fields')];
+    }
+
+    public function hold(DataScope $scope, ModuleRef $module, LifecyclePlanRef $plan, ?OwnerLease $previous): OwnerLease
+    {
+        throw new LifecycleBlocked('The field-search fixture does not supply destructive lifecycle exclusion.');
+    }
+
+    public function verify(DataScope $scope, OwnerLease $lease): void
+    {
+        throw new LifecycleBlocked('The field-search fixture has no lifecycle lease.');
+    }
+
+    public function release(DataScope $scope, OwnerLease $lease): void
+    {
+        throw new LifecycleBlocked('The field-search fixture has no lifecycle lease.');
+    }
+}
+
 function compileFieldSearch(Application $app, DataScope $scope, TenantContext $tenant, EntityHandle $entity, array $fixture): array
 {
     verifyFixture($app['config']->get('corex-search-custom-fields.enabled') === true, 'The installed Field Search bridge must be enabled.');
+    $app->make(Gate::class)->define('corex.lifecycle.enable', static fn (ScopePrincipal $actor, DataScope $checked, ModuleRef $target): bool => $checked == $scope
+        && $actor->kind === $scope->principalKind && $actor->id === $scope->principalId && $target->package === Module::Name);
     $app->make(ModuleLifecycle::class)->enable(Module::Name);
     $driver = $app->make(IndexDriver::class);
     verifyFixture(get_class($driver) === $fixture['class'] && in_array($driver, iterator_to_array($app->tagged(CandidateDriver::class)), true),
@@ -147,6 +204,7 @@ function compileFieldSearch(Application $app, DataScope $scope, TenantContext $t
     $actor = new ViewContext($tenant, 'system', $scope->principalId);
     $viewScope = new ViewScope($entity->value, null, null, null);
     $viewSchema = new FixtureSavedViewSchema($catalogue, $scope, $actor);
+    $app->instance(SavedViewInventory::class, new FixtureSavedViewInventory($app, $scope, $actor, $viewScope));
     $app->instance(ViewSchemaProvider::class, $viewSchema);
     $app->instance(ViewAccessPolicy::class, new readonly class($actor, $viewScope) implements ViewAccessPolicy
     {

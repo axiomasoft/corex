@@ -7,6 +7,9 @@ namespace CoreX\Operations\Bulk\Internal;
 use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
+use CoreX\Foundation\Contracts\ReferenceAdmission;
+use CoreX\Foundation\Data\ModuleRef;
+use CoreX\Operations\Bulk\Laravel\BulkReferences;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use DateInterval;
 use DateTimeImmutable;
@@ -43,6 +46,7 @@ final readonly class BulkRetention
         private int $resultRetentionSeconds = self::DefaultResultSeconds,
         private int $metadataRetentionSeconds = self::DefaultMetadataSeconds,
         private int $idempotencyRetentionSeconds = self::DefaultResultSeconds,
+        private ?ReferenceAdmission $admission = null,
     ) {
         if ($this->resultRetentionSeconds < 1
             || $this->metadataRetentionSeconds < 1
@@ -87,6 +91,7 @@ final readonly class BulkRetention
 
         foreach ($removeRows as $row) {
             if ($this->trusted(row: $row, scope: $scope)) {
+                $this->enlist($scope, $row);
                 $removeIds[] = DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id'));
             }
         }
@@ -111,6 +116,7 @@ final readonly class BulkRetention
 
             foreach ($clearRows as $row) {
                 if ($this->trusted(row: $row, scope: $scope)) {
+                    $this->enlist($scope, $row);
                     $clearIds[] = DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id'));
                 }
             }
@@ -124,9 +130,25 @@ final readonly class BulkRetention
             : $this->connection->table(self::Table)->whereIn('id', $clearIds)->update([
                 'input_ref' => '{}',
                 'result_ref' => null,
+                'owner_result_ref' => null,
+                'failure_page_ref' => null,
             ]);
 
         return ['cleared' => $cleared, 'removed' => $removed];
+    }
+
+    private function enlist(DataScope $scope, object $row): void
+    {
+        if ($this->admission === null) {
+            return;
+        }
+
+        $stamp = JsonCanonical::decode(DatabaseValue::text(DatabaseValue::field($row, 'extension_stamp')));
+
+        if (! is_array($stamp)) {
+            throw new InvalidArgumentException('Bulk retention owner stamp is invalid.');
+        }
+        $this->admission->enlist($scope, $this->connection, new ModuleRef('axiomasoft/corex-operations'), ...BulkReferences::stampTargets($stamp));
     }
 
     private function assertLimit(int $limit): void
@@ -165,7 +187,7 @@ final readonly class BulkRetention
     private function wherePiiRemains(Builder $query): Builder
     {
         return $query->where(function (Builder $pii): void {
-            $pii->whereNotNull('result_ref');
+            $pii->whereNotNull('result_ref')->orWhereNotNull('owner_result_ref')->orWhereNotNull('failure_page_ref');
 
             if ($this->connection->getDriverName() === 'pgsql') {
                 $pii->orWhereRaw("input_ref::text NOT IN ('{}', '[]')");

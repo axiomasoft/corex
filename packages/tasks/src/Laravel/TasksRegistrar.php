@@ -6,6 +6,7 @@ namespace CoreX\Tasks\Laravel;
 
 use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Foundation\Contracts\ModuleReferences;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
 use CoreX\Tasks\Access\Contracts\TaskPlanningAccess;
@@ -26,6 +27,7 @@ use CoreX\Tasks\Task\Internal\Actions\CreateTask;
 use CoreX\Tasks\Task\Internal\Actions\MoveTaskToStage;
 use CoreX\Tasks\Task\Internal\Actions\UpdateTask;
 use CoreX\Tasks\Task\Internal\TaskCompletion;
+use CoreX\Tasks\Task\Internal\TaskModuleReferences;
 use CoreX\Tasks\Task\Laravel\TaskPortBindings;
 use Illuminate\Contracts\Foundation\Application;
 use LogicException;
@@ -39,6 +41,9 @@ final class TasksRegistrar implements PackageRegistrar
 {
     public function register(Application $app): void
     {
+        $app->scoped(TaskModuleReferences::class);
+        $app->tag(TaskModuleReferences::class, ModuleReferences::class);
+
         TaskPortBindings::register($app);
 
         $app->bind(CreateTaskCommand::class, CreateTask::class);

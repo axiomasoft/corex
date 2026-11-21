@@ -39,6 +39,8 @@ final class PackmanGovernanceTest extends TestCase
     {
         $root = dirname(__DIR__, 2);
         $manifest = json_decode(file_get_contents($root.'/packman.json'), true, flags: JSON_THROW_ON_ERROR);
+        $configured = $manifest['gates']['table_owners'];
+        // The catalogue lists these upstream-owned tables separately from the per-table rows.
         $expected = [
             'mod_modules' => 'axiomasoft/packman-modules',
             'mod_records' => 'axiomasoft/packman-modules',
@@ -47,12 +49,13 @@ final class PackmanGovernanceTest extends TestCase
             'sys_saved_views' => 'axiomasoft/packman-panels',
         ];
         foreach (file($root.'/docs/architecture/table-ownership.md') as $line) {
-            if (preg_match('/^\| ((?:sys_|mod_)[a-z0-9_]+) \| (axiomasoft\/[a-z0-9-]+) \|/', $line, $match) === 1) {
+            if (preg_match('/^\| ([a-z0-9_]+) \| ([a-z0-9-]+\/[a-z0-9-]+) \|/', $line, $match) === 1
+                && (str_starts_with($match[1], 'sys_') || str_starts_with($match[1], 'mod_') || array_key_exists($match[1], $configured))) {
                 $expected[$match[1]] = $match[2];
             }
         }
-        ksort($expected);
-        self::assertSame($expected, $manifest['gates']['table_owners']);
+        ksort($expected, SORT_STRING);
+        self::assertSame($expected, $configured);
     }
 
     public function test_native_table_write_gate_admits_only_the_declared_owner(): void

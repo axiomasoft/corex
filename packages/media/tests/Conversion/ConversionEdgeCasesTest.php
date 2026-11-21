@@ -3,8 +3,9 @@
 declare(strict_types=1);
 
 use CoreX\Media\Contracts\ConversionDriver;
-use CoreX\Media\Contracts\MediaLibrary;
 use CoreX\Media\Contracts\MediaPolicy;
+use CoreX\Media\Conversions\Exceptions\UnsupportedConversionProfile;
+use CoreX\Media\Conversions\Laravel\ConversionCoordinator;
 use CoreX\Media\Data\ConversionInput;
 use CoreX\Media\Data\ConversionOutput;
 use CoreX\Media\Data\ConversionProfile;
@@ -13,7 +14,7 @@ use CoreX\Media\Data\MediaContext;
 use CoreX\Media\Data\MediaSubject;
 use CoreX\Media\Data\UploadInput;
 use CoreX\Media\Exceptions\MediaOperationConflict;
-use CoreX\Media\Internal\ConversionCoordinator;
+use CoreX\Media\Files\Contracts\MediaLibrary;
 use CoreX\Media\Internal\ConversionProfiles;
 use CoreX\Media\Internal\Jobs\ConvertMedia;
 use CoreX\Media\Internal\MediaBlobs;
@@ -44,7 +45,7 @@ it('does not advertise a conversion when no matching driver is installed', funct
         new UploadInput('unsupported-profile', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.txt', 'bytes')), 'attachment'),
     );
 
-    expect(resolve(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'missing-profile'))->toBeNull()
+    expect(fn () => resolve(MediaLibrary::class)->requestConversion(conversionContext(), $file->id, 'missing-profile'))->toThrow(UnsupportedConversionProfile::class)
         ->and(DB::table('med_conversions')->count())->toBe(0);
 });
 
@@ -55,7 +56,7 @@ it('keeps malformed source conversions pending for durable retry instead of publ
         new UploadInput('malformed-conversion', UploadedFileSource::fromFile(UploadedFile::fake()->createWithContent('source.jpg', 'not an image')), 'attachment'),
     );
 
-    resolve(MediaLibrary::class)->conversion(conversionContext(), $file->id, 'thumbnail');
+    resolve(MediaLibrary::class)->requestConversion(conversionContext(), $file->id, 'thumbnail');
 
     expect(fn (): mixed => app()->call([new ConvertMedia($file->id, 'thumbnail', mediaConversionKey($file->id)), 'handle']))
         ->toThrow(MediaOperationConflict::class);

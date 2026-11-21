@@ -1,7 +1,7 @@
 {
     "contract_fingerprint": "927a769a62ded268249e1f945e8889dc797edbe00fac7c4e3a4c1992e6c99a1a",
     "files": {
-        "errors.json": "f6111a0171c9df5eb6cf55c918561b3f3cce8a023bb7465a026d172d3bdac6f2",
+        "errors.json": "c15c41b912f39a99e40fb2f359b73e4d79ef4dc570e6ffa64851913d38f1b1e4",
         "openapi.json": "00d78250b7fbeb369b76d464a37848788917d77a3393421761e8901a84153440",
         "operations.json": "81ebca19ca8e94965bd893cf58c22c78dc7f05e6817c12f4c5875565589946cc",
         "webhooks.json": "af380203beaa1accbee1296510329991e58adba88c17d54e2a9a3d1ca4759a65"

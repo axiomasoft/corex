@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Media\Internal\Jobs;
 
 use CoreX\Context\Contracts\StoredWorkRunner;
-use CoreX\Media\Internal\ConversionCoordinator;
+use CoreX\Media\Conversions\Laravel\ConversionCoordinator;
 use CoreX\Media\Internal\MediaOperationStore;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Foundation\Application;

@@ -29,8 +29,11 @@ use CoreX\Context\Exceptions\ScopeAuthorityUnavailable;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
+use CoreX\Foundation\Data\ModuleRef;
+use CoreX\Foundation\Exceptions\LifecycleBlocked;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
+use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
@@ -59,14 +62,102 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
 
     public function acquire(DataScope $scope, OperationKey $key, AdmissionKind $kind): AdmissionTicket
     {
-        if ($kind !== AdmissionKind::LocalWrite) {
+        if ($kind !== AdmissionKind::LocalWrite || str_starts_with($key->id, 'corex.lifecycle/')) {
             throw new ScopeContextMismatch('Provider sends and receipt projections require their dedicated authority.');
         }
 
         return $this->issue($scope, $key, $kind, null);
     }
 
+    /**
+     * The mutex belongs to the independent authority. Tenant generations change on
+     * workspace entry and even on return to the original account.
+     *
+     * @template T
+     *
+     * @param  Closure(Closure():void):T  $work
+     * @return T
+     */
+    public function withLifecycleLock(DataScope $scope, Closure $work): mixed
+    {
+        $control = $this->independent();
+        $this->binding($this->route($scope->accountId)->first())->assertScope($scope);
+        $identity = 'corex.lifecycle/'.hash('sha256', json_encode([$scope->deploymentId, $scope->bindingId], JSON_THROW_ON_ERROR));
+        $lock = null;
+        $verify = static function (): void {};
+
+        try {
+            if ($control->getDriverName() === 'pgsql') {
+                // A separate transaction pins the backend through transaction pools.
+                // Ordinary route/ticket writes keep using independent commits.
+                $factory = ApplicationLocator::current()->make(ConnectionFactory::class);
+                $config = $control->getConfig();
+
+                if (! is_array($config)) {
+                    throw new ScopeAuthorityUnavailable('Independent control session configuration unavailable.');
+                }
+                $lock = $factory->make($config, 'corex-lifecycle-exclusion');
+                $lock->beginTransaction();
+                $pid = $lock->scalar('select pg_backend_pid()', [], false);
+
+                if ($lock->scalar("select pg_try_advisory_xact_lock(hashtext('corex.lifecycle/2'), hashtext(?))", [$identity], false) !== true) {
+                    throw new LifecycleBlocked('Concurrent physical lifecycle transition.');
+                }
+                // The original, host-attested control connection must see this
+                // exact exclusive lock in its own database and lock manager.
+                $verify = static function () use ($control, $pid, $identity): void {
+                    $owns = $control->scalar("select exists(select 1 from pg_locks where locktype='advisory' and pid=? and granted and mode='ExclusiveLock' and database=(select oid from pg_database where datname=current_database()) and objsubid=2 and classid=hashtext('corex.lifecycle/2')::oid and objid=hashtext(?)::oid)", [$pid, $identity], false);
+
+                    if ($owns !== true) {
+                        throw new LifecycleBlocked('Lost independent lifecycle lock.');
+                    }
+                };
+                $verify();
+            }
+            $ticket = $control->transaction(function () use ($scope, $control, $identity, $lock): AdmissionTicket {
+                $this->binding($this->route($scope->accountId)->lockForUpdate()->first())->assertScope($scope);
+                $attempts = $control->table('corex_scope_tickets')->where('deployment_id', $scope->deploymentId)
+                    ->where('operation_id', $identity)->where('kind', AdmissionKind::LocalWrite->value);
+                $active = (clone $attempts)->where('state', 'outstanding');
+
+                if ($active->exists()) {
+                    if ($lock === null) {
+                        throw new LifecycleBlocked('Unsettled physical lifecycle coordinator.');
+                    }
+                    // The exclusive PG session proves the old coordinator exited.
+                    // Owner cleanup and provider send tickets have separate keys.
+                    $active->update(['state' => 'reconciled', 'evidence' => 'previous-lifecycle-session-ended']);
+                }
+                $last = $attempts->max('attempt');
+                $attempt = $last === null ? 1 : $this->number(['attempt' => $last], 'attempt') + 1;
+
+                return $this->issue($scope, new OperationKey($identity, $attempt), AdmissionKind::LocalWrite, null, transaction: $control);
+            });
+
+            try {
+                return $work($verify);
+            } finally {
+                $verify();
+                $this->settle($ticket, new AttemptEvidence('reconciled', $ticket->id));
+            }
+        } finally {
+            if ($lock !== null) {
+                try {
+                    $lock->rollBack();
+                } finally {
+                    $lock->disconnect();
+                }
+            }
+        }
+    }
+
     public function reserve(DataScope $scope, ProviderAttempt $attempt): AdmissionTicket
+    {
+        return $this->reserveTargets($scope, $attempt, []);
+    }
+
+    /** @param list<string> $targets */
+    public function reserveTargets(DataScope $scope, ProviderAttempt $attempt, array $targets): AdmissionTicket
     {
         ApplicationLocator::current()->make(CurrentWorkScope::class)->assert($scope);
         $effect = $attempt->effect;
@@ -75,7 +166,7 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
             throw new ScopeContextMismatch('Provider effect belongs to another logical owner.');
         }
 
-        return $this->issue($scope, new OperationKey($effect->identity(), $attempt->attempt, $effect->effectKey, $attempt->deadline), AdmissionKind::ProviderSend, $attempt);
+        return $this->issue($scope, new OperationKey($effect->identity(), $attempt->attempt, $effect->effectKey, $attempt->deadline), AdmissionKind::ProviderSend, $attempt, targets: $targets);
     }
 
     /** A receipt ticket can only be installed by the registered recovery dispatcher. */
@@ -84,12 +175,14 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
         return $this->issue($provider->scope, new OperationKey((string) Str::uuid7(), 1, $provider->id), AdmissionKind::ReceiptProjection, null, $provider);
     }
 
-    private function issue(DataScope $scope, OperationKey $key, AdmissionKind $kind, ?ProviderAttempt $attempt, ?AdmissionTicket $provider = null): AdmissionTicket
+    /** @param list<string> $targets */
+    private function issue(DataScope $scope, OperationKey $key, AdmissionKind $kind, ?ProviderAttempt $attempt, ?AdmissionTicket $provider = null, array $targets = [], ?Connection $transaction = null): AdmissionTicket
     {
-        $control = $this->independent();
+        $control = $transaction ?? $this->independent();
 
-        return $control->transaction(function () use ($scope, $key, $kind, $control, $attempt, $provider): AdmissionTicket {
-            $binding = $this->binding($this->route($scope->accountId)->lockForUpdate()->first());
+        return $control->transaction(function () use ($scope, $key, $kind, $control, $attempt, $provider, $targets): AdmissionTicket {
+            $route = $this->route($scope->accountId)->lockForUpdate()->first();
+            $binding = $this->binding($route);
             $binding->assertScope($scope);
 
             if ($provider !== null) {
@@ -104,6 +197,11 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
             }
 
             if ($attempt !== null) {
+                $closed = $this->closures($route);
+
+                if ($closed !== [] && ($targets === [] || array_intersect($targets, array_keys($closed)) !== [])) {
+                    throw new LifecycleBlocked('Provider reference admission is closed.');
+                }
                 $prior = $this->providerRows($attempt->effect)->lockForUpdate()->first();
 
                 if ($attempt->deadline <= $this->clock->now() || ($prior !== null && (
@@ -121,6 +219,7 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
                 'binding_id' => $scope->bindingId, 'binding_generation' => $scope->bindingGeneration,
                 'restore_epoch' => $scope->restoreEpoch, 'control_revision' => $binding->controlRevision,
                 'scope' => json_encode($this->codec->encode($scope), JSON_THROW_ON_ERROR),
+                'module_targets' => $targets === [] ? null : json_encode($targets, JSON_THROW_ON_ERROR),
                 'operation_id' => $key->id, 'attempt' => $key->attempt, 'kind' => $kind->value,
                 'effect_key' => $key->effectKey, 'deadline' => $key->deadline?->format('Y-m-d H:i:s.uP'), 'state' => 'outstanding',
                 'provider_identity' => $attempt?->effect->identity(), 'provider_owner' => $attempt?->effect->owner,
@@ -331,6 +430,133 @@ final readonly class DatabaseScopeControl implements ProviderEffectLedger, Scope
             }
             $query->update(['state' => $evidence->outcome, 'evidence' => $evidence->reference]);
         });
+    }
+
+    /** @param non-empty-list<string> $targets */
+    public function enlistTargets(AdmissionTicket $ticket, array $targets): void
+    {
+        $db = $this->independent();
+        $db->transaction(function () use ($db, $ticket, $targets): void {
+            $route = $this->route($ticket->scope->accountId)->lockForUpdate()->first();
+            $binding = $this->binding($route);
+            $binding->assertScope($ticket->scope);
+            $query = $this->ticketRow($db, $ticket);
+            $row = $query->lockForUpdate()->first();
+            $this->verifyTicket($ticket, $row);
+
+            if ($row === null || $row->state !== 'outstanding' || $ticket->kind !== AdmissionKind::LocalWrite) {
+                throw new ScopeContextMismatch('A live local transaction ticket is required.');
+            }
+            $held = $this->targets($row);
+            $added = array_diff($targets, $held);
+
+            if ($added === []) {
+                return;
+            }
+
+            if ($binding->mode !== 'open' || array_intersect($added, array_keys($this->closures($route))) !== []) {
+                throw new LifecycleBlocked('Module reference admission is closed.');
+            }
+            $merged = array_values(array_unique([...$held, ...$targets]));
+            sort($merged, SORT_STRING);
+            $query->update(['module_targets' => json_encode($merged, JSON_THROW_ON_ERROR)]);
+        });
+    }
+
+    /** The plan token survives a process death and is compared on every takeover. */
+    public function fenceModule(DataScope $scope, ModuleRef $target, string $plan, ?string $predecessor): void
+    {
+        $this->independent()->transaction(function () use ($scope, $target, $plan, $predecessor): void {
+            $query = $this->route($scope->accountId);
+            $row = $query->lockForUpdate()->first();
+            $binding = $this->binding($row);
+            $binding->assertScope($scope);
+            $closures = $this->closures($row);
+            $existing = $closures[$target->package] ?? null;
+
+            if ($binding->mode !== 'open' || ($existing !== $plan && $existing !== $predecessor)) {
+                throw new LifecycleBlocked('Another lifecycle plan owns this closure.');
+            }
+            $closures[$target->package] = $plan;
+            $query->update(['module_closures' => json_encode($closures, JSON_THROW_ON_ERROR)]);
+        });
+    }
+
+    public function moduleClosure(DataScope $scope, ModuleRef $target): ?string
+    {
+        $row = $this->route($scope->accountId)->first();
+        $this->binding($row)->assertScope($scope);
+
+        return $this->closures($row)[$target->package] ?? null;
+    }
+
+    public function reopenModule(DataScope $scope, ModuleRef $target, string $expected): void
+    {
+        $this->independent()->transaction(function () use ($scope, $target, $expected): void {
+            $route = $this->route($scope->accountId);
+            $row = $route->lockForUpdate()->first();
+            $binding = $this->binding($row);
+            $binding->assertScope($scope);
+            $closures = $this->closures($row);
+
+            if ($binding->mode !== 'open' || ($closures[$target->package] ?? null) !== $expected) {
+                throw new LifecycleBlocked('The module closure changed.');
+            }
+            unset($closures[$target->package]);
+            $route->update(['module_closures' => json_encode($closures, JSON_THROW_ON_ERROR)]);
+        });
+    }
+
+    /** @return list<string> */
+    public function outstandingReferences(DataScope $scope, ModuleRef $target): array
+    {
+        $this->binding($this->route($scope->accountId)->first())->assertScope($scope);
+        $ids = [];
+        foreach ($this->connection()->table('corex_scope_tickets')->where('deployment_id', $scope->deploymentId)
+            ->where('account_id', $scope->accountId)->whereIn('state', ['outstanding', 'unknown', 'conflicting'])
+            ->orderBy('ticket_id')->cursor() as $row) {
+            $targets = $this->targets($row);
+
+            if (in_array($target->package, $targets, true) || ($targets === [] && $row->kind === AdmissionKind::ProviderSend->value)) {
+                $ids[] = $this->text(get_object_vars($row), 'ticket_id');
+            }
+        }
+
+        return $ids;
+    }
+
+    /** @return array<string,string> */
+    private function closures(?object $row): array
+    {
+        if ($row === null || ! property_exists($row, 'module_closures')) {
+            throw new ScopeAuthorityUnavailable('The independent lifecycle schema is unavailable.');
+        }
+        $map = $row->module_closures === null ? [] : json_decode($this->text(get_object_vars($row), 'module_closures'), true, flags: JSON_THROW_ON_ERROR);
+
+        if (! is_array($map) || ! array_all($map, static fn (mixed $value): bool => is_string($value)) || ! array_all(array_keys($map), static fn (mixed $value): bool => is_string($value))) {
+            throw new ScopeAuthorityUnavailable('Unreadable lifecycle closure.');
+        }
+        $result = [];
+        foreach ($map as $name => $plan) {
+            if (! is_string($name) || ! is_string($plan)) {
+                throw new ScopeAuthorityUnavailable('Unexpected module closure.');
+            }
+            $result[$name] = $plan;
+        }
+
+        return $result;
+    }
+
+    /** @return list<string> */
+    private function targets(object $row): array
+    {
+        $targets = (get_object_vars($row)['module_targets'] ?? null) === null ? [] : json_decode($this->text(get_object_vars($row), 'module_targets'), true, flags: JSON_THROW_ON_ERROR);
+
+        if (! is_array($targets) || ! array_is_list($targets) || ! array_all($targets, static fn (mixed $value): bool => is_string($value))) {
+            throw new ScopeAuthorityUnavailable('Unreadable reference ticket.');
+        }
+
+        return array_map(static fn (mixed $name): string => is_string($name) ? $name : throw new ScopeAuthorityUnavailable('Invalid module target.'), $targets);
     }
 
     public function close(string $accountId, int $expectedRevision): int

@@ -8,6 +8,7 @@ use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\CustomFields\Schemas\Contracts\SchemaFacts;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\EntityHandle;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
 use Packman\Attributes\Internal;
@@ -26,6 +27,13 @@ final readonly class SchemaSteps
         $this->current->assert($scope, $db);
         $entity = new EntityHandle(SchemaValue::text($claim->entity));
         $this->access->manage($scope, $entity);
+
+        if ($claim->cancel_requested !== true) {
+            // runStored retains this claim ticket through the dedicated CIC
+            // dispatch and acknowledgment, beyond this local transaction.
+            $db->transaction(fn () => ReferenceWrites::enlist($db, $scope, 'axiomasoft/corex-custom-fields',
+                'schema-step', ['entity' => $entity->value, 'operation' => SchemaValue::text($claim->id)]));
+        }
         $plan = SchemaRows::decode($claim->plan);
 
         if (SchemaRows::digest(['fields.plan.v2', SchemaRows::logical($scope), SchemaRows::fence($scope), $plan]) !== $claim->plan_digest) {

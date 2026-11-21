@@ -17,7 +17,7 @@ glossary (historical record in Git), N5.
 Provider feature module живёт прямо в модуле; `<Pkg>Module.php` — только в корне пакета.
 
 Ядро `axiomasoft/corex` не имеет корневого модуля: в `src/` разрешены только
-`CoreServiceProvider.php` и модули закрытого списка glossary. Путь каждого PHP-файла
+`CoreServiceProvider.php` и модули [закрытого списка ядра](core-zones.md). Путь каждого PHP-файла
 соответствует его namespace относительно PSR-4 корня пакета.
 
 ## Процедуры по статьям STR-002…STR-006
@@ -47,13 +47,12 @@ Provider feature module живёт прямо в модуле; `<Pkg>Module.php`
 `composer module-layout-gate` сканирует `packages/*/src/` и проверяет правила R0–R5.
 Конфигурация — `scripts/module-layout.json`; полный отчёт:
 `python3 scripts/module-layout-gate.py --report`.
-CI выполняет гейт и восемь тестов его правил и baseline.
 
-`scripts/module-layout-baseline.json` — единственный ratchet остаточных нарушений раскладки.
-Новая запись или исправленная, но оставленная запись даёт exit 1; baseline только сокращается.
-P03.1 фиксирует текущее дерево: 436 записей (R1 49, R3 344, R5 43).
-P03.2 выполняет утверждённый перенос и сокращает baseline до 159;
-P04 классифицирует публичные типы и сокращает межмодульные ссылки в Internal.
-Прогноз будущего дерева не подменяет baseline текущего дерева.
+`scripts/module-layout-baseline.json` хранит существующие исключения раскладки.
+Гейт обнаруживает новые и устаревшие записи.
 
-Runtime-код не ссылается на dev-мосты `Tooling/`, `PHPStan/`, `Testing/` своего или другого пакета. Гейт `module-layout` R6 проверяет namespace-ссылки; общая runtime-часть размещается в `Internal/`.
+Dev-мосты `Tooling/`, `PHPStan/` и `Testing/` предназначены для инструментов и тестов.
+Сканер поверхности находится в `CoreX\Foundation\Tooling`. R6 запрещает ссылки
+на dev-мосты из runtime-кода. Laravel-адаптер текущего principal находится в
+`CoreX\Access\Laravel\PrincipalIdentity`. Обе границы следуют PSR-4 и не
+публикуют альтернативные имена.

@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use CoreX\Audit\Internal\AuditLog;
-use CoreX\Audit\Internal\AuditObserver;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
@@ -16,15 +15,10 @@ use CoreX\Settings\Data\SettingsScope;
 use CoreX\Settings\Enums\SettingScope;
 use CoreX\Settings\Internal\DatabaseSettingsRepository;
 use CoreX\Tests\Support\SourceScanner;
-use Packman\Schema\Contracts\Migration\SchemaSets;
-use Packman\Schema\Enums\SchemaLifecycle;
-use Packman\Schema\Enums\SchemaScope;
-use Packman\Schema\Exceptions\SchemaSetException;
 
 // P6.2 — zone arch gate (D32/D101). Matrix is copied from the design, not read at runtime.
-// Scheduling is the P07.5 kernel module and may import Foundation and tenancy contracts.
-// Invocation (operation-handler contract, audit 2026-10-08 P-02) has the same allowance.
-// PubSub/ is Messaging by path. ALLOWED['Foundation'] stays empty.
+// Modules and package-owned adapters are classified by their current runtime paths.
+// Foundation contracts may name the explicit current-scope admission DTOs below.
 
 /**
  * @var array<string, list<string>>
@@ -32,22 +26,30 @@ use Packman\Schema\Exceptions\SchemaSetException;
 const CORE_ZONE_ALLOWED = [
     'Foundation' => [],
     'Database' => ['Foundation'],
-    'Modules' => ['Foundation', 'TenancyContracts', 'Audit', 'Settings', 'SavedViews', 'Storage', 'Messaging', 'Features', 'Departments', 'Money'],
     'TenancyContracts' => ['Foundation'],
     'Audit' => ['Foundation', 'TenancyContracts'],
     'Settings' => ['Foundation', 'TenancyContracts'],
-    'SavedViews' => ['Foundation', 'TenancyContracts'],
     'Storage' => ['Foundation', 'TenancyContracts'],
     'Messaging' => ['Foundation', 'TenancyContracts'],
     'Features' => ['Foundation', 'TenancyContracts'],
     'Departments' => ['Foundation', 'TenancyContracts'],
-    'Money' => ['Foundation', 'TenancyContracts'],
     'Scheduling' => ['Foundation', 'TenancyContracts'],
     'Invocation' => ['Foundation', 'TenancyContracts'],
 ];
 
 /** @var list<string> */
 const CORE_ZONE_COMPOSITION = [
+    'packages/core/src/Foundation/Internal/Commands/ManageLifecycle.php',
+    'packages/core/src/Foundation/Internal/CoreModuleReferences.php',
+    'packages/core/src/Foundation/Internal/DatabaseLifecyclePlans.php',
+    'packages/core/src/Foundation/Internal/DatabaseReferenceAdmission.php',
+    'packages/core/src/Foundation/Internal/GuardedModuleLifecycle.php',
+    'packages/core/src/Foundation/Internal/HostProviderRemoval.php',
+    'packages/core/src/Foundation/Internal/LifecycleCatalogue.php',
+    'packages/core/src/Foundation/Internal/LifecycleFrame.php',
+    'packages/core/src/Foundation/Internal/LifecycleOperator.php',
+    'packages/core/src/Foundation/Laravel/ReferenceWrites.php',
+    'packages/core/src/Foundation/Laravel/SqlReferenceInventory.php',
     'packages/core/src/Foundation/Laravel/ConsoleRegistrar.php',
     'packages/core/src/Foundation/Laravel/PackmanRegistrar.php',
     'packages/core/src/Foundation/Internal/PackmanActorResolver.php',
@@ -87,11 +89,9 @@ const CORE_ZONE_E_BASEMODEL = 'packages/core/src/Database/Laravel/BaseModel.php'
  * @var array<string, list<string>>
  */
 const CORE_ZONE_EXACT_IMPORTS = [
-    'packages/core/src/Modules/Laravel/LifecycleRegistrar.php' => [
-        SchemaSets::class,
-        SchemaLifecycle::class,
-        SchemaScope::class,
-        SchemaSetException::class,
+    'packages/core/src/Foundation/Contracts/ReferenceAdmission.php' => [
+        'CoreX\Context\Data\AdmissionTicket',
+        'CoreX\Context\Data\ProviderAttempt',
     ],
     'packages/core/src/Context/Internal/ImpersonationGuard.php' => [AuditLog::class],
     'packages/core/src/Messaging/Events/DomainEvent.php' => [
@@ -139,9 +139,6 @@ const CORE_ZONE_EXACT_IMPORTS = [
         TracePropagation::class,
         OperationContext::class,
     ],
-    'packages/core/src/Modules/Internal/Audit/AuditCapabilityWiring.php' => [
-        AuditObserver::class,
-    ],
 ];
 
 /**
@@ -181,8 +178,6 @@ const CORE_ZONE_PREFIX = [
     'Features/' => 'Features',
     'Invocation/' => 'Invocation',
     'Messaging/' => 'Messaging',
-    'Modules/' => 'Modules',
-    'Money/' => 'Money',
     'Scheduling/' => 'Scheduling',
     'Settings/' => 'Settings',
     'Storage/' => 'Storage',
@@ -195,31 +190,45 @@ const CORE_ZONE_PREFIX = [
  * @var array<string, string>
  */
 const CORE_ZONE_DUMP = [
-    'Database/Contracts/SchemaMigrator.php' => 'Database',
-    'Database/Contracts/SchemaSetProvider.php' => 'Database',
-    'Database/Contracts/SchemaSets.php' => 'Database',
-    'Database/Data/SchemaSet.php' => 'Database',
-    'Database/Data/SchemaSetStatus.php' => 'Database',
-    'Database/Enums/SchemaLifecycle.php' => 'Database',
-    'Database/Enums/SchemaScope.php' => 'Database',
-    'Database/Exceptions/SchemaSetException.php' => 'Database',
-    'Database/Internal/Commands/SchemaMigrateCommand.php' => 'Database',
-    'Database/Internal/Commands/SchemaStatusCommand.php' => 'Database',
+    'Foundation/Contracts/DeploymentOwners.php' => 'Foundation',
+    'Foundation/Contracts/LifecycleInventory.php' => 'Foundation',
+    'Foundation/Contracts/LifecyclePlans.php' => 'Foundation',
+    'Foundation/Contracts/ModuleReferences.php' => 'Foundation',
+    'Foundation/Contracts/ModuleTableReferences.php' => 'Foundation',
+    'Foundation/Contracts/ProviderRemovalGate.php' => 'Foundation',
+    'Foundation/Contracts/ReferenceAdmission.php' => 'Foundation',
+    'Foundation/Contracts/ReferenceCleanup.php' => 'Foundation',
+    'Foundation/Contracts/ReferenceExclusion.php' => 'Foundation',
+    'Foundation/Contracts/ReferenceOwners.php' => 'Foundation',
+    'Foundation/Data/CleanupAction.php' => 'Foundation',
+    'Foundation/Data/CleanupReceipt.php' => 'Foundation',
+    'Foundation/Data/LifecycleBlocker.php' => 'Foundation',
+    'Foundation/Data/LifecycleConfirmation.php' => 'Foundation',
+    'Foundation/Data/LifecyclePlan.php' => 'Foundation',
+    'Foundation/Data/LifecyclePlanRef.php' => 'Foundation',
+    'Foundation/Data/LifecycleStatus.php' => 'Foundation',
+    'Foundation/Data/ModuleId.php' => 'Foundation',
+    'Foundation/Data/ModuleRef.php' => 'Foundation',
+    'Foundation/Data/OwnerLease.php' => 'Foundation',
+    'Foundation/Data/PlanDigest.php' => 'Foundation',
+    'Foundation/Data/ReferenceCursor.php' => 'Foundation',
+    'Foundation/Data/ReferencePage.php' => 'Foundation',
+    'Foundation/Data/RemovalApproval.php' => 'Foundation',
+    'Foundation/Enums/LifecycleAction.php' => 'Foundation',
+    'Foundation/Enums/LifecyclePhase.php' => 'Foundation',
+    'Foundation/Exceptions/LifecycleBlocked.php' => 'Foundation',
+    'Foundation/Exceptions/LifecyclePlanConflict.php' => 'Foundation',
+    'Foundation/Internal/LifecycleCheckpoint.php' => 'Foundation',
+    'Foundation/Internal/UnavailableOwnerCheckpoint.php' => 'Foundation',
+    'Foundation/Tooling/SourceType.php' => 'Foundation',
+    'Foundation/Tooling/SurfaceDiagnostic.php' => 'Foundation',
+    'Foundation/Tooling/SurfaceReport.php' => 'Foundation',
+    'Foundation/Tooling/SurfaceScanner.php' => 'Foundation',
     'Database/Internal/CoreSchemaSets.php' => 'Database',
-    'Database/Internal/LaravelSchemaMigrator.php' => 'Database',
-    'Database/Internal/TaggedSchemaSets.php' => 'Database',
-    'Database/Testing/MigratesSchemaSets.php' => 'Database',
 
     'Observability/Contracts/TracePropagation.php' => 'Foundation',
     'Messaging/PHPStan/DurablePayloadTypeChecker.php' => 'Foundation',
     'Messaging/PHPStan/Rules/DurablePayloadPromotedPropertyRule.php' => 'Foundation',
-    'Attributes/Api.php' => 'Foundation',
-    'Attributes/Tooling/SourceType.php' => 'Foundation',
-    'Attributes/Tooling/SurfaceDiagnostic.php' => 'Foundation',
-    'Attributes/Tooling/SurfaceReport.php' => 'Foundation',
-    'Attributes/Tooling/SurfaceScanner.php' => 'Foundation',
-    'Attributes/Spi.php' => 'Foundation',
-    'Attributes/SpiKind.php' => 'Foundation',
     'Audit/Internal/AuditObserver.php' => 'Audit',
     'Audit/Data/AuditEntry.php' => 'Audit',
     'Audit/Contracts/AuditLogger.php' => 'Audit',
@@ -382,7 +391,6 @@ const CORE_ZONE_DUMP = [
     'Messaging/Internal/RedisPubSub.php' => 'Messaging',
     'Messaging/Internal/SubscribeGuard.php' => 'Messaging',
     'Messaging/Testing/MessagingFixtures.php' => 'Messaging',
-    'Modules/Contracts/ModuleRegistrar.php' => 'Foundation',
     'Observability/Contracts/OperationObserver.php' => 'Foundation',
     'Observability/Internal/MetricAttributes.php' => 'Foundation',
     'Observability/Internal/NullOperationObserver.php' => 'Foundation',
@@ -435,14 +443,9 @@ const CORE_ZONE_DUMP = [
 test('every core src file is classified into a zone or composition/testing', function (): void {
     expect(rz0Offenders())->toBe([])
         ->and(zoneOf('packages/core/src/Messaging/Internal/RedisPubSub.php'))->toBe('Messaging')
+        ->and(zoneOf('packages/core/src/Foundation/Internal/LifecycleCheckpoint.php'))->toBe('Foundation')
+        ->and(zoneOf('packages/core/src/Foundation/Internal/UnavailableOwnerCheckpoint.php'))->toBe('Foundation')
         ->and(CORE_ZONE_ALLOWED['Foundation'])->toBe([])
-        ->and(zoneOf('packages/core/src/Config/Laravel/ConfigurationValidator.php'))->toBe('Foundation')
-        ->and(zoneOf('packages/core/src/Config/Exceptions/InvalidConfiguration.php'))->toBe('Foundation')
-        ->and(zoneOf('packages/core/src/Config/Data/SecretRef.php'))->toBe('Foundation')
-        ->and(zoneOf('packages/core/src/Errors/Contracts/DescribesError.php'))->toBe('Foundation')
-        ->and(zoneOf('packages/core/src/Errors/Data/ErrorDescriptor.php'))->toBe('Foundation')
-        ->and(zoneOf('packages/core/src/Errors/Enums/ErrorCategory.php'))->toBe('Foundation')
-        ->and(zoneOf('packages/core/src/Errors/Enums/UnavailabilityReason.php'))->toBe('Foundation')
         ->and(coreZoneKind('packages/core/src/Config/Data/CoreOptions.php'))->toBe('composition')
         ->and(coreZoneKind('packages/core/src/Foundation/Laravel/PackmanRegistrar.php'))->toBe('composition');
 });
@@ -616,7 +619,7 @@ function coreZoneKind(string $relative): string
 
     $under = substr($relative, strlen($prefix));
 
-    if (str_starts_with($under, 'Testing/')) {
+    if (str_starts_with($under, 'Testing/') || str_starts_with($under, 'Foundation/Tooling/')) {
         return 'testing';
     }
 

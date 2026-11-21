@@ -55,7 +55,7 @@ The registered `review` panel then owns the capability check, record decision an
 ],
 ```
 
-The provider reads users through the configured connection and returns `PrincipalIdentity`. It does not write `auth.*` configuration. Password rehashing uses `IdentityPasswordRehasher`; remember tokens are unsupported.
+The provider reads users through the configured connection and returns `CoreX\Access\Laravel\PrincipalIdentity`. It does not write `auth.*` configuration. Password rehashing uses `IdentityPasswordRehasher`; remember tokens are unsupported.
 
 ## Installation
 

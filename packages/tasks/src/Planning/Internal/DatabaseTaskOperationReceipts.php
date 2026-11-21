@@ -6,6 +6,7 @@ namespace CoreX\Tasks\Planning\Internal;
 
 use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Data\JsonDocument;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
 use CoreX\Tasks\Planning\Data\TaskOperationFence;
 use CoreX\Tasks\Planning\Data\TaskOperationIdentity;
@@ -68,6 +69,7 @@ final readonly class DatabaseTaskOperationReceipts implements TaskOperationRecei
         }
 
         $this->workScope->assert($identity->scope, $connection);
+        ReferenceWrites::enlist($connection, $identity->scope, 'axiomasoft/corex-tasks', 'task-receipt', ['kind' => $identity->kind]);
         $fence = $receipt->originalFence;
 
         try {

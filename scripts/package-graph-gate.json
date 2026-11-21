@@ -1,28 +1,6 @@
 {
     "allowlist": [
         {
-            "from": "axiomasoft/corex-operations",
-            "to": "axiomasoft/corex-import-export",
-            "import_file": "packages/operations/src/Bulk/Data/BulkTransferSession.php",
-            "guard_file": "packages/operations/src/Bulk/Internal/TransferBulkExecutor.php",
-            "guard_contains": [
-                "interface_exists(TransferRunner::class)",
-                "interface_exists(ExportRunner::class)"
-            ],
-            "reason": "Public bulk session names optional transfer ports; the executor refuses them until both interfaces exist and a host factory is bound (P14.20)."
-        },
-        {
-            "from": "axiomasoft/corex-operations",
-            "to": "axiomasoft/corex-import-export",
-            "import_file": "packages/operations/src/Bulk/Internal/TransferBulkExecutor.php",
-            "guard_file": "packages/operations/src/Bulk/Internal/TransferBulkExecutor.php",
-            "guard_contains": [
-                "interface_exists(TransferRunner::class)",
-                "interface_exists(ExportRunner::class)"
-            ],
-            "reason": "Transfer bulk execution is suggest-only and fail-closed when the optional package or factory is absent (P14.20)."
-        },
-        {
             "from": "axiomasoft/corex-custom-fields",
             "to": "axiomasoft/corex",
             "import_file": "packages/custom-fields/src/CustomFieldsServiceProvider.php",
@@ -56,6 +34,11 @@
             "from": "flex/crm",
             "to": "axiomasoft/corex-operations",
             "reason": "Operation handlers implement the kernel CoreX\\Invocation contract; the product must not depend on the operations runtime (audit 2026-10-08 P-02)."
+        },
+        {
+            "from": "axiomasoft/corex-operations",
+            "to": "axiomasoft/corex-import-export",
+            "reason": "Operations owns the neutral Bulk SPI; only the host composes transfer owners."
         }
     ],
     "reservations": [

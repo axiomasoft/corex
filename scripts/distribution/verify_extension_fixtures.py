@@ -200,6 +200,14 @@ def validate_isolated_databases(witness: dict, databases: dict[str, str], entity
             or not str(owner.get("backend", "")).startswith("PostgreSQL ")
             or not str(control.get("backend", "")).startswith("PostgreSQL ")):
         raise SystemExit(f"{entity}: installed proof did not use both isolated databases")
+    if budget_database := databases.get("COREX_SCENARIO_DB_BUDGET"):
+        budget = witness.get("budget")
+        if (not isinstance(budget, dict) or budget.get("database") != budget_database
+                or budget_database in {owner["database"], control["database"]}
+                or not budget.get("session") or budget["session"] in {owner["session"], control["session"]}
+                or not budget.get("oid") or budget["oid"] in {owner["oid"], control["oid"]}
+                or budget.get("backend") != owner["backend"]):
+            raise SystemExit(f"{entity}: installed proof did not use an independent budget database")
 
 
 def probe_phase(consumer: Path, command: list[str], env: dict[str, str], entity: str, phase: str) -> dict:
@@ -219,9 +227,11 @@ def probe_phase(consumer: Path, command: list[str], env: dict[str, str], entity:
 
 
 @contextmanager
-def installed_runtime(consumer: Path, env: dict[str, str], postgres: int | None):
+def installed_runtime(consumer: Path, env: dict[str, str], postgres: int | None, *, budget: bool = False):
     profiles = profile_proof_module()
     profile = {"database": "postgres-isolated", "database_roles": ["control", "a"], "default_database": "a"}
+    if budget:
+        profile["database_roles"].append("budget")
     for path in ("bootstrap/cache", "storage/logs", "storage/framework/views"):
         (consumer / path).mkdir(parents=True, exist_ok=True)
     with profiles.isolated_scenario_databases(profile, postgres) as databases:
@@ -233,8 +243,9 @@ def installed_runtime(consumer: Path, env: dict[str, str], postgres: int | None)
 
 def run_field_proof(
     consumer: Path, probe: Path, fixture: dict, env: dict[str, str], postgres: int | None, php: str | None,
+    *, budget: bool = False,
 ) -> dict:
-    with installed_runtime(consumer, env, postgres) as (databases, runtime):
+    with installed_runtime(consumer, env, postgres, budget=budget) as (databases, runtime):
         command = ["php", str(probe), fixture["class"]]
         compiled = probe_phase(consumer, [*command, "compile"], runtime, fixture["entity"], "compile")
         witness = probe_phase(consumer, [*command, "exercise"], runtime, fixture["entity"], "exercise")
@@ -288,7 +299,7 @@ def run_search_proof(
     consumer: Path, probe: Path, fixture: dict, env: dict[str, str], postgres: int | None, php: str | None,
     *, profile: str = "absent",
 ) -> dict:
-    with installed_runtime(consumer, env, postgres) as (databases, runtime):
+    with installed_runtime(consumer, env, postgres, budget=profile == "equipment") as (databases, runtime):
         witness = run_search_profile(consumer, probe, fixture, runtime, profile, "search")
         validate_search_witness(witness, databases, fixture, php, profile=profile)
         return witness

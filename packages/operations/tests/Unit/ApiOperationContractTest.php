@@ -73,16 +73,54 @@ it('rejects duplicate fields and scopes, bad capability and deprecation, and uns
         ->toThrow(CompilationException::class, 'Unsafe idempotent effect');
 });
 
-it('marks bulk modes unsupported and refuses enabled execution', function () use ($operation): void {
-    $bulk = $operation('POST', 'notes.bulk')->asBulkCommand()->idempotency('required')->effect('reconciliation_contract');
+it('compiles execution support only for an explicitly opted-in bulk command', function () use ($operation, $compile): void {
+    $bulk = $operation('POST', 'notes.bulk')->asBulkCommand()->idempotency('required')->effect('tenant_transactional')->cost(['base' => 2]);
+    $bulk->successStatus = 202;
+    $bulk->executionSupported = true;
 
-    expect($bulk->executionSupported)->toBeFalse()
-        ->and($bulk->bulkExecutionEnabled)->toBeFalse();
+    expect($compile($bulk)->executionSupported)->toBeFalse();
 
     $bulk->bulkExecutionEnabled = true;
+    $bulk->executionSupported = false;
+    $compiled = $compile($bulk);
 
-    expect(fn () => OperationDefinitionValidator::validate($bulk))->toThrow(CompilationException::class, 'cannot enable execution');
+    expect($compiled->executionSupported)->toBeTrue()
+        ->and($compiled->operationMode)->toBe('bulk_command')
+        ->and($compiled->idempotencyRequirement)->toBe('required')
+        ->and($compiled->successStatus)->toBe(202)
+        ->and($compiled->cost['base'])->toBe(2);
 });
+
+it('rejects unsafe execution opt-ins in the real compiler', function (string $control, string $reason) use ($operation, $compile): void {
+    $api = $operation('POST', 'notes.bulk')->asBulkCommand()->idempotency('required')->effect('tenant_transactional');
+    $api->successStatus = 202;
+
+    if ($control !== 'missing cost') {
+        $api->cost(['base' => 2]);
+    }
+    match ($control) {
+        'query' => $api->asBulkQuery(),
+        'effect' => $api->effect('reconciliation_contract'),
+        'method' => $api->method = 'GET',
+        'status' => $api->successStatus = 200,
+        'key' => $api->idempotency('optional'),
+        'implicit key' => $api->idempotencyExplicit = false,
+        'overflow' => $api->cost(['base' => 10_001]),
+        default => null,
+    };
+    $api->bulkExecutionEnabled = true;
+
+    expect(fn () => $compile($api))->toThrow(CompilationException::class, $reason);
+})->with([
+    ['query', 'cannot enable execution'],
+    ['effect', 'cannot enable execution'],
+    ['method', 'Illegal operation contract'],
+    ['status', 'cannot enable execution'],
+    ['key', 'Illegal operation contract'],
+    ['implicit key', 'cannot enable execution'],
+    ['missing cost', 'requires a cost recipe'],
+    ['overflow', 'Cost overflow'],
+]);
 
 it('projects the same contract hash when declaration order is reversed', function () use ($schema): void {
     $make = static fn (string $id, string $method): Api => Api::operation(

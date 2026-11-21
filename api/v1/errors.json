@@ -65,6 +65,22 @@
     },
     {
         "category": "conflict",
+        "code": "core.lifecycle_blocked",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
+        "code": "core.lifecycle_plan_conflict",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "conflict",
         "code": "core.outbox_lease_lost",
         "detail_keys": [],
         "owner": "axiomasoft/corex",

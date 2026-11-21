@@ -43,7 +43,7 @@ it('rejects a page that exceeds the row cap even when it is a single part', func
         draft: new ExportManifest($manifestId, 'coherent', $hash, $hash, JsonDocuments::capture([]), str_repeat('0', 64)),
         after: new ExportCursor('0', '0', $hash),
     ))->toThrow(ExportUnavailable::class)
-        ->and(DB::table('corex_export_manifests')->count())->toBe(0);
+        ->and(DB::table('corex_export_manifests')->whereIn('state', ['sealed', 'published'])->count())->toBe(0);
 });
 
 it('seals several parts when each page stays inside the row cap', function (): void {
@@ -78,11 +78,10 @@ it('enforces the byte cap independently of the part count', function (): void {
         ->and(DB::table('corex_export_manifests')->where('state', 'sealed')->count())->toBe(0);
 });
 
-it('drops an interrupted capture so a new manifest can be sealed', function (): void {
+it('restarts an interrupted capture under the original manifest identity', function (): void {
     $hash = str_repeat('d', 64);
     $jobId = '44444444-4444-4444-8444-444444444401';
     $interrupted = '44444444-4444-4444-8444-444444444402';
-    $fresh = '44444444-4444-4444-8444-444444444403';
     exportLimitJob($jobId, $hash);
     $signal = new class implements CancellationSignal
     {
@@ -102,13 +101,12 @@ it('drops an interrupted capture so a new manifest can be sealed', function (): 
     $sealed = exportLimitRunner(records: 1)->seal(
         scope: exportLimitScope($hash),
         jobId: $jobId,
-        draft: new ExportManifest($fresh, 'coherent', $hash, $hash, JsonDocuments::capture([]), str_repeat('0', 64)),
+        draft: new ExportManifest($interrupted, 'coherent', $hash, $hash, JsonDocuments::capture([]), str_repeat('0', 64)),
         after: new ExportCursor('0', '0', $hash),
     );
 
-    expect(DB::table('corex_export_manifests')->where('id', $interrupted)->count())->toBe(0)
-        ->and($sealed->id)->toBe($fresh)
-        ->and(DB::table('corex_export_manifests')->where('id', $fresh)->value('state'))->toBe('sealed');
+    expect($sealed->id)->toBe($interrupted)
+        ->and(DB::table('corex_export_manifests')->where('id', $interrupted)->value('state'))->toBe('sealed');
 });
 
 it('checks runtime and memory before each page and rolls the capture back', function (): void {
@@ -128,7 +126,7 @@ it('checks runtime and memory before each page and rolls the capture back', func
         draft: new ExportManifest($manifestId, 'coherent', $hash, $hash, JsonDocuments::capture([]), str_repeat('0', 64)),
         after: new ExportCursor('0', '0', $hash),
     ))->toThrow(TransferLimitReached::class)
-        ->and(DB::table('corex_export_manifests')->count())->toBe(0);
+        ->and(DB::table('corex_export_manifests')->whereIn('state', ['sealed', 'published'])->count())->toBe(0);
 });
 
 function exportLimitJob(string $id, string $hash): void

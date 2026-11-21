@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tooling\PackageGraph;
 
-use CoreX\Attributes\Tooling\SurfaceScanner;
+use CoreX\Foundation\Tooling\SurfaceScanner;
 use FilesystemIterator;
 use Packman\DevTools\Generators\Contracts\ApiManifestGenerator;
 use RecursiveCallbackFilterIterator;

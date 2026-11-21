@@ -116,13 +116,6 @@ foreach ($files as $file) {
         foreach ($m[1] as $token) {
             $bare = str_replace('\\\\', '\\', $token);
 
-            // PLAN3.D63 reuses only these namespace declarations for API metadata.
-            // Every renamed custom-fields class and child namespace remains forbidden.
-            if (($fqcn[$bare] ?? null) === 'namespaces'
-                && in_array($bare, ['CoreX\\Attributes', 'CoreX\\Attributes\\Tooling'], true)) {
-                continue;
-            }
-
             if (isset($fqcn[$bare])) {
                 $violations[] = sprintf('%s:%d %s %s', $file, $i + 1, $fqcn[$bare], $bare);
 

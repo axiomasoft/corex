@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Messaging\Internal;
 
 use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Data\ConsumerId;
@@ -38,6 +39,7 @@ final readonly class SqlInbox implements Inbox
             throw new InboxRefused('Message exceeds the registered PII class.');
         }
         $contract->validateFact($message);
+        ReferenceWrites::enlist($connection, $message->scope, 'axiomasoft/corex', 'inbox', ['package' => $contract->owner, 'subject' => $message->subjectData(), 'consumer' => $consumer->name]);
         $key = [...MessageReceiptIdentity::logical($message->scope), 'consumer' => $consumer->name, 'source' => $message->source, 'message_id' => $message->messageId];
         $digest = $message->digest();
         $inserted = $connection->table($this->table)->insertOrIgnoreReturning([

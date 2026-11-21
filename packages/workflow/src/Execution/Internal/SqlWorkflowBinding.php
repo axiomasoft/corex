@@ -7,6 +7,7 @@ namespace CoreX\Workflow\Execution\Internal;
 use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Workflow\Contracts\EngineAdapter;
 use CoreX\Workflow\Contracts\WorkflowBinding;
 use CoreX\Workflow\Data\CaptureResult;
@@ -68,6 +69,8 @@ final readonly class SqlWorkflowBinding implements WorkflowBinding
             'principal_kind' => $request->scope->principalKind,
             'principal_id' => $request->scope->principalId,
         ], $stamp);
+
+        ReferenceWrites::enlist($connection, $request->scope, 'axiomasoft/corex-workflow', 'workflow-capture', ['package' => $request->module, 'entity' => $request->entityHandle, 'version' => $request->versionRef, 'provider' => $provider->namespace]);
 
         return $this->intents->capture($connection, $request, $provider, $stored);
     }

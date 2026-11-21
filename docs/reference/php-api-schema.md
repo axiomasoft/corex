@@ -1,6 +1,6 @@
 # PHP source surface schema
 
-`CoreX\Attributes\Tooling\SurfaceScanner::scan($root)` owns source discovery, ownership,
+`CoreX\Foundation\Tooling\SurfaceScanner::scan($root)` owns source discovery, ownership,
 classification, signatures and diagnostics. It parses production Composer PSR-4/PSR-0/classmap/files
 paths and configuration under `packages/` and `products/`. Products are consumers, without
 package API manifests. Inspected files are never executed. Vendor source resolves type references for diagnostics. External members are never expanded

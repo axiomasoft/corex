@@ -7,6 +7,7 @@ namespace CoreX\Search\Internal\Index;
 use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\EntityHandle;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Search\Index\Contracts\ActiveGenerations;
 use CoreX\Search\Index\Data\IndexTarget;
 use CoreX\Search\Internal\Value;
@@ -69,6 +70,7 @@ final readonly class LaneStore implements ActiveGenerations
         $identity = $this->laneIdentity($scope, $entity);
 
         if ($create) {
+            ReferenceWrites::enlist($db, $scope, 'axiomasoft/corex-search', 'search-lane', ['entity' => $entity->value, 'backend' => $this->backend]);
             $db->table(self::LANES)->insertOrIgnore($identity);
         }
 

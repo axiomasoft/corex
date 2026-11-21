@@ -11,6 +11,7 @@ use CoreX\CustomFields\Schemas\Data\LockedFieldMapping;
 use CoreX\CustomFields\Schemas\Data\SchemaRevision;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\EntityHandle;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use Illuminate\Database\ConnectionInterface;
 use Packman\Attributes\Internal;
 use stdClass;
@@ -40,6 +41,7 @@ final readonly class DatabaseSchemaHeads implements SchemaHeads
         $row = (clone $query)->lock($lock)->first();
 
         if ($row === null) {
+            ReferenceWrites::enlist($db, $scope, 'axiomasoft/corex-custom-fields', 'schema-head', ['entity' => $entity->value, 'entries' => $declared->entries]);
             $digest = $declared->digest();
             $inserted = $db->table('sys_field_schema_heads')->insertOrIgnoreReturning([...$key, 'mapping' => SchemaRows::json($declared->entries),
                 'effective_revision' => $digest, 'mapping_digest' => $digest, 'manifest_digest' => $digest], ['entity'], ['account_id', 'account_incarnation', 'workspace_scope', 'entity']);

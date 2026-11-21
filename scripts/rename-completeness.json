@@ -3363,6 +3363,26 @@
                 "old": "CoreX\\SearchMeilisearch\\MeilisearchServiceProvider",
                 "new": "CoreX\\SearchMeilisearch\\SearchMeilisearchServiceProvider",
                 "match": "fqcn"
+            },
+            {
+                "old": "CoreX\\Access\\Access\\Laravel\\PrincipalIdentity",
+                "new": "CoreX\\Access\\Laravel\\PrincipalIdentity",
+                "match": "fqcn"
+            },
+            {
+                "old": "CoreX\\Operations\\Bulk\\Contracts\\BulkTransferFactory",
+                "new": "CoreX\\Operations\\Bulk\\Contracts\\BulkExecutor",
+                "match": "fqcn"
+            },
+            {
+                "old": "CoreX\\Operations\\Bulk\\Data\\BulkTransferSession",
+                "new": "CoreX\\Operations\\Bulk\\Data\\BulkStep",
+                "match": "fqcn"
+            },
+            {
+                "old": "CoreX\\Operations\\Bulk\\Internal\\TransferBulkExecutor",
+                "new": "CoreX\\Operations\\Bulk\\Internal\\BulkWorker",
+                "match": "fqcn"
             }
         ],
         "namespaces": [
@@ -3980,6 +4000,11 @@
                 "old": "CoreX\\Wakeup\\",
                 "new": "CoreX\\Scheduler\\",
                 "match": "prefix"
+            },
+            {
+                "old": "CoreX\\Attributes\\Tooling",
+                "new": "CoreX\\Foundation\\Tooling",
+                "match": "prefix"
             }
         ],
         "packages": [
@@ -4108,6 +4133,31 @@
             {
                 "old": "packages/wakeup",
                 "new": "packages/scheduler",
+                "match": "word"
+            },
+            {
+                "old": "packages/core/src/Attributes/Tooling",
+                "new": "stage-7",
+                "match": "word"
+            },
+            {
+                "old": "packages/access/src/Access/Laravel/PrincipalIdentity.php",
+                "new": "stage-7",
+                "match": "word"
+            },
+            {
+                "old": "packages/operations/src/Bulk/Data/BulkTransferSession.php",
+                "new": "stage-7",
+                "match": "word"
+            },
+            {
+                "old": "packages/operations/src/Bulk/Contracts/BulkTransferFactory.php",
+                "new": "stage-7",
+                "match": "word"
+            },
+            {
+                "old": "packages/operations/src/Bulk/Internal/TransferBulkExecutor.php",
+                "new": "stage-7",
                 "match": "word"
             }
         ],

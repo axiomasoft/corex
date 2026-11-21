@@ -6,6 +6,7 @@ namespace CoreX\Webhooks\Internal;
 
 use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Data\DataScope;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
@@ -58,6 +59,7 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
         $this->assertEgress(scope: $scope, url: $subscription->endpointUrl);
 
         return $this->connection->transaction(function () use ($scope, $subscription): WebhookSubscription {
+            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-webhooks', 'subscription', ['declaration' => $subscription]);
             $this->assertScope($scope);
 
             if ($this->connection->table(self::Table)->count() >= self::CAP) {
@@ -115,6 +117,7 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
         $this->assertEgress(scope: $scope, url: $replacement->endpointUrl);
 
         return $this->connection->transaction(function () use ($scope, $id, $expectedRevision, $replacement): WebhookSubscription {
+            ReferenceWrites::enlist($this->connection, $scope, 'axiomasoft/corex-webhooks', 'subscription-update', ['id' => $id, 'replacement' => $replacement]);
             $this->assertScope($scope);
             $updated = $this->connection->table(self::Table)
                 ->where('id', $id)

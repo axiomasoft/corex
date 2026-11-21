@@ -15,6 +15,7 @@ use CoreX\Context\Data\ProviderObservation;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Enums\ProviderObservationKind;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Notifications\Delivery\Contracts\DeliveryExecution;
 use CoreX\Notifications\Delivery\Contracts\NotificationChannelDriver;
 use CoreX\Notifications\Delivery\Contracts\RecipientResolver;
@@ -142,14 +143,14 @@ final readonly class DeliveryCoordinator implements DeliveryExecution
             && ! $this->container->make(ProviderEffectRecovery::class)->recover($effect)) {
             return;
         }
-        $ticket = $ledger->reserve($claim->scope, new ProviderAttempt(
+        $ticket = ReferenceWrites::reserveEffect($claim->scope, new ProviderAttempt(
             effect: $effect,
             ownerRef: $claim->id,
             claimToken: $claim->token,
             attempt: $claim->attempts,
             deadline: $claim->deadline,
             digest: DeliveryStore::providerDigest($claim->messageHash, $namespace, $input->target->reference),
-        ));
+        ), 'axiomasoft/corex-notifications', $ledger);
 
         if (! $this->deliveries->startSending($claim, $ticket->id)) {
             $ledger->observe($ticket, new ProviderObservation(ProviderObservationKind::Absent, 'owner-send-not-started', DeliveryIntents::Owner));

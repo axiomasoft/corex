@@ -17,6 +17,13 @@ use Packman\Schema\Contracts\Migration\SchemaSets;
  */
 final class SchemaGate
 {
+    private const array VERSION_THREE_TENANT_PATHS = [
+        'axiomasoft/corex:tenant' => 'packages/core/database/migrations/tenant',
+        'axiomasoft/corex-import-export:tenant' => 'packages/import-export/database/migrations/tenant',
+        'axiomasoft/corex-media:tenant' => 'packages/media/database/migrations/tenant',
+        'axiomasoft/corex-operations:tenant' => 'packages/operations/database/migrations/tenant',
+    ];
+
     /** @var list<SchemaHit> */
     private array $hits = [];
 
@@ -55,7 +62,9 @@ final class SchemaGate
                 $this->hit('S1', $set['path'], 1, 'registered set has no migration files');
             }
 
-            $baselineVersion = str_starts_with($set['path'], 'packages/') ? 2 : 1;
+            $baselineVersion = $set['path'] === (self::VERSION_THREE_TENANT_PATHS[$set['id']] ?? null)
+                ? 3
+                : (str_starts_with($set['path'], 'packages/') ? 2 : 1);
 
             if ($set['version'] !== $baselineVersion) {
                 $this->hit('S8', $set['path'], 1, 'baseline set version must be '.$baselineVersion);

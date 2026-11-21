@@ -61,9 +61,12 @@
 | corex-operations.bulk.enabled | axiomasoft/corex-operations | bool | true | no | product-policy | unobserved | unobserved | BulkOptions::$enabled |  |  |
 | corex-operations.bulk.idempotency_retention_seconds | axiomasoft/corex-operations | int | 86400 | no | product-policy | unobserved | unobserved | BulkOptions::$idempotencyRetentionSeconds |  |  |
 | corex-operations.bulk.lease_seconds | axiomasoft/corex-operations | int | 30 | no | product-policy | unobserved | unobserved | BulkOptions::$leaseSeconds |  |  |
+| corex-operations.bulk.max_recovery_attempts | axiomasoft/corex-operations | int | 5 | no | product-policy | unobserved | Integer 1–100 | BulkOptions::$maxRecoveryAttempts |  | Consecutive retries for an unchanged checkpoint. |
 | corex-operations.bulk.metadata_retention_seconds | axiomasoft/corex-operations | int | 2592000 | no | product-policy | unobserved | unobserved | BulkOptions::$metadataRetentionSeconds |  |  |
 | corex-operations.bulk.result_retention_seconds | axiomasoft/corex-operations | int | 86400 | no | product-policy | unobserved | unobserved | BulkOptions::$resultRetentionSeconds |  |  |
 | corex-operations.bulk.retry_seconds | axiomasoft/corex-operations | int | 5 | no | product-policy | unobserved | unobserved | BulkOptions::$retrySeconds |  |  |
+| corex-operations.bulk.row_limit | axiomasoft/corex-operations | int | 500 | no | product-policy | unobserved | Integer 1–500 | BulkOptions::$rowLimit |  | Maximum number of rows admitted to one Bulk step. |
+| corex-operations.bulk.time_limit_seconds | axiomasoft/corex-operations | int | 20 | no | product-policy | unobserved | Integer 1–30 and less than lease_seconds | BulkOptions::$timeLimitSeconds |  | Upper execution bound for one Bulk step. |
 | corex-operations.bulk.worker | axiomasoft/corex-operations | string | api-bulk | no | deployment | no | unobserved | BulkOptions::$worker |  |  |
 | corex-operations.capabilities | axiomasoft/corex-operations | array | [] | no | product-policy | unobserved | unobserved | ApiOptions::$capabilities |  |  |
 | corex-operations.cost.capacity | axiomasoft/corex-operations | int | 10000 | no | product-policy | unobserved | unobserved | CostOptions::$capacity |  |  |

@@ -115,8 +115,38 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Features\Data\FeatureFlagDefinition` | api | 1.0 |
 | `CoreX\Features\Events\FeatureFlagToggled` | spi-call | 1.0 |
 | `CoreX\Features\Laravel\FeaturesRegistrar` | spi-call | 1.0 |
+| `CoreX\Foundation\Contracts\DeploymentOwners` | spi-implement | 2.0.0 |
+| `CoreX\Foundation\Contracts\LifecycleInventory` | spi-implement | 2.0.0 |
+| `CoreX\Foundation\Contracts\LifecyclePlans` | spi-call | 2.0.0 |
+| `CoreX\Foundation\Contracts\ModuleReferences` | spi-implement | 2.0.0 |
+| `CoreX\Foundation\Contracts\ModuleTableReferences` | spi-implement | 2.0.0 |
+| `CoreX\Foundation\Contracts\ProviderRemovalGate` | spi-call | 2.0.0 |
+| `CoreX\Foundation\Contracts\ReferenceAdmission` | spi-call | 2.0.0 |
+| `CoreX\Foundation\Contracts\ReferenceCleanup` | spi-implement | 2.0.0 |
+| `CoreX\Foundation\Contracts\ReferenceExclusion` | spi-implement | 2.0.0 |
+| `CoreX\Foundation\Contracts\ReferenceOwners` | spi-implement | 2.0.0 |
+| `CoreX\Foundation\Data\CleanupAction` | api | 2.0.0 |
+| `CoreX\Foundation\Data\CleanupReceipt` | api | 2.0.0 |
+| `CoreX\Foundation\Data\LifecycleBlocker` | api | 2.0.0 |
+| `CoreX\Foundation\Data\LifecycleConfirmation` | api | 2.0.0 |
+| `CoreX\Foundation\Data\LifecyclePlan` | api | 2.0.0 |
+| `CoreX\Foundation\Data\LifecyclePlanRef` | api | 2.0.0 |
+| `CoreX\Foundation\Data\LifecycleStatus` | api | 2.0.0 |
+| `CoreX\Foundation\Data\ModuleId` | api | 2.0.0 |
+| `CoreX\Foundation\Data\ModuleRef` | api | 2.0.0 |
+| `CoreX\Foundation\Data\OwnerLease` | api | 2.0.0 |
+| `CoreX\Foundation\Data\PlanDigest` | api | 2.0.0 |
+| `CoreX\Foundation\Data\ReferenceCursor` | api | 2.0.0 |
+| `CoreX\Foundation\Data\ReferencePage` | api | 2.0.0 |
+| `CoreX\Foundation\Data\RemovalApproval` | api | 2.0.0 |
+| `CoreX\Foundation\Enums\LifecycleAction` | api | 2.0.0 |
+| `CoreX\Foundation\Enums\LifecyclePhase` | api | 2.0.0 |
+| `CoreX\Foundation\Exceptions\LifecycleBlocked` | api | 2.0.0 |
+| `CoreX\Foundation\Exceptions\LifecyclePlanConflict` | api | 2.0.0 |
 | `CoreX\Foundation\Laravel\ConsoleRegistrar` | spi-call | 1.0 |
 | `CoreX\Foundation\Laravel\PackmanRegistrar` | spi-call | 1.0 |
+| `CoreX\Foundation\Laravel\ReferenceWrites` | spi-call | 2.0.0 |
+| `CoreX\Foundation\Laravel\SqlReferenceInventory` | spi-call | 2.0.0 |
 | `CoreX\Invocation\Contracts\OperationHandler` | spi-implement | 1.0 |
 | `CoreX\Invocation\Contracts\RequestContext` | spi-implement | 1.0 |
 | `CoreX\Invocation\Data\InvocationMetadata` | api | 1.0 |
@@ -204,7 +234,6 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | Symbol | Layer | Since |
 |:--|:--|:--|
 | `CoreX\Access\AccessServiceProvider` | spi-call | 1.0 |
-| `CoreX\Access\Access\Laravel\PrincipalIdentity` | spi-call | 1.0 |
 | `CoreX\Access\Contracts\AccessChecker` | spi-implement | 1.0 |
 | `CoreX\Access\Contracts\RoleMatrixCompiler` | spi-implement | 1.0 |
 | `CoreX\Access\Data\RecordContext` | api | 1.0 |
@@ -216,6 +245,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Access\Laravel\AccessBindingsRegistrar` | spi-call | 1.0 |
 | `CoreX\Access\Laravel\AccessIntegrationRegistrar` | spi-call | 1.0 |
 | `CoreX\Access\Laravel\AuthOptions` | spi-call | 1.0 |
+| `CoreX\Access\Laravel\PrincipalIdentity` | spi-call | 1.0 |
 | `CoreX\Access\Laravel\ScopeResolver` | spi-implement | 1.0 |
 | `CoreX\Access\Matrix\Contracts\EntityActivity` | spi-call | 1.0 |
 | `CoreX\Access\Matrix\Contracts\ScopeMapVersions` | spi-call | 1.0 |
@@ -288,7 +318,9 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | Symbol | Layer | Since |
 |:--|:--|:--|
 | `CoreX\ImportExport\Contracts\CancellationSignal` | spi-implement | 1.0 |
+| `CoreX\ImportExport\Contracts\ExportPublications` | spi-call | 2.0.0 |
 | `CoreX\ImportExport\Contracts\ExportRunner` | spi-implement | 1.0 |
+| `CoreX\ImportExport\Contracts\ExportSchemaWitness` | spi-implement | 2.0.0 |
 | `CoreX\ImportExport\Contracts\ExportSource` | spi-implement | 1.0 |
 | `CoreX\ImportExport\Contracts\ImportExportFactory` | spi-call | 1.0 |
 | `CoreX\ImportExport\Contracts\RecordMapper` | spi-implement | 1.0 |
@@ -386,10 +418,13 @@ Attributes own membership. Members belong to this package; direct extends/implem
 
 | Symbol | Layer | Since |
 |:--|:--|:--|
+| `CoreX\Media\Attachments\Contracts\MediaAttachments` | spi-implement | 1.0 |
 | `CoreX\Media\Contracts\ConversionDriver` | spi-implement | 1.0 |
-| `CoreX\Media\Contracts\MediaLibrary` | api | 1.0 |
 | `CoreX\Media\Contracts\MediaPolicy` | spi-implement | 1.0 |
-| `CoreX\Media\Contracts\RelationLookup` | spi-implement | 1.0 |
+| `CoreX\Media\Conversions\Contracts\ConversionOperations` | api | 2.0.0 |
+| `CoreX\Media\Conversions\Data\ConversionStatus` | api | 2.0.0 |
+| `CoreX\Media\Conversions\Enums\ConversionState` | api | 2.0.0 |
+| `CoreX\Media\Conversions\Exceptions\UnsupportedConversionProfile` | api | 2.0.0 |
 | `CoreX\Media\Data\AttachmentInput` | api | 1.0 |
 | `CoreX\Media\Data\AttachmentRef` | api | 1.0 |
 | `CoreX\Media\Data\ConversionInput` | api | 1.0 |
@@ -407,6 +442,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Media\Exceptions\MediaAccessDenied` | api | 1.0 |
 | `CoreX\Media\Exceptions\MediaFileInUse` | api | 1.0 |
 | `CoreX\Media\Exceptions\MediaOperationConflict` | api | 1.0 |
+| `CoreX\Media\Files\Contracts\MediaLibrary` | api | 1.0 |
 | `CoreX\Media\Laravel\GdThumbnailDriverFactory` | spi-call | 1.0 |
 | `CoreX\Media\Laravel\MediaBindingsRegistrar` | spi-call | 1.0 |
 | `CoreX\Media\Laravel\UploadedFileSource` | spi-call | 1.0 |
@@ -468,17 +504,25 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Operations\Authorization\Contracts\PrincipalResolver` | spi-implement | 1.0 |
 | `CoreX\Operations\Authorization\Contracts\ReplayAuthorizer` | spi-implement | 1.0 |
 | `CoreX\Operations\Authorization\Laravel\DeclaredFieldAuthorizer` | spi-call | 1.0 |
+| `CoreX\Operations\Bulk\Contracts\BulkExecutor` | spi-implement | 2.0.0 |
 | `CoreX\Operations\Bulk\Contracts\BulkOperationStore` | spi-implement | 1.0 |
-| `CoreX\Operations\Bulk\Contracts\BulkTransferFactory` | spi-implement | 1.0 |
+| `CoreX\Operations\Bulk\Contracts\BulkOwner` | spi-implement | 2.0.0 |
+| `CoreX\Operations\Bulk\Data\BulkCheckpoint` | api | 2.0.0 |
+| `CoreX\Operations\Bulk\Data\BulkContext` | api | 2.0.0 |
+| `CoreX\Operations\Bulk\Data\BulkFailurePage` | api | 2.0.0 |
 | `CoreX\Operations\Bulk\Data\BulkOperation` | api | 1.0 |
 | `CoreX\Operations\Bulk\Data\BulkOperationDefinition` | api | 1.0 |
 | `CoreX\Operations\Bulk\Data\BulkOptions` | api | 1.0 |
-| `CoreX\Operations\Bulk\Data\BulkTransferSession` | api | 1.0 |
+| `CoreX\Operations\Bulk\Data\BulkOwnerRef` | api | 2.0.0 |
+| `CoreX\Operations\Bulk\Data\BulkStep` | api | 2.0.0 |
+| `CoreX\Operations\Bulk\Data\BulkStepResult` | api | 2.0.0 |
 | `CoreX\Operations\Bulk\Enums\BulkOperationStatus` | api | 1.0 |
+| `CoreX\Operations\Bulk\Enums\BulkStepStatus` | api | 2.0.0 |
 | `CoreX\Operations\Bulk\Laravel\BulkBindingsRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Bulk\Laravel\BulkHttpRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Bulk\Laravel\BulkOptionsParser` | spi-call | 1.0 |
 | `CoreX\Operations\Bulk\Laravel\BulkRouteRegistrar` | spi-call | 1.0 |
+| `CoreX\Operations\Bulk\Laravel\SubmitBulkOperation` | spi-call | 2.0.0 |
 | `CoreX\Operations\Cost\Contracts\BudgetExecution` | spi-call | 1.0 |
 | `CoreX\Operations\Cost\Contracts\BudgetReservation` | spi-implement | 1.0 |
 | `CoreX\Operations\Cost\Contracts\DurableOperationBudget` | spi-implement | 2.0.0 |
@@ -583,6 +627,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 
 | Symbol | Layer | Since |
 |:--|:--|:--|
+| `CoreX\Panels\Contracts\SavedViewInventory` | spi-implement | 2.0.0 |
 | `CoreX\Panels\Laravel\PanelContexts` | spi-call | 1.0 |
 | `CoreX\Panels\PanelsServiceProvider` | spi-call | 1.0 |
 
@@ -652,6 +697,8 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Search\Index\Contracts\ActiveGenerations` | spi-call | 2.0.0 |
 | `CoreX\Search\Index\Contracts\IndexDriver` | spi-implement | 2.0.0 |
 | `CoreX\Search\Index\Contracts\IndexLookupAccess` | spi-call | 2.0.0 |
+| `CoreX\Search\Index\Contracts\IndexNamespaceExclusion` | spi-implement | 2.0.0 |
+| `CoreX\Search\Index\Contracts\IndexRemovalEvidence` | spi-implement | 2.0.0 |
 | `CoreX\Search\Index\Contracts\IndexWorker` | spi-call | 2.0.0 |
 | `CoreX\Search\Index\Data\IndexBatch` | api | 2.0.0 |
 | `CoreX\Search\Index\Data\IndexDocument` | api | 2.0.0 |

@@ -8,10 +8,15 @@ use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Foundation\Contracts\ReferenceAdmission;
+use CoreX\Foundation\Data\ModuleRef;
 use CoreX\Operations\Bulk\Contracts\BulkOperationStore;
+use CoreX\Operations\Bulk\Data\BulkCheckpoint;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
+use CoreX\Operations\Bulk\Data\BulkOwnerRef;
 use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
+use CoreX\Operations\Bulk\Laravel\BulkReferences;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use DateInterval;
 use DateTimeImmutable;
@@ -37,6 +42,7 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
         private ClockInterface $clock,
         private int $leaseSeconds = 30,
         private int $resultRetentionSeconds = 86_400,
+        private ?ReferenceAdmission $admission = null,
     ) {
         if ($leaseSeconds < 1 || $resultRetentionSeconds < 1) {
             throw new InvalidArgumentException('Bulk lease and result retention must be positive.');
@@ -51,6 +57,7 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
 
         return $this->connection->transaction(function () use ($scope, $definition): BulkOperation {
             $this->assertScope($scope);
+            $this->enlist($scope, $definition);
             $now = $this->clock->now();
             $this->connection->table(self::Table)->insertOrIgnore([
                 'id' => $definition->id,
@@ -58,12 +65,15 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
                 'operation_id' => $definition->operationId,
                 'submission_id' => $definition->submissionId,
                 'scope' => JsonCanonical::encode($definition->encodedScope),
+                'logical_scope' => $this->logicalScope($scope),
+                'row_limit' => $definition->rowLimit,
+                'time_limit_seconds' => $definition->timeLimitSeconds,
+                'recovery_attempts' => 0,
                 'actor_id' => $definition->actorId,
                 'client_id' => $definition->clientId,
                 'contract_hash' => $definition->contractHash,
                 'extension_stamp' => JsonCanonical::encode(JsonDocuments::map($definition->extensionStamp)),
                 'input_ref' => JsonCanonical::encode(JsonDocuments::map($definition->inputRef)),
-                'transfer_ref' => null,
                 'status' => BulkOperationStatus::Pending->value,
                 'terminal_status' => null,
                 'revision' => 0,
@@ -82,6 +92,8 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
             ]);
 
             $row = $this->connection->table(self::Table)
+                ->where('logical_scope', $this->logicalScope($scope))
+                ->where('client_id', $definition->clientId)
                 ->where('major', $definition->major)
                 ->where('operation_id', $definition->operationId)
                 ->where('submission_id', $definition->submissionId)
@@ -127,18 +139,9 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
             $this->assertScope($scope);
             $now = $this->clock->now();
             $query = $this->scopeQuery(query: $this->connection->table(self::Table), scope: $scope)
-                ->where(function (Builder $query) use ($now): void {
-                    $query->where(function (Builder $pending) use ($now): void {
-                        $pending->where('status', BulkOperationStatus::Pending->value)
-                            ->where('next_attempt_at', '<=', $now)
-                            ->whereNull('lease_owner');
-                    })->orWhere(function (Builder $recoverable) use ($now): void {
-                        $recoverable->whereIn('status', [
-                            BulkOperationStatus::Running->value,
-                            BulkOperationStatus::Cancelling->value,
-                        ])->where('lease_until', '<=', $now);
-                    });
-                })
+                ->where('next_attempt_at', '<=', $now)
+                ->whereIn('status', [BulkOperationStatus::Pending->value, BulkOperationStatus::Running->value, BulkOperationStatus::Cancelling->value])
+                ->where(static fn (Builder $query): Builder => $query->whereNull('lease_owner')->orWhere('lease_until', '<=', $now))
                 ->oldest('next_attempt_at')->oldest()
                 ->orderBy('id')
                 ->limit(1);
@@ -150,7 +153,9 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
                 return null;
             }
 
-            $status = BulkOperationStatus::from(DatabaseValue::text(DatabaseValue::field(row: $row, name: 'status')));
+            $operation = $this->operation($row);
+            $this->enlist($scope, $operation->definition);
+            $status = $operation->status;
             $nextStatus = $status === BulkOperationStatus::Pending
                 ? BulkOperationStatus::Running
                 : $status;
@@ -164,7 +169,8 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
                     'revision' => DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'revision')) + 1,
                     'lease_owner' => $worker,
                     'lease_until' => $leaseUntil,
-                    'attempt' => DatabaseValue::integer(DatabaseValue::field(row: $row, name: 'attempt')) + 1,
+                    'attempt' => $operation->attempt + 1,
+                    'recovery_attempts' => $operation->recoveryAttempts + 1,
                 ]);
 
             if ($changed !== 1) {
@@ -173,6 +179,19 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
 
             return $this->operation($this->requiredRow(DatabaseValue::text(DatabaseValue::field(row: $row, name: 'id'))));
         }, $this->transactionAttempts());
+    }
+
+    #[Override]
+    public function ownsClaim(DataScope $scope, BulkOperation $operation): bool
+    {
+        $this->assertScope($scope);
+
+        return $operation->leaseOwner !== null && $this->scopeQuery($this->connection->table(self::Table), $scope)
+            ->where('id', $operation->definition->id)
+            ->where('lease_owner', $operation->leaseOwner)
+            ->where('revision', $operation->revision)
+            ->where('lease_until', '>', $this->clock->now())
+            ->exists();
     }
 
     #[Override]
@@ -212,6 +231,7 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
                 throw new InvalidArgumentException('Bulk durable definition is immutable.');
             }
 
+            $this->enlist($scope, $stored->definition);
             $this->assertTransition(from: $stored->status, to: $operation->status);
             $terminal = $operation->status->isTerminal();
             $changed = $this->connection->table(self::Table)
@@ -221,13 +241,19 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
                 ->where('revision', $revision)
                 ->where('lease_until', '>', $now)
                 ->update([
-                    'transfer_ref' => $this->jsonOrNull(JsonDocuments::optionalMap($operation->transferRef)),
                     'status' => $operation->status->value,
                     'terminal_status' => null,
                     'revision' => $revision + 1,
-                    'lease_owner' => $terminal ? null : $leaseOwner,
-                    'lease_until' => $terminal ? null : $now->add(new DateInterval("PT{$this->leaseSeconds}S")),
-                    'checkpoint' => JsonCanonical::encode(JsonDocuments::map($operation->checkpoint)),
+                    'lease_owner' => null,
+                    'lease_until' => null,
+                    'checkpoint' => JsonCanonical::encode($operation->checkpoint === null ? [] : [
+                        'version' => 1,
+                        'sequence' => $operation->checkpoint->sequence,
+                        'owner_state' => JsonDocuments::map($operation->checkpoint->ownerState),
+                    ]),
+                    'owner_result_ref' => $this->ownerRefJson($operation->ownerResultRef),
+                    'failure_page_ref' => $this->ownerRefJson($operation->failurePageRef),
+                    'recovery_attempts' => $operation->recoveryAttempts,
                     'progress' => JsonCanonical::encode(JsonDocuments::map($operation->progress)),
                     'result_ref' => $this->jsonOrNull(JsonDocuments::optionalMap($operation->resultRef)),
                     'error' => $this->jsonOrNull(JsonDocuments::optionalMap($operation->error)),
@@ -262,6 +288,7 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
                 return $operation;
             }
 
+            $this->enlist($scope, $operation->definition);
             $now = $this->clock->now();
             $nextStatus = $operation->status === BulkOperationStatus::Pending
                 ? BulkOperationStatus::Cancelled
@@ -313,6 +340,7 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
 
     private function scopeQuery(Builder $query, DataScope $scope): Builder
     {
+        $query->where('logical_scope', $this->logicalScope($scope));
         $encoded = JsonCanonical::encode($this->scopeCodec->encode($scope));
 
         if ($this->connection->getDriverName() === 'pgsql') {
@@ -346,6 +374,8 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
         return $requested->submissionId === $stored->submissionId
             && $requested->operationId === $stored->operationId
             && $requested->major === $stored->major
+            && $requested->rowLimit === $stored->rowLimit
+            && $requested->timeLimitSeconds === $stored->timeLimitSeconds
             && $requested->contractHash === $stored->contractHash
             && JsonCanonical::encode($requested->encodedScope) === JsonCanonical::encode($stored->encodedScope)
             && $requested->actorId === $stored->actorId
@@ -370,6 +400,8 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
             BulkOperationStatus::Cancelling => [
                 BulkOperationStatus::Cancelling,
                 BulkOperationStatus::Cancelled,
+                BulkOperationStatus::Completed,
+                BulkOperationStatus::Failed,
             ],
             default => [],
         };
@@ -397,12 +429,13 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
             actorId: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'actor_id')),
             clientId: DatabaseValue::text(DatabaseValue::field(row: $row, name: 'client_id')),
             extensionStamp: JsonDocuments::capture($this->objectArray(value: DatabaseValue::field(row: $row, name: 'extension_stamp'), name: 'extension stamp')),
-            inputRef: JsonDocuments::capture($this->objectArray(value: DatabaseValue::field(row: $row, name: 'input_ref'), name: 'input reference')),
+            inputRef: JsonDocuments::capture($this->inputReference($row)),
+            rowLimit: DatabaseValue::integer(DatabaseValue::field($row, 'row_limit')),
+            timeLimitSeconds: DatabaseValue::integer(DatabaseValue::field($row, 'time_limit_seconds')),
         );
 
         return new BulkOperation(
             definition: $definition,
-            transferRef: JsonDocuments::nullable($this->nullableObjectArray(value: DatabaseValue::field(row: $row, name: 'transfer_ref'), name: 'transfer reference')),
             status: BulkOperationStatus::from(DatabaseValue::text(DatabaseValue::field(row: $row, name: 'status'))),
             terminalStatus: DatabaseValue::field(row: $row, name: 'terminal_status') === null
                 ? null
@@ -411,7 +444,7 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
             leaseOwner: DatabaseValue::field(row: $row, name: 'lease_owner') === null ? null : DatabaseValue::text(DatabaseValue::field(row: $row, name: 'lease_owner')),
             leaseUntil: $this->date(DatabaseValue::field(row: $row, name: 'lease_until')),
             cancelRequestedAt: $this->date(DatabaseValue::field(row: $row, name: 'cancel_requested_at')),
-            checkpoint: JsonDocuments::capture($this->objectArray(value: DatabaseValue::field(row: $row, name: 'checkpoint'), name: 'checkpoint')),
+            checkpoint: $this->checkpoint(DatabaseValue::field($row, 'checkpoint')),
             progress: JsonDocuments::capture($this->objectArray(value: DatabaseValue::field(row: $row, name: 'progress'), name: 'progress')),
             resultRef: JsonDocuments::nullable($this->nullableObjectArray(value: DatabaseValue::field(row: $row, name: 'result_ref'), name: 'result reference')),
             error: JsonDocuments::nullable($this->nullableObjectArray(value: DatabaseValue::field(row: $row, name: 'error'), name: 'error')),
@@ -420,7 +453,67 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
             createdAt: $this->requiredDate(value: DatabaseValue::field(row: $row, name: 'created_at'), name: 'created'),
             finishedAt: $this->date(DatabaseValue::field(row: $row, name: 'finished_at')),
             expiresAt: $this->date(DatabaseValue::field(row: $row, name: 'expires_at')),
+            ownerResultRef: $this->ownerRef(DatabaseValue::field($row, 'owner_result_ref')),
+            failurePageRef: $this->ownerRef(DatabaseValue::field($row, 'failure_page_ref')),
+            recoveryAttempts: DatabaseValue::integer(DatabaseValue::field($row, 'recovery_attempts')),
         );
+    }
+
+    /** @return array<array-key, mixed> */
+    private function inputReference(object $row): array
+    {
+        $input = $this->objectArray(DatabaseValue::field($row, 'input_ref'), 'input reference');
+
+        if ($input === [] && DatabaseValue::field($row, 'finished_at') !== null) {
+            return ['kind' => 'expired'];
+        }
+
+        return $input;
+    }
+
+    private function enlist(DataScope $scope, BulkOperationDefinition $definition): void
+    {
+        $this->admission?->enlist($scope, $this->connection, new ModuleRef('axiomasoft/corex-operations'), ...BulkReferences::targets($definition));
+    }
+
+    private function logicalScope(DataScope $scope): string
+    {
+        return hash('sha256', JsonCanonical::encode([$scope->accountId, $scope->accountIncarnation, $scope->workspaceId, $scope->principalKind, $scope->principalId]));
+    }
+
+    private function checkpoint(mixed $value): ?BulkCheckpoint
+    {
+        $data = $this->objectArray($value, 'checkpoint');
+
+        if ($data === []) {
+            return null;
+        }
+
+        if (($data['version'] ?? null) !== 1 || ! is_int($data['sequence'] ?? null) || ! is_array($data['owner_state'] ?? null)) {
+            throw new RuntimeException('Bulk checkpoint envelope is invalid.');
+        }
+
+        return new BulkCheckpoint($data['sequence'], JsonDocuments::capture($data['owner_state']));
+    }
+
+    private function ownerRef(mixed $value): ?BulkOwnerRef
+    {
+        $data = $this->nullableObjectArray($value, 'owner reference');
+
+        if ($data === null) {
+            return null;
+        }
+
+        if (($data['version'] ?? null) !== 1 || ! is_string($data['owner'] ?? null) || ! is_string($data['kind'] ?? null) || ! is_string($data['id'] ?? null)) {
+            throw new RuntimeException('Bulk owner reference envelope is invalid.');
+        }
+
+        return new BulkOwnerRef($data['owner'], $data['kind'], $data['id']);
+    }
+
+    private function ownerRefJson(?BulkOwnerRef $ref): ?string
+    {
+        return $ref === null ? null : JsonCanonical::encode(['version' => 1, 'owner' => $ref->owner, 'kind' => $ref->kind, 'id' => $ref->id]);
     }
 
     /** @return array<string, scalar|null> */

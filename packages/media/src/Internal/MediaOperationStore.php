@@ -7,12 +7,21 @@ namespace CoreX\Media\Internal;
 use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Context\Contracts\DataScopeFactory;
 use CoreX\Context\Contracts\StoredWorkIssuer;
+use CoreX\Context\Contracts\StoredWorkRunner;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\StoredWorkProof;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\JsonDocument;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Foundation\Contracts\ReferenceAdmission;
+use CoreX\Foundation\Data\ModuleRef;
+use CoreX\Foundation\Laravel\ReferenceWrites;
+use CoreX\Media\Conversions\Data\ConversionStatus;
+use CoreX\Media\Conversions\Enums\ConversionState;
+use CoreX\Media\Data\MediaConversionRef;
+use CoreX\Media\Exceptions\MediaAccessDenied;
 use CoreX\Media\Internal\Data\ConversionClaim;
 use CoreX\Media\Internal\Data\ConversionOperationRequest;
 use CoreX\Media\Internal\Data\PurgeClaim;
@@ -25,6 +34,7 @@ use Illuminate\Support\Str;
 use LogicException;
 use Packman\Attributes\Internal;
 use Psr\Clock\ClockInterface;
+use Throwable;
 
 #[Internal]
 final readonly class MediaOperationStore
@@ -40,12 +50,20 @@ final readonly class MediaOperationStore
         private CurrentWorkScope $current,
         private DataScopeCodec $codec,
         private StoredWorkIssuer $issuer,
+        private ReferenceAdmission $admission,
+        private StoredWorkRunner $runner,
     ) {}
 
     public function enqueuePurge(string $fileId): void
     {
         $this->blobs->assertConnection($this->connection);
+        $scope = $this->enlist();
+        $key = 'purge:'.$fileId;
+        $proof = $this->issuer->issue($scope, 'corex.media.purge', $key);
         $this->connection->table('med_operations')->insertOrIgnore([
+            ...$this->conversionIdentity($scope), ...$this->conversionFence($scope),
+            'conversion_scope' => json_encode($this->codec->encode($scope), JSON_THROW_ON_ERROR),
+            'scope_seal' => $proof->seal,
             'file_id' => $fileId,
             'operation_key' => "purge:{$fileId}",
             'kind' => 'purge',
@@ -58,10 +76,41 @@ final readonly class MediaOperationStore
         ]);
     }
 
+    public function purge(string $fileId): void
+    {
+        $scope = $this->currentConversionScope();
+        $query = $this->connection->table('med_operations')->where('operation_key', 'purge:'.$fileId)
+            ->where('kind', 'purge')->where($this->conversionFence($scope))
+            ->where('account_id', $scope->accountId)->where('account_incarnation', $scope->accountIncarnation);
+
+        if ($scope->workspaceId !== null) {
+            $query->where($this->conversionIdentity($scope));
+        }
+        $row = $query->first();
+
+        if ($row === null) {
+            return;
+        }
+        $this->runner->runStored($this->conversionScope($row), new StoredWorkProof('corex.media.purge', 'purge:'.$fileId, Value::text($row->scope_seal)), function () use ($fileId): void {
+            $claim = $this->claimPurge($fileId);
+
+            if ($claim !== null) {
+                try {
+                    $this->completePurge($claim);
+                } catch (Throwable $exception) {
+                    $this->markUnknown($claim);
+
+                    throw $exception;
+                }
+            }
+        });
+    }
+
     public function claimPurge(string $fileId): ?PurgeClaim
     {
         return $this->blobs->transaction($this->connection, function () use ($fileId): ?PurgeClaim {
-            $file = $this->connection->table('med_files')->where('id', $fileId)->where('account_id', $this->blobs->accountId())->lockForUpdate()->first();
+            $scope = $this->enlist();
+            $file = $this->connection->table('med_files')->where($this->conversionIdentity($scope))->where('id', $fileId)->where('account_id', $this->blobs->accountId())->lockForUpdate()->first();
 
             if ($file === null || $file->state !== 'deleting') {
                 return null;
@@ -69,7 +118,7 @@ final readonly class MediaOperationStore
 
             $operation = $this->connection->table('med_operations')
                 ->where('file_id', $fileId)
-                ->where('kind', 'purge')
+                ->where($this->conversionIdentity($scope))->where($this->conversionFence($scope))->where('kind', 'purge')
                 ->lockForUpdate()
                 ->first();
 
@@ -86,29 +135,34 @@ final readonly class MediaOperationStore
                 'updated_at' => $this->clock->now(),
             ]);
 
-            return new PurgeClaim(operationId: Value::integer($operation->id), fileId: Value::text($file->id), epoch: $epoch, fileVersion: Value::integer($file->version));
+            return new PurgeClaim(operationId: Value::integer($operation->id), fileId: Value::text($file->id), epoch: $epoch, fileVersion: Value::integer($file->version), scope: $scope);
         });
     }
 
     public function completePurge(PurgeClaim $claim): void
     {
         $this->blobs->transaction($this->connection, function () use ($claim): void {
-            $file = $this->connection->table('med_files')->where('id', $claim->fileId)->where('account_id', $this->blobs->accountId())->lockForUpdate()->first();
+            $this->admission->enlist($claim->scope, $this->connection, new ModuleRef('axiomasoft/corex-media'));
+            $file = $this->connection->table('med_files')->where($this->conversionIdentity($claim->scope))->where('id', $claim->fileId)->where('account_id', $this->blobs->accountId())->lockForUpdate()->first();
             $operation = $this->connection->table('med_operations')->where('id', $claim->operationId)->lockForUpdate()->first();
 
-            if ($file === null || $operation === null || $file->state !== 'deleting' || Value::integer($file->version) !== $claim->fileVersion || $operation->state !== 'claimed' || Value::integer($operation->claim_epoch) !== $claim->epoch) {
+            if ($file === null || $operation === null || ! $this->notYetDue($operation->lease_until) || $file->state !== 'deleting' || Value::integer($file->version) !== $claim->fileVersion || $operation->state !== 'claimed' || Value::integer($operation->claim_epoch) !== $claim->epoch) {
                 return;
             }
 
             $conversions = $this->connection->table('med_conversions')->where('file_id', $claim->fileId)->lockForUpdate()->get();
+            $released = [];
             foreach ($conversions as $conversion) {
                 if ($conversion->blob_id !== null) {
-                    $this->blobs->unpin(Value::text($conversion->blob_id), 'corex.media.conversion', Value::text($conversion->id));
+                    $key = Value::text($conversion->id);
+                    $this->blobs->unpin(Value::text($conversion->blob_id), 'corex.media.conversion', $key);
+                    $released[] = [$conversion->blob_id, 'corex.media.conversion', $key];
                 }
             }
 
             if ($file->blob_id !== null) {
                 $this->blobs->unpin(Value::text($file->blob_id), 'corex.media.file', $claim->fileId);
+                $released[] = [$file->blob_id, 'corex.media.file', $claim->fileId];
             }
             $this->connection->table('med_conversions')->where('file_id', $claim->fileId)->update(['blob_id' => null, 'state' => 'deleted']);
             $this->connection->table('med_files')->where('id', $claim->fileId)->update([
@@ -119,6 +173,7 @@ final readonly class MediaOperationStore
             ]);
             $this->connection->table('med_operations')->where('id', $claim->operationId)->update([
                 'state' => 'ready',
+                'released_pins' => json_encode($released, JSON_THROW_ON_ERROR),
                 'lease_until' => null,
                 'updated_at' => $this->clock->now(),
             ]);
@@ -127,8 +182,12 @@ final readonly class MediaOperationStore
 
     public function markUnknown(PurgeClaim $claim): void
     {
-        $this->blobs->assertConnection($this->connection);
-        $this->connection->table('med_operations')
+        try {
+            $this->current->assert($claim->scope, $this->connection);
+        } catch (ScopeContextMismatch) {
+            return;
+        }
+        $this->connection->table('med_operations')->where($this->conversionIdentity($claim->scope))->where($this->conversionFence($claim->scope))
             ->where('id', $claim->operationId)
             ->where('file_id', $claim->fileId)
             ->whereIn('file_id', $this->connection->table('med_files')->select('id')->where('account_id', $this->blobs->accountId()))
@@ -158,6 +217,43 @@ final readonly class MediaOperationStore
             'account_incarnation' => $scope->accountIncarnation,
             'workspace_scope' => $scope->workspaceId === null ? 'account' : 'workspace:'.$scope->workspaceId,
         ];
+    }
+
+    public function enlist(ModuleRef ...$targets): DataScope
+    {
+        $scope = $this->currentConversionScope();
+        $this->admission->enlist($scope, $this->connection, new ModuleRef('axiomasoft/corex-media'), ...$targets);
+
+        return $scope;
+    }
+
+    public function status(MediaConversionRef $ref): ConversionStatus
+    {
+        $scope = $this->currentConversionScope();
+        $op = $this->conversionOperation($ref->fileId, $ref->profile, null, $ref->id, $scope)
+            ->where($this->conversionIdentity($scope))->first();
+
+        if ($op === null) {
+            throw new MediaAccessDenied('Conversion reference unavailable.');
+        }
+        $state = match ($op->state) {
+            'ready' => ConversionState::Ready, 'pending' => ConversionState::Pending,
+            'claimed' => ConversionState::Processing, 'superseded', 'failed' => ConversionState::Failed,
+            default => ConversionState::Unknown,
+        };
+
+        if ($state !== ConversionState::Ready) {
+            return new ConversionStatus($state);
+        }
+        $output = $this->connection->table('med_conversions')->where($this->conversionIdentity($scope))
+            ->where('file_id', $ref->fileId)->where('profile_key', $ref->profile)->where('profile_digest', $op->profile_digest)
+            ->where('source_version', $op->source_version)->where('blob_id', $op->blob_receipt)->where('state', 'ready')->first();
+
+        if ($output === null || ! is_string($op->blob_receipt)) {
+            return new ConversionStatus(ConversionState::Unknown);
+        }
+
+        return new ConversionStatus($state, $op->blob_receipt, Value::text($output->sha256), Value::integer($output->width), Value::integer($output->height));
     }
 
     public function enqueueConversion(string $fileId, string $profileKey, string $profileDigest, int $sourceVersion): string
@@ -232,7 +328,7 @@ final readonly class MediaOperationStore
                 return null;
             }
 
-            $scope = $this->currentConversionScope();
+            $scope = $this->enlist();
             $identity = $this->conversionIdentity($scope);
             // Old deployments cannot publish under the digest of a different driver.
             $this->connection->table('med_operations')->where($identity)->where($this->conversionFence($scope))->where('file_id', $fileId)->where('profile_key', $profileKey)
@@ -275,7 +371,7 @@ final readonly class MediaOperationStore
                 'updated_at' => $this->clock->now(),
             ]);
 
-            return new ConversionClaim(operationId: Value::integer($operation->id), scope: $scope, token: $token, conversionId: Value::integer($conversion->id), fileId: Value::text($file->id), epoch: $epoch, fileVersion: Value::integer($file->version), sourceBlobId: Value::text($file->blob_id), accountId: Value::text($file->account_id), sourceMimeType: Value::text($file->mime_type), profileKey: $profileKey, profileDigest: Value::text($conversion->profile_digest));
+            return new ConversionClaim(operationId: Value::integer($operation->id), scope: $scope, token: $token, conversionId: Value::integer($conversion->id), fileId: Value::text($file->id), epoch: $epoch, fileVersion: Value::integer($file->version), sourceBlobId: Value::text($file->blob_id), accountId: Value::text($file->account_id), sourceMimeType: Value::text($file->mime_type), sourceHash: Value::text($file->sha256), sourceSize: Value::integer($file->size_bytes), profileKey: $profileKey, profileDigest: Value::text($conversion->profile_digest));
         });
     }
 
@@ -291,7 +387,7 @@ final readonly class MediaOperationStore
                 return false;
             }
 
-            $this->current->assert($claim->scope, $this->connection);
+            $this->admission->enlist($claim->scope, $this->connection, new ModuleRef('axiomasoft/corex-media'), ...ReferenceWrites::targets($claim->scope, 'axiomasoft/corex-media', 'conversion-profile', ['profile' => $claim->profileKey, 'digest' => $claim->profileDigest]));
             $blob = $this->blobs->commit($bytes, $claim->accountId);
             $this->blobs->pin($blob->id, 'corex.media.conversion', (string) $claim->conversionId);
             $this->connection->table('med_conversions')->where('id', $claim->conversionId)->update([
@@ -366,7 +462,7 @@ final readonly class MediaOperationStore
         ];
     }
 
-    private function conversionKey(DataScope $scope, string $fileId, string $profileKey, string $profileDigest, int $sourceVersion): string
+    public function conversionKey(DataScope $scope, string $fileId, string $profileKey, string $profileDigest, int $sourceVersion): string
     {
         return 'conversion:'.hash('sha256', json_encode([
             $this->conversionIdentity($scope), $fileId, $profileKey, $profileDigest, $sourceVersion,
@@ -381,11 +477,13 @@ final readonly class MediaOperationStore
     /** @return list<string> */
     public function duePurgeFileIds(int $limit = 100): array
     {
-        $this->blobs->assertConnection($this->connection);
+        $scope = $this->currentConversionScope();
         $now = $this->clock->now();
 
         return array_values($this->connection->table('med_operations')
-            ->where('kind', 'purge')
+            ->where('kind', 'purge')->where($this->conversionFence($scope))
+            ->where('account_id', $scope->accountId)->where('account_incarnation', $scope->accountIncarnation)
+            ->when($scope->workspaceId !== null, fn (Builder $q) => $q->where($this->conversionIdentity($scope)))
             ->where(fn (Builder $query) => $this->due($query, $now))
             ->whereIn('file_id', $this->connection->table('med_files')->select('id')->where('account_id', $this->blobs->accountId()))
             ->orderBy('id')

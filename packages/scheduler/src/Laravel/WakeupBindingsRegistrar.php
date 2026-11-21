@@ -11,11 +11,13 @@ use CoreX\Context\Contracts\StoredWorkRunner;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Contracts\WorkScopeRunner;
 use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Foundation\Contracts\ModuleReferences;
 use CoreX\Scheduler\Internal\SchedulerOptions;
 use CoreX\Scheduler\Internal\SqlWakeupScheduler;
 use CoreX\Scheduler\Internal\SweepRunner;
 use CoreX\Scheduler\Internal\WakeupHandlerRegistry;
 use CoreX\Scheduler\Internal\WakeupInput;
+use CoreX\Scheduler\Internal\WakeupModuleReferences;
 use CoreX\Scheduling\Contracts\DueWakeupSource;
 use CoreX\Scheduling\Contracts\DueWakeupSweeper;
 use CoreX\Scheduling\Contracts\WakeupScheduleHint;
@@ -40,6 +42,9 @@ final class WakeupBindingsRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
+        $app->scoped(WakeupModuleReferences::class);
+        $app->tag(WakeupModuleReferences::class, ModuleReferences::class);
+
         $app->singleton(SchedulerOptions::class, static fn (Application $app): SchedulerOptions => SchedulerOptions::fromArray(
             (array) $app->make(Repository::class)->get('corex-scheduler', []),
         ));

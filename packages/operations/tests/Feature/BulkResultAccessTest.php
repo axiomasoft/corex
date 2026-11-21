@@ -10,21 +10,20 @@ use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
+use CoreX\Operations\Bulk\Data\BulkOwnerRef;
 use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
 use CoreX\Operations\Bulk\Internal\BulkFailureReader;
 use CoreX\Operations\Bulk\Internal\BulkOperations;
 use CoreX\Operations\Bulk\Internal\BulkResultReader;
 use CoreX\Operations\Bulk\Internal\SqlBulkOperationStore;
-use CoreX\Operations\Bulk\Internal\TransferBulkExecutor;
 use CoreX\Operations\Laravel\ApiSchemaConnections;
 use CoreX\Operations\Testing\ContextFixture;
-use CoreX\Operations\Tests\Fixtures\BulkTransferFactory;
+use CoreX\Operations\Tests\Fixtures\BulkExecutorFixture;
 use CoreX\Operations\Tests\TestCase;
 use CoreX\Tests\Support\CallerWorkScopeFixture;
 use CoreX\Time\Testing\FrozenClock;
 use DateTimeImmutable;
 use Illuminate\Support\Facades\DB;
-use InvalidArgumentException;
 use Packman\Schema\Contracts\Migration\SchemaMigrator;
 use Packman\Schema\Contracts\Migration\SchemaSets;
 
@@ -34,9 +33,7 @@ final class BulkResultAccessTest extends TestCase
 
     private DataScope $scope;
 
-    private int $manifestReads = 0;
-
-    private int $failureReads = 0;
+    private BulkExecutorFixture $owner;
 
     protected function setUp(): void
     {
@@ -64,14 +61,15 @@ final class BulkResultAccessTest extends TestCase
         $this->store = new SqlBulkOperationStore($connection, new ArrayDataScopeCodec, new CallerWorkScopeFixture($contexts), $clock);
         $this->scope = CallerWorkScopeFixture::scope('account-1', null, 'actor-1', hash('sha256', 'epoch'));
         $this->clock = $clock;
+        $this->owner = new BulkExecutorFixture;
     }
 
     private FrozenClock $clock;
 
     public function test_foreign_caller_and_revoked_field_access_do_not_read_the_result(): void
     {
-        $api = $this->api(fieldAccess: static fn (): bool => false);
-        $api->submit($this->scope, 'client-1', 'submission-1', $this->definition());
+        $api = $this->api(false);
+        $this->store->submit($this->definition());
         $claimed = $this->store->claim($this->scope, 'worker-1');
         self::assertNotNull($claimed);
         self::assertTrue($this->store->save($this->completed($claimed), 'worker-1', $claimed->revision));
@@ -80,41 +78,49 @@ final class BulkResultAccessTest extends TestCase
         self::assertSame(404, $api->result($foreign, 'client-9', 'bulk-1')->status());
         self::assertSame(404, $api->show($this->scope, 'client-9', 'bulk-1')->status());
         self::assertSame(404, $api->result($this->scope, 'client-1', 'bulk-1')->status());
-        self::assertSame(0, $this->manifestReads);
-        self::assertSame(0, $this->failureReads);
+        self::assertSame(0, $this->owner->resultReads);
+        self::assertSame(0, $this->owner->failureReads);
     }
 
     public function test_failure_cursor_rejects_limits_above_100(): void
     {
-        $api = $this->api(fieldAccess: static fn (): bool => true);
-        $api->submit($this->scope, 'client-1', 'submission-1', $this->definition());
+        $api = $this->api(true);
+        $this->store->submit($this->definition());
+        $claimed = $this->store->claim($this->scope, 'worker-1');
+        self::assertNotNull($claimed);
+        self::assertTrue($this->store->save($this->completed($claimed), 'worker-1', $claimed->revision));
         $page = $api->failurePage($this->scope, 'client-1', 'bulk-1', '10', 100);
         $denied = $api->failurePage($this->scope, 'client-1', 'bulk-1', null, 101);
 
         self::assertSame(200, $page->status());
         self::assertSame(422, $denied->status());
-        self::assertSame(1, $this->failureReads);
+        self::assertSame(1, $this->owner->failureReads);
         self::assertSame('limit_exceeded', $denied->getData(true)['code']);
     }
 
-    private function api(callable $fieldAccess): BulkOperations
+    public function test_empty_failure_page_checks_current_owner_authority(): void
     {
+        $this->store->submit($this->definition());
+        $claimed = $this->store->claim($this->scope, 'worker-1');
+        self::assertNotNull($claimed);
+        self::assertTrue($this->store->save($this->completed($claimed, hasFailures: false), 'worker-1', $claimed->revision));
+
+        $allowed = $this->api(true)->failurePage($this->scope, 'client-1', 'bulk-1', null, 50);
+        self::assertSame(200, $allowed->status());
+        self::assertSame([], $allowed->getData(true)['records']);
+        self::assertSame(404, $this->api(false)->failurePage($this->scope, 'client-1', 'bulk-1', null, 50)->status());
+        self::assertSame(1, $this->owner->resultReads);
+        self::assertSame(0, $this->owner->failureReads);
+    }
+
+    private function api(bool $allowed): BulkOperations
+    {
+        $this->owner->allowRead = $allowed;
+
         return new BulkOperations(
             $this->store,
-            new TransferBulkExecutor(new BulkTransferFactory, $this->store, $this->clock, scopes: new ArrayDataScopeCodec),
-            new BulkResultReader($fieldAccess, function (): array {
-                $this->manifestReads++;
-
-                return ['media_type' => 'application/json'];
-            }),
-            new BulkFailureReader(function (DataScope $scope, BulkOperation $operation, ?string $after, int $limit): array {
-                if ($limit > BulkFailureReader::MAX_LIMIT) {
-                    throw new InvalidArgumentException('limit');
-                }
-                $this->failureReads++;
-
-                return ['records' => [], 'next' => $after];
-            }),
+            new BulkResultReader(fn (): BulkExecutorFixture => $this->owner),
+            new BulkFailureReader(fn (): BulkExecutorFixture => $this->owner),
             $this->clock,
         );
     }
@@ -135,26 +141,27 @@ final class BulkResultAccessTest extends TestCase
         );
     }
 
-    private function completed(BulkOperation $operation): BulkOperation
+    private function completed(BulkOperation $operation, bool $hasFailures = true): BulkOperation
     {
         return new BulkOperation(
             definition: $operation->definition,
-            transferRef: JsonDocuments::nullable(null),
             status: BulkOperationStatus::Completed,
             terminalStatus: null,
             revision: $operation->revision,
             leaseOwner: $operation->leaseOwner,
             leaseUntil: $operation->leaseUntil,
             cancelRequestedAt: null,
-            checkpoint: JsonDocuments::capture(['sequence' => '1']),
+            checkpoint: null,
             progress: JsonDocuments::capture(['phase' => 'completed']),
-            resultRef: JsonDocuments::nullable(['id' => 'result-1']),
+            resultRef: null,
             error: JsonDocuments::nullable(null),
             attempt: $operation->attempt,
             nextAttemptAt: $operation->nextAttemptAt,
             createdAt: $operation->createdAt,
             finishedAt: null,
             expiresAt: null,
+            ownerResultRef: new BulkOwnerRef('fixture/owner', 'result', 'result-1'),
+            failurePageRef: $hasFailures ? new BulkOwnerRef('fixture/owner', 'failures', 'result-1') : null,
         );
     }
 }

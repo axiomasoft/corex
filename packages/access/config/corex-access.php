@@ -49,7 +49,7 @@ return [
     | Local login lane (D125 — OQ-18 variant A)
     |--------------------------------------------------------------------------
     | `Identity\PrincipalUserProvider` reads this table via query-builder and
-    | returns a PrincipalIdentity(user, <id>) — the shared seam BOTH login
+    | returns a CoreX\Access\Laravel\PrincipalIdentity(user, <id>) — the shared seam BOTH login
     | lanes construct through (parity, premortem C4): the OIDC lane
     | (axiomasoft/corex-tenancy) ends in `Auth::loginUsingId($sub)`, which resolves
     | through this exact provider. `connection`/`table` name a table by

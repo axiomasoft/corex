@@ -27,12 +27,14 @@ return new class extends PackmanMigration
             $table->string('operation_id', 191);
             $table->string('submission_id', 64);
             $table->json('scope');
+            $table->char('logical_scope', 64);
+            $table->unsignedBigInteger('row_limit')->default(500);
+            $table->unsignedBigInteger('time_limit_seconds')->default(20);
             $table->string('actor_id', 191);
             $table->string('client_id', 191);
             $table->char('contract_hash', 64);
             $table->json('extension_stamp');
             $table->json('input_ref');
-            $table->json('transfer_ref')->nullable();
             $table->string('status', 16);
             $table->string('terminal_status', 16)->nullable();
             $table->unsignedBigInteger('revision');
@@ -42,14 +44,17 @@ return new class extends PackmanMigration
             $table->json('checkpoint');
             $table->json('progress');
             $table->json('result_ref')->nullable();
+            $table->json('owner_result_ref')->nullable();
+            $table->json('failure_page_ref')->nullable();
+            $table->unsignedBigInteger('recovery_attempts')->default(0);
             $table->json('error')->nullable();
             $table->unsignedBigInteger('attempt');
             $table->timestampTz('next_attempt_at', precision: 6);
             $table->timestampTz('created_at', precision: 6);
             $table->timestampTz('finished_at', precision: 6)->nullable();
             $table->timestampTz('expires_at', precision: 6)->nullable();
-            $table->unique(['major', 'operation_id', 'submission_id'], 'sys_api_bulk_operations_submission_uq');
-            $table->index(['status', 'next_attempt_at', 'lease_until'], 'sys_api_bulk_operations_claim_ix');
+            $table->unique(['logical_scope', 'client_id', 'major', 'operation_id', 'submission_id'], 'sys_api_bulk_operations_submission_uq');
+            $table->index(['logical_scope', 'status', 'next_attempt_at', 'lease_until'], 'sys_api_bulk_operations_claim_ix');
         });
 
         $this->addCheck($connection, 'sys_api_bulk_operations', 'sys_api_bulk_operations_status_ck',

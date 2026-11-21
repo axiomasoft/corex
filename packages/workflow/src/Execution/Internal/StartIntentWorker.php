@@ -24,6 +24,7 @@ use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use CoreX\Workflow\Contracts\EngineAdapter;
 use CoreX\Workflow\Data\EngineEffectRef;
 use CoreX\Workflow\Data\EngineProvider;
@@ -124,11 +125,11 @@ final readonly class StartIntentWorker
                     return;
                 }
 
-                $ticket = $this->effects->reserve($scope, new ProviderAttempt(
+                $ticket = ReferenceWrites::reserveEffect($scope, new ProviderAttempt(
                     $effect, $id, Value::text(Value::field($row, 'claim_token')), Value::integer(Value::field($row, 'attempt')),
                     new DateTimeImmutable(Value::text(Value::field($row, 'lease_until')), new DateTimeZone('UTC')), $digest,
                     singleInstanceReference: true,
-                ));
+                ), 'axiomasoft/corex-workflow', $this->effects);
 
                 if (! $this->intents->compareAndSet($db, $scope, $row, 'claimed', ['state' => 'sending', 'provider_ticket' => $ticket->id])) {
                     return;

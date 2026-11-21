@@ -1,0 +1,194 @@
+{
+  "id": "owner-effects",
+  "laravel": 13,
+  "host_support": true,
+  "retain_install_evidence": true,
+  "timeout_seconds": 240,
+  "distinct_connections": true,
+  "variants": {
+    "cloud": {
+      "profile": {
+        "id": "owner-effects-two-owners",
+        "database": "postgres-isolated",
+        "database_roles": [
+          "control",
+          "a",
+          "b",
+          "budget"
+        ],
+        "default_database": "control",
+        "http": true,
+        "packages": [
+          "axiomasoft/corex-tenancy",
+          "axiomasoft/corex-access",
+          "axiomasoft/corex-media",
+          "axiomasoft/corex-panels",
+          "axiomasoft/corex-operations",
+          "axiomasoft/corex-import-export"
+        ],
+        "prerequisites": [
+          "axiomasoft/tenant-laravel",
+          "axiomasoft/vaulter-core",
+          "axiomasoft/vaulter-media"
+        ],
+        "extension_fixture": {
+          "id": "custom-attribute-source",
+          "version": "1.0.0"
+        },
+        "forbid": []
+      }
+    }
+  },
+  "processes": {
+    "request": [
+      "php",
+      "{fixture}/probe.php",
+      "request"
+    ],
+    "charge": [
+      "php",
+      "{fixture}/probe.php",
+      "charge"
+    ],
+    "setup": [
+      "php",
+      "{fixture}/probe.php",
+      "setup"
+    ],
+    "recover": [
+      "php",
+      "{fixture}/probe.php",
+      "recover"
+    ],
+    "replay": [
+      "php",
+      "{fixture}/probe.php",
+      "replay"
+    ],
+    "isolation": [
+      "php",
+      "{fixture}/probe.php",
+      "isolation"
+    ],
+    "cleanup": [
+      "php",
+      "{fixture}/probe.php",
+      "cleanup"
+    ],
+    "cleanup-unknown": [
+      "php",
+      "{fixture}/probe.php",
+      "cleanup-unknown"
+    ],
+    "cleanup-ack": [
+      "php",
+      "{fixture}/probe.php",
+      "cleanup-ack"
+    ],
+    "retention": [
+      "php",
+      "{fixture}/probe.php",
+      "retention"
+    ]
+  },
+  "actions": [
+    {
+      "action": "start",
+      "name": "setup"
+    },
+    {
+      "action": "complete",
+      "name": "setup"
+    },
+    {
+      "action": "start",
+      "name": "retention"
+    },
+    {
+      "action": "complete",
+      "name": "retention"
+    },
+    {
+      "action": "start",
+      "name": "request"
+    },
+    {
+      "action": "await",
+      "name": "before-dispatch",
+      "process": "request"
+    },
+    {
+      "action": "terminate",
+      "name": "request",
+      "barrier": "before-dispatch"
+    },
+    {
+      "action": "start",
+      "name": "recover"
+    },
+    {
+      "action": "complete",
+      "name": "recover"
+    },
+    {
+      "action": "start",
+      "name": "charge"
+    },
+    {
+      "action": "await",
+      "name": "before-settlement",
+      "process": "charge"
+    },
+    {
+      "action": "terminate",
+      "name": "charge",
+      "barrier": "before-settlement"
+    },
+    {
+      "action": "start",
+      "name": "replay"
+    },
+    {
+      "action": "complete",
+      "name": "replay"
+    },
+    {
+      "action": "start",
+      "name": "isolation"
+    },
+    {
+      "action": "complete",
+      "name": "isolation"
+    },
+    {
+      "action": "start",
+      "name": "cleanup-unknown"
+    },
+    {
+      "action": "complete",
+      "name": "cleanup-unknown"
+    },
+    {
+      "action": "start",
+      "name": "cleanup-ack"
+    },
+    {
+      "action": "await",
+      "name": "cleanup-committed",
+      "process": "cleanup-ack"
+    },
+    {
+      "action": "terminate",
+      "name": "cleanup-ack",
+      "barrier": "cleanup-committed"
+    },
+    {
+      "action": "start",
+      "name": "cleanup"
+    },
+    {
+      "action": "complete",
+      "name": "cleanup"
+    }
+  ]
+}

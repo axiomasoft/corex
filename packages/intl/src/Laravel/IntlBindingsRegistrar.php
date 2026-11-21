@@ -6,6 +6,7 @@ namespace CoreX\Intl\Laravel;
 
 use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Foundation\Contracts\ModuleReferences;
 use CoreX\Intl\Currency\Contracts\CurrencyConverter;
 use CoreX\Intl\Currency\Contracts\CurrencyMetadata;
 use CoreX\Intl\Currency\Contracts\RateImporter;
@@ -16,6 +17,7 @@ use CoreX\Intl\Currency\Internal\SqlRateImporter;
 use CoreX\Intl\Currency\Internal\SqlRateProvider;
 use CoreX\Intl\Formatting\Contracts\MoneyFormatter;
 use CoreX\Intl\Formatting\Internal\PlainMoneyFormatter;
+use CoreX\Intl\Internal\IntlModuleReferences;
 use CoreX\Intl\Internal\IntlOptions;
 use CoreX\Intl\Locale\Contracts\LocaleResolver;
 use CoreX\Intl\Locale\Data\LocalePolicy;
@@ -41,6 +43,9 @@ final class IntlBindingsRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
+        $app->scoped(IntlModuleReferences::class);
+        $app->tag(IntlModuleReferences::class, ModuleReferences::class);
+
         LocalePortBindings::register($app);
 
         $app->singleton(IntlOptions::class, static fn (Application $app): IntlOptions => IntlOptions::fromArray(

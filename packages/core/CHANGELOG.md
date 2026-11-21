@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — CoreX 2.0 lifecycle and ownership
+
+- Add typed lifecycle plan, inspection and apply contracts with persisted digests, blockers, cleanup receipts and resume cursors. Compose the public Packman lifecycle binding with current operator authorization and reference admission fencing.
+- Keep module closure generations and admitted reference targets in the independent scope control store. Destructive transitions require complete owner inventory, current external exclusions and retained effect evidence.
+- Add the optional `ModuleTableReferences` probe for native module tables. A completed purge records the verified table drop and original cleanup receipts so later scans can account for that owner's inventory.
+- Move development surface scanners from `Attributes/Tooling` to `Foundation/Tooling` and remove the obsolete kernel module entries.
+
 ## Unreleased — durable messaging and provider receipts
 
 - Pass the caller's active Laravel connection to `Outbox::append` and `Inbox::claim`. The v2 envelope carries a typed scope, subject and correlation. Domain handlers consume each immutable fact once per logical subscriber. A changed payload under an existing fact identity raises a conflict.

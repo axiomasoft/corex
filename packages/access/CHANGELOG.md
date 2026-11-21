@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — Laravel identity
+
+- Moved the public adapter to `CoreX\Access\Laravel\PrincipalIdentity`. Laravel callers and the native user provider use this path.
+
 ## Unreleased — field use authorization
 
 - Added separate read, write, search, filter, sort, aggregate and export checks for stable field IDs. FieldUsePolicy returns an unconditional grant, a witnessed set of allowed records, or a denial. DataScopeAuthorizer enforces record and field grants on the verified physical connection.

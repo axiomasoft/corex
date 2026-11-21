@@ -24,7 +24,7 @@ final readonly class SessionRuntime
 
     public function assertTransfer(string $transferId): void
     {
-        if ($this->transferId !== $transferId) {
+        if ($this->transferId !== null && $this->transferId !== $transferId) {
             throw new SessionUnavailable('The runner belongs to another transfer session.');
         }
     }

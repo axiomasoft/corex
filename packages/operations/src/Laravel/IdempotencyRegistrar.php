@@ -6,10 +6,12 @@ namespace CoreX\Operations\Laravel;
 
 use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Context\Contracts\DataScopeFactory;
+use CoreX\Foundation\Contracts\ReferenceAdmission;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
 use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
+use CoreX\Operations\Bulk\Laravel\SubmitBulkOperation;
 use CoreX\Operations\Cost\Contracts\BudgetExecution;
 use CoreX\Operations\Errors\Internal\ErrorMapper;
 use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
@@ -47,6 +49,8 @@ final class IdempotencyRegistrar implements PackageRegistrar
                 errors: $app->make(ErrorMapper::class),
                 problems: $app->make(ProblemRegistry::class),
                 budget: $app->bound(BudgetExecution::class) ? $app->make(BudgetExecution::class) : null,
+                bulk: static fn (): SubmitBulkOperation => $app->make(SubmitBulkOperation::class),
+                references: $app->make(ReferenceAdmission::class),
             ));
         $app->scoped(IdempotencyStore::class, static fn (Application $app): IdempotencyStore => (new IdempotencyStoreFactory)->make($app));
     }

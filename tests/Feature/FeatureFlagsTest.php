@@ -12,6 +12,7 @@ use CoreX\Messaging\Events\DomainEvent;
 use CoreX\Settings\Data\SettingsScope;
 use CoreX\Settings\Enums\SettingScope;
 use CoreX\Settings\Events\SettingChanged;
+use CoreX\Tests\Support\WorkScopeFixture;
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
@@ -35,14 +36,21 @@ function featureFlags(): DatabaseFeatureFlags
 }
 
 beforeEach(function (): void {
+    $this->previousDefault = DB::getDefaultConnection();
     // D12: sys_feature_flags/overrides are PG-only. Reset to a clean public
     // schema so each test starts with no migration history (mirrors
     // SettingsTest's/AuditLogTest's pg-lane pattern).
     featureFlagsPg()->statement('DROP SCHEMA IF EXISTS public CASCADE');
     featureFlagsPg()->statement('CREATE SCHEMA public');
     DB::purge(FEATURE_FLAGS_TEST_CONNECTION);
+    DB::setDefaultConnection(FEATURE_FLAGS_TEST_CONNECTION);
+    WorkScopeFixture::install($this->app, principalId: 'configuration-operator')->scope();
 
     $this->migrateSchemaSets(['axiomasoft/corex:tenant'], FEATURE_FLAGS_TEST_CONNECTION);
+});
+
+afterEach(function (): void {
+    DB::setDefaultConnection($this->previousDefault);
 });
 
 it('stamps a DomainEvent with a UUIDv7 eventId, occurredAt and a stable name()', function (): void {

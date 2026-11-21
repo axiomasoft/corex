@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — owner-scoped bulk transfer
+
+- Added durable transfer step receipts, independent sink reconciliation, and scoped publication and reads of verified export manifests.
+- Export hosts implement `ExportSchemaWitness` so capture, publication and known-result reads reject a stale owner projection.
+
 ## Unreleased — Packman governance
 
 - Adopt Packman API/SPI attributes and shared configuration/error contracts directly, with explicit Internal classification and no compatibility aliases. Declare package ownership in `extra.packman` and the monorepo manifest.

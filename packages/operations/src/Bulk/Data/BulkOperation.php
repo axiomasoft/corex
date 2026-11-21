@@ -15,14 +15,13 @@ final readonly class BulkOperation
 {
     public function __construct(
         public BulkOperationDefinition $definition,
-        public ?JsonDocument $transferRef,
         public BulkOperationStatus $status,
         public ?BulkOperationStatus $terminalStatus,
         public int $revision,
         public ?string $leaseOwner,
         public ?DateTimeImmutable $leaseUntil,
         public ?DateTimeImmutable $cancelRequestedAt,
-        public JsonDocument $checkpoint,
+        public ?BulkCheckpoint $checkpoint,
         public JsonDocument $progress,
         public ?JsonDocument $resultRef,
         public ?JsonDocument $error,
@@ -31,8 +30,11 @@ final readonly class BulkOperation
         public DateTimeImmutable $createdAt,
         public ?DateTimeImmutable $finishedAt,
         public ?DateTimeImmutable $expiresAt,
+        public ?BulkOwnerRef $ownerResultRef = null,
+        public ?BulkOwnerRef $failurePageRef = null,
+        public int $recoveryAttempts = 0,
     ) {
-        if ($revision < 0 || $attempt < 0) {
+        if ($revision < 0 || $attempt < 0 || $recoveryAttempts < 0) {
             throw new InvalidArgumentException('Bulk revision and attempt must be non-negative.');
         }
 

@@ -7,6 +7,7 @@ namespace CoreX\Access\Matrix\Internal;
 use CoreX\Access\Contracts\RoleMatrixCompiler;
 use CoreX\Access\Matrix\Events\RoleMatrixCompiled;
 use CoreX\Access\Roles\Laravel\RoleMatrixData;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
@@ -34,6 +35,7 @@ final readonly class DatabaseRoleMatrixCompiler implements RoleMatrixCompiler
         }
 
         $connection->transaction(function () use ($roleId, $connection): void {
+            ReferenceWrites::enlist($connection, ReferenceWrites::current(), 'axiomasoft/corex-access', 'compile-role', ['role' => $roleId]);
             RoleMatrixData::role($roleId);
             RoleMatrixData::matrix($roleId);
 

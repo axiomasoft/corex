@@ -7,6 +7,7 @@ namespace CoreX\Access\Roles\Internal;
 use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Roles\DirectGrants;
 use CoreX\Context\Contracts\Principal;
+use CoreX\Foundation\Laravel\ReferenceWrites;
 use DateTimeImmutable;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Support\Str;
@@ -47,6 +48,7 @@ final readonly class DatabaseDirectGrants implements DirectGrants
         ];
         $connection = $this->connections->connection();
         $connection->transaction(function () use ($connection, $identity, $expiresAt, $revoke): void {
+            ReferenceWrites::enlist($connection, ReferenceWrites::current(), 'axiomasoft/corex-access', 'grant', ['grant' => $identity]);
             // A first grant has no existing row to lock. Serialize grants and revocations for this principal and permission.
             $connection->selectOne(
                 "SELECT pg_advisory_xact_lock(hashtextextended(jsonb_build_array('corex.access.direct', ?::text, ?::uuid, ?::text)::text, 0))",

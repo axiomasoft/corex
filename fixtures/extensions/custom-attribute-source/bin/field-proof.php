@@ -35,7 +35,9 @@ use CoreX\Data\Data\FieldUseRequest;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Enums\FieldUse;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Foundation\Data\ModuleRef;
 use CoreX\Messaging\Contracts\OutboxRelay;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\DatabaseManager;
@@ -181,6 +183,15 @@ final class FieldProofProvider extends ServiceProvider
             'corex.scope.deployment_id' => FieldProofAuthority::Deployment,
             'cache.default' => 'array',
         ]);
+
+        if (getenv('COREX_SCENARIO_DB_BUDGET') !== false) {
+            $budget = tempDatabase('BUDGET');
+            $this->app['config']->set([
+                'database.connections.field_proof_budget' => postgresConnection($budget),
+                'corex-operations.schema.tenant' => ['connection' => 'pgsql', 'driver' => 'pgsql', 'database' => $owner],
+                'corex-operations.schema.budget' => ['connection' => 'field_proof_budget', 'driver' => 'pgsql', 'database' => $budget],
+            ]);
+        }
         $this->app->singleton(
             FieldProofAuthority::class,
             static fn (Application $app): FieldProofAuthority => new FieldProofAuthority($app->make('field-proof.fixture')),
@@ -197,7 +208,7 @@ function tempDatabase(string $role): string
 {
     $database = getenv('COREX_SCENARIO_DB_'.$role);
 
-    if (! is_string($database) || preg_match('/\Acorex_scenario_[a-f0-9]{16}_(?:a|control)_test\z/D', $database) !== 1) {
+    if (! is_string($database) || preg_match('/\Acorex_scenario_[a-f0-9]{16}_'.strtolower($role).'_test\z/D', $database) !== 1) {
         throw new RuntimeException('The verifier must provide a fresh private PostgreSQL database.');
     }
 
@@ -328,6 +339,7 @@ try {
     $control = FieldProofConnection::identity($db->connection('field_proof_control'));
     requireWitness($owner['database'] === tempDatabase('A') && $control['database'] === tempDatabase('CONTROL')
         && $owner['database'] !== $control['database'], 'The fixture database isolation is invalid.');
+    $budget = getenv('COREX_SCENARIO_DB_BUDGET') === false ? null : FieldProofConnection::identity($db->connection('field_proof_budget'));
     ScopeControlSchema::install($db->connection('field_proof_control'));
     $app->make(SchemaMigrator::class)->migrate(SchemaScope::Tenant);
     $context = $app->make(TenantContextResolver::class)->current();
@@ -336,6 +348,8 @@ try {
     ));
     $scopes = $app->make(DataScopeFactory::class);
     $scope = $scopes->forCurrentPrincipal($context);
+    $app->make(Gate::class)->define('corex.lifecycle.enable', static fn (ScopePrincipal $actor, DataScope $checked, ModuleRef $target): bool => $checked == $scope
+        && $actor->kind === $scope->principalKind && $actor->id === $scope->principalId && $target->package === $fixture['owner']);
     $work = $app->make(WorkScopeRunner::class);
     $witness = $work->run($scope, static function () use ($app, $scope, $fixture): array {
         $app->make(ModuleLifecycle::class)->enable($fixture['owner']);
@@ -356,6 +370,7 @@ try {
     echo json_encode([
         ...$witness['proof'], 'denied_filter' => true,
         'phase' => $phase, 'php' => PHP_VERSION, 'pid' => getmypid(), 'owner' => $owner, 'control' => $control,
+        ...($budget === null ? [] : ['budget' => $budget]),
     ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES), "\n";
 } catch (Throwable $error) {
     fwrite(STDERR, (string) $error."\n");

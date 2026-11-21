@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\ImportExport\Internal\Export;
 
+use CoreX\Context\Enums\ProviderObservationKind;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\FieldSelection;
@@ -24,10 +25,10 @@ use CoreX\ImportExport\Internal\SessionIdentity;
 use CoreX\ImportExport\Internal\SessionRuntime;
 use CoreX\ImportExport\Internal\Transfer\ExecutionGuard;
 use CoreX\ImportExport\Internal\Transfer\NeverCancelled;
-use CoreX\ImportExport\Internal\Transfer\TransferLimitReached;
+use CoreX\ImportExport\Internal\TransferReferences;
 use CoreX\ImportExport\Internal\Value;
 use CoreX\Storage\Contracts\TenantStorage;
-use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use JsonException;
@@ -38,7 +39,7 @@ use Packman\Attributes\Internal;
 final readonly class DatabaseExportRunner implements ExportRunner
 {
     public function __construct(
-        private ConnectionInterface $connection,
+        private Connection $connection,
         private TenantStorage $storage,
         private ExportSource $source,
         private TransferLimits $limits,
@@ -47,6 +48,9 @@ final readonly class DatabaseExportRunner implements ExportRunner
         private CancellationSignal $cancellation = new NeverCancelled,
         private ?ExecutionGuard $guard = null,
         private ?SessionRuntime $runtime = null,
+        private ?TransferReferences $references = null,
+        private bool $limitCaptureRows = false,
+        private ?CurrentExportSchema $schema = null,
     ) {}
 
     #[Override]
@@ -57,87 +61,66 @@ final readonly class DatabaseExportRunner implements ExportRunner
         $this->runtime?->assertExport(json_encode([$draft, $after], JSON_THROW_ON_ERROR));
         $this->assertCaptureAccess(scope: $scope, manifest: $draft);
         $this->assertJobScope($jobId, $scope);
-        $existingJob = $this->connection->table('corex_export_manifests')->where('id', $draft->id)->value('job_id');
 
-        if ($existingJob !== null && Value::text($existingJob) !== $jobId) {
-            throw new ExportUnavailable('The export manifest belongs to another job.');
+        if ($draft->snapshotMode !== 'coherent' || $this->connection->transactionLevel() !== 0) {
+            throw new ExportUnavailable('Coherent capture requires an independent owner transaction.');
         }
 
-        if ($draft->snapshotMode !== 'coherent') {
-            throw new ExportUnavailable('Only a coherent manifest may be sealed.');
-        }
+        $this->prepareCapture($scope, $jobId, $draft);
+        $guard = $this->guard ?? ExecutionGuard::production($this->limits);
 
-        if ($this->abortUnsealedAttempt($scope, $draft->id)) {
-            throw new ExportUnavailable('An interrupted unsealed capture requires a new manifest attempt.');
-        }
-
-        return $this->connection->transaction(function () use ($scope, $jobId, $draft, $after): ExportManifest {
-            $this->connection->statement('SET LOCAL TRANSACTION ISOLATION LEVEL REPEATABLE READ');
+        return $this->connection->transaction(function () use ($scope, $jobId, $draft, $after, $guard): ExportManifest {
+            if ($this->connection->getDriverName() === 'pgsql') {
+                $this->connection->statement('SET LOCAL TRANSACTION ISOLATION LEVEL REPEATABLE READ');
+            }
             $this->runtime?->assertCurrent($this->connection, $scope);
             $this->assertCaptureAccess(scope: $scope, manifest: $draft);
-            $existing = $this->connection->table('corex_export_manifests')->where('id', $draft->id)->lockForUpdate()->first();
+            $existing = $this->connection->table('corex_export_manifests')->where('id', $draft->id)->where('job_id', $jobId)
+                ->lockForUpdate()->first() ?? throw new ExportUnavailable('The export capture is unavailable.');
 
-            if ($existing !== null && Value::text($existing->job_id) !== $jobId) {
-                throw new ExportUnavailable('The export manifest belongs to another job.');
-            }
-
-            if ($existing !== null && $existing->state === 'sealed') {
+            if (in_array(Value::field($existing, 'state'), ['sealed', 'published'], true)) {
                 return $this->storedManifest($existing);
             }
 
-            if ($existing !== null) {
-                throw new ExportUnavailable('Unsealed export attempts are not resumable.');
-            }
-
-            $this->connection->table('corex_export_manifests')->insert([
-                'id' => $draft->id,
-                'job_id' => $jobId,
-                'capture_attempt' => hash('sha256', $draft->id.'|'.$draft->schemaHash.'|'.$draft->restoreEpoch),
-                'schema_hash' => $draft->schemaHash,
-                'restore_epoch' => $draft->restoreEpoch,
-                'roster' => json_encode(JsonDocuments::map($draft->roster), JSON_THROW_ON_ERROR),
-                'parts_hash' => null,
-                'snapshot_mode' => $draft->snapshotMode,
-                'state' => 'capturing',
-            ]);
-
+            $this->references?->enlist($scope, $this->connection, JsonDocuments::map($draft->roster));
             $parts = [];
             $cursor = $after;
             $partNumber = 0;
-            $guard = $this->guard ?? ExecutionGuard::production(limits: $this->limits);
-            $written = [];
+            $rows = 0;
+            do {
+                $this->assertCaptureAccess(scope: $scope, manifest: $draft);
+                $this->assertBudget(guard: $guard, manifest: $draft);
 
-            try {
-                do {
-                    $this->assertCaptureAccess(scope: $scope, manifest: $draft);
-                    $this->assertBudget(guard: $guard, manifest: $draft);
+                if ($this->cancellation->isCancelled()) {
+                    throw new ExportUnavailable('Export capture was cancelled.');
+                }
 
-                    if ($this->cancellation->isCancelled()) {
-                        throw new ExportUnavailable('Export capture was cancelled.');
-                    }
+                $page = $this->source->page(scope: $scope, manifest: $draft, after: $cursor, limits: $this->limits);
+                $this->assertPageBounds(records: $page->rows);
+                $rows += count($page->rows);
 
-                    $page = $this->source->page(scope: $scope, manifest: $draft, after: $cursor, limits: $this->limits);
-                    $this->assertPageBounds(records: $page->rows);
-                    foreach ($page->rows as $record) {
-                        $this->authorizeRecord($scope, $record->entity, $record->externalId, array_keys($record->values));
-                    }
-                    $this->assertBudget(guard: $guard, manifest: $draft);
+                if (($this->limitCaptureRows && $rows > $this->limits->batchRows)
+                    || (! $page->complete && ($page->next === null || $page->next->manifestHash !== $after->manifestHash
+                        || ((int) $page->next->partNumber < (int) $cursor->partNumber)
+                        || ($page->next->partNumber === $cursor->partNumber && (int) $page->next->rowOrdinal <= (int) $cursor->rowOrdinal)
+                        || $page->rows === []))) {
+                    throw new ExportUnavailable('Export capture is outside its bounded snapshot.');
+                }
+                foreach ($page->rows as $record) {
+                    $this->authorizeRecord($scope, $record->entity, $record->externalId, array_keys($record->values));
+                }
+                $this->assertBudget(guard: $guard, manifest: $draft);
 
-                    if ($this->cancellation->isCancelled()) {
-                        throw new ExportUnavailable('Export capture was cancelled.');
-                    }
+                if ($this->cancellation->isCancelled()) {
+                    throw new ExportUnavailable('Export capture was cancelled.');
+                }
 
-                    $part = $this->stagePart(manifest: $draft, number: (string) $partNumber, records: $page->rows);
-                    $written[] = $part->immutableRef;
-                    $parts[] = $part;
-                    $cursor = $page->next ?? $cursor;
-                    $partNumber++;
-                } while (! $page->complete);
-            } catch (TransferLimitReached|ExportUnavailable $failed) {
-                $this->discardOrphans(refs: $written);
-
-                throw $failed;
-            }
+                $parts[] = $this->stagePart($scope, $jobId, $draft, (string) $partNumber, $page->rows);
+                $cursor = $page->next ?? $cursor;
+                $partNumber++;
+            } while (! $page->complete);
+            $this->assertBudget(guard: $guard, manifest: $draft);
+            $this->assertCaptureAccess($scope, $draft);
 
             $partsHash = hash('sha256', implode("\n", array_map(
                 static fn (ExportPart $part): string => "{$part->number}:{$part->sha256}:{$part->byteLength}",
@@ -154,7 +137,6 @@ final readonly class DatabaseExportRunner implements ExportRunner
                 'parts_hash' => $partsHash,
                 'state' => 'sealed',
             ]);
-            $this->connection->table('corex_transfer_jobs')->where('id', $jobId)->update(['state' => 'completed']);
 
             return new ExportManifest(
                 id: $draft->id,
@@ -170,46 +152,39 @@ final readonly class DatabaseExportRunner implements ExportRunner
     #[Override]
     public function emit(DataScope $scope, ExportManifest $manifest, ExportCursor $cursor): string
     {
-        $this->runtime?->assertCurrent($this->connection, $scope);
-        $this->assertEmitAccess(scope: $scope, manifest: $manifest, cursor: $cursor);
-        $stored = $this->connection->table('corex_export_manifests')->where('id', $manifest->id)->first();
-        $part = $this->connection->table('corex_export_parts')
-            ->where('manifest_id', $manifest->id)
-            ->where('part_no', $cursor->partNumber)
-            ->first();
-
-        if ($stored === null || $stored->state !== 'sealed' || ! hash_equals(Value::text($stored->parts_hash), $manifest->partsHash)) {
-            throw new ExportUnavailable('Export cursor does not address a sealed immutable part.');
+        if ($this->connection->transactionLevel() !== 0) {
+            throw new ExportUnavailable('Export emit requires an independent owner snapshot.');
         }
 
-        $this->assertJobScope(Value::text($stored->job_id), $scope);
+        return $this->connection->transaction(function () use ($scope, $manifest, $cursor): string {
+            if ($this->connection->getDriverName() === 'pgsql') {
+                $this->connection->statement('SET LOCAL TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY');
+            }
+            $this->runtime?->assertCurrent($this->connection, $scope);
+            $this->assertEmitAccess($scope, $manifest, $cursor);
+            $jobId = $this->connection->table('corex_export_manifests')->where('id', $manifest->id)->value('job_id');
 
-        if ($part === null || ! hash_equals($manifest->partsHash, $cursor->manifestHash)) {
-            throw new ExportUnavailable('Export cursor does not address a sealed immutable part.');
-        }
-
-        $bytes = $this->storage->disk()->get(Value::text($part->immutable_ref));
-
-        if (! is_string($bytes) || strlen($bytes) !== Value::integer($part->byte_length) || ! hash_equals(Value::text($part->hash), hash('sha256', $bytes))) {
-            throw new ExportUnavailable('Immutable export part verification failed.');
-        }
-
-        foreach (explode("\n", rtrim($bytes, "\n")) as $line) {
-            if ($line === '') {
-                continue;
+            if (! is_string($jobId)) {
+                throw new ExportUnavailable('Export cursor does not address a sealed immutable part.');
             }
 
-            try {
-                $record = Value::map(json_decode($line, true, flags: JSON_THROW_ON_ERROR));
-                $fields = Value::map($record['values'] ?? null);
-                $this->authorizeRecord($scope, Value::text($record['entity'] ?? null), Value::text($record['externalId'] ?? null), array_keys($fields));
-            } catch (InvalidArgumentException|JsonException $exception) {
-                throw new ExportUnavailable('The sealed export projection cannot be verified.', previous: $exception);
-            }
-        }
-        $this->assertEmitAccess(scope: $scope, manifest: $manifest, cursor: $cursor);
+            $this->assertJobScope($jobId, $scope);
+            $verify = new SealedExportParts($this->connection, $this->storage, $this->authorizer, $this->schema);
+            $stored = $verify->manifest($scope, $jobId, published: false);
+            $part = $this->connection->table('corex_export_parts')->where('manifest_id', $manifest->id)
+                ->where('part_no', $cursor->partNumber)->first();
 
-        return $bytes;
+            if ($part === null || $cursor->rowOrdinal !== '0' || Value::field($stored, 'id') !== $manifest->id
+                || Value::field($stored, 'parts_hash') !== $manifest->partsHash || Value::field($stored, 'schema_hash') !== $manifest->schemaHash) {
+                throw new ExportUnavailable('Export cursor does not address a sealed immutable part.');
+            }
+
+            $bytes = $verify->verifyBytes($scope, $part);
+            $this->assertEmitAccess($scope, $manifest, $cursor);
+            $verify->assertSchema($scope, $stored);
+
+            return $bytes;
+        });
     }
 
     /** @param list<string> $fields */
@@ -227,7 +202,7 @@ final readonly class DatabaseExportRunner implements ExportRunner
     }
 
     /** @param list<CanonicalRecord> $records */
-    private function stagePart(ExportManifest $manifest, string $number, array $records): ExportPart
+    private function stagePart(DataScope $scope, string $jobId, ExportManifest $manifest, string $number, array $records): ExportPart
     {
         try {
             $bytes = $this->codec->rawNdjson(records: $records, maxBytes: $this->limits->maxFileBytes);
@@ -239,7 +214,20 @@ final readonly class DatabaseExportRunner implements ExportRunner
         $ref = "corex-exports/{$manifest->id}/{$number}-{$hash}.ndjson";
         $disk = $this->storage->disk();
 
+        $effectKey = hash('sha256', json_encode(['export-part/1', $manifest->id, $number], JSON_THROW_ON_ERROR));
+        $previous = $this->references?->inspect($scope, 'export-part', $effectKey, $jobId, $hash);
+        $ticket = $previous?->ticket;
+
         if (! $disk->exists($ref)) {
+            if ($previous?->observation?->kind === ProviderObservationKind::Confirmed) {
+                throw new ExportUnavailable('Previously verified export part is missing.');
+            }
+
+            if ($ticket !== null) {
+                $this->references->observe($ticket, ProviderObservationKind::Absent, $effectKey);
+            }
+            $ticket = $this->references?->reserve($scope, 'export-part', $effectKey, $jobId, $hash, JsonDocuments::map($manifest->roster), $this->limits->maxRuntimeSeconds, $previous);
+
             if ($disk->put($ref, $bytes) !== true) {
                 throw new ExportUnavailable('Immutable export part could not be persisted.');
             }
@@ -251,6 +239,9 @@ final readonly class DatabaseExportRunner implements ExportRunner
             throw new ExportUnavailable('Immutable export part storage acknowledgement is unknown.');
         }
 
+        if ($ticket !== null) {
+            $this->references?->observe($ticket, ProviderObservationKind::Confirmed, $effectKey);
+        }
         $part = new ExportPart(number: $number, immutableRef: $ref, sha256: $hash, byteLength: strlen($bytes), rowCounts: ['records' => count($records)]);
         $this->connection->table('corex_export_parts')->updateOrInsert(
             attributes: ['manifest_id' => $manifest->id, 'part_no' => $number],
@@ -296,18 +287,6 @@ final readonly class DatabaseExportRunner implements ExportRunner
         }
     }
 
-    /** @param list<string> $refs */
-    private function discardOrphans(array $refs): void
-    {
-        $disk = $this->storage->disk();
-
-        foreach ($refs as $ref) {
-            if ($disk->exists($ref)) {
-                $disk->delete($ref);
-            }
-        }
-    }
-
     private function assertCaptureAccess(DataScope $scope, ExportManifest $manifest): void
     {
         if (! $this->storage->capabilities()->export
@@ -315,22 +294,37 @@ final readonly class DatabaseExportRunner implements ExportRunner
             || ! $this->authorizer->authorize($scope, new RecordRef('import-export.manifest', $manifest->id), new FieldSelection([]), FieldUse::Export)->allowed) {
             throw new ExportUnavailable('Export capture is unavailable under the current authority.');
         }
+        $this->schema?->assertCurrent($scope, $manifest->schemaHash, $manifest->roster);
     }
 
-    private function abortUnsealedAttempt(DataScope $scope, string $manifestId): bool
+    private function prepareCapture(DataScope $scope, string $jobId, ExportManifest $draft): void
     {
-        return $this->connection->transaction(function () use ($scope, $manifestId): bool {
+        $this->connection->transaction(function () use ($scope, $jobId, $draft): void {
             $this->runtime?->assertCurrent($this->connection, $scope);
-            $manifest = $this->connection->table('corex_export_manifests')->where('id', $manifestId)->lockForUpdate()->first();
+            $this->assertJobScope($jobId, $scope);
+            $job = $this->connection->table('corex_transfer_jobs')->where('id', $jobId)->lockForUpdate()->first();
 
-            if ($manifest === null || $manifest->state !== 'capturing') {
-                return false;
+            if ($job === null || Value::field($job, 'mode') !== 'export' || Value::field($job, 'schema_hash') !== $draft->schemaHash) {
+                throw new ExportUnavailable('Export capture does not match its job.');
             }
+            $existing = $this->connection->table('corex_export_manifests')->where('job_id', $jobId)->orWhere('id', $draft->id)->first();
+            $attempt = hash('sha256', json_encode([$jobId, $draft], JSON_THROW_ON_ERROR));
 
-            $this->connection->table('corex_export_manifests')->where('id', $manifestId)->update(['state' => 'aborted']);
+            if ($existing !== null) {
+                if (Value::field($existing, 'job_id') !== $jobId || Value::field($existing, 'id') !== $draft->id || Value::field($existing, 'capture_attempt') !== $attempt
+                    || ! in_array(Value::field($existing, 'state'), ['capturing', 'sealed', 'published'], true)) {
+                    throw new ExportUnavailable('Export capture identity has changed.');
+                }
 
-            return true;
-        }, attempts: 3);
+                return;
+            }
+            $this->references?->enlist($scope, $this->connection, JsonDocuments::map($draft->roster));
+            $this->connection->table('corex_export_manifests')->insert([
+                'id' => $draft->id, 'job_id' => $jobId, 'capture_attempt' => $attempt, 'schema_hash' => $draft->schemaHash,
+                'restore_epoch' => $draft->restoreEpoch, 'roster' => json_encode(JsonDocuments::map($draft->roster), JSON_THROW_ON_ERROR),
+                'parts_hash' => null, 'snapshot_mode' => $draft->snapshotMode, 'state' => 'capturing',
+            ]);
+        });
     }
 
     private function assertEmitAccess(DataScope $scope, ExportManifest $manifest, ExportCursor $cursor): void

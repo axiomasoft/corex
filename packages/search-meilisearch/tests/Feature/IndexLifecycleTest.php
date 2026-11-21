@@ -68,6 +68,9 @@ it('confirms only the precise provider task and keeps late writes on the immutab
     $dropped = $adapter->submit($drop);
     $this->await($dropped);
     expect($adapter->lookup($drop, $dropped))->toBe(IndexOutcome::Confirmed)
+        ->and($adapter->absent($old))->toBeTrue()
+        ->and($adapter->absent($new))->toBeFalse()
+        ->and(fn () => $this->adapter(new CallerWorkScopeFixture($context, expected: $old->scope), fn () => new Client($this->endpoint, 'incorrect-test-key'))->absent($old))->toThrow(ApiException::class)
         ->and($adapter->canary($old))->toBeFalse()
         ->and($adapter->canary($new))->toBeTrue();
 });

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Media\Contracts\MediaLibrary;
 use CoreX\Media\Exceptions\MediaOperationConflict;
+use CoreX\Media\Files\Contracts\MediaLibrary;
 use CoreX\Media\Internal\Jobs\PurgeMedia;
 use CoreX\Media\Internal\MediaOperationStore;
 use Illuminate\Support\Facades\DB;

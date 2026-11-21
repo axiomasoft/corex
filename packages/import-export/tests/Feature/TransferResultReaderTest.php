@@ -25,7 +25,7 @@ it('returns a bounded failure page and a typed manifest from transfer tables onl
         'cursor' => '{"ordinal":"2","boundaryByteOffset":"40"}', 'stats' => '{"invalid":1}', 'claim_epoch' => '1',
         'created_at' => now(), 'updated_at' => now(),
     ]);
-    foreach ([['1', 'rowFailed'], ['2', 'unknownTarget']] as [$ordinal, $code]) {
+    foreach ([['1', 'invalid', 'rowFailed'], ['2', 'unknown', 'unknownTarget'], ['3', 'conflict', 'rowConflict']] as [$ordinal, $status, $code]) {
         DB::table('corex_transfer_rows')->insert([
             'id' => (string) str()->uuid(),
             'job_id' => $jobId,
@@ -33,8 +33,8 @@ it('returns a bounded failure page and a typed manifest from transfer tables onl
             'external_identity_hash' => str_repeat('b', 64),
             'operation_key' => hash('sha256', $ordinal),
             'payload_hash' => $hash,
-            'result' => 'invalid',
-            'error' => json_encode(['code' => $code, 'path' => 'values.name'], JSON_THROW_ON_ERROR),
+            'result' => $status,
+            'error' => json_encode(['code' => $code, 'path' => '/values/name'], JSON_THROW_ON_ERROR),
             'epoch' => '1',
         ]);
     }
@@ -45,9 +45,9 @@ it('returns a bounded failure page and a typed manifest from transfer tables onl
     $next = $reader->failures(scope: $scope, ref: new TransferRef($jobId), afterOrdinal: $page['next'], limit: 1);
     $manifest = $reader->result(scope: $scope, ref: new TransferRef($jobId));
 
-    expect($page['records'])->toBe([['ordinal' => '1', 'code' => 'rowFailed', 'path' => 'values.name']])
+    expect($page['records'])->toBe([['ordinal' => '1', 'code' => 'rowFailed', 'path' => '/values/name']])
         ->and($page['next'])->toBe('1')
-        ->and($next['records'][0]['code'])->toBe('unknownTarget')
+        ->and($next['records'])->toBe([['ordinal' => '3', 'code' => 'rowConflict', 'path' => '/values/name']])
         ->and($next['next'])->toBeNull()
         ->and($manifest['state'])->toBe('completed')
         ->and($manifest['checkpointSequence'])->toBe('2')

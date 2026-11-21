@@ -7,6 +7,7 @@ namespace CoreX\Tenancy\Laravel;
 use CoreX\Context\Contracts\ImpersonationGuard;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantDatabaseLifecycle;
+use CoreX\Foundation\Contracts\ModuleReferences;
 use CoreX\Tenancy\Account\Internal\DatabaseTenantProvisioner;
 use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycle;
 use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycleFsm;
@@ -18,6 +19,7 @@ use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\Contracts\AccountResources;
 use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks;
 use CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle;
+use CoreX\Tenancy\Provisioning\Internal\TenancyModuleReferences;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionResolverInterface;
@@ -38,6 +40,9 @@ final class ProvisioningRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
+        $app->scoped(TenancyModuleReferences::class);
+        $app->tag(TenancyModuleReferences::class, ModuleReferences::class);
+
         $app->singleton(
             DatabaseTenantProvisioner::class,
             static fn (Application $app): DatabaseTenantProvisioner => new DatabaseTenantProvisioner(

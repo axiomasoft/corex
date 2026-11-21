@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Bulk\Data;
 
+use CoreX\Context\Data\OperationKey;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\JsonDocument;
 use CoreX\Data\Laravel\JsonDocuments;
 use InvalidArgumentException;
@@ -27,7 +29,13 @@ final readonly class BulkOperationDefinition
         public string $clientId,
         public JsonDocument $extensionStamp,
         public JsonDocument $inputRef,
+        public int $rowLimit = 500,
+        public int $timeLimitSeconds = 20,
     ) {
+        if ($rowLimit < 1 || $rowLimit > 500 || $timeLimitSeconds < 1 || $timeLimitSeconds > 30) {
+            throw new InvalidArgumentException('Invalid bulk execution bounds.');
+        }
+
         self::assertString(value: $id, name: 'id', maximum: 64);
         self::assertString(value: $submissionId, name: 'submission id', maximum: 64);
         self::assertString(value: $operationId, name: 'operation id', maximum: 191);
@@ -46,6 +54,18 @@ final readonly class BulkOperationDefinition
         self::assertJsonObject(value: JsonDocuments::map($extensionStamp), name: 'extension stamp');
         self::assertJsonObject(value: JsonDocuments::map($inputRef), name: 'input reference');
         self::assertSafeInputReference(JsonDocuments::map($inputRef));
+        self::assertSafeInputReference(JsonDocuments::map($extensionStamp));
+    }
+
+    public function context(DataScope $scope, ?OperationKey $key = null): BulkContext
+    {
+        $kind = JsonDocuments::map($this->inputRef)['kind'] ?? null;
+
+        if (! is_string($kind) || preg_match('/\A[a-z][a-z0-9.-]{0,63}\z/D', $kind) !== 1) {
+            throw new InvalidArgumentException('A declared bulk kind is required.');
+        }
+
+        return new BulkContext($scope, $this->id, $kind, $this->contractHash, $key ?? new OperationKey($this->id, 1), $this->clientId, $this->inputRef, $this->extensionStamp);
     }
 
     private static function assertString(string $value, string $name, int $maximum): void

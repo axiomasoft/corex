@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Enums\Scope;
+use CoreX\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Laravel\ScopeResolver;
 use CoreX\Access\Matrix\Events\RoleMatrixCompiled;
 use CoreX\Access\Roles\DirectGrants;
