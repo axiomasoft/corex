@@ -16,9 +16,7 @@ use CoreX\RecurringTasks\Tests\PgTestCase;
 use CoreX\RecurringTasks\Tests\Support\SeriesSeeder;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tasks\Project\Internal\Models\Project;
-use CoreX\Tasks\Task\Contracts\CompleteTaskCommand;
 use CoreX\Tasks\Task\Data\ActorData;
-use CoreX\Tasks\Task\Data\CompleteTaskData;
 use CoreX\Tasks\Task\Data\TaskDraft;
 use CoreX\Tasks\Task\Internal\Models\Stage;
 use CoreX\Tasks\Task\Internal\Models\Task;
@@ -31,10 +29,6 @@ use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\RecurringTasks\RecurringTasksServiceProvider;
 use CoreX\Scheduling\Contracts\WakeupScheduler;
 use CoreX\Scheduling\Data\WakeupRequest;
-use CoreX\Workflow\Contracts\EngineAdapter;
-use CoreX\Workflow\Data\EngineProvider;
-use CoreX\Workflow\Internal\WorkflowOptions;
-use CoreX\Workflow\WorkflowServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Mockery\MockInterface;
@@ -204,32 +198,6 @@ it('MAT-06b quarantines an exact handler version mismatch without invoking mater
     expect($result->failed)->toBe(1)
         ->and(Task::query()->count())->toBe(0)
         ->and(DB::table('sys_wakeup_requests')->where('request_key', 'mismatch:series-pg-06b')->value('failure_code'))->toBe('handler-version-mismatch');
-});
-
-it('MAT-07 captures workflow completion inside the task transaction when enabled', function (): void {
-    app()->register(WorkflowServiceProvider::class);
-    $engine = Mockery::mock(EngineAdapter::class);
-    $engine->shouldReceive('provider')->andReturn(new EngineProvider('fixture.workflow'));
-    app()->instance(EngineAdapter::class, $engine);
-    expect($this->migrateWorkflow())->toBe(0);
-    app()['config']->set('corex-workflow.enforce_declarations', false);
-    app()->forgetInstance(WorkflowOptions::class);
-    app()['config']->set('corex-recurring-tasks.completion_capture.enabled', true);
-    app()->forgetInstance(RecurringTasksOptions::class);
-    app()->forgetScopedInstances();
-
-    $set = SeriesSeeder::dailySet('series-pg-07', 'rev-1', 1);
-    $series = SeriesSeeder::seed('series-pg-07', $set, $this->template, $this->restoreEpoch);
-    $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-05');
-    $receipt = resolve(TaskRecurrenceCommand::class)->materialize(pgScope($this), $series, $window, pgToken($this, $series, $window, 'pg-07-a'));
-    $taskId = $receipt->taskRefs[0]->id;
-
-    resolve(CompleteTaskCommand::class)->handle(new CompleteTaskData(taskId: $taskId, actor: $this->actor));
-
-    expect(DB::table('sys_workflow_intents')->where('subject_ref', 'task:'.$taskId)->exists())->toBeTrue()
-        ->and(DB::table('sys_workflow_intents')->where('subject_ref', 'task:'.$taskId)->value('version_ref'))->toBe('task-completion/1')
-        ->and(DB::table('sys_workflow_intents')->where('subject_ref', 'task:'.$taskId)->value('definition_ref'))->toBe('task-completion/1')
-        ->and(DB::table('corex_task_operations')->where('kind', 'completionCapture')->exists())->toBeTrue();
 });
 
 it('MAT-08 denies cross-account restore epoch reuse on postgres', function (): void {

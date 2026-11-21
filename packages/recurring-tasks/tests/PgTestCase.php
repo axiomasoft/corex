@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CoreX\RecurringTasks\Tests;
 
 use CoreX\Scheduler\Internal\SchedulerSchemaSets;
-use CoreX\Workflow\Internal\WorkflowSchemaSets;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Override;
@@ -21,7 +20,7 @@ abstract class PgTestCase extends TestCase
     protected function defineEnvironment($app): void
     {
         parent::defineEnvironment($app);
-        $app->tag([SchedulerSchemaSets::class, WorkflowSchemaSets::class], SchemaSetProvider::class);
+        $app->tag(SchedulerSchemaSets::class, SchemaSetProvider::class);
 
         $app['config']->set('database.default', 'pgsql');
     }
@@ -58,13 +57,6 @@ abstract class PgTestCase extends TestCase
     protected function migrateWakeup(): int
     {
         $this->migrateSchemaSets(['axiomasoft/corex-scheduler:tenant'], 'pgsql');
-
-        return 0;
-    }
-
-    protected function migrateWorkflow(): int
-    {
-        $this->migrateSchemaSets(['axiomasoft/corex-workflow:tenant'], 'pgsql');
 
         return 0;
     }

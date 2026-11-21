@@ -2,7 +2,11 @@
 
 ## CoreX 2.0 — Durable effects
 
-- Pass the saving Task model’s active owner connection to completion contributors.
+- Keep completion contributors unresolved during application boot and validate their runtime type inside the trusted completion scope.
+- Breaking: rename the planning entry point from `TaskPlanningCommand` to `TaskPlanning`.
+- Breaking: `TaskCompletionCapture::capture` takes a trusted candidate and the verified `ConnectionInterface`, and returns a typed `TaskCompletionAdmission`.
+- Publish `tsk.task/completed` from the Tasks module. Capture its first eligible Done transition through one optional contributor. The two completion commands atomically persist Done and the confirmed intent receipt, and reuse the receipt after reopening.
+- Breaking: `TaskOperationReceipts` uses `TaskOperationIdentity` and `TaskOperationReceipt`. The owner schema separates workspace-scoped planning and materialization keys and preserves the original writer fence. Transfer historical receipts through the offline import path.
 
 ## Unreleased — Packman governance
 

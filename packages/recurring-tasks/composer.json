@@ -1,6 +1,6 @@
 {
     "name": "axiomasoft/corex-recurring-tasks",
-    "description": "Recurring task materialization with durable scheduling and optional workflow completion capture.",
+    "description": "Recurring task materialization with durable scheduling.",
     "type": "packman-module",
     "license": "MIT",
     "require": {
@@ -8,7 +8,6 @@
         "axiomasoft/corex": "^2.0@dev",
         "axiomasoft/corex-recurrence": "^2.0@dev",
         "axiomasoft/corex-tasks": "^2.0@dev",
-        "axiomasoft/corex-workflow": "^2.0@dev",
         "axiomasoft/packman": "^0.1",
         "axiomasoft/packman-modules": "^0.1.1",
         "axiomasoft/packman-schema": "^0.1",
@@ -52,7 +51,7 @@
             "dev-main": "2.0.x-dev"
         },
         "packman": {
-            "module": "CoreX\\RecurringTasks\\Internal\\TaskWorkflowIntegration",
+            "module": "CoreX\\RecurringTasks\\RecurringTasksModule",
             "schema-version": 1,
             "package-type": "integration",
             "stability": "stable",
@@ -63,8 +62,7 @@
                 "Data",
                 "Errors",
                 "Exceptions",
-                "Internal",
-                "Laravel"
+                "Internal"
             ]
         }
     },
@@ -105,16 +103,6 @@
             "options": {
                 "versions": {
                     "axiomasoft/corex-scheduler": "2.0.x-dev"
-                },
-                "reference": "config"
-            }
-        },
-        {
-            "type": "path",
-            "url": "../workflow",
-            "options": {
-                "versions": {
-                    "axiomasoft/corex-workflow": "2.0.x-dev"
                 },
                 "reference": "config"
             }

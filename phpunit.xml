@@ -64,6 +64,9 @@
         <testsuite name="RecurringTasksPackage">
             <directory>packages/recurring-tasks/tests</directory>
         </testsuite>
+        <testsuite name="TasksWorkflowPackage">
+            <directory>packages/tasks-workflow/tests</directory>
+        </testsuite>
         <testsuite name="IntlPackage">
             <directory>packages/intl/tests</directory>
         </testsuite>
@@ -92,6 +95,7 @@
             <directory>packages/search-custom-fields/src</directory>
             <directory>packages/search-meilisearch/src</directory>
             <directory>packages/recurring-tasks/src</directory>
+            <directory>packages/tasks-workflow/src</directory>
             <directory>packages/intl/src</directory>
         </include>
     </source>

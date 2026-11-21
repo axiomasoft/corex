@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Laravel;
 
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\DataScopeFactory;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
 use CoreX\Tasks\Access\Contracts\TaskPlanningAccess;
 use CoreX\Tasks\Access\Internal\DenyTaskAccess;
 use CoreX\Tasks\Access\Internal\DenyTaskMutationAccess;
 use CoreX\Tasks\Access\Internal\DenyTaskPlanningAccess;
-use CoreX\Tasks\Planning\Contracts\TaskPlanningCommand;
+use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
+use CoreX\Tasks\Planning\Contracts\TaskPlanning;
 use CoreX\Tasks\Planning\Internal\PlanningOperationsServiceProvider;
 use CoreX\Tasks\Planning\Laravel\PlanningCommand;
 use CoreX\Tasks\Task\Contracts\CompleteTaskCommand;
@@ -18,19 +21,18 @@ use CoreX\Tasks\Task\Contracts\CreateTaskCommand;
 use CoreX\Tasks\Task\Contracts\MoveTaskToStageCommand;
 use CoreX\Tasks\Task\Contracts\TaskCompletionCapture;
 use CoreX\Tasks\Task\Contracts\UpdateTaskCommand;
-use CoreX\Tasks\Task\Data\TaskCompletionCandidate;
-use CoreX\Tasks\Task\Enums\TaskStatus;
 use CoreX\Tasks\Task\Internal\Actions\CompleteTask;
 use CoreX\Tasks\Task\Internal\Actions\CreateTask;
 use CoreX\Tasks\Task\Internal\Actions\MoveTaskToStage;
 use CoreX\Tasks\Task\Internal\Actions\UpdateTask;
-use CoreX\Tasks\Task\Internal\Models\Task;
+use CoreX\Tasks\Task\Internal\TaskCompletion;
 use CoreX\Tasks\Task\Laravel\TaskPortBindings;
 use Illuminate\Contracts\Foundation\Application;
 use LogicException;
 use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 use Packman\Foundation\Contracts\PackageRegistrar;
+use Psr\Clock\ClockInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class TasksRegistrar implements PackageRegistrar
@@ -45,33 +47,57 @@ final class TasksRegistrar implements PackageRegistrar
         $app->bind(CompleteTaskCommand::class, CompleteTask::class);
         $app->bind(TaskAccess::class, DenyTaskAccess::class);
         $app->bind(TaskMutationAccess::class, DenyTaskMutationAccess::class);
-        $app->bind(TaskPlanningCommand::class, PlanningCommand::class);
+        $app->bind(TaskPlanning::class, PlanningCommand::class);
         $app->bind(TaskPlanningAccess::class, DenyTaskPlanningAccess::class);
         $app->register(PlanningOperationsServiceProvider::class);
+
+        $app->bind(TaskCompletion::class, static fn (Application $app): TaskCompletion => new TaskCompletion(
+            access: $app->make(TaskMutationAccess::class),
+            clock: $app->make(ClockInterface::class),
+            scopes: $app->make(DataScopeFactory::class),
+            workScope: $app->make(CurrentWorkScope::class),
+            receipts: $app->make(TaskOperationReceipts::class),
+            capture: self::completionCapture($app),
+        ));
     }
 
     public function boot(Application $app): void
     {
-        Task::saving(fn (Task $task) => $this->captureCompletion($app, $task));
+        $app->booted(static fn () => self::assertCaptureRegistrations($app));
     }
 
-    private function captureCompletion(Application $app, Task $task): void
+    private static function assertCaptureRegistrations(Application $app): void
     {
-        $raw = $task->getRawOriginal('status');
-        $previous = is_string($raw) ? TaskStatus::from($raw) : TaskStatus::Open;
-        $candidate = new TaskCompletionCandidate(
-            taskId: ($task->id ?? ''),
-            previousStatus: $previous,
-            status: $task->status,
-            statusChanged: $task->isDirty('status'),
-        );
+        $captures = $app->tagged(TaskCompletionCapture::TAG);
 
-        foreach ($app->tagged('corex.tasks.completion-captures') as $capture) {
-            if (! $capture instanceof TaskCompletionCapture) {
-                throw new LogicException('Task completion captures must implement TaskCompletionCapture.');
+        // Laravel counts tag registrations without resolving their scoped factories.
+        if (is_countable($captures) && count($captures) > 1) {
+            throw new LogicException('Tasks accepts at most one task completion capture contributor.');
+        }
+    }
+
+    private static function completionCapture(Application $app): ?TaskCompletionCapture
+    {
+        $captures = $app->tagged(TaskCompletionCapture::TAG);
+
+        if (is_countable($captures) && count($captures) > 1) {
+            throw new LogicException('Tasks accepts at most one task completion capture contributor.');
+        }
+
+        $capture = null;
+
+        foreach ($captures as $registered) {
+            if ($capture !== null) {
+                throw new LogicException('Tasks accepts at most one task completion capture contributor.');
             }
 
-            $capture->capture($candidate, $task->getConnection());
+            if (! $registered instanceof TaskCompletionCapture) {
+                throw new LogicException('The task completion contributor must implement TaskCompletionCapture.');
+            }
+
+            $capture = $registered;
         }
+
+        return $capture;
     }
 }

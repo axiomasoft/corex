@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Workflow\Contracts;
 
+use CoreX\Workflow\Data\DefinitionRequest;
 use CoreX\Workflow\Data\EngineEffectRef;
 use CoreX\Workflow\Data\EngineProvider;
 use CoreX\Workflow\Data\SignalRequest;
@@ -18,8 +19,8 @@ use Packman\Attributes\SpiKind;
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface EngineAdapter
 {
-    /** Resolve a pinned definition and its provider without external I/O. */
-    public function provider(TriggerRequest $request): ?EngineProvider;
+    /** Resolve the exact pinned definition for this context and trigger without external I/O. Return null if unavailable. */
+    public function provider(DefinitionRequest $request): ?EngineProvider;
 
     public function reconcile(EngineEffectRef $effect): StartResult;
 
@@ -27,5 +28,5 @@ interface EngineAdapter
 
     public function signal(SignalRequest $request): SignalResult;
 
-    public function fire(TransitionRequest $request): TransitionResult;
+    public function transition(TransitionRequest $request): TransitionResult;
 }

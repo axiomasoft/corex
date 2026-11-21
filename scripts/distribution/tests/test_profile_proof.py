@@ -51,6 +51,36 @@ class ProfileProofTest(unittest.TestCase):
             with self.assertRaisesRegex(MODULE.ProfileError, f"does not match {expected}"):
                 MODULE.assert_fields_bridge(profile, boot)
 
+    def test_task_profiles_require_exact_cached_capture_composition(self) -> None:
+        for profile_id, expected in (("tasks-workflow-absent", "absent"), ("tasks-workflow-disabled", "disabled"),
+                                     ("tasks-workflow-enabled", "enabled")):
+            with self.subTest(profile=profile_id):
+                profile = MODULE.require_profile(self.manifest, profile_id)
+                enabled = expected == "enabled"
+                actual = {
+                    "installed": expected != "absent", "enabled": None if expected == "absent" else enabled,
+                    "definition_ref": "fixture:workflow" if enabled else None,
+                    "version_ref": "fixture:version1" if enabled else None,
+                    "contributor_count": int(enabled),
+                }
+                evidence = MODULE.assert_tasks_workflow(profile, {"tasks_workflow": actual})
+                self.assertEqual(expected, evidence["tasks_workflow"]["state"])
+                actual["contributor_count"] += 1
+                with self.assertRaisesRegex(MODULE.ProfileError, f"does not match {expected}"):
+                    MODULE.assert_tasks_workflow(profile, {"tasks_workflow": actual})
+
+    def test_unsupported_task_lifetime_pin_survives_cached_configuration(self) -> None:
+        profile = {"id": "activation-proof", "tasks_workflow": "unsupported-version"}
+        actual = {
+            "installed": True, "enabled": True, "definition_ref": "fixture:workflow", "version_ref": "fixture:missing-version",
+            "contributor_count": 1,
+        }
+        evidence = MODULE.assert_tasks_workflow(profile, {"tasks_workflow": actual})
+        self.assertEqual("unsupported-version", evidence["tasks_workflow"]["state"])
+        actual["version_ref"] = "fixture:version1"
+        with self.assertRaisesRegex(MODULE.ProfileError, "does not match unsupported-version"):
+            MODULE.assert_tasks_workflow(profile, {"tasks_workflow": actual})
+
     def test_equipment_fixture_identity_uses_committed_consumer_package(self) -> None:
         spec = {"id": "equipment-registry", "version": "1.0.0", "kind": "equipment"}
         self.assertEqual(Path("fixtures/consumers/equipment-registry"), MODULE.extension_source(spec))

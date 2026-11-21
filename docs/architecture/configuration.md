@@ -93,9 +93,6 @@
 | corex-operations.schema.tenant.database | axiomasoft/corex-operations | null | null | no | deployment | no | use-site | ApiOptions::$(registrar-read) |  |  |
 | corex-operations.schema.tenant.driver | axiomasoft/corex-operations | null | null | no | deployment | no | use-site | ApiOptions::$(registrar-read) |  |  |
 | corex-operations.versions | axiomasoft/corex-operations | array | unobserved | no | product-policy | unobserved | unobserved | ApiOptions::$versions |  |  |
-| corex-recurring-tasks.completion_capture.definition_ref | axiomasoft/corex-recurring-tasks | string | task-completion/1 | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$completionCaptureDefinitionRef |  |  |
-| corex-recurring-tasks.completion_capture.enabled | axiomasoft/corex-recurring-tasks | bool | false | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$completionCaptureEnabled |  |  |
-| corex-recurring-tasks.completion_capture.version_ref | axiomasoft/corex-recurring-tasks | string | task-completion/1 | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$completionCaptureVersionRef |  |  |
 | corex-recurring-tasks.wakeup.enabled | axiomasoft/corex-recurring-tasks | bool | false | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$wakeupEnabled |  |  |
 | corex-recurring-tasks.wakeup.handler | axiomasoft/corex-recurring-tasks | string | CoreX\RecurringTasks\Internal\MaterializationWakeupHandler | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$wakeupHandler |  |  |
 | corex-recurring-tasks.wakeup.handler_kind | axiomasoft/corex-recurring-tasks | string | task-recurrence.materialize | no | product-policy | unobserved | unobserved | RecurringTasksOptions::$wakeupHandlerKind |  |  |
@@ -112,6 +109,9 @@
 | corex-search.postgres.scan_budget | axiomasoft/corex-search | int | 1000 | no | product-policy | unobserved | 1..1000 at boot | SearchOptions::$scanBudget |  |  |
 | corex-search.postgres.text_search_config | axiomasoft/corex-search | string | simple | no | product-policy | unobserved | unobserved | SearchOptions::$textSearchConfig |  |  |
 | corex-search.retention_seconds | axiomasoft/corex-search | int | 604800 | no | product-policy | no | positive integer at boot | SearchOptions::$retentionSeconds |  | Rollback retention for a generation after publication. |
+| corex-tasks-workflow.definition_ref | axiomasoft/corex-tasks-workflow | null | null | no | product-policy | no | required when enabled | TasksWorkflowOptions::$definitionRef |  |  |
+| corex-tasks-workflow.enabled | axiomasoft/corex-tasks-workflow | bool | false | no | deployment | no | boot | TasksWorkflowOptions::$enabled |  |  |
+| corex-tasks-workflow.version_ref | axiomasoft/corex-tasks-workflow | null | null | no | product-policy | no | required when enabled | TasksWorkflowOptions::$versionRef |  |  |
 | corex-tenancy.central_connection | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$centralConnection |  |  |
 | corex-tenancy.domain_trust.challenge_ttl_seconds | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$domainTrustChallengeTtlSeconds |  |  |
 | corex-tenancy.domain_trust.enabled | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$domainTrustEnabled |  |  |

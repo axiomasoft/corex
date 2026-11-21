@@ -6,24 +6,6 @@
         "corex-recurring-tasks": {
             "type": "object",
             "properties": {
-                "completion_capture": {
-                    "type": "object",
-                    "properties": {
-                        "definition_ref": {
-                            "type": "string",
-                            "default": "task-completion/1"
-                        },
-                        "enabled": {
-                            "type": "boolean",
-                            "default": false
-                        },
-                        "version_ref": {
-                            "type": "string",
-                            "default": "task-completion/1"
-                        }
-                    },
-                    "additionalProperties": false
-                },
                 "wakeup": {
                     "type": "object",
                     "properties": {

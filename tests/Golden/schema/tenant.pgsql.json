@@ -1774,10 +1774,35 @@
         },
         "corex_task_operations": {
             "columns": {
+                "account_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_generation": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
                 "created_at": {
                     "type": "timestamp(0) with time zone",
                     "nullable": false,
                     "default": "CURRENT_TIMESTAMP"
+                },
+                "deployment_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
                 },
                 "id": {
                     "type": "uuid",
@@ -1795,7 +1820,7 @@
                     "default": null
                 },
                 "request_key": {
-                    "type": "character varying(128)",
+                    "type": "character varying(190)",
                     "nullable": false,
                     "default": null
                 },
@@ -1806,6 +1831,16 @@
                 },
                 "result_ref": {
                     "type": "json",
+                    "nullable": false,
+                    "default": null
+                },
+                "subject_ref": {
+                    "type": "character varying(190)",
+                    "nullable": false,
+                    "default": null
+                },
+                "workspace_scope": {
+                    "type": "character varying(138)",
                     "nullable": false,
                     "default": null
                 }
@@ -1822,9 +1857,12 @@
                     "nulls_not_distinct": false
                 },
                 {
-                    "name": "corex_task_operations_request_key_uq",
+                    "name": "corex_task_operations_scope_request_uq",
                     "kind": "uq",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
                         "request_key"
                     ],
                     "predicate": null,
@@ -1845,6 +1883,10 @@
                 {
                     "name": "corex_task_operations_restore_epoch_ck",
                     "expression": "(restore_epoch ~ '^[a-f0-9]{64}$'::text)"
+                },
+                {
+                    "name": "corex_task_operations_scope_ck",
+                    "expression": "((binding_generation > 0) AND (((kind)::text = 'completionCapture'::text) = ((workspace_scope)::text = ''::text)))"
                 }
             ],
             "triggers": []

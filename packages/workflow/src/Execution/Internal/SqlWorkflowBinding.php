@@ -55,7 +55,7 @@ final readonly class SqlWorkflowBinding implements WorkflowBinding
             $request->scalarSnapshot, $request->requestKey,
         );
         $stamp = $this->definitionStamp($request);
-        $provider = $this->engine->provider($request)
+        $provider = $this->engine->provider($request->definition())
             ?? throw new UnsupportedWorkflowCapability('The requested workflow definition and version have no active engine.');
         $stored = WorkflowDefinitionStamp::storedPayload([
             'event_id' => $request->eventId,
@@ -91,12 +91,12 @@ final readonly class SqlWorkflowBinding implements WorkflowBinding
         return $this->engine->signal($request);
     }
 
-    public function fire(TransitionRequest $request): TransitionResult
+    public function transition(TransitionRequest $request): TransitionResult
     {
         $this->assertContext(accountId: $request->context->account->id, workspaceId: $request->context->workspace?->id);
         $this->assertKey($request->requestKey);
 
-        return $this->engine->fire($request);
+        return $this->engine->transition($request);
     }
 
     private function assertTriggerDeclaration(TriggerRequest $request): void

@@ -32,6 +32,7 @@ CARET = re.compile(r"^\^(\d+)\.(\d+)(?:\.(\d+))?$")
 INTERPRETER_MINORS = ("8.3", "8.4", "8.5")
 PROFILE_PHP = "8.4"
 REMOVAL_NAMES = {"axiomasoft/corex-search-intl": "Search Intl"}
+TASKS_WORKFLOW_VERSIONS = {"enabled": "fixture:version1", "unsupported-version": "fixture:missing-version"}
 PROBE = r"""<?php
 declare(strict_types=1);
 
@@ -91,6 +92,17 @@ if (getenv('COREX_SCENARIO_FIELDS_BRIDGE') !== false) {
         'contributors' => $contributions,
     ];
 }
+$taskBridge = null;
+if (getenv('COREX_SCENARIO_TASKS_WORKFLOW') !== false) {
+    $captures = $app->tagged('corex.tasks.completion-captures');
+    $taskBridge = [
+        'installed' => in_array('axiomasoft/corex-tasks-workflow', $packages, true),
+        'enabled' => $app['config']->get('corex-tasks-workflow.enabled'),
+        'definition_ref' => $app['config']->get('corex-tasks-workflow.definition_ref'),
+        'version_ref' => $app['config']->get('corex-tasks-workflow.version_ref'),
+        'contributor_count' => is_countable($captures) ? count($captures) : null,
+    ];
+}
 echo json_encode([
     'packages' => $packages,
     'providers' => array_keys($app->getLoadedProviders()),
@@ -99,6 +111,7 @@ echo json_encode([
     'php' => PHP_VERSION,
     'http_routes' => is_file($root . '/routes/web.php'),
     ...($bridge === null ? [] : ['search_custom_fields' => $bridge]),
+    ...($taskBridge === null ? [] : ['tasks_workflow' => $taskBridge]),
 ], JSON_THROW_ON_ERROR);
 """
 
@@ -249,6 +262,25 @@ def assert_fields_bridge(profile: dict, boot: dict) -> dict:
             or actual.get("subscriber") is not enabled or bool(actual.get("contributors")) is not enabled):
         raise ProfileError(f"{profile['id']}: Search Custom Fields does not match {expected}")
     return {"search_custom_fields": {"state": expected, **actual}}
+
+
+def assert_tasks_workflow(profile: dict, boot: dict) -> dict:
+    expected = profile.get("tasks_workflow")
+    if expected is None:
+        return {}
+    if expected not in {"absent", "disabled", *TASKS_WORKFLOW_VERSIONS}:
+        raise ProfileError(f"{profile['id']}: invalid Tasks Workflow profile")
+    version = TASKS_WORKFLOW_VERSIONS.get(expected)
+    enabled = version is not None
+    actual = boot.get("tasks_workflow", {})
+    contributor_count = actual.get("contributor_count")
+    if (actual.get("installed") is not (expected != "absent")
+            or actual.get("enabled") is not (None if expected == "absent" else enabled)
+            or actual.get("definition_ref") != ("fixture:workflow" if enabled else None)
+            or actual.get("version_ref") != version
+            or type(contributor_count) is not int or contributor_count != int(enabled)):
+        raise ProfileError(f"{profile['id']}: Tasks Workflow does not match {expected}")
+    return {"tasks_workflow": {"state": expected, **actual}}
 
 
 def assert_no_workspace(payload: str, workspace: Path) -> None:
@@ -733,6 +765,16 @@ def install_app(
         runtime.update({"COREX_SCENARIO_FIELDS_BRIDGE": bridge, "COREX_SEARCH_CUSTOM_FIELDS_ENABLED": "true" if bridge == "enabled" else "false"})
     for overlay in host_overlays:
         shutil.copytree(overlay, consumer, dirs_exist_ok=True)
+    if tasks_workflow := profile.get("tasks_workflow"):
+        runtime["COREX_SCENARIO_TASKS_WORKFLOW"] = tasks_workflow
+        if version_ref := TASKS_WORKFLOW_VERSIONS.get(tasks_workflow):
+            (consumer / "config/corex-tasks-workflow.php").write_text(
+                "<?php\n\ndeclare(strict_types=1);\n\nreturn [\n"
+                "    'enabled' => true,\n"
+                "    'definition_ref' => 'fixture:workflow',\n"
+                f"    'version_ref' => '{version_ref}',\n];\n",
+                encoding="utf-8",
+            )
     closure = dist_closure(packages, load_json(repository / "packages.json")["packages"])
     if "axiomasoft/corex-operations" in closure:
         providers = consumer / "bootstrap/providers.php"
@@ -917,6 +959,7 @@ def execute_cell(cell: dict, profile: dict | None, repository: Path, workspace: 
         cohort_installed = sorted(name for name in report["packages"] if is_corex_package(name))
         return {
             **assert_fields_bridge(profile, report),
+            **assert_tasks_workflow(profile, report),
             "installed": cohort_installed,
             "locked": shown,
             "lock_sha256": dist["lock_sha256"],

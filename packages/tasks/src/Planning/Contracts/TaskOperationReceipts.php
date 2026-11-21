@@ -4,23 +4,20 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Planning\Contracts;
 
-use CoreX\Tasks\Planning\Data\TaskOperationKind;
+use CoreX\Tasks\Planning\Data\TaskOperationIdentity;
 use CoreX\Tasks\Planning\Data\TaskOperationReceipt;
-use Illuminate\Database\Connection;
+use CoreX\Tasks\Planning\Exceptions\PlanningConflict;
+use Illuminate\Database\ConnectionInterface;
 use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
-/** Tasks-owned ledger port. The supplied connection preserves the caller's transaction. */
+/** Tasks-owned ledger on the verified owner connection. */
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface TaskOperationReceipts
 {
-    public function find(Connection $connection, string $requestKey): ?TaskOperationReceipt;
+    /** @throws PlanningConflict If the request key already belongs to a different subject. */
+    public function find(ConnectionInterface $connection, TaskOperationIdentity $identity): ?TaskOperationReceipt;
 
-    /**
-     * A duplicate key raises QueryException; callers must read and compare the
-     * stored hash before treating it as an idempotent replay.
-     *
-     * @param  array<string, mixed>  $resultRef
-     */
-    public function record(Connection $connection, TaskOperationKind $kind, string $requestKey, string $payloadHash, string $restoreEpoch, array $resultRef): void;
+    /** @throws PlanningConflict If the request identity was already recorded. Requires an active transaction. */
+    public function record(ConnectionInterface $connection, TaskOperationIdentity $identity, TaskOperationReceipt $receipt): void;
 }

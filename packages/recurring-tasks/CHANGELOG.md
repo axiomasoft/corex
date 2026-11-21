@@ -1,5 +1,9 @@
 # Changelog
 
+## CoreX 2.0
+
+- Breaking. Completion settings move to `axiomasoft/corex-tasks-workflow`. `RecurringTasksModule` declares the existing series schema, and materialization consumes typed Tasks operation receipts.
+
 ## CoreX 2.0 — Durable effects
 
 - Pass the exact Task transaction connection to Workflow and record confirmed capture evidence with the original scope epoch.

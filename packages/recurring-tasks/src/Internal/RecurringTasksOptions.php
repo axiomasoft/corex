@@ -17,9 +17,6 @@ final readonly class RecurringTasksOptions
         public string $wakeupHandlerKind,
         public string $wakeupHandlerVersion,
         public string $wakeupHandler,
-        public bool $completionCaptureEnabled,
-        public string $completionCaptureDefinitionRef,
-        public string $completionCaptureVersionRef,
     ) {}
 
     /** @param  array<array-key, mixed>  $config */
@@ -27,19 +24,15 @@ final readonly class RecurringTasksOptions
     {
         $violations = new ConfigurationValidator;
         $wakeup = is_array($config['wakeup'] ?? null) ? $config['wakeup'] : [];
-        $capture = is_array($config['completion_capture'] ?? null) ? $config['completion_capture'] : [];
 
         $wakeupEnabled = self::bool(violations: $violations, path: 'wakeup.enabled', value: $wakeup['enabled'] ?? false);
         $handlerKind = self::nonEmpty(violations: $violations, path: 'wakeup.handler_kind', value: $wakeup['handler_kind'] ?? 'task-recurrence.materialize');
         $handlerVersion = self::nonEmpty(violations: $violations, path: 'wakeup.handler_version', value: $wakeup['handler_version'] ?? 'task-materialization/1');
         $handler = self::nonEmpty(violations: $violations, path: 'wakeup.handler', value: $wakeup['handler'] ?? MaterializationWakeupHandler::class);
-        $captureEnabled = self::bool(violations: $violations, path: 'completion_capture.enabled', value: $capture['enabled'] ?? false);
-        $definitionRef = self::nonEmpty(violations: $violations, path: 'completion_capture.definition_ref', value: $capture['definition_ref'] ?? 'task-completion/1');
-        $versionRef = self::nonEmpty(violations: $violations, path: 'completion_capture.version_ref', value: $capture['version_ref'] ?? 'task-completion/1');
 
         $violations->failIfAny();
 
-        return new self(wakeupEnabled: $wakeupEnabled, wakeupHandlerKind: $handlerKind, wakeupHandlerVersion: $handlerVersion, wakeupHandler: $handler, completionCaptureEnabled: $captureEnabled, completionCaptureDefinitionRef: $definitionRef, completionCaptureVersionRef: $versionRef);
+        return new self(wakeupEnabled: $wakeupEnabled, wakeupHandlerKind: $handlerKind, wakeupHandlerVersion: $handlerVersion, wakeupHandler: $handler);
     }
 
     /** Versioned durable registration of the materialization handler (D96 §C.9). */

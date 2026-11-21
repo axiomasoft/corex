@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CoreX\RecurringTasks\Internal;
+namespace CoreX\RecurringTasks;
 
+use CoreX\RecurringTasks\Internal\RecurringTasksSchemaSets;
 use Override;
 use Packman\Attributes\Internal;
 use Packman\Extensions\Concerns\Persistence\OwnsSchema;
@@ -12,7 +13,7 @@ use Packman\Modules\Contracts\Definition\ModuleDefinition;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 
 #[Internal]
-final class TaskWorkflowIntegration extends ModuleDefinition implements WithSchema
+final class RecurringTasksModule extends ModuleDefinition implements WithSchema
 {
     use OwnsSchema;
 
@@ -20,8 +21,8 @@ final class TaskWorkflowIntegration extends ModuleDefinition implements WithSche
     public function manifest(): ModuleManifest
     {
         return ModuleManifest::make('axiomasoft/corex-recurring-tasks')
-            ->title('Tasks Workflow')
-            ->description('Recurrence-to-task materialization with durable wakeup and optional workflow capture.')
+            ->title('Recurring Tasks')
+            ->description('Recurrence-to-task materialization with durable wakeups.')
             ->tablePrefix($this->tablePrefix());
     }
 

@@ -20,6 +20,7 @@ use CoreX\SearchCustomFields\SearchCustomFieldsServiceProvider;
 use CoreX\SearchIntl\SearchIntlServiceProvider;
 use CoreX\SearchMeilisearch\SearchMeilisearchServiceProvider;
 use CoreX\Tasks\TasksServiceProvider;
+use CoreX\TasksWorkflow\TasksWorkflowServiceProvider;
 use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\Contracts\AccountResources;
 use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks;
@@ -54,6 +55,7 @@ abstract class GoldenTestCase extends TestCase
             SearchIntlServiceProvider::class,
             SearchMeilisearchServiceProvider::class,
             TasksServiceProvider::class,
+            TasksWorkflowServiceProvider::class,
             RecurringTasksServiceProvider::class,
             TenancyServiceProvider::class,
             ImportExportServiceProvider::class,

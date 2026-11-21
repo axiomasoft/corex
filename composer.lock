@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d738cb5ea2742f737b65fa21339f649a",
+    "content-hash": "013a551ecf63205949ab5cb62c33a1c3",
     "packages": [
         {
             "name": "axiomasoft/corex",
@@ -12,7 +12,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/core",
-                "reference": "945349f141212517c62cae9f7d3c427dd1d3120e"
+                "reference": "f3212904945ec1538779cbb2e647c6aea5269105"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -167,7 +167,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/custom-fields",
-                "reference": "711b7ca33e978c8adf3be60bcc5cfb9632756b6b"
+                "reference": "17f60ef9af2f292d4dface51d256ad096f8f0c32"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -267,7 +267,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/import-export",
-                "reference": "740dfc0c7273c0971dd2fad7af917dca8d574fa7"
+                "reference": "169f4dd7be8fe2a0a5941dcd5abbb627eec82e99"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -353,7 +353,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/intl",
-                "reference": "fac1887faac7b6c2ead4c0ecac8ea54e973a794f"
+                "reference": "444a398badc6f35535fc64d1f68f390f02a49bc9"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -453,7 +453,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/media",
-                "reference": "dcc43770ef4241fedacef1c90a0ea8aa13ddf841"
+                "reference": "dae33b77bf458e5ff06decc5407b892d235098e3"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -550,7 +550,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/notifications",
-                "reference": "374b13e778e76a206ce70c25e16c78c6a4d071b1"
+                "reference": "ca4d03ef0352f0ed7d69d8d54df7c19e66103bc5"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -646,7 +646,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/operations",
-                "reference": "1b63a4792bcc0b29a70359b1d30d5c384d528956"
+                "reference": "d9791312deb0374701c8373d9a4295e7e89fe8b9"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -764,7 +764,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/panels",
-                "reference": "0952124c9c518961b9e872a3904f08f445841903"
+                "reference": "2465d5eb3ae5ab8807a9e188e05f91e6ed0b6b90"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -848,7 +848,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/recurrence",
-                "reference": "569e90469527a8a2b5fcd004f787c395e4b8a6ca"
+                "reference": "70e47c007d49d124e350897bc070fcb504dc9865"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -923,13 +923,12 @@
             "dist": {
                 "type": "path",
                 "url": "packages/recurring-tasks",
-                "reference": "60e7c03a6dd0713ec0808e1a30449729628687bc"
+                "reference": "f23e14f554d43f0c0be9791549f58876c78c226d"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
                 "axiomasoft/corex-recurrence": "^2.0@dev",
                 "axiomasoft/corex-tasks": "^2.0@dev",
-                "axiomasoft/corex-workflow": "^2.0@dev",
                 "axiomasoft/packman": "^0.1",
                 "axiomasoft/packman-modules": "^0.1.1",
                 "axiomasoft/packman-schema": "^0.1",
@@ -965,7 +964,7 @@
                     "dev-main": "2.0.x-dev"
                 },
                 "packman": {
-                    "module": "CoreX\\RecurringTasks\\Internal\\TaskWorkflowIntegration",
+                    "module": "CoreX\\RecurringTasks\\RecurringTasksModule",
                     "schema-version": 1,
                     "package-type": "integration",
                     "stability": "stable",
@@ -976,8 +975,7 @@
                         "Data",
                         "Errors",
                         "Exceptions",
-                        "Internal",
-                        "Laravel"
+                        "Internal"
                     ]
                 }
             },
@@ -1008,7 +1006,7 @@
             "license": [
                 "MIT"
             ],
-            "description": "Recurring task materialization with durable scheduling and optional workflow completion capture.",
+            "description": "Recurring task materialization with durable scheduling.",
             "transport-options": {
                 "relative": true
             }
@@ -1019,7 +1017,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/scheduler",
-                "reference": "37eea3fbc3e10faa42149d2084ac52050b4a2d65"
+                "reference": "03dadfe6442503f040b761079bf0f061c3bb3964"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1108,7 +1106,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search",
-                "reference": "feba164b9036b8b5218df2d2262a543a6fb47a71"
+                "reference": "b0f846d0041a0a5a69ce313ba8e0eb002ddab511"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1202,7 +1200,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-custom-fields",
-                "reference": "d095ce1989a432658cda9df7b1273f214e5e3a6d"
+                "reference": "02c71a841580b16ae61252b6e65dd2125426c670"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1287,7 +1285,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-intl",
-                "reference": "2000e3d48b79a5001d38b7cda03cba21c5f077cc"
+                "reference": "ff82e6178ed6464892b3f89438a7e85c1e22cb0a"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1368,7 +1366,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-meilisearch",
-                "reference": "571c0b357dee1b3fde7339872f7db16fe2784ba4"
+                "reference": "d2b75418c4eef46856cfdc231f75ac943cfe4514"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1457,7 +1455,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tasks",
-                "reference": "7d9e452018deae3c2403ef4b9fd632436aad1012"
+                "reference": "34cb7e579a0f0b13c59d4a0b89689ba68dcce390"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1563,12 +1561,94 @@
             }
         },
         {
+            "name": "axiomasoft/corex-tasks-workflow",
+            "version": "2.0.x-dev",
+            "dist": {
+                "type": "path",
+                "url": "packages/tasks-workflow",
+                "reference": "8cb11fd2505b9bc42a2198a278f5b554ad839923"
+            },
+            "require": {
+                "axiomasoft/corex": "^2.0@dev",
+                "axiomasoft/corex-tasks": "^2.0@dev",
+                "axiomasoft/corex-workflow": "^2.0@dev",
+                "axiomasoft/packman": "^0.1",
+                "axiomasoft/packman-modules": "^0.1.1",
+                "illuminate/contracts": "^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/support": "^13.0",
+                "laravel/framework": "^13.0",
+                "php": "^8.4"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5"
+            },
+            "type": "library",
+            "extra": {
+                "corex": {
+                    "schema-version": 1,
+                    "package-type": "integration",
+                    "stability": "stable"
+                },
+                "laravel": {
+                    "providers": [
+                        "CoreX\\TasksWorkflow\\TasksWorkflowServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "2.0.x-dev"
+                },
+                "packman": {
+                    "schema-version": 1,
+                    "package-type": "integration",
+                    "stability": "stable",
+                    "profile": "laravel-package",
+                    "error-prefix": "tasks-workflow",
+                    "owns": [
+                        "Completion"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\TasksWorkflow\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\TasksWorkflow\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml"
+                ],
+                "test:coverage": [
+                    "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --coverage --min=80"
+                ],
+                "analyse": [
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/tasks-workflow/phpstan.neon --memory-limit=2G --no-progress"
+                ],
+                "lint:check": [
+                    "../../vendor/bin/pint --test"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Optional durable Workflow capture when a CoreX task completes.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "axiomasoft/corex-tenancy",
             "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/tenancy",
-                "reference": "7ffe783829aa5b284c72c0a2f60bf4c644411b19"
+                "reference": "489373b7d502ed7523647d42175e025182b47e19"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1708,7 +1788,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/workflow",
-                "reference": "27c35795435fad7b6199f659abd6759d3f32b6fa"
+                "reference": "2311938adc044d8df99df41b97d6d8621bdef159"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -9059,7 +9139,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/access",
-                "reference": "930302d5133c6578d206d5080b2215584ef0a40d"
+                "reference": "ab24226693a442bf94e5e0310a808b71080f61a7"
             },
             "require": {
                 "axiomasoft/azguard": "^2.0@dev",
@@ -9216,7 +9296,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tools",
-                "reference": "afd8d02844fc83d41922224b383d6c8c0c75dae3"
+                "reference": "4a34584e49fd3c6a21664f537bbf6ca425a63b72"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -9323,7 +9403,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/webhooks",
-                "reference": "0ae480099a3157e473a6bf373e359dc43e946cac"
+                "reference": "76950d9a588ccedb8cbb19bcc51cb90d86377ed2"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -16768,6 +16848,7 @@
         "axiomasoft/corex-search-intl": 20,
         "axiomasoft/corex-search-meilisearch": 20,
         "axiomasoft/corex-tasks": 20,
+        "axiomasoft/corex-tasks-workflow": 20,
         "axiomasoft/corex-tenancy": 20,
         "axiomasoft/corex-tools": 20,
         "axiomasoft/corex-webhooks": 20,

@@ -1,0 +1,32 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "axiomasoft/corex-tasks-workflow configuration",
+    "type": "object",
+    "properties": {
+        "corex-tasks-workflow": {
+            "type": "object",
+            "properties": {
+                "definition_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null
+                },
+                "enabled": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "version_ref": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

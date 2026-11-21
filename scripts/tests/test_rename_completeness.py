@@ -1,4 +1,4 @@
-"""D63 namespace reuse must not admit renamed custom-fields symbols."""
+"""Reclaimed namespaces still reject retired runtime symbols."""
 import json
 import shutil
 import subprocess
@@ -29,6 +29,9 @@ class AttributeRenameTest(unittest.TestCase):
                                  if row.get('new') == old_schema)
             retired_search = 'CoreX\\Search' + '\\Contracts\\SearchProvider'
             retired_query = 'CoreX\\Search' + '\\Data\\SearchQuery'
+            bridge = 'CoreX\\TasksWorkflow'
+            retired_bridge = bridge + '\\TaskWorkflowIntegration'
+            retired_recurring = 'CoreX\\RecurringTasks' + '\\Internal\\TaskWorkflowIntegration'
             for text, expected in (
                 ('namespace CoreX\\Attributes;', 0),
                 ('namespace CoreX\\Attributes\\Tooling;', 0),
@@ -41,6 +44,11 @@ class AttributeRenameTest(unittest.TestCase):
                 ('use ' + retired_query + ';', 1),
                 ('use CoreX\\Search\\Query\\Contracts\\Search;', 0),
                 ('use CoreX\\Search\\Query\\Data\\SearchQuery;', 0),
+                ('use ' + retired_bridge + ';', 1),
+                ('use ' + retired_recurring + ';', 1),
+                ('namespace ' + bridge + '\\Completion\\Internal;', 0),
+                ('$name = "' + 'corex/' + 'tasks-workflow";', 1),
+                ('$name = "axiomasoft/corex-tasks-workflow";', 0),
             ):
                 with self.subTest(text=text):
                     fixture.write_text('<?php ' + text)

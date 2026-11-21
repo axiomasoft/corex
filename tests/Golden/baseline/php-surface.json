@@ -55064,88 +55064,6 @@
         "properties": [],
         "readonly": false
     },
-    "CoreX\\RecurringTasks\\Internal\\CaptureTaskCompletion": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "CoreX\\Tasks\\Task\\Contracts\\TaskCompletionCapture"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "enabled",
-                        "type": "bool",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "definitionRef",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "versionRef",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "receipts",
-                        "type": "CoreX\\Tasks\\Planning\\Contracts\\TaskOperationReceipts",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "contexts",
-                        "type": "CoreX\\Context\\Contracts\\TenantContextResolver",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "scopes",
-                        "type": "CoreX\\Context\\Contracts\\DataScopeFactory",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "workflow",
-                        "type": "?CoreX\\Workflow\\Contracts\\WorkflowBinding",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "capture": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "candidate",
-                        "type": "CoreX\\Tasks\\Task\\Data\\TaskCompletionCandidate",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "connection",
-                        "type": "Illuminate\\Database\\Connection",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": true
-    },
     "CoreX\\RecurringTasks\\Internal\\MaterializationBindings": {
         "abstract": false,
         "constants": [],
@@ -55355,6 +55273,12 @@
                 "params": [
                     {
                         "byRef": false,
+                        "name": "identity",
+                        "type": "CoreX\\Tasks\\Planning\\Data\\TaskOperationIdentity",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
                         "name": "existing",
                         "type": "CoreX\\Tasks\\Planning\\Data\\TaskOperationReceipt",
                         "variadic": false
@@ -55391,8 +55315,8 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "operationKey",
-                        "type": "string",
+                        "name": "identity",
+                        "type": "CoreX\\Tasks\\Planning\\Data\\TaskOperationIdentity",
                         "variadic": false
                     }
                 ],
@@ -55493,8 +55417,8 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "operationKey",
-                        "type": "string",
+                        "name": "identity",
+                        "type": "CoreX\\Tasks\\Planning\\Data\\TaskOperationIdentity",
                         "variadic": false
                     },
                     {
@@ -55505,14 +55429,8 @@
                     },
                     {
                         "byRef": false,
-                        "name": "restoreEpoch",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "resultRef",
-                        "type": "array",
+                        "name": "receipt",
+                        "type": "CoreX\\RecurringTasks\\Data\\MaterializationReceipt",
                         "variadic": false
                     }
                 ],
@@ -55529,18 +55447,6 @@
                     }
                 ],
                 "return": "CoreX\\RecurringTasks\\Data\\MaterializationReceipt",
-                "static": false
-            },
-            "receiptToStored": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "receipt",
-                        "type": "CoreX\\RecurringTasks\\Data\\MaterializationReceipt",
-                        "variadic": false
-                    }
-                ],
-                "return": "array",
                 "static": false
             }
         },
@@ -55620,24 +55526,6 @@
                         "name": "wakeupHandler",
                         "type": "string",
                         "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "completionCaptureEnabled",
-                        "type": "bool",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "completionCaptureDefinitionRef",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "completionCaptureVersionRef",
-                        "type": "string",
-                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -55663,24 +55551,6 @@
         },
         "parent": null,
         "properties": {
-            "completionCaptureDefinitionRef": {
-                "name": "completionCaptureDefinitionRef",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "completionCaptureEnabled": {
-                "name": "completionCaptureEnabled",
-                "readonly": true,
-                "static": false,
-                "type": "bool"
-            },
-            "completionCaptureVersionRef": {
-                "name": "completionCaptureVersionRef",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
             "wakeupEnabled": {
                 "name": "wakeupEnabled",
                 "readonly": true,
@@ -55918,51 +55788,6 @@
         "properties": [],
         "readonly": true
     },
-    "CoreX\\RecurringTasks\\Internal\\TaskWorkflowIntegration": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "Packman\\Extensions\\Contracts\\Persistence\\WithSchema"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "manifest": {
-                "params": [],
-                "return": "Packman\\Modules\\Data\\Lifecycle\\ModuleManifest",
-                "static": false
-            },
-            "migrationPath": {
-                "params": [],
-                "return": "?string",
-                "static": false
-            },
-            "schemaComponents": {
-                "params": [],
-                "return": "array",
-                "static": false
-            },
-            "schemaSetProviders": {
-                "params": [],
-                "return": "array",
-                "static": false
-            },
-            "tableNouns": {
-                "params": [],
-                "return": "array",
-                "static": false
-            },
-            "tablePrefix": {
-                "params": [],
-                "return": "string",
-                "static": false
-            }
-        },
-        "parent": "Packman\\Modules\\Contracts\\Definition\\ModuleDefinition",
-        "properties": [],
-        "readonly": false
-    },
     "CoreX\\RecurringTasks\\Internal\\Value": {
         "abstract": false,
         "constants": [],
@@ -56060,28 +55885,48 @@
         "properties": [],
         "readonly": false
     },
-    "CoreX\\RecurringTasks\\Laravel\\CompletionBindings": {
+    "CoreX\\RecurringTasks\\RecurringTasksModule": {
         "abstract": false,
         "constants": [],
         "final": true,
-        "interfaces": [],
+        "interfaces": [
+            "Packman\\Extensions\\Contracts\\Persistence\\WithSchema"
+        ],
         "internal": false,
         "kind": "class",
         "methods": {
-            "register": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "app",
-                        "type": "Illuminate\\Contracts\\Foundation\\Application",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": true
+            "manifest": {
+                "params": [],
+                "return": "Packman\\Modules\\Data\\Lifecycle\\ModuleManifest",
+                "static": false
+            },
+            "migrationPath": {
+                "params": [],
+                "return": "?string",
+                "static": false
+            },
+            "schemaComponents": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "schemaSetProviders": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "tableNouns": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "tablePrefix": {
+                "params": [],
+                "return": "string",
+                "static": false
             }
         },
-        "parent": null,
+        "parent": "Packman\\Modules\\Contracts\\Definition\\ModuleDefinition",
         "properties": [],
         "readonly": false
     },
@@ -66791,6 +66636,442 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\TasksWorkflow\\Completion\\Internal\\ActivationGateExtension": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "decorate",
+                        "type": "Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "prepare": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Foundation\\Application",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "binding",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\TasksWorkflow\\Completion\\Internal\\CompletionScope": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": [],
+        "parent": null,
+        "properties": {
+            "attachingGate": {
+                "name": "attachingGate",
+                "readonly": false,
+                "static": false,
+                "type": "bool"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\TasksWorkflow\\Completion\\Internal\\ScopedRegistryIntrospection": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "Packman\\Modules\\Contracts\\Registry\\RegistryIntrospection"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "reader",
+                        "type": "Packman\\Modules\\Contracts\\Registry\\RegistryIntrospection",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\TasksWorkflow\\Completion\\Internal\\CompletionScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "booted",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "extensionPoints": {
+                "params": [],
+                "return": "Packman\\Modules\\Data\\Registry\\RegistryMap",
+                "static": false
+            },
+            "why": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "module",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "?Packman\\Context\\Contracts\\ContextScopeInterface",
+                        "variadic": false
+                    }
+                ],
+                "return": "Packman\\Modules\\Data\\Registry\\ModuleExplanation",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\TasksWorkflow\\Completion\\Internal\\TaskCompletionTrigger": {
+        "abstract": false,
+        "constants": {
+            "ENTITY": {
+                "type": "string",
+                "value": "tsk.task"
+            },
+            "EVENT": {
+                "type": "string",
+                "value": "completed"
+            },
+            "MODULE": {
+                "type": "string",
+                "value": "axiomasoft/corex-tasks"
+            }
+        },
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "assertDeclared": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "registry",
+                        "type": "Packman\\Modules\\Contracts\\Registry\\ModuleRegistry",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": true
+            },
+            "assertInstalledDeclaration": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "discovery",
+                        "type": "Packman\\Modules\\Contracts\\Definition\\ModuleDiscovery",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": true
+            },
+            "isDeclared": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "registry",
+                        "type": "Packman\\Modules\\Contracts\\Registry\\ModuleRegistry",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\TasksWorkflow\\Completion\\Internal\\TasksWorkflowActivationGate": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "Packman\\Modules\\Contracts\\Lifecycle\\ModuleActivationGate"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "host",
+                        "type": "Packman\\Modules\\Contracts\\Lifecycle\\ModuleActivationGate",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "container",
+                        "type": "Closure",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "?CoreX\\TasksWorkflow\\Completion\\Internal\\CompletionScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "definitionRef",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "versionRef",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "check": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "ctx",
+                        "type": "Packman\\Context\\Contracts\\ContextScopeInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "module",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "edition",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "Packman\\Modules\\Data\\Lifecycle\\ModuleActivationDecision",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\TasksWorkflow\\Completion\\Internal\\TasksWorkflowOptions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "fromArray": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "definitionRef": {
+                "name": "definitionRef",
+                "readonly": true,
+                "static": false,
+                "type": "?string"
+            },
+            "enabled": {
+                "name": "enabled",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            },
+            "versionRef": {
+                "name": "versionRef",
+                "readonly": true,
+                "static": false,
+                "type": "?string"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\TasksWorkflow\\Completion\\Internal\\WorkflowCompletionCapture": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Tasks\\Task\\Contracts\\TaskCompletionCapture"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scopes",
+                        "type": "CoreX\\Context\\Contracts\\CurrentWorkScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "modules",
+                        "type": "Packman\\Modules\\Contracts\\Registry\\ModuleRegistry",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "workflow",
+                        "type": "CoreX\\Workflow\\Contracts\\WorkflowBinding",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "definitionRef",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "versionRef",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "capture": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "candidate",
+                        "type": "CoreX\\Tasks\\Task\\Data\\TaskCompletionCandidate",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connection",
+                        "type": "Illuminate\\Database\\ConnectionInterface",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Tasks\\Task\\Data\\TaskCompletionAdmission",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\TasksWorkflow\\Completion\\Laravel\\CompletionRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "Packman\\Foundation\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\TasksWorkflow\\TasksWorkflowServiceProvider": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": "Illuminate\\Support\\ServiceProvider",
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Tasks\\Access\\Contracts\\TaskAccess": {
         "abstract": false,
         "constants": [],
@@ -67415,13 +67696,13 @@
                     {
                         "byRef": false,
                         "name": "connection",
-                        "type": "Illuminate\\Database\\Connection",
+                        "type": "Illuminate\\Database\\ConnectionInterface",
                         "variadic": false
                     },
                     {
                         "byRef": false,
-                        "name": "requestKey",
-                        "type": "string",
+                        "name": "identity",
+                        "type": "CoreX\\Tasks\\Planning\\Data\\TaskOperationIdentity",
                         "variadic": false
                     }
                 ],
@@ -67433,37 +67714,19 @@
                     {
                         "byRef": false,
                         "name": "connection",
-                        "type": "Illuminate\\Database\\Connection",
+                        "type": "Illuminate\\Database\\ConnectionInterface",
                         "variadic": false
                     },
                     {
                         "byRef": false,
-                        "name": "kind",
-                        "type": "CoreX\\Tasks\\Planning\\Data\\TaskOperationKind",
+                        "name": "identity",
+                        "type": "CoreX\\Tasks\\Planning\\Data\\TaskOperationIdentity",
                         "variadic": false
                     },
                     {
                         "byRef": false,
-                        "name": "requestKey",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "payloadHash",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "restoreEpoch",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "resultRef",
-                        "type": "array",
+                        "name": "receipt",
+                        "type": "CoreX\\Tasks\\Planning\\Data\\TaskOperationReceipt",
                         "variadic": false
                     }
                 ],
@@ -67475,7 +67738,7 @@
         "properties": [],
         "readonly": false
     },
-    "CoreX\\Tasks\\Planning\\Contracts\\TaskPlanningCommand": {
+    "CoreX\\Tasks\\Planning\\Contracts\\TaskPlanning": {
         "abstract": false,
         "constants": [],
         "final": false,
@@ -67737,6 +68000,179 @@
         },
         "readonly": true
     },
+    "CoreX\\Tasks\\Planning\\Data\\TaskOperationFence": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "deploymentId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "bindingId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "bindingGeneration",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "accountIncarnation",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "restoreEpoch",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "fromScope": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "accountIncarnation": {
+                "name": "accountIncarnation",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "bindingGeneration": {
+                "name": "bindingGeneration",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "bindingId": {
+                "name": "bindingId",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "deploymentId": {
+                "name": "deploymentId",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "restoreEpoch": {
+                "name": "restoreEpoch",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Tasks\\Planning\\Data\\TaskOperationIdentity": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "kind",
+                        "type": "CoreX\\Tasks\\Planning\\Data\\TaskOperationKind",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "requestKey",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "subjectRef",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "workspaceId",
+                        "type": "?string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "kind": {
+                "name": "kind",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Tasks\\Planning\\Data\\TaskOperationKind"
+            },
+            "requestKey": {
+                "name": "requestKey",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "scope": {
+                "name": "scope",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Data\\Data\\DataScope"
+            },
+            "subjectRef": {
+                "name": "subjectRef",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "workspaceId": {
+                "name": "workspaceId",
+                "readonly": true,
+                "static": false,
+                "type": "?string"
+            }
+        },
+        "readonly": true
+    },
     "CoreX\\Tasks\\Planning\\Data\\TaskOperationKind": {
         "abstract": false,
         "constants": {
@@ -67848,14 +68284,14 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "requestKey",
+                        "name": "payloadHash",
                         "type": "string",
                         "variadic": false
                     },
                     {
                         "byRef": false,
-                        "name": "payloadHash",
-                        "type": "string",
+                        "name": "originalFence",
+                        "type": "CoreX\\Tasks\\Planning\\Data\\TaskOperationFence",
                         "variadic": false
                     },
                     {
@@ -67871,14 +68307,14 @@
         },
         "parent": null,
         "properties": {
-            "payloadHash": {
-                "name": "payloadHash",
+            "originalFence": {
+                "name": "originalFence",
                 "readonly": true,
                 "static": false,
-                "type": "string"
+                "type": "CoreX\\Tasks\\Planning\\Data\\TaskOperationFence"
             },
-            "requestKey": {
-                "name": "requestKey",
+            "payloadHash": {
+                "name": "payloadHash",
                 "readonly": true,
                 "static": false,
                 "type": "string"
@@ -67983,6 +68419,12 @@
                         "name": "clock",
                         "type": "Psr\\Clock\\ClockInterface",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "workScope",
+                        "type": "CoreX\\Context\\Contracts\\CurrentWorkScope",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -67993,13 +68435,13 @@
                     {
                         "byRef": false,
                         "name": "connection",
-                        "type": "Illuminate\\Database\\Connection",
+                        "type": "Illuminate\\Database\\ConnectionInterface",
                         "variadic": false
                     },
                     {
                         "byRef": false,
-                        "name": "requestKey",
-                        "type": "string",
+                        "name": "identity",
+                        "type": "CoreX\\Tasks\\Planning\\Data\\TaskOperationIdentity",
                         "variadic": false
                     }
                 ],
@@ -68011,37 +68453,19 @@
                     {
                         "byRef": false,
                         "name": "connection",
-                        "type": "Illuminate\\Database\\Connection",
+                        "type": "Illuminate\\Database\\ConnectionInterface",
                         "variadic": false
                     },
                     {
                         "byRef": false,
-                        "name": "kind",
-                        "type": "CoreX\\Tasks\\Planning\\Data\\TaskOperationKind",
+                        "name": "identity",
+                        "type": "CoreX\\Tasks\\Planning\\Data\\TaskOperationIdentity",
                         "variadic": false
                     },
                     {
                         "byRef": false,
-                        "name": "requestKey",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "payloadHash",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "restoreEpoch",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "resultRef",
-                        "type": "array",
+                        "name": "receipt",
+                        "type": "CoreX\\Tasks\\Planning\\Data\\TaskOperationReceipt",
                         "variadic": false
                     }
                 ],
@@ -68066,7 +68490,7 @@
                     {
                         "byRef": false,
                         "name": "connection",
-                        "type": "Illuminate\\Database\\Connection",
+                        "type": "Illuminate\\Database\\ConnectionInterface",
                         "variadic": false
                     },
                     {
@@ -68079,31 +68503,42 @@
                 "return": "",
                 "static": false
             },
-            "claimOrReplay": {
+            "record": {
                 "params": [
                     {
                         "byRef": false,
-                        "name": "operation",
-                        "type": "CoreX\\Tasks\\Planning\\Data\\PlanningOperation",
+                        "name": "identity",
+                        "type": "CoreX\\Tasks\\Planning\\Data\\TaskOperationIdentity",
                         "variadic": false
                     },
                     {
                         "byRef": false,
-                        "name": "token",
-                        "type": "CoreX\\Tasks\\Planning\\Data\\PlanningToken",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "restoreEpoch",
+                        "name": "payloadHash",
                         "type": "string",
                         "variadic": false
                     },
                     {
                         "byRef": false,
-                        "default": null,
                         "name": "resultRef",
-                        "type": "?array",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "replay": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "identity",
+                        "type": "CoreX\\Tasks\\Planning\\Data\\TaskOperationIdentity",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "payloadHash",
+                        "type": "string",
                         "variadic": false
                     }
                 ],
@@ -68131,18 +68566,6 @@
                         "type": "CoreX\\Tasks\\Project\\Data\\ProjectDraft",
                         "variadic": false
                     },
-                    {
-                        "byRef": false,
-                        "name": "context",
-                        "type": "CoreX\\Context\\Data\\TenantContext",
-                        "variadic": false
-                    }
-                ],
-                "return": "string",
-                "static": true
-            },
-            "restoreEpoch": {
-                "params": [
                     {
                         "byRef": false,
                         "name": "context",
@@ -68254,7 +68677,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Tasks\\Planning\\Contracts\\TaskPlanningCommand"
+            "CoreX\\Tasks\\Planning\\Contracts\\TaskPlanning"
         ],
         "internal": false,
         "kind": "class",
@@ -68278,6 +68701,20 @@
                         "default": null,
                         "name": "receipts",
                         "type": "?CoreX\\Tasks\\Planning\\Contracts\\TaskOperationReceipts",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "scopes",
+                        "type": "?CoreX\\Context\\Contracts\\DataScopeFactory",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "workScope",
+                        "type": "?CoreX\\Context\\Contracts\\CurrentWorkScope",
                         "variadic": false
                     }
                 ],
@@ -69379,7 +69816,12 @@
     },
     "CoreX\\Tasks\\Task\\Contracts\\TaskCompletionCapture": {
         "abstract": false,
-        "constants": [],
+        "constants": {
+            "TAG": {
+                "type": "string",
+                "value": "corex.tasks.completion-captures"
+            }
+        },
         "final": false,
         "interfaces": [],
         "internal": false,
@@ -69396,11 +69838,11 @@
                     {
                         "byRef": false,
                         "name": "connection",
-                        "type": "Illuminate\\Database\\Connection",
+                        "type": "Illuminate\\Database\\ConnectionInterface",
                         "variadic": false
                     }
                 ],
-                "return": "void",
+                "return": "CoreX\\Tasks\\Task\\Data\\TaskCompletionAdmission",
                 "static": false
             }
         },
@@ -69712,6 +70154,77 @@
         },
         "readonly": true
     },
+    "CoreX\\Tasks\\Task\\Data\\TaskCompletionAdmission": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "status",
+                        "type": "CoreX\\Tasks\\Task\\Enums\\TaskCompletionAdmissionStatus",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "intentRef",
+                        "type": "?string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "digest",
+                        "type": "?string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "versionRef",
+                        "type": "?string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "digest": {
+                "name": "digest",
+                "readonly": true,
+                "static": false,
+                "type": "?string"
+            },
+            "intentRef": {
+                "name": "intentRef",
+                "readonly": true,
+                "static": false,
+                "type": "?string"
+            },
+            "status": {
+                "name": "status",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Tasks\\Task\\Enums\\TaskCompletionAdmissionStatus"
+            },
+            "versionRef": {
+                "name": "versionRef",
+                "readonly": true,
+                "static": false,
+                "type": "?string"
+            }
+        },
+        "readonly": true
+    },
     "CoreX\\Tasks\\Task\\Data\\TaskCompletionCandidate": {
         "abstract": false,
         "constants": [],
@@ -69722,6 +70235,18 @@
         "methods": {
             "__construct": {
                 "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    },
                     {
                         "byRef": false,
                         "name": "taskId",
@@ -69742,8 +70267,14 @@
                     },
                     {
                         "byRef": false,
-                        "name": "statusChanged",
-                        "type": "bool",
+                        "name": "requestKey",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "actor",
+                        "type": "CoreX\\Tasks\\Task\\Data\\ActorData",
                         "variadic": false
                     }
                 ],
@@ -69753,23 +70284,41 @@
         },
         "parent": null,
         "properties": {
+            "actor": {
+                "name": "actor",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Tasks\\Task\\Data\\ActorData"
+            },
+            "context": {
+                "name": "context",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Context\\Data\\TenantContext"
+            },
             "previousStatus": {
                 "name": "previousStatus",
                 "readonly": true,
                 "static": false,
                 "type": "CoreX\\Tasks\\Task\\Enums\\TaskStatus"
             },
+            "requestKey": {
+                "name": "requestKey",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "scope": {
+                "name": "scope",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Data\\Data\\DataScope"
+            },
             "status": {
                 "name": "status",
                 "readonly": true,
                 "static": false,
                 "type": "CoreX\\Tasks\\Task\\Enums\\TaskStatus"
-            },
-            "statusChanged": {
-                "name": "statusChanged",
-                "readonly": true,
-                "static": false,
-                "type": "bool"
             },
             "taskId": {
                 "name": "taskId",
@@ -70362,6 +70911,89 @@
         },
         "readonly": true
     },
+    "CoreX\\Tasks\\Task\\Enums\\TaskCompletionAdmissionStatus": {
+        "abstract": false,
+        "constants": {
+            "Conflict": {
+                "type": "CoreX\\Tasks\\Task\\Enums\\TaskCompletionAdmissionStatus",
+                "value": {
+                    "enum": "CoreX\\Tasks\\Task\\Enums\\TaskCompletionAdmissionStatus",
+                    "case": "Conflict",
+                    "value": "conflict"
+                }
+            },
+            "Created": {
+                "type": "CoreX\\Tasks\\Task\\Enums\\TaskCompletionAdmissionStatus",
+                "value": {
+                    "enum": "CoreX\\Tasks\\Task\\Enums\\TaskCompletionAdmissionStatus",
+                    "case": "Created",
+                    "value": "created"
+                }
+            },
+            "Existing": {
+                "type": "CoreX\\Tasks\\Task\\Enums\\TaskCompletionAdmissionStatus",
+                "value": {
+                    "enum": "CoreX\\Tasks\\Task\\Enums\\TaskCompletionAdmissionStatus",
+                    "case": "Existing",
+                    "value": "existing"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
     "CoreX\\Tasks\\Task\\Enums\\TaskPriority": {
         "abstract": false,
         "constants": {
@@ -70740,14 +71372,8 @@
                     },
                     {
                         "byRef": false,
-                        "name": "access",
-                        "type": "CoreX\\Tasks\\Access\\Contracts\\TaskMutationAccess",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "clock",
-                        "type": "Psr\\Clock\\ClockInterface",
+                        "name": "completion",
+                        "type": "CoreX\\Tasks\\Task\\Internal\\TaskCompletion",
                         "variadic": false
                     },
                     {
@@ -71207,6 +71833,30 @@
                         "name": "clock",
                         "type": "Psr\\Clock\\ClockInterface",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "scopes",
+                        "type": "CoreX\\Context\\Contracts\\DataScopeFactory",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "workScope",
+                        "type": "CoreX\\Context\\Contracts\\CurrentWorkScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "receipts",
+                        "type": "CoreX\\Tasks\\Planning\\Contracts\\TaskOperationReceipts",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "capture",
+                        "type": "?CoreX\\Tasks\\Task\\Contracts\\TaskCompletionCapture",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -71231,9 +71881,63 @@
                         "name": "context",
                         "type": "CoreX\\Context\\Data\\TenantContext",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connection",
+                        "type": "Illuminate\\Database\\ConnectionInterface",
+                        "variadic": false
                     }
                 ],
                 "return": "bool",
+                "static": false
+            },
+            "lockTask": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "taskId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connection",
+                        "type": "Illuminate\\Database\\Connection",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Tasks\\Task\\Internal\\Models\\Task",
+                "static": false
+            },
+            "scope": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connection",
+                        "type": "Illuminate\\Database\\ConnectionInterface",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Data\\Data\\DataScope",
                 "static": false
             }
         },
@@ -92202,24 +92906,12 @@
         "internal": false,
         "kind": "interface",
         "methods": {
-            "fire": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "request",
-                        "type": "CoreX\\Workflow\\Data\\TransitionRequest",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Workflow\\Data\\TransitionResult",
-                "static": false
-            },
             "provider": {
                 "params": [
                     {
                         "byRef": false,
                         "name": "request",
-                        "type": "CoreX\\Workflow\\Data\\TriggerRequest",
+                        "type": "CoreX\\Workflow\\Data\\DefinitionRequest",
                         "variadic": false
                     }
                 ],
@@ -92261,6 +92953,18 @@
                 ],
                 "return": "CoreX\\Workflow\\Data\\StartResult",
                 "static": false
+            },
+            "transition": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "CoreX\\Workflow\\Data\\TransitionRequest",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Workflow\\Data\\TransitionResult",
+                "static": false
             }
         },
         "parent": null,
@@ -92293,18 +92997,6 @@
                 "return": "CoreX\\Workflow\\Data\\CaptureResult",
                 "static": false
             },
-            "fire": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "request",
-                        "type": "CoreX\\Workflow\\Data\\TransitionRequest",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Workflow\\Data\\TransitionResult",
-                "static": false
-            },
             "signal": {
                 "params": [
                     {
@@ -92315,6 +93007,18 @@
                     }
                 ],
                 "return": "CoreX\\Workflow\\Data\\SignalResult",
+                "static": false
+            },
+            "transition": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "CoreX\\Workflow\\Data\\TransitionRequest",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Workflow\\Data\\TransitionResult",
                 "static": false
             }
         },
@@ -92376,6 +93080,98 @@
                 "readonly": true,
                 "static": false,
                 "type": "CoreX\\Workflow\\Enums\\CaptureStatus"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Workflow\\Data\\DefinitionRequest": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "module",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entityHandle",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "eventName",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "definitionRef",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "versionRef",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "context": {
+                "name": "context",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Context\\Data\\TenantContext"
+            },
+            "definitionRef": {
+                "name": "definitionRef",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "entityHandle": {
+                "name": "entityHandle",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "eventName": {
+                "name": "eventName",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "module": {
+                "name": "module",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "versionRef": {
+                "name": "versionRef",
+                "readonly": true,
+                "static": false,
+                "type": "string"
             }
         },
         "readonly": true
@@ -92899,6 +93695,11 @@
                 ],
                 "return": "",
                 "static": false
+            },
+            "definition": {
+                "params": [],
+                "return": "CoreX\\Workflow\\Data\\DefinitionRequest",
+                "static": false
             }
         },
         "parent": null,
@@ -93256,18 +94057,6 @@
                 "return": "Packman\\Modules\\Data\\Compiler\\ExtensionStamp",
                 "static": false
             },
-            "fire": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "request",
-                        "type": "CoreX\\Workflow\\Data\\TransitionRequest",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Workflow\\Data\\TransitionResult",
-                "static": false
-            },
             "signal": {
                 "params": [
                     {
@@ -93278,6 +94067,18 @@
                     }
                 ],
                 "return": "CoreX\\Workflow\\Data\\SignalResult",
+                "static": false
+            },
+            "transition": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "CoreX\\Workflow\\Data\\TransitionRequest",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Workflow\\Data\\TransitionResult",
                 "static": false
             }
         },
@@ -93440,24 +94241,12 @@
         "internal": true,
         "kind": "class",
         "methods": {
-            "fire": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "request",
-                        "type": "CoreX\\Workflow\\Data\\TransitionRequest",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Workflow\\Data\\TransitionResult",
-                "static": false
-            },
             "provider": {
                 "params": [
                     {
                         "byRef": false,
                         "name": "request",
-                        "type": "CoreX\\Workflow\\Data\\TriggerRequest",
+                        "type": "CoreX\\Workflow\\Data\\DefinitionRequest",
                         "variadic": false
                     }
                 ],
@@ -93498,6 +94287,18 @@
                     }
                 ],
                 "return": "CoreX\\Workflow\\Data\\StartResult",
+                "static": false
+            },
+            "transition": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "CoreX\\Workflow\\Data\\TransitionRequest",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Workflow\\Data\\TransitionResult",
                 "static": false
             }
         },

@@ -7,7 +7,7 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Tasks\Access\Contracts\TaskPlanningAccess;
-use CoreX\Tasks\Planning\Contracts\TaskPlanningCommand;
+use CoreX\Tasks\Planning\Contracts\TaskPlanning;
 use CoreX\Tasks\Planning\Data\PlanningOperation;
 use CoreX\Tasks\Planning\Data\PlanningSubject;
 use CoreX\Tasks\Planning\Data\PlanningToken;
@@ -20,9 +20,12 @@ use CoreX\Tasks\Sprint\Data\SprintDraft;
 use CoreX\Tasks\Sprint\Internal\Models\Sprint;
 use CoreX\Tasks\Task\Contracts\CompleteTaskCommand;
 use CoreX\Tasks\Task\Contracts\CreateTaskCommand;
+use CoreX\Tasks\Task\Contracts\TaskCompletionCapture;
 use CoreX\Tasks\Task\Data\ActorData;
 use CoreX\Tasks\Task\Data\CompleteTaskData;
+use CoreX\Tasks\Task\Data\TaskCompletionAdmission;
 use CoreX\Tasks\Task\Data\TaskDraft;
+use CoreX\Tasks\Task\Enums\TaskCompletionAdmissionStatus;
 use CoreX\Tasks\Task\Enums\TaskStatus;
 use CoreX\Tasks\Task\Internal\Models\Task;
 use CoreX\Tasks\Time\Data\TimeLogDraft;
@@ -88,7 +91,7 @@ it('creates a project in the trusted workspace context', function (): void {
         payloadHash: PlanningHasher::project($draft, $this->context),
     );
 
-    $reference = resolve(TaskPlanningCommand::class)->createProject($draft, $token);
+    $reference = resolve(TaskPlanning::class)->createProject($draft, $token);
 
     expect($reference->type)->toBe('tsk.project')
         ->and($reference->display)->toBe('Maintenance')
@@ -121,7 +124,7 @@ it('denies a project in another narrowed workspace', function (): void {
         payloadHash: PlanningHasher::project($draft, $narrowed),
     );
 
-    expect(fn () => resolve(TaskPlanningCommand::class)->createProject($draft, $token))
+    expect(fn () => resolve(TaskPlanning::class)->createProject($draft, $token))
         ->toThrow(ValidationException::class);
 
     expect(Project::query()->count())->toBe(0);
@@ -137,7 +140,7 @@ it('replays the same project request key and rejects changed payloads', function
         requestKey: 'prim-03-project',
         payloadHash: PlanningHasher::project($draft, $this->context),
     );
-    $command = resolve(TaskPlanningCommand::class);
+    $command = resolve(TaskPlanning::class);
 
     $first = $command->createProject($draft, $token);
     $second = $command->createProject($draft, $token);
@@ -159,6 +162,55 @@ it('replays the same project request key and rejects changed payloads', function
         ->toThrow(PlanningConflict::class);
 });
 
+it('scopes planning tokens to the actual workspace and retains the original writer fence', function (): void {
+    $command = resolve(TaskPlanning::class);
+    $firstDraft = new ProjectDraft(workspaceId: $this->workspaceId, name: 'One', actor: $this->actor);
+    $secondDraft = new ProjectDraft(workspaceId: $this->otherWorkspaceId, name: 'Two', actor: $this->actor);
+    $firstToken = planningToken('shared across workspaces', PlanningHasher::project($firstDraft, $this->context));
+    $secondToken = planningToken($firstToken->requestKey, PlanningHasher::project($secondDraft, $this->context));
+
+    $first = $command->createProject($firstDraft, $firstToken);
+    $second = $command->createProject($secondDraft, $secondToken);
+    $rows = DB::table('corex_task_operations')->where('request_key', $firstToken->requestKey)->get()->keyBy('workspace_scope');
+
+    expect($first->id)->not->toBe($second->id)
+        ->and($command->createProject($secondDraft, $secondToken)->id)->toBe($second->id)
+        ->and($rows)->toHaveCount(2)
+        ->and($rows['workspace:'.$this->workspaceId]->subject_ref)->toBe('workspace:'.$this->workspaceId)
+        ->and($rows['workspace:'.$this->otherWorkspaceId]->subject_ref)->toBe('workspace:'.$this->otherWorkspaceId)
+        ->and($rows['workspace:'.$this->workspaceId]->restore_epoch)->toBe($this->workScope->restoreEpoch)
+        ->and($rows['workspace:'.$this->otherWorkspaceId]->account_incarnation)->toBe($this->workScope->accountIncarnation);
+});
+
+it('keeps an account-wide planning token separate from lifetime completion identity', function (): void {
+    $task = Task::query()->create([
+        'title' => 'Historical task without a workspace',
+        'created_by' => $this->actor->toArray(),
+    ]);
+    $command = resolve(TaskPlanning::class);
+    $draft = new TimeLogDraft($task->id, $this->userId, 5, '2026-09-17', null, TimeLogSource::Manual, $this->actor);
+    $key = hash('sha256', json_encode([
+        'completion-capture/2', $this->workScope->accountId, $this->workScope->accountIncarnation, $task->id,
+    ], JSON_THROW_ON_ERROR));
+    $token = planningToken($key, PlanningHasher::timeLog($draft, $this->context));
+    $recorded = $command->recordTime($draft, $token);
+    $capture = Mockery::mock(TaskCompletionCapture::class);
+    $capture->shouldReceive('capture')->once()->andReturn(
+        new TaskCompletionAdmission(TaskCompletionAdmissionStatus::Created, 'intent:same-key', str_repeat('d', 64), 'definition:7'),
+    );
+    app()->instance(TaskCompletionCapture::class, $capture);
+    app()->tag(TaskCompletionCapture::class, TaskCompletionCapture::TAG);
+
+    resolve(CompleteTaskCommand::class)->handle(new CompleteTaskData($task->id, $this->actor));
+
+    $receipts = DB::table('corex_task_operations')->where('request_key', $key)->get()->keyBy('kind');
+    expect($command->recordTime($draft, $token)->id)->toBe($recorded->id)
+        ->and($task->fresh()->status)->toBe(TaskStatus::Done)
+        ->and($receipts)->toHaveCount(2)
+        ->and($receipts['recordTime']->workspace_scope)->toBe('account')
+        ->and($receipts['completionCapture']->workspace_scope)->toBe('');
+});
+
 it('validates sprint parent and date ordering before writes', function (): void {
     $project = Project::query()->create([
         'workspace_id' => $this->workspaceId,
@@ -178,7 +230,7 @@ it('validates sprint parent and date ordering before writes', function (): void 
         payloadHash: PlanningHasher::sprint($draft, $this->context, '2026-09-20', '2026-09-10'),
     );
 
-    expect(fn () => resolve(TaskPlanningCommand::class)->createSprint($draft, $token))
+    expect(fn () => resolve(TaskPlanning::class)->createSprint($draft, $token))
         ->toThrow(InvalidPlanningDraft::class);
 
     expect(Sprint::query()->count())->toBe(0);
@@ -207,7 +259,7 @@ it('records time atomically with spent totals and operation receipts', function 
 
     DB::beginTransaction();
 
-    $reference = resolve(TaskPlanningCommand::class)->recordTime($draft, $token);
+    $reference = resolve(TaskPlanning::class)->recordTime($draft, $token);
 
     expect(TimeLog::query()->count())->toBe(1)
         ->and(Task::query()->findOrFail($task->getKey())->spent_minutes)->toBe(45)
@@ -254,7 +306,7 @@ it('supports boxed null workspace context for planning subjects', function (): v
         payloadHash: PlanningHasher::project($draft, $context),
     );
 
-    $reference = resolve(TaskPlanningCommand::class)->createProject($draft, $token);
+    $reference = resolve(TaskPlanning::class)->createProject($draft, $token);
 
     expect($reference->display)->toBe('Boxed');
 });
@@ -309,7 +361,7 @@ it('creates maintenance project sprint and time log through the neutral fixture'
         requestKey: 'prim-08-project',
         payloadHash: PlanningHasher::project($projectDraft, $this->context),
     );
-    $project = resolve(TaskPlanningCommand::class)->createProject($projectDraft, $projectToken);
+    $project = resolve(TaskPlanning::class)->createProject($projectDraft, $projectToken);
 
     $sprintDraft = new SprintDraft(
         projectId: $project->id,
@@ -322,7 +374,7 @@ it('creates maintenance project sprint and time log through the neutral fixture'
         requestKey: 'prim-08-sprint',
         payloadHash: PlanningHasher::sprint($sprintDraft, $this->context, '2026-09-01', '2026-09-14'),
     );
-    $sprint = resolve(TaskPlanningCommand::class)->createSprint($sprintDraft, $sprintToken);
+    $sprint = resolve(TaskPlanning::class)->createSprint($sprintDraft, $sprintToken);
 
     $task = Task::query()->create([
         'workspace_id' => $this->workspaceId,
@@ -345,7 +397,7 @@ it('creates maintenance project sprint and time log through the neutral fixture'
         requestKey: 'prim-08-time',
         payloadHash: PlanningHasher::timeLog($timeDraft, $this->context),
     );
-    $time = resolve(TaskPlanningCommand::class)->recordTime($timeDraft, $timeToken);
+    $time = resolve(TaskPlanning::class)->recordTime($timeDraft, $timeToken);
 
     expect($project->type)->toBe('tsk.project')
         ->and($sprint->type)->toBe('tsk.sprint')
@@ -355,7 +407,7 @@ it('creates maintenance project sprint and time log through the neutral fixture'
 
 it('replays sprint creation without creating a second sprint', function (): void {
     $projectDraft = new ProjectDraft($this->workspaceId, 'Planning', $this->actor);
-    $command = resolve(TaskPlanningCommand::class);
+    $command = resolve(TaskPlanning::class);
     $project = $command->createProject($projectDraft, planningToken('coverage-project', PlanningHasher::project($projectDraft, $this->context)));
     $draft = new SprintDraft($project->id, 'Sprint', startDate: '2026-10-01', endDate: '2026-10-14', actor: $this->actor);
     $token = planningToken('coverage-sprint', PlanningHasher::sprint($draft, $this->context, '2026-10-01', '2026-10-14'));
@@ -368,7 +420,7 @@ it('rejects malformed planning tokens before writes', function (string $key, str
     $draft = new ProjectDraft($this->workspaceId, 'Planning', $this->actor);
 
     try {
-        resolve(TaskPlanningCommand::class)->createProject($draft, planningToken($key, $hash));
+        resolve(TaskPlanning::class)->createProject($draft, planningToken($key, $hash));
         test()->fail('Invalid token was accepted.');
     } catch (InvalidPlanningDraft $exception) {
         expect($exception->errorDescriptor()->retryable)->toBeFalse();

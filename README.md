@@ -24,7 +24,8 @@ FlexStore) без переписывания фундамента. Моноре�
 | `axiomasoft/corex-search-intl` | Optional localized projection glue between axiomasoft/corex-intl and axiomasoft/corex-search. | [search-intl](packages/search-intl/README.md) |
 | `axiomasoft/corex-search-meilisearch` | Optional Meilisearch candidate adapter for axiomasoft/corex-search. | [search-meilisearch](packages/search-meilisearch/README.md) |
 | `axiomasoft/corex-tasks` | CoreX Tasks module — workspace projects, stages and tasks for DB-per-account applications. | [tasks](packages/tasks/README.md) |
-| `axiomasoft/corex-recurring-tasks` | Recurrence-to-task materialization for CoreX with durable wakeup and optional workflow capture. | [recurring-tasks](packages/recurring-tasks/README.md) |
+| `axiomasoft/corex-recurring-tasks` | Recurrence-to-task materialization for CoreX with durable wakeup. | [recurring-tasks](packages/recurring-tasks/README.md) |
+| `axiomasoft/corex-tasks-workflow` | Optional Workflow intent capture on the first Task completion. | [tasks-workflow](packages/tasks-workflow/README.md) |
 | `axiomasoft/corex-tenancy` | CoreX account and workspace lifecycle with external Tenant runtime and host-owned physical resources. | [tenancy](packages/tenancy/README.md) |
 | `axiomasoft/corex-tools` | Guarded tool runtime for CoreX operations: schemas, contract hash and MCP projection. | [tools](packages/tools/README.md) |
 | `axiomasoft/corex-import-export` | Bounded import and export primitives for CoreX. | [import-export](packages/import-export/README.md) |

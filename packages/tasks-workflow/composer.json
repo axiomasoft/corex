@@ -1,0 +1,97 @@
+{
+    "name": "axiomasoft/corex-tasks-workflow",
+    "description": "Optional durable Workflow capture when a CoreX task completes.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "axiomasoft/corex": "^2.0@dev",
+        "axiomasoft/corex-tasks": "^2.0@dev",
+        "axiomasoft/corex-workflow": "^2.0@dev",
+        "axiomasoft/packman": "^0.1",
+        "axiomasoft/packman-modules": "^0.1.1",
+        "illuminate/contracts": "^13.0",
+        "illuminate/database": "^13.0",
+        "illuminate/support": "^13.0",
+        "laravel/framework": "^13.0",
+        "php": "^8.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "CoreX\\TasksWorkflow\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CoreX\\TasksWorkflow\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "corex": {
+            "schema-version": 1,
+            "package-type": "integration",
+            "stability": "stable"
+        },
+        "laravel": {
+            "providers": [
+                "CoreX\\TasksWorkflow\\TasksWorkflowServiceProvider"
+            ]
+        },
+        "branch-alias": {
+            "dev-main": "2.0.x-dev"
+        },
+        "packman": {
+            "schema-version": 1,
+            "package-type": "integration",
+            "stability": "stable",
+            "profile": "laravel-package",
+            "error-prefix": "tasks-workflow",
+            "owns": [
+                "Completion"
+            ]
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../core",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
+        },
+        {
+            "type": "path",
+            "url": "../tasks",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex-tasks": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
+        },
+        {
+            "type": "path",
+            "url": "../workflow",
+            "options": {
+                "versions": {
+                    "axiomasoft/corex-workflow": "2.0.x-dev"
+                },
+                "reference": "config"
+            }
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "scripts": {
+        "test": "../../vendor/bin/pest --configuration=phpunit.xml",
+        "test:coverage": "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --coverage --min=80",
+        "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/tasks-workflow/phpstan.neon --memory-limit=2G --no-progress",
+        "lint:check": "../../vendor/bin/pint --test"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^11.3",
+        "orchestra/testbench-core": "^11.5"
+    }
+}

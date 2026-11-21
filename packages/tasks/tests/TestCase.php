@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Tests;
 
+use CoreX\Data\Data\DataScope;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
 use CoreX\Tasks\Access\Contracts\TaskPlanningAccess;
@@ -14,6 +15,8 @@ use Packman\Modules\Contracts\Registry\ModuleRegistry;
 
 abstract class TestCase extends TasksTestCase
 {
+    protected DataScope $workScope;
+
     #[Override]
     protected function setUp(): void
     {
@@ -37,5 +40,6 @@ abstract class TestCase extends TasksTestCase
         $planningAccess = Mockery::mock(TaskPlanningAccess::class);
         $planningAccess->shouldReceive('authorize')->byDefault()->andReturnNull();
         $this->app->instance(TaskPlanningAccess::class, $planningAccess);
+        $this->workScope = $this->establishWorkScope();
     }
 }

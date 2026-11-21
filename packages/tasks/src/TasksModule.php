@@ -13,6 +13,7 @@ use Packman\Extensions\Concerns\Persistence\OwnsSchema;
 use Packman\Extensions\Contracts\Persistence\WithSchema;
 use Packman\Modules\Contracts\Definition\ModuleDefinition;
 use Packman\Modules\Data\Entities\Entity;
+use Packman\Modules\Data\Extenders\Workflow;
 use Packman\Modules\Data\Lifecycle\ModuleManifest;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
@@ -46,6 +47,7 @@ final class TasksModule extends ModuleDefinition implements WithSchema
                     ->workflowable()
                     ->commentable()
                     ->documentable(),
+                Workflow::trigger('tsk.task', ['completed']),
             ]);
     }
 

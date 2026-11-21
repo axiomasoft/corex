@@ -10,18 +10,19 @@
 - UUIDv7 генерируются через Laravel `HasUuids`;
 - публичные write-границы: `CreateTaskCommand`, `MoveTaskToStageCommand`,
   `UpdateTaskCommand`, `CompleteTaskCommand`, а также планирование
-  `TaskPlanningCommand` (`createProject`, `createSprint`, `recordTime`);
+  `TaskPlanning` (`createProject`, `createSprint`, `recordTime`);
 - переносимые ссылки на внешние сущности передаются как `EntityReference`,
   без зависимости от моделей host-приложения;
 - host обязан предоставить `TaskAccess`, `TaskMutationAccess` и
   `TaskPlanningAccess`; пакетные реализации по умолчанию запрещают все команды.
-- `TaskPlanningCommand` дедуплицирует запросы через `corex_task_operations`,
-  проверяет tenant/workspace-контекст и атомарно обновляет `spent_minutes` при
-  `recordTime`.
-- Публичный `TaskOperationReceipts` даёт интеграциям read/record операции в
-  транзакции вызывающей стороны; только `axiomasoft/corex-tasks` знает физическую таблицу.
-  Повтор ключа вызывает ошибку уникальности: клиент читает сохранённый receipt
-  и сверяет payload hash перед признанием повтора.
+- `TaskPlanning` проверяет scope, переиспользует результат запроса в его
+  рабочем пространстве и атомарно обновляет `spent_minutes` при `recordTime`.
+- Порт `TaskOperationReceipts` принимает соединение владельца и
+  `TaskOperationIdentity`. Внутри транзакции поиск блокирует найденную запись.
+  Повтор требует того же типа операции, субъекта и digest. Конфликт откатывает
+  команду. У завершения, операций аккаунта и операций рабочего пространства
+  раздельные области ключей. Запись хранит исходный физический fence и типизированную JSON-ссылку
+  на результат.
 
 Команды проверяют активность модуля в текущем tenant context, работают через
 текущее соединение модели и открывают вложенную транзакцию. Поэтому standalone
@@ -55,7 +56,7 @@ composer lint:check
 
 ## Installation
 
-Install with `composer require axiomasoft/corex-tasks` from the approved CoreX channel and register the module through Packman Modules. Prepare the tenant database with UUID primary keys in `users.id` and `wsp_workspaces.id` before enabling Tasks. CoreX Tenancy provides these tables in `axiomasoft/corex-tenancy:tenant`. A standalone host can supply the same columns through its own migrations. Enabling Tasks then applies the module’s owned schema. Bind the three task access ports before invoking writes; their default implementations deny commands.
+Install with `composer require axiomasoft/corex-tasks` from the approved CoreX channel and register the module through Packman Modules. Prepare the tenant database with UUID primary keys in `users.id` and `wsp_workspaces.id` before enabling Tasks. CoreX Tenancy provides these tables in `axiomasoft/corex-tenancy:tenant`. A standalone host can supply the same columns through its own migrations. Enabling Tasks then applies the module’s owned schema. Bind the three task access ports before invoking writes. Completion and planning also require the host’s current work principal and a verified tenant writer.
 
 ## Завершение и чтение задачи
 
@@ -63,14 +64,27 @@ Install with `composer require axiomasoft/corex-tasks` from the approved CoreX c
 `SprintView`; конкретные Eloquent-модели остаются внутри владельца. Для внешнего
 чтения доступны `TaskRead`, `ProjectRead` и `SprintRead`.
 
-Интеграция завершения реализует `TaskCompletionCapture` и получает
-`TaskCompletionCandidate` через тег `corex.tasks.completion-captures`. Вызов
-синхронный, до сохранения, внутри транзакции команды: ошибка capture откатывает
-изменение статуса. Интеграция `axiomasoft/corex-recurring-tasks` проверяет реальный переход в Done, сохраняет
-receipt без повторов и пропускает отключённую либо отсутствующую интеграцию.
+Tasks объявляет событие `tsk.task/completed` через Packman. Для подключения
+действия зарегистрируйте один `TaskCompletionCapture` с тегом
+`TaskCompletionCapture::TAG`. Для Workflow эту роль выполняет отдельный пакет
+`axiomasoft/corex-tasks-workflow`.
 
-`TaskOperationReceipt::resultRef` содержит `JsonDocument`; JSON-представление
-результата восстанавливает `JsonDocuments::map()`.
+`CompleteTaskCommand` и переход в стадию с автоматическим статусом Done
+проверяют текущий scope и блокируют строку задачи. Перед первым реальным
+завершением contributor получает `TaskCompletionCandidate` и то же активное
+соединение. `TaskCompletionAdmission` со статусом `created` или `existing`
+подтверждает digest, ссылку на intent и версию определения. Tasks сохраняет
+результат в одной транзакции с Done. Конфликт или ошибка откатывает обе записи.
+
+Повторный вызов для Done сохраняет дату завершения. После переоткрытия задача
+может снова перейти в Done с новой датой и существующим receipt. Ключ
+завершения зависит от account ID, incarnation и Task ID. Когда contributor
+отключён, завершение проходит без нового receipt. При переносе сохраняйте
+исходный ключ завершения, digest и pinned intent/version.
+
+`TaskOperationReceipt::originalFence` хранит deployment ID, binding ID,
+generation, account incarnation и restore epoch на момент записи.
+`TaskOperationReceipt::resultRef` представлен `JsonDocument`.
 
 ## Typed errors
 

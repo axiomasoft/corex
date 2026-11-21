@@ -1,0 +1,453 @@
+{
+  "id": "task-lifetime",
+  "laravel": 13,
+  "host_support": true,
+  "retain_install_evidence": true,
+  "timeout_seconds": 150,
+  "distinct_connections": true,
+  "artisan": [
+    [
+      "config:cache",
+      "--no-interaction"
+    ],
+    [
+      "modules:compile",
+      "--no-interaction"
+    ],
+    [
+      "list",
+      "--raw"
+    ],
+    [
+      "route:list",
+      "--json"
+    ]
+  ],
+  "variants": {
+    "enabled": {
+      "profile": {
+        "id": "boxed-task-lifetime-enabled",
+        "database": "postgres-isolated",
+        "database_roles": [
+          "control",
+          "a"
+        ],
+        "default_database": "a",
+        "http": true,
+        "packages": [
+          "axiomasoft/corex-tasks-workflow"
+        ],
+        "tasks_workflow": "enabled",
+        "forbid": [
+          {
+            "package": "axiomasoft/corex-recurring-tasks",
+            "name": "corex-recurring-tasks"
+          }
+        ]
+      },
+      "processes": {
+        "producer": [
+          "php",
+          "{fixture}/probe.php",
+          "producer"
+        ],
+        "outer-account-first": [
+          "php",
+          "{fixture}/probe.php",
+          "diagnostics",
+          "account",
+          "outer"
+        ],
+        "outer-workspace-first": [
+          "php",
+          "{fixture}/probe.php",
+          "diagnostics",
+          "workspace",
+          "outer",
+          "gate-first"
+        ],
+        "complete-a": [
+          "php",
+          "{fixture}/probe.php",
+          "complete-a"
+        ],
+        "complete-b": [
+          "php",
+          "{fixture}/probe.php",
+          "complete-b"
+        ],
+        "observer": [
+          "php",
+          "{fixture}/probe.php",
+          "observer"
+        ],
+        "lifetime": [
+          "php",
+          "{fixture}/probe.php",
+          "lifetime"
+        ],
+        "conflict": [
+          "php",
+          "{fixture}/probe.php",
+          "conflict"
+        ],
+        "stale-epoch": [
+          "php",
+          "{fixture}/probe.php",
+          "stale-epoch"
+        ],
+        "duplicate": [
+          "php",
+          "{fixture}/probe.php",
+          "duplicate"
+        ],
+        "registration-reader-first": [
+          "php",
+          "{fixture}/probe.php",
+          "registration",
+          "reader",
+          "check",
+          "instance"
+        ],
+        "registration-gate-first": [
+          "php",
+          "{fixture}/probe.php",
+          "registration",
+          "gate",
+          "check",
+          "instance"
+        ],
+        "booted-reader": [
+          "php",
+          "{fixture}/probe.php",
+          "booted-reader"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "producer"
+        },
+        {
+          "action": "complete",
+          "name": "producer"
+        },
+        {
+          "action": "start",
+          "name": "booted-reader"
+        },
+        {
+          "action": "complete",
+          "name": "booted-reader"
+        },
+        {
+          "action": "start",
+          "name": "registration-reader-first"
+        },
+        {
+          "action": "complete",
+          "name": "registration-reader-first"
+        },
+        {
+          "action": "start",
+          "name": "registration-gate-first"
+        },
+        {
+          "action": "complete",
+          "name": "registration-gate-first"
+        },
+        {
+          "action": "start",
+          "name": "outer-account-first"
+        },
+        {
+          "action": "complete",
+          "name": "outer-account-first"
+        },
+        {
+          "action": "start",
+          "name": "outer-workspace-first"
+        },
+        {
+          "action": "complete",
+          "name": "outer-workspace-first"
+        },
+        {
+          "action": "start",
+          "name": "complete-a"
+        },
+        {
+          "action": "await",
+          "name": "task-before-save",
+          "process": "complete-a"
+        },
+        {
+          "action": "start",
+          "name": "complete-b"
+        },
+        {
+          "action": "await",
+          "name": "task-b-ready",
+          "process": "complete-b"
+        },
+        {
+          "action": "release",
+          "name": "task-b-ready"
+        },
+        {
+          "action": "start",
+          "name": "observer"
+        },
+        {
+          "action": "complete",
+          "name": "observer"
+        },
+        {
+          "action": "release",
+          "name": "task-before-save"
+        },
+        {
+          "action": "complete",
+          "name": "complete-a"
+        },
+        {
+          "action": "complete",
+          "name": "complete-b"
+        },
+        {
+          "action": "start",
+          "name": "lifetime"
+        },
+        {
+          "action": "complete",
+          "name": "lifetime"
+        },
+        {
+          "action": "start",
+          "name": "stale-epoch"
+        },
+        {
+          "action": "complete",
+          "name": "stale-epoch"
+        },
+        {
+          "action": "start",
+          "name": "conflict"
+        },
+        {
+          "action": "complete",
+          "name": "conflict"
+        },
+        {
+          "action": "start",
+          "name": "duplicate"
+        },
+        {
+          "action": "complete",
+          "name": "duplicate"
+        }
+      ]
+    },
+    "unsupported-version": {
+      "profile": {
+        "id": "boxed-task-lifetime-unsupported-version",
+        "database": "postgres-isolated",
+        "database_roles": [
+          "control",
+          "a"
+        ],
+        "default_database": "a",
+        "http": true,
+        "packages": [
+          "axiomasoft/corex-tasks-workflow"
+        ],
+        "tasks_workflow": "unsupported-version",
+        "forbid": []
+      },
+      "processes": {
+        "activation": [
+          "php",
+          "{fixture}/probe.php",
+          "activation"
+        ],
+        "registration-reader-first": [
+          "php",
+          "{fixture}/probe.php",
+          "registration",
+          "reader",
+          "enable",
+          "instance"
+        ],
+        "registration-gate-first": [
+          "php",
+          "{fixture}/probe.php",
+          "registration",
+          "gate",
+          "enable",
+          "instance"
+        ],
+        "booted-activation": [
+          "php",
+          "{fixture}/probe.php",
+          "booted-activation"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "activation"
+        },
+        {
+          "action": "complete",
+          "name": "activation"
+        },
+        {
+          "action": "start",
+          "name": "booted-activation"
+        },
+        {
+          "action": "complete",
+          "name": "booted-activation"
+        },
+        {
+          "action": "start",
+          "name": "registration-reader-first"
+        },
+        {
+          "action": "complete",
+          "name": "registration-reader-first"
+        },
+        {
+          "action": "start",
+          "name": "registration-gate-first"
+        },
+        {
+          "action": "complete",
+          "name": "registration-gate-first"
+        }
+      ]
+    },
+    "recurring": {
+      "profile": {
+        "id": "boxed-task-lifetime-recurring",
+        "database": "postgres-isolated",
+        "database_roles": [
+          "control",
+          "a"
+        ],
+        "default_database": "a",
+        "http": true,
+        "packages": [
+          "axiomasoft/corex-recurring-tasks"
+        ],
+        "tasks_workflow": "absent",
+        "forbid": [
+          {
+            "package": "axiomasoft/corex-workflow",
+            "name": "corex-workflow"
+          },
+          {
+            "package": "axiomasoft/corex-tasks-workflow",
+            "name": "corex-tasks-workflow"
+          }
+        ]
+      },
+      "processes": {
+        "composition": [
+          "php",
+          "{fixture}/probe.php",
+          "composition"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "composition"
+        },
+        {
+          "action": "complete",
+          "name": "composition"
+        }
+      ]
+    },
+    "without-bridge": {
+      "profile": {
+        "id": "boxed-task-lifetime-without-bridge",
+        "database": "postgres-isolated",
+        "database_roles": [
+          "control",
+          "a"
+        ],
+        "default_database": "a",
+        "http": true,
+        "packages": [
+          "axiomasoft/corex-tasks",
+          "axiomasoft/corex-workflow"
+        ],
+        "tasks_workflow": "absent",
+        "forbid": [
+          {
+            "package": "axiomasoft/corex-tasks-workflow",
+            "name": "corex-tasks-workflow"
+          },
+          {
+            "package": "axiomasoft/corex-recurring-tasks",
+            "name": "corex-recurring-tasks"
+          }
+        ]
+      },
+      "processes": {
+        "composition": [
+          "php",
+          "{fixture}/probe.php",
+          "composition"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "composition"
+        },
+        {
+          "action": "complete",
+          "name": "composition"
+        }
+      ]
+    },
+    "everything": {
+      "profile": {
+        "id": "boxed-task-lifetime-everything",
+        "database": "postgres-isolated",
+        "database_roles": [
+          "control",
+          "a"
+        ],
+        "default_database": "a",
+        "http": true,
+        "packages": [
+          "axiomasoft/corex-recurring-tasks",
+          "axiomasoft/corex-tasks-workflow"
+        ],
+        "tasks_workflow": "enabled",
+        "forbid": []
+      },
+      "processes": {
+        "composition": [
+          "php",
+          "{fixture}/probe.php",
+          "composition"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "composition"
+        },
+        {
+          "action": "complete",
+          "name": "composition"
+        }
+      ]
+    }
+  }
+}

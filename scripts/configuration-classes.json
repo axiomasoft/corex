@@ -94,6 +94,11 @@
                 "class": "CoreX\\Workflow\\Internal\\WorkflowOptions"
             }
         ],
+        "corex-tasks-workflow": [
+            {
+                "class": "CoreX\\TasksWorkflow\\Completion\\Internal\\TasksWorkflowOptions"
+            }
+        ],
         "corex-recurring-tasks": [
             {
                 "class": "CoreX\\RecurringTasks\\Internal\\RecurringTasksOptions"
@@ -875,30 +880,30 @@
             "deprecated_aliases": "",
             "notes": "Rollback retention for a generation after publication."
         },
-        "corex-recurring-tasks.completion_capture.definition_ref": {
-            "owner": "axiomasoft/corex-recurring-tasks",
+        "corex-tasks-workflow.definition_ref": {
+            "owner": "axiomasoft/corex-tasks-workflow",
             "secret": "no",
             "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
+            "reloadable": "no",
+            "validation": "required when enabled",
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-recurring-tasks.completion_capture.enabled": {
-            "owner": "axiomasoft/corex-recurring-tasks",
+        "corex-tasks-workflow.enabled": {
+            "owner": "axiomasoft/corex-tasks-workflow",
             "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
+            "mode": "deployment",
+            "reloadable": "no",
+            "validation": "boot",
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-recurring-tasks.completion_capture.version_ref": {
-            "owner": "axiomasoft/corex-recurring-tasks",
+        "corex-tasks-workflow.version_ref": {
+            "owner": "axiomasoft/corex-tasks-workflow",
             "secret": "no",
             "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
+            "reloadable": "no",
+            "validation": "required when enabled",
             "deprecated_aliases": "",
             "notes": ""
         },

@@ -70,7 +70,7 @@ it('delegates signal and transition operations to the configured engine adapter'
     $context = resolve(TenantContextResolver::class)->current();
 
     expect($binding->signal(new SignalRequest($context, 'approved', 'ticket:1', JsonDocuments::capture([]), 'workflow:signal:1', new DateTimeImmutable('+1 hour')))->status)->toBe('buffered')
-        ->and($binding->fire(new TransitionRequest($context, 'ticket:1', 'approve', 'user:1', JsonDocuments::capture([]), 'workflow:transition:1'))->status)->toBe('completed');
+        ->and($binding->transition(new TransitionRequest($context, 'ticket:1', 'approve', 'user:1', JsonDocuments::capture([]), 'workflow:transition:1'))->status)->toBe('completed');
 });
 
 it('does not send expired signals to the engine adapter', function (): void {

@@ -5,6 +5,10 @@ set -euo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$root"
 
+export COREX_TASKS_FEATURE_PG=1
+export COREX_TASKS_WORKFLOW_PG_DATABASE="${COREX_TASKS_WORKFLOW_PG_DATABASE:-${PGSQL_DATABASE:-corex_test}}"
+export COREX_WORKFLOW_PG_DATABASE="${COREX_WORKFLOW_PG_DATABASE:-${PGSQL_DATABASE:-corex_test}}"
+
 if (( $# > 0 )); then
     exec vendor/bin/pest --group=pg "$@"
 fi

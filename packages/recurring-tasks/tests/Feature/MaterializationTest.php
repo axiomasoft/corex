@@ -115,6 +115,25 @@ it('MAT-02 replays the same operation key with the stored receipt', function ():
         ->and(Task::query()->count())->toBe(2);
 });
 
+it('scopes a materialization operation key to the series workspace', function (): void {
+    $otherWorkspace = (string) Str::uuid7();
+    DB::table('wsp_workspaces')->insert(['id' => $otherWorkspace, 'name' => 'Other']);
+    $otherTemplate = new TaskDraft(workspaceId: $otherWorkspace, title: 'Other maintenance', actor: $this->actor);
+    $first = SeriesSeeder::seed('workspace-a', SeriesSeeder::dailySet('workspace-a', 'rev-1', 1), $this->template, $this->restoreEpoch);
+    $second = SeriesSeeder::seed('workspace-b', SeriesSeeder::dailySet('workspace-b', 'rev-1', 1), $otherTemplate, $this->restoreEpoch);
+    $window = new MaterializationWindow(start: '2026-09-01', end: '2026-09-03');
+    $command = resolve(TaskRecurrenceCommand::class);
+
+    foreach ([$first, $second] as $series) {
+        $token = matToken($this, $series, $window, 'shared-operation-key');
+        expect($command->materialize(matScope($this), $series, $window, $token)->created)->toBe(1)
+            ->and($command->materialize(matScope($this), $series, $window, $token)->created)->toBe(0);
+    }
+
+    expect(Task::query()->count())->toBe(2)
+        ->and(DB::table('corex_task_operations')->where('request_key', 'shared-operation-key')->count())->toBe(2);
+});
+
 it('MAT-03 stops at a partial budget without advancing beyond the contiguous prefix', function (): void {
     $set = SeriesSeeder::dailySet('series-mat-03', 'rev-1', 10);
     $series = SeriesSeeder::seed('series-mat-03', $set, $this->template, $this->restoreEpoch);

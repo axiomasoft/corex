@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Scenario;
 
 use CoreX\Workflow\Contracts\EngineAdapter;
+use CoreX\Workflow\Data\DefinitionRequest;
 use CoreX\Workflow\Data\EngineEffectRef;
 use CoreX\Workflow\Data\EngineProvider;
 use CoreX\Workflow\Data\SignalRequest;
@@ -22,7 +23,7 @@ final readonly class FixtureWorkflowEngine implements EngineAdapter
 
     public function __construct(private ProviderSimulator $provider) {}
 
-    public function provider(TriggerRequest $request): ?EngineProvider
+    public function provider(DefinitionRequest $request): ?EngineProvider
     {
         return $request->definitionRef === 'fixture:workflow' && $request->versionRef === 'fixture:version1'
             ? new EngineProvider(self::NAMESPACE, statusLookup: true, idempotentResend: true)
@@ -49,7 +50,7 @@ final readonly class FixtureWorkflowEngine implements EngineAdapter
         throw new RuntimeException('The installed scenario only admits start effects.');
     }
 
-    public function fire(TransitionRequest $request): TransitionResult
+    public function transition(TransitionRequest $request): TransitionResult
     {
         throw new RuntimeException('The installed scenario only admits start effects.');
     }

@@ -14,4 +14,9 @@ final readonly class TriggerRequest
 {
     /** Immutable JSON value. */
     public function __construct(public TenantContext $context, public DataScope $scope, public string $module, public string $entityHandle, public string $eventId, public string $eventName, public string $subjectRef, public string $definitionRef, public string $versionRef, public JsonDocument $scalarSnapshot, public string $requestKey, public ?string $effectKey = null) {}
+
+    public function definition(): DefinitionRequest
+    {
+        return new DefinitionRequest($this->context, $this->module, $this->entityHandle, $this->eventName, $this->definitionRef, $this->versionRef);
+    }
 }

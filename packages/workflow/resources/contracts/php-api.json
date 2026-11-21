@@ -14,26 +14,6 @@
             "uses": [],
             "doc": [],
             "methods": {
-                "fire": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "request",
-                            "type": "CoreX\\Workflow\\Data\\TransitionRequest",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "CoreX\\Workflow\\Data\\TransitionResult",
-                    "doc": []
-                },
                 "provider": {
                     "visibility": "public",
                     "static": false,
@@ -43,7 +23,7 @@
                     "parameters": [
                         {
                             "name": "request",
-                            "type": "CoreX\\Workflow\\Data\\TriggerRequest",
+                            "type": "CoreX\\Workflow\\Data\\DefinitionRequest",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -113,6 +93,26 @@
                     ],
                     "return": "CoreX\\Workflow\\Data\\StartResult",
                     "doc": []
+                },
+                "transition": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "request",
+                            "type": "CoreX\\Workflow\\Data\\TransitionRequest",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "CoreX\\Workflow\\Data\\TransitionResult",
+                    "doc": []
                 }
             },
             "properties": {},
@@ -162,26 +162,6 @@
                     "return": "CoreX\\Workflow\\Data\\CaptureResult",
                     "doc": []
                 },
-                "fire": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "request",
-                            "type": "CoreX\\Workflow\\Data\\TransitionRequest",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "CoreX\\Workflow\\Data\\TransitionResult",
-                    "doc": []
-                },
                 "signal": {
                     "visibility": "public",
                     "static": false,
@@ -200,6 +180,26 @@
                         }
                     ],
                     "return": "CoreX\\Workflow\\Data\\SignalResult",
+                    "doc": []
+                },
+                "transition": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "request",
+                            "type": "CoreX\\Workflow\\Data\\TransitionRequest",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "CoreX\\Workflow\\Data\\TransitionResult",
                     "doc": []
                 }
             },
@@ -253,6 +253,89 @@
                             "variadic": false,
                             "optional": true,
                             "default": "null",
+                            "flags": 1
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                }
+            },
+            "properties": {},
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
+        "CoreX\\Workflow\\Data\\DefinitionRequest": {
+            "kind": "class",
+            "layer": "api",
+            "since": "2.0.0",
+            "final": true,
+            "readonly": true,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "context",
+                            "type": "CoreX\\Context\\Data\\TenantContext",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "module",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "entityHandle",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "eventName",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "definitionRef",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "versionRef",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
                             "flags": 1
                         }
                     ],
@@ -813,6 +896,16 @@
                         }
                     ],
                     "return": null,
+                    "doc": []
+                },
+                "definition": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "CoreX\\Workflow\\Data\\DefinitionRequest",
                     "doc": []
                 }
             },

@@ -113,6 +113,14 @@
             "env_prefix": "COREX_TASKS_",
             "command_prefix": "corex:tasks:"
         },
+        "axiomasoft/corex-tasks-workflow": {
+            "dir": "tasks-workflow",
+            "root": "CoreX\\TasksWorkflow",
+            "config": "corex-tasks-workflow",
+            "tag_prefix": "corex-tasks-workflow-",
+            "env_prefix": "COREX_TASKS_WORKFLOW_",
+            "command_prefix": null
+        },
         "axiomasoft/corex-recurring-tasks": {
             "dir": "recurring-tasks",
             "root": "CoreX\\RecurringTasks",

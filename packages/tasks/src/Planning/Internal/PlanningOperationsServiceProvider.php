@@ -14,6 +14,6 @@ final class PlanningOperationsServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(TaskOperationReceipts::class, DatabaseTaskOperationReceipts::class);
+        $this->app->scoped(TaskOperationReceipts::class, DatabaseTaskOperationReceipts::class);
     }
 }

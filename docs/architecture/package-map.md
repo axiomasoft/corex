@@ -52,6 +52,7 @@ flowchart TB
     end
     subgraph adapters[Адаптеры и расширения]
         searchfields[search-custom-fields]
+        tasksworkflow[tasks-workflow]
         searchintl[search-intl]
         meili[search-meilisearch]
         tools[tools]
@@ -64,7 +65,8 @@ flowchart TB
     core --> packman
     recurring --> tasks
     recurring --> recurrence
-    recurring --> workflow
+    tasksworkflow --> tasks
+    tasksworkflow --> workflow
     searchfields --> search
     searchfields --> fields
     searchintl --> search
@@ -107,6 +109,7 @@ flowchart TB
 | `search-intl` | `CoreX\SearchIntl` | Локализованная поисковая проекция |
 | `search-meilisearch` | `CoreX\SearchMeilisearch` | Реализация поискового провайдера через Meilisearch |
 | `tasks` | `CoreX\Tasks` | Задачи, проекты, стадии, планирование и учёт времени |
+| `tasks-workflow` | `CoreX\TasksWorkflow` | Передача первого завершения задачи в Workflow внутри транзакции Tasks |
 | `tenancy` | `CoreX\Tenancy` | Аккаунты, workspace membership и адаптация Tenant; физические операции через порты владельца |
 | `tools` | `CoreX\Tools` | Объявленные tool-вызовы поверх операций, schema validation и MCP projection |
 | `import-export` | `CoreX\ImportExport` | Импорт и экспорт прикладных записей, checkpoints и sealed manifests |

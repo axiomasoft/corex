@@ -86,7 +86,7 @@ jobs:
           python3 scripts/distribution/prove_scenario.py --candidate "$CANDIDATE" --case installed-boot --php "$PHP_VERSION" --evidence-dir "$EVIDENCE/scenario"
       - name: Prove scoped workers, provider delivery, fields and search from installed archives
         run: |
-          for scenario in worker-scope binding-restore workspace-sweep notification-visibility provider-unknown field-write ddl-claim search-rights generation field-search; do
+          for scenario in worker-scope binding-restore workspace-sweep notification-visibility provider-unknown field-write ddl-claim search-rights generation field-search task-lifetime; do
             python3 scripts/distribution/prove_scenario.py --candidate "$CANDIDATE" --case "$scenario" --php "$PHP_VERSION" --postgres "$PG_MAJOR" --evidence-dir "$EVIDENCE/scenarios/$scenario"
           done
       - name: Prove extension and equipment fixtures

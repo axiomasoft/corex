@@ -25,6 +25,7 @@ use CoreX\Tasks\Task\Internal\TaskSnapshot;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Validation\ValidationException;
+use LogicException;
 use Packman\Attributes\Internal;
 
 #[Internal]
@@ -41,7 +42,6 @@ final readonly class MoveTaskToStage implements MoveTaskToStageCommand
     public function handle(MoveTaskToStageData $data): TaskReference
     {
         $context = $this->moduleGuard->context();
-        $this->access->authorizeMove(data: $data, context: $context);
         $connection = (new Task)->getConnection();
 
         return $connection->transaction(
@@ -57,18 +57,12 @@ final readonly class MoveTaskToStage implements MoveTaskToStageCommand
     {
         $connectionName = $connection->getName();
 
-        /** @var Task|null $task */
-        $task = Task::on($connectionName)->tap(static fn ($query) => $query->getQuery()->lockForUpdate())->find($data->taskId);
+        $scope = $this->completion->scope($context, $connection);
+        $this->access->authorizeMove(data: $data, context: $context);
+        $task = $this->completion->lockTask($data->taskId, $scope, $connection);
+
         /** @var Stage|null $stage */
         $stage = Stage::on($connectionName)->find($data->stageId);
-
-        if ($task === null) {
-            $this->invalid(field: 'task_id', message: 'Задача не найдена в текущем аккаунте.');
-        }
-
-        if ($context->workspace !== null && $context->workspace->id !== $task->workspace_id) {
-            $this->invalid(field: 'task_id', message: 'Задача не принадлежит текущему рабочему пространству.');
-        }
 
         if ($stage === null || $task->project_id === null || $stage->project_id !== $task->project_id) {
             $this->invalid(field: 'stage_id', message: 'Стадия не принадлежит проекту задачи.');
@@ -94,10 +88,18 @@ final readonly class MoveTaskToStage implements MoveTaskToStageCommand
         }
 
         if ($stage->auto_status === TaskStatus::Done) {
-            $completed = $this->completion->apply(task: $task, data: new CompleteTaskData(taskId: $task->id, actor: $data->actor), context: $context);
+            $completed = $this->completion->apply(
+                task: $task,
+                data: new CompleteTaskData(taskId: $task->id, actor: $data->actor),
+                context: $context,
+                scope: $scope,
+                connection: $connection,
+            );
         }
 
-        $task->save();
+        if (! $task->save()) {
+            throw new LogicException('The task move was rejected by the Task owner.');
+        }
 
         if ($completed) {
             $this->events->dispatch(new TaskCompleted(TaskSnapshot::fromTask($task)));

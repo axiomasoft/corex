@@ -3,7 +3,8 @@
   "required_profiles": [
     "bare-single", "modular-single", "modular-multi", "worker-only",
     "search-portable", "full-corex", "operations-standalone", "search-fields", "search-fields-disabled", "search-fields-enabled",
-    "search-meilisearch", "flex-crm"
+    "search-meilisearch", "flex-crm",
+    "recurring-tasks-standalone", "tasks-workflow-absent", "tasks-workflow-disabled", "tasks-workflow-enabled", "tasks-workflow-recurring"
   ],
   "profiles": [
     {
@@ -106,6 +107,56 @@
       "id": "search-fields-enabled",
       "packages": ["axiomasoft/corex-search-custom-fields"],
       "search_custom_fields": "enabled",
+      "database": "sqlite-single",
+      "http": false,
+      "forbid": []
+    },
+    {
+      "id": "recurring-tasks-standalone",
+      "packages": ["axiomasoft/corex-recurring-tasks"],
+      "tasks_workflow": "absent",
+      "database": "sqlite-single",
+      "http": false,
+      "forbid": [
+        {"package": "axiomasoft/corex-workflow", "name": "corex-workflow"},
+        {"package": "axiomasoft/corex-tasks-workflow", "name": "corex-tasks-workflow"}
+      ]
+    },
+    {
+      "id": "tasks-workflow-absent",
+      "packages": ["axiomasoft/corex-tasks", "axiomasoft/corex-workflow"],
+      "tasks_workflow": "absent",
+      "database": "sqlite-single",
+      "http": false,
+      "forbid": [
+        {"package": "axiomasoft/corex-tasks-workflow", "name": "corex-tasks-workflow"},
+        {"package": "axiomasoft/corex-recurring-tasks", "name": "corex-recurring-tasks"}
+      ]
+    },
+    {
+      "id": "tasks-workflow-disabled",
+      "packages": ["axiomasoft/corex-tasks-workflow"],
+      "tasks_workflow": "disabled",
+      "database": "sqlite-single",
+      "http": false,
+      "forbid": [
+        {"package": "axiomasoft/corex-recurring-tasks", "name": "corex-recurring-tasks"}
+      ]
+    },
+    {
+      "id": "tasks-workflow-enabled",
+      "packages": ["axiomasoft/corex-tasks-workflow"],
+      "tasks_workflow": "enabled",
+      "database": "sqlite-single",
+      "http": false,
+      "forbid": [
+        {"package": "axiomasoft/corex-recurring-tasks", "name": "corex-recurring-tasks"}
+      ]
+    },
+    {
+      "id": "tasks-workflow-recurring",
+      "packages": ["axiomasoft/corex-recurring-tasks", "axiomasoft/corex-tasks-workflow"],
+      "tasks_workflow": "enabled",
       "database": "sqlite-single",
       "http": false,
       "forbid": []

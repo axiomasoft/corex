@@ -6,7 +6,7 @@ use CoreX\Audit\Enums\ActorType;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Tasks\Access\Contracts\TaskPlanningAccess;
-use CoreX\Tasks\Planning\Contracts\TaskPlanningCommand;
+use CoreX\Tasks\Planning\Contracts\TaskPlanning;
 use CoreX\Tasks\Planning\Data\PlanningToken;
 use CoreX\Tasks\Planning\Internal\PlanningHasher;
 use CoreX\Tasks\Task\Data\ActorData;
@@ -23,6 +23,8 @@ beforeEach(function (): void {
     $this->resetPgSchema();
     expect($this->migrateFixtures())->toBe(0)
         ->and($this->migrateTasks())->toBe(0);
+
+    $this->establishWorkScope();
 
     $modules = Mockery::mock(ModuleRegistry::class, function (MockInterface $mock): void {
         $mock->shouldReceive('isActive')->byDefault()->andReturnTrue();
@@ -74,7 +76,7 @@ it('serializes concurrent time-log totals and deduplicates repeated keys', funct
         requestKey: 'prim-05-b',
         payloadHash: PlanningHasher::timeLog($draftB, $this->context),
     );
-    $command = resolve(TaskPlanningCommand::class);
+    $command = resolve(TaskPlanning::class);
 
     $command->recordTime($draftA, $tokenA);
     $command->recordTime($draftB, $tokenB);

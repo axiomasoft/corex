@@ -21,5 +21,5 @@ interface WorkflowBinding
 
     public function signal(SignalRequest $request): SignalResult;
 
-    public function fire(TransitionRequest $request): TransitionResult;
+    public function transition(TransitionRequest $request): TransitionResult;
 }

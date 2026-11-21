@@ -9,11 +9,12 @@ use CoreX\Recurrence\Data\ExpansionCursor;
 use CoreX\RecurringTasks\Data\MaterializationReceipt;
 use CoreX\RecurringTasks\Exceptions\MaterializationConflict;
 use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
-use CoreX\Tasks\Planning\Data\TaskOperationKind;
+use CoreX\Tasks\Planning\Data\TaskOperationFence;
+use CoreX\Tasks\Planning\Data\TaskOperationIdentity;
 use CoreX\Tasks\Planning\Data\TaskOperationReceipt;
+use CoreX\Tasks\Planning\Exceptions\PlanningConflict;
 use CoreX\Tasks\Task\Data\TaskReference;
 use Illuminate\Database\Connection;
-use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Packman\Attributes\Internal;
@@ -25,15 +26,19 @@ final readonly class MaterializationStore
 {
     public function __construct(private Connection $connection, private TaskOperationReceipts $receipts) {}
 
-    public function findOperation(string $operationKey): ?TaskOperationReceipt
+    public function findOperation(TaskOperationIdentity $identity): ?TaskOperationReceipt
     {
-        return $this->receipts->find(connection: $this->connection, requestKey: $operationKey);
+        try {
+            return $this->receipts->find(connection: $this->connection, identity: $identity);
+        } catch (PlanningConflict) {
+            throw MaterializationConflict::forOperationKey($identity->requestKey);
+        }
     }
 
-    public function assertReplayable(TaskOperationReceipt $existing, string $payloadHash): MaterializationReceipt
+    public function assertReplayable(TaskOperationIdentity $identity, TaskOperationReceipt $existing, string $payloadHash): MaterializationReceipt
     {
         if (! hash_equals($existing->payloadHash, $payloadHash)) {
-            throw MaterializationConflict::forOperationKey($existing->requestKey);
+            throw MaterializationConflict::forOperationKey($identity->requestKey);
         }
 
         $receipt = $this->receiptFromStored(JsonDocuments::map($existing->resultRef));
@@ -52,28 +57,20 @@ final readonly class MaterializationStore
         );
     }
 
-    /** @param array<string, mixed> $resultRef */
-    public function persistOperation(string $operationKey, string $payloadHash, string $restoreEpoch, array $resultRef): void
+    public function persistOperation(TaskOperationIdentity $identity, string $payloadHash, MaterializationReceipt $receipt): void
     {
         try {
             $this->receipts->record(
                 connection: $this->connection,
-                kind: TaskOperationKind::Materialize,
-                requestKey: $operationKey,
-                payloadHash: $payloadHash,
-                restoreEpoch: $restoreEpoch,
-                resultRef: $resultRef,
+                identity: $identity,
+                receipt: new TaskOperationReceipt(
+                    payloadHash: $payloadHash,
+                    originalFence: TaskOperationFence::fromScope($identity->scope),
+                    resultRef: JsonDocuments::capture($this->receiptToStored($receipt)),
+                ),
             );
-        } catch (QueryException $exception) {
-            $existing = $this->findOperation($operationKey);
-
-            if ($existing === null) {
-                throw $exception;
-            }
-
-            if (! hash_equals($existing->payloadHash, $payloadHash)) {
-                throw MaterializationConflict::forOperationKey($operationKey);
-            }
+        } catch (PlanningConflict) {
+            throw MaterializationConflict::forOperationKey($identity->requestKey);
         }
     }
 
@@ -207,7 +204,7 @@ final readonly class MaterializationStore
     }
 
     /** @return array<string, mixed> */
-    public function receiptToStored(MaterializationReceipt $receipt): array
+    private function receiptToStored(MaterializationReceipt $receipt): array
     {
         return [
             'version' => $receipt->version,

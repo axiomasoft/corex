@@ -31,6 +31,8 @@ use CoreX\Scheduling\Contracts\WakeupScheduler;
 use CoreX\Scheduling\Data\WakeupRequest;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
+use CoreX\Tasks\Planning\Data\TaskOperationIdentity;
+use CoreX\Tasks\Planning\Data\TaskOperationKind;
 use CoreX\Tasks\Task\Contracts\CreateTaskCommand;
 use CoreX\Tasks\Task\Data\TaskDraft;
 use CoreX\Tasks\Task\Data\TaskReference;
@@ -95,31 +97,45 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
         }
 
         $store = new MaterializationStore(connection: $this->connection, receipts: $this->receipts);
-        $existing = $store->findOperation($token->operationKey);
 
-        if ($existing !== null) {
-            $receipt = $store->assertReplayable(existing: $existing, payloadHash: $payloadHash);
-            $this->scheduleWakeup(scope: $scope, series: $series, window: $window, payloadHash: $payloadHash, receipt: $receipt, scheduler: $scheduler);
-
-            return $receipt;
-        }
-
-        $seriesRow = $this->connection
-            ->table('corex_task_series')
-            ->where('series_key', $series->id)
-            ->where('immutable_revision', $series->immutableRevision)
-            ->first();
-
-        if ($seriesRow === null || ! hash_equals(Value::text($seriesRow->definition_hash), $series->definitionHash)) {
-            throw StaleMaterialization::definition($series->id);
-        }
-
-        $receipt = $this->connection->transaction(function () use ($scope, $context, $series, $window, $token, $payloadHash, $store, $seriesRow, $scheduler): MaterializationReceipt {
+        return $this->connection->transaction(function () use ($scope, $context, $series, $window, $token, $payloadHash, $store, $scheduler): MaterializationReceipt {
             $this->contexts->assert($scope, $this->connection);
             $state = $store->lockSeriesState($series->id);
+            $seriesRow = $this->connection
+                ->table('corex_task_series')
+                ->where('series_key', $series->id)
+                ->where('immutable_revision', $series->immutableRevision)
+                ->first();
 
-            if ($state === null) {
+            if ($state === null || $seriesRow === null || ! hash_equals(Value::text($seriesRow->definition_hash), $series->definitionHash)) {
                 throw StaleMaterialization::definition($series->id);
+            }
+
+            $decoded = SeriesDefinitionCodec::decode(
+                definitionJson: $this->jsonColumn($seriesRow->definition),
+                templateJson: $this->jsonColumn($seriesRow->template),
+                actorJson: $this->jsonColumn($seriesRow->actor),
+            );
+            $workspaceId = $decoded['template']->workspaceId;
+
+            if ($scope->workspaceId !== null && $workspaceId !== $scope->workspaceId) {
+                throw new ScopeContextMismatch('The series belongs to another workspace.');
+            }
+
+            $identity = new TaskOperationIdentity(
+                scope: $scope,
+                kind: TaskOperationKind::Materialize,
+                requestKey: $token->operationKey,
+                subjectRef: 'task-series:'.$series->id,
+                workspaceId: $workspaceId,
+            );
+            $existing = $store->findOperation($identity);
+
+            if ($existing !== null) {
+                $receipt = $store->assertReplayable(identity: $identity, existing: $existing, payloadHash: $payloadHash);
+                $this->scheduleWakeup(scope: $scope, series: $series, window: $window, payloadHash: $payloadHash, receipt: $receipt, scheduler: $scheduler);
+
+                return $receipt;
             }
 
             if ((bool) $state->retired) {
@@ -132,25 +148,6 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
 
             if (! hash_equals(Value::text($state->restore_epoch), $scope->restoreEpoch)) {
                 throw StaleMaterialization::restoreEpoch($series->id);
-            }
-
-            $replay = $store->findOperation($token->operationKey);
-
-            if ($replay !== null) {
-                $receipt = $store->assertReplayable(existing: $replay, payloadHash: $payloadHash);
-                $this->scheduleWakeup(scope: $scope, series: $series, window: $window, payloadHash: $payloadHash, receipt: $receipt, scheduler: $scheduler);
-
-                return $receipt;
-            }
-
-            $decoded = SeriesDefinitionCodec::decode(
-                definitionJson: $this->jsonColumn($seriesRow->definition),
-                templateJson: $this->jsonColumn($seriesRow->template),
-                actorJson: $this->jsonColumn($seriesRow->actor),
-            );
-
-            if ($scope->workspaceId !== null && $decoded['template']->workspaceId !== $scope->workspaceId) {
-                throw new ScopeContextMismatch('The series belongs to another workspace.');
             }
 
             $recurrenceWindow = $this->materializationWindow(
@@ -268,14 +265,12 @@ final readonly class SqlTaskRecurrenceMaterializer implements TaskRecurrenceComm
                 unknown: $unknown,
             );
 
-            $store->persistOperation(operationKey: $token->operationKey, payloadHash: $payloadHash, restoreEpoch: $scope->restoreEpoch, resultRef: $store->receiptToStored($receipt));
+            $store->persistOperation(identity: $identity, payloadHash: $payloadHash, receipt: $receipt);
 
             $this->scheduleWakeup(scope: $scope, series: $series, window: $window, payloadHash: $payloadHash, receipt: $receipt, scheduler: $scheduler);
 
             return $receipt;
         });
-
-        return $receipt;
     }
 
     private function restoreCursor(stdClass $state, MaterializationStore $store): ?ExpansionCursor

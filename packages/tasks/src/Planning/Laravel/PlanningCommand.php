@@ -5,15 +5,20 @@ declare(strict_types=1);
 namespace CoreX\Tasks\Planning\Laravel;
 
 use Closure;
+use CoreX\Context\Contracts\CurrentWorkScope;
+use CoreX\Context\Contracts\DataScopeFactory;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Tasks\Access\Contracts\TaskModuleContext as TaskModuleGuard;
 use CoreX\Tasks\Access\Contracts\TaskPlanningAccess;
 use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
-use CoreX\Tasks\Planning\Contracts\TaskPlanningCommand;
+use CoreX\Tasks\Planning\Contracts\TaskPlanning;
 use CoreX\Tasks\Planning\Data\PlanningOperation;
 use CoreX\Tasks\Planning\Data\PlanningSubject;
 use CoreX\Tasks\Planning\Data\PlanningToken;
+use CoreX\Tasks\Planning\Data\TaskOperationIdentity;
+use CoreX\Tasks\Planning\Data\TaskOperationKind;
 use CoreX\Tasks\Planning\Exceptions\InvalidPlanningDraft;
 use CoreX\Tasks\Planning\Internal\OperationStore;
 use CoreX\Tasks\Planning\Internal\PlanningHasher;
@@ -43,7 +48,7 @@ use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final readonly class PlanningCommand implements TaskPlanningCommand
+final readonly class PlanningCommand implements TaskPlanning
 {
     private const int MAX_DEADLOCK_RETRIES = 3;
 
@@ -51,6 +56,8 @@ final readonly class PlanningCommand implements TaskPlanningCommand
         private TaskModuleGuard $moduleGuard,
         private TaskPlanningAccess $access,
         private ?TaskOperationReceipts $receipts = null,
+        private ?DataScopeFactory $scopes = null,
+        private ?CurrentWorkScope $workScope = null,
     ) {}
 
     public function createProject(ProjectDraft $draft, PlanningToken $token): ProjectReference
@@ -60,44 +67,34 @@ final readonly class PlanningCommand implements TaskPlanningCommand
         $this->assertToken(token: $token, expectedHash: PlanningHasher::project(draft: $draft, context: $context));
         $this->assertWorkspace(workspaceId: $draft->workspaceId, context: $context);
 
-        $subject = new PlanningSubject(
-            workspaceId: $draft->workspaceId,
-            projectId: null,
-            taskId: null,
-            userId: $draft->actor->id,
-        );
-        $this->access->authorize(
-            operation: PlanningOperation::CreateProject,
-            subject: $subject,
-            actor: $draft->actor,
-            context: $context,
-        );
-
         $connection = (new Project)->getConnection();
 
         return $connection->transaction(
-            callback: function () use ($draft, $token, $context, $name, $subject, $connection): ProjectReference {
-                $store = new OperationStore(connection: $connection, receipts: $this->receipts());
-                $restoreEpoch = PlanningHasher::restoreEpoch($context);
-                $replay = $store->claimOrReplay(
+            callback: function () use ($draft, $token, $context, $name, $connection): ProjectReference {
+                $scope = $this->scope($context, $connection);
+                $subject = new PlanningSubject(
+                    workspaceId: $draft->workspaceId,
+                    projectId: null,
+                    taskId: null,
+                    userId: $draft->actor->id,
+                );
+                $this->access->authorize(
                     operation: PlanningOperation::CreateProject,
-                    token: $token,
-                    restoreEpoch: $restoreEpoch,
+                    subject: $subject,
+                    actor: $draft->actor,
+                    context: $context,
                 );
 
-                if ($replay !== null) {
-                    $this->access->authorize(
-                        operation: PlanningOperation::CreateProject,
-                        subject: $subject,
-                        actor: $draft->actor,
-                        context: $context,
-                    );
-
-                    return ProjectReference::fromStored($replay);
+                if (! Str::isUuid($draft->workspaceId) || $connection->table('wsp_workspaces')->where('id', $draft->workspaceId)->lockForUpdate()->first() === null) {
+                    $this->invalid(field: 'workspace_id', message: 'Рабочее пространство не найдено в текущем аккаунте.');
                 }
 
-                if (! Str::isUuid($draft->workspaceId) || ! $connection->table('wsp_workspaces')->where('id', $draft->workspaceId)->exists()) {
-                    $this->invalid(field: 'workspace_id', message: 'Рабочее пространство не найдено в текущем аккаунте.');
+                $identity = new TaskOperationIdentity($scope, TaskOperationKind::CreateProject, $token->requestKey, 'workspace:'.$draft->workspaceId, $draft->workspaceId);
+                $store = new OperationStore(connection: $connection, receipts: $this->receipts());
+                $replay = $store->replay($identity, $token->payloadHash);
+
+                if ($replay !== null) {
+                    return ProjectReference::fromStored($replay);
                 }
 
                 $project = new Project([
@@ -110,12 +107,7 @@ final readonly class PlanningCommand implements TaskPlanningCommand
                 $project->save();
 
                 $reference = ProjectReferenceFactory::fromProject($project);
-                $store->claimOrReplay(
-                    operation: PlanningOperation::CreateProject,
-                    token: $token,
-                    restoreEpoch: $restoreEpoch,
-                    resultRef: $reference->toArray(),
-                );
+                $store->record($identity, $token->payloadHash, $reference->toArray());
 
                 return $reference;
             },
@@ -130,39 +122,30 @@ final readonly class PlanningCommand implements TaskPlanningCommand
         $this->assertToken(token: $token, expectedHash: PlanningHasher::sprint(draft: $draft, context: $context, startDate: $startDate, endDate: $endDate));
 
         $connection = (new Sprint)->getConnection();
-        $project = $this->resolvedProject(projectId: $draft->projectId, connection: $connection);
-
-        $subject = new PlanningSubject(
-            workspaceId: (string) $project->workspace_id,
-            projectId: Value::text($project->getKey()),
-            taskId: null,
-            userId: $draft->actor->id,
-        );
-        $this->access->authorize(
-            operation: PlanningOperation::CreateSprint,
-            subject: $subject,
-            actor: $draft->actor,
-            context: $context,
-        );
 
         return $connection->transaction(
-            callback: function () use ($draft, $token, $context, $name, $startDate, $endDate, $subject, $connection, $project): SprintReference {
-                $store = new OperationStore(connection: $connection, receipts: $this->receipts());
-                $restoreEpoch = PlanningHasher::restoreEpoch($context);
-                $replay = $store->claimOrReplay(
+            callback: function () use ($draft, $token, $context, $name, $startDate, $endDate, $connection): SprintReference {
+                $scope = $this->scope($context, $connection);
+                $project = $this->resolvedProject(projectId: $draft->projectId, connection: $connection);
+                $this->assertWorkspace($project->workspace_id, $context);
+                $subject = new PlanningSubject(
+                    workspaceId: $project->workspace_id ?? '',
+                    projectId: $project->id,
+                    taskId: null,
+                    userId: $draft->actor->id,
+                );
+                $this->access->authorize(
                     operation: PlanningOperation::CreateSprint,
-                    token: $token,
-                    restoreEpoch: $restoreEpoch,
+                    subject: $subject,
+                    actor: $draft->actor,
+                    context: $context,
                 );
 
-                if ($replay !== null) {
-                    $this->access->authorize(
-                        operation: PlanningOperation::CreateSprint,
-                        subject: $subject,
-                        actor: $draft->actor,
-                        context: $context,
-                    );
+                $identity = new TaskOperationIdentity($scope, TaskOperationKind::CreateSprint, $token->requestKey, 'project:'.$project->id, $project->workspace_id);
+                $store = new OperationStore(connection: $connection, receipts: $this->receipts());
+                $replay = $store->replay($identity, $token->payloadHash);
 
+                if ($replay !== null) {
                     return SprintReference::fromStored($replay);
                 }
 
@@ -177,12 +160,7 @@ final readonly class PlanningCommand implements TaskPlanningCommand
                 $sprint->save();
 
                 $reference = SprintReferenceFactory::fromSprint($sprint);
-                $store->claimOrReplay(
-                    operation: PlanningOperation::CreateSprint,
-                    token: $token,
-                    restoreEpoch: $restoreEpoch,
-                    resultRef: $reference->toArray(),
-                );
+                $store->record($identity, $token->payloadHash, $reference->toArray());
 
                 return $reference;
             },
@@ -194,33 +172,14 @@ final readonly class PlanningCommand implements TaskPlanningCommand
         $context = $this->moduleGuard->context();
         $this->assertToken(token: $token, expectedHash: PlanningHasher::timeLog(draft: $draft, context: $context));
         $connection = (new Task)->getConnection();
-        $this->validatedTimeLog(draft: $draft, connection: $connection);
 
         return $this->transactionWithRetry(
             connection: $connection,
             callback: function () use ($draft, $token, $context, $connection): TimeLogReference {
-                $store = new OperationStore(connection: $connection, receipts: $this->receipts());
-                $restoreEpoch = PlanningHasher::restoreEpoch($context);
-                $replay = $store->claimOrReplay(
-                    operation: PlanningOperation::RecordTime,
-                    token: $token,
-                    restoreEpoch: $restoreEpoch,
-                );
-
-                if ($replay !== null) {
-                    $task = $this->lockedTask(taskId: $draft->taskId, connection: $connection);
-                    $subject = $this->timeLogSubject(task: $task, userId: $draft->userId);
-                    $this->access->authorize(
-                        operation: PlanningOperation::RecordTime,
-                        subject: $subject,
-                        actor: $draft->actor,
-                        context: $context,
-                    );
-
-                    return TimeLogReference::fromStored($replay);
-                }
-
+                $scope = $this->scope($context, $connection);
+                $this->validatedTimeLog(draft: $draft, connection: $connection);
                 $task = $this->lockedTask(taskId: $draft->taskId, connection: $connection);
+                $this->assertWorkspace($task->workspace_id, $context);
                 $subject = $this->timeLogSubject(task: $task, userId: $draft->userId);
                 $this->access->authorize(
                     operation: PlanningOperation::RecordTime,
@@ -228,6 +187,14 @@ final readonly class PlanningCommand implements TaskPlanningCommand
                     actor: $draft->actor,
                     context: $context,
                 );
+
+                $identity = new TaskOperationIdentity($scope, TaskOperationKind::RecordTime, $token->requestKey, 'task:'.$task->id, $task->workspace_id);
+                $store = new OperationStore(connection: $connection, receipts: $this->receipts());
+                $replay = $store->replay($identity, $token->payloadHash);
+
+                if ($replay !== null) {
+                    return TimeLogReference::fromStored($replay);
+                }
 
                 if ($task->project_id !== null) {
                     Project::on($connection->getName())
@@ -264,28 +231,23 @@ final readonly class PlanningCommand implements TaskPlanningCommand
                 $task->save();
 
                 $reference = TimeLogReferenceFactory::fromTimeLog($timeLog);
-                $store->claimOrReplay(
-                    operation: PlanningOperation::RecordTime,
-                    token: $token,
-                    restoreEpoch: $restoreEpoch,
-                    resultRef: $reference->toArray(),
-                );
+                $store->record($identity, $token->payloadHash, $reference->toArray());
 
                 return $reference;
             },
         );
     }
 
-    private function assertWorkspace(string $workspaceId, TenantContext $context): void
+    private function assertWorkspace(?string $workspaceId, TenantContext $context): void
     {
         if ($context->workspace !== null && $context->workspace->id !== $workspaceId) {
-            $this->invalid(field: 'workspace_id', message: 'Проект нельзя создать в другом рабочем пространстве.');
+            $this->invalid(field: 'workspace_id', message: 'Операция запрещена в другом рабочем пространстве.');
         }
     }
 
     private function assertToken(PlanningToken $token, string $expectedHash): void
     {
-        if ($token->requestKey === '' || strlen($token->requestKey) > 190) {
+        if ($token->requestKey === '' || strlen($token->requestKey) > 190 || str_contains($token->requestKey, "\0")) {
             throw InvalidPlanningDraft::forField(field: 'request_key', message: 'Ключ запроса должен содержать от 1 до 190 байт.');
         }
 
@@ -354,7 +316,7 @@ final readonly class PlanningCommand implements TaskPlanningCommand
         }
 
         /** @var Project|null $project */
-        $project = Project::on($connection->getName())->find($projectId);
+        $project = Project::on($connection->getName())->tap(static fn ($query) => $query->getQuery()->lockForUpdate())->find($projectId);
 
         if ($project === null) {
             throw InvalidPlanningDraft::forField(field: 'project_id', message: 'Проект не найден в текущем аккаунте.');
@@ -427,6 +389,16 @@ final readonly class PlanningCommand implements TaskPlanningCommand
     private function invalid(string $field, string $message): never
     {
         throw ValidationException::withMessages([$field => [$message]]);
+    }
+
+    private function scope(TenantContext $context, Connection $connection): DataScope
+    {
+        $scopes = $this->scopes ?? Container::getInstance()->make(DataScopeFactory::class);
+        $workScope = $this->workScope ?? Container::getInstance()->make(CurrentWorkScope::class);
+        $scope = $scopes->forCurrentPrincipal($context);
+        $workScope->assert($scope, $connection);
+
+        return $scope;
     }
 
     /** The port is optional so the constructor stays source-compatible; the container bridge fills it when absent. */

@@ -54,7 +54,7 @@ final readonly class WorkflowReceiptProjector implements ProviderReceiptProjecto
         } catch (UnsupportedWorkflowCapability) {
             return null;
         }
-        $provider = $this->engine->provider($request);
+        $provider = $this->engine->provider($request->definition());
 
         if ($provider === null || $provider->namespace !== $status->effect->providerNamespace || ! $provider->statusLookup) {
             return null;

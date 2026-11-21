@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Contracts\WorkScopeRunner;
+use CoreX\Context\Data\PhysicalBinding;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Context\Exceptions\ScopeStale;
+use CoreX\Context\Laravel\DatabaseScopeControl;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
@@ -15,14 +20,18 @@ use CoreX\Tasks\Sprint\Internal\Models\Sprint;
 use CoreX\Tasks\Task\Contracts\CompleteTaskCommand;
 use CoreX\Tasks\Task\Contracts\CreateTaskCommand;
 use CoreX\Tasks\Task\Contracts\MoveTaskToStageCommand;
+use CoreX\Tasks\Task\Contracts\TaskCompletionCapture;
 use CoreX\Tasks\Task\Contracts\UpdateTaskCommand;
 use CoreX\Tasks\Task\Data\ActorData;
 use CoreX\Tasks\Task\Data\CompleteTaskData;
 use CoreX\Tasks\Task\Data\EntityReference;
 use CoreX\Tasks\Task\Data\MoveTaskToStageData;
+use CoreX\Tasks\Task\Data\TaskCompletionAdmission;
+use CoreX\Tasks\Task\Data\TaskCompletionCandidate;
 use CoreX\Tasks\Task\Data\TaskDraft;
 use CoreX\Tasks\Task\Data\TaskView;
 use CoreX\Tasks\Task\Data\UpdateTaskData;
+use CoreX\Tasks\Task\Enums\TaskCompletionAdmissionStatus;
 use CoreX\Tasks\Task\Enums\TaskPriority;
 use CoreX\Tasks\Task\Enums\TaskStatus;
 use CoreX\Tasks\Task\Events\TaskCompleted;
@@ -31,13 +40,16 @@ use CoreX\Tasks\Task\Events\TaskUpdated;
 use CoreX\Tasks\Task\Internal\Models\Stage;
 use CoreX\Tasks\Task\Internal\Models\Task;
 use CoreX\Tasks\TasksModule;
+use CoreX\Time\Testing\FrozenClock;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Mockery\MockInterface;
 use Packman\Modules\Contracts\Registry\ModuleRegistry;
+use Psr\Clock\ClockInterface;
 
 beforeEach(function (): void {
     $this->workspaceId = (string) Str::uuid7();
@@ -175,7 +187,7 @@ it('cannot move a task from another narrowed workspace', function (): void {
     ));
     $current = resolve(TenantContextResolver::class)->current();
     $resolver = Mockery::mock(TenantContextResolver::class);
-    $resolver->shouldReceive('current')->once()->andReturn(new TenantContext(
+    $resolver->shouldReceive('current')->andReturn(new TenantContext(
         account: $current->account,
         workspace: new WorkspaceRef(
             id: $this->otherWorkspaceId,
@@ -407,6 +419,174 @@ it('completes a task atomically and does not emit a duplicate event', function (
     Event::assertDispatchedTimes(TaskCompleted::class, 1);
 });
 
+function taskCompletionContributor(Closure $capture): void
+{
+    $contributor = new class($capture) implements TaskCompletionCapture
+    {
+        public function __construct(private readonly Closure $capture) {}
+
+        public function capture(TaskCompletionCandidate $candidate, ConnectionInterface $connection): TaskCompletionAdmission
+        {
+            return ($this->capture)($candidate, $connection);
+        }
+    };
+    app()->instance($contributor::class, $contributor);
+    app()->tag($contributor::class, TaskCompletionCapture::TAG);
+}
+
+it('holds a single completion receipt through reopening and auto-completion', function (TaskCompletionAdmissionStatus $outcome): void {
+    $this->todo->update(['auto_status' => TaskStatus::InProgress]);
+    $task = resolve(CreateTaskCommand::class)->handle(new TaskDraft(
+        workspaceId: $this->workspaceId, title: 'Task lifetime', actor: $this->actor,
+        projectId: $this->project->id, stageId: $this->todo->id,
+    ));
+    $clock = new FrozenClock(new DateTimeImmutable('2026-11-21T04:00:00Z'));
+    app()->instance(ClockInterface::class, $clock);
+    $key = hash('sha256', json_encode(['completion-capture/2', $this->workScope->accountId, $this->workScope->accountIncarnation, $task->id], JSON_THROW_ON_ERROR));
+    $digest = str_repeat('d', 64);
+    $captures = 0;
+    taskCompletionContributor(function (TaskCompletionCandidate $candidate, ConnectionInterface $db) use (&$captures, $task, $key, $digest, $outcome): TaskCompletionAdmission {
+        $captures++;
+        expect($db)->toBe(DB::connection())
+            ->and($db->transactionLevel())->toBeGreaterThan(1)
+            ->and($db->table('tsk_tasks')->where('id', $task->id)->value('status'))->toBe('open')
+            ->and($candidate->previousStatus)->toBe(TaskStatus::Open)
+            ->and($candidate->status)->toBe(TaskStatus::Done)
+            ->and($candidate->scope)->toEqual($this->workScope)
+            ->and($candidate->actor)->toBe($this->actor)
+            ->and($candidate->requestKey)->toBe($key);
+
+        return new TaskCompletionAdmission($outcome, 'intent:accepted', $digest, 'definition:7');
+    });
+
+    $complete = resolve(CompleteTaskCommand::class);
+    $input = new CompleteTaskData($task->id, $this->actor);
+    $complete->handle($input);
+    $first = Task::query()->findOrFail($task->id)->completed_at;
+    $clock->advance(new DateInterval('PT1M'));
+    $complete->handle($input);
+    expect(Task::query()->findOrFail($task->id)->completed_at)->toEqual($first);
+
+    $context = resolve(TenantContextResolver::class)->current();
+    $resolver = Mockery::mock(TenantContextResolver::class);
+    $resolver->shouldReceive('current')->andReturn(new TenantContext(
+        account: $context->account,
+        workspace: new WorkspaceRef($this->workspaceId, 'main', 'branch', 'main', null),
+    ));
+    app()->instance(TenantContextResolver::class, $resolver);
+
+    $move = resolve(MoveTaskToStageCommand::class);
+    // Move the completed task away from the reopen stage before applying its auto-status.
+    $move->handle(new MoveTaskToStageData($task->id, $this->done->id, $this->actor));
+    $move->handle(new MoveTaskToStageData($task->id, $this->todo->id, $this->actor));
+    expect(Task::query()->findOrFail($task->id)->status)->toBe(TaskStatus::InProgress)
+        ->and(Task::query()->findOrFail($task->id)->completed_at)->toBeNull();
+
+    $move->handle(new MoveTaskToStageData($task->id, $this->done->id, new ActorData(ActorType::System, null)));
+    $again = Task::query()->findOrFail($task->id);
+    resolve(CompleteTaskCommand::class)->handle($input);
+    $receipts = DB::table('corex_task_operations')->get();
+    $row = $receipts->sole();
+    expect($captures)->toBe(1)
+        ->and($again->status)->toBe(TaskStatus::Done)
+        ->and($again->completed_at?->getTimestamp())->toBe($clock->now()->getTimestamp())
+        ->and(Task::query()->findOrFail($task->id)->completed_at)->toEqual($again->completed_at)
+        ->and($row->kind)->toBe('completionCapture')
+        ->and($row->request_key)->toBe($key)
+        ->and($row->workspace_scope)->toBe('')
+        ->and($row->subject_ref)->toBe('task:'.$task->id)
+        ->and($row->payload_hash)->toBe($digest)
+        ->and($row->deployment_id)->toBe($this->workScope->deploymentId)
+        ->and($row->binding_id)->toBe($this->workScope->bindingId)
+        ->and($row->binding_generation)->toEqual($this->workScope->bindingGeneration)
+        ->and($row->restore_epoch)->toBe($this->workScope->restoreEpoch)
+        ->and(json_decode($row->result_ref, true, flags: JSON_THROW_ON_ERROR))->toEqual([
+            'intentRef' => 'intent:accepted', 'taskId' => $task->id, 'versionRef' => 'definition:7',
+        ]);
+})->with([
+    'created intent' => TaskCompletionAdmissionStatus::Created,
+    'matching existing intent' => TaskCompletionAdmissionStatus::Existing,
+]);
+
+it('rolls a completion back if capture conflicts or an owner save is vetoed', function (bool $conflict): void {
+    $task = resolve(CreateTaskCommand::class)->handle(new TaskDraft(
+        workspaceId: $this->workspaceId, title: 'Rejected completion', actor: $this->actor,
+        projectId: $this->project->id, stageId: $this->todo->id,
+    ));
+    taskCompletionContributor(static fn (): TaskCompletionAdmission => $conflict
+        ? new TaskCompletionAdmission(TaskCompletionAdmissionStatus::Conflict)
+        : new TaskCompletionAdmission(TaskCompletionAdmissionStatus::Created, 'intent:pending', str_repeat('d', 64), 'definition:7'));
+    $pendingReceiptSeen = false;
+
+    if (! $conflict) {
+        Task::saving(static function (Task $model) use ($task, &$pendingReceiptSeen): bool {
+            if ($model->id !== $task->id) {
+                return true;
+            }
+
+            $pendingReceiptSeen = $model->getConnection()->table('corex_task_operations')->where('kind', 'completionCapture')->exists();
+
+            return false;
+        });
+    }
+
+    expect(fn () => resolve(MoveTaskToStageCommand::class)->handle(new MoveTaskToStageData($task->id, $this->done->id, $this->actor)))
+        ->toThrow(LogicException::class, $conflict ? 'Conflicting completion intent' : 'task move was rejected');
+
+    $stored = Task::query()->findOrFail($task->id);
+    expect($pendingReceiptSeen)->toBe(! $conflict)
+        ->and($stored->status)->toBe(TaskStatus::Open)
+        ->and($stored->stage_id)->toBe($this->todo->id)
+        ->and($stored->completed_at)->toBeNull()
+        ->and(DB::table('corex_task_operations')->count())->toBe(0);
+})->with(['conflict' => true, 'write veto' => false]);
+
+it('denies an unverified writer before the completion commands read the task', function (): void {
+    $task = resolve(CreateTaskCommand::class)->handle(new TaskDraft(
+        workspaceId: $this->workspaceId, title: 'Verified writer', actor: $this->actor,
+    ));
+    $original = DB::getDefaultConnection();
+    config()->set('database.connections.unverified-tasks-writer', config('database.connections.'.$original));
+    $wrong = DB::connection('unverified-tasks-writer');
+    $wrong->enableQueryLog();
+    DB::setDefaultConnection('unverified-tasks-writer');
+
+    try {
+        expect(fn () => resolve(CompleteTaskCommand::class)->handle(new CompleteTaskData($task->id, $this->actor)))
+            ->toThrow(ScopeContextMismatch::class)
+            ->and(fn () => resolve(MoveTaskToStageCommand::class)->handle(new MoveTaskToStageData($task->id, $this->done->id, $this->actor)))
+            ->toThrow(ScopeContextMismatch::class)
+            ->and($wrong->getQueryLog())->toBe([]);
+    } finally {
+        DB::setDefaultConnection($original);
+        DB::purge('unverified-tasks-writer');
+    }
+
+    expect(Task::query()->findOrFail($task->id)->status)->toBe(TaskStatus::Open)
+        ->and(DB::table('corex_task_operations')->count())->toBe(0);
+});
+
+it('rejects completion attempted from an old work frame after restore', function (): void {
+    $task = resolve(CreateTaskCommand::class)->handle(new TaskDraft(
+        workspaceId: $this->workspaceId, title: 'Restored owner', actor: $this->actor,
+    ));
+    $before = $this->workScope;
+    $control = resolve(DatabaseScopeControl::class);
+    $closed = $control->drain($before->accountId, $control->close($before->accountId, 1));
+    $after = new PhysicalBinding($before->deploymentId, $before->bindingId, $before->bindingGeneration, $before->accountIncarnation, str_repeat('b', 64));
+    $control->reopen($before->accountId, $closed, $after, static fn (): bool => true);
+
+    $data = new CompleteTaskData($task->id, $this->actor);
+    expect(fn () => resolve(WorkScopeRunner::class)->run($before, fn () => resolve(CompleteTaskCommand::class)->handle($data)))
+        ->toThrow(ScopeStale::class);
+    expect(Task::query()->findOrFail($task->id)->status)->toBe(TaskStatus::Open)
+        ->and(DB::table('corex_task_operations')->count())->toBe(0);
+
+    resolve(CompleteTaskCommand::class)->handle($data);
+    expect(Task::query()->findOrFail($task->id)->status)->toBe(TaskStatus::Done)
+        ->and(DB::table('corex_task_operations')->count())->toBe(0);
+});
+
 it('does not complete a cancelled task', function (): void {
     $reference = resolve(CreateTaskCommand::class)->handle(new TaskDraft(
         workspaceId: $this->workspaceId,
@@ -497,9 +677,9 @@ it('rejects invalid task drafts atomically', function (array $changes, string $f
     'negative estimate' => [['estimateMinutes' => -1], 'estimate_minutes'],
     'reversed dates' => [['startsAt' => new DateTimeImmutable('2026-10-02'), 'dueAt' => new DateTimeImmutable('2026-10-01')], 'due_at'],
     'unknown author' => [['authorId' => 'missing'], 'author_id'],
-    'unknown project' => [['projectId' => 'missing'], 'project_id'],
-    'unknown sprint' => [['sprintId' => 'missing'], 'sprint_id'],
-    'unknown parent' => [['parentId' => 'missing'], 'parent_id'],
+    'unknown project' => [['projectId' => '00000000-0000-7000-8000-000000000000'], 'project_id'],
+    'unknown sprint' => [['sprintId' => '00000000-0000-7000-8000-000000000000'], 'sprint_id'],
+    'unknown parent' => [['parentId' => '00000000-0000-7000-8000-000000000000'], 'parent_id'],
     'invalid target' => [['targets' => [new EntityReference('', 'missing')]], 'targets'],
     'duplicate target' => [['targets' => [new EntityReference('item', '11111111-1111-4111-8111-111111111111'), new EntityReference('item', '11111111-1111-4111-8111-111111111111')]], 'targets'],
 ]);
@@ -519,7 +699,7 @@ it('rejects invalid updates without changing the persisted task', function (arra
     'no fields' => [[], 'task'],
     'unknown field' => [['provided' => ['unsupported']], 'task'],
     'duplicate field' => [['provided' => ['title', 'title'], 'title' => 'Changed'], 'task'],
-    'missing task' => [['taskId' => 'missing', 'provided' => ['title'], 'title' => 'Changed'], 'task_id'],
+    'missing task' => [['taskId' => '00000000-0000-7000-8000-000000000000', 'provided' => ['title'], 'title' => 'Changed'], 'task_id'],
     'blank title' => [['provided' => ['title'], 'title' => ' '], 'title'],
     'null priority' => [['provided' => ['priority']], 'priority'],
     'missing assignee' => [['provided' => ['assignee_id'], 'assigneeId' => 'missing'], 'assignee_id'],

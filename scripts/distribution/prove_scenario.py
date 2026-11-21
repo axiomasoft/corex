@@ -349,6 +349,7 @@ def prove_variant(spec: dict, fixture: Path, evidence: Path, root: Path, reposit
             profiles.assert_providers(consumer, booted, case)
             profiles.assert_profile_clean(profile, booted["packages"], http_routes=booted["http_routes"])
             receipt.update(profiles.assert_fields_bridge(profile, booted))
+            receipt.update(profiles.assert_tasks_workflow(profile, booted))
             receipt["databases"] = booted["database_versions"]
             if database and set(booted["database_versions"]) != set(database["COREX_PG_DATABASES"].split(",")):
                 raise ScenarioError("profile did not connect to every isolated PostgreSQL database")

@@ -38,6 +38,10 @@ Search хранит активное поколение и верхнюю гра
 
 Search Intl связывает stable field ID и canonical locale с детерминированным backend key. Fingerprint включает форму поля и fallback policy. Допуск к предикату проверяет исходное поле и локализованную форму. В fixture сохранённого представления Packman компилирует фильтр, сортировку и проекцию по стабильному ID после смены имени. Композиция сверяет текущую ревизию и закрывает masked field.
 
+Tasks удерживает блокировку строки во время первого завершения. Workflow записывает intent через ту же connection, а Tasks сохраняет квитанцию и статус задачи одной транзакцией. После reopen повторное завершение использует квитанцию по стабильному ключу и сохраняет один intent за жизнь задачи. `tasks-workflow` подключается отдельно и фиксирует версию определения. Recurring Tasks сохраняет материализацию серий со своим Packman module ID. Синхронный Workflow-переход вызывается через `transition()`.
+
+При включении Tasks мост сохраняет решение внешнего `ModuleActivationGate` и проверяет trigger, definition и version через scoped `EngineAdapter::provider(DefinitionRequest)`. Неподдерживаемый pin оставляет модуль available и не создаёт Task, receipt или intent. Холодные config cache и compile проверяют декларации до разрешения tenant policy и engine. Декоратор сохраняется после сброса scoped host policy.
+
 ```bash
 python3 scripts/distribution/compare_contracts.py \
   --base 1c11e0e35961409631cf68ebb28c7d2cd53ebb91 \
@@ -122,7 +126,6 @@ Diff содержит SHA и digest каждого прочитанного но
       "c1ff69d2e7540c116f13246e3fb264a3c729cbbad12b6ead75f1b064033f8409",
       "ce0f765469444d1c34d6b73df003cb9c17e916b529d963e21c3e3ae34d511fd1",
       "cf15b696879a5c83510f5aae6f9fb0338ce5fab5e431327891cd23cce890c3a6",
-      "d17fe087e834627f9f816cb70e93896998aaad633c8159c6f1cf1bd537524129",
       "d1bc6685012343a6d5ef5225e3b47b9c60976ce38208093e1ce1892e04e5a334",
       "d61b0b567ddec31e1d734d78b7ef9194c097535db27e8e08a1edcd22db0514a4",
       "de1145de3c684d2bdc97773e09e5c30b362ca7ad9671c6f1300e748fa763838a",
@@ -148,7 +151,6 @@ Diff содержит SHA и digest каждого прочитанного но
       "scripts/distribution/tests/test_profile_proof.py"
     ],
     "changes": [
-      "008c9e53b8d44c3733fbed5656e92ab3d29f99417dbc3670bc64b985eecacb8d",
       "017176ff43a823b365b2fc63f2165783bb60b8f2ca0def070a5231b8243dd0ba",
       "01774c8e94891fdfd242618278507e6d38a5f3d9c26f7c328c3a7c1780f0ebaa",
       "0933fcf81fb9a28722043af136c90157909b41810d42a2186e8c3ca0bdb6a75e",
@@ -299,7 +301,6 @@ Diff содержит SHA и digest каждого прочитанного но
       "tests/Distribution/fixtures/scenarios/workspace-sweep/probe.php"
     ],
     "changes": [
-      "071192966979ce5fbe4810ae7e4e40e84790ebbf1d2c8794434264fd93741dea",
       "085641c665c9480c23b47c589ae47c10186b9a05d9c9f3058290a0e36b53267b",
       "102899e0b67621fe2b1bc026ba09463960fa55796dece5a58d161a9c7cd66d0b",
       "15938712450f0b7d0aa661638798e75bc6abeabaa9d6208faa4b7f23695eeed5",
@@ -448,7 +449,7 @@ Diff содержит SHA и digest каждого прочитанного но
     "tests": [
       "packages/workflow/tests/Feature/WorkflowBindingTest.php",
       "packages/workflow/tests/Feature/WorkflowExecutionTest.php",
-      "packages/recurring-tasks/tests/Feature/TaskCompletionCaptureTest.php",
+      "packages/tasks-workflow/tests/Feature/TaskCompletionCaptureTest.php",
       "tests/Distribution/fixtures/scenarios/provider-unknown/probe.php"
     ],
     "changes": [
@@ -458,7 +459,6 @@ Diff содержит SHA и digest каждого прочитанного но
       "377967f33a89ffbbc54ed95b7b35e84a7510a5b768746115f5ab5a49b1dc675a",
       "44f895d99aa28cae2f7017df7a3b14f5f8968b10bf855badf4aab3d83a1ffe44",
       "4bf855afcfd360b424345ef6378509052d0356aba6a7af02d98fb53b5c3e1959",
-      "50e97b9aea14d4d9c040876d615f3c2d300dfe98e93d010f992d71b570995fde",
       "572e527c5bee2edef081ab19066a53a1b99e90255cff96c6c788ab8171abf6d7",
       "6c4d8e9a01b9c6d6234d9219005c870fa0eefc368e9f30822814be0d8fbe3909",
       "6c5b3c0579bba22b8de58a9cc2273697cae5eb6221a86310c371645dab5614cb",
@@ -469,7 +469,6 @@ Diff содержит SHA и digest каждого прочитанного но
       "8dfab8d852b4abb3fc7ff0f7d3d4deb88979aa6aca5a043bb881c0536275fd21",
       "9c163db17d9574b36141a843db395a9456d8d9d3de51211200bca909dab88e1d",
       "c8fd50f1c6a37c25725c27dfc97161cc31e10bccc48a2624d0d6829d6fbfa866",
-      "cc2bcd81eec5a6f4cb4e7cbd95d8f68ae8ba0b6a072ab0e07ff4eb24e53c81b0",
       "e1bb364c9b4d40fc7ad6ff593eedc7fd789fee194bf6dc99a2eb3e68513b17cf",
       "fcb6ab4614cde9b5288f404bc36871f9ca4fed6a7a30d94a1eca339df9d4fc69"
     ]
@@ -674,8 +673,96 @@ Diff содержит SHA и digest каждого прочитанного но
       "tests/Distribution/fixtures/scenarios/field-search/probe.php"
     ],
     "changes": [
-      "7dc114d906d04202aeafb089685ad0df059ecae03eb94ffa1d01f3feda14ce68",
       "efd59d20220f9c5853865ad6511caef62698dd0c955225f89aa8ccc1bdc1d083"
+    ]
+  },
+  {
+    "id": "tasks-completion-lifetime",
+    "plan": "§§7, 11.4, 14.3, 14.5 and Stage 6 — typed completion admission and lifetime receipt",
+    "tests": [
+      "tests/Distribution/fixtures/scenarios/task-lifetime/probe.php",
+      "packages/tasks/tests/Pg/PlanningConcurrencyTest.php"
+    ],
+    "changes": [
+      "03c60052bbbf9dbfcdd4e693200f5df66db7c34c8194673b0617333494f57ebd",
+      "053d6e2f9353c598a792b2a328eee670a9edf8038ed0dd8f11f3e4e0a5b14d85",
+      "0d49703d232614560d38868847892ed9b4fd1c03516b09091d644c50727c2f7c",
+      "0edcefab6babe67fc36d7e7c5ac05bc4b255f73ac1d56dd61bf5b80f67516117",
+      "1630902807f5610f9c6d3f62b2a7ac6e349fda309a88af6c525de32650a82228",
+      "1e4f1149e7590197f0e951fe55aa52aadec583415261d57ecc4ebd0350ccd554",
+      "28166860845a3c59400025a630df390b2e771a42eccd4955607e0ec15b049481",
+      "2da7e93f7754dfa2a5e18b1cd2742581df042faa39aca28132a58e5988d02684",
+      "441cb7905d57340be6072286ff4ac626a42cdf2b6ed778088f2d94e3bbae4ab3",
+      "46c09bb4990707d53e0440e9c4e43bebf89be75109761c360f4b77b3744f2681",
+      "4d5d9c0728c01cf8d21c3e62c23c39a69297a21fc0cca66c386fa96410ae8879",
+      "4d97ead36c0069434c1797b67008dbe597ba808ac4e993635f0f36fe256d2378",
+      "54c9d8961bbd543ab77cd6a3b34531eb16351eda281f659f84b05fccd10c9537",
+      "626488f9ec9ec4dc8adf230b4393ec40956e515ffef87093f803688352e46cfe",
+      "74ac38eb4cd43894606fc6c44322cf197f46da60d1caf69aebcbf3d7c150c77b",
+      "77689fd668ca6ef8dcf4c03be6030758340dae4bd54c9b52ddbf1790879e3f82",
+      "796f0566dc2eec9bbd6c4c07c27d91ae2e8d02d39b46936eb04e5b8dc65a8218",
+      "7a7c2d22a6fe656670ef35761947431df417476367d5a7cde3cfc0bde09bccc0",
+      "8425eef687f0d9207199328865c3a5bd129362b4190ea4ddb6491ed272284e11",
+      "97a60fe4cbdac62643e2bf760f80d957520ccd34b3c501263d4913c7208b027d",
+      "aca44cfaf5ba792cec5f8db83731c9128b4864bb8a331c6f5155200c72172614",
+      "adabc21e5361dda3ce2232e336f9e9e8fcf3d59b739f5e8d0dae4272bb3f6a36",
+      "bf6e400284205aba76349a17f913ed7481c979127b0b168b11850dc45601163a",
+      "d49842cd9bfd6edeabf446eee4f348cd16c60f41a5a37fbdd25a48a32f1c0e68",
+      "d4b1b92bd8b41e029aeb854353d38c111adfa3b9b72d0790f1d061b523b4a886",
+      "d8da6f9425b2f254f1e132801c65bde13fefde82996d653ac9d9237affa1a07d",
+      "dd571db02ac4c5feedd0db72e3ba499f7da43b46d1d91ba26f4b4119d138caa8",
+      "e2d5a323a1d4e90d3e4c061ae5cfad78a6cf011a6a4b28267232614a22794ae2",
+      "fb1f9e3b011d8aa68ef14bf52101797d9a03de782b9365bf8040089a2177736f"
+    ]
+  },
+  {
+    "id": "recurring-tasks-without-workflow",
+    "plan": "§§11.3–11.4, 14.3 and Stage 6 — separate RecurringTasks owner and its materialization receipt",
+    "tests": [
+      "tests/Distribution/fixtures/scenarios/task-lifetime/probe.php",
+      "packages/recurring-tasks/tests/Pg/MaterializationPgTest.php"
+    ],
+    "changes": [
+      "0089c58271e34c46f9335933729bf1fc9fafc8246360722c75580fc3f8c220e1",
+      "01b28d28bb29b7166ce8cd81d420094b5ee3fcfa9350869491fbb9466cf06928",
+      "1ca8dfbe86c4402e9fb331ad93afb754eca8050c5331e152a6260ccf87fb2370",
+      "352c55bb4bed9f96b91babc9b2ab10c1974c045ebc04b803fb72b86b115b2237",
+      "3f574333ba2c668e27d71d9b72641990f3392a4a6f9231c0037f2e0cf3e568b4",
+      "4056a4b6f4fa778396bf2049abc8ca2cb79f5ac442417e9cb78cce02f0847947",
+      "473a7aa6103c90f5d524e0d3bf114b5855e124b8e7a97b63a2a484cac30495b6",
+      "a3828f62d22be9a325cf69cbed677f4d650b705adc2867a9faf00acd66bcc3ff",
+      "ababe7a5f11ce9cfebb17d4dfbb1b7e3bd82cfabdfc299397198c6437a258b57",
+      "b22b932b8c2a4fb2ea36bacb85104586f548452714c239aacfe6e4a944d269f1",
+      "bf1f46d9ee941988969c74fb1d0dace401529070f651db408308691ee00686a4",
+      "c4e404d61592e67bcbf399e75a51dc9ba241318fd057ec68781e717367c25d38"
+    ]
+  },
+  {
+    "id": "workflow-transition-port",
+    "plan": "§§11.4, 14.3, 14.5 and Stage 6 — synchronous transition, durable capture and scoped definition validation before activation",
+    "tests": [
+      "tests/Distribution/fixtures/scenarios/task-lifetime/probe.php",
+      "packages/workflow/tests/Feature/WorkflowBindingTest.php"
+    ],
+    "changes": [
+      "4d60d5d4dbfd3ce94d691e73bb79b5fe67a113bd80c52958b33ce96fb77a8431",
+      "774f16446bbacc1f8d6077a4746fa14d22ac93a359ad4cad2a96a68a28a2da2e",
+      "db30a45bcbe4abd0e70510768d1ca347f36458a3c334901da4ef5a48f2d3cd07",
+      "e03dfd5ff5159baebe5d00cfe29c2052e4fada7db6528b0d47d564d92f1ae5f6",
+      "f857a9e311cab9141ac93fb6622e20a201097abbe14f49bb8af5d7e5b8267557"
+    ]
+  },
+  {
+    "id": "optional-tasks-workflow-package",
+    "plan": "§§11.1–11.3, 15.3 and Stage 6 — optional independent Tasks Workflow package",
+    "tests": [
+      "tests/Distribution/fixtures/scenarios/task-lifetime/probe.php",
+      "scripts/distribution/tests/test_release_candidate.py",
+      "scripts/distribution/tests/test_profile_proof.py"
+    ],
+    "changes": [
+      "7f823664610e9e71626a7366b604a87d509efc6c0541891e185516973f0424fe",
+      "89430ae86370ae4fe7aa6205621be7963710fd0bfd595394bad24d905cd2aac6"
     ]
   }
 ]

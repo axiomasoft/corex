@@ -9,9 +9,4 @@ return [
         'handler_version' => 'task-materialization/1',
         'handler' => 'CoreX\\RecurringTasks\\Internal\\MaterializationWakeupHandler',
     ],
-    'completion_capture' => [
-        'enabled' => false,
-        'definition_ref' => 'task-completion/1',
-        'version_ref' => 'task-completion/1',
-    ],
 ];

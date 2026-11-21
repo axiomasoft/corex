@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Workflow\Execution\Internal;
 
 use CoreX\Workflow\Contracts\EngineAdapter;
+use CoreX\Workflow\Data\DefinitionRequest;
 use CoreX\Workflow\Data\EngineEffectRef;
 use CoreX\Workflow\Data\EngineProvider;
 use CoreX\Workflow\Data\SignalRequest;
@@ -18,7 +19,7 @@ use Packman\Attributes\Internal;
 #[Internal]
 final class UnavailableEngineAdapter implements EngineAdapter
 {
-    public function provider(TriggerRequest $request): ?EngineProvider
+    public function provider(DefinitionRequest $request): ?EngineProvider
     {
         return null;
     }
@@ -38,7 +39,7 @@ final class UnavailableEngineAdapter implements EngineAdapter
         throw new UnsupportedWorkflowCapability('No independently-owned workflow engine adapter is installed.');
     }
 
-    public function fire(TransitionRequest $request): TransitionResult
+    public function transition(TransitionRequest $request): TransitionResult
     {
         throw new UnsupportedWorkflowCapability('No independently-owned workflow engine adapter is installed.');
     }

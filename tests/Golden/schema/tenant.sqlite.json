@@ -1220,10 +1220,35 @@
         },
         "corex_task_operations": {
             "columns": {
+                "account_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "account_incarnation": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_generation": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "binding_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
                 "created_at": {
                     "type": "datetime",
                     "nullable": false,
                     "default": "CURRENT_TIMESTAMP"
+                },
+                "deployment_id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
                 },
                 "id": {
                     "type": "varchar",
@@ -1254,13 +1279,26 @@
                     "type": "text",
                     "nullable": false,
                     "default": null
+                },
+                "subject_ref": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "workspace_scope": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
                 }
             },
             "indexes": [
                 {
-                    "name": "corex_task_operations_request_key_uq",
+                    "name": "corex_task_operations_scope_request_uq",
                     "kind": "uq",
                     "columns": [
+                        "account_id",
+                        "account_incarnation",
+                        "workspace_scope",
                         "request_key"
                     ],
                     "predicate": null,
@@ -1281,7 +1319,8 @@
             "triggers": {
                 "corex_task_operations_kind_ck": "CREATE TRIGGER corex_task_operations_kind_ck BEFORE INSERT ON corex_task_operations BEGIN SELECT CASE WHEN NEW.kind IN ('createProject','createSprint','recordTime','materialize','completionCapture') THEN 0 ELSE RAISE(ABORT, 'invalid kind') END; END",
                 "corex_task_operations_payload_hash_ck": "CREATE TRIGGER corex_task_operations_payload_hash_ck BEFORE INSERT ON corex_task_operations BEGIN SELECT CASE WHEN length(NEW.payload_hash) = 64 AND NEW.payload_hash NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid payload_hash') END; END",
-                "corex_task_operations_restore_epoch_ck": "CREATE TRIGGER corex_task_operations_restore_epoch_ck BEFORE INSERT ON corex_task_operations BEGIN SELECT CASE WHEN length(NEW.restore_epoch) = 64 AND NEW.restore_epoch NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid restore_epoch') END; END"
+                "corex_task_operations_restore_epoch_ck": "CREATE TRIGGER corex_task_operations_restore_epoch_ck BEFORE INSERT ON corex_task_operations BEGIN SELECT CASE WHEN length(NEW.restore_epoch) = 64 AND NEW.restore_epoch NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid restore_epoch') END; END",
+                "corex_task_operations_scope_ck": "CREATE TRIGGER corex_task_operations_scope_ck BEFORE INSERT ON corex_task_operations BEGIN SELECT CASE WHEN NEW.binding_generation > 0 AND ((NEW.kind = 'completionCapture') = (NEW.workspace_scope = '')) THEN 0 ELSE RAISE(ABORT, 'invalid operation scope') END; END"
             }
         },
         "corex_task_series": {

@@ -15,7 +15,7 @@ use Packman\Attributes\Spi;
 use Packman\Attributes\SpiKind;
 
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
-interface TaskPlanningCommand
+interface TaskPlanning
 {
     public function createProject(ProjectDraft $draft, PlanningToken $token): ProjectReference;
 

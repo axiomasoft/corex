@@ -1,12 +1,10 @@
 # axiomasoft/corex-recurring-tasks
 
 Recurring task creation for CoreX. Connects `axiomasoft/corex-recurrence` expansion with
-`axiomasoft/corex-tasks` `CreateTaskCommand`, durable operation receipts, optional scheduling through the kernel `WakeupScheduler` contract (no package dependency on `axiomasoft/corex-scheduler`),
-and optional `axiomasoft/corex-workflow` completion capture.
+`axiomasoft/corex-tasks` `CreateTaskCommand`, durable operation receipts, and optional scheduling through the kernel `WakeupScheduler` contract.
 
 This package owns the durable mapping from a recurrence occurrence to a task and resumes bounded
-materialization windows. Task lifecycle remains in `axiomasoft/corex-tasks`; workflow engine
-integration remains in `axiomasoft/corex-workflow`.
+materialization windows. `axiomasoft/corex-tasks` owns the task lifecycle.
 
 ## Public API
 
@@ -14,7 +12,7 @@ integration remains in `axiomasoft/corex-workflow`.
 
 ## Configuration
 
-See `config/corex-recurring-tasks.php` for wakeup and completion-capture toggles.
+See `config/corex-recurring-tasks.php` for the wakeup toggle and handler settings.
 
 ## Installation
 
@@ -22,7 +20,7 @@ Install with `composer require axiomasoft/corex-recurring-tasks` through the con
 
 ## Failure semantics
 
-Materialization is bounded and uses durable task operation receipts to deduplicate effects. Invalid context, stale write tokens and unsupported recurrence data are rejected rather than bypassed. Wakeup and completion capture are disabled by default. Enabling wakeup requires a
+Materialization is bounded and uses durable task operation receipts to deduplicate effects. Invalid context, stale write tokens and unsupported recurrence data are rejected. Wakeup is disabled by default. Enabling wakeup requires a
 bound `WakeupScheduler`; the package registers its scoped handler and immutable
 `WakeupHandlerDefinition` through the kernel tag using its own handler options.
 

@@ -201,8 +201,7 @@
                 "Data",
                 "Errors",
                 "Exceptions",
-                "Internal",
-                "Laravel"
+                "Internal"
             ]
         },
         {
@@ -297,6 +296,17 @@
                 "Sprint",
                 "Task",
                 "Time"
+            ]
+        },
+        {
+            "name": "axiomasoft/corex-tasks-workflow",
+            "path": "packages/tasks-workflow",
+            "namespace": "CoreX\\TasksWorkflow\\",
+            "profile": "laravel-package",
+            "layer": "L3",
+            "type": "integration",
+            "owns": [
+                "Completion"
             ]
         },
         {

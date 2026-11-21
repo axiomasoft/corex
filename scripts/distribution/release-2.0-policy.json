@@ -202,6 +202,19 @@
         "require-dev": []
       }
     },
+    "packages/tasks-workflow": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-tasks-workflow",
+      "name": "axiomasoft/corex-tasks-workflow",
+      "edges": {
+        "require": [
+          "axiomasoft/corex",
+          "axiomasoft/corex-tasks",
+          "axiomasoft/corex-workflow"
+        ],
+        "require-dev": []
+      }
+    },
     "packages/recurring-tasks": {
       "distribution": "public",
       "mirror": "axiomasoft/corex-recurring-tasks",
@@ -210,8 +223,7 @@
         "require": [
           "axiomasoft/corex",
           "axiomasoft/corex-recurrence",
-          "axiomasoft/corex-tasks",
-          "axiomasoft/corex-workflow"
+          "axiomasoft/corex-tasks"
         ],
         "require-dev": [
           "axiomasoft/corex-scheduler"

@@ -1076,7 +1076,12 @@
             },
             {
                 "old": "CoreX\\Tasks\\Contracts\\TaskPlanningCommand",
-                "new": "CoreX\\Tasks\\Planning\\Contracts\\TaskPlanningCommand",
+                "new": "CoreX\\Tasks\\Planning\\Contracts\\TaskPlanning",
+                "match": "fqcn"
+            },
+            {
+                "old": "CoreX\\Tasks\\Planning\\Contracts\\TaskPlanningCommand",
+                "new": "CoreX\\Tasks\\Planning\\Contracts\\TaskPlanning",
                 "match": "fqcn"
             },
             {
@@ -2671,7 +2676,22 @@
             },
             {
                 "old": "CoreX\\TasksWorkflow\\TaskWorkflowIntegration",
-                "new": "CoreX\\RecurringTasks\\Internal\\TaskWorkflowIntegration",
+                "new": "CoreX\\RecurringTasks\\RecurringTasksModule",
+                "match": "fqcn"
+            },
+            {
+                "old": "CoreX\\RecurringTasks\\Internal\\TaskWorkflowIntegration",
+                "new": "CoreX\\RecurringTasks\\RecurringTasksModule",
+                "match": "fqcn"
+            },
+            {
+                "old": "CoreX\\RecurringTasks\\Internal\\CaptureTaskCompletion",
+                "new": "CoreX\\TasksWorkflow\\Completion\\Internal\\WorkflowCompletionCapture",
+                "match": "fqcn"
+            },
+            {
+                "old": "CoreX\\RecurringTasks\\Laravel\\CompletionBindings",
+                "new": "CoreX\\TasksWorkflow\\TasksWorkflowServiceProvider",
                 "match": "fqcn"
             },
             {
@@ -3960,11 +3980,6 @@
                 "old": "CoreX\\Wakeup\\",
                 "new": "CoreX\\Scheduler\\",
                 "match": "prefix"
-            },
-            {
-                "old": "CoreX\\TasksWorkflow\\",
-                "new": "CoreX\\RecurringTasks\\",
-                "match": "prefix"
             }
         ],
         "packages": [
@@ -4072,11 +4087,6 @@
                 "old": "axiomasoft/corex-wakeup",
                 "new": "axiomasoft/corex-scheduler",
                 "match": "word"
-            },
-            {
-                "old": "axiomasoft/corex-tasks-workflow",
-                "new": "axiomasoft/corex-recurring-tasks",
-                "match": "word"
             }
         ],
         "paths": [
@@ -4099,14 +4109,14 @@
                 "old": "packages/wakeup",
                 "new": "packages/scheduler",
                 "match": "word"
-            },
-            {
-                "old": "packages/tasks-workflow",
-                "new": "packages/recurring-tasks",
-                "match": "word"
             }
         ],
         "identifiers": [
+            {
+                "old": "corex-recurring-tasks.completion_capture",
+                "new": "corex-tasks-workflow",
+                "match": "word"
+            },
             {
                 "old": "corex-auth",
                 "new": "corex-access",

@@ -39,6 +39,7 @@ const PRODUCER_PHASE = [
     'axiomasoft/corex-search-intl' => 'P12',
     'axiomasoft/corex-search-meilisearch' => 'P12',
     'axiomasoft/corex-tasks' => 'P16',
+    'axiomasoft/corex-tasks-workflow' => 'P16',
     'axiomasoft/corex-recurring-tasks' => 'P4',
     'axiomasoft/corex-tenancy' => 'P9',
     'axiomasoft/corex-import-export' => 'P12',

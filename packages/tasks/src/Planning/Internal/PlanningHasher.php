@@ -61,11 +61,6 @@ final class PlanningHasher
         );
     }
 
-    public static function restoreEpoch(TenantContext $context): string
-    {
-        return self::context($context);
-    }
-
     /** @param list<string> $parts */
     private static function digest(PlanningOperation $operation, array $parts): string
     {

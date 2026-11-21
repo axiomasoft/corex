@@ -623,7 +623,6 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\RecurringTasks\Exceptions\MaterializationConflict` | api | 1.0 |
 | `CoreX\RecurringTasks\Exceptions\StaleMaterialization` | api | 1.0 |
 | `CoreX\RecurringTasks\Exceptions\UnsupportedMaterialization` | api | 1.0 |
-| `CoreX\RecurringTasks\Laravel\CompletionBindings` | spi-call | 1.0 |
 | `CoreX\RecurringTasks\RecurringTasksServiceProvider` | spi-call | 1.0 |
 
 ## axiomasoft/corex-scheduler
@@ -757,10 +756,12 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Tasks\Errors\Enums\TasksErrorCode` | api | 1.0 |
 | `CoreX\Tasks\Laravel\TasksRegistrar` | spi-call | 1.0 |
 | `CoreX\Tasks\Planning\Contracts\TaskOperationReceipts` | spi-implement | 1.0 |
-| `CoreX\Tasks\Planning\Contracts\TaskPlanningCommand` | spi-implement | 1.0 |
+| `CoreX\Tasks\Planning\Contracts\TaskPlanning` | spi-implement | 1.0 |
 | `CoreX\Tasks\Planning\Data\PlanningOperation` | api | 1.0 |
 | `CoreX\Tasks\Planning\Data\PlanningSubject` | api | 1.0 |
 | `CoreX\Tasks\Planning\Data\PlanningToken` | api | 1.0 |
+| `CoreX\Tasks\Planning\Data\TaskOperationFence` | api | 2.0.0 |
+| `CoreX\Tasks\Planning\Data\TaskOperationIdentity` | api | 2.0.0 |
 | `CoreX\Tasks\Planning\Data\TaskOperationKind` | api | 1.0 |
 | `CoreX\Tasks\Planning\Data\TaskOperationReceipt` | api | 1.0 |
 | `CoreX\Tasks\Planning\Exceptions\InvalidPlanningDraft` | api | 1.0 |
@@ -788,11 +789,13 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Tasks\Task\Data\EntityReference` | api | 1.0 |
 | `CoreX\Tasks\Task\Data\MoveTaskToStageData` | api | 1.0 |
 | `CoreX\Tasks\Task\Data\StageView` | api | 1.0 |
+| `CoreX\Tasks\Task\Data\TaskCompletionAdmission` | api | 2.0.0 |
 | `CoreX\Tasks\Task\Data\TaskCompletionCandidate` | api | 1.0 |
 | `CoreX\Tasks\Task\Data\TaskDraft` | api | 1.0 |
 | `CoreX\Tasks\Task\Data\TaskReference` | api | 1.0 |
 | `CoreX\Tasks\Task\Data\TaskView` | api | 1.0 |
 | `CoreX\Tasks\Task\Data\UpdateTaskData` | api | 1.0 |
+| `CoreX\Tasks\Task\Enums\TaskCompletionAdmissionStatus` | api | 2.0.0 |
 | `CoreX\Tasks\Task\Enums\TaskPriority` | api | 1.0 |
 | `CoreX\Tasks\Task\Enums\TaskStatus` | api | 1.0 |
 | `CoreX\Tasks\Task\Events\TaskCompleted` | spi-call | 1.0 |
@@ -808,6 +811,14 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Tasks\Time\Data\TimeLogReference` | api | 1.0 |
 | `CoreX\Tasks\Time\Enums\TimeLogSource` | api | 1.0 |
 | `CoreX\Tasks\Time\Laravel\TimeLogRelations` | spi-call | 1.0 |
+
+## axiomasoft/corex-tasks-workflow
+
+[Member manifest](../../packages/tasks-workflow/resources/contracts/php-api.json)
+
+| Symbol | Layer | Since |
+|:--|:--|:--|
+| `CoreX\TasksWorkflow\TasksWorkflowServiceProvider` | spi-call | 2.0.0 |
 
 ## axiomasoft/corex-tenancy
 
@@ -1002,6 +1013,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Workflow\Contracts\EngineAdapter` | spi-implement | 1.0 |
 | `CoreX\Workflow\Contracts\WorkflowBinding` | spi-implement | 1.0 |
 | `CoreX\Workflow\Data\CaptureResult` | api | 1.0 |
+| `CoreX\Workflow\Data\DefinitionRequest` | api | 2.0.0 |
 | `CoreX\Workflow\Data\EngineEffectRef` | api | 2.0.0 |
 | `CoreX\Workflow\Data\EngineProvider` | api | 2.0.0 |
 | `CoreX\Workflow\Data\SignalRequest` | api | 1.0 |

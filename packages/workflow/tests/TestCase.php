@@ -13,6 +13,7 @@ use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\CoreServiceProvider;
 use CoreX\Tests\Support\WorkScopeFixture;
 use CoreX\Workflow\Contracts\EngineAdapter;
+use CoreX\Workflow\Data\DefinitionRequest;
 use CoreX\Workflow\Data\EngineEffectRef;
 use CoreX\Workflow\Data\EngineProvider;
 use CoreX\Workflow\Data\SignalRequest;
@@ -53,7 +54,7 @@ final class FakeEngineAdapter implements EngineAdapter
 
     public bool $statusLookup = true;
 
-    public function provider(TriggerRequest $request): ?EngineProvider
+    public function provider(DefinitionRequest $request): ?EngineProvider
     {
         return new EngineProvider('fixture.workflow', statusLookup: $this->statusLookup);
     }
@@ -81,7 +82,7 @@ final class FakeEngineAdapter implements EngineAdapter
         return new SignalResult(status: 'buffered');
     }
 
-    public function fire(TransitionRequest $request): TransitionResult
+    public function transition(TransitionRequest $request): TransitionResult
     {
         return new TransitionResult(status: 'completed');
     }

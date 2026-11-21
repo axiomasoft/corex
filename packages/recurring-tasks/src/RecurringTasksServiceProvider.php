@@ -7,8 +7,6 @@ namespace CoreX\RecurringTasks;
 use CoreX\RecurringTasks\Errors\Internal\PackageProblemDefinitions;
 use CoreX\RecurringTasks\Internal\MaterializationBindings;
 use CoreX\RecurringTasks\Internal\RecurringTasksOptions;
-use CoreX\RecurringTasks\Internal\TaskWorkflowIntegration;
-use CoreX\RecurringTasks\Laravel\CompletionBindings;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
@@ -24,7 +22,7 @@ final class RecurringTasksServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
-        $this->app->tag((new TaskWorkflowIntegration)->schemaSetProviders(), SchemaSetProvider::class);
+        $this->app->tag((new RecurringTasksModule)->schemaSetProviders(), SchemaSetProvider::class);
 
         ProblemDefinitions::register(app: $this->app, composerManifest: __DIR__.'/../composer.json', provider: PackageProblemDefinitions::class);
 
@@ -42,7 +40,5 @@ final class RecurringTasksServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->app->make(RecurringTasksOptions::class);
-
-        CompletionBindings::register($this->app);
     }
 }

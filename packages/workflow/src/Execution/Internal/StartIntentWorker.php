@@ -106,7 +106,7 @@ final readonly class StartIntentWorker
 
                 $request = $this->request($context, $scope, $row, $digest, $effectKey);
                 $engine = $this->app->make(EngineAdapter::class);
-                $provider = $engine->provider($request);
+                $provider = $engine->provider($request->definition());
 
                 if ($prior === 'accepted' || $prior === 'unknown') {
                     $this->reconcile($db, $scope, $row, $state, $effect, $engine, $provider);
