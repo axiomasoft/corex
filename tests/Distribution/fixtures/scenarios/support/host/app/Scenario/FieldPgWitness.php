@@ -142,18 +142,18 @@ final readonly class FieldPgWitness
      * @param  Closure(): (T|null)  $check
      * @return T
      */
-    public static function await(string $event, Closure $check): mixed
+    public static function await(string $event, Closure $check, int $timeoutSeconds = 30, int $pollMicroseconds = 25_000): mixed
     {
-        $deadline = hrtime(true) + 30_000_000_000;
+        $deadline = hrtime(true) + $timeoutSeconds * 1_000_000_000;
         do {
             $value = $check();
 
             if ($value !== null) {
                 return $value;
             }
-            usleep(25_000);
+            usleep($pollMicroseconds);
         } while (hrtime(true) < $deadline);
 
-        throw new RuntimeException('The fixture timed out before observing '.$event.'.');
+        throw new RuntimeException('The fixture timed out after '.$timeoutSeconds.' seconds before observing '.$event.'.');
     }
 }

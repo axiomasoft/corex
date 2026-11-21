@@ -161,7 +161,7 @@ final class ScenarioServiceProvider extends ServiceProvider
             });
         }
 
-        if (in_array($case, ['workspace-sweep', 'notification-visibility', 'provider-unknown', 'field-write', 'ddl-claim', 'search-rights', 'generation'], true)) {
+        if (in_array($case, ['workspace-sweep', 'notification-visibility', 'provider-unknown', 'field-write', 'ddl-claim', 'search-rights', 'generation', 'field-search'], true)) {
             $this->app->singleton(ScenarioClock::class);
             $this->app->alias(ScenarioClock::class, ClockInterface::class);
             $this->app->singleton(BoxedWorkspaces::class);
@@ -170,7 +170,7 @@ final class ScenarioServiceProvider extends ServiceProvider
             }
         }
 
-        if (in_array($case, ['search-rights', 'generation'], true)) {
+        if (in_array($case, ['search-rights', 'generation', 'field-search'], true)) {
             $this->app->register(SearchScenarioServiceProvider::class);
         }
 

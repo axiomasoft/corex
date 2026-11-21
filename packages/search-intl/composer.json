@@ -51,8 +51,8 @@
             "error-prefix": "search-intl",
             "owns": [
                 "Contracts",
-                "Data",
-                "Internal"
+                "Internal",
+                "Projection"
             ]
         }
     },

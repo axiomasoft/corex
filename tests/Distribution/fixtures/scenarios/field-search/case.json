@@ -1,0 +1,332 @@
+{
+  "id": "field-search",
+  "laravel": 13,
+  "host_support": true,
+  "retain_install_evidence": true,
+  "timeout_seconds": 220,
+  "distinct_connections": true,
+  "variants": {
+    "absent": {
+      "profile": {
+        "id": "equipment-field-search-absent",
+        "database": "postgres-isolated",
+        "database_roles": [
+          "control",
+          "a"
+        ],
+        "default_database": "a",
+        "http": true,
+        "meilisearch": "1.16.0",
+        "search_custom_fields": "absent",
+        "extension_fixture": {
+          "id": "equipment-registry",
+          "version": "1.0.0",
+          "kind": "equipment"
+        },
+        "packages": [
+          "axiomasoft/corex",
+          "axiomasoft/corex-custom-fields",
+          "axiomasoft/corex-search",
+          "axiomasoft/corex-search-meilisearch",
+          "axiomasoft/corex-intl",
+          "axiomasoft/corex-search-intl"
+        ],
+        "forbid": [
+          {
+            "package": "axiomasoft/corex-search-custom-fields",
+            "name": "Search Custom Fields"
+          }
+        ]
+      },
+      "processes": {
+        "independent": [
+          "php",
+          "{fixture}/probe.php",
+          "independent"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "independent"
+        },
+        {
+          "action": "complete",
+          "name": "independent"
+        }
+      ]
+    },
+    "disabled": {
+      "profile": {
+        "id": "equipment-field-search-disabled",
+        "database": "postgres-isolated",
+        "database_roles": [
+          "control",
+          "a"
+        ],
+        "default_database": "a",
+        "http": true,
+        "meilisearch": "1.16.0",
+        "search_custom_fields": "disabled",
+        "extension_fixture": {
+          "id": "equipment-registry",
+          "version": "1.0.0",
+          "kind": "equipment"
+        },
+        "packages": [
+          "axiomasoft/corex",
+          "axiomasoft/corex-custom-fields",
+          "axiomasoft/corex-search",
+          "axiomasoft/corex-search-meilisearch",
+          "axiomasoft/corex-intl",
+          "axiomasoft/corex-search-intl",
+          "axiomasoft/corex-search-custom-fields"
+        ],
+        "forbid": []
+      },
+      "processes": {
+        "independent": [
+          "php",
+          "{fixture}/probe.php",
+          "independent"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "independent"
+        },
+        {
+          "action": "complete",
+          "name": "independent"
+        }
+      ]
+    },
+    "enabled": {
+      "profile": {
+        "id": "equipment-field-search-enabled",
+        "database": "postgres-isolated",
+        "database_roles": [
+          "control",
+          "a"
+        ],
+        "default_database": "a",
+        "http": true,
+        "meilisearch": "1.16.0",
+        "search_custom_fields": "enabled",
+        "extension_fixture": {
+          "id": "equipment-registry",
+          "version": "1.0.0",
+          "kind": "equipment"
+        },
+        "packages": [
+          "axiomasoft/corex",
+          "axiomasoft/corex-custom-fields",
+          "axiomasoft/corex-search",
+          "axiomasoft/corex-search-meilisearch",
+          "axiomasoft/corex-intl",
+          "axiomasoft/corex-search-intl",
+          "axiomasoft/corex-search-custom-fields"
+        ],
+        "forbid": []
+      },
+      "processes": {
+        "produce": [
+          "php",
+          "{fixture}/probe.php",
+          "produce"
+        ],
+        "rollback": [
+          "php",
+          "{fixture}/probe.php",
+          "rollback"
+        ],
+        "commit": [
+          "php",
+          "{fixture}/probe.php",
+          "commit"
+        ],
+        "relay": [
+          "php",
+          "{fixture}/probe.php",
+          "relay"
+        ],
+        "delivery": [
+          "php",
+          "{fixture}/probe.php",
+          "delivery"
+        ],
+        "duplicate": [
+          "php",
+          "{fixture}/probe.php",
+          "duplicate"
+        ],
+        "indexed": [
+          "php",
+          "{fixture}/probe.php",
+          "indexed"
+        ],
+        "locale": [
+          "php",
+          "{fixture}/probe.php",
+          "locale"
+        ],
+        "switch": [
+          "php",
+          "{fixture}/probe.php",
+          "switch"
+        ],
+        "schema-relay": [
+          "php",
+          "{fixture}/probe.php",
+          "schema-relay"
+        ],
+        "schema-delivery": [
+          "php",
+          "{fixture}/probe.php",
+          "schema-delivery"
+        ],
+        "schema-duplicate": [
+          "php",
+          "{fixture}/probe.php",
+          "schema-duplicate"
+        ],
+        "new-index": [
+          "php",
+          "{fixture}/probe.php",
+          "new-index"
+        ]
+      },
+      "actions": [
+        {
+          "action": "start",
+          "name": "produce"
+        },
+        {
+          "action": "await",
+          "name": "equipment-ready",
+          "process": "produce"
+        },
+        {
+          "action": "release",
+          "name": "equipment-ready"
+        },
+        {
+          "action": "complete",
+          "name": "produce"
+        },
+        {
+          "action": "start",
+          "name": "rollback"
+        },
+        {
+          "action": "complete",
+          "name": "rollback"
+        },
+        {
+          "action": "start",
+          "name": "commit"
+        },
+        {
+          "action": "await",
+          "name": "equipment-committed",
+          "process": "commit"
+        },
+        {
+          "action": "terminate",
+          "name": "commit",
+          "barrier": "equipment-committed"
+        },
+        {
+          "action": "start",
+          "name": "relay"
+        },
+        {
+          "action": "complete",
+          "name": "relay"
+        },
+        {
+          "action": "start",
+          "name": "delivery"
+        },
+        {
+          "action": "complete",
+          "name": "delivery"
+        },
+        {
+          "action": "start",
+          "name": "duplicate"
+        },
+        {
+          "action": "complete",
+          "name": "duplicate"
+        },
+        {
+          "action": "start",
+          "name": "indexed"
+        },
+        {
+          "action": "complete",
+          "name": "indexed"
+        },
+        {
+          "action": "start",
+          "name": "locale"
+        },
+        {
+          "action": "complete",
+          "name": "locale"
+        },
+        {
+          "action": "start",
+          "name": "switch"
+        },
+        {
+          "action": "await",
+          "name": "equipment-switched",
+          "process": "switch"
+        },
+        {
+          "action": "release",
+          "name": "equipment-switched"
+        },
+        {
+          "action": "complete",
+          "name": "switch"
+        },
+        {
+          "action": "start",
+          "name": "schema-relay"
+        },
+        {
+          "action": "complete",
+          "name": "schema-relay"
+        },
+        {
+          "action": "start",
+          "name": "schema-delivery"
+        },
+        {
+          "action": "complete",
+          "name": "schema-delivery"
+        },
+        {
+          "action": "start",
+          "name": "schema-duplicate"
+        },
+        {
+          "action": "complete",
+          "name": "schema-duplicate"
+        },
+        {
+          "action": "start",
+          "name": "new-index"
+        },
+        {
+          "action": "complete",
+          "name": "new-index"
+        }
+      ]
+    }
+  }
+}

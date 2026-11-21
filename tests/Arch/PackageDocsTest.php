@@ -15,8 +15,8 @@ test('package docs gate reports every cohort package and assigns producer phases
     expect($exitCode)->toBe(0, "package-docs-gate exit {$exitCode}:\n".implode("\n", $output))
         ->and($report)->toBeArray()
         ->and($report['schema_version'])->toBe('corex-package-docs-gate/1')
-        ->and($report['cohort_count'])->toBe(20)
-        ->and($report['packages'])->toHaveCount(20);
+        ->and($report['cohort_count'])->toBe(21)
+        ->and($report['packages'])->toHaveCount(21);
 
     foreach ($report['violations'] as $violation) {
         expect($violation['package'])->not->toBe('')

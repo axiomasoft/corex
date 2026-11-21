@@ -6,11 +6,14 @@ namespace CoreX\Search\Query\Internal;
 
 use CoreX\Context\Contracts\CurrentWorkScope;
 use CoreX\Data\Contracts\FieldUsePolicy;
+use CoreX\Search\Errors\Exceptions\GenerationChanged;
 use CoreX\Search\Errors\Exceptions\IndexNotReady;
+use CoreX\Search\Errors\Exceptions\InvalidSearchCursor;
 use CoreX\Search\Errors\Exceptions\SearchFeatureUnavailable;
 use CoreX\Search\Errors\Exceptions\SearchWitnessChanged;
 use CoreX\Search\Index\Contracts\ActiveGenerations;
 use CoreX\Search\Index\Data\IndexTarget;
+use CoreX\Search\Projection\Contracts\ProjectionSnapshotCapabilities;
 use CoreX\Search\Projection\Contracts\SearchProjectionContributor;
 use CoreX\Search\Projection\Data\ProjectionContext;
 use CoreX\Search\Query\Contracts\CandidateDriver;
@@ -19,8 +22,10 @@ use CoreX\Search\Query\Contracts\LiveCandidateDriver;
 use CoreX\Search\Query\Data\CandidateRequest;
 use CoreX\Search\Query\Data\SearchCount;
 use CoreX\Search\Query\Data\SearchFacets;
+use CoreX\Search\Query\Data\SearchFilter;
 use CoreX\Search\Query\Data\SearchPage;
 use CoreX\Search\Query\Data\SearchQuery;
+use CoreX\Search\Query\Data\SearchSort;
 use CoreX\Search\Query\Data\SearchStatistics;
 use Packman\Attributes\Internal;
 
@@ -35,6 +40,11 @@ final class QuerySession
     private LoadedHits $returned;
 
     private ?SearchPage $produced = null;
+
+    private string $identity;
+
+    /** @var ?array{mapping:string,generation:string,witness:string,position:string} */
+    private ?array $continuation = null;
 
     public function __construct(
         private readonly ProjectionContext $context,
@@ -55,17 +65,23 @@ final class QuerySession
 
     public function run(): SearchPage
     {
+        $this->identity = SearchCursor::identity($this->context->scope, $this->query);
+
+        if ($this->query->cursor !== null) {
+            $this->continuation = $this->cursor->decode($this->identity, $this->query->cursor);
+        }
+
         for ($attempt = 0; ; $attempt++) {
             try {
-                $exactRequest = $this->driver instanceof ExactCandidateDriver && ($this->query->count || $this->query->facets !== []);
+                $exactRequest = $this->driver instanceof ExactCandidateDriver && ($this->query->count || $this->query->facets !== [])
+                    && (! $this->projection instanceof ProjectionSnapshotCapabilities || $this->projection->supportsReadOnlySnapshot());
 
                 if ($exactRequest) {
                     $admission = $this->plan();
                     $admission->verifyLowering($this->driver->capabilities(), $this->query);
 
-                    if ($this->query->cursor !== null) {
-                        $this->cursor->decode(SearchCursor::identity($this->context->scope, $this->query),
-                            SearchNamespace::generation($this->target($admission)), $admission->witness, $this->query->cursor);
+                    if ($this->continuation !== null) {
+                        $this->position(SearchNamespace::generation($this->target($admission->mapping)), $admission->witness);
                     }
                 }
                 $this->produced = null;
@@ -106,20 +122,26 @@ final class QuerySession
 
     private function plan(): SearchPlan
     {
-        return SearchPlan::compile($this->context, $this->query, $this->projection->describe($this->context), $this->policy);
+        $schema = $this->projection->describe($this->context);
+
+        if ($this->continuation !== null && ! hash_equals($this->continuation['mapping'], $schema->revision)) {
+            throw GenerationChanged::changed();
+        }
+
+        return SearchPlan::compile($this->context, $this->query, $schema, $this->policy);
     }
 
-    private function target(SearchPlan $plan): IndexTarget
+    private function target(string $mapping): IndexTarget
     {
         $context = $this->context;
         $target = $this->driver instanceof LiveCandidateDriver
-            ? $this->driver->target($context->scope, $context->entity, $plan->mapping)
+            ? $this->driver->target($context->scope, $context->entity, $mapping)
             : $this->generations?->active($context->scope, $context->entity);
 
         if ($target === null || SearchNamespace::scope($target->scope) !== SearchNamespace::scope($context->scope)
             || $target->backend !== $this->backend || $target->cluster !== $this->cluster || $target->entity->value !== $context->entity->value
-            || $target->mappingDigest !== $plan->mapping) {
-            throw IndexNotReady::unpublished();
+            || $target->mappingDigest !== $mapping) {
+            throw $this->query->cursor === null ? IndexNotReady::unpublished() : GenerationChanged::changed();
         }
 
         return $target;
@@ -127,18 +149,17 @@ final class QuerySession
 
     private function binding(SearchPlan $plan): string
     {
-        return $plan->witness.SearchNamespace::generation($this->target($plan));
+        return $plan->witness.SearchNamespace::generation($this->target($plan->mapping));
     }
 
     private function scan(bool $exact): SearchPage
     {
         $plan = $this->plan();
         $plan->verifyLowering($this->driver->capabilities(), $this->query);
-        $target = $this->target($plan);
+        $target = $this->target($plan->mapping);
         $generation = SearchNamespace::generation($target);
-        $identity = SearchCursor::identity($this->context->scope, $this->query);
         $this->binding = $plan->witness.$generation;
-        $position = $this->query->cursor === null ? null : $this->cursor->decode($identity, $generation, $plan->witness, $this->query->cursor);
+        $position = $this->position($generation, $plan->witness);
         $hits = [];
         $revisions = [];
         $confirmed = [];
@@ -146,7 +167,7 @@ final class QuerySession
         $positions = [];
         do {
             $limit = min($this->remaining, $this->query->limit - count($hits));
-            $page = $this->driver->candidates($this->request($target, $plan->recordIds, $position, $limit));
+            $page = $this->driver->candidates($this->request($target, $plan, $plan->recordIds, $position, $limit));
             $size = count($page->candidates);
 
             if ($size > $limit || ($page->nextPosition !== null && ($size === 0 || $page->nextPosition === $position || isset($positions[$page->nextPosition])))) {
@@ -178,16 +199,36 @@ final class QuerySession
         $stats = $this->statistics($exact, $target, $plan);
         $this->returned = new LoadedHits($hits, $revisions, $confirmed);
 
-        return $this->produced = new SearchPage($hits, $position === null ? null : $this->cursor->encode($identity, $generation, $plan->witness, $position),
+        return $this->produced = new SearchPage($hits, $position === null ? null : $this->cursor->encode($this->identity, $plan->mapping, $generation, $plan->witness, $position),
             new SearchCount($this->query->count, $stats->count), new SearchFacets($this->query->facets !== [], $stats->facets));
     }
 
+    private function position(string $generation, string $witness): ?string
+    {
+        if ($this->continuation === null) {
+            return null;
+        }
+
+        if (! hash_equals($this->continuation['generation'], $generation)) {
+            throw GenerationChanged::changed();
+        }
+
+        if (! hash_equals($this->continuation['witness'], $witness)) {
+            throw InvalidSearchCursor::invalid();
+        }
+
+        return $this->continuation['position'];
+    }
+
     /** @param ?list<string> $corpus */
-    private function request(IndexTarget $target, ?array $corpus, ?string $position, int $limit): CandidateRequest
+    private function request(IndexTarget $target, SearchPlan $plan, ?array $corpus, ?string $position, int $limit): CandidateRequest
     {
         $q = $this->query;
 
-        return new CandidateRequest($this->context->scope, $target, $q->text, $q->searchFields, $q->filters, $q->sort, $corpus, $position, $limit);
+        return new CandidateRequest($this->context->scope, $target, $q->text, array_map($plan->physicalField(...), $q->searchFields),
+            array_map(static fn (SearchFilter $filter): SearchFilter => new SearchFilter($plan->physicalField($filter->field), $filter->values), $plan->filters),
+            array_map(static fn (SearchSort $sort): SearchSort => new SearchSort($plan->physicalField($sort->field), $sort->descending), $q->sort),
+            $corpus, $position, $limit);
     }
 
     private function statistics(bool $exact, IndexTarget $target, SearchPlan $plan): SearchStatistics
@@ -198,18 +239,19 @@ final class QuerySession
         $count = null;
 
         if ($this->query->count) {
-            $request = $this->request($target, $plan->aggregateCorpus(''), null, 1);
+            $request = $this->request($target, $plan, $plan->aggregateCorpus(''), null, 1);
             $count = $this->driver->statistics($request, true, [])->count;
         }
         $facets = [];
         foreach ($this->query->facets as $field) {
-            $request = $this->request($target, $plan->aggregateCorpus($field), null, 1);
-            $stats = $this->driver->statistics($request, false, [$field]);
+            $request = $this->request($target, $plan, $plan->aggregateCorpus($field), null, 1);
+            $physical = $plan->physicalField($field);
+            $stats = $this->driver->statistics($request, false, [$physical]);
 
-            if (! isset($stats->facets[$field])) {
+            if (! isset($stats->facets[$physical])) {
                 return new SearchStatistics($count, null);
             }
-            $facets[$field] = $stats->facets[$field];
+            $facets[$field] = $stats->facets[$physical];
         }
 
         return new SearchStatistics($count, $facets === [] ? null : $facets);

@@ -46,6 +46,8 @@ jobs:
           MEILI_MASTER_KEY: corex-stage4-disposable-meilisearch-key
           MEILI_NO_ANALYTICS: 'true'
           MEILI_ENV: development
+          MEILI_MAX_INDEXING_THREADS: '2'
+          MEILI_MAX_INDEXING_MEMORY: '256 MiB'
         ports:
           - 7700:7700
     env:
@@ -84,7 +86,7 @@ jobs:
           python3 scripts/distribution/prove_scenario.py --candidate "$CANDIDATE" --case installed-boot --php "$PHP_VERSION" --evidence-dir "$EVIDENCE/scenario"
       - name: Prove scoped workers, provider delivery, fields and search from installed archives
         run: |
-          for scenario in worker-scope binding-restore workspace-sweep notification-visibility provider-unknown field-write ddl-claim search-rights generation; do
+          for scenario in worker-scope binding-restore workspace-sweep notification-visibility provider-unknown field-write ddl-claim search-rights generation field-search; do
             python3 scripts/distribution/prove_scenario.py --candidate "$CANDIDATE" --case "$scenario" --php "$PHP_VERSION" --postgres "$PG_MAJOR" --evidence-dir "$EVIDENCE/scenarios/$scenario"
           done
       - name: Prove extension and equipment fixtures
@@ -92,6 +94,9 @@ jobs:
         run: |
           python3 scripts/distribution/verify_extension_fixtures.py --candidate "$CANDIDATE" --receipt "$EVIDENCE/extensions.json"
           python3 scripts/distribution/verify_equipment_consumer.py --candidate "$CANDIDATE" --receipt "$EVIDENCE/equipment.json"
+      - name: Compile Search extension with and without the Fields bridge
+        if: matrix.php != '8.4' || matrix.postgres != '18'
+        run: python3 scripts/distribution/verify_extension_fixtures.py --candidate "$CANDIDATE" --only custom-search-provider --php "$PHP_VERSION" --postgres "$PG_MAJOR" --receipt "$EVIDENCE/search-extension.json"
       - name: Prove public and Octane installations
         if: matrix.postgres == '18'
         run: |

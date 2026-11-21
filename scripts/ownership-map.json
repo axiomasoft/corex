@@ -81,6 +81,14 @@
             "env_prefix": "COREX_SEARCH_",
             "command_prefix": "corex:search:"
         },
+        "axiomasoft/corex-search-custom-fields": {
+            "dir": "search-custom-fields",
+            "root": "CoreX\\SearchCustomFields",
+            "config": "corex-search-custom-fields",
+            "tag_prefix": "corex-search-custom-fields-",
+            "env_prefix": "COREX_SEARCH_CUSTOM_FIELDS_",
+            "command_prefix": null
+        },
         "axiomasoft/corex-search-intl": {
             "dir": "search-intl",
             "root": "CoreX\\SearchIntl",

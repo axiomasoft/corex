@@ -15,7 +15,7 @@ return new class extends PackmanMigration
     public function up(): void
     {
         $this->create('eq_equipment', static function (Blueprint $table): void {
-            $table->uuid('id')->primary();
+            $table->string('asset_key', 128)->primary();
             $table->string('name', 128);
             $table->softDeletesTz();
         });

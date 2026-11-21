@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\SearchIntl\Internal;
+namespace CoreX\SearchIntl\Projection\Internal;
 
 use CoreX\Intl\Locale\Data\LocaleResolution;
 use CoreX\Intl\Translation\Contracts\TranslationReader;

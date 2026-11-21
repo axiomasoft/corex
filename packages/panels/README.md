@@ -27,6 +27,20 @@ current tenant and authenticated user identity. They reject agent/API-key princi
 than reinterpreting them as users. Hosts needing another actor kind compose the upstream
 context explicitly at their trusted authentication boundary.
 
+### Saved views with Custom Fields
+
+An application that installs Custom Fields can bind Packman's `ViewSchemaProvider` to
+project its authorized `FieldCatalogue` snapshot. Use the stable field ID for both
+`ViewField::key` and `ViewField::mappingKey`. Persist that ID in saved filters, sorts,
+and projections so a machine-key or label rename preserves their identity.
+
+Packman's `SavedViewRepository::compile` requires the current `ViewSchema::version`
+to match the saved grammar version. Derive this version from the permitted stable
+IDs and their grammar. Capture and recheck the actual effective Field catalogue
+revision and mapping when compiling for execution. A host can report retained view
+references to Field schema planning through `FieldSchemaDependencies`, using
+`SavedViewRepository` under the appropriate trusted scope.
+
 ## Failure semantics
 
 Packman's default saved-view policy denies access. Supply `ViewAccessPolicy` before writes;

@@ -45,11 +45,13 @@ flowchart TB
         search[search]
         access[access]
         media[media]
-        features[custom-fields, notifications]
+        fields[custom-fields]
+        notifications[notifications]
         tenancy[tenancy]
         workflow[workflow]
     end
     subgraph adapters[Адаптеры и расширения]
+        searchfields[search-custom-fields]
         searchintl[search-intl]
         meili[search-meilisearch]
         tools[tools]
@@ -63,6 +65,8 @@ flowchart TB
     recurring --> tasks
     recurring --> recurrence
     recurring --> workflow
+    searchfields --> search
+    searchfields --> fields
     searchintl --> search
     searchintl --> intl
     meili --> search
@@ -99,6 +103,7 @@ flowchart TB
 | `recurring-tasks` | `CoreX\RecurringTasks` | Идемпотентное создание задач из occurrence и сохранение прогресса |
 | `scheduler` | `CoreX\Scheduler` | Долговечное исполнение одноразовой работы в заданный UTC instant |
 | `search` | `CoreX\Search` | Поисковые запросы, policy-проверка результатов и порт поискового провайдера |
+| `search-custom-fields` | `CoreX\SearchCustomFields` | Типизированная проекция полей и передача совершённых изменений в Search |
 | `search-intl` | `CoreX\SearchIntl` | Локализованная поисковая проекция |
 | `search-meilisearch` | `CoreX\SearchMeilisearch` | Реализация поискового провайдера через Meilisearch |
 | `tasks` | `CoreX\Tasks` | Задачи, проекты, стадии, планирование и учёт времени |

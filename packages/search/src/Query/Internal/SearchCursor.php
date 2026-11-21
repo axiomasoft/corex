@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CoreX\Search\Query\Internal;
 
 use CoreX\Data\Data\DataScope;
-use CoreX\Search\Errors\Exceptions\GenerationChanged;
 use CoreX\Search\Errors\Exceptions\InvalidSearchCursor;
 use CoreX\Search\Exceptions\InvalidSearchConfiguration;
 use CoreX\Search\Query\Data\SearchQuery;
@@ -33,11 +32,11 @@ final readonly class SearchCursor
         return hash('sha256', json_encode([2, $scope, $shape], JSON_THROW_ON_ERROR));
     }
 
-    public function encode(string $identity, string $generation, string $witness, string $position): string
+    public function encode(string $identity, string $mapping, string $generation, string $witness, string $position): string
     {
         $nonce = random_bytes(12);
         $tag = '';
-        $encrypted = openssl_encrypt($generation.$witness.$position, 'aes-256-gcm', $this->key, OPENSSL_RAW_DATA, $nonce, $tag, $identity);
+        $encrypted = openssl_encrypt('m'.$mapping.$generation.$witness.$position, 'aes-256-gcm', $this->key, OPENSSL_RAW_DATA, $nonce, $tag, $identity);
 
         if ($encrypted === false) {
             throw new RuntimeException('Search cursor encryption failed.');
@@ -46,7 +45,8 @@ final readonly class SearchCursor
         return 'q2.'.self::encode64($nonce.$tag.$encrypted);
     }
 
-    public function decode(string $identity, string $generation, string $witness, string $cursor): string
+    /** @return array{mapping:string,generation:string,witness:string,position:string} */
+    public function decode(string $identity, string $cursor): array
     {
         if (! str_starts_with($cursor, 'q2.')) {
             throw InvalidSearchCursor::invalid();
@@ -59,19 +59,12 @@ final readonly class SearchCursor
         }
         $plain = openssl_decrypt(substr($raw, 28), 'aes-256-gcm', $this->key, OPENSSL_RAW_DATA, substr($raw, 0, 12), substr($raw, 12, 16), $identity);
 
-        if ($plain === false || strlen($plain) <= 128 || strlen($plain) > 8320) {
+        if ($plain === false || strlen($plain) <= 193 || strlen($plain) > 8385 || $plain[0] !== 'm') {
             throw InvalidSearchCursor::invalid();
         }
 
-        if (! hash_equals(substr($plain, 0, 64), $generation)) {
-            throw GenerationChanged::changed();
-        }
-
-        if (! hash_equals(substr($plain, 64, 64), $witness)) {
-            throw InvalidSearchCursor::invalid();
-        }
-
-        return substr($plain, 128);
+        return ['mapping' => substr($plain, 1, 64), 'generation' => substr($plain, 65, 64),
+            'witness' => substr($plain, 129, 64), 'position' => substr($plain, 193)];
     }
 
     private static function encode64(string $bytes): string

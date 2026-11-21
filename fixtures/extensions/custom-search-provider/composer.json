@@ -1,12 +1,13 @@
 {
     "name": "thirdparty/custom-search-provider",
     "description": "Standalone search provider and index driver for the CoreX public contract.",
-    "type": "library",
+    "type": "packman-module",
     "license": "MIT",
     "require": {
         "php": "^8.4",
         "axiomasoft/corex": "^2.0",
         "axiomasoft/corex-search": "^2.0",
+        "axiomasoft/packman-modules": "^0.1.1",
         "illuminate/contracts": "^13.0",
         "illuminate/support": "^13.0"
     },
@@ -16,6 +17,9 @@
         }
     },
     "extra": {
+        "packman": {
+            "module": "ThirdParty\\Search\\RegisteredModule"
+        },
         "laravel": {
             "providers": [
                 "ThirdParty\\Search\\FixtureServiceProvider"

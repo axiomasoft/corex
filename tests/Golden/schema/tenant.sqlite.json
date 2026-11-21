@@ -911,6 +911,16 @@
                     "nullable": true,
                     "default": null
                 },
+                "source_mapping_digest": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "source_revision": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
                 "start_seq": {
                     "type": "integer",
                     "nullable": true,
@@ -955,6 +965,15 @@
                         "operation_key"
                     ],
                     "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "corex_search_rebuilds_pending_request_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "lane_key"
+                    ],
+                    "predicate": "state = 'requested'",
                     "method": "btree"
                 },
                 {

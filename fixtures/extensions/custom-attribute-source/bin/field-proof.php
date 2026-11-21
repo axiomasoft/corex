@@ -231,7 +231,7 @@ function exerciseFields(Application $app, DataScope $scope, array $fixture): arr
     $entity = new EntityHandle($fixture['entity']);
     $record = new RecordRef($fixture['entity'], FieldProofAuthority::Record);
     $model = $fixture['model'];
-    $model::query()->forceCreate(['id' => $record->id, 'name' => 'Pump Alpha']);
+    $model::query()->forceCreate([(new $model)->getKeyName() => $record->id, 'name' => 'Pump Alpha']);
 
     $catalogue = $app->make(FieldCatalogue::class);
     $values = $app->make(FieldValues::class);

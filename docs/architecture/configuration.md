@@ -103,6 +103,7 @@
 | corex-scheduler.handlers | axiomasoft/corex-scheduler | array | [] | no | product-policy | unobserved | unobserved | SchedulerOptions::$handlers |  |  |
 | corex-scheduler.lease_seconds | axiomasoft/corex-scheduler | int | 60 | no | product-policy | unobserved | unobserved | SchedulerOptions::$leaseSeconds |  |  |
 | corex-scheduler.max_attempts | axiomasoft/corex-scheduler | int | 5 | no | product-policy | unobserved | unobserved | SchedulerOptions::$maxAttempts |  |  |
+| corex-search-custom-fields.enabled | axiomasoft/corex-search-custom-fields | unobserved | unobserved | no | deployment | no | boot | SearchCustomFieldsOptions::$enabled |  | Opt in to Custom Fields projection and committed fact consumption. |
 | corex-search-intl.enabled | axiomasoft/corex-search-intl | unobserved | unobserved | no | deployment | no | unobserved | SearchIntlOptions::$enabled |  |  |
 | corex-search-meilisearch.host | axiomasoft/corex-search-meilisearch | null | null | no | product-policy | unobserved | unobserved | MeilisearchOptions::$host |  |  |
 | corex-search.cluster | axiomasoft/corex-search | string | primary | no | deployment | no | boot | SearchOptions::$cluster |  | Cluster identity recorded with each Search generation. |

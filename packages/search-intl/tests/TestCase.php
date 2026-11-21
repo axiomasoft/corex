@@ -51,7 +51,8 @@ abstract class TestCase extends SearchIntlTestCase
         parent::defineEnvironment($app);
 
         $app['config']->set('corex-search-intl.enabled', true);
-        $app['config']->set('corex-intl.locale.supported_tags', ['en', 'ru', 'en-US', 'ru-RU']);
+        $app['config']->set('corex-intl.locale.supported_tags', ['en', 'ru', 'en-US', 'ru-RU', 'zh-Hant-TW']);
         $app['config']->set('corex-intl.locale.app_tag', 'en');
+        $app['config']->set('corex-intl.locale.explicit_fallback_tags', ['en']);
     }
 }

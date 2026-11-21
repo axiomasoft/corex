@@ -58,11 +58,15 @@ final class SearchScenarioRebuild
 
     public static function scan(DataScope $scope, RebuildStatus $start): RebuildStatus
     {
-        return FieldPgWitness::await('the stable-keyset index scan advances to catch up', static function () use ($scope, $start): ?RebuildStatus {
+        return SearchScenarioMeili::await('the stable-keyset index scan catches up for rebuild '.$start->ref->id, static function () use ($scope, $start): ?RebuildStatus {
             $state = app(SearchRebuilds::class)->inspect($scope, $start->ref);
 
             if ($state->state === 'catching-up') {
                 return $state;
+            }
+
+            if ($state->state !== 'scanning') {
+                throw new RuntimeException('The index scan for rebuild '.$start->ref->id.' reached '.$state->state.' before catch-up.');
             }
             self::step($scope, $start->destination);
 
@@ -79,11 +83,15 @@ final class SearchScenarioRebuild
     {
         $db = Scenario::connection('a');
 
-        return FieldPgWitness::await('the native Meilisearch task confirms the contiguous dirty prefix', static function () use ($scope, $generation, $sequence, $db): ?object {
+        return SearchScenarioMeili::await('generation '.$generation.' confirms the native Meilisearch dirty prefix through '.$sequence, static function () use ($scope, $generation, $sequence, $db): ?object {
             $row = self::generation($db, $generation, $scope->workspaceId ?? throw new RuntimeException('An index fixture requires a workspace.'), $scope->restoreEpoch);
 
             if ((int) $row->confirmed_seq >= $sequence) {
                 return $row;
+            }
+
+            if (in_array($row->state, ['quarantined', 'retired', 'dropped'], true)) {
+                throw new RuntimeException('Meilisearch UID '.$row->uid.' reached '.$row->state.' at sequence '.$row->confirmed_seq.'.');
             }
             self::step($scope, $generation);
 

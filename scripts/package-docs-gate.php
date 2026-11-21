@@ -35,6 +35,7 @@ const PRODUCER_PHASE = [
     'axiomasoft/corex-panels' => 'P11',
     'axiomasoft/corex-recurrence' => 'P4',
     'axiomasoft/corex-search' => 'P12',
+    'axiomasoft/corex-search-custom-fields' => 'P12',
     'axiomasoft/corex-search-intl' => 'P12',
     'axiomasoft/corex-search-meilisearch' => 'P12',
     'axiomasoft/corex-tasks' => 'P16',

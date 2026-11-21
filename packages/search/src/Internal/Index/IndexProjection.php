@@ -42,6 +42,15 @@ final readonly class IndexProjection
                 throw new LogicException('Indexing requires a service grant across the indexed corpus.');
             }
             $grants[$field->id] = $plan->witness;
+
+            if ($field->authorizationField !== null) {
+                $underlying = $this->policy->plan($scope, $entity, new FieldUseRequest(new FieldSelection([$field->authorizationField]), FieldUse::Read));
+
+                if ($underlying->kind !== FieldUsePlanKind::Unconditional) {
+                    throw new LogicException('Indexing requires a service grant for the underlying field.');
+                }
+                $grants[$field->id] = [$plan->witness, $underlying->witness];
+            }
         }
         ksort($grants, SORT_STRING);
 
@@ -91,7 +100,9 @@ final readonly class IndexProjection
         $fields = [];
         $schema = $this->projection->describe($context);
         foreach ($schema->fields as $field) {
-            if (! $this->auth->authorize($scope, $record, new FieldSelection([$field->id]), FieldUse::Read)->allowed) {
+            if (! $this->auth->authorize($scope, $record, new FieldSelection([$field->id]), FieldUse::Read)->allowed
+                || ($field->authorizationField !== null
+                    && ! $this->auth->authorize($scope, $record, new FieldSelection([$field->authorizationField]), FieldUse::Read)->allowed)) {
                 throw new LogicException('Index service cannot read the declared field.');
             }
             $fields[] = $field->id;
@@ -104,14 +115,18 @@ final readonly class IndexProjection
             }
             $values[$id] = $value;
         }
-        ksort($values, SORT_STRING);
-
+        $physicalValues = [];
         foreach ($schema->fields as $field) {
             if (! $field->type->accepts($values[$field->id] ?? null)) {
                 throw new LogicException('Index projection differs from the declared field type.');
             }
-        }
 
-        return new IndexDocument($record, new ProjectedValues($values));
+            if (array_key_exists($field->id, $values)) {
+                $physicalValues[$field->physicalId ?? $field->id] = $values[$field->id];
+            }
+        }
+        ksort($physicalValues, SORT_STRING);
+
+        return new IndexDocument($record, new ProjectedValues($physicalValues));
     }
 }

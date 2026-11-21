@@ -4,6 +4,7 @@ Baseline changes require an intentional surface change under PLAN3.D40.
 
 | Дата | Решение | Слои | Причина |
 |:--|:--|:--|:--|
+| 2026-11-21 | CoreX 2.0, этап 5 | php-surface, schema | Search Custom Fields и Search Intl проецируют стабильные идентификаторы полей и версии. `corex_search_rebuilds` хранит source revision и mapping digest заявок на смену схемы. |
 | 2026-11-21 | CoreX 2.0, этап 4 | php-surface, wire, schema | Search вводит typed query, projection и rebuild, коды отказов и SQL-выбор активного поколения. Свежие PG и SQLite наборы добавляют generations/submissions и обновляют три таблицы журнала Search. |
 | 2026-11-21 | CoreX 2.0, этап 3 | php-surface, events, wire, schema | Новые контракты Custom Fields, три sealed facts, коды ошибок, JSONB-слоты, revisions и head. PostgreSQL tenant schema содержит семь таблиц владельца. |
 | 2026-11-21 | CoreX 2.0, этап 2 | php-surface, events, schema | Снимки фиксируют Messaging Envelope v2, явные транзакционные подключения, typed receipts и объявления контрактов. Tenant schema отражает scoped identity, атомарный inbox/outbox, доставку Notifications/Webhooks, Workflow intents и сохранение результата Media. PostgreSQL 18 записал каталог, PostgreSQL 16 проверил те же определения. |

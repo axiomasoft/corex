@@ -32,7 +32,7 @@ final class DeclaredEquipmentFields implements DeclaredFields
         $uses = [FieldUse::Read, FieldUse::Write, FieldUse::Filter];
 
         return [
-            new FieldDefinition(new FieldId(self::Serial), $entity, 'serial', new FieldTypeId('text'), $this->owner(), uses: $uses),
+            new FieldDefinition(new FieldId(self::Serial), $entity, 'serial', new FieldTypeId('text'), $this->owner(), uses: [...$uses, FieldUse::Search]),
             new FieldDefinition(new FieldId(self::Hours), $entity, 'hours', new FieldTypeId('int'), $this->owner(), uses: $uses),
         ];
     }

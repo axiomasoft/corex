@@ -6,6 +6,7 @@ namespace CoreX\Search\Projection\Internal;
 
 use CoreX\Data\Data\RecordRef;
 use CoreX\Search\Errors\Exceptions\SearchWitnessChanged;
+use CoreX\Search\Projection\Contracts\ProjectionSnapshotCapabilities;
 use CoreX\Search\Projection\Contracts\SearchProjectionContributor;
 use CoreX\Search\Projection\Data\ProjectedValues;
 use CoreX\Search\Projection\Data\ProjectionContext;
@@ -14,10 +15,21 @@ use CoreX\Search\Projection\Data\ProjectionSelection;
 use Packman\Attributes\Internal;
 
 #[Internal]
-final readonly class CompositeProjection implements SearchProjectionContributor
+final readonly class CompositeProjection implements ProjectionSnapshotCapabilities, SearchProjectionContributor
 {
     /** @param iterable<SearchProjectionContributor> $contributors */
     public function __construct(private iterable $contributors) {}
+
+    public function supportsReadOnlySnapshot(): bool
+    {
+        foreach ($this->contributors as $contributor) {
+            if ($contributor instanceof ProjectionSnapshotCapabilities && ! $contributor->supportsReadOnlySnapshot()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     public function describe(ProjectionContext $context): ProjectionFields
     {
@@ -35,7 +47,12 @@ final readonly class CompositeProjection implements SearchProjectionContributor
         foreach ($fields as $field) {
             $uses = array_column($field->uses, 'value');
             sort($uses, SORT_STRING);
-            $mapping[] = [$field->id, $field->type->value, $uses];
+            $shape = [$field->id, $field->type->value, $uses];
+
+            if ($field->physicalId !== null || $field->authorizationField !== null || $field->predicateRequiresRead) {
+                $shape[] = [$field->physicalId, $field->authorizationField, $field->predicateRequiresRead];
+            }
+            $mapping[] = $shape;
         }
 
         return new ProjectionFields($fields, hash('sha256', json_encode([1, $context->entity->value, $revisions, $mapping], JSON_THROW_ON_ERROR)));

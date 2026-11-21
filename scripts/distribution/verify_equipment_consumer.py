@@ -104,7 +104,7 @@ def prove(candidate: Path | None, *, php: str | None = None, postgres: int | Non
             install_root, search_probe,
             {"class": r"Equipment\Registry\Smoke", "entity": "eq.equipment", "record": "eq-1",
              "backend": "equipment-memory", "adapter": r"Equipment\Registry\MemoryDriver"},
-            env, postgres, php,
+            env, postgres, php, profile="equipment",
         )
         database = root / "equipment.sqlite"
         for mode in ("schedule", "worker", "read"):

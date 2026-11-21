@@ -16,6 +16,7 @@ use CoreX\Panels\PanelsServiceProvider;
 use CoreX\RecurringTasks\RecurringTasksServiceProvider;
 use CoreX\Scheduler\SchedulerServiceProvider;
 use CoreX\Search\SearchServiceProvider;
+use CoreX\SearchCustomFields\SearchCustomFieldsServiceProvider;
 use CoreX\SearchIntl\SearchIntlServiceProvider;
 use CoreX\SearchMeilisearch\SearchMeilisearchServiceProvider;
 use CoreX\Tasks\TasksServiceProvider;
@@ -49,6 +50,7 @@ abstract class GoldenTestCase extends TestCase
             NotificationsServiceProvider::class,
             PanelsServiceProvider::class,
             SearchServiceProvider::class,
+            SearchCustomFieldsServiceProvider::class,
             SearchIntlServiceProvider::class,
             SearchMeilisearchServiceProvider::class,
             TasksServiceProvider::class,

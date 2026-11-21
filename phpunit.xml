@@ -55,6 +55,9 @@
         <testsuite name="SearchPackage">
             <directory>packages/search/tests</directory>
         </testsuite>
+        <testsuite name="SearchCustomFieldsPackage">
+            <directory>packages/search-custom-fields/tests</directory>
+        </testsuite>
         <testsuite name="SearchMeilisearchPackage">
             <directory>packages/search-meilisearch/tests</directory>
         </testsuite>
@@ -86,6 +89,7 @@
             <directory>packages/custom-fields/src</directory>
             <directory>packages/import-export/src</directory>
             <directory>packages/search/src</directory>
+            <directory>packages/search-custom-fields/src</directory>
             <directory>packages/search-meilisearch/src</directory>
             <directory>packages/recurring-tasks/src</directory>
             <directory>packages/intl/src</directory>

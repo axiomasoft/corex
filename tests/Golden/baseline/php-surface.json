@@ -11208,6 +11208,37 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\CustomFields\\Schemas\\Contracts\\FieldProjectionCatalogue": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "snapshot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entity",
+                        "type": "CoreX\\Data\\Data\\EntityHandle",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\CustomFields\\Schemas\\Data\\FieldProjectionSchema",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\CustomFields\\Schemas\\Contracts\\FieldSchemaDependencies": {
         "abstract": false,
         "constants": [],
@@ -11861,6 +11892,142 @@
                 "readonly": true,
                 "static": false,
                 "type": "string"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\CustomFields\\Schemas\\Data\\FieldProjectionSchema": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "revision",
+                        "type": "CoreX\\CustomFields\\Schemas\\Data\\SchemaRevision",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "mappingDigest",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "fields",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "fields": {
+                "name": "fields",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            },
+            "mappingDigest": {
+                "name": "mappingDigest",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "revision": {
+                "name": "revision",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\CustomFields\\Schemas\\Data\\SchemaRevision"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\CustomFields\\Schemas\\Data\\FieldProjectionShape": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "id",
+                        "type": "CoreX\\CustomFields\\Schemas\\Data\\FieldId",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "type",
+                        "type": "CoreX\\CustomFields\\Types\\Data\\FieldTypeId",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "uses",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "operators",
+                        "type": "?CoreX\\CustomFields\\Types\\Data\\FieldOperatorSet",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "localized",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "id": {
+                "name": "id",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\CustomFields\\Schemas\\Data\\FieldId"
+            },
+            "localized": {
+                "name": "localized",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            },
+            "operators": {
+                "name": "operators",
+                "readonly": true,
+                "static": false,
+                "type": "?CoreX\\CustomFields\\Types\\Data\\FieldOperatorSet"
+            },
+            "type": {
+                "name": "type",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\CustomFields\\Types\\Data\\FieldTypeId"
+            },
+            "uses": {
+                "name": "uses",
+                "readonly": true,
+                "static": false,
+                "type": "array"
             }
         },
         "readonly": true
@@ -12856,6 +13023,69 @@
                     }
                 ],
                 "return": "CoreX\\CustomFields\\Schemas\\Data\\FieldSchemaSnapshot",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\CustomFields\\Schemas\\Internal\\DatabaseFieldProjectionCatalogue": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\CustomFields\\Schemas\\Contracts\\FieldProjectionCatalogue"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "runner",
+                        "type": "CoreX\\Context\\Contracts\\WorkScopeRunner",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "database",
+                        "type": "Illuminate\\Database\\DatabaseManager",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "heads",
+                        "type": "CoreX\\CustomFields\\Schemas\\Internal\\DatabaseSchemaHeads",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "types",
+                        "type": "CoreX\\CustomFields\\Types\\Contracts\\FieldTypes",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "snapshot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entity",
+                        "type": "CoreX\\Data\\Data\\EntityHandle",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\CustomFields\\Schemas\\Data\\FieldProjectionSchema",
                 "static": false
             }
         },
@@ -57604,60 +57834,29 @@
         },
         "readonly": true
     },
-    "CoreX\\SearchIntl\\Contracts\\LocalizedSearchValues": {
+    "CoreX\\SearchCustomFields\\Invalidation\\Contracts\\FieldSearchSubscriber": {
         "abstract": false,
-        "constants": [],
+        "constants": {
+            "CONSUMER": {
+                "type": "string",
+                "value": "search.custom-fields"
+            }
+        },
         "final": false,
         "interfaces": [],
         "internal": false,
         "kind": "interface",
         "methods": {
-            "fields": {
+            "consume": {
                 "params": [
                     {
                         "byRef": false,
-                        "name": "context",
-                        "type": "CoreX\\Search\\Projection\\Data\\ProjectionContext",
+                        "name": "restrictedRef",
+                        "type": "string",
                         "variadic": false
                     }
                 ],
-                "return": "array",
-                "static": false
-            },
-            "load": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "context",
-                        "type": "CoreX\\Search\\Projection\\Data\\ProjectionContext",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "field",
-                        "type": "CoreX\\SearchIntl\\Data\\LocalizedFieldBinding",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "record",
-                        "type": "CoreX\\Data\\Data\\RecordRef",
-                        "variadic": false
-                    }
-                ],
-                "return": "?CoreX\\Intl\\Translation\\Data\\LocalizedText",
-                "static": false
-            },
-            "locale": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "context",
-                        "type": "CoreX\\Search\\Projection\\Data\\ProjectionContext",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Intl\\Locale\\Data\\LocaleResolution",
+                "return": "CoreX\\Messaging\\Enums\\BrokerReceipt",
                 "static": false
             }
         },
@@ -57665,122 +57864,13 @@
         "properties": [],
         "readonly": false
     },
-    "CoreX\\SearchIntl\\Contracts\\SavedViewLabelReader": {
-        "abstract": false,
-        "constants": [],
-        "final": false,
-        "interfaces": [],
-        "internal": false,
-        "kind": "interface",
-        "methods": {
-            "read": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "localizedName",
-                        "type": "array",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "locale",
-                        "type": "CoreX\\Intl\\Locale\\Data\\LocaleResolution",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Intl\\Translation\\Data\\TranslationResult",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\SearchIntl\\Data\\LocalizedFieldBinding": {
+    "CoreX\\SearchCustomFields\\Invalidation\\Internal\\CommittedFieldSearchSubscriber": {
         "abstract": false,
         "constants": [],
         "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "column",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "declaredField",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "schemaHash",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": [
-                            {
-                                "enum": "CoreX\\Data\\Enums\\FieldUse",
-                                "case": "Read",
-                                "value": "read"
-                            },
-                            {
-                                "enum": "CoreX\\Data\\Enums\\FieldUse",
-                                "case": "Search",
-                                "value": "search"
-                            }
-                        ],
-                        "name": "uses",
-                        "type": "array",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "column": {
-                "name": "column",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "declaredField": {
-                "name": "declaredField",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "schemaHash": {
-                "name": "schemaHash",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "uses": {
-                "name": "uses",
-                "readonly": true,
-                "static": false,
-                "type": "array"
-            }
-        },
-        "readonly": true
-    },
-    "CoreX\\SearchIntl\\Internal\\LocalizedFieldProjector": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
+        "interfaces": [
+            "CoreX\\SearchCustomFields\\Invalidation\\Contracts\\FieldSearchSubscriber"
+        ],
         "internal": true,
         "kind": "class",
         "methods": {
@@ -57788,30 +57878,30 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "translations",
-                        "type": "CoreX\\Intl\\Translation\\Contracts\\TranslationReader",
+                        "name": "broker",
+                        "type": "CoreX\\Messaging\\Contracts\\BrokerReceiver",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "container",
+                        "type": "Illuminate\\Contracts\\Container\\Container",
                         "variadic": false
                     }
                 ],
                 "return": "",
                 "static": false
             },
-            "project": {
+            "consume": {
                 "params": [
                     {
                         "byRef": false,
-                        "name": "text",
-                        "type": "CoreX\\Intl\\Translation\\Data\\LocalizedText",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "locale",
-                        "type": "CoreX\\Intl\\Locale\\Data\\LocaleResolution",
+                        "name": "restrictedRef",
+                        "type": "string",
                         "variadic": false
                     }
                 ],
-                "return": "?string",
+                "return": "CoreX\\Messaging\\Enums\\BrokerReceipt",
                 "static": false
             }
         },
@@ -57819,11 +57909,56 @@
         "properties": [],
         "readonly": true
     },
-    "CoreX\\SearchIntl\\Internal\\LocalizedSearchContributor": {
+    "CoreX\\SearchCustomFields\\Laravel\\SearchCustomFieldsOptions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "enabled",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "fromArray": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "enabled": {
+                "name": "enabled",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\SearchCustomFields\\Projection\\Internal\\FieldProjectionContributor": {
         "abstract": false,
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Search\\Projection\\Contracts\\ProjectionSnapshotCapabilities",
             "CoreX\\Search\\Projection\\Contracts\\SearchProjectionContributor"
         ],
         "internal": true,
@@ -57833,14 +57968,26 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "projector",
-                        "type": "CoreX\\SearchIntl\\Internal\\LocalizedFieldProjector",
+                        "name": "catalogue",
+                        "type": "CoreX\\CustomFields\\Schemas\\Contracts\\FieldProjectionCatalogue",
                         "variadic": false
                     },
                     {
                         "byRef": false,
-                        "name": "source",
-                        "type": "?CoreX\\SearchIntl\\Contracts\\LocalizedSearchValues",
+                        "name": "values",
+                        "type": "CoreX\\CustomFields\\Values\\Contracts\\FieldValues",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "visibleCatalogue",
+                        "type": "CoreX\\CustomFields\\Schemas\\Contracts\\FieldCatalogue",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "filters",
+                        "type": "CoreX\\CustomFields\\Query\\Contracts\\FieldFilter",
                         "variadic": false
                     }
                 ],
@@ -57882,11 +58029,195 @@
                 ],
                 "return": "CoreX\\Search\\Projection\\Data\\ProjectedValues",
                 "static": false
+            },
+            "supportsReadOnlySnapshot": {
+                "params": [],
+                "return": "bool",
+                "static": false
             }
         },
         "parent": null,
         "properties": [],
         "readonly": true
+    },
+    "CoreX\\SearchCustomFields\\Projection\\Internal\\FieldProjectionFilter": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Search\\Projection\\Contracts\\ProjectionFilter"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "catalogue",
+                        "type": "CoreX\\CustomFields\\Schemas\\Contracts\\FieldCatalogue",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "filter",
+                        "type": "CoreX\\CustomFields\\Query\\Contracts\\FieldFilter",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Search\\Projection\\Data\\ProjectionContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "expected",
+                        "type": "CoreX\\CustomFields\\Schemas\\Data\\FieldProjectionSchema",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "field",
+                        "type": "CoreX\\CustomFields\\Schemas\\Data\\FieldId",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "normalize": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "values",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "grant",
+                        "type": "CoreX\\Data\\Data\\FieldUsePlan",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\SearchCustomFields\\SearchCustomFieldsServiceProvider": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "register": {
+                "params": [],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": "Illuminate\\Support\\ServiceProvider",
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\SearchIntl\\Contracts\\LocalizedSearchValues": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "fields": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Search\\Projection\\Data\\ProjectionContext",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "load": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Search\\Projection\\Data\\ProjectionContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "field",
+                        "type": "CoreX\\SearchIntl\\Projection\\Data\\LocalizedFieldBinding",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "record",
+                        "type": "CoreX\\Data\\Data\\RecordRef",
+                        "variadic": false
+                    }
+                ],
+                "return": "?CoreX\\Intl\\Translation\\Data\\LocalizedText",
+                "static": false
+            },
+            "locales": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Search\\Projection\\Data\\ProjectionContext",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\SearchIntl\\Contracts\\SavedViewLabelReader": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "read": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "localizedName",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "locale",
+                        "type": "CoreX\\Intl\\Locale\\Data\\LocaleResolution",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Intl\\Translation\\Data\\TranslationResult",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\SearchIntl\\Internal\\SearchIntlOptions": {
         "abstract": false,
@@ -58007,6 +58338,216 @@
         "parent": null,
         "properties": [],
         "readonly": false
+    },
+    "CoreX\\SearchIntl\\Projection\\Data\\LocalizedFieldBinding": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "fieldId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "declaredField",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "schemaHash",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": [
+                            {
+                                "enum": "CoreX\\Data\\Enums\\FieldUse",
+                                "case": "Read",
+                                "value": "read"
+                            },
+                            {
+                                "enum": "CoreX\\Data\\Enums\\FieldUse",
+                                "case": "Search",
+                                "value": "search"
+                            }
+                        ],
+                        "name": "uses",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "shapeId": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "canonicalLocale",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "declaredField": {
+                "name": "declaredField",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "fieldId": {
+                "name": "fieldId",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "schemaHash": {
+                "name": "schemaHash",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "uses": {
+                "name": "uses",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\SearchIntl\\Projection\\Internal\\LocalizedFieldContributor": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Search\\Projection\\Contracts\\SearchProjectionContributor"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "projector",
+                        "type": "CoreX\\SearchIntl\\Projection\\Internal\\LocalizedFieldProjector",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "locales",
+                        "type": "CoreX\\Intl\\Locale\\Contracts\\LocaleValidation",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "source",
+                        "type": "?CoreX\\SearchIntl\\Contracts\\LocalizedSearchValues",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "describe": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Search\\Projection\\Data\\ProjectionContext",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Search\\Projection\\Data\\ProjectionFields",
+                "static": false
+            },
+            "project": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Search\\Projection\\Data\\ProjectionContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "record",
+                        "type": "CoreX\\Data\\Data\\RecordRef",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "selection",
+                        "type": "CoreX\\Search\\Projection\\Data\\ProjectionSelection",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Search\\Projection\\Data\\ProjectedValues",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\SearchIntl\\Projection\\Internal\\LocalizedFieldProjector": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "translations",
+                        "type": "CoreX\\Intl\\Translation\\Contracts\\TranslationReader",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "project": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "text",
+                        "type": "CoreX\\Intl\\Translation\\Data\\LocalizedText",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "locale",
+                        "type": "CoreX\\Intl\\Locale\\Data\\LocaleResolution",
+                        "variadic": false
+                    }
+                ],
+                "return": "?string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
     },
     "CoreX\\SearchIntl\\SearchIntlServiceProvider": {
         "abstract": false,
@@ -60300,6 +60841,93 @@
         },
         "readonly": true
     },
+    "CoreX\\Search\\Internal\\Index\\MappingJournal": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Search\\Lane\\Contracts\\SearchMappingInvalidations"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "store",
+                        "type": "CoreX\\Search\\Internal\\Index\\LaneStore",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "projection",
+                        "type": "Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "apply": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "writer",
+                        "type": "Illuminate\\Database\\ConnectionInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "event",
+                        "type": "CoreX\\Messaging\\Data\\MessageEnvelope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entity",
+                        "type": "CoreX\\Data\\Data\\EntityHandle",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "sourceRevision",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "sourceMappingDigest",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "pending": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entity",
+                        "type": "CoreX\\Data\\Data\\EntityHandle",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\Search\\Internal\\Index\\RebuildJournal": {
         "abstract": false,
         "constants": [],
@@ -61312,6 +61940,73 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Search\\Lane\\Contracts\\SearchMappingInvalidations": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "apply": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "writer",
+                        "type": "Illuminate\\Database\\ConnectionInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "event",
+                        "type": "CoreX\\Messaging\\Data\\MessageEnvelope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entity",
+                        "type": "CoreX\\Data\\Data\\EntityHandle",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "sourceRevision",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "sourceMappingDigest",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "pending": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "entity",
+                        "type": "CoreX\\Data\\Data\\EntityHandle",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Search\\Laravel\\SearchPortBindings": {
         "abstract": false,
         "constants": [],
@@ -61494,6 +62189,55 @@
             }
         },
         "readonly": true
+    },
+    "CoreX\\Search\\Projection\\Contracts\\ProjectionFilter": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "normalize": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "values",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "grant",
+                        "type": "CoreX\\Data\\Data\\FieldUsePlan",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Search\\Projection\\Contracts\\ProjectionSnapshotCapabilities": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "supportsReadOnlySnapshot": {
+                "params": [],
+                "return": "bool",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\Search\\Projection\\Contracts\\SearchProjectionContributor": {
         "abstract": false,
@@ -61788,6 +62532,34 @@
                         "name": "uses",
                         "type": "array",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "physicalId",
+                        "type": "?string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "authorizationField",
+                        "type": "?string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "filter",
+                        "type": "?CoreX\\Search\\Projection\\Contracts\\ProjectionFilter",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": false,
+                        "name": "predicateRequiresRead",
+                        "type": "bool",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -61796,11 +62568,35 @@
         },
         "parent": null,
         "properties": {
+            "authorizationField": {
+                "name": "authorizationField",
+                "readonly": true,
+                "static": false,
+                "type": "?string"
+            },
+            "filter": {
+                "name": "filter",
+                "readonly": true,
+                "static": false,
+                "type": "?CoreX\\Search\\Projection\\Contracts\\ProjectionFilter"
+            },
             "id": {
                 "name": "id",
                 "readonly": true,
                 "static": false,
                 "type": "string"
+            },
+            "physicalId": {
+                "name": "physicalId",
+                "readonly": true,
+                "static": false,
+                "type": "?string"
+            },
+            "predicateRequiresRead": {
+                "name": "predicateRequiresRead",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
             },
             "type": {
                 "name": "type",
@@ -62219,6 +63015,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Search\\Projection\\Contracts\\ProjectionSnapshotCapabilities",
             "CoreX\\Search\\Projection\\Contracts\\SearchProjectionContributor"
         ],
         "internal": true,
@@ -62270,6 +63067,11 @@
                     }
                 ],
                 "return": "CoreX\\Search\\Projection\\Data\\ProjectedValues",
+                "static": false
+            },
+            "supportsReadOnlySnapshot": {
+                "params": [],
+                "return": "bool",
                 "static": false
             }
         },
@@ -63673,24 +64475,12 @@
                     },
                     {
                         "byRef": false,
-                        "name": "generation",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "witness",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
                         "name": "cursor",
                         "type": "string",
                         "variadic": false
                     }
                 ],
-                "return": "string",
+                "return": "array",
                 "static": false
             },
             "encode": {
@@ -63698,6 +64488,12 @@
                     {
                         "byRef": false,
                         "name": "identity",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "mapping",
                         "type": "string",
                         "variadic": false
                     },
@@ -63851,6 +64647,18 @@
                 "return": "bool",
                 "static": false
             },
+            "physicalField": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "field",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": false
+            },
             "verifyLowering": {
                 "params": [
                     {
@@ -63874,6 +64682,12 @@
         "properties": {
             "fields": {
                 "name": "fields",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            },
+            "filters": {
+                "name": "filters",
                 "readonly": true,
                 "static": false,
                 "type": "array"

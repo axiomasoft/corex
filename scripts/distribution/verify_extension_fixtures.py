@@ -22,6 +22,10 @@ from ecosystem_repositories import is_corex_package
 from consumer_repository import assert_dist_install, repositories
 
 ROOT = Path(__file__).resolve().parents[2]
+FIELD_SEARCH_HOST = {
+    "axiomasoft/corex-panels": "^2.0",
+    "axiomasoft/corex-search-custom-fields": "^2.0",
+}
 FIXTURES = (
     {
         "id": "custom-search-provider",
@@ -30,7 +34,7 @@ FIXTURES = (
         "forbidden": r"CoreX\Search\Query\Internal\AuthorizedSearch",
         "search_proof": {
             "entity": "csp.document", "record": "eq-1", "backend": "thirdparty-search",
-            "adapter": r"ThirdParty\Search\MemoryDriver",
+            "adapter": r"ThirdParty\Search\MemoryDriver", "field_id": "01900000-0000-7000-8000-000000000005",
         },
     },
     {
@@ -100,6 +104,7 @@ def materialize_repository(candidate: Path, destination: Path) -> None:
 
 def write_consumer(
     consumer: Path, fixture: Path, repository: Path, *, drop_corex: bool, laravel_host: bool = False,
+    host_requirements: dict[str, str] | None = None,
 ) -> None:
     source = fixture_composer(fixture)
     requirements = dict(source["require"])
@@ -111,7 +116,7 @@ def write_consumer(
     composer = {
         "name": "corex/extension-fixture-consumer",
         "type": "project",
-        "require": {source["name"]: "@dev"},
+        "require": {source["name"]: "@dev", **(host_requirements or {})},
         "repositories": [
             {"type": "path", "url": "fixture", "options": {"symlink": False}},
             *repositories(repository, ROOT),
@@ -208,6 +213,7 @@ def probe_phase(consumer: Path, command: list[str], env: dict[str, str], entity:
     if not isinstance(witness, dict) or witness.get("phase") != phase:
         raise SystemExit(f"{entity}: missing {phase} phase witness")
     witness["exit_code"] = completed.returncode
+    witness["command"] = command
     witness["stdout_sha256"] = hashlib.sha256(completed.stdout.encode()).hexdigest()
     return witness
 
@@ -244,8 +250,13 @@ def run_field_proof(
         return witness
 
 
-def validate_search_witness(witness: dict, databases: dict[str, str], fixture: dict, php: str | None) -> None:
+def validate_search_witness(
+    witness: dict, databases: dict[str, str], fixture: dict, php: str | None, *, profile: str = "absent",
+) -> None:
     if (witness.get("entrypoint") != r"CoreX\Search\Query\Contracts\Search" or witness.get("tagged") is not True
+            or witness.get("profile") != profile or witness.get("compiled_fields") != ["title"]
+            or not re.fullmatch(r"[a-f0-9]{64}", str(witness.get("mapping", "")))
+            or type(witness.get("assertions")) is not int or witness["assertions"] < 1
             or witness.get("candidate_calls") != 1 or witness.get("count") != "unavailable"
             or witness.get("stale_text_rejected") is not True
             or witness.get("projection") != {"title": "pump alpha"}
@@ -258,12 +269,72 @@ def validate_search_witness(witness: dict, databases: dict[str, str], fixture: d
     validate_isolated_databases(witness, databases, fixture["entity"])
 
 
+def run_search_profile(
+    consumer: Path, probe: Path, fixture: dict, env: dict[str, str], profile: str, phase: str,
+) -> dict:
+    command = ["php", str(probe), fixture["class"], profile]
+    runtime = {**env, "COREX_SEARCH_CUSTOM_FIELDS_ENABLED": "true" if profile == "enabled" else "false"}
+    compiler = probe_phase(consumer, [*command, "compile"], runtime, fixture["entity"], "module-compile")
+    witness = probe_phase(consumer, command, runtime, fixture["entity"], phase)
+    if (compiler.get("profile") != profile or compiler.get("php") != witness.get("php")
+            or type(compiler.get("pid")) is not int or compiler["pid"] < 1 or compiler["pid"] == witness.get("pid")
+            or type(compiler.get("assertions")) is not int or compiler["assertions"] < 1
+            or not str(compiler.get("compiler_output", "")).strip()):
+        raise SystemExit(f"{fixture['entity']}: {profile} module compilation is incomplete")
+    return {**witness, "compiler": compiler}
+
+
 def run_search_proof(
     consumer: Path, probe: Path, fixture: dict, env: dict[str, str], postgres: int | None, php: str | None,
+    *, profile: str = "absent",
 ) -> dict:
     with installed_runtime(consumer, env, postgres) as (databases, runtime):
-        witness = probe_phase(consumer, ["php", str(probe), fixture["class"]], runtime, fixture["entity"], "search")
-        validate_search_witness(witness, databases, fixture, php)
+        witness = run_search_profile(consumer, probe, fixture, runtime, profile, "search")
+        validate_search_witness(witness, databases, fixture, php, profile=profile)
+        return witness
+
+
+def validate_field_search_compilation(
+    witness: dict, databases: dict[str, str], fixture: dict, absent: dict, php: str | None,
+) -> None:
+    field = fixture["field_id"]
+    view = witness.get("view_id", "")
+    mapping_pairs = (
+        ("mapping", "renamed_mapping"),
+        ("schema_revision_before", "schema_revision_after"),
+        ("schema_mapping_before", "schema_mapping_after"),
+    )
+    digests = [key for pair in mapping_pairs for key in pair] + ["view_grammar"]
+    if (witness.get("profile") != "enabled" or witness.get("entity") != fixture["entity"]
+            or witness.get("driver") != fixture["adapter"]
+            or witness.get("field_id") != field or witness.get("compiled_fields") != [field, "title"]
+            or witness.get("view_projection") != [field] or witness.get("view_revision") != "1"
+            or witness.get("view_filter") != {"field": field, "op": "eq", "value": "PUMP-1"}
+            or witness.get("view_sort") != [{"field": field, "direction": "asc"}]
+            or not re.fullmatch(r"[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}", str(view))
+            or witness.get("dependencies") != [f"saved-view:{view}"]
+            or witness.get("old_key") != "asset_code" or witness.get("new_key") != "equipment_code"
+            or witness.get("old_label") != "Asset code" or witness.get("new_label") != "Equipment code"
+            or witness.get("masked_rejected") is not True or witness.get("masked_error") != "panels.invalid_saved_view"
+            or any(not re.fullmatch(r"[a-f0-9]{64}", str(witness.get(key, ""))) for key in digests)
+            or any(witness[left] == witness[right] for left, right in mapping_pairs)
+            or witness["mapping"] == absent["mapping"]
+            or type(witness.get("pid")) is not int or witness["pid"] < 1 or witness["pid"] == absent["pid"]
+            or type(witness.get("assertions")) is not int or witness["assertions"] < 1
+            or not isinstance(witness.get("php"), str) or (php is not None and not witness["php"].startswith(php + "."))):
+        raise SystemExit(f"{fixture['entity']}: enabled field-search compilation proof is incomplete")
+    validate_isolated_databases(witness, databases, fixture["entity"])
+    if any(witness[key]["database"] in {absent["owner"]["database"], absent["control"]["database"]} for key in ("owner", "control")):
+        raise SystemExit(f"{fixture['entity']}: field-search compilation reused a provider-only database")
+
+
+def run_field_search_compilation(
+    consumer: Path, probe: Path, fixture: dict, absent: dict, env: dict[str, str],
+    postgres: int | None, php: str | None,
+) -> dict:
+    with installed_runtime(consumer, env, postgres) as (databases, runtime):
+        witness = run_search_profile(consumer, probe, fixture, runtime, "enabled", "field-search-compile")
+        validate_field_search_compilation(witness, databases, fixture, absent, php)
         return witness
 
 
@@ -346,10 +417,27 @@ def verify(
             proof = prove(consumer, spec, workspace, env)
             proof.update(assert_dist_install(consumer, repository, list(fixture_composer(fixture)["require"]), workspace))
             if search := spec.get("search_proof"):
+                search = {"class": spec["class"], **search}
                 proof["installed_search"] = run_search_proof(
                     consumer, consumer / "vendor" / spec["package"] / "bin/search-proof.php",
-                    {"class": spec["class"], **search}, env, postgres, php,
+                    search, env, postgres, php,
                 )
+                enabled = root / f"{spec['id']}-field-search"
+                enabled_home = root / "field-search-composer-home"
+                enabled_home.mkdir()
+                enabled_env = composer_env(enabled_home, php)
+                write_consumer(enabled, fixture, repository, drop_corex=False, laravel_host=True, host_requirements=FIELD_SEARCH_HOST)
+                installed = install(enabled, enabled_env)
+                if installed.returncode != 0:
+                    raise SystemExit(installed.stderr or installed.stdout or f"{spec['id']} field-search install failed")
+                enabled_lock = assert_dist_install(
+                    enabled, repository, [*fixture_composer(fixture)["require"], *FIELD_SEARCH_HOST], workspace,
+                )
+                proof["installed_field_search_compilation"] = run_field_search_compilation(
+                    enabled, enabled / "vendor" / spec["package"] / "bin/search-proof.php",
+                    search, proof["installed_search"], enabled_env, postgres, php,
+                )
+                proof["installed_field_search_compilation"].update(enabled_lock)
             if spec.get("field_proof"):
                 proof["installed_fields"] = run_field_proof(
                     consumer, consumer / "vendor" / spec["package"] / "bin/field-proof.php",

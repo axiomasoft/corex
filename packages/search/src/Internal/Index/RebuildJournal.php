@@ -88,7 +88,8 @@ final readonly class RebuildJournal implements RebuildWorker, SearchRebuilds
     {
         $db = $this->store->db($scope, true);
         $lanes = $db->table(LaneStore::LANES)->select('lane_key')->where($this->store->identity($scope));
-        $row = $db->table(LaneStore::RUNS)->useWritePdo()->whereIn('lane_key', $lanes)->where('rebuild_id', $ref->id)->firstOrFail();
+        $row = $db->table(LaneStore::RUNS)->useWritePdo()->whereIn('lane_key', $lanes)
+            ->whereNull('source_revision')->where('rebuild_id', $ref->id)->firstOrFail();
 
         return $this->status($row);
     }
@@ -181,6 +182,9 @@ final readonly class RebuildJournal implements RebuildWorker, SearchRebuilds
                     'active_generation' => $status->destination, 'writer_generation' => $status->destination,
                     'next_seq' => Value::integer($run->barrier_seq) + 1, 'rebuild_id' => null, 'freeze_seq' => null]));
             LaneStore::one(self::run($db, $lane, $ref->id)->where('state', 'barrier')->update(['state' => 'published']));
+            $requests = $db->table('corex_search_rebuilds')->where('lane_key', $lane->lane_key)->where('state', 'requested');
+            (clone $requests)->where('mapping_digest', $run->mapping_digest)->update(['state' => 'satisfied']);
+            $requests->where('mapping_digest', '<>', $run->mapping_digest)->update(['state' => 'superseded']);
 
             return $this->status(self::run($db, $lane, $ref->id)->firstOrFail());
         });
@@ -261,7 +265,7 @@ final readonly class RebuildJournal implements RebuildWorker, SearchRebuilds
 
     private static function run(ConnectionInterface $db, stdClass $lane, string $id): Builder
     {
-        return $db->table(LaneStore::RUNS)->where('lane_key', $lane->lane_key)->where('rebuild_id', $id);
+        return $db->table(LaneStore::RUNS)->where('lane_key', $lane->lane_key)->whereNull('source_revision')->where('rebuild_id', $id);
     }
 
     private function status(stdClass $run): RebuildStatus

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — Custom Fields and locale integration
+
+- Compile stable logical field IDs and backend field keys before querying. Check the underlying field and its localized shape when admitting predicates and projecting results.
+- Record committed schema-change requests in the rebuild journal. Close an incompatible generation before broker delivery and return a conflict for a cursor from a prior effective mapping.
+- Report exact PostgreSQL statistics only when the registered projection and authority can use one read-only snapshot.
+
 ## Unreleased — Authorized query and durable index generations
 
 - Replace the application candidate and hydrator ports with Search. Each query verifies the caller, field uses, candidate namespace and fresh projected values before releasing hits and an opaque continuation.

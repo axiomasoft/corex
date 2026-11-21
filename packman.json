@@ -240,6 +240,19 @@
             ]
         },
         {
+            "name": "axiomasoft/corex-search-custom-fields",
+            "path": "packages/search-custom-fields",
+            "namespace": "CoreX\\SearchCustomFields\\",
+            "profile": "laravel-package",
+            "layer": "L3",
+            "type": "integration",
+            "owns": [
+                "Invalidation",
+                "Laravel",
+                "Projection"
+            ]
+        },
+        {
             "name": "axiomasoft/corex-search-intl",
             "path": "packages/search-intl",
             "namespace": "CoreX\\SearchIntl\\",
@@ -248,8 +261,8 @@
             "type": "integration",
             "owns": [
                 "Contracts",
-                "Data",
-                "Internal"
+                "Internal",
+                "Projection"
             ]
         },
         {

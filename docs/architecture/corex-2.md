@@ -34,6 +34,10 @@ Custom Fields регистрирует версии codec и определен�
 
 Search хранит активное поколение и верхнюю границу барьера в SQL. `corex-search.cluster` связывает поколение с backend, а `corex-search.retention_seconds` задаёт окно для возврата к сохранённому поколению. Хост Meilisearch разрешает credential по проверенному `IndexTarget` и роли запроса, записи или сверки. Search проверяет актуальный witness каждого поля, участвующего в поиске по тексту, перед выдачей результата.
 
+`search-custom-fields` подключается параметром `corex-search-custom-fields.enabled`. Владелец Fields передаёт стабильные ID, допустимые операции и fingerprint effective schema. Search проверяет права на предикаты до обращения к backend. Смена schema head закрывает несовместимый mapping до доставки события. Потребитель факта v2 использует транзакцию Inbox и сохраняет порядковую запись для значения или заявку на новый mapping для схемы. Search публикует текущий mapping и подтверждает заявку в одной транзакции. Для каждой поисковой линии действует одна ожидающая заявка, а receipts сохраняют исходные ревизии доставленных фактов.
+
+Search Intl связывает stable field ID и canonical locale с детерминированным backend key. Fingerprint включает форму поля и fallback policy. Допуск к предикату проверяет исходное поле и локализованную форму. В fixture сохранённого представления Packman компилирует фильтр, сортировку и проекцию по стабильному ID после смены имени. Композиция сверяет текущую ревизию и закрывает masked field.
+
 ```bash
 python3 scripts/distribution/compare_contracts.py \
   --base 1c11e0e35961409631cf68ebb28c7d2cd53ebb91 \
@@ -151,7 +155,6 @@ Diff содержит SHA и digest каждого прочитанного но
       "09b188ace5a4fb7661e814e7794bde1ecada1c351ee34db1a8406cb41848ddbc",
       "0a0a234e77bc0c2805414500785d7a8fe1c8e076cf28dc131a9c74e4fe16b8b4",
       "0b76084a21a7f7a3419222c8ffb89cc5dde7d99f19c149471fc62a97e5e9cf1a",
-      "115ce3ae3b4cc2ea9e3781cd948d111462f3c57a98130f841298a32ac39c4af8",
       "1a754aef283821112c7a9e46e4baef7618f9d26f0248228e85231ad671e40446",
       "265fd44189bf9e57ff3fc93bf1f763fe549f3004cb7d43bf3207f43a39eed9b7",
       "2774bbb6df5ece7e2c1172656a9c18cb13ff87e2974806622d1a2f9dba70919f",
@@ -645,6 +648,34 @@ Diff содержит SHA и digest каждого прочитанного но
       "7b581ad42c39c51adae12e0438205b8a60c0800aee3051640ce749aa794f64fb",
       "b288b07785aad29e2535f1b910d4679ec31fea3c33905ec63b8d1b90f9302342",
       "f1310871652b2ce39f1d15ec0f18ac770959e4b707aa72b0c3748dee61ff8a69"
+    ]
+  },
+  {
+    "id": "localized-shapes-and-saved-field-identity",
+    "plan": "§§7, 11.4, 13.3 and Stage 5 — canonical locale shapes and saved-view field IDs",
+    "tests": [
+      "packages/search-intl/tests/Unit/OptionalBridgesTest.php",
+      "fixtures/extensions/custom-search-provider/bin/field-search-compile.php",
+      "tests/Distribution/fixtures/scenarios/field-search/probe.php"
+    ],
+    "changes": [
+      "7b4c91f3d8ebae52ef08f454dfad9e2657cb2c4dc91f218f61492da587c7a45f",
+      "8133da70e4ff82b3ab32f92f63f183ffb1a87ebd17eed67192e264c08a4877cc",
+      "e079acc542c16f0289ef3febd665e59d254df00552c28aba695372c269a9def2",
+      "e434a95033bca308266d69d2a3ea62766b42845dbda8ac61ae3df1222b08399e"
+    ]
+  },
+  {
+    "id": "optional-search-custom-fields-package",
+    "plan": "§§11.1–11.3, 15.3 and Stage 5 — optional independent participant in the split cohort",
+    "tests": [
+      "scripts/distribution/tests/test_release_candidate.py",
+      "scripts/distribution/tests/test_profile_proof.py",
+      "tests/Distribution/fixtures/scenarios/field-search/probe.php"
+    ],
+    "changes": [
+      "7dc114d906d04202aeafb089685ad0df059ecae03eb94ffa1d01f3feda14ce68",
+      "efd59d20220f9c5853865ad6511caef62698dd0c955225f89aa8ccc1bdc1d083"
     ]
   }
 ]

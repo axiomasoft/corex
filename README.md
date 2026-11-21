@@ -20,6 +20,7 @@ FlexStore) без переписывания фундамента. Моноре�
 | `axiomasoft/corex-panels` | Trusted CoreX context integration for Packman panels and saved views. | [panels](packages/panels/README.md) |
 | `axiomasoft/corex-recurrence` | Bounded RFC 5545 recurrence expansion for CoreX consumers. | [recurrence](packages/recurrence/README.md) |
 | `axiomasoft/corex-search` | Typed, policy-hydrated search boundary for CoreX. | [search](packages/search/README.md) |
+| `axiomasoft/corex-search-custom-fields` | Optional projection and committed invalidation of Custom Fields in Search. | [search-custom-fields](packages/search-custom-fields/README.md) |
 | `axiomasoft/corex-search-intl` | Optional localized projection glue between axiomasoft/corex-intl and axiomasoft/corex-search. | [search-intl](packages/search-intl/README.md) |
 | `axiomasoft/corex-search-meilisearch` | Optional Meilisearch candidate adapter for axiomasoft/corex-search. | [search-meilisearch](packages/search-meilisearch/README.md) |
 | `axiomasoft/corex-tasks` | CoreX Tasks module — workspace projects, stages and tasks for DB-per-account applications. | [tasks](packages/tasks/README.md) |

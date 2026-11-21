@@ -40,6 +40,24 @@ class ProfileProofTest(unittest.TestCase):
         self.manifest = json.loads(MODULE.MANIFEST_PATH.read_text(encoding="utf-8"))
         self.composers = composers()
 
+    def test_bridge_profiles_require_cached_di_state(self) -> None:
+        for id, expected in (("search-fields", "absent"), ("search-fields-disabled", "disabled"), ("search-fields-enabled", "enabled")):
+            profile = MODULE.require_profile(self.manifest, id)
+            enabled = expected == "enabled"
+            boot = {"search_custom_fields": {"installed": expected != "absent", "enabled": None if expected == "absent" else enabled,
+                                             "subscriber": enabled, "contributors": ["FieldProjectionContributor"] if enabled else []}}
+            self.assertEqual(expected, MODULE.assert_fields_bridge(profile, boot)["search_custom_fields"]["state"])
+            boot["search_custom_fields"]["subscriber"] = not enabled
+            with self.assertRaisesRegex(MODULE.ProfileError, f"does not match {expected}"):
+                MODULE.assert_fields_bridge(profile, boot)
+
+    def test_equipment_fixture_identity_uses_committed_consumer_package(self) -> None:
+        spec = {"id": "equipment-registry", "version": "1.0.0", "kind": "equipment"}
+        self.assertEqual(Path("fixtures/consumers/equipment-registry"), MODULE.extension_source(spec))
+        self.assertEqual("equipment/registry", MODULE.fixture_package_name(spec))
+        with self.assertRaisesRegex(MODULE.ProfileError, "fixture kind"):
+            MODULE.extension_source({**spec, "id": "another-consumer"})
+
     def test_declared_profile_ids_must_match_definitions(self) -> None:
         MODULE.validate_profiles(self.manifest)
         self.manifest["profiles"].pop()

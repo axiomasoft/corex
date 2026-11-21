@@ -41,6 +41,10 @@
       "path": "packages/search"
     },
     {
+      "name": "axiomasoft/corex-search-custom-fields",
+      "path": "packages/search-custom-fields"
+    },
+    {
       "name": "axiomasoft/corex-search-intl",
       "path": "packages/search-intl"
     },

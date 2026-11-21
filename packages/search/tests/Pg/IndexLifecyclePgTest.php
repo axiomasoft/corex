@@ -47,6 +47,7 @@ use CoreX\Search\Index\Data\IndexTarget;
 use CoreX\Search\Index\Enums\IndexAction;
 use CoreX\Search\Index\Enums\IndexOutcome;
 use CoreX\Search\Lane\Contracts\SearchInvalidations;
+use CoreX\Search\Lane\Contracts\SearchMappingInvalidations;
 use CoreX\Search\Projection\Contracts\SearchProjectionContributor;
 use CoreX\Search\Projection\Contracts\SearchSource;
 use CoreX\Search\Projection\Data\ProjectedValues;
@@ -154,6 +155,8 @@ beforeEach(function (): void {
     $contract = new MessageContract('equipment.changed', 2, MessageClass::IntegrationEvent, 'axiomasoft/corex-search', PiiClass::Pseudonymous, 'search.index');
     $registry = Mockery::mock(MessageContractRegistry::class);
     $registry->shouldReceive('get')->with('equipment.changed', 2)->andReturn($contract);
+    $registry->shouldReceive('get')->with('equipment.schema.changed', 2)->andReturn(
+        new MessageContract('equipment.schema.changed', 2, MessageClass::IntegrationEvent, 'axiomasoft/corex-search', PiiClass::Pseudonymous, 'search.index'));
     app()->instance(MessageContractRegistry::class, $registry);
 
     $migrations = glob(dirname(__DIR__, 2).'/database/migrations/tenant/*.php');
@@ -171,6 +174,8 @@ beforeEach(function (): void {
         public array $values = ['pump-a' => 'scan-a', 'pump-b' => 'scan-b'];
 
         public string $witness = 'acl-1';
+
+        public string $revision = 'dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd';
 
         public function page(DataScope $scope, EntityHandle $entity, ?RecordRef $after, int $limit): RecordBatch
         {
@@ -196,7 +201,7 @@ beforeEach(function (): void {
 
         public function describe(ProjectionContext $context): ProjectionFields
         {
-            return new ProjectionFields([new ProjectionField('title', FieldType::Text, [FieldUse::Read, FieldUse::Search])], str_repeat('d', 64));
+            return new ProjectionFields([new ProjectionField('title', FieldType::Text, [FieldUse::Read, FieldUse::Search])], $this->revision);
         }
 
         public function project(ProjectionContext $context, RecordRef $record, ProjectionSelection $selection): ProjectedValues
@@ -671,3 +676,56 @@ it('preserves the rollback target and drains its outstanding claim before retent
         ->and((clone $submissions)->where('action', IndexAction::Drop->value)->where('state', 'confirmed')->count())->toBe(1)
         ->and($this->active->active($this->scope, $this->entity)->uid)->toBe($active->uid);
 })->with(['planned claim' => ['planned'], 'accepted and confirmed' => ['confirmed'], 'accepted and failed' => ['failed']]);
+
+it('fences an older rebuild at publication and settles requests only for a current mapping', function (): void {
+    $old = indexPublish();
+    $stale = indexRebuild();
+    $destination = $this->runs->inspect($this->scope, $stale)->destination;
+    indexDrain($destination);
+    $this->publisher->barrier($this->scope, $stale);
+
+    $request = function (string $messageId, string $revision): bool {
+        $db = DB::connection();
+        $fact = new MessageEnvelope($messageId, 'urn:equipment', 'equipment.schema.changed', 2, new DateTimeImmutable('2026-01-01Z'), $this->scope,
+            new MessagePayload(['target' => $revision]), PiiClass::Pseudonymous, $this->entity, 'correlation');
+
+        return $db->transaction(function () use ($db, $fact, $revision): bool {
+            if (! app()->make(Inbox::class)->claim($db, new ConsumerId('search.equipment.schema', 2), $fact)) {
+                return false;
+            }
+            app()->make(SearchMappingInvalidations::class)->apply($db, $fact, $this->entity, $revision, $revision);
+
+            return true;
+        });
+    };
+    $requests = DB::table('corex_search_rebuilds')->whereNotNull('source_revision');
+    $signals = app()->make(SearchMappingInvalidations::class);
+    expect($signals->pending($this->scope, $this->entity))->toBeFalse();
+    $this->source->revision = $second = str_repeat('e', 64);
+    expect($request('schema-2', $second))->toBeTrue()
+        ->and($request('schema-2', $second))->toBeFalse()
+        ->and($signals->pending($this->scope, $this->entity))->toBeTrue()
+        ->and((clone $requests)->where('state', 'requested')->sole()->mapping_digest)->toBe($second);
+
+    $this->source->revision = $third = str_repeat('f', 64);
+    expect($request('schema-3', $third))->toBeTrue()
+        ->and((clone $requests)->where('state', 'requested')->sole()->mapping_digest)->toBe($third)
+        ->and((clone $requests)->where('state', 'superseded')->sole()->mapping_digest)->toBe($second)
+        ->and(DB::table('corex_search_dirty')->count())->toBe(0);
+
+    expect(fn () => $this->publisher->publish($this->scope, $stale))->toThrow(LogicException::class, 'Search mapping or policy witness has changed.');
+    expect($this->runs->inspect($this->scope, $stale)->state)->toBe('barrier')
+        ->and($this->active->active($this->scope, $this->entity)->generation)->toBe($this->runs->inspect($this->scope, $old)->destination);
+    expect($this->runs->cancel($this->scope, $stale)->state)->toBe('cancelled');
+    $current = indexPublish();
+    expect($this->runs->inspect($this->scope, $current)->state)->toBe('published')
+        ->and($this->active->active($this->scope, $this->entity)->mappingDigest)->toBe($third)
+        ->and($signals->pending($this->scope, $this->entity))->toBeFalse()
+        ->and((clone $requests)->where('state', 'satisfied')->sole()->mapping_digest)->toBe($third)
+        ->and((clone $requests)->where('state', 'requested')->count())->toBe(0);
+
+    expect($request('schema-late', $second))->toBeTrue()
+        ->and((clone $requests)->where('state', 'satisfied')->count())->toBe(2)
+        ->and((clone $requests)->where('state', 'requested')->count())->toBe(0)
+        ->and(DB::table('corex_search_dirty')->count())->toBe(0);
+});

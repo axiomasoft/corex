@@ -2,7 +2,9 @@
 
 ## [Unreleased] — localized Search projection
 
-- Register localized fields through the typed Search projection contributor when enabled. Hosts provide locale and owner translations through `LocalizedSearchValues`. Locale and schema witnesses bind the projection revision.
+- Move `LocalizedFieldBinding` to `CoreX\SearchIntl\Projection\Data` and replace its `column` constructor argument with the underlying stable `fieldId`.
+- Implement `LocalizedSearchValues::locales` to supply every locale shape and fallback chain for the current entity. `LocalizedFieldBinding::shapeId` creates a semantic query ID from the stable field and a canonical Intl locale.
+- Compile bounded digest keys for the backend and check both field IDs for each Search use. Locale fallback and projection mapping changes invalidate the generation fingerprint.
 
 ## Unreleased — Packman governance
 

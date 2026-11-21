@@ -12,10 +12,12 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Contracts\WorkScopeRunner;
 use CoreX\CustomFields\Schemas\Contracts\DeclaredFields;
 use CoreX\CustomFields\Schemas\Contracts\FieldCatalogue;
+use CoreX\CustomFields\Schemas\Contracts\FieldProjectionCatalogue;
 use CoreX\CustomFields\Schemas\Contracts\FieldSchemaDependencies;
 use CoreX\CustomFields\Schemas\Contracts\FieldSchemas;
 use CoreX\CustomFields\Schemas\Contracts\SchemaHeads;
 use CoreX\CustomFields\Schemas\Internal\DatabaseFieldCatalogue;
+use CoreX\CustomFields\Schemas\Internal\DatabaseFieldProjectionCatalogue;
 use CoreX\CustomFields\Schemas\Internal\DatabaseFieldSchemas;
 use CoreX\CustomFields\Schemas\Internal\DatabaseSchemaHeads;
 use CoreX\CustomFields\Schemas\Internal\DeclaredSchema;
@@ -53,6 +55,7 @@ final class FieldSchemaRegistrar implements PackageRegistrar
         $app->alias(DatabaseSchemaHeads::class, SchemaHeads::class);
         $app->scoped(FieldSchemas::class, DatabaseFieldSchemas::class);
         $app->scoped(FieldCatalogue::class, DatabaseFieldCatalogue::class);
+        $app->scoped(FieldProjectionCatalogue::class, DatabaseFieldProjectionCatalogue::class);
         $app->scoped(SchemaWorker::class, static fn (Application $app): SchemaWorker => new SchemaWorker($app->make(DatabaseManager::class),
             $app->make(TenantContextResolver::class), $app->make(DataScopeFactory::class), $app->make(WorkScopeRunner::class), $app->make(StoredWorkRunner::class),
             $app->make(CurrentWorkScope::class), $app->make(DataScopeCodec::class), $app->make(SchemaJournal::class), $app->make(ClockInterface::class),

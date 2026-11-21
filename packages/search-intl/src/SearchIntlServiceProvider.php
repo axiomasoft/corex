@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\SearchIntl;
 
+use CoreX\Intl\Locale\Contracts\LocaleValidation;
 use CoreX\Search\Projection\Contracts\SearchProjectionContributor;
 use CoreX\SearchIntl\Contracts\LocalizedSearchValues;
 use CoreX\SearchIntl\Contracts\SavedViewLabelReader;
-use CoreX\SearchIntl\Internal\LocalizedFieldProjector;
-use CoreX\SearchIntl\Internal\LocalizedSearchContributor;
 use CoreX\SearchIntl\Internal\SearchIntlOptions;
 use CoreX\SearchIntl\Internal\SqlSavedViewLabelReader;
+use CoreX\SearchIntl\Projection\Internal\LocalizedFieldContributor;
+use CoreX\SearchIntl\Projection\Internal\LocalizedFieldProjector;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
@@ -36,11 +37,12 @@ final class SearchIntlServiceProvider extends ServiceProvider
         }
 
         $this->app->scoped(SavedViewLabelReader::class, SqlSavedViewLabelReader::class);
-        $this->app->scoped(LocalizedSearchContributor::class, static fn (Application $app): LocalizedSearchContributor => new LocalizedSearchContributor(
+        $this->app->scoped(LocalizedFieldContributor::class, static fn (Application $app): LocalizedFieldContributor => new LocalizedFieldContributor(
             projector: $app->make(LocalizedFieldProjector::class),
+            locales: $app->make(LocaleValidation::class),
             source: $app->bound(LocalizedSearchValues::class) ? $app->make(LocalizedSearchValues::class) : null,
         ));
-        $this->app->tag(LocalizedSearchContributor::class, SearchProjectionContributor::class);
+        $this->app->tag(LocalizedFieldContributor::class, SearchProjectionContributor::class);
     }
 
     public function boot(): void

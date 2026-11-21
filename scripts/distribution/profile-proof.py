@@ -72,6 +72,25 @@ if ($sqlite !== '') {
     $databaseVersions['sqlite'] = $pdo->query('SELECT sqlite_version()')->fetchColumn();
     $databases[] = 'sqlite';
 }
+$bridge = null;
+if (getenv('COREX_SCENARIO_FIELDS_BRIDGE') !== false) {
+    $package = 'axiomasoft/corex-search-custom-fields';
+    $subscriber = 'CoreX\\SearchCustomFields\\Invalidation\\Contracts\\FieldSearchSubscriber';
+    $contributions = [];
+    if (in_array($package, $packages, true)) {
+        foreach ($app->tagged('CoreX\\Search\\Projection\\Contracts\\SearchProjectionContributor') as $contributor) {
+            if (str_starts_with(get_class($contributor), 'CoreX\\SearchCustomFields\\Projection\\')) {
+                $contributions[] = get_class($contributor);
+            }
+        }
+    }
+    $bridge = [
+        'installed' => in_array($package, $packages, true),
+        'enabled' => $app['config']->get('corex-search-custom-fields.enabled'),
+        'subscriber' => $app->bound($subscriber),
+        'contributors' => $contributions,
+    ];
+}
 echo json_encode([
     'packages' => $packages,
     'providers' => array_keys($app->getLoadedProviders()),
@@ -79,6 +98,7 @@ echo json_encode([
     'database_versions' => $databaseVersions,
     'php' => PHP_VERSION,
     'http_routes' => is_file($root . '/routes/web.php'),
+    ...($bridge === null ? [] : ['search_custom_fields' => $bridge]),
 ], JSON_THROW_ON_ERROR);
 """
 
@@ -215,6 +235,20 @@ def assert_profile_clean(profile: dict, installed: list[str], *, http_routes: bo
     for package in profile.get("remove_observed", []):
         if package in present:
             raise ProfileError(f"{profile['id']}: {REMOVAL_NAMES.get(package, package)}")
+
+
+def assert_fields_bridge(profile: dict, boot: dict) -> dict:
+    expected = profile.get("search_custom_fields")
+    if expected is None:
+        return {}
+    if expected not in {"absent", "disabled", "enabled"}:
+        raise ProfileError(f"{profile['id']}: invalid Search Custom Fields profile")
+    enabled = expected == "enabled"
+    actual = boot.get("search_custom_fields", {})
+    if (actual.get("installed") is not (expected != "absent") or actual.get("enabled") is not (None if expected == "absent" else enabled)
+            or actual.get("subscriber") is not enabled or bool(actual.get("contributors")) is not enabled):
+        raise ProfileError(f"{profile['id']}: Search Custom Fields does not match {expected}")
+    return {"search_custom_fields": {"state": expected, **actual}}
 
 
 def assert_no_workspace(payload: str, workspace: Path) -> None:
@@ -663,6 +697,8 @@ def install_app(
     extension = profile.get("extension_fixture")
     if extension is not None:
         install_extension_source(consumer, workspace, extension)
+        fixture_require = load_json(consumer / "scenario-extension/composer.json").get("require", {})
+        packages.extend(name for name in fixture_require if is_corex_package(name) and name not in packages)
     if profile.get("product") == "flex/crm":
         shutil.copytree(workspace / "products/flex-crm", consumer / "flex-crm", ignore=shutil.ignore_patterns("vendor", "composer.lock"))
         manifest = load_json(consumer / "composer.json")
@@ -693,6 +729,8 @@ def install_app(
     if not env_file.exists() and example.exists():
         env_file.write_text(example.read_text(encoding="utf-8"), encoding="utf-8")
     runtime = {**env, **configure_database(consumer, profile, cell["id"], isolated or {})}
+    if bridge := profile.get("search_custom_fields"):
+        runtime.update({"COREX_SCENARIO_FIELDS_BRIDGE": bridge, "COREX_SEARCH_CUSTOM_FIELDS_ENABLED": "true" if bridge == "enabled" else "false"})
     for overlay in host_overlays:
         shutil.copytree(overlay, consumer, dirs_exist_ok=True)
     closure = dist_closure(packages, load_json(repository / "packages.json")["packages"])
@@ -715,7 +753,17 @@ def extension_source(specification: dict) -> Path:
     version = specification["version"]
     if not re.fullmatch(r"[a-z][a-z0-9-]*", slug) or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", version):
         raise ProfileError("invalid installed extension fixture identity")
+    kind = specification.get("kind", "extension")
+    if kind == "equipment" and slug == "equipment-registry":
+        return Path("fixtures/consumers") / slug
+    if kind != "extension":
+        raise ProfileError("invalid installed scenario fixture kind")
     return Path("fixtures/extensions") / slug
+
+
+def fixture_package_name(specification: dict) -> str:
+    extension_source(specification)
+    return "equipment/registry" if specification.get("kind") == "equipment" else f"thirdparty/{specification['id']}"
 
 
 def install_extension_source(consumer: Path, workspace: Path, specification: dict) -> None:
@@ -731,7 +779,7 @@ def install_extension_source(consumer: Path, workspace: Path, specification: dic
             raise ProfileError("installed extension fixture contains a symbolic link or special file")
         archive.extractall(target, filter="data")
     package = load_json(target / "composer.json")
-    name = f"thirdparty/{specification['id']}"
+    name = fixture_package_name(specification)
     if package["name"] != name:
         raise ProfileError("installed extension fixture package name differs from its identity")
     manifest_path = consumer / "composer.json"
@@ -757,7 +805,7 @@ def fixture_tree_digest(directory: Path) -> str:
 
 
 def assert_fixture_extension(consumer: Path, specification: dict) -> dict:
-    name = f"thirdparty/{specification['id']}"
+    name = fixture_package_name(specification)
     entries = load_json(consumer / "composer.lock")["packages"]
     locked = next((entry for entry in entries if entry["name"] == name), {})
     distribution = locked.get("dist", {})
@@ -868,6 +916,7 @@ def execute_cell(cell: dict, profile: dict | None, repository: Path, workspace: 
             raise ProfileError(f"{cell['id']}: independent FlexCRM version line changed")
         cohort_installed = sorted(name for name in report["packages"] if is_corex_package(name))
         return {
+            **assert_fields_bridge(profile, report),
             "installed": cohort_installed,
             "locked": shown,
             "lock_sha256": dist["lock_sha256"],

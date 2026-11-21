@@ -14,30 +14,34 @@ use RuntimeException;
 
 final class Module
 {
+    public const string Name = 'thirdparty/custom-search-provider';
+
     public const string Driver = 'thirdparty-search';
+
+    public const string Field = '01900000-0000-7000-8000-000000000005';
 
     public static function manifest(): ModuleManifest
     {
-        return ModuleManifest::make('thirdparty/custom-search-provider')
+        return ModuleManifest::make(self::Name)
             ->title('Custom search provider')
             ->description('Indexes and queries equipment through the public search contract.')
             ->tablePrefix('csp')
             ->extends([
-                Entity::make(BaseModel::class)->handle('csp.document')->table('csp_documents')->searchable()->fields([new FieldDefinition('name', 'string')]),
+                Entity::make(BaseModel::class)->handle('csp.document')->table('csp_documents')->searchable()->customFields()->fields([new FieldDefinition('name', 'string')]),
                 Entity::make(BaseModel::class)->handle('csp.note')->table('csp_notes')->fields([new FieldDefinition('name', 'string')]),
             ]);
     }
 
     public static function installedVersion(): InstalledPackageVersion
     {
-        return new InstalledPackageVersion('thirdparty/custom-search-provider', '1.0.0', 'custom-search-provider');
+        return new InstalledPackageVersion(self::Name, '1.0.0', 'custom-search-provider');
     }
 
     public static function searchFixture(): array
     {
         return [
             'driver' => self::Driver, 'class' => MemoryDriver::class,
-            'entity' => 'csp.document', 'record' => 'eq-1', 'title' => 'pump alpha',
+            'entity' => 'csp.document', 'record' => 'eq-1', 'title' => 'pump alpha', 'field' => self::Field,
         ];
     }
 
@@ -45,7 +49,7 @@ final class Module
     {
         $report = ExtensionContract::verify(
             manifests: [self::manifest()],
-            installedPackages: ['thirdparty/custom-search-provider' => self::installedVersion()],
+            installedPackages: [self::Name => self::installedVersion()],
         );
 
         if (! $report->passed()) {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "329dd956297386250962c7e72786401c",
+    "content-hash": "d738cb5ea2742f737b65fa21339f649a",
     "packages": [
         {
             "name": "axiomasoft/corex",
@@ -12,7 +12,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/core",
-                "reference": "592a6b2b4ecd2b0a4b19326ecf07820e042d3f88"
+                "reference": "945349f141212517c62cae9f7d3c427dd1d3120e"
             },
             "require": {
                 "axiomasoft/packman": "^0.1",
@@ -167,7 +167,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/custom-fields",
-                "reference": "7f05046b94f12fe9bd3b62321f7f096b954cff58"
+                "reference": "711b7ca33e978c8adf3be60bcc5cfb9632756b6b"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -267,7 +267,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/import-export",
-                "reference": "22d9d3c7dd5725329f3143806093af0e8c9db47d"
+                "reference": "740dfc0c7273c0971dd2fad7af917dca8d574fa7"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -353,7 +353,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/intl",
-                "reference": "38980a541aeb1ec68680c98a14705558f767bcff"
+                "reference": "fac1887faac7b6c2ead4c0ecac8ea54e973a794f"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -453,7 +453,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/media",
-                "reference": "a9e9d9ef45099b8f7c3fd845278921db9e611fcc"
+                "reference": "dcc43770ef4241fedacef1c90a0ea8aa13ddf841"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -550,7 +550,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/notifications",
-                "reference": "03e60b7f05d35c0c76389ffe2675e964149c1d66"
+                "reference": "374b13e778e76a206ce70c25e16c78c6a4d071b1"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -646,7 +646,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/operations",
-                "reference": "f17e7d217771dc2937276801aa77cf0284b58854"
+                "reference": "1b63a4792bcc0b29a70359b1d30d5c384d528956"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -764,7 +764,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/panels",
-                "reference": "3bfb9380eba9507412482b7d6a2651ac816c83f2"
+                "reference": "0952124c9c518961b9e872a3904f08f445841903"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -848,7 +848,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/recurrence",
-                "reference": "892e96b77c442a3e41d47ab6ab13a446f97fa719"
+                "reference": "569e90469527a8a2b5fcd004f787c395e4b8a6ca"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -923,7 +923,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/recurring-tasks",
-                "reference": "66a9f9a05202e3b58bbd19cef4e627ba2dd5b1d8"
+                "reference": "60e7c03a6dd0713ec0808e1a30449729628687bc"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1019,7 +1019,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/scheduler",
-                "reference": "5a0b7a85457d965cb716d33659b19c996c92c776"
+                "reference": "37eea3fbc3e10faa42149d2084ac52050b4a2d65"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1108,7 +1108,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search",
-                "reference": "ae62bd795de3bb770dad946f3debc259e7186147"
+                "reference": "feba164b9036b8b5218df2d2262a543a6fb47a71"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1197,12 +1197,97 @@
             }
         },
         {
+            "name": "axiomasoft/corex-search-custom-fields",
+            "version": "2.0.x-dev",
+            "dist": {
+                "type": "path",
+                "url": "packages/search-custom-fields",
+                "reference": "d095ce1989a432658cda9df7b1273f214e5e3a6d"
+            },
+            "require": {
+                "axiomasoft/corex": "^2.0@dev",
+                "axiomasoft/corex-custom-fields": "^2.0@dev",
+                "axiomasoft/corex-search": "^2.0@dev",
+                "axiomasoft/packman": "^0.1",
+                "illuminate/contracts": "^13.0",
+                "illuminate/database": "^13.0",
+                "illuminate/support": "^13.0",
+                "php": "^8.4"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^11.3",
+                "orchestra/testbench-core": "^11.5"
+            },
+            "type": "library",
+            "extra": {
+                "corex": {
+                    "schema-version": 1,
+                    "package-type": "integration",
+                    "stability": "stable"
+                },
+                "laravel": {
+                    "providers": [
+                        "CoreX\\SearchCustomFields\\SearchCustomFieldsServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "2.0.x-dev"
+                },
+                "packman": {
+                    "schema-version": 1,
+                    "package-type": "integration",
+                    "stability": "stable",
+                    "profile": "laravel-package",
+                    "error-prefix": "search-custom-fields",
+                    "owns": [
+                        "Invalidation",
+                        "Laravel",
+                        "Projection"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\SearchCustomFields\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\SearchCustomFields\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg"
+                ],
+                "test:pg": [
+                    "../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=pg"
+                ],
+                "test:coverage": [
+                    "XDEBUG_MODE=coverage ../../vendor/bin/pest --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --coverage --min=80"
+                ],
+                "analyse": [
+                    "cd ../.. && vendor/bin/phpstan analyse -c packages/search-custom-fields/phpstan.neon --memory-limit=2G --no-progress"
+                ],
+                "lint:check": [
+                    "../../vendor/bin/pint --test"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Optional Custom Fields projection and committed fact subscriber for CoreX Search.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "axiomasoft/corex-search-intl",
             "version": "2.0.x-dev",
             "dist": {
                 "type": "path",
                 "url": "packages/search-intl",
-                "reference": "7d56800bbd8c92bbb8adbc09018a2905d3de1644"
+                "reference": "2000e3d48b79a5001d38b7cda03cba21c5f077cc"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1243,8 +1328,8 @@
                     "error-prefix": "search-intl",
                     "owns": [
                         "Contracts",
-                        "Data",
-                        "Internal"
+                        "Internal",
+                        "Projection"
                     ]
                 }
             },
@@ -1283,7 +1368,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/search-meilisearch",
-                "reference": "6f4689349dcfb4b296f602207c3279a9054b777f"
+                "reference": "571c0b357dee1b3fde7339872f7db16fe2784ba4"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1372,7 +1457,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tasks",
-                "reference": "62c0076d0fdbf998a2aa7c4da2318b01e04baf24"
+                "reference": "7d9e452018deae3c2403ef4b9fd632436aad1012"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1483,7 +1568,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tenancy",
-                "reference": "b4adb12053364418eed70d4877ca0b3afbd55df4"
+                "reference": "7ffe783829aa5b284c72c0a2f60bf4c644411b19"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -1623,7 +1708,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/workflow",
-                "reference": "562fe83f8ca0c23d6f4e5aec1a45c9e8f2ce6f95"
+                "reference": "27c35795435fad7b6199f659abd6759d3f32b6fa"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -8974,7 +9059,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/access",
-                "reference": "2c30d788c36069877e2d1a077612d1fa74ee055c"
+                "reference": "930302d5133c6578d206d5080b2215584ef0a40d"
             },
             "require": {
                 "axiomasoft/azguard": "^2.0@dev",
@@ -9131,7 +9216,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tools",
-                "reference": "a60d2f97efe0642c6e371a0f13bd5d54051585b5"
+                "reference": "afd8d02844fc83d41922224b383d6c8c0c75dae3"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -9238,7 +9323,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/webhooks",
-                "reference": "caa6748e6a0f77a8cfd4be7d2ee00b5b341fac34"
+                "reference": "0ae480099a3157e473a6bf373e359dc43e946cac"
             },
             "require": {
                 "axiomasoft/corex": "^2.0@dev",
@@ -16679,6 +16764,7 @@
         "axiomasoft/corex-recurring-tasks": 20,
         "axiomasoft/corex-scheduler": 20,
         "axiomasoft/corex-search": 20,
+        "axiomasoft/corex-search-custom-fields": 20,
         "axiomasoft/corex-search-intl": 20,
         "axiomasoft/corex-search-meilisearch": 20,
         "axiomasoft/corex-tasks": 20,

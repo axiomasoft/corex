@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Composer\InstalledVersions;
 use CoreX\Context\Contracts\ControlStoreIsolation;
 use CoreX\Context\Contracts\DataScopeFactory;
 use CoreX\Context\Contracts\PhysicalBindingVerifier;
@@ -52,6 +53,7 @@ use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
+use Packman\Modules\Contracts\Entities\EntityRegistry;
 use Packman\Schema\Contracts\Migration\SchemaMigrator;
 use Packman\Schema\Enums\SchemaScope;
 
@@ -61,7 +63,9 @@ final class SearchProofOwner implements DataScopeAuthorizer, FieldUsePolicy, Sea
 {
     private bool $indexing = true;
 
-    public function __construct(private readonly RecordRef $record, private string $title) {}
+    private bool $customFieldVisible = true;
+
+    public function __construct(private readonly RecordRef $record, private string $title, private readonly ?string $customField) {}
 
     public function readAsUser(): void
     {
@@ -71,6 +75,11 @@ final class SearchProofOwner implements DataScopeAuthorizer, FieldUsePolicy, Sea
     public function changeTitle(string $title): void
     {
         $this->title = $title;
+    }
+
+    public function hideCustomField(): void
+    {
+        $this->customFieldVisible = false;
     }
 
     public function current(TenantContext $context): ScopePrincipal
@@ -93,20 +102,31 @@ final class SearchProofOwner implements DataScopeAuthorizer, FieldUsePolicy, Sea
 
     public function authorize(DataScope $scope, RecordRef $record, FieldSelection $fields, FieldUse $use): DataScopeAccessDecision
     {
-        $allowed = $record->entity === $this->record->entity && $record->id === $this->record->id
-            && ($use === FieldUse::Read || $use === FieldUse::Search) && array_diff($fields->fields, ['title']) === [];
+        $allowed = ($this->customField !== null && $record->entity === 'fields.schema' && $record->id === $this->record->entity
+                && $fields->fields === [] && in_array($use, [FieldUse::Read, FieldUse::Write], true))
+            || ($record->entity === $this->record->entity && $record->id === $this->record->id
+                && $this->permits(new FieldUseRequest($fields, $use)));
 
         return new DataScopeAccessDecision($allowed, 'fixture-record-policy-v1');
     }
 
     public function plan(DataScope $scope, EntityHandle $entity, FieldUseRequest $request): FieldUsePlan
     {
-        if ($entity->value !== $this->record->entity || array_diff($request->fields->fields, ['title']) !== []
-            || ! in_array($request->use, [FieldUse::Read, FieldUse::Search, FieldUse::Aggregate], true)) {
+        if ($entity->value !== $this->record->entity || ! $this->permits($request)) {
             return FieldUsePlan::denied();
         }
 
         return FieldUsePlan::unconditional('fixture-search-policy-v1');
+    }
+
+    private function permits(FieldUseRequest $request): bool
+    {
+        if ($this->customField !== null && $request->fields->fields === [$this->customField]) {
+            return $this->customFieldVisible && in_array($request->use, [FieldUse::Read, FieldUse::Filter, FieldUse::Sort], true);
+        }
+
+        return array_diff($request->fields->fields, ['title']) === []
+            && in_array($request->use, [FieldUse::Read, FieldUse::Search, FieldUse::Aggregate], true);
     }
 
     public function page(DataScope $scope, EntityHandle $entity, ?RecordRef $after, int $limit): RecordBatch
@@ -209,8 +229,10 @@ final class SearchProofServiceProvider extends ServiceProvider
 
         $binding = new SearchProofBinding($owner, $control);
         $app->instance(ControlStoreIsolation::class, $binding);
-        $app->instance(PhysicalBindingVerifier::class, $binding);
-        $app->instance(SearchProofOwner::class, new SearchProofOwner(new RecordRef($fixture['entity'], $fixture['record']), $fixture['title']));
+        $app->scoped(PhysicalBindingVerifier::class, static fn (): SearchProofBinding => $binding);
+        $app->instance(SearchProofOwner::class, new SearchProofOwner(
+            new RecordRef($fixture['entity'], $fixture['record']), $fixture['title'], $fixture['enabled'] ? $fixture['field'] : null,
+        ));
         foreach ([WorkPrincipalAuthority::class, DataScopeAuthorizer::class, FieldUsePolicy::class, SearchSource::class] as $contract) {
             $app->alias(SearchProofOwner::class, $contract);
         }
@@ -232,15 +254,34 @@ function verifyFixture(bool $condition, string $message): void
     if (! $condition) {
         throw new RuntimeException($message);
     }
+    $GLOBALS['searchProofAssertions'] = ($GLOBALS['searchProofAssertions'] ?? 0) + 1;
 }
 
 try {
     $class = $argv[1] ?? '';
+    $profile = $argv[2] ?? 'absent';
+    verifyFixture(in_array($profile, ['absent', 'enabled', 'equipment'], true), 'Choose an installed Search proof profile.');
     verifyFixture(class_exists($class) && is_callable([$class, 'searchFixture']), 'The installed fixture Search entry point is unavailable.');
-    $fixture = $class::searchFixture();
+    $enabled = $profile === 'enabled';
+    verifyFixture(InstalledVersions::isInstalled('axiomasoft/corex-search-custom-fields') === $enabled
+        && InstalledVersions::isInstalled('axiomasoft/corex-custom-fields') === ($profile !== 'absent')
+        && InstalledVersions::isInstalled('axiomasoft/corex-panels') === $enabled, 'The optional packages do not match the fixture profile.');
+    $fixture = [...$class::searchFixture(), 'enabled' => $enabled];
     $app = Application::configure(basePath: getcwd())->withProviders([SearchProofServiceProvider::class])->withExceptions()->create();
     $app->instance('search-proof.fixture', $fixture);
-    $app->make(Kernel::class)->bootstrap();
+    $kernel = $app->make(Kernel::class);
+    $kernel->bootstrap();
+
+    if (($argv[3] ?? null) === 'compile') {
+        $compiled = $kernel->call('modules:compile');
+        $output = $kernel->output();
+        verifyFixture($compiled === 0, $output);
+        echo json_encode([
+            'phase' => 'module-compile', 'profile' => $profile, 'compiler_output' => $output,
+            'php' => PHP_VERSION, 'pid' => getmypid(), 'assertions' => $GLOBALS['searchProofAssertions'],
+        ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES), "\n";
+        exit(0);
+    }
     $db = $app->make(DatabaseManager::class);
     $owner = SearchProofBinding::identity($db->connection());
     $control = SearchProofBinding::identity($db->connection('search_proof_control'));
@@ -256,12 +297,28 @@ try {
     $scope = $scopes->forCurrentPrincipal($context);
     $work = $app->make(WorkScopeRunner::class);
     $entity = new EntityHandle($fixture['entity']);
+    verifyFixture($app->make(EntityRegistry::class)->has($entity->value), 'The compiled module registry does not include the fixture entity.');
+
+    if ($enabled) {
+        require __DIR__.'/field-search-compile.php';
+
+        $compiled = $work->run($scope, static fn (): array => compileFieldSearch($app, $scope, $context, $entity, $fixture));
+        echo json_encode([
+            'phase' => 'field-search-compile', 'profile' => $profile, 'entity' => $entity->value,
+            'php' => PHP_VERSION, 'pid' => getmypid(), 'owner' => $owner, 'control' => $control,
+            ...$compiled, 'assertions' => $GLOBALS['searchProofAssertions'],
+        ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES), "\n";
+        exit(0);
+    }
     $target = $work->run($scope, static function () use ($app, $scope, $entity, $fixture) {
         $driver = $app->make(IndexDriver::class);
         verifyFixture(get_class($driver) === $fixture['class'] && in_array($driver, iterator_to_array($app->tagged(IndexDriver::class)), true)
             && in_array($driver, iterator_to_array($app->tagged(CandidateDriver::class)), true), 'The installed fixture driver was not discovered under both SPI tags.');
         $rebuilds = $app->make(SearchRebuilds::class);
         $plan = $rebuilds->plan($scope, new RebuildInput($entity));
+        $projection = $app->make(SearchProjectionContributor::class)->describe(new ProjectionContext($scope, $entity));
+        verifyFixture(array_column($projection->fields, 'id') === ['title'] && $projection->revision === $plan->mappingDigest,
+            'Base Search compilation did not use the provider-owned field set.');
         $ref = $rebuilds->start($scope, $plan->ref, new OperationKey('fixture-index', 1));
         $index = $app->make(IndexWorker::class);
         $status = $rebuilds->inspect($scope, $ref);
@@ -296,10 +353,11 @@ try {
         'Public Search did not reject stale indexed text using the current owner values.');
 
     echo json_encode([
-        'phase' => 'search', 'entrypoint' => Search::class, 'backend' => $target->backend,
+        'phase' => 'search', 'profile' => $profile, 'entrypoint' => Search::class, 'backend' => $target->backend,
         'adapter' => get_class($driver), 'tagged' => true, 'uid' => $target->uid, 'generation' => $target->generation,
         'entity' => $entity->value, 'record' => $result->hits[0]->record->id, 'projection' => $result->hits[0]->projection->values,
         'count' => $result->count->status->value, 'candidate_calls' => $firstQueryCalls, 'stale_text_rejected' => true,
+        'compiled_fields' => ['title'], 'mapping' => $target->mappingDigest, 'assertions' => $GLOBALS['searchProofAssertions'],
         'php' => PHP_VERSION, 'pid' => getmypid(), 'owner' => $owner, 'control' => $control,
     ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES), "\n";
 } catch (Throwable $error) {

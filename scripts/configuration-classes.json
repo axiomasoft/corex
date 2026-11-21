@@ -54,6 +54,11 @@
                 "class": "CoreX\\Search\\Internal\\SearchOptions"
             }
         ],
+        "corex-search-custom-fields": [
+            {
+                "class": "CoreX\\SearchCustomFields\\Laravel\\SearchCustomFieldsOptions"
+            }
+        ],
         "corex-search-intl": [
             {
                 "class": "CoreX\\SearchIntl\\Internal\\SearchIntlOptions"
@@ -788,6 +793,15 @@
             "validation": "unobserved",
             "deprecated_aliases": "",
             "notes": ""
+        },
+        "corex-search-custom-fields.enabled": {
+            "owner": "axiomasoft/corex-search-custom-fields",
+            "secret": "no",
+            "mode": "deployment",
+            "reloadable": "no",
+            "validation": "boot",
+            "deprecated_aliases": "",
+            "notes": "Opt in to Custom Fields projection and committed fact consumption."
         },
         "corex-search-intl.enabled": {
             "owner": "axiomasoft/corex-search-intl",

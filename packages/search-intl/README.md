@@ -4,9 +4,10 @@ Optional localized projection glue between `axiomasoft/corex-intl` and `axiomaso
 
 ## Capabilities
 
-- A tagged `SearchProjectionContributor` describes the locale-resolved projection fields and their permitted uses
-- The host binds `LocalizedSearchValues` to supply declared fields and current translations from the record owner
-- Selected values follow the host locale policy and resolve through `TranslationReader`
+- The host binds `LocalizedSearchValues` to describe the stable owner fields and every supported locale shape for a generation.
+- The owner uses the exact `RecordRef` to supply current translations. `TranslationReader` resolves the selected shapes using the supplied Intl fallback policies.
+- `LocalizedFieldBinding::shapeId($resolution->used)` gives the semantic ID to use in a Search query. Search projects results under this ID and resolves a separate digest key for the backend.
+- Search checks the requested use against both the locale shape and its underlying stable field ID. A generation fingerprint covers the field schema, physical mapping and locale fallback policy.
 - `SavedViewLabelReader` resolves saved-view `localizedName` metadata without changing filter grammar
 - `TranslationRevision` computes content revisions for the existing P6 dirty/outbox lane
 
@@ -30,4 +31,4 @@ composer --working-dir=packages/search-intl test
 
 ## Failure semantics
 
-The bridge is opt-in. When disabled, the base search path remains available without localized projection. With the bridge enabled, translation and locale fallback follow the installed intl contracts; missing localized data must not change filter grammar or grant access. Handle host search/provider failures through the base public contracts.
+The bridge is opt-in. With the bridge enabled, describe locale and field schemas independently of the requesting principal so index workers and Search clients share the same generation fingerprint. Duplicate semantic or physical IDs fail projection compilation. Missing or stale translations are omitted and current Search authorization controls each use.

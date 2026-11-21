@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — Search projection
+
+- Expose a structural projection catalogue with stable field IDs, the effective revision, its mapping digest, and typed use and operator capabilities. The authorized field catalogue still supplies field descriptions for application clients.
+
 ## Unreleased — Versioned custom fields
 
 - Use FieldSchemas and FieldCatalogue to publish and discover declared and runtime fields. FieldValues persists typed UUID-addressed slots in PostgreSQL and emits fields.values.changed.v2 with the receipt. Schema requests and switches produce their respective v2 facts.

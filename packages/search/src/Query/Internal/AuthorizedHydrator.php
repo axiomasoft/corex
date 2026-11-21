@@ -59,7 +59,11 @@ final readonly class AuthorizedHydrator
         $hits = [];
         $revisions = [];
         $confirmed = [];
-        $textFields = new ProjectionSelection($query->searchFields);
+        $textMapping = [];
+        foreach ($query->searchFields as $field) {
+            $textMapping[$field] = $plan->fields[$field]->physicalId ?? $field;
+        }
+        $textFields = new ProjectionSelection(array_values($textMapping));
         foreach ($allowed as $id => $candidate) {
             $ref = $candidate->record;
             $row = $rows[$id] ?? null;
@@ -70,11 +74,15 @@ final readonly class AuthorizedHydrator
 
             $read = [];
             foreach ($query->fields as $field) {
-                if ($plan->mayRead($field, $ref->id) && $this->authorization->authorize($context->scope, $ref, new FieldSelection([$field]), FieldUse::Read)->allowed) {
+                $underlying = $plan->fields[$field]->authorizationField;
+
+                if ($plan->mayRead($field, $ref->id)
+                    && $this->authorization->authorize($context->scope, $ref, new FieldSelection([$field]), FieldUse::Read)->allowed
+                    && ($underlying === null || $this->authorization->authorize($context->scope, $ref, new FieldSelection([$underlying]), FieldUse::Read)->allowed)) {
                     $read[] = $field;
                 }
             }
-            $selected = array_values(array_unique([...$read, ...$query->searchFields, ...array_column($query->filters, 'field')]));
+            $selected = array_values(array_unique([...$read, ...$query->searchFields, ...array_column($plan->filters, 'field')]));
             $values = array_intersect_key($row->values->values, array_flip($selected));
 
             if ($selected !== []) {
@@ -93,10 +101,19 @@ final readonly class AuthorizedHydrator
                 }
             }
 
-            if ($query->text !== null && $candidate->textWitnesses?->matches(new ProjectedValues($values), $textFields) !== true) {
-                continue;
+            if ($query->text !== null) {
+                $physicalText = [];
+                foreach ($textMapping as $field => $physical) {
+                    if (array_key_exists($field, $values)) {
+                        $physicalText[$physical] = $values[$field];
+                    }
+                }
+
+                if ($candidate->textWitnesses?->matches(new ProjectedValues($physicalText), $textFields) !== true) {
+                    continue;
+                }
             }
-            foreach ($query->filters as $filter) {
+            foreach ($plan->filters as $filter) {
                 if (! array_key_exists($filter->field, $values) || ! in_array($values[$filter->field], $filter->values, true)) {
                     continue 2;
                 }

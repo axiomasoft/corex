@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Scenario;
 
+use Closure;
+use CoreX\Data\Data\RecordRef;
 use CoreX\Search\Index\Data\IndexTarget;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
@@ -11,10 +13,24 @@ use RuntimeException;
 
 final class SearchScenarioMeili
 {
+    /**
+     * Meilisearch can queue one index behind another. The scenario runner still
+     * bounds the total case, and every task must return its real terminal status.
+     *
+     * @template T
+     *
+     * @param  Closure(): (T|null)  $check
+     * @return T
+     */
+    public static function await(string $event, Closure $check): mixed
+    {
+        return FieldPgWitness::await($event, $check, timeoutSeconds: 90, pollMicroseconds: 100_000);
+    }
+
     public static function document(IndexTarget $target, string $id): ?array
     {
         self::assertOwned($target);
-        $result = self::admin()->get('/indexes/'.$target->uid.'/documents/'.$target->documentId(SearchScenarioData::record($id)));
+        $result = self::admin()->get('/indexes/'.$target->uid.'/documents/'.$target->documentId(new RecordRef($target->entity->value, $id)));
 
         return $result->status() === 404 ? null : $result->throw()->json();
     }
@@ -27,7 +43,7 @@ final class SearchScenarioMeili
             throw new RuntimeException('The installed adapter returned no real task identifier.');
         }
 
-        return FieldPgWitness::await('the actual Meilisearch task is terminal', static function () use ($task): ?array {
+        return self::await('the actual Meilisearch task '.$task.' is terminal', static function () use ($task): ?array {
             $result = self::admin()->get('/tasks/'.$task)->throw()->json();
 
             return in_array($result['status'], ['enqueued', 'processing'], true) ? null : $result;

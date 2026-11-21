@@ -17,10 +17,13 @@ use CoreX\Search\Internal\Index\GenerationWorker;
 use CoreX\Search\Internal\Index\IndexProjection;
 use CoreX\Search\Internal\Index\IndexReceiptProjector;
 use CoreX\Search\Internal\Index\LaneStore;
+use CoreX\Search\Internal\Index\MappingJournal;
 use CoreX\Search\Internal\Index\RebuildJournal;
 use CoreX\Search\Internal\Index\VerifiedIndexLookup;
 use CoreX\Search\Internal\SearchOptions;
 use CoreX\Search\Lane\Contracts\SearchInvalidations;
+use CoreX\Search\Lane\Contracts\SearchMappingInvalidations;
+use CoreX\Search\Projection\Contracts\SearchProjectionContributor;
 use CoreX\Search\Rebuild\Contracts\RebuildWorker;
 use CoreX\Search\Rebuild\Contracts\SearchRebuilds;
 use Illuminate\Console\Events\ArtisanStarting;
@@ -42,6 +45,8 @@ final class IndexBindings
         $app->alias(LaneStore::class, ActiveGenerations::class);
         $app->scoped(IndexLookupAccess::class, VerifiedIndexLookup::class);
         $app->scoped(SearchInvalidations::class, DirtyJournal::class);
+        $app->scoped(SearchMappingInvalidations::class, static fn (Application $app): MappingJournal => new MappingJournal(
+            $app->make(LaneStore::class), static fn (): SearchProjectionContributor => $app->make(SearchProjectionContributor::class)));
         $app->scoped(IndexWorker::class, static fn (Application $app): GenerationWorker => new GenerationWorker(
             $app->make(LaneStore::class), static fn (): IndexProjection => $app->make(IndexProjection::class), static fn (): IndexDriver => $app->make(IndexDriver::class),
             $app->make(ProviderEffectLedger::class), $app->make(ScopeAdmission::class), $app->make(ClockInterface::class)));

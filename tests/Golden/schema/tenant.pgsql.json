@@ -1436,6 +1436,16 @@
                     "nullable": true,
                     "default": null
                 },
+                "source_mapping_digest": {
+                    "type": "character(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "source_revision": {
+                    "type": "character(64)",
+                    "nullable": true,
+                    "default": null
+                },
                 "start_seq": {
                     "type": "bigint",
                     "nullable": true,
@@ -1482,6 +1492,16 @@
                         "operation_key"
                     ],
                     "predicate": null,
+                    "method": "btree",
+                    "nulls_not_distinct": false
+                },
+                {
+                    "name": "corex_search_rebuilds_pending_request_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "lane_key"
+                    ],
+                    "predicate": "((state)::text = 'requested'::text)",
                     "method": "btree",
                     "nulls_not_distinct": false
                 },

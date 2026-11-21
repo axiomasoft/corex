@@ -15,6 +15,21 @@
     "tokens": {
         "classes": [
             {
+                "old": "CoreX\\SearchIntl\\Data\\LocalizedFieldBinding",
+                "new": "CoreX\\SearchIntl\\Projection\\Data\\LocalizedFieldBinding",
+                "match": "fqcn"
+            },
+            {
+                "old": "CoreX\\SearchIntl\\Internal\\LocalizedSearchContributor",
+                "new": "CoreX\\SearchIntl\\Projection\\Internal\\LocalizedFieldContributor",
+                "match": "fqcn"
+            },
+            {
+                "old": "CoreX\\SearchIntl\\Internal\\LocalizedFieldProjector",
+                "new": "CoreX\\SearchIntl\\Projection\\Internal\\LocalizedFieldProjector",
+                "match": "fqcn"
+            },
+            {
                 "old": "CoreX\\Context\\Contracts\\TenantContextRestorer",
                 "new": "CoreX\\Context\\Contracts\\WorkScopeRunner",
                 "match": "fqcn"

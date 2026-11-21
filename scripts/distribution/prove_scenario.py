@@ -348,6 +348,7 @@ def prove_variant(spec: dict, fixture: Path, evidence: Path, root: Path, reposit
             booted = profiles.boot_app(consumer, runtime, case)
             profiles.assert_providers(consumer, booted, case)
             profiles.assert_profile_clean(profile, booted["packages"], http_routes=booted["http_routes"])
+            receipt.update(profiles.assert_fields_bridge(profile, booted))
             receipt["databases"] = booted["database_versions"]
             if database and set(booted["database_versions"]) != set(database["COREX_PG_DATABASES"].split(",")):
                 raise ScenarioError("profile did not connect to every isolated PostgreSQL database")
@@ -359,6 +360,10 @@ def prove_variant(spec: dict, fixture: Path, evidence: Path, root: Path, reposit
             receipt.update(assert_dist_install(consumer, repository, declared, ROOT))
             if extension := profile.get("extension_fixture"):
                 receipt["extension"] = profiles.assert_fixture_extension(consumer, extension)
+            if spec.get("retain_install_evidence"):
+                for source, name in (("composer.json", "composer.json"), ("composer.lock", "composer.lock"),
+                                     ("vendor/composer/installed.json", "composer-installed.json")):
+                    (evidence / name).write_bytes((consumer / source).read_bytes())
             witnesses = run_actions(spec, consumer, fixture, runtime, evidence, receipt["processes"])
             receipt.update({
                 "assertions": sum(report["assertions"] for report in witnesses.values()),

@@ -242,11 +242,14 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\CustomFields\Query\Data\FilterPlan` | api | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Contracts\DeclaredFields` | spi-implement | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Contracts\FieldCatalogue` | spi-call | 2.0.0 |
+| `CoreX\CustomFields\Schemas\Contracts\FieldProjectionCatalogue` | spi-call | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Contracts\FieldSchemaDependencies` | spi-implement | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Contracts\FieldSchemas` | spi-call | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Data\ClaimGeneration` | api | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Data\FieldDefinition` | api | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Data\FieldId` | api | 2.0.0 |
+| `CoreX\CustomFields\Schemas\Data\FieldProjectionSchema` | api | 2.0.0 |
+| `CoreX\CustomFields\Schemas\Data\FieldProjectionShape` | api | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Data\FieldSchemaChange` | api | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Data\FieldSchemaSnapshot` | api | 2.0.0 |
 | `CoreX\CustomFields\Schemas\Data\PlanDigest` | api | 2.0.0 |
@@ -658,10 +661,13 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Search\Index\Enums\IndexAction` | api | 2.0.0 |
 | `CoreX\Search\Index\Enums\IndexOutcome` | api | 2.0.0 |
 | `CoreX\Search\Lane\Contracts\SearchInvalidations` | spi-call | 2.0.0 |
+| `CoreX\Search\Lane\Contracts\SearchMappingInvalidations` | spi-call | 2.0.0 |
 | `CoreX\Search\Laravel\SearchPortBindings` | spi-call | 2.0.0 |
 | `CoreX\Search\Postgres\Contracts\PostgresCorpus` | spi-implement | 2.0.0 |
 | `CoreX\Search\Postgres\Contracts\PostgresSnapshotAuthority` | spi-implement | 2.0.0 |
 | `CoreX\Search\Postgres\Data\PostgresCorpusRows` | spi-call | 2.0.0 |
+| `CoreX\Search\Projection\Contracts\ProjectionFilter` | spi-implement | 2.0.0 |
+| `CoreX\Search\Projection\Contracts\ProjectionSnapshotCapabilities` | spi-implement | 2.0.0 |
 | `CoreX\Search\Projection\Contracts\SearchProjectionContributor` | spi-implement | 2.0.0 |
 | `CoreX\Search\Projection\Contracts\SearchSource` | spi-implement | 2.0.0 |
 | `CoreX\Search\Projection\Data\FieldWitnesses` | api | 2.0.0 |
@@ -704,6 +710,15 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Search\SearchServiceProvider` | spi-call | 1.0 |
 | `CoreX\Search\Testing\SearchFixtures` | spi-call | 2.0.0 |
 
+## axiomasoft/corex-search-custom-fields
+
+[Member manifest](../../packages/search-custom-fields/resources/contracts/php-api.json)
+
+| Symbol | Layer | Since |
+|:--|:--|:--|
+| `CoreX\SearchCustomFields\Invalidation\Contracts\FieldSearchSubscriber` | spi-call | 2.0.0 |
+| `CoreX\SearchCustomFields\SearchCustomFieldsServiceProvider` | spi-call | 2.0.0 |
+
 ## axiomasoft/corex-search-intl
 
 [Member manifest](../../packages/search-intl/resources/contracts/php-api.json)
@@ -712,7 +727,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 |:--|:--|:--|
 | `CoreX\SearchIntl\Contracts\LocalizedSearchValues` | spi-implement | 2.0.0 |
 | `CoreX\SearchIntl\Contracts\SavedViewLabelReader` | spi-implement | 1.0 |
-| `CoreX\SearchIntl\Data\LocalizedFieldBinding` | api | 1.0 |
+| `CoreX\SearchIntl\Projection\Data\LocalizedFieldBinding` | api | 2.0.0 |
 | `CoreX\SearchIntl\SearchIntlServiceProvider` | spi-call | 1.0 |
 
 ## axiomasoft/corex-search-meilisearch

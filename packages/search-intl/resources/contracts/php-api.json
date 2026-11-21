@@ -52,7 +52,7 @@
                         },
                         {
                             "name": "field",
-                            "type": "CoreX\\SearchIntl\\Data\\LocalizedFieldBinding",
+                            "type": "CoreX\\SearchIntl\\Projection\\Data\\LocalizedFieldBinding",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -72,7 +72,7 @@
                     "return": "?CoreX\\Intl\\Translation\\Data\\LocalizedText",
                     "doc": []
                 },
-                "locale": {
+                "locales": {
                     "visibility": "public",
                     "static": false,
                     "final": false,
@@ -89,7 +89,7 @@
                             "flags": 0
                         }
                     ],
-                    "return": "CoreX\\Intl\\Locale\\Data\\LocaleResolution",
+                    "return": "array",
                     "doc": []
                 }
             },
@@ -147,10 +147,10 @@
             "enum_cases": [],
             "spi_kind": "implement"
         },
-        "CoreX\\SearchIntl\\Data\\LocalizedFieldBinding": {
+        "CoreX\\SearchIntl\\Projection\\Data\\LocalizedFieldBinding": {
             "kind": "class",
             "layer": "api",
-            "since": "1.0",
+            "since": "2.0.0",
             "final": true,
             "readonly": true,
             "abstract": false,
@@ -167,7 +167,7 @@
                     "by_reference": false,
                     "parameters": [
                         {
-                            "name": "column",
+                            "name": "fieldId",
                             "type": "string",
                             "by_reference": false,
                             "variadic": false,
@@ -204,6 +204,26 @@
                         }
                     ],
                     "return": null,
+                    "doc": []
+                },
+                "shapeId": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "canonicalLocale",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "string",
                     "doc": []
                 }
             },

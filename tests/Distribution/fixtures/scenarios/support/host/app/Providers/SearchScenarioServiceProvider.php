@@ -51,14 +51,6 @@ final class SearchScenarioServiceProvider extends ServiceProvider
         ]);
         $this->app->bind(MeilisearchCredentialProvider::class, SearchScenarioCredentials::class);
         $this->app->singleton(SearchScenarioTrace::class);
-        $this->app->bind(SearchSource::class, SearchScenarioProjection::class);
-        $this->app->tag([SearchScenarioProjection::class], SearchProjectionContributor::class);
-        $this->app->bind(PostgresCorpus::class, SearchScenarioPg::class);
-        $this->app->bind(PostgresSnapshotAuthority::class, SearchScenarioPg::class);
-        $this->app->bind(BrokerDeliverySource::class, SearchScenarioBroker::class);
-        $this->app->singleton(MessageContractRegistry::class, static fn () => MessagingFixtures::contracts([
-            new MessageContract('scenario.search.changed', 2, MessageClass::IntegrationEvent, 'fixture/scenario', PiiClass::None, 'scenario-search'),
-        ]));
 
         if ($driver === 'meilisearch') {
             $this->app->extend(CandidateDriver::class, static fn (CandidateDriver $driver, $app): CandidateDriver => new SearchScenarioCandidates(
@@ -68,6 +60,18 @@ final class SearchScenarioServiceProvider extends ServiceProvider
                 $driver, $app->make(SearchScenarioTrace::class),
             ));
         }
+
+        if (getenv('COREX_SCENARIO_CASE') === 'field-search') {
+            return;
+        }
+        $this->app->bind(SearchSource::class, SearchScenarioProjection::class);
+        $this->app->tag([SearchScenarioProjection::class], SearchProjectionContributor::class);
+        $this->app->bind(PostgresCorpus::class, SearchScenarioPg::class);
+        $this->app->bind(PostgresSnapshotAuthority::class, SearchScenarioPg::class);
+        $this->app->bind(BrokerDeliverySource::class, SearchScenarioBroker::class);
+        $this->app->singleton(MessageContractRegistry::class, static fn () => MessagingFixtures::contracts([
+            new MessageContract('scenario.search.changed', 2, MessageClass::IntegrationEvent, 'fixture/scenario', PiiClass::None, 'scenario-search'),
+        ]));
 
         if ($rights) {
             $this->app->extend(DataScopeAuthorizer::class, static fn (DataScopeAuthorizer&FieldUsePolicy $policy): SearchScenarioAccess => new SearchScenarioAccess($policy));

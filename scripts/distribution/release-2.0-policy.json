@@ -153,6 +153,19 @@
         "require-dev": []
       }
     },
+    "packages/search-custom-fields": {
+      "distribution": "public",
+      "mirror": "axiomasoft/corex-search-custom-fields",
+      "name": "axiomasoft/corex-search-custom-fields",
+      "edges": {
+        "require": [
+          "axiomasoft/corex",
+          "axiomasoft/corex-custom-fields",
+          "axiomasoft/corex-search"
+        ],
+        "require-dev": []
+      }
+    },
     "packages/search-intl": {
       "distribution": "public",
       "mirror": "axiomasoft/corex-search-intl",
